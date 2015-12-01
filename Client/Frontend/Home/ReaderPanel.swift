@@ -121,15 +121,17 @@ class ReadingListTableViewCell: SWTableViewCell {
         }
 
         contentView.addSubview(titleLabel)
+        contentView.addSubview(hostnameLabel)
+
         titleLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         titleLabel.numberOfLines = 2
         titleLabel.snp_makeConstraints { (make) -> () in
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
             make.left.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelLeftOffset)
             make.right.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelRightOffset) // TODO Not clear from ux spec
+            make.bottom.lessThanOrEqualTo(hostnameLabel.snp_top).priorityHigh()
         }
 
-        contentView.addSubview(hostnameLabel)
         hostnameLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         hostnameLabel.numberOfLines = 1
         hostnameLabel.snp_makeConstraints { (make) -> () in
@@ -244,6 +246,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.accessibilityIdentifier = "ReadingTable"
         tableView.rowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero

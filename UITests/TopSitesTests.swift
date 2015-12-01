@@ -37,6 +37,14 @@ class TopSitesTests: KIFTestCase {
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
     }
 
+    // A bit internal :/
+    func extractTextSizeFromThumbnail(thumbnail: UIView) -> CGFloat? {
+        guard let contentView = thumbnail.subviews.first, let wrapper = contentView.subviews.first,
+            let textWrapper = wrapper.subviews.last, let label = textWrapper.subviews.first as? UILabel else { return nil }
+
+        return label.font.pointSize
+    }
+
     func testRotatingOnTopSites() {
         // go to top sites. rotate to landscape, rotate back again. ensure it doesn't crash
         createNewTab()
@@ -56,6 +64,26 @@ class TopSitesTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("Top sites")
         rotateToPortrait()
         tester().tapViewWithAccessibilityLabel("Cancel")
+    }
+
+    func testChangingDyamicFontOnTopSites() {
+        DynamicFontUtils.restoreDynamicFontSize(tester())
+
+        createNewTab()
+        let thumbnail = tester().waitForViewWithAccessibilityLabel("The Mozilla Project")
+
+        let size = extractTextSizeFromThumbnail(thumbnail)
+
+        DynamicFontUtils.bumpDynamicFontSize(tester())
+        let bigSize = extractTextSizeFromThumbnail(thumbnail)
+
+        DynamicFontUtils.lowerDynamicFontSize(tester())
+        let smallSize = extractTextSizeFromThumbnail(thumbnail)
+
+        XCTAssertGreaterThan(bigSize!, size!)
+        XCTAssertGreaterThanOrEqual(size!, smallSize!)
+
+        openURLForPageNumber(1) // Needed for the teardown
     }
 
     func testRemovingSite() {
@@ -85,6 +113,7 @@ class TopSitesTests: KIFTestCase {
     }
 
     override func tearDown() {
+        DynamicFontUtils.restoreDynamicFontSize(tester())
         BrowserUtils.resetToAboutHome(tester())
     }
 }
