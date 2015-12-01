@@ -32,7 +32,7 @@ let IndexVisitsSiteIDDate = "idx_visits_siteID_date"                   // Remove
 let IndexVisitsSiteIDIsLocalDate = "idx_visits_siteID_is_local_date"   // Added in v6.
 let IndexBookmarksMirrorStructureParentIdx = "idx_bookmarksMirrorStructure_parent_idx"   // Added in v10.
 
-private let AllTables: Args = [
+private let AllTables: [String] = [
     TableDomains,
     TableFavicons,
     TableFaviconSites,
@@ -48,19 +48,19 @@ private let AllTables: Args = [
     TableQueuedTabs,
 ]
 
-private let AllViews: Args = [
+private let AllViews: [String] = [
     ViewHistoryIDsWithWidestFavicons,
     ViewWidestFaviconsForSites,
     ViewIconForURL,
 ]
 
-private let AllIndices: Args = [
+private let AllIndices: [String] = [
     IndexHistoryShouldUpload,
     IndexVisitsSiteIDIsLocalDate,
     IndexBookmarksMirrorStructureParentIdx,
 ]
 
-private let AllTablesIndicesAndViews: Args = AllViews + AllIndices + AllTables
+private let AllTablesIndicesAndViews: [String] = AllViews + AllIndices + AllTables
 
 private let log = Logger.syncLogger
 
@@ -524,10 +524,10 @@ public class BrowserTable: Table {
             "DROP TABLE IF EXISTS faviconSites" // We renamed it to match naming convention.
         ]
 
-        let queries = AllViews.map { "DROP VIEW IF EXISTS \($0!)" } +
-                      AllIndices.map { "DROP INDEX IF EXISTS \($0!)" } +
-                      AllTables.map { "DROP TABLE IF EXISTS \($0!)" } +
-                      additional
+        let views = AllViews.map { "DROP VIEW IF EXISTS \($0)" }
+        let indices = AllIndices.map { "DROP INDEX IF EXISTS \($0)" }
+        let tables = AllTables.map { "DROP TABLE IF EXISTS \($0)" }
+        let queries = views + indices + tables + additional
 
         return self.run(db, queries: queries)
     }
