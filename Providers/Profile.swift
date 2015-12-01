@@ -12,8 +12,8 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-public let ProfileDidStartSyncingNotification = "ProfileDidStartSyncingNotification"
-public let ProfileDidFinishSyncingNotification = "ProfileDidFinishSyncingNotification"
+public let NotificationProfileDidStartSyncing = "NotificationProfileDidStartSyncing"
+public let NotificationProfileDidFinishSyncing = "NotificationProfileDidFinishSyncing"
 public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
 public protocol SyncManager {
@@ -190,7 +190,7 @@ public class BrowserProfile: Profile {
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: NotificationOnLocationChange, object: nil)
-        notificationCenter.addObserver(self, selector: Selector("onProfileDidFinishSyncing:"), name: ProfileDidFinishSyncingNotification, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onProfileDidFinishSyncing:"), name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.addObserver(self, selector: Selector("onPrivateDataClearedHistory:"), name: NotificationPrivateDataClearedHistory, object: nil)
 
 
@@ -267,7 +267,7 @@ public class BrowserProfile: Profile {
         log.debug("Deiniting profile \(self.localName).")
         self.syncManager.endTimedSyncs()
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationOnLocationChange, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: ProfileDidFinishSyncingNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
 
@@ -541,7 +541,7 @@ public class BrowserProfile: Profile {
          */
         var syncLock = OSSpinLock() {
             didSet {
-                let notification = syncLock == 0 ? ProfileDidFinishSyncingNotification : ProfileDidStartSyncingNotification
+                let notification = syncLock == 0 ? NotificationProfileDidFinishSyncing : NotificationProfileDidStartSyncing
                 NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: nil))
             }
         }
@@ -568,14 +568,14 @@ public class BrowserProfile: Profile {
 
             let center = NSNotificationCenter.defaultCenter()
             center.addObserver(self, selector: "onLoginDidChange:", name: NotificationDataLoginDidChange, object: nil)
-            center.addObserver(self, selector: "onFinishSyncing:", name: ProfileDidFinishSyncingNotification, object: nil)
+            center.addObserver(self, selector: "onFinishSyncing:", name: NotificationProfileDidFinishSyncing, object: nil)
         }
 
         deinit {
             // Remove 'em all.
             let center = NSNotificationCenter.defaultCenter()
             center.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
-            center.removeObserver(self, name: ProfileDidFinishSyncingNotification, object: nil)
+            center.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         }
 
         // Simple in-memory rate limiting.
