@@ -66,7 +66,7 @@ class TopSitesPanel: UIViewController {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: ProfileDidFinishSyncingNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataClearedHistory, object: nil)
     }
 
@@ -94,13 +94,13 @@ class TopSitesPanel: UIViewController {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: ProfileDidFinishSyncingNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
     
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, ProfileDidFinishSyncingNotification, NotificationPrivateDataClearedHistory:
+        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory:
             refreshTopSites(maxFrecencyLimit)
             break
         default:
