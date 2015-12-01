@@ -6,6 +6,8 @@ import Foundation
 import XCGLogger
 import Shared
 
+public let NotificationDatabaseWasRecreated = "NotificationDatabaseWasRecreated"
+
 private let log = Logger.syncLogger
 
 typealias Args = [AnyObject?]
@@ -162,6 +164,7 @@ public class BrowserDB {
 
         // If we failed, move the file and try again. This will probably break things that are already
         // attached and expecting a working DB, but at least we should be able to restart.
+        var notify: NSNotification? = nil
         if !success {
             log.debug("Couldn't create or update \(tables.map { $0.name }).")
             log.debug("Attempting to move \(self.filename) to another location.")
@@ -193,10 +196,22 @@ public class BrowserDB {
                     try self.files.move(wal, toRelativePath: bak + "-wal")
                 }
                 success = true
+
+                // Notify the world that we moved the database. This allows us to
+                // reset sync and start over in the case of corruption.
+                let notification = NotificationDatabaseWasRecreated
+                notify = NSNotification(name: notification, object: self.filename)
             } catch _ {
                 success = false
             }
             assert(success)
+
+            // Do this after the relevant tables have been created.
+            defer {
+                if let notify = notify {
+                    NSNotificationCenter.defaultCenter().postNotification(notify)
+                }
+            }
 
             if let _ = db.transaction({ connection -> Bool in
                 for table in tables {
