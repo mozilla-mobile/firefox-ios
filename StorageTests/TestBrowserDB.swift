@@ -46,6 +46,14 @@ class TestBrowserDB: XCTestCase {
         }
     }
 
+    private class MockListener {
+        var notification: NSNotification?
+        @objc
+        func onDatabaseWasRecreated(notification: NSNotification) {
+            self.notification = notification
+        }
+    }
+
     func testMovesDB() {
         let db = BrowserDB(filename: "foo.db", files: self.files)
         XCTAssertTrue(db.createOrUpdate(BrowserTable()))
@@ -64,6 +72,11 @@ class TestBrowserDB: XCTestCase {
         XCTAssertFalse(files.exists("foo.db.bak.1"))
         XCTAssertFalse(files.exists("foo.db.bak.1-shm"))
         XCTAssertFalse(files.exists("foo.db.bak.1-wal"))
+
+        let center = NSNotificationCenter.defaultCenter()
+        let listener = MockListener()
+        center.addObserver(listener, selector: "onDatabaseWasRecreated:", name: NotificationDatabaseWasRecreated, object: nil)
+        defer { center.removeObserver(listener) }
 
         // It'll still fail, but it moved our old DB.
         // Our current observation is that closing the DB deletes the .shm file and also
@@ -85,5 +98,8 @@ class TestBrowserDB: XCTestCase {
         XCTAssertTrue(files.exists("foo.db.bak.1"))
         XCTAssertFalse(files.exists("foo.db.bak.1-shm"))
         XCTAssertFalse(files.exists("foo.db.bak.1-wal"))
+
+        // The right notification was issued.
+        XCTAssertEqual("foo.db", (listener.notification?.object as? String))
     }
 }
