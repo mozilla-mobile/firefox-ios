@@ -10,7 +10,6 @@ default_platform :ios
 import_build_tools(
   url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
   clone_folder: "../build-tools",
-  branch: "fluffyemily/Bug-1217855-l10n-build",
 )
 
 #move all the build tools to the right places
