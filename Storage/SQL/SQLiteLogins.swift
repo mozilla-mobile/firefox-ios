@@ -10,7 +10,7 @@ private let log = Logger.syncLogger
 
 let TableLoginsMirror = "loginsM"
 let TableLoginsLocal = "loginsL"
-let AllLoginTables: Args = [TableLoginsMirror, TableLoginsLocal]
+let AllLoginTables: [String] = [TableLoginsMirror, TableLoginsLocal]
 
 
 private class LoginsTable: Table {
