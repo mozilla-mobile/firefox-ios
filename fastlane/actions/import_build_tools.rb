@@ -7,13 +7,29 @@ module Fastlane
         Helper.log.info "Parameter URL: #{params[:url]}"
         Helper.log.info "Parameter Clone Folder: #{params[:clone_folder]}"
         Helper.log.info "Parameter Branch: #{params[:branch]}"
+        directory = params[:clone_folder]
 
-        #import from git into subdir
-        branch_option = ""
-        branch_option = "--branch #{params[:branch]}" if params[:branch] != 'HEAD'
+        git_command = ""
+        if File.directory?(directory)
+          Helper.log.info("Fetching latest version of build tools from #{directory}")
+          branch_option = ""
+          branch_option = "git checkout #{params[:branch]}\n" if params[:branch] != 'HEAD'
+          git_command = "cd #{directory}\n \
+          git checkout master\n \
+          git fetch\n \
+          #{branch_option} \
+          git pull"
+        else
+          Helper.log.info("Cloning build tools repository")
+          #import from git into subdir
+          branch_option = ""
+          branch_option = "--branch #{params[:branch]}" if params[:branch] != 'HEAD'
 
-        clone_command = "git clone '#{params[:url]}' '#{params[:clone_folder]}' #{branch_option}"
-        Actions.sh(clone_command)
+          git_command = "git clone '#{params[:url]}' '#{directory}' #{branch_option}"
+        end
+
+        Helper.log.info("Excuting #{git_command}")
+        Actions.sh(git_command)
       end
 
       #####################################################

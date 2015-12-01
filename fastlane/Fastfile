@@ -9,7 +9,7 @@ default_platform :ios
 
 import_build_tools(
   url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
-  clone_folder: "../build-tools"
+  clone_folder: "../build-tools",
 )
 
 #move all the build tools to the right places
@@ -21,5 +21,3 @@ sh("rsync -a #{clone_folder}/fastlane/templates .")
 
 #import the fastfile
 import "#{clone_folder}/fastlane/BaseFastfile"
-
-sh("rm -rf #{clone_folder}")
