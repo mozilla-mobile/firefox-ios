@@ -911,7 +911,7 @@ class TestSQLiteHistory: XCTestCase {
                     XCTAssertTrue(destination.updateTable(conn, from: table.version), "Upgrading browser table from version \(version)")
                 }.value.isSuccess
             )
-            db.close()
+            db.forceClose()
         }
     }
 
@@ -941,7 +941,7 @@ class TestSQLiteHistory: XCTestCase {
         XCTAssertNotNil(results)
         XCTAssertEqual(results![0]?.url, "http://www.example.com")
 
-        db.close()
+        db.forceClose()
     }
 
     func testDomainUpgrade() {
