@@ -104,11 +104,11 @@ public class BrowserDB {
     // creation of the table in the database.
     func createOrUpdate(tables: Table...) -> Bool {
         var success = true
+
         let doCreate = { (table: Table, connection: SQLiteDBConnection) -> () in
             switch self.createTable(connection, table: table) {
             case .Created:
                 success = true
-                connection.checkpoint()
                 return
             case .Exists:
                 log.debug("Table already exists.")
@@ -133,7 +133,6 @@ public class BrowserDB {
                     case .Updated:
                         log.debug("Updated table \(table.name).")
                         success = true
-                        connection.checkpoint()
                         break
                     case .Exists:
                         log.debug("Table \(table.name) already exists.")
@@ -168,7 +167,9 @@ public class BrowserDB {
             log.debug("Attempting to move \(self.filename) to another location.")
 
             // Make sure that we don't still have open the files that we want to move!
-            db.close()
+            // Note that we use sqlite3_close_v2, which might actually _not_ close the
+            // database file yet. For this reason we move the -shm and -wal files, too.
+            db.forceClose()
 
             // Note that a backup file might already exist! We append a counter to avoid this.
             var bakCounter = 0
@@ -344,8 +345,8 @@ extension BrowserDB {
         }
     }
 
-    public func close() {
-        db.close()
+    public func forceClose() {
+        db.forceClose()
     }
 
     func run(sql: String, withArgs args: Args? = nil) -> Success {
