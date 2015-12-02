@@ -12,6 +12,7 @@ import XCTest
 
 public class MockSyncManager: SyncManager {
     public var isSyncing = false
+    public var lastSyncFinishTime: Timestamp? = nil
 
     public func syncClients() -> SyncResult { return deferMaybe(.Completed) }
     public func syncClientsThenTabs() -> SyncResult { return deferMaybe(.Completed) }

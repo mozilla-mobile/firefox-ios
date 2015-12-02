@@ -267,17 +267,17 @@ private class SyncNowSetting: WithAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        if let timestamp = profile.prefs.timestampForKey(PrefsKeys.KeyLastSyncFinishTime) {
-            let label = NSLocalizedString("Last synced: %@", comment: "Last synced time label beside Sync Now setting option. Argument is the relative date string.")
-            let formattedLabel = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
-            let attributedString = NSMutableAttributedString(string: formattedLabel)
-            let attributes = [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)]
-            let range = NSMakeRange(0, attributedString.length)
-            attributedString.setAttributes(attributes, range: range)
-            return attributedString
+        guard let timestamp = profile.syncManager.lastSyncFinishTime else {
+            return nil
         }
 
-        return nil
+        let label = NSLocalizedString("Last synced: %@", comment: "Last synced time label beside Sync Now setting option. Argument is the relative date string.")
+        let formattedLabel = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
+        let attributedString = NSMutableAttributedString(string: formattedLabel)
+        let attributes = [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)]
+        let range = NSMakeRange(0, attributedString.length)
+        attributedString.setAttributes(attributes, range: range)
+        return attributedString
     }
 
     override func onConfigureCell(cell: UITableViewCell) {
