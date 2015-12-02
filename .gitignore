@@ -34,17 +34,17 @@ fastlane/scripts/upload.sh
 /fastlane/screenshots/*/*-portrait_framed.png
 /fastlane/screenshots/*/*-landscape_framed.png
 # folders for storing builds and prov profiles
-builds
-provisioning-profiles
-assets
+/builds
+/provisioning-profiles
+/assets
 #build tools
-scripts
-fastlane/Appfile
-fastlane/Snapfile
-fastlane/SnapshotHelper.swift
-fastlane/frames
-fastlane/scripts
-fastlane/templates
+/scripts
+/fastlane/Appfile
+/fastlane/Snapfile
+/fastlane/SnapshotHelper.swift
+/fastlane/frames
+/fastlane/scripts
+/fastlane/templates
 
 #python environment
 python-env/
