@@ -597,6 +597,13 @@ public class BrowserProfile: Profile {
             }
         }
 
+        func doInBackgroundAfter(millis millis: Int64, _ block: dispatch_block_t) {
+            let delay = millis * Int64(NSEC_PER_MSEC)
+            let when = dispatch_time(DISPATCH_TIME_NOW, delay)
+            let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+            dispatch_after(when, queue, block)
+        }
+
         @objc
         func onDatabaseWasRecreated(notification: NSNotification) {
             log.debug("Database was recreated.")
@@ -606,10 +613,7 @@ public class BrowserProfile: Profile {
             // We run this in the background after a few hundred milliseconds;
             // it doesn't really matter when it runs, so long as it doesn't
             // happen in the middle of a sync. We take the lock to prevent that.
-            let delay = 300 * Int64(NSEC_PER_MSEC)     // 300msec.
-            let when = dispatch_time(DISPATCH_TIME_NOW, delay)
-            let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            dispatch_after(when, queue) {
+            self.doInBackgroundAfter(millis: 300) {
                 OSSpinLockLock(&self.syncLock)
                 self.handleRecreationOfDatabaseNamed(name).upon { res in
                     log.debug("Reset of \(name) done: \(res.isSuccess)")
