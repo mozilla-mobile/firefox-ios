@@ -23,8 +23,10 @@ public struct UIConstants {
 
     // Static fonts
     static let DefaultChromeSize: CGFloat = 14
+    static let DefaultChromeSmallSize: CGFloat = 11
     static let DefaultChromeFont: UIFont = UIFont.systemFontOfSize(DefaultChromeSize, weight: UIFontWeightRegular)
     static let DefaultChromeBoldFont = UIFont.boldSystemFontOfSize(DefaultChromeSize)
+    static let DefaultChromeSmallFontBold = UIFont.boldSystemFontOfSize(DefaultChromeSmallSize)
 
     // These highlight colors are currently only used on Snackbar buttons when they're pressed
     static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)
