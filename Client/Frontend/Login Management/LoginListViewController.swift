@@ -68,6 +68,7 @@ class LoginListViewController: UIViewController {
         super.viewWillAppear(animated)
         tableView.dataSource = loginDataSource
         tableView.delegate = self
+        tableView.tableFooterView = UIView()
 
         profile.logins.getAllLogins().uponQueue(dispatch_get_main_queue()) { result in
             self.loginDataSource?.cursor = result.successValue
