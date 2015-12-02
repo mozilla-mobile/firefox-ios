@@ -18,6 +18,7 @@ public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
+    var lastSyncFinishTime: Timestamp? { get set }
 
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
@@ -642,8 +643,22 @@ public class BrowserProfile: Profile {
             }
         }
 
+        var lastSyncFinishTime: Timestamp? {
+            get {
+                return self.prefs.timestampForKey(PrefsKeys.KeyLastSyncFinishTime)
+            }
+
+            set(value) {
+                if let value = value {
+                    self.prefs.setTimestamp(value, forKey: PrefsKeys.KeyLastSyncFinishTime)
+                } else {
+                    self.prefs.removeObjectForKey(PrefsKeys.KeyLastSyncFinishTime)
+                }
+            }
+        }
+
         @objc func onFinishSyncing(notification: NSNotification) {
-            self.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastSyncFinishTime)
+            self.lastSyncFinishTime = NSDate.now()
         }
 
         var prefsForSync: Prefs {
