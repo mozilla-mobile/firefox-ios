@@ -114,6 +114,16 @@ class DynamicFontHelper: NSObject {
         return defaultStandardFontSize + 5
     }
 
+    /**
+     * Intro mode
+     */
+    var IntroStandardFontSize: CGFloat {
+        return defaultStandardFontSize - 1
+    }
+    var IntroBigFontSize: CGFloat {
+        return defaultStandardFontSize + 1
+    }
+
     func refreshFonts() {
         defaultStandardFontSize = UIFontDescriptor.preferredFontDescriptorWithTextStyle(UIFontTextStyleBody).pointSize
         deviceFontSize = defaultStandardFontSize * (UIDevice.currentDevice().userInterfaceIdiom == .Pad ? iPadFactor : iPhoneFactor)
