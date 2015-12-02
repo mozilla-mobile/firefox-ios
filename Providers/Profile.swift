@@ -534,6 +534,15 @@ public class BrowserProfile: Profile {
         func applicationDidBecomeActive() {
             self.backgrounded = false
             self.beginTimedSyncs()
+
+            // Sync now if it's been more than our threshold.
+            let now = NSDate.now()
+            let then = self.lastSyncFinishTime ?? 0
+            let since = now - then
+            log.debug("\(since)msec since last sync.")
+            if since > SyncConstants.SyncOnForegroundMinimumDelayMillis {
+                self.syncEverythingSoon()
+            }
         }
 
         /**
@@ -888,6 +897,12 @@ public class BrowserProfile: Profile {
             ) >>> succeed
         }
 
+        func syncEverythingSoon() {
+            self.doInBackgroundAfter(millis: SyncConstants.SyncOnForegroundAfterMillis) {
+                log.debug("Running delayed startup sync.")
+                self.syncEverything()
+            }
+        }
 
         @objc func syncOnTimer() {
             self.syncEverything()
