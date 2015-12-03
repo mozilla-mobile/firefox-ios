@@ -351,6 +351,11 @@ class TabTrayController: UIViewController {
             if let tab = tabManager.selectedTab where tab.isPrivate {
                 privateMode = true
             }
+
+            // register for previewing delegvate to enable peek and pop if force touch feature available
+            if traitCollection.forceTouchCapability == .Available {
+                registerForPreviewingWithDelegate(self, sourceView: view)
+            }
         }
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappWillResignActiveNotification", name: UIApplicationWillResignActiveNotification, object: nil)
@@ -896,5 +901,23 @@ private class EmptyPrivateTabsView: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+@available(iOS 9.0, *)
+extension TabTrayController: UIViewControllerPreviewingDelegate {
+
+    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = collectionView?.indexPathForItemAtPoint(location),
+            cell = collectionView?.cellForItemAtIndexPath(indexPath) else { return nil }
+
+        let tab = tabDataSource.tabs[indexPath.row]
+        let tabVC = TabPeekViewController(tab: tab)
+        previewingContext.sourceRect = cell.frame
+
+        return tabVC
+    }
+
+    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
     }
 }
