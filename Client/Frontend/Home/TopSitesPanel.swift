@@ -127,7 +127,7 @@ class TopSitesPanel: UIViewController {
     }
 
     private func updateAllRemoveButtonStates() {
-        collection?.indexPathsForVisibleItems().forEach(updateRemoveButtonStateForIndexPath)
+        collection?.indexPathsForVisibleItems().forEach { updateRemoveButtonStateForIndexPath($0) }
     }
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
@@ -145,7 +145,11 @@ class TopSitesPanel: UIViewController {
 
     private func updateRemoveButtonStateForIndexPath(indexPath: NSIndexPath) {
         // If we have a cell passed in, use it. If not, then use the indexPath to get it.
+<<<<<<< HEAD
         guard let cell = collection?.cellForItemAtIndexPath(indexPath) as? ThumbnailCell else {
+=======
+        guard let cell = cell ?? (collection?.cellForItemAtIndexPath(indexPath) as? ThumbnailCell) else {
+>>>>>>> Bug 1223124 - Pre: Fixed nits and added assertion helpers with assertIfMainThread method
             return
         }
 
