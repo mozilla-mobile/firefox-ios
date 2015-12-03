@@ -489,7 +489,10 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             let indexPathToUpdate = NSIndexPath(forItem: indexOfSite, inSection: 0)
             guard let cell = self.collectionView?.cellForItemAtIndexPath(indexPathToUpdate) as? ThumbnailCell else { return }
             cell.imageView.sd_setImageWithURL(url) { (img, err, type, url) -> Void in
-                guard let img = img else { return }
+                guard let img = img else {
+                    self.setDefaultThumbnailBackgroundForCell(cell)
+                    return
+                }
                 cell.image = img
                 self.setBlurredBackground(img, withURL: url, forCell: cell)
             }
