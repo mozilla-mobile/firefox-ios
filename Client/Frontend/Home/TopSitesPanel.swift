@@ -116,18 +116,18 @@ class TopSitesPanel: UIViewController {
     }
 
     private func updateAllRemoveButtonStates() {
-        collection?.indexPathsForVisibleItems().forEach { indexPath in
-            updateRemoveButtonStateForIndexPath(indexPath)
-        }
+        collection?.indexPathsForVisibleItems().forEach { updateRemoveButtonStateForIndexPath($0) }
     }
 
     private func updateRemoveButtonStateForIndexPath(indexPath: NSIndexPath, forCell cell: ThumbnailCell? = nil) {
         // If we have a cell passed in, use it. If not, then use the indexPath to get it.
-        let cell = cell ?? (collection?.cellForItemAtIndexPath(indexPath) as? ThumbnailCell)
+        guard let cell = cell ?? (collection?.cellForItemAtIndexPath(indexPath) as? ThumbnailCell) else {
+            return
+        }
 
         dataSource[indexPath.row] is SuggestedSite ?
-            cell?.toggleRemoveButton(false) :
-            cell?.toggleRemoveButton(editingThumbnails)
+            cell.toggleRemoveButton(false) :
+            cell.toggleRemoveButton(editingThumbnails)
     }
 
     private func refreshTopSites(frecencyLimit: Int) {
@@ -155,7 +155,7 @@ class TopSitesPanel: UIViewController {
     }
 
     private func invalidateTopSitesCursor() -> Success {
-        return profile.history.getTopSitesWithLimit(maxFrecencyLimit).bind { result in
+        return profile.history.getTopSitesWithLimit(maxFrecencyLimit).bindQueue(dispatch_get_main_queue()) { result in
             self.cachedCursor = result.successValue
             return succeed()
         }
@@ -236,7 +236,11 @@ extension TopSitesPanel: UICollectionViewDelegate {
 
 extension TopSitesPanel: ThumbnailCellDelegate {
 
+    // Always gets called on the main thread since it's triggered by user input.
     func didRemoveThumbnail(thumbnailCell: ThumbnailCell) {
+
+        assertIsMainThread("Removing a thumbnail cell must be called from the main thread.")
+
         guard let indexPath = collection?.indexPathForCell(thumbnailCell),
             let site = dataSource[indexPath.item] else {
             return
@@ -332,18 +336,18 @@ private class TopSitesLayout: UICollectionViewLayout {
     }
 
     private var thumbnailCount: Int {
-        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
+        assertIsMainThread("layout.thumbnailCount interacts with UIKit components - cannot call from background thread.")
         return thumbnailRows * thumbnailCols
     }
 
     private var width: CGFloat {
-        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
+        assertIsMainThread("layout.width interacts with UIKit components - cannot call from background thread.")
         return self.collectionView?.frame.width ?? 0
     }
 
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
     private var thumbnailWidth: CGFloat {
-        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
+        assertIsMainThread("layout.thumbnailWidth interacts with UIKit components - cannot call from background thread.")
 
         let size = collectionView?.bounds.size ?? CGSizeZero
         let insets = ThumbnailCellUX.insetsForCollectionViewSize(size,
@@ -354,7 +358,7 @@ private class TopSitesLayout: UICollectionViewLayout {
     // The tile's height is determined the aspect ratio of the thumbnails width. We also take into account
     // some padding between the title and the image.
     private var thumbnailHeight: CGFloat {
-        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
+        assertIsMainThread("layout.thumbnailHeight interacts with UIKit components - cannot call from background thread.")
 
         return floor(thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio))
     }
