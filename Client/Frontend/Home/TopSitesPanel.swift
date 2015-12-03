@@ -480,9 +480,9 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         guard let siteURL = site.url.asURL else { return }
 
         FaviconFetcher.getForURL(siteURL, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
-            guard let favicons = result.successValue where favicons.count > 0 else { return }
-            guard let url = favicons.first?.url.asURL else { return }
-            guard let indexOfSite = (self.data.asArray().indexOf { $0 == site }) else {
+            guard let favicons = result.successValue where favicons.count > 0,
+                  let url = favicons.first?.url.asURL,
+                  let indexOfSite = (self.data.asArray().indexOf { $0 == site }) else {
                 return
             }
 
