@@ -704,8 +704,15 @@ class BrowserViewController: UIViewController {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
-        if let tab = tabManager.selectedTab,
-           let nav = tab.loadRequest(NSURLRequest(URL: url)) {
+        guard let tab = tabManager.selectedTab else {
+            return
+        }
+
+        if let webView = tab.webView {
+            resetSpoofedUserAgentIfRequired(webView, newURL: url)
+        }
+
+        if let nav = tab.loadRequest(NSURLRequest(URL: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
@@ -890,6 +897,17 @@ class BrowserViewController: UIViewController {
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
         openURLInNewTab(nil, isPrivate: isPrivate)
         urlBar.browserLocationViewDidTapLocation(urlBar.locationView)
+    }
+
+    private func resetSpoofedUserAgentIfRequired(webView: WKWebView, newURL: NSURL) {
+        guard #available(iOS 9.0, *) else {
+            return
+        }
+
+        // Reset the UA when a different domain is being loaded
+        if webView.URL?.host != newURL.host {
+            webView.customUserAgent = nil
+        }
     }
 }
 
@@ -1600,7 +1618,6 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
-
         guard let url = navigationAction.request.URL else {
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
@@ -1614,6 +1631,9 @@ extension BrowserViewController: WKNavigationDelegate {
                 openExternal(url, prompt: navigationAction.navigationType == WKNavigationType.Other)
                 decisionHandler(WKNavigationActionPolicy.Cancel)
             } else {
+                if navigationAction.navigationType == .LinkActivated {
+                    resetSpoofedUserAgentIfRequired(webView, newURL: url)
+                }
                 decisionHandler(WKNavigationActionPolicy.Allow)
             }
         case "tel":
@@ -1683,10 +1703,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
         addOpenInViewIfNeccessary(webView.URL)
 
-        // Remember whether or not a desktop site was requested and reset potentially spoofed user agent
+        // Remember whether or not a desktop site was requested
         if #available(iOS 9.0, *) {
             tab.desktopSite = webView.customUserAgent?.isEmpty == false
-            webView.customUserAgent = nil
         }
     }
 
