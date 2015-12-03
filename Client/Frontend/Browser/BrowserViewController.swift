@@ -348,15 +348,8 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(self.header)
         }
 
-        let viewBindings: [String: AnyObject] = [
-            "header": header,
-            "topLayoutGuide": topLayoutGuide
-        ]
-        let topConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[topLayoutGuide][header]", options: [], metrics: nil, views: viewBindings)
-        view.addConstraints(topConstraint)
-        scrollController.headerTopConstraint = topConstraint.first
-
         header.snp_makeConstraints { make in
+            scrollController.headerTopConstraint = make.top.equalTo(snp_topLayoutGuideBottom).constraint
             make.height.equalTo(UIConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
         }
