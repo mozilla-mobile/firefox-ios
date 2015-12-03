@@ -57,7 +57,7 @@ class SearchInputView: UIView {
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: "SELtappedClose", forControlEvents: .TouchUpInside)
-        button.setImage(UIImage(named: "TileCloseButton"), forState: .Normal)
+        button.setImage(UIImage(named: "clear"), forState: .Normal)
         button.accessibilityLabel = NSLocalizedString("Clear Search", comment: "Clears the search input field and exits out of input mode")
         return button
     }()
