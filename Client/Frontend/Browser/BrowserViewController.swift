@@ -439,14 +439,6 @@ class BrowserViewController: UIViewController {
             // Reset previous crash state
             activeCrashReporter?.resetPreviousCrashState()
 
-            // Only ask to restore tabs from a crash if we had non-home tabs or tabs with some kind of history in them
-            guard let tabsToRestore = tabManager.tabsToRestore() else { return }
-            let onlyNoHistoryTabs = !tabsToRestore.every { $0.sessionData?.urls.count > 1 }
-            if onlyNoHistoryTabs {
-                tabManager.addTabAndSelect();
-                return
-            }
-
             let optedIntoCrashReporting = profile.prefs.boolForKey("crashreports.send.always")
             if optedIntoCrashReporting == nil {
                 // Offer a chance to allow the user to opt into crash reporting
@@ -486,7 +478,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func showRestoreTabsAlert() {
-        guard !DebugSettingsBundleOptions.skipSessionRestore else {
+        guard shouldRestoreTabs() else {
             self.tabManager.addTabAndSelect()
             return
         }
@@ -501,6 +493,12 @@ class BrowserViewController: UIViewController {
         )
 
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+
+    private func shouldRestoreTabs() -> Bool {
+        guard let tabsToRestore = tabManager.tabsToRestore() else { return false }
+        let onlyNoHistoryTabs = !tabsToRestore.every { $0.sessionData?.urls.count > 1 || !AboutUtils.isAboutHomeURL($0.sessionData?.urls.first) }
+        return !onlyNoHistoryTabs && !DebugSettingsBundleOptions.skipSessionRestore
     }
 
     override func viewDidAppear(animated: Bool) {
