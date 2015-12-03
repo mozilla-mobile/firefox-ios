@@ -871,30 +871,7 @@ public class BrowserProfile: Profile {
 
 
         @objc func syncOnTimer() {
-            log.debug("Running timed logins sync.")
-
-            // Note that we use .upon here rather than chaining with >>> precisely
-            // to allow us to sync subsequent engines regardless of earlier failures.
-            // We don't fork them in parallel because we want to limit perf impact
-            // due to background syncs, and because we're cautious about correctness.
-            self.syncLogins().upon { result in
-                if let success = result.successValue {
-                    log.debug("Timed logins sync succeeded. Status: \(success.description).")
-                } else {
-                    let reason = result.failureValue?.description ?? "none"
-                    log.debug("Timed logins sync failed. Reason: \(reason).")
-                }
-
-                log.debug("Running timed history sync.")
-                self.syncHistory().upon { result in
-                    if let success = result.successValue {
-                        log.debug("Timed history sync succeeded. Status: \(success.description).")
-                    } else {
-                        let reason = result.failureValue?.description ?? "none"
-                        log.debug("Timed history sync failed. Reason: \(reason).")
-                    }
-                }
-            }
+            self.syncEverything()
         }
 
         func syncClients() -> SyncResult {
