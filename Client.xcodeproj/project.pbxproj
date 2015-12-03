@@ -670,6 +670,7 @@
 		E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660BE051BB0666D009AC090 /* InnerStrokedView.swift */; };
 		E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E663D5771BB341C4001EF30E /* ToggleButton.swift */; };
 		E66464911C10CA9C00AF05CE /* SearchInputViewRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66464901C10CA9C00AF05CE /* SearchInputViewRefTests.swift */; };
+		E66464EE1C10D98000AF05CE /* AssertionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66464ED1C10D98000AF05CE /* AssertionUtils.swift */; };
 		E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */; };
 		E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
@@ -1888,6 +1889,7 @@
 		E6639F171BF11E17002D0853 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		E663D5771BB341C4001EF30E /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		E66464901C10CA9C00AF05CE /* SearchInputViewRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputViewRefTests.swift; sourceTree = "<group>"; };
+		E66464ED1C10D98000AF05CE /* AssertionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssertionUtils.swift; sourceTree = "<group>"; };
 		E66C5B461BDA81050051AA93 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTests.swift; sourceTree = "<group>"; };
@@ -2834,6 +2836,7 @@
 				0BAC7A7F1AC4B135006018CB /* AppConstants.swift */,
 				28E8BE7E1B792A89002CC733 /* AppInfo.swift */,
 				6BE4ACF81B0657180092AEBE /* Accessibility.swift */,
+				E66464ED1C10D98000AF05CE /* AssertionUtils.swift */,
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
 				0B5A92E31B1E6075004F47A2 /* Cancellable.swift */,
 				281B2C071ADF4F29002917DC /* DeferredUtils.swift */,
@@ -4646,6 +4649,7 @@
 				E69966991B72674B0036F797 /* RollingFileLogger.swift in Sources */,
 				288A2DAB1AB8B3700023ABC3 /* BoxType.swift in Sources */,
 				28C328021AD387E00005149C /* KeychainWrapper.swift in Sources */,
+				E66464EE1C10D98000AF05CE /* AssertionUtils.swift in Sources */,
 				28158BAC1ABC7C0E00C56FC8 /* Bytes.swift in Sources */,
 				288A2DB11AB8B37E0023ABC3 /* LockProtected.swift in Sources */,
 				2FDE87511ABA3E9A005317B1 /* HashExtensions.swift in Sources */,
