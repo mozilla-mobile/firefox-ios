@@ -226,6 +226,7 @@ struct PrivateModeStrings {
 class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
+    weak var browserViewController: BrowserViewController?
 
     var collectionView: UICollectionView!
     var navBar: UIView!
@@ -280,6 +281,11 @@ class TabTrayController: UIViewController {
         self.tabManager = tabManager
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
+    }
+
+    convenience init(tabManager: TabManager, profile: Profile, browserViewController: BrowserViewController) {
+        self.init(tabManager: tabManager, profile: profile)
+        self.browserViewController = browserViewController
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -908,8 +914,12 @@ private class EmptyPrivateTabsView: UIView {
 extension TabTrayController: UIViewControllerPreviewingDelegate {
 
     func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        guard let indexPath = collectionView?.indexPathForItemAtPoint(location),
-            cell = collectionView?.cellForItemAtIndexPath(indexPath) else { return nil }
+
+        guard let collectionView = collectionView else { return nil }
+        let convertedLocation = self.view.convertPoint(location, toView: collectionView)
+
+        guard let indexPath = collectionView.indexPathForItemAtPoint(convertedLocation),
+            let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
 
         let tab = tabDataSource.tabs[indexPath.row]
         let tabVC = TabPeekViewController(tab: tab)
@@ -919,5 +929,17 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     }
 
     func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+        guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
+        tabManager.selectTab(tpvc.tab)
+        self.navigationController?.popViewControllerAnimated(true)
+        browserViewController?.urlBar.updateAlphaForSubviews(1)
+
+        [browserViewController?.header,
+            browserViewController?.footer,
+            browserViewController?.readerModeBar,
+            browserViewController?.footerBackdrop,
+            browserViewController?.headerBackdrop].forEach { view in
+            view?.transform = CGAffineTransformIdentity
+        }
     }
 }

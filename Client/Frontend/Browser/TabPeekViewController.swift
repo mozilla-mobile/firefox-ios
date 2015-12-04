@@ -23,19 +23,34 @@ class TabPeekViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if tab.webView == nil {
-            tab.createWebview()
-        }
-
-        guard let webView = tab.webView else {
-            print("Couldn't create web view!")
+        // if there is no screenshot, load the URL in a web page
+        // otherwise just show the screenshot
+        guard let screenshot = tab.screenshot else {
+            setupWebView(tab.url)
             return
         }
+        setupWithScreenshot(screenshot)
+    }
 
+    private func setupWithScreenshot(screenshot: UIImage) {
+        let imageView = UIImageView(image: screenshot)
+        self.view.addSubview(imageView)
+
+        imageView.snp_makeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
+    }
+
+    private func setupWebView(url: NSURL?) {
+        let webView = WKWebView()
         self.view.addSubview(webView)
+
         webView.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
+        }
+
+        if let url = url {
+            webView.loadRequest(NSURLRequest(URL: url))
         }
     }
 }
