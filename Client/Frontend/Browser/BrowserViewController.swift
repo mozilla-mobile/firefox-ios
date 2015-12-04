@@ -906,7 +906,7 @@ class BrowserViewController: UIViewController {
         } else {
             request = nil
         }
-        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile)
+        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, browserViewController: self)
         tabTrayController.changePrivacyMode(isPrivate)
         self.tabTrayController = tabTrayController
         tabManager.addTabAndSelect(request, isPrivate: isPrivate)
@@ -982,7 +982,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
         self.webViewContainerToolbar.hidden = true
-        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile)
+        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, browserViewController: self)
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
