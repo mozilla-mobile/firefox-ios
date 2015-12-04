@@ -64,7 +64,7 @@ class ShareExtensionHelper: NSObject {
 
 extension ShareExtensionHelper: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
-        return NSURL() // Placeholder, does not have to contain the actual URL
+        return selectedTab.displayURL!
     }
 
     func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
