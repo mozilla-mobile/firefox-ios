@@ -411,6 +411,15 @@ class BrowserViewController: UIViewController {
             if !urls.isEmpty {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.tabManager.addTabsForURLs(urls, zombie: false)
+                    if #available(iOS 9, *) {
+                        if let lastTab = cursor.asArray().last {
+                            var userData = [QuickActions.TabURLKey: lastTab.url]
+                            if let title = lastTab.title {
+                                userData[QuickActions.TabTitleKey] = title
+                            }
+                            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastTab, withUserData: userData, toApplication: UIApplication.sharedApplication())
+                        }
+                    }
                 }
             }
 
@@ -719,9 +728,9 @@ class BrowserViewController: UIViewController {
         let shareItem = ShareItem(url: url, title: title, favicon: nil)
         profile.bookmarks.shareItem(shareItem)
         if #available(iOS 9, *) {
-            var userData = ["bookmarkURL": shareItem.url]
+            var userData = [QuickActions.TabURLKey: shareItem.url]
             if let title = shareItem.title {
-                userData["bookmarkTitle"] = title
+                userData[QuickActions.TabTitleKey] = title
             }
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
                 withUserData: userData,
