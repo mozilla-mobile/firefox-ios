@@ -13,6 +13,8 @@ private let desktopBookmarksLabel = NSLocalizedString("Desktop Bookmarks", table
 
 func titleForSpecialGUID(guid: GUID) -> String? {
     switch guid {
+    case BookmarkRoots.RootGUID:
+        return "<Root>"
     case BookmarkRoots.MobileFolderGUID:
         return BookmarksFolderTitleMobile
     case BookmarkRoots.ToolbarFolderGUID:
