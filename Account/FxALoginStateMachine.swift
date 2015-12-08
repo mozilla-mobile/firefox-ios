@@ -115,6 +115,9 @@ class FxALoginStateMachine {
                                 log.error("Unknown error: \(error.description).  Transitioning to Separated.")
                                 return separated
                             }
+                        case let .Local(localError) where localError.domain == NSURLErrorDomain:
+                            log.warning("Local networking error: \(result.failureValue!).  Assuming transient and not transitioning.")
+                            return same
                         default:
                             break
                         }
@@ -159,6 +162,9 @@ class FxALoginStateMachine {
                                 log.error("Unknown error: \(error.description).  Transitioning to Separated.")
                                 return separated
                             }
+                        case let .Local(localError) where localError.domain == NSURLErrorDomain:
+                            log.warning("Local networking error: \(result.failureValue!).  Assuming transient and not transitioning.")
+                            return same
                         default:
                             break
                         }
