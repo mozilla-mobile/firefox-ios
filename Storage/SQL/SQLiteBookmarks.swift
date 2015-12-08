@@ -573,17 +573,25 @@ extension SQLiteBookmarks: ShareToDestination {
     }
 }
 
-// At present this only searches local bookmarks.
-// TODO: also search mirrored bookmarks.
 extension SQLiteBookmarks: SearchableBookmarks {
     public func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>> {
-        let inner = "SELECT id, type, guid, bmkUri, title, faviconID FROM \(TableBookmarksLocal) WHERE type = \(BookmarkNodeType.Bookmark.rawValue) AND bmkUri = ?"
+        let inner =
+        "SELECT id, type, guid, bmkUri, title, faviconID FROM \(TableBookmarksLocal) " +
+        "WHERE " +
+        "type = \(BookmarkNodeType.Bookmark.rawValue) AND is_deleted IS NOT 1 AND bmkUri = ? " +
+        "UNION ALL " +
+        "SELECT id, type, guid, bmkUri, title, faviconID FROM \(TableBookmarksMirror) " +
+        "WHERE " +
+        "type = \(BookmarkNodeType.Bookmark.rawValue) AND is_overridden IS NOT 1 AND is_deleted IS NOT 1 AND bmkUri = ? "
+
         let sql =
         "SELECT bookmarks.id AS id, bookmarks.type AS type, guid, bookmarks.bmkUri AS bmkUri, title, " +
         "favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
         "FROM (\(inner)) AS bookmarks " +
         "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
-        let args: Args = [url.absoluteString]
+
+        let u = url.absoluteString
+        let args: Args = [u, u]
         return db.runQuery(sql, args: args, factory: BookmarkFactory.itemFactory)
     }
 }
