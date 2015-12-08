@@ -275,6 +275,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
     }
 
     func folderForGUID(guid: GUID, title: String) -> Deferred<Maybe<BookmarkFolder>> {
+        log.debug("Folder for GUID \(guid)")
         return self.getChildren(guid)
             >>== { cursor in
 
@@ -294,10 +295,12 @@ public class SQLiteBookmarks: BookmarksModelFactory {
     }
 
     private func modelWithRoot(root: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+        log.debug("Model with root \(root)")
         return deferMaybe(BookmarksModel(modelFactory: self, root: root))
     }
 
     public func modelForFolder(guid: String, title: String) -> Deferred<Maybe<BookmarksModel>> {
+        log.debug("Getting model for \(guid).")
         if guid == BookmarkRoots.FakeDesktopFolderGUID {
             return self.modelForDesktopBookmarks()
         }
@@ -308,10 +311,12 @@ public class SQLiteBookmarks: BookmarksModelFactory {
     }
 
     public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+        log.debug("modelForFolder \(folder.guid).")
         return self.modelForFolder(folder.guid, title: folder.title)
     }
 
     public func modelForFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
+        log.debug("modelForFolder \(guid).")
         return self.modelForFolder(guid, title: "")
     }
 
