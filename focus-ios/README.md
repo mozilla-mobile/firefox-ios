@@ -1,7 +1,11 @@
 Focus by Firefox
 ------------------
 
-Focus by Firefox is a free content blocker for Safari users on iOS 9 that gives users greater control of their mobile Web experience. Focus by Firefox puts users in control of their privacy by allowing them to block categories of trackers such as those used for ads, analytics and social media. Focus by Firefox may also increase performance and reduce mobile data usage by blocking Web fonts. We welcome your [feedback](https://input.mozilla.org/feedback/focus) as we explore ways to offer more features in Focus by Firefox in the future.
+Focus by Firefox is a free content blocker for Safari users on iOS 9 that gives users greater control of their mobile Web experience. Focus by Firefox puts users in control of their privacy by allowing them to block categories of trackers such as those used for ads, analytics and social media. Focus by Firefox may also increase performance and reduce mobile data usage by blocking Web fonts.
+
+Download on the [App Store](https://itunes.apple.com/app/id1055677337).
+
+We welcome your [feedback](https://input.mozilla.org/feedback/focus) as we explore ways to offer more features in the future.
 
 Getting involved
 ----------------
@@ -15,9 +19,4 @@ We encourage you to participate in this open source project. We love Pull Reques
 Build Instructions
 ------------------
 
-Run ./checkout.sh to pull in dependencies and generate the block list. After that you can open the Xcode project and run and build the app.
-
-Download
---------
-
-You can download Focus [on the Appstore](https://itunes.apple.com/app/id1055677337).
+Run `./checkout.sh` to pull in dependencies and generate the block list. After that you can open the Xcode project and build the app.
