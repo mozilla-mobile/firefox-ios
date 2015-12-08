@@ -5,8 +5,12 @@
 import UIKit
 import Shared
 
-protocol Identifiable {
+public protocol Identifiable: Equatable {
     var id: Int? { get set }
+}
+
+public func ==<T where T: Identifiable>(lhs: T, rhs: T) -> Bool {
+    return lhs.id == rhs.id
 }
 
 public enum IconType: Int {
@@ -19,7 +23,7 @@ public enum IconType: Int {
 }
 
 public class Favicon: Identifiable {
-    var id: Int? = nil
+    public var id: Int? = nil
 
     public let url: String
     public let date: NSDate
@@ -37,7 +41,7 @@ public class Favicon: Identifiable {
 // TODO: Site shouldn't have all of these optional decorators. Include those in the
 // cursor results, perhaps as a tuple.
 public class Site : Identifiable {
-    var id: Int? = nil
+    public var id: Int? = nil
     var guid: String? = nil
 
     public let url: String
