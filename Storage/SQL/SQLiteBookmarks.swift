@@ -854,14 +854,6 @@ extension SQLiteBookmarks {
     }
 }
 
-extension SQLiteBookmarkBufferStorage {
-    // Used for resetting.
-    public func wipeBookmarks() -> Success {
-        return self.db.run("DELETE FROM \(TableBookmarksBuffer)")
-           >>> { self.db.run("DELETE FROM \(TableBookmarksBufferStructure)") }
-    }
-}
-
 public class MergedSQLiteBookmarks {
     let local: SQLiteBookmarks
     let buffer: SQLiteBookmarkBufferStorage
@@ -932,31 +924,119 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
 
 extension MergedSQLiteBookmarks: AccountRemovalDelegate {
     public func onRemovedAccount() -> Success {
-        return self.resetClient()
+        return self.local.onRemovedAccount() >>> self.buffer.onRemovedAccount
     }
 }
 
 extension MergedSQLiteBookmarks: ResettableSyncStorage {
+    public func resetClient() -> Success {
+        return self.local.resetClient() >>> self.buffer.resetClient
+    }
+}
+
+extension SQLiteBookmarkBufferStorage: AccountRemovalDelegate {
+    public func onRemovedAccount() -> Success {
+        return self.resetClient()
+    }
+}
+
+extension SQLiteBookmarkBufferStorage: ResettableSyncStorage {
     /**
      * Our buffer is simply a copy of server contents. That means we should
      * be very willing to drop it and re-populate it from the server whenever we might
      * be out of sync. See Bug 1212431 Comment 2.
      */
     public func resetClient() -> Success {
-        return self.buffer.wipeBookmarks()
+        return self.wipeBookmarks()
+    }
+
+    public func wipeBookmarks() -> Success {
+        return self.db.run("DELETE FROM \(TableBookmarksBuffer)")
+         >>> { self.db.run("DELETE FROM \(TableBookmarksBufferStructure)") }
+    }
+}
+
+extension SQLiteBookmarks {
+    private func collapseMirrorIntoLocalPreservingDeletions(preserveDeletions: Bool) -> Success {
+        // As implemented, this won't work correctly without ON DELETE CASCADE.
+        assert(SwiftData.EnableForeignKeys)
+
+        // 1. Drop anything from the mirror that's overridden. It's already in
+        //    local, deleted or not.
+        //    The REFERENCES clause will drop old structure, too.
+        let removeOverridden =
+        "DELETE FROM \(TableBookmarksMirror) WHERE is_overridden IS 1"
+
+        // 2. Drop anything from local that's deleted. We don't need to track the
+        //    deletion now. Optional: keep them around if they're non-uploaded changes.
+        let removeLocalDeletions =
+        "DELETE FROM \(TableBookmarksLocal) WHERE is_deleted IS 1 " +
+            (preserveDeletions ? "AND sync_status IS NOT \(SyncStatus.Changed.rawValue)" : "")
+
+        // 3. Mark everything in local as New.
+        let markLocalAsNew =
+        "UPDATE \(TableBookmarksLocal) SET sync_status = \(SyncStatus.New.rawValue)"
+
+        // 4. Insert into local anything left in mirror.
+        //    Note that we use the server modified time as our substitute local modified time.
+        //    This will provide an ounce of conflict avoidance if the user re-links the same
+        //    account at a later date.
+        let copyMirrorContents =
+        "INSERT INTO \(TableBookmarksLocal) " +
+        "(sync_status, local_modified, " +
+        " guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos," +
+        " description, tags, keyword, folderName, queryId, faviconID) " +
+        "SELECT " +
+        "\(SyncStatus.New.rawValue) AS sync_status, " +
+        "server_modified AS local_modified, " +
+        "guid, type, bmkUri, title, parentid, parentName, " +
+        "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, faviconID " +
+        "FROM \(TableBookmarksMirror)"
+
+        // 5. Insert into localStructure anything left in mirrorStructure.
+        //    This won't copy the structure of any folders that were already overridden --
+        //    we already deleted those, and the deletions cascaded.
+        let copyMirrorStructure =
+        "INSERT INTO \(TableBookmarksLocalStructure) SELECT * FROM \(TableBookmarksMirrorStructure)"
+
+        // 6. Blank the mirror.
+        let removeMirrorStructure =
+        "DELETE FROM \(TableBookmarksMirrorStructure)"
+
+        let removeMirrorContents =
+        "DELETE FROM \(TableBookmarksMirror)"
+
+        return db.run([
+            removeOverridden,
+            removeLocalDeletions,
+            markLocalAsNew,
+            copyMirrorContents,
+            copyMirrorStructure,
+            removeMirrorStructure,
+            removeMirrorContents,
+        ])
     }
 }
 
 extension SQLiteBookmarks: AccountRemovalDelegate {
     public func onRemovedAccount() -> Success {
-        log.debug("SQLiteBookmarks doesn't yet store any data that needs to be discarded on account removal.")
-        return succeed()
+        return self.collapseMirrorIntoLocalPreservingDeletions(false)
     }
 }
 
 extension SQLiteBookmarks: ResettableSyncStorage {
     public func resetClient() -> Success {
-        log.debug("SQLiteBookmarks doesn't yet store any data that needs to be reset.")
-        return succeed()
+        // Flip flags to prompt a re-sync.
+        //
+        // We copy the mirror to local, preserving local changes, apart from
+        // deletions of records that were never synced.
+        //
+        // Records that match the server record that we'll redownload will be
+        // marked as Synced and won't be reuploaded.
+        //
+        // Records that are present locally but aren't on the server will be
+        // uploaded.
+        //
+        return self.collapseMirrorIntoLocalPreservingDeletions(true)
     }
 }
