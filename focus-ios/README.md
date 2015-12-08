@@ -7,7 +7,7 @@ Download on the [App Store](https://itunes.apple.com/app/id1055677337).
 
 We welcome your [feedback](https://input.mozilla.org/feedback/focus) as we explore ways to offer more features in the future.
 
-Getting involved
+Getting Involved
 ----------------
 
 We encourage you to participate in this open source project. We love Pull Requests, Bug Reports, ideas, (security) code reviews or any kind of positive contribution. Please read the [Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
