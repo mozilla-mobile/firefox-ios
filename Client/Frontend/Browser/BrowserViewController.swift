@@ -907,6 +907,16 @@ class BrowserViewController: UIViewController {
             webView.customUserAgent = nil
         }
     }
+
+    private func restoreSpoofedUserAgentIfRequired(webView: WKWebView, newRequest: NSURLRequest) {
+        guard #available(iOS 9.0, *) else {
+            return
+        }
+
+        // Restore any non-default UA from the request's header
+        let ua = newRequest.valueForHTTPHeaderField("User-Agent")
+        webView.customUserAgent = ua != UserAgent.defaultUserAgent() ? ua : nil
+    }
 }
 
 /**
@@ -1631,6 +1641,8 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 if navigationAction.navigationType == .LinkActivated {
                     resetSpoofedUserAgentIfRequired(webView, newURL: url)
+                } else if navigationAction.navigationType == .BackForward {
+                    restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
                 }
                 decisionHandler(WKNavigationActionPolicy.Allow)
             }
