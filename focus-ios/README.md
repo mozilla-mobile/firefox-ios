@@ -17,3 +17,7 @@ Build Instructions
 
 Run ./checkout.sh to pull in dependencies and generate the block list. After that you can open the Xcode project and run and build the app.
 
+Download
+--------
+
+You can download Focus [on the Appstore](https://itunes.apple.com/app/id1055677337).
