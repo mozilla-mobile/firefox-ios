@@ -633,7 +633,7 @@ private extension BookmarkMirrorItem {
  * When appropriate, the buffer is merged with the mirror and local storage
  * in the DB.
  */
-public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
+public class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
     private let db: BrowserDB
 
     public init(db: BrowserDB) {
@@ -845,32 +845,32 @@ extension SQLiteBookmarks {
     }
 }
 
-extension SQLiteBookmarkMirrorStorage {
+extension SQLiteBookmarkBufferStorage {
     // Used for resetting.
     public func wipeBookmarks() -> Success {
-        return self.db.run("DELETE FROM \(TableBookmarksMirror)")
-            >>> { self.db.run("DELETE FROM \(TableBookmarksMirrorStructure)") }
+        return self.db.run("DELETE FROM \(TableBookmarksBuffer)")
+           >>> { self.db.run("DELETE FROM \(TableBookmarksBufferStructure)") }
     }
 }
 
 public class MergedSQLiteBookmarks {
     let local: SQLiteBookmarks
-    let mirror: SQLiteBookmarkMirrorStorage
+    let buffer: SQLiteBookmarkBufferStorage
 
     public init(db: BrowserDB) {
         self.local = SQLiteBookmarks(db: db)
-        self.mirror = SQLiteBookmarkMirrorStorage(db: db)
+        self.buffer = SQLiteBookmarkBufferStorage(db: db)
     }
 }
 
-extension MergedSQLiteBookmarks: BookmarkMirrorStorage {
+extension MergedSQLiteBookmarks: BookmarkBufferStorage {
     public func applyRecords(records: [BookmarkMirrorItem]) -> Success {
-        return self.mirror.applyRecords(records)
+        return self.buffer.applyRecords(records)
     }
 
     public func doneApplyingRecordsAfterDownload() -> Success {
         // It doesn't really matter which one we checkpoint -- they're both backed by the same DB.
-        return self.mirror.doneApplyingRecordsAfterDownload()
+        return self.buffer.doneApplyingRecordsAfterDownload()
     }
 }
 
@@ -929,12 +929,12 @@ extension MergedSQLiteBookmarks: AccountRemovalDelegate {
 
 extension MergedSQLiteBookmarks: ResettableSyncStorage {
     /**
-     * Right now our mirror is simply a mirror of server contents. That means we should
+     * Our buffer is simply a copy of server contents. That means we should
      * be very willing to drop it and re-populate it from the server whenever we might
      * be out of sync. See Bug 1212431 Comment 2.
      */
     public func resetClient() -> Success {
-        return self.mirror.wipeBookmarks()
+        return self.buffer.wipeBookmarks()
     }
 }
 

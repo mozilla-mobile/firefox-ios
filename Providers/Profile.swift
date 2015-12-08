@@ -322,7 +322,7 @@ public class BrowserProfile: Profile {
         }
     }()
 
-    lazy var mirrorBookmarks: BookmarkMirrorStorage = {
+    lazy var mirrorBookmarks: BookmarkBufferStorage = {
         // Yeah, this is lazy. Sorry.
         return self.bookmarks as! MergedSQLiteBookmarks
     }()
