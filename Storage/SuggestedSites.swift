@@ -12,6 +12,10 @@ public class SuggestedSite: Site {
     public let wordmark: Favicon
     public let backgroundColor: UIColor
 
+    override public var tileURL: NSURL {
+        return NSURL(string: url) ?? NSURL(string: "about:blank")!
+    }
+
     let trackingId: Int
     init(data: SuggestedSiteData) {
         self.backgroundColor = UIColor(colorString: data.bgColor)

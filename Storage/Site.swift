@@ -44,6 +44,10 @@ public class Site : Identifiable {
     public var id: Int? = nil
     var guid: String? = nil
 
+    public var tileURL: NSURL {
+        return NSURL(string: url)?.domainURL() ?? NSURL(string: "about:blank")!
+    }
+
     public let url: String
     public let title: String
      // Sites may have multiple favicons. We'll return the largest.
