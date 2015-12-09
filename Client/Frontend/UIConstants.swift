@@ -21,20 +21,12 @@ public struct UIConstants {
     static let DefaultPadding: CGFloat = 10
     static let SnackbarButtonHeight: CGFloat = 48
 
-    static let DeviceFontSize: CGFloat = DeviceInfo.deviceModel().rangeOfString("iPad") != nil ? 18 : 15
-    static let DefaultMediumFontSize: CGFloat = 14
-
-    static let DefaultMediumFont: UIFont = UIFont.systemFontOfSize(DefaultMediumFontSize, weight: UIFontWeightRegular)
-    static let DefaultMediumBoldFont = UIFont.boldSystemFontOfSize(DefaultMediumFontSize)
-    static let DefaultSmallFontSize: CGFloat = 11
-
-    static let DefaultSmallFont = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightRegular)
-    static let DefaultSmallFontBold = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightBold)
-
-    static let DefaultStandardFontSize: CGFloat = 17
-    static let DefaultStandardFontBold = UIFont.boldSystemFontOfSize(DefaultStandardFontSize)
-
-    static let DefaultStandardFont: UIFont = UIFont.systemFontOfSize(DefaultStandardFontSize, weight: UIFontWeightRegular)
+    // Static fonts
+    static let DefaultChromeSize: CGFloat = 14
+    static let DefaultChromeSmallSize: CGFloat = 11
+    static let DefaultChromeFont: UIFont = UIFont.systemFontOfSize(DefaultChromeSize, weight: UIFontWeightRegular)
+    static let DefaultChromeBoldFont = UIFont.boldSystemFontOfSize(DefaultChromeSize)
+    static let DefaultChromeSmallFontBold = UIFont.boldSystemFontOfSize(DefaultChromeSmallSize)
 
     // These highlight colors are currently only used on Snackbar buttons when they're pressed
     static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)

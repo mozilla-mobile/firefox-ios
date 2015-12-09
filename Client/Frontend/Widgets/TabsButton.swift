@@ -9,7 +9,7 @@ struct TabsButtonUX {
     static let TitleColor: UIColor = UIColor.blackColor()
     static let TitleBackgroundColor: UIColor = UIColor.whiteColor()
     static let CornerRadius: CGFloat = 2
-    static let TitleFont: UIFont = UIConstants.DefaultSmallFontBold
+    static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 0
     static let BorderColor: UIColor = UIColor.clearColor()
     static let TitleInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)

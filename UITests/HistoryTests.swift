@@ -55,6 +55,25 @@ class HistoryTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
+    func testChangingDyamicFontOnHistory() {
+        _ = addHistoryItems(2)
+
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapViewWithAccessibilityLabel("History")
+
+        let historyRow = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "History List")
+        let size = historyRow.textLabel?.font.pointSize
+
+        DynamicFontUtils.bumpDynamicFontSize(tester())
+        let bigSize = historyRow.textLabel?.font.pointSize
+
+        DynamicFontUtils.lowerDynamicFontSize(tester())
+        let smallSize = historyRow.textLabel?.font.pointSize
+
+        XCTAssertGreaterThan(bigSize!, size!)
+        XCTAssertGreaterThanOrEqual(size!, smallSize!)
+    }
+
     func testDeleteHistoryItemFromListWith2Items() {
         // add 2 history items
         // delete all history items
@@ -102,6 +121,7 @@ class HistoryTests: KIFTestCase {
     }
 
     override func tearDown() {
+        DynamicFontUtils.restoreDynamicFontSize(tester())
         BrowserUtils.clearHistoryItems(tester(), numberOfTests: 2)
     }
 }
