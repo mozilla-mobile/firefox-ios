@@ -45,7 +45,7 @@ class SQLiteBookmarkFolder: BookmarkFolder {
     }
 }
 
-private class BookmarkFactory {
+class BookmarkFactory {
     private class func addIcon(bookmark: BookmarkNode, row: SDRow) {
         // TODO: share this logic with SQLiteHistory.
         if let faviconURL = row["iconURL"] as? String,
@@ -133,6 +133,54 @@ private class BookmarkFactory {
         }
         assert(false, "Invalid bookmark data.")
         return itemFactory(row)     // This will fail, but it keeps the compiler happy.
+    }
+
+    class func mirrorItemFactory(row: SDRow) -> BookmarkMirrorItem {
+        // TODO
+        // let id = row["id"] as! Int
+
+        let guid = row["guid"] as! GUID
+        let typeCode = row["type"] as! Int
+        let is_deleted = row.getBoolean("is_deleted")
+        let parentid = row["parentid"] as? GUID
+        let parentname = row["parentname"] as? String
+        let feedUri = row["feedUri"] as? String
+        let siteUri = row["siteUri"] as? String
+        let pos = row["pos"] as? Int
+        let title = row["title"] as? String
+        let description = row["description"] as? String
+        let bmkUri = row["bmkUri"] as? String
+        let tags = row["tags"] as? String
+        let keyword = row["keyword"] as? String
+        let folderName = row["folderName"] as? String
+        let queryId = row["queryId"] as? String
+
+        // TODO
+        //let faviconID = row["faviconID"] as? Int
+
+        // Local only. TODO
+        //let local_modified = row.getTimestamp("local_modified")
+        //let sync_status = row["sync_status"] as? Int
+
+        // Mirror and buffer.
+        let server_modified = row.getTimestamp("server_modified")
+        let hasDupe = row.getBoolean("hasDupe")
+
+        // Mirror only. TODO
+        //let is_overridden = row.getBoolean("is_overridden")
+
+        // Use the struct initializer directly. Yes, this doesn't validate as strongly as
+        // using the static constructors, but it'll be as valid as the contents of the DB.
+        let type = BookmarkNodeType(rawValue: typeCode)!
+        let item = BookmarkMirrorItem(guid: guid, type: type, serverModified: server_modified ?? 0,
+                                      isDeleted: is_deleted, hasDupe: hasDupe, parentID: parentid, parentName: parentname,
+                                      feedURI: feedUri, siteURI: siteUri,
+                                      pos: pos,
+                                      title: title, description: description,
+                                      bookmarkURI: bmkUri, tags: tags, keyword: keyword,
+                                      folderName: folderName, queryID: queryId,
+                                      children: nil)
+        return item
     }
 }
 
