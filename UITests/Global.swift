@@ -418,18 +418,18 @@ class DynamicFontUtils {
     static func bumpDynamicFontSize(tester: KIFUITestActor) {
         let value = UIContentSizeCategoryAccessibilityExtraLarge
         UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
-        tester.waitForTimeInterval(0.1)
+        tester.waitForTimeInterval(0.3)
     }
 
     static func lowerDynamicFontSize(tester: KIFUITestActor) {
         let value = UIContentSizeCategoryExtraSmall
         UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
-        tester.waitForTimeInterval(0.1)
+        tester.waitForTimeInterval(0.3)
     }
 
     static func restoreDynamicFontSize(tester: KIFUITestActor) {
         let value = UIContentSizeCategoryMedium
         UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
-        tester.waitForTimeInterval(0.1)
+        tester.waitForTimeInterval(0.3)
     }
 }
