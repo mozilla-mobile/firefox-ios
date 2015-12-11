@@ -332,6 +332,8 @@
 		74C027451B2A348C001B1E88 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
 		74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		74E36E151B716BAF00D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
+		7B0B1B791C1B69C900DF4AB5 /* ClientPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BCAAD81B05380B00855D82 /* ClientPickerViewController.swift */; };
+		7B0B1B9D1C1B6A3F00DF4AB5 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BCAAB81B0537E300855D82 /* InstructionsViewController.swift */; };
 		7B0E83B41BF2196E00D12554 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D31FC2311A8D908900BAF7EC /* Alamofire.framework */; };
 		7B0E83B51BF2196E00D12554 /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D31FC2311A8D908900BAF7EC /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */; };
@@ -1777,8 +1779,8 @@
 		E4BA8AA51B4B15EF00BC2E95 /* Firefox.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Firefox.entitlements; sourceTree = "<group>"; };
 		E4BA8AA61B4B15EF00BC2E95 /* ViewLater.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ViewLater.xcassets; sourceTree = "<group>"; };
 		E4BA8AA71B4B15EF00BC2E95 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E4BCAAB81B0537E300855D82 /* InstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsViewController.swift; sourceTree = "<group>"; };
-		E4BCAAD81B05380B00855D82 /* ClientPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientPickerViewController.swift; sourceTree = "<group>"; };
+		E4BCAAB81B0537E300855D82 /* InstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsViewController.swift; path = ../../Extensions/SendTo/InstructionsViewController.swift; sourceTree = "<group>"; };
+		E4BCAAD81B05380B00855D82 /* ClientPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientPickerViewController.swift; path = ../../Extensions/SendTo/ClientPickerViewController.swift; sourceTree = "<group>"; };
 		E4C358531AF1440B00299F7E /* Swizzling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Swizzling.h; sourceTree = "<group>"; };
 		E4C358541AF144BA00299F7E /* FSReadingList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSReadingList.m; sourceTree = "<group>"; };
 		E4C358561AF1467A00299F7E /* FSReadingList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSReadingList.h; sourceTree = "<group>"; };
@@ -2542,6 +2544,15 @@
 			name = OnePasswordExtension;
 			sourceTree = "<group>";
 		};
+		7B0B1B9C1C1B69F500DF4AB5 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E4BCAAD81B05380B00855D82 /* ClientPickerViewController.swift */,
+				E4BCAAB81B0537E300855D82 /* InstructionsViewController.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		7B60AFD61BDE3A8B0090C984 /* ClientUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -3278,6 +3289,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				7B0B1B9C1C1B69F500DF4AB5 /* Extensions */,
 				D3A994941A368691008AD1AC /* Browser */,
 				E49943F31AE6879C00BF9DE4 /* Intro */,
 				F84B21F51A0910F600AAB793 /* Reader */,
@@ -3365,8 +3377,6 @@
 				E4988B6E1A9B964B008B8B92 /* FennecNightly.entitlements */,
 				E448FC9B1AEE7A1900869B6C /* Firefox.entitlements */,
 				F8708D201A0970990051AB07 /* ActionViewController.swift */,
-				E4BCAAD81B05380B00855D82 /* ClientPickerViewController.swift */,
-				E4BCAAB81B0537E300855D82 /* InstructionsViewController.swift */,
 				F8708D211A0970990051AB07 /* Info.plist */,
 				F8708D221A0970990051AB07 /* MainInterface.storyboard */,
 				E4F21AA51A13C4A300B0FAAA /* Images.xcassets */,
@@ -4897,6 +4907,7 @@
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
+				7B0B1B9D1C1B6A3F00DF4AB5 /* InstructionsViewController.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				E42475E51AB73B9B00B23D33 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
@@ -5011,6 +5022,7 @@
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				E4B334541BBF2393004E2BFF /* ADJAdjustFactory.m in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
+				7B0B1B791C1B69C900DF4AB5 /* ClientPickerViewController.swift in Sources */,
 				0B5B51AF1B4CDB9E00E3B6E9 /* RXMLElement.m in Sources */,
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
 				D38B2D491A8D96D00040E6B5 /* GCDWebServerDataResponse.m in Sources */,
