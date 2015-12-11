@@ -26,7 +26,7 @@ public class DefaultSuggestedSites {
         ],
         "zh_CN": [
             SuggestedSiteData(
-                url: "https://m.baidu.com/?from=1000969a",
+                url: "https://m.baidu.com/?from=1000969b",
                 bgColor: "0x00479d",
                 imageUrl: "asset://suggestedsites_baidu",
                 faviconUrl: "asset://baiduLogo",
