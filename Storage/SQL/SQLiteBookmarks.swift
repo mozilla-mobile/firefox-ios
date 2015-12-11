@@ -297,7 +297,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 }
 
 extension SQLiteBookmarks {
-    private func getSQLToOverrideParent(folder: GUID, atModifiedTime modified: Timestamp) -> (sql: [String], args: Args) {
+    private func getSQLToOverrideParent(folder: GUID, atModifiedTime modified: Timestamp, andDelete: Bool=false) -> (sql: [String], args: Args) {
         let args: Args = [folder]
 
         // Copy it to the local table.
@@ -305,9 +305,11 @@ extension SQLiteBookmarks {
         // and in this case only the Mobile Bookmarks root.
         let overrideSQL = "INSERT OR IGNORE INTO \(TableBookmarksLocal) " +
                           "(guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos," +
-                          " description, tags, keyword, folderName, queryId, local_modified, sync_status, faviconID) " +
+                          " description, tags, keyword, folderName, queryId, is_deleted, " +
+                          " local_modified, sync_status, faviconID) " +
                           "SELECT guid, type, bmkUri, title, parentid, parentName, " +
                           "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, " +
+                          (andDelete ? "1, " : "is_deleted, ") +
                           "\(modified) AS local_modified, \(SyncStatus.Changed.rawValue) AS sync_status, faviconID " +
                           "FROM \(TableBookmarksMirror) WHERE guid = ?"
 
