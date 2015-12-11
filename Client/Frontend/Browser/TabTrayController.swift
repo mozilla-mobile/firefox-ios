@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import Storage
 
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
@@ -922,7 +923,10 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
             let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
 
         let tab = tabDataSource.tabs[indexPath.row]
-        let tabVC = TabPeekViewController(tab: tab)
+        let tabVC = TabPeekViewController(tab: tab, controller: browserViewController, tabManager: tabManager)
+        if let browserProfile = profile as? BrowserProfile {
+            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
+        }
         previewingContext.sourceRect = cell.frame
 
         return tabVC
@@ -941,5 +945,19 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
             browserViewController?.headerBackdrop].forEach { view in
             view?.transform = CGAffineTransformIdentity
         }
+    }
+}
+
+extension TabTrayController: ClientPickerViewControllerDelegate {
+
+    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+        if let item = clientPickerViewController.shareItem {
+            self.profile.sendItems([item], toClients: clients)
+        }
+        clientPickerViewController.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) {
+        clientPickerViewController.dismissViewControllerAnimated(true, completion: nil)
     }
 }

@@ -36,6 +36,7 @@ class ClientPickerViewController: UITableViewController {
     var reloading = true
     var clients: [RemoteClient] = []
     var selectedClients = NSMutableSet()
+    var shareItem: ShareItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
