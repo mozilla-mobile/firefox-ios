@@ -36,12 +36,7 @@ class SQLiteBookmarkFolder: BookmarkFolder {
 
     override subscript(index: Int) -> BookmarkNode {
         let bookmark = cursor[index]
-        if let item = bookmark as? BookmarkItem {
-            return item
-        }
-
-        // TODO: this is fragile.
-        return bookmark as! BookmarkFolder
+        return bookmark! as BookmarkNode
     }
 
     init(guid: String, title: String, children: Cursor<BookmarkNode>) {
@@ -60,6 +55,35 @@ private class BookmarkFactory {
                                            date: NSDate(timeIntervalSince1970: date),
                                            type: IconType(rawValue: faviconType)!)
         }
+    }
+
+    private class func livemarkFactory(row: SDRow) -> BookmarkItem {
+        let id = row["id"] as! Int
+        let guid = row["guid"] as! String
+        let url = row["siteUri"] as! String
+        let title = row["title"] as? String ?? "Livemark"       // TODO
+        let bookmark = BookmarkItem(guid: guid, title: title, url: url)
+        bookmark.id = id
+        BookmarkFactory.addIcon(bookmark, row: row)
+        return bookmark
+    }
+
+    private class func queryFactory(row: SDRow) -> BookmarkItem {
+        let id = row["id"] as! Int
+        let guid = row["guid"] as! String
+        let title = row["title"] as? String ?? "Query"       // TODO
+        let bookmark = BookmarkItem(guid: guid, title: title, url: "http://reddit.com")   // TODO
+        bookmark.id = id
+        BookmarkFactory.addIcon(bookmark, row: row)
+        return bookmark
+    }
+
+    private class func separatorFactory(row: SDRow) -> BookmarkSeparator {
+        let id = row["id"] as! Int
+        let guid = row["guid"] as! String
+        let separator = BookmarkSeparator(guid: guid)
+        separator.id = id
+        return separator
     }
 
     private class func itemFactory(row: SDRow) -> BookmarkItem {
@@ -96,14 +120,11 @@ private class BookmarkFactory {
             case .DynamicContainer:
                 fallthrough
             case .Separator:
-                // TODO
-                assert(false, "Separators not yet supported.")
+                return separatorFactory(row)
             case .Livemark:
-                // TODO
-                assert(false, "Livemarks not yet supported.")
+                return livemarkFactory(row)
             case .Query:
-                // TODO
-                assert(false, "Queries not yet supported.")
+                return queryFactory(row)
             }
         }
         assert(false, "Invalid bookmark data.")
