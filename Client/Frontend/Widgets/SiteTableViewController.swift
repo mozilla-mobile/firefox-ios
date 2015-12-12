@@ -125,7 +125,11 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCellWithIdentifier(CellIdentifier, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier, forIndexPath: indexPath)
+        if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
+            cell.separatorInset = UIEdgeInsetsZero
+        }
+        return cell
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -138,5 +142,9 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return SiteTableViewControllerUX.RowHeight
+    }
+
+    func tableView(tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
     }
 }
