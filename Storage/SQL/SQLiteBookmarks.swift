@@ -355,27 +355,82 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         ])
     }
 
-    // TODO: rewrite me.
-    public func removeByURL(url: String) -> Success {
-        return self.db.run([
-            ("DELETE FROM \(TableBookmarksLocal) WHERE bmkUri = ?", [url]),
-        ])
+    private func nonDeletedGUIDsForURL(url: String) -> Deferred<Maybe<(local: [GUID], mirror: [GUID])>> {
+        let local = "SELECT guid FROM \(TableBookmarksLocal) WHERE bmkUri = ? AND is_deleted = 0"
+        let mirror = "SELECT guid FROM \(TableBookmarksMirror) WHERE bmkUri = ? AND is_overridden = 0 AND is_deleted = 0"
+
+        let args: Args = [url]
+
+        return self.db.runQuery(local, args: args, factory: { $0["guid"] as! GUID }) >>== { ls in
+            return self.db.runQuery(mirror, args: args, factory: { $0["guid"] as! GUID }) >>== { ms in
+                let locals = ls.asArray()
+                let mirrors = ms.asArray()
+                return deferMaybe((local: locals, mirror: mirrors))
+            }
+        }
     }
 
-    // TODO: rewrite me.
-    public func remove(bookmark: BookmarkNode) -> Success {
-        let sql: String
-        let args: Args
-        if let id = bookmark.id {
-            sql = "DELETE FROM \(TableBookmarksLocal) WHERE id = ?"
-            args = [id]
-        } else {
-            sql = "DELETE FROM \(TableBookmarksLocal) WHERE guid = ?"
-            args = [bookmark.guid]
+    // We delete locals then non-overridden. We don't do this in one step in order to avoid
+    // potential complications when removing multiple children in a single folder (as will
+    // be the case if Sync has screwed up a user's bookmarks already!). We don't delete both
+    // non-overridden and local at the same time because it's convenient to know which is which.
+    public func removeByURL(url: String) -> Success {
+        let urls = self.nonDeletedGUIDsForURL(url)
+        return urls >>== { (local: [GUID], mirror: [GUID]) in
+            log.debug("Found GUIDs local = \(local), mirror = \(mirror).")
+            return self.removeGUIDs(mirror, thatAreLocal: false)
+             >>> { self.removeGUIDs(local, thatAreLocal: true) }
         }
+    }
+
+    private func removeGUIDs(guids: [GUID], thatAreLocal local: Bool) -> Success {
+        let f = local ? self.removeLocalByGUID : self.removeNonOverriddenByGUID
+        return walk(guids, f: f)
+    }
+
+    private func removeNonOverriddenByGUID(guid: GUID) -> Success {
+        // If the bookmark only exists in the mirror, we must override it and mark it as
+        // deleted, and override its parent and remove the deleted bookmark from its child list.
+        let (sql, args) = self.getSQLToOverrideParent(guid, atModifiedTime: NSDate.now(), andDelete: true)
+        return db.run(sql.map { ($0, args) })
+    }
+
+    public func removeByGUID(guid: GUID) -> Success {
+        return self.removeLocalByGUID(guid)
+         >>> { self.removeNonOverriddenByGUID(guid) }
+    }
+
+    private func removeLocalByGUID(guid: GUID) -> Success {
+        let args: Args = [guid]
+
+        // Find the index we're currently occupying.
+        let previousIndexSubquery = "SELECT idx FROM \(TableBookmarksLocalStructure) WHERE child = ?"
+
+        // Fix up the indices of subsequent siblings.
+        let updateIndices =
+        "UPDATE \(TableBookmarksLocalStructure) SET idx = (idx - 1) WHERE idx > (\(previousIndexSubquery))"
+
+        // If the bookmark is New, delete it outright.
+        let deleteNew =
+        "DELETE FROM \(TableBookmarksLocal) WHERE guid = ? AND sync_status = \(SyncStatus.New.rawValue)"
+
+        // If the bookmark is Changed, mark it as deleted and bump its modified time.
+        let markChanged =
+        "UPDATE \(TableBookmarksLocal) SET is_deleted = 1, local_modified = \(NSDate.now()) " +
+        "WHERE guid = ? AND sync_status = \(SyncStatus.Changed.rawValue)"
+
+        // Its parent must be either New or Changed, so we don't need to re-mirror it.
+        // TODO: bump the parent's modified time, because the child list changed?
+
+        // Now delete from structure.
+        let deleteStructure =
+        "DELETE FROM \(TableBookmarksLocalStructure) WHERE child = ?"
 
         return self.db.run([
-            (sql, args),
+            (updateIndices, args),
+            (deleteNew, args),
+            (markChanged, args),
+            (deleteStructure, args),
         ])
     }
 }
@@ -952,13 +1007,12 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
         return self.local.nullModel
     }
 
-    // TODO: we really want to know 'isRemovable', too.
     public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
         return self.local.isBookmarked(url)
     }
 
-    public func remove(bookmark: BookmarkNode) -> Success {
-        return self.local.remove(bookmark)
+    public func removeByGUID(guid: GUID) -> Success {
+        return self.local.removeByGUID(guid)
     }
 
     public func removeByURL(url: String) -> Success {
