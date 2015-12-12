@@ -231,17 +231,23 @@ public enum BookmarkNodeType: Int {
  */
 public class BookmarkNode {
     public var id: Int? = nil
-    public var guid: String
+    public var guid: GUID
     public var title: String
     public var favicon: Favicon? = nil
 
-    init(guid: String, title: String) {
+    init(guid: GUID, title: String) {
         self.guid = guid
         self.title = title
     }
 
     public var canDelete: Bool {
         return true
+    }
+}
+
+public class BookmarkSeparator: BookmarkNode {
+    init(guid: GUID) {
+        super.init(guid: guid, title: "—")
     }
 }
 
