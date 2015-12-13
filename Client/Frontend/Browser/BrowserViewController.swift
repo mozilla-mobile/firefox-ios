@@ -2539,14 +2539,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                         // Only set the image onto the pasteboard if the pasteboard hasn't changed since
                         // fetching the image; otherwise, in low-bandwidth situations,
                         // we might be overwriting something that the user has subsequently added.
-                        if changeCount == pasteboard.changeCount,
-                           let imageData = responseData where responseError == nil,
-                           let image = UIImage.imageFromDataThreadSafe(imageData) {
-                            // Setting pasteboard.items allows us to set multiple representations for the same item.
-                            pasteboard.items = [[
-                                kUTTypeURL as String: url,
-                                kUTTypePNG as String: image
-                            ]]
+                        if changeCount == pasteboard.changeCount, let imageData = responseData where responseError == nil {
+                            pasteboard.addImageWithData(imageData, forURL: url)
                         }
 
                         application.endBackgroundTask(taskId)
@@ -2573,7 +2567,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             .validate(statusCode: 200..<300)
             .response { _, _, data, _ in
                 if let data = data,
-                   let image = UIImage.imageFromDataThreadSafe(data) {
+                   let image = UIImage.dataIsGIF(data) ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
                     success(image)
                 }
             }

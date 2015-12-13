@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import WebImage
 
 private let imageLock = NSLock()
 
@@ -16,6 +17,26 @@ extension UIImage {
         let image = UIImage(data: data)
         imageLock.unlock()
         return image
+    }
+
+    /// Generates a UIImage from GIF data by calling out to SDWebImage. The latter in turn uses UIImage(data: NSData)
+    /// in certain cases so we have to synchronize calls (see bug 1223132).
+    public static func imageFromGIFDataThreadSafe(data: NSData) -> UIImage? {
+        imageLock.lock()
+        let image = UIImage.sd_animatedGIFWithData(data)
+        imageLock.unlock()
+        return image
+    }
+
+    public static func dataIsGIF(data: NSData) -> Bool {
+        guard data.length > 3 else {
+            return false
+        }
+
+        // Look for "GIF" header to identify GIF images
+        var header = [UInt8](count: 3, repeatedValue: 0)
+        data.getBytes(&header, length: 3 * sizeof(UInt8))
+        return header == [0x47, 0x49, 0x46]
     }
 
     public static func createWithColor(size: CGSize, color: UIColor) -> UIImage {
