@@ -7,4 +7,6 @@ import Foundation
 public struct SyncConstants {
     // Suitable for use in dispatch_time().
     public static let SyncDelayTriggered: Int64 = 3 * Int64(NSEC_PER_SEC)
+    public static let SyncOnForegroundMinimumDelayMillis: UInt64 = 5 * 60 * 1000
+    public static let SyncOnForegroundAfterMillis: Int64 = 5000
 }

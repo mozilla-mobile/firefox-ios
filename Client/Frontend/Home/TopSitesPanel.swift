@@ -68,6 +68,7 @@ class TopSitesPanel: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataClearedHistory, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -88,6 +89,7 @@ class TopSitesPanel: UIViewController {
         }
         self.collection = collection
 
+        self.dataSource.collectionView = self.collection
         self.profile.history.setTopSitesCacheSize(Int32(maxFrecencyLimit))
         self.refreshTopSites(maxFrecencyLimit)
     }
@@ -96,11 +98,12 @@ class TopSitesPanel: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
-    
+
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory:
+        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
             refreshTopSites(maxFrecencyLimit)
             break
         default:
@@ -257,8 +260,7 @@ extension TopSitesPanel: UICollectionViewDelegate {
         if let site = dataSource[indexPath.item] {
             // We're gonna call Top Sites bookmarks for now.
             let visitType = VisitType.Bookmark
-            let destination = NSURL(string: site.url)?.domainURL() ?? NSURL(string: "about:blank")!
-            homePanelDelegate?.homePanel(self, didSelectURL: destination, visitType: visitType)
+            homePanelDelegate?.homePanel(self, didSelectURL: site.tileURL, visitType: visitType)
         }
     }
 
@@ -432,6 +434,8 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var profile: Profile
     var editingThumbnails: Bool = false
 
+    weak var collectionView: UICollectionView?
+
     private let blurQueue = dispatch_queue_create("FaviconBlurQueue", DISPATCH_QUEUE_CONCURRENT)
     private let BackgroundFadeInDuration: NSTimeInterval = 0.3
 
@@ -473,22 +477,23 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
     }
 
-    private func getFaviconForCell(cell:ThumbnailCell, site: Site, profile: Profile) {
-        setDefaultThumbnailBackgroundForCell(cell)
-        guard let url = site.url.asURL else { return }
+    private func downloadFaviconsAndUpdateForSite(site: Site) {
+        guard let siteURL = site.url.asURL else { return }
 
-        FaviconFetcher.getForURL(url, profile: profile) >>== { icons in
-            if icons.count == 0 { return }
-            guard let url = icons[0].url.asURL else { return }
+        FaviconFetcher.getForURL(siteURL, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
+            guard let favicons = result.successValue where favicons.count > 0,
+                  let url = favicons.first?.url.asURL,
+                  let indexOfSite = (self.data.asArray().indexOf { $0 == site }) else {
+                return
+            }
 
+            let indexPathToUpdate = NSIndexPath(forItem: indexOfSite, inSection: 0)
+            guard let cell = self.collectionView?.cellForItemAtIndexPath(indexPathToUpdate) as? ThumbnailCell else { return }
             cell.imageView.sd_setImageWithURL(url) { (img, err, type, url) -> Void in
                 guard let img = img else {
-                    let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
-                    profile.favicons.addFavicon(icon, forSite: site)
                     self.setDefaultThumbnailBackgroundForCell(cell)
                     return
                 }
-
                 cell.image = img
                 self.setBlurredBackground(img, withURL: url, forCell: cell)
             }
@@ -515,7 +520,8 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.removeButton.hidden = !editing
 
         guard let icon = site.icon else {
-            getFaviconForCell(cell, site: site, profile: profile)
+            setDefaultThumbnailBackgroundForCell(cell)
+            downloadFaviconsAndUpdateForSite(site)
             return
         }
 
@@ -529,7 +535,8 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                     cell.image = img
                     self.setBlurredBackground(img, withURL: url, forCell: cell)
                 } else {
-                    self.getFaviconForCell(cell, site: site, profile: profile)
+                    self.setDefaultThumbnailBackgroundForCell(cell)
+                    self.downloadFaviconsAndUpdateForSite(site)
                 }
             })
         }

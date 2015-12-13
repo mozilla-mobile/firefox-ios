@@ -16,7 +16,6 @@ struct BookmarksPanelUX {
     private static let BookmarkFolderChevronSize: CGFloat = 20
     private static let BookmarkFolderChevronLineWidth: CGFloat = 4.0
     private static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
-    private static let BookmarkFolderTextFont = UIFont.systemFontOfSize(UIConstants.DefaultMediumFontSize, weight: UIFontWeightMedium)
 }
 
 class BookmarksPanel: SiteTableViewController, HomePanel {
@@ -140,7 +139,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if let cell = cell as? BookmarkFolderTableViewCell {
-            cell.textLabel?.font = BookmarksPanelUX.BookmarkFolderTextFont
+            cell.textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         }
     }
 
@@ -177,7 +176,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? BookmarkFolderTableViewHeader {
             // for some reason specifying the font in header view init is being ignored, so setting it here
-            header.textLabel?.font = BookmarksPanelUX.BookmarkFolderTextFont
+            header.textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         }
     }
 
@@ -287,7 +286,7 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
         self.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
         textLabel?.backgroundColor = UIColor.clearColor()
         textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
-        textLabel?.font = BookmarksPanelUX.BookmarkFolderTextFont
+        textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
 
         imageView?.image = UIImage(named: "bookmarkFolder")
 

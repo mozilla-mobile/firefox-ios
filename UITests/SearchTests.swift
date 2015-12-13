@@ -61,6 +61,27 @@ class SearchTests: KIFTestCase {
         XCTAssertFalse(found, "No suggestions after choosing No")
     }
 
+    func testChangingDyamicFontOnSearch() {
+        DynamicFontUtils.restoreDynamicFontSize(tester())
+
+        // Ensure that the prompt appears.
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("foobar")
+        waitForPotentialDebounce(tester())
+        tester().tapViewWithAccessibilityLabel("Yes")
+
+        let size = getFirstSuggestionButton(tester())?.titleLabel?.font.pointSize
+
+        DynamicFontUtils.bumpDynamicFontSize(tester())
+        let bigSize = getFirstSuggestionButton(tester())?.titleLabel?.font.pointSize
+
+        DynamicFontUtils.lowerDynamicFontSize(tester())
+        let smallSize = getFirstSuggestionButton(tester())?.titleLabel?.font.pointSize
+
+        XCTAssertGreaterThan(bigSize!, size!)
+        XCTAssertGreaterThanOrEqual(size!, smallSize!)
+    }
+
     func testTurnOffSuggestionsWhenEnteringURL() {
         var found: Bool
 
@@ -190,7 +211,12 @@ class SearchTests: KIFTestCase {
         NSNotificationCenter.defaultCenter().postNotificationName("SearchEnginesPromptReset", object: nil)
     }
 
+    private func getFirstSuggestionButton(tester: KIFUITestActor) -> UIButton? {
+        return tester.waitForViewWithAccessibilityHint(HintSuggestionButton) as? UIButton
+    }
+
     override func tearDown() {
+        DynamicFontUtils.restoreDynamicFontSize(tester())
         resetSuggestionsPrompt()
         do {
             try tester().tryFindingTappableViewWithAccessibilityLabel("Cancel")

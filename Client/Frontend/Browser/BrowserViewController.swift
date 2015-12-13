@@ -439,14 +439,6 @@ class BrowserViewController: UIViewController {
             // Reset previous crash state
             activeCrashReporter?.resetPreviousCrashState()
 
-            // Only ask to restore tabs from a crash if we had non-home tabs or tabs with some kind of history in them
-            guard let tabsToRestore = tabManager.tabsToRestore() else { return }
-            let onlyNoHistoryTabs = !tabsToRestore.every { $0.sessionData?.urls.count > 1 }
-            if onlyNoHistoryTabs {
-                tabManager.addTabAndSelect();
-                return
-            }
-
             let optedIntoCrashReporting = profile.prefs.boolForKey("crashreports.send.always")
             if optedIntoCrashReporting == nil {
                 // Offer a chance to allow the user to opt into crash reporting
@@ -486,7 +478,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func showRestoreTabsAlert() {
-        guard !DebugSettingsBundleOptions.skipSessionRestore else {
+        guard shouldRestoreTabs() else {
             self.tabManager.addTabAndSelect()
             return
         }
@@ -501,6 +493,12 @@ class BrowserViewController: UIViewController {
         )
 
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+
+    private func shouldRestoreTabs() -> Bool {
+        guard let tabsToRestore = tabManager.tabsToRestore() else { return false }
+        let onlyNoHistoryTabs = !tabsToRestore.every { $0.sessionData?.urls.count > 1 || !AboutUtils.isAboutHomeURL($0.sessionData?.urls.first) }
+        return !onlyNoHistoryTabs && !DebugSettingsBundleOptions.skipSessionRestore
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -704,8 +702,15 @@ class BrowserViewController: UIViewController {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
-        if let tab = tabManager.selectedTab,
-           let nav = tab.loadRequest(NSURLRequest(URL: url)) {
+        guard let tab = tabManager.selectedTab else {
+            return
+        }
+
+        if let webView = tab.webView {
+            resetSpoofedUserAgentIfRequired(webView, newURL: url)
+        }
+
+        if let nav = tab.loadRequest(NSURLRequest(URL: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
@@ -825,8 +830,10 @@ class BrowserViewController: UIViewController {
         if let url = tab.url {
             if ReaderModeUtils.isReaderModeURL(url) {
                 showReaderModeBar(animated: false)
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELDynamicFontChanged:", name: NotificationDynamicFontChanged, object: nil)
             } else {
                 hideReaderModeBar(animated: false)
+                NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
             }
 
             updateInContentHomePanel(url)
@@ -890,6 +897,27 @@ class BrowserViewController: UIViewController {
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
         openURLInNewTab(nil, isPrivate: isPrivate)
         urlBar.browserLocationViewDidTapLocation(urlBar.locationView)
+    }
+
+    private func resetSpoofedUserAgentIfRequired(webView: WKWebView, newURL: NSURL) {
+        guard #available(iOS 9.0, *) else {
+            return
+        }
+
+        // Reset the UA when a different domain is being loaded
+        if webView.URL?.host != newURL.host {
+            webView.customUserAgent = nil
+        }
+    }
+
+    private func restoreSpoofedUserAgentIfRequired(webView: WKWebView, newRequest: NSURLRequest) {
+        guard #available(iOS 9.0, *) else {
+            return
+        }
+
+        // Restore any non-default UA from the request's header
+        let ua = newRequest.valueForHTTPHeaderField("User-Agent")
+        webView.customUserAgent = ua != UserAgent.defaultUserAgent() ? ua : nil
     }
 }
 
@@ -1600,7 +1628,6 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
-
         guard let url = navigationAction.request.URL else {
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
@@ -1614,6 +1641,11 @@ extension BrowserViewController: WKNavigationDelegate {
                 openExternal(url, prompt: navigationAction.navigationType == WKNavigationType.Other)
                 decisionHandler(WKNavigationActionPolicy.Cancel)
             } else {
+                if navigationAction.navigationType == .LinkActivated {
+                    resetSpoofedUserAgentIfRequired(webView, newURL: url)
+                } else if navigationAction.navigationType == .BackForward {
+                    restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
+                }
                 decisionHandler(WKNavigationActionPolicy.Allow)
             }
         case "tel":
@@ -1683,10 +1715,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
         addOpenInViewIfNeccessary(webView.URL)
 
-        // Remember whether or not a desktop site was requested and reset potentially spoofed user agent
+        // Remember whether or not a desktop site was requested
         if #available(iOS 9.0, *) {
             tab.desktopSite = webView.customUserAgent?.isEmpty == false
-            webView.customUserAgent = nil
         }
     }
 
@@ -2037,6 +2068,19 @@ extension BrowserViewController {
             }
         }
     }
+
+    func SELDynamicFontChanged(notification: NSNotification) {
+        guard notification.name == NotificationDynamicFontChanged else { return }
+
+        var readerModeStyle = DefaultReaderModeStyle
+        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
+            if let style = ReaderModeStyle(dict: dict) {
+                readerModeStyle = style
+            }
+        }
+        readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
+        self.readerModeStyleViewController(ReaderModeStyleViewController(), didConfigureStyle: readerModeStyle)
+    }
 }
 
 extension BrowserViewController: ReaderModeBarViewDelegate {
@@ -2366,7 +2410,7 @@ extension BrowserViewController {
 
         TabsButton.appearance().borderColor = UIConstants.PrivateModePurple
         TabsButton.appearance().borderWidth = 1
-        TabsButton.appearance().titleFont = UIConstants.DefaultMediumBoldFont
+        TabsButton.appearance().titleFont = UIConstants.DefaultChromeBoldFont
         TabsButton.appearance().titleBackgroundColor = UIConstants.AppBackgroundColor
         TabsButton.appearance().textColor = UIConstants.PrivateModePurple
         TabsButton.appearance().insets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)

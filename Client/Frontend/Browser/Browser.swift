@@ -290,6 +290,16 @@ class Browser: NSObject {
     }
 
     func reload() {
+        if #available(iOS 9.0, *) {
+            webView?.customUserAgent = desktopSite ? UserAgent.desktopUserAgent() : nil
+
+            if let currentItem = webView?.backForwardList.currentItem where currentItem.URL != currentItem.initialURL {
+                // Reload the initial URL to avoid UA specific redirection
+                loadRequest(NSURLRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60))
+                return
+            }
+        }
+
         if let _ = webView?.reloadFromOrigin() {
             log.info("reloaded zombified tab from origin")
             return
@@ -370,18 +380,8 @@ class Browser: NSObject {
 
     @available(iOS 9, *)
     func toggleDesktopSite() {
-        guard let webView = webView, let currentItem = webView.backForwardList.currentItem else {
-            return
-        }
-
-        webView.customUserAgent = !desktopSite ? UserAgent.desktopUserAgent() : nil
-
-        if currentItem.URL != currentItem.initialURL {
-            // Reload the initial URL to avoid UA specific redirection
-            loadRequest(NSURLRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60))
-        } else {
-            reload() // Reload the current URL. We cannot use loadRequest in this case because it seems to leverage caching.
-        }
+        desktopSite = !desktopSite
+        reload()
     }
 }
 

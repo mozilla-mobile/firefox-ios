@@ -1,6 +1,8 @@
 Firefox for iOS
 ===============
 
+Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
+
 This branch
 -----------
 
@@ -52,7 +54,7 @@ It is possible to use [App Code](https://www.jetbrains.com/objc/download/) inste
 ## Contributor guidelines
 
 ### Creating a pull request
-* All pull requests must be associated with a specific bug in [Bugzilla](http://bugzilla.mozilla.org).
+* All pull requests must be associated with a specific bug in [Bugzilla](https://bugzilla.mozilla.org/).
  * If a bug corresponding to the fix does not yet exist, please [file it](https://bugzilla.mozilla.org/enter_bug.cgi?op_sys=iOS&product=Firefox%20for%20iOS&rep_platform=All).
  * You'll need to be logged in to create/update bugs, but note that Bugzilla allows you to sign in with your GitHub account.
 * Use the bug number/title as the name of pull request. For example, a pull request for [bug 1135920](https://bugzilla.mozilla.org/show_bug.cgi?id=1135920) would be titled "Bug 1135920 - Create a top sites panel".

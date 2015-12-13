@@ -412,3 +412,24 @@ class SearchUtils {
         return view.accessibilityValue!
     }
 }
+
+class DynamicFontUtils {
+    // Need to leave time for the notification to propagate
+    static func bumpDynamicFontSize(tester: KIFUITestActor) {
+        let value = UIContentSizeCategoryAccessibilityExtraLarge
+        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
+        tester.waitForTimeInterval(0.3)
+    }
+
+    static func lowerDynamicFontSize(tester: KIFUITestActor) {
+        let value = UIContentSizeCategoryExtraSmall
+        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
+        tester.waitForTimeInterval(0.3)
+    }
+
+    static func restoreDynamicFontSize(tester: KIFUITestActor) {
+        let value = UIContentSizeCategoryMedium
+        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
+        tester.waitForTimeInterval(0.3)
+    }
+}

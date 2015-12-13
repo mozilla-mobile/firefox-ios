@@ -18,6 +18,7 @@ public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
+    var lastSyncFinishTime: Timestamp? { get set }
 
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
@@ -533,6 +534,15 @@ public class BrowserProfile: Profile {
         func applicationDidBecomeActive() {
             self.backgrounded = false
             self.beginTimedSyncs()
+
+            // Sync now if it's been more than our threshold.
+            let now = NSDate.now()
+            let then = self.lastSyncFinishTime ?? 0
+            let since = now - then
+            log.debug("\(since)msec since last sync.")
+            if since > SyncConstants.SyncOnForegroundMinimumDelayMillis {
+                self.syncEverythingSoon()
+            }
         }
 
         /**
@@ -597,6 +607,13 @@ public class BrowserProfile: Profile {
             }
         }
 
+        func doInBackgroundAfter(millis millis: Int64, _ block: dispatch_block_t) {
+            let delay = millis * Int64(NSEC_PER_MSEC)
+            let when = dispatch_time(DISPATCH_TIME_NOW, delay)
+            let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+            dispatch_after(when, queue, block)
+        }
+
         @objc
         func onDatabaseWasRecreated(notification: NSNotification) {
             log.debug("Database was recreated.")
@@ -606,10 +623,7 @@ public class BrowserProfile: Profile {
             // We run this in the background after a few hundred milliseconds;
             // it doesn't really matter when it runs, so long as it doesn't
             // happen in the middle of a sync. We take the lock to prevent that.
-            let delay = 300 * Int64(NSEC_PER_MSEC)     // 300msec.
-            let when = dispatch_time(DISPATCH_TIME_NOW, delay)
-            let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            dispatch_after(when, queue) {
+            self.doInBackgroundAfter(millis: 300) {
                 OSSpinLockLock(&self.syncLock)
                 self.handleRecreationOfDatabaseNamed(name).upon { res in
                     log.debug("Reset of \(name) done: \(res.isSuccess)")
@@ -638,8 +652,22 @@ public class BrowserProfile: Profile {
             }
         }
 
+        var lastSyncFinishTime: Timestamp? {
+            get {
+                return self.prefs.timestampForKey(PrefsKeys.KeyLastSyncFinishTime)
+            }
+
+            set(value) {
+                if let value = value {
+                    self.prefs.setTimestamp(value, forKey: PrefsKeys.KeyLastSyncFinishTime)
+                } else {
+                    self.prefs.removeObjectForKey(PrefsKeys.KeyLastSyncFinishTime)
+                }
+            }
+        }
+
         @objc func onFinishSyncing(notification: NSNotification) {
-            self.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastSyncFinishTime)
+            self.lastSyncFinishTime = NSDate.now()
         }
 
         var prefsForSync: Prefs {
@@ -869,32 +897,15 @@ public class BrowserProfile: Profile {
             ) >>> succeed
         }
 
+        func syncEverythingSoon() {
+            self.doInBackgroundAfter(millis: SyncConstants.SyncOnForegroundAfterMillis) {
+                log.debug("Running delayed startup sync.")
+                self.syncEverything()
+            }
+        }
 
         @objc func syncOnTimer() {
-            log.debug("Running timed logins sync.")
-
-            // Note that we use .upon here rather than chaining with >>> precisely
-            // to allow us to sync subsequent engines regardless of earlier failures.
-            // We don't fork them in parallel because we want to limit perf impact
-            // due to background syncs, and because we're cautious about correctness.
-            self.syncLogins().upon { result in
-                if let success = result.successValue {
-                    log.debug("Timed logins sync succeeded. Status: \(success.description).")
-                } else {
-                    let reason = result.failureValue?.description ?? "none"
-                    log.debug("Timed logins sync failed. Reason: \(reason).")
-                }
-
-                log.debug("Running timed history sync.")
-                self.syncHistory().upon { result in
-                    if let success = result.successValue {
-                        log.debug("Timed history sync succeeded. Status: \(success.description).")
-                    } else {
-                        let reason = result.failureValue?.description ?? "none"
-                        log.debug("Timed history sync failed. Reason: \(reason).")
-                    }
-                }
-            }
+            self.syncEverything()
         }
 
         func syncClients() -> SyncResult {

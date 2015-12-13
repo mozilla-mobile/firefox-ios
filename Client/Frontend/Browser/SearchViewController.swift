@@ -34,7 +34,6 @@ private struct SearchViewControllerUX {
     static let SuggestionBorderColor = UIConstants.HighlightBlue
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
-    static let SuggestionFont = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
     static let SuggestionInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     static let SuggestionMargin: CGFloat = 8
     static let SuggestionCellVerticalPadding: CGFloat = 10
@@ -128,6 +127,18 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
 
         suggestionCell.delegate = self
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELDynamicFontChanged:", name: NotificationDynamicFontChanged, object: nil)
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
+    }
+
+    func SELDynamicFontChanged(notification: NSNotification) {
+        guard notification.name == NotificationDynamicFontChanged else { return }
+
+        reloadData()
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -702,7 +713,7 @@ private class SuggestionButton: InsetButton {
 
         setTitleColor(UIConstants.HighlightBlue, forState: UIControlState.Normal)
         setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
-        titleLabel?.font = SearchViewControllerUX.SuggestionFont
+        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         backgroundColor = SearchViewControllerUX.SuggestionBackgroundColor
         layer.borderColor = SearchViewControllerUX.SuggestionBorderColor.CGColor
         layer.borderWidth = SearchViewControllerUX.SuggestionBorderWidth
