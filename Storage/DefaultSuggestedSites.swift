@@ -31,7 +31,7 @@ public class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_baidu",
                 faviconUrl: "asset://baiduLogo",
                 trackingId: 700,
-                title: NSLocalizedString("Baidu", comment: "Tile title for Baidu")
+                title: "百度"
             ),
             SuggestedSiteData(
                 url: "http://sina.cn",
@@ -39,7 +39,7 @@ public class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_sina",
                 faviconUrl: "asset://sinaLogo",
                 trackingId: 701,
-                title: NSLocalizedString("Sina", comment: "Tile title for Sina")
+                title: "新浪"
             ),
             SuggestedSiteData(
                 url: "http://3g.qq.com",
@@ -47,7 +47,7 @@ public class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_qq",
                 faviconUrl: "asset://qqLogo",
                 trackingId: 702,
-                title: NSLocalizedString("QQ", comment: "Tile title for QQ")
+                title: "腾讯"
             ),
             SuggestedSiteData(
                 url: "http://m.taobao.com",
@@ -55,7 +55,7 @@ public class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_taobao",
                 faviconUrl: "asset://taobaoLogo",
                 trackingId: 703,
-                title: NSLocalizedString("Taobao", comment: "Tile title for Taobao")
+                title: "淘宝"
             ),
             SuggestedSiteData(
                 url: "http://m.jd.com/?cu=true&utm_source=c.duomai.com&utm_medium=tuiguang&utm_campaign=t_16282_51222087&utm_term=163a0d0b6b124b7b84e6e936be97a1ad",
@@ -63,7 +63,7 @@ public class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_jd",
                 faviconUrl: "asset://jdLogo",
                 trackingId: 704,
-                title: NSLocalizedString("JD.COM", comment: "Tile title for Jd")
+                title: "京东"
             ),
             SuggestedSiteData(
                 url: "http://m.okpush.com/j.html?pk=redirect&adId=7863&planId=1838&webId=6975&channelId=6975&publishId=8545",
@@ -71,7 +71,7 @@ public class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_58City",
                 faviconUrl: "asset://58CityLogo",
                 trackingId: 705,
-                title: NSLocalizedString("58 City", comment: "Tile title for 58 City")
+                title: "58 同城"
             )
         ]
     ]
