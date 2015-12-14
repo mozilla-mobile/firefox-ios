@@ -10,10 +10,10 @@
         <Param name="wd" value="{searchTerms}"/>
         <Param name="action" value="opensearch"/>
         <Param name="ie" value="UTF-8"/>
-        <Param name="from" value="1000969a"/>
+        <Param name="from" value="1000969b"/>
     </Url>
     <Url type="text/html" method="GET" template="https://m.baidu.com/s">
-        <Param name="from" value="1000969a"/>
+        <Param name="from" value="1000969b"/>
         <Param name="word" value="{searchTerms}"/>
     </Url>
 
@@ -22,7 +22,7 @@
          Note: The order of <URL> does NOT affect the way we pick between them.
     -->
     <Url type="application/x-moz-tabletsearch" method="GET" template="https://m.baidu.com/s">
-        <Param name="from" value="1000969a"/>
+        <Param name="from" value="1000969b"/>
         <Param name="word" value="{searchTerms}"/>
     </Url>
 
