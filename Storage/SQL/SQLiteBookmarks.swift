@@ -67,11 +67,13 @@ private class BookmarkFactory {
         return bookmark
     }
 
+    // We ignore queries altogether inside the model factory.
     private class func queryFactory(row: SDRow) -> BookmarkItem {
+        log.warning("Creating a BookmarkItem from a query. This is almost certainly unexpected.")
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
-        let title = row["title"] as? String ?? "Query"       // TODO
-        let bookmark = BookmarkItem(guid: guid, title: title, url: "http://reddit.com")   // TODO
+        let title = row["title"] as? String ?? SQLiteBookmarks.defaultItemTitle
+        let bookmark = BookmarkItem(guid: guid, title: title, url: "about:blank")
         bookmark.id = id
         BookmarkFactory.addIcon(bookmark, row: row)
         return bookmark
@@ -114,15 +116,17 @@ private class BookmarkFactory {
             switch type {
             case .Bookmark:
                 return itemFactory(row)
+            case .DynamicContainer:
+                // This should never be hit: we exclude dynamic containers from our models.
+                fallthrough
             case .Folder:
                 return folderFactory(row)
-            case .DynamicContainer:
-                fallthrough
             case .Separator:
                 return separatorFactory(row)
             case .Livemark:
                 return livemarkFactory(row)
             case .Query:
+                // This should never be hit: we exclude queries from our models.
                 return queryFactory(row)
             }
         }
@@ -172,15 +176,20 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID " +
         "FROM \(TableBookmarksLocal) WHERE is_deleted IS NOT 1"
 
+        // We exclude queries and dynamic containers, because we can't
+        // usefully display them.
+        let typeQuery = BookmarkNodeType.Query.rawValue
+        let typeDynamic = BookmarkNodeType.DynamicContainer.rawValue
+        let typeFilter = " vals.type NOT IN (\(typeQuery), \(typeDynamic))"
 
         let args: Args
         let exclusion: String
         if let excludingGUIDs = excludingGUIDs {
             args = ([parentGUID, parentGUID, parentGUID] + excludingGUIDs).map { $0 as AnyObject }
-            exclusion = "WHERE vals.guid NOT IN " + BrowserDB.varlist(excludingGUIDs.count)
+            exclusion = "\(typeFilter) AND vals.guid NOT IN " + BrowserDB.varlist(excludingGUIDs.count)
         } else {
             args = [parentGUID, parentGUID, parentGUID]
-            exclusion = ""
+            exclusion = typeFilter
         }
 
         let fleshed =
@@ -192,7 +201,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         "       structure.parent AS _parent " +
         "FROM (\(either)) AS structure JOIN (\(values)) AS vals " +
         "ON vals.guid = structure.guid " +
-        exclusion
+        "WHERE " + exclusion
 
         let withIcon =
         "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type, " +
