@@ -66,6 +66,8 @@
 		0BF9F8BC1A3A82CA0049A0FA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		2805F5A61B8BCA7A00268FD1 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		28078A471B1507EF0053B46A /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
+		280CB1371C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
+		280CB1381C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
 		28158BAC1ABC7C0E00C56FC8 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2401ABB531100877008 /* Bytes.swift */; };
 		2816EFDE1B33E00300522243 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAC7A7F1AC4B135006018CB /* AppConstants.swift */; };
 		2816F0001B33E05400522243 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
@@ -1405,6 +1407,7 @@
 		0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFavicons.swift; sourceTree = "<group>"; };
 		0BF648101A9C54E900BA963C /* TopSitesPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesPanel.swift; sourceTree = "<group>"; };
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
+		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Synchronizers/BookmarksSynchronizer.swift; sourceTree = "<group>"; };
 		2816EFFF1B33E05400522243 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		281B02991C037C1F005202C3 /* TestBrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBrowserDB.swift; sourceTree = "<group>"; };
 		281B2BE91ADF4D90002917DC /* MockProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MockProfile.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -2249,6 +2252,7 @@
 				2F3724E41ABF3C19007607FA /* Synchronizer.swift */,
 				28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */,
 				288E67C11B9E730900AE2C6A /* BookmarksDownloader.swift */,
+				280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */,
 				2894C1681AE89DDC00F1F92F /* ClientsSynchronizer.swift */,
 				2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */,
 				2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */,
@@ -4475,6 +4479,7 @@
 			files = (
 				2853C5411AD84C6800C4F31D /* TabsPayload.swift in Sources */,
 				28926B3A1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */,
+				280CB1371C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */,
 				2827319D1ABC9C2F00AA1954 /* SyncMeta.swift in Sources */,
 				2894C1661AE89DD200F1F92F /* TabsSynchronizer.swift in Sources */,
 				282731991ABC9C2F00AA1954 /* ClientPayload.swift in Sources */,
@@ -4550,6 +4555,7 @@
 				2F3724E61ABF3C19007607FA /* Info.swift in Sources */,
 				281EC0781BA9CB9E003052A4 /* BookmarkPayload.swift in Sources */,
 				2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */,
+				280CB1381C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */,
 				28ECD9A31BA1EF3D00D829DA /* GCDWebServer.m in Sources */,
 				28ECD9A61BA1EF3D00D829DA /* GCDWebServerRequest.m in Sources */,
 				28ECD9A41BA1EF3D00D829DA /* GCDWebServerConnection.m in Sources */,
