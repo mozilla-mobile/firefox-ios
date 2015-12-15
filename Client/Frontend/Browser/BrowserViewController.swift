@@ -1117,7 +1117,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
             return
         }
 
-        guard let tab = tabManager.selectedTab where tab.webView?.URL != nil else {
+        guard let tab = tabManager.selectedTab where tab.webView?.URL != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active else {
             return
         }
 
