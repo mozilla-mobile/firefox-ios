@@ -771,6 +771,31 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
 }
 
 extension SQLiteBookmarks {
+    private func hasDesktopBookmarks() -> Deferred<Maybe<Bool>> {
+        // This is very lazy, but it has the nice property of keeping Desktop Bookmarks visible
+        // for a while after you mark the last desktop child as deleted.
+        let parents: Args = [
+            // Local.
+            BookmarkRoots.MenuFolderGUID,
+            BookmarkRoots.ToolbarFolderGUID,
+            BookmarkRoots.UnfiledFolderGUID,
+
+            // Mirror.
+            BookmarkRoots.MenuFolderGUID,
+            BookmarkRoots.ToolbarFolderGUID,
+            BookmarkRoots.UnfiledFolderGUID,
+        ]
+
+        let sql =
+        "SELECT 1 FROM \(TableBookmarksLocalStructure) WHERE parent IN (?, ?, ?)" +
+        " UNION ALL " +
+        "SELECT 1 FROM \(TableBookmarksMirrorStructure) WHERE parent IN (?, ?, ?)"
+
+        return db.runQuery(sql, args: parents, factory: { row in
+            return row[0] != nil
+        }) >>== { deferMaybe($0[0] ?? false) }
+    }
+
     private func getDesktopRoots() -> Deferred<Maybe<Cursor<BookmarkNode>>> {
         // We deliberately exclude the mobile folder, because we're inverting the containment
         // relationship here.
@@ -785,16 +810,26 @@ extension SQLiteBookmarks {
      */
     public func extendWithDesktopBookmarksFolder(mobile: BookmarkFolder, factory: BookmarksModelFactory) -> Deferred<Maybe<BookmarksModel>> {
 
-        return self.getDesktopRoots() >>== { cursor in
-            if cursor.count == 0 {
-                // No desktop bookmarks.
-                log.debug("No desktop bookmarks. Only showing mobile.")
-                return deferMaybe(BookmarksModel(modelFactory: factory, root: mobile))
+        func onlyMobile() -> Deferred<Maybe<BookmarksModel>> {
+            // No desktop bookmarks.
+            log.debug("No desktop bookmarks. Only showing mobile.")
+            return deferMaybe(BookmarksModel(modelFactory: factory, root: mobile))
+        }
+
+        return self.hasDesktopBookmarks() >>== { yes in
+            if !yes {
+                return onlyMobile()
             }
 
-            let desktop = self.folderForDesktopBookmarksCursor(cursor)
-            let prepended = PrependedBookmarkFolder(main: mobile, prepend: desktop)
-            return deferMaybe(BookmarksModel(modelFactory: factory, root: prepended))
+            return self.getDesktopRoots() >>== { cursor in
+                if cursor.count == 0 {
+                    return onlyMobile()
+                }
+
+                let desktop = self.folderForDesktopBookmarksCursor(cursor)
+                let prepended = PrependedBookmarkFolder(main: mobile, prepend: desktop)
+                return deferMaybe(BookmarksModel(modelFactory: factory, root: prepended))
+            }
         }
     }
 
