@@ -25,34 +25,37 @@ class TabPeekViewController: UIViewController {
     var isBookmarked: Bool = false
     var isInReadingList: Bool = false
     var hasRemoteClients: Bool = false
+    var ignoreURL: Bool = false
 
     // Preview action items.
     lazy var previewActions: [UIPreviewActionItem] = {
         var actions = [UIPreviewActionItem]()
-        if !self.isInReadingList {
-            actions.append(UIPreviewAction(title: self.PreviewActionAddToReadingList, style: .Default) { previewAction, viewController in
-                guard let displayURL = self.tab.url?.absoluteString where displayURL.characters.count > 0 else { return }
-                self.bvc?.addToReadingList(displayURL, title: self.tab.lastTitle ?? displayURL)
-            })
-        }
-        if !self.isBookmarked {
-            actions.append(UIPreviewAction(title: self.PreviewActionAddToBookmarks, style: .Default) { previewAction, viewController in
-                guard let displayURL = self.tab.url?.absoluteString where displayURL.characters.count > 0 else { return }
+        if(!self.ignoreURL) {
+            if !self.isInReadingList {
+                actions.append(UIPreviewAction(title: self.PreviewActionAddToReadingList, style: .Default) { previewAction, viewController in
+                    guard let displayURL = self.tab.url?.absoluteString where displayURL.characters.count > 0 else { return }
+                    self.bvc?.addToReadingList(displayURL, title: self.tab.lastTitle ?? displayURL)
+                })
+            }
+            if !self.isBookmarked {
+                actions.append(UIPreviewAction(title: self.PreviewActionAddToBookmarks, style: .Default) { previewAction, viewController in
+                    guard let displayURL = self.tab.url?.absoluteString where displayURL.characters.count > 0 else { return }
 
-                self.bvc?.addBookmark(displayURL, title: self.tab.lastTitle ?? displayURL)
+                    self.bvc?.addBookmark(displayURL, title: self.tab.lastTitle ?? displayURL)
+                    })
+            }
+            if self.hasRemoteClients {
+                actions.append(UIPreviewAction(title: self.PreviewActionSendToDevice, style: .Default) { previewAction, viewController in
+                    guard let clientPicker = self.clientPicker else { return }
+                    self.bvc?.presentViewController(clientPicker, animated: false, completion: nil)
+                    })
+            }
+            actions.append(UIPreviewAction(title: self.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
+                guard let url = self.tab.url where url.absoluteString.characters.count > 0 else { return }
+                let pasteBoard = UIPasteboard.generalPasteboard()
+                pasteBoard.URL = url
                 })
         }
-        if self.hasRemoteClients {
-            actions.append(UIPreviewAction(title: self.PreviewActionSendToDevice, style: .Default) { previewAction, viewController in
-                guard let clientPicker = self.clientPicker else { return }
-                self.bvc?.presentViewController(clientPicker, animated: false, completion: nil)
-                })
-        }
-        actions.append(UIPreviewAction(title: self.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
-            guard let url = self.tab.url where url.absoluteString.characters.count > 0 else { return }
-            let pasteBoard = UIPasteboard.generalPasteboard()
-            pasteBoard.URL = url
-            })
         actions.append(UIPreviewAction(title: self.PreviewActionCloseTab, style: .Destructive) { previewAction, viewController in
             guard let tabViewController = viewController as? TabPeekViewController else { return }
             self.tabManager.removeTab(self.tab)
@@ -128,5 +131,6 @@ class TabPeekViewController: UIViewController {
         }
 
         isInReadingList = browserProfile.readingList?.getRecordWithURL(displayURL).successValue != nil
+        ignoreURL = isIgnoredURL(displayURL)
     }
 }
