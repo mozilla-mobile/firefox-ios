@@ -28,7 +28,7 @@ class LoginTableViewCell: UITableViewCell {
 
     private let labelContainer = UIView()
 
-    private let descriptionLabel: UILabel = {
+    let descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
@@ -38,7 +38,7 @@ class LoginTableViewCell: UITableViewCell {
         return label
     }()
 
-    private let highlightedLabel: UILabel = {
+    let highlightedLabel: UILabel = {
         let label = UILabel()
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
