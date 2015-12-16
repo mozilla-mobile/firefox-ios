@@ -7,7 +7,7 @@ import XCTest
 import Storage
 @testable import Client
 
-class LoginTableViewCellRefTests: FBSnapshotTestCase {
+class LoginTableViewCellRefTests: FXSnapshotTestCase {
     let defaultFrame = CGRect(origin: CGPointZero, size: CGSize(width: 320, height: 64))
     let compressedFrame = CGRect(origin: CGPointZero, size: CGSize(width: 160, height: 64))
     let stretchedFrame = CGRect(origin: CGPointZero, size: CGSize(width: 728, height: 64))
@@ -17,7 +17,6 @@ class LoginTableViewCellRefTests: FBSnapshotTestCase {
 
     override func setUp() {
         super.setUp()
-        recordMode = true
         cell = LoginTableViewCell(frame: defaultFrame)
     }
 

@@ -5,7 +5,7 @@
 import Foundation
 @testable import Client
 
-class SearchInputViewRefTests: FBSnapshotTestCase {
+class SearchInputViewRefTests: FXSnapshotTestCase {
 
     let defaultFrame = CGRect(origin: CGPointZero, size: CGSize(width: 320, height: 64))
     let compressedFrame = CGRect(origin: CGPointZero, size: CGSize(width: 160, height: 64))
@@ -16,9 +16,6 @@ class SearchInputViewRefTests: FBSnapshotTestCase {
 
     override func setUp() {
         super.setUp()
-        if let shouldRecord = NSProcessInfo.processInfo().environment["RECORD_SNAPSHOTS"] where shouldRecord == "YES" {
-            recordMode = true
-        }
         view = SearchInputView(frame: defaultFrame)
     }
 
