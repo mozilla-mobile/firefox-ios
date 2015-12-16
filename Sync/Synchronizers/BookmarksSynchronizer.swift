@@ -74,3 +74,33 @@ class SQLiteBookmarksMerger {
         self.storage = storage
     }
 }
+
+protocol DescriptionDestination {
+    func info(message: String)
+}
+
+protocol LocalOverrideCompletionOp {
+    func describe(log: DescriptionDestination)
+    func applyToStore(storage: SQLiteBookmarks) -> Success
+}
+
+protocol BufferCompletionOp {
+    func describe(log: DescriptionDestination)
+    func applyToBuffer(buffer: BookmarkBufferStorage) -> Success
+}
+
+protocol UpstreamCompletionOp {
+    func describe(log: DescriptionDestination)
+
+    // TODO: this should probably return a timestamp.
+    // The XIUS that we'll need for the upload can be captured as part of the op.
+    func applyToClient(client: Sync15CollectionClient<BookmarkPayload>) -> Success
+}
+
+struct BookmarksMergeResult {
+    let overrideCompletion: LocalOverrideCompletionOp
+    let bufferCompletion: BufferCompletionOp
+
+}
+protocol BookmarksMerger {
+}
