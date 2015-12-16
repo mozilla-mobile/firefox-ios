@@ -67,6 +67,8 @@ class LoginListViewController: UIViewController {
         tableView.delegate = self
         tableView.tableFooterView = UIView()
 
+        KeyboardHelper.defaultHelper.addDelegate(self)
+
         profile.logins.getAllLogins().uponQueue(dispatch_get_main_queue()) { result in
             self.loginDataSource?.cursor = result.successValue
             self.tableView.reloadData()
@@ -83,6 +85,20 @@ extension LoginListViewController: UITableViewDelegate {
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return LoginListUX.RowHeight
+    }
+}
+
+extension LoginListViewController: KeyboardHelperDelegate {
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        let coveredHeight = state.intersectionHeightForView(tableView)
+        tableView.contentInset.bottom = coveredHeight
+    }
+
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+    }
+
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        tableView.contentInset.bottom = 0
     }
 }
 
