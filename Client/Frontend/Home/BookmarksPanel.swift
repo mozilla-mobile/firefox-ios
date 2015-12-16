@@ -272,6 +272,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
             if let bookmark = self.source?.current[indexPath.row] {
+                if bookmark is BookmarkFolder {
+                    // TODO: check whether the folder is empty (excluding separators). If it isn't
+                    // then we must ask the user to confirm. Bug 1232810.
+                    log.debug("Deleting folder.")
+                }
+
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
                 // deadlock. This problem will go away when the bookmarks API switches to
