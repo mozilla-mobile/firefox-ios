@@ -16,14 +16,11 @@ private struct LoginListUX {
 class LoginListViewController: UIViewController {
 
     private var loginDataSource: LoginCursorDataSource? = nil
+    private var loginSearchController: LoginSearchController? = nil
 
     private let profile: Profile
 
-    private let searchView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.redColor()
-        return view
-    }()
+    private let searchView = SearchInputView()
 
     private lazy var tableView: UITableView = {
         return UITableView()
