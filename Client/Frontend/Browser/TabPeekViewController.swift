@@ -8,11 +8,11 @@ import Storage
 @available(iOS 9.0, *)
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
-    let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", comment: "")
-    let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", comment: "")
-    let PreviewActionSendToDevice = NSLocalizedString("Send to Device", comment: "")
-    let PreviewActionCopyURL = NSLocalizedString("Copy URL", comment: "")
-    let PreviewActionCloseTab = NSLocalizedString("Close Tab", comment: "")
+    let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
+    let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", comment: "Label for preview action on Tab Tray Tab to add current tab to Reading List")
+    let PreviewActionSendToDevice = NSLocalizedString("Send to Device", comment: "Label for preview action on Tab Tray Tab to send the current tab to another device")
+    let PreviewActionCopyURL = NSLocalizedString("Copy URL", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
+    let PreviewActionCloseTab = NSLocalizedString("Close Tab", comment: "Label for preview action on Tab Tray Tab to close the current tab")
 
     let tab: Browser
 
@@ -25,6 +25,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     private var ignoreURL: Bool = false
 
     private var screenShot: UIImageView?
+    private var previewAccessibilityLabel: String!
 
     // Preview action items.
     lazy var previewActions: [UIPreviewActionItem] = {
@@ -74,6 +75,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        previewAccessibilityLabel = NSLocalizedString("Preview of \(tab.webView?.accessibilityLabel)", comment: "Accessibility Label for preview in Tab Tray of current tab")
         // if there is no screenshot, load the URL in a web page
         // otherwise just show the screenshot
         setupWebView(tab.webView)
@@ -90,13 +92,14 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         }
         
         screenShot = imageView
+        screenShot?.accessibilityLabel = previewAccessibilityLabel
     }
 
     private func setupWebView(webView: WKWebView?) {
         guard let webView = webView else { return }
         let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
         clonedWebView.allowsLinkPreview = false
-        webView.accessibilityLabel = NSLocalizedString("Preview of \(webView.accessibilityLabel)", comment: "")
+        webView.accessibilityLabel = previewAccessibilityLabel
         self.view.addSubview(clonedWebView)
 
         clonedWebView.snp_makeConstraints { make in
