@@ -225,7 +225,11 @@ class Browser: NSObject {
     }
 
     var url: NSURL? {
-        return webView?.URL ?? lastRequest?.URL
+        guard let resolvedURL = webView?.URL ?? lastRequest?.URL else {
+            guard let sessionData = sessionData else { return nil }
+            return sessionData.urls.last
+        }
+        return resolvedURL
     }
 
     var displayURL: NSURL? {

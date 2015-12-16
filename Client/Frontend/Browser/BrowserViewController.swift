@@ -718,6 +718,15 @@ class BrowserViewController: UIViewController {
     func addBookmark(url: String, title: String?) {
         let shareItem = ShareItem(url: url, title: title, favicon: nil)
         profile.bookmarks.shareItem(shareItem)
+        if #available(iOS 9, *) {
+            var userData = ["bookmarkURL": shareItem.url]
+            if let title = shareItem.title {
+                userData["bookmarkTitle"] = title
+            }
+            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+                withUserData: userData,
+                toApplication: UIApplication.sharedApplication())
+        }
 
         // Dispatch to the main thread to update the UI
         dispatch_async(dispatch_get_main_queue()) { _ in
@@ -868,6 +877,14 @@ class BrowserViewController: UIViewController {
             }
 
             self.navigationToolbar.updateBookmarkStatus(bookmarked)
+        }
+    }
+
+    func switchToTabForURLOrOpen(url: NSURL) {
+        if let tab = tabManager.getTabForURL(url) {
+            tabManager.selectTab(tab)
+        } else {
+            openURLInNewTab(url)
         }
     }
 

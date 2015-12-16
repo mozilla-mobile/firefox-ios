@@ -348,6 +348,11 @@ class TabManager : NSObject {
         return -1
     }
 
+    func getTabForURL(url: NSURL) -> Browser? {
+        guard let index = (tabs.indexOf { $0.url == url }) else { return nil }
+        return tabs[index]
+    }
+
     func storeChanges() {
         stateDelegate?.tabManagerWillStoreTabs(normalTabs)
 

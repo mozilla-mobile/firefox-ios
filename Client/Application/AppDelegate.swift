@@ -18,12 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
 
-    @available(iOS 9, *)
-    lazy var quickActions: QuickActions = {
-        let actions = QuickActions()
-        return actions
-    }()
-
     weak var application: UIApplication?
     var launchOptions: [NSObject: AnyObject]?
 
@@ -189,8 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // If a shortcut was launched, display its information and take the appropriate action
             if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
 
-                quickActions.launchedShortcutItem = shortcutItem
-
+                QuickActions.sharedInstance.launchedShortcutItem = shortcutItem
                 // This will block "performActionForShortcutItem:completionHandler" from being called.
                 shouldPerformAdditionalDelegateHandling = false
             }
@@ -238,10 +231,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // handle quick actions is available
         if #available(iOS 9, *) {
+            var quickActions = QuickActions.sharedInstance
             if let shortcut = quickActions.launchedShortcutItem {
                 // dispatch asynchronously so that BVC is all set up for handling new tabs
                 // when we try and open them
-                self.quickActions.handleShortCutItem(shortcut, completionBlock: self.handleShortCutItemType)
+                quickActions.handleShortCutItem(shortcut, completionBlock: self.handleShortCutItemType)
                 quickActions.launchedShortcutItem = nil
             }
         }
@@ -367,7 +361,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     @available(iOS 9.0, *)
     func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: Bool -> Void) {
-        let handledShortCutItem = quickActions.handleShortCutItem(shortcutItem, completionBlock: handleShortCutItemType)
+        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, completionBlock: handleShortCutItemType)
 
         completionHandler(handledShortCutItem)
     }
@@ -381,6 +375,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         case .NewPrivateTab:
             browserViewController.applyPrivateModeTheme(force: true)
             browserViewController.openBlankNewTabAndFocus(isPrivate: true)
+        case .OpenLastBookmark:
+            // open bookmark in a non-private browsing tab
+            browserViewController.applyNormalModeTheme(force: true)
+            // find out if bookmarked URL is currently open
+            // if so, open to that tab,
+            // otherwise, create a new tab with the bookmarked URL
+            if let urlToOpen = (userData?["bookmarkURL"] as? String)?.asURL {
+                browserViewController.switchToTabForURLOrOpen(urlToOpen)
+            }
         }
     }
 }
