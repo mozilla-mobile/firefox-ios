@@ -45,14 +45,13 @@ class AuroraAppDelegate: AppDelegate {
         NSNotificationCenter.defaultCenter().addObserverForName(
             UIApplicationUserDidTakeScreenshotNotification,
             object: nil,
-            queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-                if let window = self.window {
-                    UIGraphicsBeginImageContext(window.bounds.size)
-                    window.drawViewHierarchyInRect(window.bounds, afterScreenUpdates: true)
-                    let image = UIGraphicsGetImageFromCurrentImageContext()
-                    UIGraphicsEndImageContext()
-                    self.sendFeedbackMailWithImage(image)
-                }
+            queue: NSOperationQueue.mainQueue()) { _ in
+                let snapshot = UIScreen.mainScreen().snapshotViewAfterScreenUpdates(true)
+                UIGraphicsBeginImageContext(snapshot.bounds.size)
+                snapshot.drawViewHierarchyInRect(snapshot.bounds, afterScreenUpdates: true)
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                self.sendFeedbackMailWithImage(image)
         }
     }
 
