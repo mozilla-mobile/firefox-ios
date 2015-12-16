@@ -1,16 +1,12 @@
-//
-//  TabViewController.swift
-//  Client
-//
-//  Created by Emily Toop on 12/2/15.
-//  Copyright © 2015 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 import Storage
 
 @available(iOS 9.0, *)
-class TabPeekViewController: UIViewController {
+class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", comment: "")
     let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", comment: "")
@@ -19,13 +15,15 @@ class TabPeekViewController: UIViewController {
     let PreviewActionCloseTab = NSLocalizedString("Close Tab", comment: "")
 
     let tab: Browser
-    let bvc: BrowserViewController?
-    let tabManager: TabManager
-    var clientPicker: UINavigationController?
-    var isBookmarked: Bool = false
-    var isInReadingList: Bool = false
-    var hasRemoteClients: Bool = false
-    var ignoreURL: Bool = false
+    private let bvc: BrowserViewController?
+    private let tabManager: TabManager
+    private var clientPicker: UINavigationController?
+    private var isBookmarked: Bool = false
+    private var isInReadingList: Bool = false
+    private var hasRemoteClients: Bool = false
+    private var ignoreURL: Bool = false
+
+    private var screenShot: UIImageView?
 
     // Preview action items.
     lazy var previewActions: [UIPreviewActionItem] = {
@@ -80,10 +78,8 @@ class TabPeekViewController: UIViewController {
         super.viewDidLoad()
         // if there is no screenshot, load the URL in a web page
         // otherwise just show the screenshot
-        guard let screenshot = tab.screenshot else {
-            setupWebView(tab.url)
-            return
-        }
+        setupWebView(tab.webView)
+        guard let screenshot = tab.screenshot else { return }
         setupWithScreenshot(screenshot)
     }
 
@@ -94,18 +90,25 @@ class TabPeekViewController: UIViewController {
         imageView.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
         }
+        
+        screenShot = imageView
     }
 
-    private func setupWebView(url: NSURL?) {
-        let webView = WKWebView()
-        self.view.addSubview(webView)
+    private func setupWebView(webView: WKWebView?) {
+        guard let webView = webView else { return }
+        let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
+        clonedWebView.allowsLinkPreview = false
+        webView.accessibilityLabel = NSLocalizedString("Preview of \(webView.accessibilityLabel)", comment: "")
+        self.view.addSubview(clonedWebView)
 
-        webView.snp_makeConstraints { make in
+        clonedWebView.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
-        if let url = url {
-            webView.loadRequest(NSURLRequest(URL: url))
+        clonedWebView.navigationDelegate = self
+
+        if let url = webView.URL {
+            clonedWebView.loadRequest(NSURLRequest(URL: url))
         }
     }
 
@@ -132,5 +135,10 @@ class TabPeekViewController: UIViewController {
 
         isInReadingList = browserProfile.readingList?.getRecordWithURL(displayURL).successValue != nil
         ignoreURL = isIgnoredURL(displayURL)
+    }
+
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        screenShot?.removeFromSuperview()
+        screenShot = nil
     }
 }
