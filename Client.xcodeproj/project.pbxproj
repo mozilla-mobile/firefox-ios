@@ -637,6 +637,7 @@
 		E6327A8A1BF6473A008D12E0 /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
 		E6327A8B1BF64799008D12E0 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
 		E633E2331C21E293001FFF6C /* FXSnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2321C21E293001FFF6C /* FXSnapshotTestCase.swift */; };
+		E633E3101C21F547001FFF6C /* SnapKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E68B43751C08A724002D2D76 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E635D25E1B729DEE0078962F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E635D25D1B729DEE0078962F /* Logger.swift */; };
 		E63ED7B41BFCD9800097D08E /* LoginTableViewCellRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7B31BFCD9800097D08E /* LoginTableViewCellRefTests.swift */; };
 		E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */; };
@@ -1321,6 +1322,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E633E3101C21F547001FFF6C /* SnapKit.framework in Copy Frameworks */,
 				D30DD4251B94FE0E00850E76 /* SQLite.framework in Copy Frameworks */,
 				E6C05DB21BA1CDAB00CDDD08 /* Breakpad.framework in Copy Frameworks */,
 				7B0E83B51BF2196E00D12554 /* Alamofire.framework in Copy Frameworks */,
