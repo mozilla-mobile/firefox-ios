@@ -539,6 +539,11 @@ public class BrowserProfile: Profile {
 
         func applicationDidBecomeActive() {
             self.backgrounded = false
+
+            guard self.profile.hasAccount() else {
+                return
+            }
+
             self.beginTimedSyncs()
 
             // Sync now if it's been more than our threshold.
@@ -681,6 +686,7 @@ public class BrowserProfile: Profile {
         }
 
         func onAddedAccount() -> Success {
+            self.beginTimedSyncs();
             return self.syncEverything()
         }
 
