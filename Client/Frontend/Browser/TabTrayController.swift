@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 import SnapKit
 import Storage
+import ReadingList
 
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
@@ -224,10 +225,17 @@ struct PrivateModeStrings {
     static let toggleAccessibilityValueOff = NSLocalizedString("Off", tableName: "PrivateBrowsing", comment: "Toggled OFF accessibility value")
 }
 
+protocol TabTrayDelegate {
+    func tabTrayDidDismiss(tabTray: TabTrayController)
+    func addBookmark(tab: Browser)
+    func addToReadingList(tab: Browser) -> ReadingListClientRecord?
+    func present(viewController viewController: UIViewController)
+}
+
 class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
-    weak var browserViewController: BrowserViewController?
+    var delegate: TabTrayDelegate?
 
     var collectionView: UICollectionView!
     var navBar: UIView!
@@ -284,9 +292,9 @@ class TabTrayController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-    convenience init(tabManager: TabManager, profile: Profile, browserViewController: BrowserViewController) {
+    convenience init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate) {
         self.init(tabManager: tabManager, profile: profile)
-        self.browserViewController = browserViewController
+        self.delegate = tabTrayDelegate
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -923,7 +931,7 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
             let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
 
         let tab = tabDataSource.tabs[indexPath.row]
-        let tabVC = TabPeekViewController(tab: tab, controller: browserViewController, tabManager: tabManager)
+        let tabVC = TabPeekViewController(tab: tab, delegate: delegate, tabManager: tabManager)
         if let browserProfile = profile as? BrowserProfile {
             tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
         }
@@ -936,15 +944,9 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
         guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
         tabManager.selectTab(tpvc.tab)
         self.navigationController?.popViewControllerAnimated(true)
-        browserViewController?.urlBar.updateAlphaForSubviews(1)
 
-        [browserViewController?.header,
-            browserViewController?.footer,
-            browserViewController?.readerModeBar,
-            browserViewController?.footerBackdrop,
-            browserViewController?.headerBackdrop].forEach { view in
-            view?.transform = CGAffineTransformIdentity
-        }
+        delegate?.tabTrayDidDismiss(self)
+
     }
 }
 

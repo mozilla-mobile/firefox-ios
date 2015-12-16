@@ -15,7 +15,8 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     let PreviewActionCloseTab = NSLocalizedString("Close Tab", comment: "")
 
     let tab: Browser
-    private let bvc: BrowserViewController?
+
+    private let delegate: TabTrayDelegate?
     private let tabManager: TabManager
     private var clientPicker: UINavigationController?
     private var isBookmarked: Bool = false
@@ -31,21 +32,18 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         if(!self.ignoreURL) {
             if !self.isInReadingList {
                 actions.append(UIPreviewAction(title: self.PreviewActionAddToReadingList, style: .Default) { previewAction, viewController in
-                    guard let displayURL = self.tab.url?.absoluteString where displayURL.characters.count > 0 else { return }
-                    self.bvc?.addToReadingList(displayURL, title: self.tab.lastTitle ?? displayURL)
+                    self.delegate?.addToReadingList(self.tab)
                 })
             }
             if !self.isBookmarked {
                 actions.append(UIPreviewAction(title: self.PreviewActionAddToBookmarks, style: .Default) { previewAction, viewController in
-                    guard let displayURL = self.tab.url?.absoluteString where displayURL.characters.count > 0 else { return }
-
-                    self.bvc?.addBookmark(displayURL, title: self.tab.lastTitle ?? displayURL)
+                    self.delegate?.addBookmark(self.tab)
                     })
             }
             if self.hasRemoteClients {
                 actions.append(UIPreviewAction(title: self.PreviewActionSendToDevice, style: .Default) { previewAction, viewController in
                     guard let clientPicker = self.clientPicker else { return }
-                    self.bvc?.presentViewController(clientPicker, animated: false, completion: nil)
+                    self.delegate?.present(viewController: clientPicker)
                     })
             }
             actions.append(UIPreviewAction(title: self.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
@@ -63,9 +61,9 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     }()
 
 
-    init(tab: Browser, controller: BrowserViewController?, tabManager: TabManager) {
+    init(tab: Browser, delegate: TabTrayDelegate?, tabManager: TabManager) {
         self.tab = tab
-        self.bvc = controller
+        self.delegate = delegate
         self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
     }
