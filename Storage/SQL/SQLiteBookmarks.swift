@@ -402,6 +402,10 @@ public class SQLiteBookmarks: BookmarksModelFactory {
     private func removeLocalByGUID(guid: GUID) -> Success {
         let args: Args = [guid]
 
+        // TODO: recursively delete children! Bug 1233193.
+        // Do this by finding all children, then bulk deleting, and doing so (bottom-up)
+        // until the whole subtree is marked as deleted.
+
         // Find the index we're currently occupying.
         let previousIndexSubquery = "SELECT idx FROM \(TableBookmarksLocalStructure) WHERE child = ?"
 
