@@ -346,51 +346,142 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         ])
     }
 
-    private func nonDeletedGUIDsForURL(url: String) -> Deferred<Maybe<(local: [GUID], mirror: [GUID])>> {
-        let local = "SELECT guid FROM \(TableBookmarksLocal) WHERE bmkUri = ? AND is_deleted = 0"
-        let mirror = "SELECT guid FROM \(TableBookmarksMirror) WHERE bmkUri = ? AND is_overridden = 0 AND is_deleted = 0"
-
-        let args: Args = [url]
-
-        return self.db.runQuery(local, args: args, factory: { $0["guid"] as! GUID }) >>== { ls in
-            return self.db.runQuery(mirror, args: args, factory: { $0["guid"] as! GUID }) >>== { ms in
-                let locals = ls.asArray()
-                let mirrors = ms.asArray()
-                return deferMaybe((local: locals, mirror: mirrors))
-            }
-        }
-    }
-
-    // We delete locals then non-overridden. We don't do this in one step in order to avoid
-    // potential complications when removing multiple children in a single folder (as will
-    // be the case if Sync has screwed up a user's bookmarks already!). We don't delete both
-    // non-overridden and local at the same time because it's convenient to know which is which.
     public func removeByURL(url: String) -> Success {
-        let urls = self.nonDeletedGUIDsForURL(url)
-        return urls >>== { (local: [GUID], mirror: [GUID]) in
-            log.debug("Found GUIDs local = \(local), mirror = \(mirror).")
-            return self.removeGUIDs(mirror, thatAreLocal: false)
-             >>> { self.removeGUIDs(local, thatAreLocal: true) }
-        }
-    }
-
-    private func removeGUIDs(guids: [GUID], thatAreLocal local: Bool) -> Success {
-        let f = local ? self.removeLocalByGUID : self.removeNonOverriddenByGUID
-        return walk(guids, f: f)
-    }
-
-    private func removeNonOverriddenByGUID(guid: GUID) -> Success {
-        // If the bookmark only exists in the mirror, we must override it and mark it as
-        // deleted, and override its parent and remove the deleted bookmark from its child list.
-        let (sql, args) = self.getSQLToOverrideParent(guid, atModifiedTime: NSDate.now(), andDelete: true)
-        return db.run(sql.map { ($0, args) })
+        // Find all of the records for the provided URL. Don't bother with
+        // any that are already deleted!
+        return self.nonDeletedGUIDsForURL(url)
+          >>== self.removeGUIDs
     }
 
     public func removeByGUID(guid: GUID) -> Success {
-        return self.removeLocalByGUID(guid)
-         >>> { self.removeNonOverriddenByGUID(guid) }
+        log.debug("removeByGUID: \(guid)")
+        return self.removeGUIDs([guid])
     }
 
+    public func removeGUIDs(guids: [GUID]) -> Success {
+        log.debug("removeByGUIDs: \(guids)")
+
+        // Override any parents that aren't already overridden. We're about to remove some
+        // of their children.
+        return self.overrideParentsOfGUIDs(guids)
+
+        // Find, recursively, any children of the provided GUIDs. This will only be the case
+        // if you specify folders. This is a special case because we're removing *all*
+        // children, so we don't need to do the reindexing dance.
+           >>> { self.deleteChildrenOfGUIDs(guids) }
+
+        // Override any records that aren't already overridden.
+           >>> { self.overrideGUIDs(guids) }
+
+        // Then delete the already-overridden records. We do this one at a time in order
+        // to get indices correct in edge cases. (We do bulk-delete their children
+        // one layer at a time, at least.)
+           >>> { walk(guids, f: self.removeLocalByGUID) }
+    }
+
+    private func nonDeletedGUIDsForURL(url: String) -> Deferred<Maybe<([GUID])>> {
+        let sql = "SELECT DISTINCT guid FROM \(ViewBookmarksLocalOnMirror) WHERE bmkUri = ? AND is_deleted = 0"
+        let args: Args = [url]
+
+        return self.db.runQuery(sql, args: args, factory: { $0[0] as! GUID }) >>== { guids in
+            return deferMaybe(guids.asArray())
+        }
+    }
+
+    private func overrideParentsOfGUIDs(guids: [GUID]) -> Success {
+        log.debug("Overriding parents of \(guids).")
+
+        // TODO: Yes, this can be done in one go.
+        let getParentsSQL =
+        "SELECT DISTINCT parent FROM \(ViewBookmarksLocalStructureOnMirror) " +
+        "WHERE child IN \(BrowserDB.varlist(guids.count)) AND is_overridden = 0"
+        let getParentsArgs: Args = guids.map { $0 as AnyObject }
+
+        return self.db.runQuery(getParentsSQL, args: getParentsArgs, factory: { $0[0] as! GUID })
+            >>== { parentsCursor in
+                let parents = parentsCursor.asArray()
+                log.debug("Overriding parents: \(parents).")
+                let (sql, args) = self.getSQLToOverrideFolders(parents, atModifiedTime: NSDate.now())
+                return self.db.run(sql.map { ($0, args) })
+        }
+    }
+
+    private func overrideGUIDs(guids: [GUID]) -> Success {
+        log.debug("Overriding GUIDs: \(guids).")
+        let (sql, args) = self.getSQLToOverrideNonFolders(guids, atModifiedTime: NSDate.now())
+        return self.db.run(sql.map { ($0, args) })
+    }
+
+    // Recursive.
+    private func deleteChildrenOfGUIDs(guids: [GUID]) -> Success {
+        if guids.isEmpty {
+            return succeed()
+        }
+
+        precondition(BookmarkRoots.All.intersect(guids).isEmpty, "You can't even touch the roots for removal.")
+
+        log.debug("Deleting children of \(guids).")
+
+        let topArgs: Args = guids.map { $0 as AnyObject }
+        let topVarlist = BrowserDB.varlist(topArgs.count)
+        let query =
+        "SELECT child FROM \(ViewBookmarksLocalStructureOnMirror) " +
+        "WHERE parent IN \(topVarlist)"
+
+        // We're deleting whole folders, so we don't need to worry about indices.
+        return self.db.runQuery(query, args: topArgs, factory: { $0[0] as! GUID })
+            >>== { children in
+                let childGUIDs = children.asArray()
+                log.debug("… children of \(guids) are \(childGUIDs).")
+
+                if childGUIDs.isEmpty {
+                    log.debug("No children; nothing more to do.")
+                    return succeed()
+                }
+
+                let childArgs: Args = childGUIDs.map { $0 as AnyObject }
+                let childVarlist = BrowserDB.varlist(childArgs.count)
+
+                // Mirror the children if they're not already.
+                // We use the non-folder version of this query because we're recursively
+                // destroying structure right after this, so there's no point cloning the
+                // mirror structure.
+                // Then delete the children's children, so we don't leave orphans. This is
+                // recursive, so by the time this succeeds we know that all of these records
+                // have no remaining children.
+                let (overrideSQL, overrideArgs) = self.getSQLToOverrideNonFolders(childGUIDs, atModifiedTime: NSDate.now())
+
+                return self.deleteChildrenOfGUIDs(childGUIDs)
+                    >>> { self.db.run(overrideSQL.map { ($0, overrideArgs) }) }
+                    >>> {
+                        // Delete the children themselves.
+
+                        // Remove each child from structure. We use the top list to save effort.
+                        let deleteStructure =
+                        "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(topVarlist)"
+
+                        // If a bookmark is New, delete it outright.
+                        let deleteNew =
+                        "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.New.rawValue)"
+
+                        // If a bookmark is Changed, mark it as deleted and bump its modified time.
+                        // TODO: we should also drop non-metadata fields!
+                        let markChanged =
+                        "UPDATE \(TableBookmarksLocal) SET is_deleted = 1, local_modified = \(NSDate.now()) " +
+                        "WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.Changed.rawValue)"
+
+                        return self.db.run([
+                            (deleteStructure, topArgs),
+                            (deleteNew, childArgs),
+                            (markChanged, childArgs),
+                        ])
+                }
+        }
+    }
+
+    /**
+     * This depends on the record's parent already being overridden if necessary.
+     */
     private func removeLocalByGUID(guid: GUID) -> Success {
         let args: Args = [guid]
 
@@ -427,30 +518,65 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 }
 
 extension SQLiteBookmarks {
-    private func getSQLToOverrideParent(folder: GUID, atModifiedTime modified: Timestamp, andDelete: Bool=false) -> (sql: [String], args: Args) {
-        let args: Args = [folder]
+    private func getSQLToOverrideFolder(folder: GUID, atModifiedTime modified: Timestamp) -> (sql: [String], args: Args) {
+        return self.getSQLToOverrideFolders([folder], atModifiedTime: modified)
+    }
+
+    private func getSQLToOverrideFolders(folders: [GUID], atModifiedTime modified: Timestamp) -> (sql: [String], args: Args) {
+        if folders.isEmpty {
+            return (sql: [], args: [])
+        }
+
+        let vars = BrowserDB.varlist(folders.count)
+        let args: Args = folders.map { $0 as AnyObject }
 
         // Copy it to the local table.
         // Most of these will be NULL, because we're only dealing with folders,
-        // and in this case only the Mobile Bookmarks root.
+        // and typically only the Mobile Bookmarks root.
         let overrideSQL = "INSERT OR IGNORE INTO \(TableBookmarksLocal) " +
                           "(guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos," +
                           " description, tags, keyword, folderName, queryId, is_deleted, " +
                           " local_modified, sync_status, faviconID) " +
                           "SELECT guid, type, bmkUri, title, parentid, parentName, " +
                           "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, " +
-                          (andDelete ? "1, " : "is_deleted, ") +
+                          "is_deleted, " +
                           "\(modified) AS local_modified, \(SyncStatus.Changed.rawValue) AS sync_status, faviconID " +
-                          "FROM \(TableBookmarksMirror) WHERE guid = ?"
+                          "FROM \(TableBookmarksMirror) WHERE guid IN \(vars)"
 
         // Copy its mirror structure.
-        let dropSQL = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent = ?"
+        let dropSQL = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(vars)"
         let copySQL = "INSERT INTO \(TableBookmarksLocalStructure) " +
-                      "SELECT * FROM \(TableBookmarksMirrorStructure) WHERE parent = ?"
+                      "SELECT * FROM \(TableBookmarksMirrorStructure) WHERE parent IN \(vars)"
 
         // Mark as overridden.
-        let markSQL = "UPDATE \(TableBookmarksMirror) SET is_overridden = 1 WHERE guid = ?"
+        let markSQL = "UPDATE \(TableBookmarksMirror) SET is_overridden = 1 WHERE guid IN \(vars)"
         return (sql: [overrideSQL, dropSQL, copySQL, markSQL], args: args)
+    }
+
+    private func getSQLToOverrideNonFolders(records: [GUID], atModifiedTime modified: Timestamp) -> (sql: [String], args: Args) {
+        log.info("Getting SQL to override \(records).")
+        if records.isEmpty {
+            return (sql: [], args: [])
+        }
+
+        let vars = BrowserDB.varlist(records.count)
+        let args: Args = records.map { $0 as AnyObject }
+
+        // Copy any that aren't overridden to the local table.
+        let overrideSQL =
+        "INSERT OR IGNORE INTO \(TableBookmarksLocal) " +
+        "(guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos," +
+        " description, tags, keyword, folderName, queryId, is_deleted, " +
+        " local_modified, sync_status, faviconID) " +
+        "SELECT guid, type, bmkUri, title, parentid, parentName, " +
+        "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, " +
+        "is_deleted, " +
+        "\(modified) AS local_modified, \(SyncStatus.Changed.rawValue) AS sync_status, faviconID " +
+        "FROM \(TableBookmarksMirror) WHERE guid IN \(vars) AND is_overridden = 0"
+
+        // Mark as overridden.
+        let markSQL = "UPDATE \(TableBookmarksMirror) SET is_overridden = 1 WHERE guid IN \(vars)"
+        return (sql: [overrideSQL, markSQL], args: args)
     }
 
     /**
@@ -510,7 +636,7 @@ extension SQLiteBookmarks {
             faviconID = nil
         }
 
-        log.debug("Inserting bookmark with specified icon \(faviconID).")
+        log.debug("Inserting bookmark with GUID \(newGUID) and specified icon \(faviconID).")
 
         // If the caller didn't provide an icon (and they usually don't!),
         // do a reverse lookup in history. We use a view to make this simple.
@@ -539,7 +665,7 @@ extension SQLiteBookmarks {
         func overrideParentMirror() -> Bool {
             // We do this slightly tortured work so that we can reuse these queries
             // in a different context.
-            let (sql, args) = getSQLToOverrideParent(parent, atModifiedTime: now)
+            let (sql, args) = getSQLToOverrideFolder(parent, atModifiedTime: now)
             var generator = sql.generate()
             while let query = generator.next() {
                 if !change(query, args: args, desc: "Error running overriding query.") {
@@ -625,11 +751,11 @@ extension SQLiteBookmarks {
                            "VALUES (?, ?, \(newIndex))"
         let structureArgs: Args = [parent, newGUID, parent]
 
-        log.debug("Wrapping up bookmark transaction on thread \(NSThread.currentThread())")
         if !change(structureSQL, args: structureArgs, desc: "Error adding new item \(newGUID) to local structure.") {
             return false
         }
 
+        log.debug("Wrapped up bookmark transaction on thread \(NSThread.currentThread())")
 
         /// Fill the deferred and commit the transaction.
         deferred.fill(Maybe(success: ()))
@@ -1002,6 +1128,7 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
     }
 
     public func removeByGUID(guid: GUID) -> Success {
+        log.debug("removeByGUID: \(guid)")
         return self.local.removeByGUID(guid)
     }
 
