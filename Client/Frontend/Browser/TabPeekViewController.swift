@@ -8,11 +8,11 @@ import Storage
 @available(iOS 9.0, *)
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
-    let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
-    let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", comment: "Label for preview action on Tab Tray Tab to add current tab to Reading List")
-    let PreviewActionSendToDevice = NSLocalizedString("Send to Device", comment: "Label for preview action on Tab Tray Tab to send the current tab to another device")
-    let PreviewActionCopyURL = NSLocalizedString("Copy URL", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
-    let PreviewActionCloseTab = NSLocalizedString("Close Tab", comment: "Label for preview action on Tab Tray Tab to close the current tab")
+    private static let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
+    private static let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to add current tab to Reading List")
+    private static let PreviewActionSendToDevice = NSLocalizedString("Send to Device", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to send the current tab to another device")
+    private static let PreviewActionCopyURL = NSLocalizedString("Copy URL", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
+    private static let PreviewActionCloseTab = NSLocalizedString("Close Tab", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to close the current tab")
 
     let tab: Browser
 
@@ -32,28 +32,28 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         var actions = [UIPreviewActionItem]()
         if(!self.ignoreURL) {
             if !self.isInReadingList {
-                actions.append(UIPreviewAction(title: self.PreviewActionAddToReadingList, style: .Default) { previewAction, viewController in
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .Default) { previewAction, viewController in
                     self.delegate?.addToReadingList(self.tab)
                 })
             }
             if !self.isBookmarked {
-                actions.append(UIPreviewAction(title: self.PreviewActionAddToBookmarks, style: .Default) { previewAction, viewController in
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .Default) { previewAction, viewController in
                     self.delegate?.addBookmark(self.tab)
                     })
             }
             if self.hasRemoteClients {
-                actions.append(UIPreviewAction(title: self.PreviewActionSendToDevice, style: .Default) { previewAction, viewController in
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionSendToDevice, style: .Default) { previewAction, viewController in
                     guard let clientPicker = self.clientPicker else { return }
                     self.delegate?.present(viewController: clientPicker)
                     })
             }
-            actions.append(UIPreviewAction(title: self.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
+            actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
                 guard let url = self.tab.url where url.absoluteString.characters.count > 0 else { return }
                 let pasteBoard = UIPasteboard.generalPasteboard()
                 pasteBoard.URL = url
                 })
         }
-        actions.append(UIPreviewAction(title: self.PreviewActionCloseTab, style: .Destructive) { previewAction, viewController in
+        actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCloseTab, style: .Destructive) { previewAction, viewController in
             guard let tabViewController = viewController as? TabPeekViewController else { return }
             self.tabManager.removeTab(self.tab)
             })
@@ -75,7 +75,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        previewAccessibilityLabel = NSLocalizedString("Preview of \(tab.webView?.accessibilityLabel)", comment: "Accessibility Label for preview in Tab Tray of current tab")
+        previewAccessibilityLabel = NSLocalizedString("Preview of \(tab.webView?.accessibilityLabel)", tableName: "3D Touch Actions", comment: "Accessibility Label for preview in Tab Tray of current tab")
         // if there is no screenshot, load the URL in a web page
         // otherwise just show the screenshot
         setupWebView(tab.webView)

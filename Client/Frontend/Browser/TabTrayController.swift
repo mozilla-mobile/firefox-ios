@@ -367,7 +367,7 @@ class TabTrayController: UIViewController {
                 privateMode = true
             }
 
-            // register for previewing delegvate to enable peek and pop if force touch feature available
+            // register for previewing delegate to enable peek and pop if force touch feature available
             if traitCollection.forceTouchCapability == .Available {
                 registerForPreviewingWithDelegate(self, sourceView: view)
             }
