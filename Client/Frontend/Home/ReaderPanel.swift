@@ -315,7 +315,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     }
 
     private func createEmptyStateOverview() -> UIView {
-        let overlayView = UIView(frame: tableView.bounds)
+        let overlayView = UIScrollView(frame: tableView.bounds)
         overlayView.backgroundColor = UIColor.whiteColor()
         // Unknown why this does not work with autolayout
         overlayView.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
@@ -381,6 +381,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
             make.top.equalTo(readerModeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
             make.left.equalTo(welcomeLabel.snp_left)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
+            make.bottom.equalTo(overlayView).offset(-20) // making AutoLayout compute the overlayView's contentSize
         }
 
         let readingListImageView = UIImageView(image: UIImage(named: "AddToReadingListCircle"))
