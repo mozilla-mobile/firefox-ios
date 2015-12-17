@@ -33,7 +33,7 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
         }
 
         let mirrorer = BookmarksMirrorer(storage: buffer, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks")
-        let applier = MergeApplier(buffer: buffer, storage: storage, client: bookmarksClient)
+        let applier = MergeApplier(buffer: buffer, storage: storage, client: bookmarksClient, greenLight: greenLight)
 
         // TODO: if the mirrorer tells us we're incomplete, then don't bother trying to sync!
         // We will need to extend the BookmarksMirrorer interface to allow us to see what's
@@ -44,12 +44,14 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
 }
 
 private class MergeApplier {
+    let greenLight: () -> Bool
     let buffer: BookmarkBufferStorage
     let storage: SyncableBookmarks
     let client: Sync15CollectionClient<BookmarkBasePayload>
     let merger: BookmarksMerger
 
-    init(buffer: BookmarkBufferStorage, storage: SyncableBookmarks, client: Sync15CollectionClient<BookmarkBasePayload>) {
+    init(buffer: BookmarkBufferStorage, storage: SyncableBookmarks, client: Sync15CollectionClient<BookmarkBasePayload>, greenLight: () -> Bool) {
+        self.greenLight = greenLight
         self.buffer = buffer
         self.storage = storage
         self.merger = NoOpBookmarksMerger(buffer: buffer, storage: storage)
@@ -57,6 +59,11 @@ private class MergeApplier {
     }
 
     func go() -> SyncResult {
+        if !self.greenLight() {
+            log.info("Green light turned red; not merging bookmarks.")
+            return deferMaybe(SyncStatus.Completed)
+        }
+
         return self.merger.merge() >>== { result in
             result.describe(log)
             return result.uploadCompletion.applyToClient(self.client)
