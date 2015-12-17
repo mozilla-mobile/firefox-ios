@@ -115,6 +115,12 @@ private struct TempStrings {
     let deleteLocal                     = NSLocalizedString("Logins will be permanently removed.", tableName: "LoginManager", comment: "Prompt message warning the user that deleting non-synced logins will permanently remove them")
     let deleteSyncedDevices             = NSLocalizedString("Logins will be removed from all connected devices.", tableName: "LoginManager", comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices")
     let noLoginsFound                   = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Title displayed when no logins are found after searching")
+
+    // Bug 1164067 - Find in Page
+    let findInPage = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Pending feature; currently unused string! Title for share action item and selection menu item.")
+    let findPrevious = NSLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Pending feature; currently unused string! Accessibility label for previous result button in Find in Page Toolbar.")
+    let findNext = NSLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Pending feature; currently unused string! Accessibility label for next result button in Find in Page Toolbar.")
+    let findClose = NSLocalizedString("Done", tableName: "FindInPage", comment: "Pending feature; currently unused string! Done button in Find in Page Toolbar.")
 }
 
 /// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.
