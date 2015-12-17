@@ -161,6 +161,15 @@ struct BookmarksMergeResult {
  * The goal of merging is that the buffer is empty (because we reconciled conflicts and
  * updated the server), our local overlay is empty (because we reconciled conflicts and
  * applied our changes to the server), and the mirror matches the server.
+ *
+ * Note that upstream application is robust: we can use XIUS to ensure that writes don't
+ * race. Buffer application is similarly robust, because this code owns all writes to the
+ * buffer. Local and mirror application, however, is not: the user's actions can cause
+ * changes to write to the database before we're done applying the results of a sync.
+ * We mitigate this a little by being explicit about the local changes that we're flushing
+ * (rather than, say, `DELETE FROM local`), but to do better we'd need change detection
+ * (e.g., an in-memory monotonic counter) or locking to prevent bookmark operations from
+ * racing. Later!
  */
 protocol BookmarksMerger {
     init(buffer: BookmarkBufferStorage, storage: SyncableBookmarks)
@@ -227,8 +236,17 @@ class TrivialBookmarksMerger: BookmarksMerger {
 
     // Trivial one-way sync.
     private func applyLocalDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
-        // We are confident that our local changes, when overlaid on the mirror, are
-        // consistent.
+        // Theoretically, we do the following:
+        // * Construct a virtual bookmark tree overlaying local on the mirror.
+        // * Walk the tree to produce Sync records.
+        // * Upload those records.
+        // * Flatten that tree into the mirror, clearing local.
+        //
+        // This is simpler than a full three-way merge: it's tree delta then flatten.
+        //
+        // But we are confident that our local changes, when overlaid on the mirror, are
+        // consistent. So we can take a little bit of a shortcut: process records
+        // directly, rather than building a tree.
         //
         // So do the following:
         // * Take everything in `local` and turn it into a Sync record. This means pulling
@@ -244,7 +262,9 @@ class TrivialBookmarksMerger: BookmarksMerger {
         // particular subtree (e.g., a single root, or a single branch of changes). This
         // allows us to make incremental progress.
 
-        return deferMaybe(BookmarksMergeResult.NoOp)
+        // TODO
+        log.debug("No special-case local-only merging yet. Falling back to three-way merge.")
+        return self.threeWayMerge()
     }
 
     private func applyIncomingDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
@@ -257,10 +277,26 @@ class TrivialBookmarksMerger: BookmarksMerger {
         // merging.
         //
         // TODO
-        return deferMaybe(BookmarksMergeResult.NoOp)
+        log.debug("No special-case remote-only merging yet. Falling back to three-way merge.")
+        return self.threeWayMerge()
     }
 
     private func threeWayMerge() -> Deferred<Maybe<BookmarksMergeResult>> {
+        // At this point we know that there have been changes both locally and remotely.
+        // It's very likely that there's almost no overlap, and thus no real conflicts to
+        // resolve -- a three-way merge isn't always a bad thing -- but we won't know until
+        // we compare records.
+        //
+        // Even though this function is called `threeWayMerge`, it also handles the case
+        // of a two-way merge (one without a shared parent; for the roots, this will only
+        // be on a first sync): content-based and structural merging is needed at all
+        // layers of the hierarchy, so we simply generalize that to also apply to roots.
+        //
+        // In a sense, a two-way merge is solved by constructing a shared parent consisting of
+        // only the Places root. (Special care must be taken to not deduce that one side has
+        // deleted a root, of course, as would be the case of a Sync server that doesn't contain
+        // a Mobile Bookmarks folder -- the set of roots can only grow, not shrink.)
+
         // TODO
         return deferMaybe(BookmarksMergeResult.NoOp)
     }
