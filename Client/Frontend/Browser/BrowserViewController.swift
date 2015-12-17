@@ -1198,6 +1198,15 @@ extension BrowserViewController: BrowserToolbarDelegate {
         if let selectedTab = tabManager.selectedTab {
             var activities = [UIActivity]()
 
+            if #available(iOS 9.0, *) {
+                if (selectedTab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active {
+                    let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: selectedTab.desktopSite) {
+                        selectedTab.toggleDesktopSite()
+                    }
+                    activities.append(requestDesktopSiteActivity)
+                }
+            }
+
             let helper = ShareExtensionHelper(tab: selectedTab, activities: activities)
 
             let activityViewController = helper.createActivityViewController({
