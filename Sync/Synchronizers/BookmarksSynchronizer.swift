@@ -20,7 +20,7 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
         return BookmarksStorageVersion
     }
 
-    public func mirrorBookmarksToStorage(storage: BookmarkBufferStorage, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
+    public func synchronizeBookmarksToStorage(storage: SyncableBookmarks, usingBuffer buffer: BookmarkBufferStorage, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
             return deferMaybe(.NotStarted(reason))
         }
@@ -32,8 +32,14 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
             return deferMaybe(FatalError(message: "Couldn't make bookmarks factory."))
         }
 
-        let mirrorer = BookmarksMirrorer(storage: storage, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks")
-        return mirrorer.go(info, greenLight: greenLight) >>> always(SyncStatus.Completed)
+        let mirrorer = BookmarksMirrorer(storage: buffer, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks")
+        let applier = MergeApplier(buffer: buffer, storage: storage, client: bookmarksClient)
+
+        // TODO: if the mirrorer tells us we're incomplete, then don't bother trying to sync!
+        // We will need to extend the BookmarksMirrorer interface to allow us to see what's
+        // going on.
+        return mirrorer.go(info, greenLight: greenLight)
+           >>> applier.go
     }
 }
 
