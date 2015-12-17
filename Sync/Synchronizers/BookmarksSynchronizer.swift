@@ -67,9 +67,9 @@ private class MergeApplier {
         return self.merger.merge() >>== { result in
             result.describe(log)
             return result.uploadCompletion.applyToClient(self.client)
-                >>> { result.overrideCompletion.applyToStore(self.storage) }
-                >>> { result.bufferCompletion.applyToBuffer(self.buffer) }
-                >>> always(SyncStatus.Completed)
+              >>== { result.overrideCompletion.applyToStore(self.storage, withUpstreamResult: $0) }
+               >>> { result.bufferCompletion.applyToBuffer(self.buffer) }
+               >>> always(SyncStatus.Completed)
         }
 
     }
@@ -94,12 +94,12 @@ protocol UpstreamCompletionOp {
 
     // TODO: this should probably return a timestamp.
     // The XIUS that we'll need for the upload can be captured as part of the op.
-    func applyToClient(client: Sync15CollectionClient<BookmarkBasePayload>) -> Success
+    func applyToClient(client: Sync15CollectionClient<BookmarkBasePayload>) -> Deferred<Maybe<UploadResult>>
 }
 
 protocol LocalOverrideCompletionOp {
     func describe(log: DescriptionDestination)
-    func applyToStore(storage: SyncableBookmarks) -> Success
+    func applyToStore(storage: SyncableBookmarks, withUpstreamResult upstream: UploadResult) -> Success
 }
 
 protocol BufferCompletionOp {
@@ -142,6 +142,8 @@ struct BookmarksMergeResult {
  * 1. Upload the remote changes, if any. If this fails we can retry the entire process.
  * 2(a). Apply the local changes, if any. If this fails we will re-download the records
  *       we just uploaded, and should reach the same end state.
+ *       This step takes a timestamp key from (1), because pushing a record into the mirror
+ *       requires a server timestamp.
  * 2(b). Switch to the new mirror state. If this fails, we should find that our reconciled
  *       server contents apply neatly to our mirror and empty local, and we'll reach the
  *       same end state.
@@ -161,6 +163,8 @@ protocol BookmarksMerger {
 
 // MARK: - No-op implementations of each protocol.
 
+typealias UploadResult = (succeeded: [GUID: Timestamp], failed: Set<GUID>)
+
 class NoOpBookmarksMerger: BookmarksMerger {
     let buffer: BookmarkBufferStorage
     let storage: SyncableBookmarks
@@ -179,8 +183,9 @@ class UpstreamCompletionNoOp: UpstreamCompletionOp {
     func describe(log: DescriptionDestination) {
         log.write("No upstream operation.")
     }
-    func applyToClient(client: Sync15CollectionClient<BookmarkBasePayload>) -> Success {
-        return succeed()
+
+    func applyToClient(client: Sync15CollectionClient<BookmarkBasePayload>) -> Deferred<Maybe<UploadResult>> {
+        return deferMaybe((succeeded: [:], failed: Set<GUID>()))
     }
 }
 
@@ -188,7 +193,8 @@ class LocalOverrideCompletionNoOp: LocalOverrideCompletionOp {
     func describe(log: DescriptionDestination) {
         log.write("No local override operation.")
     }
-    func applyToStore(storage: SyncableBookmarks) -> Success {
+
+    func applyToStore(storage: SyncableBookmarks, withUpstreamResult upstream: UploadResult) -> Success {
         return succeed()
     }
 }
