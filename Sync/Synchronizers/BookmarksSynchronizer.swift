@@ -227,11 +227,35 @@ class TrivialBookmarksMerger: BookmarksMerger {
 
     // Trivial one-way sync.
     private func applyLocalDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
-        // TODO
+        // We are confident that our local changes, when overlaid on the mirror, are
+        // consistent.
+        //
+        // So do the following:
+        // * Take everything in `local` and turn it into a Sync record. This means pulling
+        //   folder hierarchies out of localStructure, values out of local, and turning
+        //   them into records. Do so in hierarchical order if we can, and set sortindex
+        //   attributes to put folders first.
+        // * Upload those records in as many batches as necessary. Ensure that each batch
+        //   is consistent, if at all possible.
+        // * Take everything in local that was successfully uploaded and move it into the
+        //   mirror, using the timestamps we tracked from the upload.
+        //
+        // Optionally, set 'again' to true in our response, and do this work only for a
+        // particular subtree (e.g., a single root, or a single branch of changes). This
+        // allows us to make incremental progress.
+
         return deferMaybe(BookmarksMergeResult.NoOp)
     }
 
     private func applyIncomingDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
+        // If the incoming buffer is consistent -- and the result of the mirrorer
+        // gives us a hint about that! -- then we can move the buffer records into
+        // the mirror directly.
+        //
+        // Note that this is also true for entire subtrees: if none of the children
+        // of, say, 'menu________' are modified locally, then we can apply it without
+        // merging.
+        //
         // TODO
         return deferMaybe(BookmarksMergeResult.NoOp)
     }
@@ -243,6 +267,10 @@ class TrivialBookmarksMerger: BookmarksMerger {
 
     func merge() -> Deferred<Maybe<BookmarksMergeResult>> {
         return self.buffer.isEmpty() >>== { noIncoming in
+
+            // TODO: the presence of empty desktop roots in local storage
+            // isn't something we really need to worry about. Can we skip it here?
+
             return self.storage.isUnchanged() >>== { noOutgoing in
                 switch (noIncoming, noOutgoing) {
                 case (true, true):
