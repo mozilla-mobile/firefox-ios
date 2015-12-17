@@ -32,4 +32,9 @@ struct DebugSettingsBundleOptions {
     static var attachLogsToDebugEmail: Bool {
         return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleEmailLogsOnLaunch") ?? false
     }
+
+    /// When set, Top Sites is replaced with a web view panel.
+    static var webPanelURL: String? {
+        return NSUserDefaults.standardUserDefaults().stringForKey("WebPanelURL")
+    }
 }
