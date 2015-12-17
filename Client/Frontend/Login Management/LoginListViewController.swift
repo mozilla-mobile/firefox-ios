@@ -63,6 +63,7 @@ class LoginListViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        tableView.accessibilityIdentifier = "Login List"
         tableView.dataSource = loginDataSource
         tableView.delegate = self
         tableView.tableFooterView = UIView()
@@ -118,8 +119,6 @@ private class LoginSearchController: NSObject, SearchInputViewDelegate {
     }
 
     @objc func searchInputView(searchView: SearchInputView, didChangeTextTo text: String) {
-        // Cancel the previous in-flight search query by filling it before kicking off another query.
-        activeSearchDeferred?.fillIfUnfilled(Maybe(success: ()))
         searchLoginsWithText(text)
     }
 
@@ -175,6 +174,10 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        guard cursor?.count > 0 else {
+            return nil
+        }
+
         var firstHostnameCharacters = [Character]()
         cursor?.forEach { login in
             guard let login = login, let host = login.hostname.asURL?.host else {

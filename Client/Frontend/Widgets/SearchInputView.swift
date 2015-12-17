@@ -47,7 +47,7 @@ class SearchInputView: UIView {
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString("Search", comment: "Title for the search field at the top of the Logins list screen")
+        label.text = NSLocalizedString("Search", tableName: "LoginManager", comment: "Title for the search field at the top of the Logins list screen")
         label.font = SearchInputViewUX.titleFont
         label.textColor = SearchInputViewUX.titleColor
         return label
@@ -61,7 +61,7 @@ class SearchInputView: UIView {
         let button = UIButton()
         button.addTarget(self, action: "SELtappedClose", forControlEvents: .TouchUpInside)
         button.setImage(UIImage(named: "clear"), forState: .Normal)
-        button.accessibilityLabel = NSLocalizedString("Clear Search", comment: "Clears the search input field and exits out of input mode")
+        button.accessibilityLabel = NSLocalizedString("Clear Search", tableName: "LoginManager", comment: "Clears the search input field and exits out of input mode")
         return button
     }()
 
