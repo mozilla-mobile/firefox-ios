@@ -1126,6 +1126,11 @@ extension SQLiteBookmarks {
     }
 }
 
+extension SQLiteBookmarks: SyncableBookmarks {
+}
+extension MergedSQLiteBookmarks: SyncableBookmarks {
+}
+
 extension SQLiteBookmarks: AccountRemovalDelegate {
     public func onRemovedAccount() -> Success {
         return self.collapseMirrorIntoLocalPreservingDeletions(false)
