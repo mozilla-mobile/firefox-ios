@@ -14,6 +14,8 @@ private let TogglesPrefKey = "clearprivatedata.toggles"
 
 private let log = Logger.browserLogger
 
+private let HistoryClearableIndex = 0
+
 class ClearPrivateDataTableViewController: UITableViewController {
     private var clearButton: UITableViewCell?
 
@@ -106,28 +108,39 @@ class ClearPrivateDataTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         guard indexPath.section == SectionButton else { return }
 
-        let toggles = self.toggles
-        clearables
-            .enumerate()
-            .flatMap { (i, pair) in
-                guard toggles[i] else {
-                    return nil
+        func clearPrivateData() {
+            let toggles = self.toggles
+            self.clearables
+                .enumerate()
+                .flatMap { (i, pair) in
+                    guard toggles[i] else {
+                        return nil
+                    }
+                    log.debug("Clearing \(pair.clearable).")
+                    return pair.clearable.clear()
                 }
-                log.debug("Clearing \(pair.clearable).")
-                return pair.clearable.clear()
-            }
-            .allSucceed()
-            .upon { result in
-                assert(result.isSuccess, "Private data cleared successfully")
+                .allSucceed()
+                .upon { result in
+                    assert(result.isSuccess, "Private data cleared successfully")
 
-                self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
+                    self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
 
-                dispatch_async(dispatch_get_main_queue()) {
-                    // Disable the Clear Private Data button after it's clicked.
-                    self.clearButtonEnabled = false
-                    self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                }
+                    dispatch_async(dispatch_get_main_queue()) {
+                        // Disable the Clear Private Data button after it's clicked.
+                        self.clearButtonEnabled = false
+                        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                    }
             }
+        }
+
+        // If history is being cleared and the user is logged in then we ask for confirmation. Otherwise just do it.
+        // TODO This also needs to check if History is actually being sycned - https://bugzilla.mozilla.org/show_bug.cgi?id=1233521
+        if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
+            let alert = UIAlertController.clearSyncedHistoryAlert(clearPrivateData)
+            self.presentViewController(alert, animated: true, completion: nil)
+        } else {
+            clearPrivateData()
+        }
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
