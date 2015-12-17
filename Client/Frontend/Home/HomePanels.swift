@@ -22,7 +22,7 @@ class HomePanels {
             panels.append(
                 HomePanelDescriptor(
                     makeViewController: { (profile) -> UIViewController in
-                        WebViewPanel(url: url)
+                        WebViewPanel(profile: profile, url: url)
                     },
                     imageName: "TopSites",
                     accessibilityLabel: "Web Panel"
