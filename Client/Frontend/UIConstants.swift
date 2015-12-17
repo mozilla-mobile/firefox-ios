@@ -111,7 +111,6 @@ private struct TempStrings {
     let noLoginsFound                   = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Title displayed when no logins are found after searching")
 
     // Bug 1164067 - Find in Page
-    let findInPage = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Pending feature; currently unused string! Title for share action item and selection menu item.")
     let findPrevious = NSLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Pending feature; currently unused string! Accessibility label for previous result button in Find in Page Toolbar.")
     let findNext = NSLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Pending feature; currently unused string! Accessibility label for next result button in Find in Page Toolbar.")
     let findClose = NSLocalizedString("Done", tableName: "FindInPage", comment: "Pending feature; currently unused string! Done button in Find in Page Toolbar.")
