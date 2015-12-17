@@ -196,3 +196,50 @@ class BufferCompletionNoOp: BufferCompletionOp {
 }
 
 // MARK: - Real implementations of each protocol.
+
+class TrivialBookmarksMerger: BookmarksMerger {
+    let buffer: BookmarkBufferStorage
+    let storage: SyncableBookmarks
+
+    required init(buffer: BookmarkBufferStorage, storage: SyncableBookmarks) {
+        self.buffer = buffer
+        self.storage = storage
+    }
+
+    // Trivial one-way sync.
+    private func applyLocalDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
+        // TODO
+        return deferMaybe(BookmarksMergeResult.NoOp)
+    }
+
+    private func applyIncomingDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
+        // TODO
+        return deferMaybe(BookmarksMergeResult.NoOp)
+    }
+
+    private func threeWayMerge() -> Deferred<Maybe<BookmarksMergeResult>> {
+        // TODO
+        return deferMaybe(BookmarksMergeResult.NoOp)
+    }
+
+    func merge() -> Deferred<Maybe<BookmarksMergeResult>> {
+        return self.buffer.isEmpty() >>== { noIncoming in
+            return self.storage.isUnchanged() >>== { noOutgoing in
+                switch (noIncoming, noOutgoing) {
+                case (true, true):
+                    // Nothing to do!
+                    return deferMaybe(BookmarksMergeResult.NoOp)
+                case (true, false):
+                    // No incoming records to apply. Unilaterally apply local changes.
+                    return self.applyLocalDirectlyToMirror()
+                case (false, true):
+                    // No outgoing changes. Unilaterally apply remote changes if they're consistent.
+                    return self.applyIncomingDirectlyToMirror()
+                default:
+                    // Changes on both sides. Merge.
+                    return self.threeWayMerge()
+                }
+            }
+        }
+    }
+}
