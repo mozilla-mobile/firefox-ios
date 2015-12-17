@@ -30,6 +30,7 @@ public protocol SearchableBookmarks {
 
 public protocol SyncableBookmarks: ResettableSyncStorage, AccountRemovalDelegate {
     // TODO
+    func isUnchanged() -> Deferred<Maybe<Bool>>
 }
 
 public struct BookmarkMirrorItem {
