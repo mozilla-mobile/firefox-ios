@@ -903,9 +903,7 @@ extension SQLiteBookmarks {
         " UNION ALL " +
         "SELECT 1 FROM \(TableBookmarksMirrorStructure) WHERE parent IN (?, ?, ?)"
 
-        return db.runQuery(sql, args: parents, factory: { row in
-            return row[0] != nil
-        }) >>== { deferMaybe($0[0] ?? false) }
+        return self.db.queryReturnsResults(sql, args: parents)
     }
 
     private func getDesktopRoots() -> Deferred<Maybe<Cursor<BookmarkNode>>> {
