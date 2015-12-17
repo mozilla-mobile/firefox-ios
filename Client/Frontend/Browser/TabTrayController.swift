@@ -225,17 +225,17 @@ struct PrivateModeStrings {
     static let toggleAccessibilityValueOff = NSLocalizedString("Off", tableName: "PrivateBrowsing", comment: "Toggled OFF accessibility value")
 }
 
-protocol TabTrayDelegate {
+protocol TabTrayDelegate: class {
     func tabTrayDidDismiss(tabTray: TabTrayController)
-    func addBookmark(tab: Browser)
-    func addToReadingList(tab: Browser) -> ReadingListClientRecord?
-    func present(viewController viewController: UIViewController)
+    func tabTrayDidAddBookmark(tab: Browser)
+    func tabTrayDidAddToReadingList(tab: Browser) -> ReadingListClientRecord?
+    func tabTrayRequestsPresentationOf(viewController viewController: UIViewController)
 }
 
 class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
-    var delegate: TabTrayDelegate?
+    weak var delegate: TabTrayDelegate?
 
     var collectionView: UICollectionView!
     var navBar: UIView!
