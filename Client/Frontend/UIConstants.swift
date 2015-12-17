@@ -60,6 +60,29 @@ private struct TempStrings {
     // Bug 1186013 - Prompt for going to clipboard URL
     let goToCopiedURL = NSLocalizedString("Go to copied URL?", comment: "Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard")
     let goToCopiedURLButton = NSLocalizedString("Go", comment: "Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened")
+
+    // Bug 1198418 - Touch ID Passcode Strings
+    let touchIDSetting          = NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Title for Touch ID/Passcode settings option")
+    let turnPasscodeOn          = NSLocalizedString("Turn Passcode On", tableName: "AuthenticationManager", comment: "Title for setting to turn on passcode")
+    let turnPasscodeOff         = NSLocalizedString("Turn Passcode Off", tableName: "AuthenticationManager", comment: "Title for setting to turn off passcode")
+    let passcode                = NSLocalizedString("Passcode", tableName: "AuthenticationManager", comment: "List section title for passcode settings")
+    let changePasscode          = NSLocalizedString("Change Passcode", tableName: "AuthenticationManager", comment: "Title for setting to change passcode")
+    let requirePasscode         = NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Title for setting to require a passcode")
+    let setPasscode             = NSLocalizedString("Set Passcode", tableName: "AuthenticationManager", comment: "Screen title for Set Passcode")
+    let enterPasscode           = NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Title for entering a passcode")
+    let reenterPasscode         = NSLocalizedString("Re-enter passcode", tableName: "AuthenticationManager", comment: "Title for re-entering a passcode")
+    let useTouchID              = NSLocalizedString("Use Touch ID For:", tableName:  "AuthenticationManager", comment: "List section title for when to use touch ID")
+    let privateBrowsing         = NSLocalizedString("Private Browsing", tableName: "AuthenticationManager", comment: "List item for Private Browsing")
+    let logins                  = NSLocalizedString("Logins", tableName: "AuthenticationManager", comment: "List item for Logins")
+    let immediately             = NSLocalizedString("Immediately", tableName: "AuthenticationManager", comment: "'Immediately' interval item for selecting when to require passcode")
+    let afterOneMinute          = NSLocalizedString("After 1 minute", tableName: "AuthenticationManager", comment: "'After 1 minute' interval item for selecting when to require passcode")
+    let afterFiveMinutes        = NSLocalizedString("After 5 minutes", tableName: "AuthenticationManager", comment: "'After 5 minutes' interval item for selecting when to require passcode")
+    let afterTenMinutes         = NSLocalizedString("After 10 minutes", tableName: "AuthenticationManager", comment: "'After 10 minutes' interval item for selecting when to require passcode")
+    let afterFifteenMinutes     = NSLocalizedString("After 15 minutes", tableName: "AuthenticationManager", comment: "'After 15 minutes' interval item for selecting when to require passcode")
+    let afterOneHour            = NSLocalizedString("After 1 hour", tableName: "AuthenticationManager", comment: "'After 1 hour' interval item for selecting when to require passcode")
+    let turnOffYourPasscode     = NSLocalizedString("Turn off your passcode.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when turning off passcode")
+    let accessLogins            = NSLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
+    let accessPBMode            = NSLocalizedString("Use your fingerprint to access Private Browsing now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing private browsing")
 }
 
 /// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.
