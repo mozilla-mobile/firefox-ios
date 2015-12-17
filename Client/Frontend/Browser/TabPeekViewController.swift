@@ -134,7 +134,9 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             }
         }
 
-        isInReadingList = browserProfile.readingList?.getRecordWithURL(displayURL).successValue != nil
+        let result = browserProfile.readingList?.getRecordWithURL(displayURL).successValue!
+        isInReadingList = (result?.url.characters.count > 0) ?? false
+
         ignoreURL = isIgnoredURL(displayURL)
     }
 
