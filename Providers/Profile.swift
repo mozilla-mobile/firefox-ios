@@ -132,7 +132,7 @@ class BrowserProfileSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: class {
-    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> { get }
+    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, SyncableBookmarks> { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
@@ -327,7 +327,7 @@ public class BrowserProfile: Profile {
         return self.places
     }
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> = {
+    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, SyncableBookmarks> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         withExtendedLifetime(self.places) {
