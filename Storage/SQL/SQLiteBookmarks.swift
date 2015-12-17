@@ -1250,8 +1250,15 @@ extension SQLiteBookmarks {
 }
 
 extension SQLiteBookmarks: SyncableBookmarks {
+    public func isUnchanged() -> Deferred<Maybe<Bool>> {
+        return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksLocal)")
+    }
 }
+
 extension MergedSQLiteBookmarks: SyncableBookmarks {
+    public func isUnchanged() -> Deferred<Maybe<Bool>> {
+        return self.local.isUnchanged()
+    }
 }
 
 extension SQLiteBookmarks: AccountRemovalDelegate {
