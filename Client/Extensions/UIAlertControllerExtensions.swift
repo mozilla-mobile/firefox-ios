@@ -86,4 +86,36 @@ extension UIAlertController {
         alert.addAction(noOption)
         return alert
     }
+
+    /**
+     Builds the Alert view that asks if the users wants to also delete history stored on their other devices.
+     
+     - parameter okayCallback: Okay option handler.
+
+     - returns: UIAlertController for asking the user to restore tabs after a crash
+     */
+
+    class func clearSyncedHistoryAlert(okayCallback: () -> Void) -> UIAlertController {
+        let alert = UIAlertController(
+            title: NSLocalizedString("Remove history from your Firefox Account?", tableName: "ClearHistoryConfirm", comment: "Title of the confirmation dialog shown when a user tries to clear history that's synced to another device."),
+            message: NSLocalizedString("History will be removed from all your connected devices. This cannot be undone.", tableName: "ClearHistoryConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device."),
+            preferredStyle: UIAlertControllerStyle.Alert
+        )
+
+        let noOption = UIAlertAction(
+            title: NSLocalizedString("Cancel", tableName: "ClearHistoryConfirm", comment: "The cancel button when confirming clear history."),
+            style: UIAlertActionStyle.Cancel,
+            handler: nil
+        )
+
+        let okayOption = UIAlertAction(
+            title: NSLocalizedString("Clear", tableName: "ClearHistoryConfirm", comment: "The button that clears history even when Sync is connected."),
+            style: UIAlertActionStyle.Destructive,
+            handler: {_ in okayCallback() }
+        )
+
+        alert.addAction(okayOption)
+        alert.addAction(noOption)
+        return alert
+    }
 }
