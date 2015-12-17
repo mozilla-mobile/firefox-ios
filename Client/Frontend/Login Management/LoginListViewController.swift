@@ -22,9 +22,7 @@ class LoginListViewController: UIViewController {
 
     private let searchView = SearchInputView()
 
-    private lazy var tableView: UITableView = {
-        return UITableView()
-    }()
+    private let tableView = UITableView()
 
     init(profile: Profile) {
         self.profile = profile
@@ -41,7 +39,7 @@ class LoginListViewController: UIViewController {
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
 
-        self.title = NSLocalizedString("Logins", comment: "Title for Logins List View screen")
+        self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen")
         loginDataSource = LoginCursorDataSource(tableView: self.tableView)
         loginSearchController = LoginSearchController(profile: self.profile, dataSource: loginDataSource!)
         searchView.delegate = loginSearchController
