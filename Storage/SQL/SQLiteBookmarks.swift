@@ -779,6 +779,10 @@ public class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
         return nil
     }
 
+    public func isEmpty() -> Deferred<Maybe<Bool>> {
+        return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksBuffer)")
+    }
+
     /**
      * This is a little gnarly because our DB access layer is rough.
      * Within a single transaction, we walk the list of items, attempting to update
@@ -974,6 +978,10 @@ public class MergedSQLiteBookmarks {
 }
 
 extension MergedSQLiteBookmarks: BookmarkBufferStorage {
+    public func isEmpty() -> Deferred<Maybe<Bool>> {
+        return self.buffer.isEmpty()
+    }
+
     public func applyRecords(records: [BookmarkMirrorItem]) -> Success {
         return self.buffer.applyRecords(records)
     }
