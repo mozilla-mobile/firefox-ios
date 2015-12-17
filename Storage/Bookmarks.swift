@@ -28,6 +28,11 @@ public protocol SearchableBookmarks {
     func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
+public protocol SyncableBookmarks: ResettableSyncStorage, AccountRemovalDelegate {
+    // TODO
+    func isUnchanged() -> Deferred<Maybe<Bool>>
+}
+
 public struct BookmarkMirrorItem {
     public let guid: GUID
     public let type: BookmarkNodeType
@@ -146,6 +151,7 @@ public struct BookmarkMirrorItem {
 }
 
 public protocol BookmarkBufferStorage {
+    func isEmpty() -> Deferred<Maybe<Bool>>
     func applyRecords(records: [BookmarkMirrorItem]) -> Success
     func doneApplyingRecordsAfterDownload() -> Success
 }
