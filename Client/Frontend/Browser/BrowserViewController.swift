@@ -2426,18 +2426,18 @@ extension BrowserViewController: TabTrayDelegate {
         }
     }
 
-    func addBookmark(tab: Browser) {
+    func tabTrayDidAddBookmark(tab: Browser) {
         guard let url = tab.url?.absoluteString where url.characters.count > 0 else { return }
         self.addBookmark(url, title: tab.title)
     }
 
 
-    func addToReadingList(tab: Browser) -> ReadingListClientRecord? {
+    func tabTrayDidAddToReadingList(tab: Browser) -> ReadingListClientRecord? {
         guard let url = tab.url?.absoluteString where url.characters.count > 0 else { return nil }
         return profile.readingList?.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.currentDevice().name).successValue
     }
 
-    func present(viewController viewController: UIViewController) {
+    func tabTrayRequestsPresentationOf(viewController viewController: UIViewController) {
         self.presentViewController(viewController, animated: false, completion: nil)
     }
 }

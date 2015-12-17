@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 import Storage
@@ -16,7 +16,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     let tab: Browser
 
-    private let delegate: TabTrayDelegate?
+    private weak var delegate: TabTrayDelegate?
     private let tabManager: TabManager
     private var clientPicker: UINavigationController?
     private var isBookmarked: Bool = false
@@ -33,18 +33,18 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         if(!self.ignoreURL) {
             if !self.isInReadingList {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .Default) { previewAction, viewController in
-                    self.delegate?.addToReadingList(self.tab)
+                    self.delegate?.tabTrayDidAddToReadingList(self.tab)
                 })
             }
             if !self.isBookmarked {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .Default) { previewAction, viewController in
-                    self.delegate?.addBookmark(self.tab)
+                    self.delegate?.tabTrayDidAddBookmark(self.tab)
                     })
             }
             if self.hasRemoteClients {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionSendToDevice, style: .Default) { previewAction, viewController in
                     guard let clientPicker = self.clientPicker else { return }
-                    self.delegate?.present(viewController: clientPicker)
+                    self.delegate?.tabTrayRequestsPresentationOf(viewController: clientPicker)
                     })
             }
             actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
