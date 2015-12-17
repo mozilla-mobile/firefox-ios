@@ -11,6 +11,16 @@ private let log = Logger.browserLogger
 
 let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
 
+// MARK: - Placeholder strings for Bug 1232810.
+
+let deleteWarningTitle = NSLocalizedString("This folder isn't empty.", tableName: "BookmarkPanelDeleteConfirm", comment: "Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders.")
+let deleteWarningDescription = NSLocalizedString("Are you sure you want to delete it and its contents?", tableName: "BookmarkPanelDeleteConfirm", comment: "Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders.")
+let deleteCancelButtonLabel = NSLocalizedString("Cancel", tableName: "BookmarkPanelDeleteConfirm", comment: "Button label to cancel deletion when the user tried to delete a non-empty folder.")
+let deleteDeleteButtonLabel = NSLocalizedString("Delete", tableName: "BookmarkPanelDeleteConfirm", comment: "Button label for the button that deletes a folder and all of its children.")
+
+
+// MARK: - UX constants.
+
 struct BookmarksPanelUX {
     private static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
     private static let BookmarkFolderChevronSize: CGFloat = 20
