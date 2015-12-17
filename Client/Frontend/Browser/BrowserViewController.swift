@@ -1146,7 +1146,9 @@ extension BrowserViewController: BrowserToolbarDelegate {
 
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         if let selectedTab = tabManager.selectedTab {
-            let helper = ShareExtensionHelper(tab: selectedTab)
+            var activities = [UIActivity]()
+
+            let helper = ShareExtensionHelper(tab: selectedTab, activities: activities)
 
             let activityViewController = helper.createActivityViewController({
                 // We don't know what share action the user has chosen so we simply always

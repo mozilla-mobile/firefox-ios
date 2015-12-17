@@ -10,9 +10,11 @@ private let log = Logger.browserLogger
 class ShareExtensionHelper: NSObject {
     private let selectedTab: Browser
     private var onePasswordExtensionItem: NSExtensionItem!
+    private let activities: [UIActivity]
 
-    init(tab: Browser) {
-        selectedTab = tab
+    init(tab: Browser, activities: [UIActivity]) {
+        self.selectedTab = tab
+        self.activities = activities
     }
 
     func createActivityViewController(completionHandler: () -> Void) -> UIActivityViewController {
@@ -27,7 +29,7 @@ class ShareExtensionHelper: NSObject {
         }
         activityItems.append(self)
 
-        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: activities)
 
         // Hide 'Add to Reading List' which currently uses Safari.
         // We would also hide View Later, if possible, but the exclusion list doesn't currently support
