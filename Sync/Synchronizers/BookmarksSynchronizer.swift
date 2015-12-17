@@ -112,14 +112,20 @@ struct BookmarksMergeResult {
     let overrideCompletion: LocalOverrideCompletionOp
     let bufferCompletion: BufferCompletionOp
 
+    // If this is true, the merge was only partial, and you should try again immediately.
+    // This allows for us to make progress on individual subtrees, without having huge
+    // waterfall steps.
+    let again: Bool
+
     func describe(log: DescriptionDestination) {
         log.write("Merge result:")
         self.uploadCompletion.describe(log)
         self.overrideCompletion.describe(log)
         self.bufferCompletion.describe(log)
+        log.write("Again? \(again)")
     }
 
-    static let NoOp = BookmarksMergeResult(uploadCompletion: UpstreamCompletionNoOp(), overrideCompletion: LocalOverrideCompletionNoOp(), bufferCompletion: BufferCompletionNoOp())
+    static let NoOp = BookmarksMergeResult(uploadCompletion: UpstreamCompletionNoOp(), overrideCompletion: LocalOverrideCompletionNoOp(), bufferCompletion: BufferCompletionNoOp(), again: false)
 }
 
 
