@@ -6,6 +6,9 @@ import Foundation
 import UIKit
 import Shared
 import SnapKit
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
@@ -26,6 +29,27 @@ struct URLBarViewUX {
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
     static let ToolbarButtonInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+
+    static let Themes: [String: Theme] = {
+        var themes = [String: Theme]()
+        var theme = Theme()
+        theme.borderColor = UIConstants.PrivateModeLocationBorderColor
+        theme.activeBorderColor = UIConstants.PrivateModePurple
+        theme.tintColor = UIConstants.PrivateModePurple
+        theme.textColor = UIColor.whiteColor()
+        theme.buttonTintColor = UIConstants.PrivateModeActionButtonTintColor
+        themes[Theme.PrivateMode] = theme
+
+        theme = Theme()
+        theme.borderColor = TextFieldBorderColor
+        theme.activeBorderColor = TextFieldActiveBorderColor
+        theme.tintColor = ProgressTintColor
+        theme.textColor = UIColor.blackColor()
+        theme.buttonTintColor = UIColor.darkGrayColor()
+        themes[Theme.NormalMode] = theme
+
+        return themes
+    }()
 
     static func backgroundColorWithAlpha(alpha: CGFloat) -> UIColor {
         return UIConstants.AppBackgroundColor.colorWithAlphaComponent(alpha)
@@ -704,28 +728,22 @@ extension URLBarView {
 
 extension URLBarView: Themeable {
     
-    func forceApplyTheme() {
-        locationView.baseURLFontColor = BrowserLocationView.appearance().baseURLFontColor
-        locationView.hostFontColor = BrowserLocationView.appearance().hostFontColor
-        locationView.backgroundColor = BrowserLocationView.appearance().backgroundColor
+    func applyTheme(themeName: String) {
+        locationView.applyTheme(themeName)
+        locationTextField?.applyTheme(themeName)
 
-        locationTextField?.backgroundColor = ToolbarTextField.appearance().backgroundColor
-        locationTextField?.textColor = ToolbarTextField.appearance().textColor
-        locationTextField?.clearButtonTintColor = ToolbarTextField.appearance().clearButtonTintColor
-        locationTextField?.highlightColor = ToolbarTextField.appearance().highlightColor
+        guard let theme = URLBarViewUX.Themes[themeName] else {
+            log.error("Unable to apply unknown theme \(themeName)")
+            return
+        }
 
-        locationBorderColor = URLBarView.appearance().locationBorderColor
-        locationActiveBorderColor = URLBarView.appearance().locationActiveBorderColor
-        progressBarTint = URLBarView.appearance().progressBarTint
-        cancelTextColor = URLBarView.appearance().cancelTextColor
-        actionButtonTintColor = URLBarView.appearance().actionButtonTintColor
+        locationBorderColor = theme.borderColor!
+        locationActiveBorderColor = theme.activeBorderColor!
+        progressBarTint = theme.tintColor
+        cancelTextColor = theme.textColor
+        actionButtonTintColor = theme.buttonTintColor
 
-        tabsButton.borderColor = TabsButton.appearance().borderColor
-        tabsButton.borderWidth = TabsButton.appearance().borderWidth
-        tabsButton.titleFont = TabsButton.appearance().titleFont
-        tabsButton.titleBackgroundColor = TabsButton.appearance().titleBackgroundColor
-        tabsButton.textColor = TabsButton.appearance().textColor
-        tabsButton.insets = TabsButton.appearance().insets
+        tabsButton.applyTheme(themeName)
     }
 }
 
@@ -813,6 +831,24 @@ private class CurveView: UIView {
 }
 
 class ToolbarTextField: AutocompleteTextField {
+    static let Themes: [String: Theme] = {
+        var themes = [String: Theme]()
+        var theme = Theme()
+        theme.backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
+        theme.textColor = UIColor.whiteColor()
+        theme.buttonTintColor = UIColor.whiteColor()
+        theme.highlightColor = UIConstants.PrivateModeTextHighlightColor
+        themes[Theme.PrivateMode] = theme
+
+        theme = Theme()
+        theme.backgroundColor = UIColor.whiteColor()
+        theme.textColor = UIColor.blackColor()
+        theme.highlightColor = AutocompleteTextFieldUX.HighlightColor
+        themes[Theme.NormalMode] = theme
+
+        return themes
+    }()
+
     dynamic var clearButtonTintColor: UIColor? {
         didSet {
             // Clear previous tinted image that's cache and ask for a relayout
@@ -875,5 +911,19 @@ class ToolbarTextField: AutocompleteTextField {
         UIGraphicsEndImageContext()
         
         return tintedImage
+    }
+}
+
+extension ToolbarTextField: Themeable {
+    func applyTheme(themeName: String) {
+        guard let theme = ToolbarTextField.Themes[themeName] else {
+            log.error("Unable to apply unknown theme \(themeName)")
+            return
+        }
+
+        backgroundColor = theme.backgroundColor
+        textColor = theme.textColor
+        clearButtonTintColor = theme.buttonTintColor
+        highlightColor = theme.highlightColor!
     }
 }

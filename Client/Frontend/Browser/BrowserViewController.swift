@@ -1487,10 +1487,10 @@ extension BrowserViewController: TabManagerDelegate {
 
             if tab.isPrivate {
                 readerModeCache = MemoryReaderModeCache.sharedInstance
-                applyPrivateModeTheme()
+                applyTheme(Theme.PrivateMode)
             } else {
                 readerModeCache = DiskReaderModeCache.sharedInstance
-                applyNormalModeTheme()
+                applyTheme(Theme.NormalMode)
             }
             ReaderModeHandlers.readerModeCache = readerModeCache
 
@@ -2410,84 +2410,23 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 }
 
 // MARK: Browser Chrome Theming
-extension BrowserViewController {
+extension BrowserViewController: Themeable {
 
-    func applyPrivateModeTheme(force force: Bool = false) {
-        BrowserLocationView.appearance().baseURLFontColor = UIColor.lightGrayColor()
-        BrowserLocationView.appearance().hostFontColor = UIColor.whiteColor()
-        BrowserLocationView.appearance().backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
+    func applyTheme(themeName: String) {
+        urlBar.applyTheme(themeName)
+        toolbar?.applyTheme(themeName)
+        readerModeBar?.applyTheme(themeName)
 
-        ToolbarTextField.appearance().backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
-        ToolbarTextField.appearance().textColor = UIColor.whiteColor()
-        ToolbarTextField.appearance().clearButtonTintColor = UIColor.whiteColor()
-        ToolbarTextField.appearance().highlightColor = UIConstants.PrivateModeTextHighlightColor
-
-        URLBarView.appearance().locationBorderColor = UIConstants.PrivateModeLocationBorderColor
-        URLBarView.appearance().locationActiveBorderColor = UIConstants.PrivateModePurple
-        URLBarView.appearance().progressBarTint = UIConstants.PrivateModePurple
-        URLBarView.appearance().cancelTextColor = UIColor.whiteColor()
-        URLBarView.appearance().actionButtonTintColor = UIConstants.PrivateModeActionButtonTintColor
-
-        BrowserToolbar.appearance().actionButtonTintColor = UIConstants.PrivateModeActionButtonTintColor
-
-        TabsButton.appearance().borderColor = UIConstants.PrivateModePurple
-        TabsButton.appearance().borderWidth = 1
-        TabsButton.appearance().titleFont = UIConstants.DefaultChromeBoldFont
-        TabsButton.appearance().titleBackgroundColor = UIConstants.AppBackgroundColor
-        TabsButton.appearance().textColor = UIConstants.PrivateModePurple
-        TabsButton.appearance().insets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-
-        ReaderModeBarView.appearance().backgroundColor = UIConstants.PrivateModeReaderModeBackgroundColor
-        ReaderModeBarView.appearance().buttonTintColor = UIColor.whiteColor()
-
-        if force {
-            forceApplyTheme()
+        switch(themeName) {
+        case Theme.NormalMode:
+            header.blurStyle = .ExtraLight
+            footerBackground?.blurStyle = .ExtraLight
+        case Theme.PrivateMode:
+            header.blurStyle = .Dark
+            footerBackground?.blurStyle = .Dark
+        default:
+            log.debug("Unknown Theme \(themeName)")
         }
-
-        header.blurStyle = .Dark
-        footerBackground?.blurStyle = .Dark
-    }
-
-    func applyNormalModeTheme(force force: Bool = false) {
-        BrowserLocationView.appearance().baseURLFontColor = BrowserLocationViewUX.BaseURLFontColor
-        BrowserLocationView.appearance().hostFontColor = BrowserLocationViewUX.HostFontColor
-        BrowserLocationView.appearance().backgroundColor = UIColor.whiteColor()
-
-        ToolbarTextField.appearance().backgroundColor = UIColor.whiteColor()
-        ToolbarTextField.appearance().textColor = UIColor.blackColor()
-        ToolbarTextField.appearance().highlightColor = AutocompleteTextFieldUX.HighlightColor
-        ToolbarTextField.appearance().clearButtonTintColor = nil
-
-        URLBarView.appearance().locationBorderColor = URLBarViewUX.TextFieldBorderColor
-        URLBarView.appearance().locationActiveBorderColor = URLBarViewUX.TextFieldActiveBorderColor
-        URLBarView.appearance().progressBarTint = URLBarViewUX.ProgressTintColor
-        URLBarView.appearance().cancelTextColor = UIColor.blackColor()
-        URLBarView.appearance().actionButtonTintColor = UIColor.darkGrayColor()
-
-        BrowserToolbar.appearance().actionButtonTintColor = UIColor.darkGrayColor()
-
-        TabsButton.appearance().borderColor = TabsButtonUX.BorderColor
-        TabsButton.appearance().borderWidth = TabsButtonUX.BorderStrokeWidth
-        TabsButton.appearance().titleFont = TabsButtonUX.TitleFont
-        TabsButton.appearance().titleBackgroundColor = TabsButtonUX.TitleBackgroundColor
-        TabsButton.appearance().textColor = TabsButtonUX.TitleColor
-        TabsButton.appearance().insets = TabsButtonUX.TitleInsets
-
-        ReaderModeBarView.appearance().backgroundColor = UIColor.whiteColor()
-        ReaderModeBarView.appearance().buttonTintColor = UIColor.darkGrayColor()
-
-        if force {
-            forceApplyTheme()
-        }
-
-        header.blurStyle = .ExtraLight
-        footerBackground?.blurStyle = .ExtraLight
-    }
-
-    func forceApplyTheme() {
-        urlBar.forceApplyTheme()
-        toolbar?.forceApplyTheme()
-        readerModeBar?.forceApplyTheme()
     }
 }
 
@@ -2531,5 +2470,5 @@ class BlurWrapper: UIView {
 }
 
 protocol Themeable {
-    func forceApplyTheme()
+    func applyTheme(themeName: String)
 }

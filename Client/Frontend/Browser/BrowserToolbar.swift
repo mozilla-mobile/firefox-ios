@@ -5,6 +5,10 @@
 import Foundation
 import UIKit
 import SnapKit
+import Shared
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 @objc
 protocol BrowserToolbarProtocol {
@@ -179,6 +183,19 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
 
     var helper: BrowserToolbarHelper?
 
+    static let Themes: [String: Theme] = {
+        var themes = [String: Theme]()
+        var theme = Theme()
+        theme.buttonTintColor = UIConstants.PrivateModeActionButtonTintColor
+        themes[Theme.PrivateMode] = theme
+
+        theme = Theme()
+        theme.buttonTintColor = UIColor.darkGrayColor()
+        themes[Theme.NormalMode] = theme
+
+        return themes
+    }()
+
     // This has to be here since init() calls it
     private override init(frame: CGRect) {
         // And these have to be initialized in here or the compiler will get angry
@@ -252,7 +269,11 @@ extension BrowserToolbar {
 }
 
 extension BrowserToolbar: Themeable {
-    func forceApplyTheme() {
-        actionButtonTintColor = BrowserToolbar.appearance().actionButtonTintColor
+    func applyTheme(themeName: String) {
+        guard let theme = BrowserToolbar.Themes[themeName] else {
+            log.error("Unable to apply unknown theme \(themeName)")
+            return
+        }
+        actionButtonTintColor = theme.buttonTintColor!
     }
 }
