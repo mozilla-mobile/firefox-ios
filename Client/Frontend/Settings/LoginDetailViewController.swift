@@ -26,14 +26,22 @@ private struct LoginDetailUX {
 
 class LoginDetailViewController: UITableViewController {
 
+    private let profile: Profile
+
     private let login: LoginData
+    private var loginUsageData: LoginUsageData? = nil {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     private let LoginCellIdentifier = "LoginCell"
     private let DeleteCellIdentifier = "DeleteCell"
     private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
-    init(login: LoginData) {
+    init(profile: Profile, login: LoginData) {
         self.login = login
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -54,6 +62,14 @@ class LoginDetailViewController: UITableViewController {
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         tableView.scrollEnabled = false
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        profile.logins.getUsageDataForLoginByGUID(login.guid).uponQueue(dispatch_get_main_queue()) { result in
+            self.loginUsageData = result.successValue
+        }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -122,10 +138,16 @@ class LoginDetailViewController: UITableViewController {
         case .Info:
             let footer = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderFooterIdentifier) as! SettingsTableSectionHeaderFooterView
             footer.titleAlignment = .Top
-            let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
-            footer.titleLabel.text = String(format: lastModified, "Date goes here")
+
+            if let passwordModifiedTimestamp = loginUsageData?.timePasswordChanged {
+                let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
+                let formattedLabel = String(format: lastModified, NSDate.fromTimestamp(passwordModifiedTimestamp).toRelativeTimeString())
+                footer.titleLabel.text = formattedLabel
+            }
             return footer
-        default: return nil
+
+        default:
+            return nil
         }
     }
 }

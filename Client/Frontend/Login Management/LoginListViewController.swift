@@ -95,7 +95,7 @@ extension LoginListViewController: UITableViewDelegate {
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let login = loginDataSource.loginAtIndexPath(indexPath)
-        let detailViewController = LoginDetailViewController(login: login)
+        let detailViewController = LoginDetailViewController(profile: profile, login: login)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
