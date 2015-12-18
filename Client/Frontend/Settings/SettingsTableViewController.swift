@@ -1004,13 +1004,13 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
                 case .Top:
                     titleLabel.snp_remakeConstraints { make in
                         make.left.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-                        make.right.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+                        make.right.greaterThanOrEqualTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                         make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
                     }
                 case .Bottom:
                     titleLabel.snp_remakeConstraints { make in
                         make.left.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-                        make.right.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+                        make.right.greaterThanOrEqualTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                         make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
                     }
                 }
@@ -1068,7 +1068,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         // Initially set title to the bottom
         titleLabel.snp_makeConstraints { make in
             make.left.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-            make.right.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+            make.right.greaterThanOrEqualTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
             make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
         }
 

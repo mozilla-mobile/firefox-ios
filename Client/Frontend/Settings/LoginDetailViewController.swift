@@ -52,11 +52,13 @@ class LoginDetailViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
+
         tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: DeleteCellIdentifier)
         tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
-        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 20))
+        let footer = SettingsTableSectionHeaderFooterView()
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
@@ -149,5 +151,31 @@ class LoginDetailViewController: UITableViewController {
         default:
             return nil
         }
+    }
+}
+
+// MARK: - Table View Editing
+extension LoginDetailViewController {
+
+    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .None
+    }
+
+    override func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
+}
+
+// MARK: - Selectors
+extension LoginDetailViewController {
+
+    func SELedit() {
+        tableView.editing = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "SELdoneEditing")
+    }
+
+    func SELdoneEditing() {
+        tableView.editing = false
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
     }
 }
