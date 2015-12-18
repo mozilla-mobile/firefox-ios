@@ -13,9 +13,11 @@ private struct LoginListUX {
     static let SearchHeight: CGFloat = 58
 }
 
+private let LoginCellIdentifier = "LoginCell"
+
 class LoginListViewController: UIViewController {
 
-    private var loginDataSource: LoginCursorDataSource? = nil
+    private var loginDataSource: LoginCursorDataSource = LoginCursorDataSource()
     private var loginSearchController: LoginSearchController? = nil
 
     private let profile: Profile
@@ -40,9 +42,14 @@ class LoginListViewController: UIViewController {
         self.view.backgroundColor = UIColor.whiteColor()
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen")
-        loginDataSource = LoginCursorDataSource(tableView: self.tableView)
-        loginSearchController = LoginSearchController(profile: self.profile, dataSource: loginDataSource!)
+        loginSearchController = LoginSearchController(
+            profile: self.profile,
+            dataSource: loginDataSource,
+            tableView: tableView)
+
         searchView.delegate = loginSearchController
+
+        tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
 
         view.addSubview(searchView)
         view.addSubview(tableView)
@@ -69,7 +76,7 @@ class LoginListViewController: UIViewController {
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         profile.logins.getAllLogins().uponQueue(dispatch_get_main_queue()) { result in
-            self.loginDataSource?.cursor = result.successValue
+            self.loginDataSource.cursor = result.successValue
             self.tableView.reloadData()
         }
     }
@@ -110,9 +117,12 @@ private class LoginSearchController: NSObject, SearchInputViewDelegate {
 
     private unowned let dataSource: LoginCursorDataSource
 
-    init(profile: Profile, dataSource: LoginCursorDataSource) {
+    private unowned let tableView: UITableView
+
+    init(profile: Profile, dataSource: LoginCursorDataSource, tableView: UITableView) {
         self.profile = profile
         self.dataSource = dataSource
+        self.tableView = tableView
         super.init()
     }
 
@@ -132,9 +142,9 @@ private class LoginSearchController: NSObject, SearchInputViewDelegate {
     }
 
     private func reloadTableWithResult(result: Maybe<Cursor<LoginData>>) -> Success {
-        self.dataSource.cursor = result.successValue
-        self.dataSource.tableView.reloadData()
-        self.activeSearchDeferred = nil
+        dataSource.cursor = result.successValue
+        tableView.reloadData()
+        activeSearchDeferred = nil
         return succeed()
     }
 }
@@ -142,30 +152,20 @@ private class LoginSearchController: NSObject, SearchInputViewDelegate {
 /// Data source for handling LoginData objects from a Cursor
 private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
-    private unowned let tableView: UITableView
-
-    private let LoginCellIdentifier = "LoginCell"
-
     var cursor: Cursor<LoginData>?
-
-    init(tableView: UITableView) {
-        self.tableView = tableView
-        super.init()
-        self.tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
-    }
 
     @objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return sectionIndexTitlesForTableView(tableView)?.count ?? 0
     }
 
     @objc func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return loginsForSection(section).count
+        return loginsForSection(section, inTableView: tableView).count
     }
 
     @objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
 
-        let login = loginsForSection(indexPath.section)[indexPath.row]
+        let login = loginsForSection(indexPath.section, inTableView: tableView)[indexPath.row]
         cell.style = .IconAndBothLabels
         cell.updateCellWithLogin(login)
         return cell
@@ -201,7 +201,7 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         return sectionIndexTitlesForTableView(tableView)?[section]
     }
 
-    private func loginsForSection(section: Int) -> [LoginData] {
+    private func loginsForSection(section: Int, inTableView tableView: UITableView) -> [LoginData] {
         guard let sectionTitles = sectionIndexTitlesForTableView(tableView) else {
             return []
         }
