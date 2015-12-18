@@ -211,7 +211,16 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         let logins = cursor?.filter { $0?.hostname.asURL?.baseDomain()?.uppercaseString.startsWith(titleForSectionAtIndex) ?? false }
         let flattenLogins = logins?.flatMap { $0 } ?? []
         return flattenLogins.sort { login1, login2 in
-            login1.hostname.asURL?.baseDomain() < login2.hostname.asURL?.baseDomain()
+            let baseDomain1 = login1.hostname.asURL?.baseDomain()
+            let baseDomain2 = login2.hostname.asURL?.baseDomain()
+            let host1 = login1.hostname.asURL?.host
+            let host2 = login2.hostname.asURL?.host
+
+            if baseDomain1 == baseDomain2 {
+                return host1 < host2
+            } else {
+                return baseDomain1 < baseDomain2
+            }
         }
     }
 }
