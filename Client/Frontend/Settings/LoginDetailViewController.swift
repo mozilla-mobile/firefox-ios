@@ -121,6 +121,7 @@ class LoginDetailViewController: UITableViewController {
         switch ListSection(rawValue: section)! {
         case .Info:
             let footer = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderFooterIdentifier) as! SettingsTableSectionHeaderFooterView
+            footer.titleAlignment = .Top
             let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
             footer.titleLabel.text = String(format: lastModified, "Date goes here")
             return footer
