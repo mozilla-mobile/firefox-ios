@@ -1870,6 +1870,7 @@
 		E6639F171BF11E17002D0853 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		E663D5771BB341C4001EF30E /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		E66464901C10CA9C00AF05CE /* SearchInputViewRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputViewRefTests.swift; sourceTree = "<group>"; };
+		E6666BDB1C2464660040B5EB /* FeatureFlags.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FeatureFlags.xcconfig; path = Configuration/FeatureFlags.xcconfig; sourceTree = "<group>"; };
 		E66C5B461BDA81050051AA93 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTests.swift; sourceTree = "<group>"; };
@@ -2992,6 +2993,7 @@
 			isa = PBXGroup;
 			children = (
 				E60961851B62B89200DD640F /* BaseConfig.xcconfig */,
+				E6666BDB1C2464660040B5EB /* FeatureFlags.xcconfig */,
 				E60961861B62B8A700DD640F /* Debug.xcconfig */,
 				E60961871B62B8B300DD640F /* FennecAurora.xcconfig */,
 				E60961881B62B8BE00DD640F /* FennecNightly.xcconfig */,
@@ -6503,7 +6505,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_NIGHTLY";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_NIGHTLY ${MOZ_FEATURE_FLAGS}";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
@@ -6651,7 +6653,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE ${MOZ_FEATURE_FLAGS}";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
@@ -7994,7 +7996,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_DEBUG";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_DEBUG ${MOZ_FEATURE_FLAGS}";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
@@ -8048,7 +8050,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_AURORA";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_AURORA ${MOZ_FEATURE_FLAGS}";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
@@ -8076,6 +8078,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MOZ_PRODUCT_NAME = Fennec;
 				OTHER_LDFLAGS = "-ObjC";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_DEBUG ${MOZ_FEATURE_FLAGS}";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;

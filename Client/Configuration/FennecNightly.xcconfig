@@ -12,3 +12,6 @@ MOZ_PRODUCT_NAME = FennecNightly
 MOZ_RELEASE_CHANNEL = nightly
 
 INCLUDE_SETTINGS_BUNDLE = YES
+
+// To enable a feature using a defined feature flag in FeatureFlags, add the variable to the variable list below.
+MOZ_FEATURE_FLAGS =
