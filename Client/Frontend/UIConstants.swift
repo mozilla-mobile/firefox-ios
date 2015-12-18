@@ -102,10 +102,6 @@ private struct TempStrings {
     let accessPBMode            = NSLocalizedString("Use your fingerprint to access Private Browsing now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing private browsing")
 
     // Bug 1233418 - Login Manager Strings
-    let loginsListTitle                 = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen")
-    let loginSearchFieldTitle           = NSLocalizedString("Search", tableName: "LoginManager", comment: "Title for the search field at the top of the Logins list screen")
-    let clearSearchAccessibilityLabel   = NSLocalizedString("Clear Search", tableName: "LoginManager", comment: "Clears the search input field and exits out of input mode")
-    let searchOverlayAccessibilityLabel = NSLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
     let detailUsernameRowTitle          = NSLocalizedString("username", tableName: "LoginManager", comment: "Title for username row in Login Detail View")
     let detailPasswordRowTitle          = NSLocalizedString("password", tableName: "LoginManager", comment: "Title for password row in Login Detail View")
     let detailWebsiteRowTitle           = NSLocalizedString("website", tableName: "LoginManager", comment: "Title for website row in Login Detail View")

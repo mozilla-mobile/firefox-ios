@@ -638,10 +638,12 @@
 		E6327A8B1BF64799008D12E0 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
 		E633E2331C21E293001FFF6C /* FXSnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2321C21E293001FFF6C /* FXSnapshotTestCase.swift */; };
 		E633E3101C21F547001FFF6C /* SnapKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E68B43751C08A724002D2D76 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E633E37A1C2204BE001FFF6C /* LoginManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */; };
 		E635D25E1B729DEE0078962F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E635D25D1B729DEE0078962F /* Logger.swift */; };
 		E63ED7B41BFCD9800097D08E /* LoginTableViewCellRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7B31BFCD9800097D08E /* LoginTableViewCellRefTests.swift */; };
 		E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */; };
 		E63ED8091BFCF9770097D08E /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B9A1BEA4E7100D28BEF /* SwiftSupport.swift */; };
+		E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED8E01BFD25580097D08E /* LoginListViewController.swift */; };
 		E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */; };
 		E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
@@ -1837,9 +1839,11 @@
 		E6231C041B90A472005ABB0D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsBundleOptions.swift; sourceTree = "<group>"; };
 		E633E2321C21E293001FFF6C /* FXSnapshotTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FXSnapshotTestCase.swift; sourceTree = "<group>"; };
+		E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginManagerTests.swift; sourceTree = "<group>"; };
 		E635D25D1B729DEE0078962F /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E63ED7B31BFCD9800097D08E /* LoginTableViewCellRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCellRefTests.swift; sourceTree = "<group>"; };
 		E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
+		E63ED8E01BFD25580097D08E /* LoginListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
 		E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertControllerExtensions.swift; path = Extensions/UIAlertControllerExtensions.swift; sourceTree = "<group>"; };
 		E65607601C08B4E200534B02 /* SearchInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputView.swift; sourceTree = "<group>"; };
 		E65AB12B1B7CDADF00C2B47A /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
@@ -2698,6 +2702,7 @@
 				D313BE971B2F5096009EF241 /* DomainAutocompleteTests.swift */,
 				D39FA1801A83E84900EE869C /* Global.swift */,
 				4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */,
+				E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */,
 				D39FA1821A83E87900EE869C /* NavigationTests.swift */,
 				E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */,
 				4F97573A1AFA6F37006ECC24 /* ReaderViewUITests.swift */,
@@ -3008,6 +3013,14 @@
 			name = "System Dependencies";
 			sourceTree = "<group>";
 		};
+		E63ED8DF1BFD254E0097D08E /* Login Management */ = {
+			isa = PBXGroup;
+			children = (
+				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
+			);
+			path = "Login Management";
+			sourceTree = "<group>";
+		};
 		E652F6F91BF66A79007FFDD6 /* Delegates */ = {
 			isa = PBXGroup;
 			children = (
@@ -3279,6 +3292,7 @@
 				E49943F31AE6879C00BF9DE4 /* Intro */,
 				F84B21F51A0910F600AAB793 /* Reader */,
 				F84B22211A09122500AAB793 /* Home */,
+				E63ED8DF1BFD254E0097D08E /* Login Management */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
 				D38A1BEB1A9FA2CA00F6A386 /* Widgets */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
@@ -4770,6 +4784,7 @@
 				D3C3EB651B6FF44000388E9A /* SessionRestoreTests.swift in Sources */,
 				D38B2D3C1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */,
 				7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */,
+				E633E37A1C2204BE001FFF6C /* LoginManagerTests.swift in Sources */,
 				E42475E11AB73B9B00B23D33 /* SWLongPressGestureRecognizer.m in Sources */,
 				D38B2D391A8D96D00040E6B5 /* GCDWebServerRequest.m in Sources */,
 				D38B2D4E1A8D96D00040E6B5 /* GCDWebServerErrorResponse.m in Sources */,
@@ -4943,6 +4958,7 @@
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
 				E4A85CE71BF2600B008BD381 /* TitleActivityItemProvider.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
+				E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				E4B3345F1BBF2393004E2BFF /* ADJTimerOnce.m in Sources */,
 				0BF42D371A7C0B8E00889E28 /* FaviconManager.swift in Sources */,

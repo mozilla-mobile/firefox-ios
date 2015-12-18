@@ -7,12 +7,13 @@ import SnapKit
 
 private struct SearchInputViewUX {
 
-    static let horizontalSpacing: CGFloat = 10
+    static let horizontalSpacing: CGFloat = 16
     static let titleFont: UIFont = UIFont.systemFontOfSize(16)
     static let titleColor: UIColor = UIColor.lightGrayColor()
     static let inputColor: UIColor = UIConstants.HighlightBlue
     static let borderColor: UIColor = UIConstants.SeparatorColor
     static let borderLineWidth: CGFloat = 0.5
+    static let closeButtonSize: CGFloat = 36
 }
 
 @objc protocol SearchInputViewDelegate: class {
@@ -38,13 +39,15 @@ class SearchInputView: UIView {
         textField.textColor = SearchInputViewUX.inputColor
         textField.tintColor = SearchInputViewUX.inputColor
         textField.addTarget(self, action: "SELinputTextDidChange:", forControlEvents: .EditingChanged)
-        textField.accessibilityLabel = NSLocalizedString("Search Input Field", comment: "Accessibility label for the search input field in the Logins list")
+        textField.accessibilityLabel = NSLocalizedString("Search Input Field", tableName: "LoginManager", comment: "Accessibility label for the search input field in the Logins list")
+        textField.autocorrectionType = .No
+        textField.autocapitalizationType = .None
         return textField
     }()
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString("Search", comment: "Title for the search field at the top of the Logins list screen")
+        label.text = NSLocalizedString("Search", tableName: "LoginManager", comment: "Title for the search field at the top of the Logins list screen")
         label.font = SearchInputViewUX.titleFont
         label.textColor = SearchInputViewUX.titleColor
         return label
@@ -58,7 +61,7 @@ class SearchInputView: UIView {
         let button = UIButton()
         button.addTarget(self, action: "SELtappedClose", forControlEvents: .TouchUpInside)
         button.setImage(UIImage(named: "clear"), forState: .Normal)
-        button.accessibilityLabel = NSLocalizedString("Clear Search", comment: "Clears the search input field and exits out of input mode")
+        button.accessibilityLabel = NSLocalizedString("Clear Search", tableName: "LoginManager", comment: "Clears the search input field and exits out of input mode")
         return button
     }()
 
@@ -74,13 +77,9 @@ class SearchInputView: UIView {
         let view = UIView()
         view.backgroundColor = UIColor.whiteColor()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "SELtappedSearch"))
-        view.accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name:
-                NSLocalizedString("Enter Search Mode",
-                    comment: "Accessibility label for action denoting entering search mode for logins"),
-                    target: self,
-                    selector: "SELtappedSearch")
-        ]
+
+        view.isAccessibilityElement = true
+        view.accessibilityLabel =  NSLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
         return view
     }()
 
@@ -149,6 +148,7 @@ class SearchInputView: UIView {
         closeButton.snp_makeConstraints { make in
             make.right.equalTo(self).offset(-SearchInputViewUX.horizontalSpacing)
             make.centerY.equalTo(self)
+            make.size.equalTo(SearchInputViewUX.closeButtonSize)
         }
 
         bottomBorder.snp_makeConstraints { make in
