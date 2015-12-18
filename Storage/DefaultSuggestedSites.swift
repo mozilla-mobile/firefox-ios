@@ -8,14 +8,6 @@ public class DefaultSuggestedSites {
     public static let sites = [
         "default": [
             SuggestedSiteData(
-                url: "https://www.mozilla.org/about",
-                bgColor: "0xce4e41",
-                imageUrl: "asset://suggestedsites_mozilla",
-                faviconUrl: "asset://fxLogo",
-                trackingId: 632,
-                title: NSLocalizedString("The Mozilla Project", comment: "Tile title for Mozilla")
-            ),
-            SuggestedSiteData(
                 url: "https://support.mozilla.org/products/ios",
                 bgColor: "0xf37c00",
                 imageUrl: "asset://suggestedsites_fxsupport",
