@@ -58,6 +58,11 @@ extension MockSyncableHistory: SyncableHistory {
         return succeed()
     }
 
+    func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
+        let has = self.places.values.contains({ $0.serverModified != nil })
+        return deferMaybe(has)
+    }
+
     /**
      * This assumes that the provided GUID doesn't already map to a different URL!
      */

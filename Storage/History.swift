@@ -65,6 +65,11 @@ public protocol SyncableHistory: AccountRemovalDelegate {
 
     func doneApplyingRecordsAfterDownload() -> Success
     func doneUpdatingMetadataAfterUpload() -> Success
+
+    /**
+     * For inspecting whether we're an active participant in history sync.
+     */
+    func hasSyncedHistory() -> Deferred<Maybe<Bool>>
 }
 
 // TODO: integrate Site with this.
