@@ -6,6 +6,9 @@ import Foundation
 import UIKit
 import Shared
 import SnapKit
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
@@ -22,6 +25,23 @@ struct BrowserLocationViewUX {
     static let BaseURLPitch = 0.75
     static let HostPitch = 1.0
     static let LocationContentInset = 8
+
+    static let Themes: [String: Theme] = {
+        var themes = [String: Theme]()
+        var theme = Theme()
+        theme.URLFontColor = UIColor.lightGrayColor()
+        theme.hostFontColor = UIColor.whiteColor()
+        theme.backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
+        themes[Theme.PrivateMode] = theme
+
+        theme = Theme()
+        theme.URLFontColor = BaseURLFontColor
+        theme.hostFontColor = HostFontColor
+        theme.backgroundColor = UIColor.whiteColor()
+        themes[Theme.NormalMode] = theme
+
+        return themes
+    }()
 }
 
 class BrowserLocationView: UIView {
@@ -229,6 +249,18 @@ extension BrowserLocationView: AccessibilityActionsSource {
             return delegate?.browserLocationViewLocationAccessibilityActions(self)
         }
         return nil
+    }
+}
+
+extension BrowserLocationView: Themeable {
+    func applyTheme(themeName: String) {
+        guard let theme = BrowserLocationViewUX.Themes[themeName] else {
+            log.error("Unable to apply unknown theme \(themeName)")
+            return
+        }
+        baseURLFontColor = theme.URLFontColor!
+        hostFontColor = theme.hostFontColor!
+        backgroundColor = theme.backgroundColor
     }
 }
 
