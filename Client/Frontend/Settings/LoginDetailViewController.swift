@@ -44,11 +44,11 @@ class LoginDetailViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerClass(LoginTableViewCell.self, forHeaderFooterViewReuseIdentifier: LoginCellIdentifier)
-        tableView.registerClass(UITableViewCell.self, forHeaderFooterViewReuseIdentifier: DeleteCellIdentifier)
+        tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: DeleteCellIdentifier)
         tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
-        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: LoginDetailUX.FooterHeight))
+        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 20))
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
@@ -62,6 +62,7 @@ class LoginDetailViewController: UITableViewController {
         switch section {
         case .Info:
             let loginCell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
+            loginCell.selectionStyle = .None
 
             switch InfoItem(rawValue: indexPath.row)! {
             case .TitleItem:
@@ -69,26 +70,30 @@ class LoginDetailViewController: UITableViewController {
                 loginCell.descriptionLabel.text = login.hostname
             case .UsernameItem:
                 loginCell.style = .NoIconAndBothLabels
-                loginCell.highlightedLabel.text = NSLocalizedString("username", tableName: "LoginsManager", comment: "Title for username row in Login Detail View")
+                loginCell.highlightedLabel.text = NSLocalizedString("username", tableName: "LoginManager", comment: "Title for username row in Login Detail View")
                 loginCell.descriptionLabel.text = login.username
             case .PasswordItem:
                 loginCell.style = .NoIconAndBothLabels
-                loginCell.highlightedLabel.text = NSLocalizedString("password", tableName: "LoginsManager", comment: "Title for password row in Login Detail View")
+                loginCell.highlightedLabel.text = NSLocalizedString("password", tableName: "LoginManager", comment: "Title for password row in Login Detail View")
                 loginCell.descriptionLabel.text = login.password.anonymize()
             case .WebsiteItem:
                 loginCell.style = .NoIconAndBothLabels
-                loginCell.highlightedLabel.text = NSLocalizedString("website", tableName: "LoginsManager", comment: "Title for website row in Login Detail View")
+                loginCell.highlightedLabel.text = NSLocalizedString("website", tableName: "LoginManager", comment: "Title for website row in Login Detail View")
                 loginCell.descriptionLabel.text = login.hostname
             }
             return loginCell
         case .Delete:
             let deleteCell = tableView.dequeueReusableCellWithIdentifier(DeleteCellIdentifier, forIndexPath: indexPath)
-            deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginsManager", comment: "Button in login detail screen that deletes the current login")
+            deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Button in login detail screen that deletes the current login")
             deleteCell.textLabel?.textAlignment = NSTextAlignment.Center
             deleteCell.textLabel?.textColor = UIConstants.DestructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraitButton
             return deleteCell
         }
+    }
+
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 2
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -116,7 +121,8 @@ class LoginDetailViewController: UITableViewController {
         switch ListSection(rawValue: section)! {
         case .Info:
             let footer = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderFooterIdentifier) as! SettingsTableSectionHeaderFooterView
-            footer.titleLabel.text = "Last modified Oct 26, 2015 at 3:46pm"
+            let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
+            footer.titleLabel.text = String(format: lastModified, "Date goes here")
             return footer
         default: return nil
         }

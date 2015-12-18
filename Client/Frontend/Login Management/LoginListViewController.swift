@@ -92,6 +92,12 @@ extension LoginListViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return LoginListUX.RowHeight
     }
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let login = loginDataSource.loginAtIndexPath(indexPath)
+        let detailViewController = LoginDetailViewController(login: login)
+        navigationController?.pushViewController(detailViewController, animated: true)
+    }
 }
 
 extension LoginListViewController: KeyboardHelperDelegate {
@@ -154,24 +160,43 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
     var cursor: Cursor<LoginData>?
 
+    func loginAtIndexPath(indexPath: NSIndexPath) -> LoginData {
+        return loginsForSection(indexPath.section)[indexPath.row]
+    }
+
     @objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return sectionIndexTitlesForTableView(tableView)?.count ?? 0
+        return sectionIndexTitles()?.count ?? 0
     }
 
     @objc func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return loginsForSection(section, inTableView: tableView).count
+        return loginsForSection(section).count
     }
 
     @objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
 
-        let login = loginsForSection(indexPath.section, inTableView: tableView)[indexPath.row]
+        let login = loginAtIndexPath(indexPath)
         cell.style = .IconAndBothLabels
         cell.updateCellWithLogin(login)
         return cell
     }
 
     @objc func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        return sectionIndexTitles()
+    }
+
+    @objc func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
+        guard let titles = sectionIndexTitles() where index < titles.count && index >= 0 else {
+            return 0
+        }
+        return titles.indexOf(title) ?? 0
+    }
+
+    @objc func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sectionIndexTitles()?[section]
+    }
+
+    private func sectionIndexTitles() -> [String]? {
         guard cursor?.count > 0 else {
             return nil
         }
@@ -191,19 +216,8 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         return sectionTitles.sort()
     }
 
-    @objc func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
-        guard let titles = sectionIndexTitlesForTableView(tableView) where index < titles.count && index >= 0 else {
-            return 0
-        }
-        return titles.indexOf(title) ?? 0
-    }
-
-    @objc func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionIndexTitlesForTableView(tableView)?[section]
-    }
-
-    private func loginsForSection(section: Int, inTableView tableView: UITableView) -> [LoginData] {
-        guard let sectionTitles = sectionIndexTitlesForTableView(tableView) else {
+    private func loginsForSection(section: Int) -> [LoginData] {
+        guard let sectionTitles = sectionIndexTitles() else {
             return []
         }
 

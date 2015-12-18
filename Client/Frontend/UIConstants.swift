@@ -102,11 +102,7 @@ private struct TempStrings {
     let accessPBMode            = NSLocalizedString("Use your fingerprint to access Private Browsing now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing private browsing")
 
     // Bug 1233418 - Login Manager Strings
-    let detailUsernameRowTitle          = NSLocalizedString("username", tableName: "LoginManager", comment: "Title for username row in Login Detail View")
-    let detailPasswordRowTitle          = NSLocalizedString("password", tableName: "LoginManager", comment: "Title for password row in Login Detail View")
-    let detailWebsiteRowTitle           = NSLocalizedString("website", tableName: "LoginManager", comment: "Title for website row in Login Detail View")
     let deleteLoginDetail               = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Button in login detail screen that deletes the current login")
-    let lastLoginModified               = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
     let revealPassword                  = NSLocalizedString("Reveal", tableName: "LoginManager", comment: "Reveal password text selection menu item")
     let openAndFill                     = NSLocalizedString("Open & Fill", tableName: "LoginManager", comment: "Open and Fill website text selection menu item")
     let deselectAll                     = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Title for deselecting all selected logins")
