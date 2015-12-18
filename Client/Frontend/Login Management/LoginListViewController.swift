@@ -178,16 +178,17 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
         var firstHostnameCharacters = [Character]()
         cursor?.forEach { login in
-            guard let login = login, let host = login.hostname.asURL?.host else {
+            guard let login = login, let baseDomain = login.hostname.asURL?.baseDomain() else {
                 return
             }
 
-            let firstChar = host.uppercaseString[host.startIndex]
+            let firstChar = baseDomain.uppercaseString[baseDomain.startIndex]
             if !firstHostnameCharacters.contains(firstChar) {
                 firstHostnameCharacters.append(firstChar)
             }
         }
-        return firstHostnameCharacters.map { String($0) }
+        let sectionTitles = firstHostnameCharacters.map { String($0) }
+        return sectionTitles.sort()
     }
 
     @objc func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
@@ -207,7 +208,10 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         }
 
         let titleForSectionAtIndex = sectionTitles[section]
-        let logins = cursor?.filter { $0?.hostname.asURL?.host?.uppercaseString.startsWith(titleForSectionAtIndex) ?? false }
-        return logins?.flatMap { $0 } ?? []
+        let logins = cursor?.filter { $0?.hostname.asURL?.baseDomain()?.uppercaseString.startsWith(titleForSectionAtIndex) ?? false }
+        let flattenLogins = logins?.flatMap { $0 } ?? []
+        return flattenLogins.sort { login1, login2 in
+            login1.hostname.asURL?.baseDomain() < login2.hostname.asURL?.baseDomain()
+        }
     }
 }
