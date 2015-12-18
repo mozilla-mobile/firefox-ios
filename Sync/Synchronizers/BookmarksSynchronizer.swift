@@ -296,6 +296,27 @@ class TrivialBookmarksMerger: BookmarksMerger {
         // only the Places root. (Special care must be taken to not deduce that one side has
         // deleted a root, of course, as would be the case of a Sync server that doesn't contain
         // a Mobile Bookmarks folder -- the set of roots can only grow, not shrink.)
+        //
+        // Steps:
+        // * Construct a set of incomplete 'immediate' subtrees by slurping the structure tables.
+        //   These subtrees will intersect. We don't have to process them all at once.
+        //   We can lazily populate up and down the entire bookmark tree from here if we need to.
+        //   We don't need to do so if we're sure of consistency (because we can't have
+        //   transplanted the entire subtree without recording a parent change). To check
+        //   consistency we should do so.
+        //   We end up with three (sets of) trees: the mirror, (buffer + mirror), (local + mirror).
+        //   The latter two's nodes refer to the mirror if possible.
+        // * If every GUID on each side is present in the mirror, we have no new records.
+        // * If a non-root GUID is present on both sides but not in the mirror, then either
+        //   we're re-syncing from scratch, or (unlikely) we have a random collision.
+        // * Otherwise, we have a GUID that we don't recognize. We will structure+content reconcile
+        //   this later -- we first make sure we have handled any tree moves, so that the addition
+        //   of a bookmark to a moved folder on A, and the addition of the same bookmark to the non-
+        //   moved version of the folder, will collide successfully.
+        //
+        // * Walk both of the new trees, top-down. At each point if there are two back-pointers to
+        //   the mirror node for a GUID, we have a potential conflict, and we have all three
+        //   parts that we need to resolve it via a content-based or structure-based 3WM.
 
         // TODO
         return deferMaybe(BookmarksMergeResult.NoOp)
