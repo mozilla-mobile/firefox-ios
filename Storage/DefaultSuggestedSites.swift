@@ -42,7 +42,7 @@ public class DefaultSuggestedSites {
                 title: "新浪"
             ),
             SuggestedSiteData(
-                url: "http://3g.qq.com",
+                url: "http://info.3g.qq.com/g/s?aid=index&g_f=23946&g_ut=3",
                 bgColor: "0x028cca",
                 imageUrl: "asset://suggestedsites_qq",
                 faviconUrl: "asset://qqLogo",
