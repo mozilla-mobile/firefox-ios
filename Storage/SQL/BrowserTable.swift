@@ -548,7 +548,7 @@ public class BrowserTable: Table {
 
             let createStructure =
             "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) " +
-            "SELECT ? AS parent, guid AS child, rowid AS idx FROM children"
+            "SELECT ? AS parent, guid AS child, (rowid - 1) AS idx FROM children"
 
             let migrate: [(String, Args?)] = [
                 (migrateLocal, migrateArgs),
