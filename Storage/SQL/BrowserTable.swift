@@ -538,7 +538,7 @@ public class BrowserTable: Table {
             "FROM \(_TableBookmarks) WHERE type IS \(BookmarkNodeType.Bookmark.rawValue)"
 
             // Create structure for our migrated bookmarks.
-            // In order to get contiguous numeric row IDs, we first insert everything we just migrated under
+            // In order to get contiguous positions (idx), we first insert everything we just migrated under
             // Mobile Bookmarks into a temporary table, then use rowid as our idx.
 
             let temporaryTable =
