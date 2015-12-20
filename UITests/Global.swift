@@ -157,7 +157,7 @@ extension KIFUITestActor {
 
         let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
         webView.evaluateJavaScript("KIFHelper.hasElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
-            found = success as! Bool
+            found = success as? Bool ?? false
             stepResult = KIFTestStepResult.Success
         }
 

@@ -127,7 +127,7 @@ class BrowserProfileSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: class {
-    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> { get }
+    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, SyncableBookmarks> { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
@@ -314,7 +314,7 @@ public class BrowserProfile: Profile {
         return self.places
     }
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> = {
+    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, SyncableBookmarks> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         withExtendedLifetime(self.places) {
@@ -322,7 +322,7 @@ public class BrowserProfile: Profile {
         }
     }()
 
-    lazy var mirrorBookmarks: BookmarkMirrorStorage = {
+    lazy var mirrorBookmarks: BookmarkBufferStorage = {
         // Yeah, this is lazy. Sorry.
         return self.bookmarks as! MergedSQLiteBookmarks
     }()
@@ -697,7 +697,7 @@ public class BrowserProfile: Profile {
         func locallyResetCollection(collection: String) -> Success {
             switch collection {
             case "bookmarks":
-                return MirroringBookmarksSynchronizer.resetSynchronizerWithStorage(self.profile.bookmarks, basePrefs: self.prefsForSync, collection: "bookmarks")
+                return BufferingBookmarksSynchronizer.resetSynchronizerWithStorage(self.profile.bookmarks, basePrefs: self.prefsForSync, collection: "bookmarks")
 
             case "clients":
                 fallthrough
@@ -810,9 +810,9 @@ public class BrowserProfile: Profile {
         }
 
         private func mirrorBookmarksWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
-            log.debug("Mirroring server bookmarks to storage.")
-            let bookmarksMirrorer = ready.synchronizer(MirroringBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
-            return bookmarksMirrorer.mirrorBookmarksToStorage(self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
+            log.debug("Synchronizing server bookmarks to storage.")
+            let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
+            return bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
         func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {

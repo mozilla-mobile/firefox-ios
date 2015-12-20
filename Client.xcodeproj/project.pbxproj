@@ -66,6 +66,8 @@
 		0BF9F8BC1A3A82CA0049A0FA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		2805F5A61B8BCA7A00268FD1 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		28078A471B1507EF0053B46A /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
+		280CB1371C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
+		280CB1381C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
 		28158BAC1ABC7C0E00C56FC8 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2401ABB531100877008 /* Bytes.swift */; };
 		2816EFDE1B33E00300522243 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAC7A7F1AC4B135006018CB /* AppConstants.swift */; };
 		2816F0001B33E05400522243 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
@@ -201,6 +203,8 @@
 		28F657DD1ABFC98300A608BD /* KeysPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BD1A1D1D3200576538 /* KeysPayload.swift */; };
 		28F657DE1ABFC98300A608BD /* SyncMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BF1A1D1D3200576538 /* SyncMeta.swift */; };
 		28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA4363B1ABB8448008031D1 /* LiveAccountTest.swift */; };
+		28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */; };
+		28FDFF0D1C1F725800840F86 /* SeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */; };
 		2F0624D51AE58C7800FA022C /* KeychainCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0624D41AE58C7800FA022C /* KeychainCache.swift */; };
 		2F13E77F1AC0BFF200D75081 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */; };
 		2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */; };
@@ -1405,6 +1409,7 @@
 		0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFavicons.swift; sourceTree = "<group>"; };
 		0BF648101A9C54E900BA963C /* TopSitesPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesPanel.swift; sourceTree = "<group>"; };
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
+		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Synchronizers/BookmarksSynchronizer.swift; sourceTree = "<group>"; };
 		2816EFFF1B33E05400522243 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		281B02991C037C1F005202C3 /* TestBrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBrowserDB.swift; sourceTree = "<group>"; };
 		281B2BE91ADF4D90002917DC /* MockProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MockProfile.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1475,6 +1480,7 @@
 		28ED02251B262B5E003948B2 /* LoginsSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginsSynchronizer.swift; path = Synchronizers/LoginsSynchronizer.swift; sourceTree = "<group>"; };
 		28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IndependentRecordSynchronizer.swift; path = Synchronizers/IndependentRecordSynchronizer.swift; sourceTree = "<group>"; };
 		28F596A01ACA13CA0071DDCC /* InfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoTests.swift; path = SyncTests/InfoTests.swift; sourceTree = "<group>"; };
+		28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorTableCell.swift; sourceTree = "<group>"; };
 		2F0624D41AE58C7800FA022C /* KeychainCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainCache.swift; sourceTree = "<group>"; };
 		2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
@@ -2250,6 +2256,7 @@
 				2F3724E41ABF3C19007607FA /* Synchronizer.swift */,
 				28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */,
 				288E67C11B9E730900AE2C6A /* BookmarksDownloader.swift */,
+				280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */,
 				2894C1681AE89DDC00F1F92F /* ClientsSynchronizer.swift */,
 				2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */,
 				2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */,
@@ -2584,21 +2591,22 @@
 		D38A1BEB1A9FA2CA00F6A386 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
-				D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */,
-				0BB5B2861AC0A2B90052877D /* SnackBar.swift */,
-				0BB5B2871AC0A2B90052877D /* Toolbar.swift */,
-				D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */,
-				59A68B1F857A8638598A63A0 /* TwoLineCell.swift */,
-				D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */,
-				D30B0F2F1AA7D66300C01CA3 /* ThumbnailCell.swift */,
-				0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */,
 				6BB2FD971B017DAB001A189B /* AuralProgressBar.swift */,
-				E660BDD81BB06521009AC090 /* TabsButton.swift */,
-				E660BE051BB0666D009AC090 /* InnerStrokedView.swift */,
-				E663D5771BB341C4001EF30E /* ToggleButton.swift */,
+				D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */,
 				7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */,
-				E65607601C08B4E200534B02 /* SearchInputView.swift */,
+				E660BE051BB0666D009AC090 /* InnerStrokedView.swift */,
+				0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */,
 				E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */,
+				E65607601C08B4E200534B02 /* SearchInputView.swift */,
+				28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */,
+				D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */,
+				D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */,
+				0BB5B2861AC0A2B90052877D /* SnackBar.swift */,
+				E660BDD81BB06521009AC090 /* TabsButton.swift */,
+				D30B0F2F1AA7D66300C01CA3 /* ThumbnailCell.swift */,
+				E663D5771BB341C4001EF30E /* ToggleButton.swift */,
+				0BB5B2871AC0A2B90052877D /* Toolbar.swift */,
+				59A68B1F857A8638598A63A0 /* TwoLineCell.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -4485,6 +4493,7 @@
 			files = (
 				2853C5411AD84C6800C4F31D /* TabsPayload.swift in Sources */,
 				28926B3A1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */,
+				280CB1371C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */,
 				2827319D1ABC9C2F00AA1954 /* SyncMeta.swift in Sources */,
 				2894C1661AE89DD200F1F92F /* TabsSynchronizer.swift in Sources */,
 				282731991ABC9C2F00AA1954 /* ClientPayload.swift in Sources */,
@@ -4560,6 +4569,7 @@
 				2F3724E61ABF3C19007607FA /* Info.swift in Sources */,
 				281EC0781BA9CB9E003052A4 /* BookmarkPayload.swift in Sources */,
 				2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */,
+				280CB1381C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */,
 				28ECD9A31BA1EF3D00D829DA /* GCDWebServer.m in Sources */,
 				28ECD9A61BA1EF3D00D829DA /* GCDWebServerRequest.m in Sources */,
 				28ECD9A41BA1EF3D00D829DA /* GCDWebServerConnection.m in Sources */,
@@ -5021,6 +5031,7 @@
 				59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */,
 				D30B0F301AA7D66300C01CA3 /* ThumbnailCell.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
+				28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */,
 				E4B334541BBF2393004E2BFF /* ADJAdjustFactory.m in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				0B5B51AF1B4CDB9E00E3B6E9 /* RXMLElement.m in Sources */,
@@ -5093,6 +5104,7 @@
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
 				7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */,
 				E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */,
+				28FDFF0D1C1F725800840F86 /* SeparatorTableCell.swift in Sources */,
 				E42475E01AB73B9B00B23D33 /* SWLongPressGestureRecognizer.m in Sources */,
 				7BBFEEA31BB40A5300A305AA /* ReaderMode.swift in Sources */,
 				D38A1BEF1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,

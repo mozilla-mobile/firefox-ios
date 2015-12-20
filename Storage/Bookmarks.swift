@@ -28,6 +28,11 @@ public protocol SearchableBookmarks {
     func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
+public protocol SyncableBookmarks: ResettableSyncStorage, AccountRemovalDelegate {
+    // TODO
+    func isUnchanged() -> Deferred<Maybe<Bool>>
+}
+
 public struct BookmarkMirrorItem {
     public let guid: GUID
     public let type: BookmarkNodeType
@@ -145,7 +150,8 @@ public struct BookmarkMirrorItem {
     }
 }
 
-public protocol BookmarkMirrorStorage {
+public protocol BookmarkBufferStorage {
+    func isEmpty() -> Deferred<Maybe<Bool>>
     func applyRecords(records: [BookmarkMirrorItem]) -> Success
     func doneApplyingRecordsAfterDownload() -> Success
 }
@@ -230,13 +236,19 @@ public enum BookmarkNodeType: Int {
  */
 public class BookmarkNode {
     public var id: Int? = nil
-    public var guid: String
+    public var guid: GUID
     public var title: String
     public var favicon: Favicon? = nil
 
-    init(guid: String, title: String) {
+    init(guid: GUID, title: String) {
         self.guid = guid
         self.title = title
+    }
+}
+
+public class BookmarkSeparator: BookmarkNode {
+    init(guid: GUID) {
+        super.init(guid: guid, title: "—")
     }
 }
 
@@ -327,7 +339,7 @@ public protocol BookmarksModelFactory {
     var nullModel: BookmarksModel { get }
 
     func isBookmarked(url: String) -> Deferred<Maybe<Bool>>
-    func remove(bookmark: BookmarkNode) -> Success
+    func removeByGUID(guid: GUID) -> Success
     func removeByURL(url: String) -> Success
     func clearBookmarks() -> Success
 }
@@ -555,7 +567,7 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
-    public func remove(bookmark: BookmarkNode) -> Success {
+    public func removeByGUID(guid: GUID) -> Success {
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
