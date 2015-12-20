@@ -882,6 +882,52 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    /** 
+     * Because we are using UIAppearance, when we switch modes we have to remove and re-add things that 
+     * are controlled by UIAppearance so that the new settings can be applied
+     * We used to force things explcitly but then when the mode changes through UIAppearance, 
+     * the new settings are not always applied.
+     * This method ensures that items affected by privacy mode settings are removed & readded
+     * with the correct mode
+     **/
+    func updatePrivacyMode(newPrivacyMode isPrivate: Bool, oldPrivacyMode wasPrivate: Bool) {
+        // don't do this if we are not actually changing mode
+        if isPrivate != wasPrivate {
+            if isPrivate {
+                readerModeCache = MemoryReaderModeCache.sharedInstance
+                applyPrivateModeTheme()
+            } else {
+                readerModeCache = DiskReaderModeCache.sharedInstance
+                applyNormalModeTheme()
+            }
+            ReaderModeHandlers.readerModeCache = readerModeCache
+            let oldURLBar = urlBar
+            urlBar = URLBarView()
+            urlBar.translatesAutoresizingMaskIntoConstraints = false
+            urlBar.delegate = self
+            urlBar.browserToolbarDelegate = self
+            header.addSubview(urlBar)
+
+            if let _ = self.toolbar {
+                let oldFooterBackground = footerBackground
+                toolbar = BrowserToolbar()
+                toolbar?.browserToolbarDelegate = self
+                footerBackground = BlurWrapper(view: toolbar!)
+                footerBackground?.translatesAutoresizingMaskIntoConstraints = false
+
+                // Need to reset the proper blur style
+                if let selectedTab = tabManager.selectedTab where selectedTab.isPrivate {
+                    footerBackground!.blurStyle = .Dark
+                }
+                footer.addSubview(footerBackground!)
+                oldFooterBackground?.removeFromSuperview()
+            }
+
+            setupConstraints()
+            oldURLBar.removeFromSuperview()
+        }
+    }
+
     func switchToTabForURLOrOpen(url: NSURL) {
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
@@ -1483,16 +1529,8 @@ extension BrowserViewController: TabManagerDelegate {
                 webView.scrollView.hidden = false
             }
 
+            updatePrivacyMode(newPrivacyMode: tab.isPrivate, oldPrivacyMode: previous?.isPrivate ?? !tab.isPrivate)
             updateURLBarDisplayURL(tab)
-
-            if tab.isPrivate {
-                readerModeCache = MemoryReaderModeCache.sharedInstance
-                applyPrivateModeTheme()
-            } else {
-                readerModeCache = DiskReaderModeCache.sharedInstance
-                applyNormalModeTheme()
-            }
-            ReaderModeHandlers.readerModeCache = readerModeCache
 
             scrollController.browser = selected
             webViewContainer.addSubview(webView)
@@ -2412,7 +2450,7 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 // MARK: Browser Chrome Theming
 extension BrowserViewController {
 
-    func applyPrivateModeTheme(force force: Bool = false) {
+    func applyPrivateModeTheme() {
         BrowserLocationView.appearance().baseURLFontColor = UIColor.lightGrayColor()
         BrowserLocationView.appearance().hostFontColor = UIColor.whiteColor()
         BrowserLocationView.appearance().backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
@@ -2440,15 +2478,11 @@ extension BrowserViewController {
         ReaderModeBarView.appearance().backgroundColor = UIConstants.PrivateModeReaderModeBackgroundColor
         ReaderModeBarView.appearance().buttonTintColor = UIColor.whiteColor()
 
-        if force {
-            forceApplyTheme()
-        }
-
         header.blurStyle = .Dark
         footerBackground?.blurStyle = .Dark
     }
 
-    func applyNormalModeTheme(force force: Bool = false) {
+    func applyNormalModeTheme() {
         BrowserLocationView.appearance().baseURLFontColor = BrowserLocationViewUX.BaseURLFontColor
         BrowserLocationView.appearance().hostFontColor = BrowserLocationViewUX.HostFontColor
         BrowserLocationView.appearance().backgroundColor = UIColor.whiteColor()
@@ -2476,18 +2510,8 @@ extension BrowserViewController {
         ReaderModeBarView.appearance().backgroundColor = UIColor.whiteColor()
         ReaderModeBarView.appearance().buttonTintColor = UIColor.darkGrayColor()
 
-        if force {
-            forceApplyTheme()
-        }
-
         header.blurStyle = .ExtraLight
         footerBackground?.blurStyle = .ExtraLight
-    }
-
-    func forceApplyTheme() {
-        urlBar.forceApplyTheme()
-        toolbar?.forceApplyTheme()
-        readerModeBar?.forceApplyTheme()
     }
 }
 
@@ -2528,8 +2552,4 @@ class BlurWrapper: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-protocol Themeable {
-    func forceApplyTheme()
 }

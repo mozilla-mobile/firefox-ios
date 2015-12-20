@@ -144,10 +144,3 @@ class ReaderModeBarView: UIView {
         }
     }
 }
-
-extension ReaderModeBarView: Themeable {
-    func forceApplyTheme() {
-        backgroundColor = ReaderModeBarView.appearance().backgroundColor
-        buttonTintColor = ReaderModeBarView.appearance().buttonTintColor
-    }
-}
