@@ -204,6 +204,9 @@ public class SQLiteBookmarks: BookmarksModelFactory {
      * Note that a folder can be empty locally; we thus use the flag rather than looking at the structure itself.
      */
     private func getChildrenWithParent(parentGUID: GUID, excludingGUIDs: [GUID]?=nil, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+
+        precondition(excludingGUIDs?.count < 100, "Sanity bound for the number of GUIDs we can exclude.")
+
         let childrenOfLocallyOverridden =
         "SELECT parent, child AS guid, idx FROM \(TableBookmarksLocalStructure) WHERE parent = ?"
 
