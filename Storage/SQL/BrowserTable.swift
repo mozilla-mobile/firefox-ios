@@ -225,7 +225,7 @@ public class BrowserTable: Table {
                         ", hasDupe TINYINT NOT NULL DEFAULT 0"    // Boolean, 0 (false) if deleted.
 
     let localColumns = ", local_modified INTEGER" +            // Can be null. Client clock. In extremis only.
-                       ", sync_status TINYINT "                // SyncStatus enum. Set when changed or created.
+                       ", sync_status TINYINT NOT NULL"        // SyncStatus enum. Set when changed or created.
 
     func getBookmarksTableCreationStringForTable(table: String, withAdditionalColumns: String="") -> String {
         // The stupid absence of naming conventions here is thanks to pre-Sync Weave. Sorry.
