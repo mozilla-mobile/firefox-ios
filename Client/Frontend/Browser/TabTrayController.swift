@@ -301,6 +301,16 @@ class TabTrayController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.tabManager.removeDelegate(self)
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        tabManager.addDelegate(self)
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
@@ -318,7 +328,6 @@ class TabTrayController: UIViewController {
         super.viewDidLoad()
 
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
-        tabManager.addDelegate(self)
 
         navBar = UIView()
         navBar.backgroundColor = TabTrayControllerUX.BackgroundColor
@@ -681,7 +690,11 @@ extension TabTrayController: TabCellDelegate {
 
 private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     unowned var cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>
-    private var tabs: [Browser]
+    private var tabs: [Browser] {
+        didSet {
+            tabs.forEach { print("Tab \($0.url)) isPrivate: \($0.isPrivate)") }
+        }
+    }
 
     init(tabs: [Browser], cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>) {
         self.cellDelegate = cellDelegate
