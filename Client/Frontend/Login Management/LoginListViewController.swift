@@ -77,6 +77,9 @@ class LoginListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: Selector("SELonProfileDidFinishSyncing"), name: NotificationProfileDidFinishSyncing, object: nil)
+
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
@@ -154,6 +157,22 @@ class LoginListViewController: UIViewController {
             selectionButton.setTitle(deselectAllTitle, forState: .Normal)
         } else {
             selectionButton.setTitle(selectAllTitle, forState: .Normal)
+        }
+    }
+
+    deinit {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+    }
+}
+
+// MARK: - Selectors
+extension LoginListViewController {
+
+    func SELonProfileDidFinishSyncing() {
+        profile.logins.getAllLogins().uponQueue(dispatch_get_main_queue()) { result in
+            self.loginDataSource.cursor = result.successValue
+            self.tableView.reloadData()
         }
     }
 }

@@ -201,6 +201,28 @@ public class SQLiteLogins: BrowserLogins {
         }
     }
 
+    public func getLoginDataForGUID(guid: GUID) -> Deferred<Maybe<LoginData>> {
+        let projection = SQLiteLogins.MainWithLastUsedColumns
+        let sql =
+        "SELECT \(projection) FROM " +
+            "\(TableLoginsLocal) WHERE is_deleted = 0 AND guid = ? " +
+            "UNION ALL " +
+            "SELECT \(projection) FROM " +
+            "\(TableLoginsMirror) WHERE guid = ? " +
+        "ORDER BY hostname ASC " +
+        "LIMIT 1"
+
+        let args: Args = [guid, guid]
+        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
+            >>== { value in
+            if let login = value[0] {
+                return deferMaybe(login)
+            } else {
+                return deferMaybe(LoginDataError(description: "Login not found for GUID \(guid)"))
+            }
+        }
+    }
+
     public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
         let projection = SQLiteLogins.MainWithLastUsedColumns
 

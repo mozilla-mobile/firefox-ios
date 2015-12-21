@@ -500,6 +500,7 @@ class LocalLogin: Login {
 
 public protocol BrowserLogins {
     func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>>
+    func getLoginDataForGUID(guid: GUID) -> Deferred<Maybe<LoginData>>
     func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>>
     func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Maybe<Cursor<LoginData>>>
     func getAllLogins() -> Deferred<Maybe<Cursor<LoginData>>>

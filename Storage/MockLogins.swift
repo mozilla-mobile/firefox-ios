@@ -34,6 +34,14 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return Deferred(value: Maybe(success: cursor))
     }
 
+    public func getLoginDataForGUID(guid: GUID) -> Deferred<Maybe<LoginData>> {
+        if let login = (cache.filter { $0.guid == guid }).first {
+            return deferMaybe(login)
+        } else {
+            return deferMaybe(LoginDataError(description: "Login for GUID \(guid) not found"))
+        }
+    }
+
     public func getAllLogins() -> Deferred<Maybe<Cursor<LoginData>>> {
         let cursor = ArrayCursor(data: cache.sort({ (loginA, loginB) -> Bool in
             return loginA.hostname > loginB.hostname
