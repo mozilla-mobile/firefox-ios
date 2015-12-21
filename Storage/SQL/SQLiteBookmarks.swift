@@ -1062,6 +1062,19 @@ extension SQLiteBookmarkBufferStorage: ResettableSyncStorage {
 }
 
 extension SQLiteBookmarks {
+    /**
+     * If a synced record is deleted locally, but hasn't been synced to the server,
+     * then `preserveDeletions=true` will result in that deletion being kept.
+     *
+     * During a reset, we'll redownload all server records. If we don't keep the
+     * local deletion, then when we re-process the (non-deleted) server counterpart
+     * to the now-missing local record, it'll be reinserted: the user's deletion will
+     * be undone.
+     *
+     * Right now we don't preserve deletions when removing the Firefox Account, but
+     * we could do so if we were willing to trade local database space to handle this
+     * possible situation.
+     */
     private func collapseMirrorIntoLocalPreservingDeletions(preserveDeletions: Bool) -> Success {
         // As implemented, this won't work correctly without ON DELETE CASCADE.
         assert(SwiftData.EnableForeignKeys)
