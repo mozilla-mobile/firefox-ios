@@ -8,11 +8,11 @@ import Storage
 @available(iOS 9.0, *)
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
-    private static let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
-    private static let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to add current tab to Reading List")
-    private static let PreviewActionSendToDevice = NSLocalizedString("Send to Device", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to send the current tab to another device")
-    private static let PreviewActionCopyURL = NSLocalizedString("Copy URL", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
-    private static let PreviewActionCloseTab = NSLocalizedString("Close Tab", tableName: "3D Touch Actions", comment: "Label for preview action on Tab Tray Tab to close the current tab")
+    private static let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
+    private static let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Reading List")
+    private static let PreviewActionSendToDevice = NSLocalizedString("Send to Device", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to send the current tab to another device")
+    private static let PreviewActionCopyURL = NSLocalizedString("Copy URL", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
+    private static let PreviewActionCloseTab = NSLocalizedString("Close Tab", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to close the current tab")
 
     let tab: Browser
 
@@ -75,7 +75,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        previewAccessibilityLabel = NSLocalizedString("Preview of \(tab.webView?.accessibilityLabel)", tableName: "3D Touch Actions", comment: "Accessibility Label for preview in Tab Tray of current tab")
+        previewAccessibilityLabel = NSLocalizedString("Preview of \(tab.webView?.accessibilityLabel)", tableName: "3DTouchActions", comment: "Accessibility Label for preview in Tab Tray of current tab")
         // if there is no screenshot, load the URL in a web page
         // otherwise just show the screenshot
         setupWebView(tab.webView)
