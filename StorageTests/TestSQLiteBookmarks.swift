@@ -50,6 +50,18 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual((model?.current[0] as? BookmarkItem)?.url, url)
         XCTAssertTrue(bookmarks.isBookmarked(url).value.successValue ?? false)
         XCTAssertTrue(bookmarks.removeByURL("").value.isSuccess)
+
+        // Grab that GUID and move it into desktop bookmarks.
+        let guid = (model?.current[0] as! BookmarkItem).guid
+
+        // Desktop bookmarks.
+        XCTAssertFalse(bookmarks.hasDesktopBookmarks().value.successValue ?? true)
+        let toolbar = BookmarkRoots.ToolbarFolderGUID
+        XCTAssertTrue(bookmarks.db.run([
+            "UPDATE \(TableBookmarksLocal) SET parentid = '\(toolbar)' WHERE guid = '\(guid)'",
+            "UPDATE \(TableBookmarksLocalStructure) SET parent = '\(toolbar)' WHERE child = '\(guid)'",
+            ]).value.isSuccess)
+        XCTAssertTrue(bookmarks.hasDesktopBookmarks().value.successValue ?? true)
     }
 
     func testLocalAndMirror() {
