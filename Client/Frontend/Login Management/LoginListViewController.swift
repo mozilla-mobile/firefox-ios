@@ -11,6 +11,9 @@ import Shared
 private struct LoginListUX {
     static let RowHeight: CGFloat = 58
     static let SearchHeight: CGFloat = 58
+    static let selectionButtonFont = UIFont.systemFontOfSize(16)
+    static let selectionButtonTextColor = UIColor.whiteColor()
+    static let selectionButtonBackground = UIConstants.HighlightBlue
 }
 
 private let LoginCellIdentifier = "LoginCell"
@@ -23,6 +26,23 @@ class LoginListViewController: UIViewController {
     private let profile: Profile
 
     private let searchView = SearchInputView()
+
+    // Titles for selection/deselect buttons
+    private let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Title for deselecting all selected logins")
+    private let selectAllTitle = NSLocalizedString("Select All", tableName: "LoginManager", comment: "Title for selecting all logins")
+
+    private lazy var selectionButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = LoginListUX.selectionButtonFont
+        button.setTitle(self.selectAllTitle, forState: .Normal)
+        button.setTitleColor(LoginListUX.selectionButtonTextColor, forState: .Normal)
+        button.backgroundColor = LoginListUX.selectionButtonBackground
+        button.addTarget(self, action: "SELdidTapSelectionButton", forControlEvents: .TouchUpInside)
+        return button
+    }()
+
+    private var selectionButtonHeightConstraint: Constraint?
+    private var selectedIndexPaths = [NSIndexPath]()
 
     private let tableView = UITableView()
 
@@ -42,6 +62,7 @@ class LoginListViewController: UIViewController {
 
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen")
         loginSearchController = LoginSearchController(
@@ -55,6 +76,7 @@ class LoginListViewController: UIViewController {
 
         view.addSubview(searchView)
         view.addSubview(tableView)
+        view.addSubview(selectionButton)
 
         searchView.snp_makeConstraints { make in
             make.top.equalTo(snp_topLayoutGuideBottom).constraint
@@ -64,7 +86,15 @@ class LoginListViewController: UIViewController {
 
         tableView.snp_makeConstraints { make in
             make.top.equalTo(searchView.snp_bottom)
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.selectionButton.snp_top)
+        }
+
+        selectionButton.snp_makeConstraints { make in
             make.left.right.bottom.equalTo(self.view)
+            make.top.equalTo(self.tableView.snp_bottom)
+            make.bottom.equalTo(self.view)
+            selectionButtonHeightConstraint = make.height.equalTo(0).constraint
         }
     }
 
@@ -72,6 +102,7 @@ class LoginListViewController: UIViewController {
         super.viewWillAppear(animated)
         tableView.accessibilityIdentifier = "Login List"
         tableView.dataSource = loginDataSource
+        tableView.allowsSelectionDuringEditing = true
         tableView.delegate = self
         tableView.tableFooterView = UIView()
 
@@ -81,6 +112,76 @@ class LoginListViewController: UIViewController {
             self.loginDataSource.cursor = result.successValue
             self.tableView.reloadData()
         }
+    }
+
+    func toggleDeleteBarButton() {
+        // Show delete bar button item if we have selected any items
+        if selectedIndexPaths.count > 0 {
+            if (navigationItem.rightBarButtonItem == nil) {
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Delete", style: .Plain, target: self, action: "SELdelete")
+                navigationItem.rightBarButtonItem?.tintColor = UIColor.redColor()
+            }
+        } else {
+            navigationItem.rightBarButtonItem = nil
+        }
+    }
+
+    func toggleSelectionTitle() {
+        if selectedIndexPaths.count == loginDataSource.cursor?.count {
+            selectionButton.setTitle(deselectAllTitle, forState: .Normal)
+        } else {
+            selectionButton.setTitle(selectAllTitle, forState: .Normal)
+        }
+    }
+}
+
+// MARK: - Selectors
+extension LoginListViewController {
+
+    func SELedit() {
+        navigationItem.rightBarButtonItem = nil
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "SELcancel")
+        selectionButtonHeightConstraint?.updateOffset(UIConstants.ToolbarHeight)
+        self.view.layoutIfNeeded()
+        tableView.editing = true
+        tableView.reloadData()
+    }
+
+    func SELcancel() {
+        selectedIndexPaths = []
+        selectionButtonHeightConstraint?.updateOffset(0)
+        self.view.layoutIfNeeded()
+        tableView.editing = false
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
+        tableView.reloadData()
+    }
+
+    func SELdelete() {
+        let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ _ in
+            // Delete here
+        }, hasAccount: profile.hasAccount())
+        presentViewController(deleteAlert, animated: true, completion: nil)
+    }
+
+    func SELdidTapSelectionButton() {
+        // If we haven't selected everything yet, select all
+        if selectedIndexPaths.count < loginDataSource.cursor?.count {
+            let indexPaths = (0..<tableView.numberOfSections).flatMap { sectionNum in
+                (0..<self.tableView.numberOfRowsInSection(sectionNum)).map { NSIndexPath(forRow: $0, inSection: sectionNum) }
+            }
+
+            selectedIndexPaths.removeAll()
+            selectedIndexPaths += indexPaths
+        }
+
+        // If everything has been selected, deselect all
+        else {
+            selectedIndexPaths.removeAll()
+        }
+
+        toggleSelectionTitle()
+        toggleDeleteBarButton()
     }
 }
 
@@ -95,17 +196,32 @@ extension LoginListViewController: UITableViewDelegate {
         return LoginListUX.RowHeight
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let login = loginDataSource.loginAtIndexPath(indexPath)
-        let detailViewController = LoginDetailViewController(profile: profile, login: login)
-        detailViewController.settingsDelegate = settingsDelegate
-        navigationController?.pushViewController(detailViewController, animated: true)
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .None
+    }
 
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if tableView.editing {
+            if let foundSelectedPath = (selectedIndexPaths.filter { $0.row == indexPath.row && $0.section == indexPath.section }).first,
+               let indexToRemove = selectedIndexPaths.indexOf(foundSelectedPath) {
+                selectedIndexPaths.removeAtIndex(indexToRemove)
+            } else {
+                selectedIndexPaths.append(indexPath)
+            }
+
+            toggleSelectionTitle()
+            toggleDeleteBarButton()
+        } else {
+            let login = loginDataSource.loginAtIndexPath(indexPath)
+            let detailViewController = LoginDetailViewController(profile: profile, login: login)
+            detailViewController.settingsDelegate = settingsDelegate
+            navigationController?.pushViewController(detailViewController, animated: true)
+        }
     }
 }
 
 extension LoginListViewController: KeyboardHelperDelegate {
+
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
@@ -183,6 +299,12 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         let login = loginAtIndexPath(indexPath)
         cell.style = .IconAndBothLabels
         cell.updateCellWithLogin(login)
+
+        // If we're editing, disable the default selection highlight in favor of our checkmark icon
+        if tableView.editing {
+            cell.selectionStyle = .None
+        }
+
         return cell
     }
 
