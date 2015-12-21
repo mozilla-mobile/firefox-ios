@@ -110,7 +110,7 @@ class TabCell: UICollectionViewCell {
         self.opaque = true
 
         self.animator = SwipeAnimator(animatingView: self.backgroundHolder, container: self)
-        self.closeButton.addTarget(self.animator, action: "SELcloseWithoutGesture", forControlEvents: UIControlEvents.TouchUpInside)
+        self.closeButton.addTarget(self, action: "SELclose", forControlEvents: UIControlEvents.TouchUpInside)
 
         contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.background)
@@ -214,6 +214,11 @@ class TabCell: UICollectionViewCell {
         }
         animator.close(right: right)
         return true
+    }
+
+    @objc
+    func SELclose() {
+        self.animator.SELcloseWithoutGesture()
     }
 }
 
@@ -933,6 +938,29 @@ private class EmptyPrivateTabsView: UIView {
 }
 
 @available(iOS 9.0, *)
+extension TabTrayController: TabPeekDelegate {
+
+    func tabPeekDidAddBookmark(tab: Browser) {
+        delegate?.tabTrayDidAddBookmark(tab)
+    }
+
+    func tabPeekDidAddToReadingList(tab: Browser) -> ReadingListClientRecord? {
+        return delegate?.tabTrayDidAddToReadingList(tab)
+    }
+
+    func tabPeekDidCloseTab(tab: Browser) {
+        if let index = self.tabDataSource.tabs.indexOf(tab),
+            let cell = self.collectionView?.cellForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) as? TabCell {
+            cell.SELclose()
+        }
+    }
+
+    func tabPeekRequestsPresentationOf(viewController viewController: UIViewController) {
+        delegate?.tabTrayRequestsPresentationOf(viewController: viewController)
+    }
+}
+
+@available(iOS 9.0, *)
 extension TabTrayController: UIViewControllerPreviewingDelegate {
 
     func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
@@ -944,7 +972,7 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
             let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
 
         let tab = tabDataSource.tabs[indexPath.row]
-        let tabVC = TabPeekViewController(tab: tab, delegate: delegate, tabManager: tabManager)
+        let tabVC = TabPeekViewController(tab: tab, delegate: self)
         if let browserProfile = profile as? BrowserProfile {
             tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
         }

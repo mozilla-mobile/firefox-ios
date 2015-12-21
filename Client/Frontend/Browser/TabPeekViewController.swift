@@ -4,6 +4,15 @@
 
 import UIKit
 import Storage
+import ReadingList
+
+@available(iOS 9.0, *)
+protocol TabPeekDelegate: class {
+    func tabPeekDidAddBookmark(tab: Browser)
+    func tabPeekDidAddToReadingList(tab: Browser) -> ReadingListClientRecord?
+    func tabPeekRequestsPresentationOf(viewController viewController: UIViewController)
+    func tabPeekDidCloseTab(tab: Browser)
+}
 
 @available(iOS 9.0, *)
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
@@ -16,8 +25,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     let tab: Browser
 
-    private weak var delegate: TabTrayDelegate?
-    private let tabManager: TabManager
+    private weak var delegate: TabPeekDelegate?
     private var clientPicker: UINavigationController?
     private var isBookmarked: Bool = false
     private var isInReadingList: Bool = false
@@ -33,18 +41,18 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         if(!self.ignoreURL) {
             if !self.isInReadingList {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .Default) { previewAction, viewController in
-                    self.delegate?.tabTrayDidAddToReadingList(self.tab)
+                    self.delegate?.tabPeekDidAddToReadingList(self.tab)
                 })
             }
             if !self.isBookmarked {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .Default) { previewAction, viewController in
-                    self.delegate?.tabTrayDidAddBookmark(self.tab)
+                    self.delegate?.tabPeekDidAddBookmark(self.tab)
                     })
             }
             if self.hasRemoteClients {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionSendToDevice, style: .Default) { previewAction, viewController in
                     guard let clientPicker = self.clientPicker else { return }
-                    self.delegate?.tabTrayRequestsPresentationOf(viewController: clientPicker)
+                    self.delegate?.tabPeekRequestsPresentationOf(viewController: clientPicker)
                     })
             }
             // only add the copy URL action if we don't already have 3 items in our list
@@ -58,18 +66,16 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             }
         }
         actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCloseTab, style: .Destructive) { previewAction, viewController in
-            guard let tabViewController = viewController as? TabPeekViewController else { return }
-            self.tabManager.removeTab(self.tab)
+            self.delegate?.tabPeekDidCloseTab(self.tab)
             })
 
         return actions
     }()
 
 
-    init(tab: Browser, delegate: TabTrayDelegate?, tabManager: TabManager) {
+    init(tab: Browser, delegate: TabPeekDelegate?) {
         self.tab = tab
         self.delegate = delegate
-        self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
     }
 
