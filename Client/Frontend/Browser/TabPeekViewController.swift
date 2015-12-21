@@ -100,7 +100,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     }
 
     private func setupWebView(webView: WKWebView?) {
-        guard let webView = webView else { return }
+        guard let webView = webView, let url = webView.URL where !isIgnoredURL(url) else { return }
         let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
         clonedWebView.allowsLinkPreview = false
         webView.accessibilityLabel = previewAccessibilityLabel
@@ -112,9 +112,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
         clonedWebView.navigationDelegate = self
 
-        if let url = webView.URL {
-            clonedWebView.loadRequest(NSURLRequest(URL: url))
-        }
+        clonedWebView.loadRequest(NSURLRequest(URL: url))
     }
 
     func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: ClientPickerViewControllerDelegate) {
