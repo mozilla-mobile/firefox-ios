@@ -12,6 +12,7 @@ import SnapKit
 import XCGLogger
 import Alamofire
 import Account
+import ReadingList
 
 private let log = Logger.browserLogger
 
@@ -906,7 +907,7 @@ class BrowserViewController: UIViewController {
         } else {
             request = nil
         }
-        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile)
+        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
         tabTrayController.changePrivacyMode(isPrivate)
         self.tabTrayController = tabTrayController
         tabManager.addTabAndSelect(request, isPrivate: isPrivate)
@@ -982,7 +983,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
         self.webViewContainerToolbar.hidden = true
-        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile)
+        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
@@ -2406,6 +2407,38 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
         if let tab = tabManager.selectedTab where tab.webView === browser.webView {
             updateUIForReaderHomeStateForTab(tab)
         }
+    }
+}
+
+extension BrowserViewController: TabTrayDelegate {
+    // This function animates and resets the browser chrome transforms when
+    // the tab tray dismisses.
+    func tabTrayDidDismiss(tabTray: TabTrayController) {
+        // animate and reset transform for browser chrome
+        urlBar.updateAlphaForSubviews(1)
+
+        [header,
+            footer,
+            readerModeBar,
+            footerBackdrop,
+            headerBackdrop].forEach { view in
+                view?.transform = CGAffineTransformIdentity
+        }
+    }
+
+    func tabTrayDidAddBookmark(tab: Browser) {
+        guard let url = tab.url?.absoluteString where url.characters.count > 0 else { return }
+        self.addBookmark(url, title: tab.title)
+    }
+
+
+    func tabTrayDidAddToReadingList(tab: Browser) -> ReadingListClientRecord? {
+        guard let url = tab.url?.absoluteString where url.characters.count > 0 else { return nil }
+        return profile.readingList?.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.currentDevice().name).successValue
+    }
+
+    func tabTrayRequestsPresentationOf(viewController viewController: UIViewController) {
+        self.presentViewController(viewController, animated: false, completion: nil)
     }
 }
 

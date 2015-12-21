@@ -37,6 +37,11 @@ class ClientPickerViewController: UITableViewController {
     var clients: [RemoteClient] = []
     var selectedClients = NSMutableSet()
 
+    // ShareItem has been added as we are now using this class outside of the ShareTo extension to provide Share To functionality
+    // And in this case we need to be able to store the item we are sharing as we may not have access to the 
+    // url later. Currently used only when sharing an item from the Tab Tray from a Preview Action.
+    var shareItem: ShareItem?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = NSLocalizedString("Send Tab", tableName: "SendTo", comment: "Title of the dialog that allows you to send a tab to a different device")
