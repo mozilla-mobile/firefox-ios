@@ -23,7 +23,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     private static let PreviewActionCopyURL = NSLocalizedString("Copy URL", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
     private static let PreviewActionCloseTab = NSLocalizedString("Close Tab", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to close the current tab")
 
-    let tab: Browser
+    weak var tab: Browser?
 
     private weak var delegate: TabPeekDelegate?
     private var clientPicker: UINavigationController?
@@ -41,12 +41,14 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         if(!self.ignoreURL) {
             if !self.isInReadingList {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .Default) { previewAction, viewController in
-                    self.delegate?.tabPeekDidAddToReadingList(self.tab)
+                    guard let tab = self.tab else { return }
+                    self.delegate?.tabPeekDidAddToReadingList(tab)
                 })
             }
             if !self.isBookmarked {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .Default) { previewAction, viewController in
-                    self.delegate?.tabPeekDidAddBookmark(self.tab)
+                    guard let tab = self.tab else { return }
+                    self.delegate?.tabPeekDidAddBookmark(tab)
                     })
             }
             if self.hasRemoteClients {
@@ -59,14 +61,15 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             // as we are only allowed 4 in total and we always want to display close tab
             if actions.count < 3 {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
-                    guard let url = self.tab.url where url.absoluteString.characters.count > 0 else { return }
+                    guard let url = self.tab?.url where url.absoluteString.characters.count > 0 else { return }
                     let pasteBoard = UIPasteboard.generalPasteboard()
                     pasteBoard.URL = url
                     })
             }
         }
         actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCloseTab, style: .Destructive) { previewAction, viewController in
-            self.delegate?.tabPeekDidCloseTab(self.tab)
+            guard let tab = self.tab else { return }
+            self.delegate?.tabPeekDidCloseTab(tab)
             })
 
         return actions
@@ -85,11 +88,11 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        previewAccessibilityLabel = NSLocalizedString("Preview of \(tab.webView?.accessibilityLabel)", tableName: "3DTouchActions", comment: "Accessibility Label for preview in Tab Tray of current tab")
+        previewAccessibilityLabel = NSLocalizedString("Preview of \(tab?.webView?.accessibilityLabel)", tableName: "3DTouchActions", comment: "Accessibility Label for preview in Tab Tray of current tab")
         // if there is no screenshot, load the URL in a web page
         // otherwise just show the screenshot
-        setupWebView(tab.webView)
-        guard let screenshot = tab.screenshot else { return }
+        setupWebView(tab?.webView)
+        guard let screenshot = tab?.screenshot else { return }
         setupWithScreenshot(screenshot)
     }
 
@@ -122,7 +125,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     }
 
     func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: ClientPickerViewControllerDelegate) {
-        guard let displayURL = tab.url?.absoluteString where displayURL.characters.count > 0 else { return }
+        guard let displayURL = tab?.url?.absoluteString where displayURL.characters.count > 0 else { return }
 
         browserProfile.bookmarks.isBookmarked(displayURL).upon {
             self.isBookmarked = $0.successValue ?? false
@@ -134,8 +137,8 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                 let clientPickerController = ClientPickerViewController()
                 clientPickerController.clientPickerDelegate = clientPickerDelegate
                 clientPickerController.profile = browserProfile
-                if let url = self.tab.url?.absoluteString {
-                    clientPickerController.shareItem = ShareItem(url: url, title: self.tab.title, favicon: nil)
+                if let url = self.tab?.url?.absoluteString {
+                    clientPickerController.shareItem = ShareItem(url: url, title: self.tab?.title, favicon: nil)
                 }
 
                 self.clientPicker = UINavigationController(rootViewController: clientPickerController)
