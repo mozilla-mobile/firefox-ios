@@ -47,11 +47,15 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                     self.delegate?.tabTrayRequestsPresentationOf(viewController: clientPicker)
                     })
             }
-            actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
-                guard let url = self.tab.url where url.absoluteString.characters.count > 0 else { return }
-                let pasteBoard = UIPasteboard.generalPasteboard()
-                pasteBoard.URL = url
-                })
+            // only add the copy URL action if we don't already have 3 items in our list
+            // as we are only allowed 4 in total and we always want to display close tab
+            if actions.count < 3 {
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
+                    guard let url = self.tab.url where url.absoluteString.characters.count > 0 else { return }
+                    let pasteBoard = UIPasteboard.generalPasteboard()
+                    pasteBoard.URL = url
+                    })
+            }
         }
         actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCloseTab, style: .Destructive) { previewAction, viewController in
             guard let tabViewController = viewController as? TabPeekViewController else { return }
