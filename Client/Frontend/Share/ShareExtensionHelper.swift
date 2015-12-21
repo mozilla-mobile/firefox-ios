@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -10,15 +10,16 @@ private let log = Logger.browserLogger
 class ShareExtensionHelper: NSObject {
     private let selectedTab: Browser
     private var onePasswordExtensionItem: NSExtensionItem!
+    private let activities: [UIActivity]
 
-    init(tab: Browser) {
-        selectedTab = tab
+    init(tab: Browser, activities: [UIActivity]) {
+        self.selectedTab = tab
+        self.activities = activities
     }
 
     func createActivityViewController(completionHandler: () -> Void) -> UIActivityViewController {
         let printInfo = UIPrintInfo(dictionary: nil)
-        let url = selectedTab.url!
-        printInfo.jobName = url.absoluteString
+        printInfo.jobName = selectedTab.url?.absoluteString ?? ""
         printInfo.outputType = .General
         let renderer = BrowserPrintPageRenderer(browser: selectedTab)
 
@@ -28,14 +29,13 @@ class ShareExtensionHelper: NSObject {
         }
         activityItems.append(self)
 
-        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: activities)
 
         // Hide 'Add to Reading List' which currently uses Safari.
-        // Also hide our own View Later… after all, you're in the browser!
-        let viewLater = NSBundle.mainBundle().bundleIdentifier! + ".ViewLater"
+        // We would also hide View Later, if possible, but the exclusion list doesn't currently support
+        // third-party activity types (rdar://19430419).
         activityViewController.excludedActivityTypes = [
             UIActivityTypeAddToReadingList,
-            viewLater,                        // Doesn't work: rdar://19430419
         ]
 
         // This needs to be ready by the time the share menu has been displayed and
@@ -64,7 +64,7 @@ class ShareExtensionHelper: NSObject {
 
 extension ShareExtensionHelper: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
-        return selectedTab.displayURL!
+        return selectedTab.displayURL ?? NSURL()
     }
 
     func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
@@ -99,8 +99,8 @@ private extension ShareExtensionHelper {
         // A 'password' substring covers the most cases, such as pwsafe and 1Password.
         // com.agilebits.onepassword-ios.extension
         // com.app77.ios.pwsafe2.find-login-action-password-actionExtension
-        // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle idenfidier.
-        return (activityType!.rangeOfString("password") != nil)
+        // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle identifier.
+        return (activityType?.rangeOfString("password") != nil)
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
 
     }
