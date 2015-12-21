@@ -887,7 +887,7 @@ public class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
 }
 
 extension SQLiteBookmarks {
-    private func hasDesktopBookmarks() -> Deferred<Maybe<Bool>> {
+    func hasDesktopBookmarks() -> Deferred<Maybe<Bool>> {
         // This is very lazy, but it has the nice property of keeping Desktop Bookmarks visible
         // for a while after you mark the last desktop child as deleted.
         let parents: Args = [
@@ -905,7 +905,8 @@ extension SQLiteBookmarks {
         let sql =
         "SELECT 1 FROM \(TableBookmarksLocalStructure) WHERE parent IN (?, ?, ?)" +
         " UNION ALL " +
-        "SELECT 1 FROM \(TableBookmarksMirrorStructure) WHERE parent IN (?, ?, ?)"
+        "SELECT 1 FROM \(TableBookmarksMirrorStructure) WHERE parent IN (?, ?, ?)" +
+        " LIMIT 1"
 
         return self.db.queryReturnsResults(sql, args: parents)
     }
