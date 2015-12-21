@@ -19,7 +19,17 @@ struct DebugSettingsBundleOptions {
 
     /// When enabled, the app launch will be replaced with the mail compose view appearing with the device
     /// logs pre-attached. When the mail is sent, the app continues launching normally.
-    static var emailLogsOnLaunch: Bool {
-        return (NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleEmailLogsOnLaunch") &&  MFMailComposeViewController.canSendMail()) ?? false
+    static var launchIntoEmailComposer: Bool {
+        return ((attachTabStateToDebugEmail || attachLogsToDebugEmail) &&  MFMailComposeViewController.canSendMail()) ?? false
+    }
+
+    /// When enabled, the email composer will have the tab state attached.
+    static var attachTabStateToDebugEmail: Bool {
+        return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleEmailTabState") ?? false
+    }
+
+    /// When enabled, the email composer will have the application logs attached.
+    static var attachLogsToDebugEmail: Bool {
+        return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleEmailLogsOnLaunch") ?? false
     }
 }

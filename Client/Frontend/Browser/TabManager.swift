@@ -378,66 +378,96 @@ class TabManager : NSObject {
     }
 }
 
-extension TabManager {
-    class SavedTab: NSObject, NSCoding {
-        let isSelected: Bool
-        let title: String?
-        let isPrivate: Bool
-        var sessionData: SessionData?
-        var screenshotUUID: NSUUID?
+class SavedTab: NSObject, NSCoding {
+    let isSelected: Bool
+    let title: String?
+    let isPrivate: Bool
+    var sessionData: SessionData?
+    var screenshotUUID: NSUUID?
 
-        init?(browser: Browser, isSelected: Bool) {
-            self.screenshotUUID = browser.screenshotUUID
-            self.isSelected = isSelected
-            self.title = browser.displayTitle
-            self.isPrivate = browser.isPrivate
-            super.init()
+    var jsonDictionary: [String: AnyObject] {
+        let title: String = self.title ?? "null"
+        let uuid: String = String(self.screenshotUUID ?? "null")
 
-            if browser.sessionData == nil {
-                let currentItem: WKBackForwardListItem! = browser.webView?.backForwardList.currentItem
+        var json: [String: AnyObject] = [
+            "title": title,
+            "isPrivate": String(self.isPrivate),
+            "isSelected": String(self.isSelected),
+            "screenshotUUID": uuid
+        ]
 
-                // Freshly created web views won't have any history entries at all.
-                // If we have no history, abort.
-                if currentItem == nil {
-                    return nil
-                }
+        if let sessionDataInfo = self.sessionData?.jsonDictionary {
+            json["sessionData"] = sessionDataInfo
+        }
 
-                let backList = browser.webView?.backForwardList.backList ?? []
-                let forwardList = browser.webView?.backForwardList.forwardList ?? []
-                let urls = (backList + [currentItem] + forwardList).map { $0.URL }
-                let currentPage = -forwardList.count
-                self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: browser.lastExecutedTime ?? NSDate.now())
-            } else {
-                self.sessionData = browser.sessionData
+        return json
+    }
+
+    init?(browser: Browser, isSelected: Bool) {
+        self.screenshotUUID = browser.screenshotUUID
+        self.isSelected = isSelected
+        self.title = browser.displayTitle
+        self.isPrivate = browser.isPrivate
+        super.init()
+
+        if browser.sessionData == nil {
+            let currentItem: WKBackForwardListItem! = browser.webView?.backForwardList.currentItem
+
+            // Freshly created web views won't have any history entries at all.
+            // If we have no history, abort.
+            if currentItem == nil {
+                return nil
             }
-        }
 
-        required init?(coder: NSCoder) {
-            self.sessionData = coder.decodeObjectForKey("sessionData") as? SessionData
-            self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
-            self.isSelected = coder.decodeBoolForKey("isSelected")
-            self.title = coder.decodeObjectForKey("title") as? String
-            self.isPrivate = coder.decodeBoolForKey("isPrivate")
-        }
-
-        func encodeWithCoder(coder: NSCoder) {
-            coder.encodeObject(sessionData, forKey: "sessionData")
-            coder.encodeObject(screenshotUUID, forKey: "screenshotUUID")
-            coder.encodeBool(isSelected, forKey: "isSelected")
-            coder.encodeObject(title, forKey: "title")
-            coder.encodeBool(isPrivate, forKey: "isPrivate")
+            let backList = browser.webView?.backForwardList.backList ?? []
+            let forwardList = browser.webView?.backForwardList.forwardList ?? []
+            let urls = (backList + [currentItem] + forwardList).map { $0.URL }
+            let currentPage = -forwardList.count
+            self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: browser.lastExecutedTime ?? NSDate.now())
+        } else {
+            self.sessionData = browser.sessionData
         }
     }
 
-    private func tabsStateArchivePath() -> String {
+    required init?(coder: NSCoder) {
+        self.sessionData = coder.decodeObjectForKey("sessionData") as? SessionData
+        self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
+        self.isSelected = coder.decodeBoolForKey("isSelected")
+        self.title = coder.decodeObjectForKey("title") as? String
+        self.isPrivate = coder.decodeBoolForKey("isPrivate")
+    }
+
+    func encodeWithCoder(coder: NSCoder) {
+        coder.encodeObject(sessionData, forKey: "sessionData")
+        coder.encodeObject(screenshotUUID, forKey: "screenshotUUID")
+        coder.encodeBool(isSelected, forKey: "isSelected")
+        coder.encodeObject(title, forKey: "title")
+        coder.encodeBool(isPrivate, forKey: "isPrivate")
+    }
+}
+
+extension TabManager {
+
+    static private func tabsStateArchivePath() -> String {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
         return NSURL(fileURLWithPath: documentsPath).URLByAppendingPathComponent("tabsState.archive").path!
+    }
+
+    static func tabsToRestore() -> [SavedTab]? {
+        let tabStateArchivePath = tabsStateArchivePath()
+        if NSFileManager.defaultManager().fileExistsAtPath(tabStateArchivePath) {
+            if let data = NSData(contentsOfFile: tabStateArchivePath) {
+                let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
+                return unarchiver.decodeObjectForKey("tabs") as? [SavedTab]
+            }
+        }
+        return nil
     }
 
     private func preserveTabsInternal() {
         guard !isRestoring else { return }
 
-        let path = tabsStateArchivePath()
+        let path = TabManager.tabsStateArchivePath()
         var savedTabs = [SavedTab]()
         var savedUUIDs = Set<String>()
         for (tabIndex, tab) in tabs.enumerate() {
@@ -472,20 +502,9 @@ extension TabManager {
         }
     }
 
-    func tabsToRestore() -> [SavedTab]? {
-        let tabStateArchivePath = tabsStateArchivePath()
-        if NSFileManager.defaultManager().fileExistsAtPath(tabStateArchivePath) {
-            if let data = NSData(contentsOfFile: tabStateArchivePath) {
-                let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
-                return unarchiver.decodeObjectForKey("tabs") as? [SavedTab]
-            }
-        }
-        return nil
-    }
-
     private func restoreTabsInternal() {
         log.debug("Restoring tabs.")
-        guard let savedTabs = tabsToRestore() else {
+        guard let savedTabs = TabManager.tabsToRestore() else {
             log.debug("Nothing to restore.")
             return
         }
@@ -606,6 +625,18 @@ extension TabManager : WKNavigationDelegate {
     func webViewWebContentProcessDidTerminate(webView: WKWebView) {
         if let browser = selectedTab where browser.webView == webView {
             webView.reload()
+        }
+    }
+}
+
+extension TabManager {
+    class func tabRestorationDebugInfo() -> String {
+        let tabs = TabManager.tabsToRestore()?.map { $0.jsonDictionary } ?? []
+        do {
+            let jsonData = try NSJSONSerialization.dataWithJSONObject(tabs, options: [.PrettyPrinted])
+            return String(data: jsonData, encoding: NSUTF8StringEncoding) ?? ""
+        } catch _ {
+            return ""
         }
     }
 }
