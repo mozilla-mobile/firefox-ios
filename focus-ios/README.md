@@ -1,5 +1,4 @@
-Focus by Firefox
-------------------
+![Focus by Firefox](https://raw.githubusercontent.com/mozilla/focus/master/README.png)
 
 Focus by Firefox is a free content blocker for Safari users on iOS 9 that gives users greater control of their mobile Web experience. Focus by Firefox puts users in control of their privacy by allowing them to block categories of trackers such as those used for ads, analytics and social media. Focus by Firefox may also increase performance and reduce mobile data usage by blocking Web fonts.
 
