@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.backgroundColor = UIConstants.AppBackgroundColor
 
         // Short circuit the app if we want to email logs from the debug menu
-        if DebugSettingsBundleOptions.emailLogsOnLaunch {
+        if DebugSettingsBundleOptions.launchIntoEmailComposer {
             self.window?.rootViewController = UIViewController()
             presentEmailComposerWithLogs()
             return true
@@ -187,7 +187,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(application: UIApplication) {
-        guard !DebugSettingsBundleOptions.emailLogsOnLaunch else {
+        guard !DebugSettingsBundleOptions.launchIntoEmailComposer else {
             return
         }
 
@@ -276,16 +276,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let buildNumber = NSBundle.mainBundle().objectForInfoDictionaryKey(String(kCFBundleVersionKey)) as? NSString {
             let mailComposeViewController = MFMailComposeViewController()
             mailComposeViewController.mailComposeDelegate = self
-            mailComposeViewController.setSubject("Email logs for iOS client version v\(appVersion) (\(buildNumber))")
-            do {
-                let logNamesAndData = try Logger.diskLogFilenamesAndData()
-                logNamesAndData.forEach { nameAndData in
-                    if let data = nameAndData.1 {
-                        mailComposeViewController.addAttachmentData(data, mimeType: "text/plain", fileName: nameAndData.0)
+            mailComposeViewController.setSubject("Debug Info for iOS client version v\(appVersion) (\(buildNumber))")
+
+            if DebugSettingsBundleOptions.attachLogsToDebugEmail {
+                do {
+                    let logNamesAndData = try Logger.diskLogFilenamesAndData()
+                    logNamesAndData.forEach { nameAndData in
+                        if let data = nameAndData.1 {
+                            mailComposeViewController.addAttachmentData(data, mimeType: "text/plain", fileName: nameAndData.0)
+                        }
                     }
+                } catch _ {
+                    print("Failed to retrieve logs from device")
                 }
-            } catch _ {
-                print("Failed to retrieve logs from device")
+            }
+
+            if DebugSettingsBundleOptions.attachTabStateToDebugEmail {
+                if let tabStateDebugData = TabManager.tabRestorationDebugInfo().dataUsingEncoding(NSUTF8StringEncoding) {
+                    mailComposeViewController.addAttachmentData(tabStateDebugData, mimeType: "text/plain", fileName: "tabState.txt")
+                }
             }
 
             self.window?.rootViewController?.presentViewController(mailComposeViewController, animated: true, completion: nil)
