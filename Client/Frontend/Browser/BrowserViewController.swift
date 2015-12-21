@@ -1196,7 +1196,18 @@ extension BrowserViewController: BrowserToolbarDelegate {
 
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         if let selectedTab = tabManager.selectedTab {
-            let helper = ShareExtensionHelper(tab: selectedTab)
+            var activities = [UIActivity]()
+
+            if #available(iOS 9.0, *) {
+                if (selectedTab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active {
+                    let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: selectedTab.desktopSite) {
+                        selectedTab.toggleDesktopSite()
+                    }
+                    activities.append(requestDesktopSiteActivity)
+                }
+            }
+
+            let helper = ShareExtensionHelper(tab: selectedTab, activities: activities)
 
             let activityViewController = helper.createActivityViewController({
                 // We don't know what share action the user has chosen so we simply always
