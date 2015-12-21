@@ -5,6 +5,10 @@
 import Foundation
 import UIKit
 import SnapKit
+import Shared
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 enum ReaderModeBarButtonType {
     case MarkAsRead, MarkAsUnread, Settings, AddToReadingList, RemoveFromReadingList
@@ -38,6 +42,24 @@ enum ReaderModeBarButtonType {
 
 protocol ReaderModeBarViewDelegate {
     func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
+}
+
+struct ReaderModeBarViewUX {
+
+    static let Themes: [String: Theme] = {
+        var themes = [String: Theme]()
+        var theme = Theme()
+        theme.backgroundColor = UIConstants.PrivateModeReaderModeBackgroundColor
+        theme.buttonTintColor = UIColor.whiteColor()
+        themes[Theme.PrivateMode] = theme
+
+        theme = Theme()
+        theme.backgroundColor = UIColor.whiteColor()
+        theme.buttonTintColor = UIColor.darkGrayColor()
+        themes[Theme.NormalMode] = theme
+
+        return themes
+    }()
 }
 
 class ReaderModeBarView: UIView {
@@ -146,8 +168,13 @@ class ReaderModeBarView: UIView {
 }
 
 extension ReaderModeBarView: Themeable {
-    func forceApplyTheme() {
-        backgroundColor = ReaderModeBarView.appearance().backgroundColor
-        buttonTintColor = ReaderModeBarView.appearance().buttonTintColor
+    func applyTheme(themeName: String) {
+        guard let theme = ReaderModeBarViewUX.Themes[themeName] else {
+            log.error("Unable to apply unknown theme \(themeName)")
+            return
+        }
+
+        backgroundColor = theme.backgroundColor
+        buttonTintColor = theme.buttonTintColor!
     }
 }
