@@ -37,6 +37,12 @@ public extension String {
         return false
     }
 
+    public func anonymize() -> String {
+        return self.characters.map { _ in
+            return "•"
+        } .joinWithSeparator("")
+    }
+
     func escape() -> String {
         let raw: NSString = self
         let str = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,

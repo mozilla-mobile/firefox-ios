@@ -985,7 +985,39 @@ class SettingsTableFooterView: UIView {
     }
 }
 
+struct SettingsTableSectionHeaderFooterViewUX {
+    static let titleHorizontalPadding: CGFloat = 15
+    static let titleVerticalPadding: CGFloat = 6
+}
+
 class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
+
+    enum TitleAlignment {
+        case Top
+        case Bottom
+    }
+
+    var titleAlignment: TitleAlignment = .Bottom {
+        didSet {
+            if oldValue != titleAlignment {
+                switch titleAlignment {
+                case .Top:
+                    titleLabel.snp_remakeConstraints { make in
+                        make.left.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+                        make.right.greaterThanOrEqualTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+                        make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
+                    }
+                case .Bottom:
+                    titleLabel.snp_remakeConstraints { make in
+                        make.left.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+                        make.right.greaterThanOrEqualTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+                        make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
+                    }
+                }
+            }
+        }
+    }
+
     var showTopBorder: Bool = true {
         didSet {
             topBorder.hidden = !showTopBorder
@@ -998,26 +1030,22 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         }
     }
 
-    var titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         var headerLabel = UILabel()
-        var frame = headerLabel.frame
-        frame.origin.x = 15
-        frame.origin.y = 25
-        headerLabel.frame = frame
         headerLabel.textColor = UIConstants.TableViewHeaderTextColor
         headerLabel.font = UIFont.systemFontOfSize(12.0, weight: UIFontWeightRegular)
         return headerLabel
     }()
 
-    private lazy var topBorder: CALayer = {
-        let topBorder = CALayer()
-        topBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
+    private lazy var topBorder: UIView = {
+        let topBorder = UIView()
+        topBorder.backgroundColor = UIConstants.SeparatorColor
         return topBorder
     }()
 
-    private lazy var bottomBorder: CALayer = {
-        let bottomBorder = CALayer()
-        bottomBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
+    private lazy var bottomBorder: UIView = {
+        let bottomBorder = UIView()
+        bottomBorder.backgroundColor = UIConstants.SeparatorColor
         return bottomBorder
     }()
 
@@ -1025,25 +1053,41 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
+        addSubview(topBorder)
+        addSubview(bottomBorder)
         clipsToBounds = true
-        layer.addSublayer(topBorder)
-        layer.addSublayer(bottomBorder)
-    }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        showTopBorder = true
-        showBottomBorder = true
+        setupInitialConstraints()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        bottomBorder.frame = CGRectMake(0.0, frame.size.height - 0.5, frame.size.width, 0.5)
-        topBorder.frame = CGRectMake(0.0, 0.0, frame.size.width, 0.5)
-        titleLabel.sizeToFit()
+    func setupInitialConstraints() {
+        // Initially set title to the bottom
+        titleLabel.snp_makeConstraints { make in
+            make.left.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+            make.right.greaterThanOrEqualTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+            make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
+        }
+
+        bottomBorder.snp_makeConstraints { make in
+            make.bottom.left.right.equalTo(self)
+            make.height.equalTo(0.5)
+        }
+
+        topBorder.snp_makeConstraints { make in
+            make.top.left.right.equalTo(self)
+            make.height.equalTo(0.5)
+        }
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        showTopBorder = true
+        showBottomBorder = true
+        titleLabel.text = nil
+        titleAlignment = .Bottom
     }
 }

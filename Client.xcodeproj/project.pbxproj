@@ -641,6 +641,7 @@
 		E6327A8A1BF6473A008D12E0 /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
 		E6327A8B1BF64799008D12E0 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
 		E633E2331C21E293001FFF6C /* FXSnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2321C21E293001FFF6C /* FXSnapshotTestCase.swift */; };
+		E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */; };
 		E633E3101C21F547001FFF6C /* SnapKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E68B43751C08A724002D2D76 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E633E37A1C2204BE001FFF6C /* LoginManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */; };
 		E635D25E1B729DEE0078962F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E635D25D1B729DEE0078962F /* Logger.swift */; };
@@ -1846,6 +1847,7 @@
 		E6231C041B90A472005ABB0D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsBundleOptions.swift; sourceTree = "<group>"; };
 		E633E2321C21E293001FFF6C /* FXSnapshotTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FXSnapshotTestCase.swift; sourceTree = "<group>"; };
+		E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginDetailViewController.swift; path = ../Settings/LoginDetailViewController.swift; sourceTree = "<group>"; };
 		E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginManagerTests.swift; sourceTree = "<group>"; };
 		E635D25D1B729DEE0078962F /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E63ED7B31BFCD9800097D08E /* LoginTableViewCellRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCellRefTests.swift; sourceTree = "<group>"; };
@@ -3044,6 +3046,7 @@
 			isa = PBXGroup;
 			children = (
 				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
+				E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */,
 			);
 			path = "Login Management";
 			sourceTree = "<group>";
@@ -5050,6 +5053,7 @@
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
 				59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */,
 				D30B0F301AA7D66300C01CA3 /* ThumbnailCell.swift in Sources */,
+				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				E4B334541BBF2393004E2BFF /* ADJAdjustFactory.m in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
