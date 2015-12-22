@@ -11,20 +11,20 @@ class MarketingSnapshotTests: XCTestCase {
     let loaded = NSPredicate(format: "value BEGINSWITH '100'")
 
     var sleep = false
-        
+
     override func setUp() {
         super.setUp()
-        
+
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        
+
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
         let app = XCUIApplication()
-        setLanguage(app)
+        setupSnapshot(app)
         app.launch()
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
@@ -36,10 +36,10 @@ class MarketingSnapshotTests: XCTestCase {
         addressTextField.tap()
         addressTextField.typeText(url)
         if testForAutocompleteDialog {
-//            for var idx:UInt = 0; idx < app.buttons.count; idx++ {
-//                let button = app.buttons.elementBoundByIndex(idx)
-//                print("\(button.identifier): \(button.value)")
-//            }
+            //            for var idx:UInt = 0; idx < app.buttons.count; idx++ {
+            //                let button = app.buttons.elementBoundByIndex(idx)
+            //                print("\(button.identifier): \(button.value)")
+            //            }
             app.buttons.elementBoundByIndex(8).tap()
         }
         let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
@@ -48,9 +48,9 @@ class MarketingSnapshotTests: XCTestCase {
         app.typeText("\n")
         waitForExpectationsWithTimeout(LoadingTimeout, handler: nil)
     }
-    
+
     func testTakeMarketingScreenshots() {
-        
+
         let app = XCUIApplication()
 
         // dismiss the intro tour
@@ -81,7 +81,7 @@ class MarketingSnapshotTests: XCTestCase {
         loadWebPage("https://mozilla.org")
         app.staticTexts.firstWithName("4").tap()
         addTabButton.tap()
-        
+
         loadWebPage("firefox")
         loadWebPage("https://mozilla.org/firefox/new")
         app.staticTexts.firstWithName("5").tap()
@@ -99,7 +99,7 @@ class MarketingSnapshotTests: XCTestCase {
         // cancel search
         app.buttons.elementBoundByIndex(1).tap()
     }
-    
+
 }
 
 extension XCUIElementQuery {
@@ -111,7 +111,7 @@ extension XCUIElementQuery {
 
         return self.elementBoundByIndex(0)
     }
-
+    
     func firstMatchingType( type: XCUIElementType) -> XCUIElement {
         return self.childrenMatchingType(type).elementBoundByIndex(0)
     }
