@@ -65,6 +65,18 @@ class LoginTableViewCell: UITableViewCell {
         }
     }
 
+    var descriptionTextSize: CGSize? {
+        guard let descriptionText = descriptionLabel.text else {
+            return nil
+        }
+
+        let attributes = [
+            NSFontAttributeName: LoginTableViewCellUX.descriptionLabelFont
+        ]
+
+        return descriptionText.sizeWithAttributes(attributes)
+    }
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -102,13 +114,13 @@ class LoginTableViewCell: UITableViewCell {
             highlightedLabel.snp_remakeConstraints { make in
                 make.left.top.equalTo(labelContainer)
                 make.bottom.equalTo(descriptionLabel.snp_top)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
 
             descriptionLabel.snp_remakeConstraints { make in
                 make.left.bottom.equalTo(labelContainer)
                 make.top.equalTo(highlightedLabel.snp_bottom)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
         case .IconAndDescriptionLabel:
             iconImageView.snp_remakeConstraints { make in
@@ -129,7 +141,7 @@ class LoginTableViewCell: UITableViewCell {
 
             descriptionLabel.snp_remakeConstraints { make in
                 make.top.left.bottom.equalTo(labelContainer)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
         case .NoIconAndBothLabels:
             iconImageView.snp_remakeConstraints { make in
@@ -147,13 +159,13 @@ class LoginTableViewCell: UITableViewCell {
             highlightedLabel.snp_remakeConstraints { make in
                 make.left.top.equalTo(labelContainer)
                 make.bottom.equalTo(descriptionLabel.snp_top)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
 
             descriptionLabel.snp_remakeConstraints { make in
                 make.left.bottom.equalTo(labelContainer)
                 make.top.equalTo(highlightedLabel.snp_bottom)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
         }
 
