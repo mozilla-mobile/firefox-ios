@@ -28,13 +28,15 @@ class LoginTableViewCell: UITableViewCell {
 
     private let labelContainer = UIView()
 
-    let descriptionLabel: UILabel = {
-        let label = UILabel()
+    let descriptionLabel: UITextField = {
+        let label = UITextField()
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
         label.textAlignment = .Left
         label.backgroundColor = UIColor.whiteColor()
-        label.numberOfLines = 1
+        label.userInteractionEnabled = false
+        label.autocapitalizationType = .None
+        label.autocorrectionType = .No
         return label
     }()
 
@@ -156,6 +158,32 @@ class LoginTableViewCell: UITableViewCell {
         }
 
         setNeedsUpdateConstraints()
+    }
+}
+
+// MARK: - Menu Action Overrides
+extension LoginTableViewCell {
+
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        let showRevealOption = descriptionLabel.secureTextEntry ? (action == "SELrevealDescription") : (action == "SELsecureDescription")
+        return action == "SELcopyDescription" || showRevealOption
+    }
+
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+
+    func SELrevealDescription() {
+        descriptionLabel.secureTextEntry = false
+    }
+
+    func SELsecureDescription() {
+        descriptionLabel.secureTextEntry = true
+    }
+
+    func SELcopyDescription() {
+        // Copy description text to clipboard
+        UIPasteboard.generalPasteboard().string = descriptionLabel.text
     }
 }
 

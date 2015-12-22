@@ -39,6 +39,9 @@ class LoginDetailViewController: UITableViewController {
     private let DeleteCellIdentifier = "DeleteCell"
     private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
+    // Used to temporarly store a reference to the cell the user is showing the menu controller for
+    private var menuControllerCell: LoginTableViewCell? = nil
+
     init(profile: Profile, login: LoginData) {
         self.login = login
         self.profile = profile
@@ -51,6 +54,8 @@ class LoginDetailViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        setupCustomMenuActions()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
 
@@ -74,6 +79,29 @@ class LoginDetailViewController: UITableViewController {
         }
     }
 
+    private func setupCustomMenuActions() {
+        // Show menu controller with reveal option
+        let revealPasswordTitle = NSLocalizedString("Reveal", tableName: "LoginManager", comment: "Reveal password text selection menu item")
+        let revealPasswordItem = UIMenuItem(title: revealPasswordTitle, action: "SELrevealDescription")
+
+        let hidePasswordTitle = NSLocalizedString("Hide", tableName: "LoginManager", comment: "Hide password text selection menu item")
+        let hidePasswordItem = UIMenuItem(title: hidePasswordTitle, action: "SELsecureDescription")
+
+        let copyTitle = NSLocalizedString("Copy", tableName: "LoginManager", comment: "Copy password text selection menu item")
+        let copyItem = UIMenuItem(title: copyTitle, action: "SELcopyDescription")
+
+        UIMenuController.sharedMenuController().menuItems = [copyItem, revealPasswordItem, hidePasswordItem]
+        UIMenuController.sharedMenuController().update()
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillHideMenuController", name: UIMenuControllerWillHideMenuNotification, object: nil)
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIMenuControllerWillShowMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIMenuControllerWillHideMenuNotification, object: nil)
+    }
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let section = ListSection(rawValue: indexPath.section)!
 
@@ -93,7 +121,8 @@ class LoginDetailViewController: UITableViewController {
             case .PasswordItem:
                 loginCell.style = .NoIconAndBothLabels
                 loginCell.highlightedLabel.text = NSLocalizedString("password", tableName: "LoginManager", comment: "Title for password row in Login Detail View")
-                loginCell.descriptionLabel.text = login.password.anonymize()
+                loginCell.descriptionLabel.text = login.password
+                loginCell.descriptionLabel.secureTextEntry = true
             case .WebsiteItem:
                 loginCell.style = .NoIconAndBothLabels
                 loginCell.highlightedLabel.text = NSLocalizedString("website", tableName: "LoginManager", comment: "Title for website row in Login Detail View")
@@ -152,6 +181,33 @@ class LoginDetailViewController: UITableViewController {
             return nil
         }
     }
+
+    override func tableView(tableView: UITableView, shouldShowMenuForRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        let section = ListSection(rawValue: indexPath.section)!
+        let item = InfoItem(rawValue: indexPath.row)!
+        if section == .Info && item == .PasswordItem {
+            menuControllerCell = tableView.cellForRowAtIndexPath(indexPath) as? LoginTableViewCell
+            return true
+        } else {
+            return false
+        }
+    }
+
+    override func tableView(tableView: UITableView, canPerformAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
+        let section = ListSection(rawValue: indexPath.section)!
+        let item = InfoItem(rawValue: indexPath.row)!
+        if section == .Info && item == .PasswordItem {
+            let loginCell = tableView.cellForRowAtIndexPath(indexPath) as! LoginTableViewCell
+            let showRevealOption = loginCell.descriptionLabel.secureTextEntry ? (action == "SELrevealDescription") : (action == "SELsecureDescription")
+            return (action == "SELcopyDescription") || showRevealOption
+        } else {
+            return false
+        }
+    }
+
+    override func tableView(tableView: UITableView, performAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
+        // No-op. Needs to be overriden for custom menu action selectors to work.
+    }
 }
 
 // MARK: - Table View Editing
@@ -177,5 +233,30 @@ extension LoginDetailViewController {
     func SELdoneEditing() {
         tableView.editing = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
+    }
+
+    func SELwillShowMenuController() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIMenuControllerWillShowMenuNotification, object: nil)
+
+        let menuController = UIMenuController.sharedMenuController()
+        guard let cell = menuControllerCell else {
+            return
+        }
+
+        // Hide the original menu controller so we can customize it's location and re-show
+        menuController.setMenuVisible(false, animated: false)
+
+        let descriptionFrame = cell.descriptionLabel.frame
+
+        menuController.arrowDirection = .Up
+        menuController.setTargetRect(descriptionFrame, inView: cell)
+        menuController.setMenuVisible(true, animated: true)
+    }
+
+    func SELwillHideMenuController() {
+        menuControllerCell = nil
+        
+        // Re-add observer
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
     }
 }
