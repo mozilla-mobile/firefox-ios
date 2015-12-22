@@ -117,7 +117,7 @@ class LoginTableViewCell: UITableViewCell {
 
             labelContainer.snp_remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.right.greaterThanOrEqualTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
+                make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
                 make.left.equalTo(iconImageView.snp_right).offset(LoginTableViewCellUX.HorizontalMargin)
             }
 
@@ -126,7 +126,8 @@ class LoginTableViewCell: UITableViewCell {
             }
 
             descriptionLabel.snp_remakeConstraints { make in
-                make.edges.equalTo(labelContainer)
+                make.top.left.bottom.equalTo(labelContainer)
+                make.width.lessThanOrEqualTo(labelContainer)
             }
         case .NoIconAndBothLabels:
             iconImageView.snp_remakeConstraints { make in
@@ -137,18 +138,20 @@ class LoginTableViewCell: UITableViewCell {
 
             labelContainer.snp_remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.right.greaterThanOrEqualTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
+                make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
                 make.left.equalTo(iconImageView.snp_right)
             }
 
             highlightedLabel.snp_remakeConstraints { make in
-                make.left.right.top.equalTo(labelContainer)
+                make.left.top.equalTo(labelContainer)
                 make.bottom.equalTo(descriptionLabel.snp_top)
+                make.width.lessThanOrEqualTo(labelContainer)
             }
 
             descriptionLabel.snp_remakeConstraints { make in
-                make.left.right.bottom.equalTo(labelContainer)
+                make.left.bottom.equalTo(labelContainer)
                 make.top.equalTo(highlightedLabel.snp_bottom)
+                make.width.lessThanOrEqualTo(labelContainer)
             }
         }
 
