@@ -90,7 +90,10 @@ class LoginDetailViewController: UITableViewController {
         let copyTitle = NSLocalizedString("Copy", tableName: "LoginManager", comment: "Copy password text selection menu item")
         let copyItem = UIMenuItem(title: copyTitle, action: "SELcopyDescription")
 
-        UIMenuController.sharedMenuController().menuItems = [copyItem, revealPasswordItem, hidePasswordItem]
+        let openAndFillTitle = NSLocalizedString("Open & Fill", tableName: "LoginManager", comment: "Open and Fill website text selection menu item")
+        let openAndFillItem = UIMenuItem(title: openAndFillTitle, action: "SELopenAndFillDescription")
+
+        UIMenuController.sharedMenuController().menuItems = [copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem]
         UIMenuController.sharedMenuController().update()
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
@@ -109,6 +112,7 @@ class LoginDetailViewController: UITableViewController {
         case .Info:
             let loginCell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
             loginCell.selectionStyle = .None
+            loginCell.delegate = self
 
             switch InfoItem(rawValue: indexPath.row)! {
             case .TitleItem:
@@ -123,10 +127,12 @@ class LoginDetailViewController: UITableViewController {
                 loginCell.highlightedLabel.text = NSLocalizedString("password", tableName: "LoginManager", comment: "Title for password row in Login Detail View")
                 loginCell.descriptionLabel.text = login.password
                 loginCell.descriptionLabel.secureTextEntry = true
+                loginCell.enabledActions = [.Copy, .Reveal]
             case .WebsiteItem:
                 loginCell.style = .NoIconAndBothLabels
                 loginCell.highlightedLabel.text = NSLocalizedString("website", tableName: "LoginManager", comment: "Title for website row in Login Detail View")
                 loginCell.descriptionLabel.text = login.hostname
+                loginCell.enabledActions = [.Copy, .OpenAndFill]
             }
             return loginCell
         case .Delete:
@@ -185,21 +191,30 @@ class LoginDetailViewController: UITableViewController {
     override func tableView(tableView: UITableView, shouldShowMenuForRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         let section = ListSection(rawValue: indexPath.section)!
         let item = InfoItem(rawValue: indexPath.row)!
-        if section == .Info && item == .PasswordItem {
-            menuControllerCell = tableView.cellForRowAtIndexPath(indexPath) as? LoginTableViewCell
-            return true
-        } else {
-            return false
+        if section == .Info {
+            if item == .PasswordItem || item == .WebsiteItem {
+                menuControllerCell = tableView.cellForRowAtIndexPath(indexPath) as? LoginTableViewCell
+                return true
+            }
         }
+
+        return false
     }
 
     override func tableView(tableView: UITableView, canPerformAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
         let section = ListSection(rawValue: indexPath.section)!
         let item = InfoItem(rawValue: indexPath.row)!
+
+        // Menu actions for password
         if section == .Info && item == .PasswordItem {
             let loginCell = tableView.cellForRowAtIndexPath(indexPath) as! LoginTableViewCell
             let showRevealOption = loginCell.descriptionLabel.secureTextEntry ? (action == "SELrevealDescription") : (action == "SELsecureDescription")
-            return (action == "SELcopyDescription") || showRevealOption
+            return action == "SELcopyDescription" || showRevealOption
+        }
+
+        // Menu actions for Website
+        else if section == .Info && item == .WebsiteItem {
+            return action == "SELcopyDescription" || action == "SELopenAndFillDescription"
         } else {
             return false
         }
@@ -267,5 +282,22 @@ extension LoginDetailViewController {
 
         // Re-add observer
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
+    }
+}
+
+// MARK: - Cell Delegate
+extension LoginDetailViewController: LoginTableViewCellDelegate {
+
+    func didSelectOpenAndFillForCell(cell: LoginTableViewCell) {
+        navigationController?.dismissViewControllerAnimated(true, completion: {
+            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                let rootNavigationController = appDelegate.rootViewController
+                rootNavigationController.popViewControllerAnimated(true)
+                if let formSubmitURL = self.login.formSubmitURL,
+                   let url = NSURL(string: formSubmitURL) {
+                    appDelegate.browserViewController.openURLInNewTab(url)
+                }
+            }
+        })
     }
 }
