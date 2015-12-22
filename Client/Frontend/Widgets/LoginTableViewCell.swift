@@ -51,6 +51,7 @@ class LoginTableViewCell: UITableViewCell {
         label.userInteractionEnabled = false
         label.autocapitalizationType = .None
         label.autocorrectionType = .No
+        label.accessibilityElementsHidden = true
         return label
     }()
 
@@ -70,6 +71,17 @@ class LoginTableViewCell: UITableViewCell {
         imageView.contentMode = .ScaleAspectFit
         return imageView
     }()
+
+    /// Override the default accessibility label since it won't include the description by default
+    /// since it's a UITextField acting as a label.
+    override var accessibilityLabel: String? {
+        get {
+            return "\(highlightedLabel.text ?? ""), \(descriptionLabel.text ?? "")"
+        }
+        set {
+            // Ignore sets
+        }
+    }
 
     var enabledActions = [LoginTableViewCellActions]()
 

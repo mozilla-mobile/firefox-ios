@@ -69,6 +69,7 @@ class LoginDetailViewController: UITableViewController {
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         tableView.scrollEnabled = false
+        tableView.accessibilityIdentifier = "Login Detail List"
     }
 
     override func viewWillAppear(animated: Bool) {

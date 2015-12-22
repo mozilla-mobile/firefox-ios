@@ -44,6 +44,7 @@ class LoginManagerTests: KIFTestCase {
 
         (0..<(numRange.count * prefixes.characters.count)).forEach { index in
             let login = Login(guid: "\(index)", hostname: hostnames[index], username: usernames[index], password: passwords[index])
+            login.formSubmitURL = hostnames[index]
             profile.logins.addLogin(login).value
         }
     }
@@ -115,5 +116,81 @@ class LoginManagerTests: KIFTestCase {
         tester().swipeViewWithAccessibilityLabel("table index", inDirection: KIFSwipeDirection.Down)
         tester().waitForViewWithAccessibilityLabel("k0@email.com, http://k0.com")
         closeLoginManager()
+    }
+
+    func testDetailPasswordMenuOptions() {
+        openLoginManager()
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().waitForViewWithAccessibilityLabel("password, passworda0")
+
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+        var passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+
+        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        let centerOfCell = CGPoint(x: passwordCell.frame.width / 2, y: passwordCell.frame.height / 2)
+        XCTAssertTrue(passwordCell.descriptionLabel.secureTextEntry)
+
+        // Tap the 'Reveal' menu option
+        passwordCell.longPressAtPoint(centerOfCell, duration: 2)
+        tester().waitForViewWithAccessibilityLabel("Reveal")
+        tester().tapViewWithAccessibilityLabel("Reveal")
+
+        passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        XCTAssertFalse(passwordCell.descriptionLabel.secureTextEntry)
+
+        // Tap the 'Hide' menu option
+        passwordCell.longPressAtPoint(centerOfCell, duration: 2)
+        tester().waitForViewWithAccessibilityLabel("Hide")
+        tester().tapViewWithAccessibilityLabel("Hide")
+
+        passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        XCTAssertTrue(passwordCell.descriptionLabel.secureTextEntry)
+
+        // Tap the 'Copy' menu option
+        passwordCell.longPressAtPoint(centerOfCell, duration: 2)
+        tester().waitForViewWithAccessibilityLabel("Copy")
+        tester().tapViewWithAccessibilityLabel("Copy")
+
+        XCTAssertEqual(UIPasteboard.generalPasteboard().string, "passworda0")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+        closeLoginManager()
+    }
+
+    func testDetailWebsiteMenuOptions() {
+        openLoginManager()
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().waitForViewWithAccessibilityLabel("password, passworda0")
+
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+        let websiteCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! LoginTableViewCell
+
+        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        let centerOfCell = CGPoint(x: websiteCell.frame.width / 2, y: websiteCell.frame.height / 2)
+
+        // Tap the 'Copy' menu option
+        websiteCell.longPressAtPoint(centerOfCell, duration: 2)
+        tester().waitForViewWithAccessibilityLabel("Copy")
+        tester().tapViewWithAccessibilityLabel("Copy")
+
+        XCTAssertEqual(UIPasteboard.generalPasteboard().string, "http://a0.com")
+
+        // Tap the 'Open & Fill' menu option - just checks to make sure we navigate to the web page
+        websiteCell.longPressAtPoint(centerOfCell, duration: 2)
+        tester().waitForViewWithAccessibilityLabel("Open & Fill")
+        tester().tapViewWithAccessibilityLabel("Open & Fill")
+
+        tester().waitForTimeInterval(2)
+        tester().waitForViewWithAccessibilityLabel("a0.com")
+
+        BrowserUtils.resetToAboutHome(tester())
     }
 }
