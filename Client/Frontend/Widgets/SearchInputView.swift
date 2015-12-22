@@ -20,7 +20,9 @@ private struct SearchInputViewUX {
 
     func searchInputView(searchView: SearchInputView, didChangeTextTo text: String)
 
-    func searchInputViewDidClose(searchView: SearchInputView)
+    func searchInputViewBeganEditing(searchView: SearchInputView)
+
+    func searchInputViewFinishedEditing(searchView: SearchInputView)
 }
 
 class SearchInputView: UIView {
@@ -83,7 +85,7 @@ class SearchInputView: UIView {
         return view
     }()
 
-    private var isEditing = false {
+    private(set) var isEditing = false {
         didSet {
             if isEditing {
                 overlay.hidden = true
@@ -174,12 +176,13 @@ extension SearchInputView {
     @objc private func SELtappedSearch() {
         isEditing = true
         inputField.becomeFirstResponder()
+        delegate?.searchInputViewBeganEditing(self)
     }
 
     @objc private func SELtappedClose() {
         isEditing = false
+        delegate?.searchInputViewFinishedEditing(self)
         inputField.text = nil
-        delegate?.searchInputViewDidClose(self)
         inputField.resignFirstResponder()
     }
 
@@ -195,6 +198,7 @@ extension SearchInputView: UITextFieldDelegate {
         // If there is no text, go back to showing the title view
         if (textField.text?.characters.count ?? 0) == 0 {
             isEditing = false
+            delegate?.searchInputViewFinishedEditing(self)
         }
     }
 }

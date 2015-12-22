@@ -16,16 +16,31 @@ private struct LoginListUX {
     static let selectionButtonBackground = UIConstants.HighlightBlue
 }
 
+private extension UITableView {
+    var allIndexPaths: [NSIndexPath] {
+        return (0..<self.numberOfSections).flatMap { sectionNum in
+            (0..<self.numberOfRowsInSection(sectionNum)).map { NSIndexPath(forRow: $0, inSection: sectionNum) }
+        }
+    }
+}
+
 private let LoginCellIdentifier = "LoginCell"
 
 class LoginListViewController: UIViewController {
 
-    private var loginDataSource: LoginCursorDataSource = LoginCursorDataSource()
-    private var loginSearchController: LoginSearchController? = nil
+    private lazy var loginSelectionController: ListSelectionController = {
+        return ListSelectionController(tableView: self.tableView)
+    }()
+
+    private lazy var loginDataSource: LoginCursorDataSource = {
+        return LoginCursorDataSource()
+    }()
 
     private let profile: Profile
 
     private let searchView = SearchInputView()
+
+    private var activeLoginQuery: Success?
 
     // Titles for selection/deselect buttons
     private let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Title for deselecting all selected logins")
@@ -65,13 +80,8 @@ class LoginListViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen")
-        loginSearchController = LoginSearchController(
-            profile: self.profile,
-            dataSource: loginDataSource,
-            tableView: tableView)
 
-        searchView.delegate = loginSearchController
-
+        searchView.delegate = self
         tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
 
         view.addSubview(searchView)
@@ -102,21 +112,27 @@ class LoginListViewController: UIViewController {
         super.viewWillAppear(animated)
         tableView.accessibilityIdentifier = "Login List"
         tableView.dataSource = loginDataSource
-        tableView.allowsSelectionDuringEditing = true
+        tableView.allowsMultipleSelectionDuringEditing = true
         tableView.delegate = self
         tableView.tableFooterView = UIView()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        profile.logins.getAllLogins().uponQueue(dispatch_get_main_queue()) { result in
-            self.loginDataSource.cursor = result.successValue
-            self.tableView.reloadData()
+        // If we are editing the search view, use the search term query instead
+        if searchView.isEditing {
+            searchLoginsWithText(searchView.inputField.text ?? "")
+        } else {
+            activeLoginQuery = profile.logins.getAllLogins().bindQueue(dispatch_get_main_queue()) { result in
+                self.loginDataSource.cursor = result.successValue
+                self.tableView.reloadData()
+                return succeed()
+            }
         }
     }
 
     func toggleDeleteBarButton() {
         // Show delete bar button item if we have selected any items
-        if selectedIndexPaths.count > 0 {
+        if loginSelectionController.selectedCount > 0 {
             if (navigationItem.rightBarButtonItem == nil) {
                 navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Delete", style: .Plain, target: self, action: "SELdelete")
                 navigationItem.rightBarButtonItem?.tintColor = UIColor.redColor()
@@ -127,7 +143,7 @@ class LoginListViewController: UIViewController {
     }
 
     func toggleSelectionTitle() {
-        if selectedIndexPaths.count == loginDataSource.cursor?.count {
+        if loginSelectionController.selectedCount == loginDataSource.cursor?.count {
             selectionButton.setTitle(deselectAllTitle, forState: .Normal)
         } else {
             selectionButton.setTitle(selectAllTitle, forState: .Normal)
@@ -143,18 +159,16 @@ extension LoginListViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "SELcancel")
         selectionButtonHeightConstraint?.updateOffset(UIConstants.ToolbarHeight)
         self.view.layoutIfNeeded()
-        tableView.editing = true
-        tableView.reloadData()
+        tableView.setEditing(true, animated: true)
     }
 
     func SELcancel() {
-        selectedIndexPaths = []
         selectionButtonHeightConstraint?.updateOffset(0)
         self.view.layoutIfNeeded()
-        tableView.editing = false
+        loginSelectionController.deselectAll()
+        tableView.setEditing(false, animated: true)
         navigationItem.leftBarButtonItem = nil
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
-        tableView.reloadData()
     }
 
     func SELdelete() {
@@ -166,18 +180,23 @@ extension LoginListViewController {
 
     func SELdidTapSelectionButton() {
         // If we haven't selected everything yet, select all
-        if selectedIndexPaths.count < loginDataSource.cursor?.count {
-            let indexPaths = (0..<tableView.numberOfSections).flatMap { sectionNum in
-                (0..<self.tableView.numberOfRowsInSection(sectionNum)).map { NSIndexPath(forRow: $0, inSection: sectionNum) }
+        if loginSelectionController.selectedCount < loginDataSource.cursor?.count {
+            // Find all unselected indexPaths
+            let unselectedPaths = tableView.allIndexPaths.filter { indexPath in
+                return !loginSelectionController.indexPathIsSelected(indexPath)
             }
-
-            selectedIndexPaths.removeAll()
-            selectedIndexPaths += indexPaths
+            loginSelectionController.selectIndexPaths(unselectedPaths)
+            unselectedPaths.forEach { indexPath in
+                self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
+            }
         }
 
         // If everything has been selected, deselect all
         else {
-            selectedIndexPaths.removeAll()
+            loginSelectionController.deselectAll()
+            tableView.allIndexPaths.forEach { indexPath in
+                self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            }
         }
 
         toggleSelectionTitle()
@@ -185,6 +204,7 @@ extension LoginListViewController {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension LoginListViewController: UITableViewDelegate {
 
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -202,13 +222,7 @@ extension LoginListViewController: UITableViewDelegate {
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if tableView.editing {
-            if let foundSelectedPath = (selectedIndexPaths.filter { $0.row == indexPath.row && $0.section == indexPath.section }).first,
-               let indexToRemove = selectedIndexPaths.indexOf(foundSelectedPath) {
-                selectedIndexPaths.removeAtIndex(indexToRemove)
-            } else {
-                selectedIndexPaths.append(indexPath)
-            }
-
+            loginSelectionController.selectIndexPath(indexPath)
             toggleSelectionTitle()
             toggleDeleteBarButton()
         } else {
@@ -218,8 +232,17 @@ extension LoginListViewController: UITableViewDelegate {
             navigationController?.pushViewController(detailViewController, animated: true)
         }
     }
+
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        if tableView.editing {
+            loginSelectionController.deselectIndexPath(indexPath)
+            toggleSelectionTitle()
+            toggleDeleteBarButton()
+        }
+    }
 }
 
+// MARK: - KeyboardHelperDelegate
 extension LoginListViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
@@ -235,44 +258,85 @@ extension LoginListViewController: KeyboardHelperDelegate {
     }
 }
 
-/// Controller that handles interactions with the search widget and updating the data source for searching
-private class LoginSearchController: NSObject, SearchInputViewDelegate {
-
-    private let profile: Profile
-
-    private var activeSearchDeferred: Success?
-
-    private unowned let dataSource: LoginCursorDataSource
-
-    private unowned let tableView: UITableView
-
-    init(profile: Profile, dataSource: LoginCursorDataSource, tableView: UITableView) {
-        self.profile = profile
-        self.dataSource = dataSource
-        self.tableView = tableView
-        super.init()
-    }
+// MARK: - SearchInputViewDelegate
+extension LoginListViewController: SearchInputViewDelegate {
 
     @objc func searchInputView(searchView: SearchInputView, didChangeTextTo text: String) {
         searchLoginsWithText(text)
     }
 
-    @objc func searchInputViewDidClose(searchView: SearchInputView) {
-        activeSearchDeferred = profile.logins.getAllLogins()
+    @objc func searchInputViewBeganEditing(searchView: SearchInputView) {
+        // Trigger a cancel for editing
+        SELcancel()
+
+        // Hide the edit button while we're searching
+        navigationItem.rightBarButtonItem = nil
+        activeLoginQuery = profile.logins.getAllLogins()
+            .bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
+    }
+
+    @objc func searchInputViewFinishedEditing(searchView: SearchInputView) {
+        // Show the edit after we're done with the search
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
+        activeLoginQuery = profile.logins.getAllLogins()
             .bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
     }
 
     private func searchLoginsWithText(text: String) -> Success {
-        activeSearchDeferred = profile.logins.searchLoginsWithQuery(text)
+        activeLoginQuery = profile.logins.searchLoginsWithQuery(text)
             .bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
-        return activeSearchDeferred!
+        return activeLoginQuery!
     }
 
     private func reloadTableWithResult(result: Maybe<Cursor<LoginData>>) -> Success {
-        dataSource.cursor = result.successValue
+        loginDataSource.cursor = result.successValue
         tableView.reloadData()
-        activeSearchDeferred = nil
+        activeLoginQuery = nil
         return succeed()
+    }
+}
+
+/// Controller that keeps track of selected indexes
+private class ListSelectionController: NSObject {
+
+    private unowned let tableView: UITableView
+
+    private(set) var selectedIndexPaths = [NSIndexPath]()
+
+    var selectedCount: Int {
+        return selectedIndexPaths.count
+    }
+
+    init(tableView: UITableView) {
+        self.tableView = tableView
+        super.init()
+    }
+
+    func selectIndexPath(indexPath: NSIndexPath) {
+        selectedIndexPaths.append(indexPath)
+    }
+
+    func indexPathIsSelected(indexPath: NSIndexPath) -> Bool {
+        return selectedIndexPaths.contains(indexPath) { path1, path2 in
+            return path1.row == path2.row && path1.section == path2.section
+        }
+    }
+
+    func deselectIndexPath(indexPath: NSIndexPath) {
+        guard let foundSelectedPath = (selectedIndexPaths.filter { $0.row == indexPath.row && $0.section == indexPath.section }).first,
+              let indexToRemove = selectedIndexPaths.indexOf(foundSelectedPath) else {
+            return
+        }
+
+        selectedIndexPaths.removeAtIndex(indexToRemove)
+    }
+
+    func deselectAll() {
+        selectedIndexPaths.removeAll()
+    }
+
+    func selectIndexPaths(indexPaths: [NSIndexPath]) {
+        selectedIndexPaths += indexPaths
     }
 }
 
@@ -299,11 +363,6 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         let login = loginAtIndexPath(indexPath)
         cell.style = .IconAndBothLabels
         cell.updateCellWithLogin(login)
-
-        // If we're editing, disable the default selection highlight in favor of our checkmark icon
-        if tableView.editing {
-            cell.selectionStyle = .None
-        }
 
         return cell
     }
