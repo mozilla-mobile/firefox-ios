@@ -391,9 +391,9 @@ extension BrowserDB: Changeable {
     }
 
     /**
-     * Runs an array of sql commands. Note: These will all run in order in a transaction and will block
-     * the callers thread until they've finished. If any of them fail the operation will abort (no more
-     * commands will be run) and the transaction will rollback, returning a DatabaseError.
+     * Runs an array of SQL commands. Note: These will all run in order in a transaction and will block
+     * the caller's thread until they've finished. If any of them fail the operation will abort (no more
+     * commands will be run) and the transaction will roll back, returning a DatabaseError.
      */
     func run(commands: [(sql: String, args: Args?)]) -> Success {
         var err: NSError? = nil
