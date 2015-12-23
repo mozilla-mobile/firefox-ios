@@ -398,6 +398,10 @@ extension BrowserDB: Changeable {
      * commands will be run) and the transaction will roll back, returning a DatabaseError.
      */
     func run(commands: [(sql: String, args: Args?)]) -> Success {
+        if commands.isEmpty {
+            return succeed()
+        }
+
         var err: NSError? = nil
         self.transaction(&err) { (conn, err) -> Bool in
             for (sql, args) in commands {
