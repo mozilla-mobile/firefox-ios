@@ -161,6 +161,15 @@ public struct BookmarkRoots {
 
     public static let FakeDesktopFolderGUID =  "desktop_____"   // Pseudo. Never mentioned in a real record.
 
+    public static let All = Set<GUID>([
+        BookmarkRoots.RootGUID,
+        BookmarkRoots.MobileFolderGUID,
+        BookmarkRoots.MenuFolderGUID,
+        BookmarkRoots.ToolbarFolderGUID,
+        BookmarkRoots.UnfiledFolderGUID,
+        BookmarkRoots.FakeDesktopFolderGUID,
+    ])
+
     /**
      * Sync records are a horrible mess of Places-native GUIDs and Sync-native IDs.
      * For example:
