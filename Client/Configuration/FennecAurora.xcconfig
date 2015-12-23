@@ -15,3 +15,5 @@ INCLUDE_SETTINGS_BUNDLE = YES
 ADJUST_ENVIRONMENT =
 ADJUST_APP_TOKEN =
 
+// To enable a feature using a defined feature flag in FeatureFlags, add the variable to the variable list below.
+MOZ_FEATURE_FLAGS =
