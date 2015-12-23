@@ -336,8 +336,9 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         }
     }
 
-    // TODO: rewrite me.
-    public func clearBookmarks() -> Success {
+    // TODO: rewrite me. This is only used from tests.
+    func clearBookmarks() -> Success {
+        log.warning("CALLING clearBookmarks -- this should only be used from tests.")
         return self.db.run([
             ("DELETE FROM \(TableBookmarksLocal) WHERE parentid IS NOT ?", [BookmarkRoots.RootGUID]),
             self.favicons.getCleanupCommands()
@@ -1007,7 +1008,7 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
         return self.local.removeByURL(url)
     }
 
-    public func clearBookmarks() -> Success {
+    func clearBookmarks() -> Success {
         return self.local.clearBookmarks()
     }
 }
