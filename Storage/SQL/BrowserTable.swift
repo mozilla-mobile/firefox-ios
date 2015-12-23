@@ -28,6 +28,9 @@ let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
 let TableQueuedTabs = "queue"
 
+let ViewBookmarksLocalOnMirror = "view_bookmarksLocal_on_mirror"
+let ViewBookmarksLocalStructureOnMirror = "view_bookmarksLocalStructure_on_mirror"
+
 let ViewWidestFaviconsForSites = "view_favicons_widest"
 let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
 let ViewIconForURL = "view_icon_for_url"
@@ -62,6 +65,8 @@ private let AllViews: [String] = [
     ViewHistoryIDsWithWidestFavicons,
     ViewWidestFaviconsForSites,
     ViewIconForURL,
+    ViewBookmarksLocalOnMirror,
+    ViewBookmarksLocalStructureOnMirror,
 ]
 
 private let AllIndices: [String] = [
@@ -81,7 +86,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 12
+    static let DefaultVersion = 13
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -275,6 +280,25 @@ public class BrowserTable: Table {
         return sql
     }
 
+    private let localBookmarksView =
+    "CREATE VIEW \(ViewBookmarksLocalOnMirror) AS " +
+    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID, 0 AS is_overridden " +
+    "FROM \(TableBookmarksMirror) WHERE is_overridden IS NOT 1 " +
+    "UNION ALL " +
+    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID, 1 AS is_overridden " +
+    "FROM \(TableBookmarksLocal) WHERE is_deleted IS NOT 1"
+
+    // TODO: phrase this without the subselect…
+    private let localBookmarksStructureView =
+    "CREATE VIEW \(ViewBookmarksLocalStructureOnMirror) AS " +
+    "SELECT parent, child, idx, 1 AS is_overridden FROM \(TableBookmarksLocalStructure) " +
+    "WHERE " +
+    "((SELECT is_deleted FROM \(TableBookmarksLocal) WHERE guid = parent) IS NOT 1) " +
+    "UNION ALL " +
+    "SELECT parent, child, idx, 0 AS is_overridden FROM \(TableBookmarksMirrorStructure) " +
+    "WHERE " +
+    "((SELECT is_overridden FROM \(TableBookmarksMirror) WHERE guid = parent) IS NOT 1) "
+
     func create(db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
@@ -405,6 +429,8 @@ public class BrowserTable: Table {
             iconForURL,
             self.queueTableCreate,
             self.topSitesTableCreate,
+            self.localBookmarksView,
+            self.localBookmarksStructureView,
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -574,6 +600,14 @@ public class BrowserTable: Table {
             }
             // TODO: trigger a sync?
         }
+
+        // Add views for the overlays.
+        if from < 13 && to >= 13 {
+            if !self.run(db, queries: [self.localBookmarksView, self.localBookmarksStructureView]) {
+                return false
+            }
+        }
+
 
         return true
     }
