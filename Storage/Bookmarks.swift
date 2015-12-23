@@ -345,7 +345,6 @@ public protocol BookmarksModelFactory {
     func isBookmarked(url: String) -> Deferred<Maybe<Bool>>
     func removeByGUID(guid: GUID) -> Success
     func removeByURL(url: String) -> Success
-    func clearBookmarks() -> Success
 }
 
 /*
