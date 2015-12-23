@@ -193,4 +193,160 @@ class LoginManagerTests: KIFTestCase {
 
         BrowserUtils.resetToAboutHome(tester())
     }
+
+    func testListSelection() {
+        openLoginManager()
+
+        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().waitForAnimationsToFinish()
+
+        // Select one entry
+        let firstIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+        tester().tapRowAtIndexPath(firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+        tester().waitForViewWithAccessibilityLabel("Delete")
+
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
+        let firstCell = list.cellForRowAtIndexPath(firstIndexPath)!
+        XCTAssertTrue(firstCell.selected)
+
+        // Deselect first row
+        tester().tapRowAtIndexPath(firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+        XCTAssertFalse(firstCell.selected)
+
+        // Cancel
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().waitForViewWithAccessibilityLabel("Edit")
+
+        // Select multiple logins
+        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().waitForAnimationsToFinish()
+
+        let pathsToSelect = (0..<5).map { NSIndexPath(forRow: $0, inSection: 0) }
+        pathsToSelect.forEach { path in
+            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+        }
+        tester().waitForViewWithAccessibilityLabel("Delete")
+
+        pathsToSelect.forEach { path in
+            XCTAssertTrue(list.cellForRowAtIndexPath(firstIndexPath)!.selected)
+        }
+
+        // Deselect only first row
+        tester().tapRowAtIndexPath(firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+        XCTAssertFalse(firstCell.selected)
+
+        // Make sure delete is still showing
+        tester().waitForViewWithAccessibilityLabel("Delete")
+
+        // Deselect the rest
+        let pathsWithoutFirst = pathsToSelect[1..<pathsToSelect.count]
+        pathsWithoutFirst.forEach { path in
+            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+        }
+
+        // Cancel
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().waitForViewWithAccessibilityLabel("Edit")
+
+        tester().tapViewWithAccessibilityLabel("Edit")
+
+        // Select all using select all button
+        tester().tapViewWithAccessibilityLabel("Select All")
+        list.visibleCells.forEach { cell in
+            XCTAssertTrue(cell.selected)
+        }
+        tester().waitForViewWithAccessibilityLabel("Delete")
+
+        // Deselect all using button
+        tester().tapViewWithAccessibilityLabel("Deselect All")
+        list.visibleCells.forEach { cell in
+            XCTAssertFalse(cell.selected)
+        }
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().waitForViewWithAccessibilityLabel("Edit")
+
+        // Finally, test selections get persisted after cells recycle
+        tester().tapViewWithAccessibilityLabel("Edit")
+        let firstInEachSection = (0..<3).map { NSIndexPath(forRow: 0, inSection: $0) }
+        firstInEachSection.forEach { path in
+            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+        }
+
+        // Go up, down and back up to for some recyling
+        tester().scrollViewWithAccessibilityIdentifier("Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
+        tester().scrollViewWithAccessibilityIdentifier("Login List", byFractionOfSizeHorizontal: 0, vertical: -1)
+        tester().scrollViewWithAccessibilityIdentifier("Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
+
+        XCTAssertTrue(list.cellForRowAtIndexPath(firstInEachSection[0])!.selected)
+
+        firstInEachSection.forEach { path in
+            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+        }
+
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().waitForViewWithAccessibilityLabel("Edit")
+
+        closeLoginManager()
+    }
+
+    func testListSelectAndDelete() {
+        openLoginManager()
+
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
+        let oldLoginCount = countOfRowsInTableView(list)
+
+        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().waitForAnimationsToFinish()
+
+        // Select and delete one entry
+        let firstIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+        tester().tapRowAtIndexPath(firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+        tester().waitForViewWithAccessibilityLabel("Delete")
+
+        let firstCell = list.cellForRowAtIndexPath(firstIndexPath)!
+        XCTAssertTrue(firstCell.selected)
+
+        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForAnimationsToFinish()
+
+        tester().waitForViewWithAccessibilityLabel("Are you sure?")
+        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForAnimationsToFinish()
+
+        tester().waitForViewWithAccessibilityLabel("Edit")
+
+        var newLoginCount = countOfRowsInTableView(list)
+        XCTAssertEqual(oldLoginCount - 1, newLoginCount)
+
+        // Select and delete multiple entries
+        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().waitForAnimationsToFinish()
+
+        let multiplePaths = (0..<3).map { NSIndexPath(forRow: $0, inSection: 0) }
+
+        multiplePaths.forEach { path in
+            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+        }
+
+        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForAnimationsToFinish()
+
+        tester().waitForViewWithAccessibilityLabel("Are you sure?")
+        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForAnimationsToFinish()
+
+        tester().waitForViewWithAccessibilityLabel("Edit")
+
+        newLoginCount = countOfRowsInTableView(list)
+        XCTAssertEqual(oldLoginCount - 4, newLoginCount)
+        closeLoginManager()
+    }
+
+    private func countOfRowsInTableView(tableView: UITableView) -> Int {
+        var count = 0
+        (0..<tableView.numberOfSections).forEach { section in
+            count += tableView.numberOfRowsInSection(section)
+        }
+        return count
+    }
 }
