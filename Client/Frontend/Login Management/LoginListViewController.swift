@@ -172,9 +172,31 @@ extension LoginListViewController {
     }
 
     func SELdelete() {
-        let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ _ in
+        let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+
             // Delete here
+            let loginsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
+                self.loginDataSource.loginAtIndexPath(indexPath)
+            }
+
+            let now = NSDate.now()
+            let deleteDeferreds = loginsToDelete.map { login in
+                return self.profile.logins.deleteByGUID(login.guid, deletedAt: now)
+            }
+
+            all(deleteDeferreds).upon { _ in
+                self.activeLoginQuery = self.profile.logins.getAllLogins().bindQueue(dispatch_get_main_queue()) { result in
+                    // Cancel out of editing
+                    self.SELcancel()
+
+                    self.loginDataSource.cursor = result.successValue
+                    self.tableView.reloadData()
+                    return succeed()
+                }
+            }
+
         }, hasAccount: profile.hasAccount())
+
         presentViewController(deleteAlert, animated: true, completion: nil)
     }
 
@@ -226,6 +248,7 @@ extension LoginListViewController: UITableViewDelegate {
             toggleSelectionTitle()
             toggleDeleteBarButton()
         } else {
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
             let login = loginDataSource.loginAtIndexPath(indexPath)
             let detailViewController = LoginDetailViewController(profile: profile, login: login)
             detailViewController.settingsDelegate = settingsDelegate
