@@ -207,27 +207,13 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 
         precondition(excludingGUIDs?.count < 100, "Sanity bound for the number of GUIDs we can exclude.")
 
-        let childrenOfLocallyOverridden =
-        "SELECT parent, child AS guid, idx FROM \(TableBookmarksLocalStructure) WHERE parent = ?"
+        let structure =
+        "SELECT parent, child AS guid, idx FROM \(ViewBookmarksLocalStructureOnMirror) " +
+        "WHERE parent = ?"
 
-        // This could be a view: a join between structure and mirror.
-        let childrenOfNotOverridden =
-        "SELECT parent, child AS guid, idx FROM \(TableBookmarksMirrorStructure) " +
-        "WHERE " +
-        "((SELECT is_overridden FROM \(TableBookmarksMirror) WHERE guid = ?) IS NOT 1) " +
-        "AND parent = ?"
-
-        // This could be a view.
-        let either =
-        childrenOfLocallyOverridden + " UNION ALL " + childrenOfNotOverridden + " ORDER BY idx ASC"
-
-        // This could be a view.
         let values =
         "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID " +
-        "FROM \(TableBookmarksMirror) WHERE is_overridden IS NOT 1 " +
-        "UNION ALL " +
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID " +
-        "FROM \(TableBookmarksLocal) WHERE is_deleted IS NOT 1"
+        "FROM \(ViewBookmarksLocalOnMirror)"
 
         // We exclude queries and dynamic containers, because we can't
         // usefully display them.
@@ -238,10 +224,10 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         let args: Args
         let exclusion: String
         if let excludingGUIDs = excludingGUIDs {
-            args = ([parentGUID, parentGUID, parentGUID] + excludingGUIDs).map { $0 as AnyObject }
+            args = ([parentGUID] + excludingGUIDs).map { $0 as AnyObject }
             exclusion = "\(typeFilter) AND vals.guid NOT IN " + BrowserDB.varlist(excludingGUIDs.count)
         } else {
-            args = [parentGUID, parentGUID, parentGUID]
+            args = [parentGUID]
             exclusion = typeFilter
         }
 
@@ -252,7 +238,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         "       vals.faviconID AS faviconID, " +
         "       structure.idx AS idx, " +
         "       structure.parent AS _parent " +
-        "FROM (\(either)) AS structure JOIN (\(values)) AS vals " +
+        "FROM (\(structure)) AS structure JOIN (\(values)) AS vals " +
         "ON vals.guid = structure.guid " +
         "WHERE " + exclusion
 
