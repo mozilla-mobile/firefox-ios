@@ -177,8 +177,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let it = self.source?.current[indexPath.row]
-        if it is BookmarkSeparator {
+        if let it = self.source?.current[indexPath.row] where it is BookmarkSeparator {
             return BookmarksPanelUX.SeparatorRowHeight
         }
 
