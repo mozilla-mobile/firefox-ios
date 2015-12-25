@@ -336,7 +336,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         }
     }
 
-    // TODO: rewrite me. This is only used from tests.
+    // This is only used from tests.
     func clearBookmarks() -> Success {
         log.warning("CALLING clearBookmarks -- this should only be used from tests.")
         return self.db.run([
