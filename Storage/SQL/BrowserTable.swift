@@ -241,7 +241,7 @@ public class BrowserTable: Table {
         // Shared fields.
         "( id INTEGER PRIMARY KEY AUTOINCREMENT" +
         ", guid TEXT NOT NULL UNIQUE" +
-        ", type TINYINT NOT NULL" +                    // Type enum. TODO: BookmarkNodeType needs to be extended.
+        ", type TINYINT NOT NULL" +                    // Type enum.
 
         // Record/envelope metadata that'll allow us to do merges.
         ", is_deleted TINYINT NOT NULL DEFAULT 0" +    // Boolean
@@ -269,7 +269,6 @@ public class BrowserTable: Table {
      * referenced child nodes to exist yet!
      */
     func getBookmarksStructureTableCreationStringForTable(table: String, referencingMirror mirror: String) -> String {
-        // TODO: index me.
         let sql =
         "CREATE TABLE IF NOT EXISTS \(table) " +
         "( parent TEXT NOT NULL REFERENCES \(mirror)(guid) ON DELETE CASCADE" +
