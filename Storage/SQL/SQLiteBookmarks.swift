@@ -465,10 +465,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
                         "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.New.rawValue)"
 
                         // If a bookmark is Changed, mark it as deleted and bump its modified time.
-                        // TODO: we should also drop non-metadata fields!
-                        let markChanged =
-                        "UPDATE \(TableBookmarksLocal) SET is_deleted = 1, local_modified = \(NSDate.now()) " +
-                        "WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.Changed.rawValue)"
+                        let markChanged = self.getMarkDeletedSQLWithWhereFragment("guid IN \(childVarlist)")
 
                         return self.db.run([
                             (deleteStructure, topArgs),
@@ -479,6 +476,27 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         }
     }
 
+    private func getMarkDeletedSQLWithWhereFragment(whereFragment: String) -> String {
+        let sql =
+        "UPDATE \(TableBookmarksLocal) SET" +
+        "  is_deleted = 1" +
+        ", local_modified = \(NSDate.now())" +
+        ", bmkUri = NULL" +
+        ", feedUri = NULL" +
+        ", siteUri = NULL" +
+        ", pos = NULL" +
+        ", title = NULL" +
+        ", tags = NULL" +
+        ", keyword = NULL" +
+        ", description = NULL" +
+        ", parentid = NULL" +
+        ", parentName = NULL" +
+        ", folderName = NULL" +
+        ", queryId = NULL" +
+        " WHERE \(whereFragment) AND sync_status = \(SyncStatus.Changed.rawValue)"
+
+        return sql
+    }
     /**
      * This depends on the record's parent already being overridden if necessary.
      */
@@ -497,9 +515,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         "DELETE FROM \(TableBookmarksLocal) WHERE guid = ? AND sync_status = \(SyncStatus.New.rawValue)"
 
         // If the bookmark is Changed, mark it as deleted and bump its modified time.
-        let markChanged =
-        "UPDATE \(TableBookmarksLocal) SET is_deleted = 1, local_modified = \(NSDate.now()) " +
-        "WHERE guid = ? AND sync_status = \(SyncStatus.Changed.rawValue)"
+        let markChanged = self.getMarkDeletedSQLWithWhereFragment("guid = ?")
 
         // Its parent must be either New or Changed, so we don't need to re-mirror it.
         // TODO: bump the parent's modified time, because the child list changed?
