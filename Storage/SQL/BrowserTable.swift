@@ -28,6 +28,8 @@ let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
 let TableQueuedTabs = "queue"
 
+let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
+let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
 let ViewBookmarksLocalOnMirror = "view_bookmarksLocal_on_mirror"
 let ViewBookmarksLocalStructureOnMirror = "view_bookmarksLocalStructure_on_mirror"
 
@@ -41,6 +43,7 @@ let IndexVisitsSiteIDIsLocalDate = "idx_visits_siteID_is_local_date"   // Added 
 let IndexBookmarksMirrorStructureParentIdx = "idx_bookmarksMirrorStructure_parent_idx"   // Added in v10.
 let IndexBookmarksLocalStructureParentIdx = "idx_bookmarksLocalStructure_parent_idx"     // Added in v12.
 let IndexBookmarksBufferStructureParentIdx = "idx_bookmarksBufferStructure_parent_idx"   // Added in v12.
+let IndexBookmarksMirrorStructureChild = "idx_bookmarksMirrorStructure_child"            // Added in v14.
 
 private let AllTables: [String] = [
     TableDomains,
@@ -65,6 +68,8 @@ private let AllViews: [String] = [
     ViewHistoryIDsWithWidestFavicons,
     ViewWidestFaviconsForSites,
     ViewIconForURL,
+    ViewBookmarksBufferOnMirror,
+    ViewBookmarksBufferStructureOnMirror,
     ViewBookmarksLocalOnMirror,
     ViewBookmarksLocalStructureOnMirror,
 ]
@@ -75,6 +80,7 @@ private let AllIndices: [String] = [
     IndexBookmarksBufferStructureParentIdx,
     IndexBookmarksLocalStructureParentIdx,
     IndexBookmarksMirrorStructureParentIdx,
+    IndexBookmarksMirrorStructureChild,
 ]
 
 private let AllTablesIndicesAndViews: [String] = AllViews + AllIndices + AllTables
@@ -86,7 +92,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 13
+    static let DefaultVersion = 14
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -159,12 +165,15 @@ public class BrowserTable: Table {
             BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, BookmarkRoots.RootGUID, status, now,
         ]
 
-        let structureArgs: Args = [
-            BookmarkRoots.RootGUID, BookmarkRoots.MenuFolderGUID,    0,
-            BookmarkRoots.RootGUID, BookmarkRoots.ToolbarFolderGUID, 1,
-            BookmarkRoots.RootGUID, BookmarkRoots.UnfiledFolderGUID, 2,
-            BookmarkRoots.RootGUID, BookmarkRoots.MobileFolderGUID,  3,
-        ]
+        // Compute these args using the sequence in RootChildren, rather than hard-coding.
+        var idx = 0
+        var structureArgs = Args()
+        structureArgs.reserveCapacity(BookmarkRoots.RootChildren.count * 3)
+        BookmarkRoots.RootChildren.forEach { guid in
+            structureArgs.append(BookmarkRoots.RootGUID)
+            structureArgs.append(guid)
+            structureArgs.append(idx++)
+        }
 
         // Note that we specify an empty title and parentName for these records. We should
         // never need a parentName -- we don't use content-based reconciling or
@@ -173,19 +182,12 @@ public class BrowserTable: Table {
 
         let local =
         "INSERT INTO \(TableBookmarksLocal) " +
-        "(id, guid, type, parentid, title, parentName, sync_status, local_modified) VALUES" +
-        "  (?, ?, ?, ?, '', '', ?, ?)" +    // Root
-        ", (?, ?, ?, ?, '', '', ?, ?)" +    // Mobile
-        ", (?, ?, ?, ?, '', '', ?, ?)" +    // Menu
-        ", (?, ?, ?, ?, '', '', ?, ?)" +    // Toolbar
-        ", (?, ?, ?, ?, '', '', ?, ?)"      // Unsorted
+        "(id, guid, type, parentid, title, parentName, sync_status, local_modified) VALUES " +
+        Array(count: BookmarkRoots.RootChildren.count + 1, repeatedValue: "(?, ?, ?, ?, '', '', ?, ?)").joinWithSeparator(", ")
 
         let structure =
-        "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES" +
-        "  (?, ?, ?)" +      // Menu
-        ", (?, ?, ?)" +      // Toolbar
-        ", (?, ?, ?)" +      // Unsorted
-        ", (?, ?, ?)"        // Mobile
+        "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES " +
+        Array(count: BookmarkRoots.RootChildren.count, repeatedValue: "(?, ?, ?)").joinWithSeparator(", ")
 
         return self.run(db, queries: [(local, localArgs), (structure, structureArgs)])
     }
@@ -278,6 +280,57 @@ public class BrowserTable: Table {
 
         return sql
     }
+
+    private let bufferBookmarksView =
+    "CREATE VIEW \(ViewBookmarksBufferOnMirror) AS " +
+    "SELECT" +
+    "  -1 AS id" +
+    ", mirror.guid AS guid" +
+    ", mirror.type AS type" +
+    ", mirror.is_deleted AS is_deleted" +
+    ", mirror.parentid AS parentid" +
+    ", mirror.parentName AS parentName" +
+    ", mirror.feedUri AS feedUri" +
+    ", mirror.pos AS pos" +
+    ", mirror.title AS title" +
+    ", mirror.bmkUri AS bmkUri" +
+    ", mirror.folderName AS folderName" +
+    ", null AS faviconID" +
+    ", 0 AS is_overridden" +
+
+    // LEFT EXCLUDING JOIN to get mirror records that aren't in the buffer.
+    // We don't have an is_overridden flag to help us here.
+    " FROM \(TableBookmarksMirror) mirror LEFT JOIN" +
+    " \(TableBookmarksBuffer) buffer ON mirror.guid = buffer.guid" +
+    " WHERE buffer.guid IS NULL" +
+    " UNION ALL " +
+    "SELECT" +
+    "  -1 AS id" +
+    ", guid" +
+    ", type" +
+    ", is_deleted" +
+    ", parentid" +
+    ", parentName" +
+    ", feedUri" +
+    ", pos" +
+    ", title" +
+    ", bmkUri" +
+    ", folderName" +
+    ", null AS faviconID" +
+    ", 1 AS is_overridden" +
+    " FROM \(TableBookmarksBuffer) WHERE is_deleted IS 0"
+
+    // TODO: phrase this without the subselect…
+    private let bufferBookmarksStructureView =
+    // We don't need to exclude deleted parents, because we drop those from the structure
+    // table when we see them.
+    "CREATE VIEW \(ViewBookmarksBufferStructureOnMirror) AS " +
+    "SELECT parent, child, idx, 1 AS is_overridden FROM \(TableBookmarksBufferStructure) " +
+    "UNION ALL " +
+
+    // Exclude anything from the mirror that's present in the buffer -- dynamic is_overridden.
+    "SELECT parent, child, idx, 0 AS is_overridden FROM \(TableBookmarksMirrorStructure) " +
+    "LEFT JOIN \(TableBookmarksBuffer) ON parent = guid WHERE guid IS NULL"
 
     private let localBookmarksView =
     "CREATE VIEW \(ViewBookmarksLocalOnMirror) AS " +
@@ -405,6 +458,8 @@ public class BrowserTable: Table {
             "ON \(TableBookmarksBufferStructure) (parent, idx)"
         let indexMirrorStructureParentIdx = "CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureParentIdx) " +
             "ON \(TableBookmarksMirrorStructure) (parent, idx)"
+        let indexMirrorStructureChild = "CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureChild) " +
+            "ON \(TableBookmarksMirrorStructure) (child)"
 
         let queries: [String] = [
             self.domainsTableCreate,
@@ -420,6 +475,7 @@ public class BrowserTable: Table {
             indexBufferStructureParentIdx,
             indexLocalStructureParentIdx,
             indexMirrorStructureParentIdx,
+            indexMirrorStructureChild,
             faviconSites,
             indexShouldUpload,
             indexSiteIDDate,
@@ -430,6 +486,8 @@ public class BrowserTable: Table {
             self.topSitesTableCreate,
             self.localBookmarksView,
             self.localBookmarksStructureView,
+            self.bufferBookmarksView,
+            self.bufferBookmarksStructureView,
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -601,8 +659,16 @@ public class BrowserTable: Table {
         }
 
         // Add views for the overlays.
-        if from < 13 && to >= 13 {
-            if !self.run(db, queries: [self.localBookmarksView, self.localBookmarksStructureView]) {
+        if from < 14 && to >= 14 {
+            let indexMirrorStructureChild =
+            "CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureChild) " +
+            "ON \(TableBookmarksMirrorStructure) (child)"
+            if !self.run(db, queries: [
+                self.bufferBookmarksView,
+                self.bufferBookmarksStructureView,
+                self.localBookmarksView,
+                self.localBookmarksStructureView,
+                indexMirrorStructureChild]) {
                 return false
             }
         }
