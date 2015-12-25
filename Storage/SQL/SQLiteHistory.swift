@@ -532,8 +532,15 @@ extension SQLiteHistory: Favicons {
     }
 
     func getFaviconsForBookmarkedURL(url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
-        // TODO: query mirror bookmarks as well as local.
-        let sql = "SELECT \(TableFavicons).id AS id, \(TableFavicons).url AS url, \(TableFavicons).date AS date, \(TableFavicons).type AS type, \(TableFavicons).width AS width FROM \(TableFavicons), \(TableBookmarksLocal) WHERE \(TableBookmarksLocal).faviconID = \(TableFavicons).id AND \(TableBookmarksLocal).bmkUri IS ?"
+        let sql =
+        "SELECT " +
+        "  \(TableFavicons).id AS id" +
+        ", \(TableFavicons).url AS url" +
+        ", \(TableFavicons).date AS date" +
+        ", \(TableFavicons).type AS type" +
+        ", \(TableFavicons).width AS width" +
+        " FROM \(TableFavicons), \(ViewBookmarksLocalOnMirror) AS bm" +
+        " WHERE bm.faviconID = \(TableFavicons).id AND bm.bmkUri IS ?"
         let args: Args = [url]
         return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
     }
