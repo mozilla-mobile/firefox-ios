@@ -18,8 +18,10 @@ public extension Array {
         }
         return false
     }
+}
 
-    func every(f: (Element) -> Bool) -> Bool {
+public extension SequenceType {
+    func every(f: (Self.Generator.Element) -> Bool) -> Bool {
         for x in self {
             if !f(x) {
                 return false
