@@ -158,17 +158,16 @@ public class FxAClient10 {
         if json.isError {
             return nil
         }
-        if let uid = json["uid"].asString {
-            if let verified = json["verified"].asBool {
-                if let sessionToken = json["sessionToken"].asString {
-                    if let keyFetchToken = json["keyFetchToken"].asString {
-                        return FxALoginResponse(remoteEmail: "", uid: uid, verified: verified,
-                            sessionToken: sessionToken.hexDecodedData, keyFetchToken: keyFetchToken.hexDecodedData)
-                    }
-                }
-            }
+        
+        guard let uid = json["uid"].asString,
+            let verified = json["verified"].asBool,
+            let sessionToken = json["sessionToken"].asString,
+            let keyFetchToken = json["keyFetchToken"].asString else {
+                return nil
         }
-        return nil
+        
+        return FxALoginResponse(remoteEmail: "", uid: uid, verified: verified,
+            sessionToken: sessionToken.hexDecodedData, keyFetchToken: keyFetchToken.hexDecodedData)
     }
 
     private class func keysResponseFromJSON(keyRequestKey: NSData, json: JSON) -> FxAKeysResponse? {
