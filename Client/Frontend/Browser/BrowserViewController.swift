@@ -1027,6 +1027,8 @@ class BrowserViewController: UIViewController {
             self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
+            guard let webView = tabManager.selectedTab?.webView else { return }
+            webView.evaluateJavaScript("__firefox__.findDone()", completionHandler: nil)
             findInPageBar.removeFromSuperview()
             self.findInPageBar = nil
             updateViewConstraints()
@@ -1349,6 +1351,10 @@ extension BrowserViewController: BrowserDelegate {
         let sessionRestoreHelper = SessionRestoreHelper(browser: browser)
         sessionRestoreHelper.delegate = self
         browser.addHelper(sessionRestoreHelper, name: SessionRestoreHelper.name())
+
+        let findInPageHelper = FindInPageHelper(browser: browser)
+        findInPageHelper.delegate = self
+        browser.addHelper(findInPageHelper, name: FindInPageHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
@@ -2580,17 +2586,39 @@ protocol Themeable {
     func applyTheme(themeName: String)
 }
 
-extension BrowserViewController: FindInPageBarDelegate {
+extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate {
     func findInPage(findInPage: FindInPageBar, didTextChange text: String) {
+        find(text, function: "find")
     }
 
     func findInPage(findInPage: FindInPageBar, didFindNextWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findNext")
     }
 
     func findInPage(findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findPrevious")
     }
 
     func findInPageDidPressClose(findInPage: FindInPageBar) {
         updateFindInPageVisibility(visible: false)
+    }
+
+    private func find(text: String, function: String) {
+        guard let webView = tabManager.selectedTab?.webView else { return }
+
+        let escaped = text.stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
+                          .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+
+        webView.evaluateJavaScript("__firefox__.\(function)(\"\(escaped)\")", completionHandler: nil)
+    }
+
+    func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int) {
+        findInPageBar?.currentResult = currentResult
+    }
+
+    func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int) {
+        findInPageBar?.totalResults = totalResults
     }
 }
