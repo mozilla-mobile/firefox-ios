@@ -1078,6 +1078,8 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
         self.webViewContainerToolbar.hidden = true
+        updateFindInPageVisibility(visible: false)
+
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
 
         if let tab = tabManager.selectedTab {
@@ -1599,6 +1601,8 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
 
+        updateFindInPageVisibility(visible: false)
+
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
@@ -1666,6 +1670,8 @@ extension BrowserViewController: WKNavigationDelegate {
         if tabManager.selectedTab?.webView !== webView {
             return
         }
+
+        updateFindInPageVisibility(visible: false)
 
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
