@@ -50,6 +50,7 @@ class BrowserViewController: UIViewController {
     private var searchLoader: SearchLoader!
     private let snackBars = UIView()
     private let webViewContainerToolbar = UIView()
+    private var findInPageBar: FindInPageBar?
     private let findInPageContainer = UIView()
 
     // popover rotation handling
@@ -549,10 +550,11 @@ class BrowserViewController: UIViewController {
                 make.top.equalTo(self.header.snp_bottom)
             }
 
+            let findInPageHeight = (findInPageBar == nil) ? 0 : UIConstants.ToolbarHeight
             if let toolbar = self.toolbar {
-                make.bottom.equalTo(toolbar.snp_top)
+                make.bottom.equalTo(toolbar.snp_top).offset(-findInPageHeight)
             } else {
-                make.bottom.equalTo(self.view)
+                make.bottom.equalTo(self.view).offset(-findInPageHeight)
             }
         }
 
@@ -956,6 +958,7 @@ class BrowserViewController: UIViewController {
         var activities = [UIActivity]()
 
         let findInPageActivity = FindInPageActivity() {
+            self.updateFindInPageVisibility(visible: true)
         }
         activities.append(findInPageActivity)
 
@@ -996,6 +999,38 @@ class BrowserViewController: UIViewController {
         }
 
         self.presentViewController(controller, animated: true, completion: nil)
+    }
+
+    private func updateFindInPageVisibility(visible visible: Bool) {
+        if visible {
+            if findInPageBar == nil {
+                let findInPageBar = FindInPageBar()
+                self.findInPageBar = findInPageBar
+                findInPageBar.delegate = self
+                findInPageContainer.addSubview(findInPageBar)
+
+                findInPageBar.snp_makeConstraints { make in
+                    make.edges.equalTo(findInPageContainer)
+                    make.height.equalTo(UIConstants.ToolbarHeight)
+                }
+
+                updateViewConstraints()
+
+                // We make the find-in-page bar the first responder below, causing the keyboard delegates
+                // to fire. This, in turn, will animate the Find in Page container since we use the same
+                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
+                // constraints added above, however, so force a layout now to prevent these constraints
+                // from being lumped in with the keyboard animation.
+                findInPageBar.layoutIfNeeded()
+            }
+
+            self.findInPageBar?.becomeFirstResponder()
+        } else if let findInPageBar = self.findInPageBar {
+            findInPageBar.endEditing(true)
+            findInPageBar.removeFromSuperview()
+            self.findInPageBar = nil
+            updateViewConstraints()
+        }
     }
 }
 
@@ -2543,4 +2578,19 @@ class BlurWrapper: UIView {
 
 protocol Themeable {
     func applyTheme(themeName: String)
+}
+
+extension BrowserViewController: FindInPageBarDelegate {
+    func findInPage(findInPage: FindInPageBar, didTextChange text: String) {
+    }
+
+    func findInPage(findInPage: FindInPageBar, didFindNextWithText text: String) {
+    }
+
+    func findInPage(findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+    }
+
+    func findInPageDidPressClose(findInPage: FindInPageBar) {
+        updateFindInPageVisibility(visible: false)
+    }
 }
