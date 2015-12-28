@@ -65,8 +65,8 @@ class BrowserScrollingController: NSObject {
     private var contentOffset: CGPoint { return scrollView?.contentOffset ?? CGPointZero }
     private var contentSize: CGSize { return scrollView?.contentSize ?? CGSizeZero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
-    private var headerFrame: CGRect { return header?.frame ?? CGRectZero }
-    private var footerFrame: CGRect { return footer?.frame ?? CGRectZero }
+    private var topScrollHeight: CGFloat { return header?.frame.height ?? 0 }
+    private var bottomScrollHeight: CGFloat { return urlBar?.frame.height ?? 0 }
     private var snackBarsFrame: CGRect { return snackBars?.frame ?? CGRectZero }
 
     private var lastContentOffset: CGFloat = 0
@@ -79,7 +79,7 @@ class BrowserScrollingController: NSObject {
 
     func showToolbars(animated animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
         toolbarState = .Visible
-        let durationRatio = abs(headerTopOffset / headerFrame.height)
+        let durationRatio = abs(headerTopOffset / topScrollHeight)
         let actualDuration = NSTimeInterval(ToolbarBaseAnimationDuration * durationRatio)
         self.animateToolbarsWithOffsets(
             animated: animated,
@@ -92,13 +92,13 @@ class BrowserScrollingController: NSObject {
 
     func hideToolbars(animated animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
         toolbarState = .Collapsed
-        let durationRatio = abs((headerFrame.height + headerTopOffset) / headerFrame.height)
+        let durationRatio = abs((topScrollHeight + headerTopOffset) / topScrollHeight)
         let actualDuration = NSTimeInterval(ToolbarBaseAnimationDuration * durationRatio)
         self.animateToolbarsWithOffsets(
             animated: animated,
             duration: actualDuration,
-            headerOffset: -headerFrame.height,
-            footerOffset: footerFrame.height - snackBarsFrame.height,
+            headerOffset: -topScrollHeight,
+            footerOffset: bottomScrollHeight,
             alpha: 0,
             completion: completion)
     }
@@ -138,7 +138,7 @@ private extension BrowserScrollingController {
                     scrollWithDelta(delta)
                 }
 
-                if headerTopOffset == -headerFrame.height {
+                if headerTopOffset == -topScrollHeight {
                     toolbarState = .Collapsed
                 } else if headerTopOffset == 0 {
                     toolbarState = .Visible
@@ -165,20 +165,20 @@ private extension BrowserScrollingController {
         }
 
         var updatedOffset = headerTopOffset - delta
-        headerTopOffset = clamp(updatedOffset, min: -headerFrame.height, max: 0)
+        headerTopOffset = clamp(updatedOffset, min: -topScrollHeight, max: 0)
         if isHeaderDisplayedForGivenOffset(updatedOffset) {
             scrollView?.contentOffset = CGPoint(x: contentOffset.x, y: contentOffset.y - delta)
         }
 
         updatedOffset = footerBottomOffset + delta
-        footerBottomOffset = clamp(updatedOffset, min: 0, max: footerFrame.height - snackBarsFrame.height)
+        footerBottomOffset = clamp(updatedOffset, min: 0, max: bottomScrollHeight)
 
-        let alpha = 1 - abs(headerTopOffset / headerFrame.height)
+        let alpha = 1 - abs(headerTopOffset / topScrollHeight)
         urlBar?.updateAlphaForSubviews(alpha)
     }
 
     func isHeaderDisplayedForGivenOffset(offset: CGFloat) -> Bool {
-        return offset > -headerFrame.height && offset < 0
+        return offset > -topScrollHeight && offset < 0
     }
 
     func clamp(y: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
