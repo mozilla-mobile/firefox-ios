@@ -50,6 +50,7 @@ class BrowserViewController: UIViewController {
     private var searchLoader: SearchLoader!
     private let snackBars = UIView()
     private let webViewContainerToolbar = UIView()
+    private let findInPageContainer = UIView()
 
     // popover rotation handling
     private var displayedPopoverController: UIViewController?
@@ -330,6 +331,7 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(footer)
         self.view.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
+        self.view.addSubview(findInPageContainer)
 
         scrollController.urlBar = urlBar
         scrollController.header = header
@@ -364,10 +366,8 @@ class BrowserViewController: UIViewController {
         }
 
         webViewContainerToolbar.snp_makeConstraints { make in
-            make.trailing.equalTo(webViewContainer)
-            make.leading.equalTo(webViewContainer)
+            make.left.right.top.equalTo(webViewContainer)
             make.height.equalTo(0)
-            make.top.equalTo(webViewContainer)
         }
     }
 
@@ -588,6 +588,18 @@ class BrowserViewController: UIViewController {
                 make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
             } else {
                 make.bottom.equalTo(self.view.snp_bottom)
+            }
+        }
+
+        findInPageContainer.snp_remakeConstraints { make in
+            make.left.right.equalTo(self.view)
+
+            if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view) where keyboardHeight > 0 {
+                make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            } else if let toolbar = self.toolbar {
+                make.bottom.equalTo(toolbar.snp_top)
+            } else {
+                make.bottom.equalTo(self.view)
             }
         }
     }
@@ -1329,18 +1341,14 @@ extension BrowserViewController: BrowserDelegate {
 
     private func updateSnackBarConstraints() {
         snackBars.snp_remakeConstraints { make in
+            make.bottom.equalTo(findInPageContainer.snp_top)
+
             let bars = self.snackBars.subviews
-            // if the keyboard is showing then ensure that the snackbars are positioned above it, otherwise position them above the toolbar/view bottom
             if bars.count > 0 {
                 let view = bars[bars.count-1]
                 make.top.equalTo(view.snp_top)
-                if let state = keyboardState {
-                    make.bottom.equalTo(-(state.intersectionHeightForView(self.view)))
-                } else {
-                    make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
-                }
             } else {
-                make.top.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
+                make.height.equalTo(0)
             }
 
             if traitCollection.horizontalSizeClass != .Regular {
@@ -2405,12 +2413,14 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {
-
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
-        // if we are already showing snack bars, adjust them so they sit above the keyboard
-        if snackBars.subviews.count > 0 {
-            updateSnackBarConstraints()
+        updateViewConstraints()
+
+        UIView.animateWithDuration(state.animationDuration) {
+            UIView.setAnimationCurve(state.animationCurve)
+            self.findInPageContainer.layoutIfNeeded()
+            self.snackBars.layoutIfNeeded()
         }
     }
 
@@ -2419,9 +2429,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
-        // if we are showing snack bars, adjust them so they are no longer sitting above the keyboard
-        if snackBars.subviews.count > 0 {
-            updateSnackBarConstraints()
+        updateViewConstraints()
+
+        UIView.animateWithDuration(state.animationDuration) {
+            UIView.setAnimationCurve(state.animationCurve)
+            self.findInPageContainer.layoutIfNeeded()
+            self.snackBars.layoutIfNeeded()
         }
     }
 }
