@@ -929,6 +929,15 @@ extension SQLiteLogins: SyncableLogins {
         return self.db.run("DELETE FROM \(TableLoginsMirror) WHERE guid IN \(inClause)", withArgs: args)
          >>> { self.db.run("DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause)", withArgs: args) }
     }
+
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        let checkLoginsMirror = "SELECT 1 FROM \(TableLoginsMirror)"
+        let checkLoginsLocal = "SELECT 1 FROM \(TableLoginsLocal) WHERE sync_status != \(SyncStatus.New.rawValue)"
+
+        return self.db.queryReturnsResults(checkLoginsLocal) >>== { result in
+            result ? deferMaybe(true) : self.db.queryReturnsResults(checkLoginsMirror)
+        }
+    }
 }
 
 extension SQLiteLogins: ResettableSyncStorage {

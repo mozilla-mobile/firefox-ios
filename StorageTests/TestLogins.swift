@@ -633,4 +633,15 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertFalse(applied.isSignificantlyDifferentFrom(expected))
         XCTAssertFalse(expected.isSignificantlyDifferentFrom(applied))
     }
+
+    func testLoginsIsSynced() {
+        let loginA = Login.createWithHostname("alphabet.com", username: "username1", password: "password1")
+        let serverLoginA = ServerLogin(guid: loginA.guid, hostname: "alpha.com", username: "username1", password: "password1", modified: NSDate.now())
+
+        XCTAssertFalse(logins.hasSyncedLogins().value.successValue ?? true)
+        logins.addLogin(loginA).value
+        XCTAssertFalse(logins.hasSyncedLogins().value.successValue ?? false)
+        logins.applyChangedLogin(serverLoginA).value
+        XCTAssertTrue(logins.hasSyncedLogins().value.successValue ?? false)
+    }
 }

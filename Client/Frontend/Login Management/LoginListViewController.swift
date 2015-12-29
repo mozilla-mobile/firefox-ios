@@ -172,27 +172,27 @@ extension LoginListViewController {
     }
 
     func SELdelete() {
-        let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
-
-            // Delete here
-            let guidsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
-                self.loginDataSource.loginAtIndexPath(indexPath).guid
-            }
-
-            self.profile.logins.removeLoginsWithGUIDs(guidsToDelete) >>> {
-                self.activeLoginQuery = self.profile.logins.getAllLogins().bindQueue(dispatch_get_main_queue()) { result in
-                    // Cancel out of editing
-                    self.SELcancel()
-
-                    self.loginDataSource.cursor = result.successValue
-                    self.tableView.reloadData()
-                    return succeed()
+        profile.logins.hasSyncedLogins().uponQueue(dispatch_get_main_queue()) { yes in
+            let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+                // Delete here
+                let guidsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
+                    self.loginDataSource.loginAtIndexPath(indexPath).guid
                 }
-            }
 
-        }, hasAccount: profile.hasAccount())
+                self.profile.logins.removeLoginsWithGUIDs(guidsToDelete) >>> {
+                    self.activeLoginQuery = self.profile.logins.getAllLogins().bindQueue(dispatch_get_main_queue()) { result in
+                        // Cancel out of editing
+                        self.SELcancel()
 
-        presentViewController(deleteAlert, animated: true, completion: nil)
+                        self.loginDataSource.cursor = result.successValue
+                        self.tableView.reloadData()
+                        return succeed()
+                    }
+                }
+            }, hasSyncedLogins: yes.successValue ?? true)
+
+            self.presentViewController(deleteAlert, animated: true, completion: nil)
+        }
     }
 
     func SELdidTapSelectionButton() {

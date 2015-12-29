@@ -130,6 +130,10 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return succeed()
     }
 
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        return deferMaybe(true)
+    }
+
     // TODO
     public func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success { return succeed() }
     public func applyChangedLogin(upstream: ServerLogin) -> Success { return succeed() }

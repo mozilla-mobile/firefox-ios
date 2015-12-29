@@ -44,6 +44,10 @@ public class MockSyncManager: SyncManager {
     public func onRemovedAccount(account: FirefoxAccount?) -> Success {
         return succeed()
     }
+
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        return deferMaybe(true)
+    }
 }
 
 public class MockTabQueue: TabQueue {

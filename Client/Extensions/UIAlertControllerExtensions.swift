@@ -124,13 +124,13 @@ extension UIAlertController {
      case of local-only logins or deleted across synced devices in synced account logins.
 
      - parameter deleteCallback: Block to run when delete is tapped.
-     - parameter hasAccount: Boolean indicating the user has a FxA account connected.
+     - parameter hasSyncedLogins: Boolean indicating the user has logins that have been synced.
 
      - returns: UIAlertController instance
      */
     class func deleteLoginAlertWithDeleteCallback(
         deleteCallback: UIAlertActionCallback,
-        hasAccount: Bool) -> UIAlertController {
+        hasSyncedLogins: Bool) -> UIAlertController {
 
         let areYouSureTitle = NSLocalizedString("Are you sure?",
             tableName: "LoginManager",
@@ -149,7 +149,7 @@ extension UIAlertController {
             comment: "Button in login detail screen that deletes the current login")
 
         let deleteAlert: UIAlertController
-        if hasAccount {
+        if hasSyncedLogins {
             deleteAlert = UIAlertController(title: areYouSureTitle, message: deleteSyncedDevicesMessage, preferredStyle: .Alert)
         } else {
             deleteAlert = UIAlertController(title: areYouSureTitle, message: deleteLocalMessage, preferredStyle: .Alert)

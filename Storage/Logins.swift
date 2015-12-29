@@ -535,6 +535,11 @@ public protocol SyncableLogins: AccountRemovalDelegate {
      */
     func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
     func markAsDeleted(guids: [GUID]) -> Success
+
+    /**
+     * For inspecting whether we're an active participant in login sync.
+     */
+    func hasSyncedLogins() -> Deferred<Maybe<Bool>>
 }
 
 public class LoginDataError: MaybeErrorType {
