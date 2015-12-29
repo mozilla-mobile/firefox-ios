@@ -124,7 +124,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
         tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password, passworda0")
+        tester().waitForViewWithAccessibilityLabel("password")
 
         let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
         var passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
@@ -167,7 +167,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
         tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password, passworda0")
+        tester().waitForViewWithAccessibilityLabel("password")
 
         let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
         let websiteCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! LoginTableViewCell

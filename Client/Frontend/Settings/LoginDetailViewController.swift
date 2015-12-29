@@ -39,7 +39,7 @@ class LoginDetailViewController: UITableViewController {
     private let DeleteCellIdentifier = "DeleteCell"
     private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
-    // Used to temporarly store a reference to the cell the user is showing the menu controller for
+    // Used to temporarily store a reference to the cell the user is showing the menu controller for
     private var menuControllerCell: LoginTableViewCell? = nil
 
     init(profile: Profile, login: LoginData) {
@@ -222,7 +222,7 @@ class LoginDetailViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, performAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
-        // No-op. Needs to be overriden for custom menu action selectors to work.
+        // No-op. Needs to be overridden for custom menu action selectors to work.
     }
 }
 
@@ -260,14 +260,11 @@ extension LoginDetailViewController {
             return
         }
 
-        // Hide the original menu controller so we can customize it's location and re-show
-        menuController.setMenuVisible(false, animated: false)
-
         // The description label constraints are such that it extends full width of the cell instead of only 
-        // the size of it's text. The reason is because when the description is used as a password, the dots
+        // the size of its text. The reason is because when the description is used as a password, the dots
         // are slightly larger characters than the font size which causes the password text to be truncated 
         // even though the revealed text fits. Since the label is actually full width, the menu controller will
-        // display in it's center by default which looks weird with small passwords. To prevent this,
+        // display in its center by default which looks weird with small passwords. To prevent this,
         // the actual size of the text is used to determine where to correctly place the menu.
 
         var descriptionFrame = cell.descriptionLabel.frame

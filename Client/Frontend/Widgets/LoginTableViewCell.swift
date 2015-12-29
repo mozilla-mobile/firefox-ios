@@ -76,7 +76,11 @@ class LoginTableViewCell: UITableViewCell {
     /// since it's a UITextField acting as a label.
     override var accessibilityLabel: String? {
         get {
-            return "\(highlightedLabel.text ?? ""), \(descriptionLabel.text ?? "")"
+            if descriptionLabel.secureTextEntry {
+                return highlightedLabel.text ?? ""
+            } else {
+                return "\(highlightedLabel.text ?? ""), \(descriptionLabel.text ?? "")"
+            }
         }
         set {
             // Ignore sets
