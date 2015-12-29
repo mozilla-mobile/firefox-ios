@@ -126,6 +126,20 @@
 			remoteGlobalIDString = EEBCC9D719CC627D0083B827;
 			remoteInfo = "SnapKit iOS";
 		};
+		D3E9DF281C331738006904C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D301790B1BC6D222009AD388 /* GCDWebServer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E2DDD1C71BE698A8002CE867;
+			remoteInfo = "GCDWebServer (tvOS)";
+		};
+		D3E9DF2A1C331738006904C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D301790B1BC6D222009AD388 /* GCDWebServer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E2DDD18B1BE69404002CE867;
+			remoteInfo = "GCDWebServers (tvOS)";
+		};
 		E4BF2DF31BACE92400DA9D68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4BF2DCB1BACE8CA00DA9D68 /* Project object */;
@@ -231,8 +245,10 @@
 			children = (
 				D30179151BC6D222009AD388 /* GCDWebServer */,
 				D30179171BC6D222009AD388 /* GCDWebServer.app */,
+				D3E9DF291C331738006904C8 /* GCDWebServer.app */,
 				D30179191BC6D222009AD388 /* GCDWebServers.framework */,
 				D301791B1BC6D222009AD388 /* GCDWebServers.framework */,
+				D3E9DF2B1C331738006904C8 /* GCDWebServers.framework */,
 				D301791D1BC6D222009AD388 /* Tests.xctest */,
 			);
 			name = Products;
@@ -526,6 +542,20 @@
 			fileType = wrapper.cfbundle;
 			path = "SnapKit OSX Tests.xctest";
 			remoteRef = D39288711BC5D1670016A9A0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D3E9DF291C331738006904C8 /* GCDWebServer.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = GCDWebServer.app;
+			remoteRef = D3E9DF281C331738006904C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D3E9DF2B1C331738006904C8 /* GCDWebServers.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GCDWebServers.framework;
+			remoteRef = D3E9DF2A1C331738006904C8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
