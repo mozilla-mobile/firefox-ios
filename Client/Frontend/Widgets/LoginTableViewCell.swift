@@ -21,6 +21,9 @@ private struct LoginTableViewCellUX {
 
     static let HorizontalMargin: CGFloat = 14
     static let IconImageSize: CGFloat = 34
+
+    static let indentWidth: CGFloat = 44
+    static let IndentAnimationDuration: NSTimeInterval = 0.2
 }
 
 enum LoginTableViewCellStyle {
@@ -72,11 +75,11 @@ class LoginTableViewCell: UITableViewCell {
         return imageView
     }()
 
-    private lazy var customSelectionBackground: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.clearColor()
-        return view
-    }()
+    private var showingIndent: Bool = false
+
+    private var customIndentView = UIView()
+
+    private var customCheckmarkIcon = UIImageView(image: UIImage(named: "loginUnselected"))
 
     /// Override the default accessibility label since it won't include the description by default
     /// since it's a UITextField acting as a label.
@@ -118,6 +121,9 @@ class LoginTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        indentationWidth = 0
+        selectionStyle = .None
+
         contentView.backgroundColor = UIColor.whiteColor()
         labelContainer.backgroundColor = UIColor.whiteColor()
 
@@ -126,6 +132,9 @@ class LoginTableViewCell: UITableViewCell {
 
         contentView.addSubview(iconImageView)
         contentView.addSubview(labelContainer)
+
+        customIndentView.addSubview(customCheckmarkIcon)
+        addSubview(customIndentView)
 
         configureLayoutForStyle(self.style)
     }
@@ -138,6 +147,27 @@ class LoginTableViewCell: UITableViewCell {
         super.prepareForReuse()
         enabledActions = []
         delegate = nil
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        // Adjust indent frame
+        var indentFrame = CGRect(
+            origin: CGPointZero,
+            size: CGSize(width: LoginTableViewCellUX.indentWidth, height: frame.height))
+
+        if !showingIndent{
+            indentFrame.origin.x = -LoginTableViewCellUX.indentWidth
+        }
+
+        customIndentView.frame = indentFrame
+        customCheckmarkIcon.frame.center = CGPoint(x: indentFrame.width / 2, y: indentFrame.height / 2)
+
+        // Adjust content view frame based on indent
+        var contentFrame = self.contentView.frame
+        contentFrame.origin.x += showingIndent ? LoginTableViewCellUX.indentWidth : 0
+        contentView.frame = contentFrame
     }
 
     private func configureLayoutForStyle(style: LoginTableViewCellStyle) {
@@ -217,8 +247,27 @@ class LoginTableViewCell: UITableViewCell {
     }
 
     override func setEditing(editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        selectedBackgroundView = editing ? customSelectionBackground : nil
+        showingIndent = editing
+
+        let adjustConstraints = { [unowned self] in
+
+            // Shift over content view
+            var contentFrame = self.contentView.frame
+            contentFrame.origin.x += editing ? LoginTableViewCellUX.indentWidth : -LoginTableViewCellUX.indentWidth
+            self.contentView.frame = contentFrame
+
+            // Shift over custom indent view
+            var indentFrame = self.customIndentView.frame
+            indentFrame.origin.x += editing ? LoginTableViewCellUX.indentWidth : -LoginTableViewCellUX.indentWidth
+            self.customIndentView.frame = indentFrame
+        }
+
+        animated ? UIView.animateWithDuration(LoginTableViewCellUX.IndentAnimationDuration, animations: adjustConstraints) : adjustConstraints()
+    }
+
+    override func setSelected(selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        customCheckmarkIcon.image = UIImage(named: selected ? "loginSelected" : "loginUnselected")
     }
 }
 
@@ -275,6 +324,6 @@ extension LoginTableViewCell {
     func updateCellWithLogin(login: LoginData) {
         descriptionLabel.text = login.hostname
         highlightedLabel.text = login.username
-        iconImageView.image = UIImage(named: "settingsFlatfox")
+        iconImageView.image = UIImage(named: "faviconFox")
     }
 }
