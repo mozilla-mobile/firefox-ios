@@ -514,6 +514,7 @@ public protocol BrowserLogins {
     // Add the use of a login by GUID.
     func addUseOfLoginByGUID(guid: GUID) -> Success
     func removeLoginByGUID(guid: GUID) -> Success
+    func removeLoginsWithGUIDs(guids: [GUID]) -> Success
 
     func removeAll() -> Success
 }

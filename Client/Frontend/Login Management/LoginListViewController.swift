@@ -175,16 +175,11 @@ extension LoginListViewController {
         let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
 
             // Delete here
-            let loginsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
-                self.loginDataSource.loginAtIndexPath(indexPath)
+            let guidsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
+                self.loginDataSource.loginAtIndexPath(indexPath).guid
             }
 
-            let now = NSDate.now()
-            let deleteDeferreds = loginsToDelete.map { login in
-                return self.profile.logins.deleteByGUID(login.guid, deletedAt: now)
-            }
-
-            all(deleteDeferreds).upon { _ in
+            self.profile.logins.removeLoginsWithGUIDs(guidsToDelete) >>> {
                 self.activeLoginQuery = self.profile.logins.getAllLogins().bindQueue(dispatch_get_main_queue()) { result in
                     // Cancel out of editing
                     self.SELcancel()
