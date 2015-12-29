@@ -442,6 +442,7 @@ class TabTrayController: UIViewController {
         let settingsTableViewController = SettingsTableViewController()
         settingsTableViewController.profile = profile
         settingsTableViewController.tabManager = tabManager
+        settingsTableViewController.settingsDelegate = self
 
         let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
         controller.popoverDelegate = self
@@ -690,6 +691,14 @@ extension TabTrayController: TabCellDelegate {
         let indexPath = collectionView.indexPathForCell(cell)!
         let tab = tabsToDisplay[indexPath.item]
         tabManager.removeTab(tab)
+    }
+}
+
+extension TabTrayController: SettingsDelegate {
+    func settingsOpenURLInNewTab(url: NSURL) {
+        let request = NSURLRequest(URL: url)
+        let tab = tabManager.addTab(request)
+        tabManager.selectTab(tab)
     }
 }
 

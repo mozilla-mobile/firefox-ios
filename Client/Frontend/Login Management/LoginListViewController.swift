@@ -26,6 +26,8 @@ class LoginListViewController: UIViewController {
 
     private let tableView = UITableView()
 
+    weak var settingsDelegate: SettingsDelegate?
+
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
@@ -96,6 +98,7 @@ extension LoginListViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let login = loginDataSource.loginAtIndexPath(indexPath)
         let detailViewController = LoginDetailViewController(profile: profile, login: login)
+        detailViewController.settingsDelegate = settingsDelegate
         navigationController?.pushViewController(detailViewController, animated: true)
 
         tableView.deselectRowAtIndexPath(indexPath, animated: false)

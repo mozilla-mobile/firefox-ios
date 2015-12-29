@@ -36,6 +36,8 @@ class SettingsTableViewCell: UITableViewCell {
 class Setting {
     private var _title: NSAttributedString?
 
+    weak var delegate: SettingsDelegate?
+
     // The url the SettingsContentViewController will show, e.g. Licenses and Privacy Policy.
     var url: NSURL? { return nil }
 
@@ -73,8 +75,9 @@ class Setting {
         }
     }
 
-    init(title: NSAttributedString? = nil) {
+    init(title: NSAttributedString? = nil, delegate: SettingsDelegate? = nil) {
         self._title = title
+        self.delegate = delegate
     }
 }
 
@@ -598,20 +601,17 @@ private class SendFeedbackSetting: Setting {
 
 // Opens the the SUMO page in a new tab
 private class OpenSupportPageSetting: Setting {
-    init() {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Help", comment: "Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    init(delegate: SettingsDelegate?) {
+        super.init(title: NSAttributedString(string: NSLocalizedString("Help", comment: "Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
+            delegate: delegate)
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        navigationController?.dismissViewControllerAnimated(true, completion: {
-            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                let rootNavigationController = appDelegate.rootViewController
-                rootNavigationController.popViewControllerAnimated(true)
-                if let url = NSURL(string: "https://support.mozilla.org/products/ios") {
-                    appDelegate.browserViewController.openURLInNewTab(url)
-                }
+        navigationController?.dismissViewControllerAnimated(true) {
+            if let url = NSURL(string: "https://support.mozilla.org/products/ios") {
+                self.delegate?.settingsOpenURLInNewTab(url)
             }
-        })
+        }
     }
 }
 
@@ -643,16 +643,18 @@ private class LoginsSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController, delegate: SettingsDelegate?) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
 
         let loginsTitle = NSLocalizedString("Logins", comment: "Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.")
-        super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
+                   delegate: delegate)
     }
 
     override func onClick(navigationController: UINavigationController?) {
         let viewController = LoginListViewController(profile: profile)
+        viewController.settingsDelegate = delegate
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -721,11 +723,18 @@ private class ChinaSyncServiceSetting: WithoutAccountSetting {
     }
 }
 
+@objc
+protocol SettingsDelegate: class {
+    func settingsOpenURLInNewTab(url: NSURL)
+}
+
 // The base settings view controller.
 class SettingsTableViewController: UITableViewController {
     private let Identifier = "CellIdentifier"
     private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
     private var settings = [SettingSection]()
+
+    weak var settingsDelegate: SettingsDelegate?
 
     var profile: Profile!
     var tabManager: TabManager!
@@ -788,7 +797,7 @@ class SettingsTableViewController: UITableViewController {
             SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
         ]
 
-        var privacySettings: [Setting] = [LoginsSetting(settings: self), ClearPrivateDataSetting(settings: self)]
+        var privacySettings: [Setting] = [LoginsSetting(settings: self, delegate: settingsDelegate), ClearPrivateDataSetting(settings: self)]
 
         if #available(iOS 9, *) {
             privacySettings += [
@@ -813,7 +822,7 @@ class SettingsTableViewController: UITableViewController {
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self),
                 SendFeedbackSetting(),
-                OpenSupportPageSetting()
+                OpenSupportPageSetting(delegate: settingsDelegate),
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self),

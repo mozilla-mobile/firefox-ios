@@ -7,7 +7,12 @@ import UIKit
 import SnapKit
 import Storage
 
-struct LoginTableViewCellUX {
+@objc
+protocol LoginTableViewCellDelegate: class {
+    func didSelectOpenAndFillForCell(cell: LoginTableViewCell)
+}
+
+private struct LoginTableViewCellUX {
     static let highlightedLabelFont = UIFont.systemFontOfSize(12)
     static let highlightedLabelTextColor = UIConstants.HighlightBlue
 
@@ -24,17 +29,29 @@ enum LoginTableViewCellStyle {
     case IconAndDescriptionLabel
 }
 
+enum LoginTableViewCellActions {
+    case OpenAndFill
+    case Reveal
+    case Hide
+    case Copy
+}
+
 class LoginTableViewCell: UITableViewCell {
 
     private let labelContainer = UIView()
 
-    let descriptionLabel: UILabel = {
-        let label = UILabel()
+    weak var delegate: LoginTableViewCellDelegate? = nil
+
+    let descriptionLabel: UITextField = {
+        let label = UITextField()
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
         label.textAlignment = .Left
         label.backgroundColor = UIColor.whiteColor()
-        label.numberOfLines = 1
+        label.userInteractionEnabled = false
+        label.autocapitalizationType = .None
+        label.autocorrectionType = .No
+        label.accessibilityElementsHidden = true
         return label
     }()
 
@@ -55,12 +72,41 @@ class LoginTableViewCell: UITableViewCell {
         return imageView
     }()
 
+    /// Override the default accessibility label since it won't include the description by default
+    /// since it's a UITextField acting as a label.
+    override var accessibilityLabel: String? {
+        get {
+            if descriptionLabel.secureTextEntry {
+                return highlightedLabel.text ?? ""
+            } else {
+                return "\(highlightedLabel.text ?? ""), \(descriptionLabel.text ?? "")"
+            }
+        }
+        set {
+            // Ignore sets
+        }
+    }
+
+    var enabledActions = [LoginTableViewCellActions]()
+
     var style: LoginTableViewCellStyle = .IconAndBothLabels {
         didSet {
             if style != oldValue {
                 configureLayoutForStyle(style)
             }
         }
+    }
+
+    var descriptionTextSize: CGSize? {
+        guard let descriptionText = descriptionLabel.text else {
+            return nil
+        }
+
+        let attributes = [
+            NSFontAttributeName: LoginTableViewCellUX.descriptionLabelFont
+        ]
+
+        return descriptionText.sizeWithAttributes(attributes)
     }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -82,6 +128,12 @@ class LoginTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        enabledActions = []
+        delegate = nil
+    }
+
     private func configureLayoutForStyle(style: LoginTableViewCellStyle) {
         switch style {
         case .IconAndBothLabels:
@@ -100,13 +152,13 @@ class LoginTableViewCell: UITableViewCell {
             highlightedLabel.snp_remakeConstraints { make in
                 make.left.top.equalTo(labelContainer)
                 make.bottom.equalTo(descriptionLabel.snp_top)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
 
             descriptionLabel.snp_remakeConstraints { make in
                 make.left.bottom.equalTo(labelContainer)
                 make.top.equalTo(highlightedLabel.snp_bottom)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
         case .IconAndDescriptionLabel:
             iconImageView.snp_remakeConstraints { make in
@@ -127,7 +179,7 @@ class LoginTableViewCell: UITableViewCell {
 
             descriptionLabel.snp_remakeConstraints { make in
                 make.top.left.bottom.equalTo(labelContainer)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
         case .NoIconAndBothLabels:
             iconImageView.snp_remakeConstraints { make in
@@ -145,17 +197,65 @@ class LoginTableViewCell: UITableViewCell {
             highlightedLabel.snp_remakeConstraints { make in
                 make.left.top.equalTo(labelContainer)
                 make.bottom.equalTo(descriptionLabel.snp_top)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
 
             descriptionLabel.snp_remakeConstraints { make in
                 make.left.bottom.equalTo(labelContainer)
                 make.top.equalTo(highlightedLabel.snp_bottom)
-                make.width.lessThanOrEqualTo(labelContainer)
+                make.width.equalTo(labelContainer)
             }
         }
 
         setNeedsUpdateConstraints()
+    }
+}
+
+// MARK: - Menu Action Overrides
+extension LoginTableViewCell {
+
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        let checks: [Bool] = enabledActions.map { actionEnum in
+            switch actionEnum {
+            case .OpenAndFill:
+                return action == "SELopenAndFillDescription"
+            case .Reveal:
+                return action == "SELrevealDescription"
+            case .Hide:
+                return action == "SELsecureDescription"
+            case .Copy:
+                return action == "SELcopyDescription"
+            }
+        }
+
+        return checks.contains(true)
+    }
+
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+}
+
+// MARK: - Menu Selectors
+extension LoginTableViewCell {
+
+    func SELrevealDescription() {
+        descriptionLabel.secureTextEntry = false
+        enabledActions = [.Copy, .Hide]
+    }
+
+    func SELsecureDescription() {
+        descriptionLabel.secureTextEntry = true
+        enabledActions = [.Copy, .Reveal]
+    }
+
+    func SELcopyDescription() {
+        // Copy description text to clipboard
+        UIPasteboard.generalPasteboard().string = descriptionLabel.text
+    }
+
+    func SELopenAndFillDescription() {
+        delegate?.didSelectOpenAndFillForCell(self)
     }
 }
 

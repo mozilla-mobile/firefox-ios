@@ -103,8 +103,6 @@ private struct TempStrings {
 
     // Bug 1233418 - Login Manager Strings
     let deleteLoginDetail               = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Button in login detail screen that deletes the current login")
-    let revealPassword                  = NSLocalizedString("Reveal", tableName: "LoginManager", comment: "Reveal password text selection menu item")
-    let openAndFill                     = NSLocalizedString("Open & Fill", tableName: "LoginManager", comment: "Open and Fill website text selection menu item")
     let deselectAll                     = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Title for deselecting all selected logins")
     let selectAll                       = NSLocalizedString("Select All", tableName: "LoginManager", comment: "Title for selecting all logins")
     let areYouSure                      = NSLocalizedString("Are you sure?", tableName: "LoginManager", comment: "Prompt title when deleting logins")
