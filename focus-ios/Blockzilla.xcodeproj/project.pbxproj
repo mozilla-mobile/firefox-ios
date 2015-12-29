@@ -413,7 +413,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
-				ORGANIZATIONNAME = "Stefan Arentz";
+				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					E4BF2DD21BACE8CA00DA9D68 = {
 						CreatedOnToolsVersion = 7.0;
