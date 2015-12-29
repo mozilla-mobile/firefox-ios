@@ -42,6 +42,8 @@ class LoginDetailViewController: UITableViewController {
     // Used to temporarily store a reference to the cell the user is showing the menu controller for
     private var menuControllerCell: LoginTableViewCell? = nil
 
+    weak var settingsDelegate: SettingsDelegate?
+
     init(profile: Profile, login: LoginData) {
         self.login = login
         self.profile = profile
@@ -287,15 +289,12 @@ extension LoginDetailViewController {
 extension LoginDetailViewController: LoginTableViewCellDelegate {
 
     func didSelectOpenAndFillForCell(cell: LoginTableViewCell) {
+        guard let url = self.login.formSubmitURL?.asURL else {
+            return
+        }
+
         navigationController?.dismissViewControllerAnimated(true, completion: {
-            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                let rootNavigationController = appDelegate.rootViewController
-                rootNavigationController.popViewControllerAnimated(true)
-                if let formSubmitURL = self.login.formSubmitURL,
-                   let url = NSURL(string: formSubmitURL) {
-                    appDelegate.browserViewController.openURLInNewTab(url)
-                }
-            }
+            self.settingsDelegate?.settingsOpenURLInNewTab(url)
         })
     }
 }
