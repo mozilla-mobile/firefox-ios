@@ -939,6 +939,48 @@ class BrowserViewController: UIViewController {
         let ua = newRequest.valueForHTTPHeaderField("User-Agent")
         webView.customUserAgent = ua != UserAgent.defaultUserAgent() ? ua : nil
     }
+
+    private func presentActivityViewController(url: NSURL, tab: Browser? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
+        var activities = [UIActivity]()
+
+        if #available(iOS 9.0, *) {
+            if let tab = tab where (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active {
+                let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: tab.desktopSite) {
+                    tab.toggleDesktopSite()
+                }
+                activities.append(requestDesktopSiteActivity)
+            }
+        }
+
+        let helper = ShareExtensionHelper(url: url, tab: tab, activities: activities)
+
+        let controller = helper.createActivityViewController({
+            // We don't know what share action the user has chosen so we simply always
+            // update the toolbar and reader mode bar to reflect the latest status.
+            if let tab = tab {
+                self.updateURLBarDisplayURL(tab)
+            }
+            self.updateReaderModeBar()
+        })
+
+        let setupPopover = { [unowned self] in
+            if let popoverPresentationController = controller.popoverPresentationController {
+                popoverPresentationController.sourceView = sourceView
+                popoverPresentationController.sourceRect = sourceRect
+                popoverPresentationController.permittedArrowDirections = arrowDirection
+                popoverPresentationController.delegate = self
+            }
+        }
+
+        setupPopover()
+
+        if controller.popoverPresentationController != nil {
+            displayedPopoverController = controller
+            updateDisplayedPopoverProperties = setupPopover
+        }
+
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
 }
 
 /**
@@ -1195,47 +1237,10 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
-        if let selectedTab = tabManager.selectedTab {
-            var activities = [UIActivity]()
-
-            if #available(iOS 9.0, *) {
-                if (selectedTab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active {
-                    let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: selectedTab.desktopSite) {
-                        selectedTab.toggleDesktopSite()
-                    }
-                    activities.append(requestDesktopSiteActivity)
-                }
-            }
-
-            let helper = ShareExtensionHelper(tab: selectedTab, activities: activities)
-
-            let activityViewController = helper.createActivityViewController({
-                // We don't know what share action the user has chosen so we simply always
-                // update the toolbar and reader mode bar to refelect the latest status.
-                self.updateURLBarDisplayURL(selectedTab)
-                self.updateReaderModeBar()
-            })
-
-            let setupPopover = { [unowned self] in
-                if let popoverPresentationController = activityViewController.popoverPresentationController {
-                    let sourceView = self.navigationToolbar.shareButton
-                    popoverPresentationController.sourceView = sourceView.superview
-                    popoverPresentationController.sourceRect = sourceView.frame
-                    popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
-                    popoverPresentationController.delegate = self
-                }
-            }
-
-            setupPopover()
-
-            if activityViewController.popoverPresentationController != nil {
-                displayedPopoverController = activityViewController
-                updateDisplayedPopoverProperties = setupPopover
-            }
-
-            self.presentViewController(activityViewController, animated: true, completion: nil)
+        if let tab = tabManager.selectedTab, url = tab.displayURL {
+            let sourceView = self.navigationToolbar.shareButton
+            presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
         }
-
     }
 }
 
@@ -2271,6 +2276,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         let touchPoint = gestureRecognizer.locationInView(view)
         guard touchPoint != CGPointZero else { return }
 
+        let touchSize = CGSizeMake(0, 16)
+
         let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         var dialogTitle: String?
 
@@ -2303,6 +2310,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 pasteBoard.URL = url
             }
             actionSheetController.addAction(copyAction)
+
+            let shareTitle = NSLocalizedString("Share Link", comment: "Context menu item for sharing a link URL")
+            let shareAction = UIAlertAction(title: shareTitle, style: UIAlertActionStyle.Default) { _ in
+                self.presentActivityViewController(url, sourceView: self.view, sourceRect: CGRect(origin: touchPoint, size: touchSize), arrowDirection: .Any)
+            }
+            actionSheetController.addAction(shareAction)
         }
 
         if let url = elements.image {
@@ -2367,7 +2380,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         // If we're showing an arrow popup, set the anchor to the long press location.
         if let popoverPresentationController = actionSheetController.popoverPresentationController {
             popoverPresentationController.sourceView = view
-            popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: CGSizeMake(0, 16))
+            popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: touchSize)
             popoverPresentationController.permittedArrowDirections = .Any
         }
 
