@@ -1679,12 +1679,11 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
                 decisionHandler(WKNavigationActionPolicy.Allow)
             }
+        case "tel":
+            callExternal(url)
+            decisionHandler(WKNavigationActionPolicy.Cancel)
         default:
-            // If this is a scheme that we don't know how to handle, open it externally and cancel
-            // the request so that the webview does not see it.
-            // Always prompt for tel: links
-            let shouldPrompt = url.scheme == "tel";
-            openExternal(url, prompt: shouldPrompt)
+            openExternal(url, prompt: false)
             decisionHandler(WKNavigationActionPolicy.Cancel)
         }
     }
