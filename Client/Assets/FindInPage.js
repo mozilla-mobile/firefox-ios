@@ -9,8 +9,8 @@ var DEBUG_ENABLED = false;
 var MATCH_HIGHLIGHT_ACTIVE = "#f19750";
 var MATCH_HIGHLIGHT_INACTIVE = "#ffde49";
 
-// window.find() sometimes gets stuck in on a result, causing an infinite loop
-// when we try to search. (e.g., Yahoo search result pages).
+// window.find() sometimes gets stuck on a result, causing an infinite loop
+// when we try to search (e.g., Yahoo search result pages).
 // As a workaround, abort after failing too many times.
 var MAX_FAILURES = 100;
 
@@ -42,10 +42,11 @@ function clearSelection() {
 function highlightAllMatches(text) {
   debug("Searching: " + text)
 
-  // Array of anchor nodes, plus matching rects within those nodes. Why? window.find()
-  // is buggy, to put it mildly. Sometimes it can infinitely loop in pages, even with
-  // wrapping disabled (test case: search "foo" on Yahoo; find "f"). As a workaround,
-  // remembering all processed rects can help us determine that we've already hit this match.
+  // Mapping of rects that have been searched. Why? window.find() is buggy, to
+  // put it mildly. Sometimes it can infinitely loop in pages, even with
+  // wrapping disabled (test case: search "foo" on Yahoo; find "f"). As a
+  // workaround, remembering all processed rects can help us determine that
+  // we've already hit this match.
   var matches = {};
 
   var foundRanges = [];
@@ -125,7 +126,7 @@ function highlightAllMatches(text) {
       debug("Already found this rect! Aborting.");
       break;
     }
-    matches[rectID] = rect;
+    matches[rectID] = true;
 
     foundRanges.push(selection.getRangeAt(0));
   }
