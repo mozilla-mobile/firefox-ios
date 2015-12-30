@@ -110,12 +110,6 @@ private struct TempStrings {
     let deleteSyncedDevices             = NSLocalizedString("Logins will be removed from all connected devices.", tableName: "LoginManager", comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices")
     let noLoginsFound                   = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Title displayed when no logins are found after searching")
 
-    // Bug 1164067 - Find in Page
-    let findInPage = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Pending feature; currently unused string! Title for share action item and selection menu item.")
-    let findPrevious = NSLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Pending feature; currently unused string! Accessibility label for previous result button in Find in Page Toolbar.")
-    let findNext = NSLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Pending feature; currently unused string! Accessibility label for next result button in Find in Page Toolbar.")
-    let findClose = NSLocalizedString("Done", tableName: "FindInPage", comment: "Pending feature; currently unused string! Done button in Find in Page Toolbar.")
-
     // Bug 1235840 - Land string for opting out of anonymous data usage sending
     let sendAnonymousUsageData = NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")
     let moreInfo = NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")

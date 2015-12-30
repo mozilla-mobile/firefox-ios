@@ -50,6 +50,8 @@ class BrowserViewController: UIViewController {
     private var searchLoader: SearchLoader!
     private let snackBars = UIView()
     private let webViewContainerToolbar = UIView()
+    private var findInPageBar: FindInPageBar?
+    private let findInPageContainer = UIView()
 
     // popover rotation handling
     private var displayedPopoverController: UIViewController?
@@ -330,6 +332,7 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(footer)
         self.view.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
+        self.view.addSubview(findInPageContainer)
 
         scrollController.urlBar = urlBar
         scrollController.header = header
@@ -364,10 +367,8 @@ class BrowserViewController: UIViewController {
         }
 
         webViewContainerToolbar.snp_makeConstraints { make in
-            make.trailing.equalTo(webViewContainer)
-            make.leading.equalTo(webViewContainer)
+            make.left.right.top.equalTo(webViewContainer)
             make.height.equalTo(0)
-            make.top.equalTo(webViewContainer)
         }
     }
 
@@ -549,10 +550,11 @@ class BrowserViewController: UIViewController {
                 make.top.equalTo(self.header.snp_bottom)
             }
 
+            let findInPageHeight = (findInPageBar == nil) ? 0 : UIConstants.ToolbarHeight
             if let toolbar = self.toolbar {
-                make.bottom.equalTo(toolbar.snp_top)
+                make.bottom.equalTo(toolbar.snp_top).offset(-findInPageHeight)
             } else {
-                make.bottom.equalTo(self.view)
+                make.bottom.equalTo(self.view).offset(-findInPageHeight)
             }
         }
 
@@ -572,7 +574,7 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(self.footer)
         }
 
-        adjustFooterSize(nil)
+        updateSnackBarConstraints()
         footerBackground?.snp_remakeConstraints { make in
             make.bottom.left.right.equalTo(self.footer)
             make.height.equalTo(UIConstants.ToolbarHeight)
@@ -588,6 +590,18 @@ class BrowserViewController: UIViewController {
                 make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
             } else {
                 make.bottom.equalTo(self.view.snp_bottom)
+            }
+        }
+
+        findInPageContainer.snp_remakeConstraints { make in
+            make.left.right.equalTo(self.view)
+
+            if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view) where keyboardHeight > 0 {
+                make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            } else if let toolbar = self.toolbar {
+                make.bottom.equalTo(toolbar.snp_top)
+            } else {
+                make.bottom.equalTo(self.view)
             }
         }
     }
@@ -943,6 +957,11 @@ class BrowserViewController: UIViewController {
     private func presentActivityViewController(url: NSURL, tab: Browser? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         var activities = [UIActivity]()
 
+        let findInPageActivity = FindInPageActivity() {
+            self.updateFindInPageVisibility(visible: true)
+        }
+        activities.append(findInPageActivity)
+
         if #available(iOS 9.0, *) {
             if let tab = tab where (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active {
                 let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: tab.desktopSite) {
@@ -980,6 +999,40 @@ class BrowserViewController: UIViewController {
         }
 
         self.presentViewController(controller, animated: true, completion: nil)
+    }
+
+    private func updateFindInPageVisibility(visible visible: Bool) {
+        if visible {
+            if findInPageBar == nil {
+                let findInPageBar = FindInPageBar()
+                self.findInPageBar = findInPageBar
+                findInPageBar.delegate = self
+                findInPageContainer.addSubview(findInPageBar)
+
+                findInPageBar.snp_makeConstraints { make in
+                    make.edges.equalTo(findInPageContainer)
+                    make.height.equalTo(UIConstants.ToolbarHeight)
+                }
+
+                updateViewConstraints()
+
+                // We make the find-in-page bar the first responder below, causing the keyboard delegates
+                // to fire. This, in turn, will animate the Find in Page container since we use the same
+                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
+                // constraints added above, however, so force a layout now to prevent these constraints
+                // from being lumped in with the keyboard animation.
+                findInPageBar.layoutIfNeeded()
+            }
+
+            self.findInPageBar?.becomeFirstResponder()
+        } else if let findInPageBar = self.findInPageBar {
+            findInPageBar.endEditing(true)
+            guard let webView = tabManager.selectedTab?.webView else { return }
+            webView.evaluateJavaScript("__firefox__.findDone()", completionHandler: nil)
+            findInPageBar.removeFromSuperview()
+            self.findInPageBar = nil
+            updateViewConstraints()
+        }
     }
 }
 
@@ -1025,6 +1078,8 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
         self.webViewContainerToolbar.hidden = true
+        updateFindInPageVisibility(visible: false)
+
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
 
         if let tab = tabManager.selectedTab {
@@ -1298,6 +1353,10 @@ extension BrowserViewController: BrowserDelegate {
         let sessionRestoreHelper = SessionRestoreHelper(browser: browser)
         sessionRestoreHelper.delegate = self
         browser.addHelper(sessionRestoreHelper, name: SessionRestoreHelper.name())
+
+        let findInPageHelper = FindInPageHelper(browser: browser)
+        findInPageHelper.delegate = self
+        browser.addHelper(findInPageHelper, name: FindInPageHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
@@ -1323,20 +1382,16 @@ extension BrowserViewController: BrowserDelegate {
         return nil
     }
 
-    private func adjustFooterSize(top: UIView? = nil) {
+    private func updateSnackBarConstraints() {
         snackBars.snp_remakeConstraints { make in
+            make.bottom.equalTo(findInPageContainer.snp_top)
+
             let bars = self.snackBars.subviews
-            // if the keyboard is showing then ensure that the snackbars are positioned above it, otherwise position them above the toolbar/view bottom
             if bars.count > 0 {
                 let view = bars[bars.count-1]
                 make.top.equalTo(view.snp_top)
-                if let state = keyboardState {
-                    make.bottom.equalTo(-(state.intersectionHeightForView(self.view)))
-                } else {
-                    make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
-                }
             } else {
-                make.top.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
+                make.height.equalTo(0)
             }
 
             if traitCollection.horizontalSizeClass != .Regular {
@@ -1397,7 +1452,7 @@ extension BrowserViewController: BrowserDelegate {
 
     func showBar(bar: SnackBar, animated: Bool) {
         finishAddingBar(bar)
-        adjustFooterSize(bar)
+        updateSnackBarConstraints()
 
         bar.hide()
         view.layoutIfNeeded()
@@ -1415,9 +1470,7 @@ extension BrowserViewController: BrowserDelegate {
             }) { success in
                 // Really remove the bar
                 self.finishRemovingBar(bar)
-
-                // Adjust the footer size to only contain the bars
-                self.adjustFooterSize()
+                self.updateSnackBarConstraints()
             }
         }
     }
@@ -1429,7 +1482,7 @@ extension BrowserViewController: BrowserDelegate {
                 bar.removeFromSuperview()
             }
         }
-        self.adjustFooterSize()
+        self.updateSnackBarConstraints()
     }
 
     func browser(browser: Browser, didAddSnackbar bar: SnackBar) {
@@ -1548,6 +1601,8 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
 
+        updateFindInPageVisibility(visible: false)
+
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
@@ -1615,6 +1670,8 @@ extension BrowserViewController: WKNavigationDelegate {
         if tabManager.selectedTab?.webView !== webView {
             return
         }
+
+        updateFindInPageVisibility(visible: false)
 
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
@@ -2403,12 +2460,14 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {
-
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
-        // if we are already showing snack bars, adjust them so they sit above the keyboard
-        if snackBars.subviews.count > 0 {
-            adjustFooterSize(nil)
+        updateViewConstraints()
+
+        UIView.animateWithDuration(state.animationDuration) {
+            UIView.setAnimationCurve(state.animationCurve)
+            self.findInPageContainer.layoutIfNeeded()
+            self.snackBars.layoutIfNeeded()
         }
     }
 
@@ -2417,9 +2476,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
-        // if we are showing snack bars, adjust them so they are no longer sitting above the keyboard
-        if snackBars.subviews.count > 0 {
-            adjustFooterSize(nil)
+        updateViewConstraints()
+
+        UIView.animateWithDuration(state.animationDuration) {
+            UIView.setAnimationCurve(state.animationCurve)
+            self.findInPageContainer.layoutIfNeeded()
+            self.snackBars.layoutIfNeeded()
         }
     }
 }
@@ -2528,4 +2590,41 @@ class BlurWrapper: UIView {
 
 protocol Themeable {
     func applyTheme(themeName: String)
+}
+
+extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate {
+    func findInPage(findInPage: FindInPageBar, didTextChange text: String) {
+        find(text, function: "find")
+    }
+
+    func findInPage(findInPage: FindInPageBar, didFindNextWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findNext")
+    }
+
+    func findInPage(findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findPrevious")
+    }
+
+    func findInPageDidPressClose(findInPage: FindInPageBar) {
+        updateFindInPageVisibility(visible: false)
+    }
+
+    private func find(text: String, function: String) {
+        guard let webView = tabManager.selectedTab?.webView else { return }
+
+        let escaped = text.stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
+                          .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+
+        webView.evaluateJavaScript("__firefox__.\(function)(\"\(escaped)\")", completionHandler: nil)
+    }
+
+    func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int) {
+        findInPageBar?.currentResult = currentResult
+    }
+
+    func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int) {
+        findInPageBar?.totalResults = totalResults
+    }
 }
