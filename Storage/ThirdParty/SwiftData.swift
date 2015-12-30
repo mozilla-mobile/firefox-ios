@@ -593,6 +593,7 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         } catch let error1 as NSError {
             error = error1
             statement = nil
+            log.error("SQL error: \(error1.localizedDescription) for SQL \(sqlStr).")
         }
 
         // Close, not reset -- this isn't going to be reused.
