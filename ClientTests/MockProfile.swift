@@ -14,6 +14,10 @@ public class MockSyncManager: SyncManager {
     public var isSyncing = false
     public var lastSyncFinishTime: Timestamp? = nil
 
+    public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
+        return deferMaybe(true)
+    }
+
     public func syncClients() -> SyncResult { return deferMaybe(.Completed) }
     public func syncClientsThenTabs() -> SyncResult { return deferMaybe(.Completed) }
     public func syncHistory() -> SyncResult { return deferMaybe(.Completed) }

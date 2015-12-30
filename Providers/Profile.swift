@@ -20,6 +20,8 @@ public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
 
+    func hasSyncedHistory() -> Deferred<Maybe<Bool>>
+
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
@@ -918,6 +920,10 @@ public class BrowserProfile: Profile {
 
         @objc func syncOnTimer() {
             self.syncEverything()
+        }
+
+        func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
+            return self.profile.history.hasSyncedHistory()
         }
 
         func syncClients() -> SyncResult {
