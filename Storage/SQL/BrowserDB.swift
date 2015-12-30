@@ -391,7 +391,8 @@ extension BrowserDB {
         self.transaction(&err) { (conn, err) -> Bool in
             for (sql, args) in sql {
                 err = conn.executeChange(sql, withArgs: args)
-                if err != nil {
+                if let err = err {
+                    log.warning("SQL operation failed: \(err.localizedDescription)")
                     return false
                 }
             }
