@@ -940,6 +940,16 @@ extension SQLiteHistory: SyncableHistory {
     }
 }
 
+extension SQLiteHistory {
+    // Returns a deferred `true` if there are rows in the DB that have a server_modified time.
+    // Because we clear this when we reset or remove the account, and never set server_modified
+    // without syncing, the presence of matching rows directly indicates that a deletion
+    // would be synced to the server.
+    public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
+        return self.db.queryReturnsResults("SELECT 1 FROM \(TableHistory) WHERE server_modified IS NOT NULL LIMIT 1")
+    }
+}
+
 extension SQLiteHistory: ResettableSyncStorage {
     // We don't drop deletions when we reset -- we might need to upload a deleted item
     // that never made it to the server.

@@ -803,10 +803,14 @@ class TestSQLiteHistory: XCTestCase {
 
     private func deleteDatabases() {
         for v in ["6", "7", "8", "10", "6-data"] {
-            do { try
-                files.remove("browser-v\(v).db")
+            do {
+                try files.remove("browser-v\(v).db")
             } catch {}
         }
+        do {
+            try files.remove("browser.db")
+            try files.remove("historysynced.db")
+        } catch {}
     }
 
     override func tearDown() {
@@ -1008,6 +1012,21 @@ class TestSQLiteHistory: XCTestCase {
         waitForExpectationsWithTimeout(10.0) { error in
             return
         }
+    }
+
+    func testHistoryIsSynced() {
+        let db = BrowserDB(filename: "historysynced.db", files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)!
+
+        let initialGUID = Bytes.generateGUID()
+        let site = Place(guid: initialGUID, url: "http://www.example.com/test1.3", title: "title")
+
+        XCTAssertFalse(history.hasSyncedHistory().value.successValue ?? true)
+
+        XCTAssertTrue(history.insertOrUpdatePlace(site, modified: NSDate.now()).value.isSuccess)
+
+        XCTAssertTrue(history.hasSyncedHistory().value.successValue ?? false)
     }
 
     // This is a very basic test. Adds an entry, retrieves it, updates it,

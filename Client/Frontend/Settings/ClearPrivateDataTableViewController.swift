@@ -133,11 +133,22 @@ class ClearPrivateDataTableViewController: UITableViewController {
             }
         }
 
-        // If history is being cleared and the user is logged in then we ask for confirmation. Otherwise just do it.
-        // TODO This also needs to check if History is actually being sycned - https://bugzilla.mozilla.org/show_bug.cgi?id=1233521
+        // We have been asked to clear history and we have an account.
+        // (Whether or not it's in a good state is irrelevant.)
         if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
-            let alert = UIAlertController.clearSyncedHistoryAlert(clearPrivateData)
-            self.presentViewController(alert, animated: true, completion: nil)
+            profile.syncManager.hasSyncedHistory().uponQueue(dispatch_get_main_queue()) { yes in
+                // Err on the side of warning, but this shouldn't fail.
+                if yes.successValue ?? true {
+                    // Our local database contains some history items that have been synced.
+                    // Warn the user before clearing.
+                    let alert = UIAlertController.clearSyncedHistoryAlert(clearPrivateData)
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    return
+                }
+
+                // Otherwise, just clear directly.
+                clearPrivateData()
+            }
         } else {
             clearPrivateData()
         }
