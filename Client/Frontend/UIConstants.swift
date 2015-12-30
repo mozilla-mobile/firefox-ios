@@ -115,6 +115,10 @@ private struct TempStrings {
     let findPrevious = NSLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Pending feature; currently unused string! Accessibility label for previous result button in Find in Page Toolbar.")
     let findNext = NSLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Pending feature; currently unused string! Accessibility label for next result button in Find in Page Toolbar.")
     let findClose = NSLocalizedString("Done", tableName: "FindInPage", comment: "Pending feature; currently unused string! Done button in Find in Page Toolbar.")
+
+    // Bug 1235840 - Land string for opting out of anonymous data usage sending
+    let sendAnonymousUsageData = NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")
+    let moreInfo = NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")
 }
 
 /// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.
