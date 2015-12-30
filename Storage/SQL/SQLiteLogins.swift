@@ -470,39 +470,14 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     public func removeLoginByGUID(guid: GUID) -> Success {
-        let nowMillis = NSDate.now()
-
-        // Immediately delete anything that's marked as new -- i.e., it's never reached
-        // the server.
-        let delete =
-        "DELETE FROM \(TableLoginsLocal) WHERE guid = ? AND sync_status = \(SyncStatus.New.rawValue)"
-
-        // Otherwise, mark it as changed.
-        let update =
-        "UPDATE \(TableLoginsLocal) SET " +
-        " local_modified = \(nowMillis)" +
-        ", sync_status = \(SyncStatus.Changed.rawValue)" +
-        ", is_deleted = 1" +
-        ", password = ''" +
-        ", hostname = ''" +
-        ", username = ''" +
-        " WHERE guid = ?"
-
-        let insert =
-        "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
-        "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
-        "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid = ?"
-
-        let args: Args = [guid]
-
-        return self.db.run(delete, withArgs: args)
-           >>> { self.db.run(update, withArgs: args) }
-           >>> { self.markMirrorAsOverridden(guid) }
-           >>> { self.db.run(insert, withArgs: args) }
-            >>> effect(self.notifyLoginDidChange)
+        return removeLoginsWithGUIDs([guid])
     }
 
     public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
+        if guids.isEmpty {
+            return succeed()
+        }
+
         let nowMillis = NSDate.now()
         let inClause = BrowserDB.varlist(guids.count)
 
@@ -514,12 +489,12 @@ public class SQLiteLogins: BrowserLogins {
         // Otherwise, mark it as changed.
         let update =
         "UPDATE \(TableLoginsLocal) SET " +
-            " local_modified = \(nowMillis)" +
-            ", sync_status = \(SyncStatus.Changed.rawValue)" +
-            ", is_deleted = 1" +
-            ", password = ''" +
-            ", hostname = ''" +
-            ", username = ''" +
+        " local_modified = \(nowMillis)" +
+        ", sync_status = \(SyncStatus.Changed.rawValue)" +
+        ", is_deleted = 1" +
+        ", password = ''" +
+        ", hostname = ''" +
+        ", username = ''" +
         " WHERE guid IN \(inClause)"
 
        let markMirrorAsOverridden =
@@ -932,11 +907,10 @@ extension SQLiteLogins: SyncableLogins {
 
     public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
         let checkLoginsMirror = "SELECT 1 FROM \(TableLoginsMirror)"
-        let checkLoginsLocal = "SELECT 1 FROM \(TableLoginsLocal) WHERE sync_status != \(SyncStatus.New.rawValue)"
+        let checkLoginsLocal = "SELECT 1 FROM \(TableLoginsLocal) WHERE sync_status IS NOT \(SyncStatus.New.rawValue)"
 
-        return self.db.queryReturnsResults(checkLoginsLocal) >>== { result in
-            result ? deferMaybe(true) : self.db.queryReturnsResults(checkLoginsMirror)
-        }
+        let sql = "\(checkLoginsMirror) UNION ALL \(checkLoginsLocal)"
+        return self.db.queryReturnsResults(sql)
     }
 }
 
