@@ -367,6 +367,24 @@ class LoginManagerTests: KIFTestCase {
         closeLoginManager()
     }
 
+    func testLoginListShowsNoResults() {
+        openLoginManager()
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        // Find something that doesn't exist
+        tester().tapViewWithAccessibilityLabel("Enter Search Mode")
+        tester().enterTextIntoCurrentFirstResponder("asdfasdf")
+        tester().waitForViewWithAccessibilityLabel("No logins found")
+
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("")
+
+        // Erase search and make sure we see results instead
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        closeLoginManager()
+    }
+
     private func countOfRowsInTableView(tableView: UITableView) -> Int {
         var count = 0
         (0..<tableView.numberOfSections).forEach { section in
