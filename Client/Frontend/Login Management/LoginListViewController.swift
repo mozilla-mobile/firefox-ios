@@ -163,9 +163,12 @@ extension LoginListViewController {
     }
 
     func SELcancel() {
+        // Update selection and select all button
+        loginSelectionController.deselectAll()
+        toggleSelectionTitle()
         selectionButtonHeightConstraint?.updateOffset(0)
         self.view.layoutIfNeeded()
-        loginSelectionController.deselectAll()
+
         tableView.setEditing(false, animated: true)
         navigationItem.leftBarButtonItem = nil
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")

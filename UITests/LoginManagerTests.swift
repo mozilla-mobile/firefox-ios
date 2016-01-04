@@ -342,6 +342,31 @@ class LoginManagerTests: KIFTestCase {
         closeLoginManager()
     }
 
+    func testSelectAllCancelAndEdit() {
+        openLoginManager()
+
+        tester().waitForViewWithAccessibilityLabel("Edit")
+        tester().tapViewWithAccessibilityLabel("Edit")
+
+        // Select all using select all button
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
+        tester().tapViewWithAccessibilityLabel("Select All")
+        list.visibleCells.forEach { cell in
+            XCTAssertTrue(cell.selected)
+        }
+
+        tester().waitForViewWithAccessibilityLabel("Deselect All")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapViewWithAccessibilityLabel("Edit")
+
+        // Make sure the state of the button is 'Select All' since we cancelled mid-way previously.
+        tester().waitForViewWithAccessibilityLabel("Select All")
+
+        tester().tapViewWithAccessibilityLabel("Cancel")
+
+        closeLoginManager()
+    }
+
     private func countOfRowsInTableView(tableView: UITableView) -> Int {
         var count = 0
         (0..<tableView.numberOfSections).forEach { section in
