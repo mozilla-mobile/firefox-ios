@@ -409,8 +409,10 @@ class BrowserViewController: UIViewController {
                     if #available(iOS 9, *) {
                         if let lastTab = cursor.asArray().last {
                             var userData = [QuickActions.TabURLKey: lastTab.url]
-                            if let title = lastTab.title {
+                            if let title = lastTab.title where title.characters.count > 0 {
                                 userData[QuickActions.TabTitleKey] = title
+                            } else {
+                                userData[QuickActions.TabTitleKey] = lastTab.url
                             }
                             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastTab, withUserData: userData, toApplication: UIApplication.sharedApplication())
                         }
