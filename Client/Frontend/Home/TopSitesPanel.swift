@@ -119,7 +119,7 @@ class TopSitesPanel: UIViewController {
             self.dataSource.data = data
             self.dataSource.profile = self.profile
 
-            // redraw now we've udpated our sources
+            // redraw now we've updated our sources
             self.collection?.collectionViewLayout.invalidateLayout()
             self.collection?.setNeedsLayout()
         }
@@ -130,16 +130,17 @@ class TopSitesPanel: UIViewController {
     }
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
-        func reloadThumbnails() {
-            self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount)
-                .uponQueue(dispatch_get_main_queue()) { result in
-                    self.deleteOrUpdateSites(result, indexPath: indexPath)
-            }
-        }
-
+        let mainQueue = dispatch_get_main_queue()
+        collection?.userInteractionEnabled = false
         profile.history.removeSiteFromTopSites(site)
-        >>> self.profile.history.refreshTopSitesCache
-        >>> reloadThumbnails
+            .bindQueue(mainQueue) { _ in
+                return self.profile.history.refreshTopSitesCache()
+            }.bindQueue(mainQueue) { _ in
+                return self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount)
+            }.uponQueue(mainQueue) { result in
+                self.deleteOrUpdateSites(result, indexPath: indexPath)
+                self.collection?.userInteractionEnabled = true
+            }
     }
     private func updateRemoveButtonStateForIndexPath(indexPath: NSIndexPath, forCell cell: ThumbnailCell? = nil) {
         // If we have a cell passed in, use it. If not, then use the indexPath to get it.
@@ -204,7 +205,7 @@ class TopSitesPanel: UIViewController {
                 self.collection?.deleteItemsAtIndexPaths([indexPath])
             }
         }, completion: { _ in
-            self.updateRemoveButtonStates()
+            self.updateAllRemoveButtonStates()
         })
     }
 
@@ -277,12 +278,10 @@ extension TopSitesPanel: UICollectionViewDelegate {
 
 extension TopSitesPanel: ThumbnailCellDelegate {
     func didRemoveThumbnail(thumbnailCell: ThumbnailCell) {
-        if let indexPath = collection?.indexPathForCell(thumbnailCell) {
-            if let site = dataSource[indexPath.item] {
-                self.deleteHistoryTileForSite(site, atIndexPath: indexPath)
-            }
-        }
-        
+        guard let indexPath = collection?.indexPathForCell(thumbnailCell),
+              let site = dataSource[indexPath.item] else { return }
+
+        self.deleteHistoryTileForSite(site, atIndexPath: indexPath)
     }
 
     func didLongPressThumbnail(thumbnailCell: ThumbnailCell) {
