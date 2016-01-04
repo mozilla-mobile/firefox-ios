@@ -985,7 +985,7 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
         if let browserProfile = profile as? BrowserProfile {
             tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
         }
-        previewingContext.sourceRect = cell.frame
+        previewingContext.sourceRect = self.view.convertRect(cell.frame, fromView: collectionView)
 
         return tabVC
     }
