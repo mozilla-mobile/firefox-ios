@@ -101,9 +101,6 @@ private struct TempStrings {
     let accessLogins            = NSLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
     let accessPBMode            = NSLocalizedString("Use your fingerprint to access Private Browsing now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing private browsing")
 
-    // Bug 1233418 - Login Manager Strings
-    let noLoginsFound                   = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Title displayed when no logins are found after searching")
-
     // Bug 1235840 - Land string for opting out of anonymous data usage sending
     let sendAnonymousUsageData = NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")
     let moreInfo = NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")
