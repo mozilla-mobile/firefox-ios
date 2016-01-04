@@ -797,7 +797,12 @@ class SettingsTableViewController: UITableViewController {
             SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
         ]
 
-        var privacySettings: [Setting] = [LoginsSetting(settings: self, delegate: settingsDelegate), ClearPrivateDataSetting(settings: self)]
+        var privacySettings: [Setting]
+        if AppConstants.MOZ_LOGIN_MANAGER {
+            privacySettings = [LoginsSetting(settings: self, delegate: settingsDelegate), ClearPrivateDataSetting(settings: self)]
+        } else {
+            privacySettings = [ClearPrivateDataSetting(settings: self)]
+        }
 
         if #available(iOS 9, *) {
             privacySettings += [
@@ -954,8 +959,14 @@ class SettingsTableViewController: UITableViewController {
         }
 
         if #available(iOS 9, *) {
-            if indexPath.section == 2 && indexPath.row == 2 {
-                return 64
+            if AppConstants.MOZ_LOGIN_MANAGER {
+                if indexPath.section == 2 && indexPath.row == 2 {
+                    return 64
+                }
+            } else {
+                if indexPath.section == 2 && indexPath.row == 1 {
+                    return 64
+                }
             }
         }
 
