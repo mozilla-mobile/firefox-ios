@@ -28,5 +28,5 @@ I think all the steps below can go away if we move this project to Carthage or C
 * Run `./checkout.sh`
 * Open the project
 * Select *GCDWebServer* project. Select the *GCDWebServers (iOS)* target. Select the *Build Settings*. Under *Deployment* change *Skip Install* from *No* to *Yes*.
-* Select *General* and change the *Team* to *None*
+* Select *General* and change the *Team* to *None*. Set the *Version* to *1.0*. Set the *Build* to *1*.
 * Now *Archive* and upload
