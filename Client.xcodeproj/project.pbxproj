@@ -8592,6 +8592,7 @@
 				7B95CD221C3AB2EE00638E31 /* FennecNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = FennecAurora;
 		};
 		D39FA1671A83E0EC00EE869C /* Build configuration list for PBXNativeTarget "UITests" */ = {
 			isa = XCConfigurationList;
