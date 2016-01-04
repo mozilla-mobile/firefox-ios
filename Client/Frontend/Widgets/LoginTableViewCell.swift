@@ -45,7 +45,7 @@ class LoginTableViewCell: UITableViewCell {
 
     weak var delegate: LoginTableViewCellDelegate? = nil
 
-    let descriptionLabel: UITextField = {
+    lazy var descriptionLabel: UITextField = {
         let label = UITextField()
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
@@ -55,10 +55,11 @@ class LoginTableViewCell: UITableViewCell {
         label.autocapitalizationType = .None
         label.autocorrectionType = .No
         label.accessibilityElementsHidden = true
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
 
-    let highlightedLabel: UILabel = {
+    lazy var highlightedLabel: UILabel = {
         let label = UILabel()
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
@@ -116,6 +117,24 @@ class LoginTableViewCell: UITableViewCell {
         ]
 
         return descriptionText.sizeWithAttributes(attributes)
+    }
+
+    var displayDescriptionAsPassword: Bool = false {
+        didSet {
+            descriptionLabel.secureTextEntry = displayDescriptionAsPassword
+
+            // If we're editing only allow copy and hide reveal/hide
+            if descriptionLabel.editing {
+                enabledActions = [.Copy]
+                return
+            }
+
+            if displayDescriptionAsPassword {
+                enabledActions = [.Copy, .Reveal]
+            } else {
+                enabledActions = [.Copy, .Hide]
+            }
+        }
     }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -303,13 +322,11 @@ extension LoginTableViewCell {
 extension LoginTableViewCell: MenuHelperInterface {
 
     func menuHelperReveal(sender: NSNotification) {
-        descriptionLabel.secureTextEntry = false
-        enabledActions = [.Copy, .Hide]
+        displayDescriptionAsPassword = false
     }
 
     func menuHelperSecure(sender: NSNotification) {
-        descriptionLabel.secureTextEntry = true
-        enabledActions = [.Copy, .Reveal]
+        displayDescriptionAsPassword = true
     }
 
     func menuHelperCopy(sender: NSNotification) {

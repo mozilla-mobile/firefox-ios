@@ -159,8 +159,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.style = .NoIconAndBothLabels
             loginCell.highlightedLabel.text = NSLocalizedString("password", tableName: "LoginManager", comment: "Title for password row in Login Detail View")
             loginCell.descriptionLabel.text = login.password
-            loginCell.descriptionLabel.secureTextEntry = true
-            loginCell.enabledActions = [.Copy, .Reveal]
+            loginCell.displayDescriptionAsPassword = true
             loginCell.descriptionLabel.userInteractionEnabled = editingInfo
             return loginCell
 
@@ -286,8 +285,12 @@ extension LoginDetailViewController: KeyboardHelperDelegate {
 // MARK: - UITextFieldDelegate
 extension LoginDetailViewController: UITextFieldDelegate {
 
+    private func cellForItem(item: InfoItem) -> LoginTableViewCell? {
+        return tableView.cellForRowAtIndexPath(item.indexPath) as? LoginTableViewCell
+    }
+
     private func textFieldForItem(item: InfoItem) -> UITextField? {
-        guard let loginCell = tableView.cellForRowAtIndexPath(item.indexPath) as? LoginTableViewCell else {
+        guard let loginCell = cellForItem(item) else {
             return nil
         }
 
@@ -308,6 +311,19 @@ extension LoginDetailViewController: UITextFieldDelegate {
         }
 
         return false
+    }
+
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        if let passwordField = textFieldForItem(.PasswordItem) where passwordField == textField {
+            cellForItem(.PasswordItem)?.displayDescriptionAsPassword = false
+        }
+        return true
+    }
+
+    func textFieldDidEndEditing(textField: UITextField) {
+        if let passwordField = textFieldForItem(.PasswordItem) where passwordField == textField {
+            cellForItem(.PasswordItem)?.displayDescriptionAsPassword = true
+        }
     }
 }
 
