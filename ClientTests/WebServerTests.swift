@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import GCDWebServers
 import XCTest
 
 /// Minimal web server tests. This class can be used as a base class for tests that need a real web server.

@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Deferred
 
 public class MockLogins: BrowserLogins, SyncableLogins {
     private var cache = [Login]()

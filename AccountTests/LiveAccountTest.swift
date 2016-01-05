@@ -6,6 +6,7 @@
 import Foundation
 import FxA
 import Shared
+import Deferred
 
 import XCTest
 

@@ -10,6 +10,7 @@ import Shared
 import Storage
 import Sync
 import XCTest
+import Deferred
 
 public class MockSyncManager: SyncManager {
     public var isSyncing = false

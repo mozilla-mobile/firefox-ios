@@ -4,7 +4,9 @@
 
 import Foundation
 import XCGLogger
+import Deferred
 import Shared
+import Deferred
 
 public let NotificationDatabaseWasRecreated = "NotificationDatabaseWasRecreated"
 

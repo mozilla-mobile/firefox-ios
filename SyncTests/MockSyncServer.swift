@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import GCDWebServers
 @testable import Sync
 
 import XCTest

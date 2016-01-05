@@ -5,6 +5,7 @@
 import Alamofire
 import Shared
 import Foundation
+import Deferred
 
 let TokenServerClientErrorDomain = "org.mozilla.token.error"
 let TokenServerClientUnknownError = TokenServerError.Local(

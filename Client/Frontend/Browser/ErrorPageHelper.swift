@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import GCDWebServers
 import Shared
 
 class ErrorPageHelper {

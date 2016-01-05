@@ -7,6 +7,7 @@ import Shared
 import Storage
 import UIKit
 import WebKit
+import Deferred
 
 import XCTest
 

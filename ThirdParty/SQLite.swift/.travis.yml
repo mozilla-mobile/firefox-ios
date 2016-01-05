@@ -1,0 +1,9 @@
+language: objective-c
+env:
+  - BUILD_SCHEME="SQLite iOS"
+  - BUILD_SCHEME="SQLite Mac"
+before_install:
+  - gem install xcpretty --no-document
+script:
+  - make test
+osx_image: xcode7
