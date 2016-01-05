@@ -23,11 +23,11 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
         return "ContextMenuHelper"
     }
 
-    /// On iOS <9, clicking an element with VoiceOver fires touchstart, but not touchend, causing the context
+    /// Clicking an element with VoiceOver fires touchstart, but not touchend, causing the context
     /// menu to appear when it shouldn't (filed as rdar://22256909). As a workaround, disable the custom
-    /// context menu for VoiceOver users on iOS <9.
+    /// context menu for VoiceOver users.
     private var showCustomContextMenu: Bool {
-        return NSProcessInfo.processInfo().operatingSystemVersion.majorVersion >= 9 || !UIAccessibilityIsVoiceOverRunning()
+        return !UIAccessibilityIsVoiceOverRunning()
     }
 
     required init(browser: Browser) {
