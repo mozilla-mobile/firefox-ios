@@ -126,25 +126,25 @@ class TopSitesPanel: UIViewController {
     }
 
     private func updateAllRemoveButtonStates() {
-        collection?.indexPathsForVisibleItems().forEach { updateRemoveButtonStateForIndexPath($0) }
+        collection?.indexPathsForVisibleItems().forEach(updateRemoveButtonStateForIndexPath)
     }
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
-        let mainQueue = dispatch_get_main_queue()
         collection?.userInteractionEnabled = false
-        profile.history.removeSiteFromTopSites(site)
-            .bindQueue(mainQueue) { _ in
-                return self.profile.history.refreshTopSitesCache()
-            }.bindQueue(mainQueue) { _ in
-                return self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit)
-            }.uponQueue(mainQueue) { result in
-                self.deleteOrUpdateSites(result, indexPath: indexPath)
-                self.collection?.userInteractionEnabled = true
-            }
+
+        let newSites = profile.history.removeSiteFromTopSites(site) >>> {
+            self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit)
+        }
+
+        newSites.uponQueue(dispatch_get_main_queue()) { result in
+            self.deleteOrUpdateSites(result, indexPath: indexPath)
+            self.collection?.userInteractionEnabled = true
+        }
     }
-    private func updateRemoveButtonStateForIndexPath(indexPath: NSIndexPath, forCell cell: ThumbnailCell? = nil) {
+
+    private func updateRemoveButtonStateForIndexPath(indexPath: NSIndexPath) {
         // If we have a cell passed in, use it. If not, then use the indexPath to get it.
-        guard let cell = cell ?? (collection?.cellForItemAtIndexPath(indexPath) as? ThumbnailCell) else {
+        guard let cell = collection?.cellForItemAtIndexPath(indexPath) as? ThumbnailCell else {
             return
         }
 
