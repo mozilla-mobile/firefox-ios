@@ -993,6 +993,20 @@
 			remoteGlobalIDString = 70CB94201B99E728007802FF;
 			remoteInfo = "XCGLogger (watchOS)";
 		};
+		7BCB050E1C3BFFF800AD952C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 00733A4C1BC487C000A5A117;
+			remoteInfo = "WebImage tvOS";
+		};
+		7BCB05221C3BFFF800AD952C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 70CB94201B99E728007802FF;
+			remoteInfo = "XCGLogger (watchOS)";
+		};
 		7BD028D31C073AA90032FDC0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -4141,18 +4155,18 @@
 			remoteRef = 7BB8DE341C3EB9F8005D3632 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7BFB46551C3BE28100A6EB8E /* WebImage.framework */ = {
+		7BCB050F1C3BFFF800AD952C /* WebImage.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = WebImage.framework;
-			remoteRef = 7BFB46541C3BE28100A6EB8E /* PBXContainerItemProxy */;
+			remoteRef = 7BCB050E1C3BFFF800AD952C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7BFB46691C3BE28100A6EB8E /* XCGLogger.framework */ = {
+		7BCB05231C3BFFF800AD952C /* XCGLogger.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = XCGLogger.framework;
-			remoteRef = 7BFB46681C3BE28100A6EB8E /* PBXContainerItemProxy */;
+			remoteRef = 7BCB05221C3BFFF800AD952C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		D31FC2311A8D908900BAF7EC /* Alamofire.framework */ = {
