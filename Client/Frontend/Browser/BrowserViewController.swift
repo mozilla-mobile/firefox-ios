@@ -1034,6 +1034,15 @@ class BrowserViewController: UIViewController {
             updateViewConstraints()
         }
     }
+
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+
+    override func becomeFirstResponder() -> Bool {
+        // Make the web view the first responder so that it can show the selection menu.
+        return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
+    }
 }
 
 /**
