@@ -426,27 +426,3 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
         return helpers[name]
     }
 }
-
-extension WKWebView {
-    func runScriptFunction(function: String, fromScript: String, callback: (AnyObject?) -> Void) {
-        if let path = NSBundle.mainBundle().pathForResource(fromScript, ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                evaluateJavaScript(source, completionHandler: { (obj, err) -> Void in
-                    if let err = err {
-                        print("Error injecting \(err)")
-                        return
-                    }
-
-                    self.evaluateJavaScript("__firefox__.\(fromScript).\(function)", completionHandler: { (obj, err) -> Void in
-                        self.evaluateJavaScript("delete window.__firefox__.\(fromScript)", completionHandler: { (obj, err) -> Void in })
-                        if let err = err {
-                            print("Error running \(err)")
-                            return
-                        }
-                        callback(obj)
-                    })
-                })
-            }
-        }
-    }
-}
