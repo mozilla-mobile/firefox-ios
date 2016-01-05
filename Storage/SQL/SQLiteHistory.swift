@@ -122,6 +122,7 @@ extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(site: Site) -> Success {
         if let host = site.url.asURL?.normalizedHost() {
             return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
+                >>> { return self.refreshTopSitesCache() }
         }
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
     }
