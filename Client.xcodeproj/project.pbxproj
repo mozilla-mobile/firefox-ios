@@ -684,6 +684,7 @@
 		E69966991B72674B0036F797 /* RollingFileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69966981B72674B0036F797 /* RollingFileLogger.swift */; };
 		E69BEA5E1BC6A7F300EA6D04 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69BEA371BC6A79B00EA6D04 /* ArrayExtensions.swift */; };
 		E6A118F31C32DE98008989E8 /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A118F21C32DE98008989E8 /* SettingsTests.swift */; };
+		E6B8963A1C3C1A9500D9B05B /* topdomains.txt in Resources */ = {isa = PBXBuildFile; fileRef = E6B896391C3C1A9500D9B05B /* topdomains.txt */; };
 		E6C05DB21BA1CDAB00CDDD08 /* Breakpad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E69E4E2A1B9F709A00646EDB /* Breakpad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */; };
 		E6E4A9631BF0FA85008162D5 /* NSFileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E4A9621BF0FA85008162D5 /* NSFileManagerExtensions.swift */; };
@@ -1905,6 +1906,7 @@
 		E69E4E241B9F709A00646EDB /* Breakpad.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Breakpad.xcodeproj; path = "Carthage/Checkouts/google-breakpad-ios/src/client/ios/Breakpad.xcodeproj"; sourceTree = "<group>"; };
 		E6A118F21C32DE98008989E8 /* SettingsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
+		E6B896391C3C1A9500D9B05B /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
 		E6E4A9621BF0FA85008162D5 /* NSFileManagerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFileManagerExtensions.swift; sourceTree = "<group>"; };
 		E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
@@ -2730,6 +2732,7 @@
 		D39FA1601A83E0EC00EE869C /* UITests */ = {
 			isa = PBXGroup;
 			children = (
+				E6B896391C3C1A9500D9B05B /* topdomains.txt */,
 				D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */,
 				D34E33021BA793C2006135F0 /* loginForm.html */,
 				0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */,
@@ -2803,7 +2806,6 @@
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
 				7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */,
-				E4A85CE61BF2600B008BD381 /* TitleActivityItemProvider.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 				0BF0DB931A8545800039F300 /* URLBarView.swift */,
 				E4ECD0871B70FD4F00B90D22 /* WindowCloseHelper.swift */,
@@ -4380,6 +4382,7 @@
 			files = (
 				E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */,
 				D34E33031BA793C2006135F0 /* loginForm.html in Resources */,
+				E6B8963A1C3C1A9500D9B05B /* topdomains.txt in Resources */,
 				0B6FBAB21AC1F830007EC669 /* numberedPage.html in Resources */,
 				0B5A93421B1EB572004F47A2 /* readablePage.html in Resources */,
 				0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */,
