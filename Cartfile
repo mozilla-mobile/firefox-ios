@@ -14,4 +14,4 @@ github "DaveWoodCom/XCGLogger"      "swift_2.0"        # Previously: swift_1.2
 github "sleroux/google-breakpad-ios" "master"
 github "adjust/ios_sdk"             "v4.3.0"
 github "AgileBits/onepassword-extension" "add-framework-support"
-github "jrendel/SwiftKeychainWrapper"					# default to latest tag
+github "jrendel/SwiftKeychainWrapper" "1.0.11"					# default to latest tag
