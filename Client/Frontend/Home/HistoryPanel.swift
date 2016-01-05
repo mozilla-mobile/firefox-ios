@@ -37,6 +37,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     private let Today = getDate(dayOffset: 0)
     private let Yesterday = getDate(dayOffset: -1)
     private let ThisWeek = getDate(dayOffset: -7)
+    private let refreshTableView = UITableViewController()
 
     // Category number (index) -> (UI section, row count, cursor offset).
     private var categories: [CategorySpec] = [CategorySpec]()
@@ -60,6 +61,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.accessibilityIdentifier = "History List"
+        self.addChildViewController(self.refreshTableView)
+        self.refreshTableView.tableView = self.tableView
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -108,11 +111,13 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = refresh
-        self.tableView.addSubview(refresh)
+//        self.tableView.addSubview(refresh)
+        self.refreshTableView.refreshControl = refresh
+        self.refreshTableView.refreshControl?.layer.zPosition = self.tableView.layer.zPosition + 1
     }
 
     func removeRefreshControl() {
-        self.refreshControl?.removeFromSuperview()
+//        self.refreshControl?.removeFromSuperview()
         self.refreshControl = nil
     }
 
