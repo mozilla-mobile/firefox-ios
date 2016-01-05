@@ -134,7 +134,7 @@ class TopSitesPanel: UIViewController {
             .bindQueue(mainQueue) { _ in
                 return self.profile.history.refreshTopSitesCache()
             }.bindQueue(mainQueue) { _ in
-                return self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount)
+                return self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit)
             }.uponQueue(mainQueue) { result in
                 self.deleteOrUpdateSites(result, indexPath: indexPath)
                 self.collection?.userInteractionEnabled = true
