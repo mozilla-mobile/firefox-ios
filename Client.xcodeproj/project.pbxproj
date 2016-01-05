@@ -2803,7 +2803,6 @@
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
 				7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */,
-				E4A85CE61BF2600B008BD381 /* TitleActivityItemProvider.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 				0BF0DB931A8545800039F300 /* URLBarView.swift */,
 				E4ECD0871B70FD4F00B90D22 /* WindowCloseHelper.swift */,
