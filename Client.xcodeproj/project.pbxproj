@@ -1000,6 +1000,20 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
+		7BFB46541C3BE28100A6EB8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 00733A4C1BC487C000A5A117;
+			remoteInfo = "WebImage tvOS";
+		};
+		7BFB46681C3BE28100A6EB8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 70CB94201B99E728007802FF;
+			remoteInfo = "XCGLogger (watchOS)";
+		};
 		D31FC2301A8D908900BAF7EC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */;
@@ -2034,7 +2048,7 @@
 				0B6544C41A96C59E000DD202 /* libSDWebImage+WebP.a */,
 				0B6544C61A96C59E000DD202 /* libSDWebImage+MKAnnotation.a */,
 				D3B5A0EA1B5459F600C15BCF /* WebImage.framework */,
-				7BB8DE211C3EB9F8005D3632 /* WebImage.framework */,
+				7BFB46551C3BE28100A6EB8E /* WebImage.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2231,7 +2245,7 @@
 				E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */,
 				D38B2D0E1A8D96D00040E6B5 /* GCDWebServer */,
 				39C575111BE28C6400E1C4B1 /* OnePasswordExtension */,
-				7B9A61CA1C3EBFAE005C83DC /* RaptureXML */,
+				0B5B51AC1B4CDB9E00E3B6E9 /* RaptureXML */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
 				7BFB466A1C3BE2BA00A6EB8E /* SwiftKeychainWrapper */,
 				E42475CC1AB73B7500B23D33 /* SWTableViewCell */,
@@ -2433,7 +2447,7 @@
 			children = (
 				39A362D41AAF5E2C00F47390 /* XCGLogger.framework */,
 				39A362D61AAF5E2C00F47390 /* XCGLogger.framework */,
-				7BB8DE351C3EB9F8005D3632 /* XCGLogger.framework */,
+				7BFB46691C3BE28100A6EB8E /* XCGLogger.framework */,
 				39A362D81AAF5E2C00F47390 /* XCGLoggerTests (iOS).xctest */,
 				7B7692CD1B7CCBD100188277 /* XCGLoggerTests (OS X).xctest */,
 			);
@@ -2475,32 +2489,6 @@
 			);
 			name = Snapshot;
 			sourceTree = "<group>";
-		};
-		7B9A61CA1C3EBFAE005C83DC /* RaptureXML */ = {
-			isa = PBXGroup;
-			children = (
-				7B9A61CB1C3EBFAE005C83DC /* RXMLElement.h */,
-				7B9A61CC1C3EBFAE005C83DC /* RXMLElement.m */,
-			);
-			name = RaptureXML;
-			path = ThirdParty/RaptureXML;
-			sourceTree = "<group>";
-		};
-		7B9A62BA1C4002B1005C83DC /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7B9A62DB1C4002B1005C83DC /* SQLite.framework */,
-				7B9A62DD1C4002B1005C83DC /* SQLite iOS Tests.xctest */,
-				7B9A62DF1C4002B1005C83DC /* SQLite.framework */,
-				7B9A62E11C4002B1005C83DC /* SQLite Mac Tests.xctest */,
-				7B9A62E31C4002B1005C83DC /* SQLiteCipher.framework */,
-				7B9A62E51C4002B1005C83DC /* SQLiteCipher iOS Tests.xctest */,
-				7B9A62E71C4002B1005C83DC /* SQLiteCipher.framework */,
-				7B9A62E91C4002B1005C83DC /* SQLiteCipher Mac Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		7BFB466A1C3BE2BA00A6EB8E /* SwiftKeychainWrapper */ = {
 			isa = PBXGroup;
 			children = (
@@ -3996,7 +3984,8 @@
 		2F44F9F91A9D417600FD20CC /* Base32.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = Base32.framework;
+			name = Base32.framework;
+			path = .framework;
 			remoteRef = 2F44F9F81A9D417600FD20CC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -4124,6 +4113,20 @@
 			fileType = wrapper.framework;
 			path = XCGLogger.framework;
 			remoteRef = 7BB8DE341C3EB9F8005D3632 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BFB46551C3BE28100A6EB8E /* WebImage.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = WebImage.framework;
+			remoteRef = 7BFB46541C3BE28100A6EB8E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7BFB46691C3BE28100A6EB8E /* XCGLogger.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = XCGLogger.framework;
+			remoteRef = 7BFB46681C3BE28100A6EB8E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		D31FC2311A8D908900BAF7EC /* Alamofire.framework */ = {
@@ -4530,7 +4533,6 @@
 				2FDE87321ABA3E87005317B1 /* json.swift in Sources */,
 				E69966991B72674B0036F797 /* RollingFileLogger.swift in Sources */,
 				288A2DAB1AB8B3700023ABC3 /* BoxType.swift in Sources */,
-				7BCB05241C3C001200AD952C /* Deferred.swift in Sources */,
 				E66464EE1C10D98000AF05CE /* AssertionUtils.swift in Sources */,
 				28158BAC1ABC7C0E00C56FC8 /* Bytes.swift in Sources */,
 				288A2DB11AB8B37E0023ABC3 /* LockProtected.swift in Sources */,
