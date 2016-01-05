@@ -122,6 +122,7 @@ extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(site: Site) -> Success {
         if let host = site.url.asURL?.normalizedHost() {
             return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
+                >>> { return self.refreshTopSitesCache() }
         }
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
     }
@@ -289,8 +290,7 @@ extension SQLiteHistory: BrowserHistory {
 
     public func refreshTopSitesCache() -> Success {
         let cacheSize = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0)
-        return self.clearTopSitesCache()
-            >>> { self.updateTopSitesCacheWithLimit(cacheSize) }
+        return updateTopSitesCacheWithLimit(cacheSize)
     }
 
     private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
@@ -298,10 +298,10 @@ extension SQLiteHistory: BrowserHistory {
         let (query, args) = self.filteredSitesByFrecencyQueryWithLimit(limit, groupClause: groupBy, whereData: whereData)
         let insertQuery = "INSERT INTO \(TableCachedTopSites) \(query)"
         return self.clearTopSitesCache() >>> {
-            self.db.run(insertQuery, withArgs: args) >>> {
-                self.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
-                return succeed()
-            }
+            return self.db.run(insertQuery, withArgs: args)
+        } >>> {
+            self.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+            return succeed()
         }
     }
 
