@@ -29,6 +29,8 @@ class LoginDetailViewController: UIViewController {
 
     private let profile: Profile
 
+    private let favicon: Favicon?
+
     private let tableView = UITableView()
 
     private var login: Login {
@@ -54,9 +56,10 @@ class LoginDetailViewController: UIViewController {
 
     weak var settingsDelegate: SettingsDelegate?
 
-    init(profile: Profile, login: Login) {
+    init(profile: Profile, login: Login, favicon: Favicon?) {
         self.login = login
         self.profile = profile
+        self.favicon = favicon
         super.init(nibName: nil, bundle: nil)
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
@@ -143,8 +146,9 @@ extension LoginDetailViewController: UITableViewDataSource {
         switch InfoItem(rawValue: indexPath.row)! {
         case .TitleItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.style = .NoIconAndBothLabels
+            loginCell.style = .IconAndBothLabels
             loginCell.descriptionLabel.text = login.hostname
+            loginCell.faviconURL = favicon?.url.asURL
             return loginCell
 
         case .UsernameItem:

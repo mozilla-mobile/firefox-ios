@@ -10,6 +10,11 @@ public protocol Favicons {
     func clearAllFavicons() -> Success
 
     /**
+     * Returns a cursor of tuples containg a domain and it's matching favicon.
+     */
+    func getFaviconsByDomain() -> Deferred<Maybe<Cursor<(String, Favicon)?>>>
+
+    /**
      * Returns the ID of the added favicon.
      */
     func addFavicon(icon: Favicon) -> Deferred<Maybe<Int>>

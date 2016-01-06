@@ -120,6 +120,10 @@ class LoginListViewController: UIViewController {
         loadingStateView.snp_makeConstraints { make in
             make.edges.equalTo(tableView)
         }
+
+        fetchAllFaviconsByDomain().uponQueue(dispatch_get_main_queue()) { results in
+            self.loginDataSource.domainFaviconLookup = results.successValue ?? [String:Favicon]()
+        }
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -180,6 +184,19 @@ class LoginListViewController: UIViewController {
         tableView.reloadData()
         activeLoginQuery = nil
         return succeed()
+    }
+
+    private func fetchAllFaviconsByDomain() -> Deferred<Maybe<[String: Favicon]>> {
+        return profile.favicons.getFaviconsByDomain() >>== { result in
+            var lookup = [String: Favicon]()
+            result.asArray().forEach { t in
+                guard let domain = t?.0, favicon = t?.1 else {
+                    return
+                }
+                lookup[domain] = favicon
+            }
+            return deferMaybe(lookup)
+        }
     }
 }
 
@@ -278,7 +295,8 @@ extension LoginListViewController: UITableViewDelegate {
         } else {
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
             let login = loginDataSource.loginAtIndexPath(indexPath)
-            let detailViewController = LoginDetailViewController(profile: profile, login: login)
+            let favicon = loginDataSource.faviconForLogin(login)
+            let detailViewController = LoginDetailViewController(profile: profile, login: login, favicon: favicon)
             detailViewController.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(detailViewController, animated: true)
         }
@@ -383,6 +401,15 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
     var cursor: Cursor<Login>?
 
+    var domainFaviconLookup = [String: Favicon]()
+
+    func faviconForLogin(login: Login) -> Favicon? {
+        if let normalizedHost = login.hostname.asURL?.normalizedHost() {
+            return domainFaviconLookup[normalizedHost]
+        }
+        return nil
+    }
+
     func loginAtIndexPath(indexPath: NSIndexPath) -> Login {
         return loginsForSection(indexPath.section)[indexPath.row]
     }
@@ -407,9 +434,9 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         let cell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
 
         let login = loginAtIndexPath(indexPath)
-        cell.style = .NoIconAndBothLabels
+        cell.style = .IconAndBothLabels
         cell.updateCellWithLogin(login)
-
+        cell.faviconURL = faviconForLogin(login)?.url.asURL
         return cell
     }
 
@@ -438,7 +465,7 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
             guard let login = login, let baseDomain = login.hostname.asURL?.baseDomain() else {
                 return
             }
-
+            
             let firstChar = baseDomain.uppercaseString[baseDomain.startIndex]
             if !firstHostnameCharacters.contains(firstChar) {
                 firstHostnameCharacters.append(firstChar)
