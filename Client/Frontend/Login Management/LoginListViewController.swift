@@ -335,7 +335,7 @@ extension LoginListViewController: SearchInputViewDelegate {
         return activeLoginQuery!
     }
 
-    private func reloadTableWithResult(result: Maybe<Cursor<LoginData>>) -> Success {
+    private func reloadTableWithResult(result: Maybe<Cursor<Login>>) -> Success {
         loginDataSource.cursor = result.successValue
         tableView.reloadData()
         activeLoginQuery = nil
@@ -392,9 +392,9 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
     private let emptyStateView = NoLoginsView()
 
-    var cursor: Cursor<LoginData>?
+    var cursor: Cursor<Login>?
 
-    func loginAtIndexPath(indexPath: NSIndexPath) -> LoginData {
+    func loginAtIndexPath(indexPath: NSIndexPath) -> Login {
         return loginsForSection(indexPath.section)[indexPath.row]
     }
 
@@ -459,7 +459,7 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         return sectionTitles.sort()
     }
 
-    private func loginsForSection(section: Int) -> [LoginData] {
+    private func loginsForSection(section: Int) -> [Login] {
         guard let sectionTitles = sectionIndexTitles() else {
             return []
         }

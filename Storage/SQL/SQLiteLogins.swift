@@ -201,8 +201,8 @@ public class SQLiteLogins: BrowserLogins {
         }
     }
 
-    public func getLoginDataForGUID(guid: GUID) -> Deferred<Maybe<LoginData>> {
-        let projection = SQLiteLogins.MainWithLastUsedColumns
+    public func getLoginDataForGUID(guid: GUID) -> Deferred<Maybe<Login>> {
+        let projection = SQLiteLogins.LoginColumns
         let sql =
         "SELECT \(projection) FROM " +
             "\(TableLoginsLocal) WHERE is_deleted = 0 AND guid = ? " +
@@ -213,7 +213,7 @@ public class SQLiteLogins: BrowserLogins {
         "LIMIT 1"
 
         let args: Args = [guid, guid]
-        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
+        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginFactory)
             >>== { value in
             if let login = value[0] {
                 return deferMaybe(login)
@@ -270,12 +270,12 @@ public class SQLiteLogins: BrowserLogins {
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 
-    public func getAllLogins() -> Deferred<Maybe<Cursor<LoginData>>> {
+    public func getAllLogins() -> Deferred<Maybe<Cursor<Login>>> {
         return searchLoginsWithQuery(nil)
     }
 
-    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
-        let projection = SQLiteLogins.MainWithLastUsedColumns
+    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<Login>>> {
+        let projection = SQLiteLogins.LoginColumns
         var searchClauses = [String]()
         var args: Args? = nil
         if let query = query {
@@ -299,7 +299,7 @@ public class SQLiteLogins: BrowserLogins {
             "\(TableLoginsMirror) WHERE is_overridden = 0 " + whereSearchClause +
         "ORDER BY hostname ASC"
 
-        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
+        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginFactory)
     }
 
     public func addLogin(login: LoginData) -> Success {

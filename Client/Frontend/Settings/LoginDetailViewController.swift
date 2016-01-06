@@ -31,7 +31,7 @@ class LoginDetailViewController: UIViewController {
 
     private let tableView = UITableView()
 
-    private var login: LoginData {
+    private var login: Login {
         didSet {
             tableView.reloadData()
         }
@@ -53,7 +53,7 @@ class LoginDetailViewController: UIViewController {
 
     weak var settingsDelegate: SettingsDelegate?
 
-    init(profile: Profile, login: LoginData) {
+    init(profile: Profile, login: Login) {
         self.login = login
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
@@ -176,11 +176,9 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .LastModifiedSeperator:
             let footer = SettingsTableSectionHeaderFooterView()
             footer.titleAlignment = .Top
-//            if let passwordModifiedTimestamp = loginUsageData?.timePasswordChanged {
-//                let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
-//                let formattedLabel = String(format: lastModified, NSDate.fromTimestamp(passwordModifiedTimestamp).toRelativeTimeString())
-//                footer.titleLabel.text = formattedLabel
-//            }
+            let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
+            let formattedLabel = String(format: lastModified, NSDate.fromMicrosecondTimestamp(login.timePasswordChanged).toRelativeTimeString())
+            footer.titleLabel.text = formattedLabel
             let cell = wrapFooter(footer, withCellFromTableView: tableView, atIndexPath: indexPath)
             return cell
 
@@ -230,8 +228,6 @@ extension LoginDetailViewController: UITableViewDelegate {
             return LoginDetailUX.DeleteRowHeight
         }
     }
-
-
 
     func tableView(tableView: UITableView, shouldShowMenuForRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         let item = InfoItem(rawValue: indexPath.row)!
