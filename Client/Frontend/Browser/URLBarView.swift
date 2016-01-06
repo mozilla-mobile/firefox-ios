@@ -103,6 +103,8 @@ class URLBarView: UIView {
         }
     }
 
+    private var currentTheme: String = Theme.NormalMode
+
     var toolbarIsShowing = false
 
     private var locationTextField: ToolbarTextField?
@@ -352,6 +354,8 @@ class URLBarView: UIView {
         locationTextField.snp_makeConstraints { make in
             make.edges.equalTo(self.locationView.urlTextField)
         }
+
+        locationTextField.applyTheme(currentTheme)
     }
 
     func removeLocationTextField() {
@@ -737,6 +741,7 @@ extension URLBarView: Themeable {
             return
         }
 
+        currentTheme = themeName
         locationBorderColor = theme.borderColor!
         locationActiveBorderColor = theme.activeBorderColor!
         progressBarTint = theme.tintColor
