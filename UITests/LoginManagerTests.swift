@@ -415,7 +415,7 @@ class LoginManagerTests: KIFTestCase {
 
         XCTAssertEqual(usernameField, firstResponder)
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("changedusername")
-        tester().tapViewWithAccessibilityLabel("return")
+        tester().tapViewWithAccessibilityLabel("Next")
 
         firstResponder = UIApplication.sharedApplication().keyWindow?.firstResponder()
         let passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
@@ -426,23 +426,12 @@ class LoginManagerTests: KIFTestCase {
         XCTAssertFalse(passwordField.secureTextEntry)
 
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("changedpassword")
-        tester().tapViewWithAccessibilityLabel("return")
-
-        firstResponder = UIApplication.sharedApplication().keyWindow?.firstResponder()
-        let websiteCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! LoginTableViewCell
-        let websiteField = websiteCell.descriptionLabel
-
-        // Check that we moved to the website field and that the password is now secure
-        XCTAssertEqual(websiteField, firstResponder)
-        XCTAssertTrue(passwordField.secureTextEntry)
-
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("http://changedwebsite.com")
         tester().tapViewWithAccessibilityLabel("Done")
 
         // Go back and find the changed login
         tester().tapViewWithAccessibilityLabel("Back")
         tester().tapViewWithAccessibilityLabel("Enter Search Mode")
-        tester().enterTextIntoCurrentFirstResponder("changedwebsite")
+        tester().enterTextIntoCurrentFirstResponder("changedusername")
 
         let loginsList = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
         XCTAssertEqual(loginsList.numberOfRowsInSection(0), 1)

@@ -11,7 +11,7 @@ private enum InfoItem: Int {
     case UsernameItem = 1
     case PasswordItem = 2
     case WebsiteItem = 3
-    case LastModifiedSeperator = 4
+    case LastModifiedSeparator = 4
     case DeleteItem = 5
 
     var indexPath: NSIndexPath {
@@ -22,7 +22,7 @@ private enum InfoItem: Int {
 private struct LoginDetailUX {
     static let InfoRowHeight: CGFloat = 58
     static let DeleteRowHeight: CGFloat = 44
-    static let SeperatorHeight: CGFloat = 44
+    static let SeparatorHeight: CGFloat = 44
 }
 
 class LoginDetailViewController: UIViewController {
@@ -114,10 +114,10 @@ class LoginDetailViewController: UIViewController {
 
         // The following hacks are to prevent the default cell seperators from displaying. We want to
         // hide the default seperator for the website/last modified cells since the last modified cell
-        // draws it's own seperators. The last item in the list draws its seperator full width. The reason
+        // draws its own separators. The last item in the list draws its seperator full width.
 
         // Prevent seperators from showing by pushing them off screen by the width of the cell
-        let itemsToHideSeperators: [InfoItem] = [.WebsiteItem, .LastModifiedSeperator]
+        let itemsToHideSeperators: [InfoItem] = [.WebsiteItem, .LastModifiedSeparator]
         itemsToHideSeperators.forEach { item in
             let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: item.rawValue, inSection: 0))
             cell?.separatorInset = UIEdgeInsetsMake(0, cell?.bounds.width ?? 0, 0, 0)
@@ -151,7 +151,8 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.highlightedLabel.text = NSLocalizedString("username", tableName: "LoginManager", comment: "Title for username row in Login Detail View")
             loginCell.descriptionLabel.text = login.username
             loginCell.descriptionLabel.keyboardType = .EmailAddress
-            loginCell.descriptionLabel.userInteractionEnabled = editingInfo
+            loginCell.descriptionLabel.returnKeyType = .Next
+            loginCell.editingDescription = editingInfo
             return loginCell
 
         case .PasswordItem:
@@ -159,8 +160,9 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.style = .NoIconAndBothLabels
             loginCell.highlightedLabel.text = NSLocalizedString("password", tableName: "LoginManager", comment: "Title for password row in Login Detail View")
             loginCell.descriptionLabel.text = login.password
+            loginCell.descriptionLabel.returnKeyType = .Default
             loginCell.displayDescriptionAsPassword = true
-            loginCell.descriptionLabel.userInteractionEnabled = editingInfo
+            loginCell.editingDescription = editingInfo
             return loginCell
 
         case .WebsiteItem:
@@ -169,11 +171,9 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.highlightedLabel.text = NSLocalizedString("website", tableName: "LoginManager", comment: "Title for website row in Login Detail View")
             loginCell.descriptionLabel.text = login.hostname
             loginCell.enabledActions = [.Copy, .OpenAndFill]
-            loginCell.descriptionLabel.keyboardType = .URL
-            loginCell.descriptionLabel.userInteractionEnabled = editingInfo
             return loginCell
 
-        case .LastModifiedSeperator:
+        case .LastModifiedSeparator:
             let footer = SettingsTableSectionHeaderFooterView()
             footer.titleAlignment = .Top
             let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
@@ -222,8 +222,8 @@ extension LoginDetailViewController: UITableViewDelegate {
         switch InfoItem(rawValue: indexPath.row)! {
         case .TitleItem, .UsernameItem, .PasswordItem, .WebsiteItem:
             return LoginDetailUX.InfoRowHeight
-        case .LastModifiedSeperator:
-            return LoginDetailUX.SeperatorHeight
+        case .LastModifiedSeparator:
+            return LoginDetailUX.SeparatorHeight
         case .DeleteItem:
             return LoginDetailUX.DeleteRowHeight
         }
@@ -296,14 +296,9 @@ extension LoginDetailViewController: UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         let usernameField = textFieldForItem(.UsernameItem)
         let passwordField = textFieldForItem(.PasswordItem)
-        let websiteField = textFieldForItem(.WebsiteItem)
 
         if textField == usernameField {
             passwordField?.becomeFirstResponder()
-        } else if textField == passwordField {
-            websiteField?.becomeFirstResponder()
-        } else {
-            textField.resignFirstResponder()
         }
 
         return false
@@ -347,22 +342,20 @@ extension LoginDetailViewController {
     func SELdoneEditing() {
         let usernameField = textFieldForItem(.UsernameItem)
         let passwordField = textFieldForItem(.PasswordItem)
-        let websiteField = textFieldForItem(.WebsiteItem)
 
         // Force resign responder from all input fields
-        [usernameField, passwordField, websiteField].forEach { $0?.resignFirstResponder() }
+        [usernameField, passwordField].forEach { $0?.resignFirstResponder() }
 
         editingInfo = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
 
         let username = usernameField?.text ?? ""
         let password = passwordField?.text ?? ""
-        let hostname = websiteField?.text ?? ""
 
         // Update login if there were any changes
-        if username != login.username || password != login.password || hostname != login.hostname {
+        if username != login.username || password != login.password {
             // Update local, in-memory copy to view changes right away.
-            login = Login(guid: login.guid, hostname: hostname, username: username, password: password)
+            login = Login(guid: login.guid, hostname: login.hostname, username: username, password: password)
             profile.logins.updateLoginByGUID(login.guid, new: login, significant: true)
         }
     }

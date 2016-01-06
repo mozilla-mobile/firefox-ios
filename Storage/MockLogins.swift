@@ -45,8 +45,6 @@ public class MockLogins: BrowserLogins, SyncableLogins {
     public func getAllLogins() -> Deferred<Maybe<Cursor<Login>>> {
         let cursor = ArrayCursor(data: cache.sort({ (loginA, loginB) -> Bool in
             return loginA.hostname > loginB.hostname
-        }).map({ login in
-            return login
         }))
         return Deferred(value: Maybe(success: cursor))
     }
@@ -62,8 +60,6 @@ public class MockLogins: BrowserLogins, SyncableLogins {
             return checks.contains(true)
         }).sort({ (loginA, loginB) -> Bool in
             return loginA.hostname > loginB.hostname
-        }).map({ login in
-            return login
         }))
         return Deferred(value: Maybe(success: cursor))
     }

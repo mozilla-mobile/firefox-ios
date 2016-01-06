@@ -208,7 +208,7 @@ public class SQLiteLogins: BrowserLogins {
             "\(TableLoginsLocal) WHERE is_deleted = 0 AND guid = ? " +
             "UNION ALL " +
             "SELECT \(projection) FROM " +
-            "\(TableLoginsMirror) WHERE guid = ? " +
+            "\(TableLoginsMirror) WHERE is_overriden IS NOT 1 AND guid = ? " +
         "ORDER BY hostname ASC " +
         "LIMIT 1"
 
