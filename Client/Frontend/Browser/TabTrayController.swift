@@ -704,11 +704,7 @@ extension TabTrayController: SettingsDelegate {
 
 private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     unowned var cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>
-    private var tabs: [Browser] {
-        didSet {
-            tabs.forEach { print("Tab \($0.url)) isPrivate: \($0.isPrivate)") }
-        }
-    }
+    private var tabs: [Browser]
 
     init(tabs: [Browser], cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>) {
         self.cellDelegate = cellDelegate
