@@ -21,11 +21,12 @@ protocol BrowserHelper {
 protocol BrowserDelegate {
     func browser(browser: Browser, didAddSnackbar bar: SnackBar)
     func browser(browser: Browser, didRemoveSnackbar bar: SnackBar)
+    func browser(browser: Browser, didSelectFindInPageForSelection selection: String)
     optional func browser(browser: Browser, didCreateWebView webView: WKWebView)
     optional func browser(browser: Browser, willDeleteWebView webView: WKWebView)
 }
 
-class Browser: NSObject {
+class Browser: NSObject, BrowserWebViewDelegate {
     private var _isPrivate: Bool = false
     internal private(set) var isPrivate: Bool {
         get {
@@ -110,7 +111,8 @@ class Browser: NSObject {
             configuration!.userContentController = WKUserContentController()
             configuration!.preferences = WKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
-            let webView = WKWebView(frame: CGRectZero, configuration: configuration!)
+            let webView = BrowserWebView(frame: CGRectZero, configuration: configuration!)
+            webView.delegate = self
             configuration = nil
 
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
@@ -387,6 +389,10 @@ class Browser: NSObject {
         desktopSite = !desktopSite
         reload()
     }
+
+    private func browserWebView(browserWebView: BrowserWebView, didSelectFindInPageForSelection selection: String) {
+        browserDelegate?.browser(self, didSelectFindInPageForSelection: selection)
+    }
 }
 
 private class HelperManager: NSObject, WKScriptMessageHandler {
@@ -424,5 +430,24 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
 
     func getHelper(name name: String) -> BrowserHelper? {
         return helpers[name]
+    }
+}
+
+private protocol BrowserWebViewDelegate: class {
+    func browserWebView(browserWebView: BrowserWebView, didSelectFindInPageForSelection selection: String)
+}
+
+private class BrowserWebView: WKWebView, MenuHelperInterface {
+    private weak var delegate: BrowserWebViewDelegate?
+
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        return action == MenuHelper.SelectorFindInPage
+    }
+
+    @objc func menuHelperFindInPage(sender: NSNotification) {
+        evaluateJavaScript("getSelection().toString()") { result, _ in
+            let selection = result as? String ?? ""
+            self.delegate?.browserWebView(self, didSelectFindInPageForSelection: selection)
+        }
     }
 }

@@ -42,6 +42,17 @@ class FindInPageBar: UIView {
         }
     }
 
+    var text: String? {
+        get {
+            return searchText.text
+        }
+
+        set {
+            searchText.text = newValue
+            SELdidTextChange(searchText)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
