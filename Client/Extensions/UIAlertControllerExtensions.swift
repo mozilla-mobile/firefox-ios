@@ -118,4 +118,49 @@ extension UIAlertController {
         alert.addAction(noOption)
         return alert
     }
+
+    /**
+     Creates an alert view to warn the user that their logins will either be completely deleted in the 
+     case of local-only logins or deleted across synced devices in synced account logins.
+
+     - parameter deleteCallback: Block to run when delete is tapped.
+     - parameter hasSyncedLogins: Boolean indicating the user has logins that have been synced.
+
+     - returns: UIAlertController instance
+     */
+    class func deleteLoginAlertWithDeleteCallback(
+        deleteCallback: UIAlertActionCallback,
+        hasSyncedLogins: Bool) -> UIAlertController {
+
+        let areYouSureTitle = NSLocalizedString("Are you sure?",
+            tableName: "LoginManager",
+            comment: "Prompt title when deleting logins")
+        let deleteLocalMessage = NSLocalizedString("Logins will be permanently removed.",
+            tableName: "LoginManager",
+            comment: "Prompt message warning the user that deleting non-synced logins will permanently remove them")
+        let deleteSyncedDevicesMessage = NSLocalizedString("Logins will be removed from all connected devices.",
+            tableName: "LoginManager",
+            comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices")
+        let cancelActionTitle = NSLocalizedString("Cancel",
+            tableName: "LoginManager",
+            comment: "Prompt option for cancelling out of deletion")
+        let deleteActionTitle = NSLocalizedString("Delete",
+            tableName: "LoginManager",
+            comment: "Button in login detail screen that deletes the current login")
+
+        let deleteAlert: UIAlertController
+        if hasSyncedLogins {
+            deleteAlert = UIAlertController(title: areYouSureTitle, message: deleteSyncedDevicesMessage, preferredStyle: .Alert)
+        } else {
+            deleteAlert = UIAlertController(title: areYouSureTitle, message: deleteLocalMessage, preferredStyle: .Alert)
+        }
+
+        let cancelAction = UIAlertAction(title: cancelActionTitle, style: .Cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: deleteActionTitle, style: .Destructive, handler: deleteCallback)
+
+        deleteAlert.addAction(cancelAction)
+        deleteAlert.addAction(deleteAction)
+
+        return deleteAlert
+    }
 }

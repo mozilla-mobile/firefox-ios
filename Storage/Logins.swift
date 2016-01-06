@@ -514,6 +514,7 @@ public protocol BrowserLogins {
     // Add the use of a login by GUID.
     func addUseOfLoginByGUID(guid: GUID) -> Success
     func removeLoginByGUID(guid: GUID) -> Success
+    func removeLoginsWithGUIDs(guids: [GUID]) -> Success
 
     func removeAll() -> Success
 }
@@ -534,6 +535,11 @@ public protocol SyncableLogins: AccountRemovalDelegate {
      */
     func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
     func markAsDeleted(guids: [GUID]) -> Success
+
+    /**
+     * For inspecting whether we're an active participant in login sync.
+     */
+    func hasSyncedLogins() -> Deferred<Maybe<Bool>>
 }
 
 public class LoginDataError: MaybeErrorType {

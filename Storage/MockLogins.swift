@@ -119,9 +119,19 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return succeed()
     }
 
+    public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
+        return walk(guids) { guid in
+            self.removeLoginByGUID(guid)
+        }
+    }
+
     public func removeAll() -> Success {
         cache.removeAll(keepCapacity: false)
         return succeed()
+    }
+
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        return deferMaybe(true)
     }
 
     // TODO

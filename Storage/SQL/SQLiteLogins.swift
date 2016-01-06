@@ -470,12 +470,21 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     public func removeLoginByGUID(guid: GUID) -> Success {
+        return removeLoginsWithGUIDs([guid])
+    }
+
+    public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
+        if guids.isEmpty {
+            return succeed()
+        }
+
         let nowMillis = NSDate.now()
+        let inClause = BrowserDB.varlist(guids.count)
 
         // Immediately delete anything that's marked as new -- i.e., it's never reached
         // the server.
         let delete =
-        "DELETE FROM \(TableLoginsLocal) WHERE guid = ? AND sync_status = \(SyncStatus.New.rawValue)"
+        "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause) AND sync_status = \(SyncStatus.New.rawValue)"
 
         // Otherwise, mark it as changed.
         let update =
@@ -486,20 +495,25 @@ public class SQLiteLogins: BrowserLogins {
         ", password = ''" +
         ", hostname = ''" +
         ", username = ''" +
-        " WHERE guid = ?"
+        " WHERE guid IN \(inClause)"
+
+       let markMirrorAsOverridden =
+        "UPDATE \(TableLoginsMirror) SET " +
+            "is_overridden = 1 " +
+            "WHERE guid IN \(inClause)"
 
         let insert =
         "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
-        "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
-        "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid = ?"
+            "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
+        "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
 
-        let args: Args = [guid]
-
-        return self.db.run(delete, withArgs: args)
-           >>> { self.db.run(update, withArgs: args) }
-           >>> { self.markMirrorAsOverridden(guid) }
-           >>> { self.db.run(insert, withArgs: args) }
-            >>> effect(self.notifyLoginDidChange)
+        let args: Args = guids.map { $0 as AnyObject }
+        return self.db.run([
+            (delete, args),
+            (update, args),
+            (markMirrorAsOverridden, args),
+            (insert, args)
+        ]) >>> effect(self.notifyLoginDidChange)
     }
 
     public func removeAll() -> Success {
@@ -889,6 +903,14 @@ extension SQLiteLogins: SyncableLogins {
 
         return self.db.run("DELETE FROM \(TableLoginsMirror) WHERE guid IN \(inClause)", withArgs: args)
          >>> { self.db.run("DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause)", withArgs: args) }
+    }
+
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        let checkLoginsMirror = "SELECT 1 FROM \(TableLoginsMirror)"
+        let checkLoginsLocal = "SELECT 1 FROM \(TableLoginsLocal) WHERE sync_status IS NOT \(SyncStatus.New.rawValue)"
+
+        let sql = "\(checkLoginsMirror) UNION ALL \(checkLoginsLocal)"
+        return self.db.queryReturnsResults(sql)
     }
 }
 

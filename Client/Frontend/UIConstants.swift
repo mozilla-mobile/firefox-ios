@@ -102,12 +102,6 @@ private struct TempStrings {
     let accessPBMode            = NSLocalizedString("Use your fingerprint to access Private Browsing now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing private browsing")
 
     // Bug 1233418 - Login Manager Strings
-    let deleteLoginDetail               = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Button in login detail screen that deletes the current login")
-    let deselectAll                     = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Title for deselecting all selected logins")
-    let selectAll                       = NSLocalizedString("Select All", tableName: "LoginManager", comment: "Title for selecting all logins")
-    let areYouSure                      = NSLocalizedString("Are you sure?", tableName: "LoginManager", comment: "Prompt title when deleting logins")
-    let deleteLocal                     = NSLocalizedString("Logins will be permanently removed.", tableName: "LoginManager", comment: "Prompt message warning the user that deleting non-synced logins will permanently remove them")
-    let deleteSyncedDevices             = NSLocalizedString("Logins will be removed from all connected devices.", tableName: "LoginManager", comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices")
     let noLoginsFound                   = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Title displayed when no logins are found after searching")
 
     // Bug 1235840 - Land string for opting out of anonymous data usage sending

@@ -62,6 +62,27 @@ class TestSQLiteLogins: XCTestCase {
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
 
+    func testRemoveLogins() {
+        let loginA = Login.createWithHostname("alphabet.com", username: "username1", password: "password1")
+        let loginB = Login.createWithHostname("alpha.com", username: "username2", password: "password2")
+        let loginC = Login.createWithHostname("berry.com", username: "username3", password: "password3")
+        let loginD = Login.createWithHostname("candle.com", username: "username4", password: "password4")
+
+        func addLogins() -> Success {
+            addLogin(loginA).value
+            addLogin(loginB).value
+            addLogin(loginC).value
+            addLogin(loginD).value
+            return succeed()
+        }
+
+        addLogins().value
+        let guids = [loginA.guid, loginB.guid]
+        logins.removeLoginsWithGUIDs(guids).value
+        let result = logins.getAllLogins().value.successValue!
+        XCTAssertEqual(result.count, 2)
+    }
+
     func testUpdateLogin() {
         let expectation = self.expectationWithDescription("Update login")
         let updated = Login.createWithHostname("hostname1", username: "username1", password: "password3")
@@ -611,5 +632,16 @@ class TestSyncableLogins: XCTestCase {
         let applied = loginA1.applyDeltas(merged)
         XCTAssertFalse(applied.isSignificantlyDifferentFrom(expected))
         XCTAssertFalse(expected.isSignificantlyDifferentFrom(applied))
+    }
+
+    func testLoginsIsSynced() {
+        let loginA = Login.createWithHostname("alphabet.com", username: "username1", password: "password1")
+        let serverLoginA = ServerLogin(guid: loginA.guid, hostname: "alpha.com", username: "username1", password: "password1", modified: NSDate.now())
+
+        XCTAssertFalse(logins.hasSyncedLogins().value.successValue ?? true)
+        logins.addLogin(loginA).value
+        XCTAssertFalse(logins.hasSyncedLogins().value.successValue ?? false)
+        logins.applyChangedLogin(serverLoginA).value
+        XCTAssertTrue(logins.hasSyncedLogins().value.successValue ?? false)
     }
 }
