@@ -191,13 +191,13 @@ class LoginDetailViewController: UITableViewController {
         // Menu actions for password
         if section == .Info && item == .PasswordItem {
             let loginCell = tableView.cellForRowAtIndexPath(indexPath) as! LoginTableViewCell
-            let showRevealOption = loginCell.descriptionLabel.secureTextEntry ? (action == "SELrevealDescription") : (action == "SELsecureDescription")
-            return action == "SELcopyDescription" || showRevealOption
+            let showRevealOption = loginCell.descriptionLabel.secureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
+            return action == MenuHelper.SelectorCopy || showRevealOption
         }
 
         // Menu actions for Website
         else if section == .Info && item == .WebsiteItem {
-            return action == "SELcopyDescription" || action == "SELopenAndFillDescription"
+            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
         } else {
             return false
         }

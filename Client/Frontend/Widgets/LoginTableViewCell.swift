@@ -278,13 +278,13 @@ extension LoginTableViewCell {
         let checks: [Bool] = enabledActions.map { actionEnum in
             switch actionEnum {
             case .OpenAndFill:
-                return action == "SELopenAndFillDescription"
+                return action == MenuHelper.SelectorOpenAndFill
             case .Reveal:
-                return action == "SELrevealDescription"
+                return action == MenuHelper.SelectorReveal
             case .Hide:
-                return action == "SELsecureDescription"
+                return action == MenuHelper.SelectorHide
             case .Copy:
-                return action == "SELcopyDescription"
+                return action == MenuHelper.SelectorCopy
             }
         }
 
@@ -297,24 +297,24 @@ extension LoginTableViewCell {
 }
 
 // MARK: - Menu Selectors
-extension LoginTableViewCell {
+extension LoginTableViewCell: MenuHelperInterface {
 
-    func SELrevealDescription() {
+    func menuHelperReveal(sender: NSNotification) {
         descriptionLabel.secureTextEntry = false
         enabledActions = [.Copy, .Hide]
     }
 
-    func SELsecureDescription() {
+    func menuHelperSecure(sender: NSNotification) {
         descriptionLabel.secureTextEntry = true
         enabledActions = [.Copy, .Reveal]
     }
 
-    func SELcopyDescription() {
+    func menuHelperCopy(sender: NSNotification) {
         // Copy description text to clipboard
         UIPasteboard.generalPasteboard().string = descriptionLabel.text
     }
 
-    func SELopenAndFillDescription() {
+    func menuHelperOpenAndFill(sender: NSNotification) {
         delegate?.didSelectOpenAndFillForCell(self)
     }
 }
