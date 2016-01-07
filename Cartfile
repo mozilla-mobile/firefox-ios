@@ -8,7 +8,6 @@ github "mozilla/readability"        "master"
 github "rs/SDWebImage"              "master"           # To get the fix for libwebp
 github "SnapKit/SnapKit"            "0.18.0"
 github "st3fan/SQLite.swift"        "swift-2"
-github "CEWendel/SWTableViewCell"                      # Implicit: latest tag.
 github "st3fan/SWXMLHash"           "xcode-7.0"        # So we get Swift 2.0 fixes.
 github "DaveWoodCom/XCGLogger"      "swift_2.0"        # Previously: swift_1.2
 github "sleroux/google-breakpad-ios" "master"
