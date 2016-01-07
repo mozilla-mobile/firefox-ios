@@ -11,3 +11,6 @@ public let NotificationPrivateDataClearedHistory = "PrivateDataClearedHistoryNot
 
 // Fired when the user finishes navigating to a page and the location has changed
 public let NotificationOnLocationChange = "OnLocationChange"
+
+// Fired when the setting "Show default suggested sites" is changed
+public let NotificationShowDefaultSuggestedSitesChanged = "ShowDefaultSuggestedSitesChangedNotification"

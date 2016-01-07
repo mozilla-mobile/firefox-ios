@@ -152,6 +152,7 @@ class BoolSetting: Setting {
     @objc func switchValueChanged(control: UISwitch) {
         prefs.setBool(control.on, forKey: prefKey)
         settingDidChange?(control.on)
+        NSNotificationCenter.defaultCenter().postNotificationName(NotificationShowDefaultSuggestedSitesChanged, object: nil)
     }
 }
 
@@ -767,6 +768,8 @@ class SettingsTableViewController: UITableViewController {
                 titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
                 titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
+            BoolSetting(prefs: prefs, prefKey: "showDefaultSuggestedSites", defaultValue: true,
+                titleText: NSLocalizedString("Show Default Suggested Sites", comment: "Setting to show/hide the default suggested sites on home screen")),
         ]
 
         let accountChinaSyncSetting: [Setting]

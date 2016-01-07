@@ -147,6 +147,9 @@ protocol Profile: class {
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
     func localName() -> String
 
+    // Bind default suggested sites to profile.
+    var suggestedSites: SuggestedSitesCursor { get }
+
     // URLs and account configuration.
     var accountConfiguration: FirefoxAccountConfiguration { get }
 
@@ -425,6 +428,15 @@ public class BrowserProfile: Profile {
         }
         return Singleton.instance
     }()
+
+    var suggestedSites: SuggestedSitesCursor {
+        let showDefaultSuggestedSites: Bool = self.prefs.boolForKey("showDefaultSuggestedSites") ?? true
+        if showDefaultSuggestedSites {
+            return SuggestedSites
+        }
+        let NoneSuggestedSites: SuggestedSitesCursor = SuggestedSitesCursor(isShow: false)
+        return NoneSuggestedSites
+    }
 
     var accountConfiguration: FirefoxAccountConfiguration {
         let locale = NSLocale.currentLocale()

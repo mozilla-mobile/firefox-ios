@@ -140,6 +140,8 @@ public class MockProfile: Profile {
         return MockLogins(files: self.files)
     }()
 
+    let suggestedSites: SuggestedSitesCursor = SuggestedSites
+
     let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
     var account: FirefoxAccount? = nil
 
