@@ -69,6 +69,7 @@ class TopSitesPanel: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataClearedHistory, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationDynamicFontChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationShowDefaultSuggestedSitesChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -100,11 +101,12 @@ class TopSitesPanel: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationShowDefaultSuggestedSitesChanged, object: nil)
     }
 
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
+        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged, NotificationShowDefaultSuggestedSitesChanged:
             refreshTopSites(maxFrecencyLimit)
             break
         default:
@@ -192,7 +194,7 @@ class TopSitesPanel: UIViewController {
         collection?.performBatchUpdates({
 
             // find out how many thumbnails, up the max for display, we can actually add
-            let numOfCellsFromData = data.count + SuggestedSites.count
+            let numOfCellsFromData = data.count + self.profile.suggestedSites.count
             let numOfThumbnails = min(numOfCellsFromData, self.layout.thumbnailCount)
 
             // If we have enough data to fill the tiles after the deletion, then delete the correct tile and insert any that are missing
@@ -270,7 +272,7 @@ extension TopSitesPanel: UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         if let thumbnailCell = cell as? ThumbnailCell {
             thumbnailCell.delegate = self
-            if editingThumbnails && indexPath.item < dataSource.data.count && thumbnailCell.removeButton.hidden {
+            if editingThumbnails && !(dataSource[indexPath.row] is SuggestedSite) && thumbnailCell.removeButton.hidden {
                 thumbnailCell.removeButton.hidden = false
             }
         }
@@ -463,7 +465,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
         // If there aren't enough data items to fill the grid, look for items in suggested sites.
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
-            return min(data.count + SuggestedSites.count, layout.thumbnailCount)
+            return min(data.count + self.profile.suggestedSites.count, layout.thumbnailCount)
         }
 
         return 0
@@ -499,7 +501,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                 return
             }
 
-            let indexPathToUpdate = NSIndexPath(forItem: indexOfSite, inSection: 0)
+            let indexPathToUpdate = (NSLocale.currentLocale().localeIdentifier == "zh_CN") ? NSIndexPath(forItem: (indexOfSite + self.profile.suggestedSites.count), inSection: 0) : NSIndexPath(forItem: indexOfSite, inSection: 0)
             guard let cell = self.collectionView?.cellForItemAtIndexPath(indexPathToUpdate) as? ThumbnailCell else { return }
             cell.imageView.sd_setImageWithURL(url) { (img, err, type, url) -> Void in
                 guard let img = img else {
@@ -582,10 +584,17 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             return nil
         }
 
-        if index >= data.count {
-            return SuggestedSites[index - data.count]
+        if NSLocale.currentLocale().localeIdentifier == "zh_CN" {
+            if index >= self.profile.suggestedSites.count {
+                return data[index - self.profile.suggestedSites.count] as Site?
+            }
+            return self.profile.suggestedSites[index]
+        } else {
+            if index >= data.count {
+                return self.profile.suggestedSites[index - data.count]
+            }
+            return data[index] as Site?
         }
-        return data[index] as Site?
     }
 
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -596,7 +605,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         let traitCollection = collectionView.traitCollection
         cell.updateLayoutForCollectionViewSize(collectionView.bounds.size, traitCollection: traitCollection)
 
-        if indexPath.item >= data.count {
+        if ((NSLocale.currentLocale().localeIdentifier == "zh_CN") ? (indexPath.item < self.profile.suggestedSites.count) : (indexPath.item >= data.count)) {
             configureCell(cell, forSuggestedSite: site as! SuggestedSite)
         } else {
             configureCell(cell, forSite: site, isEditing: editingThumbnails, profile: profile)
