@@ -424,8 +424,8 @@ public class BrowserProfile: Profile {
     }()
 
     var accountConfiguration: FirefoxAccountConfiguration {
-        let syncService: Bool = self.prefs.boolForKey("useChinaSyncService") ?? false
-        if syncService {
+        let locale = NSLocale.currentLocale()
+        if self.prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN") {
             return ChinaEditionFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()
