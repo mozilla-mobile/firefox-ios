@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 
 from lxml import html
 import os
@@ -47,4 +47,3 @@ def getFile(locale, file):
 
 if __name__ == "__main__":
         main()
-
