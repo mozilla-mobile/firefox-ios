@@ -140,4 +140,23 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertFalse(engines2.shouldShowSearchSuggestionsOptIn)
         XCTAssertTrue(engines2.shouldShowSearchSuggestions)
     }
+
+    func testDirectoriesForLanguageIdentifier() {
+        XCTAssertEqual(
+            SearchEngines.directoriesForLanguageIdentifier("nl", basePath: "/tmp", fallbackIdentifier: "en"),
+            ["/tmp/nl", "/tmp/en"]
+        )
+        XCTAssertEqual(
+            SearchEngines.directoriesForLanguageIdentifier("en-US", basePath: "/tmp", fallbackIdentifier: "en"),
+            ["/tmp/en-US", "/tmp/en"]
+        )
+        XCTAssertEqual(
+            SearchEngines.directoriesForLanguageIdentifier("es-MX", basePath: "/tmp", fallbackIdentifier: "en"),
+            ["/tmp/es-MX", "/tmp/es", "/tmp/en"]
+        )
+        XCTAssertEqual(
+            SearchEngines.directoriesForLanguageIdentifier("zh-Hans-CN", basePath: "/tmp", fallbackIdentifier: "en"),
+            ["/tmp/zh-Hans-CN", "/tmp/zh-CN", "/tmp/zh", "/tmp/en"]
+        )
+    }
 }
