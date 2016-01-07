@@ -3,7 +3,6 @@ github "mozilla/Base32"             "swift-2.0"        # So we don't have to tag
 github "mozilla/Deferred"           "master"           # Making Deferred extensible in swift 2.0
 github "swisspol/GCDWebServer"		"3.3"			     
 github "kif-framework/KIF"          "master"
-github "ZaBlanc/RaptureXML"         "master"
 github "mozilla/readability"        "master"
 github "rs/SDWebImage"              "master"           # To get the fix for libwebp
 github "SnapKit/SnapKit"            "0.18.0"
