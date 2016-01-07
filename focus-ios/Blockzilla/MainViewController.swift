@@ -106,6 +106,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return UIStatusBarStyle.LightContent
     }
 
+    private func toggleForIndexPath(indexPath: NSIndexPath) -> BlockerToggle {
+        var index = indexPath.row
+        for i in 1..<indexPath.section {
+            index += tableView.numberOfRowsInSection(i)
+        }
+        return toggles[index]
+    }
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "toggleCell")
         switch indexPath.section {
@@ -114,15 +122,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             headerView.snp_makeConstraints { make in
                 make.edges.equalTo(cell)
             }
-        case 1:
-            let toggle = toggles[indexPath.row]
+        case 1: fallthrough
+        case 2:
+            let toggle = toggleForIndexPath(indexPath)
             cell.textLabel?.text = toggle.label
+            cell.textLabel?.numberOfLines = 0
             cell.accessoryView = toggle.toggle
             cell.detailTextLabel?.text = toggle.subtitle
-        case 2:
-            let toggle = toggles[indexPath.row + 4]
-            cell.textLabel?.text = toggle.label
-            cell.accessoryView = toggle.toggle
+            cell.detailTextLabel?.numberOfLines = 0
         default:
             break
         }
@@ -154,14 +161,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
+        if indexPath.section == 0 {
             return heightForCustomCellWithView(headerView)
-        default:
-            break
         }
 
-        return 44
+        return tableView.rowHeight
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -291,11 +295,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
 
 private class TableFooterView: UIView {
-    var logo: UIImageView = {
+    lazy var logo: UIImageView = {
         var image =  UIImageView(image: UIImage(named: "FooterLogo"))
         image.contentMode = UIViewContentMode.Center
         return image
-        }()
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
