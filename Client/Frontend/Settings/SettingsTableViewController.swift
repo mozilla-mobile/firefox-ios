@@ -257,6 +257,12 @@ private class DisconnectSetting: WithAccountSetting {
 }
 
 private class SyncNowSetting: WithAccountSetting {
+    private lazy var timestampFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter
+    }()
+
     private let syncNowTitle = NSAttributedString(string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
 
     private let syncingTitle = NSAttributedString(string: NSLocalizedString("Syncing…", comment: "Syncing Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFontWeightRegular)])
@@ -274,8 +280,7 @@ private class SyncNowSetting: WithAccountSetting {
             return nil
         }
 
-        let label = NSLocalizedString("Last synced: %@", comment: "Last synced time label beside Sync Now setting option. Argument is the relative date string.")
-        let formattedLabel = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
+        let formattedLabel = timestampFormatter.stringFromDate(NSDate.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)
         let attributes = [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)]
         let range = NSMakeRange(0, attributedString.length)
