@@ -378,75 +378,75 @@ class TabManager : NSObject {
     }
 }
 
-class SavedTab: NSObject, NSCoding {
-    let isSelected: Bool
-    let title: String?
-    let isPrivate: Bool
-    var sessionData: SessionData?
-    var screenshotUUID: NSUUID?
+extension TabManager {
 
-    var jsonDictionary: [String: AnyObject] {
-        let title: String = self.title ?? "null"
-        let uuid: String = String(self.screenshotUUID ?? "null")
+    class SavedTab: NSObject, NSCoding {
+        let isSelected: Bool
+        let title: String?
+        let isPrivate: Bool
+        var sessionData: SessionData?
+        var screenshotUUID: NSUUID?
 
-        var json: [String: AnyObject] = [
-            "title": title,
-            "isPrivate": String(self.isPrivate),
-            "isSelected": String(self.isSelected),
-            "screenshotUUID": uuid
-        ]
+        var jsonDictionary: [String: AnyObject] {
+            let title: String = self.title ?? "null"
+            let uuid: String = String(self.screenshotUUID ?? "null")
 
-        if let sessionDataInfo = self.sessionData?.jsonDictionary {
-            json["sessionData"] = sessionDataInfo
-        }
+            var json: [String: AnyObject] = [
+                "title": title,
+                "isPrivate": String(self.isPrivate),
+                "isSelected": String(self.isSelected),
+                "screenshotUUID": uuid
+            ]
 
-        return json
-    }
-
-    init?(browser: Browser, isSelected: Bool) {
-        self.screenshotUUID = browser.screenshotUUID
-        self.isSelected = isSelected
-        self.title = browser.displayTitle
-        self.isPrivate = browser.isPrivate
-        super.init()
-
-        if browser.sessionData == nil {
-            let currentItem: WKBackForwardListItem! = browser.webView?.backForwardList.currentItem
-
-            // Freshly created web views won't have any history entries at all.
-            // If we have no history, abort.
-            if currentItem == nil {
-                return nil
+            if let sessionDataInfo = self.sessionData?.jsonDictionary {
+                json["sessionData"] = sessionDataInfo
             }
 
-            let backList = browser.webView?.backForwardList.backList ?? []
-            let forwardList = browser.webView?.backForwardList.forwardList ?? []
-            let urls = (backList + [currentItem] + forwardList).map { $0.URL }
-            let currentPage = -forwardList.count
-            self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: browser.lastExecutedTime ?? NSDate.now())
-        } else {
-            self.sessionData = browser.sessionData
+            return json
+        }
+
+        init?(browser: Browser, isSelected: Bool) {
+            self.screenshotUUID = browser.screenshotUUID
+            self.isSelected = isSelected
+            self.title = browser.displayTitle
+            self.isPrivate = browser.isPrivate
+            super.init()
+
+            if browser.sessionData == nil {
+                let currentItem: WKBackForwardListItem! = browser.webView?.backForwardList.currentItem
+
+                // Freshly created web views won't have any history entries at all.
+                // If we have no history, abort.
+                if currentItem == nil {
+                    return nil
+                }
+
+                let backList = browser.webView?.backForwardList.backList ?? []
+                let forwardList = browser.webView?.backForwardList.forwardList ?? []
+                let urls = (backList + [currentItem] + forwardList).map { $0.URL }
+                let currentPage = -forwardList.count
+                self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: browser.lastExecutedTime ?? NSDate.now())
+            } else {
+                self.sessionData = browser.sessionData
+            }
+        }
+
+        required init?(coder: NSCoder) {
+            self.sessionData = coder.decodeObjectForKey("sessionData") as? SessionData
+            self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
+            self.isSelected = coder.decodeBoolForKey("isSelected")
+            self.title = coder.decodeObjectForKey("title") as? String
+            self.isPrivate = coder.decodeBoolForKey("isPrivate")
+        }
+
+        func encodeWithCoder(coder: NSCoder) {
+            coder.encodeObject(sessionData, forKey: "sessionData")
+            coder.encodeObject(screenshotUUID, forKey: "screenshotUUID")
+            coder.encodeBool(isSelected, forKey: "isSelected")
+            coder.encodeObject(title, forKey: "title")
+            coder.encodeBool(isPrivate, forKey: "isPrivate")
         }
     }
-
-    required init?(coder: NSCoder) {
-        self.sessionData = coder.decodeObjectForKey("sessionData") as? SessionData
-        self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
-        self.isSelected = coder.decodeBoolForKey("isSelected")
-        self.title = coder.decodeObjectForKey("title") as? String
-        self.isPrivate = coder.decodeBoolForKey("isPrivate")
-    }
-
-    func encodeWithCoder(coder: NSCoder) {
-        coder.encodeObject(sessionData, forKey: "sessionData")
-        coder.encodeObject(screenshotUUID, forKey: "screenshotUUID")
-        coder.encodeBool(isSelected, forKey: "isSelected")
-        coder.encodeObject(title, forKey: "title")
-        coder.encodeBool(isPrivate, forKey: "isPrivate")
-    }
-}
-
-extension TabManager {
 
     static private func tabsStateArchivePath() -> String {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
