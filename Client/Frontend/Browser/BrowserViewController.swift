@@ -1761,14 +1761,7 @@ extension BrowserViewController: WKNavigationDelegate {
             callExternal(url)
             decisionHandler(WKNavigationActionPolicy.Cancel)
         default:
-            // If this is a scheme that we don't know how to handle, see if an external app
-            // can handle it. If not then we show an error page. In either case we cancel
-            // the request so that the webview does not see it.
-            if UIApplication.sharedApplication().canOpenURL(url) {
-                openExternal(url)
-            } else {
-                ErrorPageHelper().showPage(NSError(domain: kCFErrorDomainCFNetwork as String, code: Int(CFNetworkErrors.CFErrorHTTPBadURL.rawValue), userInfo: [:]), forUrl: url, inWebView: webView)
-            }
+            openExternal(url, prompt: false)
             decisionHandler(WKNavigationActionPolicy.Cancel)
         }
     }
