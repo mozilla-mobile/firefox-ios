@@ -478,6 +478,10 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
         // It doesn't really matter which one we checkpoint -- they're both backed by the same DB.
         return self.buffer.doneApplyingRecordsAfterDownload()
     }
+
+    public func validate() -> Success {
+        return self.buffer.validate()
+    }
 }
 
 extension MergedSQLiteBookmarks: ShareToDestination {
@@ -537,5 +541,57 @@ extension SQLiteBookmarks {
 extension MergedSQLiteBookmarks: SyncableBookmarks {
     public func isUnchanged() -> Deferred<Maybe<Bool>> {
         return self.local.isUnchanged()
+    }
+}
+
+
+// MARK: - Validation of buffer contents.
+
+private let allBufferStructuresReferToRecords =
+"SELECT s.child AS pointee, s.parent AS pointer FROM " +
+"\(ViewBookmarksBufferStructureOnMirror) s LEFT JOIN \(ViewBookmarksBufferOnMirror) b " +
+"ON b.guid = s.child WHERE b.guid IS NULL"
+
+private let allNonDeletedBufferRecordsAreInStructure =
+"SELECT b.guid AS missing, b.parentid AS parent FROM " +
+"\(ViewBookmarksBufferOnMirror) b LEFT JOIN \(ViewBookmarksBufferStructureOnMirror) s " +
+"ON b.guid = s.child " +
+"WHERE s.child IS NULL AND " +
+"b.is_deleted IS 0 AND " +
+"b.parentid IS NOT '\(BookmarkRoots.RootGUID)'"
+
+private let allRecordsAreChildrenOnce =
+"SELECT s.child FROM \(ViewBookmarksBufferStructureOnMirror) s " +
+"INNER JOIN (" +
+"SELECT child, COUNT(*) AS dupes FROM \(ViewBookmarksBufferStructureOnMirror) " +
+"GROUP BY child HAVING dupes > 1" +
+") i ON s.child = i.child"
+
+private let bufferParentidMatchesStructure =
+"SELECT b.guid, b.parentid, s.parent, s.child, s.idx FROM " +
+"\(TableBookmarksBuffer) b JOIN \(TableBookmarksBufferStructure) s " +
+"ON b.guid = s.child " +
+"WHERE b.parentid IS NOT s.parent"
+
+extension SQLiteBookmarkBufferStorage {
+    public func validate() -> Success {
+        func yup(message: String) -> Bool -> Success {
+            return { truth in
+                guard truth else {
+                    log.warning(message)
+                    return deferMaybe(DatabaseError(description: message))
+                }
+                return succeed()
+            }
+        }
+
+        return [
+            (allBufferStructuresReferToRecords, "Not all buffer structures refer to records. Buffer is inconsistent."),
+            (allNonDeletedBufferRecordsAreInStructure, "Not all buffer records are in structure. Buffer is inconsistent."),
+            (allRecordsAreChildrenOnce, "Some buffer structures refer to the same records. Buffer is inconsistent."),
+            (bufferParentidMatchesStructure, "Some buffer records don't match structure. Buffer is inconsistent."),
+        ].map { (query, message) in
+            return self.db.queryReturnsNoResults(query) >>== yup(message)
+        }.allSucceed()
     }
 }
