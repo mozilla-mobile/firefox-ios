@@ -526,3 +526,16 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
         return self.local.clearBookmarks()
     }
 }
+
+// Not actually implementing SyncableBookmarks, just a utility for MergedSQLiteBookmarks to do so.
+extension SQLiteBookmarks {
+    public func isUnchanged() -> Deferred<Maybe<Bool>> {
+        return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksLocal)")
+    }
+}
+
+extension MergedSQLiteBookmarks: SyncableBookmarks {
+    public func isUnchanged() -> Deferred<Maybe<Bool>> {
+        return self.local.isUnchanged()
+    }
+}
