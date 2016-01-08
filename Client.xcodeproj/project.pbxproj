@@ -993,20 +993,6 @@
 			remoteGlobalIDString = 70CB94201B99E728007802FF;
 			remoteInfo = "XCGLogger (watchOS)";
 		};
-		7BB8DE201C3EB9F8005D3632 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 00733A4C1BC487C000A5A117;
-			remoteInfo = "WebImage tvOS";
-		};
-		7BB8DE341C3EB9F8005D3632 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 70CB94201B99E728007802FF;
-			remoteInfo = "XCGLogger (watchOS)";
-		};
 		7BD028D31C073AA90032FDC0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -2503,6 +2489,32 @@
 			);
 			name = Snapshot;
 			sourceTree = "<group>";
+		};
+		7B9A61CA1C3EBFAE005C83DC /* RaptureXML */ = {
+			isa = PBXGroup;
+			children = (
+				7B9A61CB1C3EBFAE005C83DC /* RXMLElement.h */,
+				7B9A61CC1C3EBFAE005C83DC /* RXMLElement.m */,
+			);
+			name = RaptureXML;
+			path = ThirdParty/RaptureXML;
+			sourceTree = "<group>";
+		};
+		7B9A62BA1C4002B1005C83DC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7B9A62DB1C4002B1005C83DC /* SQLite.framework */,
+				7B9A62DD1C4002B1005C83DC /* SQLite iOS Tests.xctest */,
+				7B9A62DF1C4002B1005C83DC /* SQLite.framework */,
+				7B9A62E11C4002B1005C83DC /* SQLite Mac Tests.xctest */,
+				7B9A62E31C4002B1005C83DC /* SQLiteCipher.framework */,
+				7B9A62E51C4002B1005C83DC /* SQLiteCipher iOS Tests.xctest */,
+				7B9A62E71C4002B1005C83DC /* SQLiteCipher.framework */,
+				7B9A62E91C4002B1005C83DC /* SQLiteCipher Mac Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		7BFB466A1C3BE2BA00A6EB8E /* SwiftKeychainWrapper */ = {
 			isa = PBXGroup;
 			children = (
@@ -4113,20 +4125,6 @@
 			fileType = wrapper.cfbundle;
 			path = "SQLiteCipher Mac Tests.xctest";
 			remoteRef = 7B9A62E81C4002B1005C83DC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7BB8DE211C3EB9F8005D3632 /* WebImage.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = WebImage.framework;
-			remoteRef = 7BB8DE201C3EB9F8005D3632 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7BB8DE351C3EB9F8005D3632 /* XCGLogger.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = XCGLogger.framework;
-			remoteRef = 7BB8DE341C3EB9F8005D3632 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		7BB8DE211C3EB9F8005D3632 /* WebImage.framework */ = {
