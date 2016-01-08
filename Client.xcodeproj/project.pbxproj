@@ -456,6 +456,7 @@
 		D3BF8CBB1B7425570007AFE6 /* DiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */; };
 		D3BF8CBD1B7472FA0007AFE6 /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		D3BF8CBE1B74735F0007AFE6 /* DiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */; };
+		D3C03E471C3C7C1500A07D5C /* MenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C03E461C3C7C1500A07D5C /* MenuHelper.swift */; };
 		D3C3EB651B6FF44000388E9A /* SessionRestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */; };
 		D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
 		D3C744CE1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
@@ -463,6 +464,7 @@
 		D3C744D01A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
 		D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */; };
 		D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D3E171C11A841EAD00AB44CD /* KIFHelper.js */; };
+		D3E1B0B91C3D90440069945A /* MenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C03E461C3C7C1500A07D5C /* MenuHelper.swift */; };
 		D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */; };
 		D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA777A1A43B2990010CD32 /* SearchTests.swift */; };
 		D3FA77971A43B5390010CD32 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
@@ -1682,6 +1684,7 @@
 		D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuroraAppDelegate.swift; sourceTree = "<group>"; };
 		D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskImageStore.swift; sourceTree = "<group>"; };
 		D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskImageStoreTests.swift; sourceTree = "<group>"; };
+		D3C03E461C3C7C1500A07D5C /* MenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuHelper.swift; sourceTree = "<group>"; };
 		D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreTests.swift; sourceTree = "<group>"; };
 		D3C744CC1A687D6C004CE85D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
 		D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAccessorTests.swift; sourceTree = "<group>"; };
@@ -2833,11 +2836,16 @@
 		E42CCDFF1A24C4E300B794D3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				287DA9D51AE06D220055AC35 /* Extensions */,
+				E695D8631C037E9F00D3FCCE /* FSUtils.h */,
+				E4C358531AF1440B00299F7E /* Swizzling.h */,
+				E46C51C11B41ADD800EB349F /* Try.h */,
+				E695D8641C037E9F00D3FCCE /* FSUtils.m */,
+				E4252A0D1AF01AE40028C684 /* Swizzling.m */,
+				E46C51C21B41ADD800EB349F /* Try.m */,
 				0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */,
+				6BE4ACF81B0657180092AEBE /* Accessibility.swift */,
 				0BAC7A7F1AC4B135006018CB /* AppConstants.swift */,
 				28E8BE7E1B792A89002CC733 /* AppInfo.swift */,
-				6BE4ACF81B0657180092AEBE /* Accessibility.swift */,
 				E66464ED1C10D98000AF05CE /* AssertionUtils.swift */,
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
 				0B5A92E31B1E6075004F47A2 /* Cancellable.swift */,
@@ -2850,18 +2858,14 @@
 				2F0624D41AE58C7800FA022C /* KeychainCache.swift */,
 				D339C2821AD354B400C087BD /* Loader.swift */,
 				E635D25D1B729DEE0078962F /* Logger.swift */,
+				D3C03E461C3C7C1500A07D5C /* MenuHelper.swift */,
 				285D3B321B4332C00035FD22 /* NotificationConstants.swift */,
 				282731A11ABC9D2600AA1954 /* Prefs.swift */,
 				E69966981B72674B0036F797 /* RollingFileLogger.swift */,
 				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
 				B729F0691B75CBEF00745F7A /* UserAgent.swift */,
 				D3ACB4381AD33EBA00748D50 /* WeakList.swift */,
-				E695D8631C037E9F00D3FCCE /* FSUtils.h */,
-				E695D8641C037E9F00D3FCCE /* FSUtils.m */,
-				E4252A0D1AF01AE40028C684 /* Swizzling.m */,
-				E4C358531AF1440B00299F7E /* Swizzling.h */,
-				E46C51C11B41ADD800EB349F /* Try.h */,
-				E46C51C21B41ADD800EB349F /* Try.m */,
+				287DA9D51AE06D220055AC35 /* Extensions */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -5060,6 +5064,7 @@
 				E4B3348C1BC01D8F004E2BFF /* AdjustIntegration.swift in Sources */,
 				7FB63CC91C08B27E0047F9A4 /* DynamicFontHelper.swift in Sources */,
 				D38B2D3A1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */,
+				D3C03E471C3C7C1500A07D5C /* MenuHelper.swift in Sources */,
 				E4B334511BBF2393004E2BFF /* NSData+ADJAdditions.m in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				E4ECD0881B70FD4F00B90D22 /* WindowCloseHelper.swift in Sources */,
@@ -5152,6 +5157,7 @@
 				0BD19A681A2530A40084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
 				7BBFEE9B1BB409C300A305AA /* Browser.swift in Sources */,
 				28EADE5E1AFC3B86007FB2FB /* UIImageViewExtensions.swift in Sources */,
+				D3E1B0B91C3D90440069945A /* MenuHelper.swift in Sources */,
 				D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */,
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
 				7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */,

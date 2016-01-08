@@ -48,6 +48,9 @@ class LoginDetailViewController: UITableViewController {
         self.login = login
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillHideMenuController", name: UIMenuControllerWillHideMenuNotification, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -56,8 +59,6 @@ class LoginDetailViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupCustomMenuActions()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
 
@@ -80,27 +81,6 @@ class LoginDetailViewController: UITableViewController {
         profile.logins.getUsageDataForLoginByGUID(login.guid).uponQueue(dispatch_get_main_queue()) { result in
             self.loginUsageData = result.successValue
         }
-    }
-
-    private func setupCustomMenuActions() {
-        // Show menu controller with reveal option
-        let revealPasswordTitle = NSLocalizedString("Reveal", tableName: "LoginManager", comment: "Reveal password text selection menu item")
-        let revealPasswordItem = UIMenuItem(title: revealPasswordTitle, action: "SELrevealDescription")
-
-        let hidePasswordTitle = NSLocalizedString("Hide", tableName: "LoginManager", comment: "Hide password text selection menu item")
-        let hidePasswordItem = UIMenuItem(title: hidePasswordTitle, action: "SELsecureDescription")
-
-        let copyTitle = NSLocalizedString("Copy", tableName: "LoginManager", comment: "Copy password text selection menu item")
-        let copyItem = UIMenuItem(title: copyTitle, action: "SELcopyDescription")
-
-        let openAndFillTitle = NSLocalizedString("Open & Fill", tableName: "LoginManager", comment: "Open and Fill website text selection menu item")
-        let openAndFillItem = UIMenuItem(title: openAndFillTitle, action: "SELopenAndFillDescription")
-
-        UIMenuController.sharedMenuController().menuItems = [copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem]
-        UIMenuController.sharedMenuController().update()
-
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillHideMenuController", name: UIMenuControllerWillHideMenuNotification, object: nil)
     }
 
     deinit {
@@ -211,13 +191,13 @@ class LoginDetailViewController: UITableViewController {
         // Menu actions for password
         if section == .Info && item == .PasswordItem {
             let loginCell = tableView.cellForRowAtIndexPath(indexPath) as! LoginTableViewCell
-            let showRevealOption = loginCell.descriptionLabel.secureTextEntry ? (action == "SELrevealDescription") : (action == "SELsecureDescription")
-            return action == "SELcopyDescription" || showRevealOption
+            let showRevealOption = loginCell.descriptionLabel.secureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
+            return action == MenuHelper.SelectorCopy || showRevealOption
         }
 
         // Menu actions for Website
         else if section == .Info && item == .WebsiteItem {
-            return action == "SELcopyDescription" || action == "SELopenAndFillDescription"
+            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
         } else {
             return false
         }

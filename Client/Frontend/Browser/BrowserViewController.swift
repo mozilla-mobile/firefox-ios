@@ -1503,6 +1503,11 @@ extension BrowserViewController: BrowserDelegate {
     func browser(browser: Browser, didRemoveSnackbar bar: SnackBar) {
         removeBar(bar, animated: true)
     }
+
+    func browser(browser: Browser, didSelectFindInPageForSelection selection: String) {
+        updateFindInPageVisibility(visible: true)
+        findInPageBar?.text = selection
+    }
 }
 
 extension BrowserViewController: HomePanelViewControllerDelegate {
