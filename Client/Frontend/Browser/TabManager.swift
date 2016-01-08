@@ -453,15 +453,22 @@ extension TabManager {
         return NSURL(fileURLWithPath: documentsPath).URLByAppendingPathComponent("tabsState.archive").path!
     }
 
-    static func tabsToRestore() -> [SavedTab]? {
+    static func tabArchiveData() -> NSData? {
         let tabStateArchivePath = tabsStateArchivePath()
         if NSFileManager.defaultManager().fileExistsAtPath(tabStateArchivePath) {
-            if let data = NSData(contentsOfFile: tabStateArchivePath) {
-                let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
-                return unarchiver.decodeObjectForKey("tabs") as? [SavedTab]
-            }
+            return NSData(contentsOfFile: tabStateArchivePath)
+        } else {
+            return nil
         }
-        return nil
+    }
+
+    static func tabsToRestore() -> [SavedTab]? {
+        if let tabData = tabArchiveData() {
+            let unarchiver = NSKeyedUnarchiver(forReadingWithData: tabData)
+            return unarchiver.decodeObjectForKey("tabs") as? [SavedTab]
+        } else {
+            return nil
+        }
     }
 
     private func preserveTabsInternal() {
