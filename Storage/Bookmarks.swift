@@ -410,7 +410,6 @@ public struct BookmarkTree {
 
         // Precompute every leaf node.
         mappings.forEach { row in
-            log.debug("Mapping: \(row.parent) -> \(row.child) (child type: \(row.type))")
             parents[row.child] = row.parent
             remainingFolders.insert(row.parent)
             tops.insert(row.parent)

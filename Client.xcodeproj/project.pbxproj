@@ -59,7 +59,10 @@
 		2805F5A61B8BCA7A00268FD1 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		28078A471B1507EF0053B46A /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		280CB1371C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
-		280CB1381C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
+		28126F481C2F948E006466CC /* SQLiteBookmarksHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */; };
+		28126F6E1C2F94F9006466CC /* SQLiteBookmarksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */; };
+		28126F741C2F96F1006466CC /* SQLiteBookmarksResetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28126F731C2F96F1006466CC /* SQLiteBookmarksResetting.swift */; };
+		28126F771C2F9833006466CC /* SQLiteBookmarksBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28126F761C2F9833006466CC /* SQLiteBookmarksBase.swift */; };
 		28158BAC1ABC7C0E00C56FC8 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2401ABB531100877008 /* Bytes.swift */; };
 		2816EFDE1B33E00300522243 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAC7A7F1AC4B135006018CB /* AppConstants.swift */; };
 		2816F0001B33E05400522243 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
@@ -80,9 +83,7 @@
 		282731A21ABC9D2600AA1954 /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282731A11ABC9D2600AA1954 /* Prefs.swift */; };
 		28293BB51B333EA2004A65EC /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		2829D37A1C2F0A7F00DCF931 /* BookmarksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829D3791C2F0A7F00DCF931 /* BookmarksModel.swift */; };
-		2829D37B1C2F0A7F00DCF931 /* BookmarksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829D3791C2F0A7F00DCF931 /* BookmarksModel.swift */; };
 		2829D3A01C2F0AD400DCF931 /* Sharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829D39F1C2F0AD400DCF931 /* Sharing.swift */; };
-		2829D3A11C2F0AD400DCF931 /* Sharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829D39F1C2F0AD400DCF931 /* Sharing.swift */; };
 		282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		28302E401AF0747800521E2E /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28302E3F1AF0747800521E2E /* DatabaseError.swift */; };
 		28532BE91C471FFB000072D9 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBABAE1AB3659000DB5728 /* ResultTests.swift */; };
@@ -94,7 +95,7 @@
 		285D3B331B4332C00035FD22 /* NotificationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D3B321B4332C00035FD22 /* NotificationConstants.swift */; };
 		285D3B681B4380B70035FD22 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D3B671B4380B70035FD22 /* Queue.swift */; };
 		285D3B901B4386520035FD22 /* SQLiteQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D3B8F1B4386520035FD22 /* SQLiteQueue.swift */; };
-		285F2DC11AF80B4600211843 /* SQLiteBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285F2DC01AF80B4600211843 /* SQLiteBookmarks.swift */; };
+		285F2DC11AF80B4600211843 /* SQLiteBookmarksSyncing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285F2DC01AF80B4600211843 /* SQLiteBookmarksSyncing.swift */; };
 		2868FA061ADF7B69000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		2868FA231ADF7B70000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		287360431B8B9AC7005B8AE4 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7692B21B7CCBD100188277 /* SQLite.framework */; };
@@ -167,7 +168,6 @@
 		28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F596A01ACA13CA0071DDCC /* InfoTests.swift */; };
 		28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA4363B1ABB8448008031D1 /* LiveAccountTest.swift */; };
 		28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */; };
-		28FDFF0D1C1F725800840F86 /* SeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */; };
 		2F0624D51AE58C7800FA022C /* KeychainCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0624D41AE58C7800FA022C /* KeychainCache.swift */; };
 		2F13E77F1AC0BFF200D75081 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */; };
 		2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */; };
@@ -386,7 +386,6 @@
 		D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B451B054F8600641031 /* TestAppDelegate.swift */; };
 		D3BE7B481B05596800641031 /* AuroraAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */; };
 		D3BF8CBB1B7425570007AFE6 /* DiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */; };
-		D3BF8CBD1B7472FA0007AFE6 /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		D3C03E471C3C7C1500A07D5C /* MenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C03E461C3C7C1500A07D5C /* MenuHelper.swift */; };
 		D3C3EB651B6FF44000388E9A /* SessionRestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */; };
 		D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
@@ -1342,6 +1341,10 @@
 		0BF648101A9C54E900BA963C /* TopSitesPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesPanel.swift; sourceTree = "<group>"; };
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
 		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Synchronizers/BookmarksSynchronizer.swift; sourceTree = "<group>"; };
+		28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksHelpers.swift; sourceTree = "<group>"; };
+		28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksModel.swift; sourceTree = "<group>"; };
+		28126F731C2F96F1006466CC /* SQLiteBookmarksResetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksResetting.swift; sourceTree = "<group>"; };
+		28126F761C2F9833006466CC /* SQLiteBookmarksBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksBase.swift; sourceTree = "<group>"; };
 		2816EFFF1B33E05400522243 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		281B02991C037C1F005202C3 /* TestBrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBrowserDB.swift; sourceTree = "<group>"; };
 		281B2BE91ADF4D90002917DC /* MockProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MockProfile.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1362,7 +1365,7 @@
 		285D3B321B4332C00035FD22 /* NotificationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationConstants.swift; sourceTree = "<group>"; };
 		285D3B671B4380B70035FD22 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Queue.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		285D3B8F1B4386520035FD22 /* SQLiteQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteQueue.swift; sourceTree = "<group>"; };
-		285F2DC01AF80B4600211843 /* SQLiteBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarks.swift; sourceTree = "<group>"; };
+		285F2DC01AF80B4600211843 /* SQLiteBookmarksSyncing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksSyncing.swift; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* DeferredTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredTests.swift; sourceTree = "<group>"; };
 		287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExtensions.swift; sourceTree = "<group>"; };
@@ -2489,7 +2492,11 @@
 				2FCAE24D1ABB531100877008 /* GenericTable.swift */,
 				2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */,
 				2FCAE2531ABB531100877008 /* SchemaTable.swift */,
-				285F2DC01AF80B4600211843 /* SQLiteBookmarks.swift */,
+				28126F761C2F9833006466CC /* SQLiteBookmarksBase.swift */,
+				28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */,
+				28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */,
+				28126F731C2F96F1006466CC /* SQLiteBookmarksResetting.swift */,
+				285F2DC01AF80B4600211843 /* SQLiteBookmarksSyncing.swift */,
 				2FCAE2551ABB531100877008 /* SQLiteHistory.swift */,
 				0BDA56B31B26B203008C9B96 /* SQLiteLogins.swift */,
 				285D3B8F1B4386520035FD22 /* SQLiteQueue.swift */,
@@ -2595,11 +2602,8 @@
 			children = (
 				6BB2FD971B017DAB001A189B /* AuralProgressBar.swift */,
 				D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */,
-				7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */,
 				E660BE051BB0666D009AC090 /* InnerStrokedView.swift */,
 				0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */,
-				E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */,
-				E65607601C08B4E200534B02 /* SearchInputView.swift */,
 				28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */,
 				D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */,
 				D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */,
@@ -4625,7 +4629,6 @@
 				2F67C5261BB0CB4E00E7B73A /* MetaGlobalTests.swift in Sources */,
 				2827319E1ABC9C5900AA1954 /* RecordTests.swift in Sources */,
 				2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */,
-				280CB1381C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */,
 				28ECD9A31BA1EF3D00D829DA /* GCDWebServer.m in Sources */,
 				28ECD9A61BA1EF3D00D829DA /* GCDWebServerRequest.m in Sources */,
 				28ECD9A41BA1EF3D00D829DA /* GCDWebServerConnection.m in Sources */,
@@ -4724,13 +4727,15 @@
 			files = (
 				2FCAE2621ABB531100877008 /* History.swift in Sources */,
 				0B3E7DBA1B27AB4C00E2E84D /* MockLogins.swift in Sources */,
+				28126F6E1C2F94F9006466CC /* SQLiteBookmarksModel.swift in Sources */,
 				0BDA56B21B26B1E4008C9B96 /* Logins.swift in Sources */,
 				0BDA56B41B26B203008C9B96 /* SQLiteLogins.swift in Sources */,
 				2829D3A01C2F0AD400DCF931 /* Sharing.swift in Sources */,
 				2FCAE2751ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FCAE26A1ABB531100877008 /* GenericTable.swift in Sources */,
-				285F2DC11AF80B4600211843 /* SQLiteBookmarks.swift in Sources */,
+				285F2DC11AF80B4600211843 /* SQLiteBookmarksSyncing.swift in Sources */,
 				28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */,
+				28126F741C2F96F1006466CC /* SQLiteBookmarksResetting.swift in Sources */,
 				28B62ACE1BC745E7004A585A /* Syncable.swift in Sources */,
 				2FCAE26F1ABB531100877008 /* RemoteTabsTable.swift in Sources */,
 				7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */,
@@ -4743,6 +4748,7 @@
 				2FCAE2701ABB531100877008 /* SchemaTable.swift in Sources */,
 				D3BF8CBB1B7425570007AFE6 /* DiskImageStore.swift in Sources */,
 				2FCAE2611ABB531100877008 /* FileAccessor.swift in Sources */,
+				28126F481C2F948E006466CC /* SQLiteBookmarksHelpers.swift in Sources */,
 				2FCAE2691ABB531100877008 /* FaviconsTable.swift in Sources */,
 				2829D37A1C2F0A7F00DCF931 /* BookmarksModel.swift in Sources */,
 				2FCAE2661ABB531100877008 /* Site.swift in Sources */,
@@ -4752,6 +4758,7 @@
 				2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */,
 				2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */,
 				2FCAE2601ABB531100877008 /* Favicons.swift in Sources */,
+				28126F771C2F9833006466CC /* SQLiteBookmarksBase.swift in Sources */,
 				0B5A93041B1E60B4004F47A2 /* DeferredDBOperation.swift in Sources */,
 				2FCAE2771ABB531100877008 /* SwiftData.swift in Sources */,
 				28E8BE9D1B792B23002CC733 /* ExtensionUtils.swift in Sources */,
@@ -5121,7 +5128,6 @@
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
 				7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */,
 				E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */,
-				28FDFF0D1C1F725800840F86 /* SeparatorTableCell.swift in Sources */,
 				E42475E01AB73B9B00B23D33 /* SWLongPressGestureRecognizer.m in Sources */,
 				D38B2D381A8D96D00040E6B5 /* GCDWebServerRequest.m in Sources */,
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
