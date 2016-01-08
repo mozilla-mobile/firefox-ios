@@ -482,6 +482,10 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
     public func validate() -> Success {
         return self.buffer.validate()
     }
+
+    public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
+        return self.buffer.getBufferedDeletions()
+    }
 }
 
 extension MergedSQLiteBookmarks: ShareToDestination {
@@ -536,11 +540,36 @@ extension SQLiteBookmarks {
     public func isUnchanged() -> Deferred<Maybe<Bool>> {
         return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksLocal)")
     }
+
+    public func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
+        let sql =
+        "SELECT guid, local_modified FROM \(TableBookmarksLocal) " +
+        "WHERE is_deleted = 1"
+
+        return self.db.runQuery(sql, args: nil, factory: { ($0["guid"] as! GUID, $0.getTimestamp("local_modified")!) })
+          >>== { deferMaybe($0.asArray()) }
+    }
 }
 
 extension MergedSQLiteBookmarks: SyncableBookmarks {
     public func isUnchanged() -> Deferred<Maybe<Bool>> {
         return self.local.isUnchanged()
+    }
+
+    public func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
+        return self.local.getLocalDeletions()
+    }
+
+    public func treeForMirror() -> Deferred<Maybe<BookmarkTree>> {
+        return self.local.treeForMirror()
+    }
+
+    public func treesForEdges() -> Deferred<Maybe<(local: BookmarkTree, buffer: BookmarkTree)>> {
+        return self.local.treeForLocal() >>== { local in
+            return self.local.treeForBuffer() >>== { buffer in
+                return deferMaybe((local: local, buffer: buffer))
+            }
+        }
     }
 }
 
@@ -593,5 +622,110 @@ extension SQLiteBookmarkBufferStorage {
         ].map { (query, message) in
             return self.db.queryReturnsNoResults(query) >>== yup(message)
         }.allSucceed()
+    }
+
+    public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
+        let sql =
+        "SELECT guid, server_modified FROM \(TableBookmarksBuffer) " +
+        "WHERE is_deleted = 1"
+
+        return self.db.runQuery(sql, args: nil, factory: { ($0["guid"] as! GUID, $0.getTimestamp("server_modified")!) })
+          >>== { deferMaybe($0.asArray()) }
+    }
+}
+
+extension SQLiteBookmarks {
+    private func structureQueryForTable(table: String, structure: String) -> String {
+        // We use a subquery so we get back rows for overridden folders, even when their
+        // children aren't in the shadowing table.
+        let sql =
+        "SELECT s.parent AS parent, s.child AS child, COALESCE(m.type, -1) AS type " +
+        "FROM \(structure) s LEFT JOIN \(table) m ON s.child = m.guid AND m.is_deleted IS NOT 1 " +
+        "ORDER BY s.parent, s.idx ASC"
+        return sql
+    }
+
+    private func remainderQueryForTable(table: String, structure: String) -> String {
+        // This gives us value rows that aren't children of a folder.
+        // You might notice that these complementary LEFT JOINs are how you
+        // express a FULL OUTER JOIN in sqlite.
+        // We exclude folders here because if they have children, they'll appear
+        // in the structure query, and if they don't, they'll appear in the bottom
+        // half of this query.
+        let sql =
+        "SELECT m.guid AS guid, m.type AS type " +
+        "FROM \(table) m LEFT JOIN \(structure) s ON s.child = m.guid " +
+        "WHERE m.is_deleted IS NOT 1 AND m.type IS NOT \(BookmarkNodeType.Folder.rawValue) AND s.child IS NULL " +
+
+        "UNION ALL " +
+
+        // This gives us folders with no children.
+        "SELECT m.guid AS guid, m.type AS type " +
+        "FROM \(table) m LEFT JOIN \(structure) s ON s.parent = m.guid " +
+        "WHERE m.is_deleted IS NOT 1 AND m.type IS \(BookmarkNodeType.Folder.rawValue) AND s.parent IS NULL "
+
+        return sql
+    }
+
+    private func deletionQueryForTable(table: String) -> String {
+        return "SELECT guid FROM \(table) WHERE is_deleted IS 1"
+    }
+
+    private func treeForTable(table: String, structure: String) -> Deferred<Maybe<BookmarkTree>> {
+        // The structure query doesn't give us non-structural rows -- that is, if you
+        // make a value-only change to a record, and it's not otherwise mentioned by
+        // way of being a child of a structurally modified folder, it won't appear here at all.
+        // It also doesn't give us empty folders, because they have no children.
+        // We run a separate query to get those.
+        let structureSQL = self.structureQueryForTable(table, structure: structure)
+        let remainderSQL = self.remainderQueryForTable(table, structure: structure)
+        let deletionSQL = self.deletionQueryForTable(table)
+
+        func structureFactory(row: SDRow) -> StructureRow {
+            let typeCode = row["type"] as! Int
+            let type = BookmarkNodeType(rawValue: typeCode)   // nil if typeCode is invalid (e.g., -1).
+            return (parent: row["parent"] as! GUID, child: row["child"] as! GUID, type: type)
+        }
+
+        func nonStructureFactory(row: SDRow) -> BookmarkTreeNode {
+            let guid = row["guid"] as! GUID
+            let typeCode = row["type"] as! Int
+            if let type = BookmarkNodeType(rawValue: typeCode) {
+                switch type {
+                case .Folder:
+                    return BookmarkTreeNode.Folder(guid: guid, children: [])
+                default:
+                    return BookmarkTreeNode.NonFolder(guid: guid)
+                }
+            } else {
+                return BookmarkTreeNode.Unknown(guid: guid)
+            }
+        }
+
+        return self.db.runQuery(deletionSQL, args: nil, factory: { $0["guid"] as! GUID })
+            >>== { cursor in
+                let deleted = Set<GUID>(cursor.asArray())
+                return self.db.runQuery(remainderSQL, args: nil, factory: nonStructureFactory)
+                    >>== { cursor in
+                        let nonFoldersAndEmptyFolders = cursor.asArray()
+                        return self.db.runQuery(structureSQL, args: nil, factory: structureFactory)
+                            >>== { cursor in
+                                let structureRows = cursor.asArray()
+                                return BookmarkTree.mappingsToTreeForStructureRows(structureRows, withNonFoldersAndEmptyFolders: nonFoldersAndEmptyFolders, withDeletedRecords: deleted)
+                        }
+                }
+        }
+    }
+
+    public func treeForMirror() -> Deferred<Maybe<BookmarkTree>> {
+        return self.treeForTable(TableBookmarksMirror, structure: TableBookmarksMirrorStructure)
+    }
+
+    public func treeForBuffer() -> Deferred<Maybe<BookmarkTree>> {
+        return self.treeForTable(TableBookmarksBuffer, structure: TableBookmarksBufferStructure)
+    }
+
+    public func treeForLocal() -> Deferred<Maybe<BookmarkTree>> {
+        return self.treeForTable(TableBookmarksLocal, structure: TableBookmarksLocalStructure)
     }
 }
