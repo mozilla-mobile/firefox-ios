@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F84B21D21A090F8100AAB793"
-               BuildableName = "FennecAurora.xctest"
+               BuildableName = "ClientTests.xctest"
                BlueprintName = "ClientTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -93,7 +93,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
@@ -103,7 +103,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F84B21D21A090F8100AAB793"
-               BuildableName = "FennecAurora.xctest"
+               BuildableName = "ClientTests.xctest"
                BlueprintName = "ClientTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -177,7 +177,7 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -200,7 +200,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Fennec"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -217,10 +217,10 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Debug">
+      buildConfiguration = "Fennec">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Fennec"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

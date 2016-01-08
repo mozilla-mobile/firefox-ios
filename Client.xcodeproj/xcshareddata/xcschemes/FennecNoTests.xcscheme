@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0720"
+   LastUpgradeVersion = "0700"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -9,41 +9,40 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7BEB64401C7345600092C02E"
-               BuildableName = "L10nSnapshotTests.xctest"
-               BlueprintName = "L10nSnapshotTests"
+               BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
+               BuildableName = "Client.app"
+               BlueprintName = "Client"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "FirefoxBetaEnterprise"
+      buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7BEB64401C7345600092C02E"
-               BuildableName = "L10nSnapshotTests.xctest"
-               BlueprintName = "L10nSnapshotTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
+            BuildableName = "Client.app"
+            BlueprintName = "Client"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "FirefoxBetaEnterprise"
+      buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -52,39 +51,41 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7BEB64401C7345600092C02E"
-            BuildableName = "L10nSnapshotTests.xctest"
-            BlueprintName = "L10nSnapshotTests"
+            BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
+            BuildableName = "Client.app"
+            BlueprintName = "Client"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "FirefoxBetaEnterprise"
+      buildConfiguration = "Fennec"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7BEB64401C7345600092C02E"
-            BuildableName = "L10nSnapshotTests.xctest"
-            BlueprintName = "L10nSnapshotTests"
+            BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
+            BuildableName = "Client.app"
+            BlueprintName = "Client"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "FirefoxBetaEnterprise">
+      buildConfiguration = "Fennec">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "FirefoxBetaEnterprise"
+      buildConfiguration = "Fennec"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

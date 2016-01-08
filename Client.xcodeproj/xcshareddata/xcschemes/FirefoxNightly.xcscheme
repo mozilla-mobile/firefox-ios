@@ -23,10 +23,19 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Firefox"
+      buildConfiguration = "FirefoxNightly"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "/usr/local/bin/carthage checkout">
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <Testables>
       </Testables>
       <MacroExpansion>
@@ -42,7 +51,7 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Firefox"
+      buildConfiguration = "FirefoxNightly"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -65,7 +74,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Firefox"
+      buildConfiguration = "FirefoxNightly"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -82,10 +91,19 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Firefox">
+      buildConfiguration = "FirefoxNightly">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Firefox"
+      buildConfiguration = "FirefoxNightly"
       revealArchiveInOrganizer = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "/usr/local/bin/carthage checkout">
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
    </ArchiveAction>
 </Scheme>
