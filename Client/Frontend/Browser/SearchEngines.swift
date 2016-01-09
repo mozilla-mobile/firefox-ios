@@ -141,7 +141,7 @@ class SearchEngines {
     }
 
     /// Return all possible paths for a language identifier in the order of most specific to least specific.
-    /// For example, zh-Hans-CN with a default of en will return [zh-Hans-CN, zh-CN, zh, en]. The fallback
+    /// For example, zh-Hans-CN with a default of en will return [zh-Hans-CN, zh-Hans, zh, en]. The fallback
     /// identifier must be a known one that is guaranteed to exist in the SearchPlugins directory.
     class func directoriesForLanguageIdentifier(languageIdentifier: String, basePath: NSString, fallbackIdentifier: String) -> [String] {
         var directories = [String]()
@@ -155,7 +155,7 @@ class SearchEngines {
             directories.append(components[0])
         } else if components.count == 3 {
             directories.append(languageIdentifier)
-            directories.append(components[0] + "-" + components[2])
+            directories.append(components[0] + "-" + components[1])
             directories.append(components[0])
         }
         if !directories.contains(fallbackIdentifier) {
