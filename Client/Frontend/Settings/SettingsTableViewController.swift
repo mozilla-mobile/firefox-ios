@@ -740,8 +740,6 @@ class SettingsTableViewController: UITableViewController {
         if locale.localeIdentifier != "zh_CN" {
             accountChinaSyncSetting = []
         } else {
-            // Set the value of "useChinaSyncService"
-            prefs.setObject(true, forKey: "useChinaSyncService")
             accountChinaSyncSetting = [
                 // Show China sync service setting:
                 ChinaSyncServiceSetting(settings: self)
