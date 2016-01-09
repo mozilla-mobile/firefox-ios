@@ -47,4 +47,9 @@ public struct AppConstants {
     return true
 #endif
     }()
+
+    /// Enables/disables the saving and restoring tab history in saved sessions
+    public static let MOZ_PERSIST_SESSION_HISTORY: Bool = {
+        return false
+    }()
 }

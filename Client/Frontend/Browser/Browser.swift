@@ -142,22 +142,29 @@ class Browser: NSObject, BrowserWebViewDelegate {
         // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
         // to trigger the session restore via custom handlers
         if let sessionData = self.sessionData {
-            restoring = true
+            if AppConstants.MOZ_PERSIST_SESSION_HISTORY {
+                restoring = true
 
-            var updatedURLs = [String]()
-            for url in sessionData.urls {
-                let updatedURL = WebServer.sharedInstance.updateLocalURL(url)!.absoluteString
-                updatedURLs.append(updatedURL)
+                var updatedURLs = [String]()
+                for url in sessionData.urls {
+                    let updatedURL = WebServer.sharedInstance.updateLocalURL(url)!.absoluteString
+                    updatedURLs.append(updatedURL)
+                }
+                let currentPage = sessionData.currentPage
+                self.sessionData = nil
+                var jsonDict = [String: AnyObject]()
+                jsonDict["history"] = updatedURLs
+                jsonDict["currentPage"] = currentPage
+                let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+                let restoreURL = NSURL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")
+                lastRequest = NSURLRequest(URL: restoreURL!)
+                webView.loadRequest(lastRequest!)
+            } else {
+                if let url = sessionData.urls.last {
+                    lastRequest = NSURLRequest(URL: url)
+                    webView.loadRequest(lastRequest!)
+                }
             }
-            let currentPage = sessionData.currentPage
-            self.sessionData = nil
-            var jsonDict = [String: AnyObject]()
-            jsonDict["history"] = updatedURLs
-            jsonDict["currentPage"] = currentPage
-            let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-            let restoreURL = NSURL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")
-            lastRequest = NSURLRequest(URL: restoreURL!)
-            webView.loadRequest(lastRequest!)
         } else if let request = lastRequest {
             webView.loadRequest(request)
         } else {
