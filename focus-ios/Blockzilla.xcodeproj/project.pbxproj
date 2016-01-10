@@ -39,6 +39,8 @@
 		D3BFCB5B1BD15CD000AD22D1 /* rights.html in Resources */ = {isa = PBXBuildFile; fileRef = D3BFCB5A1BD15CD000AD22D1 /* rights.html */; };
 		D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */; };
 		D3C0EEFD1BE97F9300BD89C1 /* blocker-enabled-detector.json in Resources */ = {isa = PBXBuildFile; fileRef = D3C0EEFC1BE97F9300BD89C1 /* blocker-enabled-detector.json */; };
+		E43A10781C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
+		E43A10791C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */; };
 		E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */; };
 		E4BF2DF11BACE92400DA9D68 /* ActionRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2DF01BACE92400DA9D68 /* ActionRequestHandler.swift */; };
@@ -119,6 +121,7 @@
 		D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		D3C0EEFC1BE97F9300BD89C1 /* blocker-enabled-detector.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "blocker-enabled-detector.json"; path = "Lists/blocker-enabled-detector.json"; sourceTree = SOURCE_ROOT; };
 		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Klar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E43A10771C42BBE400FE695B /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4BF2DE21BACE8CA00DA9D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -172,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				E4BF2E101BAD8AC500DA9D68 /* Settings.swift */,
+				E43A10771C42BBE400FE695B /* AppInfo.swift */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -430,6 +434,7 @@
 				D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */,
 				D37DE54D1BCDB86100906364 /* IntroSlideFinish.swift in Sources */,
 				D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */,
+				E43A10781C42BBE400FE695B /* AppInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +444,7 @@
 			files = (
 				E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */,
 				E4BF2DF11BACE92400DA9D68 /* ActionRequestHandler.swift in Sources */,
+				E43A10791C42BBE400FE695B /* AppInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

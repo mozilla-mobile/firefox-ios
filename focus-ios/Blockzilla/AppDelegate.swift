@@ -5,8 +5,6 @@
 import SafariServices
 import UIKit
 
-private let ContentBlockerBundleIdentifier = "org.mozilla.ios.Klar.ContentBlocker"
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegate, IntroViewControllerDelegate {
     var window: UIWindow?
@@ -73,10 +71,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegat
     }
 
     private func reloadContentBlocker() {
-        SFContentBlockerManager.reloadContentBlockerWithIdentifier(ContentBlockerBundleIdentifier, completionHandler: { (error) -> Void in
-            if let error = error {
-                NSLog("Failed to reload \(ContentBlockerBundleIdentifier): \(error.description)")
-            }
-        })
+        if let identifier = AppInfo.contentBlockerBundleIdentifier() {
+            SFContentBlockerManager.reloadContentBlockerWithIdentifier(identifier, completionHandler: {
+                (error) -> Void in
+                if let error = error {
+                    NSLog("Failed to reload \(identifier): \(error.description)")
+                }
+            })
+        }
     }
 }

@@ -5,8 +5,6 @@
 import Foundation
 
 struct Settings {
-    static let SuiteName = "group.org.mozilla.ios.Klar"
-
     static let KeyBlockAds = "BlockAds"
     static let KeyBlockAnalytics = "BlockAnalytics"
     static let KeyBlockSocial = "BlockSocial"
@@ -23,13 +21,18 @@ struct Settings {
     }
 
     static func getBool(name: String) -> Bool? {
-        return NSUserDefaults(suiteName: SuiteName)?.objectForKey(name) as? Bool
+        guard let suiteName = AppInfo.sharedContainerIdentifier() else {
+            return nil
+        }
+        return NSUserDefaults(suiteName: suiteName)?.objectForKey(name) as? Bool
     }
 
     static func set(value: Bool, forKey key: String) {
-        if let defaults = NSUserDefaults(suiteName: SuiteName) {
-            defaults.setBool(value, forKey: key)
-            defaults.synchronize()
+        if let suiteName = AppInfo.sharedContainerIdentifier() {
+            if let defaults = NSUserDefaults(suiteName: suiteName) {
+                defaults.setBool(value, forKey: key)
+                defaults.synchronize()
+            }
         }
     }
 }
