@@ -1767,7 +1767,10 @@ extension BrowserViewController: WKNavigationDelegate {
             if UIApplication.sharedApplication().canOpenURL(url) {
                 openExternal(url)
             } else {
-                ErrorPageHelper().showPage(NSError(domain: kCFErrorDomainCFNetwork as String, code: Int(CFNetworkErrors.CFErrorHTTPBadURL.rawValue), userInfo: [:]), forUrl: url, inWebView: webView)
+                // Only show the error page if this was not a JavaScript initiated request. This prevents the error to overwrite apps that try to open native apps from an already loadeded page.
+                if navigationAction.navigationType != WKNavigationType.Other {
+                    ErrorPageHelper().showPage(NSError(domain: kCFErrorDomainCFNetwork as String, code: Int(CFNetworkErrors.CFErrorHTTPBadURL.rawValue), userInfo: [:]), forUrl: url, inWebView: webView)
+                }
             }
             decisionHandler(WKNavigationActionPolicy.Cancel)
         }
