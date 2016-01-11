@@ -19,6 +19,11 @@ class LoginsHelper: BrowserHelper {
     private let profile: Profile
     private var snackBar: SnackBar?
 
+    // Exposed for mocking purposes
+    var logins: BrowserLogins {
+        return profile.logins
+    }
+
     class func name() -> String {
         return "LoginsHelper"
     }
@@ -91,6 +96,14 @@ class LoginsHelper: BrowserHelper {
 
     func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
         return profile.logins.getLoginsForProtectionSpace(protectionSpace)
+    }
+
+    func updateLoginByGUID(guid: GUID, new: LoginData, significant: Bool) -> Success {
+        return profile.logins.updateLoginByGUID(guid, new: new, significant: significant)
+    }
+
+    func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
+        return profile.logins.removeLoginsWithGUIDs(guids)
     }
 
     func setCredentials(login: LoginData) {

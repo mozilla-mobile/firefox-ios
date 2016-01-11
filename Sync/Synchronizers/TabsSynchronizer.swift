@@ -115,7 +115,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
 
                         let allDone = all(filtered.map(doInsert))
                         return allDone.bind { (results) -> Success in
-                            if let failure = find(results, f: { $0.isFailure }) {
+                            if let failure = results.find({ $0.isFailure }) {
                                 return deferMaybe(failure.failureValue!)
                             }
 

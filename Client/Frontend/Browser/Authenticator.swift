@@ -8,6 +8,7 @@ import Storage
 
 private let CancelButtonTitle = NSLocalizedString("Cancel", comment: "Authentication prompt cancel button")
 private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentication prompt log in button")
+private let log = Logger.browserLogger
 
 class Authenticator {
     private static let MaxAuthenticationAttempts = 3
@@ -38,14 +39,60 @@ class Authenticator {
 
         // Otherwise, try to look them up and show the prompt.
         if let loginsHelper = loginsHelper {
-            return loginsHelper.getLoginsForProtectionSpace(challenge.protectionSpace).bindQueue(dispatch_get_main_queue()) { res in
-                let credentials = res.successValue?[0]?.credentials
+            return findMatchingCredentialsForChallenge(challenge, fromLoginsProvider: loginsHelper.logins).bindQueue(dispatch_get_main_queue()) { result in
+                guard let credentials = result.successValue else {
+                    return deferMaybe(result.failureValue ?? LoginDataError(description: "Unknown error when finding credentials"))
+                }
                 return self.promptForUsernamePassword(viewController, credentials: credentials, protectionSpace: challenge.protectionSpace, loginsHelper: loginsHelper)
             }
         }
 
         // No credentials, so show an empty prompt.
         return self.promptForUsernamePassword(viewController, credentials: nil, protectionSpace: challenge.protectionSpace, loginsHelper: nil)
+    }
+
+    static func findMatchingCredentialsForChallenge(challenge: NSURLAuthenticationChallenge, fromLoginsProvider loginsProvider: BrowserLogins) -> Deferred<Maybe<NSURLCredential?>> {
+        return loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
+            guard cursor.count >= 1 else {
+                return deferMaybe(nil)
+            }
+
+            let logins = cursor.asArray()
+            var credentials: NSURLCredential? = nil
+
+            // It is possible that we might have duplicate entries since we match against host and scheme://host.
+            // This is a side effect of https://bugzilla.mozilla.org/show_bug.cgi?id=1238103.
+            if logins.count > 1 {
+                credentials = (logins.find { login in
+                    (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`) && !(login.hasMalformedHostname ?? false)
+                })?.credentials
+
+                let malformedGUIDs: [GUID] = logins.flatMap { login in
+                    if login.hasMalformedHostname {
+                        return login.guid
+                    }
+                    return nil
+                }
+                loginsProvider.removeLoginsWithGUIDs(malformedGUIDs).upon { log.debug("Removed malformed logins. Success :\($0.isSuccess)") }
+            }
+
+            // Found a single entry but the schemes don't match. This is a result of a schemeless entry that we
+            // saved in a previous iteration of the app so we need to migrate it. We only care about the
+            // the username/password so we can rewrite the scheme to be correct.
+            else if logins.count == 1 && logins[0].protectionSpace.`protocol` != challenge.protectionSpace.`protocol` {
+                let login = logins[0]
+                credentials = login.credentials
+                let new = Login(credential: login.credentials, protectionSpace: challenge.protectionSpace)
+                loginsProvider.updateLoginByGUID(login.guid, new: new, significant: true).value
+            }
+
+            // Found a single entry that matches the scheme and host - good to go.
+            else {
+                credentials = logins[0].credentials
+            }
+
+            return deferMaybe(credentials)
+        }
     }
 
     private static func promptForUsernamePassword(viewController: UIViewController, credentials: NSURLCredential?, protectionSpace: NSURLProtectionSpace, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginData>> {

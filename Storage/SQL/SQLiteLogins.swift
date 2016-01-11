@@ -133,14 +133,38 @@ public class SQLiteLogins: BrowserLogins {
         let credential = NSURLCredential(user: row["username"] as? String ?? "",
             password: row["password"] as! String,
             persistence: NSURLCredentialPersistence.None)
-        let protectionSpace = NSURLProtectionSpace(host: row["hostname"] as! String,
-            port: 0,
-            `protocol`: nil,
+
+        // There was a bug in previous versions of the app where we saved only the hostname and not the
+        // scheme and port in the DB. To work with these scheme-less hostnames, we try to extract the scheme and
+        // hostname by converting to a URL first. If there is no valid hostname or scheme for the URL,
+        // fallback to returning the raw hostname value from the DB as the host and allow NSURLProtectionSpace
+        // to use the default (http) scheme. See https://bugzilla.mozilla.org/show_bug.cgi?id=1238103.
+
+        let hostnameString = (row["hostname"] as? String) ?? ""
+        let hostnameURL = hostnameString.asURL
+
+        let scheme = hostnameURL?.scheme
+        let port = hostnameURL?.port?.integerValue ?? 0
+
+        // Check for malformed hostname urls in the DB
+        let host: String
+        var malformedHostname = false
+        if let h = hostnameURL?.host {
+            host = h
+        } else {
+            host = hostnameString
+            malformedHostname = true
+        }
+
+        let protectionSpace = NSURLProtectionSpace(host: host,
+            port: port,
+            `protocol`: scheme,
             realm: row["httpRealm"] as? String,
             authenticationMethod: nil)
 
         let login = T(credential: credential, protectionSpace: protectionSpace)
         self.populateLogin(login, row: row)
+        login.hasMalformedHostname = malformedHostname
         return login
     }
 
@@ -228,15 +252,23 @@ public class SQLiteLogins: BrowserLogins {
 
         let sql =
         "SELECT \(projection) FROM " +
-        "\(TableLoginsLocal) WHERE is_deleted = 0 AND hostname IS ? " +
+        "\(TableLoginsLocal) WHERE is_deleted = 0 AND hostname IS ? OR hostname IS ?" +
         "UNION ALL " +
         "SELECT \(projection) FROM " +
-        "\(TableLoginsMirror) WHERE is_overridden = 0 AND hostname IS ? " +
+        "\(TableLoginsMirror) WHERE is_overridden = 0 AND hostname IS ? OR hostname IS ?" +
         "ORDER BY timeLastUsed DESC"
 
-        let args: Args = [protectionSpace.host, protectionSpace.host]
+        // Since we store hostnames as the full scheme/protocol + host, combine the two to look up in our DB.
+        // In the case of https://bugzilla.mozilla.org/show_bug.cgi?id=1238103, there may be hostnames without
+        // a scheme. Check for these as well.
+        let args: Args = [
+            protectionSpace.urlString(),
+            protectionSpace.host,
+            protectionSpace.urlString(),
+            protectionSpace.host,
+        ]
         if Logger.logPII {
-            log.debug("Looking for login: \(protectionSpace.host)")
+            log.debug("Looking for login: \(protectionSpace.urlString()) && \(protectionSpace.host)")
         }
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
