@@ -450,4 +450,11 @@ private class BrowserWebView: WKWebView, MenuHelperInterface {
             self.delegate?.browserWebView(self, didSelectFindInPageForSelection: selection)
         }
     }
+
+    private override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
+        // The find-in-page selection menu only appears if the webview is the first responder.
+        becomeFirstResponder()
+
+        return super.hitTest(point, withEvent: event)
+    }
 }
