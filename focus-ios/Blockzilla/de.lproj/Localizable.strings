@@ -1,0 +1,106 @@
+/* Button at top of app that goes to the About screen
+   Title for the About screen */
+"About" = "Über";
+
+/* Label for toggle on main screen */
+"Block Web fonts" = "Web-Schriftarten blockieren";
+
+/* Label for toggle on main screen */
+"Block ad trackers" = "Verfolgung durch Werbung blockieren";
+
+/* Label for toggle on main screen */
+"Block analytics trackers" = "Verfolgung durch Statistiken blockieren";
+
+/* Label for toggle on main screen */
+"Block other content trackers" = "Verfolgung durch sonstige Inhalte blockieren";
+
+/* Label for toggle on main screen */
+"Block social trackers" = "Verfolgung durch soziale Medien blockieren";
+
+/* Alert message shown when toggling the Content blocker */
+"Blocking other content trackers may break some videos and Web pages." = "Eventuell funktionieren durch das Blockieren sonstiger Verfolgung einige Videos und Websites nicht mehr.";
+
+/* Text displayed at the final step of the intro screen */
+"Checking installation…" = "Installation wird überprüft…";
+
+/* Button at top of app that goes to the About screen */
+"Done" = "Fertig";
+
+/* Label for instructions to enable shown on the second introduction screen */
+"Enable Focus" = "Klar aktivieren";
+
+/* Instructions shown in main app when Focus is disabled in system settings */
+"Enable Focus in" = "Aktivieren Sie Klar in";
+
+/* Description text shown on the welcome slide of the tour */
+"Focus helps you improve the privacy and performance of your mobile browsing experience. You control what types of page content are allowed." = "Klar hilft Ihnen bei der Verbesserung des Schutzes Ihrer Daten und der Leistung, während Sie surfen. Sie bestimmen, welche Arten von Seiteninhalten erlaubt sind.";
+
+/* Label displayed above toggles */
+"Focus improves privacy and may boost page load speed and lower your mobile data usage." = "Klar verbessert den Datenschutz und kann die Ladegeschwindigkeit der Seite verbessern sowie das benötigte Datenvolumen senken.";
+
+/* Text displayed at the final step of the intro screen */
+"Focus is enabled!" = "Klar ist aktiv!";
+
+/* Error label when Focus is not enabled, shown in the intro and main app when Focus is disabled */
+"Focus is not enabled." = "Klar ist nicht aktiviert.";
+
+/* About copy on the about page */
+"Focus is produced by Mozilla, the people behind the Firefox Web browser." = "Klar wird von Mozilla entwickelt, den Menschen hinter dem Web-Browser Firefox.";
+
+/* Notice label show on second introduction screen */
+"Focus must be enabled in Settings to work." = "Um verfügbar zu sein, muss Klar in der Einstellungen-App aktiviert werden.";
+
+/* About copy on the about page */
+"Focus puts you in control and brings added privacy and performance to your mobile browsing experience." = "Klar lässt Sie entscheiden und hilft Ihnen bei der Verbesserung des Schutzes Ihrer Daten und der Leistung, während Sie surfen.";
+
+/* Button to close the intro screen */
+"Get Started" = "Einführung";
+
+/* Label in About screen */
+"Help" = "Hilfe";
+
+/* Button label for accepting Content blocker alert */
+"I Understand" = "OK";
+
+/* Label for toggle on main screen */
+"May break some videos and Web pages" = "Kann Wiedergabe einiger Videos und Websites stören";
+
+/* Button label for declining Content blocker alert */
+"No, Thanks" = "Abbrechen";
+
+/* Button to open the system Settings, shown in the intro and main app when Focus is disabled */
+"Open Settings" = "Einstellungen öffnen";
+
+/* Label for instructions to enable shown on the second introduction screen */
+"Open Settings App" = "Einstellungen-App öffnen";
+
+/* About copy on the about page */
+"Our mission is to foster a healthy, open Internet." = "Unser Ziel ist es, ein offenes, organisches Internet zu fördern.";
+
+/* Section label for performance toggles */
+"PERFORMANCE" = "LEISTUNG";
+
+/* Section label for privacy toggles */
+"PRIVACY" = "DATENSCHUTZ";
+
+/* Button on the about page */
+"Read more." = "Weitere Informationen";
+
+/* Instructions shown in main app when Focus is disabled in system settings */
+"Settings → Safari → Content Blockers" = "Einstellungen → Safari → Inhalts-Blocker";
+
+/* Label in About screen */
+"Setup Instructions" = "Einrichtungsanleitung";
+
+/* Button at top of the last intro screen when Focus is not enabled */
+"Skip" = "Überspringen";
+
+/* Label for instructions to enable shown on the second introduction screen */
+"Tap Safari, then select Content Blockers" = "Tippen Sie auf Safari, dann auf Inhalts-Blocker";
+
+/* Text displayed above Focus description when first launching the app */
+"Welcome" = "Willkommen";
+
+/* Label in About screen */
+"Your Rights" = "Ihre Rechte";
+

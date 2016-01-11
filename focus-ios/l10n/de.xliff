@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="Blockzilla/Info.plist" source-language="en" datatype="plaintext" target-language="de">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName">
+        <source>Focus</source>
+        <target>Klar</target>
+      </trans-unit>
+      <trans-unit id="CFBundleName">
+        <source>$(PRODUCT_NAME)</source>
+        <target>$(PRODUCT_NAME)</target>
+      </trans-unit>
+      <trans-unit id="CFBundleShortVersionString">
+        <source>1.1</source>
+        <target>1.1</target>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Blockzilla/Localizable.strings" source-language="en" datatype="plaintext" target-language="de">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="About">
+        <source>About</source>
+        <target>Über</target>
+        <note>Button at top of app that goes to the About screen
+   Title for the About screen</note>
+      </trans-unit>
+      <trans-unit id="Block Web fonts">
+        <source>Block Web fonts</source>
+        <target>Web-Schriftarten blockieren</target>
+        <note>Label for toggle on main screen</note>
+      </trans-unit>
+      <trans-unit id="Block ad trackers">
+        <source>Block ad trackers</source>
+        <target>Verfolgung durch Werbung blockieren</target>
+        <note>Label for toggle on main screen</note>
+      </trans-unit>
+      <trans-unit id="Block analytics trackers">
+        <source>Block analytics trackers</source>
+        <target>Verfolgung durch Statistiken blockieren</target>
+        <note>Label for toggle on main screen</note>
+      </trans-unit>
+      <trans-unit id="Block other content trackers">
+        <source>Block other content trackers</source>
+        <target>Verfolgung durch sonstige Inhalte blockieren</target>
+        <note>Label for toggle on main screen</note>
+      </trans-unit>
+      <trans-unit id="Block social trackers">
+        <source>Block social trackers</source>
+        <target>Verfolgung durch soziale Medien blockieren</target>
+        <note>Label for toggle on main screen</note>
+      </trans-unit>
+      <trans-unit id="Blocking other content trackers may break some videos and Web pages.">
+        <source>Blocking other content trackers may break some videos and Web pages.</source>
+        <target>Eventuell funktionieren durch das Blockieren sonstiger Verfolgung einige Videos und Websites nicht mehr.</target>
+        <note>Alert message shown when toggling the Content blocker</note>
+      </trans-unit>
+      <trans-unit id="Checking installation…">
+        <source>Checking installation…</source>
+        <target>Installation wird überprüft…</target>
+        <note>Text displayed at the final step of the intro screen</note>
+      </trans-unit>
+      <trans-unit id="Done">
+        <source>Done</source>
+        <target>Fertig</target>
+        <note>Button at top of app that goes to the About screen</note>
+      </trans-unit>
+      <trans-unit id="Enable Focus">
+        <source>Enable Focus</source>
+        <target>Klar aktivieren</target>
+        <note>Label for instructions to enable shown on the second introduction screen</note>
+      </trans-unit>
+      <trans-unit id="Enable Focus in">
+        <source>Enable Focus in</source>
+        <target>Aktivieren Sie Klar in</target>
+        <note>Instructions shown in main app when Focus is disabled in system settings</note>
+      </trans-unit>
+      <trans-unit id="Focus helps you improve the privacy and performance of your mobile browsing experience. You control what types of page content are allowed.">
+        <source>Focus helps you improve the privacy and performance of your mobile browsing experience. You control what types of page content are allowed.</source>
+        <target>Klar hilft Ihnen bei der Verbesserung des Schutzes Ihrer Daten und der Leistung, während Sie surfen. Sie bestimmen, welche Arten von Seiteninhalten erlaubt sind.</target>
+        <note>Description text shown on the welcome slide of the tour</note>
+      </trans-unit>
+      <trans-unit id="Focus improves privacy and may boost page load speed and lower your mobile data usage.">
+        <source>Focus improves privacy and may boost page load speed and lower your mobile data usage.</source>
+        <target>Klar verbessert den Datenschutz und kann die Ladegeschwindigkeit der Seite verbessern sowie das benötigte Datenvolumen senken.</target>
+        <note>Label displayed above toggles</note>
+      </trans-unit>
+      <trans-unit id="Focus is enabled!">
+        <source>Focus is enabled!</source>
+        <target>Klar ist aktiv!</target>
+        <note>Text displayed at the final step of the intro screen</note>
+      </trans-unit>
+      <trans-unit id="Focus is not enabled.">
+        <source>Focus is not enabled.</source>
+        <target>Klar ist nicht aktiviert.</target>
+        <note>Error label when Focus is not enabled, shown in the intro and main app when Focus is disabled</note>
+      </trans-unit>
+      <trans-unit id="Focus is produced by Mozilla, the people behind the Firefox Web browser.">
+        <source>Focus is produced by Mozilla, the people behind the Firefox Web browser.</source>
+        <target>Klar wird von Mozilla entwickelt, den Menschen hinter dem Web-Browser Firefox.</target>
+        <note>About copy on the about page</note>
+      </trans-unit>
+      <trans-unit id="Focus must be enabled in Settings to work.">
+        <source>Focus must be enabled in Settings to work.</source>
+        <target>Um verfügbar zu sein, muss Klar in der Einstellungen-App aktiviert werden.</target>
+        <note>Notice label show on second introduction screen</note>
+      </trans-unit>
+      <trans-unit id="Focus puts you in control and brings added privacy and performance to your mobile browsing experience.">
+        <source>Focus puts you in control and brings added privacy and performance to your mobile browsing experience.</source>
+        <target>Klar lässt Sie entscheiden und hilft Ihnen bei der Verbesserung des Schutzes Ihrer Daten und der Leistung, während Sie surfen.</target>
+        <note>About copy on the about page</note>
+      </trans-unit>
+      <trans-unit id="Get Started">
+        <source>Get Started</source>
+        <target>Einführung</target>
+        <note>Button to close the intro screen</note>
+      </trans-unit>
+      <trans-unit id="Help">
+        <source>Help</source>
+        <target>Hilfe</target>
+        <note>Label in About screen</note>
+      </trans-unit>
+      <trans-unit id="I Understand">
+        <source>I Understand</source>
+        <target>OK</target>
+        <note>Button label for accepting Content blocker alert</note>
+      </trans-unit>
+      <trans-unit id="May break some videos and Web pages">
+        <source>May break some videos and Web pages</source>
+        <target>Kann Wiedergabe einiger Videos und Websites stören</target>
+        <note>Label for toggle on main screen</note>
+      </trans-unit>
+      <trans-unit id="No, Thanks">
+        <source>No, Thanks</source>
+        <target>Abbrechen</target>
+        <note>Button label for declining Content blocker alert</note>
+      </trans-unit>
+      <trans-unit id="Open Settings">
+        <source>Open Settings</source>
+        <target>Einstellungen öffnen</target>
+        <note>Button to open the system Settings, shown in the intro and main app when Focus is disabled</note>
+      </trans-unit>
+      <trans-unit id="Open Settings App">
+        <source>Open Settings App</source>
+        <target>Einstellungen-App öffnen</target>
+        <note>Label for instructions to enable shown on the second introduction screen</note>
+      </trans-unit>
+      <trans-unit id="Our mission is to foster a healthy, open Internet.">
+        <source>Our mission is to foster a healthy, open Internet.</source>
+        <target>Unser Ziel ist es, ein offenes, organisches Internet zu fördern.</target>
+        <note>About copy on the about page</note>
+      </trans-unit>
+      <trans-unit id="PERFORMANCE">
+        <source>PERFORMANCE</source>
+        <target>LEISTUNG</target>
+        <note>Section label for performance toggles</note>
+      </trans-unit>
+      <trans-unit id="PRIVACY">
+        <source>PRIVACY</source>
+        <target>DATENSCHUTZ</target>
+        <note>Section label for privacy toggles</note>
+      </trans-unit>
+      <trans-unit id="Read more.">
+        <source>Read more.</source>
+        <target>Weitere Informationen</target>
+        <note>Button on the about page</note>
+      </trans-unit>
+      <trans-unit id="Settings → Safari → Content Blockers">
+        <source>Settings → Safari → Content Blockers</source>
+        <target>Einstellungen → Safari → Inhalts-Blocker</target>
+        <note>Instructions shown in main app when Focus is disabled in system settings</note>
+      </trans-unit>
+      <trans-unit id="Setup Instructions">
+        <source>Setup Instructions</source>
+        <target>Einrichtungsanleitung</target>
+        <note>Label in About screen</note>
+      </trans-unit>
+      <trans-unit id="Skip">
+        <source>Skip</source>
+        <target>Überspringen</target>
+        <note>Button at top of the last intro screen when Focus is not enabled</note>
+      </trans-unit>
+      <trans-unit id="Tap Safari, then select Content Blockers">
+        <source>Tap Safari, then select Content Blockers</source>
+        <target>Tippen Sie auf Safari, dann auf Inhalts-Blocker</target>
+        <note>Label for instructions to enable shown on the second introduction screen</note>
+      </trans-unit>
+      <trans-unit id="Welcome">
+        <source>Welcome</source>
+        <target>Willkommen</target>
+        <note>Text displayed above Focus description when first launching the app</note>
+      </trans-unit>
+      <trans-unit id="Your Rights">
+        <source>Your Rights</source>
+        <target>Ihre Rechte</target>
+        <note>Label in About screen</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="ContentBlocker/Info.plist" source-language="en" datatype="plaintext" target-language="de">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName">
+        <source>ContentBlocker</source>
+        <target>ContentBlocker</target>
+      </trans-unit>
+      <trans-unit id="CFBundleName">
+        <source>$(PRODUCT_NAME)</source>
+        <target>$(PRODUCT_NAME)</target>
+      </trans-unit>
+      <trans-unit id="CFBundleShortVersionString">
+        <source>1.1</source>
+        <target>1.1</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
