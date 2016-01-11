@@ -36,6 +36,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         BlockerToggle(label: LabelBlockFonts, key: Settings.KeyBlockFonts),
     ]
 
+    /// Used to calculate cell heights.
+    private lazy var dummyToggleCell: UITableViewCell = {
+        let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "dummyCell")
+        cell.accessoryView = PaddedSwitch(switchView: UISwitch())
+        return cell
+    }()
+
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.Colors.Background
 
@@ -106,6 +113,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return UIStatusBarStyle.LightContent
     }
 
+    private func toggleForIndexPath(indexPath: NSIndexPath) -> BlockerToggle {
+        var index = indexPath.row
+        for i in 1..<indexPath.section {
+            index += tableView.numberOfRowsInSection(i)
+        }
+        return toggles[index]
+    }
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "toggleCell")
         switch indexPath.section {
@@ -114,15 +129,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             headerView.snp_makeConstraints { make in
                 make.edges.equalTo(cell)
             }
-        case 1:
-            let toggle = toggles[indexPath.row]
-            cell.textLabel?.text = toggle.label
-            cell.accessoryView = toggle.toggle
-            cell.detailTextLabel?.text = toggle.subtitle
+        case 1: fallthrough
         case 2:
-            let toggle = toggles[indexPath.row + 4]
+            let toggle = toggleForIndexPath(indexPath)
             cell.textLabel?.text = toggle.label
-            cell.accessoryView = toggle.toggle
+            cell.textLabel?.numberOfLines = 0
+            cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
+            cell.detailTextLabel?.text = toggle.subtitle
+            cell.detailTextLabel?.numberOfLines = 0
         default:
             break
         }
@@ -154,14 +168,31 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
+        if indexPath.section == 0 {
             return heightForCustomCellWithView(headerView)
-        default:
-            break
         }
 
-        return 44
+        // We have to manually calculate the cell height since UITableViewCell don't correctly
+        // layout multiline detailTextLabels.
+        let toggle = toggleForIndexPath(indexPath)
+        let tableWidth = tableView.frame.width
+        let accessoryWidth = dummyToggleCell.accessoryView!.frame.width
+        let insetsWidth = 2 * tableView.separatorInset.left
+        let width = tableWidth - accessoryWidth - insetsWidth
+
+        var height = heightForLabel(dummyToggleCell.textLabel!, width: width, text: toggle.label)
+        if let subtitle = toggle.subtitle {
+            height += heightForLabel(dummyToggleCell.detailTextLabel!, width: width, text: subtitle)
+        }
+
+        return height + 22
+    }
+
+    private func heightForLabel(label: UILabel, width: CGFloat, text: String) -> CGFloat {
+        let size = CGSizeMake(width, CGFloat.max)
+        let attrs = [NSFontAttributeName: label.font]
+        let boundingRect = NSString(string: text).boundingRectWithSize(size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attrs, context: nil)
+        return boundingRect.height
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -289,13 +320,29 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 }
 
+private class PaddedSwitch: UIView {
+    private static let Padding: CGFloat = 8
+
+    init(switchView: UISwitch) {
+        super.init(frame: CGRectZero)
+
+        addSubview(switchView)
+
+        frame.size = CGSizeMake(switchView.frame.width + PaddedSwitch.Padding, switchView.frame.height)
+        switchView.frame.offsetInPlace(dx: PaddedSwitch.Padding, dy: 0)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
 
 private class TableFooterView: UIView {
-    var logo: UIImageView = {
+    lazy var logo: UIImageView = {
         var image =  UIImageView(image: UIImage(named: "FooterLogo"))
         image.contentMode = UIViewContentMode.Center
         return image
-        }()
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
