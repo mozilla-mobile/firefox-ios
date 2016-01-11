@@ -39,7 +39,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     /// Used to calculate cell heights.
     private lazy var dummyToggleCell: UITableViewCell = {
         let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "dummyCell")
-        cell.accessoryView = UISwitch()
+        cell.accessoryView = PaddedSwitch(switchView: UISwitch())
         return cell
     }()
 
@@ -134,7 +134,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let toggle = toggleForIndexPath(indexPath)
             cell.textLabel?.text = toggle.label
             cell.textLabel?.numberOfLines = 0
-            cell.accessoryView = toggle.toggle
+            cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
             cell.detailTextLabel?.text = toggle.subtitle
             cell.detailTextLabel?.numberOfLines = 0
         default:
@@ -320,6 +320,22 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 }
 
+private class PaddedSwitch: UIView {
+    private static let Padding: CGFloat = 8
+
+    init(switchView: UISwitch) {
+        super.init(frame: CGRectZero)
+
+        addSubview(switchView)
+
+        frame.size = CGSizeMake(switchView.frame.width + PaddedSwitch.Padding, switchView.frame.height)
+        switchView.frame.offsetInPlace(dx: PaddedSwitch.Padding, dy: 0)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
 
 private class TableFooterView: UIView {
     lazy var logo: UIImageView = {
