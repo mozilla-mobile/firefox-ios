@@ -167,11 +167,29 @@ class SearchEngines {
         }
     }
 
+    // Return the language identifier to be used for the search engine selection. This returns the first
+    // identifier from preferredLanguages and takes into account that on iOS 8, zh-Hans-CN is returned as
+    // zh-Hans. In that case it returns the longer form zh-Hans-CN. Same for traditional Chinese.
+    //
+    // These exceptions can go away when we drop iOS 8 or when we start using a better mechanism for search
+    // engine selection that is not based on language identifier.
+    class func languageIdentifierForSearchEngines() -> String {
+        let languageIdentifier = NSLocale.preferredLanguages().first!
+        switch languageIdentifier {
+            case "zh-Hans":
+                return "zh-Hans-CN"
+            case "zh-Hant":
+                return "zh-Hant-TW"
+            default:
+                return languageIdentifier
+        }
+    }
+
     // Get all known search engines, with the default search engine first, but the others in no
     // particular order.
     class func getUnorderedEngines() -> [OpenSearchEngine] {
         let pluginBasePath: NSString = (NSBundle.mainBundle().resourcePath! as NSString).stringByAppendingPathComponent("SearchPlugins")
-        let languageIdentifier = NSLocale.preferredLanguages().first!
+        let languageIdentifier = languageIdentifierForSearchEngines()
         let fallbackDirectory: NSString = pluginBasePath.stringByAppendingPathComponent("en")
 
         var directory: String?
