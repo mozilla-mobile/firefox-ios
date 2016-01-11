@@ -2220,12 +2220,22 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 readerModeStyleViewController.readerModeStyle = readerModeStyle
                 readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
 
-                let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
-                popoverPresentationController?.backgroundColor = UIColor.whiteColor()
-                popoverPresentationController?.delegate = self
-                popoverPresentationController?.sourceView = readerModeBar
-                popoverPresentationController?.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: UIConstants.ToolbarHeight, width: 1, height: 1)
-                popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.Up
+                let setupPopover = { [unowned self] in
+                    if let popoverPresentationController = readerModeStyleViewController.popoverPresentationController {
+                        popoverPresentationController.backgroundColor = UIColor.whiteColor()
+                        popoverPresentationController.delegate = self
+                        popoverPresentationController.sourceView = readerModeBar
+                        popoverPresentationController.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: UIConstants.ToolbarHeight, width: 1, height: 1)
+                        popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+                    }
+                }
+
+                setupPopover()
+
+                if readerModeStyleViewController.popoverPresentationController != nil {
+                    displayedPopoverController = readerModeStyleViewController
+                    updateDisplayedPopoverProperties = setupPopover
+                }
 
                 self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
             }
