@@ -36,6 +36,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         BlockerToggle(label: LabelBlockFonts, key: Settings.KeyBlockFonts),
     ]
 
+    /// Used to calculate cell heights.
+    private lazy var dummyToggleCell: UITableViewCell = {
+        let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "dummyCell")
+        cell.accessoryView = UISwitch()
+        return cell
+    }()
+
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.Colors.Background
 
@@ -165,7 +172,27 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             return heightForCustomCellWithView(headerView)
         }
 
-        return tableView.rowHeight
+        // We have to manually calculate the cell height since UITableViewCell don't correctly
+        // layout multiline detailTextLabels.
+        let toggle = toggleForIndexPath(indexPath)
+        let tableWidth = tableView.frame.width
+        let accessoryWidth = dummyToggleCell.accessoryView!.frame.width
+        let insetsWidth = 2 * tableView.separatorInset.left
+        let width = tableWidth - accessoryWidth - insetsWidth
+
+        var height = heightForLabel(dummyToggleCell.textLabel!, width: width, text: toggle.label)
+        if let subtitle = toggle.subtitle {
+            height += heightForLabel(dummyToggleCell.detailTextLabel!, width: width, text: subtitle)
+        }
+
+        return height + 22
+    }
+
+    private func heightForLabel(label: UILabel, width: CGFloat, text: String) -> CGFloat {
+        let size = CGSizeMake(width, CGFloat.max)
+        let attrs = [NSFontAttributeName: label.font]
+        let boundingRect = NSString(string: text).boundingRectWithSize(size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attrs, context: nil)
+        return boundingRect.height
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
