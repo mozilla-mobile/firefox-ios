@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "focus-logo.png",
+      "filename" : "klar-logo.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "focus-logo@2x.png",
+      "filename" : "klar-logo@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "focus-logo@3x.png",
+      "filename" : "klar-logo@3x.png",
       "scale" : "3x"
     }
   ],
