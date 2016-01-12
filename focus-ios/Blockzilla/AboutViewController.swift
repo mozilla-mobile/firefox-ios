@@ -153,7 +153,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     private func aboutHeaderViewDidPressReadMore(aboutHeaderView: AboutHeaderView) {
         let contentViewController = AboutContentViewController()
-        contentViewController.url = NSURL(string: "https://www.mozilla.org/en-US/about/manifesto/")
+        contentViewController.url = NSURL(string: "https://www.mozilla.org/de/about/manifesto/")
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 }
