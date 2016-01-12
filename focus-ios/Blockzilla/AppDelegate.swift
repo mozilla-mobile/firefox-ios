@@ -5,7 +5,7 @@
 import SafariServices
 import UIKit
 
-private let ContentBlockerBundleIdentifier = "org.mozilla.ios.Focus.ContentBlocker"
+private let ContentBlockerBundleIdentifier = "org.mozilla.ios.Klar.ContentBlocker"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegate, IntroViewControllerDelegate {

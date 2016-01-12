@@ -5,7 +5,7 @@
 import Foundation
 
 struct Settings {
-    static let SuiteName = "group.org.mozilla.ios.Focus"
+    static let SuiteName = "group.org.mozilla.ios.Klar"
 
     static let KeyBlockAds = "BlockAds"
     static let KeyBlockAnalytics = "BlockAnalytics"
