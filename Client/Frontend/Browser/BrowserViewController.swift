@@ -529,6 +529,19 @@ class BrowserViewController: UIViewController {
         super.viewWillDisappear(animated)
     }
 
+    func resetBrowserChrome() {
+        // animate and reset transform for browser chrome
+        urlBar.updateAlphaForSubviews(1)
+
+        [header,
+            footer,
+            readerModeBar,
+            footerBackdrop,
+            headerBackdrop].forEach { view in
+                view?.transform = CGAffineTransformIdentity
+        }
+    }
+
     override func updateViewConstraints() {
         super.updateViewConstraints()
 
@@ -900,6 +913,11 @@ class BrowserViewController: UIViewController {
     }
 
     func switchToTabForURLOrOpen(url: NSURL) {
+        let previousViewController = navigationController?.topViewController
+        navigationController?.popToViewController(self, animated: false)
+        if let previousViewController = previousViewController where previousViewController != self {
+            resetBrowserChrome()
+        }
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
@@ -1368,6 +1386,12 @@ extension BrowserViewController: BrowserDelegate {
         let findInPageHelper = FindInPageHelper(browser: browser)
         findInPageHelper.delegate = self
         browser.addHelper(findInPageHelper, name: FindInPageHelper.name())
+
+        let openURL = {(url: NSURL) -> Void in
+            self.switchToTabForURLOrOpen(url)
+        }
+        let spotlightHelper = SpotlightHelper(browser: browser, openURL: openURL)
+        browser.addHelper(spotlightHelper, name: SpotlightHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
@@ -2534,16 +2558,7 @@ extension BrowserViewController: TabTrayDelegate {
     // This function animates and resets the browser chrome transforms when
     // the tab tray dismisses.
     func tabTrayDidDismiss(tabTray: TabTrayController) {
-        // animate and reset transform for browser chrome
-        urlBar.updateAlphaForSubviews(1)
-
-        [header,
-            footer,
-            readerModeBar,
-            footerBackdrop,
-            headerBackdrop].forEach { view in
-                view?.transform = CGAffineTransformIdentity
-        }
+        resetBrowserChrome()
     }
 
     func tabTrayDidAddBookmark(tab: Browser) {

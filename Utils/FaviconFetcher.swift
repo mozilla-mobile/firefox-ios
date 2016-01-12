@@ -153,7 +153,7 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         })
     }
 
-    private func getFavicon(siteUrl: NSURL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
+    func getFavicon(siteUrl: NSURL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
         let manager = SDWebImageManager.sharedManager()
