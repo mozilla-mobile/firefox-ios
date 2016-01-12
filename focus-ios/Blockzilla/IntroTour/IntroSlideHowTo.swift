@@ -14,6 +14,9 @@ class IntroSlideHowTo: UIView {
     init() {
         super.init(frame: CGRectZero)
 
+        let instructionsContainer = UIView()
+        addSubview(instructionsContainer)
+
         let instructionsView = InstructionsView()
         addSubview(instructionsView)
 
@@ -33,9 +36,14 @@ class IntroSlideHowTo: UIView {
 
         addSubview(openSettingsButton)
 
+        instructionsContainer.snp_makeConstraints { make in
+            make.top.equalTo(self)
+            make.bottom.equalTo(mustBeEnabledLabel.snp_top)
+            make.leading.trailing.equalTo(self)
+        }
+
         instructionsView.snp_makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.top.equalTo(self).offset(100)
+            make.center.equalTo(instructionsContainer)
             make.width.equalTo(220)
         }
 
