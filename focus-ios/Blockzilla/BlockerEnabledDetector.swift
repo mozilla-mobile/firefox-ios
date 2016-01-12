@@ -17,7 +17,7 @@ class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
     override init() {
         super.init()
 
-        server.addHandlerForMethod("GET", path: "/focus-detector", requestClass: GCDWebServerRequest.self) { [weak self] request -> GCDWebServerResponse! in
+        server.addHandlerForMethod("GET", path: "/klar-detector", requestClass: GCDWebServerRequest.self) { [weak self] request -> GCDWebServerResponse! in
             if let loadedBlockedPage = request.query["blocked"] as? String where loadedBlockedPage == "1" {
                 // Second page loaded, so we aren't blocked.
                 self?.blocked = false
@@ -27,7 +27,7 @@ class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
             // The blocker list is loaded asynchronously, so the first page load of the SVC may not be blocked
             // even if we have a block rule enabled. As a workaround, try redirecting to a second page; if it
             // still loads, assume the blocker isn't enabled.
-            return GCDWebServerDataResponse(HTML: "<html><head><meta http-equiv=\"refresh\" content=\"0; url=/focus-detector?blocked=1\"></head></html>")
+            return GCDWebServerDataResponse(HTML: "<html><head><meta http-equiv=\"refresh\" content=\"0; url=/klar-detector?blocked=1\"></head></html>")
         }
 
         server.startWithPort(0, bonjourName: nil)
@@ -39,7 +39,7 @@ class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
         blocked = true
         self.callback = callback
 
-        let detectURL = NSURL(string: "http://localhost:\(server.port)/focus-detector")!
+        let detectURL = NSURL(string: "http://localhost:\(server.port)/klar-detector")!
         svc = SFSafariViewController(URL: detectURL)
         svc.delegate = self
         parentView.addSubview(svc.view)

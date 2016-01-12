@@ -1,4 +1,4 @@
 [{
   "action": { "type": "block" },
-  "trigger": { "url-filter": "^http://localhost:[0-9]+/focus-detector\\?blocked=1$" }
+  "trigger": { "url-filter": "^http://localhost:[0-9]+/klar-detector\\?blocked=1$" }
 }]
