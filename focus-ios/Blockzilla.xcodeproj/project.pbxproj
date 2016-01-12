@@ -215,7 +215,7 @@
 		D3BFCB5A1BD15CD000AD22D1 /* rights.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = rights.html; sourceTree = "<group>"; };
 		D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		D3C0EEFC1BE97F9300BD89C1 /* blocker-enabled-detector.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "blocker-enabled-detector.json"; path = "Lists/blocker-enabled-detector.json"; sourceTree = SOURCE_ROOT; };
-		E4BF2DD31BACE8CA00DA9D68 /* Focus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Focus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Klar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4BF2DE21BACE8CA00DA9D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -337,7 +337,7 @@
 		E4BF2DD41BACE8CA00DA9D68 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4BF2DD31BACE8CA00DA9D68 /* Focus.app */,
+				E4BF2DD31BACE8CA00DA9D68 /* Klar.app */,
 				E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */,
 			);
 			name = Products;
@@ -391,9 +391,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4BF2DD21BACE8CA00DA9D68 /* Focus */ = {
+		E4BF2DD21BACE8CA00DA9D68 /* Klar */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4BF2DE51BACE8CA00DA9D68 /* Build configuration list for PBXNativeTarget "Focus" */;
+			buildConfigurationList = E4BF2DE51BACE8CA00DA9D68 /* Build configuration list for PBXNativeTarget "Klar" */;
 			buildPhases = (
 				E4BF2DCF1BACE8CA00DA9D68 /* Sources */,
 				E4BF2DD01BACE8CA00DA9D68 /* Frameworks */,
@@ -408,9 +408,9 @@
 				D39288741BC5D1B50016A9A0 /* PBXTargetDependency */,
 				E4BF2DF41BACE92400DA9D68 /* PBXTargetDependency */,
 			);
-			name = Focus;
+			name = Klar;
 			productName = Blockzilla;
-			productReference = E4BF2DD31BACE8CA00DA9D68 /* Focus.app */;
+			productReference = E4BF2DD31BACE8CA00DA9D68 /* Klar.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E4BF2DEB1BACE92400DA9D68 /* ContentBlocker */ = {
@@ -442,7 +442,6 @@
 				TargetAttributes = {
 					E4BF2DD21BACE8CA00DA9D68 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 43AQ936H96;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -483,7 +482,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				E4BF2DD21BACE8CA00DA9D68 /* Focus */,
+				E4BF2DD21BACE8CA00DA9D68 /* Klar */,
 				E4BF2DEB1BACE92400DA9D68 /* ContentBlocker */,
 			);
 		};
@@ -856,7 +855,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4BF2DE51BACE8CA00DA9D68 /* Build configuration list for PBXNativeTarget "Focus" */ = {
+		E4BF2DE51BACE8CA00DA9D68 /* Build configuration list for PBXNativeTarget "Klar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4BF2DE61BACE8CA00DA9D68 /* Debug */,
