@@ -47,4 +47,15 @@ public struct AppConstants {
     return true
 #endif
     }()
+
+    /// Enables/disables the Touch ID/passcode functionality and settings screen
+    public static let MOZ_AUTHENTICATION_MANAGER: Bool = {
+#if MOZ_CHANNEL_AURORA
+    return false
+#elseif MOZ_CHANNEL_RELEASE
+    return false
+#else
+    return true
+#endif
+    }()
 }
