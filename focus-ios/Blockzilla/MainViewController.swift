@@ -329,7 +329,7 @@ private class PaddedSwitch: UIView {
         addSubview(switchView)
 
         frame.size = CGSizeMake(switchView.frame.width + PaddedSwitch.Padding, switchView.frame.height)
-        switchView.frame.offsetInPlace(dx: PaddedSwitch.Padding, dy: 0)
+        switchView.frame.origin = CGPointMake(PaddedSwitch.Padding, 0)
     }
 
     required init?(coder aDecoder: NSCoder) {
