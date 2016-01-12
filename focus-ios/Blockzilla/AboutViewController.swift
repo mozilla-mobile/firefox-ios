@@ -134,7 +134,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             delegate?.aboutViewControllerDidPressIntro(self)
         case 2:
             let contentViewController = AboutContentViewController()
-            contentViewController.url = NSURL(string: "https://support.mozilla.org/en-US/kb/focus")
+            contentViewController.url = NSURL(string: "https://support.mozilla.org/kb/klar")
             navigationController?.pushViewController(contentViewController, animated: true)
         case 3:
             let contentViewController = AboutContentViewController()
