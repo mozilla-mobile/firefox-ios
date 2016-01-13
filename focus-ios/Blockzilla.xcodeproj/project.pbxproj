@@ -19,7 +19,6 @@
 		D32817251BD0689800185845 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817211BD0689800185845 /* disconnect-social.json */; };
 		D32F71D31BCEF67C006D44FC /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */; };
 		D33A1AB11BC48FAC0003D929 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33A1AB01BC48FAC0003D929 /* MainViewController.swift */; };
-		D343DCBD1C44356400D7EEE8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCBF1C44356400D7EEE8 /* InfoPlist.strings */; };
 		D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCC41C44356500D7EEE8 /* Localizable.strings */; };
 		D37DE5451BCDB7EF00906364 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE5441BCDB7EF00906364 /* IntroViewController.swift */; };
 		D37DE5471BCDB80B00906364 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE5461BCDB80B00906364 /* InstructionsView.swift */; };
@@ -192,7 +191,6 @@
 		D32817211BD0689800185845 /* disconnect-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-social.json"; path = "Lists/disconnect-social.json"; sourceTree = SOURCE_ROOT; };
 		D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		D33A1AB01BC48FAC0003D929 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		D343DCBE1C44356400D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D343DCC31C44356500D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D37DE5441BCDB7EF00906364 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		D37DE5461BCDB80B00906364 /* InstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
@@ -371,7 +369,6 @@
 		E4BF2DED1BACE92400DA9D68 /* ContentBlocker */ = {
 			isa = PBXGroup;
 			children = (
-				D343DCBF1C44356400D7EEE8 /* InfoPlist.strings */,
 				E4BF2DFB1BACEF1B00DA9D68 /* ContentBlocker.entitlements */,
 				D3C0EEFC1BE97F9300BD89C1 /* blocker-enabled-detector.json */,
 				D328171E1BD0689800185845 /* disconnect-advertising.json */,
@@ -586,7 +583,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3C0EEFD1BE97F9300BD89C1 /* blocker-enabled-detector.json in Resources */,
-				D343DCBD1C44356400D7EEE8 /* InfoPlist.strings in Resources */,
 				D32817251BD0689800185845 /* disconnect-social.json in Resources */,
 				D32817231BD0689800185845 /* disconnect-analytics.json in Resources */,
 				D32817221BD0689800185845 /* disconnect-advertising.json in Resources */,
@@ -656,14 +652,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		D343DCBF1C44356400D7EEE8 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D343DCBE1C44356400D7EEE8 /* de */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		D343DCC41C44356500D7EEE8 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
