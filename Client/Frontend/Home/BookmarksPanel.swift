@@ -192,7 +192,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: self.defaultIcon)
             }
             return cell
-        case let _ as BookmarkSeparator:
+        case is BookmarkSeparator:
             return tableView.dequeueReusableCellWithIdentifier(BookmarkSeparatorCellIdentifier, forIndexPath: indexPath)
         case let bookmark as BookmarkFolder:
             let cell = tableView.dequeueReusableCellWithIdentifier(BookmarkFolderCellIdentifier, forIndexPath: indexPath)
