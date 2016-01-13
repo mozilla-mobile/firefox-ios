@@ -127,7 +127,7 @@ class TopSitesPanel: UIViewController {
     }
 
     private func updateAllRemoveButtonStates() {
-        collection?.indexPathsForVisibleItems().forEach(updateRemoveButtonStateForIndexPath)
+        collection?.indexPathsForVisibleItems().forEach { updateRemoveButtonStateForIndexPath($0) }
     }
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
