@@ -2,28 +2,28 @@
   "images" : [
     {
       "idiom" : "iphone",
-      "scale" : "1x",
-      "filename" : "tile-taobao.png"
+      "filename" : "tile-taobao.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "iphone",
-      "scale" : "2x",
-      "filename" : "tile-taobao@2x.png"
+      "filename" : "tile-taobao@2x.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "iphone",
-      "scale" : "3x",
-      "filename" : "tile-taobao@3x.png"
+      "filename" : "tile-taobao@3x.png",
+      "scale" : "3x"
     },
     {
       "idiom" : "ipad",
-      "scale" : "1x",
-      "filename" : "tile—taobaoiPad.png"
+      "filename" : "tile-taobao-iPad.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "ipad",
-      "scale" : "2x",
-      "filename" : "tile-taobao-iPad@2x.png"
+      "filename" : "tile-taobao-iPad@2x.png",
+      "scale" : "2x"
     }
   ],
   "info" : {
