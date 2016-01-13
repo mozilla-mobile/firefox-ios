@@ -1,21 +1,15 @@
-> These are the instructions for building the *master* branch which is focussed on iOS 9 and Xcode 7 for our upcoming v1.1 and v2.0 releases. If you instead want to work on v1.0 then please follow the README.md in that branch.
-
 Building Firefox for iOS
 ========================
 
 Prerequisites, as of *September 4, 2015*:
 
-* Mac OS X 10.10.5
-* Xcode 7.0 GM with the iOS 9.0 GM SDK (Newer betas not supported)
+* Mac OS X 10.11.1
+* Xcode 7.1 GM with the iOS 9.2 GM SDK (Newer betas not supported)
 * Carthage 0.8 via Homebrew
-
-> There are issues with Carthage on OS X 10.11 El Capitan. We recommend to use OS X 10.10 Yosemite instead.
-
-(For the v1.1 release, we try to keep up to date with the most recent beta versions of Xcode and the iOS SDK.)
 
 When running on a device:
 
-* A device that supports iOS 9.0 GM
+* A device that supports iOS 9.2 GM
 * One of the following:
  * A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS DevCenter*
  * A free developer account, new with Xcode 7
@@ -40,8 +34,6 @@ brew update
 brew upgrade
 brew install carthage
 ```
-
-> OS X 10.11 El Capitan note: At time of writing it was not possible to install Carthage via homebrew. Instead, install the latest Carthage release manually from their [https://github.com/Carthage/Carthage/releases](releases page)
 
 You can now execute our `checkout.sh` script:
 
