@@ -8,7 +8,7 @@ import GCDWebServers
 private let LocalResources = ["rights", "licenses", "gpl"]
 
 class LocalWebServer {
-    static let sharedInstance = LocalWebServer(port: 6572)
+    static let sharedInstance = LocalWebServer(port: 6573)
 
     private let server = GCDWebServer()
     private let port: UInt
