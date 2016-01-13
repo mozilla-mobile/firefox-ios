@@ -353,8 +353,12 @@ public struct BookmarkTree {
         return self.lookup[guid] != nil
     }
 
+    public func find(guid: GUID) -> BookmarkTreeNode? {
+        return self.lookup[guid]
+    }
+
     public func find(node: BookmarkTreeNode) -> BookmarkTreeNode? {
-        return self.lookup[node.recordGUID]
+        return self.find(node.recordGUID)
     }
 
     /**
