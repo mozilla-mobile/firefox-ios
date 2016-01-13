@@ -8,7 +8,7 @@ github "rs/SDWebImage"              "3.7.4"
 github "SnapKit/SnapKit"            "0.18.0"
 github "drmohundro/SWXMLHash"       "2.0.0"            # So we get Swift 2.0 fixes.
 github "DaveWoodCom/XCGLogger"      "swift_2.0"        # Previously: swift_1.2
-github "sleroux/google-breakpad-ios" "master"
+github "sleroux/google-breakpad-ios" "v1.0.0"
 github "adjust/ios_sdk"             "v4.5.0"
 github "AgileBits/onepassword-extension" "add-framework-support"
 github "jrendel/SwiftKeychainWrapper" "1.0.11"					# default to latest tag
