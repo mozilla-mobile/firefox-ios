@@ -27,7 +27,7 @@
 "Done" = "Fertig";
 
 /* Label for instructions to enable shown on the second introduction screen */
-"Enable Focus" = "Klar aktivieren";
+"Enable Focus" = "Klar by Firefox aktivieren";
 
 /* Instructions shown in main app when Focus is disabled in system settings */
 "Enable Focus in" = "Aktivieren Sie Klar in";
