@@ -4,7 +4,8 @@
 
 import Foundation
 import Shared
-import Sync
+@testable import Sync
+
 import XCTest
 
 func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
