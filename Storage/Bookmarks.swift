@@ -337,6 +337,10 @@ public struct BookmarkTree {
         return self.subtrees.isEmpty && self.deleted.isEmpty
     }
 
+    public static func emptyTree() -> BookmarkTree {
+        return BookmarkTree(subtrees: [], lookup: [:], parents: [:], orphans: Set<GUID>(), deleted: Set<GUID>())
+    }
+
     public func includesOrDeletesNode(node: BookmarkTreeNode) -> Bool {
         return self.includesOrDeletesGUID(node.recordGUID)
     }
