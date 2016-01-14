@@ -31,8 +31,6 @@ class ShareExtensionHelper: NSObject {
             activityItems.append(BrowserPrintPageRenderer(browser: tab))
         }
 
-        activityItems.append(selectedURL)
-
         if let title = selectedTab?.title {
             activityItems.append(TitleActivityItemProvider(title: title))
         }
