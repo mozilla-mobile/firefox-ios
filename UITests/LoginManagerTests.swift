@@ -438,4 +438,30 @@ class LoginManagerTests: KIFTestCase {
 
         closeLoginManager()
     }
+
+    func testDeleteLoginFromDetailScreen() {
+
+        openLoginManager()
+
+        var list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
+        var firstRow = list.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
+        XCTAssertEqual(firstRow.descriptionLabel.text, "http://a0.com")
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("Delete")
+
+        // Verify that we are looking at the non-synced alert dialog
+        tester().waitForViewWithAccessibilityLabel("Are you sure?")
+        tester().waitForViewWithAccessibilityLabel("Logins will be permanently removed.")
+
+        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForAnimationsToFinish()
+
+        list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
+        firstRow = list.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
+        XCTAssertEqual(firstRow.descriptionLabel.text, "http://a1.com")
+
+        closeLoginManager()
+    }
 }

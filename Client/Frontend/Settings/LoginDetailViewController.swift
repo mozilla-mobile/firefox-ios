@@ -218,6 +218,12 @@ extension LoginDetailViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension LoginDetailViewController: UITableViewDelegate {
 
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath == InfoItem.DeleteItem.indexPath {
+            deleteLogin()
+        }
+    }
+
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         switch InfoItem(rawValue: indexPath.row)! {
         case .TitleItem, .UsernameItem, .PasswordItem, .WebsiteItem:
@@ -320,6 +326,18 @@ extension LoginDetailViewController: UITextFieldDelegate {
 
 // MARK: - Selectors
 extension LoginDetailViewController {
+
+    func deleteLogin() {
+        profile.logins.hasSyncedLogins().uponQueue(dispatch_get_main_queue()) { yes in
+            let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+                self.profile.logins.removeLoginByGUID(self.login.guid).uponQueue(dispatch_get_main_queue()) { _ in
+                    self.navigationController?.popViewControllerAnimated(true)
+                }
+            }, hasSyncedLogins: yes.successValue ?? true)
+
+            self.presentViewController(deleteAlert, animated: true, completion: nil)
+        }
+    }
 
     func SELonProfileDidFinishSyncing() {
         // Reload details after syncing.
