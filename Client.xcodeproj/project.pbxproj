@@ -1000,6 +1000,20 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
+		7BFB46541C3BE28100A6EB8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 00733A4C1BC487C000A5A117;
+			remoteInfo = "WebImage tvOS";
+		};
+		7BFB46681C3BE28100A6EB8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 70CB94201B99E728007802FF;
+			remoteInfo = "XCGLogger (watchOS)";
+		};
 		D31FC2301A8D908900BAF7EC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */;
@@ -2231,7 +2245,7 @@
 				E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */,
 				D38B2D0E1A8D96D00040E6B5 /* GCDWebServer */,
 				39C575111BE28C6400E1C4B1 /* OnePasswordExtension */,
-				7B9A61CA1C3EBFAE005C83DC /* RaptureXML */,
+				0B5B51AC1B4CDB9E00E3B6E9 /* RaptureXML */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
 				7BFB466A1C3BE2BA00A6EB8E /* SwiftKeychainWrapper */,
 				E42475CC1AB73B7500B23D33 /* SWTableViewCell */,
@@ -3996,7 +4010,8 @@
 		2F44F9F91A9D417600FD20CC /* Base32.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = Base32.framework;
+			name = Base32.framework;
+			path = .framework;
 			remoteRef = 2F44F9F81A9D417600FD20CC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
