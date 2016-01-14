@@ -43,14 +43,12 @@
 		0BB5B3601AC0D6360052877D /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */; };
 		0BD19A651A2530840084FBA7 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
-		0BD19A681A2530A40084FBA7 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
 		0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BDA568B1B26B1BE008C9B96 /* LoginsHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */; };
 		0BDA56B01B26B1D5008C9B96 /* TestLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56AE1B26B1D5008C9B96 /* TestLogins.swift */; };
 		0BDA56B21B26B1E4008C9B96 /* Logins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56B11B26B1E4008C9B96 /* Logins.swift */; };
 		0BDA56B41B26B203008C9B96 /* SQLiteLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56B31B26B203008C9B96 /* SQLiteLogins.swift */; };
 		0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108351A1B1EC700D4B712 /* TestLocking.swift */; };
-		0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0DB931A8545800039F300 /* URLBarView.swift */; };
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF42D371A7C0B8E00889E28 /* FaviconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D361A7C0B8E00889E28 /* FaviconManager.swift */; };
@@ -188,7 +186,6 @@
 		2F67C5261BB0CB4E00E7B73A /* MetaGlobalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F67C5251BB0CB4E00E7B73A /* MetaGlobalTests.swift */; };
 		2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */; };
 		2F834D161A80629A006A0B7B /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 2F834D111A80629A006A0B7B /* FxASignIn.js */; };
-		2F834D171A80629A006A0B7B /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 2F834D111A80629A006A0B7B /* FxASignIn.js */; };
 		2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F834D131A80629A006A0B7B /* FxAContentViewController.swift */; };
 		2F8C76571BC32F3C00D5E4E0 /* MockSyncServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8C76561BC32F3C00D5E4E0 /* MockSyncServerTests.swift */; };
 		2FA436061ABB83B4008031D1 /* Account.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* Account.framework */; };
@@ -391,9 +388,7 @@
 		E418D0D91A251B3200CAE47A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41A7D4A1A1BE04500245963 /* InitialViewController.swift */; };
 		E41F0D981ADFFB5400FC7387 /* ReadingListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D971ADFFB5400FC7387 /* ReadingListService.swift */; };
-		E41F0D991ADFFB5400FC7387 /* ReadingListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D971ADFFB5400FC7387 /* ReadingListService.swift */; };
 		E41F0D9B1ADFFC5600FC7387 /* ReadingListError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */; };
-		E41F0D9C1ADFFC5600FC7387 /* ReadingListError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */; };
 		E42475DC1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E42475D01AB73B9B00B23D33 /* SWCellScrollView.m */; };
 		E42475DD1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E42475D01AB73B9B00B23D33 /* SWCellScrollView.m */; };
 		E42475DE1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E42475D01AB73B9B00B23D33 /* SWCellScrollView.m */; };
@@ -501,45 +496,25 @@
 		E4D5672F1ADECE2800F1EFE7 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		E4D567301ADECE2800F1EFE7 /* ReadingList.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4D5676A1ADECE8100F1EFE7 /* ReadingListAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567551ADECE8100F1EFE7 /* ReadingListAuthenticator.swift */; };
-		E4D5676B1ADECE8100F1EFE7 /* ReadingListAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567551ADECE8100F1EFE7 /* ReadingListAuthenticator.swift */; };
 		E4D5676C1ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567561ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift */; };
-		E4D5676D1ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567561ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift */; };
 		E4D5676E1ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567571ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift */; };
-		E4D5676F1ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567571ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift */; };
 		E4D567701ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567581ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift */; };
-		E4D567711ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567581ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift */; };
 		E4D567721ADECE8100F1EFE7 /* ReadingListClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567591ADECE8100F1EFE7 /* ReadingListClient.swift */; };
-		E4D567731ADECE8100F1EFE7 /* ReadingListClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567591ADECE8100F1EFE7 /* ReadingListClient.swift */; };
 		E4D567741ADECE8100F1EFE7 /* ReadingListClientMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675A1ADECE8100F1EFE7 /* ReadingListClientMetadata.swift */; };
-		E4D567751ADECE8100F1EFE7 /* ReadingListClientMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675A1ADECE8100F1EFE7 /* ReadingListClientMetadata.swift */; };
 		E4D567761ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675B1ADECE8100F1EFE7 /* ReadingListClientRecord.swift */; };
-		E4D567771ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675B1ADECE8100F1EFE7 /* ReadingListClientRecord.swift */; };
 		E4D5677A1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675D1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift */; };
-		E4D5677B1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675D1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift */; };
 		E4D5677C1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675E1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift */; };
-		E4D5677D1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675E1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift */; };
 		E4D5677E1ADECE8100F1EFE7 /* ReadingListRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675F1ADECE8100F1EFE7 /* ReadingListRecord.swift */; };
-		E4D5677F1ADECE8100F1EFE7 /* ReadingListRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675F1ADECE8100F1EFE7 /* ReadingListRecord.swift */; };
 		E4D567801ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567601ADECE8100F1EFE7 /* ReadingListRecordResponse.swift */; };
-		E4D567811ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567601ADECE8100F1EFE7 /* ReadingListRecordResponse.swift */; };
 		E4D567821ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567611ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift */; };
-		E4D567831ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567611ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift */; };
 		E4D567841ADECE8100F1EFE7 /* ReadingListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567621ADECE8100F1EFE7 /* ReadingListResponse.swift */; };
-		E4D567851ADECE8100F1EFE7 /* ReadingListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567621ADECE8100F1EFE7 /* ReadingListResponse.swift */; };
 		E4D567861ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567631ADECE8100F1EFE7 /* ReadingListServerMetadata.swift */; };
-		E4D567871ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567631ADECE8100F1EFE7 /* ReadingListServerMetadata.swift */; };
 		E4D567881ADECE8100F1EFE7 /* ReadingListServerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567641ADECE8100F1EFE7 /* ReadingListServerRecord.swift */; };
-		E4D567891ADECE8100F1EFE7 /* ReadingListServerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567641ADECE8100F1EFE7 /* ReadingListServerRecord.swift */; };
 		E4D5678A1ADECE8100F1EFE7 /* ReadingListSQLStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567651ADECE8100F1EFE7 /* ReadingListSQLStorage.swift */; };
-		E4D5678B1ADECE8100F1EFE7 /* ReadingListSQLStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567651ADECE8100F1EFE7 /* ReadingListSQLStorage.swift */; };
 		E4D5678C1ADECE8100F1EFE7 /* ReadingListStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567661ADECE8100F1EFE7 /* ReadingListStorage.swift */; };
-		E4D5678D1ADECE8100F1EFE7 /* ReadingListStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567661ADECE8100F1EFE7 /* ReadingListStorage.swift */; };
 		E4D5678E1ADECE8100F1EFE7 /* ReadingListSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567671ADECE8100F1EFE7 /* ReadingListSynchronizer.swift */; };
-		E4D5678F1ADECE8100F1EFE7 /* ReadingListSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567671ADECE8100F1EFE7 /* ReadingListSynchronizer.swift */; };
 		E4D567901ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567681ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift */; };
-		E4D567911ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567681ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift */; };
 		E4D567921ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567691ADECE8100F1EFE7 /* ReadingListUtils.swift */; };
-		E4D567931ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567691ADECE8100F1EFE7 /* ReadingListUtils.swift */; };
 		E4D5679F1ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567951ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift */; };
 		E4D567A51ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5679B1ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift */; };
 		E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */; };
@@ -4415,7 +4390,6 @@
 			files = (
 				2F1BDF931A8523B000213B54 /* LICENSE in Resources */,
 				D38A1BF11A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */,
-				2F834D171A80629A006A0B7B /* FxASignIn.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4759,30 +4733,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4D5678F1ADECE8100F1EFE7 /* ReadingListSynchronizer.swift in Sources */,
-				E4D567751ADECE8100F1EFE7 /* ReadingListClientMetadata.swift in Sources */,
 				E4D567A51ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift in Sources */,
-				E4D5676B1ADECE8100F1EFE7 /* ReadingListAuthenticator.swift in Sources */,
-				E4D5676F1ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift in Sources */,
-				E41F0D991ADFFB5400FC7387 /* ReadingListService.swift in Sources */,
-				E4D5677B1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift in Sources */,
-				E4D567811ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */,
-				E4D567911ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift in Sources */,
-				E4D567931ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */,
-				E4D567711ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift in Sources */,
-				E4D5677D1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift in Sources */,
-				E4D567871ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */,
-				E41F0D9C1ADFFC5600FC7387 /* ReadingListError.swift in Sources */,
-				E4D5677F1ADECE8100F1EFE7 /* ReadingListRecord.swift in Sources */,
-				E4D567771ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */,
-				E4D567831ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift in Sources */,
 				E4D5679F1ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift in Sources */,
-				E4D567731ADECE8100F1EFE7 /* ReadingListClient.swift in Sources */,
-				E4D567891ADECE8100F1EFE7 /* ReadingListServerRecord.swift in Sources */,
-				E4D5678B1ADECE8100F1EFE7 /* ReadingListSQLStorage.swift in Sources */,
-				E4D5676D1ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift in Sources */,
-				E4D5678D1ADECE8100F1EFE7 /* ReadingListStorage.swift in Sources */,
-				E4D567851ADECE8100F1EFE7 /* ReadingListResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5004,7 +4956,6 @@
 				E42475DD1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */,
 				D38B2D3E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m in Sources */,
 				7BBFEEA01BB409F300A305AA /* AboutUtils.swift in Sources */,
-				0BD19A681A2530A40084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
 				D3E1B0B91C3D90440069945A /* MenuHelper.swift in Sources */,
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
 				7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */,
@@ -5018,7 +4969,6 @@
 				E46C51C41B41ADD800EB349F /* Try.m in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				E42475E91AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */,
-				0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */,
 				4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */,
 				28D52E2F1BCDF53900187A1D /* ResetTests.swift in Sources */,
 				E42475E61AB73B9B00B23D33 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
