@@ -2,12 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import UIKit
-import XCTest
-
+@testable import Client
 import Shared
 import Storage
+import UIKit
 import WebKit
+
+import XCTest
+
 
 public class TabManagerMockProfile: MockProfile {
     override func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
