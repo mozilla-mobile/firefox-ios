@@ -14,6 +14,8 @@ private struct LoginListUX {
     static let selectionButtonFont = UIFont.systemFontOfSize(16)
     static let selectionButtonTextColor = UIColor.whiteColor()
     static let selectionButtonBackground = UIConstants.HighlightBlue
+    static let NoResultsFont: UIFont = UIFont.systemFontOfSize(16)
+    static let NoResultsTextColor: UIColor = UIColor.lightGrayColor()
 }
 
 private extension UITableView {
@@ -130,7 +132,12 @@ class LoginListViewController: UIViewController {
         }
     }
 
-    func toggleDeleteBarButton() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.loginDataSource.emptyStateView.searchBarHeight = searchView.frame.height
+    }
+
+    private func toggleDeleteBarButton() {
         // Show delete bar button item if we have selected any items
         if loginSelectionController.selectedCount > 0 {
             if (navigationItem.rightBarButtonItem == nil) {
@@ -142,7 +149,7 @@ class LoginListViewController: UIViewController {
         }
     }
 
-    func toggleSelectionTitle() {
+    private func toggleSelectionTitle() {
         if loginSelectionController.selectedCount == loginDataSource.cursor?.count {
             selectionButton.setTitle(deselectAllTitle, forState: .Normal)
         } else {
@@ -364,6 +371,8 @@ private class ListSelectionController: NSObject {
 /// Data source for handling LoginData objects from a Cursor
 private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
+    private let emptyStateView = NoLoginsView()
+
     var cursor: Cursor<LoginData>?
 
     func loginAtIndexPath(indexPath: NSIndexPath) -> LoginData {
@@ -371,7 +380,15 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return sectionIndexTitles()?.count ?? 0
+        let numOfSections = sectionIndexTitles()?.count ?? 0
+        if numOfSections == 0 {
+            tableView.backgroundView = emptyStateView
+            tableView.separatorStyle = .None
+        } else {
+            tableView.backgroundView = nil
+            tableView.separatorStyle = .SingleLine
+        }
+        return numOfSections
     }
 
     @objc func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -443,5 +460,42 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
                 return baseDomain1 < baseDomain2
             }
         }
+    }
+}
+
+/// Empty state view when there is no logins to display.
+private class NoLoginsView: UIView {
+
+    // We use the search bar height to maintain visual balance with the whitespace on this screen. The
+    // title label is centered visually using the empty view + search bar height as the size to center with.
+    var searchBarHeight: CGFloat = 0 {
+        didSet {
+            setNeedsUpdateConstraints()
+        }
+    }
+
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = LoginListUX.NoResultsFont
+        label.textColor = LoginListUX.NoResultsTextColor
+        label.text = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Title displayed when no logins are found after searching")
+        return label
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(titleLabel)
+    }
+
+    private override func updateConstraints() {
+        super.updateConstraints()
+        titleLabel.snp_remakeConstraints { make in
+            make.centerX.equalTo(self)
+            make.centerY.equalTo(self).offset(-(searchBarHeight / 2))
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
