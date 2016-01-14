@@ -65,4 +65,16 @@ public class DeviceInfo {
         // Thus, testing has to take place on actual devices.
         return !lowGraphicsQualityModels.contains(specificModelName)
     }
+
+    public class func hasConnectivity() -> Bool {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Online(.WWAN):
+            return true
+        case .Online(.WiFi):
+            return true
+        default:
+            return false
+        }
+    }
 }

@@ -521,6 +521,14 @@ class BrowserViewController: UIViewController {
         log.debug("BVC calling super.viewDidAppear.")
         super.viewDidAppear(animated)
         log.debug("BVC done.")
+
+        let appVersion = AppInfo.appVersion
+        if profile.prefs.stringForKey("latestAppVersion") != appVersion && DeviceInfo.hasConnectivity() {
+            if let whatsNewURL = AppConstants.whatsNewURLForVersion(appVersion) {
+                self.openURLInNewTab(whatsNewURL)
+                profile.prefs.setString(appVersion, forKey: "latestAppVersion")
+            }
+        }
     }
 
     override func viewWillDisappear(animated: Bool) {
