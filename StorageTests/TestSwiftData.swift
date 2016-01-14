@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import XCTest
 import Shared
-import Storage
+@testable import Storage
 
+import XCTest
 
 // TODO: rewrite this test to not use BrowserTable. It used to use HistoryTable…
 class TestSwiftData: XCTestCase {

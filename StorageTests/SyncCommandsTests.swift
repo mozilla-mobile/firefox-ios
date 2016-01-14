@@ -4,8 +4,9 @@
 
 import Foundation
 import Shared
-import XCTest
+@testable import Storage
 
+import XCTest
 
 func byValue(a: SyncCommand, b: SyncCommand) -> Bool {
     return a.value < b.value

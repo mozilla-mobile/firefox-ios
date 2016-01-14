@@ -4,8 +4,10 @@
 
 import Foundation
 import Shared
-import XCTest
+@testable import Storage
 import XCGLogger
+
+import XCTest
 
 private let log = XCGLogger.defaultInstance()
 
