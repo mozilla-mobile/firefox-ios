@@ -3,10 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Storage
-import XCTest
 import Shared
-import Sync
+import Storage
+@testable import Sync
+
+import XCTest
 
 class CryptoTests: XCTestCase {
     let hmacB16 = "b1e6c18ac30deb70236bc0d65a46f7a4dce3b8b0e02cf92182b914e3afa5eebc"

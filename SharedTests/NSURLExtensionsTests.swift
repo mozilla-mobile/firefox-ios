@@ -4,7 +4,7 @@
 
 import UIKit
 import XCTest
-import Shared
+@testable import Shared
 
 class NSURLExtensionsTests : XCTestCase {
     func testRemovesHTTPFromURL() {

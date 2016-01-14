@@ -4,7 +4,7 @@
 
 import Foundation
 import XCTest
-import Shared
+@testable import Shared
 
 class RollingFileLoggerTests: XCTestCase {
     var logger: RollingFileLogger!

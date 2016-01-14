@@ -4,7 +4,7 @@
 
 import UIKit
 import XCTest
-import Shared
+@testable import Shared
 
 class NSMutableAttributedStringExtensionsTests: XCTestCase {
     private func checkCharacterAtPosition(position: Int, isColored color: UIColor, inString string: NSAttributedString) -> Bool {
