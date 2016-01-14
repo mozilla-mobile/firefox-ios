@@ -18,7 +18,23 @@ We encourage you to participate in this open source project. We love Pull Reques
 Build Instructions
 ------------------
 
-Run `./checkout.sh` to pull in dependencies and generate the block list. After that you can open the Xcode project and build the app.
+1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage).
+1. Clone the repository:
+
+  ```shell
+  git clone https://github.com/mozilla/focus
+  ```
+
+1. Pull in the project dependencies:
+
+  ```shell
+  cd focus
+  ./checkout.sh
+  ```
+
+1. Open `Blockzilla.xcodeproj` in Xcode.
+1. Build the `Focus` scheme in Xcode.
 
 Building for Distribution
 -------------------------

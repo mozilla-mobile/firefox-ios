@@ -1,6 +1,0 @@
-[submodule "SnapKit"]
-	path = SnapKit
-	url = https://github.com/SnapKit/SnapKit.git
-[submodule "GCDWebServer"]
-	path = GCDWebServer
-	url = https://github.com/swisspol/GCDWebServer.git
