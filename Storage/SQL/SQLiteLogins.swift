@@ -201,6 +201,28 @@ public class SQLiteLogins: BrowserLogins {
         }
     }
 
+    public func getLoginDataForGUID(guid: GUID) -> Deferred<Maybe<Login>> {
+        let projection = SQLiteLogins.LoginColumns
+        let sql =
+        "SELECT \(projection) FROM " +
+            "\(TableLoginsLocal) WHERE is_deleted = 0 AND guid = ? " +
+            "UNION ALL " +
+            "SELECT \(projection) FROM " +
+            "\(TableLoginsMirror) WHERE is_overriden IS NOT 1 AND guid = ? " +
+        "ORDER BY hostname ASC " +
+        "LIMIT 1"
+
+        let args: Args = [guid, guid]
+        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginFactory)
+            >>== { value in
+            if let login = value[0] {
+                return deferMaybe(login)
+            } else {
+                return deferMaybe(LoginDataError(description: "Login not found for GUID \(guid)"))
+            }
+        }
+    }
+
     public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
         let projection = SQLiteLogins.MainWithLastUsedColumns
 
@@ -248,12 +270,12 @@ public class SQLiteLogins: BrowserLogins {
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 
-    public func getAllLogins() -> Deferred<Maybe<Cursor<LoginData>>> {
+    public func getAllLogins() -> Deferred<Maybe<Cursor<Login>>> {
         return searchLoginsWithQuery(nil)
     }
 
-    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
-        let projection = SQLiteLogins.MainWithLastUsedColumns
+    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<Login>>> {
+        let projection = SQLiteLogins.LoginColumns
         var searchClauses = [String]()
         var args: Args? = nil
         if let query = query {
@@ -277,7 +299,7 @@ public class SQLiteLogins: BrowserLogins {
             "\(TableLoginsMirror) WHERE is_overridden = 0 " + whereSearchClause +
         "ORDER BY hostname ASC"
 
-        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
+        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginFactory)
     }
 
     public func addLogin(login: LoginData) -> Success {

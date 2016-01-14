@@ -34,16 +34,22 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return Deferred(value: Maybe(success: cursor))
     }
 
-    public func getAllLogins() -> Deferred<Maybe<Cursor<LoginData>>> {
+    public func getLoginDataForGUID(guid: GUID) -> Deferred<Maybe<Login>> {
+        if let login = (cache.filter { $0.guid == guid }).first {
+            return deferMaybe(login)
+        } else {
+            return deferMaybe(LoginDataError(description: "Login for GUID \(guid) not found"))
+        }
+    }
+
+    public func getAllLogins() -> Deferred<Maybe<Cursor<Login>>> {
         let cursor = ArrayCursor(data: cache.sort({ (loginA, loginB) -> Bool in
             return loginA.hostname > loginB.hostname
-        }).map({ login in
-            return login as LoginData
         }))
         return Deferred(value: Maybe(success: cursor))
     }
 
-    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
+    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<Login>>> {
         let cursor = ArrayCursor(data: cache.filter({ login in
             var checks = [Bool]()
             if let query = query {
@@ -54,8 +60,6 @@ public class MockLogins: BrowserLogins, SyncableLogins {
             return checks.contains(true)
         }).sort({ (loginA, loginB) -> Bool in
             return loginA.hostname > loginB.hostname
-        }).map({ login in
-            return login as LoginData
         }))
         return Deferred(value: Maybe(success: cursor))
     }

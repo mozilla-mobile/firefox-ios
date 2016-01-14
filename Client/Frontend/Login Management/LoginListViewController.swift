@@ -77,6 +77,9 @@ class LoginListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: Selector("SELonProfileDidFinishSyncing"), name: NotificationProfileDidFinishSyncing, object: nil)
+
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
@@ -154,6 +157,22 @@ class LoginListViewController: UIViewController {
             selectionButton.setTitle(deselectAllTitle, forState: .Normal)
         } else {
             selectionButton.setTitle(selectAllTitle, forState: .Normal)
+        }
+    }
+
+    deinit {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+    }
+}
+
+// MARK: - Selectors
+extension LoginListViewController {
+
+    func SELonProfileDidFinishSyncing() {
+        profile.logins.getAllLogins().uponQueue(dispatch_get_main_queue()) { result in
+            self.loginDataSource.cursor = result.successValue
+            self.tableView.reloadData()
         }
     }
 }
@@ -316,7 +335,7 @@ extension LoginListViewController: SearchInputViewDelegate {
         return activeLoginQuery!
     }
 
-    private func reloadTableWithResult(result: Maybe<Cursor<LoginData>>) -> Success {
+    private func reloadTableWithResult(result: Maybe<Cursor<Login>>) -> Success {
         loginDataSource.cursor = result.successValue
         tableView.reloadData()
         activeLoginQuery = nil
@@ -373,9 +392,9 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
     private let emptyStateView = NoLoginsView()
 
-    var cursor: Cursor<LoginData>?
+    var cursor: Cursor<Login>?
 
-    func loginAtIndexPath(indexPath: NSIndexPath) -> LoginData {
+    func loginAtIndexPath(indexPath: NSIndexPath) -> Login {
         return loginsForSection(indexPath.section)[indexPath.row]
     }
 
@@ -440,7 +459,7 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         return sectionTitles.sort()
     }
 
-    private func loginsForSection(section: Int) -> [LoginData] {
+    private func loginsForSection(section: Int) -> [Login] {
         guard let sectionTitles = sectionIndexTitles() else {
             return []
         }

@@ -15,6 +15,7 @@ protocol LoginTableViewCellDelegate: class {
 private struct LoginTableViewCellUX {
     static let highlightedLabelFont = UIFont.systemFontOfSize(12)
     static let highlightedLabelTextColor = UIConstants.HighlightBlue
+    static let highlightedLabelEditingTextColor = UIConstants.TableViewHeaderTextColor
 
     static let descriptionLabelFont = UIFont.systemFontOfSize(16)
     static let descriptionLabelTextColor = UIColor.blackColor()
@@ -24,6 +25,8 @@ private struct LoginTableViewCellUX {
 
     static let indentWidth: CGFloat = 44
     static let IndentAnimationDuration: NSTimeInterval = 0.2
+
+    static let editingDescriptionIndent: CGFloat = IconImageSize + HorizontalMargin
 }
 
 enum LoginTableViewCellStyle {
@@ -45,7 +48,7 @@ class LoginTableViewCell: UITableViewCell {
 
     weak var delegate: LoginTableViewCellDelegate? = nil
 
-    let descriptionLabel: UITextField = {
+    lazy var descriptionLabel: UITextField = {
         let label = UITextField()
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
@@ -55,10 +58,11 @@ class LoginTableViewCell: UITableViewCell {
         label.autocapitalizationType = .None
         label.autocorrectionType = .No
         label.accessibilityElementsHidden = true
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
 
-    let highlightedLabel: UILabel = {
+    lazy var highlightedLabel: UILabel = {
         let label = UILabel()
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
@@ -118,6 +122,38 @@ class LoginTableViewCell: UITableViewCell {
         return descriptionText.sizeWithAttributes(attributes)
     }
 
+    var displayDescriptionAsPassword: Bool = false {
+        didSet {
+            descriptionLabel.secureTextEntry = displayDescriptionAsPassword
+
+            // If we're editing only allow copy and hide reveal/hide
+            if descriptionLabel.editing {
+                enabledActions = [.Copy]
+                return
+            }
+
+            if displayDescriptionAsPassword {
+                enabledActions = [.Copy, .Reveal]
+            } else {
+                enabledActions = [.Copy, .Hide]
+            }
+        }
+    }
+
+    var editingDescription: Bool = false {
+        didSet {
+            if editingDescription != oldValue {
+                descriptionLabel.userInteractionEnabled = editingDescription
+
+                highlightedLabel.textColor = editingDescription ?
+                    LoginTableViewCellUX.highlightedLabelEditingTextColor : LoginTableViewCellUX.highlightedLabelTextColor
+
+                // Trigger a layout configuration if we changed to editing/not editing the description.
+                configureLayoutForStyle(self.style)
+            }
+        }
+    }
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -147,6 +183,10 @@ class LoginTableViewCell: UITableViewCell {
         super.prepareForReuse()
         enabledActions = []
         delegate = nil
+        descriptionLabel.secureTextEntry = false
+        descriptionLabel.keyboardType = .Default
+        descriptionLabel.returnKeyType = .Default
+        descriptionLabel.userInteractionEnabled = false
     }
 
     override func layoutSubviews() {
@@ -218,6 +258,10 @@ class LoginTableViewCell: UITableViewCell {
                 make.width.equalTo(labelContainer)
             }
         case .NoIconAndBothLabels:
+            // Currently we only support modifying the description for this layout which is why
+            // we factor in the editingOffset when calculating the constraints.
+            let editingOffset = editingDescription ? LoginTableViewCellUX.editingDescriptionIndent : 0
+
             iconImageView.snp_remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
@@ -227,7 +271,7 @@ class LoginTableViewCell: UITableViewCell {
             labelContainer.snp_remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp_right)
+                make.left.equalTo(iconImageView.snp_right).offset(editingOffset)
             }
 
             highlightedLabel.snp_remakeConstraints { make in
@@ -300,13 +344,11 @@ extension LoginTableViewCell {
 extension LoginTableViewCell: MenuHelperInterface {
 
     func menuHelperReveal(sender: NSNotification) {
-        descriptionLabel.secureTextEntry = false
-        enabledActions = [.Copy, .Hide]
+        displayDescriptionAsPassword = false
     }
 
     func menuHelperSecure(sender: NSNotification) {
-        descriptionLabel.secureTextEntry = true
-        enabledActions = [.Copy, .Reveal]
+        displayDescriptionAsPassword = true
     }
 
     func menuHelperCopy(sender: NSNotification) {

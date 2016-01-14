@@ -32,6 +32,10 @@ extension NSDate {
         return NSDate(timeIntervalSince1970: Double(timestamp) / 1000)
     }
 
+    public class func fromMicrosecondTimestamp(microsecondTimestamp: MicrosecondTimestamp) -> NSDate {
+        return NSDate(timeIntervalSince1970: Double(microsecondTimestamp) / 1000000)
+    }
+
     public func toRelativeTimeString() -> String {
         let now = NSDate()
 
