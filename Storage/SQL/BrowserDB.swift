@@ -10,7 +10,7 @@ public let NotificationDatabaseWasRecreated = "NotificationDatabaseWasRecreated"
 
 private let log = Logger.syncLogger
 
-typealias Args = [AnyObject?]
+public typealias Args = [AnyObject?]
 
 protocol Changeable {
     func run(sql: String, withArgs args: Args?) -> Success
@@ -42,7 +42,7 @@ public class BrowserDB {
 
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
     // appear in a query string.
-    static let MaxVariableNumber = 999
+    public static let MaxVariableNumber = 999
 
     public init(filename: String, secretKey: String? = nil, files: FileAccessor) {
         log.debug("Initializing BrowserDB: \(filename).")

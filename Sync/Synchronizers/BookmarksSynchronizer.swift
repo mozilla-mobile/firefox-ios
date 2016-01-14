@@ -144,18 +144,6 @@ class NoOpBookmarksMerger: BookmarksStorageMerger {
     }
 }
 
-extension BookmarkBufferStorage {
-    func applyBufferCompletionOp(op: BufferCompletionOp) -> Success {
-        return succeed()
-    }
-}
-
-extension SyncableBookmarks {
-    func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, withUpstreamResult upstream: POSTResult) -> Success {
-        return succeed()
-    }
-}
-
 class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
     let buffer: BookmarkBufferStorage
     let storage: SyncableBookmarks

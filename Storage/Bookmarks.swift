@@ -18,6 +18,7 @@ public protocol SyncableBookmarks: ResettableSyncStorage, AccountRemovalDelegate
     func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>>
     func treesForEdges() -> Deferred<Maybe<(local: BookmarkTree, buffer: BookmarkTree)>>
     func treeForMirror() -> Deferred<Maybe<BookmarkTree>>
+    func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, withModifiedTimestamp timestamp: Timestamp) -> Success
 }
 
 public protocol BookmarkBufferStorage {
