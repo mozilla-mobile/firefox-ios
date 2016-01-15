@@ -71,13 +71,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegat
     }
 
     private func reloadContentBlocker() {
-        if let identifier = AppInfo.contentBlockerBundleIdentifier() {
-            SFContentBlockerManager.reloadContentBlockerWithIdentifier(identifier, completionHandler: {
-                (error) -> Void in
-                if let error = error {
-                    NSLog("Failed to reload \(identifier): \(error.description)")
-                }
-            })
+        let identifier = AppInfo.ContentBlockerBundleIdentifier
+        SFContentBlockerManager.reloadContentBlockerWithIdentifier(identifier) { error in
+            if let error = error {
+                NSLog("Failed to reload \(identifier): \(error.description)")
+            }
         }
     }
 }

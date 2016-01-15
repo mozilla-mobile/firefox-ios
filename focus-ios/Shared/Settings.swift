@@ -12,6 +12,8 @@ struct Settings {
     static let KeyBlockFonts = "BlockFonts"
     static let KeyIntroDone = "IntroDone"
 
+    private static let defaults = NSUserDefaults(suiteName: AppInfo.SharedContainerIdentifier)!
+
     static func registerDefaults() {
         set(true, forKey: KeyBlockAds)
         set(true, forKey: KeyBlockAnalytics)
@@ -21,18 +23,11 @@ struct Settings {
     }
 
     static func getBool(name: String) -> Bool? {
-        guard let suiteName = AppInfo.sharedContainerIdentifier() else {
-            return nil
-        }
-        return NSUserDefaults(suiteName: suiteName)?.objectForKey(name) as? Bool
+        return defaults.objectForKey(name) as? Bool
     }
 
     static func set(value: Bool, forKey key: String) {
-        if let suiteName = AppInfo.sharedContainerIdentifier() {
-            if let defaults = NSUserDefaults(suiteName: suiteName) {
-                defaults.setBool(value, forKey: key)
-                defaults.synchronize()
-            }
-        }
+        defaults.setBool(value, forKey: key)
+        defaults.synchronize()
     }
 }
