@@ -268,6 +268,7 @@
 		7B604F941C494C47006EEEC3 /* Base32.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F921C494C3A006EEEC3 /* Base32.framework */; };
 		7B604F951C494D13006EEEC3 /* Base32.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F921C494C3A006EEEC3 /* Base32.framework */; };
 		7B604F971C494E2A006EEEC3 /* Breakpad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F961C494E2A006EEEC3 /* Breakpad.framework */; };
+		7B604F991C494F74006EEEC3 /* KIF.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F981C494F74006EEEC3 /* KIF.framework */; };
 		7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */; };
 		7B9A61CD1C3EBFAE005C83DC /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9A61CC1C3EBFAE005C83DC /* RXMLElement.m */; };
 		7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */; };
@@ -362,7 +363,6 @@
 		D38B2D521A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D2D1A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m */; };
 		D38B2D531A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D2D1A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m */; };
 		D38B2D541A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D2D1A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m */; };
-		D38B2D751A8D97A40040E6B5 /* libKIF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D6C1A8D976A0040E6B5 /* libKIF.a */; };
 		D38B2D881A8D98700040E6B5 /* SWXMLHash.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D38B2D8A1A8D98D00040E6B5 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D38B2D8B1A8D98D10040E6B5 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
@@ -959,34 +959,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		D357E4021B8D0B850070BD90 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9CC9673B1AD4B1B600576D13;
-			remoteInfo = KIFFramework;
-		};
-		D38B2D6B1A8D976A0040E6B5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EABD46AA1857A0C700A5F081;
-			remoteInfo = KIF;
-		};
-		D38B2D6F1A8D976A0040E6B5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EB60ECC1177F8C83005A041A;
-			remoteInfo = "Test Host";
-		};
-		D38B2D711A8D976A0040E6B5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EABD46CD1857A0F300A5F081;
-			remoteInfo = "KIF Tests";
-		};
 		D38B2D801A8D98380040E6B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */;
@@ -1407,6 +1379,7 @@
 		7B604F851C494983006EEEC3 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		7B604F921C494C3A006EEEC3 /* Base32.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Base32.framework; path = Carthage/Build/iOS/Base32.framework; sourceTree = "<group>"; };
 		7B604F961C494E2A006EEEC3 /* Breakpad.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Breakpad.framework; path = Carthage/Build/iOS/Breakpad.framework; sourceTree = "<group>"; };
+		7B604F981C494F74006EEEC3 /* KIF.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KIF.framework; path = Carthage/Build/iOS/KIF.framework; sourceTree = "<group>"; };
 		7B60AFD91BDE3A8B0090C984 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		7B60B0091BDE3B460090C984 /* MarketingSnapshotTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MarketingSnapshotTests.swift; path = snapshot/MarketingSnapshotTests.swift; sourceTree = "<group>"; };
@@ -1488,7 +1461,6 @@
 		D38B2D2B1A8D96D00040E6B5 /* GCDWebServerFileResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDWebServerFileResponse.m; sourceTree = "<group>"; };
 		D38B2D2C1A8D96D00040E6B5 /* GCDWebServerStreamedResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDWebServerStreamedResponse.h; sourceTree = "<group>"; };
 		D38B2D2D1A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDWebServerStreamedResponse.m; sourceTree = "<group>"; };
-		D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KIF.xcodeproj; path = Carthage/Checkouts/KIF/KIF.xcodeproj; sourceTree = "<group>"; };
 		D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SWXMLHash.xcodeproj; path = Carthage/Checkouts/SWXMLHash/SWXMLHash.xcodeproj; sourceTree = "<group>"; };
 		D38F02D01C05127100175932 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		D38F036F1C06387900175932 /* AuthenticationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTests.swift; sourceTree = "<group>"; };
@@ -1858,8 +1830,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6231C071B90A712005ABB0D /* libz.tbd in Frameworks */,
+				7B604F991C494F74006EEEC3 /* KIF.framework in Frameworks */,
 				D36998891AD70A0A00650C6C /* IOKit.framework in Frameworks */,
-				D38B2D751A8D97A40040E6B5 /* libKIF.a in Frameworks */,
 				D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2530,17 +2502,6 @@
 			path = Responses;
 			sourceTree = "<group>";
 		};
-		D38B2D631A8D976A0040E6B5 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				D38B2D6C1A8D976A0040E6B5 /* libKIF.a */,
-				D38B2D701A8D976A0040E6B5 /* Test Host.app */,
-				D38B2D721A8D976A0040E6B5 /* KIF Tests - XCTest.xctest */,
-				D357E4031B8D0B850070BD90 /* KIF.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		D38B2D771A8D98380040E6B5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -2998,13 +2959,13 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				7B604F981C494F74006EEEC3 /* KIF.framework */,
 				7B604F961C494E2A006EEEC3 /* Breakpad.framework */,
 				7B604F921C494C3A006EEEC3 /* Base32.framework */,
 				7B604F851C494983006EEEC3 /* Alamofire.framework */,
 				E4B334891BBF23F9004E2BFF /* AdSupport.framework */,
 				E4B334871BBF23F3004E2BFF /* iAd.framework */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
-				D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */,
 				0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */,
 				E68B436D1C08A724002D2D76 /* SnapKit.xcodeproj */,
 				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
@@ -3796,10 +3757,6 @@
 					ProjectRef = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
 				},
 				{
-					ProductGroup = D38B2D631A8D976A0040E6B5 /* Products */;
-					ProjectRef = D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */;
-				},
-				{
 					ProductGroup = 0B6544B11A96C59E000DD202 /* Products */;
 					ProjectRef = 0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */;
 				},
@@ -4001,34 +3958,6 @@
 			fileType = wrapper.framework;
 			path = XCGLogger.framework;
 			remoteRef = 7BCB05221C3BFFF800AD952C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		D357E4031B8D0B850070BD90 /* KIF.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KIF.framework;
-			remoteRef = D357E4021B8D0B850070BD90 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		D38B2D6C1A8D976A0040E6B5 /* libKIF.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libKIF.a;
-			remoteRef = D38B2D6B1A8D976A0040E6B5 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		D38B2D701A8D976A0040E6B5 /* Test Host.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Test Host.app";
-			remoteRef = D38B2D6F1A8D976A0040E6B5 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		D38B2D721A8D976A0040E6B5 /* KIF Tests - XCTest.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "KIF Tests - XCTest.xctest";
-			remoteRef = D38B2D711A8D976A0040E6B5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */ = {
@@ -6239,6 +6168,10 @@
 		D349D7381A85977700229905 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.allizom.$(PRODUCT_NAME:rfc1034identifier)";
@@ -6250,6 +6183,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -6269,6 +6206,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = UITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -6432,6 +6373,10 @@
 		E421F2901A8D2BF300971276 /* FennecNightly */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.allizom.$(PRODUCT_NAME:rfc1034identifier)";
@@ -6595,6 +6540,10 @@
 		E448FCA21AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.allizom.$(PRODUCT_NAME:rfc1034identifier)";
