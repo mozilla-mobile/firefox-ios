@@ -2,7 +2,7 @@ github "fluffyemily/Alamofire"      "alamofire-ios-only"
 github "mozilla/Base32"             "swift-2.0"        # So we don't have to tag a release for Emily's fixes.
 github "mozilla/Deferred"           "v2.0.0"           # Making Deferred extensible in swift 2.0
 github "swisspol/GCDWebServer"		"3.3"			     
-github "kif-framework/KIF"          " v3.3.1"
+github "kif-framework/KIF"          "v3.3.1"
 github "mozilla/readability"        "master"
 github "rs/SDWebImage"              "3.7.4"           
 github "SnapKit/SnapKit"            "0.18.0"
