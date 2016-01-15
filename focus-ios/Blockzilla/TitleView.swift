@@ -8,7 +8,7 @@ class TitleView: UIView {
     init() {
         super.init(frame: CGRectZero)
 
-        let logo = UIImage(named: "HeaderLogo")!
+        let logo = UIImage(named: "\(AppInfo.ProductName)HeaderLogo")!
         let logoView = UIImageView(image: logo)
         addSubview(logoView)
 

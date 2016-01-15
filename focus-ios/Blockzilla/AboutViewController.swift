@@ -180,7 +180,7 @@ private class AboutHeaderView: UIView {
     init() {
         super.init(frame: CGRectZero)
 
-        let logo = UIImageView(image: UIImage(named: "Logo"))
+        let logo = UIImageView(image: UIImage(named: "\(AppInfo.ProductName)Logo"))
         addSubview(logo)
 
         let descriptionLabel1 = UILabel()
