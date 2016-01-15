@@ -500,6 +500,10 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
     public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
         return self.buffer.getBufferedDeletions()
     }
+
+    public func applyBufferCompletionOp(op: BufferCompletionOp) -> Success {
+        return self.buffer.applyBufferCompletionOp(op)
+    }
 }
 
 extension MergedSQLiteBookmarks: ShareToDestination {
@@ -745,10 +749,17 @@ extension SQLiteBookmarks {
 
 // MARK: - Applying merge operations.
 
-public extension BookmarkBufferStorage {
-    // TODO
+public extension SQLiteBookmarkBufferStorage {
     public func applyBufferCompletionOp(op: BufferCompletionOp) -> Success {
-        return succeed()
+        var queries: [(sql: String, args: Args?)] = []
+        op.processedBufferChanges.subsetsOfSize(BrowserDB.MaxVariableNumber).forEach { guids in
+            let varlist = BrowserDB.varlist(guids.count)
+            let args: Args = guids.map { $0 as AnyObject }
+            queries.append((sql: "DELETE FROM \(TableBookmarksBufferStructure) WHERE parent IN \(varlist)", args: args))
+            queries.append((sql: "DELETE FROM \(TableBookmarksBuffer) WHERE guid IN \(varlist)", args: args))
+        }
+
+        return self.db.run(queries)
     }
 }
 
