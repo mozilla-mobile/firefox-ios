@@ -228,8 +228,6 @@
 		394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */; };
 		39A359E41BFCCE94006B9E87 /* SpotlightHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A359E31BFCCE94006B9E87 /* SpotlightHelper.swift */; };
 		39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */; };
-		39A362D91AAF5ECE00F47390 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; };
-		39A362DA1AAF5ECE00F47390 /* XCGLogger.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		39C5750E1BE28BAE00E1C4B1 /* OnePasswordExtension.h in Sources */ = {isa = PBXBuildFile; fileRef = 39C5750C1BE28BAE00E1C4B1 /* OnePasswordExtension.h */; };
 		39C5750F1BE28BAE00E1C4B1 /* OnePasswordExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 39C5750D1BE28BAE00E1C4B1 /* OnePasswordExtension.m */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
@@ -275,6 +273,12 @@
 		7B604FB71C495782006EEEC3 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FB61C495782006EEEC3 /* SWXMLHash.framework */; };
 		7B604FB81C4957B1006EEEC3 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FB61C495782006EEEC3 /* SWXMLHash.framework */; };
 		7B604FB91C4957C0006EEEC3 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FB61C495782006EEEC3 /* SWXMLHash.framework */; };
+		7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
+		7B604FBC1C495E1E006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
+		7B604FBD1C495E31006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
+		7B604FBE1C495E4E006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
+		7B604FBF1C495E60006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
+		7B604FC01C495FD1006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
 		7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */; };
 		7B9A61CD1C3EBFAE005C83DC /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9A61CC1C3EBFAE005C83DC /* RXMLElement.m */; };
 		7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */; };
@@ -657,13 +661,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		2F0624F51AE5AA1A00FA022C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
-			remoteInfo = "XCGLogger (iOS)";
-		};
 		2F11EE4F1ABCAE910083902D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -684,13 +681,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
 			remoteInfo = Shared;
-		};
-		2F14E1371ABB88E000FF98DB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
-			remoteInfo = "XCGLogger (iOS)";
 		};
 		2F77F69C1ABCAEFE00484F3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -748,13 +738,6 @@
 			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
 			remoteInfo = Shared;
 		};
-		2FA436201ABB83DD008031D1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
-			remoteInfo = "XCGLogger (iOS)";
-		};
 		2FA436431ABB84CB008031D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
@@ -796,48 +779,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
 			remoteInfo = Shared;
-		};
-		2FCAE23D1ABB520700877008 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
-			remoteInfo = "XCGLogger (iOS)";
-		};
-		39A362D31AAF5E2C00F47390 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 55E3EE4519D76F280068C3A7;
-			remoteInfo = "XCGLogger (iOS)";
-		};
-		39A362D51AAF5E2C00F47390 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 554DF41719D76FE7005708BE;
-			remoteInfo = "XCGLogger (OS X)";
-		};
-		39A362D71AAF5E2C00F47390 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 55E3EE5019D76F280068C3A7;
-			remoteInfo = XCGLoggerTests;
-		};
-		39A362DB1AAF5ECE00F47390 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
-			remoteInfo = "XCGLogger (iOS)";
-		};
-		7B7692CC1B7CCBD100188277 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 55BB1F011B79DC7500709779;
-			remoteInfo = "XCGLoggerTests (OS X)";
 		};
 		7B9A62DA1C4002B1005C83DC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -901,13 +842,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = DC2B29E11B26F718001C60EA;
 			remoteInfo = "SQLite iOS";
-		};
-		7BCB05221C3BFFF800AD952C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 70CB94201B99E728007802FF;
-			remoteInfo = "XCGLogger (watchOS)";
 		};
 		7BD028D31C073AA90032FDC0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1046,7 +980,6 @@
 				288A2D9E1AB8B3260023ABC3 /* Shared.framework in Copy Frameworks */,
 				282731761ABC9BE700AA1954 /* Sync.framework in Copy Frameworks */,
 				2FA436131ABB83B4008031D1 /* Account.framework in Copy Frameworks */,
-				39A362DA1AAF5ECE00F47390 /* XCGLogger.framework in Copy Frameworks */,
 				E4A888171A95679500CDC337 /* FxA.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -1259,7 +1192,6 @@
 		394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSuggestedSites.swift; sourceTree = "<group>"; };
 		39A359E31BFCCE94006B9E87 /* SpotlightHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotlightHelper.swift; path = Helpers/SpotlightHelper.swift; sourceTree = "<group>"; };
 		39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SpotlightHelper.js; sourceTree = "<group>"; };
-		39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XCGLogger.xcodeproj; path = Carthage/Checkouts/XCGLogger/XCGLogger/Library/XCGLogger.xcodeproj; sourceTree = "<group>"; };
 		39C5750C1BE28BAE00E1C4B1 /* OnePasswordExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OnePasswordExtension.h; path = "Carthage/Checkouts/onepassword-extension/OnePasswordExtension.h"; sourceTree = "<group>"; };
 		39C5750D1BE28BAE00E1C4B1 /* OnePasswordExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OnePasswordExtension.m; path = "Carthage/Checkouts/onepassword-extension/OnePasswordExtension.m"; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
@@ -1288,6 +1220,7 @@
 		7B604F9A1C4950F2006EEEC3 /* WebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebImage.framework; path = Carthage/Build/iOS/WebImage.framework; sourceTree = "<group>"; };
 		7B604FA11C495268006EEEC3 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		7B604FB61C495782006EEEC3 /* SWXMLHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SWXMLHash.framework; path = Carthage/Build/iOS/SWXMLHash.framework; sourceTree = "<group>"; };
+		7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 		7B60AFD91BDE3A8B0090C984 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		7B60B0091BDE3B460090C984 /* MarketingSnapshotTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MarketingSnapshotTests.swift; path = snapshot/MarketingSnapshotTests.swift; sourceTree = "<group>"; };
@@ -1652,6 +1585,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B604FC01C495FD1006EEEC3 /* XCGLogger.framework in Frameworks */,
 				28ECD9BF1BA1F19900D829DA /* libz.tbd in Frameworks */,
 				282731691ABC9BE700AA1954 /* Sync.framework in Frameworks */,
 			);
@@ -1663,6 +1597,7 @@
 			files = (
 				7B604F881C4949A4006EEEC3 /* Alamofire.framework in Frameworks */,
 				7B604F941C494C47006EEEC3 /* Base32.framework in Frameworks */,
+				7B604FBC1C495E1E006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1676,6 +1611,7 @@
 				7B604F9B1C4950F2006EEEC3 /* WebImage.framework in Frameworks */,
 				7B604FB71C495782006EEEC3 /* SWXMLHash.framework in Frameworks */,
 				7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */,
+				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				E4B334881BBF23F3004E2BFF /* iAd.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
@@ -1687,7 +1623,6 @@
 				E4D5672F1ADECE2800F1EFE7 /* ReadingList.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				E4A888161A95679500CDC337 /* FxA.framework in Frameworks */,
-				39A362D91AAF5ECE00F47390 /* XCGLogger.framework in Frameworks */,
 				282731751ABC9BE700AA1954 /* Sync.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1697,6 +1632,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B604F891C4949B1006EEEC3 /* Alamofire.framework in Frameworks */,
+				7B604FBE1C495E4E006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1706,6 +1642,7 @@
 			files = (
 				7B604F8A1C4949C1006EEEC3 /* Alamofire.framework in Frameworks */,
 				2FA436061ABB83B4008031D1 /* Account.framework in Frameworks */,
+				7B604FBF1C495E60006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1714,6 +1651,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B742CCF1B32493E00EE9264 /* libsqlcipher.a in Frameworks */,
+				7B604FBD1C495E31006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2218,18 +2156,6 @@
 				39A359E31BFCCE94006B9E87 /* SpotlightHelper.swift */,
 			);
 			name = Helpers;
-			sourceTree = "<group>";
-		};
-		39A362B31AAF5E2B00F47390 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				39A362D41AAF5E2C00F47390 /* XCGLogger.framework */,
-				39A362D61AAF5E2C00F47390 /* XCGLogger.framework */,
-				7BCB05231C3BFFF800AD952C /* XCGLogger.framework */,
-				39A362D81AAF5E2C00F47390 /* XCGLoggerTests (iOS).xctest */,
-				7B7692CD1B7CCBD100188277 /* XCGLoggerTests (OS X).xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		39C575111BE28C6400E1C4B1 /* OnePasswordExtension */ = {
@@ -2832,6 +2758,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */,
 				7B604FB61C495782006EEEC3 /* SWXMLHash.framework */,
 				7B604FA11C495268006EEEC3 /* SnapKit.framework */,
 				7B604F9A1C4950F2006EEEC3 /* WebImage.framework */,
@@ -2844,7 +2771,6 @@
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
 				7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */,
-				39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -3202,7 +3128,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F0624F61AE5AA1A00FA022C /* PBXTargetDependency */,
 			);
 			name = Shared;
 			productName = Shared;
@@ -3224,7 +3149,6 @@
 			dependencies = (
 				2FA436441ABB84CB008031D1 /* PBXTargetDependency */,
 				2FA4361D1ABB83DD008031D1 /* PBXTargetDependency */,
-				2FA436211ABB83DD008031D1 /* PBXTargetDependency */,
 			);
 			name = Account;
 			productName = Account;
@@ -3243,7 +3167,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F14E1381ABB88E000FF98DB /* PBXTargetDependency */,
 				2F14E1341ABB88CF00FF98DB /* PBXTargetDependency */,
 				2F14E1181ABB88CB00FF98DB /* PBXTargetDependency */,
 			);
@@ -3266,7 +3189,6 @@
 			dependencies = (
 				0B742CCE1B32493800EE9264 /* PBXTargetDependency */,
 				2FCAE23C1ABB520700877008 /* PBXTargetDependency */,
-				2FCAE23E1ABB520700877008 /* PBXTargetDependency */,
 			);
 			name = Storage;
 			productName = Storage;
@@ -3441,7 +3363,6 @@
 				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
 				F84B22651A09210A00AAB793 /* PBXTargetDependency */,
 				E4A888191A95679500CDC337 /* PBXTargetDependency */,
-				39A362DC1AAF5ECE00F47390 /* PBXTargetDependency */,
 				288A2D9C1AB8B3260023ABC3 /* PBXTargetDependency */,
 				2FCAE2301ABB51F800877008 /* PBXTargetDependency */,
 				2FA436111ABB83B4008031D1 /* PBXTargetDependency */,
@@ -3639,10 +3560,6 @@
 					ProductGroup = 7B9A62BA1C4002B1005C83DC /* Products */;
 					ProjectRef = 7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */;
 				},
-				{
-					ProductGroup = 39A362B31AAF5E2B00F47390 /* Products */;
-					ProjectRef = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -3688,34 +3605,6 @@
 			fileType = wrapper.cfbundle;
 			path = FxATests.xctest;
 			remoteRef = 28CE83D11A1D1D5100576538 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		39A362D41AAF5E2C00F47390 /* XCGLogger.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = XCGLogger.framework;
-			remoteRef = 39A362D31AAF5E2C00F47390 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		39A362D61AAF5E2C00F47390 /* XCGLogger.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = XCGLogger.framework;
-			remoteRef = 39A362D51AAF5E2C00F47390 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		39A362D81AAF5E2C00F47390 /* XCGLoggerTests (iOS).xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "XCGLoggerTests (iOS).xctest";
-			remoteRef = 39A362D71AAF5E2C00F47390 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7B7692CD1B7CCBD100188277 /* XCGLoggerTests (OS X).xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "XCGLoggerTests (OS X).xctest";
-			remoteRef = 7B7692CC1B7CCBD100188277 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		7B9A62DB1C4002B1005C83DC /* SQLite.framework */ = {
@@ -3772,13 +3661,6 @@
 			fileType = wrapper.cfbundle;
 			path = "SQLiteCipher Mac Tests.xctest";
 			remoteRef = 7B9A62E81C4002B1005C83DC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7BCB05231C3BFFF800AD952C /* XCGLogger.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = XCGLogger.framework;
-			remoteRef = 7BCB05221C3BFFF800AD952C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3985,6 +3867,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
@@ -4000,6 +3883,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
@@ -4016,6 +3900,7 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Base32.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
@@ -4053,6 +3938,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/WebImage.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SWXMLHash.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
@@ -4709,11 +4595,6 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 28ECD9BE1BA1F12B00D829DA /* PBXContainerItemProxy */;
 		};
-		2F0624F61AE5AA1A00FA022C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "XCGLogger (iOS)";
-			targetProxy = 2F0624F51AE5AA1A00FA022C /* PBXContainerItemProxy */;
-		};
 		2F11EE501ABCAE910083902D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
@@ -4728,11 +4609,6 @@
 			isa = PBXTargetDependency;
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
 			targetProxy = 2F14E1331ABB88CF00FF98DB /* PBXContainerItemProxy */;
-		};
-		2F14E1381ABB88E000FF98DB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "XCGLogger (iOS)";
-			targetProxy = 2F14E1371ABB88E000FF98DB /* PBXContainerItemProxy */;
 		};
 		2F67C5281BB0D33000E7B73A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4779,11 +4655,6 @@
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
 			targetProxy = 2FA4361C1ABB83DD008031D1 /* PBXContainerItemProxy */;
 		};
-		2FA436211ABB83DD008031D1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "XCGLogger (iOS)";
-			targetProxy = 2FA436201ABB83DD008031D1 /* PBXContainerItemProxy */;
-		};
 		2FA436441ABB84CB008031D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FxA;
@@ -4808,16 +4679,6 @@
 			isa = PBXTargetDependency;
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
 			targetProxy = 2FCAE23B1ABB520700877008 /* PBXContainerItemProxy */;
-		};
-		2FCAE23E1ABB520700877008 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "XCGLogger (iOS)";
-			targetProxy = 2FCAE23D1ABB520700877008 /* PBXContainerItemProxy */;
-		};
-		39A362DC1AAF5ECE00F47390 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "XCGLogger (iOS)";
-			targetProxy = 39A362DB1AAF5ECE00F47390 /* PBXContainerItemProxy */;
 		};
 		7B9A62F91C400303005C83DC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5068,6 +4929,10 @@
 		2827317A1ABC9BE800AA1954 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -5102,6 +4967,10 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -5142,6 +5011,10 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -5575,6 +5448,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -5627,6 +5504,10 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -5686,6 +5567,10 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -6451,6 +6336,10 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -6705,6 +6594,10 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
