@@ -769,6 +769,10 @@ extension MergedSQLiteBookmarks {
         var err: NSError?
         self.local.db.transaction(&err) { (conn, inout err: NSError?) in
             // This is a little tortured because we want it all to happen in a single transaction.
+            // We walk through the accrued work items, applying them in the right order (e.g., structure
+            // then value), doing so with the ugly NSError-based transaction API.
+            // If at any point we fail, we abort, roll back the transaction (return false),
+            // and reject the deferred.
 
             func change(sql: String, args: Args?=nil) -> Bool {
                 if let e = conn.executeChange(sql, withArgs: args) {
