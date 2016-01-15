@@ -2176,6 +2176,23 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		7B604FC11C496005006EEEC3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */,
+				7B604FB61C495782006EEEC3 /* SWXMLHash.framework */,
+				7B604FA11C495268006EEEC3 /* SnapKit.framework */,
+				7B604F9A1C4950F2006EEEC3 /* WebImage.framework */,
+				7B604F981C494F74006EEEC3 /* KIF.framework */,
+				7B604F961C494E2A006EEEC3 /* Breakpad.framework */,
+				7B604F921C494C3A006EEEC3 /* Base32.framework */,
+				7B604F851C494983006EEEC3 /* Alamofire.framework */,
+				E4B334891BBF23F9004E2BFF /* AdSupport.framework */,
+				E4B334871BBF23F3004E2BFF /* iAd.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7B60AFD61BDE3A8B0090C984 /* ClientUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -2758,16 +2775,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */,
-				7B604FB61C495782006EEEC3 /* SWXMLHash.framework */,
-				7B604FA11C495268006EEEC3 /* SnapKit.framework */,
-				7B604F9A1C4950F2006EEEC3 /* WebImage.framework */,
-				7B604F981C494F74006EEEC3 /* KIF.framework */,
-				7B604F961C494E2A006EEEC3 /* Breakpad.framework */,
-				7B604F921C494C3A006EEEC3 /* Base32.framework */,
-				7B604F851C494983006EEEC3 /* Alamofire.framework */,
-				E4B334891BBF23F9004E2BFF /* AdSupport.framework */,
-				E4B334871BBF23F3004E2BFF /* iAd.framework */,
+				7B604FC11C496005006EEEC3 /* Frameworks */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
 				7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */,
