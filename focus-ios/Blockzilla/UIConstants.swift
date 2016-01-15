@@ -37,8 +37,8 @@ struct UIConstants {
     }
 
     struct Strings {
-        static let AppDescription = NSLocalizedString("Focus improves privacy and may boost page load speed and lower your mobile data usage.", comment: "Label displayed above toggles")
-        static let NotEnabledError = NSLocalizedString("Focus is not enabled.", comment: "Error label when Focus is not enabled, shown in the intro and main app when Focus is disabled")
-        static let OpenSettings = NSLocalizedString("Open Settings", comment: "Button to open the system Settings, shown in the intro and main app when Focus is disabled")
+        static let AppDescription = String(format: NSLocalizedString("%@ improves privacy and may boost page load speed and lower your mobile data usage.", comment: "Label displayed above toggles"), AppInfo.ProductName)
+        static let NotEnabledError = String(format: NSLocalizedString("%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.ProductName)
+        static let OpenSettings = NSLocalizedString("Open Settings", comment: "Button to open the system Settings, shown in the intro and main app when disabled")
     }
 }

@@ -34,4 +34,8 @@ public class AppInfo {
     public static var ContentBlockerBundleIdentifier: String {
         return BaseBundleIdentifier + ".ContentBlocker"
     }
+
+    public static var ProductName: String {
+        return NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String
+    }
 }

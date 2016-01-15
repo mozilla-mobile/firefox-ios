@@ -21,7 +21,8 @@ class IntroSlideHowTo: UIView {
         addSubview(instructionsView)
 
         let mustBeEnabledLabel = UILabel()
-        mustBeEnabledLabel.text = NSLocalizedString("Focus must be enabled in Settings to work.", comment: "Notice label show on second introduction screen")
+        let mustBeEnabledText = NSLocalizedString("%@ must be enabled in Settings to work.", comment: "Notice label show on second introduction screen")
+        mustBeEnabledLabel.text = String(format: mustBeEnabledText, AppInfo.ProductName)
         mustBeEnabledLabel.numberOfLines = 0
         mustBeEnabledLabel.textAlignment = NSTextAlignment.Center
         mustBeEnabledLabel.textColor = UIConstants.Colors.FocusOrange

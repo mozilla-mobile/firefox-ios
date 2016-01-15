@@ -184,7 +184,8 @@ private class AboutHeaderView: UIView {
         addSubview(logo)
 
         let descriptionLabel1 = UILabel()
-        descriptionLabel1.text = NSLocalizedString("Focus puts you in control and brings added privacy and performance to your mobile browsing experience.", comment: "About copy on the about page")
+        let descriptionLabel1Text = NSLocalizedString("%@ puts you in control and brings added privacy and performance to your mobile browsing experience.", comment: "About copy on the about page")
+        descriptionLabel1.text = String(format: descriptionLabel1Text, AppInfo.ProductName)
         descriptionLabel1.textColor = UIConstants.Colors.DefaultFont
         descriptionLabel1.font = descriptionLabel1.font.fontWithSize(14)
         descriptionLabel1.numberOfLines = 0
@@ -192,7 +193,8 @@ private class AboutHeaderView: UIView {
         addSubview(descriptionLabel1)
 
         let descriptionLabel2 = UILabel()
-        descriptionLabel2.text = NSLocalizedString("Focus is produced by Mozilla, the people behind the Firefox Web browser.", comment: "About copy on the about page")
+        let descriptionLabel2Text = NSLocalizedString("%@ is produced by Mozilla, the people behind the Firefox Web browser.", comment: "About copy on the about page")
+        descriptionLabel2.text = String(format: descriptionLabel2Text, AppInfo.ProductName)
         descriptionLabel2.textColor = UIConstants.Colors.DefaultFont
         descriptionLabel2.font = descriptionLabel2.font.fontWithSize(14)
         descriptionLabel2.numberOfLines = 0

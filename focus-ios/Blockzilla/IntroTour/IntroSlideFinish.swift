@@ -127,7 +127,8 @@ private class EnabledStateView: UIView {
         super.init(frame: CGRectZero)
 
         let label = UILabel()
-        label.text = NSLocalizedString("Focus is enabled!", comment: "Text displayed at the final step of the intro screen")
+        let enabledText = NSLocalizedString("%@ is enabled!", comment: "Text displayed at the final step of the intro screen")
+        label.text = String(format: enabledText, AppInfo.ProductName)
         label.textColor = UIConstants.Colors.FocusGreen
         addSubview(label)
 

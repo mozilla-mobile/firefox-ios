@@ -30,7 +30,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
         let titleView = TitleView()
         view.addSubview(titleView)
 
-        skipButton.setTitle(NSLocalizedString("Skip", comment: "Button at top of the last intro screen when Focus is not enabled"), forState: UIControlState.Normal)
+        skipButton.setTitle(NSLocalizedString("Skip", comment: "Button at top of the last intro screen when the app is not enabled"), forState: UIControlState.Normal)
         skipButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
         skipButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
         skipButton.addTarget(self, action: "skipClicked:", forControlEvents: UIControlEvents.TouchUpInside)

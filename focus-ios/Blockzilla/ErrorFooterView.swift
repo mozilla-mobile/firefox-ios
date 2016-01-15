@@ -23,13 +23,14 @@ class ErrorFooterView: UIView {
         addSubview(notEnabledLabel)
 
         let instructionsLabel1 = UILabel()
-        instructionsLabel1.text = NSLocalizedString("Enable Focus in", comment: "Instructions shown in main app when Focus is disabled in system settings")
+        let instructionsLabel1Text = NSLocalizedString("Enable %@ in", comment: "Instructions shown in main app when disabled in system settings")
+        instructionsLabel1.text = String(format: instructionsLabel1Text, AppInfo.ProductName)
         instructionsLabel1.textColor = UIConstants.Colors.DefaultFont
         instructionsLabel1.font = UIConstants.Fonts.SmallerFont
         addSubview(instructionsLabel1)
 
         let instructionsLabel2 = UILabel()
-        instructionsLabel2.text = NSLocalizedString("Settings → Safari → Content Blockers", comment: "Instructions shown in main app when Focus is disabled in system settings")
+        instructionsLabel2.text = NSLocalizedString("Settings → Safari → Content Blockers", comment: "Instructions shown in main app when disabled in system settings")
         instructionsLabel2.textColor = UIConstants.Colors.DefaultFont
         instructionsLabel2.numberOfLines = 0
         instructionsLabel2.textAlignment = NSTextAlignment.Center

@@ -10,7 +10,7 @@ class InstructionsView: UIView {
 
         let settingsText = NSLocalizedString("Open Settings App", comment: "Label for instructions to enable shown on the second introduction screen")
         let safariText = NSLocalizedString("Tap Safari, then select Content Blockers", comment: "Label for instructions to enable shown on the second introduction screen")
-        let enableText = NSLocalizedString("Enable Focus", comment: "Label for instructions to enable shown on the second introduction screen")
+        let enableText = String(format: NSLocalizedString("Enable %@", comment: "Label for instructions to enable shown on the second introduction screen"), AppInfo.ProductName)
 
         let settingsInstruction = InstructionView(text: settingsText, image: UIImage(named: "instructions-cog")!)
         let safariInstruction = InstructionView(text: safariText, image: UIImage(named: "instructions-safari")!)
