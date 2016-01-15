@@ -19,6 +19,8 @@
 		D32F71D31BCEF67C006D44FC /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */; };
 		D33A1AB11BC48FAC0003D929 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33A1AB01BC48FAC0003D929 /* MainViewController.swift */; };
 		D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCC41C44356500D7EEE8 /* Localizable.strings */; };
+		D362D2961C49AC1A0041980A /* Focus-enabled-detector.json in Resources */ = {isa = PBXBuildFile; fileRef = D362D2941C49AC1A0041980A /* Focus-enabled-detector.json */; };
+		D362D2971C49AC1A0041980A /* Klar-enabled-detector.json in Resources */ = {isa = PBXBuildFile; fileRef = D362D2951C49AC1A0041980A /* Klar-enabled-detector.json */; };
 		D37DE5451BCDB7EF00906364 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE5441BCDB7EF00906364 /* IntroViewController.swift */; };
 		D37DE5471BCDB80B00906364 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE5461BCDB80B00906364 /* InstructionsView.swift */; };
 		D37DE5491BCDB82B00906364 /* IntroSlideWelcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE5481BCDB82B00906364 /* IntroSlideWelcome.swift */; };
@@ -38,7 +40,6 @@
 		D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */; };
 		D3BFCB5B1BD15CD000AD22D1 /* rights.html in Resources */ = {isa = PBXBuildFile; fileRef = D3BFCB5A1BD15CD000AD22D1 /* rights.html */; };
 		D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */; };
-		D3C0EEFD1BE97F9300BD89C1 /* blocker-enabled-detector.json in Resources */ = {isa = PBXBuildFile; fileRef = D3C0EEFC1BE97F9300BD89C1 /* blocker-enabled-detector.json */; };
 		E43A10781C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E43A10791C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */; };
@@ -101,6 +102,8 @@
 		D33A1AB01BC48FAC0003D929 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		D343DCC31C44356500D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D362D26A1C47326A0041980A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D362D2941C49AC1A0041980A /* Focus-enabled-detector.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Focus-enabled-detector.json"; path = "Lists/Focus-enabled-detector.json"; sourceTree = SOURCE_ROOT; };
+		D362D2951C49AC1A0041980A /* Klar-enabled-detector.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Klar-enabled-detector.json"; path = "Lists/Klar-enabled-detector.json"; sourceTree = SOURCE_ROOT; };
 		D37DE5441BCDB7EF00906364 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		D37DE5461BCDB80B00906364 /* InstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		D37DE5481BCDB82B00906364 /* IntroSlideWelcome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroSlideWelcome.swift; sourceTree = "<group>"; };
@@ -120,7 +123,6 @@
 		D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentViewController.swift; sourceTree = "<group>"; };
 		D3BFCB5A1BD15CD000AD22D1 /* rights.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = rights.html; sourceTree = "<group>"; };
 		D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
-		D3C0EEFC1BE97F9300BD89C1 /* blocker-enabled-detector.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "blocker-enabled-detector.json"; path = "Lists/blocker-enabled-detector.json"; sourceTree = SOURCE_ROOT; };
 		E43A10771C42BBE400FE695B /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Klar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -259,11 +261,12 @@
 			isa = PBXGroup;
 			children = (
 				E4BF2DFB1BACEF1B00DA9D68 /* ContentBlocker.entitlements */,
-				D3C0EEFC1BE97F9300BD89C1 /* blocker-enabled-detector.json */,
 				D328171E1BD0689800185845 /* disconnect-advertising.json */,
 				D328171F1BD0689800185845 /* disconnect-analytics.json */,
 				D32817201BD0689800185845 /* disconnect-content.json */,
 				D32817211BD0689800185845 /* disconnect-social.json */,
+				D362D2941C49AC1A0041980A /* Focus-enabled-detector.json */,
+				D362D2951C49AC1A0041980A /* Klar-enabled-detector.json */,
 				D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */,
 				E4BF2DF21BACE92400DA9D68 /* Info.plist */,
 				E4BF2DF01BACE92400DA9D68 /* ActionRequestHandler.swift */,
@@ -381,9 +384,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3C0EEFD1BE97F9300BD89C1 /* blocker-enabled-detector.json in Resources */,
+				D362D2961C49AC1A0041980A /* Focus-enabled-detector.json in Resources */,
 				D32817251BD0689800185845 /* disconnect-social.json in Resources */,
 				D32817231BD0689800185845 /* disconnect-analytics.json in Resources */,
+				D362D2971C49AC1A0041980A /* Klar-enabled-detector.json in Resources */,
 				D32817221BD0689800185845 /* disconnect-advertising.json in Resources */,
 				D32817241BD0689800185845 /* disconnect-content.json in Resources */,
 				E4BF2E151BAE324400DA9D68 /* LaunchScreen.storyboard in Resources */,

@@ -9,7 +9,7 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
     func beginRequestWithExtensionContext(context: NSExtensionContext) {
         // NSItemProvider apparently doesn't support multiple attachments as a way to load multiple blocking lists.
         // As a workaround, we load each list into memory, then merge them into a single attachment.
-        var mergedList = itemsFromFile("blocker-enabled-detector")
+        var mergedList = itemsFromFile("\(AppInfo.ProductName)-enabled-detector")
 
         if Settings.getBool(Settings.KeyBlockAds) ?? false {
             mergedList.appendContentsOf(itemsFromFile("disconnect-advertising"))
