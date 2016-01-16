@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var rootViewController: UINavigationController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
+    var adjustIntegration: AdjustIntegration?
 
     weak var application: UIApplication?
     var launchOptions: [NSObject: AnyObject]?
@@ -126,6 +127,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let localNotification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
             viewURLInNewTab(localNotification)
         }
+        
+        adjustIntegration = AdjustIntegration(profile: profile)
 
         log.debug("Done with setting up the application.")
         return true
@@ -162,15 +165,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.profile = p
         return p
     }
-
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
         log.debug("Did finish launching.")
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-            AdjustIntegration.sharedInstance.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
-        }
+        
+        log.debug("Setting up Adjust")
+        self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+        
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
 
