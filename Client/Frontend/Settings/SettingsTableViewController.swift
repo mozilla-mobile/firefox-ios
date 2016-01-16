@@ -124,23 +124,27 @@ class BoolSetting: Setting {
     private let prefs: Prefs
     private let defaultValue: Bool
     private let settingDidChange: ((Bool) -> Void)?
-    private let statusText: String?
+    private let statusText: NSAttributedString?
 
-    init(prefs: Prefs, prefKey: String, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    init(prefs: Prefs, prefKey: String, defaultValue: Bool, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         self.prefs = prefs
         self.prefKey = prefKey
         self.defaultValue = defaultValue
         self.settingDidChange = settingDidChange
-        self.statusText = statusText
-        super.init(title: NSAttributedString(string: titleText, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+        self.statusText = attributedStatusText
+        super.init(title: attributedTitleText)
+    }
+
+    convenience init(prefs: Prefs, prefKey: String, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+        var statusTextAttributedString: NSAttributedString?
+        if let statusTextString = statusText {
+            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
+        }
+        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
-        if let text = statusText {
-            return NSAttributedString(string: text, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
-        } else {
-            return nil
-        }
+        return statusText
     }
 
     override func onConfigureCell(cell: UITableViewCell) {
