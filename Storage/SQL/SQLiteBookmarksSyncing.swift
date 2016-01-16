@@ -751,6 +751,12 @@ extension SQLiteBookmarks {
 
 public extension SQLiteBookmarkBufferStorage {
     public func applyBufferCompletionOp(op: BufferCompletionOp) -> Success {
+        log.debug("Marking buffer rows as applied.")
+        if op.isNoOp {
+            log.debug("Nothing to do.")
+            return succeed()
+        }
+
         var queries: [(sql: String, args: Args?)] = []
         op.processedBufferChanges.subsetsOfSize(BrowserDB.MaxVariableNumber).forEach { guids in
             let varlist = BrowserDB.varlist(guids.count)
@@ -765,6 +771,12 @@ public extension SQLiteBookmarkBufferStorage {
 
 extension MergedSQLiteBookmarks {
     public func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, withModifiedTimestamp timestamp: Timestamp) -> Success {
+        log.debug("Applying local op to merged.")
+        if op.isNoOp {
+            log.debug("Nothing to do.")
+            return succeed()
+        }
+
         let deferred = Success()
         var err: NSError?
         self.local.db.transaction(&err) { (conn, inout err: NSError?) in
@@ -790,120 +802,138 @@ extension MergedSQLiteBookmarks {
 
             // TODO: these can be done with a lazy walk, rather than building an array in advance.
 
-            log.debug("Marking \(op.processedLocalChanges) local changes as processed.")
-            op.processedLocalChanges
-              .subsetsOfSize(BrowserDB.MaxVariableNumber)
-              .forEach { guids in
-                guard err == nil else { return }
+            log.debug("Marking \(op.processedLocalChanges.count) local changes as processed.")
+            if !op.processedLocalChanges.isEmpty {
+                op.processedLocalChanges
+                  .subsetsOfSize(BrowserDB.MaxVariableNumber)
+                  .forEach { guids in
+                    guard err == nil else { return }
 
-                let args: Args = Args(arrayLiteral: guids)
-                let varlist = BrowserDB.varlist(guids.count)
+                    if guids.isEmpty {
+                        return
+                    }
 
-                let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(varlist)"
-                if !change(sqlLocalStructure, args: args) {
-                    return
+                    let args: Args = Args(arrayLiteral: guids)
+                    let varlist = BrowserDB.varlist(guids.count)
+
+                    let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(varlist)"
+                    if !change(sqlLocalStructure, args: args) {
+                        return
+                    }
+
+                    let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
+                    if !change(sqlLocal, args: args) {
+                        return
+                    }
+
+                    // If the values change, we'll handle those elsewhere, but at least we need to mark these as non-overridden.
+                    let sqlMirrorOverride = "UPDATE \(TableBookmarksMirror) SET is_overridden = 0 WHERE guid IN \(varlist)"
+                    change(sqlMirrorOverride, args: args)
                 }
 
-                let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
-                if !change(sqlLocal, args: args) {
-                    return
-                }
-
-                // If the values change, we'll handle those elsewhere, but at least we need to mark these as non-overridden.
-                let sqlMirrorOverride = "UPDATE \(TableBookmarksMirror) SET is_overridden = 0 WHERE guid IN \(varlist)"
-                change(sqlMirrorOverride, args: args)
-            }
-
-            if err != nil {
-                return false
-            }
-
-            log.debug("Deleting \(op.mirrorItemsToDelete) mirror items.")
-            op.mirrorItemsToDelete
-              .subsetsOfSize(BrowserDB.MaxVariableNumber)
-              .forEach { guids in
-                guard err == nil else { return }
-
-                let args: Args = Args(arrayLiteral: guids)
-                let varlist = BrowserDB.varlist(guids.count)
-
-                let sqlMirrorStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN \(varlist)"
-                if !change(sqlMirrorStructure, args: args) {
-                    return
-                }
-
-                let sqlMirror = "DELETE FROM \(TableBookmarksMirror) WHERE guid IN \(varlist)"
-                change(sqlMirror, args: args)
-            }
-
-            if err != nil {
-                return false
-            }
-
-            let updateSQL = [
-                "UPDATE \(TableBookmarksMirror) SET",
-                "type = ?, server_modified = ?, is_deleted = ?,",
-                "hasDupe = ?, parentid = ?, parentName = ?,",
-                "feedUri = ?, siteUri = ?, pos = ?, title = ?,",
-                "description = ?, bmkUri = ?, tags = ?, keyword = ?,",
-                "folderName = ?, queryId = ?, is_overridden = 0",
-                "WHERE guid = ?",
-                ].joinWithSeparator(" ")
-
-            op.mirrorItemsToUpdate.forEach { (guid, mirrorItem) in
-                // Break out of the loop if we failed.
-                guard err == nil else { return }
-
-                let args = mirrorItem.getUpdateOrInsertArgs()
-                change(updateSQL, args: args)
-            }
-
-            if err != nil {
-                return false
-            }
-
-            let insertSQL = [
-                "INSERT OR IGNORE INTO \(TableBookmarksMirror) (",
-                "type, server_modified, is_deleted,",
-                "hasDupe, parentid, parentName,",
-                "feedUri, siteUri, pos, title,",
-                "description, bmkUri, tags, keyword,",
-                "folderName, queryId, guid",
-                "VALUES",
-                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                ].joinWithSeparator(" ")
-
-            op.mirrorItemsToInsert.forEach { (guid, mirrorItem) in
-                // Break out of the loop if we failed.
-                guard err == nil else { return }
-
-                let args = mirrorItem.getUpdateOrInsertArgs()
-                change(insertSQL, args: args)
-            }
-
-            if err != nil {
-                return false
-            }
-
-            let structureRows =
-            op.mirrorStructures.flatMap { (parent, children) in
-                return children.enumerate().map { (idx, child) -> Args in
-                    let vals: Args = [parent, child, idx]
-                    return vals
+                if err != nil {
+                    return false
                 }
             }
 
-            let parents = op.mirrorStructures.map { $0.0 }
-            if let e = deleteStructureForGUIDs(parents, fromTable: TableBookmarksMirrorStructure, connection: conn) {
-                err = e
-                deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                return false
+            log.debug("Deleting \(op.mirrorItemsToDelete.count) mirror items.")
+            if !op.mirrorItemsToDelete.isEmpty {
+                op.mirrorItemsToDelete
+                  .subsetsOfSize(BrowserDB.MaxVariableNumber)
+                  .forEach { guids in
+                    guard err == nil else { return }
+
+                    if guids.isEmpty {
+                        return
+                    }
+
+                    let args: Args = Args(arrayLiteral: guids)
+                    let varlist = BrowserDB.varlist(guids.count)
+
+                    let sqlMirrorStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN \(varlist)"
+                    if !change(sqlMirrorStructure, args: args) {
+                        return
+                    }
+
+                    let sqlMirror = "DELETE FROM \(TableBookmarksMirror) WHERE guid IN \(varlist)"
+                    change(sqlMirror, args: args)
+                }
+
+                if err != nil {
+                    return false
+                }
             }
 
-            if let e = insertStructureIntoTable(TableBookmarksMirrorStructure, connection: conn, children: structureRows, maxVars: BrowserDB.MaxVariableNumber) {
-                err = e
-                deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                return false
+            if !op.mirrorItemsToUpdate.isEmpty {
+                let updateSQL = [
+                    "UPDATE \(TableBookmarksMirror) SET",
+                    "type = ?, server_modified = ?, is_deleted = ?,",
+                    "hasDupe = ?, parentid = ?, parentName = ?,",
+                    "feedUri = ?, siteUri = ?, pos = ?, title = ?,",
+                    "description = ?, bmkUri = ?, tags = ?, keyword = ?,",
+                    "folderName = ?, queryId = ?, is_overridden = 0",
+                    "WHERE guid = ?",
+                    ].joinWithSeparator(" ")
+
+                op.mirrorItemsToUpdate.forEach { (guid, mirrorItem) in
+                    // Break out of the loop if we failed.
+                    guard err == nil else { return }
+
+                    let args = mirrorItem.getUpdateOrInsertArgs()
+                    change(updateSQL, args: args)
+                }
+
+                if err != nil {
+                    return false
+                }
+            }
+
+            if !op.mirrorItemsToInsert.isEmpty {
+                let insertSQL = [
+                    "INSERT OR IGNORE INTO \(TableBookmarksMirror) (",
+                    "type, server_modified, is_deleted,",
+                    "hasDupe, parentid, parentName,",
+                    "feedUri, siteUri, pos, title,",
+                    "description, bmkUri, tags, keyword,",
+                    "folderName, queryId, guid",
+                    "VALUES",
+                    "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    ].joinWithSeparator(" ")
+
+                op.mirrorItemsToInsert.forEach { (guid, mirrorItem) in
+                    // Break out of the loop if we failed.
+                    guard err == nil else { return }
+
+                    let args = mirrorItem.getUpdateOrInsertArgs()
+                    change(insertSQL, args: args)
+                }
+
+                if err != nil {
+                    return false
+                }
+            }
+
+            if !op.mirrorStructures.isEmpty {
+                let structureRows =
+                op.mirrorStructures.flatMap { (parent, children) in
+                    return children.enumerate().map { (idx, child) -> Args in
+                        let vals: Args = [parent, child, idx]
+                        return vals
+                    }
+                }
+
+                let parents = op.mirrorStructures.map { $0.0 }
+                if let e = deleteStructureForGUIDs(parents, fromTable: TableBookmarksMirrorStructure, connection: conn) {
+                    err = e
+                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                    return false
+                }
+
+                if let e = insertStructureIntoTable(TableBookmarksMirrorStructure, connection: conn, children: structureRows, maxVars: BrowserDB.MaxVariableNumber) {
+                    err = e
+                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                    return false
+                }
             }
 
             // Commit the result.
