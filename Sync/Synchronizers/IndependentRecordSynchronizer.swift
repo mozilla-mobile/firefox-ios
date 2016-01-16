@@ -62,8 +62,10 @@ public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchroni
 
         return walk(records, f: apply) >>> done
     }
+}
 
-    /*
+extension TimestampedSingleCollectionSynchronizer {
+    /**
      * On each chunk that we upload, we pass along the server modified timestamp to the next,
      * chained through the provided `onUpload` function.
      *

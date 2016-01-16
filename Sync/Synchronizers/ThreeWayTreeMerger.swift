@@ -15,19 +15,6 @@ public protocol BookmarkStorer {
     func applyUpstreamCompletionOp(op: UpstreamCompletionOp) -> Deferred<Maybe<POSTResult>>
 }
 
-class CollectionClientStorer: BookmarkStorer {
-    let client: Sync15CollectionClient<BookmarkBasePayload>
-
-    init(client: Sync15CollectionClient<BookmarkBasePayload>) {
-        self.client = client
-    }
-
-    func applyUpstreamCompletionOp(op: UpstreamCompletionOp) -> Deferred<Maybe<POSTResult>> {
-        return self.client.post(op.records, ifUnmodifiedSince: op.ifUnmodifiedSince)
-          >>== { deferMaybe($0.value) }
-    }
-}
-
 public class UpstreamCompletionOp: PerhapsNoOp {
     public var records: [Record<BookmarkBasePayload>] = []
     public let ifUnmodifiedSince: Timestamp?

@@ -11,6 +11,8 @@ private let log = Logger.syncLogger
 
 // MARK: - External synchronizer interface.
 
+private typealias UploadFunction = ([Record<BookmarkBasePayload>], lastTimestamp: Timestamp, onUpload: (POSTResult) -> DeferredTimestamp) -> DeferredTimestamp
+
 public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "bookmarks")
@@ -18,6 +20,38 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
 
     override var storageVersion: Int {
         return BookmarksStorageVersion
+    }
+
+    private class Storer: BookmarkStorer {
+        let uploader: UploadFunction
+        init(uploader: UploadFunction) {
+            self.uploader = uploader
+        }
+
+        func applyUpstreamCompletionOp(op: UpstreamCompletionOp) -> Deferred<Maybe<POSTResult>> {
+            log.debug("Uploading \(op.records.count) modified records.")
+
+            var modified: Timestamp = 0
+            var success: [GUID] = []
+            var failed: [GUID: [String]] = [:]
+
+            func onUpload(result: POSTResult) -> DeferredTimestamp {
+                modified = result.modified
+                success.appendContentsOf(result.success)
+                result.failed.forEach { guid, strings in
+                    failed[guid] = strings
+                }
+
+                return deferMaybe(result.modified)
+            }
+
+            // Chain the last upload timestamp right into our lastFetched timestamp.
+            // This is what Sync clients tend to do, but we can probably do better.
+            // Upload 50 records at a time.
+            return uploader(op.records, lastTimestamp: op.ifUnmodifiedSince!, onUpload: onUpload)
+                // As if we uploaded everything in one go.
+                >>> { deferMaybe(POSTResult(modified: modified, success: success, failed: failed)) }
+        }
     }
 
     public func synchronizeBookmarksToStorage(storage: SyncableBookmarks, usingBuffer buffer: BookmarkBufferStorage, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
@@ -33,7 +67,10 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
         }
 
         let mirrorer = BookmarksMirrorer(storage: buffer, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks")
-        let storer = CollectionClientStorer(client: bookmarksClient)
+        let storer = Storer(uploader: { records, lastTimestamp, onUpload in
+            return self.uploadRecords(records, by: 50, lastTimestamp: lastTimestamp, storageClient: bookmarksClient, onUpload: onUpload)
+              >>== effect(self.setTimestamp)
+        })
         let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
 
         // TODO: if the mirrorer tells us we're incomplete, then don't bother trying to sync!
