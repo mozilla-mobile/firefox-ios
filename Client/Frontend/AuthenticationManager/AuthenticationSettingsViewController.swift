@@ -4,6 +4,8 @@
 
 import Foundation
 import UIKit
+import Shared
+import SwiftKeychainWrapper
 
 private let ImmediatelyInSeconds: Int32 = 0
 private let OneMinuteInSeconds: Int32 = 1 * 60
@@ -14,6 +16,18 @@ private let OneHourInSeconds: Int32 = 1 * 60 * 60
 
 private let PrefKeyTouchIDEnabled = "authentication.touchIDEnabled"
 private let PrefKeyRequirePasscodeInterval = "authentication.requirePasscodeInterval"
+
+let KeychainKeyPasscode = "AppPasscode"
+
+struct AuthenticationStrings {
+    static let enterPasscode    = NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Title for entering a passcode")
+    static let reenterPasscode  = NSLocalizedString("Re-enter passcode", tableName: "AuthenticationManager", comment: "Title for re-entering a passcode")
+    static let setPasscode      = NSLocalizedString("Set Passcode", tableName: "AuthenticationManager", comment: "Screen title for Set Passcode")
+    static let turnOffPasscode  = NSLocalizedString("Turn Passcode Off", tableName: "AuthenticationManager", comment: "Title for setting to turn off passcode")
+    static let turnOnPasscode   = NSLocalizedString("Turn Passcode On", tableName: "AuthenticationManager", comment: "Title for setting to turn on passcode")
+    static let changePasscode   = NSLocalizedString("Change Passcode", tableName: "AuthenticationManager", comment: "Title for screen when changing your passcode")
+    static let enterNewPasscode = NSLocalizedString("Enter a new passcode", tableName: "AuthenticationManager", comment: "Title for screen when updating your existin passcode")
+}
 
 private extension NSAttributedString {
     static func rowTitle(string: String) -> NSAttributedString {
@@ -27,39 +41,49 @@ private extension NSAttributedString {
 
 class TurnPasscodeOnSetting: Setting {
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
-        let title = NSLocalizedString("Turn Passcode On", tableName: "AuthenticationManager", comment: "Title for setting to turn on passcode")
-        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
+        super.init(title: NSAttributedString(string: AuthenticationStrings.turnOnPasscode, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
                    delegate: delegate)
     }
 
     override func onClick(navigationController: UINavigationController?) {
         // Navigate to passcode configuration screen
+        let passcodeVC = PasscodeConfirmViewController.newPasscodeVC()
+        passcodeVC.title = AuthenticationStrings.setPasscode
+        let passcodeNav = UINavigationController(rootViewController: passcodeVC)
+        navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
     }
 }
 
 class TurnPasscodeOffSetting: Setting {
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
-        let title = NSLocalizedString("Turn Passcode Off", tableName: "AuthenticationManager", comment: "Title for setting to turn off passcode")
-        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
+        super.init(title: NSAttributedString(string: AuthenticationStrings.turnOffPasscode, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
                    delegate: delegate)
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        // Navigate to passcode configuration screen
+        let passcodeVC = PasscodeConfirmViewController.removePasscodeVC()
+        passcodeVC.title = AuthenticationStrings.turnOffPasscode
+        let passcodeNav = UINavigationController(rootViewController: passcodeVC)
+        navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
     }
 }
 
 class ChangePasscodeSetting: Setting {
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool) {
-        let title = NSLocalizedString("Change Passcode", tableName: "AuthenticationManager", comment: "Title for setting to change passcode")
-        let attributedTitle = (enabled ?? true) ? NSAttributedString.rowTitle(title) : NSAttributedString.disabledRowTitle(title)
+        let attributedTitle: NSAttributedString = (enabled ?? false) ?
+            NSAttributedString.rowTitle(AuthenticationStrings.changePasscode) :
+            NSAttributedString.disabledRowTitle(AuthenticationStrings.changePasscode)
+
         super.init(title: attributedTitle,
                    delegate: delegate,
                    enabled: enabled)
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        // Navigate to passcode configuration screen
+        let passcodeVC = PasscodeConfirmViewController.changePasscodeVC()
+        passcodeVC.title = AuthenticationStrings.changePasscode
+        let passcodeNav = UINavigationController(rootViewController: passcodeVC)
+        navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
     }
 }
 
@@ -104,11 +128,20 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Title for Touch ID/Passcode settings option")
+
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: Selector("passcodeStateChanged:"), name: NotificationPasscodeDidRemove, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("passcodeStateChanged:"), name: NotificationPasscodeDidCreate, object: nil)
+    }
+
+    deinit {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.removeObserver(self, name: NotificationPasscodeDidRemove, object: nil)
+        notificationCenter.removeObserver(self, name: NotificationPasscodeDidCreate, object: nil)
     }
 
     override func generateSettings() -> [SettingSection] {
-
-        if true {
+        if let _ = KeychainWrapper.stringForKey(KeychainKeyPasscode) {
             return passcodeEnabledSettings()
         } else {
             return passcodeDisabledSettings()
@@ -151,9 +184,8 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
             ChangePasscodeSetting(settings: self, delegate: nil, enabled: false)
         ])
 
-        let prefs = profile.prefs
         let requirePasscodeSection = SettingSection(title: nil, children: [
-            RequirePasscodeSetting(settings: self, delegate: nil, requireInterval: prefs.intForKey(PrefKeyRequirePasscodeInterval), enabled: false),
+            RequirePasscodeSetting(settings: self, delegate: nil, requireInterval: profile.prefs.intForKey(PrefKeyRequirePasscodeInterval), enabled: false),
         ])
 
         settings += [
@@ -162,5 +194,12 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         ]
 
         return settings
+    }
+}
+
+extension AuthenticationSettingsViewController {
+    func passcodeStateChanged(notification: NSNotification) {
+        generateSettings()
+        tableView.reloadData()
     }
 }
