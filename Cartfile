@@ -10,7 +10,7 @@ github "SnapKit/SnapKit"            "0.18.0"
 github "st3fan/SQLite.swift"        "swift-2"
 github "CEWendel/SWTableViewCell"                      # Implicit: latest tag.
 github "st3fan/SWXMLHash"           "xcode-7.0"        # So we get Swift 2.0 fixes.
-github "DaveWoodCom/XCGLogger"      "swift_2.0"        # Previously: swift_1.2
+github "DaveWoodCom/XCGLogger"      "Version_3.2"
 github "sleroux/google-breakpad-ios" "master"
 github "adjust/ios_sdk"             "v4.3.0"
 github "AgileBits/onepassword-extension" "add-framework-support"
