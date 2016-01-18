@@ -4,6 +4,7 @@
 
 import Foundation
 import XCGLogger
+import SwiftKeychainWrapper
 
 private let log = Logger.keychainLogger
 
