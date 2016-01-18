@@ -40,9 +40,9 @@ public struct AppConstants {
     /// Enables/disables the Login manager UI by hiding the 'Logins' setting item.
     public static let MOZ_LOGIN_MANAGER: Bool = {
 #if MOZ_CHANNEL_AURORA
-    return false
+    return true
 #elseif MOZ_CHANNEL_RELEASE
-    return false
+    return true
 #else
     return true
 #endif
