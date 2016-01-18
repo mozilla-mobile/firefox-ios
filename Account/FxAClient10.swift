@@ -6,6 +6,7 @@ import Alamofire
 import Shared
 import Foundation
 import FxA
+import Deferred
 
 public let FxAClientErrorDomain = "org.mozilla.fxa.error"
 public let FxAClientUnknownError = NSError(domain: FxAClientErrorDomain, code: 999,

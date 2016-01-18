@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Deferred
 
 public protocol TabQueue {
     func addToQueue(tab: ShareItem) -> Success

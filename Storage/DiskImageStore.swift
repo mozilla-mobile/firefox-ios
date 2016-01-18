@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import UIKit
+import Deferred
 
 private class DiskImageStoreErrorType: MaybeErrorType {
     let description: String

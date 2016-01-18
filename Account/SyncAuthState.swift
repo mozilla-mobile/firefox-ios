@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import XCGLogger
+import Deferred
 
 private let CurrentSyncAuthStateCacheVersion = 1
 
