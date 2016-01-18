@@ -7,9 +7,6 @@
 #import "FSReadingList.h"
 #import "Try.h"
 
-#import "GCDWebServer.h"
-#import "GCDWebServerDataRequest.h"
-#import "GCDWebServerDataResponse.h"
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
 #import "ThirdParty/Apple/UIImage+ImageEffects.h"
 #import "ThirdParty/SWTableViewCell/PodFiles/SWTableViewCell.h"

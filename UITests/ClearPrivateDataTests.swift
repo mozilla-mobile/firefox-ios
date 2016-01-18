@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import WebKit
 import UIKit
+import GCDWebServers
 
 // Needs to be in sync with Client Clearables.
 private enum Clearable: String {
