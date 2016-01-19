@@ -182,6 +182,9 @@ class ThreeWayTreeMerger {
 
     // Sets computed by looking at the three trees. These are used for diagnostics,
     // to simplify operations, and for testing.
+
+    // We won't get here unless every local and remote orphan is correctly rooted
+    // when overlaid on the mirror, so we don't need to exclude here.
     let mirrorAllGUIDs: Set<GUID>          // Excluding deletions.
     let localAllGUIDs: Set<GUID>           // Excluding deletions.
     let remoteAllGUIDs: Set<GUID>          // Excluding deletions.
@@ -196,7 +199,11 @@ class ThreeWayTreeMerger {
     // course to flatten a recursive tree walk into iteration.
     var conflictValueQueue: [GUID] = []
     var remoteValueQueue: [GUID] = []                 // Need value reconciling.
+    var localValueQueue: [GUID] = []                  // Need value reconciling.
     var remoteQueue: [BookmarkTreeNode] = []          // Structure to walk.
+    var localQueue: [BookmarkTreeNode] = []           // Structure to walk.
+
+    var localNodesProcessed: Set<GUID> = Set()        // Things we already touched when walking the remote tree.
 
     // Here's where we collect our results.
     // Note that to construct the records to push upstream we need to have
@@ -222,6 +229,22 @@ class ThreeWayTreeMerger {
         self.conflictingGUIDs = localAllGUIDs.intersect(remoteAllGUIDs)
     }
 
+    func processLocalNode(node: BookmarkTreeNode) throws {
+        switch node {
+        case let .Folder(guid, remoteChildren):
+            // Folder: children changed and/or the folder's value changed.
+            try self.processLocalFolderWithGUID(guid, children: remoteChildren)
+        case let .NonFolder(guid):
+            // Value change or parent change.
+            localValueQueue.append(guid)
+        case .Unknown:
+            // Placeholder. Nothing to do: it hasn't changed.
+            // We should never get here.
+            log.warning("Structurally processing an Unknown buffer node. We should never get here!")
+            break
+        }
+    }
+
     func processRemoteNode(node: BookmarkTreeNode) throws {
         switch node {
         case let .Folder(guid, remoteChildren):
@@ -235,6 +258,34 @@ class ThreeWayTreeMerger {
             // We should never get here.
             log.warning("Structurally processing an Unknown buffer node. We should never get here!")
             break
+        }
+    }
+
+    func processLocalFolderWithGUID(guid: GUID, children: [BookmarkTreeNode]) throws {
+        // Find the mirror node from which we descend, and find any corresponding local change.
+        // Search by GUID only, because (a) the mirror is a GUID match by definition, and (b)
+        // we only do content-based matches for nodes where we categorically know their parent
+        // folder, and when the node is new (i.e., no mirror match), so we do it when processing a folder.
+        if let mirrored = self.mirror.find(guid) {
+            // This is a change from a known mirror node.
+            guard case let .Folder(_, originalChildren) = mirrored else {
+                // It's not a folder! Uh oh!
+                log.error("Unable to process change of \(guid) from non-folder to folder.")
+                throw BookmarksMergeConsistencyError()
+            }
+
+            if self.localNodesProcessed.contains(guid) {
+                // Just queue the children.
+                // TODO
+                return
+            }
+
+            // TODO:
+            //try self.processKnownLocalFolderWithGUID(guid, children: children, originalChildren: originalChildren)
+        } else {
+            // No mirror node. It must be a local addition.
+            // TODO
+            //try self.processPotentiallyNewRemoteFolderWithGUID(guid, children: children)
         }
     }
 
@@ -297,6 +348,8 @@ class ThreeWayTreeMerger {
 
     // Only call this if you know the lists differ.
     func processKnownChangedLocalFolderWithGUID(guid: GUID, originalChildren: [BookmarkTreeNode], localChildren: [BookmarkTreeNode]) throws {
+        self.localNodesProcessed.insert(guid)
+        // TODO
 
     }
 
@@ -336,6 +389,7 @@ class ThreeWayTreeMerger {
     }
 
     func processKnownLocalFolderWithGUID(guid: GUID, originalChildren: [BookmarkTreeNode], localChildren: [BookmarkTreeNode]) throws {
+        self.localNodesProcessed.insert(guid)
         // TODO
                 // TODO: for each child, check whether it's an addition, removal, rearrangement, or move.
                 // Look in other trees to check for the other part of these operations.
@@ -383,6 +437,7 @@ class ThreeWayTreeMerger {
         if localUnchanged {
             log.debug("Remote folder changed structure for \(guid).")
             try self.processKnownChangedRemoteFolderWithGUID(guid, children: remoteChildren, originalChildren: originalChildren)
+            self.localNodesProcessed.insert(guid)
             return
         }
 
@@ -390,6 +445,7 @@ class ThreeWayTreeMerger {
         log.debug("Structural conflict for \(guid).")
 
         // TODO
+        self.localNodesProcessed.insert(guid)
     }
 
     func merge() -> Deferred<Maybe<BookmarksMergeResult>> {
@@ -434,17 +490,46 @@ class ThreeWayTreeMerger {
         }
 
         do {
-            repeat {} while try self.step()
+            repeat {} while try self.stepRemote()
         } catch {
-            log.warning("Caught error \(error) while processing queue. \(self.remoteQueue.count) remaining items.")
+            log.warning("Caught error \(error) while processing remote queue. \(self.remoteQueue.count) remaining items.")
             return deferMaybe(error as? MaybeErrorType ?? BookmarksMergeError())
         }
 
-        // TODO: process local subtrees, skipping nodes that were already picked up and processed while
+        // Process local subtrees, skipping nodes that were already picked up and processed while
         // walking the buffer.
+        self.local.subtrees.forEach { subtree in
+            if subtree.recordGUID == BookmarkRoots.RootGUID {
+                if case let .Folder(_, roots) = subtree {
+                    self.localQueue.appendContentsOf(roots.reverse())
+                } else {
+                    log.error("Root wasn't a folder!")
+                }
+            } else {
+                self.localQueue.append(subtree)
+            }
+        }
+
+        do {
+            repeat {} while try self.stepLocal()
+        } catch {
+            log.warning("Caught error \(error) while processing local queue. \(self.localQueue.count) remaining items.")
+            return deferMaybe(error as? MaybeErrorType ?? BookmarksMergeError())
+        }
 
         // TODO: process deletions and orphans for each side -- they won't necessarily have been
         // present in the structure walks. Dump these into the value queue?
+        // TODO: process the value queue.
+
+        self.conflictValueQueue.forEach { guid in
+            log.debug("Processing conflicting changed value entry: \(guid).")
+        }
+        self.remoteValueQueue.forEach { guid in
+            log.debug("Processing possibly changed remote value entry: \(guid).")
+        }
+        self.localValueQueue.forEach { guid in
+            log.debug("Processing possibly changed local value entry: \(guid).")
+        }
 
         return deferMaybe(BookmarksMergeResult(uploadCompletion: self.upstreamOp, overrideCompletion: self.localOp, bufferCompletion: self.bufferOp))
     }
@@ -452,12 +537,24 @@ class ThreeWayTreeMerger {
     /**
      * Returns true if work was done.
      */
-    func step() throws -> Bool {
+    func stepRemote() throws -> Bool {
         guard let item = self.remoteQueue.popLast() else {
             log.debug("No more items.")
             return false
         }
         try self.processRemoteNode(item)
+        return true
+    }
+
+    /**
+     * Returns true if work was done.
+     */
+    func stepLocal() throws -> Bool {
+        guard let item = self.localQueue.popLast() else {
+            log.debug("No more items.")
+            return false
+        }
+        try self.processLocalNode(item)
         return true
     }
 }
