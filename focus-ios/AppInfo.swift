@@ -38,4 +38,8 @@ public class AppInfo {
     public static var ProductName: String {
         return NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String
     }
+
+    public static var LanguageCode: String {
+        return NSBundle.mainBundle().preferredLocalizations.first!
+    }
 }

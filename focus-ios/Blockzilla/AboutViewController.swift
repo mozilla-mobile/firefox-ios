@@ -14,6 +14,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     private let tableView = UITableView()
     private let headerView = AboutHeaderView()
+    private let supportPath = (AppInfo.ProductName == "Focus") ? "en-US/kb/focus" : "products/klar"
 
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.Colors.Background
@@ -134,11 +135,11 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             delegate?.aboutViewControllerDidPressIntro(self)
         case 2:
             let contentViewController = AboutContentViewController()
-            contentViewController.url = NSURL(string: "https://support.mozilla.org/products/klar")
+            contentViewController.url = NSURL(string: "https://support.mozilla.org/\(supportPath)")
             navigationController?.pushViewController(contentViewController, animated: true)
         case 3:
             let contentViewController = AboutContentViewController()
-            contentViewController.url = LocalWebServer.sharedInstance.URLForPath("/rights.html")
+            contentViewController.url = LocalWebServer.sharedInstance.URLForPath("/rights-\(AppInfo.ProductName).html")
             navigationController?.pushViewController(contentViewController, animated: true)
         default:
             break
@@ -153,7 +154,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     private func aboutHeaderViewDidPressReadMore(aboutHeaderView: AboutHeaderView) {
         let contentViewController = AboutContentViewController()
-        contentViewController.url = NSURL(string: "https://www.mozilla.org/de/about/manifesto/")
+        contentViewController.url = NSURL(string: "https://www.mozilla.org/\(AppInfo.LanguageCode)/about/manifesto/")
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 }
