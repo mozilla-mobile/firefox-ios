@@ -103,8 +103,13 @@ extension KIFUITestActor {
      * elements with the given textContent or title.
      */
     func waitForWebViewElementWithAccessibilityLabel(text: String) {
-        let success = hasWebViewElementWithAccessibilityLabel(text)
-        XCTAssert(success, "Found accessibility label in webview: \(text)")
+        runBlock { error in
+            if (self.hasWebViewElementWithAccessibilityLabel(text)) {
+                return KIFTestStepResult.Success
+            }
+
+            return KIFTestStepResult.Wait
+        }
     }
 
     /**
