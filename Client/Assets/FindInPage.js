@@ -8,6 +8,8 @@
 var DEBUG_ENABLED = false;
 var MATCH_HIGHLIGHT_ACTIVE = "#f19750";
 var MATCH_HIGHLIGHT_INACTIVE = "#ffde49";
+var SCROLL_INTERVAL_INCREMENT = 5;
+var SCROLL_INTERVAL_DURATION = 400;
 
 // window.find() sometimes gets stuck on a result, causing an infinite loop
 // when we try to search (e.g., Yahoo search result pages).
@@ -16,6 +18,7 @@ var MAX_FAILURES = 100;
 
 var activeHighlightSpan = null;
 var lastSearch;
+var scrollInterval;
 var activeIndex = 0;
 var highlightSpans = [];
 
@@ -162,8 +165,28 @@ function updateHighlightedSpan() {
   var left = rect.left + scrollX - window.innerWidth / 2;
   left = clamp(left, 0, document.body.scrollWidth);
   top = clamp(top, 0, document.body.scrollHeight);
-  window.scrollTo(left, top);
+  scrollToSelection(left, top, SCROLL_INTERVAL_DURATION);
   debug("Scrolled to: " + left + ", " + top);
+}
+
+function scrollToSelection(left, top, duration) {
+  var time = 0;
+  var startX = scrollX;
+  var startY = scrollY;
+  clearInterval(scrollInterval);
+  scrollInterval = setInterval(function() {
+    var xStep = easeOutCubic(time, startX, left - startX, duration);
+    var yStep = easeOutCubic(time, startY, top - startY, duration);
+    window.scrollTo(xStep, yStep);
+    time += SCROLL_INTERVAL_INCREMENT;
+    if (time >= duration) {
+      clearInterval(scrollInterval);
+    }                 
+  }, SCROLL_INTERVAL_INCREMENT);
+}
+
+function easeOutCubic(currentTime, startValue, changeInValue, duration) {
+  return changeInValue * (Math.pow(currentTime / duration - 1, 3) + 1) + startValue;
 }
 
 function clamp(number, min, max) {
