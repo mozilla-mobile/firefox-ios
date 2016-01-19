@@ -219,6 +219,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return false
     }
 
+    func application(application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: String) -> Bool {
+        return extensionPointIdentifier != UIApplicationKeyboardExtensionPointIdentifier
+    }
+
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(application: UIApplication) {
