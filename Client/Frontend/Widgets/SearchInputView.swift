@@ -63,7 +63,8 @@ class SearchInputView: UIView {
         let button = UIButton()
         button.addTarget(self, action: "SELtappedClose", forControlEvents: .TouchUpInside)
         button.setImage(UIImage(named: "clear"), forState: .Normal)
-        button.accessibilityLabel = NSLocalizedString("Clear Search", tableName: "LoginManager", comment: "Clears the search input field and exits out of input mode")
+        button.accessibilityLabel = NSLocalizedString("Clear Search", tableName: "LoginManager",
+            comment: "Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode")
         return button
     }()
 
