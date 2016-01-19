@@ -98,7 +98,7 @@ class MergeApplier {
         self.greenLight = greenLight
         self.buffer = buffer
         self.storage = storage
-        self.merger = NoOpBookmarksMerger(buffer: buffer, storage: storage)
+        self.merger = ThreeWayBookmarksStorageMerger(buffer: buffer, storage: storage)
         self.client = client
     }
 
