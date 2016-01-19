@@ -138,7 +138,7 @@ public func walk<T, U>(items: [T], start: Deferred<Maybe<U>>, f: (T, U) -> Defer
 extension Array where Element: Success {
     public func allSucceed() -> Success {
         return all(self).bind { results -> Success in
-            if let failure = find(results, f: { $0.isFailure }) {
+            if let failure = results.find({ $0.isFailure }) {
                 return deferMaybe(failure.failureValue!)
             }
 

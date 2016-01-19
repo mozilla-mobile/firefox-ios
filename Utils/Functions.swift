@@ -168,19 +168,6 @@ public func mapValues<K, T, U>(source: [K: T], f: (T -> U)) -> [K: U] {
     return m
 }
 
-/**
- * Find the first matching item in the array and return it.
- * Unlike map/filter approaches, this is lazy.
- */
-public func find<T>(arr: [T], f: T -> Bool) -> T? {
-    for x in arr {
-        if f(x) {
-            return x
-        }
-    }
-    return nil
-}
-
 public func findOneValue<K, V>(map: [K: V], f: V -> Bool) -> V? {
     for v in map.values {
         if f(v) {

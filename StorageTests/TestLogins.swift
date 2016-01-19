@@ -122,8 +122,8 @@ class TestSQLiteLogins: XCTestCase {
         func checkSearchHostnames() -> Success {
             return logins.searchLoginsWithQuery("pha") >>== { results in
                 XCTAssertEqual(results.count, 2)
-                XCTAssertEqual(results[0]!.hostname, "alpha.com")
-                XCTAssertEqual(results[1]!.hostname, "alphabet.com")
+                XCTAssertEqual(results[0]!.hostname, "http://alpha.com")
+                XCTAssertEqual(results[1]!.hostname, "http://alphabet.com")
                 return succeed()
             }
         }

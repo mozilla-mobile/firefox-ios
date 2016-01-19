@@ -105,6 +105,9 @@ public protocol LoginData: class {
     var usernameField: String? { get set }
     var passwordField: String? { get set }
 
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1238103
+    var hasMalformedHostname: Bool { get set }
+
     func toDict() -> [String: String]
 
     func isSignificantlyDifferentFrom(login: LoginData) -> Bool
@@ -123,7 +126,15 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
     public let credentials: NSURLCredential
     public let protectionSpace: NSURLProtectionSpace
 
-    public var hostname: String { return protectionSpace.host }
+    public var hostname: String {
+        if let _ = protectionSpace.`protocol` {
+            return protectionSpace.urlString()
+        }
+        return protectionSpace.host
+    }
+
+    public var hasMalformedHostname: Bool = false
+
     public var username: String? { return credentials.user }
     public var password: String { return credentials.password! }
     public var usernameField: String? = nil
@@ -189,7 +200,19 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
     public init(guid: String, hostname: String, username: String, password: String) {
         self.guid = guid
         self.credentials = NSURLCredential(user: username, password: password, persistence: NSURLCredentialPersistence.None)
-        self.protectionSpace = NSURLProtectionSpace(host: hostname, port: 0, `protocol`: nil, realm: nil, authenticationMethod: nil)
+
+        // Break down the full url hostname into its scheme/protocol and host components
+        let hostnameURL = hostname.asURL
+        let host = hostnameURL?.host ?? hostname
+        let scheme = hostnameURL?.scheme ?? ""
+
+        // We should ignore any SSL or normal web ports in the URL.
+        var port = hostnameURL?.port?.integerValue ?? 0
+        if port == 443 || port == 80 {
+            port = 0
+        }
+
+        self.protectionSpace = NSURLProtectionSpace(host: host, port: port, `protocol`: scheme, realm: nil, authenticationMethod: nil)
     }
 
     convenience init(hostname: String, username: String, password: String) {
