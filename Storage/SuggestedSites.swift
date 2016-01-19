@@ -26,13 +26,13 @@ public class SuggestedSite: Site {
     }
 }
 
-public let SuggestedSites: SuggestedSitesCursor = SuggestedSitesCursor()
+public let SuggestedSites: SuggestedSitesCursor = SuggestedSitesCursor(isShow: true)
 
 public class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
-    private init() {
+    public init(isShow: Bool) {
         let locale = NSLocale.currentLocale()
-        let sites = DefaultSuggestedSites.sites[locale.localeIdentifier] ??
-                    DefaultSuggestedSites.sites["default"]! as Array<SuggestedSiteData>
+        let sites = (isShow == true ? DefaultSuggestedSites.sites[locale.localeIdentifier] ??
+            DefaultSuggestedSites.sites["default"] : [])! as Array<SuggestedSiteData>
         let tiles = sites.map({data in SuggestedSite(data: data)})
         super.init(data: tiles, status: .Success, statusMessage: "Loaded")
     }
