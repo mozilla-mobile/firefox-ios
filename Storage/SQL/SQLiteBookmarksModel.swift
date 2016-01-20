@@ -453,6 +453,7 @@ class BookmarkFactory {
         return itemFactory(row)     // This will fail, but it keeps the compiler happy.
     }
 
+    // N.B., doesn't include children!
     class func mirrorItemFactory(row: SDRow) -> BookmarkMirrorItem {
         // TODO
         // let id = row["id"] as! Int
@@ -473,12 +474,11 @@ class BookmarkFactory {
         let folderName = row["folderName"] as? String
         let queryId = row["queryId"] as? String
 
-        // TODO
-        //let faviconID = row["faviconID"] as? Int
+        // Local and mirror only.
+        let faviconID = row["faviconID"] as? Int
 
-        // Local only. TODO
-        //let local_modified = row.getTimestamp("local_modified")
-        //let sync_status = row["sync_status"] as? Int
+        // Local only.
+        let local_modified = row.getTimestamp("local_modified")
 
         // Mirror and buffer.
         let server_modified = row.getTimestamp("server_modified")
@@ -490,6 +490,14 @@ class BookmarkFactory {
         // Use the struct initializer directly. Yes, this doesn't validate as strongly as
         // using the static constructors, but it'll be as valid as the contents of the DB.
         let type = BookmarkNodeType(rawValue: typeCode)!
+
+        // This one might really be missing (it's local-only), so do this the hard way.
+        let syncStatus: SyncStatus?
+        if let s = row["sync_status"] as? Int {
+            syncStatus = SyncStatus(rawValue: s)
+        } else {
+            syncStatus = nil
+        }
         let item = BookmarkMirrorItem(guid: guid, type: type, serverModified: server_modified ?? 0,
                                       isDeleted: is_deleted, hasDupe: hasDupe, parentID: parentid, parentName: parentname,
                                       feedURI: feedUri, siteURI: siteUri,
@@ -497,7 +505,9 @@ class BookmarkFactory {
                                       title: title, description: description,
                                       bookmarkURI: bmkUri, tags: tags, keyword: keyword,
                                       folderName: folderName, queryID: queryId,
-                                      children: nil)
+                                      children: nil,
+                                      faviconID: faviconID, localModified: local_modified,
+                                      syncStatus: syncStatus)
         return item
     }
 }

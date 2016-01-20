@@ -200,6 +200,11 @@ public struct BookmarkMirrorItem {
     // Folders.
     let children: [GUID]?
 
+    // Internal stuff.
+    let faviconID: Int?
+    let localModified: Timestamp?
+    let syncStatus: SyncStatus?
+
     // The places root is a folder but has no parentName.
     public static func folder(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String, description: String?, children: [GUID]) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
@@ -212,7 +217,8 @@ public struct BookmarkMirrorItem {
             title: title, description: description,
             bookmarkURI: nil, tags: nil, keyword: nil,
             folderName: nil, queryID: nil,
-            children: children)
+            children: children,
+            faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
     public static func livemark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String?, description: String?, feedURI: String, siteURI: String) -> BookmarkMirrorItem {
@@ -226,7 +232,8 @@ public struct BookmarkMirrorItem {
             title: title, description: description,
             bookmarkURI: nil, tags: nil, keyword: nil,
             folderName: nil, queryID: nil,
-            children: nil)
+            children: nil,
+            faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
     public static func separator(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, pos: Int) -> BookmarkMirrorItem {
@@ -240,7 +247,8 @@ public struct BookmarkMirrorItem {
             title: nil, description: nil,
             bookmarkURI: nil, tags: nil, keyword: nil,
             folderName: nil, queryID: nil,
-            children: nil)
+            children: nil,
+            faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
     public static func bookmark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?) -> BookmarkMirrorItem {
@@ -254,7 +262,8 @@ public struct BookmarkMirrorItem {
             title: title, description: description,
             bookmarkURI: URI, tags: tags, keyword: keyword,
             folderName: nil, queryID: nil,
-            children: nil)
+            children: nil,
+            faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
     public static func query(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?, folderName: String?, queryID: String?) -> BookmarkMirrorItem {
@@ -268,7 +277,8 @@ public struct BookmarkMirrorItem {
             title: title, description: description,
             bookmarkURI: URI, tags: tags, keyword: keyword,
             folderName: folderName, queryID: queryID,
-            children: nil)
+            children: nil,
+            faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
     public static func deleted(type: BookmarkNodeType, guid: GUID, modified: Timestamp) -> BookmarkMirrorItem {
@@ -281,7 +291,8 @@ public struct BookmarkMirrorItem {
             title: nil, description: nil,
             bookmarkURI: nil, tags: nil, keyword: nil,
             folderName: nil, queryID: nil,
-            children: nil)
+            children: nil,
+            faviconID: nil, localModified: nil, syncStatus: nil)
     }
 }
 
