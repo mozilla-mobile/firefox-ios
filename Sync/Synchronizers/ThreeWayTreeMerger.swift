@@ -433,6 +433,11 @@ class ThreeWayTreeMerger {
         let filteredGUIDs = filtered.map { $0.recordGUID }
         log.debug("Folder \(guid) being recorded with children \(filteredGUIDs.joinWithSeparator(", "))")
         self.localOp.mirrorStructures[guid] = filteredGUIDs
+        if filteredGUIDs.count != childGUIDs.count {
+            // We changed the list. We need to upload a new record.
+            log.debug("Queueing replacement server record for \(guid).")
+            self.upstreamOp.amendChildrenFromBuffer[guid] = filteredGUIDs
+        }
     }
 
     func processPotentiallyNewRemoteFolderWithGUID(guid: GUID, children: [BookmarkTreeNode]) throws {
