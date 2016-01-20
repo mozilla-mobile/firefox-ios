@@ -307,6 +307,22 @@ public enum BookmarkTreeNode {
     public var isRoot: Bool {
         return BookmarkRoots.All.contains(self.recordGUID)
     }
+
+    public func hasChildList(nodes: [BookmarkTreeNode]) -> Bool {
+        if case let .Folder(_, ours) = self {
+            return ours.elementsEqual(nodes, isEquivalent: { $0.recordGUID == $1.recordGUID })
+        }
+        return false
+    }
+
+    public func hasSameChildListAs(other: BookmarkTreeNode) -> Bool {
+        if case let .Folder(_, ours) = self {
+            if case let .Folder(_, theirs) = other {
+                return ours.elementsEqual(theirs, isEquivalent: { $0.recordGUID == $1.recordGUID })
+            }
+        }
+        return false
+    }
 }
 
 typealias StructureRow = (parent: GUID, child: GUID, type: BookmarkNodeType?)
