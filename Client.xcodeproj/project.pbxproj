@@ -89,6 +89,7 @@
 		28532BE91C471FFB000072D9 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBABAE1AB3659000DB5728 /* ResultTests.swift */; };
 		28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28786E541AB0F5FA009EA9EF /* DeferredTests.swift */; };
 		28532BEB1C472015000072D9 /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */; };
+		28532CC11C473977000072D9 /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* MockFiles.swift */; };
 		2853C5411AD84C6800C4F31D /* TabsPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2853C5401AD84C6800C4F31D /* TabsPayload.swift */; };
 		2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */; };
 		285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077971A3B064000834FE5 /* CryptoTests.swift */; };
@@ -4621,6 +4622,7 @@
 				2F3724C61ABF3C01007607FA /* LiveStorageClientTests.swift in Sources */,
 				28ECD9A51BA1EF3D00D829DA /* GCDWebServerFunctions.m in Sources */,
 				28ECD9A81BA1EF5100D829DA /* GCDWebServerDataRequest.m in Sources */,
+				28532CC11C473977000072D9 /* MockFiles.swift in Sources */,
 				28ECD9AC1BA1EF5100D829DA /* GCDWebServerDataResponse.m in Sources */,
 				28ECD9AE1BA1EF5100D829DA /* GCDWebServerFileResponse.m in Sources */,
 				2F8C76571BC32F3C00D5E4E0 /* MockSyncServerTests.swift in Sources */,
