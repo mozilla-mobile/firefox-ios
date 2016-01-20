@@ -187,7 +187,7 @@ class NoOpBookmarksMerger: BookmarksStorageMerger {
     }
 }
 
-class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
+class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger, MirrorItemSource {
     let buffer: BookmarkBufferStorage
     let storage: SyncableBookmarks
 
@@ -195,6 +195,18 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
         self.buffer = buffer
         self.storage = storage
     }
+
+    // MARK: - MirrorItemSource.
+
+    func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+        return self.buffer.getBufferItemWithGUID(guid)
+    }
+
+    func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.buffer.getBufferItemsWithGUIDs(guids)
+    }
+
+    // MARK: - BookmarksStorageMerger.
 
     // Trivial one-way sync.
     private func applyLocalDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
@@ -254,7 +266,7 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
             return self.storage.treeForMirror() >>== { mirror in
                 // At this point we know that there have been changes both locally and remotely.
                 // (Or, in the general case, changes either locally or remotely.)
-                let merger = ThreeWayTreeMerger(local: local, mirror: mirror, remote: buffer)
+                let merger = ThreeWayTreeMerger(local: local, mirror: mirror, remote: buffer, itemSource: self)
                 return merger.merge()
             }
         }

@@ -179,11 +179,22 @@ protocol MirrorItemSource {
  * Match, conflict? Resolve. Might involve moves from other matches!
  * No match in the mirror? Check for content match with the same parent, any position.
  * Still no match? Add.
+ *
+ * Note that these trees don't include values. This is because we usually don't need them:
+ * if there are no conflicts, or no shared parents, we can do everything we need to do
+ * at this stage simply with structure and GUIDs, and then flush rows straight from the
+ * buffer into the mirror with a single SQL INSERT. We do need to fetch values later
+ * in some cases: to amend child lists or otherwise construct outbound records. We do
+ * need to fetch values immediately in other cases: in order to reconcile conflicts.
+ * Those should ordinarily be uncommon, and because we know most of the conflicting
+ * GUIDs up-front, we can prime a cache of records.
  */
 class ThreeWayTreeMerger {
     let local: BookmarkTree
     let mirror: BookmarkTree
     let remote: BookmarkTree
+
+    let itemSource: MirrorItemSource
 
     // Sets computed by looking at the three trees. These are used for diagnostics,
     // to simplify operations, and for testing.
@@ -220,10 +231,11 @@ class ThreeWayTreeMerger {
     var bufferOp = BufferCompletionOp()
     var localOp = LocalOverrideCompletionOp()
 
-    init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree) {
+    init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree, itemSource: MirrorItemSource) {
         self.local = local
         self.mirror = mirror
         self.remote = remote
+        self.itemSource = itemSource
 
         // We won't get here unless every local and remote orphan is correctly rooted
         // when overlaid on the mirror, so we don't need to exclude orphans here.
