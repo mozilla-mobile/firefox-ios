@@ -16,6 +16,7 @@ public enum NSFileManagerExtensionsErrorCodes: Int {
 }
 
 public extension NSFileManager {
+
     private func directoryEnumeratorForURL(url: NSURL) throws -> NSDirectoryEnumerator {
         let prefetchedProperties = [
             NSURLIsRegularFileKey,
@@ -90,6 +91,12 @@ public extension NSFileManager {
         return try NSFileManager.defaultManager().contentsOfDirectoryAtPath(path)
             .filter { $0.hasPrefix("\(prefix).") }
             .sort { $0 < $1 }
+    }
+
+    func removeItemInDirectory(directory: String, named: String) throws {
+        if let file = NSURL.fileURLWithPath(directory).URLByAppendingPathComponent(named).path {
+            try self.removeItemAtPath(file)
+        }
     }
 
     private func errorWithCode(code: NSFileManagerExtensionsErrorCodes, underlyingError error: NSError? = nil) -> NSError {
