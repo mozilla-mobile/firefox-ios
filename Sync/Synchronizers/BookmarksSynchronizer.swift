@@ -30,6 +30,12 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
 
         func applyUpstreamCompletionOp(op: UpstreamCompletionOp) -> Deferred<Maybe<POSTResult>> {
             log.debug("Uploading \(op.records.count) modified records.")
+            log.debug("Uploading \(op.amendChildrenFromBuffer.count) amended records.")
+
+            //
+            // TODO: synthesize amended records.
+            assert(op.amendChildrenFromBuffer.count == 0)
+            //
 
             var modified: Timestamp = 0
             var success: [GUID] = []

@@ -16,7 +16,12 @@ public protocol BookmarkStorer {
 }
 
 public class UpstreamCompletionOp: PerhapsNoOp {
+    // Upload these records from the buffer, but with these child lists.
+    public var amendChildrenFromBuffer: [GUID: [GUID]] = [:]
+
+    // Upload these records as-is.
     public var records: [Record<BookmarkBasePayload>] = []
+
     public let ifUnmodifiedSince: Timestamp?
 
     public var isNoOp: Bool {
