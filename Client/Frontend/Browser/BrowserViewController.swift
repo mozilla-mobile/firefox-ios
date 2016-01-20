@@ -912,6 +912,17 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    @available(iOS 9, *)
+    func switchToPrivacyMode(isPrivate isPrivate: Bool ){
+        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+
+        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
+        if tabTrayController.privateMode != isPrivate {
+            tabTrayController.changePrivacyMode(isPrivate)
+        }
+        self.tabTrayController = tabTrayController
+    }
+
     func switchToTabForURLOrOpen(url: NSURL) {
         popToBrowser()
         if let tab = tabManager.getTabForURL(url) {
@@ -937,9 +948,7 @@ class BrowserViewController: UIViewController {
         } else {
             request = nil
         }
-        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-        tabTrayController.changePrivacyMode(isPrivate)
-        self.tabTrayController = tabTrayController
+        switchToPrivacyMode(isPrivate: isPrivate)
         tabManager.addTabAndSelect(request, isPrivate: isPrivate)
     }
 
