@@ -522,7 +522,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        return NSAttributedString(string: "本地服务使用火狐通行证同步数据", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
+        return NSAttributedString(string: "禁用后使用全球服务同步数据", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
     }
 
     override func onConfigureCell(cell: UITableViewCell) {
