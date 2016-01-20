@@ -358,6 +358,7 @@ class ThreeWayTreeMerger {
         let childGUIDs = children.map { $0.recordGUID }
         if self.nonRemoteKnownGUIDs.isDisjointWith(childGUIDs) {
             log.debug("Remote folder \(guid)'s children are all new, and it doesn't conflict locally. Taking this row as-is.")
+            // No need to queue anything for upload -- we're taking the child list and values from the buffer.
             // TODO: processing these children should be easy: they're not present locally, they can't ever
             // value-reconcile, and so must only ever be additions or moves. Special-case.
             self.localOp.mirrorStructures[guid] = childGUIDs
@@ -415,7 +416,7 @@ class ThreeWayTreeMerger {
             }
 
             // It's all new!
-            // Accept this record directly, value-wise.
+            // Accept this record directly, value-wise. No need to upload anything.
             log.debug("Remote child \(childGUID) of \(guid) is new.")
             self.localOp.mirrorValuesToCopyFromBuffer.insert(childGUID)
             self.remoteValueQueue.ignoreKey(childGUID)
@@ -448,7 +449,7 @@ class ThreeWayTreeMerger {
         log.debug("Remote folder \(guid) not found in mirror. Checking for local conflict.")
         if let counterpart = self.local.find(guid) {
             // Also locally changed. Resolve the conflict, two-way merge.
-            guard case let .Folder(_, localChildren) = counterpart else {
+            guard case .Folder = counterpart else {
                 log.error("Local record \(guid) has a different type! We can't recover from this yet.")
                 throw BookmarksMergeConsistencyError()
             }
@@ -458,8 +459,16 @@ class ThreeWayTreeMerger {
             // Queue them up for a value-based reconcile.
             self.conflictValueQueue.push(guid)
 
+            if counterpart.hasChildList(children) {
+                // Child list is the same on both sides. Nothing to do beyond value reconciling.
+                log.debug("Child list is the same locally.")
+                return
+            }
+
             // Two-way reconcile the child list.
             // TODO
+            // TODO: construct a Sync record for upload. Everywhere we apply some buffer record with
+            // any changes, we must upload those changes.
         } else {
             log.debug("No counterpart.")
             try self.processNewRemoteFolderWithGUID(guid, children: children)
