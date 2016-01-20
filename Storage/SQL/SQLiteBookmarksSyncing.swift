@@ -800,68 +800,87 @@ extension MergedSQLiteBookmarks {
                 return false
             }
 
-            // TODO: these can be done with a lazy walk, rather than building an array in advance.
+            log.debug("Deleting \(op.mirrorItemsToDelete.count) mirror items.")
+            op.mirrorItemsToDelete
+              .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                guard err == nil else { return }
+                let args: Args = Args(arrayLiteral: guids)
+                let varlist = BrowserDB.varlist(guids.count)
 
-            log.debug("Marking \(op.processedLocalChanges.count) local changes as processed.")
-            if !op.processedLocalChanges.isEmpty {
-                op.processedLocalChanges
-                  .subsetsOfSize(BrowserDB.MaxVariableNumber)
-                  .forEach { guids in
-                    guard err == nil else { return }
-
-                    if guids.isEmpty {
-                        return
-                    }
-
-                    let args: Args = Args(arrayLiteral: guids)
-                    let varlist = BrowserDB.varlist(guids.count)
-
-                    let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(varlist)"
-                    if !change(sqlLocalStructure, args: args) {
-                        return
-                    }
-
-                    let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
-                    if !change(sqlLocal, args: args) {
-                        return
-                    }
-
-                    // If the values change, we'll handle those elsewhere, but at least we need to mark these as non-overridden.
-                    let sqlMirrorOverride = "UPDATE \(TableBookmarksMirror) SET is_overridden = 0 WHERE guid IN \(varlist)"
-                    change(sqlMirrorOverride, args: args)
+                let sqlMirrorStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN \(varlist)"
+                if !change(sqlMirrorStructure, args: args) {
+                    return
                 }
 
-                if err != nil {
-                    return false
-                }
+                let sqlMirror = "DELETE FROM \(TableBookmarksMirror) WHERE guid IN \(varlist)"
+                change(sqlMirror, args: args)
             }
 
-            log.debug("Deleting \(op.mirrorItemsToDelete.count) mirror items.")
-            if !op.mirrorItemsToDelete.isEmpty {
-                op.mirrorItemsToDelete
-                  .subsetsOfSize(BrowserDB.MaxVariableNumber)
-                  .forEach { guids in
-                    guard err == nil else { return }
+            if err != nil {
+                return false
+            }
 
-                    if guids.isEmpty {
-                        return
-                    }
+            // Copy from other tables for simplicity.
+            // Do this *before* we throw away local and buffer changes!
+            // This is one reason why the local override step needs to be processed before the buffer is cleared.
+            op.mirrorValuesToCopyFromBuffer
+              .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = Args(arrayLiteral: guids)
+                let varlist = BrowserDB.varlist(guids.count)
+                let copySQL = "INSERT INTO \(TableBookmarksMirror) SELECT * FROM \(TableBookmarksBuffer) WHERE guid IN \(varlist)"
+                change(copySQL, args: args)
+            }
 
-                    let args: Args = Args(arrayLiteral: guids)
-                    let varlist = BrowserDB.varlist(guids.count)
+            if err != nil {
+                return false
+            }
 
-                    let sqlMirrorStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN \(varlist)"
-                    if !change(sqlMirrorStructure, args: args) {
-                        return
-                    }
+            op.mirrorValuesToCopyFromLocal
+              .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = Args(arrayLiteral: guids)
+                let varlist = BrowserDB.varlist(guids.count)
+                let copySQL = [
+                    "INSERT INTO \(TableBookmarksMirror)",
+                    "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                    "bmkUri, tags, keyword, folderName, queryId, faviconID,",
 
-                    let sqlMirror = "DELETE FROM \(TableBookmarksMirror) WHERE guid IN \(varlist)"
-                    change(sqlMirror, args: args)
+                    // TODO: we actually need *multiple* timestamps here, or multiple accrued local ops, because
+                    // uploads occur in batches. Oops.
+                    "\(timestamp) AS server_modified",
+                    "FROM \(TableBookmarksLocal) WHERE guid IN",
+                    varlist,
+                    ].joinWithSeparator(" ")
+                change(copySQL, args: args)
+            }
+
+            if err != nil {
+                return false
+            }
+
+            log.debug("Marking \(op.processedLocalChanges.count) local changes as processed.")
+            op.processedLocalChanges
+              .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                guard err == nil else { return }
+                let args: Args = Args(arrayLiteral: guids)
+                let varlist = BrowserDB.varlist(guids.count)
+
+                let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(varlist)"
+                if !change(sqlLocalStructure, args: args) {
+                    return
                 }
 
-                if err != nil {
-                    return false
+                let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
+                if !change(sqlLocal, args: args) {
+                    return
                 }
+
+                // If the values change, we'll handle those elsewhere, but at least we need to mark these as non-overridden.
+                let sqlMirrorOverride = "UPDATE \(TableBookmarksMirror) SET is_overridden = 0 WHERE guid IN \(varlist)"
+                change(sqlMirrorOverride, args: args)
+            }
+
+            if err != nil {
+                return false
             }
 
             if !op.mirrorItemsToUpdate.isEmpty {
