@@ -287,7 +287,7 @@ public struct BookmarkMirrorItem {
 
 // MARK: - Defining a tree structure for syncability.
 
-public enum BookmarkTreeNode {
+public enum BookmarkTreeNode: Equatable {
     indirect case Folder(guid: GUID, children: [BookmarkTreeNode])
     case NonFolder(guid: GUID)
     case Unknown(guid: GUID)
@@ -320,6 +320,26 @@ public enum BookmarkTreeNode {
             if case let .Folder(_, theirs) = other {
                 return ours.elementsEqual(theirs, isEquivalent: { $0.recordGUID == $1.recordGUID })
             }
+        }
+        return false
+    }
+}
+
+public func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
+    switch lhs {
+    case let .Folder(guid, children):
+        if case let .Folder(rguid, rchildren) = rhs {
+            return guid == rguid && children == rchildren
+        }
+        return false
+    case let .NonFolder(guid):
+        if case let .NonFolder(rguid) = rhs {
+            return guid == rguid
+        }
+        return false
+    case let .Unknown(guid):
+        if case let .Unknown(rguid) = rhs {
+            return guid == rguid
         }
         return false
     }
