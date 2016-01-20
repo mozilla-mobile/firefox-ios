@@ -36,7 +36,7 @@ protocol QuickActionHandlerDelegate {
 }
 
 @available(iOS 9, *)
-struct QuickActions {
+class QuickActions: NSObject {
 
     private let log = Logger.browserLogger
 
@@ -54,7 +54,7 @@ struct QuickActions {
     var launchedShortcutItem: UIApplicationShortcutItem?
 
     // MARK: Administering Quick Actions
-    mutating func addDynamicApplicationShortcutItemOfType(type: ShortcutType, fromShareItem shareItem: ShareItem, toApplication application: UIApplication) {
+    func addDynamicApplicationShortcutItemOfType(type: ShortcutType, fromShareItem shareItem: ShareItem, toApplication application: UIApplication) {
             var userData = [QuickActions.TabURLKey: shareItem.url]
             if let title = shareItem.title {
                 userData[QuickActions.TabTitleKey] = title
@@ -62,7 +62,7 @@ struct QuickActions {
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(type, withUserData: userData, toApplication: application)
     }
 
-    mutating func addDynamicApplicationShortcutItemOfType(type: ShortcutType, var withUserData userData: [NSObject : AnyObject] = [NSObject : AnyObject](), toApplication application: UIApplication) -> Bool {
+    func addDynamicApplicationShortcutItemOfType(type: ShortcutType, var withUserData userData: [NSObject : AnyObject] = [NSObject : AnyObject](), toApplication application: UIApplication) -> Bool {
         // add the quick actions version so that it is always in the user info
         userData[QuickActions.QuickActionsVersionKey] = QuickActions.QuickActionsVersion
         var dynamicShortcutItems = application.shortcutItems ?? [UIApplicationShortcutItem]()
@@ -101,7 +101,7 @@ struct QuickActions {
         return true
     }
 
-    mutating func removeDynamicApplicationShortcutItemOfType(type: ShortcutType, fromApplication application: UIApplication) {
+    func removeDynamicApplicationShortcutItemOfType(type: ShortcutType, fromApplication application: UIApplication) {
         guard var dynamicShortcutItems = application.shortcutItems,
             let index = (dynamicShortcutItems.indexOf{ $0.type == type.type }) else { return }
 

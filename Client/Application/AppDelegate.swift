@@ -234,7 +234,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // handle quick actions is available
         if #available(iOS 9, *) {
-            var quickActions = QuickActions.sharedInstance
+            let quickActions = QuickActions.sharedInstance
             if let shortcut = quickActions.launchedShortcutItem {
                 // dispatch asynchronously so that BVC is all set up for handling new tabs
                 // when we try and open them
