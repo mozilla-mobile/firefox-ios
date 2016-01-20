@@ -8,7 +8,7 @@ import XCTest
 import Shared
 
 private let DefaultSearchEngineName = "Yahoo"
-private let ExpectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia", "Yahoo"]
+private let ExpectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia", "Yahoo", "YouTube"]
 
 class SearchEnginesTests: XCTestCase {
     func testIncludesExpectedEngines() {
