@@ -29,6 +29,9 @@ public protocol BookmarkBufferStorage {
     func validate() -> Success
     func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>>
     func applyBufferCompletionOp(op: BufferCompletionOp) -> Success
+
+    func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
+    func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
 }
 
 public struct BookmarkRoots {

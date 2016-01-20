@@ -467,6 +467,41 @@ public class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
         self.db.checkpoint()
         return succeed()
     }
+
+    public func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+        let args: Args = [guid]
+        let sql = "SELECT * FROM \(TableBookmarksBuffer) WHERE guid = ?"
+        return self.db.runQuery(sql, args: args, factory: BookmarkFactory.mirrorItemFactory)
+          >>== { cursor in
+                guard let item = cursor[0] else {
+                    return deferMaybe(DatabaseError(description: "Expected to find \(guid) in buffer but did not."))
+                }
+                return deferMaybe(item)
+        }
+    }
+
+    public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        var acc: [GUID: BookmarkMirrorItem] = [:]
+        func accumulate(args: Args) -> Success {
+            let sql = "SELECT * FROM \(TableBookmarksBuffer) WHERE guid IN \(BrowserDB.varlist(args.count))"
+            return self.db.runQuery(sql, args: args, factory: BookmarkFactory.mirrorItemFactory)
+              >>== { cursor in
+                cursor.forEach { row in
+                    guard let row = row else { return }    // Oh, Cursor.
+                    acc[row.guid] = row
+                }
+                return succeed()
+            }
+        }
+
+        if guids.count < BrowserDB.MaxVariableNumber {
+            return accumulate(guids.map { $0 }) >>> { deferMaybe(acc) }
+        }
+
+        let chunks = chunk(guids, by: BrowserDB.MaxVariableNumber)
+        return walk(chunks.map { $0.map { $0 } }, f: accumulate)
+           >>> { deferMaybe(acc) }
+    }
 }
 
 public class MergedSQLiteBookmarks {
@@ -503,6 +538,14 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
 
     public func applyBufferCompletionOp(op: BufferCompletionOp) -> Success {
         return self.buffer.applyBufferCompletionOp(op)
+    }
+
+    public func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+        return self.buffer.getBufferItemWithGUID(guid)
+    }
+
+    public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.buffer.getBufferItemsWithGUIDs(guids)
     }
 }
 
