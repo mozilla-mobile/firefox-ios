@@ -913,11 +913,7 @@ class BrowserViewController: UIViewController {
     }
 
     func switchToTabForURLOrOpen(url: NSURL) {
-        let previousViewController = navigationController?.topViewController
-        navigationController?.popToViewController(self, animated: false)
-        if let previousViewController = previousViewController where previousViewController != self {
-            resetBrowserChrome()
-        }
+        popToBrowser()
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
@@ -949,8 +945,20 @@ class BrowserViewController: UIViewController {
 
     @available(iOS 9, *)
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
+        popToBrowser()
         openURLInNewTab(nil, isPrivate: isPrivate)
         urlBar.browserLocationViewDidTapLocation(urlBar.locationView)
+    }
+
+    private func popToBrowser() {
+        guard let currentViewController = navigationController?.topViewController where currentViewController != self else {
+            return
+        }
+        if let presentedViewController = currentViewController.presentedViewController {
+            presentedViewController.dismissViewControllerAnimated(true, completion: nil)
+        }
+        navigationController?.popToViewController(self, animated: false)
+        resetBrowserChrome()
     }
 
     private func resetSpoofedUserAgentIfRequired(webView: WKWebView, newURL: NSURL) {
