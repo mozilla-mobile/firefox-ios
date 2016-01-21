@@ -137,32 +137,19 @@ class ReaderModeBarView: UIView {
         delegate?.readerModeBar(self, didSelectButton: added ? .RemoveFromReadingList : .AddToReadingList)
     }
 
-    private func updateUnread(unread: Bool) {
-        var buttonType: ReaderModeBarButtonType = unread ? .MarkAsRead : .MarkAsUnread
-        if !added {
-            buttonType = .MarkAsUnread
-        }
-        readStatusButton.setImage(buttonType.image, forState: UIControlState.Normal)
-
-        readStatusButton.enabled = added
-        readStatusButton.alpha = added ? 1.0 : 0.6
-    }
-
     var unread: Bool = true {
         didSet {
-            updateUnread(unread)
+            let buttonType: ReaderModeBarButtonType = unread && added ? .MarkAsRead : .MarkAsUnread
+            readStatusButton.setImage(buttonType.image, forState: UIControlState.Normal)
+            readStatusButton.enabled = added
+            readStatusButton.alpha = added ? 1.0 : 0.6
         }
     }
-
-    private func updateAdded(added: Bool) {
-        let buttonType: ReaderModeBarButtonType = added ? .RemoveFromReadingList : .AddToReadingList
-        listStatusButton.setImage(buttonType.image, forState: UIControlState.Normal)
-    }
-
+    
     var added: Bool = false {
         didSet {
-            updateAdded(added)
-            updateUnread(unread)
+            let buttonType: ReaderModeBarButtonType = added ? .RemoveFromReadingList : .AddToReadingList
+            listStatusButton.setImage(buttonType.image, forState: UIControlState.Normal)
         }
     }
 }
