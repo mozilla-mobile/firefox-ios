@@ -2056,8 +2056,16 @@ extension BrowserViewController: WKUIDelegate {
             return
         }
 
-        if let url = error.userInfo["NSErrorFailingURLKey"] as? NSURL {
+        if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
+
+            // If the local web server isn't working for some reason (Firefox cellular data is
+            // disabled in settings, for example), we'll fail to load the session restore URL.
+            // We rely on loading that page to get the restore callback to reset the restoring
+            // flag, so if we fail to load that page, reset it here.
+            if AboutUtils.getAboutComponent(url) == "sessionrestore" {
+                tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
+            }
         }
     }
 
