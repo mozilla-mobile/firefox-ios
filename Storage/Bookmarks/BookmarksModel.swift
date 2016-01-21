@@ -6,6 +6,54 @@ import Foundation
 import Shared
 
 /**
+ * The immutable base interface for bookmarks and folders.
+ */
+public class BookmarkNode {
+    public var id: Int? = nil
+    public var guid: GUID
+    public var title: String
+    public var favicon: Favicon? = nil
+
+    init(guid: GUID, title: String) {
+        self.guid = guid
+        self.title = title
+    }
+}
+
+public class BookmarkSeparator: BookmarkNode {
+    init(guid: GUID) {
+        super.init(guid: guid, title: "—")
+    }
+}
+
+/**
+ * An immutable item representing a bookmark.
+ *
+ * To modify this, issue changes against the backing store and get an updated model.
+ */
+public class BookmarkItem: BookmarkNode {
+    public let url: String!
+
+    public init(guid: String, title: String, url: String) {
+        self.url = url
+        super.init(guid: guid, title: title)
+    }
+}
+
+/**
+ * A folder is an immutable abstraction over a named
+ * thing that can return its child nodes by index.
+ */
+public class BookmarkFolder: BookmarkNode {
+    public var count: Int { return 0 }
+    public subscript(index: Int) -> BookmarkNode? { return nil }
+
+    public func itemIsEditableAtIndex(index: Int) -> Bool {
+        return false
+    }
+}
+
+/**
  * A model is a snapshot of the bookmarks store, suitable for backing a table view.
  *
  * Navigation through the folder hierarchy produces a sequence of models.

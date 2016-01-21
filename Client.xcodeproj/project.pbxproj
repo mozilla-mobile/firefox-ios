@@ -87,13 +87,14 @@
 		2829D3A01C2F0AD400DCF931 /* Sharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829D39F1C2F0AD400DCF931 /* Sharing.swift */; };
 		282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		28302E401AF0747800521E2E /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28302E3F1AF0747800521E2E /* DatabaseError.swift */; };
+		2852B8441C51996B00591EAC /* Trees.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2852B8431C51996B00591EAC /* Trees.swift */; };
 		28532BE91C471FFB000072D9 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBABAE1AB3659000DB5728 /* ResultTests.swift */; };
 		28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28786E541AB0F5FA009EA9EF /* DeferredTests.swift */; };
 		28532BEB1C472015000072D9 /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */; };
 		28532CC11C473977000072D9 /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* MockFiles.swift */; };
 		28532CE61C48098D000072D9 /* ThreeWayTreeMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28532CE51C48098D000072D9 /* ThreeWayTreeMerger.swift */; };
 		28532D0C1C4837F1000072D9 /* SetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28532D0B1C4837F1000072D9 /* SetExtensions.swift */; };
-		28532D321C483E3D000072D9 /* BookmarksMergeResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28532D311C483E3D000072D9 /* BookmarksMergeResults.swift */; };
+		28532D321C483E3D000072D9 /* CompletionOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28532D311C483E3D000072D9 /* CompletionOps.swift */; };
 		2853C5411AD84C6800C4F31D /* TabsPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2853C5401AD84C6800C4F31D /* TabsPayload.swift */; };
 		2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */; };
 		285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077971A3B064000834FE5 /* CryptoTests.swift */; };
@@ -1361,13 +1362,14 @@
 		282731701ABC9BE700AA1954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		282731A11ABC9D2600AA1954 /* Prefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
 		282915E51AF1A7920006EEB5 /* BrowserTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTable.swift; sourceTree = "<group>"; };
-		28296D431C5AFA6A00014434 /* ThreeWayTreeMerger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreeWayTreeMerger.swift; path = Synchronizers/ThreeWayTreeMerger.swift; sourceTree = "<group>"; };
-		2829D3791C2F0A7F00DCF931 /* BookmarksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksModel.swift; sourceTree = "<group>"; };
+		2829D3791C2F0A7F00DCF931 /* BookmarksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksModel.swift; path = Bookmarks/BookmarksModel.swift; sourceTree = "<group>"; };
 		2829D39F1C2F0AD400DCF931 /* Sharing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sharing.swift; sourceTree = "<group>"; };
 		28302E3F1AF0747800521E2E /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		283306E81AB3BB87008999AC /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
+		2852B8431C51996B00591EAC /* Trees.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Trees.swift; path = Bookmarks/Trees.swift; sourceTree = "<group>"; };
+		28532CE51C48098D000072D9 /* ThreeWayTreeMerger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreeWayTreeMerger.swift; path = Synchronizers/ThreeWayTreeMerger.swift; sourceTree = "<group>"; };
 		28532D0B1C4837F1000072D9 /* SetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetExtensions.swift; sourceTree = "<group>"; };
-		28532D311C483E3D000072D9 /* BookmarksMergeResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksMergeResults.swift; sourceTree = "<group>"; };
+		28532D311C483E3D000072D9 /* CompletionOps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletionOps.swift; sourceTree = "<group>"; };
 		2853C5401AD84C6800C4F31D /* TabsPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPayload.swift; sourceTree = "<group>"; };
 		2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = HistorySynchronizerTests.swift; path = SyncTests/HistorySynchronizerTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		285D3B321B4332C00035FD22 /* NotificationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationConstants.swift; sourceTree = "<group>"; };
@@ -1473,7 +1475,7 @@
 		2FCAE21D1ABB51F800877008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Storage/Info.plist; sourceTree = "<group>"; };
 		2FCAE2241ABB51F800877008 /* StorageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StorageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FCAE22C1ABB51F800877008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2FCAE23F1ABB531100877008 /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
+		2FCAE23F1ABB531100877008 /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bookmarks.swift; path = Bookmarks/Bookmarks.swift; sourceTree = "<group>"; };
 		2FCAE2401ABB531100877008 /* Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
 		2FCAE2411ABB531100877008 /* Cursor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cursor.swift; sourceTree = "<group>"; };
 		2FCAE2421ABB531100877008 /* Favicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favicons.swift; sourceTree = "<group>"; };
@@ -2158,7 +2160,8 @@
 			children = (
 				2FCAE23F1ABB531100877008 /* Bookmarks.swift */,
 				2829D3791C2F0A7F00DCF931 /* BookmarksModel.swift */,
-				28532D311C483E3D000072D9 /* BookmarksMergeResults.swift */,
+				28532D311C483E3D000072D9 /* CompletionOps.swift */,
+				2852B8431C51996B00591EAC /* Trees.swift */,
 			);
 			name = Bookmarks;
 			sourceTree = "<group>";
@@ -4761,10 +4764,11 @@
 				28B62ACE1BC745E7004A585A /* Syncable.swift in Sources */,
 				2FCAE26F1ABB531100877008 /* RemoteTabsTable.swift in Sources */,
 				7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */,
+				2852B8441C51996B00591EAC /* Trees.swift in Sources */,
 				28E08C991AF44EF9009BA2FA /* SQLiteHistory.swift in Sources */,
 				285D3B901B4386520035FD22 /* SQLiteQueue.swift in Sources */,
 				7BF5A1CA1B4160EA00EA9DD8 /* SyncCommandsTable.swift in Sources */,
-				28532D321C483E3D000072D9 /* BookmarksMergeResults.swift in Sources */,
+				28532D321C483E3D000072D9 /* CompletionOps.swift in Sources */,
 				2FCAE25D1ABB531100877008 /* Bookmarks.swift in Sources */,
 				394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */,
 				2FCAE2781ABB531100877008 /* Visit.swift in Sources */,
