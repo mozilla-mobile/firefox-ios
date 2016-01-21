@@ -8,8 +8,9 @@ import Shared
 private let log = Logger.browserLogger
 
 class ShareExtensionHelper: NSObject {
+    private weak var selectedTab: Browser?
+
     private let selectedURL: NSURL
-    private let selectedTab: Browser?
     private var onePasswordExtensionItem: NSExtensionItem!
     private let activities: [UIActivity]
 
