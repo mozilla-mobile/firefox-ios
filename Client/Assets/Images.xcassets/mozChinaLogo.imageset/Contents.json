@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "58CityLogo.png"
+      "filename" : "mozChinaLogo.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "58CityLogo@2x.png"
+      "filename" : "mozChinaLogo@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "58CityLogo@3x.png"
+      "filename" : "mozChinaLogo@3x.png"
     }
   ],
   "info" : {
