@@ -26,11 +26,19 @@ public class DefaultSuggestedSites {
         ],
         "zh_CN": [
             SuggestedSiteData(
+                url: "http://mozilla.com.cn",
+                bgColor: "0xbc3326",
+                imageUrl: "asset://suggestedsites_mozchina",
+                faviconUrl: "asset://mozChinaLogo",
+                trackingId: 700,
+                title: "火狐社区"
+            ),
+            SuggestedSiteData(
                 url: "https://m.baidu.com/?from=1000969b",
                 bgColor: "0x00479d",
                 imageUrl: "asset://suggestedsites_baidu",
                 faviconUrl: "asset://baiduLogo",
-                trackingId: 700,
+                trackingId: 701,
                 title: "百度"
             ),
             SuggestedSiteData(
@@ -38,7 +46,7 @@ public class DefaultSuggestedSites {
                 bgColor: "0xe60012",
                 imageUrl: "asset://suggestedsites_sina",
                 faviconUrl: "asset://sinaLogo",
-                trackingId: 701,
+                trackingId: 702,
                 title: "新浪"
             ),
             SuggestedSiteData(
@@ -46,7 +54,7 @@ public class DefaultSuggestedSites {
                 bgColor: "0x028cca",
                 imageUrl: "asset://suggestedsites_qq",
                 faviconUrl: "asset://qqLogo",
-                trackingId: 702,
+                trackingId: 703,
                 title: "腾讯"
             ),
             SuggestedSiteData(
@@ -54,7 +62,7 @@ public class DefaultSuggestedSites {
                 bgColor: "0xee5900",
                 imageUrl: "asset://suggestedsites_taobao",
                 faviconUrl: "asset://taobaoLogo",
-                trackingId: 703,
+                trackingId: 704,
                 title: "淘宝"
             ),
             SuggestedSiteData(
@@ -62,16 +70,8 @@ public class DefaultSuggestedSites {
                 bgColor: "0xc71622",
                 imageUrl: "asset://suggestedsites_jd",
                 faviconUrl: "asset://jdLogo",
-                trackingId: 704,
-                title: "京东"
-            ),
-            SuggestedSiteData(
-                url: "http://m.okpush.com/j.html?pk=redirect&adId=7863&planId=1838&webId=6975&channelId=6975&publishId=8545",
-                bgColor: "0xea5415",
-                imageUrl: "asset://suggestedsites_58City",
-                faviconUrl: "asset://58CityLogo",
                 trackingId: 705,
-                title: "58 同城"
+                title: "京东"
             )
         ]
     ]
