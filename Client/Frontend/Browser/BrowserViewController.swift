@@ -911,6 +911,7 @@ class BrowserViewController: UIViewController {
             self.navigationToolbar.updateBookmarkStatus(bookmarked)
         }
     }
+    // Mark: Opening New Tabs
 
     @available(iOS 9, *)
     func switchToPrivacyMode(isPrivate isPrivate: Bool ){
@@ -969,6 +970,8 @@ class BrowserViewController: UIViewController {
         navigationController?.popToViewController(self, animated: false)
         resetBrowserChrome()
     }
+
+    // Mark: User Agent Spoofing
 
     private func resetSpoofedUserAgentIfRequired(webView: WKWebView, newURL: NSURL) {
         guard #available(iOS 9.0, *) else {
@@ -1649,6 +1652,10 @@ extension BrowserViewController: TabManagerDelegate {
                 // When this happens, the URL is nil, so try restoring the page upon selection.
                 tab.reload()
             }
+        }
+
+        if let selected = selected, previous = previous where selected.isPrivate != previous.isPrivate {
+            updateTabCountUsingTabManager(tabManager)
         }
 
         removeAllBars()
