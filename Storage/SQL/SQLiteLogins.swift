@@ -280,10 +280,16 @@ public class SQLiteLogins: BrowserLogins {
         let args: Args
         let usernameMatch: String
         if let username = username {
-            args = [protectionSpace.host, username, protectionSpace.host, username]
+            args = [
+                protectionSpace.urlString(), username, protectionSpace.host,
+                protectionSpace.urlString(), username, protectionSpace.host
+            ]
             usernameMatch = "username = ?"
         } else {
-            args = [protectionSpace.host, protectionSpace.host]
+            args = [
+                protectionSpace.urlString(), protectionSpace.host,
+                protectionSpace.urlString(), protectionSpace.host
+            ]
             usernameMatch = "username IS NULL"
         }
 
@@ -293,10 +299,10 @@ public class SQLiteLogins: BrowserLogins {
 
         let sql =
         "SELECT \(projection) FROM " +
-        "\(TableLoginsLocal) WHERE is_deleted = 0 AND hostname IS ? AND \(usernameMatch) " +
+        "\(TableLoginsLocal) WHERE is_deleted = 0 AND hostname IS ? AND \(usernameMatch) OR hostname IS ?" +
         "UNION ALL " +
         "SELECT \(projection) FROM " +
-        "\(TableLoginsMirror) WHERE is_overridden = 0 AND hostname IS ? AND username IS ? " +
+        "\(TableLoginsMirror) WHERE is_overridden = 0 AND hostname IS ? AND \(usernameMatch) OR hostname IS ?" +
         "ORDER BY timeLastUsed DESC"
 
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
