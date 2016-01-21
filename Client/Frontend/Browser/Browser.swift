@@ -297,11 +297,14 @@ class Browser: NSObject, BrowserWebViewDelegate {
 
     func reload() {
         if #available(iOS 9.0, *) {
-            webView?.customUserAgent = desktopSite ? UserAgent.desktopUserAgent() : nil
+            let userAgent: String? = desktopSite ? UserAgent.desktopUserAgent() : nil
+            if (userAgent ?? "") != webView?.customUserAgent,
+               let currentItem = webView?.backForwardList.currentItem
+            {
+                webView?.customUserAgent = userAgent
 
-            if let currentItem = webView?.backForwardList.currentItem where currentItem.URL != currentItem.initialURL {
                 // Reload the initial URL to avoid UA specific redirection
-                loadRequest(NSURLRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60))
+                loadRequest(NSURLRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 60))
                 return
             }
         }
