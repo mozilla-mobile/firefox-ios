@@ -1346,7 +1346,7 @@
 		0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFavicons.swift; sourceTree = "<group>"; };
 		0BF648101A9C54E900BA963C /* TopSitesPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesPanel.swift; sourceTree = "<group>"; };
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
-		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Synchronizers/BookmarksSynchronizer.swift; sourceTree = "<group>"; };
+		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Sync/Synchronizers/Bookmarks/BookmarksSynchronizer.swift; sourceTree = SOURCE_ROOT; };
 		28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksHelpers.swift; sourceTree = "<group>"; };
 		28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksModel.swift; sourceTree = "<group>"; };
 		28126F731C2F96F1006466CC /* SQLiteBookmarksResetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksResetting.swift; sourceTree = "<group>"; };
@@ -1367,7 +1367,7 @@
 		28302E3F1AF0747800521E2E /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		283306E81AB3BB87008999AC /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		2852B8431C51996B00591EAC /* Trees.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Trees.swift; path = Bookmarks/Trees.swift; sourceTree = "<group>"; };
-		28532CE51C48098D000072D9 /* ThreeWayTreeMerger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreeWayTreeMerger.swift; path = Synchronizers/ThreeWayTreeMerger.swift; sourceTree = "<group>"; };
+		28532CE51C48098D000072D9 /* ThreeWayTreeMerger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreeWayTreeMerger.swift; sourceTree = "<group>"; };
 		28532D0B1C4837F1000072D9 /* SetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetExtensions.swift; sourceTree = "<group>"; };
 		28532D311C483E3D000072D9 /* CompletionOps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletionOps.swift; sourceTree = "<group>"; };
 		2853C5401AD84C6800C4F31D /* TabsPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPayload.swift; sourceTree = "<group>"; };
@@ -1389,7 +1389,7 @@
 		288A2DAF1AB8B37E0023ABC3 /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReadWriteLock.swift; path = Carthage/Checkouts/Deferred/Deferred/ReadWriteLock.swift; sourceTree = "<group>"; };
 		288A2DB31AB8B38D0023ABC3 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = ThirdParty/Result/Error.swift; sourceTree = "<group>"; };
 		288A2DB41AB8B38D0023ABC3 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Result.swift; path = ThirdParty/Result/Result.swift; sourceTree = "<group>"; };
-		288E67C11B9E730900AE2C6A /* BookmarksDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksDownloader.swift; path = Synchronizers/BookmarksDownloader.swift; sourceTree = "<group>"; };
+		288E67C11B9E730900AE2C6A /* BookmarksDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksDownloader.swift; path = Sync/Synchronizers/Bookmarks/BookmarksDownloader.swift; sourceTree = SOURCE_ROOT; };
 		2891CEC31ADC7F2900427D3C /* NSURLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLExtensions.swift; sourceTree = "<group>"; };
 		28926B191AC0F074009C0B1D /* EncryptedJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedJSON.swift; sourceTree = "<group>"; };
 		28926B361AC0F0DD009C0B1D /* EnvelopeJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnvelopeJSON.swift; sourceTree = "<group>"; };
@@ -2250,8 +2250,7 @@
 		2894C1641AE89DBC00F1F92F /* Synchronizers */ = {
 			isa = PBXGroup;
 			children = (
-				288E67C11B9E730900AE2C6A /* BookmarksDownloader.swift */,
-				280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */,
+				28C28BD81C51A2FA00D5460E /* Bookmarks */,
 				2894C1681AE89DDC00F1F92F /* ClientsSynchronizer.swift */,
 				28A17B661BEC727500BC14ED /* Downloader.swift */,
 				2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */,
@@ -2259,7 +2258,6 @@
 				28ED02251B262B5E003948B2 /* LoginsSynchronizer.swift */,
 				2F3724E41ABF3C19007607FA /* Synchronizer.swift */,
 				2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */,
-				28296D431C5AFA6A00014434 /* ThreeWayTreeMerger.swift */,
 			);
 			name = Synchronizers;
 			sourceTree = "<group>";
@@ -2281,6 +2279,17 @@
 				2F3724C51ABF3C01007607FA /* StorageClientTests.swift */,
 			);
 			name = SyncTests;
+			sourceTree = "<group>";
+		};
+		28C28BD81C51A2FA00D5460E /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				288E67C11B9E730900AE2C6A /* BookmarksDownloader.swift */,
+				280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */,
+				28532CE51C48098D000072D9 /* ThreeWayTreeMerger.swift */,
+			);
+			name = Bookmarks;
+			path = Synchronizers/Bookmarks;
 			sourceTree = "<group>";
 		};
 		28CE83B71A1D1D3200576538 /* FxAClient */ = {
