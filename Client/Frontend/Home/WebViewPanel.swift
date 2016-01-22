@@ -121,9 +121,12 @@ extension BookmarksModel: DictionaryView {
 
 extension Site: DictionaryView {
     func toDictionary() -> [String: AnyObject] {
+        let iconURL = icon?.url != nil ? icon?.url : ""
         return [
             "title": title,
-            "url": url
+            "url": url,
+            "date": NSNumber(unsignedLongLong: (latestVisit?.date)!),
+            "iconURL": iconURL!,
         ]
     }
 }
