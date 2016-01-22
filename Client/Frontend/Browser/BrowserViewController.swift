@@ -997,14 +997,14 @@ class BrowserViewController: UIViewController {
     private func presentActivityViewController(url: NSURL, tab: Browser? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         var activities = [UIActivity]()
 
-        let findInPageActivity = FindInPageActivity() {
+        let findInPageActivity = FindInPageActivity() { [unowned self] in
             self.updateFindInPageVisibility(visible: true)
         }
         activities.append(findInPageActivity)
 
         if #available(iOS 9.0, *) {
             if let tab = tab where (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active {
-                let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: tab.desktopSite) {
+                let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: tab.desktopSite) { [unowned tab] in
                     tab.toggleDesktopSite()
                 }
                 activities.append(requestDesktopSiteActivity)
@@ -1013,7 +1013,7 @@ class BrowserViewController: UIViewController {
 
         let helper = ShareExtensionHelper(url: url, tab: tab, activities: activities)
 
-        let controller = helper.createActivityViewController({
+        let controller = helper.createActivityViewController({ [unowned self] in
             // We don't know what share action the user has chosen so we simply always
             // update the toolbar and reader mode bar to reflect the latest status.
             if let tab = tab {
