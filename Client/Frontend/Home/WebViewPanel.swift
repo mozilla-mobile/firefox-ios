@@ -44,13 +44,16 @@ private enum DataMethod: String {
     case getTopSites                = "getTopSites"
 
     /* 
-    getClientsAndTabs
+    getLocalBookmarks
         {
-            method: "getClientsAndTabs",
+            method: "getLocalBookmarks",
+            params: {
+                limit: <Int>
+            },
             callback: <CallbackFunc>
         }
     */
-    case getClientsAndTabs          = "getClientsAndTabs"
+    case getLocalBookmarks          = "getLocalBookmarks"
     case Undefined
 }
 
@@ -185,6 +188,7 @@ class WebViewPanel: UIViewController, HomePanel {
                 self.webView.evaluateJavaScript(callbackInvocation, completionHandler: nil)
             }
         }
+
         return webView
     }()
 
