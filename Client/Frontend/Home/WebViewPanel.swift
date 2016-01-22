@@ -19,27 +19,6 @@ import Storage
  */
 private enum DataMethod: String {
 
-    /*
-    GetBookmarkModelForID
-        {
-            method: "getBookmarkModelForID",
-            params: {
-                id: <String>
-            },
-            callback: <CallbackFunc>
-        }
-    */
-    case GetBookmarkModelForID      = "getBookmarkModelForID"
-
-    /* 
-    GetRootBookmarkFolder
-        {
-            method: "getBookmarkModelForID",
-            callback: <CallbackFunc>
-        }
-    */
-    case GetRootBookmarkFolder      = "getRootBookmarkFolder"
-
     /* 
     getSitesByLastVisit
         {
@@ -178,6 +157,34 @@ class WebViewPanel: UIViewController, HomePanel {
             }
         }
 
+        dataAPI.registerHandlerForMethod(DataMethod.getTopSites) { params, callback in
+            guard let limit = params["limit"] as? Int,
+                  let callback = callback else {
+                return
+            }
+
+            self.profile.history.getTopSitesWithLimit(limit).uponQueue(dispatch_get_main_queue()) { result in
+                let callbackInvocation: String
+                do {
+                    if let sites = result.successValue {
+                        let data: [NSDictionary] = sites.map { $0!.toDictionary() }
+                        let jsonData = try NSJSONSerialization.dataWithJSONObject(data, options: [])
+                        let jsonString = String(data: jsonData, encoding: NSUTF8StringEncoding)!
+                        callbackInvocation = "\(callback)(null, \(jsonString))"
+                    } else {
+                        var err = [String: AnyObject]()
+                        err["message"] = result.failureValue?.description ?? "No description"
+                        let jsonData = try NSJSONSerialization.dataWithJSONObject(err, options: [])
+                        let jsonString = String(data: jsonData, encoding: NSUTF8StringEncoding)!
+                        callbackInvocation = "\(callback)(\(jsonString)), null)"
+                    }
+                } catch _ {
+                    callbackInvocation = "\(callback)(null, null)"
+                }
+
+                self.webView.evaluateJavaScript(callbackInvocation, completionHandler: nil)
+            }
+        }
         return webView
     }()
 
