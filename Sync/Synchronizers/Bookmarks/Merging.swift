@@ -91,3 +91,37 @@ protocol MirrorItemSource {
     func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
     func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
 }
+
+enum MergeState<T> {
+    case Unknown
+    case Unchanged
+    case Remote
+    case Local
+    case New(value: T)
+}
+
+class MergedTreeNode {
+    let guid: GUID
+    let mirror: BookmarkTreeNode?
+    var remote: BookmarkTreeNode?
+    var local: BookmarkTreeNode?
+
+    var valueState: MergeState<BookmarkMirrorItem> = MergeState.Unknown
+    var structureState: MergeState<BookmarkTreeNode> = MergeState.Unknown
+
+    init(guid: GUID, mirror: BookmarkTreeNode?) {
+        self.guid = guid
+        self.mirror = mirror
+    }
+}
+
+class MergedTree {
+    var root: MergedTreeNode
+    var deleted: Set<GUID> = Set()
+
+    init(mirrorRoot: BookmarkTreeNode) {
+        self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot)
+        self.root.valueState = MergeState.Unchanged
+        self.root.structureState = MergeState.Unchanged
+    }
+}
