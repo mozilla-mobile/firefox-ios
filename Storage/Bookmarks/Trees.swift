@@ -30,6 +30,13 @@ public enum BookmarkTreeNode: Equatable {
         return BookmarkRoots.All.contains(self.recordGUID)
     }
 
+    public var children: [BookmarkTreeNode]? {
+        if case let .Folder(_, children) = self {
+            return children
+        }
+        return nil
+    }
+
     public func hasChildList(nodes: [BookmarkTreeNode]) -> Bool {
         if case let .Folder(_, ours) = self {
             return ours.elementsEqual(nodes, isEquivalent: { $0.recordGUID == $1.recordGUID })

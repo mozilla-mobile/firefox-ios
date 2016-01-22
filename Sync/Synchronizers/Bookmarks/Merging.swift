@@ -100,6 +100,21 @@ enum MergeState<T> {
     case New(value: T)
 }
 
+/**
+ * Using this:
+ *
+ * You get one for the root. Then you give it children for the roots
+ * from the mirror.
+ *
+ * Then you walk those, populating the remote and local nodes by looking
+ * at the left/right trees.
+ *
+ * By comparing left and right, and doing value-based comparisons if necessary,
+ * a merge state is decided and assigned for both value and structure.
+ *
+ * One then walks both left and right child structures (both to ensure that
+ * all nodes on both left and right will be visited!) recursively.
+ */
 class MergedTreeNode {
     let guid: GUID
     let mirror: BookmarkTreeNode?
@@ -108,10 +123,30 @@ class MergedTreeNode {
 
     var valueState: MergeState<BookmarkMirrorItem> = MergeState.Unknown
     var structureState: MergeState<BookmarkTreeNode> = MergeState.Unknown
+    var mergedChildren: [MergedTreeNode] = []
 
     init(guid: GUID, mirror: BookmarkTreeNode?) {
         self.guid = guid
         self.mirror = mirror
+    }
+
+    var decidedStructure: BookmarkTreeNode? {
+        switch self.structureState {
+        case .Unknown:
+            return nil
+        case .Unchanged:
+            return self.mirror
+        case .Remote:
+            return self.remote
+        case .Local:
+            return self.local
+        case let .New(node):
+            return node
+        }
+    }
+
+    var children: [BookmarkTreeNode]? {
+        return self.decidedStructure?.children
     }
 }
 
