@@ -394,6 +394,25 @@ class SendFeedbackSetting: Setting {
     }
 }
 
+class SendAnonymousUsageDataSetting: BoolSetting {
+    init(prefs: Prefs, delegate: SettingsDelegate?) {
+        super.init(
+            prefs: prefs, prefKey: "settings.sendUsageData", defaultValue: true,
+            attributedTitleText: NSAttributedString(string: NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")),
+            attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIColor.blueColor()]),
+            settingDidChange: { AdjustIntegration.setEnabled($0) }
+        )
+    }
+
+    override var url: NSURL? {
+        return SupportUtils.URLForTopic("adjust")
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController)
+    }
+}
+
 // Opens the the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?) {
