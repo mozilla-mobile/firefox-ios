@@ -2318,6 +2318,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 if let url = ReaderModeUtils.decodeURL(url) {
                     profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
                     readerModeBar.added = true
+                    readerModeBar.unread = true
                 }
             }
 
@@ -2326,6 +2327,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 if let successValue = result.successValue, record = successValue {
                     profile.readingList?.deleteRecord(record) // TODO Check result, can this fail?
                     readerModeBar.added = false
+                    readerModeBar.unread = false
                 }
             }
         }
