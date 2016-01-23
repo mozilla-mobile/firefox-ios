@@ -582,6 +582,7 @@
 		E69966991B72674B0036F797 /* RollingFileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69966981B72674B0036F797 /* RollingFileLogger.swift */; };
 		E69BEA5E1BC6A7F300EA6D04 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69BEA371BC6A79B00EA6D04 /* ArrayExtensions.swift */; };
 		E6A118F31C32DE98008989E8 /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A118F21C32DE98008989E8 /* SettingsTests.swift */; };
+		E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */; };
 		E6B8963A1C3C1A9500D9B05B /* topdomains.txt in Resources */ = {isa = PBXBuildFile; fileRef = E6B896391C3C1A9500D9B05B /* topdomains.txt */; };
 		E6C05DB21BA1CDAB00CDDD08 /* Breakpad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E69E4E2A1B9F709A00646EDB /* Breakpad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6D749011C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */; };
@@ -1815,6 +1816,7 @@
 		E69BEA371BC6A79B00EA6D04 /* ArrayExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		E69E4E241B9F709A00646EDB /* Breakpad.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Breakpad.xcodeproj; path = "Carthage/Checkouts/google-breakpad-ios/src/client/ios/Breakpad.xcodeproj"; sourceTree = "<group>"; };
 		E6A118F21C32DE98008989E8 /* SettingsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
+		E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInputTests.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
 		E6B896391C3C1A9500D9B05B /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLProtectionSpaceExtensions.swift; sourceTree = "<group>"; };
@@ -2667,6 +2669,7 @@
 				D343DCD81C445EE600D7EEE8 /* FindInPageTests.swift */,
 				D39FA1801A83E84900EE869C /* Global.swift */,
 				4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */,
+				E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */,
 				E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */,
 				D39FA1821A83E87900EE869C /* NavigationTests.swift */,
 				E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */,
@@ -4695,6 +4698,7 @@
 				D33B5B7C1AF1AFC100F4DDE6 /* SearchTests.swift in Sources */,
 				4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */,
 				E42475E71AB73B9B00B23D33 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
+				E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */,
 				D375A9201AE71675001B30D5 /* ViewMemoryLeakTests.swift in Sources */,
 				E42475E41AB73B9B00B23D33 /* SWTableViewCell.m in Sources */,
 				D38B2D361A8D96D00040E6B5 /* GCDWebServerFunctions.m in Sources */,
