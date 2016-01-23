@@ -30,6 +30,13 @@ public enum BookmarkTreeNode: Equatable {
         return BookmarkRoots.All.contains(self.recordGUID)
     }
 
+    public var isUnknown: Bool {
+        if case .Unknown = self {
+            return true
+        }
+        return false
+    }
+
     public var children: [BookmarkTreeNode]? {
         if case let .Folder(_, children) = self {
             return children
