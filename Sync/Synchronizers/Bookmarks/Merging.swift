@@ -98,6 +98,13 @@ enum MergeState<T> {
     case Remote
     case Local
     case New(value: T)
+
+    var isUnknown: Bool {
+        if case .Unknown = self {
+            return true
+        }
+        return false
+    }
 }
 
 /**
