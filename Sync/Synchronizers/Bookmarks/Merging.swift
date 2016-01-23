@@ -130,14 +130,27 @@ class MergedTreeNode {
 
     var valueState: MergeState<BookmarkMirrorItem> = MergeState.Unknown
     var structureState: MergeState<BookmarkTreeNode> = MergeState.Unknown
-    var mergedChildren: [MergedTreeNode] = []
+
+    var hasDecidedChildren: Bool {
+        return !self.structureState.isUnknown
+    }
+
+    var mergedChildren: [MergedTreeNode]? = nil
+
+    init(guid: GUID, mirror: BookmarkTreeNode?, structureState: MergeState<BookmarkTreeNode>) {
+        self.guid = guid
+        self.mirror = mirror
+        self.structureState = structureState
+    }
 
     init(guid: GUID, mirror: BookmarkTreeNode?) {
         self.guid = guid
         self.mirror = mirror
     }
 
-    var decidedStructure: BookmarkTreeNode? {
+    // N.B., you cannot recurse down `decidedStructure`: you'll depart from the
+    // merged tree. You need to use `mergedChildren` instead.
+    private var decidedStructure: BookmarkTreeNode? {
         switch self.structureState {
         case .Unknown:
             return nil
@@ -152,8 +165,23 @@ class MergedTreeNode {
         }
     }
 
-    var children: [BookmarkTreeNode]? {
-        return self.decidedStructure?.children
+    func asUnmergedTreeNode() -> BookmarkTreeNode {
+        return self.decidedStructure ?? BookmarkTreeNode.Unknown(guid: self.guid)
+    }
+
+    // Recursive. Starts returning Unknown when nodes haven't been processed.
+    func asMergedTreeNode() -> BookmarkTreeNode {
+        guard let decided = self.decidedStructure,
+              let merged = self.mergedChildren else {
+            return BookmarkTreeNode.Unknown(guid: self.guid)
+        }
+
+        if case .Folder = decided {
+            let children = merged.map { $0.asMergedTreeNode() }
+            return BookmarkTreeNode.Folder(guid: self.guid, children: children)
+        }
+
+        return decided
     }
 }
 
@@ -162,8 +190,7 @@ class MergedTree {
     var deleted: Set<GUID> = Set()
 
     init(mirrorRoot: BookmarkTreeNode) {
-        self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot)
+        self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot, structureState: MergeState.Unchanged)
         self.root.valueState = MergeState.Unchanged
-        self.root.structureState = MergeState.Unchanged
     }
 }
