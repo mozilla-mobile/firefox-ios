@@ -145,7 +145,7 @@ public struct BookmarkMirrorItem {
     }
 }
 
-public protocol BookmarkMirrorStorage {
+public protocol BookmarkBufferStorage {
     func applyRecords(records: [BookmarkMirrorItem]) -> Success
     func doneApplyingRecordsAfterDownload() -> Success
 }
@@ -160,6 +160,15 @@ public struct BookmarkRoots {
     public static let UnfiledFolderGUID =      "unfiled_____"
 
     public static let FakeDesktopFolderGUID =  "desktop_____"   // Pseudo. Never mentioned in a real record.
+
+    public static let All = Set<GUID>([
+        BookmarkRoots.RootGUID,
+        BookmarkRoots.MobileFolderGUID,
+        BookmarkRoots.MenuFolderGUID,
+        BookmarkRoots.ToolbarFolderGUID,
+        BookmarkRoots.UnfiledFolderGUID,
+        BookmarkRoots.FakeDesktopFolderGUID,
+    ])
 
     /**
      * Sync records are a horrible mess of Places-native GUIDs and Sync-native IDs.
@@ -230,13 +239,19 @@ public enum BookmarkNodeType: Int {
  */
 public class BookmarkNode {
     public var id: Int? = nil
-    public var guid: String
+    public var guid: GUID
     public var title: String
     public var favicon: Favicon? = nil
 
-    init(guid: String, title: String) {
+    init(guid: GUID, title: String) {
         self.guid = guid
         self.title = title
+    }
+}
+
+public class BookmarkSeparator: BookmarkNode {
+    init(guid: GUID) {
+        super.init(guid: guid, title: "—")
     }
 }
 
@@ -327,9 +342,8 @@ public protocol BookmarksModelFactory {
     var nullModel: BookmarksModel { get }
 
     func isBookmarked(url: String) -> Deferred<Maybe<Bool>>
-    func remove(bookmark: BookmarkNode) -> Success
+    func removeByGUID(guid: GUID) -> Success
     func removeByURL(url: String) -> Success
-    func clearBookmarks() -> Success
 }
 
 /*
@@ -555,7 +569,7 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
-    public func remove(bookmark: BookmarkNode) -> Success {
+    public func removeByGUID(guid: GUID) -> Success {
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
