@@ -112,7 +112,7 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 }
 
                 var bestType = IconType.NoneFound
-                element.iterate("head.link") { link in
+                element.iterateWithRootXPath("//head//link[contains(@rel, 'icon')]") { link in
                     var iconType: IconType? = nil
                     if let rel = link.attribute("rel") {
                         switch (rel) {
@@ -128,8 +128,16 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                                 iconType = nil
                         }
                     }
+
+                    guard let href = link.attribute("href") where iconType != nil else {
+                        return
+                    }
+
+                    if (href.endsWith(".ico")) {
+                        iconType = .Guess
+                    }
+
                     if let type = iconType where !bestType.isPreferredTo(type),
-                        let href = link.attribute("href"),
                         let iconUrl = NSURL(string: href, relativeToURL: url) {
                             let icon = Favicon(url: iconUrl.absoluteString, date: NSDate(), type: type)
                             // If we already have a list of Favicons going already, then add it…
@@ -145,7 +153,7 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
 
                 // If we haven't got any options icons, then use the default at the root of the domain.
                 if let url = NSURL(string: "/favicon.ico", relativeToURL: url) where icons.isEmpty {
-                    let icon = Favicon(url: url.absoluteString, date: NSDate(), type: .Icon)
+                    let icon = Favicon(url: url.absoluteString, date: NSDate(), type: .Guess)
                     icons = [icon]
                 }
             }
