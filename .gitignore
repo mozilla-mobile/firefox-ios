@@ -18,7 +18,7 @@ DerivedData
 *.xcscmblueprint
 
 fastlane/scripts/upload.sh
-
+/firefox-ios-l10n
 # fastlane temporary profiling data
 /fastlane/report.xml
 # deliver temporary error output
