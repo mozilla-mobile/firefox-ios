@@ -846,12 +846,9 @@ class BrowserViewController: UIViewController {
             toolbar?.updateReloadStatus(loading)
             urlBar.updateReloadStatus(loading)
         case KVOURL:
-            if let tab = tabManager.selectedTab where tab.webView?.URL == nil {
+            guard let tab = tabManager.selectedTab where tab.webView?.URL == nil else {
                 log.debug("URL is nil!")
-            }
-
-            if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
-                updateUIForReaderHomeStateForTab(tab)
+                break
             }
         case KVOCanGoBack:
             guard let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
@@ -1842,6 +1839,12 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 completionHandler(NSURLSessionAuthChallengeDisposition.RejectProtectionSpace, nil)
             }
+        }
+    }
+
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
+            updateUIForReaderHomeStateForTab(tab)
         }
     }
 
