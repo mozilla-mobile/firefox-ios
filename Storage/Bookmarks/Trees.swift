@@ -161,7 +161,7 @@ public struct BookmarkTree {
 
     // Recursively process an input set of structure pairs to yield complete subtrees,
     // assembling those subtrees to make a minimal set of trees.
-    static func mappingsToTreeForStructureRows(mappings: [StructureRow], withNonFoldersAndEmptyFolders nonFoldersAndEmptyFolders: [BookmarkTreeNode], withDeletedRecords deleted: Set<GUID>) -> Deferred<Maybe<BookmarkTree>> {
+    static func mappingsToTreeForStructureRows(mappings: [StructureRow], withNonFoldersAndEmptyFolders nonFoldersAndEmptyFolders: [BookmarkTreeNode], withDeletedRecords deleted: Set<GUID>, alwaysIncludeRoots: Bool) -> Deferred<Maybe<BookmarkTree>> {
         // Accumulate.
         var nodes: [GUID: BookmarkTreeNode] = [:]
         var parents: [GUID: GUID] = [:]
@@ -214,6 +214,18 @@ public struct BookmarkTree {
                 // This will be the case if we've shadowed a folder; we indirectly reference the original rows.
                 nodes[row.child] = BookmarkTreeNode.Unknown(guid: row.child)
             }
+        }
+
+        // When we build the mirror, we always want to pretend it has our stock roots.
+        // This gives us our shared basis from which to merge.
+        // Doing it here means we don't need to protect the mirror database table.
+        if alwaysIncludeRoots {
+            // Note that we don't check whether the input already contained the roots; we
+            // never change them, so it's safe to do this unconditionally.
+            pseudoTree[BookmarkRoots.RootGUID] = BookmarkRoots.RootChildren
+            tops.insert(BookmarkRoots.RootGUID)
+            notTops.unionInPlace(BookmarkRoots.RootChildren)
+            remainingFolders.unionInPlace(BookmarkRoots.RootChildren)
         }
 
         tops.subtractInPlace(notTops)
