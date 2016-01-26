@@ -969,14 +969,16 @@ class BrowserViewController: UIViewController {
     }
 
     private func popToBrowser() {
-        guard let currentViewController = navigationController?.topViewController where currentViewController != self else {
+        guard let currentViewController = navigationController?.topViewController else {
             return
         }
         if let presentedViewController = currentViewController.presentedViewController {
             presentedViewController.dismissViewControllerAnimated(true, completion: nil)
         }
-        navigationController?.popToViewController(self, animated: false)
-        resetBrowserChrome()
+        if currentViewController != self {
+            navigationController?.popToViewController(self, animated: false)
+            resetBrowserChrome()
+        }
     }
 
     // Mark: User Agent Spoofing
