@@ -110,6 +110,8 @@ class ThreeWayTreeMerger {
     let local: BookmarkTree
     let mirror: BookmarkTree
     let remote: BookmarkTree
+    var merged: MergedTree
+    var done: Bool = false
 
     let itemSource: MirrorItemSource
 
@@ -128,10 +130,17 @@ class ThreeWayTreeMerger {
 
 
     init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree, itemSource: MirrorItemSource) {
+        // These are runtime-tested in merge(). assert to make sure that tests
+        // don't do anything stupid, and we don't slip past those constraints.
+        assert(local.isFullyRootedIn(mirror))
+        assert(remote.isFullyRootedIn(mirror))
+        precondition(mirror.root != nil)
+
         self.local = local
         self.mirror = mirror
         self.remote = remote
         self.itemSource = itemSource
+        self.merged = MergedTree(mirrorRoot: self.mirror.root!)
 
         // We won't get here unless every local and remote orphan is correctly rooted
         // when overlaid on the mirror, so we don't need to exclude orphans here.
@@ -145,8 +154,92 @@ class ThreeWayTreeMerger {
         self.nonRemoteKnownGUIDs = self.mirrorAllGUIDs.union(self.localAllGUIDs).union(self.local.deleted)
     }
 
+    private func nullOrMatch(a: String?, _ b: String?) -> Bool {
+        guard let a = a, let b = b else {
+            return true
+        }
+        return a == b
+    }
+
+    // We'll end up looking at deletions and such as we go.
+    func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) -> MergedTreeNode {
+        // We'll never get here with no nodes at all… right?
+        precondition((localNode != nil) || (mirrorNode != nil) || (remoteNode != nil))
+
+        // Note that not all of the input nodes must share a GUID: we might have decided, based on
+        // value comparison in an earlier recursive call, that a local node will be replaced by a
+        // remote node, and we'll need to mark the local GUID as a deletion, using its values and
+        // structure during our reconciling.
+        // But we will never have the mirror and remote differ.
+        precondition(nullOrMatch(remoteNode?.recordGUID, mirrorNode?.recordGUID))
+        precondition(nullOrMatch(remoteNode?.recordGUID, guid))
+        precondition(nullOrMatch(mirrorNode?.recordGUID, guid))
+
+        guard let mirrorNode = mirrorNode else {
+            // Two-way merge.
+            if let loc = localNode {
+                if let rem = remoteNode {
+                    // Two-way merge; probably a disconnect-reconnect scenario.
+                } else {
+                    // Node only exists locally.
+                }
+            } else {
+                if let rem = remoteNode {
+                    // Node only exists remotely. Take it.
+                } else {
+                    // This should not occur: we have preconditions above.
+                    precondition(false, "Unexpectedly got past our preconditions!")
+                    abort()
+                }
+            }
+            // TODO
+            return MergedTreeNode(guid: guid, mirror: remoteNode ?? localNode)
+        }
+
+        // We have a mirror node.
+        if let loc = localNode {
+            if let rem = remoteNode {
+                // Conflict: local and remote changes to a mirror item.
+            } else {
+                // Local-only change to a mirror item.
+                // Easy, but watch out for value changes or deletions to our children.
+            }
+        } else {
+            if let rem = remoteNode {
+                // Remote-only change to a mirror item.
+                // Easy, but watch out for value changes or deletions to our children.
+            } else {
+                // No change.
+                return MergedTreeNode(guid: guid, mirror: mirrorNode, structureState: MergeState.Unchanged)
+            }
+        }
+
+        // TODO
+        return MergedTreeNode(guid: guid, mirror: mirrorNode)
+    }
+
+    // This should only be called once.
     func produceMergedTree() -> Deferred<Maybe<MergedTree>> {
-        return deferMaybe(MergedTree(mirrorRoot: BookmarkTreeNode.Folder(guid: "foof", children: [])))
+        if self.done {
+            return deferMaybe(self.merged)
+        }
+
+        let root = self.merged.root
+        assert((root.mirror?.children?.count ?? 0) == BookmarkRoots.RootChildren.count)
+
+        // Get to walkin'.
+        root.structureState = MergeState.Unchanged      // We never change the root.
+        root.valueState = MergeState.Unchanged
+        root.mergedChildren = root.mirror!.children!.map {
+            let guid = $0.recordGUID
+            let loc = self.local.find(guid)
+            let mir = self.mirror.find(guid)
+            let rem = self.remote.find(guid)
+            return self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
+        }
+
+        self.done = true
+        return deferMaybe(self.merged)
     }
 
     func produceMergeResultFromMergedTree(mergedTree: MergedTree) -> Deferred<Maybe<BookmarksMergeResult>> {
@@ -154,6 +247,7 @@ class ThreeWayTreeMerger {
         let buffer = BufferCompletionOp()
         let local = LocalOverrideCompletionOp()
 
+        // TODO: walk the merged tree to produce filled ops.
         return deferMaybe(BookmarksMergeResult(uploadCompletion: upstream, overrideCompletion: local, bufferCompletion: buffer))
     }
 
@@ -163,6 +257,9 @@ class ThreeWayTreeMerger {
         // the tree is inconsistent -- there isn't a full tree present either on the server (or local)
         // or in the mirror, or the changes aren't congruent in some way. If we reach this state, we
         // cannot proceed.
+        //
+        // This is assert()ed in the initializer, too, so that we crash hard and early in developer builds and tests.
+
         if !self.local.isFullyRootedIn(self.mirror) {
             log.warning("Local bookmarks not fully rooted when overlayed on mirror. This is most unusual.")
             return deferMaybe(BookmarksMergeErrorTreeIsUnrooted(roots: self.local.subtreeGUIDs))
