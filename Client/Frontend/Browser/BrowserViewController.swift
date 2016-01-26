@@ -969,15 +969,14 @@ class BrowserViewController: UIViewController {
     }
 
     private func popToBrowser() {
-        guard let currentViewController = navigationController?.topViewController else {
-            return
+        guard let currentViewController = navigationController?.topViewController,
+            let presentedViewController = currentViewController.presentedViewController else {
+                return
         }
-        if let presentedViewController = currentViewController.presentedViewController {
-            presentedViewController.dismissViewControllerAnimated(true, completion: nil)
-        }
+        
+        presentedViewController.dismissViewControllerAnimated(false, completion: nil)
         if currentViewController != self {
-            navigationController?.popToViewController(self, animated: false)
-            resetBrowserChrome()
+            self.navigationController?.popViewControllerAnimated(true)
         }
     }
 
