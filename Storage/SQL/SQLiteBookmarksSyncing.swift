@@ -731,7 +731,7 @@ extension SQLiteBookmarks {
         return "SELECT guid FROM \(table) WHERE is_deleted IS 1"
     }
 
-    private func treeForTable(table: String, structure: String) -> Deferred<Maybe<BookmarkTree>> {
+    private func treeForTable(table: String, structure: String, alwaysIncludeRoots includeRoots: Bool) -> Deferred<Maybe<BookmarkTree>> {
         // The structure query doesn't give us non-structural rows -- that is, if you
         // make a value-only change to a record, and it's not otherwise mentioned by
         // way of being a child of a structurally modified folder, it won't appear here at all.
@@ -771,22 +771,22 @@ extension SQLiteBookmarks {
                         return self.db.runQuery(structureSQL, args: nil, factory: structureFactory)
                             >>== { cursor in
                                 let structureRows = cursor.asArray()
-                                return BookmarkTree.mappingsToTreeForStructureRows(structureRows, withNonFoldersAndEmptyFolders: nonFoldersAndEmptyFolders, withDeletedRecords: deleted)
+                                return BookmarkTree.mappingsToTreeForStructureRows(structureRows, withNonFoldersAndEmptyFolders: nonFoldersAndEmptyFolders, withDeletedRecords: deleted, alwaysIncludeRoots: includeRoots)
                         }
                 }
         }
     }
 
     public func treeForMirror() -> Deferred<Maybe<BookmarkTree>> {
-        return self.treeForTable(TableBookmarksMirror, structure: TableBookmarksMirrorStructure)
+        return self.treeForTable(TableBookmarksMirror, structure: TableBookmarksMirrorStructure, alwaysIncludeRoots: true)
     }
 
     public func treeForBuffer() -> Deferred<Maybe<BookmarkTree>> {
-        return self.treeForTable(TableBookmarksBuffer, structure: TableBookmarksBufferStructure)
+        return self.treeForTable(TableBookmarksBuffer, structure: TableBookmarksBufferStructure, alwaysIncludeRoots: false)
     }
 
     public func treeForLocal() -> Deferred<Maybe<BookmarkTree>> {
-        return self.treeForTable(TableBookmarksLocal, structure: TableBookmarksLocalStructure)
+        return self.treeForTable(TableBookmarksLocal, structure: TableBookmarksLocalStructure, alwaysIncludeRoots: false)
     }
 }
 
