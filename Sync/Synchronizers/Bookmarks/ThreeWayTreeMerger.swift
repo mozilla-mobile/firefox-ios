@@ -161,6 +161,18 @@ class ThreeWayTreeMerger {
         return a == b
     }
 
+    private func twoWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode) -> MergedTreeNode {
+        let node = MergedTreeNode(guid: guid, mirror: nil)
+        node.local = localNode
+        node.remote = remoteNode
+        node.structureState = MergeState.Local
+        node.valueState = MergeState.Local
+
+        // TODO: children
+        // TODO: merge values (based on date) and structure so we don't lose children.
+        return node
+    }
+
     // We'll end up looking at deletions and such as we go.
     func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) -> MergedTreeNode {
         // We'll never get here with no nodes at all… right?
@@ -180,20 +192,28 @@ class ThreeWayTreeMerger {
             if let loc = localNode {
                 if let rem = remoteNode {
                     // Two-way merge; probably a disconnect-reconnect scenario.
-                } else {
-                    // Node only exists locally.
+                    return self.twoWayMerge(guid, localNode: loc, remoteNode: rem)
                 }
-            } else {
-                if let rem = remoteNode {
-                    // Node only exists remotely. Take it.
-                } else {
-                    // This should not occur: we have preconditions above.
-                    precondition(false, "Unexpectedly got past our preconditions!")
-                    abort()
-                }
+
+                // Node only exists locally.
+                // However! The children might be mentioned in the mirror or
+                // remote tree.
+                let node = MergedTreeNode(guid: guid, mirror: nil, structureState: MergeState.Local)
+                node.local = loc
+                node.valueState = MergeState.Local
+                // TODO: children.
+                return node
             }
+
+            guard let rem = remoteNode else {
+                // This should not occur: we have preconditions above.
+                precondition(false, "Unexpectedly got past our preconditions!")
+                abort()
+            }
+
+            // Node only exists remotely. Take it.
             // TODO
-            return MergedTreeNode(guid: guid, mirror: remoteNode ?? localNode)
+            return MergedTreeNode(guid: guid, mirror: rem)
         }
 
         // We have a mirror node.
