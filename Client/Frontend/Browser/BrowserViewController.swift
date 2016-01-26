@@ -492,9 +492,11 @@ class BrowserViewController: UIViewController {
         let alert = UIAlertController.restoreTabsAlert(
             okayCallback: { _ in
                 self.tabManager.restoreTabs()
+                self.updateTabCountUsingTabManager(self.tabManager, animated: false)
             },
             noCallback: { _ in
                 self.tabManager.addTabAndSelect()
+                self.updateTabCountUsingTabManager(self.tabManager, animated: false)
             }
         )
 
