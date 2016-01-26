@@ -154,6 +154,11 @@ public struct BookmarkTree {
         }
     }
 
+    // If this tree contains the root, return it.
+    public var root: BookmarkTreeNode? {
+        return self.find(BookmarkRoots.RootGUID)
+    }
+
     // Recursively process an input set of structure pairs to yield complete subtrees,
     // assembling those subtrees to make a minimal set of trees.
     static func mappingsToTreeForStructureRows(mappings: [StructureRow], withNonFoldersAndEmptyFolders nonFoldersAndEmptyFolders: [BookmarkTreeNode], withDeletedRecords deleted: Set<GUID>) -> Deferred<Maybe<BookmarkTree>> {
