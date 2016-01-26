@@ -65,6 +65,12 @@ function highlightAllMatches(text) {
   var scrollLeft = document.body.scrollLeft;
   var failures = 0;
 
+  // window.find() sometimes updates the scroll position of the page to the found selection
+  // (for example, nytimes.com). As a workaround, record the current scroll position,
+  // and reset it after we're done looking for results.
+  var startX = window.scrollX;
+  var startY = window.scrollY;
+
   while (true) {
     if (failures > MAX_FAILURES) {
       debug("Reached max fail count; stopping search.");
@@ -133,6 +139,8 @@ function highlightAllMatches(text) {
 
     foundRanges.push(selection.getRangeAt(0));
   }
+
+  window.scrollTo(startX, startY);
 
   for (var range of foundRanges) {
     var highlight = document.createElement("span");
