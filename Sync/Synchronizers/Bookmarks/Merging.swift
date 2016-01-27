@@ -137,6 +137,27 @@ class MergedTreeNode {
 
     var mergedChildren: [MergedTreeNode]? = nil
 
+    // One-sided constructors.
+    static func forRemote(remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
+        let n = MergedTreeNode(guid: remote.recordGUID, mirror: mirror, structureState: MergeState.Remote)
+        n.remote = remote
+        n.valueState = MergeState.Remote
+        return n
+    }
+
+    static func forLocal(local: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
+        let n = MergedTreeNode(guid: local.recordGUID, mirror: mirror, structureState: MergeState.Local)
+        n.local = local
+        n.valueState = MergeState.Local
+        return n
+    }
+
+    static func forUnchanged(mirror: BookmarkTreeNode) -> MergedTreeNode {
+        let n = MergedTreeNode(guid: mirror.recordGUID, mirror: mirror, structureState: MergeState.Unchanged)
+        n.valueState = MergeState.Unchanged
+        return n
+    }
+
     init(guid: GUID, mirror: BookmarkTreeNode?, structureState: MergeState<BookmarkTreeNode>) {
         self.guid = guid
         self.mirror = mirror
