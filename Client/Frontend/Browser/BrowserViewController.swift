@@ -1368,11 +1368,6 @@ extension BrowserViewController: WindowCloseHelperDelegate {
 extension BrowserViewController: BrowserDelegate {
 
     func browser(browser: Browser, didCreateWebView webView: WKWebView) {
-        webViewContainer.insertSubview(webView, atIndex: 0)
-        webView.snp_makeConstraints { make in
-            make.top.equalTo(webViewContainerToolbar.snp_bottom)
-            make.left.right.bottom.equalTo(self.webViewContainer)
-        }
 
         // Observers that live as long as the tab. Make sure these are all cleared
         // in willDeleteWebView below!
@@ -1380,7 +1375,7 @@ extension BrowserViewController: BrowserDelegate {
         webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoBack, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoForward, options: .New, context: nil)
-        browser.webView?.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
+        webView.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
 
         webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .New, context: nil)
 
@@ -1636,7 +1631,21 @@ extension BrowserViewController: TabManagerDelegate {
             ReaderModeHandlers.readerModeCache = readerModeCache
 
             scrollController.browser = selected
+
+            // before we add a new webView, ensure that there aren't too many subviews already in the webViewContainer
+            if webViewContainer.subviews.count > 20,
+                let bottomWebView = ( webViewContainer.subviews.find {
+                $0.isKindOfClass(WKWebView)
+            } ) {
+                log.info("Reached max number of WKWebViews in memory. Removing oldest view from container")
+                bottomWebView.removeFromSuperview()
+            }
+
             webViewContainer.addSubview(webView)
+            webView.snp_makeConstraints { make in
+                make.top.equalTo(webViewContainerToolbar.snp_bottom)
+                make.left.right.bottom.equalTo(self.webViewContainer)
+            }
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
