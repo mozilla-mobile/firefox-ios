@@ -162,8 +162,62 @@ class ThreeWayTreeMerger {
     }
 
     private func twoWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromLocal local: [BookmarkTreeNode], remote: [BookmarkTreeNode]) throws {
-        result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: local))
-        result.mergedChildren = nil      // TODO
+        // The most trivial implementation: take everything in the first list, then append
+        // everything new in the second list.
+        // Anything present in both is queued up to be resolved.
+        // We can't get away from handling deletions and moves, etc. -- one might have
+        // created a folder on two devices and moved existing items on one, some of which
+        // might have been deleted on the other.
+        // This kind of shit is why bookmark sync is hard.
+        var out: [MergedTreeNode] = []
+        var seen: Set<GUID> = Set()
+
+        // Do a recursive merge of each child.
+        try remote.forEach { rem in
+            let guid = rem.recordGUID
+            seen.insert(guid)
+
+            let mir = self.mirror.find(guid)
+            let loc = self.local.find(guid)
+            let locallyDeleted = self.local.deleted.contains(guid)
+
+            if locallyDeleted {
+                // It was locally deleted. This would be good enough for us,
+                // but we need to ensure that any remote children are recursively
+                // deleted or handled as orphans.
+                // TODO
+                return
+            }
+
+            let m = try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
+            out.append(m)
+        }
+
+        try local.forEach { loc in
+            let guid = loc.recordGUID
+            if seen.contains(guid) {
+                return
+            }
+
+            let mir = self.mirror.find(guid)
+            let rem = self.remote.find(guid)
+            let remotelyDeleted = self.remote.deleted.contains(guid)
+
+            if remotelyDeleted {
+                // It was remotely deleted. This would be good enough for us,
+                // but we need to ensure that any local children are recursively
+                // deleted or handled as orphans.
+                // TODO
+                return
+            }
+
+            let m = try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
+            out.append(m)
+        }
+
+        let newStructure = out.map { $0.asMergedTreeNode() }
+        result.mergedChildren = out
+        result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: newStructure))
     }
 
     // This will never be called with two .Unknown values.
