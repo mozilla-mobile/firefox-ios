@@ -59,6 +59,23 @@ public enum BookmarkTreeNode: Equatable {
         }
         return false
     }
+
+    // Returns false for unknowns.
+    public func isSameTypeAs(other: BookmarkTreeNode) -> Bool {
+        switch self {
+        case .Folder:
+            if case .Folder = other {
+                return true
+            }
+        case .NonFolder:
+            if case .NonFolder = other {
+                return true
+            }
+        default:
+            return false
+        }
+        return false
+    }
 }
 
 public func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
