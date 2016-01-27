@@ -64,6 +64,10 @@ class Browser: NSObject, BrowserWebViewDelegate {
     private var helperManager: HelperManager? = nil
     private var configuration: WKWebViewConfiguration? = nil
 
+    /// Any time a browser tries to make requests to display a Javascript Alert and we are not the active
+    /// browser instance, queue it for later until we become foregrounded.
+    private var alertQueue = [JSAlertInfo]()
+
     init(configuration: WKWebViewConfiguration) {
         self.configuration = configuration
     }
@@ -391,6 +395,17 @@ class Browser: NSObject, BrowserWebViewDelegate {
     func toggleDesktopSite() {
         desktopSite = !desktopSite
         reload()
+    }
+
+    func queueJavascriptAlertPrompt(alert: JSAlertInfo) {
+        alertQueue.append(alert)
+    }
+
+    func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
+        guard !alertQueue.isEmpty else {
+            return nil
+        }
+        return alertQueue.removeFirst()
     }
 
     private func browserWebView(browserWebView: BrowserWebView, didSelectFindInPageForSelection selection: String) {

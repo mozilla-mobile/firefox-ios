@@ -16,9 +16,6 @@ import ReadingList
 
 private let log = Logger.browserLogger
 
-private let OKString = NSLocalizedString("OK", comment: "OK button")
-private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
-
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 private let KVOURL = "URL"
@@ -530,6 +527,12 @@ class BrowserViewController: UIViewController {
                 self.openURLInNewTab(whatsNewURL)
                 profile.prefs.setString(appVersion, forKey: "latestAppVersion")
             }
+        }
+
+        if var queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
+            let alertController = queuedAlertInfo.alertController()
+            alertController.delegate = self
+            presentViewController(alertController, animated: true, completion: nil)
         }
     }
 
@@ -1962,67 +1965,39 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
-    /// Show a title for a JavaScript Panel (alert) based on the WKFrameInfo. On iOS9 we will use the new securityOrigin
-    /// and on iOS 8 we will fall back to the request URL. If the request URL is nil, which happens for JavaScript pages,
-    /// we fall back to "JavaScript" as a title.
-    private func titleForJavaScriptPanelInitiatedByFrame(frame: WKFrameInfo) -> String {
-        var title: String = "JavaScript"
-        if #available(iOS 9, *) {
-            title = "\(frame.securityOrigin.`protocol`)://\(frame.securityOrigin.host)"
-            if frame.securityOrigin.port != 0 {
-                title += ":\(frame.securityOrigin.port)"
-            }
-        } else {
-            if let url = frame.request.URL {
-                title = "\(url.scheme)://\(url.hostPort))"
-            }
-        }
-        return title
-    }
-
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
-        tabManager.selectTab(tabManager[webView])
-
-        // Show JavaScript alerts.
-
-        let alertController = UIAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
+        var messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
+        if tabManager.selectedTab?.webView == webView {
+            presentViewController(messageAlert.alertController(), animated: true, completion: nil)
+        } else if let promptingTab = tabManager[webView] {
+            promptingTab.queueJavascriptAlertPrompt(messageAlert)
+        } else {
+            // This should never happen since an alert needs to come from a web view but just in case call the handler
+            // since not calling it will result in a runtime exception.
             completionHandler()
-        }))
-        presentViewController(alertController, animated: true, completion: nil)
+        }
     }
 
     func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
-        tabManager.selectTab(tabManager[webView])
-
-        // Show JavaScript confirm dialogs.
-        let alertController = UIAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
-            completionHandler(true)
-        }))
-        alertController.addAction(UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: { _ in
+        var confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
+        if tabManager.selectedTab?.webView == webView {
+            presentViewController(confirmAlert.alertController(), animated: true, completion: nil)
+        } else if let promptingTab = tabManager[webView] {
+            promptingTab.queueJavascriptAlertPrompt(confirmAlert)
+        } else {
             completionHandler(false)
-        }))
-        presentViewController(alertController, animated: true, completion: nil)
+        }
     }
 
     func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String?) -> Void) {
-        tabManager.selectTab(tabManager[webView])
-
-        // Show JavaScript input dialogs.
-        let alertController = UIAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: prompt, preferredStyle: UIAlertControllerStyle.Alert)
-        var input: UITextField!
-        alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField) in
-            textField.text = defaultText
-            input = textField
-        })
-        alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
-            completionHandler(input.text)
-        }))
-        alertController.addAction(UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: { _ in
+        var textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
+        if tabManager.selectedTab?.webView == webView {
+            presentViewController(textInputAlert.alertController(), animated: true, completion: nil)
+        } else if let promptingTab = tabManager[webView] {
+            promptingTab.queueJavascriptAlertPrompt(textInputAlert)
+        } else {
             completionHandler(nil)
-        }))
-        presentViewController(alertController, animated: true, completion: nil)
+        }
     }
 
     /// Invoked when an error occurs during a committed main frame navigation.
@@ -2490,7 +2465,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     self.getImage(url) { UIImageWriteToSavedPhotosAlbum($0, nil, nil, nil) }
                 } else {
                     let accessDenied = UIAlertController(title: NSLocalizedString("Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: UIAlertControllerStyle.Alert)
-                    let dismissAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Default, handler: nil)
+                    let dismissAction = UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.Default, handler: nil)
                     accessDenied.addAction(dismissAction)
                     let settingsAction = UIAlertAction(title: NSLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7"), style: UIAlertActionStyle.Default ) { (action: UIAlertAction!) -> Void in
                         UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
@@ -2545,7 +2520,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         }
 
         actionSheetController.title = dialogTitle?.ellipsize(maxLength: ActionSheetTitleMaxLength)
-        let cancelAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.Cancel, handler: nil)
         actionSheetController.addAction(cancelAction)
         self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
@@ -2720,5 +2695,15 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
 
     func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int) {
         findInPageBar?.totalResults = totalResults
+    }
+}
+
+extension BrowserViewController: JSPromptAlertControllerDelegate {
+    func promptAlertControllerDidDismiss(alertController: JSPromptAlertController) {
+        if var queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
+            let alertController = queuedAlertInfo.alertController()
+            alertController.delegate = self
+            presentViewController(alertController, animated: true, completion: nil)
+        }
     }
 }
