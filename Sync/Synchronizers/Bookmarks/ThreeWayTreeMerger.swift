@@ -161,6 +161,41 @@ class ThreeWayTreeMerger {
         return a == b
     }
 
+    // TODO: can we merge these two helpers?
+    private func oneWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromRemote remote: [BookmarkTreeNode]) throws {
+        // TODO: this should be sensibly co-recursive; just as with merging
+        // the child lists in the two-way and three-way merge, we need
+        // to handle deletions, moves, tracking of seen items, etc.
+        // This is thus temporary!
+        let out: [MergedTreeNode] = try remote.map { child in
+            // TODO: handle deletions.
+            let childGUID = child.recordGUID
+            let localCounterpart = self.local.find(childGUID)
+            let mirrorCounterpart = self.mirror.find(childGUID)
+            return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: mirrorCounterpart, remoteNode: child)
+        }
+        let newStructure = out.map { $0.asMergedTreeNode() }
+        result.mergedChildren = out
+        result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: newStructure))
+    }
+
+    private func oneWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromLocal local: [BookmarkTreeNode]) throws {
+        // TODO: this should be sensibly co-recursive; just as with merging
+        // the child lists in the two-way and three-way merge, we need
+        // to handle deletions, moves, tracking of seen items, etc.
+        // This is thus temporary!
+        let out: [MergedTreeNode] = try local.map { child in
+            // TODO: handle deletions.
+            let childGUID = child.recordGUID
+            let remoteCounterpart = self.remote.find(childGUID)
+            let mirrorCounterpart = self.mirror.find(childGUID)
+            return try self.mergeNode(childGUID, localNode: child, mirrorNode: mirrorCounterpart, remoteNode: remoteCounterpart)
+        }
+        let newStructure = out.map { $0.asMergedTreeNode() }
+        result.mergedChildren = out
+        result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: newStructure))
+    }
+
     private func twoWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromLocal local: [BookmarkTreeNode], remote: [BookmarkTreeNode]) throws {
         // The most trivial implementation: take everything in the first list, then append
         // everything new in the second list.
@@ -324,9 +359,14 @@ class ThreeWayTreeMerger {
                 // No remote. Node only exists locally.
                 // However! The children might be mentioned in the mirror or
                 // remote tree.
-                // TODO: process children.
                 log.debug("Node \(guid) only exists locally.")
-                return MergedTreeNode.forLocal(loc)
+                let merged = MergedTreeNode.forLocal(loc)
+                if case let .Folder(_, children) = loc {
+                    log.debug("… and it's a folder. Taking local children.")
+                    try self.oneWayMergeChildListsIntoMergedNode(merged, fromLocal: children)
+                }
+
+                return merged
             }
 
             // No local.
@@ -340,7 +380,13 @@ class ThreeWayTreeMerger {
             // Node only exists remotely. Take it.
             // TODO: process children.
             log.debug("Node \(guid) only exists remotely.")
-            return MergedTreeNode.forRemote(rem)
+            let merged = MergedTreeNode.forRemote(rem)
+            if case let .Folder(_, children) = rem {
+                log.debug("… and it's a folder. Taking remote children.")
+                try self.oneWayMergeChildListsIntoMergedNode(merged, fromRemote: children)
+            }
+
+            return merged
         }
 
         // We have a mirror node.
