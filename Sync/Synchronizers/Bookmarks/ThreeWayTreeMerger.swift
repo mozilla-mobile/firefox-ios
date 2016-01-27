@@ -111,23 +111,29 @@ class ThreeWayTreeMerger {
     let mirror: BookmarkTree
     let remote: BookmarkTree
     var merged: MergedTree
-    var done: Bool = false
+
+    // Don't merge twice.
+    var mergeAttempted: Bool = false
 
     let itemSource: MirrorItemSource
 
     // Sets computed by looking at the three trees. These are used for diagnostics,
     // to simplify operations, and for testing.
+    // TODO: pre-fetch items from `itemSource` using allChangedGUIDs.
 
     let mirrorAllGUIDs: Set<GUID>          // Excluding deletions.
     let localAllGUIDs: Set<GUID>           // Excluding deletions.
     let remoteAllGUIDs: Set<GUID>          // Excluding deletions.
-    let localAdditions: Set<GUID>          // New records added locally.
-    let remoteAdditions: Set<GUID>         // New records from the server.
-    let allGUIDs: Set<GUID>                // Everything added or changed locally or remotely.
+    let localAdditions: Set<GUID>          // New records added locally, not present in the mirror.
+    let remoteAdditions: Set<GUID>         // New records from the server, not present in the mirror.
+    let allDeletions: Set<GUID>            // Records deleted locally or remotely.
+    let allChangedGUIDs: Set<GUID>         // Everything added or changed locally or remotely.
     let conflictingGUIDs: Set<GUID>        // Anything added or changed both locally and remotely.
 
     let nonRemoteKnownGUIDs: Set<GUID>     // Everything existing, added, or deleted locally or in the mirror.
 
+    // For now, track just one list. We might need to split this later.
+    var done: Set<GUID> = Set()
 
     init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree, itemSource: MirrorItemSource) {
         // These are runtime-tested in merge(). assert to make sure that tests
@@ -144,12 +150,13 @@ class ThreeWayTreeMerger {
 
         // We won't get here unless every local and remote orphan is correctly rooted
         // when overlaid on the mirror, so we don't need to exclude orphans here.
-        self.mirrorAllGUIDs = Set<GUID>(self.mirror.lookup.keys)
-        self.localAllGUIDs = Set<GUID>(self.local.lookup.keys)
-        self.remoteAllGUIDs = Set<GUID>(self.remote.lookup.keys)
+        self.mirrorAllGUIDs = self.mirror.modified
+        self.localAllGUIDs = self.local.modified
+        self.remoteAllGUIDs = self.remote.modified
         self.localAdditions = localAllGUIDs.subtract(mirrorAllGUIDs)
         self.remoteAdditions = remoteAllGUIDs.subtract(mirrorAllGUIDs)
-        self.allGUIDs = localAllGUIDs.union(remoteAllGUIDs)
+        self.allDeletions = self.local.deleted.union(self.remote.deleted)
+        self.allChangedGUIDs = localAllGUIDs.union(self.remoteAllGUIDs)
         self.conflictingGUIDs = localAllGUIDs.intersect(remoteAllGUIDs)
         self.nonRemoteKnownGUIDs = self.mirrorAllGUIDs.union(self.localAllGUIDs).union(self.local.deleted)
     }
@@ -161,7 +168,25 @@ class ThreeWayTreeMerger {
         return a == b
     }
 
-    // TODO: can we merge these two helpers?
+    // TODO: can we merge these three helpers?
+    private func takeMirrorChildrenInMergedNode(result: MergedTreeNode) throws {
+        guard let mirrorChildren = result.mirror?.children else {
+            preconditionFailure("Expected children.")
+        }
+
+        let out: [MergedTreeNode] = try mirrorChildren.map { child in
+            // TODO: handle deletions.
+            let childGUID = child.recordGUID
+            let localCounterpart = self.local.find(childGUID)
+            let remoteCounterpart = self.remote.find(childGUID)
+            return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: child, remoteNode: remoteCounterpart)
+        }
+
+        let newStructure = out.map { $0.asMergedTreeNode() }
+        result.mergedChildren = out
+        result.structureState = MergeState.Unchanged
+    }
+
     private func oneWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromRemote remote: [BookmarkTreeNode]) throws {
         // TODO: this should be sensibly co-recursive; just as with merging
         // the child lists in the two-way and three-way merge, we need
@@ -171,8 +196,7 @@ class ThreeWayTreeMerger {
             // TODO: handle deletions.
             let childGUID = child.recordGUID
             let localCounterpart = self.local.find(childGUID)
-            let mirrorCounterpart = self.mirror.find(childGUID)
-            return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: mirrorCounterpart, remoteNode: child)
+            return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: result.mirror, remoteNode: child)
         }
         let newStructure = out.map { $0.asMergedTreeNode() }
         result.mergedChildren = out
@@ -188,8 +212,7 @@ class ThreeWayTreeMerger {
             // TODO: handle deletions.
             let childGUID = child.recordGUID
             let remoteCounterpart = self.remote.find(childGUID)
-            let mirrorCounterpart = self.mirror.find(childGUID)
-            return try self.mergeNode(childGUID, localNode: child, mirrorNode: mirrorCounterpart, remoteNode: remoteCounterpart)
+            return try self.mergeNode(childGUID, localNode: child, mirrorNode: result.mirror, remoteNode: remoteCounterpart)
         }
         let newStructure = out.map { $0.asMergedTreeNode() }
         result.mergedChildren = out
@@ -257,7 +280,6 @@ class ThreeWayTreeMerger {
 
     // This will never be called with two .Unknown values.
     private func twoWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode) throws -> MergedTreeNode {
-
         // These really shouldn't occur in a two-way merge, but there we are.
         if remoteNode.isUnknown {
             if localNode.isUnknown {
@@ -299,6 +321,7 @@ class ThreeWayTreeMerger {
                     log.debug("Local and remote records have different children. Merging.")
                     try self.twoWayMergeChildListsIntoMergedNode(result, fromLocal: localChildren, remote: remoteChildren)
                 }
+
                 return result
             }
 
@@ -340,12 +363,56 @@ class ThreeWayTreeMerger {
         precondition(nullOrMatch(remoteNode?.recordGUID, guid))
         precondition(nullOrMatch(mirrorNode?.recordGUID, guid))
 
+        // Immediately mark this GUID -- and the local GUID, if it differs -- as done.
+        // This avoids us repeating this in each branch, and avoids the possibility of
+        // certain moves causing us to hit the same node again.
+        // We don't need to actually check this list until:
+        // 1. We walk the local tree as well as the remote tree. At this point we
+        //    should skip the local records that we've already seen.
+        // 2. We do content-based reconciling, in which case we need to avoid processing
+        //    twice. When we do the content lookup, we should also make sure that
+        //    we're not going to run into the node by GUID later!
+        self.done.insert(guid)
+        if let otherGUID = localNode?.recordGUID where otherGUID != guid {
+            self.done.insert(otherGUID)
+        }
+
+        func takeRemoteAndMergeChildren(remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) throws -> MergedTreeNode {
+            // Easy, but watch out for value changes or deletions to our children.
+            let merged = MergedTreeNode.forRemote(remote, mirror: mirror)
+            if case let .Folder(_, children) = remote {
+                log.debug("… and it's a folder. Taking remote children.")
+                try self.oneWayMergeChildListsIntoMergedNode(merged, fromRemote: children)
+            }
+            return merged
+        }
+
+        func takeLocalAndMergeChildren(local: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) throws -> MergedTreeNode {
+            // Easy, but watch out for value changes or deletions to our children.
+            let merged = MergedTreeNode.forLocal(local, mirror: mirror)
+            if case let .Folder(_, children) = local {
+                log.debug("… and it's a folder. Taking local children.")
+                try self.oneWayMergeChildListsIntoMergedNode(merged, fromLocal: children)
+            }
+            return merged
+        }
+
+        func takeMirrorNode(mirror: BookmarkTreeNode) throws -> MergedTreeNode {
+            let merged = MergedTreeNode.forUnchanged(mirror)
+            if case .Folder = mirror {
+                try self.takeMirrorChildrenInMergedNode(merged)
+            }
+            return merged
+        }
+
         // If we ended up here with two unknowns, just proceed down the mirror.
         // We know we have a mirror, else we'd have a non-unknown edge.
         if (localNode?.isUnknown ?? true) && (remoteNode?.isUnknown ?? true) {
             precondition(mirrorNode != nil)
             log.debug("Record \(guid) didn't change from mirror.")
-            return MergedTreeNode.forUnchanged(mirrorNode!)
+
+            self.done.insert(guid)
+            return try takeMirrorNode(mirrorNode!)
         }
 
         guard let mirrorNode = mirrorNode else {
@@ -360,13 +427,7 @@ class ThreeWayTreeMerger {
                 // However! The children might be mentioned in the mirror or
                 // remote tree.
                 log.debug("Node \(guid) only exists locally.")
-                let merged = MergedTreeNode.forLocal(loc)
-                if case let .Folder(_, children) = loc {
-                    log.debug("… and it's a folder. Taking local children.")
-                    try self.oneWayMergeChildListsIntoMergedNode(merged, fromLocal: children)
-                }
-
-                return merged
+                return try takeLocalAndMergeChildren(loc)
             }
 
             // No local.
@@ -378,15 +439,8 @@ class ThreeWayTreeMerger {
             }
 
             // Node only exists remotely. Take it.
-            // TODO: process children.
             log.debug("Node \(guid) only exists remotely.")
-            let merged = MergedTreeNode.forRemote(rem)
-            if case let .Folder(_, children) = rem {
-                log.debug("… and it's a folder. Taking remote children.")
-                try self.oneWayMergeChildListsIntoMergedNode(merged, fromRemote: children)
-            }
-
-            return merged
+            return try takeRemoteAndMergeChildren(rem)
         }
 
         // We have a mirror node.
@@ -394,28 +448,23 @@ class ThreeWayTreeMerger {
             if let rem = remoteNode where !rem.isUnknown {
                 log.debug("Both local and remote changes to a mirror item. Resolving conflict.")
                 return try self.threeWayMerge(guid, localNode: loc, remoteNode: rem, mirrorNode: mirrorNode)
-            } else {
-                log.debug("Local-only change to a mirror item.")
-                // Easy, but watch out for value changes or deletions to our children.
-                // TODO: process children.
-                return MergedTreeNode.forLocal(loc, mirror: mirrorNode)
             }
-        } else {
-            if let rem = remoteNode where !rem.isUnknown {
-                log.debug("Remote-only change to a mirror item.")
-                // Easy, but watch out for value changes or deletions to our children.
-                // TODO: process children.
-                return MergedTreeNode.forRemote(rem, mirror: mirrorNode)
-            } else {
-                log.debug("Record \(guid) didn't change from mirror.")
-                return MergedTreeNode.forUnchanged(mirrorNode)
-            }
+            log.debug("Local-only change to a mirror item.")
+            return try takeLocalAndMergeChildren(loc, mirror: mirrorNode)
         }
+
+        if let rem = remoteNode where !rem.isUnknown {
+            log.debug("Remote-only change to a mirror item.")
+            return try takeRemoteAndMergeChildren(rem, mirror: mirrorNode)
+        }
+
+        log.debug("Record \(guid) didn't change from mirror.")
+        return try takeMirrorNode(mirrorNode)
     }
 
     // This should only be called once.
     func produceMergedTree() -> Deferred<Maybe<MergedTree>> {
-        if self.done {
+        if self.mergeAttempted {
             return deferMaybe(self.merged)
         }
 
@@ -440,7 +489,10 @@ class ThreeWayTreeMerger {
             return deferMaybe(BookmarksMergeConsistencyError())
         }
 
-        self.done = true
+        // Now walk down from the mirror root again, this time taking all of the unmerged local branches.
+        // TODO
+
+        self.mergeAttempted = true
         return deferMaybe(self.merged)
     }
 
