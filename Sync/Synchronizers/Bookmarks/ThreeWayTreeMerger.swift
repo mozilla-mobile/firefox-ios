@@ -161,20 +161,79 @@ class ThreeWayTreeMerger {
         return a == b
     }
 
-    private func twoWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode) -> MergedTreeNode {
-        let node = MergedTreeNode(guid: guid, mirror: nil)
-        node.local = localNode
-        node.remote = remoteNode
-        node.structureState = MergeState.Local
-        node.valueState = MergeState.Local
+    // This will never be called with two .Unknown values.
+    private func twoWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode) throws -> MergedTreeNode {
 
-        // TODO: children
-        // TODO: merge values (based on date) and structure so we don't lose children.
-        return node
+        // These really shouldn't occur in a two-way merge, but there we are.
+        if remoteNode.isUnknown {
+            if localNode.isUnknown {
+                preconditionFailure("Two unknown nodes!")
+            }
+
+            log.debug("Taking local node in two-way merge: remote bafflingly unchanged.")
+            return MergedTreeNode.forLocal(localNode)
+        } else if localNode.isUnknown {
+            log.debug("Taking remote node in two-way merge: local bafflingly unchanged.")
+            return MergedTreeNode.forRemote(remoteNode)
+        }
+
+        let result = MergedTreeNode(guid: guid, mirror: nil)
+        result.local = localNode
+        result.remote = remoteNode
+
+        // Value merge. This applies regardless.
+        log.debug("We are lazy: taking remote value for \(guid) in two-way merge.")
+        result.valueState = MergeState.Remote       // TODO: value-based merge.
+
+        switch localNode {
+        case let .Folder(_, localChildren):
+            if case let .Folder(_, remoteChildren) = remoteNode {
+                // Structural merge.
+                if localChildren.sameElements(remoteChildren, f: { $0.recordGUID == $1.recordGUID }) {
+                    // Great!
+                    log.debug("Local and remote records have same children in two-way merge.")
+                    result.structureState = MergeState.New(value: localNode)
+                } else {
+                    // Merge the two folder lists.
+                    // We know that each side is internally consistent: that is, each
+                    // node in this list is present in the tree once only. But when we
+                    // combine the two lists, we might be inadvertently duplicating a
+                    // record that has already been, or will soon be, found in the other
+                    // tree. We need to be careful to make sure that we don't feature
+                    // a node in the tree more than once.
+                    // Remember to check deletions.
+                    log.debug("Local and remote records have different children. Merging.")
+                    // TODO
+                }
+                return result
+            }
+
+        case .NonFolder:
+            if case .NonFolder = remoteNode {
+                log.debug("Two non-folders with GUID \(guid) collide. Taking remote.")
+                return result
+            }
+
+        default:
+            break
+        }
+
+        // Otherwise, this must be a GUID collision between different types.
+        // TODO: Assign a new GUID to the local record
+        // but do not upload a deletion; these shouldn't merge.
+        log.debug("Remote and local records with same GUID \(guid) but different types. Consistency error.")
+        throw BookmarksMergeConsistencyError()
+    }
+
+    private func threeWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode, mirrorNode: BookmarkTreeNode) throws -> MergedTreeNode {
+        // TODO: three-way merge!
+        return self.twoWayMerge(guid, localNode: localNode, remoteNode: remoteNode)
     }
 
     // We'll end up looking at deletions and such as we go.
-    func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) -> MergedTreeNode {
+    func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
+        log.debug("Merging nodes with GUID \(guid).")
+
         // We'll never get here with no nodes at all… right?
         precondition((localNode != nil) || (mirrorNode != nil) || (remoteNode != nil))
 
@@ -187,55 +246,66 @@ class ThreeWayTreeMerger {
         precondition(nullOrMatch(remoteNode?.recordGUID, guid))
         precondition(nullOrMatch(mirrorNode?.recordGUID, guid))
 
+        // If we ended up here with two unknowns, just proceed down the mirror.
+        // We know we have a mirror, else we'd have a non-unknown edge.
+        if (localNode?.isUnknown ?? true) && (remoteNode?.isUnknown ?? true) {
+            precondition(mirrorNode != nil)
+            log.debug("Record \(guid) didn't change from mirror.")
+            return MergedTreeNode.forUnchanged(mirrorNode!)
+        }
+
         guard let mirrorNode = mirrorNode else {
-            // Two-way merge.
-            if let loc = localNode {
+            // No mirror node: at most a two-way merge.
+            if let loc = localNode where !loc.isUnknown {
                 if let rem = remoteNode {
                     // Two-way merge; probably a disconnect-reconnect scenario.
-                    return self.twoWayMerge(guid, localNode: loc, remoteNode: rem)
+                    return try self.twoWayMerge(guid, localNode: loc, remoteNode: rem)
                 }
 
-                // Node only exists locally.
+                // No remote. Node only exists locally.
                 // However! The children might be mentioned in the mirror or
                 // remote tree.
-                let node = MergedTreeNode(guid: guid, mirror: nil, structureState: MergeState.Local)
-                node.local = loc
-                node.valueState = MergeState.Local
-                // TODO: children.
-                return node
+                // TODO: process children.
+                log.debug("Node \(guid) only exists locally.")
+                return MergedTreeNode.forLocal(loc)
             }
 
-            guard let rem = remoteNode else {
+            // No local.
+
+            guard let rem = remoteNode where !rem.isUnknown else {
+                // No remote!
                 // This should not occur: we have preconditions above.
-                precondition(false, "Unexpectedly got past our preconditions!")
-                abort()
+                preconditionFailure("Unexpectedly got past our preconditions!")
             }
 
             // Node only exists remotely. Take it.
-            // TODO
-            return MergedTreeNode(guid: guid, mirror: rem)
+            // TODO: process children.
+            log.debug("Node \(guid) only exists remotely.")
+            return MergedTreeNode.forRemote(rem)
         }
 
         // We have a mirror node.
-        if let loc = localNode {
-            if let rem = remoteNode {
-                // Conflict: local and remote changes to a mirror item.
+        if let loc = localNode where !loc.isUnknown {
+            if let rem = remoteNode where !rem.isUnknown {
+                log.debug("Both local and remote changes to a mirror item. Resolving conflict.")
+                return try self.threeWayMerge(guid, localNode: loc, remoteNode: rem, mirrorNode: mirrorNode)
             } else {
-                // Local-only change to a mirror item.
+                log.debug("Local-only change to a mirror item.")
                 // Easy, but watch out for value changes or deletions to our children.
+                // TODO: process children.
+                return MergedTreeNode.forLocal(loc, mirror: mirrorNode)
             }
         } else {
-            if let rem = remoteNode {
-                // Remote-only change to a mirror item.
+            if let rem = remoteNode where !rem.isUnknown {
+                log.debug("Remote-only change to a mirror item.")
                 // Easy, but watch out for value changes or deletions to our children.
+                // TODO: process children.
+                return MergedTreeNode.forRemote(rem, mirror: mirrorNode)
             } else {
-                // No change.
-                return MergedTreeNode(guid: guid, mirror: mirrorNode, structureState: MergeState.Unchanged)
+                log.debug("Record \(guid) didn't change from mirror.")
+                return MergedTreeNode.forUnchanged(mirrorNode)
             }
         }
-
-        // TODO
-        return MergedTreeNode(guid: guid, mirror: mirrorNode)
     }
 
     // This should only be called once.
@@ -250,12 +320,19 @@ class ThreeWayTreeMerger {
         // Get to walkin'.
         root.structureState = MergeState.Unchanged      // We never change the root.
         root.valueState = MergeState.Unchanged
-        root.mergedChildren = root.mirror!.children!.map {
-            let guid = $0.recordGUID
-            let loc = self.local.find(guid)
-            let mir = self.mirror.find(guid)
-            let rem = self.remote.find(guid)
-            return self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
+
+        do {
+            try root.mergedChildren = root.mirror!.children!.map {
+                let guid = $0.recordGUID
+                let loc = self.local.find(guid)
+                let mir = self.mirror.find(guid)
+                let rem = self.remote.find(guid)
+                return try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
+            }
+        } catch let error as BookmarksMergeConsistencyError {
+            return deferMaybe(error)
+        } catch {
+            return deferMaybe(BookmarksMergeConsistencyError())
         }
 
         self.done = true
