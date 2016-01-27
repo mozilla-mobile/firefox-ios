@@ -161,6 +161,11 @@ class ThreeWayTreeMerger {
         return a == b
     }
 
+    private func twoWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromLocal local: [BookmarkTreeNode], remote: [BookmarkTreeNode]) throws {
+        result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: local))
+        result.mergedChildren = nil      // TODO
+    }
+
     // This will never be called with two .Unknown values.
     private func twoWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode) throws -> MergedTreeNode {
 
@@ -203,7 +208,7 @@ class ThreeWayTreeMerger {
                     // a node in the tree more than once.
                     // Remember to check deletions.
                     log.debug("Local and remote records have different children. Merging.")
-                    // TODO
+                    try self.twoWayMergeChildListsIntoMergedNode(result, fromLocal: localChildren, remote: remoteChildren)
                 }
                 return result
             }
@@ -227,7 +232,7 @@ class ThreeWayTreeMerger {
 
     private func threeWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode, mirrorNode: BookmarkTreeNode) throws -> MergedTreeNode {
         // TODO: three-way merge!
-        return self.twoWayMerge(guid, localNode: localNode, remoteNode: remoteNode)
+        return try self.twoWayMerge(guid, localNode: localNode, remoteNode: remoteNode)
     }
 
     // We'll end up looking at deletions and such as we go.
