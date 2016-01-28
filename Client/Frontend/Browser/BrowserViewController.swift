@@ -1836,8 +1836,10 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic ||
-              challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest,
+              challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest ||
+              challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
               let tab = tabManager[webView] else {
             completionHandler(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
             return
