@@ -1130,7 +1130,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
-        webViewContainer.showToolbar(false)
+        webViewContainer.hideToolbar()
         updateFindInPageVisibility(visible: false)
 
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)

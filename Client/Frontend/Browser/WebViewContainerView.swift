@@ -8,29 +8,25 @@ import Shared
 private let log = Logger.browserLogger
 
 class WebViewContainerView: UIView {
-    private let MAX_NUMBER_OF_WEB_VIEWS = 5
+    private let MaxNumberOfWebViews = 5
 
     private let toolbar = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(toolbar)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
         toolbar.snp_makeConstraints { make in
             make.left.right.top.equalTo(self)
             make.height.equalTo(0)
         }
     }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     private func makeRoomForSubview() {
-        if self.subviews.count > MAX_NUMBER_OF_WEB_VIEWS,
+        if self.subviews.count > MaxNumberOfWebViews,
             let bottomWebView = ( self.subviews.find {
                 $0.isKindOfClass(WKWebView)
                 } ) {
@@ -83,7 +79,11 @@ class WebViewContainerView: UIView {
         }
     }
 
-    func showToolbar(show: Bool = true) {
-        toolbar.hidden = !show
+    func showToolbar() {
+        toolbar.hidden = false
+    }
+
+    func hideToolbar() {
+        toolbar.hidden = true
     }
 }
