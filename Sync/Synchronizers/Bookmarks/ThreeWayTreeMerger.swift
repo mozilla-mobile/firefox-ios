@@ -15,13 +15,21 @@ private let log = Logger.syncLogger
  * The mirror is always complete, never contains deletions, never has
  * orphans, and has a single root.
  *
- * Each of local and buffer can contain a number of subtrees (each of which must
+ * Each of local and remote can contain a number of subtrees (each of which must
  * be a folder or root), a number of deleted GUIDs, and a number of orphans (records
  * with no known parent).
  *
- * It's very likely that there's almost no overlap, and thus no real conflicts to
- * resolve -- a three-way merge isn't always a bad thing -- but we won't know until
- * we compare records.
+ * As output it produces a merged tree. The tree contains the new structure,
+ * including every record that we're keeping, and also makes note of any deletions.
+ *
+ * The merged tree can be walked to yield a set of operations against the original
+ * three trees. Those operations will make the upstream source and local storage
+ * match the merge output.
+ *
+ * It's very likely that there's almost no overlap between local and remote, and
+ * thus no real conflicts to resolve -- a three-way merge isn't always a bad thing
+ * -- but we won't know until we compare records.
+ *
  *
  * Even though this is called 'three way merge', it also handles the case
  * of a two-way merge (one without a shared parent; for the roots, this will only
@@ -30,9 +38,11 @@ private let log = Logger.syncLogger
  *
  * In a sense, a two-way merge is solved by constructing a shared parent consisting of
  * roots, which are implicitly shared.
+ *
  * (Special care must be taken to not deduce that one side has deleted a root, of course,
  * as would be the case of a Sync server that doesn't contain
  * a Mobile Bookmarks folder -- the set of roots can only grow, not shrink.)
+ *
  *
  * To begin with we structurally reconcile. If necessary we will lazily fetch the
  * attributes of records in order to do a content-based reconciliation. Once we've
@@ -63,6 +73,11 @@ private let log = Logger.syncLogger
  * * Fetch all local and remote deletions. These won't be included in structure (for obvious
  *   reasons); we hold on to them explicitly so we can spot the difference between a move
  *   and a deletion.
+ * * Walk each subtree, top-down. At each point if there are two back-pointers to
+ *   the mirror node for a GUID, we have a potential conflict, and we have all three
+ *   parts that we need to resolve it via a content-based or structure-based 3WM.
+ *
+ * Observations:
  * * If every GUID on each side is present in the mirror, we have no new records.
  * * If a non-root GUID is present on both sides but not in the mirror, then either
  *   we're re-syncing from scratch, or (unlikely) we have a random collision.
@@ -70,10 +85,6 @@ private let log = Logger.syncLogger
  *   this later -- we first make sure we have handled any tree moves, so that the addition
  *   of a bookmark to a moved folder on A, and the addition of the same bookmark to the non-
  *   moved version of the folder, will collide successfully.
- *
- * * Walk each subtree, top-down. At each point if there are two back-pointers to
- *   the mirror node for a GUID, we have a potential conflict, and we have all three
- *   parts that we need to resolve it via a content-based or structure-based 3WM.
  *
  * When we look at a child list:
  * * It's the same. Great! Keep walking down.
@@ -91,11 +102,6 @@ private let log = Logger.syncLogger
  * application becomes easier.
  *
  * When we run out of subtrees on both sides, we're done.
- *
- * Match, no conflict? Apply.
- * Match, conflict? Resolve. Might involve moves from other matches!
- * No match in the mirror? Check for content match with the same parent, any position.
- * Still no match? Add.
  *
  * Note that these trees don't include values. This is because we usually don't need them:
  * if there are no conflicts, or no shared parents, we can do everything we need to do
@@ -175,14 +181,14 @@ class ThreeWayTreeMerger {
         }
 
         let out: [MergedTreeNode] = try mirrorChildren.map { child in
-            // TODO: handle deletions.
+            // TODO: handle deletions. That might change the below from 'Unchanged'
+            // to 'New'.
             let childGUID = child.recordGUID
             let localCounterpart = self.local.find(childGUID)
             let remoteCounterpart = self.remote.find(childGUID)
             return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: child, remoteNode: remoteCounterpart)
         }
 
-        let newStructure = out.map { $0.asMergedTreeNode() }
         result.mergedChildren = out
         result.structureState = MergeState.Unchanged
     }
@@ -343,7 +349,8 @@ class ThreeWayTreeMerger {
     }
 
     private func threeWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode, mirrorNode: BookmarkTreeNode) throws -> MergedTreeNode {
-        // TODO: three-way merge!
+        // TODO: three-way merge! Particularly important for value-based merging,
+        // but we can also do a better job of merging child lists.
         return try self.twoWayMerge(guid, localNode: localNode, remoteNode: remoteNode)
     }
 
