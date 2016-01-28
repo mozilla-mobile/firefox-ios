@@ -51,6 +51,9 @@ public struct UIConstants {
 
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
     static let ScreenshotQuality: Float = 0.3
+
+    static let OKString = NSLocalizedString("OK", comment: "OK button")
+    static let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 }
 
 /// Strings that will be used for features that haven't yet landed.
