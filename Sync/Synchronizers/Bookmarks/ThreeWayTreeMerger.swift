@@ -224,6 +224,48 @@ class ThreeWayTreeMerger {
         result.structureState = MergeState.Local       // If the list changes, this will switch to .New.
     }
 
+    /**
+     * When we have a folder match and new records on each side -- records
+     * not mentioned in the buffer -- it's possible that the new records
+     * are the same but have different GUIDs.
+     * This function will look at value matches to identify a local
+     * equivalent in this folder, returning nil if none are found.
+     *
+     * Note that we don't match records that have already been matched, and
+     * we don't match any for which a GUID is known in the mirror or remote.
+     */
+    private func findNewLocalNodeMatchingContentOfRemoteNote(remote: BookmarkTreeNode, inFolder parent: GUID, withLocalChildren children: [BookmarkTreeNode], havingSeen seen: Set<GUID>) -> BookmarkTreeNode? {
+        // TODO: don't compute this list once per incoming child! Profile me.
+        let candidates = children.filter { child in
+            let childGUID = child.recordGUID
+            return !seen.contains(childGUID) &&                   // Not already used in this folder.
+                   !self.remoteAdditions.contains(childGUID) &&   // Not locally and remotely added with same GUID.
+                   !self.remote.deleted.contains(childGUID) &&    // Not remotely deleted.
+                   !self.done.contains(childGUID)                 // Not already processed elsewhere in the tree.
+        }
+
+        guard let remoteValue = self.itemSource.getBufferItemWithGUID(remote.recordGUID).value.successValue else {
+            log.error("Couldn't find remote value for \(remote.recordGUID).")
+            return nil
+        }
+
+        let guids = candidates.map { $0.recordGUID }
+        guard let items = self.itemSource.getLocalItemsWithGUIDs(guids).value.successValue else {
+            log.error("Couldn't find local values for \(candidates.count) candidates.")
+            return nil
+        }
+
+        // Return the first candidate that's a value match.
+        guard let localItem = (guids.flatMap { items[$0] }.find { $0.sameAs(remoteValue) }) else {
+            log.debug("Didn't find a local value match for new remote record \(remote.recordGUID).")
+            return nil
+        }
+
+        log.debug("Found a local match \(localItem.guid) for new remote record \(remote.recordGUID) in parent \(parent).")
+        // Find the original contributing child node by GUID.
+        return children.find { $0.recordGUID == localItem.guid }
+    }
+
     private func twoWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromLocal local: [BookmarkTreeNode], remote: [BookmarkTreeNode]) throws {
         // The most trivial implementation: take everything in the first list, then append
         // everything new in the second list.
@@ -241,10 +283,8 @@ class ThreeWayTreeMerger {
             seen.insert(guid)
 
             let mir = self.mirror.find(guid)
-            let loc = self.local.find(guid)
-            let locallyDeleted = self.local.deleted.contains(guid)
 
-            if locallyDeleted {
+            if self.local.deleted.contains(guid) {
                 // It was locally deleted. This would be good enough for us,
                 // but we need to ensure that any remote children are recursively
                 // deleted or handled as orphans.
@@ -257,6 +297,8 @@ class ThreeWayTreeMerger {
                 return
             }
 
+            let loc = self.local.find(guid) ??
+                      self.findNewLocalNodeMatchingContentOfRemoteNote(rem, inFolder: result.guid, withLocalChildren: local, havingSeen: seen)
             let m = try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
             out.append(m)
         }
@@ -370,7 +412,11 @@ class ThreeWayTreeMerger {
 
     // We'll end up looking at deletions and such as we go.
     func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
-        log.debug("Merging nodes with GUID \(guid).")
+        log.debug("Merging nodes with GUID \(guid). Local match is \(localNode?.recordGUID).")
+
+        // TODO: if the local node has a different GUID, it's because we did a value-based
+        // merge. Make sure the local row with the differing local GUID doesn't
+        // stick around.
 
         // We'll never get here with no nodes at all… right?
         precondition((localNode != nil) || (mirrorNode != nil) || (remoteNode != nil))
