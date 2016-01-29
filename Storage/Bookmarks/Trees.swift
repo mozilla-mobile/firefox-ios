@@ -117,6 +117,9 @@ public struct BookmarkTree {
     // Records that have been deleted.
     public let deleted: Set<GUID>
 
+    // Every record that's changed but not deleted.
+    public let modified: Set<GUID>
+
     // Accessor for all top-level folders' GUIDs.
     public var subtreeGUIDs: Set<GUID> {
         return Set(self.subtrees.map { $0.recordGUID })
@@ -127,7 +130,7 @@ public struct BookmarkTree {
     }
 
     public static func emptyTree() -> BookmarkTree {
-        return BookmarkTree(subtrees: [], lookup: [:], parents: [:], orphans: Set<GUID>(), deleted: Set<GUID>())
+        return BookmarkTree(subtrees: [], lookup: [:], parents: [:], orphans: Set<GUID>(), deleted: Set<GUID>(), modified: Set<GUID>())
     }
 
     public func includesOrDeletesNode(node: BookmarkTreeNode) -> Bool {
@@ -178,7 +181,7 @@ public struct BookmarkTree {
 
     // Recursively process an input set of structure pairs to yield complete subtrees,
     // assembling those subtrees to make a minimal set of trees.
-    static func mappingsToTreeForStructureRows(mappings: [StructureRow], withNonFoldersAndEmptyFolders nonFoldersAndEmptyFolders: [BookmarkTreeNode], withDeletedRecords deleted: Set<GUID>, alwaysIncludeRoots: Bool) -> Deferred<Maybe<BookmarkTree>> {
+    static func mappingsToTreeForStructureRows(mappings: [StructureRow], withNonFoldersAndEmptyFolders nonFoldersAndEmptyFolders: [BookmarkTreeNode], withDeletedRecords deleted: Set<GUID>, modifiedRecords modified: Set<GUID>, alwaysIncludeRoots: Bool) -> Deferred<Maybe<BookmarkTree>> {
         // Accumulate.
         var nodes: [GUID: BookmarkTreeNode] = [:]
         var parents: [GUID: GUID] = [:]
@@ -276,6 +279,6 @@ public struct BookmarkTree {
 
         // Whatever we're left with in `tops` is the set of records for which we
         // didn't process a parent.
-        return deferMaybe(BookmarkTree(subtrees: subtrees, lookup: nodes, parents: parents, orphans: orphans, deleted: deleted))
+        return deferMaybe(BookmarkTree(subtrees: subtrees, lookup: nodes, parents: parents, orphans: orphans, deleted: deleted, modified: modified))
     }
 }
