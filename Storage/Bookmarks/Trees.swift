@@ -133,6 +133,10 @@ public struct BookmarkTree {
         return BookmarkTree(subtrees: [], lookup: [:], parents: [:], orphans: Set<GUID>(), deleted: Set<GUID>(), modified: Set<GUID>())
     }
 
+    public static func emptyMirrorTree() -> BookmarkTree {
+        return mappingsToTreeForStructureRows([], withNonFoldersAndEmptyFolders: [], withDeletedRecords: Set(), modifiedRecords: Set(), alwaysIncludeRoots: true)
+    }
+
     public func includesOrDeletesNode(node: BookmarkTreeNode) -> Bool {
         return self.includesOrDeletesGUID(node.recordGUID)
     }
