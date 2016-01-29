@@ -194,19 +194,17 @@ class ThreeWayTreeMerger {
     }
 
     private func oneWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromRemote remote: [BookmarkTreeNode]) throws {
-        // TODO: this should be sensibly co-recursive; just as with merging
-        // the child lists in the two-way and three-way merge, we need
-        // to handle deletions, moves, tracking of seen items, etc.
-        // This is thus temporary!
+        // TODO: just as with merging the child lists in the two-way and
+        // three-way merge, we need to handle deletions, moves, tracking
+        // of seen items, etc. This is thus temporary!
         let out: [MergedTreeNode] = try remote.map { child in
             // TODO: handle deletions.
             let childGUID = child.recordGUID
             let localCounterpart = self.local.find(childGUID)
             return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: result.mirror, remoteNode: child)
         }
-        let newStructure = out.map { $0.asMergedTreeNode() }
         result.mergedChildren = out
-        result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: newStructure))
+        result.structureState = MergeState.Remote      // If the list changes, this will switch to .New.
     }
 
     private func oneWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromLocal local: [BookmarkTreeNode]) throws {
@@ -220,9 +218,8 @@ class ThreeWayTreeMerger {
             let remoteCounterpart = self.remote.find(childGUID)
             return try self.mergeNode(childGUID, localNode: child, mirrorNode: result.mirror, remoteNode: remoteCounterpart)
         }
-        let newStructure = out.map { $0.asMergedTreeNode() }
         result.mergedChildren = out
-        result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: newStructure))
+        result.structureState = MergeState.Local       // If the list changes, this will switch to .New.
     }
 
     private func twoWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromLocal local: [BookmarkTreeNode], remote: [BookmarkTreeNode]) throws {
@@ -250,6 +247,11 @@ class ThreeWayTreeMerger {
                 // but we need to ensure that any remote children are recursively
                 // deleted or handled as orphans.
                 // TODO
+                log.warning("Quietly accepting local deletion of record \(guid).")
+                self.merged.deleteRemotely.insert(guid)
+                if mir != nil {
+                    self.merged.deleteFromMirror.insert(guid)
+                }
                 return
             }
 
@@ -272,6 +274,11 @@ class ThreeWayTreeMerger {
                 // but we need to ensure that any local children are recursively
                 // deleted or handled as orphans.
                 // TODO
+                log.warning("Quietly accepting remote deletion of record \(guid).")
+                self.merged.deleteLocally.insert(guid)
+                if mir != nil {
+                    self.merged.deleteFromMirror.insert(guid)
+                }
                 return
             }
 
@@ -282,6 +289,12 @@ class ThreeWayTreeMerger {
         let newStructure = out.map { $0.asMergedTreeNode() }
         result.mergedChildren = out
         result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: newStructure))
+    }
+
+    private func twoWayValueMerge(guid: GUID) throws -> MergeState<BookmarkMirrorItem> {
+        // TODO
+        log.debug("We are lazy: taking remote value for \(guid) in two-way merge.")
+        return MergeState.Remote
     }
 
     // This will never be called with two .Unknown values.
@@ -304,8 +317,7 @@ class ThreeWayTreeMerger {
         result.remote = remoteNode
 
         // Value merge. This applies regardless.
-        log.debug("We are lazy: taking remote value for \(guid) in two-way merge.")
-        result.valueState = MergeState.Remote       // TODO: value-based merge.
+        result.valueState = try self.twoWayValueMerge(guid)
 
         switch localNode {
         case let .Folder(_, localChildren):
@@ -386,6 +398,8 @@ class ThreeWayTreeMerger {
 
         func takeRemoteAndMergeChildren(remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) throws -> MergedTreeNode {
             // Easy, but watch out for value changes or deletions to our children.
+            // TODO: detect whether there was a value change, and don't bother
+            // doing any value work if there wasn't.
             let merged = MergedTreeNode.forRemote(remote, mirror: mirror)
             if case let .Folder(_, children) = remote {
                 log.debug("… and it's a folder. Taking remote children.")

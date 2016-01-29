@@ -225,7 +225,9 @@ class MergedTreeNode {
 
 class MergedTree {
     var root: MergedTreeNode
-    var deleted: Set<GUID> = Set()
+    var deleteLocally: Set<GUID> = Set()
+    var deleteRemotely: Set<GUID> = Set()
+    var deleteFromMirror: Set<GUID> = Set()
 
     init(mirrorRoot: BookmarkTreeNode) {
         self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot, structureState: MergeState.Unchanged)
