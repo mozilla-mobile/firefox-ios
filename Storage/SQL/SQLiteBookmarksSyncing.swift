@@ -727,8 +727,8 @@ extension SQLiteBookmarks {
         return sql
     }
 
-    private func deletionQueryForTable(table: String) -> String {
-        return "SELECT guid FROM \(table) WHERE is_deleted IS 1"
+    private func statusQueryForTable(table: String) -> String {
+        return "SELECT guid, is_deleted FROM \(table)"
     }
 
     private func treeForTable(table: String, structure: String, alwaysIncludeRoots includeRoots: Bool) -> Deferred<Maybe<BookmarkTree>> {
@@ -739,7 +739,7 @@ extension SQLiteBookmarks {
         // We run a separate query to get those.
         let structureSQL = self.structureQueryForTable(table, structure: structure)
         let remainderSQL = self.remainderQueryForTable(table, structure: structure)
-        let deletionSQL = self.deletionQueryForTable(table)
+        let statusSQL = self.statusQueryForTable(table)
 
         func structureFactory(row: SDRow) -> StructureRow {
             let typeCode = row["type"] as! Int
@@ -762,16 +762,30 @@ extension SQLiteBookmarks {
             }
         }
 
-        return self.db.runQuery(deletionSQL, args: nil, factory: { $0["guid"] as! GUID })
+        func statusFactory(row: SDRow) -> (GUID, Bool) {
+            return (row["guid"] as! GUID, row.getBoolean("is_deleted"))
+        }
+
+        return self.db.runQuery(statusSQL, args: nil, factory: statusFactory)
             >>== { cursor in
-                let deleted = Set<GUID>(cursor.asArray())
+                var deleted = Set<GUID>()
+                var modified = Set<GUID>()
+                cursor.forEach { pair in
+                    let (guid, del) = pair!    // Oh, cursor.
+                    if del {
+                        deleted.insert(guid)
+                    } else {
+                        modified.insert(guid)
+                    }
+                }
+
                 return self.db.runQuery(remainderSQL, args: nil, factory: nonStructureFactory)
                     >>== { cursor in
                         let nonFoldersAndEmptyFolders = cursor.asArray()
                         return self.db.runQuery(structureSQL, args: nil, factory: structureFactory)
                             >>== { cursor in
                                 let structureRows = cursor.asArray()
-                                return BookmarkTree.mappingsToTreeForStructureRows(structureRows, withNonFoldersAndEmptyFolders: nonFoldersAndEmptyFolders, withDeletedRecords: deleted, alwaysIncludeRoots: includeRoots)
+                                return BookmarkTree.mappingsToTreeForStructureRows(structureRows, withNonFoldersAndEmptyFolders: nonFoldersAndEmptyFolders, withDeletedRecords: deleted, modifiedRecords: modified, alwaysIncludeRoots: includeRoots)
                         }
                 }
         }
