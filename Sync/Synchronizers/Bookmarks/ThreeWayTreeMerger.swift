@@ -201,7 +201,8 @@ class ThreeWayTreeMerger {
             // TODO: handle deletions.
             let childGUID = child.recordGUID
             let localCounterpart = self.local.find(childGUID)
-            return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: result.mirror, remoteNode: child)
+            let mirrorCounterpart = self.mirror.find(childGUID)
+            return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: mirrorCounterpart, remoteNode: child)
         }
         result.mergedChildren = out
         result.structureState = MergeState.Remote      // If the list changes, this will switch to .New.
@@ -216,7 +217,8 @@ class ThreeWayTreeMerger {
             // TODO: handle deletions.
             let childGUID = child.recordGUID
             let remoteCounterpart = self.remote.find(childGUID)
-            return try self.mergeNode(childGUID, localNode: child, mirrorNode: result.mirror, remoteNode: remoteCounterpart)
+            let mirrorCounterpart = self.mirror.find(childGUID)
+            return try self.mergeNode(childGUID, localNode: child, mirrorNode: mirrorCounterpart, remoteNode: remoteCounterpart)
         }
         result.mergedChildren = out
         result.structureState = MergeState.Local       // If the list changes, this will switch to .New.
