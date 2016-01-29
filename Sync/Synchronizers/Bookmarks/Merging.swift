@@ -107,6 +107,23 @@ enum MergeState<T> {
     }
 }
 
+func ==<T: Equatable>(lhs: MergeState<T>, rhs: MergeState<T>) -> Bool {
+    switch (lhs, rhs) {
+    case (.Unknown, .Unknown):
+        return true
+    case (.Unchanged, .Unchanged):
+        return true
+    case (.Remote, .Remote):
+        return true
+    case (.Local, .Local):
+        return true
+    case let (.New(lh), .New(rh)):
+        return lh == rh
+    default:
+        return false
+    }
+}
+
 /**
  * Using this:
  *
