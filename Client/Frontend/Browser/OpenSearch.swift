@@ -21,6 +21,7 @@ class OpenSearchEngine {
     private let suggestTemplate: String?
 
     private let SearchTermComponent = "{searchTerms}"
+    private let LocaleTermComponent = "{moz:locale}"
 
     private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
 
@@ -102,7 +103,10 @@ class OpenSearchEngine {
             templateAllowedSet.formUnionWithCharacterSet(NSCharacterSet(charactersInString: "{}"))
 
             if let encodedSearchTemplate = searchTemplate.stringByAddingPercentEncodingWithAllowedCharacters(templateAllowedSet) {
-                let urlString = encodedSearchTemplate.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                let localeString = NSLocale.currentLocale().localeIdentifier
+                let urlString = encodedSearchTemplate
+                    .stringByReplacingOccurrencesOfString(SearchTermComponent, withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                    .stringByReplacingOccurrencesOfString(LocaleTermComponent, withString: localeString, options: NSStringCompareOptions.LiteralSearch, range: nil)
                 return NSURL(string: urlString)
             }
         }
