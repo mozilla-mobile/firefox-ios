@@ -255,7 +255,25 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger, MirrorItemSource {
         return self.threeWayMerge()
     }
 
-    private func threeWayMerge() -> Deferred<Maybe<BookmarksMergeResult>> {
+    // This exists for testing.
+    func getMergedTree() -> Deferred<Maybe<MergedTree?>> {
+        return self.storage.treesForEdges() >>== { (local, buffer) in
+            if local.isEmpty && buffer.isEmpty {
+                // We should never have been called!
+                return deferMaybe(nil)
+            }
+
+            // Find the mirror tree so we can compare.
+            return self.storage.treeForMirror() >>== { mirror in
+                // At this point we know that there have been changes both locally and remotely.
+                // (Or, in the general case, changes either locally or remotely.)
+                let merger = ThreeWayTreeMerger(local: local, mirror: mirror, remote: buffer, itemSource: self)
+                return merger.produceMergedTree() >>== { deferMaybe($0) }
+            }
+        }
+    }
+
+    func threeWayMerge() -> Deferred<Maybe<BookmarksMergeResult>> {
         return self.storage.treesForEdges() >>== { (local, buffer) in
             if local.isEmpty && buffer.isEmpty {
                 // We should never have been called!
