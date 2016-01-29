@@ -69,17 +69,17 @@ class SpotlightHelper: NSObject {
                 activity.contentAttributeSet = attrs
                 activity.eligibleForSearch = true
 
-                // We can't be certain that the favicon isn't already available.
-                // If it is, for this URL, then update the activity with the favicon now.
-                if let image = thumbnailImage where urlForThumbnail == url {
-                    updateImage(image, forURL: url)
-                }
             }
         }
-        activity.becomeCurrent()
+
+        // We can't be certain that the favicon isn't already available.
+        // If it is, for this URL, then update the activity with the favicon now.
+        if urlForThumbnail == url {
+            updateImage(thumbnailImage, forURL: url)
+        }
     }
 
-    func updateImage(image: UIImage, forURL url: NSURL) {
+    func updateImage(image: UIImage? = nil, forURL url: NSURL) {
         guard let currentActivity = self.activity where currentActivity.webpageURL == url else {
             // We've got a favicon, but not for this URL.
             // Let's store it until we can get the title and description.
@@ -89,10 +89,14 @@ class SpotlightHelper: NSObject {
         }
 
         if #available(iOS 9.0, *) {
-            activity?.contentAttributeSet?.thumbnailData = UIImagePNGRepresentation(image)
+            if let image = image {
+                activity?.contentAttributeSet?.thumbnailData = UIImagePNGRepresentation(image)
+            }
         }
         urlForThumbnail = nil
         thumbnailImage = nil
+
+        becomeCurrent()
     }
 
     func becomeCurrent() {
