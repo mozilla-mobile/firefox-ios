@@ -418,7 +418,7 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         let cell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
 
         let login = loginAtIndexPath(indexPath)
-        cell.style = .IconAndBothLabels
+        cell.style = .NoIconAndBothLabels
         cell.updateCellWithLogin(login)
 
         return cell

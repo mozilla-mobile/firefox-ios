@@ -141,7 +141,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         switch InfoItem(rawValue: indexPath.row)! {
         case .TitleItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.style = .IconAndDescriptionLabel
+            loginCell.style = .NoIconAndBothLabels
             loginCell.descriptionLabel.text = login.hostname
             return loginCell
 
