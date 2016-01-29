@@ -185,7 +185,7 @@ public struct BookmarkTree {
 
     // Recursively process an input set of structure pairs to yield complete subtrees,
     // assembling those subtrees to make a minimal set of trees.
-    static func mappingsToTreeForStructureRows(mappings: [StructureRow], withNonFoldersAndEmptyFolders nonFoldersAndEmptyFolders: [BookmarkTreeNode], withDeletedRecords deleted: Set<GUID>, modifiedRecords modified: Set<GUID>, alwaysIncludeRoots: Bool) -> Deferred<Maybe<BookmarkTree>> {
+    static func mappingsToTreeForStructureRows(mappings: [StructureRow], withNonFoldersAndEmptyFolders nonFoldersAndEmptyFolders: [BookmarkTreeNode], withDeletedRecords deleted: Set<GUID>, modifiedRecords modified: Set<GUID>, alwaysIncludeRoots: Bool) -> BookmarkTree {
         // Accumulate.
         var nodes: [GUID: BookmarkTreeNode] = [:]
         var parents: [GUID: GUID] = [:]
@@ -283,6 +283,6 @@ public struct BookmarkTree {
 
         // Whatever we're left with in `tops` is the set of records for which we
         // didn't process a parent.
-        return deferMaybe(BookmarkTree(subtrees: subtrees, lookup: nodes, parents: parents, orphans: orphans, deleted: deleted, modified: modified))
+        return BookmarkTree(subtrees: subtrees, lookup: nodes, parents: parents, orphans: orphans, deleted: deleted, modified: modified)
     }
 }
