@@ -785,7 +785,8 @@ extension SQLiteBookmarks {
                         return self.db.runQuery(structureSQL, args: nil, factory: structureFactory)
                             >>== { cursor in
                                 let structureRows = cursor.asArray()
-                                return BookmarkTree.mappingsToTreeForStructureRows(structureRows, withNonFoldersAndEmptyFolders: nonFoldersAndEmptyFolders, withDeletedRecords: deleted, modifiedRecords: modified, alwaysIncludeRoots: includeRoots)
+                                let tree = BookmarkTree.mappingsToTreeForStructureRows(structureRows, withNonFoldersAndEmptyFolders: nonFoldersAndEmptyFolders, withDeletedRecords: deleted, modifiedRecords: modified, alwaysIncludeRoots: includeRoots)
+                                return deferMaybe(tree)
                         }
                 }
         }
