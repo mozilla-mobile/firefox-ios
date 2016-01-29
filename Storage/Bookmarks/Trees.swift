@@ -248,8 +248,10 @@ public struct BookmarkTree {
             // never change them, so it's safe to do this unconditionally.
             pseudoTree[BookmarkRoots.RootGUID] = BookmarkRoots.RootChildren
             tops.insert(BookmarkRoots.RootGUID)
-            notTops.unionInPlace(BookmarkRoots.RootChildren)
-            remainingFolders.unionInPlace(BookmarkRoots.RootChildren)
+            remainingFolders.insert(BookmarkRoots.RootGUID)
+            BookmarkRoots.RootChildren.forEach {
+                parents[$0] = BookmarkRoots.RootGUID
+            }
         }
 
         tops.subtractInPlace(notTops)
@@ -262,7 +264,9 @@ public struct BookmarkTree {
             }
 
             if !remainingFolders.contains(guid) {
-                return BookmarkTreeNode.Unknown(guid: guid)
+                let node = BookmarkTreeNode.Unknown(guid: guid)
+                nodes[guid] = node
+                return node
             }
 
             // Removing these eagerly prevents infinite recursion in the case of a cycle.
