@@ -125,7 +125,36 @@ public enum BookmarkNodeType: Int {
     // No microsummary: those turn into bookmarks.
 }
 
-public struct BookmarkMirrorItem {
+public func == (lhs: BookmarkMirrorItem, rhs: BookmarkMirrorItem) -> Bool {
+    if lhs.type != rhs.type ||
+       lhs.guid != rhs.guid ||
+       lhs.serverModified != rhs.serverModified ||
+       lhs.isDeleted != rhs.isDeleted ||
+       lhs.hasDupe != rhs.hasDupe ||
+       lhs.pos != rhs.pos ||
+       lhs.faviconID != rhs.faviconID ||
+       lhs.localModified != rhs.localModified ||
+       lhs.parentID != rhs.parentID ||
+       lhs.parentName != rhs.parentName ||
+       lhs.feedURI != rhs.feedURI ||
+       lhs.siteURI != rhs.siteURI ||
+       lhs.title != rhs.title ||
+       lhs.description != rhs.description ||
+       lhs.bookmarkURI != rhs.bookmarkURI ||
+       lhs.tags != rhs.tags ||
+       lhs.keyword != rhs.keyword ||
+       lhs.folderName != rhs.folderName ||
+       lhs.queryID != rhs.queryID {
+        return false
+    }
+
+    if let lhsChildren = lhs.children, rhsChildren = rhs.children {
+        return lhsChildren == rhsChildren
+    }
+    return lhs.children == nil && rhs.children == nil
+}
+
+public struct BookmarkMirrorItem: Equatable {
     public let guid: GUID
     public let type: BookmarkNodeType
     let serverModified: Timestamp
