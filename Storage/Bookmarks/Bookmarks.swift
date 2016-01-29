@@ -192,6 +192,32 @@ public struct BookmarkMirrorItem: Equatable {
     let localModified: Timestamp?
     let syncStatus: SyncStatus?
 
+    // Ignores internal metadata and GUID; a pure value comparison.
+    // Does compare child GUIDs!
+    public func sameAs(rhs: BookmarkMirrorItem) -> Bool {
+        if self.type != rhs.type ||
+           self.isDeleted != rhs.isDeleted ||
+           self.pos != rhs.pos ||
+           self.parentID != rhs.parentID ||
+           self.parentName != rhs.parentName ||
+           self.feedURI != rhs.feedURI ||
+           self.siteURI != rhs.siteURI ||
+           self.title != rhs.title ||
+           self.description != rhs.description ||
+           self.bookmarkURI != rhs.bookmarkURI ||
+           self.tags != rhs.tags ||
+           self.keyword != rhs.keyword ||
+           self.folderName != rhs.folderName ||
+           self.queryID != rhs.queryID {
+            return false
+        }
+
+        if let lhsChildren = self.children, rhsChildren = rhs.children {
+            return lhsChildren == rhsChildren
+        }
+        return self.children == nil && rhs.children == nil
+    }
+
     // The places root is a folder but has no parentName.
     public static func folder(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String, description: String?, children: [GUID]) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
