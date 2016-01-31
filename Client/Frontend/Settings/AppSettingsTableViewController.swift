@@ -117,11 +117,17 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),
-                DisconnectSetting(settings: self),
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
-            ])
-        ]
+            ])]
+            
+            if (profile.hasAccount()) {
+                settings += [
+                    SettingSection(title: nil, children: [
+                        DisconnectSetting(settings: self),
+                        ])
+                ]
+            }
 
         return settings
     }
