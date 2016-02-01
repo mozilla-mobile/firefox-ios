@@ -125,8 +125,7 @@ class ThreeWayTreeMerger {
     let localItemSource: LocalItemSource
 
     // Sets computed by looking at the three trees. These are used for diagnostics,
-    // to simplify operations, and for testing.
-    // TODO: pre-fetch items from `itemSource` using allChangedGUIDs.
+    // to simplify operations, to pre-fetch items for value comparison, and for testing.
 
     let mirrorAllGUIDs: Set<GUID>          // Excluding deletions.
     let localAllGUIDs: Set<GUID>           // Excluding deletions.
