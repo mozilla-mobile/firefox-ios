@@ -247,8 +247,8 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
 
     // This exists for testing.
     func getMergedTree() -> Deferred<Maybe<MergedTree?>> {
-        return self.storage.treesForEdges() >>== { (local, buffer) in
-            if local.isEmpty && buffer.isEmpty {
+        return self.storage.treesForEdges() >>== { (local, remote) in
+            if local.isEmpty && remote.isEmpty {
                 // We should never have been called!
                 return deferMaybe(nil)
             }
@@ -257,15 +257,15 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
             return self.storage.treeForMirror() >>== { mirror in
                 // At this point we know that there have been changes both locally and remotely.
                 // (Or, in the general case, changes either locally or remotely.)
-                let merger = ThreeWayTreeMerger(local: local, mirror: mirror, remote: buffer, itemSource: self)
+                let merger = ThreeWayTreeMerger(local: local, mirror: mirror, remote: remote, localItemSource: self.storage, bufferItemSource: self.buffer)
                 return merger.produceMergedTree() >>== { deferMaybe($0) }
             }
         }
     }
 
     func threeWayMerge() -> Deferred<Maybe<BookmarksMergeResult>> {
-        return self.storage.treesForEdges() >>== { (local, buffer) in
-            if local.isEmpty && buffer.isEmpty {
+        return self.storage.treesForEdges() >>== { (local, remote) in
+            if local.isEmpty && remote.isEmpty {
                 // We should never have been called!
                 return deferMaybe(BookmarksMergeResult.NoOp)
             }
@@ -274,7 +274,7 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
             return self.storage.treeForMirror() >>== { mirror in
                 // At this point we know that there have been changes both locally and remotely.
                 // (Or, in the general case, changes either locally or remotely.)
-                let merger = ThreeWayTreeMerger(local: local, mirror: mirror, remote: buffer, itemSource: self)
+                let merger = ThreeWayTreeMerger(local: local, mirror: mirror, remote: remote, localItemSource: self.storage, bufferItemSource: self.buffer)
                 return merger.merge()
             }
         }
