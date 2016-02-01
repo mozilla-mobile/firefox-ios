@@ -121,7 +121,8 @@ class ThreeWayTreeMerger {
     // Don't merge twice.
     var mergeAttempted: Bool = false
 
-    let itemSource: MirrorItemSource
+    let bufferItemSource: BufferItemSource
+    let localItemSource: LocalItemSource
 
     // Sets computed by looking at the three trees. These are used for diagnostics,
     // to simplify operations, and for testing.
@@ -141,17 +142,22 @@ class ThreeWayTreeMerger {
     // For now, track just one list. We might need to split this later.
     var done: Set<GUID> = Set()
 
-    init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree, itemSource: MirrorItemSource) {
+    init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree, localItemSource: LocalItemSource, bufferItemSource: BufferItemSource) {
+        precondition(mirror.root != nil)
+        precondition(mirror.orphans.isEmpty)
+        precondition(mirror.deleted.isEmpty)
+        precondition(mirror.subtrees.count == 1)
+
         // These are runtime-tested in merge(). assert to make sure that tests
         // don't do anything stupid, and we don't slip past those constraints.
         assert(local.isFullyRootedIn(mirror))
         assert(remote.isFullyRootedIn(mirror))
-        precondition(mirror.root != nil)
 
         self.local = local
         self.mirror = mirror
         self.remote = remote
-        self.itemSource = itemSource
+        self.bufferItemSource = bufferItemSource
+        self.localItemSource = localItemSource
         self.merged = MergedTree(mirrorRoot: self.mirror.root!)
 
         // We won't get here unless every local and remote orphan is correctly rooted
@@ -174,7 +180,6 @@ class ThreeWayTreeMerger {
         return a == b
     }
 
-    // TODO: can we merge these three helpers?
     private func takeMirrorChildrenInMergedNode(result: MergedTreeNode) throws {
         guard let mirrorChildren = result.mirror?.children else {
             preconditionFailure("Expected children.")
@@ -244,13 +249,13 @@ class ThreeWayTreeMerger {
                    !self.done.contains(childGUID)                 // Not already processed elsewhere in the tree.
         }
 
-        guard let remoteValue = self.itemSource.getBufferItemWithGUID(remote.recordGUID).value.successValue else {
+        guard let remoteValue = self.bufferItemSource.getBufferItemWithGUID(remote.recordGUID).value.successValue else {
             log.error("Couldn't find remote value for \(remote.recordGUID).")
             return nil
         }
 
         let guids = candidates.map { $0.recordGUID }
-        guard let items = self.itemSource.getLocalItemsWithGUIDs(guids).value.successValue else {
+        guard let items = self.localItemSource.getLocalItemsWithGUIDs(guids).value.successValue else {
             log.error("Couldn't find local values for \(candidates.count) candidates.")
             return nil
         }
@@ -336,6 +341,11 @@ class ThreeWayTreeMerger {
     }
 
     private func twoWayValueMerge(guid: GUID) throws -> MergeState<BookmarkMirrorItem> {
+        if BookmarkRoots.All.contains(guid) {
+            log.debug("Two-way value merge on a root: always unaltered.")
+            return MergeState.Unchanged
+        }
+
         // TODO
         log.debug("We are lazy: taking remote value for \(guid) in two-way merge.")
         return MergeState.Remote
