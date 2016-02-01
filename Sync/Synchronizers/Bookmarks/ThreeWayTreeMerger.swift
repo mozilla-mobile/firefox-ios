@@ -613,6 +613,16 @@ class ThreeWayTreeMerger {
             log.warning("Expecting conflicts between local and remote: \(conflictingGUIDs.joinWithSeparator(", ")).")
         }
 
-        return self.produceMergedTree() >>== self.produceMergeResultFromMergedTree
+        // Pre-fetch items so we don't need to do async work later.
+        return self.prefetchItems()
+            >>> {
+               self.produceMergedTree()
+                >>== self.produceMergeResultFromMergedTree
+        }
+    }
+
+    private func prefetchItems() -> Success {
+        return self.bufferItemSource.prefetchBufferItemsWithGUIDs(self.allChangedGUIDs)
+           >>> { self.localItemSource.prefetchLocalItemsWithGUIDs(self.allChangedGUIDs) }
     }
 }
