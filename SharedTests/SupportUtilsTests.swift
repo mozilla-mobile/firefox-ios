@@ -9,9 +9,9 @@ import XCTest
 class SupportUtilsTests: XCTestCase {
     func testURLForTopic() {
         let appVersion = AppInfo.appVersion
-        let localeIdentifier = NSLocale.currentLocale().localeIdentifier
-        XCTAssertEqual(SupportUtils.URLForTopic("Bacon")?.absoluteString, "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(localeIdentifier)/Bacon")
-        XCTAssertEqual(SupportUtils.URLForTopic("Cheese & Crackers")?.absoluteString, "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(localeIdentifier)/Cheese%20&%20Crackers")
-        XCTAssertEqual(SupportUtils.URLForTopic("Möbelträgerfüße")?.absoluteString, "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(localeIdentifier)/M%C3%B6beltr%C3%A4gerf%C3%BC%C3%9Fe")
+        let languageIdentifier = NSLocale.preferredLanguages().first!
+        XCTAssertEqual(SupportUtils.URLForTopic("Bacon")?.absoluteString, "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(languageIdentifier)/Bacon")
+        XCTAssertEqual(SupportUtils.URLForTopic("Cheese & Crackers")?.absoluteString, "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(languageIdentifier)/Cheese%20&%20Crackers")
+        XCTAssertEqual(SupportUtils.URLForTopic("Möbelträgerfüße")?.absoluteString, "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(languageIdentifier)/M%C3%B6beltr%C3%A4gerf%C3%BC%C3%9Fe")
     }
 }
