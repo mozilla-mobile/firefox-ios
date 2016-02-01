@@ -37,13 +37,13 @@ public protocol MirrorItemSource {
 public protocol BufferItemSource {
     func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
     func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
-    func prefetchBufferItemsWithGUIDs(guids: [GUID]) -> Success
+    func prefetchBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
 }
 
 public protocol LocalItemSource {
     func getLocalItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
     func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
-    func prefetchLocalItemsWithGUIDs(guids: [GUID]) -> Success
+    func prefetchLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
 }
 
 public struct BookmarkRoots {
