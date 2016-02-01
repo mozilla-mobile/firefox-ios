@@ -283,6 +283,7 @@ class ThreeWayTreeMerger {
         // This kind of shit is why bookmark sync is hard.
         var out: [MergedTreeNode] = []
         var seen: Set<GUID> = Set()
+        var changed = false
 
         // Do a recursive merge of each child.
         try remote.forEach { rem in
@@ -301,6 +302,7 @@ class ThreeWayTreeMerger {
                 if mir != nil {
                     self.merged.deleteFromMirror.insert(guid)
                 }
+                changed = true
                 return
             }
 
@@ -334,12 +336,20 @@ class ThreeWayTreeMerger {
             }
 
             let m = try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
+            changed = true
             out.append(m)
         }
 
-        let newStructure = out.map { $0.asMergedTreeNode() }
         result.mergedChildren = out
-        result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: newStructure))
+
+        // If the child list didn't change, then we don't need .New.
+        if changed {
+            let newStructure = out.map { $0.asMergedTreeNode() }
+            result.structureState = MergeState.New(value: BookmarkTreeNode.Folder(guid: result.guid, children: newStructure))
+        } else {
+            log.debug("Child list didn't change for \(result.guid).")
+            result.structureState = MergeState.Remote
+        }
     }
 
     private func twoWayValueMerge(guid: GUID) throws -> MergeState<BookmarkMirrorItem> {
