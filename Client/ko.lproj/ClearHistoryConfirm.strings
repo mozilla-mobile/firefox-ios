@@ -1,0 +1,12 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "취소";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "삭제";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "방문기록을 모든 연결 된 장치에서 제거합니다. 이것은 취소할 수 없습니다.";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "파이어폭스 계정에서 방문기록을 제거 하시겠습니까?";
+

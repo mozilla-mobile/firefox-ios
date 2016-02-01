@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "完成";
+
+/* Share action title */
+"Find in Page" = "在頁面中搜尋";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "下一筆搜尋結果";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "前一筆搜尋結果";
+

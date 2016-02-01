@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Ste prepričani?";
+
+/* Clears the search input field and exits out of input mode */
+"Clear Search" = "Počisti iskanje";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopiraj";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Izbriši";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Počisti izbiro";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Vključite iskalni način";
+
+/* Hide password text selection menu item */
+"Hide" = "Skrij";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Zadnja sprememba: %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Prijave";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Prijave bodo trajno odstranjene.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Prijave bodo odstranjene iz vseh povezanih naprav.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Ni prijav";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Odpri in izpolni";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Razkrij";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Išči";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Iskalno polje";
+
+/* Title for selecting all logins */
+"Select All" = "Izberi vse";
+
+/* Title for password row in Login Detail View */
+"password" = "geslo";
+
+/* Title for username row in Login Detail View */
+"username" = "uporabniško ime";
+
+/* Title for website row in Login Detail View */
+"website" = "spletna stran";
+

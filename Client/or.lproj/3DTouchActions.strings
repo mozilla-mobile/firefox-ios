@@ -1,0 +1,24 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "ବୁକମାର୍କରେ ଯୋଡ଼ନ୍ତୁ";
+
+/* Label for preview action on Tab Tray Tab to add current tab to Reading List */
+"Add to Reading List" = "ପଢ଼ାତାଲିକାରେ ଯୋଡ଼ନ୍ତୁ";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "ଟ୍ୟାବ ବନ୍ଦକରନ୍ତୁ";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "URL କପିକରନ୍ତୁ";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "ଶେଷ ବୁକମାର୍କ ଖୋଲନ୍ତୁ";
+
+/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
+"Open Last Tab" = "ଶେଷ ଟ୍ୟାବ ଖୋଲନ୍ତୁ";
+
+/* Accessibility Label for preview in Tab Tray of current tab */
+"Preview of %@" = "%@ର ଦେଖଣା";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "ଉପକରଣକୁ ପଠାଅ";
+

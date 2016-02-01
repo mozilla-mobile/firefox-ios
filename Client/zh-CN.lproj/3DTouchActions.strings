@@ -1,0 +1,24 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "添加到书签";
+
+/* Label for preview action on Tab Tray Tab to add current tab to Reading List */
+"Add to Reading List" = "添加到阅读列表";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "关闭标签页";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "复制网址";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "打开最后的书签";
+
+/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
+"Open Last Tab" = "打开最后的标签页";
+
+/* Accessibility Label for preview in Tab Tray of current tab */
+"Preview of %@" = "%@ 的预览";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "发送到设备";
+

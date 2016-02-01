@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Gorffen";
+
+/* Share action title */
+"Find in Page" = "Canfod yn y Dudalen";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Canlyniad o fewn tudalen nesaf";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Canlyniad o fewn tudalen blaenorol";
+
