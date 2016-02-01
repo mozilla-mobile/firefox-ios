@@ -8,9 +8,14 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-extension SQLiteBookmarks {
+extension SQLiteBookmarks: LocalItemSource {
     public func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         return self.db.getMirrorItemsFromTable(TableBookmarksLocal, guids: guids)
+    }
+
+    public func prefetchLocalItemsWithGUIDs(guids: [GUID]) -> Success {
+        log.debug("Not implemented for SQLiteBookmarks.")
+        return succeed()
     }
 }
 
@@ -473,13 +478,20 @@ public class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
         self.db.checkpoint()
         return succeed()
     }
+}
 
+extension SQLiteBookmarkBufferStorage: BufferItemSource {
     public func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         return self.db.getMirrorItemFromTable(TableBookmarksBuffer, guid: guid)
     }
 
     public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         return self.db.getMirrorItemsFromTable(TableBookmarksBuffer, guids: guids)
+    }
+
+    public func prefetchBufferItemsWithGUIDs(guids: [GUID]) -> Success {
+        log.debug("Not implemented.")
+        return succeed()
     }
 }
 
@@ -556,7 +568,9 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
     public func applyBufferCompletionOp(op: BufferCompletionOp) -> Success {
         return self.buffer.applyBufferCompletionOp(op)
     }
+}
 
+extension MergedSQLiteBookmarks: BufferItemSource {
     public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         return self.buffer.getBufferItemsWithGUIDs(guids)
     }
@@ -565,8 +579,18 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
         return self.buffer.getBufferItemWithGUID(guid)
     }
 
+    public func prefetchBufferItemsWithGUIDs(guids: [GUID]) -> Success {
+        return self.buffer.prefetchBufferItemsWithGUIDs(guids)
+    }
+}
+
+extension MergedSQLiteBookmarks: LocalItemSource {
     public func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         return self.local.getLocalItemsWithGUIDs(guids)
+    }
+
+    public func prefetchLocalItemsWithGUIDs(guids: [GUID]) -> Success {
+        return self.local.prefetchLocalItemsWithGUIDs(guids)
     }
 }
 
