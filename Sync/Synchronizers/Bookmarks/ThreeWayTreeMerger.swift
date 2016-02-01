@@ -353,8 +353,8 @@ class ThreeWayTreeMerger {
     }
 
     private func twoWayValueMerge(guid: GUID) throws -> MergeState<BookmarkMirrorItem> {
-        if BookmarkRoots.All.contains(guid) {
-            log.debug("Two-way value merge on a root: always unaltered.")
+        if BookmarkRoots.RootGUID == guid {
+            log.debug("Two-way value merge on the root: always unaltered.")
             return MergeState.Unchanged
         }
 
