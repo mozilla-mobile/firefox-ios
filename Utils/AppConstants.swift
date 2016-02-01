@@ -58,9 +58,4 @@ public struct AppConstants {
     return true
 #endif
     }()
-
-    /// Function returning the What's New page for iOS
-    public static func whatsNewURLForVersion(version: String) -> NSURL? {
-        return NSURL(string: "https://support.mozilla.org/1/mobile/\(version)/%OS%/%LOCALE%/new-ios")
-    }
 }
