@@ -373,7 +373,9 @@ class ThreeWayTreeMerger {
 
             log.debug("Taking local node in two-way merge: remote bafflingly unchanged.")
             return MergedTreeNode.forLocal(localNode)
-        } else if localNode.isUnknown {
+        }
+
+        if localNode.isUnknown {
             log.debug("Taking remote node in two-way merge: local bafflingly unchanged.")
             return MergedTreeNode.forRemote(remoteNode)
         }
