@@ -614,11 +614,8 @@ class ThreeWayTreeMerger {
         }
 
         // Pre-fetch items so we don't need to do async work later.
-        return self.prefetchItems()
-            >>> {
-               self.produceMergedTree()
-                >>== self.produceMergeResultFromMergedTree
-        }
+        return (self.prefetchItems() >>> self.produceMergedTree)
+          >>== self.produceMergeResultFromMergedTree
     }
 
     private func prefetchItems() -> Success {
