@@ -654,8 +654,8 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
         // visible cells do sometimes return also not visible cells when attempting to go past the last cell with VoiceOver right-flick gesture; so make sure we have only visible cells (yeah...)
         visibleCells = visibleCells.filter { !CGRectIsEmpty(CGRectIntersection($0.frame, bounds)) }
 
-        let indexPaths = visibleCells.map { self.collectionView.indexPathForCell($0)! }
-            .sort { $0.section < $1.section || ($0.section == $1.section && $0.row < $1.row) }
+        let cells = visibleCells.map { self.collectionView.indexPathForCell($0)! }
+        let indexPaths = cells.sort { $0.section < $1.section || ($0.section == $1.section && $0.row < $1.row) }
 
         if indexPaths.count == 0 {
             return NSLocalizedString("No tabs", comment: "Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray")

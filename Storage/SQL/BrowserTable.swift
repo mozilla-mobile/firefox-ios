@@ -527,8 +527,7 @@ public class BrowserTable: Table {
         let views = AllViews.map { "DROP VIEW IF EXISTS \($0)" }
         let indices = AllIndices.map { "DROP INDEX IF EXISTS \($0)" }
         let tables = AllTables.map { "DROP TABLE IF EXISTS \($0)" }
-        let queries = views + indices + tables + additional
-
+        let queries = Array([views, indices, tables, additional].flatten())
         return self.run(db, queries: queries)
     }
 }
