@@ -34,6 +34,7 @@ class FaviconManager : BrowserHelper {
         let manager = SDWebImageManager.sharedManager()
         self.browser?.favicons.removeAll(keepCapacity: false)
         if let tab = self.browser,
+            let currentURL = tab.url,
             let url = tab.url?.absoluteString {
                 let site = Site(url: url, title: "")
                 var favicons = [Favicon]()
@@ -60,13 +61,17 @@ class FaviconManager : BrowserHelper {
                                 fav.width = Int(img.size.width)
                                 fav.height = Int(img.size.height)
                             } else {
+                                if favicons.count == 1 && favicons[0].type == .Guess {
+                                    // No favicon is indicated in the HTML
+                                    self.noFaviconAvailable(tab, atURL: currentURL)
+                                }
                                 return
                             }
 
                             if !tab.isPrivate {
                                 self.profile.favicons.addFavicon(fav, forSite: site)
                                 if tab.favicons.isEmpty {
-                                    self.makeFaviconAvailable(tab, atURL: tab.url!, favicon: fav, withImage: img)
+                                    self.makeFaviconAvailable(tab, atURL: currentURL, favicon: fav, withImage: img)
                                 }
                             }
                             tab.favicons.append(fav)
@@ -79,5 +84,11 @@ class FaviconManager : BrowserHelper {
     func makeFaviconAvailable(tab: Browser, atURL url: NSURL, favicon: Favicon, withImage image: UIImage) {
         let helper = tab.getHelper(name: "SpotlightHelper") as? SpotlightHelper
         helper?.updateImage(image, forURL: url)
+    }
+
+    func noFaviconAvailable(tab: Browser, atURL url: NSURL) {
+        let helper = tab.getHelper(name: "SpotlightHelper") as? SpotlightHelper
+        helper?.updateImage(forURL: url)
+
     }
 }
