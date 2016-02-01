@@ -100,6 +100,21 @@ enum MergeState<T> {
         }
         return false
     }
+
+    var label: String {
+        switch self {
+        case .Unknown:
+            return "Unknown"
+        case .Unchanged:
+            return "Unchanged"
+        case .Remote:
+            return "Remote"
+        case .Local:
+            return "Local"
+        case .New:
+            return "New"
+        }
+    }
 }
 
 func ==<T: Equatable>(lhs: MergeState<T>, rhs: MergeState<T>) -> Bool {
@@ -216,6 +231,33 @@ class MergedTreeNode {
 
         return decided
     }
+
+    func dump(indent: Int) {
+        precondition(indent < 200)
+        let r: Character = "R"
+        let l: Character = "L"
+        let m: Character = "M"
+        let ind = indenting(indent)
+        print(ind, "[V: ", box(self.remote, r), box(self.mirror, m), box(self.local, l), self.guid, self.valueState.label, "]")
+        print(ind, "[S: ", self.structureState.label, "]")
+        if let children = self.mergedChildren {
+            print(ind, "  ..")
+            for child in children {
+                child.dump(indent + 2)
+            }
+        }
+    }
+}
+
+private func box<T>(x: T?, _ c: Character) -> Character {
+    if x == nil {
+        return "□"
+    }
+    return c
+}
+
+private func indenting(by: Int) -> String {
+    return String(count: by, repeatedValue: " " as Character)
 }
 
 class MergedTree {
@@ -227,5 +269,13 @@ class MergedTree {
     init(mirrorRoot: BookmarkTreeNode) {
         self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot, structureState: MergeState.Unchanged)
         self.root.valueState = MergeState.Unchanged
+    }
+
+    func dump() {
+        print("Deleted locally: \(self.deleteLocally.joinWithSeparator(", "))")
+        print("Deleted remotely: \(self.deleteRemotely.joinWithSeparator(", "))")
+        print("Deleted from mirror: \(self.deleteFromMirror.joinWithSeparator(", "))")
+        print("Root: ")
+        self.root.dump(0)
     }
 }
