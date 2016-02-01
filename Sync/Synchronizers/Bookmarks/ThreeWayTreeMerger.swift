@@ -141,6 +141,9 @@ class ThreeWayTreeMerger {
     // For now, track just one list. We might need to split this later.
     var done: Set<GUID> = Set()
 
+    // Local branches down which we did not recurse on our first pass.
+    var localQueue = nodeOnceOnlyStack()
+
     init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree, localItemSource: LocalItemSource, bufferItemSource: BufferItemSource) {
         precondition(mirror.root != nil)
         precondition(mirror.orphans.isEmpty)
