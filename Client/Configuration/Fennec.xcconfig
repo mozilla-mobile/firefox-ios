@@ -13,12 +13,6 @@ MOZ_PRODUCT_NAME = Fennec
 // Bundle Identifier
 MOZ_BUNDLE_ID = org.mozilla.ios.Fennec
 
-// App Version
-MOZ_VERSION = 3.0
-
-// Build ID
-MOZ_BUILD_ID = 1
-
 // Product Name
 MOZ_SOCORRO_PRODUCT_NAME = FenneciOS
 

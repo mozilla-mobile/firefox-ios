@@ -13,12 +13,6 @@ MOZ_PRODUCT_NAME = FirefoxBetaEnterprise
 // Bundle Identifier
 MOZ_BUNDLE_ID = org.mozilla.ios.FirefoxBeta.enterprise
 
-// App Version
-MOZ_VERSION = 2.0
-
-// Build ID
-MOZ_BUILD_ID = 2001
-
 // Product Name
 MOZ_SOCORRO_PRODUCT_NAME = FirefoxBetaEnterpriseiOS
 
