@@ -102,17 +102,20 @@ class MergeApplier {
         self.client = client
     }
 
+    // Exposed for use from tests.
+    func applyResult(result: BookmarksMergeResult) -> Success {
+        return result.applyToClient(self.client, storage: self.storage, buffer: self.buffer)
+    }
+
     func go() -> SyncResult {
-        if !self.greenLight() {
+        guard self.greenLight() else {
             log.info("Green light turned red; not merging bookmarks.")
             return deferMaybe(SyncStatus.Completed)
         }
 
-        return self.merger.merge() >>== { result in
-            return result.applyToClient(self.client, storage: self.storage, buffer: self.buffer)
-               >>> always(SyncStatus.Completed)
-        }
-
+        return self.merger.merge()
+          >>== self.applyResult
+           >>> always(SyncStatus.Completed)
     }
 }
 
