@@ -16,6 +16,7 @@ class L10nSnapshotTests: XCTestCase {
 
         let app = XCUIApplication()
         setupSnapshot(app)
+        app.launchEnvironment["WIPE_PROFILE"] = "YES"
         app.launch()
     }
     
@@ -24,10 +25,25 @@ class L10nSnapshotTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        XCTAssertTrue(true)
+    func testIntro() {
+        let app = XCUIApplication()
+
+        snapshot("Intro-1")
+
+        app.swipeLeft()
+        sleep(2)
+        snapshot("Intro-2")
+
+        app.swipeLeft()
+        sleep(2)
+        snapshot("Intro-3")
+
+        app.swipeLeft()
+        sleep(2)
+        snapshot("Intro-4")
+
+        app.swipeLeft()
+        sleep(2)
+        snapshot("Intro-5")
     }
-    
 }
