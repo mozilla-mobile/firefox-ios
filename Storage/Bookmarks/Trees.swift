@@ -248,7 +248,8 @@ public struct BookmarkTree {
             // never change them, so it's safe to do this unconditionally.
             pseudoTree[BookmarkRoots.RootGUID] = BookmarkRoots.RootChildren
             tops.insert(BookmarkRoots.RootGUID)
-            remainingFolders.insert(BookmarkRoots.RootGUID)
+            notTops.unionInPlace(BookmarkRoots.RootChildren)
+            remainingFolders.unionInPlace(BookmarkRoots.All)
             BookmarkRoots.RootChildren.forEach {
                 parents[$0] = BookmarkRoots.RootGUID
             }
