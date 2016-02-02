@@ -146,6 +146,7 @@ class ThreeWayTreeMerger {
 
     init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree, localItemSource: LocalItemSource, bufferItemSource: BufferItemSource) {
         precondition(mirror.root != nil)
+        assert((mirror.root!.children?.count ?? 0) == BookmarkRoots.RootChildren.count)
         precondition(mirror.orphans.isEmpty)
         precondition(mirror.deleted.isEmpty)
         precondition(mirror.subtrees.count == 1)
@@ -555,38 +556,9 @@ class ThreeWayTreeMerger {
         return try takeMirrorNode(mirrorNode)
     }
 
-    // This should only be called once.
-    func produceMergedTree() -> Deferred<Maybe<MergedTree>> {
-        if self.mergeAttempted {
-            return deferMaybe(self.merged)
-        }
-
-        let root = self.merged.root
-        assert((root.mirror?.children?.count ?? 0) == BookmarkRoots.RootChildren.count)
-
-        // Get to walkin'.
-        root.structureState = MergeState.Unchanged      // We never change the root.
-        root.valueState = MergeState.Unchanged
-
-        do {
-            try root.mergedChildren = root.mirror!.children!.map {
-                let guid = $0.recordGUID
-                let loc = self.local.find(guid)
-                let mir = self.mirror.find(guid)
-                let rem = self.remote.find(guid)
-                return try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
-            }
-        } catch let error as BookmarksMergeConsistencyError {
-            return deferMaybe(error)
-        } catch {
-            return deferMaybe(BookmarksMergeConsistencyError())
-        }
-
-        // Now walk down from the mirror root again, this time taking all of the unmerged local branches.
-        // TODO
-
-        self.mergeAttempted = true
-        return deferMaybe(self.merged)
+    func merge() -> Deferred<Maybe<BookmarksMergeResult>> {
+        return self.produceMergedTree()
+          >>== self.produceMergeResultFromMergedTree
     }
 
     func produceMergeResultFromMergedTree(mergedTree: MergedTree) -> Deferred<Maybe<BookmarksMergeResult>> {
@@ -598,8 +570,7 @@ class ThreeWayTreeMerger {
         return deferMaybe(BookmarksMergeResult(uploadCompletion: upstream, overrideCompletion: local, bufferCompletion: buffer))
     }
 
-    func merge() -> Deferred<Maybe<BookmarksMergeResult>> {
-
+    func produceMergedTree() -> Deferred<Maybe<MergedTree>> {
         // Both local and remote should reach a single root when overlayed. If not, it means that
         // the tree is inconsistent -- there isn't a full tree present either on the server (or local)
         // or in the mirror, or the changes aren't congruent in some way. If we reach this state, we
@@ -627,13 +598,47 @@ class ThreeWayTreeMerger {
             log.warning("Expecting conflicts between local and remote: \(conflictingGUIDs.joinWithSeparator(", ")).")
         }
 
+        if self.mergeAttempted {
+            return deferMaybe(self.merged)
+        }
+
         // Pre-fetch items so we don't need to do async work later.
-        return (self.prefetchItems() >>> self.produceMergedTree)
-          >>== self.produceMergeResultFromMergedTree
+        return self.prefetchItems() >>> self.walkProducingMergedTree
     }
 
     private func prefetchItems() -> Success {
         return self.bufferItemSource.prefetchBufferItemsWithGUIDs(self.allChangedGUIDs)
            >>> { self.localItemSource.prefetchLocalItemsWithGUIDs(self.allChangedGUIDs) }
+    }
+
+    // This should only be called once.
+    // Callers should ensure validity of inputs.
+    private func walkProducingMergedTree() -> Deferred<Maybe<MergedTree>> {
+        let root = self.merged.root
+        assert((root.mirror?.children?.count ?? 0) == BookmarkRoots.RootChildren.count)
+
+        // Get to walkin'.
+        root.structureState = MergeState.Unchanged      // We never change the root.
+        root.valueState = MergeState.Unchanged
+
+        do {
+            try root.mergedChildren = root.mirror!.children!.map {
+                let guid = $0.recordGUID
+                let loc = self.local.find(guid)
+                let mir = self.mirror.find(guid)
+                let rem = self.remote.find(guid)
+                return try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
+            }
+        } catch let error as BookmarksMergeConsistencyError {
+            return deferMaybe(error)
+        } catch {
+            return deferMaybe(BookmarksMergeConsistencyError())
+        }
+
+        // Now walk down from the mirror root again, this time taking all of the unmerged local branches.
+        // TODO
+
+        self.mergeAttempted = true
+        return deferMaybe(self.merged)
     }
 }
