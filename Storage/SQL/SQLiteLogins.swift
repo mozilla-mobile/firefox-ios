@@ -390,31 +390,9 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     private func cloneMirrorToOverlay(whereClause whereClause: String?, args: Args?) -> Deferred<Maybe<Int>> {
-        let shared =
-        "guid " +
-        ", hostname" +
-        ", httpRealm" +
-        ", formSubmitURL" +
-        ", usernameField" +
-        ", passwordField" +
-        ", timeCreated" +
-        ", timeLastUsed" +
-        ", timePasswordChanged" +
-        ", timesUsed" +
-        ", username" +
-        ", password "
-
-        let local =
-        ", local_modified " +
-        ", is_deleted " +
-        ", sync_status "
-
-        let sql = "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
-        "(\(shared)\(local)) " +
-        "SELECT \(shared), NULL AS local_modified, 0 AS is_deleted, 0 AS sync_status " +
-        "FROM \(TableLoginsMirror) " +
-        (whereClause ?? "")
-
+        let shared = "guid, hostname, httpRealm, formSubmitURL, usernameField, passwordField, timeCreated, timeLastUsed, timePasswordChanged, timesUsed, username, password "
+        let local = ", local_modified, is_deleted, sync_status "
+        let sql = "INSERT OR IGNORE INTO \(TableLoginsLocal) (\(shared)\(local)) SELECT \(shared), NULL AS local_modified, 0 AS is_deleted, 0 AS sync_status FROM \(TableLoginsMirror) \(whereClause ?? "")"
         return self.db.write(sql, withArgs: args)
     }
 
