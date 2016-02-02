@@ -205,7 +205,7 @@ class TestSQLiteBookmarks: XCTestCase {
         }
 
         let bookmarks = SQLiteBookmarks(db: db)
-        self.assertTreeIsEmpty(bookmarks.treeForMirror().value)
+        self.assertTreeContainsOnlyRoots(bookmarks.treeForMirror().value)
         self.assertTreeIsEmpty(bookmarks.treeForBuffer().value)
         self.assertTreeContainsOnlyRoots(bookmarks.treeForLocal().value)
 
@@ -239,7 +239,7 @@ class TestSQLiteBookmarks: XCTestCase {
         }
 
         let bookmarks = SQLiteBookmarks(db: db)
-        self.assertTreeIsEmpty(bookmarks.treeForMirror().value)
+        self.assertTreeContainsOnlyRoots(bookmarks.treeForMirror().value)
         self.assertTreeIsEmpty(bookmarks.treeForBuffer().value)
         self.assertTreeContainsOnlyRoots(bookmarks.treeForLocal().value)
 
