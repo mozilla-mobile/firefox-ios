@@ -1,0 +1,63 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Ar ôl 1 awr";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Ar ôl 1 munud";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Ar ôl 5 munud";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Ar ôl 10 munud";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Ar ôl 15 munud";
+
+/* Title for setting to change passcode */
+"Change Passcode" = "Newid Cyfringod";
+
+/* Title for entering a passcode */
+"Enter a passcode" = "Cynnig cyfringod";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Yn syth";
+
+/* List item for Logins */
+"Logins" = "Mewngofnodion";
+
+/* List section title for passcode settings */
+"Passcode" = "Cyfringod";
+
+/* List item for Private Browsing */
+"Private Browsing" = "Pori Preifat";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Ailgynnig cyfringod";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Angen Cyfringod";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Gosod Cyfringod";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Enw Cyffwrdd a Chyfringod";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Diffodd y Cyfringod";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Cychwyn y Cyfringod";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Diffodd eich cyfringod.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID for" = "Defnyddio Enw Cyffwrdd ar gyfer";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Defnyddio eich ôl bys i gael mynediad at fewngofnodion nawr.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Defnyddi eich ôl bys i gael mynediad at Bori Preifat nawr.";
+

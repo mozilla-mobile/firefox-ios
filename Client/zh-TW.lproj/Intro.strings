@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "使用分頁標籤一次瀏覽多個網頁。";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "選擇";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "在任何地方使用時都連線到 Firefox。";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "自訂";
+
+/* See http://mzl.la/1T8gxwo */
+"Easily switch between open pages with tabs." = "透過分頁，輕易地切換開啟的頁面。";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox 和一片雲";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "介紹畫面，第 %1$@ 張，共 %2$@ 張";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "管理";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "到設定畫面中用您想要的方式個人化 Firefox。";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your default search engine and more in Settings." = "到設定畫面中選擇您的預設搜尋引擎及其他個人化功能。";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "分享";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "登入至 Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "開始瀏覽";
+
+/* See http://mzl.la/1T8gxwo */
+"Sync Your Devices." = "同步您的裝置。";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "按住 Firefox 圖示，移動到 Dock 方便快速啟動 Firefox。";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "「設定」按鈕位在分頁列的最前面。";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "「顯示分頁」按鈕位在網址列與搜尋框旁邊，並顯示目前已開啟的分頁數量。";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "直接從其他應用程式將鏈結傳送到 Firefox 開啟。";
+

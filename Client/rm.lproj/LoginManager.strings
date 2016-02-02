@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Es ti segir?";
+
+/* Clears the search input field and exits out of input mode */
+"Clear Search" = "Svidar la tschertga";
+
+/* Copy password text selection menu item */
+"Copy" = "Copiar";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Stizzar";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Deselecziunar tut";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Midar en il modus da tschertgar";
+
+/* Hide password text selection menu item */
+"Hide" = "Zuppentar";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Ultima modificaziun: %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Infurmaziuns d'annunzia";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Las infurmaziuns d'annunzia vegnan allontanadas definitivamain.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Las infurmaziuns d'annunzia vegnan allontanadas da tut ils apparats associads.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Chattà naginas infurmaziuns d'annunzia";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Avrir & emplenir";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Mussar";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Tschertgar";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Champ d'endataziun per tschertgar";
+
+/* Title for selecting all logins */
+"Select All" = "Selecziunar tut";
+
+/* Title for password row in Login Detail View */
+"password" = "pled-clav";
+
+/* Title for username row in Login Detail View */
+"username" = "num d'utilisader";
+
+/* Title for website row in Login Detail View */
+"website" = "website";
+

@@ -1,0 +1,548 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ запрашивает имя пользователя и пароль.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ запрашивает имя пользователя и пароль. Сайт сообщает: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "О программе";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Добавить вкладку";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Добавить в Список для чтения";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Страница добавлена в Список для чтения";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Адрес и Поиск";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Всегда отправлять";
+
+/* Authentication prompt title */
+"Authentication required" = "Требуется аутентификация";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Назад";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Блокировка всплывающих окон";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Заложить";
+
+/* Panel accessibility label */
+"Bookmarks" = "Закладки";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Яркость";
+
+/* Alert Call Button */
+"Call" = "Позвонить";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Отмена";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Изменяет цветовую тему.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Изменяет тип шрифта.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Удалить личные данные";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Закрыть";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Закрытие вкладки";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Копировать адрес";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Копировать изображение";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Копировать ссылку";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Не удалось добавить страницу в Список для чтения. Может быть она уже там?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Не удалось добавить страницу в Список для чтения";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Не удалось загрузить страницу.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Создать аккаунт";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Тёмная";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Отладка: забыть состояние авторизации синхронизации";
+
+/* Debug option */
+"Debug: require password" = "Отладка: затребовать пароль";
+
+/* Debug option */
+"Debug: require upgrade" = "Отладка: затребовать обновление";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Уменьшить размер шрифта";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Поисковая система по умолчанию";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Отключить дополнительные диалоговые окна страницы";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Параметры отображения";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Вы хотите сохранить пароль для %1$@ на %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Вы хотите сохранить пароль на %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Вы хотите обновить пароль для %1$@ на %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Вы хотите обновить пароль на %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Не отправлять";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Готово";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Дважды нажмите и удерживайте, чтобы открыть журнал";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Введите пароль для подключения.";
+
+/* Tile title for App Help */
+"Firefox Help and Support" = "Справка и Поддержка Firefox";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox прекратит синхронизацию с вашим аккаунтом, но не будет удалять ничего из ваших данных веб-сёрфинга на этом устройстве.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox хотел бы получить доступ к вашим Фото";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Вперёд";
+
+/* General settings section title */
+"General" = "Основные";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Получите открытые вкладки, закладки и пароли с других ваших устройств.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Перейти";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Перейти на скопированный URL?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Справка";
+
+/* Panel accessibility label */
+"History" = "Журнал";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Увеличить размер шрифта";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Карусель вводного тура";
+
+/* History tableview section header */
+"Last month" = "Последний месяц";
+
+/* Last synced time label beside Sync Now setting option. Argument is the relative date string.
+   Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Последняя синхронизация: %@";
+
+/* History tableview section header */
+"Last week" = "Последняя неделя";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Лицензии";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Светлая";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Загрузить исходную страницу";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Загрузка содержимого…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Выйти";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Выйти?";
+
+/* Authentication prompt log in button */
+"Log in" = "Войти";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Логины";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Похоже, что Firefox ранее упал. Вы хотите восстановить ваши вкладки?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Отметить как прочитанное";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Отметить как непрочитанное";
+
+/* Error for a missing remote error number */
+"Missing error" = "Отсутствует номер ошибки";
+
+/* Error for a missing remote error message */
+"Missing message" = "Отсутствует сообщение";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Панель навигации";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Новая вкладка: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Доступна новая версия";
+
+/* Restore Tabs Negative Action */
+"No" = "Нет";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Вкладок нет";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Не сейчас";
+
+/* Button to not save the user's password */
+"Not now" = "Не сейчас";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Согласен";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ой! Firefox упал";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Открыть в новой вкладке";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Открыть Параметры";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Открывайте статьи в Виде для чтения, нажав на значок книги, когда он появится в строке заголовка.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Открыть в…";
+
+/* Opening an external URL */
+"Opening %@" = "Открытие %@";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "Недавно посещённые вами страницы появятся здесь.";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Выбор панелей";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Пароль";
+
+/* Paste the URL into the location bar */
+"Paste" = "Вставить";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Вставить и перейти";
+
+/* Privacy section title */
+"Privacy" = "Приватность";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Политика приватности";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Системы быстрого поиска";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Вид для чтения";
+
+/* Panel accessibility label */
+"Reading list" = "Список для чтения";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Обновить";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Удалить";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Удалить из Списка для чтения";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Удалить страницу";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Запросить полную версию сайта";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Запросить мобильную версию сайта";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Без засечек";
+
+/* Context menu item for saving an image */
+"Save Image" = "Сохранить изображение";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Сохранять логины";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Сохраняйте страницы в Списке для чтения, нажав на значок книги с плюсом в управлении Видом для чтения.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Поиск";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Введите запрос или адрес";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Поиск предложений";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Защищённое соединение";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "Отправлять сообщения о падениях";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "Отправить отзыв";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Отправить сообщение";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Отправить сообщение о падении, чтобы Mozilla могла устранить эту проблему?";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Сепия";
+
+/* Font type setting in the reading view settings */
+"Serif" = "С засечками";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Параметры";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Поделиться";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Поделиться ссылкой";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Отображать поисковые предложения";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Отображать вкладки";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Провести тур";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Отображать поисковые предложения";
+
+/* Text message / button in the settings table view */
+"Sign In" = "Войти";
+
+/* Text message / button in the settings table view */
+"Sign in" = "Войти";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "Остановить";
+
+/* Support section title */
+"Support" = "Поддержка";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Чтобы закрыть вкладку, проведите тремя пальцами влево или вправо.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Синхронизировать";
+
+/* See http://mzl.la/1Qtkf0j */
+"Sync your tabs, bookmarks, passwords and more." = "Синхронизация ваших вкладок, закладок, паролей и многого другого.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Sync your tabs, passwords and more." = "Синхронизация ваших вкладок, паролей и многого другого.";
+
+/* Panel accessibility label */
+"Synced tabs" = "Синхронизированные вкладки";
+
+/* Syncing Firefox Account */
+"Syncing…" = "Синхронизация…";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "%1$@ из %2$@ вкладок";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "С %1$@ по %2$@ из %3$@ вкладок";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Лоток вкладок";
+
+/* Tile title for Mozilla */
+"The Mozilla Project" = "Проект Mozilla";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Не удалось отобразить эту страницу в Виде для чтения.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Доступна новая версия Firefox Aurora. Нажмите OK, чтобы перейти на страницу загрузки.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "При доступе к вкладкам с других устройств возникла проблема. Подождите немного и попробуйте снова.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "При преобразовании страницы произошла ошибка";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Это позволит сохранить изображение в вашу «Фотопленку».";
+
+/* Opening an external app */
+"This will open in another application" = "Это будет открыто в другом приложении";
+
+/* History tableview section header */
+"Today" = "Сегодня";
+
+/* Panel accessibility label */
+"Top sites" = "Топ сайтов";
+
+/* Button to update the user's password */
+"Update" = "Обновить";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Для подключения обновите Firefox.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Использовать компактные вкладки";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Имя пользователя";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Подтвердите свой адрес эл. почты.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Версия %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Просмотреть";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Веб-содержимое";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Добро пожаловать в Синхронизацию";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Добро пожаловать в ваш Список для чтения";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Ой, вот ведь незадача";
+
+/* Button to save the user's password */
+"Yes" = "Да";
+
+/* History tableview section header */
+"Yesterday" = "Вчера";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "У вас нет ни одного устройства, подключенного к этому Аккаунту Firefox и доступного для синхронизации.";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "На ваших других устройствах в Firefox не открыто ни одной вкладки.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Ваши права";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "компьютер";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "прямо сейчас";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "мобильное устройство";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "более месяца назад";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "более недели назад";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "прочитано";
+
+/* Relative date for date in past week. */
+"this week" = "на этой неделе";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "сегодня в %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "непрочитано";
+
+/* Relative date for yesterday. */
+"yesterday" = "вчера";
+

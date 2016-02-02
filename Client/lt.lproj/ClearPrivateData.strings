@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Ar tikrai norite išvalyti visus savo duomenis? Tuo pačiu bus užvertos visos atidarytos kortelės.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Naršymo žurnalas";
+
+/* Settings item for clearing the cache */
+"Cache" = "Podėlis";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Atsisakyti";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Valyti";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Valyti viską";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Valyti privačius duomenis";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Slapukai";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Duomenys darbui neprisijungus";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Įrašyti prisijungimai";
+

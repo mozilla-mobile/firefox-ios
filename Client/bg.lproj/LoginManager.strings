@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Сигурни ли сте?";
+
+/* Clears the search input field and exits out of input mode */
+"Clear Search" = "Изчистване на търсене";
+
+/* Copy password text selection menu item */
+"Copy" = "Копиране";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Изтриване";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Отмяна всички";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Влизане в режим на търсене";
+
+/* Hide password text selection menu item */
+"Hide" = "Скриване";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Последна промяна на %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Вписвания";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Вписванията ще бъдат безвъзвратно загубени.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Вписванията ще бъдат премахнати от всички свързани устройства.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Няма намерени вписвания";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Отваряне и попълване";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Разкриване";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Търсене";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Поле за търсене";
+
+/* Title for selecting all logins */
+"Select All" = "Избери всичко";
+
+/* Title for password row in Login Detail View */
+"password" = "парола";
+
+/* Title for username row in Login Detail View */
+"username" = "потребителско име";
+
+/* Title for website row in Login Detail View */
+"website" = "уебсайт";
+

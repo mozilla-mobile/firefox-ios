@@ -1,0 +1,63 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Dopo 1 ora";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Dopo 1 minuto";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Dopo 5 minuti";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Dopo 10 minuti";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Dopo 15 minuti";
+
+/* Title for setting to change passcode */
+"Change Passcode" = "Cambia codice";
+
+/* Title for entering a passcode */
+"Enter a passcode" = "Inserire un codice";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Subito";
+
+/* List item for Logins */
+"Logins" = "Accessi";
+
+/* List section title for passcode settings */
+"Passcode" = "Codice";
+
+/* List item for Private Browsing */
+"Private Browsing" = "Navigazione anonima";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Reinserisci codice";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Richiedi codice";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Imposta codice";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID e codice";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Disattiva codice";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Attiva codice";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Disattiva il tuo codice.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID for" = "Usa Touch ID per";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Usa la tua impronta digitale per utilizzare gli accessi salvati.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Usa la tua impronta digitale per attivare la navigazione anonima.";
+
