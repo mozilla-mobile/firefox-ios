@@ -464,4 +464,19 @@ class LoginManagerTests: KIFTestCase {
 
         closeLoginManager()
     }
+
+    func testLoginDetailDisplaysLastModified() {
+
+        openLoginManager()
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().waitForViewWithAccessibilityLabel("password")
+
+        XCTAssertTrue(tester().viewExistsWithLabelPrefixedBy("Last modified"))
+
+        tester().tapViewWithAccessibilityLabel("Back")
+        closeLoginManager()
+    }
 }
