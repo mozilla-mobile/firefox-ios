@@ -289,7 +289,7 @@ class ThreeWayTreeMerger {
     private func twoWayMergeChildListsIntoMergedNode(result: MergedTreeNode, fromLocal local: [BookmarkTreeNode], remote: [BookmarkTreeNode]) throws {
         // The most trivial implementation: take everything in the first list, then append
         // everything new in the second list.
-        // Anything present in both is queued up to be resolved.
+        // Anything present in both is resolved.
         // We can't get away from handling deletions and moves, etc. -- one might have
         // created a folder on two devices and moved existing items on one, some of which
         // might have been deleted on the other.
@@ -331,21 +331,28 @@ class ThreeWayTreeMerger {
                 // We do so by finding the modification time of the parent on each side,
                 // unless one of the records is explicitly non-modified.
                 if let localParentGUID = self.local.parents[guid] {
+
+                    // Oh hey look! Ad hoc three-way merge!
                     let mirrorParentGUID = self.mirror.parents[guid]
+
                     if localParentGUID != result.guid {
                         log.debug("Local child \(guid) is in folder \(localParentGUID), but remotely is in \(result.guid).")
                         if mirrorParentGUID != localParentGUID {
                             log.debug("… and locally it has changed since our last sync, moving from \(mirrorParentGUID) to \(localParentGUID).")
-                            // Find out which position is most recent.
+
+                            // Find out which parent is most recent.
                             if let localRecords = self.localItemSource.getLocalItemsWithGUIDs([localParentGUID, guid]).value.successValue,
                                let remoteRecords = self.bufferItemSource.getBufferItemsWithGUIDs([result.guid, guid]).value.successValue {
+
                                 let latestLocalTimestamp = max(localRecords[guid]?.localModified ?? 0, localRecords[localParentGUID]?.localModified ?? 0)
                                 let latestRemoteTimestamp = max(remoteRecords[guid]?.serverModified ?? 0, remoteRecords[result.guid]?.serverModified ?? 0)
                                 log.debug("Latest remote timestamp: \(latestRemoteTimestamp). Latest local timestamp: \(latestLocalTimestamp).")
+
                                 if latestLocalTimestamp > latestRemoteTimestamp {
                                     log.debug("Keeping record in its local position. We'll merge these later.")
                                     return
                                 }
+
                                 log.debug("Taking remote, because it's later. Merging now.")
                             }
                         } else {
@@ -355,6 +362,7 @@ class ThreeWayTreeMerger {
                         log.debug("\(guid) is locally in \(localParentGUID) and remotely in \(result.guid). Easy.")
                     }
                 }
+
                 out.append(try self.mergeNode(guid, localNode: localByGUID, mirrorNode: mir, remoteNode: rem))
                 return
             }
@@ -598,15 +606,15 @@ class ThreeWayTreeMerger {
         // We have a mirror node.
         if let loc = localNode where !loc.isUnknown {
             if let rem = remoteNode where !rem.isUnknown {
-                log.debug("Both local and remote changes to a mirror item. Resolving conflict.")
+                log.debug("Both local and remote changes to mirror item \(guid). Resolving conflict.")
                 return try self.threeWayMerge(guid, localNode: loc, remoteNode: rem, mirrorNode: mirrorNode)
             }
-            log.debug("Local-only change to a mirror item.")
+            log.debug("Local-only change to mirror item \(guid).")
             return try takeLocalAndMergeChildren(loc, mirror: mirrorNode)
         }
 
         if let rem = remoteNode where !rem.isUnknown {
-            log.debug("Remote-only change to a mirror item.")
+            log.debug("Remote-only change to mirror item \(guid).")
             return try takeRemoteAndMergeChildren(rem, mirror: mirrorNode)
         }
 
