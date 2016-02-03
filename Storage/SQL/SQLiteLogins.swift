@@ -10,12 +10,19 @@ private let log = Logger.syncLogger
 
 let TableLoginsMirror = "loginsM"
 let TableLoginsLocal = "loginsL"
+let IndexLoginsOverrideHostname = "idx_loginsM_is_overridden_hostname"
+let IndexLoginsDeletedHostname = "idx_loginsL_is_deleted_hostname"
 let AllLoginTables: [String] = [TableLoginsMirror, TableLoginsLocal]
 
+private let OverriddenHostnameIndexQuery =
+"CREATE INDEX IF NOT EXISTS \(IndexLoginsOverrideHostname) ON \(TableLoginsMirror) (is_overridden, hostname)"
+
+private let DeletedHostnameIndexQuery =
+"CREATE INDEX IF NOT EXISTS \(IndexLoginsDeletedHostname) ON \(TableLoginsLocal) (is_deleted, hostname)"
 
 private class LoginsTable: Table {
     var name: String { return "LOGINS" }
-    var version: Int { return 2 }
+    var version: Int { return 3 }
 
     func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
@@ -66,8 +73,7 @@ private class LoginsTable: Table {
             ", sync_status TINYINT " +                        // SyncStatus enum. Set when changed or created.
             "NOT NULL DEFAULT \(SyncStatus.Synced.rawValue)" +
         ")"
-
-        return self.run(db, queries: [mirror, local])
+        return self.run(db, queries: [mirror, local, OverriddenHostnameIndexQuery, DeletedHostnameIndexQuery])
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
@@ -81,6 +87,11 @@ private class LoginsTable: Table {
             // This is likely an upgrade from before Bug 1160399.
             log.debug("Updating logins tables from zero. Assuming drop and recreate.")
             return drop(db) && create(db)
+        }
+
+        if from < 3 && to >= 3 {
+            log.debug("Updating logins tables to include version 3 indices")
+            return self.run(db, queries: [OverriddenHostnameIndexQuery, DeletedHostnameIndexQuery])
         }
 
         // TODO: real update!
@@ -316,7 +327,7 @@ public class SQLiteLogins: BrowserLogins {
         let projection = SQLiteLogins.LoginColumns
         var searchClauses = [String]()
         var args: Args? = nil
-        if let query = query {
+        if let query = query where !query.isEmpty {
             // Add wildcards to change query to 'contains in' and add them to args. We need 6 args because
             // we include the where clause twice: Once for the local table and another for the remote.
             args = (0..<6).map { _ in

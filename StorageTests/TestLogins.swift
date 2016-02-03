@@ -289,6 +289,20 @@ class TestSQLiteLoginsPerf: XCTestCase {
         XCTAssertTrue(removeAllLogins().value.isSuccess)
     }
 
+    func testLoginsGetAllPerf() {
+        populateTestLogins()
+
+        // Measure time to find all matching results
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+            for _ in 0...5 {
+                self.logins.getAllLogins().value
+            }
+            self.stopMeasuring()
+        }
+
+        XCTAssertTrue(removeAllLogins().value.isSuccess)
+    }
+
     func populateTestLogins() {
         for i in 0..<1000 {
             let login = Login.createWithHostname("website\(i).com", username: "username\(i)", password: "password\(i)")
