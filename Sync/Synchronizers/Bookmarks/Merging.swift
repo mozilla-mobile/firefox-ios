@@ -266,6 +266,19 @@ class MergedTree {
     var deleteRemotely: Set<GUID> = Set()
     var deleteFromMirror: Set<GUID> = Set()
 
+    var allGUIDs: Set<GUID> {
+        var out = Set<GUID>([self.root.guid])
+        func acc(node: MergedTreeNode) {
+            guard let children = node.mergedChildren else {
+                return
+            }
+            out.unionInPlace(children.map { $0.guid })
+            children.forEach(acc)
+        }
+        acc(self.root)
+        return out
+    }
+
     init(mirrorRoot: BookmarkTreeNode) {
         self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot, structureState: MergeState.Unchanged)
         self.root.valueState = MergeState.Unchanged
