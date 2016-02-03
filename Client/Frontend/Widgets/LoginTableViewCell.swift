@@ -35,13 +35,6 @@ enum LoginTableViewCellStyle {
     case IconAndDescriptionLabel
 }
 
-enum LoginTableViewCellActions {
-    case OpenAndFill
-    case Reveal
-    case Hide
-    case Copy
-}
-
 class LoginTableViewCell: UITableViewCell {
 
     private let labelContainer = UIView()
@@ -100,8 +93,6 @@ class LoginTableViewCell: UITableViewCell {
         }
     }
 
-    var enabledActions = [LoginTableViewCellActions]()
-
     var style: LoginTableViewCellStyle = .IconAndBothLabels {
         didSet {
             if style != oldValue {
@@ -125,18 +116,6 @@ class LoginTableViewCell: UITableViewCell {
     var displayDescriptionAsPassword: Bool = false {
         didSet {
             descriptionLabel.secureTextEntry = displayDescriptionAsPassword
-
-            // If we're editing only allow copy and hide reveal/hide
-            if descriptionLabel.editing {
-                enabledActions = [.Copy]
-                return
-            }
-
-            if displayDescriptionAsPassword {
-                enabledActions = [.Copy, .Reveal]
-            } else {
-                enabledActions = [.Copy, .Hide]
-            }
         }
     }
 
@@ -181,7 +160,6 @@ class LoginTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        enabledActions = []
         delegate = nil
         descriptionLabel.secureTextEntry = false
         descriptionLabel.keyboardType = .Default
@@ -312,31 +290,6 @@ class LoginTableViewCell: UITableViewCell {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         customCheckmarkIcon.image = UIImage(named: selected ? "loginSelected" : "loginUnselected")
-    }
-}
-
-// MARK: - Menu Action Overrides
-extension LoginTableViewCell {
-
-    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        let checks: [Bool] = enabledActions.map { actionEnum in
-            switch actionEnum {
-            case .OpenAndFill:
-                return action == MenuHelper.SelectorOpenAndFill
-            case .Reveal:
-                return action == MenuHelper.SelectorReveal
-            case .Hide:
-                return action == MenuHelper.SelectorHide
-            case .Copy:
-                return action == MenuHelper.SelectorCopy
-            }
-        }
-
-        return checks.contains(true)
-    }
-
-    override func canBecomeFirstResponder() -> Bool {
-        return true
     }
 }
 

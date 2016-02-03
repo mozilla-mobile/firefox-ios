@@ -250,6 +250,32 @@ class LoginManagerTests: KIFTestCase {
         BrowserUtils.resetToAboutHome(tester())
     }
 
+    func testDetailUsernameMenuOptions() {
+        openLoginManager()
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().waitForViewWithAccessibilityLabel("password")
+
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+        let usernameCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! LoginTableViewCell
+
+        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        let centerOfCell = CGPoint(x: usernameCell.frame.width / 2, y: usernameCell.frame.height / 2)
+
+        // Tap the 'Copy' menu option
+        usernameCell.longPressAtPoint(centerOfCell, duration: 2)
+        tester().waitForViewWithAccessibilityLabel("Copy")
+        tester().tapViewWithAccessibilityLabel("Copy")
+
+        XCTAssertEqual(UIPasteboard.generalPasteboard().string, "a0@email.com")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+        closeLoginManager()
+    }
+
     func testListSelection() {
         openLoginManager()
 
