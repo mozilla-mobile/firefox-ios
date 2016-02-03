@@ -697,6 +697,14 @@ class ThreeWayTreeMerger {
         // TODO
 
         self.mergeAttempted = true
+
+        // Validate. Note that we might end up with *more* records than this -- records
+        // that didn't change naturally aren't present in the change list on either side.
+        let expected = self.allChangedGUIDs.subtract(self.allDeletions)
+        let actual = self.merged.allGUIDs
+        assert(actual.isSupersetOf(expected))
+        assert(actual.intersect(self.allDeletions).isEmpty)
+
         return deferMaybe(self.merged)
     }
 }
