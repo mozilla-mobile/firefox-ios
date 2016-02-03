@@ -938,8 +938,9 @@ class BrowserViewController: UIViewController {
     }
 
     func switchToTabForURLOrOpen(url: NSURL) {
-        popToBrowser()
-        if let tab = tabManager.getTabForURL(url) {
+        let tab = tabManager.getTabForURL(url)
+        popToBrowser(tab)
+        if let tab = tab {
             tabManager.selectTab(tab)
         } else {
             openURLInNewTab(url)
@@ -973,14 +974,16 @@ class BrowserViewController: UIViewController {
         urlBar.browserLocationViewDidTapLocation(urlBar.locationView)
     }
 
-    private func popToBrowser() {
-        guard let currentViewController = navigationController?.topViewController,
-            let presentedViewController = currentViewController.presentedViewController else {
+    private func popToBrowser(forTab: Browser? = nil) {
+        guard let currentViewController = navigationController?.topViewController else {
                 return
         }
-        
-        presentedViewController.dismissViewControllerAnimated(false, completion: nil)
-        if currentViewController != self {
+        if let presentedViewController = currentViewController.presentedViewController {
+            presentedViewController.dismissViewControllerAnimated(false, completion: nil)
+        }
+        // if a tab already exists and the top VC is not the BVC then pop the top VC, otherwise don't.
+        if currentViewController != self,
+            let _ = forTab {
             self.navigationController?.popViewControllerAnimated(true)
         }
     }
