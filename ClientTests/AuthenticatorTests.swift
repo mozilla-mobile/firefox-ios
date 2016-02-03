@@ -33,6 +33,7 @@ class MockMalformableLogin: LoginData {
     var usernameField: String?
     var passwordField: String?
     var hasMalformedHostname = true
+    var isValid = Maybe(success: ())
 
     static func createWithHostname(hostname: String, username: String, password: String) -> MockMalformableLogin {
         return self.init(guid: Bytes.generateGUID(), hostname: hostname, username: username, password: password)

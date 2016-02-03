@@ -548,7 +548,6 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testLoginDetailDisplaysLastModified() {
-
         openLoginManager()
 
         tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
@@ -557,6 +556,28 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("password")
 
         XCTAssertTrue(tester().viewExistsWithLabelPrefixedBy("Last modified"))
+        tester().tapViewWithAccessibilityLabel("Back")
+        closeLoginManager()
+    }
+
+    func testPreventBlankPasswordInDetail() {
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+
+        tester().tapViewWithAccessibilityLabel("Edit")
+
+        // Check that we've selected the username field
+        var passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        var passwordField = passwordCell.descriptionLabel
+
+        tester().tapViewWithAccessibilityLabel("Next")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("")
+        tester().tapViewWithAccessibilityLabel("Done")
+
+        passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        passwordField = passwordCell.descriptionLabel
+
+        // Confirm that when entering a blank password we revert back to the original
+        XCTAssertEqual(passwordField.text, "passworda0")
 
         tester().tapViewWithAccessibilityLabel("Back")
         closeLoginManager()
