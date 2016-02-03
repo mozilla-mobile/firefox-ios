@@ -188,10 +188,14 @@ class ThreeWayTreeMerger {
             preconditionFailure("Expected children.")
         }
 
-        let out: [MergedTreeNode] = try mirrorChildren.map { child in
+        let out: [MergedTreeNode] = try mirrorChildren.flatMap { child in
             // TODO: handle deletions. That might change the below from 'Unchanged'
             // to 'New'.
             let childGUID = child.recordGUID
+            if self.done.contains(childGUID) {
+                log.warning("Not taking mirror child \(childGUID): already done. This is unexpected.")
+                return nil
+            }
             let localCounterpart = self.local.find(childGUID)
             let remoteCounterpart = self.remote.find(childGUID)
             return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: child, remoteNode: remoteCounterpart)
@@ -205,9 +209,13 @@ class ThreeWayTreeMerger {
         // TODO: just as with merging the child lists in the two-way and
         // three-way merge, we need to handle deletions, moves, tracking
         // of seen items, etc. This is thus temporary!
-        let out: [MergedTreeNode] = try remote.map { child in
+        let out: [MergedTreeNode] = try remote.flatMap { child in
             // TODO: handle deletions.
             let childGUID = child.recordGUID
+            if self.done.contains(childGUID) {
+                log.debug("Not taking remote child \(childGUID): already done.")
+                return nil
+            }
             let localCounterpart = self.local.find(childGUID)
             let mirrorCounterpart = self.mirror.find(childGUID)
             return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: mirrorCounterpart, remoteNode: child)
@@ -221,9 +229,13 @@ class ThreeWayTreeMerger {
         // the child lists in the two-way and three-way merge, we need
         // to handle deletions, moves, tracking of seen items, etc.
         // This is thus temporary!
-        let out: [MergedTreeNode] = try local.map { child in
+        let out: [MergedTreeNode] = try local.flatMap { child in
             // TODO: handle deletions.
             let childGUID = child.recordGUID
+            if self.done.contains(childGUID) {
+                log.debug("Not taking local child \(childGUID): already done.")
+                return nil
+            }
             let remoteCounterpart = self.remote.find(childGUID)
             let mirrorCounterpart = self.mirror.find(childGUID)
             return try self.mergeNode(childGUID, localNode: child, mirrorNode: mirrorCounterpart, remoteNode: remoteCounterpart)
@@ -291,6 +303,11 @@ class ThreeWayTreeMerger {
             let guid = rem.recordGUID
             seen.insert(guid)
 
+            if self.done.contains(guid) {
+                log.debug("Processing children of \(result.guid). Child \(guid) already seen elsewhere!")
+                return
+            }
+
             let mir = self.mirror.find(guid)
 
             if self.local.deleted.contains(guid) {
@@ -307,15 +324,55 @@ class ThreeWayTreeMerger {
                 return
             }
 
-            let loc = self.local.find(guid) ??
-                      self.findNewLocalNodeMatchingContentOfRemoteNote(rem, inFolder: result.guid, withLocalChildren: local, havingSeen: seen)
-            let m = try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
-            out.append(m)
+            if let localByGUID = self.local.find(guid) {
+                // Let's check the parent of the local match. If it differs, then the matching
+                // record is elsewhere in the local tree, and we need to decide which place to
+                // keep it.
+                // We do so by finding the modification time of the parent on each side,
+                // unless one of the records is explicitly non-modified.
+                if let localParentGUID = self.local.parents[guid] {
+                    let mirrorParentGUID = self.mirror.parents[guid]
+                    if localParentGUID != result.guid {
+                        log.debug("Local child \(guid) is in folder \(localParentGUID), but remotely is in \(result.guid).")
+                        if mirrorParentGUID != localParentGUID {
+                            log.debug("… and locally it has changed since our last sync, moving from \(mirrorParentGUID) to \(localParentGUID).")
+                            // Find out which position is most recent.
+                            if let localRecords = self.localItemSource.getLocalItemsWithGUIDs([localParentGUID, guid]).value.successValue,
+                               let remoteRecords = self.bufferItemSource.getBufferItemsWithGUIDs([result.guid, guid]).value.successValue {
+                                let latestLocalTimestamp = max(localRecords[guid]?.localModified ?? 0, localRecords[localParentGUID]?.localModified ?? 0)
+                                let latestRemoteTimestamp = max(remoteRecords[guid]?.serverModified ?? 0, remoteRecords[result.guid]?.serverModified ?? 0)
+                                log.debug("Latest remote timestamp: \(latestRemoteTimestamp). Latest local timestamp: \(latestLocalTimestamp).")
+                                if latestLocalTimestamp > latestRemoteTimestamp {
+                                    log.debug("Keeping record in its local position. We'll merge these later.")
+                                    return
+                                }
+                                log.debug("Taking remote, because it's later. Merging now.")
+                            }
+                        } else {
+                            log.debug("\(guid) didn't move from \(mirrorParentGUID) since our last sync. Taking remote parent.")
+                        }
+                    } else {
+                        log.debug("\(guid) is locally in \(localParentGUID) and remotely in \(result.guid). Easy.")
+                    }
+                }
+                out.append(try self.mergeNode(guid, localNode: localByGUID, mirrorNode: mir, remoteNode: rem))
+                return
+            }
+
+            // We don't ever have to handle moves in this case: we only search this directory.
+            let localByContent = self.findNewLocalNodeMatchingContentOfRemoteNote(rem, inFolder: result.guid, withLocalChildren: local, havingSeen: seen)
+            out.append(try self.mergeNode(guid, localNode: localByContent, mirrorNode: mir, remoteNode: rem))
         }
 
         try local.forEach { loc in
             let guid = loc.recordGUID
             if seen.contains(guid) {
+                log.debug("Already saw local child \(guid).")
+                return
+            }
+
+            if self.done.contains(guid) {
+                log.debug("Already saw local child \(guid) elsewhere.")
                 return
             }
 
@@ -464,6 +521,7 @@ class ThreeWayTreeMerger {
         // 2. We do content-based reconciling, in which case we need to avoid processing
         //    twice. When we do the content lookup, we should also make sure that
         //    we're not going to run into the node by GUID later!
+        log.debug("Marking \(guid) as merged.")
         self.done.insert(guid)
         if let otherGUID = localNode?.recordGUID where otherGUID != guid {
             self.done.insert(otherGUID)
