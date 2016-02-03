@@ -169,7 +169,7 @@ public func == (lhs: BookmarkMirrorItem, rhs: BookmarkMirrorItem) -> Bool {
 public struct BookmarkMirrorItem: Equatable {
     public let guid: GUID
     public let type: BookmarkNodeType
-    let serverModified: Timestamp
+    public let serverModified: Timestamp
     let isDeleted: Bool
     let hasDupe: Bool
     let parentID: GUID?
@@ -200,7 +200,7 @@ public struct BookmarkMirrorItem: Equatable {
 
     // Internal stuff.
     let faviconID: Int?
-    let localModified: Timestamp?
+    public let localModified: Timestamp?
     let syncStatus: SyncStatus?
 
     // Ignores internal metadata and GUID; a pure value comparison.
