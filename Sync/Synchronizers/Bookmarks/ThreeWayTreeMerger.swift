@@ -539,7 +539,15 @@ class ThreeWayTreeMerger {
         log.debug("Child list didn't change for \(result.guid). Keeping structure state \(result.structureState)")
     }
 
-    private func twoWayValueMerge(guid: GUID) throws -> MergeState<BookmarkMirrorItem> {
+    private func resolveThreeWayValueConflict(guid: GUID) throws -> MergeState<BookmarkMirrorItem> {
+        // TODO
+        return try self.resolveTwoWayValueConflict(guid)
+    }
+
+    private func resolveTwoWayValueConflict(guid: GUID) throws -> MergeState<BookmarkMirrorItem> {
+        // We don't check for all roots, because we might have to
+        // copy them to the mirror or buffer, so we need to pick
+        // a direction. The Places root is never uploaded.
         if BookmarkRoots.RootGUID == guid {
             log.debug("Two-way value merge on the root: always unaltered.")
             return MergeState.Unchanged
@@ -603,9 +611,17 @@ class ThreeWayTreeMerger {
         result.remote = remoteNode
 
         // Value merge. This applies regardless.
-        // TODO: three-way merge! Particularly important for value-based merging,
-        // but we can also do a better job of merging child lists.
-        result.valueState = try self.twoWayValueMerge(guid)
+        if localNode.isUnknown {
+            result.valueState = MergeState.Remote
+        } else if remoteNode.isUnknown {
+            result.valueState = MergeState.Local
+        } else {
+            if mirrorNode == nil {
+                result.valueState = try self.resolveTwoWayValueConflict(guid)
+            } else {
+                result.valueState = try self.resolveThreeWayValueConflict(guid)
+            }
+        }
 
         switch localNode {
         case let .Folder(_, localChildren):
