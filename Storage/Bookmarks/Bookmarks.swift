@@ -41,6 +41,7 @@ public protocol BufferItemSource {
 }
 
 public protocol LocalItemSource {
+    func getLocalItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
     func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
     func prefetchLocalItemsWithGUIDs(guids: [GUID]) -> Success
 }
