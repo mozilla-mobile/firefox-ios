@@ -90,6 +90,7 @@ public class BookmarksMergeErrorTreeIsUnrooted: BookmarksMergeConsistencyError {
 protocol MirrorItemSource {
     func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
     func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
+    func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
 }
 
 enum MergeState<T> {

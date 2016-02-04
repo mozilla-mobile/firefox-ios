@@ -198,6 +198,10 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger, MirrorItemSource {
 
     // MARK: - MirrorItemSource.
 
+    func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.storage.getLocalItemsWithGUIDs(guids)
+    }
+
     func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         return self.buffer.getBufferItemWithGUID(guid)
     }
