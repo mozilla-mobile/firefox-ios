@@ -9,6 +9,12 @@ import XCGLogger
 private let log = Logger.syncLogger
 
 extension SQLiteBookmarks {
+    public func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.db.getMirrorItemsFromTable(TableBookmarksLocal, guids: guids)
+    }
+}
+
+extension SQLiteBookmarks {
     func getSQLToOverrideFolder(folder: GUID, atModifiedTime modified: Timestamp) -> (sql: [String], args: Args) {
         return self.getSQLToOverrideFolders([folder], atModifiedTime: modified)
     }
@@ -469,22 +475,32 @@ public class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
     }
 
     public func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+        return self.db.getMirrorItemFromTable(TableBookmarksBuffer, guid: guid)
+    }
+
+    public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.db.getMirrorItemsFromTable(TableBookmarksBuffer, guids: guids)
+    }
+}
+
+extension BrowserDB {
+    private func getMirrorItemFromTable(table: String, guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         let args: Args = [guid]
-        let sql = "SELECT * FROM \(TableBookmarksBuffer) WHERE guid = ?"
-        return self.db.runQuery(sql, args: args, factory: BookmarkFactory.mirrorItemFactory)
+        let sql = "SELECT * FROM \(table) WHERE guid = ?"
+        return self.runQuery(sql, args: args, factory: BookmarkFactory.mirrorItemFactory)
           >>== { cursor in
                 guard let item = cursor[0] else {
-                    return deferMaybe(DatabaseError(description: "Expected to find \(guid) in buffer but did not."))
+                    return deferMaybe(DatabaseError(description: "Expected to find \(guid) in \(table) but did not."))
                 }
                 return deferMaybe(item)
         }
     }
 
-    public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    private func getMirrorItemsFromTable(table: String, guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         var acc: [GUID: BookmarkMirrorItem] = [:]
         func accumulate(args: Args) -> Success {
-            let sql = "SELECT * FROM \(TableBookmarksBuffer) WHERE guid IN \(BrowserDB.varlist(args.count))"
-            return self.db.runQuery(sql, args: args, factory: BookmarkFactory.mirrorItemFactory)
+            let sql = "SELECT * FROM \(table) WHERE guid IN \(BrowserDB.varlist(args.count))"
+            return self.runQuery(sql, args: args, factory: BookmarkFactory.mirrorItemFactory)
               >>== { cursor in
                 cursor.forEach { row in
                     guard let row = row else { return }    // Oh, Cursor.
@@ -495,7 +511,8 @@ public class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
         }
 
         if guids.count < BrowserDB.MaxVariableNumber {
-            return accumulate(guids.map { $0 }) >>> { deferMaybe(acc) }
+            let args: Args = guids.map { $0 as AnyObject }
+            return accumulate(args) >>> { deferMaybe(acc) }
         }
 
         let chunks = chunk(guids, by: BrowserDB.MaxVariableNumber)
@@ -540,12 +557,16 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
         return self.buffer.applyBufferCompletionOp(op)
     }
 
+    public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.buffer.getBufferItemsWithGUIDs(guids)
+    }
+
     public func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         return self.buffer.getBufferItemWithGUID(guid)
     }
 
-    public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
-        return self.buffer.getBufferItemsWithGUIDs(guids)
+    public func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.local.getLocalItemsWithGUIDs(guids)
     }
 }
 
