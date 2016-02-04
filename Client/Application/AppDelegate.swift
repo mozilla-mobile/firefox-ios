@@ -24,8 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
-    func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    var openInFirefoxURL: NSURL? = nil
 
+    func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Hold references to willFinishLaunching parameters for delayed app launch
         self.application = application
         self.launchOptions = launchOptions
@@ -214,9 +215,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 default: ()
                 }
             }
-            if let url = url,
-                   newURL = NSURL(string: url.unescape()) {
-                self.browserViewController.openURLInNewTab(newURL)
+
+            if let url = url, newURL = NSURL(string: url.unescape()) {
+                // If we are active then we can ask the BVC to open the new tab right away. Else we remember the
+                // URL and we open it in applicationDidBecomeActive.
+                if application.applicationState == .Active {
+                    if #available(iOS 9, *) {
+                        self.browserViewController.switchToPrivacyMode(isPrivate: false)
+                    }
+                    self.browserViewController.openURLInNewTab(newURL)
+                } else {
+                    openInFirefoxURL = newURL
+                }
                 return true
             }
         }
@@ -248,6 +258,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // when we try and open them
                 quickActions.handleShortCutItem(shortcut, withBrowserViewController: browserViewController)
                 quickActions.launchedShortcutItem = nil
+            }
+        }
+
+        // If we have a URL waiting to open, switch to non-private mode and open the URL.
+        if let url = openInFirefoxURL {
+            openInFirefoxURL = nil
+            // This needs to be scheduled so that the BVC is ready.
+            dispatch_async(dispatch_get_main_queue()) {
+                if #available(iOS 9, *) {
+                    self.browserViewController.switchToPrivacyMode(isPrivate: false)
+                }
+                self.browserViewController.switchToTabForURLOrOpen(url)
             }
         }
     }
