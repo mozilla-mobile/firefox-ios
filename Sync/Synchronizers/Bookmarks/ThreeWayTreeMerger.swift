@@ -641,7 +641,10 @@ class ThreeWayTreeMerger {
                 // a node in the tree more than once.
                 // Remember to check deletions.
                 log.debug("Local and remote records have different children. Merging.")
-                result.structureState = MergeState.New(value: localNode)
+
+                // Assume it'll be the same as the remote one; mergeChildListsIntoMergedNode
+                // sets this to New if the structure changes.
+                result.structureState = MergeState.Remote
                 try self.mergeChildListsIntoMergedNode(result, fromLocal: localNode, remote: remoteNode, mirror: mirrorNode)
                 return result
             }
