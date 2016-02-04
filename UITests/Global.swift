@@ -45,6 +45,13 @@ extension KIFUITestActor {
         }
     }
 
+    func viewExistsWithLabelPrefixedBy(prefix: String) -> Bool {
+        let element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
+            return element.accessibilityLabel?.hasPrefix(prefix) ?? false
+        }
+        return element != nil
+    }
+
     /// Waits for and returns a view with the given accessibility value.
     func waitForViewWithAccessibilityValue(value: String) -> UIView {
         var element: UIAccessibilityElement!

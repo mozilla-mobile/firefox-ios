@@ -47,6 +47,7 @@ class LoginDetailViewController: UIViewController {
 
     private let LoginCellIdentifier = "LoginCell"
     private let DefaultCellIdentifier = "DefaultCellIdentifier"
+    private let SeparatorIdentifier = "SeparatorIdentifier"
 
     // Used to temporarily store a reference to the cell the user is showing the menu controller for
     private var menuControllerCell: LoginTableViewCell? = nil
@@ -73,6 +74,7 @@ class LoginDetailViewController: UIViewController {
 
         tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
+        tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SeparatorIdentifier)
 
         view.addSubview(tableView)
         tableView.snp_makeConstraints { make in
@@ -174,7 +176,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             return loginCell
 
         case .LastModifiedSeparator:
-            let footer = SettingsTableSectionHeaderFooterView()
+            let footer = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SeparatorIdentifier) as! SettingsTableSectionHeaderFooterView
             footer.titleAlignment = .Top
             let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
             let formattedLabel = String(format: lastModified, NSDate.fromMicrosecondTimestamp(login.timePasswordChanged).toRelativeTimeString())
