@@ -9,6 +9,16 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
+private func negate<T>(f: T -> Bool) -> T -> Bool {
+    return { !f($0) }
+}
+
+extension CollectionType {
+    func exclude(predicate: (Self.Generator.Element) -> Bool) -> [Self.Generator.Element] {
+        return self.filter(negate(predicate))
+    }
+}
+
 /**
  * This class takes as input three 'trees'.
  *
