@@ -35,6 +35,7 @@ class TestSQLiteBookmarks: XCTestCase {
         self.remove("TSQLBtestBufferStorage.db")
         self.remove("TSQLBtestLocalAndMirror.db")
         self.remove("TSQLBtestRecursiveAndURLDelete.db")
+        self.remove("TSQLBtestUnrooted.db")
         self.remove("TSQLBtestTreeBuilding.db")
         super.tearDown()
     }
@@ -195,6 +196,40 @@ class TestSQLiteBookmarks: XCTestCase {
         } else {
             XCTFail("Tree didn't contain root.")
         }
+    }
+
+    func testUnrootedBufferRowsDontAppearInTrees() {
+        guard let db = getBrowserDB("TSQLBtestUnrooted.db", files: self.files) else {
+            XCTFail("Unable to create browser DB.")
+            return
+        }
+
+        let bookmarks = SQLiteBookmarks(db: db)
+        self.assertTreeIsEmpty(bookmarks.treeForMirror().value)
+        self.assertTreeIsEmpty(bookmarks.treeForBuffer().value)
+        self.assertTreeContainsOnlyRoots(bookmarks.treeForLocal().value)
+
+        let args: Args = [
+            "unrooted0001", BookmarkNodeType.Bookmark.rawValue, 0, "somefolder01", "Some Folder", "I have no folder", "http://example.org/",
+            "rooted000002", BookmarkNodeType.Bookmark.rawValue, 0, "somefolder02", "Some Other Folder", "I have a folder", "http://example.org/",
+            "somefolder02", BookmarkNodeType.Folder.rawValue, 0, BookmarkRoots.MobileFolderGUID, "Mobile Bookmarks", "Some Other Folder",
+        ]
+        let now = NSDate.now()
+        let bufferSQL =
+        "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
+        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
+        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
+        "(\(now), ?, ?, ?, ?, ?, ?, NULL)"
+
+        let bufferStructureSQL = "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES ('somefolder02', 'rooted000002', 0)"
+        db.run(bufferSQL, withArgs: args).succeeded()
+        db.run(bufferStructureSQL).succeeded()
+
+        let tree = bookmarks.treeForBuffer().value.successValue!
+        XCTAssertFalse(tree.orphans.contains("somefolder02"))        // Folders are never orphans; they appear in subtrees instead.
+        XCTAssertFalse(tree.orphans.contains("rooted000002"))        // This tree contains its parent, so it's not an orphan.
+        XCTAssertTrue(tree.orphans.contains("unrooted0001"))
+        XCTAssertEqual(Set(tree.subtrees.map { $0.recordGUID }), Set(["somefolder02"]))
     }
 
     func testTreeBuilding() {
