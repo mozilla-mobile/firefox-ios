@@ -161,7 +161,7 @@ class LoginManagerTests: KIFTestCase {
         closeLoginManager()
     }
 
-    func testDetailWebsiteMenuOptions() {
+    func testDetailWebsiteMenuCopy() {
         openLoginManager()
 
         tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
@@ -182,6 +182,62 @@ class LoginManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Copy")
 
         XCTAssertEqual(UIPasteboard.generalPasteboard().string, "http://a0.com")
+
+        // Tap the 'Open & Fill' menu option - just checks to make sure we navigate to the web page
+        websiteCell.longPressAtPoint(centerOfCell, duration: 2)
+        tester().waitForViewWithAccessibilityLabel("Open & Fill")
+        tester().tapViewWithAccessibilityLabel("Open & Fill")
+
+        tester().waitForTimeInterval(2)
+        tester().waitForViewWithAccessibilityLabel("a0.com")
+
+        BrowserUtils.resetToAboutHome(tester())
+    }
+
+    func testOpenAndFillFromNormalContext() {
+        openLoginManager()
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().waitForViewWithAccessibilityLabel("password")
+
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+        let websiteCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! LoginTableViewCell
+
+        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        let centerOfCell = CGPoint(x: websiteCell.frame.width / 2, y: websiteCell.frame.height / 2)
+
+        // Tap the 'Open & Fill' menu option - just checks to make sure we navigate to the web page
+        websiteCell.longPressAtPoint(centerOfCell, duration: 2)
+        tester().waitForViewWithAccessibilityLabel("Open & Fill")
+        tester().tapViewWithAccessibilityLabel("Open & Fill")
+
+        tester().waitForTimeInterval(2)
+        tester().waitForViewWithAccessibilityLabel("a0.com")
+
+        BrowserUtils.resetToAboutHome(tester())
+    }
+
+    func testOpenAndFillFromPrivateContext() {
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
+
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().waitForViewWithAccessibilityLabel("password")
+
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+        let websiteCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! LoginTableViewCell
+
+        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        let centerOfCell = CGPoint(x: websiteCell.frame.width / 2, y: websiteCell.frame.height / 2)
 
         // Tap the 'Open & Fill' menu option - just checks to make sure we navigate to the web page
         websiteCell.longPressAtPoint(centerOfCell, duration: 2)
