@@ -582,7 +582,7 @@ class ThreeWayTreeMerger {
         throw BookmarksMergeError()
     }
 
-    // This will never be called with two .Unknown values.
+    // This will never be called with two primary .Unknown values.
     private func threeWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode, mirrorNode: BookmarkTreeNode?) throws -> MergedTreeNode {
         if mirrorNode == nil {
             log.debug("Two-way merge for \(guid).")
@@ -590,19 +590,17 @@ class ThreeWayTreeMerger {
             log.debug("Three-way merge for \(guid).")
         }
 
-        // TODO: extend these cases for the three-way case.
-        // These really shouldn't occur in a two-way merge, but there we are.
         if remoteNode.isUnknown {
             if localNode.isUnknown {
                 preconditionFailure("Two unknown nodes!")
             }
 
-            log.debug("Taking local node in two-way merge: remote bafflingly unchanged.")
+            log.debug("Taking local node in two/three-way merge: remote bafflingly unchanged.")
             return MergedTreeNode.forLocal(localNode)
         }
 
         if localNode.isUnknown {
-            log.debug("Taking remote node in two-way merge: local bafflingly unchanged.")
+            log.debug("Taking remote node in two/three-way merge: local bafflingly unchanged.")
             return MergedTreeNode.forRemote(remoteNode)
         }
 
@@ -631,20 +629,20 @@ class ThreeWayTreeMerger {
                     // Great!
                     log.debug("Local and remote records have same children in two-way merge.")
                     result.structureState = MergeState.New(value: localNode)    // TODO: what if it's the same as the mirror?
-                } else {
-                    // Merge the two folder lists.
-                    // We know that each side is internally consistent: that is, each
-                    // node in this list is present in the tree once only. But when we
-                    // combine the two lists, we might be inadvertently duplicating a
-                    // record that has already been, or will soon be, found in the other
-                    // tree. We need to be careful to make sure that we don't feature
-                    // a node in the tree more than once.
-                    // Remember to check deletions.
-                    log.debug("Local and remote records have different children. Merging.")
-                    result.structureState = MergeState.New(value: localNode)
-                    try self.mergeChildListsIntoMergedNode(result, fromLocal: localNode, remote: remoteNode, mirror: mirrorNode)
+                    return result
                 }
 
+                // Merge the two folder lists.
+                // We know that each side is internally consistent: that is, each
+                // node in this list is present in the tree once only. But when we
+                // combine the two lists, we might be inadvertently duplicating a
+                // record that has already been, or will soon be, found in the other
+                // tree. We need to be careful to make sure that we don't feature
+                // a node in the tree more than once.
+                // Remember to check deletions.
+                log.debug("Local and remote records have different children. Merging.")
+                result.structureState = MergeState.New(value: localNode)
+                try self.mergeChildListsIntoMergedNode(result, fromLocal: localNode, remote: remoteNode, mirror: mirrorNode)
                 return result
             }
 
@@ -670,6 +668,7 @@ class ThreeWayTreeMerger {
     }
 
     // We'll end up looking at deletions and such as we go.
+    // TODO: accumulate deletions into the three buckets as we go.
     func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
         log.debug("Merging nodes with GUID \(guid). Local match is \(localNode?.recordGUID).")
 
@@ -690,14 +689,8 @@ class ThreeWayTreeMerger {
         precondition(nullOrMatch(mirrorNode?.recordGUID, guid))
 
         // Immediately mark this GUID -- and the local GUID, if it differs -- as done.
-        // This avoids us repeating this in each branch, and avoids the possibility of
+        // This avoids repeated code in each conditional branch, and avoids the possibility of
         // certain moves causing us to hit the same node again.
-        // We don't need to actually check this list until:
-        // 1. We walk the local tree as well as the remote tree. At this point we
-        //    should skip the local records that we've already seen.
-        // 2. We do content-based reconciling, in which case we need to avoid processing
-        //    twice. When we do the content lookup, we should also make sure that
-        //    we're not going to run into the node by GUID later!
         log.debug("Marking \(guid) as merged.")
         self.done.insert(guid)
         if let otherGUID = localNode?.recordGUID where otherGUID != guid {
@@ -718,6 +711,8 @@ class ThreeWayTreeMerger {
 
         func takeLocalAndMergeChildren(local: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) throws -> MergedTreeNode {
             // Easy, but watch out for value changes or deletions to our children.
+            // TODO: detect whether there was a value change, and don't bother
+            // doing any value work if there wasn't.
             let merged = MergedTreeNode.forLocal(local, mirror: mirror)
             if case .Folder = local {
                 log.debug("… and it's a folder. Taking local children.")
@@ -806,12 +801,18 @@ class ThreeWayTreeMerger {
     }
 
     func produceMergedTree() -> Deferred<Maybe<MergedTree>> {
+        // Don't ever do this work twice.
+        if self.mergeAttempted {
+            return deferMaybe(self.merged)
+        }
+
         // Both local and remote should reach a single root when overlayed. If not, it means that
-        // the tree is inconsistent -- there isn't a full tree present either on the server (or local)
-        // or in the mirror, or the changes aren't congruent in some way. If we reach this state, we
-        // cannot proceed.
+        // the tree is inconsistent -- there isn't a full tree present either on the server (or
+        // local) or in the mirror, or the changes aren't congruent in some way. If we reach this
+        // state, we cannot proceed.
         //
-        // This is assert()ed in the initializer, too, so that we crash hard and early in developer builds and tests.
+        // This is assert()ed in the initializer, too, so that we crash hard and early in developer
+        // builds and tests.
 
         if !self.local.isFullyRootedIn(self.mirror) {
             log.warning("Local bookmarks not fully rooted when overlayed on mirror. This is most unusual.")
@@ -821,11 +822,19 @@ class ThreeWayTreeMerger {
         if !self.remote.isFullyRootedIn(mirror) {
             log.warning("Remote bookmarks not fully rooted when overlayed on mirror. Partial read or write in buffer?")
 
-            // TODO: request recovery.
+            // This might be a temporary state: another client might not have uploaded all of its
+            // records yet. Another batch might arrive in a second, or it might arrive a month
+            // later if the user just closed the lid of their laptop and went on vacation!
+            //
+            // This can also be a semi-stable state; e.g., Bug 1235269. It's theoretically
+            // possible for us to try to recover by requesting reupload from other devices
+            // by changing syncID, or through some new command.
+            //
+            // Regardless, we can't proceed until this situation changes.
             return deferMaybe(BookmarksMergeErrorTreeIsUnrooted(roots: self.remote.subtreeGUIDs))
         }
 
-        log.debug("Processing \(self.localAllGUIDs.count) local changes and \(self.remoteAllGUIDs.count) remote.")
+        log.debug("Processing \(self.localAllGUIDs.count) local changes and \(self.remoteAllGUIDs.count) remote changes.")
         log.debug("\(self.local.subtrees.count) local subtrees and \(self.remote.subtrees.count) remote subtrees.")
         log.debug("Local is adding \(self.localAdditions.count) records, and remote is adding \(self.remoteAdditions.count).")
 
@@ -833,15 +842,12 @@ class ThreeWayTreeMerger {
             log.warning("Expecting conflicts between local and remote: \(conflictingGUIDs.joinWithSeparator(", ")).")
         }
 
-        if self.mergeAttempted {
-            return deferMaybe(self.merged)
-        }
-
         // Pre-fetch items so we don't need to do async work later.
         return self.prefetchItems() >>> self.walkProducingMergedTree
     }
 
     private func prefetchItems() -> Success {
+        // TODO: implement caching of results in the item source.
         return self.bufferItemSource.prefetchBufferItemsWithGUIDs(self.allChangedGUIDs)
            >>> { self.localItemSource.prefetchLocalItemsWithGUIDs(self.allChangedGUIDs) }
     }
@@ -870,20 +876,13 @@ class ThreeWayTreeMerger {
             return deferMaybe(BookmarksMergeConsistencyError())
         }
 
-        // Now walk down from the mirror root again, this time taking all of the unmerged local branches.
-        // TODO
-
         self.mergeAttempted = true
 
         // Validate. Note that we might end up with *more* records than this -- records
         // that didn't change naturally aren't present in the change list on either side.
         let expected = self.allChangedGUIDs.subtract(self.allDeletions)
-        let actual = self.merged.allGUIDs
-        /*
-// TODO
-        assert(actual.isSupersetOf(expected))
-        assert(actual.intersect(self.allDeletions).isEmpty)
-*/
+        assert(self.merged.allGUIDs.isSupersetOf(expected))
+        assert(self.merged.allGUIDs.intersect(self.allDeletions).isEmpty)
 
         return deferMaybe(self.merged)
     }
