@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     weak var application: UIApplication?
     var launchOptions: [NSObject: AnyObject]?
+    private var openInFirefoxURL: NSURL?
 
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
@@ -196,12 +197,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
+        if let openInURL = launchOptions?[UIApplicationLaunchOptionsURLKey] as? NSURL {
+            openInFirefoxURL = openInURL
+            shouldPerformAdditionalDelegateHandling = false
+        }
+
         log.debug("Done with applicationDidFinishLaunching.")
 
         return shouldPerformAdditionalDelegateHandling
     }
 
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+    private func handleOpenInURL(url: NSURL) -> Bool {
+
         if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) {
             if components.scheme != "firefox" && components.scheme != "firefox-x-callback" {
                 return false
@@ -215,12 +222,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             if let url = url,
-                   newURL = NSURL(string: url.unescape()) {
-                self.browserViewController.openURLInNewTab(newURL)
-                return true
+                newURL = NSURL(string: url.unescape()) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.browserViewController.openURLInNewTab(newURL)
+                    }
+                    return true
             }
         }
         return false
+    }
+
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return handleOpenInURL(url)
     }
 
     func application(application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: String) -> Bool {
@@ -249,6 +262,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 quickActions.handleShortCutItem(shortcut, withBrowserViewController: browserViewController)
                 quickActions.launchedShortcutItem = nil
             }
+        }
+
+        if let url = openInFirefoxURL {
+            handleOpenInURL(url)
+            openInFirefoxURL = nil
         }
     }
 
