@@ -545,9 +545,33 @@ class ThreeWayTreeMerger {
             return MergeState.Unchanged
         }
 
-        // TODO
-        log.debug("We are lazy: taking remote value for \(guid) in two-way merge.")
-        return MergeState.Remote
+        let localRecord = self.localItemSource.getLocalItemWithGUID(guid).value.successValue
+        let remoteRecord = self.bufferItemSource.getBufferItemWithGUID(guid).value.successValue
+
+        if let local = localRecord {
+            if let remote = remoteRecord {
+                // Two-way.
+                log.debug("Comparing local (\(local.localModified)) to remote (\(remote.serverModified)) clock for two-way value merge of \(guid).")
+                if local.localModified > remote.serverModified {
+                    return MergeState.Local
+                }
+                return MergeState.Remote
+            }
+
+            // No remote!
+            log.debug("Expected two-way merge for \(guid), but no remote item found.")
+            return MergeState.Local
+        }
+
+        if let remote = remoteRecord {
+            // No local!
+            log.debug("Expected two-way merge for \(guid), but no local item found.")
+            return MergeState.Remote
+        }
+
+        // Can't two-way merge with nothing!
+        log.error("Expected two-way merge for \(guid), but no local or remote item found!")
+        throw BookmarksMergeError()
     }
 
     // This will never be called with two .Unknown values.
