@@ -416,7 +416,7 @@ extension LoginDetailViewController {
 extension LoginDetailViewController: LoginTableViewCellDelegate {
 
     func didSelectOpenAndFillForCell(cell: LoginTableViewCell) {
-        guard let url = self.login.formSubmitURL?.asURL else {
+        guard let url = (self.login.formSubmitURL?.asURL ?? self.login.hostname.asURL) else {
             return
         }
 
