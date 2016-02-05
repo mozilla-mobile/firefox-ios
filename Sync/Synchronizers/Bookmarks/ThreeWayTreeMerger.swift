@@ -9,13 +9,13 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-private func negate<T>(f: T -> Bool) -> T -> Bool {
-    return { !f($0) }
+private func negate<T>(f: T throws -> Bool) -> T throws -> Bool {
+    return { try !f($0) }
 }
 
 extension CollectionType {
-    func exclude(predicate: (Self.Generator.Element) -> Bool) -> [Self.Generator.Element] {
-        return self.filter(negate(predicate))
+    func exclude(predicate: (Self.Generator.Element) throws -> Bool) throws -> [Self.Generator.Element] {
+        return try self.filter(negate(predicate))
     }
 }
 
