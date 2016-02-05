@@ -1,0 +1,63 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 ଘଣ୍ଟା ପରେ";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 ମିନଟ ପରେ";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 ମିନିଟ ପରେ";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 ମିନିଟ ପରେ";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 ମିନିଟ ପରେ";
+
+/* Title for setting to change passcode */
+"Change Passcode" = "ପାସକୋଡ଼ ବଦଳାନ୍ତୁ";
+
+/* Title for entering a passcode */
+"Enter a passcode" = "ପାସକୋଡ଼ ଭରନ୍ତୁ";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "ସଙ୍ଗେସଙ୍ଗେ";
+
+/* List item for Logins */
+"Logins" = "ଲଗଇନ";
+
+/* List section title for passcode settings */
+"Passcode" = "ପାସକୋଡ଼";
+
+/* List item for Private Browsing */
+"Private Browsing" = "ବ୍ୟକ୍ତିଗତ ବ୍ରାଉଜିଙ୍ଗ";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "ପାସକୋଡ଼ ଆଉଥରେ ଭରନ୍ତୁ";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "ପାସକୋଡ଼ ଦରକାର";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "ପାସକୋଡ଼ ଥୟ କରନ୍ତୁ";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "ଟଚ ID ଓ ପାସକୋଡ଼";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "ପାସକୋଡ଼ ବନ୍ଦକରନ୍ତୁ";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "ପାସକୋଡ଼ ଅନ କରନ୍ତୁ";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "ପାସକୋଡ଼ ବନ୍ଦକରନ୍ତୁ ।";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID for" = "ଟଚ ID କାହା ପାଇଁ ବ୍ୟବହାର କରିବେ:";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ନିଜ ଲଗଇନସବୁ ଦେଖିବା ପାଇଁ ଫିଙ୍ଗରପ୍ରିଣ୍ଟ ବ୍ୟବହାର କରନ୍ତୁ ।";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "ବ୍ୟକ୍ତିଗତ ବ୍ରାଉଜିଂସବୁ ଦେଖିବା ପାଇଁ ଫିଙ୍ଗରପ୍ରିଣ୍ଟ ବ୍ୟବହାର କରନ୍ତୁ ।";
+

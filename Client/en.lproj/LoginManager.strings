@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Are you sure?";
+
+/* Clears the search input field and exits out of input mode */
+"Clear Search" = "Clear Search";
+
+/* Copy password text selection menu item */
+"Copy" = "Copy";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Delete";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Deselect All";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Enter Search Mode";
+
+/* Hide password text selection menu item */
+"Hide" = "Hide";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Last modified %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Logins";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Logins will be permanently removed.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Logins will be removed from all connected devices.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "No logins found";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Open & Fill";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Reveal";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Search";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Search Input Field";
+
+/* Title for selecting all logins */
+"Select All" = "Select All";
+
+/* Title for password row in Login Detail View */
+"password" = "password";
+
+/* Title for username row in Login Detail View */
+"username" = "username";
+
+/* Title for website row in Login Detail View */
+"website" = "website";
+

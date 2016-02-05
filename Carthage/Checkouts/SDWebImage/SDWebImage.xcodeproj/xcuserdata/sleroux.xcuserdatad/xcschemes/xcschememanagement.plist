@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>SDWebImage+MKAnnotation.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>27</integer>
+		</dict>
+		<key>SDWebImage+WebP.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>26</integer>
+		</dict>
+		<key>SDWebImage.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>25</integer>
+		</dict>
+		<key>SDWebImageFramework.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>28</integer>
+		</dict>
+		<key>WebImage.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>24</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>4A2CADFE1AB4BB5300B6BC39</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>531041C2157EAFA400BBABC3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>53761307155AD0D5005750A4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>537D957317ECC1FE0097C263</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>539F912B16316D2D00160719</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

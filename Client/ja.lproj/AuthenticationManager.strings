@@ -1,0 +1,63 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 時間後";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 分後";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 分後";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 分後";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 分後";
+
+/* Title for setting to change passcode */
+"Change Passcode" = "パスコード変更";
+
+/* Title for entering a passcode */
+"Enter a passcode" = "パスコードを入力してください";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "今すぐ";
+
+/* List item for Logins */
+"Logins" = "ログイン情報";
+
+/* List section title for passcode settings */
+"Passcode" = "パスコード";
+
+/* List item for Private Browsing */
+"Private Browsing" = "プライベートブラウジング";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "パスコードの再入力";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "パスコードが必要です";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "パスコード設定";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID とパスコード";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "パスコードをオフにする";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "パスコードをオンにする";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "パスコードをオフにします。";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID for" = "Touch ID の利用";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ログインに指紋認証を利用する。";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "プライベートブラウジングで指紋認証を利用する。";
+

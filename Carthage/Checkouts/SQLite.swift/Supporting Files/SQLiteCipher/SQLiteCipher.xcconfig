@@ -1,0 +1,5 @@
+#include "../Base.xcconfig"
+
+PRODUCT_NAME = SQLiteCipher
+
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) SQLITE_HAS_CODEC=1
