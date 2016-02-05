@@ -232,6 +232,10 @@ class MergedTreeNode {
         return decided
     }
 
+    var isFolder: Bool {
+        return self.mergedChildren != nil
+    }
+
     func dump(indent: Int) {
         precondition(indent < 200)
         let r: Character = "R"
@@ -239,6 +243,10 @@ class MergedTreeNode {
         let m: Character = "M"
         let ind = indenting(indent)
         print(ind, "[V: ", box(self.remote, r), box(self.mirror, m), box(self.local, l), self.guid, self.valueState.label, "]")
+        guard self.isFolder else {
+            return
+        }
+
         print(ind, "[S: ", self.structureState.label, "]")
         if let children = self.mergedChildren {
             print(ind, "  ..")
