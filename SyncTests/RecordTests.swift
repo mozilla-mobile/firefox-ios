@@ -246,6 +246,31 @@ class RecordTests: XCTestCase {
         XCTAssertTrue(bookmark?.isValid() ?? false)
     }
 
+    func testLivemarkMissingFields() {
+        let json = JSON([
+            "id": "M5bwUKK8hPyF",
+            "type": "livemark",
+            "siteUri": "http://www.bbc.co.uk/go/rss/int/news/-/news/",
+            "feedUri": "http://fxfeeds.mozilla.com/en-US/firefox/headlines.xml",
+            "parentName": "Bookmarks Toolbar",
+            "parentid": "toolbar",
+            "children": ["3Qr13GucOtEh"]])
+
+        let bookmark = BookmarkType.payloadFromJSON(json)
+        XCTAssertTrue(bookmark is LivemarkPayload)
+
+        let livemark = bookmark as! LivemarkPayload
+        XCTAssertTrue(livemark.isValid() ?? false)
+        let siteURI = "http://www.bbc.co.uk/go/rss/int/news/-/news/"
+        let feedURI = "http://fxfeeds.mozilla.com/en-US/firefox/headlines.xml"
+        XCTAssertEqual(feedURI, livemark.feedURI)
+        XCTAssertEqual(siteURI, livemark.siteURI)
+
+        let m = (livemark as MirrorItemable).toMirrorItem(NSDate.now())
+        XCTAssertEqual("http://fxfeeds.mozilla.com/en-US/firefox/headlines.xml", m.feedURI)
+        XCTAssertEqual("http://www.bbc.co.uk/go/rss/int/news/-/news/", m.siteURI)
+    }
+
     func testLivemark() {
         let json = JSON([
             "id": "M5bwUKK8hPyF",
