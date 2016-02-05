@@ -14,7 +14,9 @@ private let log = XCGLogger.defaultInstance()
 class TestSQLiteLogins: XCTestCase {
     var db: BrowserDB!
     var logins: SQLiteLogins!
-    let login = Login.createWithHostname("hostname1", username: "username1", password: "password1")
+
+    let formSubmitURL = "http://submit.me"
+    let login = Login.createWithHostname("hostname1", username: "username1", password: "password1", formSubmitURL: "http://submit.me")
 
     override func setUp() {
         super.setUp()
@@ -44,6 +46,7 @@ class TestSQLiteLogins: XCTestCase {
 
         // Different GUID.
         let login2 = Login.createWithHostname("hostname1", username: "username2", password: "password2")
+        login2.formSubmitURL = "http://submit.me"
 
         addLogin(login) >>>
             { self.addLogin(login2) } >>>
@@ -65,10 +68,10 @@ class TestSQLiteLogins: XCTestCase {
     }
 
     func testRemoveLogins() {
-        let loginA = Login.createWithHostname("alphabet.com", username: "username1", password: "password1")
-        let loginB = Login.createWithHostname("alpha.com", username: "username2", password: "password2")
-        let loginC = Login.createWithHostname("berry.com", username: "username3", password: "password3")
-        let loginD = Login.createWithHostname("candle.com", username: "username4", password: "password4")
+        let loginA = Login.createWithHostname("alphabet.com", username: "username1", password: "password1", formSubmitURL: formSubmitURL)
+        let loginB = Login.createWithHostname("alpha.com", username: "username2", password: "password2", formSubmitURL: formSubmitURL)
+        let loginC = Login.createWithHostname("berry.com", username: "username3", password: "password3", formSubmitURL: formSubmitURL)
+        let loginD = Login.createWithHostname("candle.com", username: "username4", password: "password4", formSubmitURL: formSubmitURL)
 
         func addLogins() -> Success {
             addLogin(loginA).value
@@ -87,7 +90,7 @@ class TestSQLiteLogins: XCTestCase {
 
     func testUpdateLogin() {
         let expectation = self.expectationWithDescription("Update login")
-        let updated = Login.createWithHostname("hostname1", username: "username1", password: "password3")
+        let updated = Login.createWithHostname("hostname1", username: "username1", password: "password3", formSubmitURL: formSubmitURL)
         updated.guid = self.login.guid
 
         addLogin(login) >>>
@@ -98,11 +101,75 @@ class TestSQLiteLogins: XCTestCase {
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
 
+    func testAddInvalidLogin() {
+        let emptyPasswordLogin = Login.createWithHostname("hostname1", username: "username1", password: "", formSubmitURL: formSubmitURL)
+        var result =  logins.addLogin(emptyPasswordLogin).value
+        XCTAssertNil(result.successValue)
+        XCTAssertNotNil(result.failureValue)
+        XCTAssertEqual(result.failureValue?.description, "Can't add a login with an empty password.")
+
+        let emptyHostnameLogin = Login.createWithHostname("", username: "username1", password: "password", formSubmitURL: formSubmitURL)
+        result =  logins.addLogin(emptyHostnameLogin).value
+        XCTAssertNil(result.successValue)
+        XCTAssertNotNil(result.failureValue)
+        XCTAssertEqual(result.failureValue?.description, "Can't add a login with an empty hostname.")
+
+        let credential = NSURLCredential(user: "username", password: "password", persistence: .ForSession)
+        let protectionSpace = NSURLProtectionSpace(host: "https://website.com", port: 443, `protocol`: "https", realm: "Basic Auth", authenticationMethod: "Basic Auth")
+        let bothFormSubmitURLAndRealm = Login.createWithCredential(credential, protectionSpace: protectionSpace)
+        bothFormSubmitURLAndRealm.formSubmitURL = "http://submit.me"
+        result =  logins.addLogin(bothFormSubmitURLAndRealm).value
+        XCTAssertNil(result.successValue)
+        XCTAssertNotNil(result.failureValue)
+        XCTAssertEqual(result.failureValue?.description, "Can't add a login with both a httpRealm and formSubmitURL.")
+
+        let noFormSubmitURLOrRealm = Login.createWithHostname("host", username: "username1", password: "password", formSubmitURL: nil)
+        result =  logins.addLogin(noFormSubmitURLOrRealm).value
+        XCTAssertNil(result.successValue)
+        XCTAssertNotNil(result.failureValue)
+        XCTAssertEqual(result.failureValue?.description, "Can't add a login without a httpRealm or formSubmitURL.")
+    }
+
+    func testUpdateInvalidLogin() {
+        let updated = Login.createWithHostname("hostname1", username: "username1", password: "", formSubmitURL: formSubmitURL)
+        updated.guid = self.login.guid
+
+        addLogin(login).value
+        var result = logins.updateLoginByGUID(login.guid, new: updated, significant: true).value
+        XCTAssertNil(result.successValue)
+        XCTAssertNotNil(result.failureValue)
+        XCTAssertEqual(result.failureValue?.description, "Can't add a login with an empty password.")
+
+        let emptyHostnameLogin = Login.createWithHostname("", username: "username1", password: "", formSubmitURL: formSubmitURL)
+        emptyHostnameLogin.guid = self.login.guid
+        result = logins.updateLoginByGUID(login.guid, new: emptyHostnameLogin, significant: true).value
+        XCTAssertNil(result.successValue)
+        XCTAssertNotNil(result.failureValue)
+        XCTAssertEqual(result.failureValue?.description, "Can't add a login with an empty hostname.")
+
+        let credential = NSURLCredential(user: "username", password: "password", persistence: .ForSession)
+        let protectionSpace = NSURLProtectionSpace(host: "https://website.com", port: 443, `protocol`: "https", realm: "Basic Auth", authenticationMethod: "Basic Auth")
+        let bothFormSubmitURLAndRealm = Login.createWithCredential(credential, protectionSpace: protectionSpace)
+        bothFormSubmitURLAndRealm.formSubmitURL = "http://submit.me"
+        bothFormSubmitURLAndRealm.guid = self.login.guid
+        result = logins.updateLoginByGUID(login.guid, new: bothFormSubmitURLAndRealm, significant: true).value
+        XCTAssertNil(result.successValue)
+        XCTAssertNotNil(result.failureValue)
+        XCTAssertEqual(result.failureValue?.description, "Can't add a login with both a httpRealm and formSubmitURL.")
+
+        let noFormSubmitURLOrRealm = Login.createWithHostname("host", username: "username1", password: "password", formSubmitURL: nil)
+        noFormSubmitURLOrRealm.guid = self.login.guid
+        result = logins.updateLoginByGUID(login.guid, new: noFormSubmitURLOrRealm, significant: true).value
+        XCTAssertNil(result.successValue)
+        XCTAssertNotNil(result.failureValue)
+        XCTAssertEqual(result.failureValue?.description, "Can't add a login without a httpRealm or formSubmitURL.")
+    }
+
     func testSearchLogins() {
-        let loginA = Login.createWithHostname("alphabet.com", username: "username1", password: "password1")
-        let loginB = Login.createWithHostname("alpha.com", username: "username2", password: "password2")
-        let loginC = Login.createWithHostname("berry.com", username: "username3", password: "password3")
-        let loginD = Login.createWithHostname("candle.com", username: "username4", password: "password4")
+        let loginA = Login.createWithHostname("alphabet.com", username: "username1", password: "password1", formSubmitURL: formSubmitURL)
+        let loginB = Login.createWithHostname("alpha.com", username: "username2", password: "password2", formSubmitURL: formSubmitURL)
+        let loginC = Login.createWithHostname("berry.com", username: "username3", password: "password3", formSubmitURL: formSubmitURL)
+        let loginD = Login.createWithHostname("candle.com", username: "username4", password: "password4", formSubmitURL: formSubmitURL)
 
         func addLogins() -> Success {
             addLogin(loginA).value

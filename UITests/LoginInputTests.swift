@@ -57,4 +57,40 @@ class LoginInputTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("Do you want to update the password for \(username) on \(webRoot)?")
         tester().tapViewWithAccessibilityLabel("Update")
     }
+
+    func testLoginFormDoesntOfferSaveWhenEmptyPassword() {
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url = "\(webRoot)/loginForm.html"
+        let username = "test@user.com"
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().enterText(username, intoWebViewInputWithName: "username")
+        tester().enterText("", intoWebViewInputWithName: "password")
+        tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
+
+        // Wait a bit then verify that we haven't shown the prompt
+        tester().waitForTimeInterval(2)
+        XCTAssertFalse(tester().viewExistsWithLabel("Do you want to save the password for \(username) on \(webRoot)?"))
+    }
+
+    func testLoginFormDoesntOfferUpdateWhenEmptyPassword() {
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url = "\(webRoot)/loginForm.html"
+        let username = "test@user.com"
+        let password1 = "password1"
+        let password2 = ""
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().enterText(username, intoWebViewInputWithName: "username")
+        tester().enterText(password1, intoWebViewInputWithName: "password")
+        tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
+        tester().waitForViewWithAccessibilityLabel("Do you want to save the password for \(username) on \(webRoot)?")
+        tester().tapViewWithAccessibilityLabel("Yes")
+
+        tester().enterText(username, intoWebViewInputWithName: "username")
+        tester().enterText(password2, intoWebViewInputWithName: "password")
+        tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
+
+        // Wait a bit then verify that we haven't shown the prompt
+        tester().waitForTimeInterval(2)
+        XCTAssertFalse(tester().viewExistsWithLabel("Do you want to update the password for \(username) on \(webRoot)?"))
+    }
 }

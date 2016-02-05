@@ -352,6 +352,10 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     public func addLogin(login: LoginData) -> Success {
+        if let error = login.isValid.failureValue {
+            return deferMaybe(error)
+        }
+
         let nowMicro = NSDate.nowMicroseconds()
         let nowMilli = nowMicro / 1000
         let dateMicro = NSNumber(unsignedLongLong: nowMicro)
@@ -460,6 +464,10 @@ public class SQLiteLogins: BrowserLogins {
      * without triggering an upload or a conflict.
      */
     public func updateLoginByGUID(guid: GUID, new: LoginData, significant: Bool) -> Success {
+        if let error = new.isValid.failureValue {
+            return deferMaybe(error)
+        }
+
         // Right now this method is only ever called if the password changes at
         // point of use, so we always set `timePasswordChanged` and `timeLastUsed`.
         // We can (but don't) also assume that `significant` will always be `true`,

@@ -104,6 +104,7 @@ public protocol LoginData: class {
     var formSubmitURL: String? { get set }
     var usernameField: String? { get set }
     var passwordField: String? { get set }
+    var isValid: Maybe<()> { get }
 
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1238103
     var hasMalformedHostname: Bool { get set }
@@ -179,6 +180,33 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
         return "Login for \(hostname)"
     }
 
+    public var isValid: Maybe<()> {
+        // Referenced from https://mxr.mozilla.org/mozilla-central/source/toolkit/components/passwordmgr/nsLoginManager.js?rev=f76692f0fcf8&mark=280-281#271
+
+        // Logins with empty hostnames are not valid.
+        if hostname.isEmpty {
+            return Maybe(failure: LoginDataError(description: "Can't add a login with an empty hostname."))
+        }
+
+        // Logins with empty passwords are not valid.
+        if password.isEmpty {
+            return Maybe(failure: LoginDataError(description: "Can't add a login with an empty password."))
+        }
+
+        // Logins with both a formSubmitURL and httpRealm are not valid.
+        if let _ = formSubmitURL, _ = httpRealm {
+            return Maybe(failure: LoginDataError(description: "Can't add a login with both a httpRealm and formSubmitURL."))
+        }
+
+        // Login must have at least a formSubmitURL or httpRealm.
+        if (formSubmitURL == nil) && (httpRealm == nil) {
+            return Maybe(failure: LoginDataError(description: "Can't add a login without a httpRealm or formSubmitURL."))
+        }
+
+        // All good.
+        return Maybe(success: ())
+    }
+
     // Essentially: should we sync a change?
     // Desktop ignores usernameField and hostnameField.
     public func isSignificantlyDifferentFrom(login: LoginData) -> Bool {
@@ -187,6 +215,13 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
                login.username != self.username ||
                login.formSubmitURL != self.formSubmitURL ||
                login.httpRealm != self.httpRealm
+    }
+    
+    /* Used for testing purposes since formSubmitURL should be given back to use from the Logins.js script */
+    public class func createWithHostname(hostname: String, username: String, password: String, formSubmitURL: String?) -> LoginData {
+        let loginData = Login(hostname: hostname, username: username, password: password) as LoginData
+        loginData.formSubmitURL = formSubmitURL
+        return loginData
     }
 
     public class func createWithHostname(hostname: String, username: String, password: String) -> LoginData {

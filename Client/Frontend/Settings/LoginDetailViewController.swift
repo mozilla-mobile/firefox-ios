@@ -373,13 +373,14 @@ extension LoginDetailViewController {
         editingInfo = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
 
-        let username = usernameField?.text ?? ""
-        let password = passwordField?.text ?? ""
+        // We only care to update if we changed something
+        guard let username = usernameField?.text, password = passwordField?.text
+            where username != login.username || password != login.password else {
+            return
+        }
 
-        // Update login if there were any changes
-        if username != login.username || password != login.password {
-            // Update local, in-memory copy to view changes right away.
-            login = Login(guid: login.guid, hostname: login.hostname, username: username, password: password)
+        let updated = Login(guid: login.guid, hostname: login.hostname, username: username, password: password)
+        if updated.isValid.isSuccess {
             profile.logins.updateLoginByGUID(login.guid, new: login, significant: true)
         }
     }

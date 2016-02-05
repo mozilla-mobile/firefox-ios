@@ -135,6 +135,10 @@ class LoginsHelper: BrowserHelper {
     }
 
     private func promptSave(login: LoginData) {
+        guard login.isValid.isSuccess else {
+            return
+        }
+
         let promptMessage: NSAttributedString
         if let username = login.username {
             let promptStringFormat = NSLocalizedString("Do you want to save the password for %@ on %@?", comment: "Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
@@ -168,6 +172,10 @@ class LoginsHelper: BrowserHelper {
     }
 
     private func promptUpdateFromLogin(login old: LoginData, toLogin new: LoginData) {
+        guard new.isValid.isSuccess else {
+            return
+        }
+
         let guid = old.guid
 
         let formatted: String
