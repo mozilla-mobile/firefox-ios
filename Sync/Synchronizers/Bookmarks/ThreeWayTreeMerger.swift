@@ -237,14 +237,6 @@ class ThreeWayTreeMerger {
         return children.find { $0.recordGUID == localItem.guid }
     }
 
-    private func isLocallyDeleted(node: BookmarkTreeNode) -> Bool {
-        return self.local.deleted.contains(node.recordGUID)
-    }
-
-    private func isRemotelyDeleted(node: BookmarkTreeNode) -> Bool {
-        return self.remote.deleted.contains(node.recordGUID)
-    }
-
     private func takeMirrorChildrenInMergedNode(result: MergedTreeNode) throws {
         guard let mirrorChildren = result.mirror?.children else {
             preconditionFailure("Expected children.")
@@ -307,7 +299,11 @@ class ThreeWayTreeMerger {
             // here, and we'll take them as additional children.
 
             let guid = node.recordGUID
-            guard let orphans = node.children?.exclude(self.isLocallyDeleted) where !orphans.isEmpty else {
+            func isLocallyDeleted(child: BookmarkTreeNode) throws -> Bool {
+                return try checkForLocalDeletionOfRemoteNode(child, mirrorNode: self.mirror.find(child.recordGUID))
+            }
+
+            guard let orphans = try node.children?.exclude(isLocallyDeleted) where !orphans.isEmpty else {
                 log.debug("No remote orphans from local deletion of \(guid).")
                 return
             }
@@ -332,7 +328,11 @@ class ThreeWayTreeMerger {
             // here, and we'll take them as additional children.
 
             let guid = node.recordGUID
-            guard let orphans = node.children?.exclude(self.isRemotelyDeleted) where !orphans.isEmpty else {
+            func isRemotelyDeleted(child: BookmarkTreeNode) throws -> Bool {
+                return try checkForRemoteDeletionOfLocalNode(child, mirrorNode: self.mirror.find(child.recordGUID))
+            }
+
+            guard let orphans = try node.children?.exclude(isRemotelyDeleted) where !orphans.isEmpty else {
                 log.debug("No local orphans from remote deletion of \(guid).")
                 return
             }
@@ -361,10 +361,11 @@ class ThreeWayTreeMerger {
             // It was locally deleted. This would be good enough for us,
             // but we need to ensure that any remote children are recursively
             // deleted or handled as orphans.
-            // TODO
             log.warning("Quietly accepting local deletion of record \(guid).")
             changed = true
+
             self.merged.deleteRemotely.insert(guid)
+            self.merged.acceptLocalDeletion.insert(guid)
             if mirrorNode != nil {
                 self.merged.deleteFromMirror.insert(guid)
             }
@@ -383,10 +384,10 @@ class ThreeWayTreeMerger {
             // It was remotely deleted. This would be good enough for us,
             // but we need to ensure that any local children are recursively
             // deleted or handled as orphans.
-            // TODO
             log.warning("Quietly accepting remote deletion of record \(guid).")
 
             self.merged.deleteLocally.insert(guid)
+            self.merged.acceptRemoteDeletion.insert(guid)
             if mirrorNode != nil {
                 self.merged.deleteFromMirror.insert(guid)
             }
@@ -505,8 +506,11 @@ class ThreeWayTreeMerger {
                     return
                 }
 
-                if locallyDeleted == remotelyDeleted {
-                    log.debug("Mirror child \(potentiallyDeleted) was deleted (or not) both locally and remoted. We cool.")
+                if locallyDeleted && remotelyDeleted {
+                    log.debug("Mirror child \(potentiallyDeleted) was deleted both locally and remoted. We cool.")
+                    self.merged.deleteFromMirror.insert(potentiallyDeleted)
+                    self.merged.acceptLocalDeletion.insert(potentiallyDeleted)
+                    self.merged.acceptRemoteDeletion.insert(potentiallyDeleted)
                     return
                 }
 
@@ -517,13 +521,25 @@ class ThreeWayTreeMerger {
                         log.debug("Remote still thinks \(potentiallyDeleted) is here. Processing for orphans.")
                         try processRemoteOrphansForNode(self.remote.find(potentiallyDeleted)!)
                     }
+
+                    // Accept the local deletion, and make a note to apply it elsewhere.
+                    self.merged.deleteFromMirror.insert(potentiallyDeleted)
+                    self.merged.deleteRemotely.insert(potentiallyDeleted)
+                    self.merged.acceptLocalDeletion.insert(potentiallyDeleted)
                     return
                 }
+
+                // Remotely deleted.
 
                 let parent = self.local.parents[potentiallyDeleted]
                 if parent == nil || parent == expectedParent {
                     log.debug("Local still thinks \(potentiallyDeleted) is here. Processing for orphans.")
                     try processLocalOrphansForNode(self.local.find(potentiallyDeleted)!)
+
+                    // Accept the remote deletion, and make a note to apply it elsewhere.
+                    self.merged.deleteFromMirror.insert(potentiallyDeleted)
+                    self.merged.deleteLocally.insert(potentiallyDeleted)
+                    self.merged.acceptRemoteDeletion.insert(potentiallyDeleted)
                 }
             }
         }
