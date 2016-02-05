@@ -172,7 +172,6 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.style = .NoIconAndBothLabels
             loginCell.highlightedLabel.text = NSLocalizedString("website", tableName: "LoginManager", comment: "Title for website row in Login Detail View")
             loginCell.descriptionLabel.text = login.hostname
-            loginCell.enabledActions = [.Copy, .OpenAndFill]
             return loginCell
 
         case .LastModifiedSeparator:
@@ -239,7 +238,7 @@ extension LoginDetailViewController: UITableViewDelegate {
 
     func tableView(tableView: UITableView, shouldShowMenuForRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         let item = InfoItem(rawValue: indexPath.row)!
-        if item == .PasswordItem || item == .WebsiteItem {
+        if item == .PasswordItem || item == .WebsiteItem || item == .UsernameItem {
             menuControllerCell = tableView.cellForRowAtIndexPath(indexPath) as? LoginTableViewCell
             return true
         }
@@ -258,11 +257,16 @@ extension LoginDetailViewController: UITableViewDelegate {
         }
 
         // Menu actions for Website
-        else if item == .WebsiteItem {
+        if item == .WebsiteItem {
             return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
-        } else {
-            return false
         }
+
+        // Menu actions for Username
+        if item == .UsernameItem {
+            return action == MenuHelper.SelectorCopy
+        }
+
+        return false
     }
 
     func tableView(tableView: UITableView, performAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
