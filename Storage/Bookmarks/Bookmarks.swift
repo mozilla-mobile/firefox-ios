@@ -32,6 +32,9 @@ public protocol BookmarkBufferStorage {
 }
 
 public protocol MirrorItemSource {
+    func getMirrorItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
+    func getMirrorItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
+    func prefetchMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
 }
 
 public protocol BufferItemSource {
