@@ -400,6 +400,13 @@ class TestBookmarkTreeMerging: SaneTestCase {
         // Dump it so we can see it.
         mergedTree.dump()
 
+        XCTAssertTrue(mergedTree.deleteLocally.contains("folderBBBBBB"))
+        XCTAssertTrue(mergedTree.deleteFromMirror.contains("folderBBBBBB"))
+        XCTAssertTrue(mergedTree.deleteRemotely.contains("folderDDDDDD"))
+        XCTAssertTrue(mergedTree.deleteFromMirror.contains("folderDDDDDD"))
+        XCTAssertTrue(mergedTree.acceptLocalDeletion.contains("folderDDDDDD"))
+        XCTAssertTrue(mergedTree.acceptRemoteDeletion.contains("folderBBBBBB"))
+
         // E and F still exist, in Menu and Toolbar respectively.
         // Note that the merge itself includes asserts for this; we shouldn't even get here if
         // this part will fail.
