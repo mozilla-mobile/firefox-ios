@@ -132,6 +132,7 @@ class ThreeWayTreeMerger {
     var mergeAttempted: Bool = false
 
     let bufferItemSource: BufferItemSource
+    let mirrorItemSource: MirrorItemSource
     let localItemSource: LocalItemSource
 
     // Sets computed by looking at the three trees. These are used for diagnostics,
@@ -154,7 +155,7 @@ class ThreeWayTreeMerger {
     // Local branches down which we did not recurse on our first pass.
     var localQueue = nodeOnceOnlyStack()
 
-    init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree, localItemSource: LocalItemSource, bufferItemSource: BufferItemSource) {
+    init(local: BookmarkTree, mirror: BookmarkTree, remote: BookmarkTree, localItemSource: LocalItemSource, mirrorItemSource: MirrorItemSource, bufferItemSource: BufferItemSource) {
         precondition(mirror.root != nil)
         assert((mirror.root!.children?.count ?? 0) == BookmarkRoots.RootChildren.count)
         precondition(mirror.orphans.isEmpty)
@@ -170,6 +171,7 @@ class ThreeWayTreeMerger {
         self.mirror = mirror
         self.remote = remote
         self.bufferItemSource = bufferItemSource
+        self.mirrorItemSource = mirrorItemSource
         self.localItemSource = localItemSource
         self.merged = MergedTree(mirrorRoot: self.mirror.root!)
 
@@ -852,6 +854,7 @@ class ThreeWayTreeMerger {
     private func prefetchItems() -> Success {
         // TODO: implement caching of results in the item source.
         return self.bufferItemSource.prefetchBufferItemsWithGUIDs(self.allChangedGUIDs)
+           >>> { self.mirrorItemSource.prefetchMirrorItemsWithGUIDs(self.allChangedGUIDs) }
            >>> { self.localItemSource.prefetchLocalItemsWithGUIDs(self.allChangedGUIDs) }
     }
 
