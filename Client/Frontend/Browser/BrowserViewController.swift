@@ -521,11 +521,10 @@ class BrowserViewController: UIViewController {
         super.viewDidAppear(animated)
         log.debug("BVC done.")
 
-        let appVersion = AppInfo.appVersion
-        if profile.prefs.stringForKey("latestAppVersion") != appVersion && DeviceInfo.hasConnectivity() {
+        if profile.prefs.stringForKey(LatestAppVersionProfileKey) != AppInfo.appVersion && DeviceInfo.hasConnectivity() {
             if let whatsNewURL = SupportUtils.URLForTopic("new-ios") {
                 self.openURLInNewTab(whatsNewURL)
-                profile.prefs.setString(appVersion, forKey: "latestAppVersion")
+                profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
             }
         }
 

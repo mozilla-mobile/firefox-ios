@@ -11,6 +11,8 @@ import MessageUI
 
 private let log = Logger.browserLogger
 
+let LatestAppVersionProfileKey = "latestAppVersion"
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
@@ -131,6 +133,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         adjustIntegration = AdjustIntegration(profile: profile)
 
+        // We need to check if the app is a clean install to use for
+        // preventing the What's New URL from appearing.
+        if getProfile(application).prefs.stringForKey(LatestAppVersionProfileKey) == nil {
+            getProfile(application).prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+        }
         log.debug("Done with setting up the application.")
         return true
     }
