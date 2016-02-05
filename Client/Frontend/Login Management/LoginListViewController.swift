@@ -80,7 +80,8 @@ class LoginListViewController: UIViewController {
         super.viewDidLoad()
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: Selector("SELonProfileDidFinishSyncing"), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("SELreloadLogins"), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("SELreloadLogins"), name: NotificationDataLoginDidChange, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
@@ -144,6 +145,7 @@ class LoginListViewController: UIViewController {
     deinit {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
     }
 
     private func toggleDeleteBarButton() {
@@ -184,13 +186,9 @@ class LoginListViewController: UIViewController {
 // MARK: - Selectors
 extension LoginListViewController {
 
-    func SELonProfileDidFinishSyncing() {
+    func SELreloadLogins() {
         loadLogins()
     }
-}
-
-// MARK: - Selectors
-extension LoginListViewController {
 
     func SELedit() {
         navigationItem.rightBarButtonItem = nil
@@ -220,10 +218,8 @@ extension LoginListViewController {
                     self.loginDataSource.loginAtIndexPath(indexPath).guid
                 }
 
-                self.profile.logins.removeLoginsWithGUIDs(guidsToDelete) >>> {
-                    self.loadLogins().uponQueue(dispatch_get_main_queue()) { _ in
-                        self.SELcancel()
-                    }
+                self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
+                    self.SELcancel()
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 
