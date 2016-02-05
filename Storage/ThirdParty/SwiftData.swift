@@ -408,13 +408,15 @@ public class SQLiteDBConnection {
         if key == nil && prevKey == nil {
             do {
                 try self.prepareCleartext()
-            } catch {
+            } catch let err as NSError {
+                log.warning("Preparing to clear text failed: \(err)")
                 return nil
             }
         } else {
             do {
                 try self.prepareEncrypted(flags, key: key, prevKey: prevKey)
-            } catch {
+            } catch let err as NSError {
+                log.warning("Preparing to encrypt failed: \(err)")
                 return nil
             }
         }
