@@ -17,8 +17,9 @@ extension Dictionary {
     }
 }
 
-class MockItemSource: BufferItemSource, LocalItemSource {
+class MockItemSource: BufferItemSource, MirrorItemSource, LocalItemSource {
     var buffer: [GUID: BookmarkMirrorItem] = [:]
+    var mirror: [GUID: BookmarkMirrorItem] = [:]
     var local: [GUID: BookmarkMirrorItem] = [:]
 
     func getLocalItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
@@ -32,6 +33,23 @@ class MockItemSource: BufferItemSource, LocalItemSource {
         var acc: [GUID: BookmarkMirrorItem] = [:]
         guids.forEach { guid in
             if let item = self.local[guid] {
+                acc[guid] = item
+            }
+        }
+        return deferMaybe(acc)
+    }
+
+    func getMirrorItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+        guard let item = self.local[guid] else {
+            return deferMaybe(DatabaseError(description: "Couldn't find item \(guid)."))
+        }
+        return deferMaybe(item)
+    }
+
+    func getMirrorItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        var acc: [GUID: BookmarkMirrorItem] = [:]
+        guids.forEach { guid in
+            if let item = self.mirror[guid] {
                 acc[guid] = item
             }
         }
@@ -56,6 +74,10 @@ class MockItemSource: BufferItemSource, LocalItemSource {
     }
 
     func prefetchLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
+        return succeed()
+    }
+
+    func prefetchMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
         return succeed()
     }
 
