@@ -23,6 +23,21 @@ extension SQLiteBookmarks: LocalItemSource {
     }
 }
 
+extension SQLiteBookmarks: MirrorItemSource {
+    public func getMirrorItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+        return self.db.getMirrorItemFromTable(TableBookmarksMirror, guid: guid)
+    }
+
+    public func getMirrorItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.db.getMirrorItemsFromTable(TableBookmarksMirror, guids: guids)
+    }
+
+    public func prefetchMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
+        log.debug("Not implemented for SQLiteBookmarks.")
+        return succeed()
+    }
+}
+
 extension SQLiteBookmarks {
     func getSQLToOverrideFolder(folder: GUID, atModifiedTime modified: Timestamp) -> (sql: [String], args: Args) {
         return self.getSQLToOverrideFolders([folder], atModifiedTime: modified)
@@ -585,6 +600,20 @@ extension MergedSQLiteBookmarks: BufferItemSource {
 
     public func prefetchBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
         return self.buffer.prefetchBufferItemsWithGUIDs(guids)
+    }
+}
+
+extension MergedSQLiteBookmarks: MirrorItemSource {
+    public func getMirrorItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+        return self.local.getMirrorItemWithGUID(guid)
+    }
+
+    public func getMirrorItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.local.getMirrorItemsWithGUIDs(guids)
+    }
+
+    public func prefetchMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
+        return self.local.prefetchMirrorItemsWithGUIDs(guids)
     }
 }
 
