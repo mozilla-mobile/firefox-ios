@@ -273,6 +273,8 @@ class MergedTree {
     var deleteLocally: Set<GUID> = Set()
     var deleteRemotely: Set<GUID> = Set()
     var deleteFromMirror: Set<GUID> = Set()
+    var acceptLocalDeletion: Set<GUID> = Set()
+    var acceptRemoteDeletion: Set<GUID> = Set()
 
     var allGUIDs: Set<GUID> {
         var out = Set<GUID>([self.root.guid])
@@ -296,6 +298,8 @@ class MergedTree {
         print("Deleted locally: \(self.deleteLocally.joinWithSeparator(", "))")
         print("Deleted remotely: \(self.deleteRemotely.joinWithSeparator(", "))")
         print("Deleted from mirror: \(self.deleteFromMirror.joinWithSeparator(", "))")
+        print("Accepted local deletions: \(self.acceptLocalDeletion.joinWithSeparator(", "))")
+        print("Accepted remote deletions: \(self.acceptRemoteDeletion.joinWithSeparator(", "))")
         print("Root: ")
         self.root.dump(0)
     }
