@@ -492,8 +492,8 @@ extension LivemarkPayload: MirrorItemable {
             hasDupe: self.hasDupe,
             // TODO: these might need to be weakened if real-world data is dirty.
             parentID: self["parentid"].asString!,
-            parentName: self["parentName"].asString!,
-            title: self["title"].asString!,
+            parentName: self["parentName"].asString,
+            title: self["title"].asString,
             description: self["description"].asString,
             feedURI: self.feedURI!,
             siteURI: self.siteURI!
