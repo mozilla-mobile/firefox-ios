@@ -195,7 +195,7 @@ class TestBookmarkTreeMerging: SaneTestCase {
         XCTAssertTrue(constructed.isFullyRootedIn(fromDB!))
     }
 
-    // This scenario can never happen in the wild: we'll always have roots.
+    // This should never occur in the wild: local will never be empty.
     func testMergingEmpty() {
         let r = BookmarkTree.emptyTree()
         let m = BookmarkTree.emptyMirrorTree()
@@ -209,6 +209,7 @@ class TestBookmarkTreeMerging: SaneTestCase {
         }
 
         mergedTree.dump()
+        XCTAssertEqual(mergedTree.allGUIDs, BookmarkRoots.Real)
 
         guard let result = merger.produceMergeResultFromMergedTree(mergedTree).value.successValue else {
             XCTFail("Couldn't produce result.")
@@ -218,11 +219,27 @@ class TestBookmarkTreeMerging: SaneTestCase {
         XCTAssertTrue(result.isNoOp)
     }
 
+    func getItemSourceIncludingEmptyRoots() -> MockItemSource {
+        let s = MockItemSource()
+
+        func makeRoot(guid: GUID, _ name: String) {
+            s.local[guid] = BookmarkMirrorItem.folder(guid, modified: NSDate.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: name, description: nil, children: [])
+        }
+
+        makeRoot(BookmarkRoots.MenuFolderGUID, "Bookmarks Menu")
+        makeRoot(BookmarkRoots.ToolbarFolderGUID, "Bookmarks Toolbar")
+        makeRoot(BookmarkRoots.MobileFolderGUID, "Mobile Bookmarks")
+        makeRoot(BookmarkRoots.UnfiledFolderGUID, "Unsorted Bookmarks")
+        makeRoot(BookmarkRoots.RootGUID, "")
+
+        return s
+    }
+
     func testMergingOnlyLocalRoots() {
         let r = BookmarkTree.emptyTree()
         let m = BookmarkTree.emptyMirrorTree()
         let l = self.localTree()
-        let s = MockItemSource()
+        let s = self.getItemSourceIncludingEmptyRoots()
 
         let merger = ThreeWayTreeMerger(local: l, mirror: m, remote: r, localItemSource: s, mirrorItemSource: s, bufferItemSource: s)
         guard let mergedTree = merger.produceMergedTree().value.successValue else {
@@ -231,6 +248,7 @@ class TestBookmarkTreeMerging: SaneTestCase {
         }
 
         mergedTree.dump()
+        XCTAssertEqual(mergedTree.allGUIDs, BookmarkRoots.Real)
 
         guard let result = merger.produceMergeResultFromMergedTree(mergedTree).value.successValue else {
             XCTFail("Couldn't produce result.")
