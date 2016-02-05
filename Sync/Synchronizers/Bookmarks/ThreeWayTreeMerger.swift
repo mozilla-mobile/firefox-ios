@@ -598,11 +598,13 @@ class ThreeWayTreeMerger {
             }
 
             log.debug("Taking local node in two/three-way merge: remote bafflingly unchanged.")
+            // TODO: value-unchanged
             return MergedTreeNode.forLocal(localNode)
         }
 
         if localNode.isUnknown {
             log.debug("Taking remote node in two/three-way merge: local bafflingly unchanged.")
+            // TODO: value-unchanged
             return MergedTreeNode.forRemote(remoteNode)
         }
 
@@ -672,6 +674,40 @@ class ThreeWayTreeMerger {
         return try self.threeWayMerge(guid, localNode: localNode, remoteNode: remoteNode, mirrorNode: nil)
     }
 
+    private func unchangedIf(out: MergedTreeNode, original: BookmarkMirrorItem?, new: BookmarkMirrorItem?) -> MergedTreeNode {
+        guard let original = original, new = new else {
+            return out
+        }
+
+        if new.sameAs(original) {
+            out.valueState = MergeState.Unchanged
+        }
+        return out
+    }
+
+    private func takeLocalIfChanged(local: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
+        let guid = local.recordGUID
+        let localValues = self.localItemSource.getLocalItemWithGUID(guid).value.successValue
+        let mirrorValues = self.mirrorItemSource.getMirrorItemWithGUID(guid).value.successValue
+
+        // We don't expect these to ever fail to exist.
+        assert(localValues != nil)
+
+        let merged = MergedTreeNode.forLocal(local, mirror: mirror)
+        return unchangedIf(merged, original: mirrorValues, new: localValues)
+    }
+
+    private func takeRemoteIfChanged(remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
+        let guid = remote.recordGUID
+        let remoteValues = self.bufferItemSource.getBufferItemWithGUID(guid).value.successValue
+        let mirrorValues = self.mirrorItemSource.getMirrorItemWithGUID(guid).value.successValue
+
+        assert(remoteValues != nil)
+
+        let merged = MergedTreeNode.forRemote(remote, mirror: mirror)
+        return unchangedIf(merged, original: mirrorValues, new: remoteValues)
+    }
+
     // We'll end up looking at deletions and such as we go.
     // TODO: accumulate deletions into the three buckets as we go.
     func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
@@ -703,10 +739,7 @@ class ThreeWayTreeMerger {
         }
 
         func takeRemoteAndMergeChildren(remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) throws -> MergedTreeNode {
-            // Easy, but watch out for value changes or deletions to our children.
-            // TODO: detect whether there was a value change, and don't bother
-            // doing any value work if there wasn't.
-            let merged = MergedTreeNode.forRemote(remote, mirror: mirror)
+            let merged = self.takeRemoteIfChanged(remote, mirror: mirror)
             if case .Folder = remote {
                 log.debug("… and it's a folder. Taking remote children.")
                 try self.oneWayMergeChildListsIntoMergedNode(merged, fromRemote: remote)
@@ -715,10 +748,7 @@ class ThreeWayTreeMerger {
         }
 
         func takeLocalAndMergeChildren(local: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) throws -> MergedTreeNode {
-            // Easy, but watch out for value changes or deletions to our children.
-            // TODO: detect whether there was a value change, and don't bother
-            // doing any value work if there wasn't.
-            let merged = MergedTreeNode.forLocal(local, mirror: mirror)
+            let merged = self.takeLocalIfChanged(local, mirror: mirror)
             if case .Folder = local {
                 log.debug("… and it's a folder. Taking local children.")
                 try self.oneWayMergeChildListsIntoMergedNode(merged, fromLocal: local)
