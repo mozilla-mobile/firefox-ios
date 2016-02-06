@@ -842,15 +842,6 @@ class ThreeWayTreeMerger {
           >>== self.produceMergeResultFromMergedTree
     }
 
-    func produceMergeResultFromMergedTree(mergedTree: MergedTree) -> Deferred<Maybe<BookmarksMergeResult>> {
-        let upstream = UpstreamCompletionOp()
-        let buffer = BufferCompletionOp()
-        let local = LocalOverrideCompletionOp()
-
-        // TODO: walk the merged tree to produce filled ops.
-        return deferMaybe(BookmarksMergeResult(uploadCompletion: upstream, overrideCompletion: local, bufferCompletion: buffer))
-    }
-
     func produceMergedTree() -> Deferred<Maybe<MergedTree>> {
         // Don't ever do this work twice.
         if self.mergeAttempted {
@@ -937,5 +928,14 @@ class ThreeWayTreeMerger {
         assert(self.merged.allGUIDs.intersect(self.allDeletions).isEmpty)
 
         return deferMaybe(self.merged)
+    }
+
+    func produceMergeResultFromMergedTree(mergedTree: MergedTree) -> Deferred<Maybe<BookmarksMergeResult>> {
+        let upstream = UpstreamCompletionOp()
+        let buffer = BufferCompletionOp()
+        let local = LocalOverrideCompletionOp()
+
+        // TODO: walk the merged tree to produce filled ops.
+        return deferMaybe(BookmarksMergeResult(uploadCompletion: upstream, overrideCompletion: local, bufferCompletion: buffer))
     }
 }
