@@ -8,11 +8,11 @@ import Shared
 
 private let log = Logger.syncLogger
 
-public protocol SearchableBookmarks {
+public protocol SearchableBookmarks: class {
     func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
-public protocol SyncableBookmarks: ResettableSyncStorage, AccountRemovalDelegate {
+public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalDelegate {
     // TODO
     func isUnchanged() -> Deferred<Maybe<Bool>>
     func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>>
@@ -21,7 +21,7 @@ public protocol SyncableBookmarks: ResettableSyncStorage, AccountRemovalDelegate
     func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, withModifiedTimestamp timestamp: Timestamp) -> Success
 }
 
-public protocol BookmarkBufferStorage {
+public protocol BookmarkBufferStorage: class {
     func isEmpty() -> Deferred<Maybe<Bool>>
     func applyRecords(records: [BookmarkMirrorItem]) -> Success
     func doneApplyingRecordsAfterDownload() -> Success
@@ -31,19 +31,19 @@ public protocol BookmarkBufferStorage {
     func applyBufferCompletionOp(op: BufferCompletionOp) -> Success
 }
 
-public protocol MirrorItemSource {
+public protocol MirrorItemSource: class {
     func getMirrorItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
     func getMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
     func prefetchMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
 }
 
-public protocol BufferItemSource {
+public protocol BufferItemSource: class {
     func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
     func getBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
     func prefetchBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
 }
 
-public protocol LocalItemSource {
+public protocol LocalItemSource: class {
     func getLocalItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
     func getLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
     func prefetchLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
