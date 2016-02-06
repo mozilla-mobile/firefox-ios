@@ -13,7 +13,7 @@ extension SQLiteBookmarks: LocalItemSource {
         return self.db.getMirrorItemFromTable(TableBookmarksLocal, guid: guid)
     }
 
-    public func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    public func getLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         return self.db.getMirrorItemsFromTable(TableBookmarksLocal, guids: guids)
     }
 
@@ -28,7 +28,7 @@ extension SQLiteBookmarks: MirrorItemSource {
         return self.db.getMirrorItemFromTable(TableBookmarksMirror, guid: guid)
     }
 
-    public func getMirrorItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    public func getMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         return self.db.getMirrorItemsFromTable(TableBookmarksMirror, guids: guids)
     }
 
@@ -504,7 +504,7 @@ extension SQLiteBookmarkBufferStorage: BufferItemSource {
         return self.db.getMirrorItemFromTable(TableBookmarksBuffer, guid: guid)
     }
 
-    public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    public func getBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         return self.db.getMirrorItemsFromTable(TableBookmarksBuffer, guids: guids)
     }
 
@@ -527,7 +527,7 @@ extension BrowserDB {
         }
     }
 
-    private func getMirrorItemsFromTable(table: String, guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    private func getMirrorItemsFromTable<T: CollectionType where T.Generator.Element == GUID>(table: String, guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         var acc: [GUID: BookmarkMirrorItem] = [:]
         func accumulate(args: Args) -> Success {
             let sql = "SELECT * FROM \(table) WHERE guid IN \(BrowserDB.varlist(args.count))"
@@ -541,13 +541,13 @@ extension BrowserDB {
             }
         }
 
-        if guids.count < BrowserDB.MaxVariableNumber {
-            let args: Args = guids.map { $0 as AnyObject }
+        let args: Args = guids.map { $0 as AnyObject }
+        if args.count < BrowserDB.MaxVariableNumber {
             return accumulate(args) >>> { deferMaybe(acc) }
         }
 
-        let chunks = chunk(guids, by: BrowserDB.MaxVariableNumber)
-        return walk(chunks.map { $0.map { $0 } }, f: accumulate)
+        let chunks = chunk(args, by: BrowserDB.MaxVariableNumber)
+        return walk(chunks.lazy.map { Array($0) }, f: accumulate)
            >>> { deferMaybe(acc) }
     }
 }
@@ -590,12 +590,12 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
 }
 
 extension MergedSQLiteBookmarks: BufferItemSource {
-    public func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
-        return self.buffer.getBufferItemsWithGUIDs(guids)
-    }
-
     public func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         return self.buffer.getBufferItemWithGUID(guid)
+    }
+
+    public func getBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+        return self.buffer.getBufferItemsWithGUIDs(guids)
     }
 
     public func prefetchBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
@@ -608,7 +608,7 @@ extension MergedSQLiteBookmarks: MirrorItemSource {
         return self.local.getMirrorItemWithGUID(guid)
     }
 
-    public func getMirrorItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    public func getMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         return self.local.getMirrorItemsWithGUIDs(guids)
     }
 
@@ -622,7 +622,7 @@ extension MergedSQLiteBookmarks: LocalItemSource {
         return self.local.getLocalItemWithGUID(guid)
     }
 
-    public func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    public func getLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         return self.local.getLocalItemsWithGUIDs(guids)
     }
 
