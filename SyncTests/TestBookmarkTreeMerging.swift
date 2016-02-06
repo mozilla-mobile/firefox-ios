@@ -29,7 +29,7 @@ class MockItemSource: BufferItemSource, MirrorItemSource, LocalItemSource {
         return deferMaybe(item)
     }
 
-    func getLocalItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    func getLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         var acc: [GUID: BookmarkMirrorItem] = [:]
         guids.forEach { guid in
             if let item = self.local[guid] {
@@ -46,7 +46,7 @@ class MockItemSource: BufferItemSource, MirrorItemSource, LocalItemSource {
         return deferMaybe(item)
     }
 
-    func getMirrorItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    func getMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         var acc: [GUID: BookmarkMirrorItem] = [:]
         guids.forEach { guid in
             if let item = self.mirror[guid] {
@@ -56,7 +56,7 @@ class MockItemSource: BufferItemSource, MirrorItemSource, LocalItemSource {
         return deferMaybe(acc)
     }
 
-    func getBufferItemsWithGUIDs(guids: [GUID]) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    func getBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         var acc: [GUID: BookmarkMirrorItem] = [:]
         guids.forEach { guid in
             if let item = self.buffer[guid] {
