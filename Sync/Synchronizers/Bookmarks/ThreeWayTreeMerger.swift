@@ -930,11 +930,63 @@ class ThreeWayTreeMerger {
         return deferMaybe(self.merged)
     }
 
+    /**
+     * Input to this function will be a merged tree: a collection of known deletions,
+     * and a tree of nodes that reflect an action and pointers to the edges and the
+     * mirror, something like this:
+     *
+     * -------------------------------------------------------------------------------
+     * Deleted locally: folderBBBBBB
+     * Deleted remotely: folderDDDDDD
+     * Deleted from mirror: folderBBBBBB, folderDDDDDD
+     * Accepted local deletions: folderDDDDDD
+     * Accepted remote deletions: folderBBBBBB
+     * Root:
+     *  [V:  □ M □ root________ Unchanged ]
+     *  [S:  Unchanged ]
+     *    ..
+     *    [V:  □ M □ menu________ Unchanged ]
+     *    [S:  Unchanged ]
+     *      ..
+     *      [V:  □ M L folderCCCCCC Unchanged ]
+     *      [S:  New ]
+     *        ..
+     *        [V:  R □ □ bookmarkFFFF Remote ]
+     *    [V:  □ M □ toolbar_____ Unchanged ]
+     *    [S:  Unchanged ]
+     *      ..
+     *      [V:  R M □ folderAAAAAA Unchanged ]
+     *      [S:  New ]
+     *        ..
+     *        [V:  □ □ L r_FpO9_RAXp3 Local ]
+     *    [V:  □ M □ unfiled_____ Unchanged ]
+     *    [S:  Unchanged ]
+     *      ..
+     *    [V:  □ M □ mobile______ Unchanged ]
+     *    [S:  Unchanged ]
+     *      ..
+     * -------------------------------------------------------------------------------
+     *
+     * We walk this tree from the root, breadth-first in order to process folders before
+     * their children. We look at the valueState and structureState (for folders) to decide
+     * whether to spit out actions into the completion ops.
+     *
+     * Changes recorded in the completion ops are along the lines of "copy the record with
+     * this GUID from local into the mirror", "upload this record from local", "delete this
+     * record". Dependencies are encoded by the sequence of completion ops: for example, we
+     * don't want to drop local changes and update the mirror until the server reflects our
+     * local state, and we achieve that by only running the local completion op if the
+     * upload succeeds.
+     */
     func produceMergeResultFromMergedTree(mergedTree: MergedTree) -> Deferred<Maybe<BookmarksMergeResult>> {
         let upstream = UpstreamCompletionOp()
         let buffer = BufferCompletionOp()
         let local = LocalOverrideCompletionOp()
 
+        func accumulateNode(node: MergedTreeNode) {
+            // Note that a root can be Unchanged, but be missing from the mirror. That's OK: roots
+            // don't really have values. Take the local.
+        }
         // TODO: walk the merged tree to produce filled ops.
         return deferMaybe(BookmarksMergeResult(uploadCompletion: upstream, overrideCompletion: local, bufferCompletion: buffer))
     }
