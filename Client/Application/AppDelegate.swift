@@ -135,7 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
-        if getProfile(application).prefs.stringForKey(LatestAppVersionProfileKey) == nil {
+        if getProfile(application).prefs.stringForKey(IntroViewControllerSeenProfileKey) == nil {
             getProfile(application).prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
         }
         log.debug("Done with setting up the application.")
