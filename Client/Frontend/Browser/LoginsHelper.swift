@@ -52,7 +52,7 @@ class LoginsHelper: BrowserHelper {
 
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
         // right before requesting login data. See bug 1194567 for more context.
-        if let url = message.frameInfo.request.URL {
+        if let url = message.frameInfo.request.URL where url.scheme != "http" {
             // Since responses go to the main frame, make sure we only listen for main frame requests
             // to avoid XSS attacks.
             if message.frameInfo.mainFrame && type == "request" {
