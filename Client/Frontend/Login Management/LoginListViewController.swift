@@ -80,8 +80,7 @@ class LoginListViewController: UIViewController {
         super.viewDidLoad()
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: Selector("SELreloadLogins"), name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.addObserver(self, selector: Selector("SELreloadLogins"), name: NotificationDataLoginDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("SELreloadLogins"), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
@@ -170,8 +169,9 @@ class LoginListViewController: UIViewController {
 
     private func loadLogins(query: String? = nil) -> Success {
         loadingStateView.hidden = false
-        activeLoginQuery = profile.logins.searchLoginsWithQuery(query).bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
-        return activeLoginQuery!
+        let query = profile.logins.searchLoginsWithQuery(query).bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
+        activeLoginQuery = query
+        return query
     }
 
     private func reloadTableWithResult(result: Maybe<Cursor<Login>>) -> Success {
@@ -220,6 +220,7 @@ extension LoginListViewController {
 
                 self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
                     self.SELcancel()
+                    self.loadLogins()
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 

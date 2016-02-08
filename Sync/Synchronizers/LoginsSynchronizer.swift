@@ -163,7 +163,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             log.debug("Applying incoming password records from response timestamped \(ts), last modified \(lm).")
             log.debug("Records header hint: \(response.metadata.records)")
             return self.applyIncomingToStorage(logins, records: response.value, fetched: lm) >>> effect {
-                NSNotificationCenter.defaultCenter().postNotificationName(NotificationDataLoginDidChange, object: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName(NotificationDataRemoteLoginChangesWereApplied, object: nil)
             }
         }
         return passwordsClient.getSince(since)
