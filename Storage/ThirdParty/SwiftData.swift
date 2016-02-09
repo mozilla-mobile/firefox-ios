@@ -272,6 +272,40 @@ protocol SQLiteDBConnection {
     func vacuum() -> NSError?
 }
 
+// Represents a failure to open.
+class FailedSQLiteDBConnection: SQLiteDBConnection {
+    private func fail(str: String) -> NSError {
+        return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: str])
+    }
+
+    var lastInsertedRowID: Int { return 0 }
+    var numberOfRowsModified: Int { return 0 }
+    func executeChange(sqlStr: String) -> NSError? {
+        return self.fail("Non-open connection; can't execute change.")
+    }
+    func executeChange(sqlStr: String, withArgs args: [AnyObject?]?) -> NSError? {
+        return self.fail("Non-open connection; can't execute change.")
+    }
+    func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T)) -> Cursor<T> {
+        return self.executeQuery(sqlStr, factory: factory, withArgs: nil)
+    }
+    func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
+        return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
+    }
+    func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T)) -> Cursor<T> {
+        return self.executeQueryUnsafe(sqlStr, factory: factory, withArgs: nil)
+    }
+    func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
+        return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
+    }
+    func interrupt() {}
+    func checkpoint() {}
+    func checkpoint(mode: Int32) {}
+    func vacuum() -> NSError? {
+        return self.fail("Non-open connection; can't vacuum.")
+    }
+}
+
 public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     private var sqliteDB: COpaquePointer = nil
     private let filename: String
