@@ -98,7 +98,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             make.left.right.bottom.equalTo(self.view)
         }
 
-        self.panels = HomePanels().enabledPanels
+        self.panels = HomePanels.enabledPanels
         updateButtons()
 
         // Gesture recognizer to dismiss the keyboard in the URLBarView when the buttonContainerView is tapped

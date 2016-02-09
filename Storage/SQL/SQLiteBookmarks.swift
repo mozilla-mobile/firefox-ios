@@ -370,6 +370,22 @@ extension SQLiteBookmarks: SearchableBookmarks {
         let args: Args = [url.absoluteString]
         return db.runQuery(sql, args: args, factory: LocalBookmarkNodeFactory.itemFactory)
     }
+
+    public func localBookmarksWithLimit(limit: Int) -> Deferred<Maybe<Cursor<BookmarkItem>>> {
+        let inner =
+        "SELECT id, type, guid, url, title, faviconID " +
+        "FROM \(TableBookmarks) " +
+        "WHERE type = \(BookmarkNodeType.Bookmark.rawValue) " +
+        "LIMIT ?"
+
+        let sql =
+        "SELECT bookmarks.id AS id, bookmarks.type AS type, guid, bookmarks.url AS url, title, " +
+        "favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
+        "FROM (\(inner)) AS bookmarks " +
+        "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
+        let args: Args = [limit]
+        return db.runQuery(sql, args: args, factory: LocalBookmarkNodeFactory.itemFactory)
+    }
 }
 
 private extension BookmarkMirrorItem {

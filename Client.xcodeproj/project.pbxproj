@@ -593,6 +593,7 @@
 		E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
 		E6B4C4031C68F58B001F97E8 /* BrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */; };
 		E6B8963A1C3C1A9500D9B05B /* topdomains.txt in Resources */ = {isa = PBXBuildFile; fileRef = E6B896391C3C1A9500D9B05B /* topdomains.txt */; };
+		E6BF499F1C23676300E2D6C4 /* WebViewPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF499E1C23676300E2D6C4 /* WebViewPanel.swift */; };
 		E6C05DB21BA1CDAB00CDDD08 /* Breakpad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E69E4E2A1B9F709A00646EDB /* Breakpad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6D749011C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */; };
 		E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */; };
@@ -1843,6 +1844,7 @@
 		E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTests.swift; sourceTree = "<group>"; };
 		E6B896391C3C1A9500D9B05B /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLProtectionSpaceExtensions.swift; sourceTree = "<group>"; };
+		E6BF499E1C23676300E2D6C4 /* WebViewPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewPanel.swift; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
 		E6E4A9621BF0FA85008162D5 /* NSFileManagerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFileManagerExtensions.swift; sourceTree = "<group>"; };
 		E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
@@ -3374,6 +3376,7 @@
 				0BF648101A9C54E900BA963C /* TopSitesPanel.swift */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */,
+				E6BF499E1C23676300E2D6C4 /* WebViewPanel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -4917,6 +4920,7 @@
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
+				E6BF499F1C23676300E2D6C4 /* WebViewPanel.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				7B0B1B9D1C1B6A3F00DF4AB5 /* InstructionsViewController.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,

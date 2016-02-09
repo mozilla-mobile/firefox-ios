@@ -26,6 +26,7 @@ public protocol ShareToDestination {
 
 public protocol SearchableBookmarks {
     func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
+    func localBookmarksWithLimit(limit: Int) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
 public struct BookmarkMirrorItem {

@@ -165,4 +165,16 @@ class TestSQLiteBookmarks: XCTestCase {
         // We no longer have children.
         XCTAssertEqual(0, childCount("UjAHxFOGEqU8"))
     }
+
+    func testLocalBookmarksQuery() {
+        guard let db = getBrowserDB("browser.db", files: MockFiles()) else {
+            XCTFail("Unable to create browser DB.")
+            return
+        }
+        let bookmarks = SQLiteBookmarks(db: db)
+        bookmarks.addToMobileBookmarks("http://url1".asURL!, title: "url1", favicon: nil).value
+        bookmarks.addToMobileBookmarks("http://url2".asURL!, title: "url2", favicon: nil).value
+        XCTAssertEqual(2, bookmarks.localBookmarksWithLimit(2).value.successValue!.count)
+        XCTAssertEqual(1, bookmarks.localBookmarksWithLimit(1).value.successValue!.count)
+    }
 }
