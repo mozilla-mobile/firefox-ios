@@ -294,6 +294,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.profile?.shutdown()
             application.endBackgroundTask(taskId)
         }
+
+        // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
+        let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
+        tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
     }
 
     private func setUpWebServer(profile: Profile) {
