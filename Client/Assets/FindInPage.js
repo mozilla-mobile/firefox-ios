@@ -40,6 +40,8 @@ function clearSelection() {
     }
     highlightSpans = [];
   }
+
+  activeHighlightSpan = null;
 }
 
 function highlightAllMatches(text) {
@@ -207,10 +209,31 @@ function updateSearch(text) {
     var totalResults = highlightSpans.length;
     activeIndex = (activeIndex + totalResults) % totalResults;
   } else {
-    // The search text changed, so start again from the top.
+    // The search text changed, so scan the page for new results.
     lastSearch = text;
+
+    // Store the current active rect to decide which new match should be active.
+    var activeHighlightRect = null;
+    if (activeHighlightSpan) {
+      activeHighlightRect = activeHighlightSpan.getBoundingClientRect();
+    }
+
     highlightAllMatches(text);
     activeIndex = 0;
+
+    // If we found a match at or after the last match, use that position
+    // instead of starting again from the top.
+    if (activeHighlightRect) {
+      for (var i = 0; i < highlightSpans.length; i++) {
+        var highlight = highlightSpans[i];
+        var highlightRect = highlight.getBoundingClientRect();
+        if ((highlightRect.top == activeHighlightRect.top && highlightRect.left >= activeHighlightRect.left) ||
+            (highlightRect.top > activeHighlightRect.top)) {
+          activeIndex = i;
+          break;
+        }
+      }
+    }
   }
 
   var currentResult = 0;
