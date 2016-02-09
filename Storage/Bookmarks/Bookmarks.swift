@@ -250,6 +250,79 @@ public struct BookmarkMirrorItem: Equatable {
         return self.children == nil && rhs.children == nil
     }
 
+    public func asJSON() -> JSON {
+        var out: [String: AnyObject] = [:]
+
+        out["id"] = BookmarkRoots.translateOutgoingRootGUID(self.guid)
+
+        func take(key: String, _ val: String?) {
+            guard let val = val else {
+                return
+            }
+            out[key] = val
+        }
+
+        if self.isDeleted {
+            out["deleted"] = true
+            return JSON(out)
+        }
+
+        out["hasDupe"] = self.hasDupe
+        take("parentName", self.parentName)
+
+        // TODO: this should never be nil!
+        if let parentID = self.parentID {
+            out["parentid"] = BookmarkRoots.translateOutgoingRootGUID(parentID)
+        }
+
+        switch self.type {
+
+        case .Query:
+            take("folderName", self.folderName)
+            take("queryId", self.queryID)
+            fallthrough
+        case .Bookmark:
+            take("title", self.title)
+            take("bmkUri", self.bookmarkURI)
+            take("description", self.description)
+            if let tags = self.tags {
+                let tagsJSON = JSON.parse(tags)
+                if let tagsArray = tagsJSON.asArray where tagsArray.every({ $0.isString }) {
+                    out["tags"] = tagsArray
+                }
+            }
+            take("keyword", self.keyword)
+
+        case .Livemark:
+            take("siteUri", self.siteURI)
+            take("feedUri", self.feedURI)
+            fallthrough
+        case .Folder:
+            take("title", self.title)
+            take("description", self.description)
+            if let children = self.children {
+                if BookmarkRoots.RootGUID == self.guid {
+                    // Only the root contains roots, and so only its children
+                    // need to be translated.
+                    out["children"] = children.map(BookmarkRoots.translateOutgoingRootGUID)
+                } else {
+                    out["children"] = children
+                }
+            }
+
+        case .Separator:
+            if let pos = self.pos {
+                out["pos"] = pos
+            }
+
+        case .DynamicContainer:
+            // Sigh.
+            preconditionFailure("DynamicContainer not supported.")
+        }
+
+        return JSON(out)
+    }
+
     // The places root is a folder but has no parentName.
     public static func folder(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String, description: String?, children: [GUID]) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
