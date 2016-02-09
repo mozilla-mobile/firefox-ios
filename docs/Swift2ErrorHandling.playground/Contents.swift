@@ -119,13 +119,13 @@ func counterWithLoop() {
     }
 
     print("number is \(number)")
-    print("interations is \(iterations)")
+    print("iterations is \(iterations)")
 }
 
 
 counterWithLoop()
 
-//: you can have as much code inside that defered block as you want
+//: you can have as much code inside that deferred block as you want
 
 enum EqualError: ErrorType {
     case NoLeftHandValue
@@ -239,7 +239,7 @@ do {
     print(error)
 }
 
-//: But othertimes you don't actually care what the error is, you just want to do something based on whether or not it succeeds. 
+//: But other times you don't actually care what the error is, you just want to do something based on whether or not it succeeds. 
 //: Or your throwing function _may_ return something but won't if it fails. These are cases for try?
 func cleanDivision(val: Int, by: Int) throws -> Int? {
     if val % by == 0 {
