@@ -116,6 +116,16 @@ public struct BookmarkRoots {
         ][guid] ?? guid
     }
 
+    public static func translateOutgoingRootGUID(guid: GUID) -> GUID {
+        return [
+            RootGUID: "places",
+            MobileFolderGUID: "mobile",
+            MenuFolderGUID: "menu",
+            ToolbarFolderGUID: "toolbar",
+            UnfiledFolderGUID: "unfiled"
+        ][guid] ?? guid
+    }
+
     /*
     public static let TagsFolderGUID =         "tags________"
     public static let PinnedFolderGUID =       "pinned______"
