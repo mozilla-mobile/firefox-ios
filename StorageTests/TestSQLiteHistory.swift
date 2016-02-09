@@ -8,6 +8,13 @@ import Shared
 
 import XCTest
 
+let threeMonthsInMillis: UInt64 = 3 * 30 * 24 * 60 * 60 * 1000
+let threeMonthsInMicros: UInt64 = UInt64(threeMonthsInMillis) * UInt64(1000)
+
+// Start everything three months ago.
+let baseInstantInMillis = NSDate.now() - threeMonthsInMillis
+let baseInstantInMicros = NSDate.nowMicroseconds() - threeMonthsInMicros
+
 func advanceTimestamp(timestamp: Timestamp, by: Int) -> Timestamp {
     return timestamp + UInt64(by)
 }
@@ -841,24 +848,24 @@ class TestSQLiteHistory: XCTestCase {
         siteR.guid = "remoteremote"
         siteB.guid = "bothbothboth"
 
-        let siteVisitL1 = SiteVisit(site: siteL, date: 1437088398461000, type: VisitType.Link)
-        let siteVisitL2 = SiteVisit(site: siteL, date: 1437088398462000, type: VisitType.Link)
+        let siteVisitL1 = SiteVisit(site: siteL, date: baseInstantInMicros + 1000, type: VisitType.Link)
+        let siteVisitL2 = SiteVisit(site: siteL, date: baseInstantInMicros + 2000, type: VisitType.Link)
 
-        let siteVisitR1 = SiteVisit(site: siteR, date: 1437088398461000, type: VisitType.Link)
-        let siteVisitR2 = SiteVisit(site: siteR, date: 1437088398462000, type: VisitType.Link)
-        let siteVisitR3 = SiteVisit(site: siteR, date: 1437088398463000, type: VisitType.Link)
+        let siteVisitR1 = SiteVisit(site: siteR, date: baseInstantInMicros + 1000, type: VisitType.Link)
+        let siteVisitR2 = SiteVisit(site: siteR, date: baseInstantInMicros + 2000, type: VisitType.Link)
+        let siteVisitR3 = SiteVisit(site: siteR, date: baseInstantInMicros + 3000, type: VisitType.Link)
 
-        let siteVisitBL1 = SiteVisit(site: siteB, date: 1437088398464000, type: VisitType.Link)
-        let siteVisitBR1 = SiteVisit(site: siteB, date: 1437088398465000, type: VisitType.Link)
+        let siteVisitBL1 = SiteVisit(site: siteB, date: baseInstantInMicros + 4000, type: VisitType.Link)
+        let siteVisitBR1 = SiteVisit(site: siteB, date: baseInstantInMicros + 5000, type: VisitType.Link)
 
         let deferred =
         history.clearHistory()
             >>> { history.addLocalVisit(siteVisitL1) }
             >>> { history.addLocalVisit(siteVisitL2) }
             >>> { history.addLocalVisit(siteVisitBL1) }
-            >>> { history.insertOrUpdatePlace(siteL.asPlace(), modified: 1437088398462) }
-            >>> { history.insertOrUpdatePlace(siteR.asPlace(), modified: 1437088398463) }
-            >>> { history.insertOrUpdatePlace(siteB.asPlace(), modified: 1437088398465) }
+            >>> { history.insertOrUpdatePlace(siteL.asPlace(), modified: baseInstantInMillis + 2) }
+            >>> { history.insertOrUpdatePlace(siteR.asPlace(), modified: baseInstantInMillis + 3) }
+            >>> { history.insertOrUpdatePlace(siteB.asPlace(), modified: baseInstantInMillis + 5) }
 
             // Do this step twice, so we exercise the dupe-visit handling.
             >>> { history.storeRemoteVisits([siteVisitR1, siteVisitR2, siteVisitR3], forGUID: siteR.guid!) }
@@ -1242,13 +1249,13 @@ class TestSQLiteHistory: XCTestCase {
         history.clearHistory().value
 
         // Make sure that we get back the top sites
-        populateHistoryForFrecencyCalcuations(history, siteCount: 100)
+        populateHistoryForFrecencyCalculations(history, siteCount: 100)
 
         // Add extra visits to the 5th site to bubble it to the top of the top sites cache
         let site = Site(url: "http://s\(5)ite\(5)/foo", title: "A \(5)")
         site.guid = "abc\(5)def"
         for i in 0...20 {
-            addVisitForSite(site, intoHistory: history, from: .Local, atTime: advanceTimestamp(1438088398461, by: 1000 * i))
+            addVisitForSite(site, intoHistory: history, from: .Local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
         }
 
         let expectation = self.expectationWithDescription("First.")
@@ -1283,7 +1290,7 @@ class TestSQLiteHistory: XCTestCase {
             let site = Site(url: "http://s\(0)ite\(0)/foo", title: "A \(0)")
             site.guid = "abc\(0)def"
             for i in 0...20 {
-                addVisitForSite(site, intoHistory: history, from: .Local, atTime: advanceTimestamp(1439088398461, by: 1000 * i))
+                addVisitForSite(site, intoHistory: history, from: .Local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
             }
             return succeed()
         }
@@ -1330,7 +1337,7 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
 
         history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).value
 
-        let ts: MicrosecondTimestamp = 1437088398461000
+        let ts: MicrosecondTimestamp = baseInstantInMicros
         let local = SiteVisit(site: site, date: ts, type: VisitType.Link)
         XCTAssertTrue(history.addLocalVisit(local).value.isSuccess)
     }
@@ -1348,7 +1355,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
         let count = 500
 
         history.clearHistory().value
-        populateHistoryForFrecencyCalcuations(history, siteCount: count)
+        populateHistoryForFrecencyCalculations(history, siteCount: count)
 
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
@@ -1369,7 +1376,7 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
         let count = 500
 
         history.clearHistory().value
-        populateHistoryForFrecencyCalcuations(history, siteCount: count)
+        populateHistoryForFrecencyCalculations(history, siteCount: count)
 
         history.setTopSitesNeedsInvalidation()
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
@@ -1386,21 +1393,23 @@ private enum VisitOrigin {
     case Remote
 }
 
-private func populateHistoryForFrecencyCalcuations(history: SQLiteHistory, siteCount count: Int) {
+private func populateHistoryForFrecencyCalculations(history: SQLiteHistory, siteCount count: Int) {
     for i in 0...count {
         let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
 
-        history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).value
+        let baseMillis: UInt64 = baseInstantInMillis - 20000
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).value
+
         for j in 0...20 {
-            let visitTime = advanceMicrosecondTimestamp(1437088398461000, by: ((1000000 * i) + (1000 * j)))
+            let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
             addVisitForSite(site, intoHistory: history, from: .Local, atTime: visitTime)
             addVisitForSite(site, intoHistory: history, from: .Remote, atTime: visitTime)
         }
     }
 }
 
-private func addVisitForSite(site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: Timestamp) {
+private func addVisitForSite(site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
     let visit = SiteVisit(site: site, date: atTime, type: VisitType.Link)
     switch from {
     case .Local:
