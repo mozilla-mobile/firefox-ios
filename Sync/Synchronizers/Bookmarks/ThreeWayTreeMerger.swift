@@ -979,15 +979,127 @@ class ThreeWayTreeMerger {
      * upload succeeds.
      */
     func produceMergeResultFromMergedTree(mergedTree: MergedTree) -> Deferred<Maybe<BookmarksMergeResult>> {
-        let upstream = UpstreamCompletionOp()
-        let buffer = BufferCompletionOp()
-        let local = LocalOverrideCompletionOp()
+        let upstreamOp = UpstreamCompletionOp()
+        let bufferOp = BufferCompletionOp()
+        let localOp = LocalOverrideCompletionOp()
+
+        func accumulateNonRootFolder(node: MergedTreeNode) {
+            assert(node.isFolder)
+
+            guard let children = node.mergedChildren else {
+                preconditionFailure("Shouldn't have a non-Unknown folder without known children.")
+            }
+
+            // Recurse first — because why not?
+            // We don't expect deep enough bookmark trees that we'll overflow the stack, so
+            // we don't bother making a queue.
+            children.forEach(accumulateNode)
+
+
+            switch node.structureState {
+            case .Unchanged:
+                return   // TODO
+                case .Remote:
+                    return   // TODO
+                case .Local:
+                    return   // TODO
+                default: return        // Deliberately incomplete switch.
+                }
+            // Process structure.
+            // TODO
+        }
+
+        func accumulateRoot(node: MergedTreeNode) {
+            assert(node.isFolder)
+            assert(BookmarkRoots.Real.contains(node.guid))
+
+            // Note that a root can be Unchanged, but be missing from the mirror. That's OK: roots
+            // don't really have values. Take whichever we find.
+            if node.mirror == nil {
+                if node.hasLocal {
+                    localOp.mirrorValuesToCopyFromLocal.insert(node.guid)
+                } else if node.hasRemote {
+                    localOp.mirrorValuesToCopyFromBuffer.insert(node.guid)
+                } else {
+                    assertionFailure("No values to copy into mirror. Need to synthesize root.")
+                }
+
+                // TODO: make sure this work isn't redundant or duplicated.
+                localOp.mirrorStructures[node.guid] = node.mergedChildren?.map { $0.guid }
+                return
+            }
+
+            // TODO: deal with the rest of the work of ensuring that non-Places roots
+            // end up on the server and in the mirror.
+        }
 
         func accumulateNode(node: MergedTreeNode) {
-            // Note that a root can be Unchanged, but be missing from the mirror. That's OK: roots
-            // don't really have values. Take the local.
+            precondition(!node.valueState.isUnknown)
+            precondition(!node.structureState.isUnknown)
+
+            // These two clauses are common to all: if we walk through a node,
+            // it means it's been processed, and no longer needs to be kept
+            // on the edges.
+            if node.hasLocal {
+                localOp.processedLocalChanges.insert(node.guid)
+            }
+
+            if node.hasRemote {
+                bufferOp.processedBufferChanges.insert(node.guid)
+            }
+
+            if node.isFolder {
+                if BookmarkRoots.Real.contains(node.guid) {
+                    accumulateRoot(node)
+                    return
+                }
+
+                // We have to consider structure, and we have to recurse.
+                accumulateNonRootFolder(node)
+
+                // Fall through and handle values.
+            }
+
+            // Value didn't change, and no structure to handle. Done.
+            if node.valueState.isUnchanged {
+                precondition(node.hasMirror, "Can't have an unchanged non-root without there being a mirror record.")
+                return
+            }
+
+            // Not new. Emit copy directives.
+
+            switch node.valueState {
+            case .Remote:
+                localOp.mirrorValuesToCopyFromBuffer.insert(node.guid)
+            case .Local:
+                localOp.mirrorValuesToCopyFromLocal.insert(node.guid)
+
+            // New. Emit explicit insertions into all three places,
+            // and eliminate any existing records for this GUID.
+            // Note that we don't check structure: this isn't a folder.
+            case let .New(value):
+                //
+                // TODO: ensure that `value` has the right parent GUID!!!
+                // Reparenting means that the moved node has _new_ values
+                // pointing to the _new_ parent.
+                //
+                // It also must have the correct child list. That isn't a
+                // problem in this value-only branch.
+                //
+
+                // Upstream.
+                let record = Record<BookmarkBasePayload>(id: node.guid, payload: value.asPayload())
+                upstreamOp.records.append(record)
+
+                // Mirror. No structure needed.
+                localOp.mirrorItemsToInsert[node.guid] = value
+
+            default:
+                return            // Deliberately incomplete switch.
+            }
         }
+
         // TODO: walk the merged tree to produce filled ops.
-        return deferMaybe(BookmarksMergeResult(uploadCompletion: upstream, overrideCompletion: local, bufferCompletion: buffer))
+        return deferMaybe(BookmarksMergeResult(uploadCompletion: upstreamOp, overrideCompletion: localOp, bufferCompletion: bufferOp))
     }
 }
