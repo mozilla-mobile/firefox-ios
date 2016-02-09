@@ -9,6 +9,12 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
+extension BookmarkMirrorItem {
+    func asPayload() -> BookmarkBasePayload {
+        return BookmarkType.somePayloadFromJSON(self.asJSON())
+    }
+}
+
 /**
  * Hierarchy:
  * - BookmarkBasePayload
