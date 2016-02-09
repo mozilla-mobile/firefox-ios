@@ -94,6 +94,13 @@ enum MergeState<T> {
     case Local
     case New(value: T)
 
+    var isUnchanged: Bool {
+        if case .Unchanged = self {
+            return true
+        }
+        return false
+    }
+
     var isUnknown: Bool {
         if case .Unknown = self {
             return true
@@ -154,6 +161,10 @@ class MergedTreeNode {
     let mirror: BookmarkTreeNode?
     var remote: BookmarkTreeNode?
     var local: BookmarkTreeNode?
+
+    var hasLocal: Bool { return self.local != nil }
+    var hasMirror: Bool { return self.mirror != nil }
+    var hasRemote: Bool { return self.remote != nil }
 
     var valueState: MergeState<BookmarkMirrorItem> = MergeState.Unknown
     var structureState: MergeState<BookmarkTreeNode> = MergeState.Unknown
