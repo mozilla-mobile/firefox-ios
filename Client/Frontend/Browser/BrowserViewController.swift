@@ -34,7 +34,7 @@ private struct BrowserViewControllerUX {
 
 class BrowserViewController: UIViewController {
     var homePanelController: HomePanelViewController?
-    var webViewContainer: UIView!
+    var webViewContainer: WebViewContainerView!
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
@@ -46,7 +46,6 @@ class BrowserViewController: UIViewController {
     private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
     private let snackBars = UIView()
-    private let webViewContainerToolbar = UIView()
     private var findInPageBar: FindInPageBar?
     private let findInPageContainer = UIView()
 
@@ -272,8 +271,7 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
 
-        webViewContainer = UIView()
-        webViewContainer.addSubview(webViewContainerToolbar)
+        webViewContainer = WebViewContainerView()
         view.addSubview(webViewContainer)
 
         log.debug("BVC setting up status bar…")
@@ -361,11 +359,6 @@ class BrowserViewController: UIViewController {
 
         webViewContainerBackdrop.snp_makeConstraints { make in
             make.edges.equalTo(webViewContainer)
-        }
-
-        webViewContainerToolbar.snp_makeConstraints { make in
-            make.left.right.top.equalTo(webViewContainer)
-            make.height.equalTo(0)
         }
     }
 
@@ -510,7 +503,7 @@ class BrowserViewController: UIViewController {
         log.debug("BVC viewDidAppear.")
         presentIntroViewController()
         log.debug("BVC intro presented.")
-        self.webViewContainerToolbar.hidden = false
+        webViewContainer.showToolbar()
 
         screenshotHelper.viewIsVisible = true
         log.debug("BVC taking pending screenshots….")
@@ -1151,7 +1144,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
-        self.webViewContainerToolbar.hidden = true
+        webViewContainer.hideToolbar()
         updateFindInPageVisibility(visible: false)
 
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
@@ -1382,11 +1375,7 @@ extension BrowserViewController: WindowCloseHelperDelegate {
 extension BrowserViewController: BrowserDelegate {
 
     func browser(browser: Browser, didCreateWebView webView: WKWebView) {
-        webViewContainer.insertSubview(webView, atIndex: 0)
-        webView.snp_makeConstraints { make in
-            make.top.equalTo(webViewContainerToolbar.snp_bottom)
-            make.left.right.bottom.equalTo(self.webViewContainer)
-        }
+        webViewContainer.insertWebView(webView, atIndex: 0)
 
         // Observers that live as long as the tab. Make sure these are all cleared
         // in willDeleteWebView below!
@@ -1394,7 +1383,7 @@ extension BrowserViewController: BrowserDelegate {
         webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoBack, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoForward, options: .New, context: nil)
-        browser.webView?.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
+        webView.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
 
         webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .New, context: nil)
 
@@ -1650,7 +1639,17 @@ extension BrowserViewController: TabManagerDelegate {
             ReaderModeHandlers.readerModeCache = readerModeCache
 
             scrollController.browser = selected
-            webViewContainer.addSubview(webView)
+
+            // before we add a new webView, ensure that there aren't too many subviews already in the webViewContainer
+            if webViewContainer.subviews.count > 20,
+                let bottomWebView = ( webViewContainer.subviews.find {
+                $0.isKindOfClass(WKWebView)
+            } ) {
+                log.info("Reached max number of WKWebViews in memory. Removing oldest view from container")
+                bottomWebView.removeFromSuperview()
+            }
+
+            webViewContainer.addWebView(webView)
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
@@ -1913,26 +1912,13 @@ extension BrowserViewController: WKNavigationDelegate {
 
     private func addOpenInViewIfNeccessary(url: NSURL?) {
         guard let url = url, let openInHelper = OpenInHelperFactory.helperForURL(url) else { return }
-        let view = openInHelper.openInView
-        webViewContainerToolbar.addSubview(view)
-        webViewContainerToolbar.snp_updateConstraints { make in
-            make.height.equalTo(OpenInViewUX.ViewHeight)
-        }
-        view.snp_makeConstraints { make in
-            make.edges.equalTo(webViewContainerToolbar)
-        }
-
+        webViewContainer.addOpenInHelperView(openInHelper.openInView)
         self.openInHelper = openInHelper
     }
 
     private func removeOpenInView() {
         guard let _ = self.openInHelper else { return }
-        webViewContainerToolbar.subviews.forEach { $0.removeFromSuperview() }
-
-        webViewContainerToolbar.snp_updateConstraints { make in
-            make.height.equalTo(0)
-        }
-
+        webViewContainer.removeOpenInHelperViews()
         self.openInHelper = nil
     }
 
