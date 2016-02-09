@@ -104,7 +104,25 @@ public class SwiftData {
         }
 
         guard let connection = conn else {
-            return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
+            // Run the callback with a fake failed connection.
+            // Yeah, that means we have an error return value but we still run the callback.
+            let failed = FailedSQLiteDBConnection()
+            let queue = self.sharedConnectionQueue
+            let noConnection = NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
+
+            if synchronous {
+                var error: NSError? = nil
+                dispatch_sync(queue) {
+                    error = cb(db: failed)
+                }
+                return error ?? noConnection
+            }
+
+            dispatch_async(queue) {
+                cb(db: failed)
+            }
+
+            return noConnection
         }
 
         if synchronous {
