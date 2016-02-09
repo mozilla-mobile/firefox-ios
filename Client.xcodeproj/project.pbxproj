@@ -590,6 +590,8 @@
 		E69BEA5E1BC6A7F300EA6D04 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69BEA371BC6A79B00EA6D04 /* ArrayExtensions.swift */; };
 		E6A118F31C32DE98008989E8 /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A118F21C32DE98008989E8 /* SettingsTests.swift */; };
 		E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */; };
+		E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
+		E6B4C4031C68F58B001F97E8 /* BrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */; };
 		E6B8963A1C3C1A9500D9B05B /* topdomains.txt in Resources */ = {isa = PBXBuildFile; fileRef = E6B896391C3C1A9500D9B05B /* topdomains.txt */; };
 		E6C05DB21BA1CDAB00CDDD08 /* Breakpad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E69E4E2A1B9F709A00646EDB /* Breakpad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6D749011C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */; };
@@ -1837,6 +1839,8 @@
 		E6A118F21C32DE98008989E8 /* SettingsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInputTests.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
+		E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = JSPrompt.html; sourceTree = "<group>"; };
+		E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTests.swift; sourceTree = "<group>"; };
 		E6B896391C3C1A9500D9B05B /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLProtectionSpaceExtensions.swift; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
@@ -2692,6 +2696,7 @@
 			children = (
 				D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */,
 				D343DCFD1C446BDB00D7EEE8 /* findPage.html */,
+				E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */,
 				D34E33021BA793C2006135F0 /* loginForm.html */,
 				0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */,
 				0B6FBAB11AC1F830007EC669 /* numberedPage.html */,
@@ -2701,6 +2706,7 @@
 				D3E171C11A841EAD00AB44CD /* KIFHelper.js */,
 				D38F036F1C06387900175932 /* AuthenticationTests.swift */,
 				0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */,
+				E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */,
 				7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */,
 				D313BE971B2F5096009EF241 /* DomainAutocompleteTests.swift */,
 				D343DCD81C445EE600D7EEE8 /* FindInPageTests.swift */,
@@ -4396,6 +4402,7 @@
 				E6B8963A1C3C1A9500D9B05B /* topdomains.txt in Resources */,
 				0B6FBAB21AC1F830007EC669 /* numberedPage.html in Resources */,
 				0B5A93421B1EB572004F47A2 /* readablePage.html in Resources */,
+				E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */,
 				D343DCFE1C446BDB00D7EEE8 /* findPage.html in Resources */,
 				0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */,
 				D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */,
@@ -4775,6 +4782,7 @@
 				D38F03701C06387900175932 /* AuthenticationTests.swift in Sources */,
 				D343DCD91C445EE600D7EEE8 /* FindInPageTests.swift in Sources */,
 				0BB5B3601AC0D6360052877D /* BookmarkingTests.swift in Sources */,
+				E6B4C4031C68F58B001F97E8 /* BrowserTests.swift in Sources */,
 				D39FA1811A83E84900EE869C /* Global.swift in Sources */,
 				D33B5B7C1AF1AFC100F4DDE6 /* SearchTests.swift in Sources */,
 				4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */,

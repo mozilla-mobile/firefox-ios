@@ -528,6 +528,10 @@ class BrowserViewController: UIViewController {
             }
         }
 
+        showQueuedAlertIfAvailable()
+    }
+
+    private func showQueuedAlertIfAvailable() {
         if var queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
             alertController.delegate = self
@@ -1029,13 +1033,18 @@ class BrowserViewController: UIViewController {
 
         let helper = ShareExtensionHelper(url: url, tab: tab, activities: activities)
 
-        let controller = helper.createActivityViewController({ [unowned self] in
-            // We don't know what share action the user has chosen so we simply always
-            // update the toolbar and reader mode bar to reflect the latest status.
-            if let tab = tab {
-                self.updateURLBarDisplayURL(tab)
+        let controller = helper.createActivityViewController({ [unowned self] completed in
+            // After dismissing, check to see if there were any prompts we queued up
+            self.showQueuedAlertIfAvailable()
+
+            if completed {
+                // We don't know what share action the user has chosen so we simply always
+                // update the toolbar and reader mode bar to reflect the latest status.
+                if let tab = tab {
+                    self.updateURLBarDisplayURL(tab)
+                }
+                self.updateReaderModeBar()
             }
-            self.updateReaderModeBar()
         })
 
         let setupPopover = { [unowned self] in
@@ -1969,9 +1978,14 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
+    private func canDisplayJSAlertForWebView(webView: WKWebView) -> Bool {
+        // Only display a JS Alert if we are selected and there isn't anything being shown
+        return (tabManager.selectedTab?.webView == webView ?? false) && (self.presentedViewController == nil)
+    }
+
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
         var messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
-        if tabManager.selectedTab?.webView == webView {
+        if canDisplayJSAlertForWebView(webView) {
             presentViewController(messageAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
@@ -1984,7 +1998,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
         var confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
-        if tabManager.selectedTab?.webView == webView {
+        if canDisplayJSAlertForWebView(webView) {
             presentViewController(confirmAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(confirmAlert)
@@ -1995,7 +2009,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String?) -> Void) {
         var textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
-        if tabManager.selectedTab?.webView == webView {
+        if canDisplayJSAlertForWebView(webView) {
             presentViewController(textInputAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
@@ -2704,10 +2718,6 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
 
 extension BrowserViewController: JSPromptAlertControllerDelegate {
     func promptAlertControllerDidDismiss(alertController: JSPromptAlertController) {
-        if var queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
-            let alertController = queuedAlertInfo.alertController()
-            alertController.delegate = self
-            presentViewController(alertController, animated: true, completion: nil)
-        }
+        showQueuedAlertIfAvailable()
     }
 }
