@@ -379,9 +379,15 @@ extension LoginDetailViewController {
             return
         }
 
-        let updated = Login(guid: login.guid, hostname: login.hostname, username: username, password: password)
-        if updated.isValid.isSuccess {
+        // Keep a copy of the old data in case we fail and need to revert back
+        let oldPassword = login.password
+        let oldUsername = login.username
+        login.update(password: password, username: username)
+
+        if login.isValid.isSuccess {
             profile.logins.updateLoginByGUID(login.guid, new: login, significant: true)
+        } else if let oldUsername = oldUsername {
+            login.update(password: oldPassword, username: oldUsername)
         }
     }
 

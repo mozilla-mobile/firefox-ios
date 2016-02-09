@@ -124,7 +124,7 @@ public protocol LoginUsageData {
 public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable {
     public var guid: String
 
-    public let credentials: NSURLCredential
+    public private(set) var credentials: NSURLCredential
     public let protectionSpace: NSURLProtectionSpace
 
     public var hostname: String {
@@ -205,6 +205,11 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
 
         // All good.
         return Maybe(success: ())
+    }
+
+    public func update(password _: String, username: String) {
+        self.credentials =
+            NSURLCredential(user: username, password: password, persistence: credentials.persistence)
     }
 
     // Essentially: should we sync a change?
