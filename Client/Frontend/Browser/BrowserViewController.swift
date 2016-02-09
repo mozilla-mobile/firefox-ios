@@ -243,6 +243,13 @@ class BrowserViewController: UIViewController {
         })
     }
 
+    func SELdetectClipboardURL() {
+        if let clipboardURL = UIPasteboard.generalPasteboard().string?.asURL where profile.prefs.boolForKey("goToCopiedURL") == true {
+                log.debug("There is a URL on the clipboard")
+                print(clipboardURL)
+        }
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: BookmarkStatusChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
@@ -256,6 +263,8 @@ class BrowserViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELBookmarkStatusDidChange:", name: BookmarkStatusChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappWillResignActiveNotification", name: UIApplicationWillResignActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappDidBecomeActiveNotification", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELdetectClipboardURL", name: UIApplicationDidBecomeActiveNotification, object: nil)
+
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         log.debug("BVC adding footer and header…")
@@ -338,6 +347,12 @@ class BrowserViewController: UIViewController {
 
         log.debug("BVC updating toolbar state…")
         self.updateToolbarStateForTraitCollection(self.traitCollection)
+
+        // Need to detect URL on clipboard every time BVC is initialized (except during the first on-boarding)
+        // since attaching it to the DidBecomeActiveNotification at first won't get triggered.
+        if profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == 1 {
+            SELdetectClipboardURL()
+        }
 
         log.debug("BVC setting up constraints…")
         setupConstraints()
