@@ -113,13 +113,16 @@ class BrowserViewController: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
+
+        guard let displayedPopoverController = self.displayedPopoverController where displayedPopoverController.isBeingPresented() else {
+            return
+        }
+
+        displayedPopoverController.dismissViewControllerAnimated(true, completion: nil)
 
         coordinator.animateAlongsideTransition(nil) { context in
-            if let displayedPopoverController = self.displayedPopoverController {
-                self.updateDisplayedPopoverProperties?()
-                self.presentViewController(displayedPopoverController, animated: true, completion: nil)
-            }
+            self.updateDisplayedPopoverProperties?()
+            self.presentViewController(displayedPopoverController, animated: true, completion: nil)
         }
     }
 
@@ -215,6 +218,10 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    func SELappDidEnterBackgroundNotification() {
+        displayedPopoverController?.dismissViewControllerAnimated(false, completion: nil)
+    }
+
     func SELtappedTopArea() {
         scrollController.showToolbars(animated: true)
     }
@@ -247,6 +254,7 @@ class BrowserViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: BookmarkStatusChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
     }
 
     override func viewDidLoad() {
@@ -256,6 +264,7 @@ class BrowserViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELBookmarkStatusDidChange:", name: BookmarkStatusChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappWillResignActiveNotification", name: UIApplicationWillResignActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappDidBecomeActiveNotification", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappDidEnterBackgroundNotification", name: UIApplicationDidEnterBackgroundNotification, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         log.debug("BVC adding footer and header…")
