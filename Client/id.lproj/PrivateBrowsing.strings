@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Tutup Tab Pribadi";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox tidak akan mengingat semua riwayat atau kuki, tetapi markah baru akan tetap disimpan.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Pelajari Lebih Lanjut";
+
+/* Toggled OFF accessibility value */
+"Off" = "Nonaktifkan";
+
+/* Toggled ON accessibility value */
+"On" = "Aktifkan";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Buka di Tab Pribadi Baru";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Penjelajahan Pribadi";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Mode Pribadi";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Aktifkan atau nonaktifkan mode pribadi";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Saat Meninggalkan Penjelajahan Pribadi";
+

@@ -1,0 +1,6 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "বাতিল";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "পরিশ্রুত করুন";
+

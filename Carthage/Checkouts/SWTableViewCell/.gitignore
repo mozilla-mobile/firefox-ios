@@ -1,0 +1,10 @@
+.DS_Store
+build/*
+*.pbxuser
+*.xcworkspace
+xcuserdata
+profile
+*.moved-aside
+xcuserdata/
+project.xcworkspace/
+xcshareddata/

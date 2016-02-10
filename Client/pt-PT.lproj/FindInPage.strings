@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "OK";
+
+/* Share action title */
+"Find in Page" = "Localizar na página";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Próximo resultado na página";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Anterior resultado na página";
+

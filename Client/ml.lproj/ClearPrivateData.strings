@@ -1,0 +1,19 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "ബ്രൌസ് ചെയ്ത നാള്‍വഴി";
+
+/* Settings item for clearing the cache */
+"Cache" = "കാഷ്";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "റദ്ദാക്കുക";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "സ്വകാര്യവിവരങ്ങള്‍ നീക്കം ചെയ്യുക";
+
+/* Settings item for clearing cookies */
+"Cookies" = "കുക്കികള്‍";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ഓഫ്‌ലൈന്‍ ആയ വെബ്സൈറ്റ് വിവരങ്ങള്‍";
+
