@@ -408,6 +408,12 @@ class Browser: NSObject, BrowserWebViewDelegate {
         return alertQueue.removeFirst()
     }
 
+    func cancelQueuedAlerts() {
+        alertQueue.forEach { alert in
+            alert.cancel()
+        }
+    }
+
     private func browserWebView(browserWebView: BrowserWebView, didSelectFindInPageForSelection selection: String) {
         browserDelegate?.browser(self, didSelectFindInPageForSelection: selection)
     }

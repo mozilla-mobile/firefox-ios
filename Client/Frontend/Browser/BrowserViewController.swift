@@ -1440,6 +1440,8 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
+        browser.cancelQueuedAlerts()
+
         webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
         webView.removeObserver(self, forKeyPath: KVOLoading)
         webView.removeObserver(self, forKeyPath: KVOCanGoBack)
