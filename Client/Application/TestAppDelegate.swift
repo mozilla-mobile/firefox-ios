@@ -6,6 +6,10 @@ import Foundation
 
 class TestAppDelegate: AppDelegate {
     override func getProfile(application: UIApplication) -> Profile {
+        if let profile = self.profile {
+            return profile
+        }
+
         // Use a clean profile for each test session.
         let profile = BrowserProfile(localName: "testProfile", app: application)
         _ = try? profile.files.removeFilesInDirectory()

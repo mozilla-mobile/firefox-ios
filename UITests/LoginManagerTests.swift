@@ -303,14 +303,14 @@ class LoginManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Edit")
         tester().waitForAnimationsToFinish()
 
-        let pathsToSelect = (0..<5).map { NSIndexPath(forRow: $0, inSection: 0) }
+        let pathsToSelect = (0..<3).map { NSIndexPath(forRow: $0, inSection: 0) }
         pathsToSelect.forEach { path in
             tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
         }
         tester().waitForViewWithAccessibilityLabel("Delete")
 
         pathsToSelect.forEach { path in
-            XCTAssertTrue(list.cellForRowAtIndexPath(firstIndexPath)!.selected)
+            XCTAssertTrue(list.cellForRowAtIndexPath(path)!.selected)
         }
 
         // Deselect only first row
@@ -561,6 +561,13 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testPreventBlankPasswordInDetail() {
+        openLoginManager()
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().waitForViewWithAccessibilityLabel("password")
+
         let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
 
         tester().tapViewWithAccessibilityLabel("Edit")
