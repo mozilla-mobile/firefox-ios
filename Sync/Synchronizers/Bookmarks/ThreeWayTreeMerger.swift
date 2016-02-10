@@ -977,6 +977,10 @@ class ThreeWayTreeMerger {
      * don't want to drop local changes and update the mirror until the server reflects our
      * local state, and we achieve that by only running the local completion op if the
      * upload succeeds.
+     *
+     * There's a lot of boilerplate in this function. That's partly because the lines of
+     * switch statements are easier to read through and match up to expected behavior, but
+     * also because it's simpler than threading all of the edge cases around.
      */
     func produceMergeResultFromMergedTree(mergedTree: MergedTree) -> Deferred<Maybe<BookmarksMergeResult>> {
         let upstreamOp = UpstreamCompletionOp()
@@ -990,28 +994,106 @@ class ThreeWayTreeMerger {
                 preconditionFailure("Shouldn't have a non-Unknown folder without known children.")
             }
 
+            let childGUIDs = children.map { $0.guid }
+
             // Recurse first — because why not?
             // We don't expect deep enough bookmark trees that we'll overflow the stack, so
             // we don't bother making a queue.
             children.forEach(accumulateNode)
 
-
+            // Verify that computed child lists match the right source node.
             switch node.structureState {
+            case .Remote:
+                assert(node.remote?.children?.map { $0.recordGUID } ?? [] == childGUIDs)
+            case .Local:
+                assert(node.local?.children?.map { $0.recordGUID } ?? [] == childGUIDs)
+            case let .New(treeNode):
+                assert(treeNode.children?.map { $0.recordGUID } ?? [] == childGUIDs)
+            default:
+                break
+            }
+
+            switch node.valueState {
+            case .Unknown:
+                return            // Never occurs: guarded by precondition.
             case .Unchanged:
-                return   // TODO
+                // We can't have Unchanged value without a mirror node…
+                assert(node.hasMirror)
+
+                switch node.structureState {
+                case .Unknown:
+                    return            // Never occurs: guarded by precondition.
+                case .Unchanged:
+                    // Nothing changed!
+                    return
                 case .Remote:
-                    return   // TODO
+                    // Nothing special to do: no need to amend server.
+                    break
                 case .Local:
-                    return   // TODO
-                default: return        // Deliberately incomplete switch.
+                    upstreamOp.amendChildrenFromMirror[node.guid] = childGUIDs
+                case .New:
+                    // No change in value, but a new structure.
+                    // Construct a new upstream record from the old mirror value,
+                    // and update the mirror structure.
+                    upstreamOp.amendChildrenFromMirror[node.guid] = childGUIDs
                 }
-            // Process structure.
-            // TODO
+
+                // We always need to do this for Remote, Local, New.
+                localOp.mirrorStructures[node.guid] = childGUIDs
+
+            case .Local:
+                localOp.mirrorValuesToCopyFromLocal.insert(node.guid)
+
+                // Generate a new upstream record.
+                upstreamOp.amendChildrenFromLocal[node.guid] = childGUIDs
+
+                // Update the structure in the mirror if necessary.
+                if case .Unchanged = node.structureState {
+                    return
+                }
+                localOp.mirrorStructures[node.guid] = childGUIDs
+
+            case .Remote:
+                localOp.mirrorValuesToCopyFromBuffer.insert(node.guid)
+
+                // Update the structure in the mirror if necessary.
+                switch node.structureState {
+                case .Unchanged:
+                    return
+                case .Remote:
+                    localOp.mirrorStructures[node.guid] = childGUIDs
+                default:
+                    // We need to upload a new record.
+                    upstreamOp.amendChildrenFromBuffer[node.guid] = childGUIDs
+                    localOp.mirrorStructures[node.guid] = childGUIDs
+                }
+
+            case let .New(value):
+                // We can only do this if we stuffed the BookmarkMirrorItem with the right children.
+                // Verify that with a precondition.
+                precondition(value.children ?? [] == childGUIDs)
+
+                localOp.mirrorStructures[node.guid] = childGUIDs
+                if node.hasMirror {
+                    localOp.mirrorItemsToUpdate[node.guid] = value
+                } else {
+                    localOp.mirrorItemsToInsert[node.guid] = value
+                }
+                let record = Record<BookmarkBasePayload>(id: node.guid, payload: value.asPayload())
+                upstreamOp.records.append(record)
+            }
         }
 
         func accumulateRoot(node: MergedTreeNode) {
             assert(node.isFolder)
             assert(BookmarkRoots.Real.contains(node.guid))
+
+            guard let children = node.mergedChildren else {
+                preconditionFailure("Shouldn't have a non-Unknown folder without known children.")
+            }
+
+            // Recurse first — because why not?
+            children.forEach(accumulateNode)
 
             // Note that a root can be Unchanged, but be missing from the mirror. That's OK: roots
             // don't really have values. Take whichever we find.
@@ -1041,10 +1123,12 @@ class ThreeWayTreeMerger {
             // it means it's been processed, and no longer needs to be kept
             // on the edges.
             if node.hasLocal {
+                log.debug("Marking \(node.guid) to drop from local.")
                 localOp.processedLocalChanges.insert(node.guid)
             }
 
             if node.hasRemote {
+                log.debug("Marking \(node.guid) to drop from buffer.")
                 bufferOp.processedBufferChanges.insert(node.guid)
             }
 
@@ -1056,8 +1140,7 @@ class ThreeWayTreeMerger {
 
                 // We have to consider structure, and we have to recurse.
                 accumulateNonRootFolder(node)
-
-                // Fall through and handle values.
+                return
             }
 
             // Value didn't change, and no structure to handle. Done.
@@ -1092,14 +1175,54 @@ class ThreeWayTreeMerger {
                 upstreamOp.records.append(record)
 
                 // Mirror. No structure needed.
-                localOp.mirrorItemsToInsert[node.guid] = value
+                if node.hasMirror {
+                    localOp.mirrorItemsToUpdate[node.guid] = value
+                } else {
+                    localOp.mirrorItemsToInsert[node.guid] = value
+                }
 
             default:
                 return            // Deliberately incomplete switch.
             }
         }
 
-        // TODO: walk the merged tree to produce filled ops.
-        return deferMaybe(BookmarksMergeResult(uploadCompletion: upstreamOp, overrideCompletion: localOp, bufferCompletion: bufferOp))
+        // Upload deleted records for anything we need to delete.
+        // Each one also ends up being dropped from the buffer.
+        if !mergedTree.deleteRemotely.isEmpty {
+            upstreamOp.records.appendContentsOf(mergedTree.deleteRemotely.map {
+                Record<BookmarkBasePayload>(id: $0, payload: BookmarkBasePayload.deletedPayload($0))
+                })
+            bufferOp.processedBufferChanges.unionInPlace(mergedTree.deleteRemotely)
+        }
+
+        // Drop deleted items from the mirror.
+        localOp.mirrorItemsToDelete.unionInPlace(mergedTree.deleteFromMirror)
+
+        // Anything we deleted on either end and accepted, add to the processed lists to be
+        // automatically dropped.
+        localOp.processedLocalChanges.unionInPlace(mergedTree.acceptLocalDeletion)
+        bufferOp.processedBufferChanges.unionInPlace(mergedTree.acceptRemoteDeletion)
+
+        // We draw a terminological distinction between accepting a local deletion (which
+        // drops it from the local table) and deleting an item that's locally modified
+        // (which drops it from the local table, and perhaps also from the mirror).
+        // Either way, we put it in the list to drop.
+        localOp.processedLocalChanges.unionInPlace(mergedTree.deleteLocally)
+
+        // Now walk the final tree to get the substantive changes.
+        accumulateNode(mergedTree.root)
+
+        // Postconditions.
+        // None of the work items appear in more than one place.
+        assert(Set(upstreamOp.amendChildrenFromBuffer.keys).isDisjointWith(upstreamOp.amendChildrenFromLocal.keys))
+        assert(Set(upstreamOp.amendChildrenFromBuffer.keys).isDisjointWith(upstreamOp.amendChildrenFromMirror.keys))
+        assert(Set(upstreamOp.amendChildrenFromLocal.keys).isDisjointWith(upstreamOp.amendChildrenFromMirror.keys))
+        assert(localOp.mirrorItemsToDelete.isDisjointWith(localOp.mirrorItemsToInsert.keys))
+        assert(localOp.mirrorItemsToDelete.isDisjointWith(localOp.mirrorItemsToUpdate.keys))
+        assert(Set(localOp.mirrorItemsToInsert.keys).isDisjointWith(localOp.mirrorItemsToUpdate.keys))
+        assert(localOp.mirrorValuesToCopyFromBuffer.isDisjointWith(localOp.mirrorValuesToCopyFromLocal))
+
+        let result = BookmarksMergeResult(uploadCompletion: upstreamOp, overrideCompletion: localOp, bufferCompletion: bufferOp)
+        return deferMaybe(result)
     }
 }
