@@ -19,6 +19,12 @@ public class UpstreamCompletionOp: PerhapsNoOp {
     // Upload these records from the buffer, but with these child lists.
     public var amendChildrenFromBuffer: [GUID: [GUID]] = [:]
 
+    // Upload these records from the mirror, but with these child lists.
+    public var amendChildrenFromMirror: [GUID: [GUID]] = [:]
+
+    // Upload these records from local, but with these child lists.
+    public var amendChildrenFromLocal: [GUID: [GUID]] = [:]
+
     // Upload these records as-is.
     public var records: [Record<BookmarkBasePayload>] = []
 
