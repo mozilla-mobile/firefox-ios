@@ -42,6 +42,7 @@ protocol JSAlertInfo {
      */
     mutating func alertController() -> JSPromptAlertController
     func alertWillDismiss()
+    func cancel()
 }
 
 struct MessageAlert: JSAlertInfo {
@@ -59,6 +60,10 @@ struct MessageAlert: JSAlertInfo {
     }
 
     func alertWillDismiss() {
+        completionHandler()
+    }
+
+    func cancel() {
         completionHandler()
     }
 }
@@ -89,6 +94,10 @@ struct ConfirmPanelAlert: JSAlertInfo {
 
     func alertWillDismiss() {
         completionHandler(didConfirm)
+    }
+
+    func cancel() {
+        completionHandler(false)
     }
 }
 
@@ -121,6 +130,10 @@ struct TextInputAlert: JSAlertInfo {
 
     func alertWillDismiss() {
         completionHandler(input.text)
+    }
+
+    func cancel() {
+        completionHandler(nil)
     }
 }
 
