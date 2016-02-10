@@ -44,6 +44,8 @@ class LoginListViewController: UIViewController {
 
     private var activeLoginQuery: Success?
 
+    private let loadingStateView = LoadingLoginsView()
+
     // Titles for selection/deselect buttons
     private let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Title for deselecting all selected logins")
     private let selectAllTitle = NSLocalizedString("Select All", tableName: "LoginManager", comment: "Title for selecting all logins")
@@ -78,7 +80,7 @@ class LoginListViewController: UIViewController {
         super.viewDidLoad()
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: Selector("SELonProfileDidFinishSyncing"), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("SELreloadLogins"), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
@@ -91,7 +93,10 @@ class LoginListViewController: UIViewController {
 
         view.addSubview(searchView)
         view.addSubview(tableView)
+        view.addSubview(loadingStateView)
         view.addSubview(selectionButton)
+
+        loadingStateView.hidden = true
 
         searchView.snp_makeConstraints { make in
             make.top.equalTo(snp_topLayoutGuideBottom).constraint
@@ -111,6 +116,10 @@ class LoginListViewController: UIViewController {
             make.bottom.equalTo(self.view)
             selectionButtonHeightConstraint = make.height.equalTo(0).constraint
         }
+
+        loadingStateView.snp_makeConstraints { make in
+            make.edges.equalTo(tableView)
+        }
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -123,21 +132,19 @@ class LoginListViewController: UIViewController {
 
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        // If we are editing the search view, use the search term query instead
-        if searchView.isEditing {
-            searchLoginsWithText(searchView.inputField.text ?? "")
-        } else {
-            activeLoginQuery = profile.logins.getAllLogins().bindQueue(dispatch_get_main_queue()) { result in
-                self.loginDataSource.cursor = result.successValue
-                self.tableView.reloadData()
-                return succeed()
-            }
-        }
+        searchView.isEditing ? loadLogins(searchView.inputField.text) : loadLogins()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.loginDataSource.emptyStateView.searchBarHeight = searchView.frame.height
+        self.loadingStateView.searchBarHeight = searchView.frame.height
+    }
+
+    deinit {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
     }
 
     private func toggleDeleteBarButton() {
@@ -160,25 +167,28 @@ class LoginListViewController: UIViewController {
         }
     }
 
-    deinit {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+    private func loadLogins(query: String? = nil) -> Success {
+        loadingStateView.hidden = false
+        let query = profile.logins.searchLoginsWithQuery(query).bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
+        activeLoginQuery = query
+        return query
+    }
+
+    private func reloadTableWithResult(result: Maybe<Cursor<Login>>) -> Success {
+        loadingStateView.hidden = true
+        loginDataSource.cursor = result.successValue
+        tableView.reloadData()
+        activeLoginQuery = nil
+        return succeed()
     }
 }
 
 // MARK: - Selectors
 extension LoginListViewController {
 
-    func SELonProfileDidFinishSyncing() {
-        profile.logins.getAllLogins().uponQueue(dispatch_get_main_queue()) { result in
-            self.loginDataSource.cursor = result.successValue
-            self.tableView.reloadData()
-        }
+    func SELreloadLogins() {
+        loadLogins()
     }
-}
-
-// MARK: - Selectors
-extension LoginListViewController {
 
     func SELedit() {
         navigationItem.rightBarButtonItem = nil
@@ -208,15 +218,9 @@ extension LoginListViewController {
                     self.loginDataSource.loginAtIndexPath(indexPath).guid
                 }
 
-                self.profile.logins.removeLoginsWithGUIDs(guidsToDelete) >>> {
-                    self.activeLoginQuery = self.profile.logins.getAllLogins().bindQueue(dispatch_get_main_queue()) { result in
-                        // Cancel out of editing
-                        self.SELcancel()
-
-                        self.loginDataSource.cursor = result.successValue
-                        self.tableView.reloadData()
-                        return succeed()
-                    }
+                self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
+                    self.SELcancel()
+                    self.loadLogins()
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 
@@ -309,7 +313,7 @@ extension LoginListViewController: KeyboardHelperDelegate {
 extension LoginListViewController: SearchInputViewDelegate {
 
     @objc func searchInputView(searchView: SearchInputView, didChangeTextTo text: String) {
-        searchLoginsWithText(text)
+        loadLogins(text)
     }
 
     @objc func searchInputViewBeganEditing(searchView: SearchInputView) {
@@ -318,28 +322,13 @@ extension LoginListViewController: SearchInputViewDelegate {
 
         // Hide the edit button while we're searching
         navigationItem.rightBarButtonItem = nil
-        activeLoginQuery = profile.logins.getAllLogins()
-            .bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
+        loadLogins()
     }
 
     @objc func searchInputViewFinishedEditing(searchView: SearchInputView) {
         // Show the edit after we're done with the search
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
-        activeLoginQuery = profile.logins.getAllLogins()
-            .bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
-    }
-
-    private func searchLoginsWithText(text: String) -> Success {
-        activeLoginQuery = profile.logins.searchLoginsWithQuery(text)
-            .bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
-        return activeLoginQuery!
-    }
-
-    private func reloadTableWithResult(result: Maybe<Cursor<Login>>) -> Success {
-        loginDataSource.cursor = result.successValue
-        tableView.reloadData()
-        activeLoginQuery = nil
-        return succeed()
+        loadLogins()
     }
 }
 
@@ -509,6 +498,41 @@ private class NoLoginsView: UIView {
     private override func updateConstraints() {
         super.updateConstraints()
         titleLabel.snp_remakeConstraints { make in
+            make.centerX.equalTo(self)
+            make.centerY.equalTo(self).offset(-(searchBarHeight / 2))
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+/// View to display to the user while we are loading the logins
+private class LoadingLoginsView: UIView {
+
+    var searchBarHeight: CGFloat = 0 {
+        didSet {
+            setNeedsUpdateConstraints()
+        }
+    }
+
+    lazy var indicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        indicator.hidesWhenStopped = false
+        return indicator
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(indicator)
+        backgroundColor = UIColor.whiteColor()
+        indicator.startAnimating()
+    }
+
+    private override func updateConstraints() {
+        super.updateConstraints()
+        indicator.snp_remakeConstraints { make in
             make.centerX.equalTo(self)
             make.centerY.equalTo(self).offset(-(searchBarHeight / 2))
         }
