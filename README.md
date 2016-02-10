@@ -6,7 +6,11 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch
 -----------
 
-This branch is targeting iOS 9, uses Swift 2.0, and is slated to become v1.1 and later. See the __v1.0__ branch if you're doing work for a 1.0.\* release.
+This branch is for mainline development that will eventually ship as v3.0.
+
+See the __v2.x__ branch if you're doing stabilization work for v2.0.
+
+This branch works with Xcode 7.2.1, and supports iOS 8.3 and 9.x.
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -29,7 +33,7 @@ https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScroll
 Building the code
 -----------------
 
-> __As of August 28, 2015, this project requires Xcode 7 beta 6.__
+> __As of February 10, 2016, this project requires Xcode 7.2.1.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage).
