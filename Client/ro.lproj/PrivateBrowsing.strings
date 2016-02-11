@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Închide filele private";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox nu va memora niciun istoric sau cookie, însă noile semne de carte vor fi salvate.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Află mai multe";
+
+/* Toggled OFF accessibility value */
+"Off" = "Dezactivată";
+
+/* Toggled ON accessibility value */
+"On" = "Activată";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Deschide în filă privată nouă";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Navigare privată";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Mod privat";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Activează sau dezactivează modul privat";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Când părăsești navigarea privată";
+

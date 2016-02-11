@@ -1,0 +1,548 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Un nume de utilizator și parolă sunt solicitate de %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Un nume de utilizator și parolă sunt solicitate de %1$@. Site-ul spune: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Despre";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Adaugă filă";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Adaugă la lista de citit";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Pagină adăugată la lista de citit";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adresă și căutare";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Trimite mereu";
+
+/* Authentication prompt title */
+"Authentication required" = "Autentificare necesară";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Înapoi";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blochează ferestre pop-up";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Marchează";
+
+/* Panel accessibility label */
+"Bookmarks" = "Semne de carte";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Luminozitate";
+
+/* Alert Call Button */
+"Call" = "Apel";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Anulează";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Schimbă culoarea temei.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Schimbă tipul fontului.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Curăță datele private";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Închide";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Se închide fila";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Copiază adresa";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Copiază imaginea";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Copiază linkul";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Nu s-a putut adăuga pagina la lista de citit. Poate e deja acolo?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Nu s-a putut adăuga pagina la lista de citit";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Nu s-a putut încărca pagina.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Creează un cont";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Întunecat";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Depanare: uită starea de autentificare pentru Sincronizare";
+
+/* Debug option */
+"Debug: require password" = "Depanare: solicită parolă";
+
+/* Debug option */
+"Debug: require upgrade" = "Depanare: solicită upgrade";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Micșorează mărimea textului";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Motor de căutare implicit";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Dezactivează dialogurile adiționale pentru pagină";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Setări de afișare";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Dorești să salvezi parola pentru %1$@ pe %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Dorești să salvezi parola pe %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Dorești să actualizezi parola pentru %1$@ pe %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Dorești să actualizezi parola pe %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Nu trimite";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Gata";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Atinge de două ori și ține apăsat pentru a deschide istoricul";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Introdu parola pentru a te conecta.";
+
+/* Tile title for App Help */
+"Firefox Help and Support" = "Ajutor și suport Firefox";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox va opri sincronizarea cu contul tău, dar nu va șterge niciuna din datele de navigare de pe acest dispozitiv.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox dorește să acceseze pozele tale";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Înainte";
+
+/* General settings section title */
+"General" = "General";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Obține filele deschise, semnele de carte și parolele de pe celelalte dispozitive.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Accesează";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Accesezi URL-ul copiat?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Ajutor";
+
+/* Panel accessibility label */
+"History" = "Istoric";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Mărește mărimea textului";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Tur de introducere Carousel";
+
+/* History tableview section header */
+"Last month" = "Luna trecută";
+
+/* Last synced time label beside Sync Now setting option. Argument is the relative date string.
+   Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Ultima sincronizare: %@";
+
+/* History tableview section header */
+"Last week" = "Săptămâna trecută";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licențe";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Luminos";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Încarcă pagina originală";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Se încarcă conținut…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Deconectare";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Te deconectezi?";
+
+/* Authentication prompt log in button */
+"Log in" = "Autentificare";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Autentificări";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Se pare că Firefox s-a închis neașteptat anterior. Dorești să îți restaurezi filele?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Marchează ca citit";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Marchează ca necitit";
+
+/* Error for a missing remote error number */
+"Missing error" = "Eroare lipsă";
+
+/* Error for a missing remote error message */
+"Missing message" = "Mesaj lipsă";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Bară de navigare";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Filă nouă: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Versiune nouă disponibilă";
+
+/* Restore Tabs Negative Action */
+"No" = "Nu";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Nicio filă";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Nu acum";
+
+/* Button to not save the user's password */
+"Not now" = "Nu acum";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "Ok";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Ok";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ups! Firefox s-a închis neașteptat";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Deschide într-o filă nouă";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Deschide Setări";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Deschide articole în modul lectură atingând iconița carte când aceasta apare în bara de titlu.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Deschide în…";
+
+/* Opening an external URL */
+"Opening %@" = "Se deschide %@";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "Paginile pe care le-ai vizitat recent vor apărea aici.";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Selector de panouri";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Parolă";
+
+/* Paste the URL into the location bar */
+"Paste" = "Lipește";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Lipește și accesează";
+
+/* Privacy section title */
+"Privacy" = "Confidențialitate";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Politică de confidențialitate";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Motoare de căutare rapidă";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Mod citire";
+
+/* Panel accessibility label */
+"Reading list" = "Listă de citit";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Reîncarcă";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Elimină";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Elimină din lista de citit";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Elimină pagina";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Cere versiune de desktop";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Cere versiune de mobil";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "Salvează imaginea";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Salvează autentificările";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Salvează paginile din lista de citit atingând iconița carte cu plus din controalele modului lectură.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Căutare";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Caută sau introdu adresa";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Caută sugestii";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Conexiune securizată";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "Trimite rapoarte de defecțiuni";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "Trimite feedback";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Trimite raport";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Trimiți un raport de defecțiune astfel încât Mozilla să poată remedia problema?";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Setări";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Împărtășește";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Partajează linkul";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Arată sugestii de căutare";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Arată filele";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Arată turul";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Arată sugestii de căutare";
+
+/* Text message / button in the settings table view */
+"Sign In" = "Autentificare";
+
+/* Text message / button in the settings table view */
+"Sign in" = "Autentificare";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "Oprește";
+
+/* Support section title */
+"Support" = "Suport";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Glisează spre dreapta sau stânga cu trei degete pentru a închide fila.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Sincronizează acum";
+
+/* See http://mzl.la/1Qtkf0j */
+"Sync your tabs, bookmarks, passwords and more." = "Sincronizează filele, semnele de carte, parolele și multe altele.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Sync your tabs, passwords and more." = "Sincronizează filele, parolele și multe altele.";
+
+/* Panel accessibility label */
+"Synced tabs" = "File sincronizate";
+
+/* Syncing Firefox Account */
+"Syncing…" = "Se sincronizează…";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Fila %1$@ din %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Filele %1$@ până la %2$@ din %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Bara cu file";
+
+/* Tile title for Mozilla */
+"The Mozilla Project" = "Proiectul Mozilla";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Pagina nu a putut fi afișată în modul lectură.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Există o versiune nouă disponibilă de Firefox Aurora. Atinge pe Ok pentru a merge la pagina de descărcare.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "A apărut o problemă la accesarea filelor de pe celelalte dispozitive ale tale. Încearcă din nou în câteva momente.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "A apărut o problemă la convertirea paginii";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Aceasta îți permite să salvezi imaginea pe Camera Roll.";
+
+/* Opening an external app */
+"This will open in another application" = "Aceasta se va deschide cu o altă aplicație";
+
+/* History tableview section header */
+"Today" = "Azi";
+
+/* Panel accessibility label */
+"Top sites" = "Site-uri de top";
+
+/* Button to update the user's password */
+"Update" = "Actualizează";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Actualizează Firefox pentru a te conecta.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Utilizează file compacte";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Nume de utilizator";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Verifică-ți adresa de e-mail.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versiune %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Vezi";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Conținut web";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Bun venit la Sincronizare";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Bun venit la lista de citit";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Ei, asta e jenant.";
+
+/* Button to save the user's password */
+"Yes" = "Da";
+
+/* History tableview section header */
+"Yesterday" = "Ieri";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Nu ai alte dispozitive conectate la acest cont Firefox disponibile pentru sincronizare.";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Nu ai nicio filă deschisă în Firefox pe celelalte dispozitive ale tale.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Drepturile tale";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "calculator";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "chiar acum";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "dispozitiv mobil";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "cu mai mult de o lună în urmă";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "cu mai mult de o săptămână în urmă";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "citit";
+
+/* Relative date for date in past week. */
+"this week" = "această săptămână";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "azi la %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "necitit";
+
+/* Relative date for yesterday. */
+"yesterday" = "ieri";
+
