@@ -1,0 +1,63 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Через 1 годину";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Через 1 хвилину";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Через 5 хвилин";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Через 10 хвилин";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Через 15 хвилин";
+
+/* Title for setting to change passcode */
+"Change Passcode" = "Змінити код доступу";
+
+/* Title for entering a passcode */
+"Enter a passcode" = "Введіть код доступу";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Негайно";
+
+/* List item for Logins */
+"Logins" = "Логіни";
+
+/* List section title for passcode settings */
+"Passcode" = "Код доступу";
+
+/* List item for Private Browsing */
+"Private Browsing" = "Приватний перегляд";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Введіть код доступу ще раз";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Вимагати код доступу";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Встановити код доступу";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID і код допуску";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Вимкнути код доступу";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Увімкнути код доступу";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Вимкніть свій код доступу.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID for" = "Використовувати Touch ID для";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Використайте свої відбитки пальців для доступу до логінів.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Використайте свої відбитки пальців для доступу до приватного перегляду.";
+

@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "War ga alhakiika?";
+
+/* Clears the search input field and exits out of input mode */
+"Clear Search" = "Ceeciyanoo tuusu";
+
+/* Copy password text selection menu item */
+"Copy" = "Berandi";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Tuusu";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Ikul naŋ";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Ceeciyan alhaali dam";
+
+/* Hide password text selection menu item */
+"Hide" = "Tugu";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Barmayyan koraa %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Huruyan tammaasawey";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Huruyan tammaasawey ka hun ka ben.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Huruyan tammaasawey ga hun jinay dobantey kul ga.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Huruyan tammaasayaŋ kul mana duwandi";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Feeri nda toonandi";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Bangandi";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Ceeci";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Damhaya faari ceeci";
+
+/* Title for selecting all logins */
+"Select All" = "Ikul suuba";
+
+/* Title for password row in Login Detail View */
+"password" = "šennikufal";
+
+/* Title for username row in Login Detail View */
+"username" = "goykaw maa";
+
+/* Title for website row in Login Detail View */
+"website" = "interneti nungu";
+

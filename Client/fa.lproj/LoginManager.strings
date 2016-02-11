@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "آیا اطمینان دارید؟";
+
+/* Clears the search input field and exits out of input mode */
+"Clear Search" = "پاک‌سازی جست‌وجو";
+
+/* Copy password text selection menu item */
+"Copy" = "نسخه‌برداری";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "حذف";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "عدم انتخاب همه";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "وارد‌کردن حالت جست‌و‌جو";
+
+/* Hide password text selection menu item */
+"Hide" = "مخفی کردن";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "آخرین تغییر در %@";
+
+/* Title for Logins List View screen */
+"Logins" = "ورود";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "ورود‌ها برای همیشه حذف شد.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "ورود‌ها بر روی تمامی دستگاه‌ها حذف شد.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "هیچ ورودی یافت نشد";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "باز‌شده و پر";
+
+/* Reveal password text selection menu item */
+"Reveal" = "آشکارساختن";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "جست و جو";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "بخش ورود اطلاعات جست‌و‌جو";
+
+/* Title for selecting all logins */
+"Select All" = "انتخاب همه";
+
+/* Title for password row in Login Detail View */
+"password" = "گذرواژه";
+
+/* Title for username row in Login Detail View */
+"username" = "نام‌کاربری";
+
+/* Title for website row in Login Detail View */
+"website" = "پایگاه اینترنتی";
+

@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Zamykanie prywatnych kart";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox nie zachowa historii przeglądania ani ciasteczek (dodane zakładki zostaną zachowane)";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Więcej informacji";
+
+/* Toggled OFF accessibility value */
+"Off" = "Wyłączone";
+
+/* Toggled ON accessibility value */
+"On" = "Włączone";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Otwórz w trybie prywatnym";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Przeglądanie prywatne";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Tryb prywatny";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Przełącza tryb prywatny";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "podczas opuszczania trybu prywatnego";
+

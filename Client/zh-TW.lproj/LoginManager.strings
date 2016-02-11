@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "您確定？";
+
+/* Clears the search input field and exits out of input mode */
+"Clear Search" = "清除搜尋";
+
+/* Copy password text selection menu item */
+"Copy" = "複製";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "刪除";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "取消選擇全部";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "進入搜尋模式";
+
+/* Hide password text selection menu item */
+"Hide" = "隱藏";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "最後修改於 %@";
+
+/* Title for Logins List View screen */
+"Logins" = "登入資訊";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "將永久移除登入資訊。";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "將移除所有連結的裝置中的登入資訊。";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "找不到登入資訊";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "開啟及填入";
+
+/* Reveal password text selection menu item */
+"Reveal" = "顯示";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "搜尋";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "搜尋欄位";
+
+/* Title for selecting all logins */
+"Select All" = "選取全部";
+
+/* Title for password row in Login Detail View */
+"password" = "密碼";
+
+/* Title for username row in Login Detail View */
+"username" = "使用者名稱";
+
+/* Title for website row in Login Detail View */
+"website" = "網站";
+

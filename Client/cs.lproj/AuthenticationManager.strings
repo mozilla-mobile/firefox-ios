@@ -1,0 +1,63 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Po 1 hodině";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Po 1 minutě";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Po 5 minutách";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Po 10 minutách";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Po 15 minutách";
+
+/* Title for setting to change passcode */
+"Change Passcode" = "Změna hesla";
+
+/* Title for entering a passcode */
+"Enter a passcode" = "Zadejte heslo";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Okamžitě";
+
+/* List item for Logins */
+"Logins" = "Přihlášení";
+
+/* List section title for passcode settings */
+"Passcode" = "Heslo";
+
+/* List item for Private Browsing */
+"Private Browsing" = "Anonymní prohlížení";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Zopakujte heslo";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Vyžadováno heslo";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Nastavení hesla";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID & Heslo";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Přestat požadovat heslo";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Požadovat heslo";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Vypněte své heslo.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID for" = "Použít Touch ID pro";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Použijte svůj otisk prstu pro otevření Přihlášení.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Použijte svůj otisk prstu pro otevření Anonymního prohlížení.";
+

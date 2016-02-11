@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "ເຂົ້າໄປທ່ອງຫລາຍໆເວັບພ້ອມກັນໂດຍການໃຊ້ແທັບ.";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "ເລືອກ";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "ເຊື່ອມຕໍ Firefox ທຸກໆບ່ອນທີ່ທ່ານໃຊ້ມັນ.";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "ຕັ້ງຄ່າ";
+
+/* See http://mzl.la/1T8gxwo */
+"Easily switch between open pages with tabs." = "ສະດວກສະບາຍໃນການສະຫລັບຫນ້າເວັບທີ່ເປີດຢູ່ໂດຍໃຊ້ແທັບ.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox ແລະ The cloud";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Introductory slide %1$@ of %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "ຈັດລະບຽບ";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "ປັບແຕ່ງ Firefox ຂອງທ່ານຕາມທີ່ທ່ານຕ້ອງການໃນການຕັ້ງຄ່າ.";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your default search engine and more in Settings." = "ຕັ້ງຄ່າພື້ນຖານການຄົ້າຫາຂອງທ່ານ ແລະ ອື່ນໆໃນການຕັ້ງຄ່າ.";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "ແບ່ງປັນ";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "ລົງຊື່ເຂົ້າໃຊ້ Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "ເລີ່ມການທ່ອງເວັບ";
+
+/* See http://mzl.la/1T8gxwo */
+"Sync Your Devices." = "Sync ອຸປະກອນຂອງທ່ານ.";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "ແຕະຄ້າງໄວ້ ແລະ ຍ້າຍໄອຄອນ Firefox ໄປໄວ້ໃນ Dock ຂອງທ່ານເພື່ອເຮັດໃຫ້ທ່ານສາມາດເຂົ້າໄປໃຊ້ງ່າຍ.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "ປຸມການຕັ້ງຄ່າຢູ່ຈຸດທຳອິດຂອງ Tabs Tray.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "ປຸ່ມ Show Tabs ຢູ່ຖັດຈາກ Address ແລະ ຊ່ອງ Search ແລະ ສະແດງຈຳນວນແທັບທີ່ເປີດຢູ່ໃນປະຈຸບັນ.";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "ໃຊ້ແຜ່ນແບ່ງປັນເພື່ອສົ່ງລີ້ງຈາກ apps ຕ່າງໆໄປຫາ Firefox.";
+

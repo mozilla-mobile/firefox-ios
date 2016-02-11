@@ -1,0 +1,24 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "Ouzhpennañ d'ar sinedoù";
+
+/* Label for preview action on Tab Tray Tab to add current tab to Reading List */
+"Add to Reading List" = "Ouzhpennañ er Roll Lennadurioù";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "Serriñ an ivinell";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "Eilañ an URL";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "Digeriñ ar sined diwezhañ";
+
+/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
+"Open Last Tab" = "Digeriñ an ivinell ziwezhañ";
+
+/* Accessibility Label for preview in Tab Tray of current tab */
+"Preview of %@" = "Alberz %@";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "Kas d'an trevnad";
+

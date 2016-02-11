@@ -1,0 +1,5 @@
+#include "../Base.xcconfig"
+
+PRODUCT_NAME = SQLite
+
+OTHER_LDFLAGS = -lsqlite3
