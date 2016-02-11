@@ -446,8 +446,10 @@ class TestBookmarkTreeMerging: SaneTestCase {
 
         // The mirror will now contain everything added by each side, and not the deleted folders.
         XCTAssertEqual(result.overrideCompletion.mirrorItemsToDelete, Set(["folderBBBBBB", "folderDDDDDD"]))
-        XCTAssertEqual(result.overrideCompletion.mirrorValuesToCopyFromLocal, Set([insertedGUID]))
-        XCTAssertEqual(result.overrideCompletion.mirrorValuesToCopyFromBuffer, Set(["bookmarkFFFF"]))
+        XCTAssertTrue(result.overrideCompletion.mirrorValuesToCopyFromLocal.isEmpty)
+        XCTAssertTrue(result.overrideCompletion.mirrorValuesToCopyFromBuffer.isEmpty)
+        XCTAssertTrue(result.overrideCompletion.mirrorItemsToInsert.keys.contains(insertedGUID))   // Because it was reparented.
+        XCTAssertTrue(result.overrideCompletion.mirrorItemsToInsert.keys.contains("bookmarkFFFF"))   // Because it was reparented.
 
         // The mirror now has the right structure.
         XCTAssertEqual(result.overrideCompletion.mirrorStructures["folderCCCCCC"]!, ["bookmarkFFFF"])
@@ -461,8 +463,24 @@ class TestBookmarkTreeMerging: SaneTestCase {
 
         // Anything deleted:
         XCTAssertTrue(result.uploadCompletion.records.contains { ($0.id == "folderDDDDDD") && ($0.payload["deleted"].asBool ?? false) })
-        // TODO: F (changed parent)
-        // TODO: insertedGUID (new)
+
+        // Inserted:
+        let uploadE = result.uploadCompletion.records.find { $0.id == insertedGUID }
+        XCTAssertNotNil(uploadE)
+        XCTAssertEqual(uploadE!.payload["title"].asString!, "E")
+
+        // We fixed the parent before uploading.
+        XCTAssertEqual(uploadE!.payload["parentid"].asString!, "folderAAAAAA")
+        XCTAssertEqual(uploadE!.payload["parentName"].asString ?? "", "A")
+
+        // Reparented:
+        let uploadF = result.uploadCompletion.records.find { $0.id == "bookmarkFFFF" }
+        XCTAssertNotNil(uploadF)
+        XCTAssertEqual(uploadF!.payload["title"].asString!, "F")
+
+        // We fixed the parent before uploading.
+        XCTAssertEqual(uploadF!.payload["parentid"].asString!, "folderCCCCCC")
+        XCTAssertEqual(uploadF!.payload["parentName"].asString ?? "", "C")
     }
 
     func testComplexMoveWithAdditions() {
