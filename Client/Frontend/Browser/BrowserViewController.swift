@@ -350,6 +350,8 @@ class BrowserViewController: UIViewController {
 
         log.debug("BVC setting up constraints…")
         setupConstraints()
+        log.debug("BVC setting up handoff")
+        setupHandoff()
         log.debug("BVC done.")
     }
 
@@ -525,6 +527,9 @@ class BrowserViewController: UIViewController {
         log.debug("BVC taking pending screenshots….")
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
         log.debug("BVC done taking screenshots.")
+        
+        log.debug("BVC starting handoff.")
+        HandoffManager.sharedInstance.start()
 
         log.debug("BVC calling super.viewDidAppear.")
         super.viewDidAppear(animated)
@@ -550,6 +555,9 @@ class BrowserViewController: UIViewController {
 
     override func viewWillDisappear(animated: Bool) {
         screenshotHelper.viewIsVisible = false
+        
+        log.debug("BVC stopping handoff.")
+        HandoffManager.sharedInstance.stop()
 
         super.viewWillDisappear(animated)
     }
@@ -924,6 +932,8 @@ class BrowserViewController: UIViewController {
         navigationToolbar.updatePageStatus(isWebPage: isPage)
 
         guard let url = tab.displayURL?.absoluteString else {
+            HandoffManager.sharedInstance.clearCurrentURL()
+            HandoffManager.sharedInstance.stop()
             return
         }
 
@@ -934,6 +944,14 @@ class BrowserViewController: UIViewController {
             }
 
             self.navigationToolbar.updateBookmarkStatus(bookmarked)
+        }
+        
+        if !tab.isPrivate {
+            HandoffManager.sharedInstance.updateCurrentURL(url)
+            HandoffManager.sharedInstance.start()
+        } else {
+            HandoffManager.sharedInstance.clearCurrentURL()
+            HandoffManager.sharedInstance.stop()
         }
     }
     // Mark: Opening New Tabs
@@ -1107,6 +1125,10 @@ class BrowserViewController: UIViewController {
             self.findInPageBar = nil
             updateViewConstraints()
         }
+    }
+
+    private func setupHandoff() {
+        userActivity = HandoffManager.sharedInstance.userActivity
     }
 
     override func canBecomeFirstResponder() -> Bool {
