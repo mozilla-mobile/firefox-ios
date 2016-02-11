@@ -255,8 +255,11 @@ class TestBookmarkTreeMerging: SaneTestCase {
             return
         }
 
-        // TODO: enable this when basic merging is implemented.
-        // XCTAssertFalse(result.isNoOp)
+        XCTAssertFalse(result.isNoOp)
+        XCTAssertTrue(result.overrideCompletion.processedLocalChanges.isSupersetOf(Set(BookmarkRoots.RootChildren)))
+
+        // TODO: we should be dropping the roots from local, and uploading roots to the server.
+        // The outgoing records should use Sync-style IDs.
     }
 
     func testMergingStorageLocalRootsEmptyServer() {
@@ -425,6 +428,41 @@ class TestBookmarkTreeMerging: SaneTestCase {
 
         XCTAssertEqual(insertedGUID, folderA.mergedChildren![0].guid)
         XCTAssertEqual("bookmarkFFFF", folderC.mergedChildren![0].guid)
+
+        guard let result = merger.produceMergeResultFromMergedTree(mergedTree).value.successValue else {
+            XCTFail("Couldn't get merge result.")
+            return
+        }
+
+        XCTAssertFalse(result.isNoOp)
+
+        // Everything in local is getting dropped.
+        let formerLocalIDs = Set(edges.local.lookup.keys)
+        XCTAssertTrue(result.overrideCompletion.processedLocalChanges.isSupersetOf(formerLocalIDs))
+
+        // Everything in the buffer is getting dropped.
+        let formerBufferIDs = Set(edges.buffer.lookup.keys)
+        XCTAssertTrue(result.bufferCompletion.processedBufferChanges.isSupersetOf(formerBufferIDs))
+
+        // The mirror will now contain everything added by each side, and not the deleted folders.
+        XCTAssertEqual(result.overrideCompletion.mirrorItemsToDelete, Set(["folderBBBBBB", "folderDDDDDD"]))
+        XCTAssertEqual(result.overrideCompletion.mirrorValuesToCopyFromLocal, Set([insertedGUID]))
+        XCTAssertEqual(result.overrideCompletion.mirrorValuesToCopyFromBuffer, Set(["bookmarkFFFF"]))
+
+        // The mirror now has the right structure.
+        XCTAssertEqual(result.overrideCompletion.mirrorStructures["folderCCCCCC"]!, ["bookmarkFFFF"])
+        XCTAssertEqual(result.overrideCompletion.mirrorStructures["folderAAAAAA"]!, [insertedGUID])
+
+        // We're going to upload new records for C (lost a child), F (changed parent),
+        // insertedGUID (new local record), A (new child), and D (deleted).
+
+        // Anything that was in the mirror and only changed structure:
+        XCTAssertEqual(result.uploadCompletion.amendChildrenFromMirror, ["folderCCCCCC": ["bookmarkFFFF"], "folderAAAAAA": [insertedGUID]])
+
+        // Anything deleted:
+        XCTAssertTrue(result.uploadCompletion.records.contains { ($0.id == "folderDDDDDD") && ($0.payload["deleted"].asBool ?? false) })
+        // TODO: F (changed parent)
+        // TODO: insertedGUID (new)
     }
 
     func testComplexMoveWithAdditions() {
