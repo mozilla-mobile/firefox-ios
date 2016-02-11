@@ -191,10 +191,10 @@ public struct BookmarkMirrorItem: Equatable {
     public let guid: GUID
     public let type: BookmarkNodeType
     public let serverModified: Timestamp
-    let isDeleted: Bool
-    let hasDupe: Bool
-    let parentID: GUID?
-    let parentName: String?
+    public let isDeleted: Bool
+    public let hasDupe: Bool
+    public let parentID: GUID?
+    public let parentName: String?
 
     // Livemarks.
     public let feedURI: String?
@@ -223,6 +223,31 @@ public struct BookmarkMirrorItem: Equatable {
     let faviconID: Int?
     public let localModified: Timestamp?
     let syncStatus: SyncStatus?
+
+    public func copyWithParentID(parentID: GUID, parentName: String?) -> BookmarkMirrorItem {
+        return BookmarkMirrorItem(
+            guid: self.guid,
+            type: self.type,
+            serverModified: self.serverModified,
+            isDeleted: self.isDeleted,
+            hasDupe: self.hasDupe,
+            parentID: parentID,
+            parentName: parentName,
+            feedURI: self.feedURI,
+            siteURI: self.siteURI,
+            pos: self.pos,
+            title: self.title,
+            description: self.description,
+            bookmarkURI: self.bookmarkURI,
+            tags: self.tags,
+            keyword: self.keyword,
+            folderName: self.folderName,
+            queryID: self.queryID,
+            children: self.children,
+            faviconID: self.faviconID,
+            localModified: self.localModified,
+            syncStatus: self.syncStatus)
+    }
 
     // Ignores internal metadata and GUID; a pure value comparison.
     // Does compare child GUIDs!
