@@ -1146,7 +1146,6 @@ class ThreeWayTreeMerger {
             // Value didn't change, and no structure to handle. Done.
             if node.valueState.isUnchanged {
                 precondition(node.hasMirror, "Can't have an unchanged non-root without there being a mirror record.")
-                return
             }
 
             // Not new. Emit copy directives.
@@ -1154,7 +1153,16 @@ class ThreeWayTreeMerger {
             switch node.valueState {
             case .Remote:
                 localOp.mirrorValuesToCopyFromBuffer.insert(node.guid)
+
             case .Local:
+                // TODO: make sure parent is correct.
+                guard let value = self.localItemSource.getLocalItemWithGUID(node.guid).value.successValue else {
+                    assertionFailure("Couldn't fetch value for new item \(node.guid). This should never happen.")
+                    return
+                }
+                let record = Record<BookmarkBasePayload>(id: node.guid, payload: value.asPayload())
+                upstreamOp.records.append(record)
+
                 localOp.mirrorValuesToCopyFromLocal.insert(node.guid)
 
             // New. Emit explicit insertions into all three places,
