@@ -283,7 +283,6 @@ protocol SQLiteDBConnection {
     func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T)) -> Cursor<T>
     func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T>
     func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T>
-    func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T)) -> Cursor<T>
     func interrupt()
     func checkpoint()
     func checkpoint(mode: Int32)
@@ -376,7 +375,7 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     private func pragma<T>(pragma: String, factory: SDRow -> T) -> T? {
-        let cursor = executeQueryUnsafe("PRAGMA \(pragma)", factory: factory)
+        let cursor = executeQueryUnsafe("PRAGMA \(pragma)", factory: factory, withArgs: nil)
         defer { cursor.close() }
         return cursor[0]
     }
@@ -659,7 +658,7 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             logger.error("DB file size: \(dbFileSize) bytes")
 
             logger.error("Integrity check:")
-            let messages = self.executeQueryUnsafe("PRAGMA integrity_check", factory: StringFactory)
+            let messages = self.executeQueryUnsafe("PRAGMA integrity_check", factory: StringFactory, withArgs: nil)
             defer { messages.close() }
 
             if messages.status == CursorStatus.Success {
@@ -695,10 +694,6 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
      * Returns a live cursor that holds the query statement and database connection.
      * Instances of this class *must not* leak outside of the connection queue!
      */
-    func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T)) -> Cursor<T> {
-        return self.executeQueryUnsafe(sqlStr, factory: factory, withArgs: nil)
-    }
-
     func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
         var error: NSError?
         let statement: SQLiteDBStatement?
