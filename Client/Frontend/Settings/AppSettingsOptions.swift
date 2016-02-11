@@ -44,6 +44,7 @@ class ConnectSetting: WithoutAccountSetting {
 // Sync setting for disconnecting a Firefox Account.  Shown when we have an account.
 class DisconnectSetting: WithAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .None }
+    override var textAlignment: NSTextAlignment { return .Center }
 
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
@@ -61,6 +62,8 @@ class DisconnectSetting: WithAccountSetting {
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert"), style: .Destructive) { (action) in
                 self.settings.profile.removeAccount()
+                self.settings.settings = self.settings.generateSettings()
+                self.settings.SELfirefoxAccountDidChange()
             })
         navigationController?.presentViewController(alertController, animated: true, completion: nil)
     }
