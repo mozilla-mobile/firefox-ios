@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 import SnapKit
 import Storage
+import Shared
 
 @objc
 protocol LoginTableViewCellDelegate: class {
@@ -65,10 +66,11 @@ class LoginTableViewCell: UITableViewCell {
         return label
     }()
 
-    private lazy var iconImageView: UIImageView = {
+    lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = UIColor.whiteColor()
         imageView.contentMode = .ScaleAspectFit
+        imageView.image = UIImage(named: "faviconFox")
         return imageView
     }()
 
@@ -133,6 +135,13 @@ class LoginTableViewCell: UITableViewCell {
         }
     }
 
+    var faviconURL: NSURL? = nil {
+        didSet {
+            assert(NSThread.isMainThread(), "Setting the cell's faviconURL requires the caller to be on the main thread.")
+            self.iconImageView.sd_setImageWithURL(faviconURL, placeholderImage: UIImage.faviconFoxPlaceholder())
+        }
+    }
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -165,6 +174,7 @@ class LoginTableViewCell: UITableViewCell {
         descriptionLabel.keyboardType = .Default
         descriptionLabel.returnKeyType = .Default
         descriptionLabel.userInteractionEnabled = false
+        iconImageView.image = nil
     }
 
     override func layoutSubviews() {
@@ -319,6 +329,5 @@ extension LoginTableViewCell {
     func updateCellWithLogin(login: LoginData) {
         descriptionLabel.text = login.hostname
         highlightedLabel.text = login.username
-        iconImageView.image = UIImage(named: "faviconFox")
     }
 }

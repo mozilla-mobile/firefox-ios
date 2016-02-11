@@ -5,7 +5,7 @@
 import UIKit
 
 extension CGRect {
-    var center: CGPoint {
+    public var center: CGPoint {
         get {
             return CGPoint(x: size.width / 2, y: size.height / 2)
         }
@@ -15,6 +15,39 @@ extension CGRect {
     }
 }
 
+extension CGSize {
+    /**
+     Returns the size that best fits this size. Best fit in this case is defined as the size
+     which requires the least amount of scaling to fill this size.
+
+     - parameter sizes: Sizes to attempt to find the best fitting size.
+
+     - returns: Size that requires the least amount of scaling to fill this size.
+     */
+    public func sizeThatBestFitsFromSizes(sizes: [CGSize]) -> CGSize? {
+
+        func maxDiffForSize(size: CGSize) -> CGFloat {
+            let diffX = floor(abs(size.width - self.width))
+            let diffY = floor(abs(size.height - self.height))
+            return max(diffX, diffY)
+        }
+
+        guard let first = sizes.first else {
+            return nil
+        }
+
+        let initial = (first, maxDiffForSize(first))
+        return sizes.reduce(initial) { acc, s in
+            let max = maxDiffForSize(s)
+            if max < acc.1 {
+                return (s, max)
+            }
+            return acc
+        } .0
+    }
+}
+
+
 /**
 Generates the affine transform for transforming the first CGRect into the second one
 
@@ -23,7 +56,7 @@ Generates the affine transform for transforming the first CGRect into the second
 
 - returns: CGAffineTransform that transforms the first CGRect into the second
 */
-func CGAffineTransformMakeRectToRect(frame: CGRect, toFrame: CGRect) -> CGAffineTransform {
+public func CGAffineTransformMakeRectToRect(frame: CGRect, toFrame: CGRect) -> CGAffineTransform {
     let scale = toFrame.size.width / frame.size.width
     let tx = toFrame.origin.x + toFrame.width / 2 - (frame.origin.x + frame.width / 2)
     let ty = toFrame.origin.y - frame.origin.y * scale * 2

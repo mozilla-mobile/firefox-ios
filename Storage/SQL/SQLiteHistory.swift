@@ -344,6 +344,18 @@ extension SQLiteHistory: BrowserHistory {
         return site
     }
 
+    private class func iconColumnFactoryWithDomain(row: SDRow) -> (String, Favicon)? {
+        if let iconType = row["iconType"] as? Int,
+            let iconURL = row["iconURL"] as? String,
+            let iconDate = row.getTimestamp("iconDate"),
+            let key = row["domain"] as? String,
+            let _ = row["iconID"] as? Int {
+                let date = NSDate.fromTimestamp(iconDate)
+                return (key, Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!))
+        }
+        return nil
+    }
+
     private class func iconColumnFactory(row: SDRow) -> Favicon? {
         if let iconType = row["iconType"] as? Int,
             let iconURL = row["iconURL"] as? String,
@@ -521,15 +533,26 @@ extension SQLiteHistory: BrowserHistory {
 }
 
 extension SQLiteHistory: Favicons {
-    // These two getter functions are only exposed for testing purposes (and aren't part of the public interface).
-    func getFaviconsForURL(url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
-        let sql = "SELECT iconID AS id, iconURL AS url, iconDate AS date, iconType AS type, iconWidth AS width FROM " +
-            "\(ViewWidestFaviconsForSites), \(TableHistory) WHERE " +
-            "\(TableHistory).id = siteID AND \(TableHistory).url = ?"
-        let args: Args = [url]
-        return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
+
+    public func getFaviconsByDomain() -> Deferred<Maybe<Cursor<(String, Favicon)?>>> {
+        let historyFavicons =
+        "SELECT \(TableHistory).url as historyURL, iconID, iconURL, iconDate, iconType, iconWidth" +
+        " FROM \(ViewWidestFaviconsForSites), \(TableHistory)" +
+        " WHERE \(TableHistory).id = siteID"
+
+        let historyDomains =
+        "SELECT \(TableDomains).domain as domain, \(TableHistory).url as historyURL" +
+        " FROM \(TableHistory) JOIN \(TableDomains) ON \(TableHistory).domain_id IS \(TableDomains).id"
+
+        let query =
+        "SELECT domain, iconID, iconURL, iconDate, iconType, iconWidth" +
+        " FROM (\(historyDomains)) as historyDomains JOIN" +
+        " (\(historyFavicons)) as historyFavicons ON historyDomains.historyURL = historyFavicons.historyURL"
+
+        return db.runQuery(query, args: nil, factory: SQLiteHistory.iconColumnFactoryWithDomain)
     }
 
+    // This getter function are only exposed for testing purposes (and aren't part of the public interface).
     func getFaviconsForBookmarkedURL(url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
         let sql = "SELECT \(TableFavicons).id AS id, \(TableFavicons).url AS url, \(TableFavicons).date AS date, \(TableFavicons).type AS type, \(TableFavicons).width AS width FROM \(TableFavicons), \(TableBookmarks) WHERE \(TableBookmarks).faviconID = \(TableFavicons).id AND \(TableBookmarks).url IS ?"
         let args: Args = [url]
