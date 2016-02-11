@@ -293,7 +293,7 @@ class ThreeWayTreeMerger {
 
         var changed = false
 
-        func processRemoteOrphansForNode(node: BookmarkTreeNode) throws {
+        func processRemoteOrphansForNode(node: BookmarkTreeNode) throws -> [MergedTreeNode]? {
             // Now we recursively merge down into our list of orphans. If those contain deleted
             // subtrees, excess leaves will be flattened up; we'll get a single list of nodes
             // here, and we'll take them as additional children.
@@ -305,7 +305,7 @@ class ThreeWayTreeMerger {
 
             guard let orphans = try node.children?.exclude(isLocallyDeleted) where !orphans.isEmpty else {
                 log.debug("No remote orphans from local deletion of \(guid).")
-                return
+                return nil
             }
 
             let mergedOrphans = try orphans.map { (orphan: BookmarkTreeNode) throws -> MergedTreeNode in
@@ -318,11 +318,14 @@ class ThreeWayTreeMerger {
             }
 
             log.debug("Collected \(mergedOrphans.count) remote orphans for deleted folder \(guid).")
+            if mergedOrphans.isEmpty {
+                return nil
+            }
             changed = true
-            out.appendContentsOf(mergedOrphans)
+            return mergedOrphans
         }
 
-        func processLocalOrphansForNode(node: BookmarkTreeNode) throws {
+        func processLocalOrphansForNode(node: BookmarkTreeNode) throws -> [MergedTreeNode]? {
             // Now we recursively merge down into our list of orphans. If those contain deleted
             // subtrees, excess leaves will be flattened up; we'll get a single list of nodes
             // here, and we'll take them as additional children.
@@ -334,7 +337,7 @@ class ThreeWayTreeMerger {
 
             guard let orphans = try node.children?.exclude(isRemotelyDeleted) where !orphans.isEmpty else {
                 log.debug("No local orphans from remote deletion of \(guid).")
-                return
+                return nil
             }
 
             let mergedOrphans = try orphans.map { (orphan: BookmarkTreeNode) throws -> MergedTreeNode in
@@ -347,8 +350,11 @@ class ThreeWayTreeMerger {
             }
 
             log.debug("Collected \(mergedOrphans.count) local orphans for deleted folder \(guid).")
+            if mergedOrphans.isEmpty {
+                return nil
+            }
             changed = true
-            out.appendContentsOf(mergedOrphans)
+            return mergedOrphans
         }
 
         func checkForLocalDeletionOfRemoteNode(node: BookmarkTreeNode, mirrorNode: BookmarkTreeNode?) throws -> Bool {
@@ -370,7 +376,9 @@ class ThreeWayTreeMerger {
                 self.merged.deleteFromMirror.insert(guid)
             }
 
-            try processRemoteOrphansForNode(node)
+            if let orphans = try processRemoteOrphansForNode(node) {
+                out.appendContentsOf(try self.relocateOrphansTo(result, orphans: orphans))
+            }
             return true
         }
 
@@ -392,7 +400,9 @@ class ThreeWayTreeMerger {
                 self.merged.deleteFromMirror.insert(guid)
             }
 
-            try processLocalOrphansForNode(node)
+            if let orphans = try processLocalOrphansForNode(node) {
+                out.appendContentsOf(try self.relocateOrphansTo(result, orphans: orphans))
+            }
             return true
         }
 
@@ -519,7 +529,9 @@ class ThreeWayTreeMerger {
                     let parent = self.remote.parents[potentiallyDeleted]
                     if parent == nil || parent == expectedParent {
                         log.debug("Remote still thinks \(potentiallyDeleted) is here. Processing for orphans.")
-                        try processRemoteOrphansForNode(self.remote.find(potentiallyDeleted)!)
+                        if let orphans = try processRemoteOrphansForNode(self.remote.find(potentiallyDeleted)!) {
+                            out.appendContentsOf(try self.relocateOrphansTo(result, orphans: orphans))
+                        }
                     }
 
                     // Accept the local deletion, and make a note to apply it elsewhere.
@@ -535,6 +547,10 @@ class ThreeWayTreeMerger {
                 if parent == nil || parent == expectedParent {
                     log.debug("Local still thinks \(potentiallyDeleted) is here. Processing for orphans.")
                     try processLocalOrphansForNode(self.local.find(potentiallyDeleted)!)
+
+                    if let orphans = try processLocalOrphansForNode(self.local.find(potentiallyDeleted)!) {
+                        out.appendContentsOf(try self.relocateOrphansTo(result, orphans: orphans))
+                    }
 
                     // Accept the remote deletion, and make a note to apply it elsewhere.
                     self.merged.deleteFromMirror.insert(potentiallyDeleted)
@@ -724,8 +740,104 @@ class ThreeWayTreeMerger {
         return unchangedIf(merged, original: mirrorValues, new: remoteValues)
     }
 
+    private var folderNameCache: [GUID: String?] = [:]
+    func getNameForFolder(folder: MergedTreeNode) throws -> String? {
+        if let name = self.folderNameCache[folder.guid] {
+            return name
+        }
+        let name = try self.fetchNameForFolder(folder)
+        self.folderNameCache[folder.guid] = name
+        return name
+    }
+
+    func fetchNameForFolder(folder: MergedTreeNode) throws -> String? {
+        switch folder.valueState {
+        case let .New(v):
+            return v.title
+        case .Unchanged:
+            if let mirror = folder.mirror?.recordGUID,
+               let title = self.mirrorItemSource.getMirrorItemWithGUID(mirror).value.successValue?.title {
+                return title
+            }
+        case .Remote:
+            if let remote = folder.remote?.recordGUID,
+               let title = self.bufferItemSource.getBufferItemWithGUID(remote).value.successValue?.title {
+                return title
+            }
+        case .Local:
+            if let local = folder.local?.recordGUID,
+               let title = self.localItemSource.getLocalItemWithGUID(local).value.successValue?.title {
+                return title
+            }
+        case .Unknown:
+            break
+        }
+
+        throw BookmarksMergeConsistencyError()
+    }
+
+    func relocateOrphansTo(mergedNode: MergedTreeNode, orphans: [MergedTreeNode]?) throws -> [MergedTreeNode] {
+        guard let orphans = orphans else {
+            return []
+        }
+
+        let parentName = try self.getNameForFolder(mergedNode)
+        return try orphans.map {
+            try self.relocateMergedTreeNode($0, parentID: mergedNode.guid, parentName: parentName)
+        }
+    }
+
+    func relocateMergedTreeNode(node: MergedTreeNode, parentID: GUID, parentName: String?) throws -> MergedTreeNode {
+        func copyWithMirrorItem(item: BookmarkMirrorItem?) throws -> MergedTreeNode {
+            guard let item = item else {
+                throw BookmarksMergeConsistencyError()
+            }
+
+            if item.parentID == parentID && item.parentName == parentName {
+                log.debug("Don't need to relocate \(node.guid)'s for value table.")
+                return node
+            }
+
+            log.debug("Relocating \(node.guid) to parent \(parentID).")
+            let n = MergedTreeNode(guid: node.guid, mirror: node.mirror)
+            n.local = node.local
+            n.remote = node.remote
+            n.mergedChildren = node.mergedChildren
+            n.structureState = node.structureState
+            n.valueState = .New(value: item.copyWithParentID(parentID, parentName: parentName))
+
+            return n
+        }
+
+        switch node.valueState {
+        case .Unknown:
+            return node
+        case .Unchanged:
+            return try copyWithMirrorItem(self.mirrorItemSource.getMirrorItemWithGUID(node.guid).value.successValue)
+        case .Local:
+            return try copyWithMirrorItem(self.localItemSource.getLocalItemWithGUID(node.guid).value.successValue)
+        case .Remote:
+            return try copyWithMirrorItem(self.bufferItemSource.getBufferItemWithGUID(node.guid).value.successValue)
+        case let .New(value):
+            return try copyWithMirrorItem(value)
+        }
+    }
+
+    // A helper that'll rewrite the resulting node's value to have the right parent.
+    func mergeNode(guid: GUID, intoFolder parentID: GUID, withParentName parentName: String?, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
+        let m = try self.mergeNode(guid, localNode: localNode, mirrorNode: mirrorNode, remoteNode: remoteNode)
+
+        // We could check the parent pointers in the tree, but looking at the values themselves
+        // will catch any mismatches between the value and structure tables.
+        return try self.relocateMergedTreeNode(m, parentID: parentID, parentName: parentName)
+    }
+
     // We'll end up looking at deletions and such as we go.
     // TODO: accumulate deletions into the three buckets as we go.
+    //
+    // TODO: if a local or remote note is kept but put in a different folder, we actually 
+    // need to generate a .New node, so we can take the parentid and parentNode that we
+    // must preserve.
     func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
         log.debug("Merging nodes with GUID \(guid). Local match is \(localNode?.recordGUID).")
 
