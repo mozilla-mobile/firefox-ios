@@ -451,12 +451,29 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             let desiredCheckpointSize = desiredPagesPerJournal * desiredPageSize
             let desiredJournalSizeLimit = 3 * desiredCheckpointSize
 
-            try pragma("journal_mode=WAL", expected: "wal",
-                       factory: StringFactory, message: "WAL journal mode set")
-            try pragma("wal_autocheckpoint=\(desiredPagesPerJournal)", expected: desiredPagesPerJournal,
-                       factory: IntFactory, message: "WAL autocheckpoint set")
-            try pragma("journal_size_limit=\(desiredJournalSizeLimit)", expected: desiredJournalSizeLimit,
-                       factory: IntFactory, message: "WAL journal size limit set")
+            /*
+             * With whole-module-optimization enabled in Xcode 7.2 and 7.2.1, the
+             * compiler seems to eagerly discard these queries if they're simply
+             * inlined, causing a crash in `pragma`.
+             *
+             * Hackily hold on to them.
+             */
+            let journalModeQuery = "journal_mode=WAL"
+            let autoCheckpointQuery = "wal_autocheckpoint=\(desiredPagesPerJournal)"
+            let journalSizeQuery = "journal_size_limit=\(desiredJournalSizeLimit)"
+
+            try withExtendedLifetime(journalModeQuery, {
+                try pragma(journalModeQuery, expected: "wal",
+                           factory: StringFactory, message: "WAL journal mode set")
+            })
+            try withExtendedLifetime(autoCheckpointQuery, {
+                try pragma(autoCheckpointQuery, expected: desiredPagesPerJournal,
+                           factory: IntFactory, message: "WAL autocheckpoint set")
+            })
+            try withExtendedLifetime(journalSizeQuery, {
+                try pragma(journalSizeQuery, expected: desiredJournalSizeLimit,
+                           factory: IntFactory, message: "WAL journal size limit set")
+            })
         }
 
         self.prepareShared()
