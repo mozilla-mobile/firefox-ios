@@ -159,6 +159,46 @@
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E65C5BC31BEA4F6500D28BEF"
+               BuildableName = "NativeRefTests.xctest"
+               BlueprintName = "NativeRefTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7BD028CD1C073AA90032FDC0"
+               BuildableName = "MarketingSnapshotTests.xctest"
+               BlueprintName = "MarketingSnapshotTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7B3632D01C2983F000D12AF9"
+               BuildableName = "L10nSnapshotTests.xctest"
+               BlueprintName = "L10nSnapshotTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7B95CD161C3AB2EE00638E31"
+               BuildableName = "MarketingUITests.xctest"
+               BlueprintName = "MarketingUITests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

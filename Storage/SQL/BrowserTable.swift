@@ -17,6 +17,7 @@ let TableBookmarksMirrorStructure = "bookmarksMirrorStructure"         // Added 
 
 let TableFavicons = "favicons"
 let TableHistory = "history"
+let TableCachedTopSites = "cached_top_sites"
 let TableDomains = "domains"
 let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
@@ -31,13 +32,14 @@ let IndexVisitsSiteIDDate = "idx_visits_siteID_date"                   // Remove
 let IndexVisitsSiteIDIsLocalDate = "idx_visits_siteID_is_local_date"   // Added in v6.
 let IndexBookmarksMirrorStructureParentIdx = "idx_bookmarksMirrorStructure_parent_idx"   // Added in v10.
 
-private let AllTables: Args = [
+private let AllTables: [String] = [
     TableDomains,
     TableFavicons,
     TableFaviconSites,
 
     TableHistory,
     TableVisits,
+    TableCachedTopSites,
 
     TableBookmarks,
     TableBookmarksMirror,
@@ -46,19 +48,19 @@ private let AllTables: Args = [
     TableQueuedTabs,
 ]
 
-private let AllViews: Args = [
+private let AllViews: [String] = [
     ViewHistoryIDsWithWidestFavicons,
     ViewWidestFaviconsForSites,
     ViewIconForURL,
 ]
 
-private let AllIndices: Args = [
+private let AllIndices: [String] = [
     IndexHistoryShouldUpload,
     IndexVisitsSiteIDIsLocalDate,
     IndexBookmarksMirrorStructureParentIdx,
 ]
 
-private let AllTablesIndicesAndViews: Args = AllViews + AllIndices + AllTables
+private let AllTablesIndicesAndViews: [String] = AllViews + AllIndices + AllTables
 
 private let log = Logger.syncLogger
 
@@ -67,14 +69,16 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 10
-    let version: Int
+    static let DefaultVersion = 11
+
+    // TableInfo fields.
     var name: String { return "BROWSER" }
+    var version: Int { return BrowserTable.DefaultVersion }
+
     let sqliteVersion: Int32
     let supportsPartialIndices: Bool
 
-    public init(version: Int = DefaultVersion) {
-        self.version = version
+    public init() {
         let v = sqlite3_libversion_number()
         self.sqliteVersion = v
         self.supportsPartialIndices = v >= 3008000          // 3.8.0.
@@ -101,6 +105,15 @@ public class BrowserTable: Table {
         return true
     }
 
+    func run(db: SQLiteDBConnection, queries: [String]) -> Bool {
+        for sql in queries {
+            if !run(db, sql: sql) {
+                return false
+            }
+        }
+        return true
+    }
+
     func runValidQueries(db: SQLiteDBConnection, queries: [(String?, Args?)]) -> Bool {
         for (sql, args) in queries {
             if let sql = sql {
@@ -110,6 +123,10 @@ public class BrowserTable: Table {
             }
         }
         return true
+    }
+
+    func runValidQueries(db: SQLiteDBConnection, queries: [String?]) -> Bool {
+        return self.run(db, queries: optFilter(queries))
     }
 
     func prepopulateRootFolders(db: SQLiteDBConnection) -> Bool {
@@ -135,49 +152,40 @@ public class BrowserTable: Table {
         return self.run(db, sql: sql, args: args)
     }
 
-    func getHistoryTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        return "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
-            "url TEXT UNIQUE, " +                 // May only be null for deleted records.
+    let topSitesTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableCachedTopSites) (" +
+            "historyID INTEGER, " +
+            "url TEXT NOT NULL, " +
             "title TEXT NOT NULL, " +
-            "server_modified INTEGER, " +         // Can be null. Integer milliseconds.
-            "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
-            "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
-            "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
-            (version > 5 ? "domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " : "") +
-            "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
-            ")"
-    }
+            "guid TEXT NOT NULL UNIQUE, " +
+            "domain_id INTEGER, " +
+            "domain TEXT NO NULL, " +
+            "localVisitDate REAL, " +
+            "remoteVisitDate REAL, " +
+            "localVisitCount INTEGER, " +
+            "remoteVisitCount INTEGER, " +
+            "iconID INTEGER, " +
+            "iconURL TEXT, " +
+            "iconDate REAL, " +
+            "iconType INTEGER, " +
+            "iconWidth INTEGER, " +
+            "frecencies REAL" +
+        ")"
 
-    func getDomainsTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version <= 5 {
-            return nil
-        }
+    let domainsTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
+           "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+           "domain TEXT NOT NULL UNIQUE, " +
+           "showOnTopSites TINYINT NOT NULL DEFAULT 1" +
+       ")"
 
-        return "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
-                   "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                   "domain TEXT NOT NULL UNIQUE, " +
-                   "showOnTopSites TINYINT NOT NULL DEFAULT 1" +
-               ")"
-    }
+    let queueTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
+            "url TEXT NOT NULL UNIQUE, " +
+            "title TEXT" +
+        ") "
 
-    func getQueueTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version <= 4 {
-            return nil
-        }
-
-        return "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
-                   "url TEXT NOT NULL UNIQUE, " +
-                   "title TEXT" +
-               ") "
-    }
-
-    func getBookmarksMirrorTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version < 9 {
-            return nil
-        }
-
+    func getBookmarksMirrorTableCreationString() -> String {
         // The stupid absence of naming conventions here is thanks to pre-Sync Weave. Sorry.
         // For now we have the simplest possible schema: everything in one.
         let sql =
@@ -214,11 +222,7 @@ public class BrowserTable: Table {
      * We need to explicitly store what's provided by the server, because we can't rely on
      * referenced child nodes to exist yet!
      */
-    func getBookmarksMirrorStructureTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version < 10 {
-            return nil
-        }
-
+    func getBookmarksMirrorStructureTableCreationString() -> String {
         // TODO: index me.
         let sql =
         "CREATE TABLE IF NOT EXISTS \(TableBookmarksMirrorStructure) " +
@@ -230,7 +234,7 @@ public class BrowserTable: Table {
         return sql
     }
 
-    func create(db: SQLiteDBConnection, version: Int) -> Bool {
+    func create(db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -240,6 +244,20 @@ public class BrowserTable: Table {
         "type INTEGER NOT NULL, " +
         "date REAL NOT NULL" +
         ") "
+
+        let history =
+        "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
+        "url TEXT UNIQUE, " +                 // May only be null for deleted records.
+        "title TEXT NOT NULL, " +
+        "server_modified INTEGER, " +         // Can be null. Integer milliseconds.
+        "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
+        "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
+        "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
+        "domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " +
+        "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
+        ")"
 
         // Right now we don't need to track per-visit deletions: Sync can't
         // represent them! See Bug 1157553 Comment 6.
@@ -324,33 +342,35 @@ public class BrowserTable: Table {
         let indexStructureParentIdx = "CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureParentIdx) " +
             "ON \(TableBookmarksMirrorStructure) (parent, idx)"
 
-        let queries: [(String?, Args?)] = [
-            (getDomainsTableCreationString(forVersion: version), nil),
-            (getHistoryTableCreationString(forVersion: version), nil),
-            (favicons, nil),
-            (visits, nil),
-            (bookmarks, nil),
-            (bookmarksMirror, nil),
-            (bookmarksMirrorStructure, nil),
-            (indexStructureParentIdx, nil),
-            (faviconSites, nil),
-            (indexShouldUpload, nil),
-            (indexSiteIDDate, nil),
-            (widestFavicons, nil),
-            (historyIDsWithIcon, nil),
-            (iconForURL, nil),
-            (getQueueTableCreationString(forVersion: version), nil)
+        let queries: [String] = [
+            self.domainsTableCreate,
+            history,
+            favicons,
+            visits,
+            bookmarks,
+            bookmarksMirror,
+            bookmarksMirrorStructure,
+            indexStructureParentIdx,
+            faviconSites,
+            indexShouldUpload,
+            indexSiteIDDate,
+            widestFavicons,
+            historyIDsWithIcon,
+            iconForURL,
+            self.queueTableCreate,
+            self.topSitesTableCreate,
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
 
         log.debug("Creating \(queries.count) tables, views, and indices.")
 
-        return self.runValidQueries(db, queries: queries) &&
+        return self.run(db, queries: queries) &&
                self.prepopulateRootFolders(db)
     }
 
-    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
+    func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
+        let to = BrowserTable.DefaultVersion
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
             return true
@@ -359,42 +379,34 @@ public class BrowserTable: Table {
         if from == 0 {
             // This is likely an upgrade from before Bug 1160399.
             log.debug("Updating browser tables from zero. Assuming drop and recreate.")
-            return drop(db) && create(db, version: to)
+            return drop(db) && create(db)
         }
 
         if from > to {
             // This is likely an upgrade from before Bug 1160399.
             log.debug("Downgrading browser tables. Assuming drop and recreate.")
-            return drop(db) && create(db, version: to)
+            return drop(db) && create(db)
         }
 
+        log.debug("Updating browser tables from \(from) to \(to).")
+
         if from < 4 && to >= 4 {
-            return drop(db) && create(db, version: to)
+            return drop(db) && create(db)
         }
 
         if from < 5 && to >= 5  {
-            let queries: [(String?, Args?)] = [(getQueueTableCreationString(forVersion: to), nil)]
-            if !self.runValidQueries(db, queries: queries) {
+            if !self.run(db, sql: self.queueTableCreate) {
                 return false
             }
         }
 
         if from < 6 && to >= 6 {
             if !self.run(db, queries: [
-                ("DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)", nil),
-                ("CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)", nil)
+                "DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)",
+                "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)",
+                self.domainsTableCreate,
+                "ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE",
             ]) {
-                return false
-            }
-        }
-
-        if from < 7 && to >= 7 {
-            let queries: [(String?, Args?)] = [
-                (getDomainsTableCreationString(forVersion: to), nil),
-                ("ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE", nil)
-            ]
-
-            if !self.runValidQueries(db, queries: queries) {
                 return false
             }
 
@@ -411,19 +423,25 @@ public class BrowserTable: Table {
         }
 
         if from < 9 && to >= 9 {
-            if !self.run(db, sql: getBookmarksMirrorTableCreationString(forVersion: to)!) {
+            if !self.run(db, sql: getBookmarksMirrorTableCreationString()) {
                 return false
             }
         }
 
         if from < 10 && to >= 10 {
-            if !self.run(db, sql: getBookmarksMirrorStructureTableCreationString(forVersion: to)!) {
+            if !self.run(db, sql: getBookmarksMirrorStructureTableCreationString()) {
                 return false
             }
 
             let indexStructureParentIdx = "CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureParentIdx) " +
                                           "ON \(TableBookmarksMirrorStructure) (parent, idx)"
             if !self.run(db, sql: indexStructureParentIdx) {
+                return false
+            }
+        }
+
+        if from < 11 && to >= 11 {
+            if !self.run(db, sql: self.topSitesTableCreate) {
                 return false
             }
         }
@@ -478,10 +496,10 @@ public class BrowserTable: Table {
         let dropTemp = "DROP TABLE \(tmpTable)"
 
         // Now run these.
-        if !self.run(db, queries: [(domains, nil),
-                                   (domainIDs, nil),
-                                   (updateHistory, nil),
-                                   (dropTemp, nil)]) {
+        if !self.run(db, queries: [domains,
+                                   domainIDs,
+                                   updateHistory,
+                                   dropTemp]) {
             log.error("Unable to migrate domains.")
             return false
         }
@@ -502,15 +520,14 @@ public class BrowserTable: Table {
 
     func drop(db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping all browser tables.")
-        let additional: [(String, Args?)] = [
-            ("DROP TABLE IF EXISTS faviconSites", nil) // We renamed it to match naming convention.
+        let additional = [
+            "DROP TABLE IF EXISTS faviconSites" // We renamed it to match naming convention.
         ]
 
-        let queries: [(String, Args?)] = AllViews.map { ("DROP VIEW IF EXISTS \($0!)", nil) } as [(String, Args?)] +
-                      AllIndices.map { ("DROP INDEX IF EXISTS \($0!)", nil) } as [(String, Args?)] +
-                      AllTables.map { ("DROP TABLE IF EXISTS \($0!)", nil) } as [(String, Args?)] +
-                      additional
-
+        let views = AllViews.map { "DROP VIEW IF EXISTS \($0)" }
+        let indices = AllIndices.map { "DROP INDEX IF EXISTS \($0)" }
+        let tables = AllTables.map { "DROP TABLE IF EXISTS \($0)" }
+        let queries = Array([views, indices, tables, additional].flatten())
         return self.run(db, queries: queries)
     }
 }

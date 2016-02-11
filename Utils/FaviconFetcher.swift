@@ -51,9 +51,9 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                     }
                 }
 
-                oldIcons.sortInPlace({ (a, b) -> Bool in
-                    return a.width > b.width
-                })
+                oldIcons = oldIcons.sort {
+                    return $0.width > $1.width
+                }
 
                 return deferMaybe(oldIcons)
             }).upon({ (result: Maybe<[Favicon]>) in
@@ -111,21 +111,57 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                     return self.parseHTMLForFavicons(url)
                 }
 
-                element.iterate("head.link") { link in
-                    if let rel = link.attribute("rel") where (rel == "shortcut icon" || rel == "icon" || rel == "apple-touch-icon"),
-                        let href = link.attribute("href"),
-                        let url = NSURL(string: href, relativeToURL: url) {
-                            let icon = Favicon(url: url.absoluteString, date: NSDate(), type: IconType.Icon)
-                            icons.append(icon)
+                var bestType = IconType.NoneFound
+                element.iterateWithRootXPath("//head//link[contains(@rel, 'icon')]") { link in
+                    var iconType: IconType? = nil
+                    if let rel = link.attribute("rel") {
+                        switch (rel) {
+                            case "shortcut icon":
+                                iconType = .Icon
+                            case "icon":
+                                iconType = .Icon
+                            case "apple-touch-icon":
+                                iconType = .AppleIcon
+                            case "apple-touch-icon-precomposed":
+                                iconType = .AppleIconPrecomposed
+                            default:
+                                iconType = nil
+                        }
+                    }
+
+                    guard let href = link.attribute("href") where iconType != nil else {
+                        return
+                    }
+
+                    if (href.endsWith(".ico")) {
+                        iconType = .Guess
+                    }
+
+                    if let type = iconType where !bestType.isPreferredTo(type),
+                        let iconUrl = NSURL(string: href, relativeToURL: url) {
+                            let icon = Favicon(url: iconUrl.absoluteString, date: NSDate(), type: type)
+                            // If we already have a list of Favicons going already, then add it…
+                            if (type == bestType) {
+                                icons.append(icon)
+                            } else {
+                                // otherwise, this is the first in a new best yet type.
+                                icons = [icon]
+                                bestType = type
+                            }
                     }
                 }
-            }
 
+                // If we haven't got any options icons, then use the default at the root of the domain.
+                if let url = NSURL(string: "/favicon.ico", relativeToURL: url) where icons.isEmpty {
+                    let icon = Favicon(url: url.absoluteString, date: NSDate(), type: .Guess)
+                    icons = [icon]
+                }
+            }
             return deferMaybe(icons)
         })
     }
 
-    private func getFavicon(siteUrl: NSURL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
+    func getFavicon(siteUrl: NSURL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
         let manager = SDWebImageManager.sharedManager()
@@ -133,7 +169,10 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
 
         var fav = Favicon(url: url, type: icon.type)
         if let url = url.asURL {
-            manager.downloadImageWithURL(url, options: SDWebImageOptions.LowPriority, progress: nil, completed: { (img, err, cacheType, success, url) -> Void in
+            manager.downloadImageWithURL(url,
+                options: SDWebImageOptions.LowPriority,
+                progress: nil,
+                completed: { (img, err, cacheType, success, url) -> Void in
                 fav = Favicon(url: url.absoluteString,
                     type: icon.type)
 

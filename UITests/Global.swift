@@ -28,6 +28,14 @@ extension KIFUITestActor {
         return element != nil
     }
 
+    func waitForViewWithAccessibilityHint(hint: String) -> UIView? {
+        var view: UIView? = nil
+        autoreleasepool {
+            waitForAccessibilityElement(nil, view: &view, withElementMatchingPredicate: NSPredicate(format: "accessibilityHint = %@", hint), tappable: false)
+        }
+        return view
+    }
+
     func viewExistsWithLabel(label: String) -> Bool {
         do {
             try self.tryFindingViewWithAccessibilityLabel(label)
@@ -35,6 +43,13 @@ extension KIFUITestActor {
         } catch {
             return false
         }
+    }
+
+    func viewExistsWithLabelPrefixedBy(prefix: String) -> Bool {
+        let element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
+            return element.accessibilityLabel?.hasPrefix(prefix) ?? false
+        }
+        return element != nil
     }
 
     /// Waits for and returns a view with the given accessibility value.
@@ -95,8 +110,13 @@ extension KIFUITestActor {
      * elements with the given textContent or title.
      */
     func waitForWebViewElementWithAccessibilityLabel(text: String) {
-        let success = hasWebViewElementWithAccessibilityLabel(text)
-        XCTAssert(success, "Found accessibility label in webview: \(text)")
+        runBlock { error in
+            if (self.hasWebViewElementWithAccessibilityLabel(text)) {
+                return KIFTestStepResult.Success
+            }
+
+            return KIFTestStepResult.Wait
+        }
     }
 
     /**
@@ -149,7 +169,7 @@ extension KIFUITestActor {
 
         let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
         webView.evaluateJavaScript("KIFHelper.hasElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
-            found = success as! Bool
+            found = success as? Bool ?? false
             stepResult = KIFTestStepResult.Success
         }
 
@@ -201,7 +221,12 @@ class BrowserUtils {
 
         // Clear all private tabs if we're running iOS 9
         if #available(iOS 9, *) {
-            tester.tapViewWithAccessibilityLabel("Private Mode")
+            // Switch to Private Mode if we're not in it already.
+            do {
+                try tester.tryFindingTappableViewWithAccessibilityLabel("Private Mode", value: "Off", traits: UIAccessibilityTraitButton)
+                tester.tapViewWithAccessibilityLabel("Private Mode")
+            } catch _ {}
+
             while tabsView.numberOfItemsInSection(0) > 0 {
                 let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
                 tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
@@ -309,7 +334,7 @@ class SimplePageServer {
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
-        for page in ["noTitle", "readablePage"] {
+        for page in ["findPage", "noTitle", "readablePage", "JSPrompt"] {
             webServer.addHandlerForMethod("GET", path: "/\(page).html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
                 return GCDWebServerDataResponse(HTML: self.getPageData(page))
             }
@@ -340,6 +365,23 @@ class SimplePageServer {
             return GCDWebServerDataResponse(HTML: self.getPageData("loginForm"))
         }
 
+        webServer.addHandlerForMethod("GET", path: "/auth.html", requestClass: GCDWebServerRequest.self) { (request: GCDWebServerRequest!) in
+            // "user:pass", Base64-encoded.
+            let expectedAuth = "Basic dXNlcjpwYXNz"
+
+            let response: GCDWebServerDataResponse
+            if request.headers["Authorization"] as? String == expectedAuth && request.query["logout"] == nil {
+                response = GCDWebServerDataResponse(HTML: "<html><body>logged in</body></html>")
+            } else {
+                // Request credentials if the user isn't logged in.
+                response = GCDWebServerDataResponse(HTML: "<html><body>auth fail</body></html>")
+                response.statusCode = 401
+                response.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
+            }
+
+            return response
+        }
+
         if !webServer.startWithPort(0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")
         }
@@ -348,5 +390,58 @@ class SimplePageServer {
         // history exclusion code (Bug 1188626).
         let webRoot = "http://127.0.0.1:\(webServer.port)"
         return webRoot
+    }
+}
+
+class SearchUtils {
+    static func navigateToSearchSettings(tester: KIFUITestActor, engine: String = "Yahoo") {
+        tester.tapViewWithAccessibilityLabel("Show Tabs")
+        tester.waitForViewWithAccessibilityLabel("Tabs Tray")
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.waitForViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityLabel("Search, \(engine)")
+        tester.waitForViewWithAccessibilityIdentifier("Search")
+    }
+
+    static func navigateFromSearchSettings(tester: KIFUITestActor) {
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityLabel("Done")
+        tester.tapViewWithAccessibilityLabel("home")
+    }
+
+    // Given that we're at the Search Settings sheet, select the named search engine as the default.
+    // Afterwards, we're still at the Search Settings sheet.
+    static func selectDefaultSearchEngineName(tester: KIFUITestActor, engineName: String) {
+        tester.tapViewWithAccessibilityLabel("Default Search Engine", traits: UIAccessibilityTraitButton)
+        tester.waitForViewWithAccessibilityLabel("Default Search Engine")
+        tester.tapViewWithAccessibilityLabel(engineName)
+        tester.waitForViewWithAccessibilityLabel("Search")
+    }
+
+    // Given that we're at the Search Settings sheet, return the default search engine's name.
+    static func getDefaultSearchEngineName(tester: KIFUITestActor) -> String {
+        let view = tester.waitForCellWithAccessibilityLabel("Default Search Engine")
+        return view.accessibilityValue!
+    }
+}
+
+class DynamicFontUtils {
+    // Need to leave time for the notification to propagate
+    static func bumpDynamicFontSize(tester: KIFUITestActor) {
+        let value = UIContentSizeCategoryAccessibilityExtraLarge
+        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
+        tester.waitForTimeInterval(0.3)
+    }
+
+    static func lowerDynamicFontSize(tester: KIFUITestActor) {
+        let value = UIContentSizeCategoryExtraSmall
+        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
+        tester.waitForTimeInterval(0.3)
+    }
+
+    static func restoreDynamicFontSize(tester: KIFUITestActor) {
+        let value = UIContentSizeCategoryMedium
+        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
+        tester.waitForTimeInterval(0.3)
     }
 }

@@ -1,4 +1,4 @@
-github "Alamofire/Alamofire"        "swift-2.0"
+github "fluffyemily/Alamofire"      "alamofire-ios-only"
 github "mozilla/Base32"             "swift-2.0"        # So we don't have to tag a release for Emily's fixes.
 github "mozilla/Deferred"           "master"           # Making Deferred extensible in swift 2.0
 github "swisspol/GCDWebServer"                         # Implicit: latest tag.
@@ -6,10 +6,11 @@ github "kif-framework/KIF"          "master"
 github "ZaBlanc/RaptureXML"         "master"
 github "mozilla/readability"        "master"
 github "rs/SDWebImage"              "master"           # To get the fix for libwebp
-github "Masonry/Snap"               "Swift-2.0"
+github "SnapKit/SnapKit"            "0.18.0"
 github "st3fan/SQLite.swift"        "swift-2"
 github "CEWendel/SWTableViewCell"                      # Implicit: latest tag.
 github "st3fan/SWXMLHash"           "xcode-7.0"        # So we get Swift 2.0 fixes.
-github "DaveWoodCom/XCGLogger"      "swift_2.0"        # Previously: swift_1.2
+github "DaveWoodCom/XCGLogger"      "Version_3.2"
 github "sleroux/google-breakpad-ios" "master"
 github "adjust/ios_sdk"             "v4.3.0"
+github "AgileBits/onepassword-extension" "add-framework-support"

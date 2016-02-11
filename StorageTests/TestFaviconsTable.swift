@@ -3,6 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+@testable import Storage
+
 import XCTest
 
 class TestFaviconsTable : XCTestCase {
@@ -72,7 +74,7 @@ class TestFaviconsTable : XCTestCase {
 
         var err: NSError?
         self.db.withConnection(flags: SwiftData.Flags.ReadWriteCreate, err: &err) { (db, err) -> Bool in
-            let result = f.create(db, version: 1)
+            let result = f.create(db)
             XCTAssertTrue(result)
             return result
         }

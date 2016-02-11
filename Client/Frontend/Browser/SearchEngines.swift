@@ -118,6 +118,16 @@ class SearchEngines {
         disabledEngineNames[engine.shortName] = true
     }
 
+
+    func queryForSearchURL(url: NSURL?) -> String? {
+        for engine in orderedEngines {
+            guard let searchTerm = engine.queryForSearchURL(url) else { continue }
+            return searchTerm
+        }
+
+        return nil
+    }
+
     private func getDisabledEngineNames() -> [String: Bool] {
         if let disabledEngineNames = self.prefs.stringArrayForKey(DisabledEngineNames) {
             var disabledEngineDict = [String: Bool]()
@@ -130,25 +140,69 @@ class SearchEngines {
         }
     }
 
+    /// Return all possible paths for a language identifier in the order of most specific to least specific.
+    /// For example, zh-Hans-CN with a default of en will return [zh-Hans-CN, zh-CN, zh, en]. The fallback
+    /// identifier must be a known one that is guaranteed to exist in the SearchPlugins directory.
+    class func directoriesForLanguageIdentifier(languageIdentifier: String, basePath: NSString, fallbackIdentifier: String) -> [String] {
+        var directories = [String]()
+        let components = languageIdentifier.componentsSeparatedByString("-")
+        if components.count == 1 {
+            // zh
+            directories.append(languageIdentifier)
+        } else if components.count == 2 {
+            // zh-CN
+            directories.append(languageIdentifier)
+            directories.append(components[0])
+        } else if components.count == 3 {
+            directories.append(languageIdentifier)
+            directories.append(components[0] + "-" + components[2])
+            directories.append(components[0])
+        }
+        if !directories.contains(fallbackIdentifier) {
+            directories.append(fallbackIdentifier)
+        }
+        
+        return directories.map { (path) -> String in
+            return basePath.stringByAppendingPathComponent(path)
+        }
+    }
+
+    // Return the language identifier to be used for the search engine selection. This returns the first
+    // identifier from preferredLanguages and takes into account that on iOS 8, zh-Hans-CN is returned as
+    // zh-Hans. In that case it returns the longer form zh-Hans-CN. Same for traditional Chinese.
+    //
+    // These exceptions can go away when we drop iOS 8 or when we start using a better mechanism for search
+    // engine selection that is not based on language identifier.
+    class func languageIdentifierForSearchEngines() -> String {
+        let languageIdentifier = NSLocale.preferredLanguages().first!
+        switch languageIdentifier {
+            case "zh-Hans":
+                return "zh-Hans-CN"
+            case "zh-Hant":
+                return "zh-Hant-TW"
+            default:
+                return languageIdentifier
+        }
+    }
+
     // Get all known search engines, with the default search engine first, but the others in no
     // particular order.
     class func getUnorderedEngines() -> [OpenSearchEngine] {
         let pluginBasePath: NSString = (NSBundle.mainBundle().resourcePath! as NSString).stringByAppendingPathComponent("SearchPlugins")
-        let language = NSLocale.preferredLanguages().first!
+        let languageIdentifier = languageIdentifierForSearchEngines()
         let fallbackDirectory: NSString = pluginBasePath.stringByAppendingPathComponent("en")
 
-        // Look for search plugins in the following order:
-        //   1) the full language ID
-        //   2) the language ID without the dialect
-        //   3) the fallback language (English)
-        // For example, "fr-CA" would look for plugins in this order: 1) fr-CA, 2) fr, 3) en.
-        var searchDirectory = pluginBasePath.stringByAppendingPathComponent(language)
-        if !NSFileManager.defaultManager().fileExistsAtPath(searchDirectory) {
-            let languageWithoutDialect = language.componentsSeparatedByString("-").first!
-            searchDirectory = pluginBasePath.stringByAppendingPathComponent(languageWithoutDialect)
-            if language == languageWithoutDialect || !NSFileManager.defaultManager().fileExistsAtPath(searchDirectory) {
-                searchDirectory = fallbackDirectory as String
+        var directory: String?
+        for path in directoriesForLanguageIdentifier(languageIdentifier, basePath: pluginBasePath, fallbackIdentifier: "en") {
+            if NSFileManager.defaultManager().fileExistsAtPath(path) {
+                directory = path
+                break
             }
+        }
+
+        // This cannot happen if we include the fallback, but if it does we return no engines at all
+        guard let searchDirectory = directory else {
+            return []
         }
 
         let index = (searchDirectory as NSString).stringByAppendingPathComponent("list.txt")

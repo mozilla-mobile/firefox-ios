@@ -30,7 +30,7 @@ class WindowCloseHelper: BrowserHelper {
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if let browser = browser {
             dispatch_async(dispatch_get_main_queue()) {
-                delegate?.windowCloseHelper(self, didRequestToCloseBrowser: browser)
+                self.delegate?.windowCloseHelper(self, didRequestToCloseBrowser: browser)
             }
         }
     }

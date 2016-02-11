@@ -12,6 +12,7 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
     private weak var browser: Browser?
     weak var delegate: ContextMenuHelperDelegate?
     private let gestureRecognizer = UILongPressGestureRecognizer()
+    private weak var selectionGestureRecognizer: UIGestureRecognizer?
 
     struct Elements {
         let link: NSURL?
@@ -22,11 +23,11 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
         return "ContextMenuHelper"
     }
 
-    /// On iOS <9, clicking an element with VoiceOver fires touchstart, but not touchend, causing the context
+    /// Clicking an element with VoiceOver fires touchstart, but not touchend, causing the context
     /// menu to appear when it shouldn't (filed as rdar://22256909). As a workaround, disable the custom
-    /// context menu for VoiceOver users on iOS <9.
+    /// context menu for VoiceOver users.
     private var showCustomContextMenu: Bool {
-        return NSProcessInfo.processInfo().operatingSystemVersion.majorVersion >= 9 || !UIAccessibilityIsVoiceOverRunning()
+        return !UIAccessibilityIsVoiceOverRunning()
     }
 
     required init(browser: Browser) {
@@ -52,16 +53,25 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
             return
         }
 
-        let data = message.body as! [String: String]
+        let data = message.body as! [String: AnyObject]
+
+        // On sites where <a> elements have child text elements, the text selection delegate can be triggered
+        // when we show a context menu. To prevent this, cancel the text selection delegate if we know the
+        // user is long-pressing a link.
+        if let handled = data["handled"] as? Bool where handled {
+            // Setting `enabled = false` cancels the current gesture for this recognizer.
+            selectionGestureRecognizer?.enabled = false
+            selectionGestureRecognizer?.enabled = true
+        }
 
         var linkURL: NSURL?
-        if let urlString = data["link"] {
-            linkURL = NSURL(string: urlString)
+        if let urlString = data["link"] as? String {
+            linkURL = NSURL(string: urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLAllowedCharacterSet())!)
         }
 
         var imageURL: NSURL?
-        if let urlString = data["image"] {
-            imageURL = NSURL(string: urlString)
+        if let urlString = data["image"] as? String {
+            imageURL = NSURL(string: urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLAllowedCharacterSet())!)
         }
 
         if linkURL != nil || imageURL != nil {
@@ -75,6 +85,11 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
     }
 
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailByGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Hack to detect the built-in text selection gesture recognizer.
+        if let otherDelegate = otherGestureRecognizer.delegate where String(otherDelegate).contains("_UIKeyboardBasedNonEditableTextSelectionGestureController") {
+            selectionGestureRecognizer = otherGestureRecognizer
+        }
+
         // Hack to detect the built-in context menu gesture recognizer.
         return otherGestureRecognizer is UILongPressGestureRecognizer && otherGestureRecognizer.delegate?.description.rangeOfString("WKContentView") != nil
     }

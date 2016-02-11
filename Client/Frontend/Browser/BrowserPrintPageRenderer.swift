@@ -6,7 +6,7 @@ import Foundation
 
 private struct PrintedPageUX {
     static let PageInsets = CGFloat(36.0)
-    static let PageTextFont = UIConstants.DefaultSmallFont
+    static let PageTextFont = DynamicFontHelper.defaultHelper.DefaultSmallFont
     static let PageMarginScale = CGFloat(0.5)
 }
 

@@ -18,25 +18,21 @@ private struct RemoteTabsPanelUX {
     static let RowHeight = SiteTableViewControllerUX.RowHeight
     static let HeaderBackgroundColor = UIColor(rgb: 0xf8f8f8)
 
-    static let EmptyStateTitleFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightMedium)
     static let EmptyStateTitleTextColor = UIColor.darkGrayColor()
 
-    static let EmptyStateInstructionsFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize - 1, weight: UIFontWeightLight)
     static let EmptyStateInstructionsTextColor = UIColor.grayColor()
     static let EmptyStateInstructionsWidth = 252
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
     static let EmptyStateSignInButtonColor = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
-    static let EmptyStateSignInButtonTitleFont = UIFont.systemFontOfSize(16)
     static let EmptyStateSignInButtonTitleColor = UIColor.whiteColor()
     static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
     static let EmptyStateSignInButtonHeight = 44
     static let EmptyStateSignInButtonWidth = 200
-    static let EmptyStateCreateAccountButtonFont = UIFont.systemFontOfSize(12)
 
     // Backup and active strings added in Bug 1205294.
-    static let EmptyStateInstructionsSyncTabsPasswordsBookmarksString = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "See http://mzl.la/1Qtkf0j")
+    static let EmptyStateInstructionsSyncTabsPasswordsBookmarksString = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "Sync tabs, bookmarks, passwords empty state instructions.")
 
-    static let EmptyStateInstructionsSyncTabsPasswordsString = NSLocalizedString("Sync your tabs, passwords and more.", comment: "See http://mzl.la/1Qtkf0j")
+    static let EmptyStateInstructionsSyncTabsPasswordsString = NSLocalizedString("Sync your tabs, passwords and more.", comment: "Sync tabs and passwords empty state instructions.")
 
     static let EmptyStateInstructionsGetTabsBookmarksPasswordsString = NSLocalizedString("Get your open tabs, bookmarks, and passwords from your other devices.", comment: "A re-worded offer about Sync that emphasizes one-way data transfer, not syncing.")
 }
@@ -362,7 +358,7 @@ class RemoteTabsErrorCell: UITableViewCell {
         }
 
         let instructionsLabel = UILabel()
-        instructionsLabel.font = RemoteTabsPanelUX.EmptyStateInstructionsFont
+        instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         instructionsLabel.text = error.localizedString()
         instructionsLabel.textAlignment = NSTextAlignment.Center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
@@ -379,7 +375,8 @@ class RemoteTabsErrorCell: UITableViewCell {
             make.top.equalTo(imageView.snp_top)
             make.left.bottom.right.equalTo(instructionsLabel)
             // And then center it in the overlay view that sits on top of the UITableView
-            make.center.equalTo(contentView)
+            make.centerX.equalTo(contentView)
+            make.centerY.equalTo(contentView).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
         }
     }
 
@@ -415,13 +412,13 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         imageView.image = UIImage(named: "emptySync")
         contentView.addSubview(imageView)
 
-        titleLabel.font = RemoteTabsPanelUX.EmptyStateTitleFont
+        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.text = NSLocalizedString("Welcome to Sync", comment: "See http://mzl.la/1Qtkf0j")
         titleLabel.textAlignment = NSTextAlignment.Center
         titleLabel.textColor = RemoteTabsPanelUX.EmptyStateTitleTextColor
         contentView.addSubview(titleLabel)
 
-        instructionsLabel.font = RemoteTabsPanelUX.EmptyStateInstructionsFont
+        instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         instructionsLabel.text = RemoteTabsPanelUX.EmptyStateInstructionsGetTabsBookmarksPasswordsString
         instructionsLabel.textAlignment = NSTextAlignment.Center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
@@ -431,14 +428,14 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
         signInButton.setTitle(NSLocalizedString("Sign in", comment: "See http://mzl.la/1Qtkf0j"), forState: .Normal)
         signInButton.setTitleColor(RemoteTabsPanelUX.EmptyStateSignInButtonTitleColor, forState: .Normal)
-        signInButton.titleLabel?.font = RemoteTabsPanelUX.EmptyStateSignInButtonTitleFont
+        signInButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
         signInButton.addTarget(self, action: "SELsignIn", forControlEvents: UIControlEvents.TouchUpInside)
         contentView.addSubview(signInButton)
 
         createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), forState: .Normal)
-        createAnAccountButton.titleLabel?.font = RemoteTabsPanelUX.EmptyStateCreateAccountButtonFont
+        createAnAccountButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
         createAnAccountButton.addTarget(self, action: "SELcreateAnAccount", forControlEvents: UIControlEvents.TouchUpInside)
         contentView.addSubview(createAnAccountButton)
 
@@ -446,7 +443,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
             make.centerX.equalTo(instructionsLabel)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(contentView.snp_centerY).offset(-180).priorityMedium()
+            make.centerY.equalTo(contentView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(contentView.snp_top).offset(50).priorityHigh()

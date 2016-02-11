@@ -107,7 +107,10 @@ public class SyncStateMachine {
     public func toReady(authState: SyncAuthState) -> ReadyDeferred {
         let token = authState.token(NSDate.now(), canBeExpired: false)
         return chainDeferred(token, f: { (token, kB) in
-            log.debug("Got token from auth state. Server is \(token.api_endpoint).")
+            log.debug("Got token from auth state.")
+            if Logger.logPII {
+                log.debug("Server is \(token.api_endpoint).")
+            }
             let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB))
             if prior == nil {
                 log.info("No persisted Sync state. Starting over.")
@@ -803,6 +806,13 @@ public class HasFreshCryptoKeys: BaseSyncStateWithInfo {
     }
 }
 
+public protocol EngineStateChanges {
+    func collectionsThatNeedLocalReset() -> [String]
+    func enginesEnabled() -> [String]
+    func enginesDisabled() -> [String]
+    func clearLocalCommands()
+}
+
 public class Ready: BaseSyncStateWithInfo {
     public override var label: SyncStateLabel { return SyncStateLabel.Ready }
     let collectionKeys: Keys
@@ -811,7 +821,9 @@ public class Ready: BaseSyncStateWithInfo {
         self.collectionKeys = keys
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
     }
+}
 
+extension Ready: EngineStateChanges {
     public func collectionsThatNeedLocalReset() -> [String] {
         var needReset: Set<String> = Set()
         for command in self.scratchpad.localCommands {

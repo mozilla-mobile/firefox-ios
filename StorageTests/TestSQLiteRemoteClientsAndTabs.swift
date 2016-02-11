@@ -4,6 +4,8 @@
 
 import Foundation
 import Shared
+@testable import Storage
+
 import XCTest
 
 public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {

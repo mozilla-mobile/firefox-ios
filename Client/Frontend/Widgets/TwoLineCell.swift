@@ -13,8 +13,23 @@ private let DetailTextTopMargin = CGFloat(5)
 class TwoLineTableViewCell: UITableViewCell {
     private let twoLineHelper = TwoLineCellHelper()
 
+    let _textLabel = UILabel()
+    let _detailTextLabel = UILabel()
+
+    // Override the default labels with our own to disable default UITableViewCell label behaviours like dynamic type
+    override var textLabel: UILabel? {
+        return _textLabel
+    }
+
+    override var detailTextLabel: UILabel? {
+        return _detailTextLabel
+    }
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+
+        contentView.addSubview(_textLabel)
+        contentView.addSubview(_detailTextLabel)
 
         twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
 
@@ -30,6 +45,11 @@ class TwoLineTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         twoLineHelper.layoutSubviews()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        twoLineHelper.setupDynamicFonts()
     }
 
     func setLines(text: String?, detailText: String?) {
@@ -67,6 +87,11 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         twoLineHelper.layoutSubviews()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        twoLineHelper.setupDynamicFonts()
     }
 
     func setLines(text: String?, detailText: String?) {
@@ -120,6 +145,11 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
         twoLineHelper.layoutSubviews()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        twoLineHelper.setupDynamicFonts()
+    }
+
     func mergeAccessibilityLabels(views: [AnyObject?]? = nil) {
         twoLineHelper.mergeAccessibilityLabels(views)
     }
@@ -144,13 +174,16 @@ private class TwoLineCellHelper {
             self.container.backgroundColor = UIColor.clearColor()
         }
 
-        textLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
         textLabel.textColor = TextColor
-
-        detailTextLabel.font = UIFont.systemFontOfSize(10, weight: UIFontWeightRegular)
         detailTextLabel.textColor = DetailTextColor
+        setupDynamicFonts()
 
         imageView.contentMode = .ScaleAspectFill
+    }
+
+    func setupDynamicFonts() {
+        textLabel.font = UIFont.systemFontOfSize(DynamicFontHelper.defaultHelper.DefaultMediumFontSize, weight: UIFontWeightMedium)
+        detailTextLabel.font = UIFont.systemFontOfSize(DynamicFontHelper.defaultHelper.DefaultSmallFontSize, weight: UIFontWeightRegular)
     }
 
     func layoutSubviews() {

@@ -52,6 +52,39 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
+    func testChangingDyamicFontOnReadingList() {
+        // Load a page
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url1 = "\(webRoot)/readablePage.html"
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
+
+        // Add it to the reading list
+        tester().tapViewWithAccessibilityLabel("Reader View")
+        tester().tapViewWithAccessibilityLabel("Add to Reading List")
+
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapViewWithAccessibilityLabel("Reading list")
+
+        let cell = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "ReadingTable")
+
+        let size = cell.textLabel?.font.pointSize
+
+        DynamicFontUtils.bumpDynamicFontSize(tester())
+        let bigSize = cell.textLabel?.font.pointSize
+
+        DynamicFontUtils.lowerDynamicFontSize(tester())
+        let smallSize = cell.textLabel?.font.pointSize
+
+        XCTAssertGreaterThan(bigSize!, size!)
+        XCTAssertGreaterThanOrEqual(size!, smallSize!)
+
+        // Remove it from the reading list
+        tester().tapViewWithAccessibilityLabel("Readable page, unread, localhost")
+        tester().waitForWebViewElementWithAccessibilityLabel("Readable page")
+        tester().tapViewWithAccessibilityLabel("Remove from Reading List")
+    }
+
     func testReadingListAutoMarkAsRead() {
         // Load a page
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -83,6 +116,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
+        DynamicFontUtils.restoreDynamicFontSize(tester())
         BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
     }
 }

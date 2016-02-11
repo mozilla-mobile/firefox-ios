@@ -30,7 +30,11 @@ private struct AdjustSettings {
 /// functions in this object from other parts of the application.
 
 class AdjustIntegration: NSObject {
-    static let sharedInstance = AdjustIntegration()
+    let profile: Profile
+    
+    init(profile: Profile) {
+        self.profile = profile
+    }
 
     /// Return an ADJConfig object if Adjust has been enabled. It is determined from the values in
     /// the Info.plist file if Adjust should be enabled, and if so, what its application token and
@@ -96,43 +100,83 @@ class AdjustIntegration: NSObject {
         }
         return path
     }
+
+    /// Return true if Adjust should be enabled. If the user has disabled the Send Anonymous Usage Data then we immediately
+    /// return false. Otherwise we only do one ping, which means we only enable it if we have not seen the attributiond
+    /// data yet.
+    
+    private func shouldEnable() throws -> Bool {
+        if profile.prefs.boolForKey("settings.sendUsageData") ?? true {
+            return true
+        }
+        return try hasAttribution() == false
+    }
+    
+    /// Return true if retention (session) tracking should be enabled. This follows the Send Anonymous Usage Data
+    /// setting.
+    
+    private func shouldTrackRetention() -> Bool {
+        return profile.prefs.boolForKey("settings.sendUsageData") ?? true
+    }
 }
 
 extension AdjustIntegration: AdjustDelegate {
-    /// This is called as part of `UIApplication.didFinishLaunchingWithOptions()`. To make sure we only send one ping
-    /// to Adjust, we check if the attribution has been written to disk. If it has then that means we have done a
-    /// successful attribution ping and we do not run Adjust at all.
+    /// This is called as part of `UIApplication.didFinishLaunchingWithOptions()`. We always initialize the
+    /// Adjust SDK. We always let it send the initial attribution ping. Session tracking is only enabled if
+    /// the Send Anonymous Usage Data setting is turned on.
 
     func triggerApplicationDidFinishLaunchingWithOptions(launchOptions: [NSObject : AnyObject]?) -> Void {
         do {
-            if try hasAttribution() == false {
-                if let config = getConfig() {
-                    Adjust.appDidLaunch(config)
-                } else {
-                    Logger.browserLogger.info("Adjust - Skipping because no or invalid config found")
+            if let config = getConfig() {
+                // Always initialize Adjust - otherwise we cannot enable/disable it later. Their SDK must be
+                // initialized through appDidFinishLaunching otherwise it will be in a bad state.
+                Adjust.appDidLaunch(config)
+
+                // Disable it right now if we have the attribution and if the user has disabled session tracking. If
+                // we do not have attribution yet then we wait until it comes in and at that point make the decision
+                // to disable Adjust again.
+                if try hasAttribution() {
+                    if !shouldTrackRetention() {
+                        Logger.browserLogger.info("Adjust - Disabling because sending of usage data is not allowed")
+                        Adjust.setEnabled(false)
+                    }
                 }
             } else {
-                Logger.browserLogger.info("Adjust - Skipping because we have already seen attribution info for this install")
+                Logger.browserLogger.info("Adjust - Skipping because no or invalid config found")
             }
         } catch let error {
-            Logger.browserLogger.error("Adjust - Failed to register application launch: \(error)")
+            Logger.browserLogger.error("Adjust - Disabling because we failed to configure: \(error)")
+            Adjust.setEnabled(false)
         }
     }
 
     /// This is called when Adjust has figured out the attribution. It will call us with a summary
     /// of all the things it knows. Like the campaign ID. We simply save this to a local file so
-    /// that we know we have done a single attribution ping to Adjust. This is also used to prevent
-    /// sending data to adjust multiple times.
+    /// that we know we have done a single attribution ping to Adjust.
     ///
-    /// We also disable Adjust here, otherwise it keeps sending session pings until the app is cold
-    /// started again.
+    /// Here we also disable Adjust based on the Send Anonymous Usage Data setting.
 
     func adjustAttributionChanged(attribution: ADJAttribution!) {
         do {
-            Adjust.setEnabled(false)
-            try AdjustIntegration.sharedInstance.saveAttribution(attribution)
+            Logger.browserLogger.info("Adjust - Saving attribution info to disk")
+            try saveAttribution(attribution)
         } catch let error {
             Logger.browserLogger.error("Adjust - Failed to save attribution: \(error)")
         }
+        // Keep Adjust enabled only if the user has allowed this
+        if shouldTrackRetention() {
+            Logger.browserLogger.info("Adjust - Enabling because user allows anonymous usage data collection")
+            Adjust.setEnabled(true)
+        } else {
+            Logger.browserLogger.info("Adjust - Disabling because user does not allow anonymous usage data collection")
+            Adjust.setEnabled(false)
+        }
+    }
+
+    /// This is called from the Settings screen. The settings screen will remember the choice in the
+    /// profile and then use this method to disable or enable Adjust.
+    
+    static func setEnabled(enabled: Bool) {
+        Adjust.setEnabled(enabled)
     }
 }

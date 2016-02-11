@@ -12,11 +12,16 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-public let ProfileDidStartSyncingNotification = "ProfileDidStartSyncingNotification"
-public let ProfileDidFinishSyncingNotification = "ProfileDidFinishSyncingNotification"
+public let NotificationProfileDidStartSyncing = "NotificationProfileDidStartSyncing"
+public let NotificationProfileDidFinishSyncing = "NotificationProfileDidFinishSyncing"
+public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
+    var lastSyncFinishTime: Timestamp? { get set }
+
+    func hasSyncedHistory() -> Deferred<Maybe<Bool>>
+    func hasSyncedLogins() -> Deferred<Maybe<Bool>>
 
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
@@ -30,6 +35,7 @@ public protocol SyncManager {
     func applicationDidEnterBackground()
     func applicationDidBecomeActive()
 
+    func onNewProfile()
     func onRemovedAccount(account: FirefoxAccount?) -> Success
     func onAddedAccount() -> Success
 }
@@ -102,7 +108,9 @@ class BrowserProfileSyncDelegate: SyncDelegate {
         // the user has agreed to them
         if let currentSettings = app.currentUserNotificationSettings() {
             if currentSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
-                log.info("Displaying notification for URL \(URL.absoluteString)")
+                if Logger.logPII {
+                    log.info("Displaying notification for URL \(URL.absoluteString)")
+                }
 
                 let notification = UILocalNotification()
                 notification.fireDate = NSDate()
@@ -122,16 +130,16 @@ class BrowserProfileSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: class {
-    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
+    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
-    var history: protocol<BrowserHistory, SyncableHistory> { get }
+    var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
-    var logins: protocol<BrowserLogins, SyncableLogins> { get }
+    var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
 
     func shutdown()
 
@@ -169,13 +177,26 @@ public class BrowserProfile: Profile {
 
     weak private var app: UIApplication?
 
+    /**
+     * N.B., BrowserProfile is used from our extensions, often via a pattern like
+     *
+     *   BrowserProfile(…).foo.saveSomething(…)
+     *
+     * This can break if BrowserProfile's initializer does async work that
+     * subsequently — and asynchronously — expects the profile to stick around:
+     * see Bug 1218833. Be sure to only perform synchronous actions here.
+     */
     init(localName: String, app: UIApplication?) {
+        log.debug("Initing profile \(localName) on thread \(NSThread.currentThread()).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: NotificationOnLocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onProfileDidFinishSyncing:"), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onPrivateDataClearedHistory:"), name: NotificationPrivateDataClearedHistory, object: nil)
+
 
         if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
             KeychainWrapper.serviceName = baseBundleIdentifier
@@ -185,10 +206,16 @@ public class BrowserProfile: Profile {
 
         // If the profile dir doesn't exist yet, this is first run (for this profile).
         if !files.exists("") {
-            log.info("New profile. Removing old account data.")
-            removeAccount()
+            log.info("New profile. Removing old account metadata.")
+            self.removeAccountMetadata()
+            self.syncManager.onNewProfile()
             prefs.clearAll()
         }
+
+        // Always start by needing invalidation.
+        // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
+        // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
+        prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
     }
 
     // Extensions don't have a UIApplication.
@@ -197,12 +224,14 @@ public class BrowserProfile: Profile {
     }
 
     func shutdown() {
+        log.debug("Shutting down profile.")
+
         if self.dbCreated {
-            db.close()
+            db.forceClose()
         }
 
         if self.loginsDBCreated {
-            loginsDB.close()
+            loginsDB.forceClose()
         }
     }
 
@@ -217,18 +246,33 @@ public class BrowserProfile: Profile {
                 // We don't record a visit if no type was specified -- that means "ignore me".
                 let site = Site(url: url.absoluteString, title: title as String)
                 let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
-                log.debug("Recording visit for \(url) with type \(v).")
                 history.addLocalVisit(visit)
             }
+
+            history.setTopSitesNeedsInvalidation()
         } else {
-            let url = notification.userInfo!["url"] as? NSURL
-            log.debug("Ignoring navigation for \(url).")
+            log.debug("Ignoring navigation.")
         }
     }
 
+    // These selectors run on which ever thread sent the notifications (not the main thread)
+    @objc
+    func onProfileDidFinishSyncing(notification: NSNotification) {
+        history.setTopSitesNeedsInvalidation()
+    }
+
+    @objc
+    func onPrivateDataClearedHistory(notification: NSNotification) {
+        // Immediately invalidate the top sites cache
+        history.refreshTopSitesCache()
+    }
+
     deinit {
+        log.debug("Deiniting profile \(self.localName).")
         self.syncManager.endTimedSyncs()
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationOnLocationChange, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
 
     func localName() -> String {
@@ -261,19 +305,19 @@ public class BrowserProfile: Profile {
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory> = {
-        return SQLiteHistory(db: self.db)!
+    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage> = {
+        return SQLiteHistory(db: self.db, prefs: self.prefs)!
     }()
 
     var favicons: Favicons {
         return self.places
     }
 
-    var history: protocol<BrowserHistory, SyncableHistory> {
+    var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
         return self.places
     }
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
+    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         withExtendedLifetime(self.places) {
@@ -302,7 +346,7 @@ public class BrowserProfile: Profile {
         return ReadingListService(profileStoragePath: self.files.rootPath as String)
     }()
 
-    private lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
+    lazy var remoteClientsAndTabs: protocol<RemoteClientsAndTabs, ResettableSyncStorage, AccountRemovalDelegate> = {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
@@ -342,21 +386,32 @@ public class BrowserProfile: Profile {
         self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
 
-    lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
+    lazy var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> = {
         return SQLiteLogins(db: self.loginsDB)
     }()
 
-    private lazy var loginsKey: String? = {
+    // This is currently only used within the dispatch_once block in loginsDB, so we don't
+    // have to worry about races giving us two keys. But if this were ever to be used
+    // elsewhere, it'd be unsafe, so we wrap this in a dispatch_once, too.
+    private var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
-        if KeychainWrapper.hasValueForKey(key) {
-            return KeychainWrapper.stringForKey(key)
+        struct Singleton {
+            static var token: dispatch_once_t = 0
+            static var instance: String!
         }
-
-        let Length: UInt = 256
-        let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-        KeychainWrapper.setString(secret, forKey: key)
-        return secret
-    }()
+        dispatch_once(&Singleton.token) {
+            if KeychainWrapper.hasValueForKey(key) {
+                let value = KeychainWrapper.stringForKey(key)
+                Singleton.instance = value
+            } else {
+                let Length: UInt = 256
+                let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+                KeychainWrapper.setString(secret, forKey: key)
+                Singleton.instance = secret
+            }
+        }
+        return Singleton.instance
+    }
 
     private var loginsDBCreated = false
     private lazy var loginsDB: BrowserDB = {
@@ -371,7 +426,13 @@ public class BrowserProfile: Profile {
         return Singleton.instance
     }()
 
-    let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
+    var accountConfiguration: FirefoxAccountConfiguration {
+        let locale = NSLocale.currentLocale()
+        if self.prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN") {
+            return ChinaEditionFirefoxAccountConfiguration()
+        }
+        return ProductionFirefoxAccountConfiguration()
+    }
 
     private lazy var account: FirefoxAccount? = {
         if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String: AnyObject] {
@@ -392,21 +453,24 @@ public class BrowserProfile: Profile {
         return account
     }
 
+    func removeAccountMetadata() {
+        self.prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
+        KeychainWrapper.removeObjectForKey(self.name + ".account")
+    }
+
     func removeAccount() {
         let old = self.account
-
-        prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-        KeychainWrapper.removeObjectForKey(name + ".account")
+        removeAccountMetadata()
         self.account = nil
 
-        // tell any observers that our account has changed
+        // Tell any observers that our account has changed.
         NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
 
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
         self.syncManager.onRemovedAccount(old)
 
-        // deregister for remote notifications
+        // Deregister for remote notifications.
         app?.unregisterForRemoteNotifications()
     }
 
@@ -457,7 +521,14 @@ public class BrowserProfile: Profile {
 
     // Extends NSObject so we can use timers.
     class BrowserSyncManager: NSObject, SyncManager {
+        // We shouldn't live beyond our containing BrowserProfile, either in the main app or in
+        // an extension.
+        // But it's possible that we'll finish a side-effect sync after we've ditched the profile
+        // as a whole, so we hold on to our Prefs, potentially for a little while longer. This is
+        // safe as a strong reference, because there's no cycle.
         unowned private let profile: BrowserProfile
+        private let prefs: Prefs
+
         let FifteenMinutes = NSTimeInterval(60 * 15)
         let OneMinute = NSTimeInterval(60)
 
@@ -471,7 +542,21 @@ public class BrowserProfile: Profile {
 
         func applicationDidBecomeActive() {
             self.backgrounded = false
+
+            guard self.profile.hasAccount() else {
+                return
+            }
+
             self.beginTimedSyncs()
+
+            // Sync now if it's been more than our threshold.
+            let now = NSDate.now()
+            let then = self.lastSyncFinishTime ?? 0
+            let since = now - then
+            log.debug("\(since)msec since last sync.")
+            if since > SyncConstants.SyncOnForegroundMinimumDelayMillis {
+                self.syncEverythingSoon()
+            }
         }
 
         /**
@@ -480,7 +565,7 @@ public class BrowserProfile: Profile {
          */
         var syncLock = OSSpinLock() {
             didSet {
-                let notification = syncLock == 0 ? ProfileDidFinishSyncingNotification : ProfileDidStartSyncingNotification
+                let notification = syncLock == 0 ? NotificationProfileDidFinishSyncing : NotificationProfileDidStartSyncing
                 NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: nil))
             }
         }
@@ -501,18 +586,64 @@ public class BrowserProfile: Profile {
 
         init(profile: BrowserProfile) {
             self.profile = profile
+            self.prefs = profile.prefs
+
             super.init()
 
             let center = NSNotificationCenter.defaultCenter()
+            center.addObserver(self, selector: "onDatabaseWasRecreated:", name: NotificationDatabaseWasRecreated, object: nil)
             center.addObserver(self, selector: "onLoginDidChange:", name: NotificationDataLoginDidChange, object: nil)
-            center.addObserver(self, selector: "onFinishSyncing:", name: ProfileDidFinishSyncingNotification, object: nil)
+            center.addObserver(self, selector: "onFinishSyncing:", name: NotificationProfileDidFinishSyncing, object: nil)
         }
 
         deinit {
             // Remove 'em all.
             let center = NSNotificationCenter.defaultCenter()
+            center.removeObserver(self, name: NotificationDatabaseWasRecreated, object: nil)
             center.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
-            center.removeObserver(self, name: ProfileDidFinishSyncingNotification, object: nil)
+            center.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+        }
+
+        private func handleRecreationOfDatabaseNamed(name: String?) -> Success {
+            let loginsCollections = ["passwords"]
+            let browserCollections = ["bookmarks", "history", "tabs"]
+
+            switch name ?? "<all>" {
+            case "<all>":
+                return self.locallyResetCollections(loginsCollections + browserCollections)
+            case "logins.db":
+                return self.locallyResetCollections(loginsCollections)
+            case "browser.db":
+                return self.locallyResetCollections(browserCollections)
+            default:
+                log.debug("Unknown database \(name).")
+                return succeed()
+            }
+        }
+
+        func doInBackgroundAfter(millis millis: Int64, _ block: dispatch_block_t) {
+            let delay = millis * Int64(NSEC_PER_MSEC)
+            let when = dispatch_time(DISPATCH_TIME_NOW, delay)
+            let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+            dispatch_after(when, queue, block)
+        }
+
+        @objc
+        func onDatabaseWasRecreated(notification: NSNotification) {
+            log.debug("Database was recreated.")
+            let name = notification.object as? String
+            log.debug("Database was \(name).")
+
+            // We run this in the background after a few hundred milliseconds;
+            // it doesn't really matter when it runs, so long as it doesn't
+            // happen in the middle of a sync. We take the lock to prevent that.
+            self.doInBackgroundAfter(millis: 300) {
+                OSSpinLockLock(&self.syncLock)
+                self.handleRecreationOfDatabaseNamed(name).upon { res in
+                    log.debug("Reset of \(name) done: \(res.isSuccess)")
+                    OSSpinLockUnlock(&self.syncLock)
+                }
+            }
         }
 
         // Simple in-memory rate limiting.
@@ -526,41 +657,107 @@ public class BrowserProfile: Profile {
                 let when: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, SyncConstants.SyncDelayTriggered)
 
                 // Trigger on the main queue. The bulk of the sync work runs in the background.
+                let greenLight = self.greenLight()
                 dispatch_after(when, dispatch_get_main_queue()) {
-                    self.syncLogins()
+                    if greenLight() {
+                        self.syncLogins()
+                    }
+                }
+            }
+        }
+
+        var lastSyncFinishTime: Timestamp? {
+            get {
+                return self.prefs.timestampForKey(PrefsKeys.KeyLastSyncFinishTime)
+            }
+
+            set(value) {
+                if let value = value {
+                    self.prefs.setTimestamp(value, forKey: PrefsKeys.KeyLastSyncFinishTime)
+                } else {
+                    self.prefs.removeObjectForKey(PrefsKeys.KeyLastSyncFinishTime)
                 }
             }
         }
 
         @objc func onFinishSyncing(notification: NSNotification) {
-            profile.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastSyncFinishTime)
+            self.lastSyncFinishTime = NSDate.now()
         }
 
         var prefsForSync: Prefs {
-            return self.profile.prefs.branch("sync")
+            return self.prefs.branch("sync")
         }
 
         func onAddedAccount() -> Success {
+            self.beginTimedSyncs();
             return self.syncEverything()
         }
 
-        func onRemovedAccount(account: FirefoxAccount?) -> Success {
-            let h: SyncableHistory = self.profile.history
-            let flagHistory = { h.onRemovedAccount() }
-            let clearTabs = { self.profile.remoteClientsAndTabs.onRemovedAccount() }
+        func locallyResetCollections(collections: [String]) -> Success {
+            return walk(collections, f: self.locallyResetCollection)
+        }
 
-            // Run these in order, because they both write to the same DB!
-            return accumulate([flagHistory, clearTabs])
-                >>> {
-                // Clear prefs after we're done clearing everything else -- just in case
-                // one of them needs the prefs and we race. Clear regardless of success
-                // or failure.
+        func locallyResetCollection(collection: String) -> Success {
+            switch collection {
+            case "bookmarks":
+                return MirroringBookmarksSynchronizer.resetSynchronizerWithStorage(self.profile.bookmarks, basePrefs: self.prefsForSync, collection: "bookmarks")
 
-                // This will remove keys from the Keychain if they exist, as well
-                // as wiping the Sync prefs.
-                SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
+            case "clients":
+                fallthrough
+            case "tabs":
+                // Because clients and tabs share storage, and thus we wipe data for both if we reset either,
+                // we reset the prefs for both at the same time.
+                return TabsSynchronizer.resetClientsAndTabsWithStorage(self.profile.remoteClientsAndTabs, basePrefs: self.prefsForSync)
+
+            case "history":
+                return HistorySynchronizer.resetSynchronizerWithStorage(self.profile.history, basePrefs: self.prefsForSync, collection: "history")
+            case "passwords":
+                return LoginsSynchronizer.resetSynchronizerWithStorage(self.profile.logins, basePrefs: self.prefsForSync, collection: "passwords")
+
+            case "forms":
+                log.debug("Requested reset for forms, but this client doesn't sync them yet.")
+                return succeed()
+            case "addons":
+                log.debug("Requested reset for addons, but this client doesn't sync them.")
+                return succeed()
+            case "prefs":
+                log.debug("Requested reset for prefs, but this client doesn't sync them.")
+                return succeed()
+            default:
+                log.warning("Asked to reset collection \(collection), which we don't know about.")
                 return succeed()
             }
+        }
+
+        func onNewProfile() {
+            SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
+        }
+
+        func onRemovedAccount(account: FirefoxAccount?) -> Success {
+            let profile = self.profile
+
+            // Run these in order, because they might write to the same DB!
+            let remove = [
+                profile.history.onRemovedAccount,
+                profile.remoteClientsAndTabs.onRemovedAccount,
+                profile.logins.onRemovedAccount,
+                profile.bookmarks.onRemovedAccount,
+            ]
+
+            let clearPrefs: () -> Success = {
+                withExtendedLifetime(self) {
+                    // Clear prefs after we're done clearing everything else -- just in case
+                    // one of them needs the prefs and we race. Clear regardless of success
+                    // or failure.
+
+                    // This will remove keys from the Keychain if they exist, as well
+                    // as wiping the Sync prefs.
+                    SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
+                }
+                return succeed()
+            }
+
+            return accumulate(remove) >>> clearPrefs
         }
 
         private func repeatingTimerAtInterval(interval: NSTimeInterval, selector: Selector) -> NSTimer {
@@ -606,7 +803,7 @@ public class BrowserProfile: Profile {
         private func syncHistoryWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing history to storage.")
             let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
-            return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info)
+            return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
         private func syncLoginsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
@@ -619,6 +816,29 @@ public class BrowserProfile: Profile {
             log.debug("Mirroring server bookmarks to storage.")
             let bookmarksMirrorer = ready.synchronizer(MirroringBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
             return bookmarksMirrorer.mirrorBookmarksToStorage(self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
+        }
+
+        func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {
+            var needReset = Set<String>(changes.collectionsThatNeedLocalReset())
+            needReset.unionInPlace(changes.enginesDisabled())
+            needReset.unionInPlace(changes.enginesEnabled())
+            if needReset.isEmpty {
+                log.debug("No collections need reset. Moving on.")
+                return deferMaybe(changes)
+            }
+
+            // needReset needs at most one of clients and tabs, because we reset them
+            // both if either needs reset. This is strictly an optimization to avoid
+            // doing duplicate work.
+            if needReset.contains("clients") {
+                if needReset.remove("tabs") != nil {
+                    log.debug("Already resetting clients (and tabs); not bothering to also reset tabs again.")
+                }
+            }
+
+            return walk(Array(needReset), f: self.locallyResetCollection)
+               >>> effect(changes.clearLocalCommands)
+               >>> always(changes)
         }
 
         /**
@@ -640,7 +860,7 @@ public class BrowserProfile: Profile {
                 let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
                 let delegate = profile.getSyncDelegate()
 
-                let go = readyDeferred >>== { ready in
+                let go = readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
                     function(delegate, self.prefsForSync, ready)
                 }
 
@@ -692,32 +912,23 @@ public class BrowserProfile: Profile {
             ) >>> succeed
         }
 
+        func syncEverythingSoon() {
+            self.doInBackgroundAfter(millis: SyncConstants.SyncOnForegroundAfterMillis) {
+                log.debug("Running delayed startup sync.")
+                self.syncEverything()
+            }
+        }
 
         @objc func syncOnTimer() {
-            log.debug("Running timed logins sync.")
+            self.syncEverything()
+        }
 
-            // Note that we use .upon here rather than chaining with >>> precisely
-            // to allow us to sync subsequent engines regardless of earlier failures.
-            // We don't fork them in parallel because we want to limit perf impact
-            // due to background syncs, and because we're cautious about correctness.
-            self.syncLogins().upon { result in
-                if let success = result.successValue {
-                    log.debug("Timed logins sync succeeded. Status: \(success.description).")
-                } else {
-                    let reason = result.failureValue?.description ?? "none"
-                    log.debug("Timed logins sync failed. Reason: \(reason).")
-                }
+        func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
+            return self.profile.history.hasSyncedHistory()
+        }
 
-                log.debug("Running timed history sync.")
-                self.syncHistory().upon { result in
-                    if let success = result.successValue {
-                        log.debug("Timed history sync succeeded. Status: \(success.description).")
-                    } else {
-                        let reason = result.failureValue?.description ?? "none"
-                        log.debug("Timed history sync failed. Reason: \(reason).")
-                    }
-                }
-            }
+        func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+            return self.profile.logins.hasSyncedLogins()
         }
 
         func syncClients() -> SyncResult {

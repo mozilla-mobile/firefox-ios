@@ -26,7 +26,7 @@ public class TabsPayload: CleartextPayloadJSON {
         func toRemoteTabForClient(guid: GUID) -> RemoteTab? {
             let urls = optFilter(urlHistory.map({ $0.asURL }))
             if urls.isEmpty {
-                log.debug("Bug 1201875 - discarding tab for \(title), \(urlHistory) as history has no conforming URLs")
+                log.debug("Bug 1201875 - Discarding tab as history has no conforming URLs.")
                 return nil
             }
 

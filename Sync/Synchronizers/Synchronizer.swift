@@ -18,6 +18,23 @@ public protocol SyncDelegate {
     // TODO: storage.
 }
 
+/**
+ * We sometimes want to make a synchronizer start from scratch: to throw away any
+ * metadata and reset storage to match, allowing us to respond to significant server
+ * changes.
+ *
+ * But instantiating a Synchronizer is a lot of work if we simply want to change some
+ * persistent state. This protocol describes a static func that fits most synchronizers.
+ *
+ * When the returned `Deferred` is filled with a success value, the supplied prefs and
+ * storage are ready to sync from scratch.
+ *
+ * Persisted long-term/local data is kept, and will later be reconciled as appropriate.
+ */
+public protocol ResettableSynchronizer {
+    static func resetSynchronizerWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success
+}
+
 // TODO: return values?
 /**
  * A Synchronizer is (unavoidably) entirely in charge of what it does within a sync.
@@ -120,14 +137,18 @@ public class BaseCollectionSynchronizer {
     let delegate: SyncDelegate
     let prefs: Prefs
 
+    static func prefsForCollection(collection: String, withBasePrefs basePrefs: Prefs) -> Prefs {
+        let branchName = "synchronizer." + collection + "."
+        return basePrefs.branch(branchName)
+    }
+
     init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, collection: String) {
         self.scratchpad = scratchpad
         self.delegate = delegate
         self.collection = collection
-        let branchName = "synchronizer." + collection + "."
-        self.prefs = basePrefs.branch(branchName)
+        self.prefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
 
-        log.info("Synchronizer configured with prefs '\(branchName)'.")
+        log.info("Synchronizer configured with prefs '\(self.prefs.getBranchPrefix()).'")
     }
 
     var storageVersion: Int {
@@ -199,5 +220,17 @@ public class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer
 
     public func remoteHasChanges(info: InfoCollections) -> Bool {
         return info.modified(self.collection) > self.lastFetched
+    }
+}
+
+extension BaseCollectionSynchronizer: ResettableSynchronizer {
+    public static func resetSynchronizerWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success {
+        let synchronizerPrefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
+        synchronizerPrefs.removeObjectForKey("lastFetched")
+
+        // Not all synchronizers use a batching downloader, but it's
+        // convenient to just always reset it here.
+        return storage.resetClient()
+           >>> effect({ BatchingDownloader.resetDownloaderWithPrefs(synchronizerPrefs, collection: collection) })
     }
 }

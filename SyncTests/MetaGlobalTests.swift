@@ -8,6 +8,7 @@ import Shared
 import Storage
 @testable import Sync
 import XCGLogger
+
 import XCTest
 
 private let log = Logger.syncLogger
@@ -72,8 +73,11 @@ class MetaGlobalTests: XCTestCase {
         }
         // We should have wiped.
         // We should have uploaded new meta/global and crypto/keys.
-        XCTAssertGreaterThan(server.collections["meta"]?["global"]?.modified ?? 0, after)
-        XCTAssertGreaterThan(server.collections["crypto"]?["keys"]?.modified ?? 0, after)
+        XCTAssertGreaterThan(server.collections["meta"]?.records["global"]?.modified ?? 0, after)
+        XCTAssertGreaterThan(server.collections["meta"]?.modified ?? 0, after)
+        XCTAssertGreaterThan(server.collections["crypto"]?.records["keys"]?.modified ?? 0, after)
+        XCTAssertGreaterThan(server.collections["crypto"]?.modified ?? 0, after)
+
         // And we should have downloaded meta/global and crypto/keys.
         XCTAssertNotNil(ready.scratchpad.global)
         XCTAssertNotNil(ready.scratchpad.keys)
@@ -397,7 +401,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         // Wipe meta/global.
-        server.collections["meta"]?.removeAll()
+        server.removeAllItemsFromCollection("meta", atTime: NSDate.now())
 
         // Now, run through the state machine again.  We should produce and upload a meta/global reflecting our engine configuration.
         let secondExpectation = expectationWithDescription("Waiting on value.")
@@ -453,6 +457,8 @@ class MetaGlobalTests: XCTestCase {
 
             // We should have marked all local engines for reset.
             XCTAssertEqual(ready.collectionsThatNeedLocalReset(), ["bookmarks", "clients", "history", "passwords", "tabs"])
+            XCTAssertEqual(ready.enginesEnabled(), [])
+            XCTAssertEqual(ready.enginesDisabled(), [])
 
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)

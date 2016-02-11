@@ -4,6 +4,8 @@
 
 import Foundation
 import Shared
+@testable import Sync
+
 import XCTest
 
 class StorageClientTests: XCTestCase {

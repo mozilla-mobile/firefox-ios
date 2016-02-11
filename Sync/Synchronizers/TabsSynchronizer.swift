@@ -38,7 +38,9 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
             "clientName": self.scratchpad.clientName,
             "tabs": jsonTabs
         ])
-        log.debug("Sending tabs JSON \(tabsJSON.toString(true))")
+        if Logger.logPII {
+            log.verbose("Sending tabs JSON \(tabsJSON.toString(true))")
+        }
         let payload = TabsPayload(tabsJSON)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
     }
@@ -81,11 +83,8 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
         func onResponseReceived(response: StorageResponse<[Record<TabsPayload>]>) -> Success {
 
             func afterWipe() -> Success {
-                log.info("Fetching tabs.")
                 let doInsert: (Record<TabsPayload>) -> Deferred<Maybe<(Int)>> = { record in
                     let remotes = record.payload.remoteTabs
-                    log.debug("\(remotes)")
-                    log.info("Inserting \(remotes.count) tabs for client \(record.id).")
                     let ins = localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
                     ins.upon() { res in
                         if let inserted = res.successValue {
@@ -116,7 +115,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
 
                         let allDone = all(filtered.map(doInsert))
                         return allDone.bind { (results) -> Success in
-                            if let failure = find(results, f: { $0.isFailure }) {
+                            if let failure = results.find({ $0.isFailure }) {
                                 return deferMaybe(failure.failureValue!)
                             }
 
@@ -159,6 +158,18 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
 
         log.error("Couldn't make tabs factory.")
         return deferMaybe(FatalError(message: "Couldn't make tabs factory."))
+    }
+
+    /**
+     * This is a dedicated resetting interface that does both tabs and clients at the
+     * same time.
+     */
+    public static func resetClientsAndTabsWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs) -> Success {
+        let clientPrefs = BaseCollectionSynchronizer.prefsForCollection("clients", withBasePrefs: basePrefs)
+        let tabsPrefs = BaseCollectionSynchronizer.prefsForCollection("tabs", withBasePrefs: basePrefs)
+        clientPrefs.removeObjectForKey("lastFetched")
+        tabsPrefs.removeObjectForKey("lastFetched")
+        return storage.resetClient()
     }
 }
 

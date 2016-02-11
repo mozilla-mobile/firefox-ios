@@ -29,6 +29,11 @@ class HomePanels {
                 bookmarks.profile = profile
                 let controller = UINavigationController(rootViewController: bookmarks)
                 controller.setNavigationBarHidden(true, animated: false)
+                // this re-enables the native swipe to pop gesture on UINavigationController for embedded, navigation bar-less UINavigationControllers
+                // don't ask me why it works though, I've tried to find an answer but can't.
+                // found here, along with many other places: 
+                // http://luugiathuy.com/2013/11/ios7-interactivepopgesturerecognizer-for-uinavigationcontroller-with-hidden-navigation-bar/
+                controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
             },
             imageName: "Bookmarks",

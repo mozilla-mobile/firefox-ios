@@ -60,21 +60,18 @@ public class FirefoxAccount {
     }
 
     public class func fromConfigurationAndJSON(configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {
-        if let email = data["email"].asString {
-            if let uid = data["uid"].asString {
-                if let sessionToken = data["sessionToken"].asString?.hexDecodedData {
-                    if let keyFetchToken = data["keyFetchToken"].asString?.hexDecodedData {
-                        if let unwrapkB = data["unwrapBKey"].asString?.hexDecodedData {
-                            let verified = data["verified"].asBool ?? false
-                            return FirefoxAccount.fromConfigurationAndParameters(configuration,
-                                email: email, uid: uid, verified: verified,
-                                sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
-                        }
-                    }
-                }
-            }
+        guard let email = data["email"].asString ,
+            let uid = data["uid"].asString,
+            let sessionToken = data["sessionToken"].asString?.hexDecodedData,
+            let keyFetchToken = data["keyFetchToken"].asString?.hexDecodedData,
+            let unwrapkB = data["unwrapBKey"].asString?.hexDecodedData else {
+                return nil
         }
-        return nil
+        
+        let verified = data["verified"].asBool ?? false
+        return FirefoxAccount.fromConfigurationAndParameters(configuration,
+            email: email, uid: uid, verified: verified,
+            sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
     }
 
     public class func fromConfigurationAndLoginResponse(configuration: FirefoxAccountConfiguration,
@@ -188,7 +185,7 @@ public class FirefoxAccount {
             if let existingDeferred = self.advanceDeferred where existingDeferred === deferred {
                 // The guard should not be needed, but should prevent trampling racing consumers.
                 self.advanceDeferred = nil
-                log.debug("advance() completed and shared deferred is existing deferred; clearing shared defered.")
+                log.debug("advance() completed and shared deferred is existing deferred; clearing shared deferred.")
             } else {
                 log.warning("advance() completed but shared deferred is not existing deferred; ignoring potential bug!")
             }

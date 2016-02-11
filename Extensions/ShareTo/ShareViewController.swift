@@ -89,7 +89,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the NavigationItem
 
         navItem = UINavigationItem()
-        navItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Cancel button title in share dialog"), style: .Plain, target: self, action: "cancel")
+        navItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
         navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarCancelButtonFont], forState: UIControlState.Normal)
 
         navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", tableName: "ShareTo", comment: "Add button in the share dialog"), style: UIBarButtonItemStyle.Done, target: self, action: "add")
@@ -109,12 +109,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         titleView.numberOfLines = ShareDialogControllerUX.ItemTitleMaxNumberOfLines
         titleView.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         titleView.text = item.title
-        if #available(iOSApplicationExtension 8.2, *) {
-            titleView.font = ShareDialogControllerUX.ItemTitleFontMedium
-        } else {
-            // Fallback on earlier versions
-            titleView.font = ShareDialogControllerUX.ItemTitleFont
-        }
+        titleView.font = ShareDialogControllerUX.ItemTitleFontMedium
         view.addSubview(titleView)
 
         // Setup the link view

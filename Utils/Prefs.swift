@@ -7,9 +7,12 @@ import Foundation
 public struct PrefsKeys {
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
+    public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
+    public static let KeyTopSitesCacheSize = "topSitesCacheSize"
 }
 
 public protocol Prefs {
+    func getBranchPrefix() -> String
     func branch(branch: String) -> Prefs
     func setTimestamp(value: Timestamp, forKey defaultName: String)
     func setLong(value: UInt64, forKey defaultName: String)
@@ -33,6 +36,10 @@ public protocol Prefs {
 
 public class MockProfilePrefs : Prefs {
     let prefix: String
+
+    public func getBranchPrefix() -> String {
+        return self.prefix
+    }
 
     // Public for testing.
     public var things: NSMutableDictionary = NSMutableDictionary()

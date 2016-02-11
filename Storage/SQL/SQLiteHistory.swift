@@ -8,8 +8,6 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-private let LogPII = false
-
 class NoSuchRecordError: MaybeErrorType {
     let guid: GUID
     init(guid: GUID) {
@@ -105,14 +103,16 @@ extension SDRow {
 public class SQLiteHistory {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
+    let prefs: Prefs
 
-    required public init?(db: BrowserDB, version: Int? = nil) {
+    required public init?(db: BrowserDB, prefs: Prefs) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
+        self.prefs = prefs
 
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
-        if !db.createOrUpdate(BrowserTable(version: version ?? BrowserTable.DefaultVersion)) {
+        if !db.createOrUpdate(BrowserTable()) {
             return nil
         }
     }
@@ -122,6 +122,7 @@ extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(site: Site) -> Success {
         if let host = site.url.asURL?.normalizedHost() {
             return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
+                >>> { return self.refreshTopSitesCache() }
         }
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
     }
@@ -140,11 +141,16 @@ extension SQLiteHistory: BrowserHistory {
 
     // Note: clearing history isn't really a sane concept in the presence of Sync.
     // This method should be split to do something else.
+    // Bug 1162778.
     public func clearHistory() -> Success {
-        return db.run([("DELETE FROM \(TableVisits)", nil),
-                       ("DELETE FROM \(TableHistory)", nil),
-                       ("DELETE FROM \(TableDomains)", nil),
-                       self.favicons.getCleanupCommands()])
+        return self.db.run([
+            ("DELETE FROM \(TableVisits)", nil),
+            ("DELETE FROM \(TableHistory)", nil),
+            ("DELETE FROM \(TableDomains)", nil),
+            self.favicons.getCleanupCommands(),
+            ])
+            // We've probably deleted a lot of stuff. Vacuum now to recover the space.
+            >>> effect(self.db.vacuum)
     }
 
     func recordVisitedSite(site: Site) -> Success {
@@ -181,7 +187,7 @@ extension SQLiteHistory: BrowserHistory {
         if let host = site.url.asURL?.normalizedHost() {
             let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
             let updateArgs: Args? = [site.title, time, host, site.url]
-            if LogPII {
+            if Logger.logPII {
                 log.debug("Setting title to \(site.title) for URL \(site.url)")
             }
             let error = conn.executeChange(update, withArgs: updateArgs)
@@ -213,7 +219,10 @@ extension SQLiteHistory: BrowserHistory {
 
             return 1
         }
-        log.warning("Invalid URL \(site.url). Not stored in history.")
+
+        if Logger.logPII {
+            log.warning("Invalid URL \(site.url). Not stored in history.")
+        }
         return 0
     }
 
@@ -249,10 +258,59 @@ extension SQLiteHistory: BrowserHistory {
 
     public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool) -> Deferred<Maybe<Cursor<Site>>> {
         // Exclude redirect domains. Bug 1194852.
-        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
-        let groupBy = "GROUP BY domain_id "
-
+        let (whereData, groupBy) = self.topSiteClauses()
         return self.getFilteredSitesByFrecencyWithLimit(limit, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon)
+    }
+
+    public func getTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+        let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frecencies DESC LIMIT (?)"
+        let factory = SQLiteHistory.iconHistoryColumnFactory
+        return self.db.runQuery(topSitesQuery, args: [limit], factory: factory)
+    }
+
+    public func setTopSitesNeedsInvalidation() {
+        prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+    }
+
+    public func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> {
+        if prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false {
+            return deferMaybe(false)
+        }
+        
+        return refreshTopSitesCache() >>> always(true)
+    }
+
+    public func setTopSitesCacheSize(size: Int32) {
+        let oldValue = prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0
+        if oldValue != size {
+            prefs.setInt(size, forKey: PrefsKeys.KeyTopSitesCacheSize)
+            setTopSitesNeedsInvalidation()
+        }
+    }
+
+    public func refreshTopSitesCache() -> Success {
+        let cacheSize = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0)
+        return updateTopSitesCacheWithLimit(cacheSize)
+    }
+
+    private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
+        let (whereData, groupBy) = self.topSiteClauses()
+        let (query, args) = self.filteredSitesByFrecencyQueryWithLimit(limit, groupClause: groupBy, whereData: whereData)
+        let insertQuery = "INSERT INTO \(TableCachedTopSites) \(query)"
+        return self.clearTopSitesCache() >>> {
+            return self.db.run(insertQuery, withArgs: args)
+        } >>> {
+            self.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+            return succeed()
+        }
+    }
+
+    public func clearTopSitesCache() -> Success {
+        let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
+        return self.db.run(deleteQuery, withArgs: nil) >>> {
+            self.prefs.removeObjectForKey(PrefsKeys.KeyTopSitesCacheIsValid)
+            return succeed()
+        }
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> {
@@ -301,6 +359,12 @@ extension SQLiteHistory: BrowserHistory {
         let site = basicHistoryColumnFactory(row)
         site.icon = iconColumnFactory(row)
         return site
+    }
+
+    private func topSiteClauses() -> (String, String) {
+        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
+        let groupBy = "GROUP BY domain_id "
+        return (whereData, groupBy)
     }
 
     private func getFilteredSitesByVisitDateWithLimit(limit: Int,
@@ -361,6 +425,28 @@ extension SQLiteHistory: BrowserHistory {
                                                      groupClause: String = "GROUP BY historyID ",
                                                      whereData: String? = nil,
                                                      includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
+        let factory: (SDRow) -> Site
+        if includeIcon {
+            factory = SQLiteHistory.iconHistoryColumnFactory
+        } else {
+            factory = SQLiteHistory.basicHistoryColumnFactory
+        }
+
+        let (query, args) = filteredSitesByFrecencyQueryWithLimit(limit,
+            whereURLContains: filter,
+            groupClause: groupClause,
+            whereData: whereData,
+            includeIcon: includeIcon
+        )
+
+        return db.runQuery(query, args: args, factory: factory)
+    }
+
+    private func filteredSitesByFrecencyQueryWithLimit(limit: Int,
+                                                       whereURLContains filter: String? = nil,
+                                                       groupClause: String = "GROUP BY historyID ",
+                                                       whereData: String? = nil,
+                                                       includeIcon: Bool = true) -> (String, Args?) {
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
         let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
@@ -403,7 +489,7 @@ extension SQLiteHistory: BrowserHistory {
         "((localVisitDate > \(sixMonthsAgo)) OR (remoteVisitDate > \(sixMonthsAgo)))" +    // Exclude really old items.
         ") ORDER BY frecency DESC" +
         " LIMIT 1000"                                 // Don't even look at a huge set. This avoids work.
-
+        
         // Next: merge by domain and sum frecency, ordering by that sum and reducing to a (typically much lower) limit.
         let historySQL =
         "SELECT historyID, url, title, guid, domain_id, domain" +
@@ -416,7 +502,7 @@ extension SQLiteHistory: BrowserHistory {
         groupClause + " " +
         "ORDER BY frecencies DESC " +
         "LIMIT \(limit) "
-
+        
         // Finally: join this small list to the favicon data.
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
@@ -424,15 +510,13 @@ extension SQLiteHistory: BrowserHistory {
             let sql = "SELECT" +
                       " historyID, url, title, guid, domain_id, domain" +
                       ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
-                      ", iconID, iconURL, iconDate, iconType, iconWidth" +
+                      ", iconID, iconURL, iconDate, iconType, iconWidth, frecencies" +
                       " FROM (\(historySQL)) LEFT OUTER JOIN " +
                       "view_history_id_favicon ON historyID = view_history_id_favicon.id"
-            let factory = SQLiteHistory.iconHistoryColumnFactory
-            return db.runQuery(sql, args: args, factory: factory)
+            return (sql, args)
         }
 
-        let factory = SQLiteHistory.basicHistoryColumnFactory
-        return db.runQuery(historySQL, args: args, factory: factory)
+        return (historySQL, args)
     }
 }
 
@@ -485,7 +569,7 @@ extension SQLiteHistory: Favicons {
      * in the history table.
      */
     public func addFavicon(icon: Favicon, forSite site: Site) -> Deferred<Maybe<Int>> {
-        if LogPII {
+        if Logger.logPII {
             log.verbose("Adding favicon \(icon.url) for site \(site.url).")
         }
         func doChange(query: String, args: Args?) -> Deferred<Maybe<Int>> {
@@ -651,7 +735,7 @@ extension SQLiteHistory: SyncableHistory {
             if let metadata = metadata {
                 // The item exists locally (perhaps originally with a different GUID).
                 if metadata.serverModified == modified {
-                    log.debug("History item \(place.guid) is unchanged; skipping insert-or-update.")
+                    log.verbose("History item \(place.guid) is unchanged; skipping insert-or-update.")
                     return deferMaybe(place.guid)
                 }
 
@@ -669,21 +753,21 @@ extension SQLiteHistory: SyncableHistory {
                         return self.db.run(update, withArgs: args) >>> always(place.guid)
                     }
 
-                    log.debug("Remote changes overriding local.")
+                    log.verbose("Remote changes overriding local.")
                     // Fall through.
                 }
 
                 // The record didn't change locally. Update it.
-                log.debug("Updating local history item for guid \(place.guid).")
+                log.verbose("Updating local history item for guid \(place.guid).")
                 let update = "UPDATE \(TableHistory) SET title = ?, server_modified = ?, is_deleted = 0 WHERE id = ?"
                 let args: Args = [place.title, serverModified, metadata.id]
                 return self.db.run(update, withArgs: args) >>> always(place.guid)
             }
 
             // The record doesn't exist locally. Insert it.
-            log.debug("Inserting remote history item for guid \(place.guid).")
+            log.verbose("Inserting remote history item for guid \(place.guid).")
             if let host = place.url.asURL?.normalizedHost() {
-                if LogPII {
+                if Logger.logPII {
                     log.debug("Inserting: \(place.url).")
                 }
 
@@ -696,7 +780,7 @@ extension SQLiteHistory: SyncableHistory {
                 ]) >>> always(place.guid)
             } else {
                 // This is a URL with no domain. Insert it directly.
-                if LogPII {
+                if Logger.logPII {
                     log.debug("Inserting: \(place.url) with no domain.")
                 }
 
@@ -845,16 +929,40 @@ extension SQLiteHistory: SyncableHistory {
         return self.db.run(sql, withArgs: args) >>> always(modified)
     }
 
+    public func doneApplyingRecordsAfterDownload() -> Success {
+        self.db.checkpoint()
+        return succeed()
+    }
+
+    public func doneUpdatingMetadataAfterUpload() -> Success {
+        self.db.checkpoint()
+        return succeed()
+    }
+}
+
+extension SQLiteHistory {
+    // Returns a deferred `true` if there are rows in the DB that have a server_modified time.
+    // Because we clear this when we reset or remove the account, and never set server_modified
+    // without syncing, the presence of matching rows directly indicates that a deletion
+    // would be synced to the server.
+    public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
+        return self.db.queryReturnsResults("SELECT 1 FROM \(TableHistory) WHERE server_modified IS NOT NULL LIMIT 1")
+    }
+}
+
+extension SQLiteHistory: ResettableSyncStorage {
+    // We don't drop deletions when we reset -- we might need to upload a deleted item
+    // that never made it to the server.
+    public func resetClient() -> Success {
+        let flag = "UPDATE \(TableHistory) SET should_upload = 1, server_modified = NULL"
+        return self.db.run(flag)
+    }
+}
+
+extension SQLiteHistory: AccountRemovalDelegate {
     public func onRemovedAccount() -> Success {
-        log.info("Clearing history metadata after account removal.")
-
-        let discard =
-        "DELETE FROM \(TableHistory) WHERE is_deleted = 1"
-
-        let flag =
-        "UPDATE \(TableHistory) SET " +
-        "should_upload = 1, server_modified = NULL "
-
-        return self.db.run(discard) >>> { self.db.run(flag) }
+        log.info("Clearing history metadata and deleted items after account removal.")
+        let discard = "DELETE FROM \(TableHistory) WHERE is_deleted = 1"
+        return self.db.run(discard) >>> self.resetClient
     }
 }

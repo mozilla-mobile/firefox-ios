@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import XCTest
 import Shared
-import Storage
+@testable import Storage
 
+import XCTest
 
 // TODO: rewrite this test to not use BrowserTable. It used to use HistoryTable…
 class TestSwiftData: XCTestCase {
@@ -30,8 +30,8 @@ class TestSwiftData: XCTestCase {
 
         swiftData!.withConnection(SwiftData.Flags.ReadWriteCreate) { db in
             let f = FaviconsTable<Favicon>()
-            f.create(db, version: 1)    // Because BrowserTable needs it.
-            table.create(db, version: 1)
+            f.create(db)    // Because BrowserTable needs it.
+            table.create(db)
             return nil
         }
 
@@ -153,5 +153,49 @@ class TestSwiftData: XCTestCase {
 
         // Now remove the encryption key.
         XCTAssertNil(verifyData(SwiftData(filename: path!, prevKey: "Secret2")), "Decrypted database")
+    }
+
+    func testArrayCursor() {
+        let data = ["One", "Two", "Three"];
+        let t = ArrayCursor<String>(data: data);
+
+        // Test subscript access
+        XCTAssertNil(t[-1], "Subscript -1 returns nil");
+        XCTAssertEqual(t[0]!, "One", "Subscript zero returns the correct data");
+        XCTAssertEqual(t[1]!, "Two", "Subscript one returns the correct data");
+        XCTAssertEqual(t[2]!, "Three", "Subscript two returns the correct data");
+        XCTAssertNil(t[3], "Subscript three returns nil");
+
+        // Test status data with default initializer
+        XCTAssertEqual(t.status, CursorStatus.Success, "Cursor as correct status");
+        XCTAssertEqual(t.statusMessage, "Success", "Cursor as correct status message");
+        XCTAssertEqual(t.count, 3, "Cursor as correct size");
+
+        // Test generator access
+        var i = 0;
+        for s in t {
+            XCTAssertEqual(s!, data[i], "Subscript zero returns the correct data");
+            i++;
+        }
+
+        // Test creating a failed cursor
+        let t2 = ArrayCursor<String>(data: data, status: CursorStatus.Failure, statusMessage: "Custom status message");
+        XCTAssertEqual(t2.status, CursorStatus.Failure, "Cursor as correct status");
+        XCTAssertEqual(t2.statusMessage, "Custom status message", "Cursor as correct status message");
+        XCTAssertEqual(t2.count, 0, "Cursor as correct size");
+
+        // Test subscript access return nil for a failed cursor
+        XCTAssertNil(t2[0], "Subscript zero returns nil if failure");
+        XCTAssertNil(t2[1], "Subscript one returns nil if failure");
+        XCTAssertNil(t2[2], "Subscript two returns nil if failure");
+        XCTAssertNil(t2[3], "Subscript three returns nil if failure");
+
+        // Test that generator doesn't work with failed cursors
+        var ran = false;
+        for s in t2 {
+            print("Got \(s)", terminator: "\n")
+            ran = true;
+        }
+        XCTAssertFalse(ran, "for...in didn't run for failed cursor");
     }
 }

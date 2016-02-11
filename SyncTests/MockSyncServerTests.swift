@@ -1,12 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import UIKit
-import XCTest
 import Shared
 import Storage
-import Sync
+@testable import Sync
+import UIKit
+
+import XCTest
 
 private class MockBackoffStorage: BackoffStorage {
     var serverBackoffUntilLocalTimestamp: Timestamp?
@@ -42,11 +43,26 @@ class MockSyncServerTests: XCTestCase {
         return Sync15StorageClient(serverURI: url, authorizer: authorizer, workQueue: queue, resultQueue: queue, backoff: MockBackoffStorage())
     }
 
+    func testDeleteSpec() {
+        // Deletion of a collection path itself, versus trailing slash, sets the right flags.
+        let all = SyncDeleteRequestSpec.fromPath("/1.5/123456/storage/bookmarks", withQuery: [:])!
+        XCTAssertTrue(all.wholeCollection)
+        XCTAssertNil(all.ids)
+
+        let some = SyncDeleteRequestSpec.fromPath("/1.5/123456/storage/bookmarks", withQuery: ["ids": "123456,abcdef"])!
+        XCTAssertFalse(some.wholeCollection)
+        XCTAssertEqual(["123456", "abcdef"], some.ids!)
+
+        let one = SyncDeleteRequestSpec.fromPath("/1.5/123456/storage/bookmarks/123456", withQuery: [:])!
+        XCTAssertFalse(one.wholeCollection)
+        XCTAssertNil(one.ids)
+    }
+
     func testInfoCollections() {
         server.storeRecords([MockSyncServer.makeValidEnvelope(Bytes.generateGUID(), modified: 0)], inCollection: "bookmarks", now: 1326251111000)
+        server.storeRecords([], inCollection: "tabs", now: 1326252222500)
         server.storeRecords([MockSyncServer.makeValidEnvelope(Bytes.generateGUID(), modified: 0)], inCollection: "bookmarks", now: 1326252222000)
         server.storeRecords([MockSyncServer.makeValidEnvelope(Bytes.generateGUID(), modified: 0)], inCollection: "clients",   now: 1326253333000)
-        server.storeRecords([], inCollection: "tabs")
 
         let expectation = self.expectationWithDescription("Waiting for result.")
         let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
@@ -59,7 +75,7 @@ class MockSyncServerTests: XCTestCase {
             let after = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
 
             // JSON contents.
-            XCTAssertEqual(response.value.collectionNames().sort(), ["bookmarks", "clients"])
+            XCTAssertEqual(response.value.collectionNames().sort(), ["bookmarks", "clients", "tabs"])
             XCTAssertEqual(response.value.modified("bookmarks"), 1326252222000)
             XCTAssertEqual(response.value.modified("clients"), 1326253333000)
 
@@ -67,7 +83,8 @@ class MockSyncServerTests: XCTestCase {
             XCTAssertLessThanOrEqual(before, response.metadata.timestampMilliseconds)
             XCTAssertLessThanOrEqual(response.metadata.timestampMilliseconds, after)
             // X-Weave-Records.
-            XCTAssertEqual(response.metadata.records, 2) // bookmarks and clients.
+            XCTAssertEqual(response.metadata.records, 3) // bookmarks, clients, tabs.
+
             // X-Last-Modified, max of all collection modified timestamps.
             XCTAssertEqual(response.metadata.lastModifiedMilliseconds, 1326253333000)
 
@@ -179,7 +196,7 @@ class MockSyncServerTests: XCTestCase {
 
             // And we really uploaded the record.
             XCTAssertNotNil(self.server.collections["crypto"])
-            XCTAssertNotNil(self.server.collections["crypto"]?["keys"])
+            XCTAssertNotNil(self.server.collections["crypto"]?.records["keys"])
 
             expectation.fulfill()
         }

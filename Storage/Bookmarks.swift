@@ -75,7 +75,7 @@ public struct BookmarkMirrorItem {
             children: children)
     }
 
-    public static func livemark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, feedURI: String, siteURI: String) -> BookmarkMirrorItem {
+    public static func livemark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String?, description: String?, feedURI: String, siteURI: String) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
@@ -147,6 +147,7 @@ public struct BookmarkMirrorItem {
 
 public protocol BookmarkMirrorStorage {
     func applyRecords(records: [BookmarkMirrorItem]) -> Success
+    func doneApplyingRecordsAfterDownload() -> Success
 }
 
 

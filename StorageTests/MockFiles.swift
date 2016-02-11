@@ -3,6 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+@testable import Storage
+
 import XCTest
 
 class MockFiles: FileAccessor {

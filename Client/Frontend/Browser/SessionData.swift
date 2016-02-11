@@ -11,6 +11,14 @@ class SessionData: NSObject, NSCoding {
     let urls: [NSURL]
     let lastUsedTime: Timestamp
 
+    var jsonDictionary: [String: AnyObject] {
+        return [
+            "currentPage": String(self.currentPage),
+            "lastUsedTime": String(self.lastUsedTime),
+            "urls": urls.map { $0.absoluteString }
+        ]
+    }
+
     /**
         Creates a new SessionData object representing a serialized tab.
 

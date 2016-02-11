@@ -34,6 +34,36 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return Deferred(value: Maybe(success: cursor))
     }
 
+    public func getLoginDataForGUID(guid: GUID) -> Deferred<Maybe<Login>> {
+        if let login = (cache.filter { $0.guid == guid }).first {
+            return deferMaybe(login)
+        } else {
+            return deferMaybe(LoginDataError(description: "Login for GUID \(guid) not found"))
+        }
+    }
+
+    public func getAllLogins() -> Deferred<Maybe<Cursor<Login>>> {
+        let cursor = ArrayCursor(data: cache.sort({ (loginA, loginB) -> Bool in
+            return loginA.hostname > loginB.hostname
+        }))
+        return Deferred(value: Maybe(success: cursor))
+    }
+
+    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<Login>>> {
+        let cursor = ArrayCursor(data: cache.filter({ login in
+            var checks = [Bool]()
+            if let query = query {
+                checks.append(login.username?.contains(query) ?? false)
+                checks.append(login.password.contains(query))
+                checks.append(login.hostname.contains(query))
+            }
+            return checks.contains(true)
+        }).sort({ (loginA, loginB) -> Bool in
+            return loginA.hostname > loginB.hostname
+        }))
+        return Deferred(value: Maybe(success: cursor))
+    }
+
     // This method is only here for testing
     public func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>> {
         let res = cache.filter({ login in
@@ -93,9 +123,19 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return succeed()
     }
 
+    public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
+        return walk(guids) { guid in
+            self.removeLoginByGUID(guid)
+        }
+    }
+
     public func removeAll() -> Success {
         cache.removeAll(keepCapacity: false)
         return succeed()
+    }
+
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        return deferMaybe(true)
     }
 
     // TODO
@@ -104,4 +144,10 @@ public class MockLogins: BrowserLogins, SyncableLogins {
     public func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>> { return deferMaybe(0) }
     public func markAsDeleted(guids: [GUID]) -> Success { return succeed() }
     public func onRemovedAccount() -> Success { return succeed() }
+}
+
+extension MockLogins: ResettableSyncStorage {
+    public func resetClient() -> Success {
+        return succeed()
+    }
 }

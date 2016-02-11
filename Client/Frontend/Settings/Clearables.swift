@@ -6,6 +6,11 @@ import Foundation
 import Shared
 import WebKit
 
+private let log = Logger.browserLogger
+
+// Removed Clearables as part of Bug 1226654, but keeping the string around.
+private let removedSavedLoginsLabel = NSLocalizedString("Saved Logins", tableName: "ClearPrivateData", comment: "Settings item for clearing passwords and login data")
+
 // A base protocol for something that can be cleared.
 protocol Clearable {
     func clear() -> Success
@@ -37,34 +42,8 @@ class HistoryClearable: Clearable {
             SDImageCache.sharedImageCache().clearDisk()
             SDImageCache.sharedImageCache().clearMemory()
             NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil)
+            log.debug("HistoryClearable succeeded: \(success).")
             return Deferred(value: success)
-        }
-    }
-}
-
-// Clear all stored passwords. This will clear both Firefox's SQLite storage and the system shared
-// Credential storage.
-class PasswordsClearable: Clearable {
-    let profile: Profile
-    init(profile: Profile) {
-        self.profile = profile
-    }
-
-    var label: String {
-        return NSLocalizedString("Saved Logins", tableName: "ClearPrivateData", comment: "Settings item for clearing passwords and login data")
-    }
-
-    func clear() -> Success {
-        // Clear our storage
-        return profile.logins.removeAll() >>== { res in
-            let storage = NSURLCredentialStorage.sharedCredentialStorage()
-            let credentials = storage.allCredentials
-            for (space, credentials) in credentials {
-                for (_, credential) in credentials {
-                    storage.removeCredential(credential, forProtectionSpace: space)
-                }
-            }
-            return succeed()
         }
     }
 }
@@ -115,6 +94,7 @@ class CacheClearable: Clearable {
             }
         }
 
+        log.debug("CacheClearable succeeded.")
         return succeed()
     }
 }
@@ -125,7 +105,12 @@ private func deleteLibraryFolderContents(folder: String) throws {
     let dir = library.URLByAppendingPathComponent(folder)
     let contents = try manager.contentsOfDirectoryAtPath(dir.path!)
     for content in contents {
-        try manager.removeItemAtURL(dir.URLByAppendingPathComponent(content))
+        do {
+            try manager.removeItemAtURL(dir.URLByAppendingPathComponent(content))
+        } catch where ((error as NSError).userInfo[NSUnderlyingErrorKey] as? NSError)?.code == Int(EPERM) {
+            // "Not permitted". We ignore this.
+            log.debug("Couldn't delete some library contents.")
+        }
     }
 }
 
@@ -163,6 +148,7 @@ class SiteDataClearable: Clearable {
             }
         }
 
+        log.debug("SiteDataClearable succeeded.")
         return succeed()
     }
 }
@@ -202,6 +188,7 @@ class CookiesClearable: Clearable {
             }
         }
 
+        log.debug("CookiesClearable succeeded.")
         return succeed()
     }
 }

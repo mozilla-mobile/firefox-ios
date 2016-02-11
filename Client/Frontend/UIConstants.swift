@@ -14,26 +14,19 @@ public struct UIConstants {
     static let PrivateModeLocationBorderColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.15)
     static let PrivateModeActionButtonTintColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.8)
     static let PrivateModeTextHighlightColor = UIColor(red: 120 / 255, green: 120 / 255, blue: 165 / 255, alpha: 1)
+    static let PrivateModeReaderModeBackgroundColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
 
     static let ToolbarHeight: CGFloat = 44
     static let DefaultRowHeight: CGFloat = 58
     static let DefaultPadding: CGFloat = 10
     static let SnackbarButtonHeight: CGFloat = 48
 
-    static let DeviceFontSize: CGFloat = DeviceInfo.deviceModel().rangeOfString("iPad") != nil ? 18 : 15
-    static let DefaultMediumFontSize: CGFloat = 14
-
-    static let DefaultMediumFont: UIFont = UIFont.systemFontOfSize(DefaultMediumFontSize, weight: UIFontWeightRegular)
-    static let DefaultMediumBoldFont = UIFont.boldSystemFontOfSize(DefaultMediumFontSize)
-    static let DefaultSmallFontSize: CGFloat = 11
-
-    static let DefaultSmallFont = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightRegular)
-    static let DefaultSmallFontBold = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightBold)
-
-    static let DefaultStandardFontSize: CGFloat = 17
-    static let DefaultStandardFontBold = UIFont.boldSystemFontOfSize(DefaultStandardFontSize)
-
-    static let DefaultStandardFont: UIFont = UIFont.systemFontOfSize(DefaultStandardFontSize, weight: UIFontWeightRegular)
+    // Static fonts
+    static let DefaultChromeSize: CGFloat = 14
+    static let DefaultChromeSmallSize: CGFloat = 11
+    static let DefaultChromeFont: UIFont = UIFont.systemFontOfSize(DefaultChromeSize, weight: UIFontWeightRegular)
+    static let DefaultChromeBoldFont = UIFont.boldSystemFontOfSize(DefaultChromeSize)
+    static let DefaultChromeSmallFontBold = UIFont.boldSystemFontOfSize(DefaultChromeSmallSize)
 
     // These highlight colors are currently only used on Snackbar buttons when they're pressed
     static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)
@@ -50,6 +43,7 @@ public struct UIConstants {
     static let TableViewHeaderBackgroundColor = UIColor(red: 242/255, green: 245/255, blue: 245/255, alpha: 1.0)
     static let TableViewHeaderTextColor = UIColor(red: 130/255, green: 135/255, blue: 153/255, alpha: 1.0)
     static let TableViewRowTextColor = UIColor(red: 53.55/255, green: 53.55/255, blue: 53.55/255, alpha: 1.0)
+    static let TableViewDisabledRowTextColor = UIColor.lightGrayColor()
     static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
 
     // Firefox Orange
@@ -57,22 +51,13 @@ public struct UIConstants {
 
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
     static let ScreenshotQuality: Float = 0.3
+
+    static let OKString = NSLocalizedString("OK", comment: "OK button")
+    static let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 }
 
 /// Strings that will be used for features that haven't yet landed.
 private struct TempStrings {
-    // Bug 1189902 - Offer crash reporting on first run after a crash
-    let crashReportTitle = NSLocalizedString("Oops! Firefox crashed", comment: "Pending feature; currently unused string! Title for prompt displayed to user after the app crashes")
-    let crashReportDescription = NSLocalizedString("Send a crash report so Mozilla can fix the problem?", comment: "Pending feature; currently unused string! Message displayed in the crash dialog above the buttons used to select when sending reports")
-    let sendReport = NSLocalizedString("Send Report", comment: "Pending feature; currently unused string! Used as a button label for crash dialog prompt")
-    let alwaysSend = NSLocalizedString("Always Send", comment: "Pending feature; currently unused string! Used as a button label for crash dialog prompt")
-    let dontSend = NSLocalizedString("Don't Send", comment: "Pending feature; currently unused string! Used as a button label for crash dialog prompt")
-    let neverSend = NSLocalizedString("Never Send", comment: "Pending feature; currently unused string! Used as a button label for crash dialog prompt")
-
-    // Bug 1109675 - Request Desktop Site
-    let requestDesktopSite = NSLocalizedString("Request Desktop Site", comment: "Pending feature; currently unused string! Tooltip label triggered by long pressing the refresh button.")
-    let requestMobileSite = NSLocalizedString("Request Mobile Site", comment: "Pending feature; currently unused string! Tooltip label triggered by long pressing the refresh button a second time.")
-
     // Bug 1182303 - Checkbox to block alert spam.
     let disableAlerts = NSLocalizedString("Disable additional page dialogs", comment: "Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown")
 
@@ -80,8 +65,30 @@ private struct TempStrings {
     let goToCopiedURL = NSLocalizedString("Go to copied URL?", comment: "Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard")
     let goToCopiedURLButton = NSLocalizedString("Go", comment: "Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened")
 
-    // Bug 1196227 - (pbmode) [Meta] Private Browsing
-    let openInNewPrivateTab = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
+    // strings for lightweight themes
+    let themeSetting = NSLocalizedString("Theme", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Settings row to enter theme settings")
+    let themesHeader = NSLocalizedString("Themes", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! sub header for theme options in theme chooser")
+    let photosHeader = NSLocalizedString("Photos", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Sub header for photo options in theme chooser")
+    let previewButton = NSLocalizedString("Preview", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Button to show preview of selected theme")
+    let setButton = NSLocalizedString("Set", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Button to set selected theme as current theme")
+    let allowButton = NSLocalizedString("Allow Firefox to use my Photos", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet.")
+    let chooseButton = NSLocalizedString("Choose", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker")
+
+    // accessibility strings for lightweight themes
+    let chooseThemeAccessibilityString = NSLocalizedString("Choose Theme", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Accessibility label for settings row to enter theme settings")
+    let defaultThemeAccessibilityString = NSLocalizedString("Default Themes", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Accessibility label for themes subheader")
+    let myPhotosAccessibilityString = NSLocalizedString("My Photos", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Accessibility label for photo viewer")
+    let previewThemeAccessibilityString = NSLocalizedString("Preview Theme", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Accessibility label for theme preview button")
+    let setThemeAccessibilityString = NSLocalizedString("Set Theme", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Accessibility label for set theme button")
+    let backToThemesAccessibilityString = NSLocalizedString("Back to Themes", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Accessibility label for back button to theme chooser")
+
+    // Bug 1198418 - Touch ID Passcode Strings
+    let setPasscode             = NSLocalizedString("Set Passcode", tableName: "AuthenticationManager", comment: "Screen title for Set Passcode")
+    let enterPasscode           = NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Title for entering a passcode")
+    let reenterPasscode         = NSLocalizedString("Re-enter passcode", tableName: "AuthenticationManager", comment: "Title for re-entering a passcode")
+    let turnOffYourPasscode     = NSLocalizedString("Turn off your passcode.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when turning off passcode")
+    let accessLogins            = NSLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
+    let accessPBMode            = NSLocalizedString("Use your fingerprint to access Private Browsing now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing private browsing")
 }
 
 /// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.

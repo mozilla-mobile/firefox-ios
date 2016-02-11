@@ -135,196 +135,22 @@ public class BookmarksMirrorer {
             case .Complete:
                 log.info("Done with batched mirroring.")
                 return self.applyRecordsFromBatcher()
+                   >>> effect(self.downloader.advance)
+                   >>> self.storage.doneApplyingRecordsAfterDownload
             case .Incomplete:
                 log.debug("Running another batch.")
                 // This recursion is fine because Deferred always pushes callbacks onto a queue.
-                return self.applyRecordsFromBatcher() >>> { self.go(info, greenLight: greenLight) }
+                return self.applyRecordsFromBatcher()
+                   >>> effect(self.downloader.advance)
+                   >>> { self.go(info, greenLight: greenLight) }
             case .Interrupted:
                 log.info("Interrupted. Aborting batching this time.")
                 return succeed()
             case .NoNewData:
                 log.info("No new data. No need to continue batching.")
+                self.downloader.advance()
                 return succeed()
             }
         }
     }
-}
-
-class BatchingDownloader<T: CleartextPayloadJSON> {
-    let client: Sync15CollectionClient<T>
-    let collection: String
-    let prefs: Prefs
-
-    var batch: [Record<T>] = []
-
-    func store(records: [Record<T>]) {
-        self.batch += records
-    }
-
-    func retrieve() -> [Record<T>] {
-        let ret = self.batch
-        self.batch = []
-        return ret
-    }
-
-    init(collectionClient: Sync15CollectionClient<T>, basePrefs: Prefs, collection: String) {
-        self.client = collectionClient
-        self.collection = collection
-        let branchName = "downloader." + collection + "."
-        self.prefs = basePrefs.branch(branchName)
-
-        log.info("Downloader configured with prefs '\(branchName)'.")
-    }
-
-    /**
-     * Clients should provide the same set of parameters alongside an `offset` as was
-     * provided with the initial request. The only thing that varies in our batch fetches
-     * is `newer`, so we track the original value alongside.
-     */
-    var nextFetchParameters: (String, Timestamp)? {
-        get {
-            let o = self.prefs.stringForKey("nextOffset")
-            let n = self.prefs.timestampForKey("offsetNewer")
-            guard let offset = o, let newer = n else {
-                return nil
-            }
-            return (offset, newer)
-        }
-        set (value) {
-            if let (offset, newer) = value {
-                self.prefs.setString(offset, forKey: "nextOffset")
-                self.prefs.setTimestamp(newer, forKey: "offsetNewer")
-            } else {
-                self.prefs.removeObjectForKey("nextOffset")
-                self.prefs.removeObjectForKey("offsetNewer")
-            }
-        }
-    }
-
-    // Set after each batch, from record timestamps.
-    var baseTimestamp: Timestamp {
-        get {
-            return self.prefs.timestampForKey("baseTimestamp") ?? 0
-        }
-        set (value) {
-            self.prefs.setTimestamp(value ?? 0, forKey: "baseTimestamp")
-        }
-    }
-
-    // Only set at the end of a batch, from headers.
-    var lastModified: Timestamp {
-        get {
-            return self.prefs.timestampForKey("lastModified") ?? 0
-        }
-        set (value) {
-            self.prefs.setTimestamp(value ?? 0, forKey: "lastModified")
-        }
-    }
-
-    /**
-     * Call this when a significant structural server change has been detected.
-     */
-    func reset() -> Success {
-        self.baseTimestamp = 0
-        self.lastModified = 0
-        self.nextFetchParameters = nil
-        self.batch = []
-        return succeed()
-    }
-
-    func go(info: InfoCollections, limit: Int) -> Deferred<Maybe<DownloadEndState>> {
-        guard let modified = info.modified(self.collection) else {
-            log.debug("No server modified time for collection \(self.collection).")
-            return deferMaybe(.NoNewData)
-        }
-
-        log.debug("Modified: \(modified); last \(self.lastModified).")
-        if modified == self.lastModified {
-            log.debug("No more data to batch-download.")
-            return deferMaybe(.NoNewData)
-        }
-
-        return self.downloadNextBatchWithLimit(limit, infoModified: modified)
-    }
-
-    // We're either fetching from our current base timestamp with no offset,
-    // or the timestamp we were using when we last saved an offset.
-    func fetchParameters() -> (String?, Timestamp) {
-        if let (offset, since) = self.nextFetchParameters {
-            return (offset, since)
-        }
-        return (nil, max(self.lastModified, self.baseTimestamp))
-    }
-
-    func downloadNextBatchWithLimit(limit: Int, infoModified: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
-        let (offset, since) = self.fetchParameters()
-        log.debug("Fetching newer=\(since), offset=\(offset).")
-
-        let fetch = self.client.getSince(since, sort: SortOption.Newest, limit: limit, offset: offset)
-
-        func handleFailure(err: MaybeErrorType) -> Deferred<Maybe<DownloadEndState>> {
-            log.debug("Handling failure.")
-            guard let badRequest = err as? BadRequestError<[Record<T>]> where badRequest.response.metadata.status == 412 else {
-                // Just pass through the failure.
-                return deferMaybe(err)
-            }
-
-            // Conflict. Start again.
-            log.warning("Server contents changed during offset-based batching. Stepping back.")
-            self.nextFetchParameters = nil
-            return deferMaybe(.Interrupted)
-        }
-
-        func handleSuccess(response: StorageResponse<[Record<T>]>) -> Deferred<Maybe<DownloadEndState>> {
-            log.debug("Handling success.")
-            // Shift to the next offset. This might be nil, in which case… fine!
-            // Note that we preserve the previous 'newer' value from the offset or the original fetch,
-            // even as we update baseTimestamp.
-            let nextOffset = response.metadata.nextOffset
-            self.nextFetchParameters = nextOffset == nil ? nil : (nextOffset!, since)
-
-            // If there are records, advance to just before the timestamp of the last.
-            // If our next fetch with X-Weave-Next-Offset fails, at least we'll start here.
-            //
-            // Without Bug 1212189 we get records in the wrong order, and this approach doesn't work.
-            // Commented out until then.
-            if let newBase = response.value.last?.modified {
-                // TODO
-                // self.baseTimestamp = newBase - 1
-            }
-
-            log.debug("Got success response with \(response.metadata.records) records.")
-            // Store the incoming records for collection.
-            self.store(response.value)
-
-            if nextOffset == nil {
-                // If we can't get a timestamp from the header -- and we should always be able to --
-                // we fall back on the collection modified time in i/c, as supplied by the caller.
-                // In any case where there is no racing writer these two values should be the same.
-                // If they differ, the header should be later. If it's missing, and we use the i/c
-                // value, we'll simply redownload some records.
-                // All bets are off if we hit this case and are filtering somehow… don't do that.
-                let lm = response.metadata.lastModifiedMilliseconds
-                log.debug("Advancing lastModified to \(lm) ?? \(infoModified).")
-                self.lastModified = lm ?? infoModified
-                return deferMaybe(.Complete)
-            }
-
-            return deferMaybe(.Incomplete)
-        }
-
-        return fetch.bind { result in
-            guard let response = result.successValue else {
-                return handleFailure(result.failureValue!)
-            }
-            return handleSuccess(response)
-        }
-    }
-}
-
-public enum DownloadEndState: String {
-    case Complete                         // We're done. Records are waiting for you.
-    case Incomplete                       // applyBatch was called, and we think there are more records.
-    case NoNewData                        // There were no records.
-    case Interrupted                      // We got a 412 conflict when fetching the next batch.
 }

@@ -4,7 +4,8 @@
 
 import Foundation
 import Shared
-import Sync
+@testable import Sync
+
 import XCTest
 
 func identity<T>(x: T) -> T {
@@ -87,9 +88,12 @@ class DownloadTests: XCTestCase {
         let ic1 = InfoCollections(collections: ["clients": ts1])
         let fetch1 = batcher.go(ic1, limit: 1).value
         XCTAssertEqual(fetch1.successValue, DownloadEndState.Complete)
+        XCTAssertEqual(0, batcher.baseTimestamp)    // This isn't updated until after success.
         let records1 = batcher.retrieve()
         XCTAssertEqual(1, records1.count)
         XCTAssertEqual(guid1, records1[0].id)
+        batcher.advance()
+        XCTAssertNotEqual(0, batcher.baseTimestamp)
 
         // Fetching again yields nothing, because the collection hasn't
         // changed.
@@ -100,19 +104,25 @@ class DownloadTests: XCTestCase {
 
         let ic2 = InfoCollections(collections: ["clients": ts2])
         server.storeRecords([rec2], inCollection: "clients", now: ts2)
+
         let fetch2 = batcher.go(ic2, limit: 1).value
         XCTAssertEqual(fetch2.successValue, DownloadEndState.Incomplete)
         let records2 = batcher.retrieve()
         XCTAssertEqual(1, records2.count)
         XCTAssertEqual(guid1, records2[0].id)
+        batcher.advance()
+
         let fetch3 = batcher.go(ic2, limit: 1).value
         XCTAssertEqual(fetch3.successValue, DownloadEndState.Complete)
         let records3 = batcher.retrieve()
         XCTAssertEqual(1, records3.count)
         XCTAssertEqual(guid2, records3[0].id)
+        batcher.advance()
+
         let fetch4 = batcher.go(ic2, limit: 1).value
         XCTAssertEqual(fetch4.successValue, DownloadEndState.NoNewData)
         let records4 = batcher.retrieve()
         XCTAssertEqual(0, records4.count)
+        batcher.advance()
     }
 }

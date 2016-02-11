@@ -32,7 +32,7 @@ public class FileAccessor {
     }
 
     /**
-     * Gets the file or directory at the given path, relative to the root.
+     * Removes the file or directory at the given path, relative to the root.
      */
     public func remove(relativePath: String) throws {
         let path = rootPath.stringByAppendingPathComponent(relativePath)
@@ -60,6 +60,11 @@ public class FileAccessor {
         return NSFileManager.defaultManager().fileExistsAtPath(path)
     }
 
+    public func fileWrapper(relativePath: String) throws -> NSFileWrapper {
+        let path = rootPath.stringByAppendingPathComponent(relativePath)
+        return try NSFileWrapper(URL: NSURL.fileURLWithPath(path), options: NSFileWrapperReadingOptions.Immediate)
+    }
+
     /**
      * Moves the file or directory to the given destination, with both paths relative to the root.
      * The destination directory is created if it does not exist.
@@ -72,6 +77,27 @@ public class FileAccessor {
         try createDir(toDir)
 
         try NSFileManager.defaultManager().moveItemAtPath(fromPath, toPath: toPath as String)
+    }
+
+    public func copyMatching(fromRelativeDirectory relativePath: String, toAbsoluteDirectory absolutePath: String, matching: String -> Bool) throws {
+        let fileManager = NSFileManager.defaultManager()
+        let path = rootPath.stringByAppendingPathComponent(relativePath)
+        let pathURL = NSURL.fileURLWithPath(path)
+        let destURL = NSURL.fileURLWithPath(absolutePath, isDirectory: true)
+
+        let files = try fileManager.contentsOfDirectoryAtPath(path)
+        for file in files {
+            if !matching(file) {
+                continue
+            }
+
+            let from = pathURL.URLByAppendingPathComponent(file, isDirectory: false).path!
+            let to = destURL.URLByAppendingPathComponent(file, isDirectory: false).path!
+            do {
+                try fileManager.copyItemAtPath(from, toPath: to)
+            } catch {
+            }
+        }
     }
 
     public func copy(fromRelativePath: String, toAbsolutePath: String) throws -> Bool {

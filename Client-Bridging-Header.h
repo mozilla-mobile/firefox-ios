@@ -11,10 +11,12 @@
 #import "GCDWebServerDataRequest.h"
 #import "GCDWebServerDataResponse.h"
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
+#import "ThirdParty/Apple/UIImage+ImageEffects.h"
 #import "Carthage/Checkouts/SDWebImage/SDWebImage/UIImageView+WebCache.h"
 #import "Carthage/Checkouts/SDWebImage/SDWebImage/UIView+WebCacheOperation.h"
 #import "Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWTableViewCell.h"
 #import "Carthage/Checkouts/RaptureXML/RaptureXML/RXMLElement.h"
 #import "Carthage/Checkouts/ios_sdk/Adjust/Adjust.h"
+#import "Carthage/Checkouts/onepassword-extension/OnePasswordExtension.h"
 
 #endif

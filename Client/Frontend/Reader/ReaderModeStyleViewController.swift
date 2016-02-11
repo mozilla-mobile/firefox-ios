@@ -12,23 +12,16 @@ private struct ReaderModeStyleViewControllerUX {
     static let Height = 4 * RowHeight
 
     static let FontTypeRowBackground = UIColor(rgb: 0xfbfbfb)
-    static let FontTypeTitleFontSansSerif = UIFont(name: "FiraSans-Book", size: 16)
-    static let FontTypeTitleFontSerif = UIFont(name: "Charis SIL", size: 16)
 
     static let FontTypeTitleSelectedColor = UIColor(rgb: 0x333333)
     static let FontTypeTitleNormalColor = UIColor.lightGrayColor() // TODO THis needs to be 44% of 0x333333
 
     static let FontSizeRowBackground = UIColor(rgb: 0xf4f4f4)
-    static let FontSizeLabelFontSansSerif = UIFont(name: "FiraSans-Book", size: 22)
-    static let FontSizeLabelFontSerif = UIFont(name: "Charis SIL", size: 22)
     static let FontSizeLabelColor = UIColor(rgb: 0x333333)
     static let FontSizeButtonTextColorEnabled = UIColor(rgb: 0x333333)
     static let FontSizeButtonTextColorDisabled = UIColor.lightGrayColor() // TODO THis needs to be 44% of 0x333333
-    static let FontSizeButtonTextFont = UIFont(name: "FiraSans-Light", size: 22)
 
     static let ThemeRowBackgroundColor = UIColor.whiteColor()
-    static let ThemeTitleFontSansSerif = UIFont(name: "FiraSans-Book", size: 15)
-    static let ThemeTitleFontSerif = UIFont(name: "Charis SIL", size: 15)
     static let ThemeTitleColorLight = UIColor(rgb: 0x333333)
     static let ThemeTitleColorDark = UIColor.whiteColor()
     static let ThemeTitleColorSepia = UIColor(rgb: 0x333333)
@@ -263,11 +256,11 @@ class FontTypeButton: UIButton {
         switch fontType {
         case .SansSerif:
             setTitle(NSLocalizedString("Sans-serif", comment: "Font type setting in the reading view settings"), forState: UIControlState.Normal)
-            let f = ReaderModeStyleViewControllerUX.ThemeTitleFontSansSerif
+            let f = UIFont(name: "FiraSans-Book", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             titleLabel?.font = f
         case .Serif:
             setTitle(NSLocalizedString("Serif", comment: "Font type setting in the reading view settings"), forState: UIControlState.Normal)
-            let f = ReaderModeStyleViewControllerUX.ThemeTitleFontSerif
+            let f = UIFont(name: "Charis SIL", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             titleLabel?.font = f
         }
     }
@@ -304,7 +297,7 @@ class FontSizeButton: UIButton {
         }
 
         // TODO Does this need to change with the selected font type? Not sure if makes sense for just +/-
-        titleLabel?.font = ReaderModeStyleViewControllerUX.FontSizeButtonTextFont
+        titleLabel?.font = UIFont(name: "FiraSans-Light", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
     }
 }
 
@@ -327,9 +320,9 @@ class FontSizeLabel: UILabel {
         didSet {
             switch fontType {
             case .SansSerif:
-                font = ReaderModeStyleViewControllerUX.FontSizeLabelFontSansSerif
+                font = UIFont(name: "FiraSans-Book", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
             case .Serif:
-                font = ReaderModeStyleViewControllerUX.FontSizeLabelFontSerif
+                font = UIFont(name: "Charis SIL", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
             }
         }
     }
@@ -368,9 +361,9 @@ class ThemeButton: UIButton {
         didSet {
             switch fontType {
             case .SansSerif:
-                titleLabel?.font = ReaderModeStyleViewControllerUX.ThemeTitleFontSansSerif
+                titleLabel?.font = UIFont(name: "FiraSans-Book", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             case .Serif:
-                titleLabel?.font = ReaderModeStyleViewControllerUX.ThemeTitleFontSerif
+                titleLabel?.font = UIFont(name: "Charis SIL", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             }
         }
     }

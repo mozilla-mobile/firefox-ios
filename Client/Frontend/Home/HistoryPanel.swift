@@ -23,7 +23,6 @@ private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: In
 
 private struct HistoryPanelUX {
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightLight) // Changes font size based on device.
     static let WelcomeScreenItemTextColor = UIColor.grayColor()
     static let WelcomeScreenItemWidth = 170
 }
@@ -55,6 +54,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataClearedHistory, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationDynamicFontChanged, object: nil)
     }
 
     override func viewDidLoad() {
@@ -82,11 +82,19 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
 
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
+            resyncHistory()
+            break
+        case NotificationDynamicFontChanged:
+            if emptyStateOverlayView.superview != nil {
+                emptyStateOverlayView.removeFromSuperview()
+            }
+            emptyStateOverlayView = createEmptyStateOverview()
             resyncHistory()
             break
         default:
@@ -192,7 +200,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             make.centerX.equalTo(overlayView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView.snp_centerY).offset(-160).priorityMedium()
+            make.centerY.equalTo(overlayView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
@@ -202,7 +210,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         overlayView.addSubview(welcomeLabel)
         welcomeLabel.text = NSLocalizedString("Pages you have visited recently will show up here.", comment: "See http://bit.ly/1I7Do4b")
         welcomeLabel.textAlignment = NSTextAlignment.Center
-        welcomeLabel.font = HistoryPanelUX.WelcomeScreenItemFont
+        welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = HistoryPanelUX.WelcomeScreenItemTextColor
         welcomeLabel.numberOfLines = 2
         welcomeLabel.adjustsFontSizeToFitWidth = true

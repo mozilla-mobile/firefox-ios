@@ -98,6 +98,32 @@ public func chunk<T>(arr: [T], by: Int) -> [ArraySlice<T>] {
     }
 }
 
+public extension SequenceType {
+    // [T] -> (T -> K) -> [K: [T]]
+    // As opposed to `groupWith` (to follow Haskell's naming), which would be
+    // [T] -> (T -> K) -> [[T]]
+    func groupBy<Key, Value>(selector: Self.Generator.Element -> Key, transformer: Self.Generator.Element -> Value) -> [Key: [Value]] {
+        var acc: [Key: [Value]] = [:]
+        for x in self {
+            let k = selector(x)
+            var a = acc[k] ?? []
+            a.append(transformer(x))
+            acc[k] = a
+        }
+        return acc
+    }
+
+    func zip<S: SequenceType>(elems: S) -> [(Self.Generator.Element, S.Generator.Element)] {
+        var rights = elems.generate()
+        return self.flatMap { lhs in
+            guard let rhs = rights.next() else {
+                return nil
+            }
+            return (lhs, rhs)
+        }
+    }
+}
+
 public func optDictionaryEqual<K: Equatable, V: Equatable>(lhs: [K: V]?, rhs: [K: V]?) -> Bool {
     switch (lhs, rhs) {
     case (.None, .None):
@@ -115,7 +141,7 @@ public func optDictionaryEqual<K: Equatable, V: Equatable>(lhs: [K: V]?, rhs: [K
  * Return members of `a` that aren't nil, changing the type of the sequence accordingly.
  */
 public func optFilter<T>(a: [T?]) -> [T] {
-    return a.filter { $0 != nil }.map { $0! }
+    return a.flatMap { $0 }
 }
 
 /**
@@ -140,19 +166,6 @@ public func mapValues<K, T, U>(source: [K: T], f: (T -> U)) -> [K: U] {
         m[k] = f(v)
     }
     return m
-}
-
-/**
- * Find the first matching item in the array and return it.
- * Unlike map/filter approaches, this is lazy.
- */
-public func find<T>(arr: [T], f: T -> Bool) -> T? {
-    for x in arr {
-        if f(x) {
-            return x
-        }
-    }
-    return nil
 }
 
 public func findOneValue<K, V>(map: [K: V], f: V -> Bool) -> V? {

@@ -41,6 +41,7 @@ private extension TrayToBrowserAnimator {
         bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.hidden = true
+        bvc.webViewContainerBackdrop.hidden = true
 
         // Take a snapshot of the collection view that we can scale/fade out. We don't need to wait for screen updates since it's already rendered on the screen
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(false)
@@ -79,8 +80,7 @@ private extension TrayToBrowserAnimator {
             container.layoutIfNeeded()
             cell.title.transform = CGAffineTransformMakeTranslation(0, -cell.title.frame.height)
 
-            resetTransformsForViews([bvc.header, bvc.footer, bvc.readerModeBar, bvc.footerBackdrop, bvc.headerBackdrop])
-            bvc.urlBar.updateAlphaForSubviews(1)
+            bvc.tabTrayDidDismiss(tabTray)
 
             tabCollectionViewSnapshot.transform = CGAffineTransformMakeScale(0.9, 0.9)
             tabCollectionViewSnapshot.alpha = 0
@@ -97,9 +97,9 @@ private extension TrayToBrowserAnimator {
             cell.removeFromSuperview()
             tabCollectionViewSnapshot.removeFromSuperview()
             bvc.footer.alpha = 1
-            bvc.startTrackingAccessibilityStatus()
             bvc.toggleSnackBarVisibility(show: true)
             toggleWebViewVisibility(show: true, usingTabManager: bvc.tabManager)
+            bvc.webViewContainerBackdrop.hidden = false
             bvc.homePanelController?.view.hidden = false
             bvc.urlBar.isTransitioning = false
             transitionContext.completeTransition(true)
@@ -199,7 +199,6 @@ private extension BrowserToTrayAnimator {
                 bvc.toggleSnackBarVisibility(show: true)
                 toggleWebViewVisibility(show: true, usingTabManager: bvc.tabManager)
                 bvc.homePanelController?.view.hidden = false
-                bvc.stopTrackingAccessibilityStatus()
 
                 bvc.urlBar.isTransitioning = false
                 transitionContext.completeTransition(true)
@@ -263,7 +262,7 @@ private func calculateExpandedCellFrameFromBVC(bvc: BrowserViewController) -> CG
     // there is no toolbar for home panels
     if !bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
         return frame
-    } else if AboutUtils.isAboutURL(bvc.tabManager.selectedTab?.url) {
+    } else if AboutUtils.isAboutURL(bvc.tabManager.selectedTab?.url) && bvc.toolbar == nil {
         frame.size.height += UIConstants.ToolbarHeight
     }
 

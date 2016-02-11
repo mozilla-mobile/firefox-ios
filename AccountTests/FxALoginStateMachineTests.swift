@@ -2,9 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+@testable import Account
 import Foundation
 import FxA
 import Shared
+
 import XCTest
 
 class MockFxALoginClient: FxALoginClient {
@@ -25,6 +27,19 @@ class MockFxALoginClient: FxALoginClient {
     func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
         let response = FxASignResponse(certificate: "certificate")
         return Deferred(value: Maybe(success: response))
+    }
+}
+
+// A mock client that fails locally (i.e., cannot connect to the network).
+class MockFxALoginClientWithoutNetwork: MockFxALoginClient {
+    override func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
+        // Fail!
+        return Deferred(value: Maybe(failure: FxAClientError.Local(NSError(domain: NSURLErrorDomain, code: -1000, userInfo: nil))))
+    }
+
+    override func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
+        // Fail!
+        return Deferred(value: Maybe(failure: FxAClientError.Local(NSError(domain: NSURLErrorDomain, code: -1000, userInfo: nil))))
     }
 }
 
@@ -130,11 +145,38 @@ class FxALoginStateMachineTests: XCTestCase {
         self.waitForExpectationsWithTimeout(10, handler: nil)
     }
 
+    func testAdvanceFromEngagedAfterVerifiedWithoutNetwork() {
+        // Advancing from engaged after verified, but during outage, stays put.
+        withMachine(MockFxALoginClientWithoutNetwork()) { stateMachine in
+            let engagedState = FxAStateTests.stateForLabel(.EngagedAfterVerified)
+
+            let e = self.expectationWithDescription("Wait for login state machine.")
+            stateMachine.advanceFromState(engagedState, now: 0).upon { newState in
+                XCTAssertEqual(newState.label.rawValue, engagedState.label.rawValue)
+                e.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
     func testAdvanceFromCohabitingAfterVerifiedDuringOutage() {
         // Advancing from engaged after verified, but during outage, stays put.
         let e = self.expectationWithDescription("Wait for login state machine.")
         let state = (FxAStateTests.stateForLabel(.CohabitingAfterKeyPair) as! CohabitingAfterKeyPairState)
         withMachine(MockFxALoginClientDuringOutage()) { stateMachine in
+            stateMachine.advanceFromState(state, now: 0).upon { newState in
+                XCTAssertEqual(newState.label.rawValue, state.label.rawValue)
+                e.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
+    func testAdvanceFromCohabitingAfterVerifiedWithoutNetwork() {
+        // Advancing from cohabiting after verified, but when the network is not available, stays put.
+        let e = self.expectationWithDescription("Wait for login state machine.")
+        let state = (FxAStateTests.stateForLabel(.CohabitingAfterKeyPair) as! CohabitingAfterKeyPairState)
+        withMachine(MockFxALoginClientWithoutNetwork()) { stateMachine in
             stateMachine.advanceFromState(state, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, state.label.rawValue)
                 e.fulfill()

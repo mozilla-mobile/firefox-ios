@@ -5,6 +5,10 @@
 import Foundation
 import UIKit
 import SnapKit
+import Shared
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 @objc
 protocol BrowserToolbarProtocol {
@@ -30,6 +34,7 @@ protocol BrowserToolbarDelegate: class {
     func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidPressReload(browserToolbar: BrowserToolbarProtocol, button: UIButton)
+    func browserToolbarDidLongPressReload(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidPressStop(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton)
@@ -92,6 +97,8 @@ public class BrowserToolbarHelper: NSObject {
         toolbar.stopReloadButton.setImage(UIImage(named: "reload"), forState: .Normal)
         toolbar.stopReloadButton.setImage(UIImage(named: "reloadPressed"), forState: .Highlighted)
         toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the browser toolbar Reload button")
+        let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressStopReload:")
+        toolbar.stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
         toolbar.stopReloadButton.addTarget(self, action: "SELdidClickStopReload", forControlEvents: UIControlEvents.TouchUpInside)
 
         toolbar.shareButton.setImage(UIImage(named: "send"), forState: .Normal)
@@ -102,6 +109,7 @@ public class BrowserToolbarHelper: NSObject {
 
         toolbar.bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
         toolbar.bookmarkButton.setImage(UIImage(named: "bookmarked"), forState: UIControlState.Selected)
+        toolbar.bookmarkButton.setImage(UIImage(named: "bookmarkHighlighted"), forState: UIControlState.Highlighted)
         toolbar.bookmarkButton.accessibilityLabel = NSLocalizedString("Bookmark", comment: "Accessibility Label for the browser toolbar Bookmark button")
         let longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBookmark:")
         toolbar.bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
@@ -152,6 +160,12 @@ public class BrowserToolbarHelper: NSObject {
         }
     }
 
+    func SELdidLongPressStopReload(recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.Began && !loading {
+            toolbar.browserToolbarDelegate?.browserToolbarDidLongPressReload(toolbar, button: toolbar.stopReloadButton)
+        }
+    }
+
     func updateReloadStatus(isLoading: Bool) {
         loading = isLoading
     }
@@ -169,6 +183,19 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
     let actionButtons: [UIButton]
 
     var helper: BrowserToolbarHelper?
+
+    static let Themes: [String: Theme] = {
+        var themes = [String: Theme]()
+        var theme = Theme()
+        theme.buttonTintColor = UIConstants.PrivateModeActionButtonTintColor
+        themes[Theme.PrivateMode] = theme
+
+        theme = Theme()
+        theme.buttonTintColor = UIColor.darkGrayColor()
+        themes[Theme.NormalMode] = theme
+
+        return themes
+    }()
 
     // This has to be here since init() calls it
     private override init(frame: CGRect) {
@@ -239,5 +266,15 @@ extension BrowserToolbar {
             guard let value = newValue else { return }
             helper?.buttonTintColor = value
         }
+    }
+}
+
+extension BrowserToolbar: Themeable {
+    func applyTheme(themeName: String) {
+        guard let theme = BrowserToolbar.Themes[themeName] else {
+            log.error("Unable to apply unknown theme \(themeName)")
+            return
+        }
+        actionButtonTintColor = theme.buttonTintColor!
     }
 }

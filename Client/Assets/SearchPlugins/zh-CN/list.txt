@@ -1,4 +1,5 @@
-google
 baidu
-twitter
+taobao
+bing
+google
 wikipedia-zh-CN

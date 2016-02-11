@@ -4,22 +4,48 @@
 
 import Foundation
 import SnapKit
+import Shared
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 struct TabsButtonUX {
     static let TitleColor: UIColor = UIColor.blackColor()
     static let TitleBackgroundColor: UIColor = UIColor.whiteColor()
     static let CornerRadius: CGFloat = 2
-    static let TitleFont: UIFont = UIConstants.DefaultSmallFontBold
+    static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 0
     static let BorderColor: UIColor = UIColor.clearColor()
     static let TitleInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+
+    static let Themes: [String: Theme] = {
+        var themes = [String: Theme]()
+        var theme = Theme()
+        theme.borderColor = UIConstants.PrivateModePurple
+        theme.borderWidth = 1
+        theme.font = UIConstants.DefaultChromeBoldFont
+        theme.backgroundColor = UIConstants.AppBackgroundColor
+        theme.textColor = UIConstants.PrivateModePurple
+        theme.insets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        themes[Theme.PrivateMode] = theme
+
+        theme = Theme()
+        theme.borderColor = BorderColor
+        theme.borderWidth = BorderStrokeWidth
+        theme.font = TitleFont
+        theme.backgroundColor = TitleBackgroundColor
+        theme.textColor = TitleColor
+        theme.insets = TitleInsets
+        themes[Theme.NormalMode] = theme
+
+        return themes
+    }()
 }
 
 class TabsButton: UIControl {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = TabsButtonUX.TitleFont
-        label.textColor = TabsButtonUX.TitleColor
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
         label.textAlignment = NSTextAlignment.Center
         label.userInteractionEnabled = false
@@ -35,7 +61,6 @@ class TabsButton: UIControl {
 
     private lazy var labelBackground: UIView = {
         let background = UIView()
-        background.backgroundColor = TabsButtonUX.TitleBackgroundColor
         background.layer.cornerRadius = TabsButtonUX.CornerRadius
         background.userInteractionEnabled = false
         return background
@@ -44,7 +69,6 @@ class TabsButton: UIControl {
     private lazy var borderView: InnerStrokedView = {
         let border = InnerStrokedView()
         border.strokeWidth = TabsButtonUX.BorderStrokeWidth
-        border.color = TabsButtonUX.BorderColor
         border.cornerRadius = TabsButtonUX.CornerRadius
         border.userInteractionEnabled = false
         return border
@@ -58,6 +82,8 @@ class TabsButton: UIControl {
         insideButton.addSubview(borderView)
         insideButton.addSubview(titleLabel)
         addSubview(insideButton)
+        isAccessibilityElement = true
+        accessibilityTraits |= UIAccessibilityTraitButton
     }
 
     override func updateConstraints() {
@@ -98,6 +124,23 @@ class TabsButton: UIControl {
         button.borderView.color = borderView.color
         button.borderView.cornerRadius = borderView.cornerRadius
         return button
+    }
+}
+
+extension TabsButton: Themeable {
+    func applyTheme(themeName: String) {
+
+        guard let theme = TabsButtonUX.Themes[themeName] else {
+            log.error("Unable to apply unknown theme \(themeName)")
+            return
+        }
+
+        borderColor = theme.borderColor!
+        borderWidth = theme.borderWidth!
+        titleFont = theme.font
+        titleBackgroundColor = theme.backgroundColor
+        textColor = theme.textColor
+        insets = theme.insets!
     }
 }
 

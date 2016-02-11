@@ -78,7 +78,6 @@ function handleTouchEnd(event) {
   cancel();
 
   removeEventListener("touchend", handleTouchEnd);
-  removeEventListener("mouseup", handleTouchEnd);
   removeEventListener("touchmove", handleTouchMove);
 
   // If we're showing the context menu, prevent the page from handling the click event.
@@ -99,10 +98,7 @@ addEventListener("touchstart", function (event) {
   var element = event.target;
 
   // Listen for touchend or move events to cancel the context menu timeout.
-  // Also listen for mouseup due to touchend not being fired with VoiceOver enabled.
-  // Open bug filed as rdar://22256909.
   element.addEventListener("touchend", handleTouchEnd);
-  element.addEventListener("mouseup", handleTouchEnd);
   element.addEventListener("touchmove", handleTouchMove);
 
   do {
@@ -137,6 +133,8 @@ addEventListener("touchstart", function (event) {
       cancel();
       webkit.messageHandlers.contextMenuMessageHandler.postMessage(data);
     }, 500);
+
+    webkit.messageHandlers.contextMenuMessageHandler.postMessage({ handled: true });
   }
 }, true);
 

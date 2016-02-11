@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+@testable import Client
 import Foundation
 import Account
 import ReadingList
@@ -12,6 +13,11 @@ import XCTest
 
 public class MockSyncManager: SyncManager {
     public var isSyncing = false
+    public var lastSyncFinishTime: Timestamp? = nil
+
+    public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
+        return deferMaybe(true)
+    }
 
     public func syncClients() -> SyncResult { return deferMaybe(.Completed) }
     public func syncClientsThenTabs() -> SyncResult { return deferMaybe(.Completed) }
@@ -30,11 +36,18 @@ public class MockSyncManager: SyncManager {
         self.endTimedSyncs()
     }
 
+    public func onNewProfile() {
+    }
+
     public func onAddedAccount() -> Success {
         return succeed()
     }
     public func onRemovedAccount(account: FirefoxAccount?) -> Success {
         return succeed()
+    }
+
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        return deferMaybe(true)
     }
 }
 
@@ -60,9 +73,6 @@ public class MockProfile: Profile {
     }
 
     func shutdown() {
-        if dbCreated {
-            db.close()
-        }
     }
 
     private var dbCreated = false
@@ -75,8 +85,8 @@ public class MockProfile: Profile {
      * Favicons, history, and bookmarks are all stored in one intermeshed
      * collection of tables.
      */
-    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory> = {
-        return SQLiteHistory(db: self.db)!
+    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage> = {
+        return SQLiteHistory(db: self.db, prefs: MockProfilePrefs())!
     }()
 
     var favicons: Favicons {
@@ -87,7 +97,7 @@ public class MockProfile: Profile {
         return MockTabQueue()
     }()
 
-    var history: protocol<BrowserHistory, SyncableHistory> {
+    var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
         return self.places
     }
 
@@ -95,7 +105,7 @@ public class MockProfile: Profile {
         return MockSyncManager()
     }()
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
+    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         let p = self.places
@@ -127,7 +137,7 @@ public class MockProfile: Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
-    lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
+    lazy var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> = {
         return MockLogins(files: self.files)
     }()
 

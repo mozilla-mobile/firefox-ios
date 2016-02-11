@@ -11,35 +11,17 @@ class ReadingListBatchRecordResponse: ReadingListResponse {
         super.init(response: response, json: json)
         if let responses = json?.valueForKeyPath("responses") as? [AnyObject] {
             for response in responses {
-                if let body = response.valueForKeyPath("body") as? [String:AnyObject] {
-                    if let statusCode = response.valueForKeyPath("status") as? Int {
-                        if let path = response.valueForKeyPath("path") as? String {
-                            if let url = NSURL(string: path, relativeToURL: self.response.URL) {
-                                if let headers = response.valueForKeyPath("headers") as? [String:String] {
-                                    if let r = NSHTTPURLResponse(URL: url, statusCode: statusCode, HTTPVersion: "1.1", headerFields: headers) {
-                                        if let recordResponse = ReadingListRecordResponse(response: r, json: body) {
-                                            self.responses.append(recordResponse)
-                                        } else {
-                                            return nil // This will
-                                        }
-                                    } else {
-                                        return nil // hopefully
-                                    }
-                                } else {
-                                    return nil // become
-                                }
-                            } else {
-                                return nil // much
-                            }
-                        } else {
-                            return nil // nicer code
-                        }
-                    } else {
-                        return nil // when we
-                    }
-                } else {
-                    return nil // use Swift 1.2
+                guard let body = response.valueForKeyPath("body") as? [String:AnyObject],
+                    let statusCode = response.valueForKeyPath("status") as? Int,
+                    let path = response.valueForKeyPath("path") as? String,
+                    let url = NSURL(string: path, relativeToURL: self.response.URL),
+                    let headers = response.valueForKeyPath("headers") as? [String:String],
+                    let r = NSHTTPURLResponse(URL: url, statusCode: statusCode, HTTPVersion: "1.1", headerFields: headers),
+                    let recordResponse = ReadingListRecordResponse(response: r, json: body) else {
+                        return nil
                 }
+                
+                self.responses.append(recordResponse)
             }
         } else {
             return nil
