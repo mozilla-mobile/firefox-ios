@@ -585,6 +585,7 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     /// Executes a change on the database.
     public func executeChange(sqlStr: String, withArgs args: [AnyObject?]?) -> NSError? {
+        log.debug("Running change\n \(sqlStr);")
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -592,6 +593,7 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         } catch let error1 as NSError {
             error = error1
             statement = nil
+            log.error("SQL error: \(error1.localizedDescription) for SQL \(sqlStr).")
         }
 
         // Close, not reset -- this isn't going to be reused.
@@ -623,6 +625,7 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     /// Queries the database.
     /// Returns a cursor pre-filled with the complete result set.
     func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
+        log.debug("Running query \(sqlStr);")
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {

@@ -11,8 +11,8 @@ private let log = Logger.syncLogger
 
 class Uploader {
     /**
-    * Upload just about anything that can be turned into something we can upload.
-    */
+     * Upload just about anything that can be turned into something we can upload.
+     */
     func sequentialPosts<T>(items: [T], by: Int, lastTimestamp: Timestamp, storageOp: ([T], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
 
         // This needs to be a real Array, not an ArraySlice,
@@ -62,8 +62,10 @@ public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchroni
 
         return walk(records, f: apply) >>> done
     }
+}
 
-    /*
+extension TimestampedSingleCollectionSynchronizer {
+    /**
      * On each chunk that we upload, we pass along the server modified timestamp to the next,
      * chained through the provided `onUpload` function.
      *
@@ -80,7 +82,7 @@ public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchroni
      * In order to implement the latter, we'd need to chain the date from getSince in place of the
      * 0 in the call to uploadOutgoingFromStorage in each synchronizer.
      */
-    func uploadRecords<T>(records: [Record<T>], by: Int, lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: ([GUID], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
+    func uploadRecords<T>(records: [Record<T>], by: Int, lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: POSTResult -> DeferredTimestamp) -> DeferredTimestamp {
         if records.isEmpty {
             log.debug("No modified records to upload.")
             return deferMaybe(lastTimestamp)
@@ -93,7 +95,7 @@ public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchroni
             // For a success response, this will be on the subsequent request, which means we don't
             // have to worry about handling successes and failures mixed with backoffs here.
             return storageClient.post(records, ifUnmodifiedSince: nil)
-                >>== { onUpload($0.value.success, $0.value.modified) }
+                >>== { onUpload($0.value) }
         }
 
         log.debug("Uploading \(records.count) modified records.")

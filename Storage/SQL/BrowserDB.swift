@@ -10,16 +10,25 @@ public let NotificationDatabaseWasRecreated = "NotificationDatabaseWasRecreated"
 
 private let log = Logger.syncLogger
 
-typealias Args = [AnyObject?]
+public typealias Args = [AnyObject?]
 
-/* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
+protocol Changeable {
+    func run(sql: String, withArgs args: Args?) -> Success
+    func run(commands: [String]) -> Success
+    func run(commands: [(sql: String, args: Args?)]) -> Success
+}
+
+protocol Queryable {
+    func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Maybe<Cursor<T>>>
+}
+
 // Version 1 - Basic history table.
 // Version 2 - Added a visits table, refactored the history table to be a GenericTable.
 // Version 3 - Added a favicons table.
 // Version 4 - Added a readinglist table.
 // Version 5 - Added the clients and the tabs tables.
 // Version 6 - Visit timestamps are now microseconds.
-// Version 7 - Eliminate most tables.
+// Version 7 - Eliminate most tables. See BrowserTable instead.
 public class BrowserDB {
     private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
@@ -33,7 +42,7 @@ public class BrowserDB {
 
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
     // appear in a query string.
-    static let MaxVariableNumber = 999
+    public static let MaxVariableNumber = 999
 
     public init(filename: String, secretKey: String? = nil, files: FileAccessor) {
         log.debug("Initializing BrowserDB: \(filename).")
@@ -370,7 +379,9 @@ extension BrowserDB {
     public func forceClose() {
         db.forceClose()
     }
+}
 
+extension BrowserDB: Changeable {
     func run(sql: String, withArgs args: Args? = nil) -> Success {
         return run([(sql, args)])
     }
@@ -380,16 +391,21 @@ extension BrowserDB {
     }
 
     /**
-     * Runs an array of sql commands. Note: These will all run in order in a transaction and will block
-     * the callers thread until they've finished. If any of them fail the operation will abort (no more
-     * commands will be run) and the transaction will rollback, returning a DatabaseError.
+     * Runs an array of SQL commands. Note: These will all run in order in a transaction and will block
+     * the caller's thread until they've finished. If any of them fail the operation will abort (no more
+     * commands will be run) and the transaction will roll back, returning a DatabaseError.
      */
-    func run(sql: [(sql: String, args: Args?)]) -> Success {
+    func run(commands: [(sql: String, args: Args?)]) -> Success {
+        if commands.isEmpty {
+            return succeed()
+        }
+
         var err: NSError? = nil
         self.transaction(&err) { (conn, err) -> Bool in
-            for (sql, args) in sql {
+            for (sql, args) in commands {
                 err = conn.executeChange(sql, withArgs: args)
-                if err != nil {
+                if let err = err {
+                    log.warning("SQL operation failed: \(err.localizedDescription)")
                     return false
                 }
             }
@@ -402,7 +418,9 @@ extension BrowserDB {
 
         return succeed()
     }
+}
 
+extension BrowserDB: Queryable {
     func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Maybe<Cursor<T>>> {
         return runWithConnection { (connection, err) -> Cursor<T> in
             return connection.executeQuery(sql, factory: factory, withArgs: args)

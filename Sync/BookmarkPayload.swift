@@ -9,6 +9,12 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
+extension BookmarkMirrorItem {
+    func asPayload() -> BookmarkBasePayload {
+        return BookmarkType.somePayloadFromJSON(self.asJSON())
+    }
+}
+
 /**
  * Hierarchy:
  * - BookmarkBasePayload
@@ -349,6 +355,10 @@ public class BookmarkQueryPayload: BookmarkPayload {
 public class BookmarkBasePayload: CleartextPayloadJSON {
     private static let requiredStringFields: [String] = ["parentid", "type"]
     private static let optionalBooleanFields: [String] = ["hasDupe"]
+
+    static func deletedPayload(guid: GUID) -> BookmarkBasePayload {
+        return BookmarkBasePayload(JSON(["id": guid, "deleted": true]))
+    }
 
     func hasStringArrayField(name: String) -> Bool {
         guard let arr = self[name].asArray else {

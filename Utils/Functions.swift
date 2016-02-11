@@ -221,3 +221,52 @@ public func debounce(delay:NSTimeInterval, action:()->()) -> ()->() {
         NSRunLoop.currentRunLoop().addTimer(timer!, forMode: NSDefaultRunLoopMode)
     }
 }
+
+/**
+ * A stack that only allows a particular item to be pushed into it once.
+ * Duplicates are determined by a key, which allows us to avoid dealing with
+ * general-purpose hashing of some of our custom enums.
+ */
+public class OnceOnlyStack<T, U: Hashable> {
+    var seen: Set<U> = Set()
+    var stack: [T] = []
+    let key: T -> U
+
+    public init(key: T -> U) {
+        self.key = key
+    }
+
+    // Returns false if the item has already been seen.
+    public func push(item: T) -> Bool {
+        let k = self.key(item)
+        if self.seen.contains(k) {
+            return false
+        }
+        self.stack.append(item)
+        self.seen.insert(k)
+        return true
+    }
+
+    public func pushAll(items: [T]) {
+        self.stack.reserveCapacity(items.count + self.stack.count)
+        items.forEach { self.push($0) }
+    }
+
+    public func pop() -> T? {
+        return self.stack.popLast()
+    }
+
+    public var count: Int {
+        return self.stack.count
+    }
+
+    public func forEach(f: T -> ()) {
+        while let v = self.stack.popLast() {
+            f(v)
+        }
+    }
+
+    public func ignoreKey(key: U) {
+        self.seen.insert(key)
+    }
+}
