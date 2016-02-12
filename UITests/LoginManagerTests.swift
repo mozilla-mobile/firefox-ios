@@ -521,6 +521,55 @@ class LoginManagerTests: KIFTestCase {
         closeLoginManager()
     }
 
+    func testEditingDetailUpdatesPassword() {
+        openLoginManager()
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().waitForViewWithAccessibilityLabel("password")
+
+        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+
+        tester().tapViewWithAccessibilityLabel("Edit")
+
+        // Check that we've selected the username field
+        var firstResponder = UIApplication.sharedApplication().keyWindow?.firstResponder()
+        let usernameCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! LoginTableViewCell
+        let usernameField = usernameCell.descriptionLabel
+
+        XCTAssertEqual(usernameField, firstResponder)
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("changedusername")
+        tester().tapViewWithAccessibilityLabel("Next")
+
+        firstResponder = UIApplication.sharedApplication().keyWindow?.firstResponder()
+        var passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        let passwordField = passwordCell.descriptionLabel
+
+        // Check that we've navigated to the password field upon return and that the password is no longer displaying as dots
+        XCTAssertEqual(passwordField, firstResponder)
+        XCTAssertFalse(passwordField.secureTextEntry)
+
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("changedpassword")
+        tester().tapViewWithAccessibilityLabel("Done")
+
+        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        let centerOfCell = CGPoint(x: passwordCell.frame.width / 2, y: passwordCell.frame.height / 2)
+        XCTAssertTrue(passwordCell.descriptionLabel.secureTextEntry)
+
+        // Tap the 'Reveal' menu option
+        passwordCell.longPressAtPoint(centerOfCell, duration: 2)
+        tester().waitForViewWithAccessibilityLabel("Reveal")
+        tester().tapViewWithAccessibilityLabel("Reveal")
+
+        passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        XCTAssertEqual(passwordCell.descriptionLabel.text, "changedpassword")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+        closeLoginManager()
+    }
+
     func testDeleteLoginFromDetailScreen() {
 
         openLoginManager()

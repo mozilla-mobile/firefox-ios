@@ -207,7 +207,7 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
         return Maybe(success: ())
     }
 
-    public func update(password _: String, username: String) {
+    public func update(password password: String, username: String) {
         self.credentials =
             NSURLCredential(user: username, password: password, persistence: credentials.persistence)
     }
