@@ -16,6 +16,9 @@ struct Theme {
     var borderWidth: CGFloat?
     var font: UIFont?
     var insets: UIEdgeInsets?
+    var highlightButtonColor: UIColor?
+    var highlightBorderColor: UIColor?
+    var highlightTextColor: UIColor?
 
     static let PrivateMode = "Private"
     static let NormalMode = "Normal"
