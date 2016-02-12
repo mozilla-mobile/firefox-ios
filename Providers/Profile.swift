@@ -9,6 +9,8 @@ import Shared
 import Storage
 import Sync
 import XCGLogger
+import SwiftKeychainWrapper
+import Deferred
 
 private let log = Logger.syncLogger
 

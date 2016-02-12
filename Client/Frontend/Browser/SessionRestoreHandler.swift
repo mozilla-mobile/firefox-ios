@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import GCDWebServers
 
 /// Handles requests to /about/sessionrestore to restore session history.
 struct SessionRestoreHandler {

@@ -8,6 +8,7 @@ import Shared
 import Storage
 @testable import Sync
 import XCGLogger
+import Deferred
 
 import XCTest
 

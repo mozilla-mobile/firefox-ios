@@ -6,6 +6,7 @@ import Foundation
 import FxA
 import Shared
 import XCGLogger
+import Deferred
 
 // TODO: log to an FxA-only, persistent log file.
 private let log = Logger.syncLogger

@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import XCGLogger
+import Deferred
 
 private let log = Logger.syncLogger
 private let DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUEUE_SERIAL)
