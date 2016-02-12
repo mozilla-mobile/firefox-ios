@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 CARTHAGE_VERSION=$(carthage version)
-if [[ $CARTHAGE_VERSION<0.11.0 || $CARTHAGE_VERSION>0.11.0 ]]; then
-	echo "Carthage requires upgrade"
+if which carthage ==/dev/null || [[ $CARTHAGE_VERSION<0.11.0 || $CARTHAGE_VERSION>0.11.0 ]]; then
+	echo "Installing Carthage 0.11"
 	brew update
 	brew install https://github.com/Carthage/Carthage/releases/tag/0.11
 fi
