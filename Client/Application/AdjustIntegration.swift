@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import AdjustSdk
 
 private let AdjustIntegrationErrorDomain = "org.mozilla.ios.Firefox.AdjustIntegrationErrorDomain"
 

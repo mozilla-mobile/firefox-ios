@@ -13,6 +13,7 @@ import XCGLogger
 import Alamofire
 import Account
 import ReadingList
+import MobileCoreServices
 
 private let log = Logger.browserLogger
 

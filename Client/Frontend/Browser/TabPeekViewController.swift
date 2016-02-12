@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import ReadingList
+import WebKit
 
 @available(iOS 9.0, *)
 protocol TabPeekDelegate: class {
