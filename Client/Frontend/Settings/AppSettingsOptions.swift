@@ -30,7 +30,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Sign In", comment: "Text message / button in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Sign In to Firefox", comment: "Text message / button in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
     override func onClick(navigationController: UINavigationController?) {
