@@ -469,9 +469,6 @@
 		E60A60A11B6BFDDC00F850D4 /* CrashReporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A60A01B6BFDDC00F850D4 /* CrashReporterTests.swift */; };
 		E614013A1C5FC26D002B5B38 /* FirefoxBetaEnterprise.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E61401391C5FC26D002B5B38 /* FirefoxBetaEnterprise.xcconfig */; };
 		E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */; };
-		E61BFEEB1C5FF96F009D56D4 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D31FC2311A8D908900BAF7EC /* Alamofire.framework */; };
-		E61BFEEC1C5FF96F009D56D4 /* Base32.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F44F9FD1A9D417600FD20CC /* Base32.framework */; };
-		E61BFEED1C5FF96F009D56D4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; };
 		E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
 		E6231C031B90A466005ABB0D /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */; };
 		E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C041B90A472005ABB0D /* libxml2.2.tbd */; };
@@ -861,20 +858,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
 			remoteInfo = Storage;
-		};
-		E61BFEE61C5FF861009D56D4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
-			remoteInfo = "XCGLogger (iOS)";
-		};
-		E61BFEE81C5FF90F009D56D4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
-			remoteInfo = "Alamofire iOS";
 		};
 		E63CD1B11B31B66400A63AFF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2009,7 +1992,6 @@
 		2FCAE21C1ABB51F800877008 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E68F78491C5FD8B200483B05 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -2643,7 +2625,6 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
-				E4D6BEB51A092E0300F538BD /* Client.entitlements */,
 				F84B22431A09165600AAB793 /* Info.plist */,
 				E4D8F3B21ACDD5150005A2E4 /* InfoPlist.strings */,
 				E60961841B62B7E100DD640F /* Configuration */,
@@ -3030,7 +3011,7 @@
 		};
 		7B3632D01C2983F000D12AF9 /* L10nSnapshotTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7B3632D81C2983F000D12AF9 /* Build configuration list for PBXNativeTarget "L10nSnapshotTests" */;
+			buildConfigurationList = E6635DBE1C6E3BD50080639A /* Build configuration list */;
 			buildPhases = (
 				7B3632CD1C2983F000D12AF9 /* Sources */,
 				7B3632CE1C2983F000D12AF9 /* Frameworks */,
@@ -3047,7 +3028,7 @@
 		};
 		7B95CD161C3AB2EE00638E31 /* MarketingUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7B95CD1E1C3AB2EE00638E31 /* Build configuration list for PBXNativeTarget "MarketingUITests" */;
+			buildConfigurationList = E6635DBF1C6E3BD50080639A /* Build configuration list */;
 			buildPhases = (
 				7B95CD131C3AB2EE00638E31 /* Sources */,
 				7B95CD141C3AB2EE00638E31 /* Frameworks */,
@@ -3073,7 +3054,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				E6D03D061C6000FD00505FD0 /* PBXTargetDependency */,
 				D39FA1661A83E0EC00EE869C /* PBXTargetDependency */,
 			);
 			name = UITests;
@@ -4529,16 +4509,6 @@
 			target = 2FCAE2191ABB51F800877008 /* Storage */;
 			targetProxy = E4EE05AF1BA3A0A10021B3A7 /* PBXContainerItemProxy */;
 		};
-		E61BFEE71C5FF861009D56D4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "XCGLogger (iOS)";
-			targetProxy = E61BFEE61C5FF861009D56D4 /* PBXContainerItemProxy */;
-		};
-		E61BFEE91C5FF90F009D56D4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Alamofire iOS";
-			targetProxy = E61BFEE81C5FF90F009D56D4 /* PBXContainerItemProxy */;
-		};
 		E65C5BCA1BEA4F6500D28BEF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
@@ -4871,6 +4841,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/**",
 					"$(BUILD_DIR)/Debug$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -4888,6 +4859,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -4912,7 +4884,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Client/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 			};
@@ -4937,7 +4908,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4953,7 +4923,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/SendTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4999,6 +4968,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/**",
 					"$(BUILD_DIR)/Debug$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -5016,6 +4986,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -5040,7 +5011,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Client/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 			};
@@ -5065,7 +5035,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5081,7 +5050,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/SendTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5265,9 +5233,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ViewLater/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5281,9 +5247,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ViewLater/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5297,9 +5261,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ViewLater/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5410,6 +5372,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/**",
 					"$(BUILD_DIR)/Debug$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -5427,6 +5390,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -5451,7 +5415,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Client/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 			};
@@ -5477,7 +5440,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/SendTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5491,7 +5453,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5506,9 +5467,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ViewLater/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5791,6 +5750,76 @@
 			};
 			name = FirefoxNightly;
 		};
+		E6635DAC1C6E3BD40080639A /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = L10nSnapshotTests;
+			};
+			name = Fennec;
+		};
+		E6635DAD1C6E3BD40080639A /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = L10nSnapshotTests;
+			};
+			name = Firefox;
+		};
+		E6635DAE1C6E3BD40080639A /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = L10nSnapshotTests;
+			};
+			name = FirefoxBeta;
+		};
+		E6635DAF1C6E3BD40080639A /* FirefoxBetaEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = L10nSnapshotTests;
+			};
+			name = FirefoxBetaEnterprise;
+		};
+		E6635DB01C6E3BD40080639A /* FirefoxNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = L10nSnapshotTests;
+			};
+			name = FirefoxNightly;
+		};
+		E6635DB11C6E3BD40080639A /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = MarketingUITests;
+			};
+			name = Fennec;
+		};
+		E6635DB21C6E3BD40080639A /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = MarketingUITests;
+			};
+			name = Firefox;
+		};
+		E6635DB31C6E3BD40080639A /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = MarketingUITests;
+			};
+			name = FirefoxBeta;
+		};
+		E6635DB41C6E3BD40080639A /* FirefoxBetaEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = MarketingUITests;
+			};
+			name = FirefoxBetaEnterprise;
+		};
+		E6635DB51C6E3BD40080639A /* FirefoxNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = MarketingUITests;
+			};
+			name = FirefoxNightly;
+		};
 		E6F965151B2F1CF20034B023 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5865,6 +5894,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/**",
 					"$(BUILD_DIR)/Debug$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -5882,6 +5912,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -5906,7 +5937,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Client/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 			};
@@ -5932,7 +5962,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/SendTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5946,7 +5975,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5961,9 +5989,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ViewLater/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -6208,6 +6234,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/**",
 					"$(BUILD_DIR)/Debug$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -6229,6 +6256,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -6253,7 +6281,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Client/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 			};
@@ -6278,7 +6305,6 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -6293,12 +6319,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/SendTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -6449,6 +6470,30 @@
 				E6FCC4301C40562400DF6113 /* FirefoxBeta */,
 				E61401421C5FC2BA002B5B38 /* FirefoxBetaEnterprise */,
 				E65C5BCF1BEA4F6500D28BEF /* FirefoxNightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		E6635DBE1C6E3BD50080639A /* Build configuration list */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6635DAC1C6E3BD40080639A /* Fennec */,
+				E6635DAD1C6E3BD40080639A /* Firefox */,
+				E6635DAE1C6E3BD40080639A /* FirefoxBeta */,
+				E6635DAF1C6E3BD40080639A /* FirefoxBetaEnterprise */,
+				E6635DB01C6E3BD40080639A /* FirefoxNightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		E6635DBF1C6E3BD50080639A /* Build configuration list */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6635DB11C6E3BD40080639A /* Fennec */,
+				E6635DB21C6E3BD40080639A /* Firefox */,
+				E6635DB31C6E3BD40080639A /* FirefoxBeta */,
+				E6635DB41C6E3BD40080639A /* FirefoxBetaEnterprise */,
+				E6635DB51C6E3BD40080639A /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
