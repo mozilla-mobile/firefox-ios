@@ -82,6 +82,14 @@ class DomainAutocompleteTests: KIFTestCase {
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ding", completion: "")
         tester().clearTextFromFirstResponder()
 
+        // Test default domains.
+        tester().enterTextIntoCurrentFirstResponder("a")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "a", completion: "mazon.com/")
+        tester().enterTextIntoCurrentFirstResponder("n")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "an", completion: "swers.com/")
+        tester().enterTextIntoCurrentFirstResponder("c")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "anc", completion: "estry.com/")
+
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
