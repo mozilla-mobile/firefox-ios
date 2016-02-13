@@ -30,6 +30,11 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         super.init()
     }
 
+    private lazy var topDomains: [String] = {
+        let filePath = NSBundle.mainBundle().pathForResource("topdomains", ofType: "txt")
+        return try! String(contentsOfFile: filePath!).componentsSeparatedByString("\n")
+    }()
+
     var query: String = "" {
         didSet {
             if query.isEmpty {
@@ -50,6 +55,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
 
                 // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
+                    // First, see if the query matches any URLs from the user's search history.
                     self.load(cursor)
                     for site in cursor {
                         if let url = site?.url,
@@ -59,6 +65,13 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                         }
                     }
 
+                    // If there are no search history matches, try matching one of the Alexa top domains.
+                    for domain in self.topDomains {
+                        if let completion = self.completionForDomain(domain) {
+                            self.urlBar.setAutocompleteSuggestion(completion)
+                            return
+                        }
+                    }
                 }
             }
         }
