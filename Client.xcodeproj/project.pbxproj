@@ -323,6 +323,7 @@
 		D34E33031BA793C2006135F0 /* loginForm.html in Resources */ = {isa = PBXBuildFile; fileRef = D34E33021BA793C2006135F0 /* loginForm.html */; };
 		D36998891AD70A0A00650C6C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D36998881AD70A0A00650C6C /* IOKit.framework */; };
 		D37016031BF282450063D032 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2BB1AC0AB9F0052877D /* UIImageExtensions.swift */; };
+		D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */ = {isa = PBXBuildFile; fileRef = D37524861C6E8B5A00A5F6C2 /* topdomains.txt */; };
 		D375A9201AE71675001B30D5 /* ViewMemoryLeakTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D375A91F1AE71675001B30D5 /* ViewMemoryLeakTests.swift */; };
 		D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */; };
 		D38A1BF01A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */; };
@@ -524,7 +525,6 @@
 		E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */; };
 		E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
 		E6B4C4031C68F58B001F97E8 /* BrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */; };
-		E6B8963A1C3C1A9500D9B05B /* topdomains.txt in Resources */ = {isa = PBXBuildFile; fileRef = E6B896391C3C1A9500D9B05B /* topdomains.txt */; };
 		E6D749011C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */; };
 		E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */; };
 		E6E4A9631BF0FA85008162D5 /* NSFileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E4A9621BF0FA85008162D5 /* NSFileManagerExtensions.swift */; };
@@ -1237,6 +1237,7 @@
 		D34E33021BA793C2006135F0 /* loginForm.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = loginForm.html; sourceTree = "<group>"; };
 		D35275151AA8D13B00E9C906 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		D36998881AD70A0A00650C6C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
+		D37524861C6E8B5A00A5F6C2 /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		D375A91F1AE71675001B30D5 /* ViewMemoryLeakTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewMemoryLeakTests.swift; sourceTree = "<group>"; };
 		D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
 		D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SiteTableViewControllerHeader.xib; sourceTree = "<group>"; };
@@ -1448,7 +1449,6 @@
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
 		E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = JSPrompt.html; sourceTree = "<group>"; };
 		E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTests.swift; sourceTree = "<group>"; };
-		E6B896391C3C1A9500D9B05B /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLProtectionSpaceExtensions.swift; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
 		E6E4A9621BF0FA85008162D5 /* NSFileManagerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFileManagerExtensions.swift; sourceTree = "<group>"; };
@@ -2247,7 +2247,6 @@
 				744B0FFD1B4F172E00100422 /* ToolbarTests.swift */,
 				7BB20B6C1B71160200F1657F /* TopSitesTests.swift */,
 				D375A91F1AE71675001B30D5 /* ViewMemoryLeakTests.swift */,
-				E6B896391C3C1A9500D9B05B /* topdomains.txt */,
 				D39FA1611A83E0EC00EE869C /* Supporting Files */,
 			);
 			path = UITests;
@@ -2718,6 +2717,7 @@
 				0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */,
 				39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */,
 				E49C0EB01B46109C009092BB /* WindowCloseHelper.js */,
+				D37524861C6E8B5A00A5F6C2 /* topdomains.txt */,
 				F84B21EF1A0910F600AAB793 /* Images.xcassets */,
 				E699220D1B94E3EF007C480D /* About */,
 				F84B22391A0914A300AAB793 /* Fonts */,
@@ -3571,7 +3571,6 @@
 			files = (
 				E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */,
 				D34E33031BA793C2006135F0 /* loginForm.html in Resources */,
-				E6B8963A1C3C1A9500D9B05B /* topdomains.txt in Resources */,
 				0B6FBAB21AC1F830007EC669 /* numberedPage.html in Resources */,
 				0B5A93421B1EB572004F47A2 /* readablePage.html in Resources */,
 				E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */,
@@ -3638,6 +3637,7 @@
 				D3B692411B9F9CC8004B87A4 /* FindInPage.js in Resources */,
 				E4CD9F5B1A71506C00318571 /* Reader.css in Resources */,
 				E4B7B7611A793CF20022C5E0 /* CharisSILB.ttf in Resources */,
+				D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */,
 				E4B7B7621A793CF20022C5E0 /* CharisSILBI.ttf in Resources */,
 				E4A961361AC052DE0069AD6F /* ReadabilityBrowserHelper.js in Resources */,
 				D32075391B017DA400CA1CD2 /* SearchPlugins in Resources */,
