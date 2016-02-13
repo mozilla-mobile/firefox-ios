@@ -1,15 +1,15 @@
 Building Firefox for iOS
 ========================
 
-Prerequisites, as of *September 4, 2015*:
+Prerequisites, as of *February 13, 2016*:
 
-* Mac OS X 10.11.1
-* Xcode 7.1 GM with the iOS 9.2 GM SDK (Newer betas not supported)
-* Carthage 0.8 via Homebrew
+* Mac OS X 10.11.3
+* Xcode 7.2.1 GM with the iOS 9.3 GM SDK (Betas not supported)
+* Carthage 0.11 via Homebrew or direct install via https://github.com/Carthage/Carthage/releases/tag/0.11
 
 When running on a device:
 
-* A device that supports iOS 9.2 GM
+* A device that supports iOS 9.3 GM
 * One of the following:
  * A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS DevCenter*
  * A free developer account, new with Xcode 7
@@ -27,12 +27,12 @@ cd firefox-ios
 Pull in Dependencies
 --------------------
 
-We use Carthage to manage projects that we depend on. If you do not already have Carthage installed, you need to grab it via Homebrew. Assuming you have Homebrew installed, execute the following:
+We use Carthage to manage projects that we depend on. __The build will currently only work with Carthage v0.11__. If you do not already have Carthage installed, you need to grab it via Homebrew. Assuming you have Homebrew installed, execute the following:
 
 ```
 brew update
 brew upgrade
-brew install carthage
+brew install https://github.com/Carthage/Carthage/releases/tag/0.11
 ```
 
 You can now execute our `checkout.sh` script:
