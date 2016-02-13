@@ -32,8 +32,11 @@ We use Carthage to manage projects that we depend on. __The build will currently
 ```
 brew update
 brew upgrade
-brew install https://github.com/Carthage/Carthage/releases/tag/0.11
+brew install carthage
+brew switch carthage 0.11
 ```
+
+If the `brew switch` does not work because Carthage 0.11 is not available, you will have to `brew uninstall carthage' and install the binary distribution manually from https://github.com/Carthage/Carthage/releases/tag/0.11 (This is temporary until some bugs in newer Carthage versions have been addresses) 
 
 You can now execute our `checkout.sh` script:
 
