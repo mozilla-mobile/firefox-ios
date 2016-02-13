@@ -84,26 +84,3 @@ It is possible to use [App Code](https://www.jetbrains.com/objc/download/) inste
 * Each commit should have a single clear purpose. If a commit contains multiple unrelated changes, those changes should be split into separate commits.
 * If a commit requires another commit to build properly, those commits should be squashed.
 * Follow-up commits for any review comments should be squashed. Do not include "Fixed PR comments", merge commits, or other "temporary" commits in pull requests.
-
-Adding new dependencies with Carthage
--------------------------------------
-
-Notes from Stefan:
-
-Usually Carthage is used to compile frameworks and then include the (compiled) binary frameworks in your app. When you do this, the frameworks do not need to be signed by Carthage. Instead, at the end of building the your application, xcode will simply sign all the embedded resources, frameworks included. So as long as signing works for your app, it will work for frameworks imported with Carthage.
-
-But, because not all Carthage dependencies can be compiled to frameworks yet, we currently include them as source. This means they become dependent projects of our application, which in turn means that they are built *and signed* individually as part of the build process of our app.
-
-Now this is where it gets tricky. Because code signing on iOS can get really tedious to get right. Small mistakes in dependent projects can turn into issues about code signing identities, missing provisioning profiles, etc.
-
-For example:
-
-If a dependent project has a team identifier set, Xcode will complain that it cannot find signin identities of that team. It is best to set the team to None.
-
-If a dependent project is configured to use a Distribution Code Signing Identity for a Release build, Xcode will complain that such a profile is not available. (Since we only have development profiles on our workstations). It is best to configure both Debug and Release Build Configurations to use the automatic "iPhone Developer" Code Signing Identity. This will pick the right thing on your local build.
-
-Most of this is fixable and can be reported upstream.
-
-If you add a new dependency, ping @st3fan and he'll make sure things work correctly on our integration (xcode server) and dogfood builders.
-
-A command exists to make adding dependencies less painful: `./update.sh`.
