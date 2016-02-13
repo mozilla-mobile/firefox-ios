@@ -31,15 +31,8 @@ class DomainAutocompleteTests: KIFTestCase {
         tester().enterTextIntoCurrentFirstResponder("h")
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "www.yah", completion: "oo.com/")
 
-        // Delete the entire string, verify the home panels are shown again.
-        tester().deleteCharacterFromFirstResponser()
-        tester().deleteCharacterFromFirstResponser()
-        tester().deleteCharacterFromFirstResponser()
-        tester().deleteCharacterFromFirstResponser()
-        tester().deleteCharacterFromFirstResponser()
-        tester().deleteCharacterFromFirstResponser()
-        tester().deleteCharacterFromFirstResponser()
-        tester().deleteCharacterFromFirstResponser()
+        // Delete the entire string and verify that the home panels are shown again.
+        tester().clearTextFromFirstResponder()
         tester().waitForViewWithAccessibilityLabel("Panel Chooser")
 
         // Ensure that the scheme is included in the autocompletion.
@@ -64,8 +57,8 @@ class DomainAutocompleteTests: KIFTestCase {
         tester().clearTextFromFirstResponder()
 
         // Ensure we don't match against TLDs.
-        tester().enterTextIntoCurrentFirstResponder("o")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "o", completion: "")
+        tester().enterTextIntoCurrentFirstResponder("org")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "org", completion: "")
         tester().clearTextFromFirstResponder()
 
         // Ensure we don't match other characters.
@@ -79,9 +72,9 @@ class DomainAutocompleteTests: KIFTestCase {
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "/", completion: "")
         tester().clearTextFromFirstResponder()
 
-        // Ensure we don't match letters that don't start a word.
-        tester().enterTextIntoCurrentFirstResponder("a")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "a", completion: "")
+        // Ensure we don't match strings that don't start a word.
+        tester().enterTextIntoCurrentFirstResponder("ozilla")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ozilla", completion: "")
         tester().clearTextFromFirstResponder()
 
         // Ensure we don't match words outside of the domain.
