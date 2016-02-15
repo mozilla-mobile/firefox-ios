@@ -8,6 +8,8 @@ import AVFoundation
 import XCGLogger
 import Breakpad
 import MessageUI
+import WebImage
+
 
 private let log = Logger.browserLogger
 

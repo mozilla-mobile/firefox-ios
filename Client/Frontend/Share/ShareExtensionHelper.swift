@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import OnePasswordExtension
 
 private let log = Logger.browserLogger
 

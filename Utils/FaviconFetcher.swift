@@ -7,6 +7,8 @@ import Shared
 import Alamofire
 import XCGLogger
 import Deferred
+import WebImage
+
 
 private let log = Logger.browserLogger
 private let queue = dispatch_queue_create("FaviconFetcher", DISPATCH_QUEUE_CONCURRENT)
