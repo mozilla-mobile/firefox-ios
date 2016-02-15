@@ -17,7 +17,8 @@ DerivedData
 *.xcuserstate
 *.xcscmblueprint
 
-fastlane/scripts/upload.sh
+/fastlane/scripts/upload.sh
+/fastlane/README.md
 /firefox-ios-l10n
 # fastlane temporary profiling data
 /fastlane/report.xml
