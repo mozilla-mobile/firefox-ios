@@ -86,13 +86,8 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                         return
                     }
                 }
-                let errorDescription: String?
-                if let error = error as? NSError {
-                    errorDescription = error.description
-                } else {
-                    errorDescription = "No content."
-                }
-                deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription!)))
+                let errorDescription = error?.description ?? "No content."
+                deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription)))
             }
         }
         return deferred
