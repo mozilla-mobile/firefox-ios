@@ -66,6 +66,14 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ]
         }
 
+        generalSettings += [
+            BoolSetting(prefs: prefs,
+                prefKey: "settings.goToCopiedURL",
+                defaultValue: true,
+                titleText: NSLocalizedString("Offer to open copied links", comment: "Setting to enable the Go to Copied URL feature"),
+                statusText: NSLocalizedString("When opening Firefox", comment: "Setting to enable the Go to Copied URL feature"))
+        ]
+
         settings += [
             SettingSection(title: nil, children: [
                 // Without a Firefox Account:
@@ -140,7 +148,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         // Make account/sign-in and close private tabs rows taller, as per design specs.
         let section = settings[indexPath.section]
-        if let setting = section[indexPath.row] as? BoolSetting where setting.prefKey == "settings.closePrivateTabs" {
+        if let setting = section[indexPath.row] as? BoolSetting where setting.prefKey == "settings.closePrivateTabs" || setting.prefKey == "settings.goToCopiedURL" {
             return 64
         } else if section[indexPath.row] is ConnectSetting {
             return 64
