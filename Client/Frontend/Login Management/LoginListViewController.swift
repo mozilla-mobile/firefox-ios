@@ -160,7 +160,7 @@ class LoginListViewController: UIViewController {
     }
 
     private func toggleSelectionTitle() {
-        if loginSelectionController.selectedCount == loginDataSource.cursor?.count {
+        if loginSelectionController.selectedCount == loginDataSource.allLogins.count {
             selectionButton.setTitle(deselectAllTitle, forState: .Normal)
         } else {
             selectionButton.setTitle(selectAllTitle, forState: .Normal)
@@ -176,7 +176,7 @@ class LoginListViewController: UIViewController {
 
     private func reloadTableWithResult(result: Maybe<Cursor<Login>>) -> Success {
         loadingStateView.hidden = true
-        loginDataSource.cursor = result.successValue
+        loginDataSource.allLogins = result.successValue?.asArray() ?? []
         tableView.reloadData()
         activeLoginQuery = nil
         return succeed()
@@ -215,7 +215,7 @@ extension LoginListViewController {
             let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
                 let guidsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
-                    self.loginDataSource.loginAtIndexPath(indexPath).guid
+                    self.loginDataSource.loginAtIndexPath(indexPath)!.guid
                 }
 
                 self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
@@ -230,7 +230,7 @@ extension LoginListViewController {
 
     func SELdidTapSelectionButton() {
         // If we haven't selected everything yet, select all
-        if loginSelectionController.selectedCount < loginDataSource.cursor?.count {
+        if loginSelectionController.selectedCount < loginDataSource.count {
             // Find all unselected indexPaths
             let unselectedPaths = tableView.allIndexPaths.filter { indexPath in
                 return !loginSelectionController.indexPathIsSelected(indexPath)
@@ -277,7 +277,7 @@ extension LoginListViewController: UITableViewDelegate {
             toggleDeleteBarButton()
         } else {
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            let login = loginDataSource.loginAtIndexPath(indexPath)
+            let login = loginDataSource.loginAtIndexPath(indexPath)!
             let detailViewController = LoginDetailViewController(profile: profile, login: login)
             detailViewController.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(detailViewController, animated: true)
@@ -379,16 +379,34 @@ private class ListSelectionController: NSObject {
 /// Data source for handling LoginData objects from a Cursor
 private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
+    var count: Int {
+        return allLogins.count
+    }
+
+    private var allLogins: [Login] = [] {
+        didSet {
+            computeLoginSections()
+        }
+    }
+
     private let emptyStateView = NoLoginsView()
 
-    var cursor: Cursor<Login>?
+    private var sections = [Character: [Login]]()
 
-    func loginAtIndexPath(indexPath: NSIndexPath) -> Login {
-        return loginsForSection(indexPath.section)[indexPath.row]
+    private var titles = [Character]()
+
+    private func loginsForSection(section: Int) -> [Login]? {
+        let titleForSectionIndex = titles[section]
+        return sections[titleForSectionIndex]
+    }
+
+    func loginAtIndexPath(indexPath: NSIndexPath) -> Login? {
+        let titleForSectionIndex = titles[indexPath.section]
+        return sections[titleForSectionIndex]?[indexPath.row]
     }
 
     @objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        let numOfSections = sectionIndexTitles()?.count ?? 0
+        let numOfSections = sections.count
         if numOfSections == 0 {
             tableView.backgroundView = emptyStateView
             tableView.separatorStyle = .None
@@ -400,73 +418,91 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return loginsForSection(section).count
+        return loginsForSection(section)?.count ?? 0
     }
 
     @objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
-
-        let login = loginAtIndexPath(indexPath)
+        let login = loginAtIndexPath(indexPath)!
         cell.style = .NoIconAndBothLabels
         cell.updateCellWithLogin(login)
-
         return cell
     }
 
     @objc func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
-        return sectionIndexTitles()
+        return titles.map { String($0) }
     }
 
     @objc func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
-        guard let titles = sectionIndexTitles() where index < titles.count && index >= 0 else {
-            return 0
-        }
-        return titles.indexOf(title) ?? 0
+        return titles.indexOf(Character(title)) ?? 0
     }
 
     @objc func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionIndexTitles()?[section]
+        return String(titles[section])
     }
 
-    private func sectionIndexTitles() -> [String]? {
-        guard cursor?.count > 0 else {
-            return nil
+    private func computeLoginSections() {
+        titles.removeAll()
+        sections.removeAll()
+
+        guard allLogins.count > 0 else {
+            return
         }
 
-        var firstHostnameCharacters = [Character]()
-        cursor?.forEach { login in
-            guard let login = login, let baseDomain = login.hostname.asURL?.baseDomain() else {
-                return
+        // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
+        // baseDomain() is a costly call because of the ETLD lookup tables.
+        var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
+        allLogins.forEach { login in
+            domainLookup[login.guid] = (
+                login.hostname.asURL?.baseDomain(),
+                login.hostname.asURL?.host,
+                login.hostname
+            )
+        }
+
+        // Rules for sorting login URLS:
+        // 1. Compare base domains
+        // 2. If bases are equal, compare hosts
+        // 3. If login URL was invalid, revert to full hostname
+        func sortByDomain(loginA: Login, loginB: Login) -> Bool {
+            guard let domainsA = domainLookup[loginA.guid],
+                  let domainsB = domainLookup[loginB.guid] else {
+                return false
             }
 
-            let firstChar = baseDomain.uppercaseString[baseDomain.startIndex]
-            if !firstHostnameCharacters.contains(firstChar) {
-                firstHostnameCharacters.append(firstChar)
+            guard let baseDomainA = domainsA.baseDomain,
+                  let baseDomainB = domainsB.baseDomain,
+                  let hostA = domainsA.host,
+                let hostB = domainsB.host else {
+                return domainsA.hostname < domainsB.hostname
             }
-        }
-        let sectionTitles = firstHostnameCharacters.map { String($0) }
-        return sectionTitles.sort()
-    }
 
-    private func loginsForSection(section: Int) -> [Login] {
-        guard let sectionTitles = sectionIndexTitles() else {
-            return []
-        }
-
-        let titleForSectionAtIndex = sectionTitles[section]
-        let logins = cursor?.filter { $0?.hostname.asURL?.baseDomain()?.uppercaseString.startsWith(titleForSectionAtIndex) ?? false }
-        let flattenLogins = logins?.flatMap { $0 } ?? []
-        return flattenLogins.sort { login1, login2 in
-            let baseDomain1 = login1.hostname.asURL?.baseDomain()
-            let baseDomain2 = login2.hostname.asURL?.baseDomain()
-            let host1 = login1.hostname.asURL?.host
-            let host2 = login2.hostname.asURL?.host
-
-            if baseDomain1 == baseDomain2 {
-                return host1 < host2
+            if baseDomainA == baseDomainB {
+                return hostA < hostB
             } else {
-                return baseDomain1 < baseDomain2
+                return baseDomainA < baseDomainB
             }
+        }
+
+        // Temporarily insert titles into a Set to get duplicate removal for 'free'.
+        var titleSet = Set<Character>()
+        allLogins.forEach { login in
+            // Fallback to hostname if we can't extract a base domain.
+            let sortBy = login.hostname.asURL?.baseDomain()?.uppercaseString ?? login.hostname
+            let sectionTitle = sortBy.characters.first ?? Character("")
+            titleSet.insert(sectionTitle)
+
+            var logins = sections[sectionTitle] ?? []
+            logins.append(login)
+            logins.sortInPlace(sortByDomain)
+            sections[sectionTitle] = logins
+        }
+        titles = Array(titleSet).sort()
+    }
+
+    subscript(index: Int) -> Login {
+        get {
+            return allLogins[index]
         }
     }
 }
