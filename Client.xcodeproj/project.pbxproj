@@ -543,7 +543,6 @@
 		E6EFB2801C52837F006232C8 /* SWXMLHash.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FB61C495782006EEEC3 /* SWXMLHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2811C52837F006232C8 /* SnapKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FA11C495268006EEEC3 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2821C52837F006232C8 /* WebImage.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F9A1C4950F2006EEEC3 /* WebImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E6EFB2831C52837F006232C8 /* KIF.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F981C494F74006EEEC3 /* KIF.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2841C52837F006232C8 /* Breakpad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F961C494E2A006EEEC3 /* Breakpad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2851C52837F006232C8 /* Base32.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F921C494C3A006EEEC3 /* Base32.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2861C52837F006232C8 /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F851C494983006EEEC3 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -952,7 +951,6 @@
 				E6EFB2801C52837F006232C8 /* SWXMLHash.framework in Copy Frameworks */,
 				E6EFB2811C52837F006232C8 /* SnapKit.framework in Copy Frameworks */,
 				E6EFB2821C52837F006232C8 /* WebImage.framework in Copy Frameworks */,
-				E6EFB2831C52837F006232C8 /* KIF.framework in Copy Frameworks */,
 				E6EFB2841C52837F006232C8 /* Breakpad.framework in Copy Frameworks */,
 				E6EFB2851C52837F006232C8 /* Base32.framework in Copy Frameworks */,
 				E6EFB2861C52837F006232C8 /* Alamofire.framework in Copy Frameworks */,
