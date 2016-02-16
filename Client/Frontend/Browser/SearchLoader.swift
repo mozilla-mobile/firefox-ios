@@ -9,7 +9,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([^/]+/)", options: [])
+private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([^/]+)/", options: [])
 
 // TODO: Swift currently requires that classes extending generic classes must also be generic.
 // This is a workaround until that requirement is fixed.
@@ -29,6 +29,11 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         self.urlBar = urlBar
         super.init()
     }
+
+    private lazy var topDomains: [String] = {
+        let filePath = NSBundle.mainBundle().pathForResource("topdomains", ofType: "txt")
+        return try! String(contentsOfFile: filePath!).componentsSeparatedByString("\n")
+    }()
 
     var query: String = "" {
         didSet {
@@ -50,40 +55,58 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
 
                 // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
+                    // First, see if the query matches any URLs from the user's search history.
                     self.load(cursor)
-                    self.urlBar.setAutocompleteSuggestion(self.getAutocompleteSuggestion(cursor))
+                    for site in cursor {
+                        if let url = site?.url,
+                               completion = self.completionForURL(url) {
+                            self.urlBar.setAutocompleteSuggestion(completion)
+                            return
+                        }
+                    }
+
+                    // If there are no search history matches, try matching one of the Alexa top domains.
+                    for domain in self.topDomains {
+                        if let completion = self.completionForDomain(domain) {
+                            self.urlBar.setAutocompleteSuggestion(completion)
+                            return
+                        }
+                    }
                 }
             }
         }
     }
 
-    private func getAutocompleteSuggestion(cursor: Cursor<Site>) -> String? {
-        for result in cursor {
-            // Extract the pre-path substring from the URL. This should be more efficient than parsing via
-            // NSURL since we need to only look at the beginning of the string.
-            // Note that we won't match non-HTTP(S) URLs.
-            if let url = result?.url,
-                   match = URLBeforePathRegex.firstMatchInString(url, options: NSMatchingOptions(), range: NSRange(location: 0, length: url.characters.count)) {
-                // If the pre-path component starts with the filter, just use it as is.
-                let prePathURL = (url as NSString).substringWithRange(match.rangeAtIndex(0))
-                if prePathURL.startsWith(query) {
-                    return prePathURL
-                }
+    private func completionForURL(url: String) -> String? {
+        // Extract the pre-path substring from the URL. This should be more efficient than parsing via
+        // NSURL since we need to only look at the beginning of the string.
+        // Note that we won't match non-HTTP(S) URLs.
+        guard let match = URLBeforePathRegex.firstMatchInString(url, options: NSMatchingOptions(), range: NSRange(location: 0, length: url.characters.count)) else {
+            return nil
+        }
 
-                // Otherwise, find and use any matching domain.
-                // To simplify the search, prepend a ".", and search the string for ".query".
-                // For example, for http://en.m.wikipedia.org, domainWithDotPrefix will be ".en.m.wikipedia.org".
-                // This allows us to use the "." as a separator, so we can match "en", "m", "wikipedia", and "org",
-                let domain = (url as NSString).substringWithRange(match.rangeAtIndex(1))
-                let domainWithDotPrefix: String = ".\(domain)"
-                if let range = domainWithDotPrefix.rangeOfString(".\(query)", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) {
-                    // We don't actually want to match the top-level domain ("com", "org", etc.) by itself, so
-                    // so make sure the result includes at least one ".".
-                    let matchedDomain: String = domainWithDotPrefix.substringFromIndex(range.startIndex.advancedBy(1))
-                    if matchedDomain.contains(".") {
-                        return matchedDomain
-                    }
-                }
+        // If the pre-path component (including the scheme) starts with the query, just use it as is.
+        let prePathURL = (url as NSString).substringWithRange(match.rangeAtIndex(0))
+        if prePathURL.startsWith(query) {
+            return prePathURL
+        }
+
+        // Otherwise, find and use any matching domain.
+        // To simplify the search, prepend a ".", and search the string for ".query".
+        // For example, for http://en.m.wikipedia.org, domainWithDotPrefix will be ".en.m.wikipedia.org".
+        // This allows us to use the "." as a separator, so we can match "en", "m", "wikipedia", and "org",
+        let domain = (url as NSString).substringWithRange(match.rangeAtIndex(1))
+        return completionForDomain(domain)
+    }
+
+    private func completionForDomain(domain: String) -> String? {
+        let domainWithDotPrefix: String = ".\(domain)"
+        if let range = domainWithDotPrefix.rangeOfString(".\(query)", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) {
+            // We don't actually want to match the top-level domain ("com", "org", etc.) by itself, so
+            // so make sure the result includes at least one ".".
+            let matchedDomain: String = domainWithDotPrefix.substringFromIndex(range.startIndex.advancedBy(1))
+            if matchedDomain.contains(".") {
+                return matchedDomain + "/"
             }
         }
 
