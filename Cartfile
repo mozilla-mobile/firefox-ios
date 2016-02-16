@@ -6,7 +6,7 @@ github "kif-framework/KIF"          "v3.3.2"
 github "mozilla/readability"        "master"
 github "rs/SDWebImage"              "3.7.4"           
 github "SnapKit/SnapKit"            "0.18.0"
-github "drmohundro/SWXMLHash"       "2.0.0"            # So we get Swift 2.0 fixes.
+github "drmohundro/SWXMLHash"       "2.1.0"
 github "DaveWoodCom/XCGLogger"      "Version_3.2"        # Previously: swift_1.2
 github "fluffyemily/google-breakpad-ios" "carthageise-breakpad"
 github "adjust/ios_sdk"             "v4.5.0"
