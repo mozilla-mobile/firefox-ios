@@ -80,19 +80,13 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         alamofire.request(.GET, url).response { (request, response, data, error) in
             // Don't cancel requests just because our Manager is deallocated.
             withExtendedLifetime(self.alamofire) {
-                if error == nil {
-                    if let data = data {
-                        deferred.fill(Maybe(success: data))
-                        return
-                    }
+                guard let data = data else {
+                    let errorDescription = error?.description ?? "No content."
+                    deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription)))
+                    return
                 }
-                let errorDescription: String?
-                if let error = error as? NSError {
-                    errorDescription = error.description
-                } else {
-                    errorDescription = "No content."
-                }
-                deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription!)))
+
+                deferred.fill(Maybe(success: data))
             }
         }
         return deferred
