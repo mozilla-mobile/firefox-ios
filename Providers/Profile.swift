@@ -188,11 +188,19 @@ public class BrowserProfile: Profile {
      * subsequently — and asynchronously — expects the profile to stick around:
      * see Bug 1218833. Be sure to only perform synchronous actions here.
      */
-    init(localName: String, app: UIApplication?) {
+    init(localName: String, app: UIApplication?, clear: Bool = false) {
         log.debug("Initing profile \(localName) on thread \(NSThread.currentThread()).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
+        
+        if clear {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(self.files.rootPath as String)
+            } catch {
+                log.info("Cannot clear profile: \(error)")
+            }
+        }
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: NotificationOnLocationChange, object: nil)
