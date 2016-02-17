@@ -179,6 +179,13 @@ class LoginListViewController: UIViewController {
         loginDataSource.allLogins = result.successValue?.asArray() ?? []
         tableView.reloadData()
         activeLoginQuery = nil
+
+        if loginDataSource.cursor?.count > 0 {
+            navigationItem.rightBarButtonItem?.enabled = true
+        } else {
+            navigationItem.rightBarButtonItem?.enabled = false
+        }
+
         return succeed()
     }
 }
