@@ -153,7 +153,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 
         let prefs = profile.prefs
         let requirePasscodeSection = SettingSection(title: nil, children: [
-            RequirePasscodeSetting(settings: self, delegate: nil, requireInterval: profile.prefs.intForKey(PrefKeyRequirePasscodeInterval), enabled: false),
+            RequirePasscodeSetting(settings: self, delegate: nil, requireInterval: prefs.intForKey(PrefKeyRequirePasscodeInterval), enabled: false),
         ])
 
         settings += [
