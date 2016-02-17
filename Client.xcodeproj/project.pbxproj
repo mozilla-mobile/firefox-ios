@@ -488,6 +488,10 @@
 		E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */; };
 		E63ED8091BFCF9770097D08E /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B9A1BEA4E7100D28BEF /* SwiftSupport.swift */; };
 		E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED8E01BFD25580097D08E /* LoginListViewController.swift */; };
+		E640E85E1C73A45A00C5F072 /* PasscodeEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */; };
+		E640E8681C73A46600C5F072 /* PasscodeConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E8671C73A46600C5F072 /* PasscodeConfirmViewController.swift */; };
+		E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E8691C73A47C00C5F072 /* PasscodeViews.swift */; };
+		E640E8701C73BCF500C5F072 /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E86F1C73BCF500C5F072 /* AuthenticationManagerTests.swift */; };
 		E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */; };
 		E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
@@ -1415,6 +1419,10 @@
 		E63ED7B31BFCD9800097D08E /* LoginTableViewCellRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCellRefTests.swift; sourceTree = "<group>"; };
 		E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
 		E63ED8E01BFD25580097D08E /* LoginListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
+		E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeEntryViewController.swift; sourceTree = "<group>"; };
+		E640E8671C73A46600C5F072 /* PasscodeConfirmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeConfirmViewController.swift; sourceTree = "<group>"; };
+		E640E8691C73A47C00C5F072 /* PasscodeViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeViews.swift; sourceTree = "<group>"; };
+		E640E86F1C73BCF500C5F072 /* AuthenticationManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManagerTests.swift; sourceTree = "<group>"; };
 		E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertControllerExtensions.swift; path = Extensions/UIAlertControllerExtensions.swift; sourceTree = "<group>"; };
 		E653422C1C5944F90039DD9E /* BrowserPrompts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserPrompts.swift; sourceTree = "<group>"; };
 		E65607601C08B4E200534B02 /* SearchInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputView.swift; sourceTree = "<group>"; };
@@ -2240,6 +2248,7 @@
 				4F9757391AFA6F37006ECC24 /* readerContent.html */,
 				E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */,
 				D3E171C11A841EAD00AB44CD /* KIFHelper.js */,
+				E640E86F1C73BCF500C5F072 /* AuthenticationManagerTests.swift */,
 				D38F036F1C06387900175932 /* AuthenticationTests.swift */,
 				0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */,
 				E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */,
@@ -2552,6 +2561,9 @@
 			isa = PBXGroup;
 			children = (
 				E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */,
+				E640E8691C73A47C00C5F072 /* PasscodeViews.swift */,
+				E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */,
+				E640E8671C73A46600C5F072 /* PasscodeConfirmViewController.swift */,
 			);
 			path = AuthenticationManager;
 			sourceTree = "<group>";
@@ -4090,6 +4102,7 @@
 				E6A118F31C32DE98008989E8 /* SettingsTests.swift in Sources */,
 				744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */,
 				2F642CED1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift in Sources */,
+				E640E8701C73BCF500C5F072 /* AuthenticationManagerTests.swift in Sources */,
 				7B59FC491C68E9B600F58EF5 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
 				E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */,
 			);
@@ -4183,6 +4196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
+				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */,
@@ -4234,6 +4248,7 @@
 				0BF42D371A7C0B8E00889E28 /* FaviconManager.swift in Sources */,
 				39A359E41BFCCE94006B9E87 /* SpotlightHelper.swift in Sources */,
 				6BB2FD981B017DAB001A189B /* AuralProgressBar.swift in Sources */,
+				E640E8681C73A46600C5F072 /* PasscodeConfirmViewController.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* BrowserScrollController.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
 				D30B101E1AA7F9C600C01CA3 /* HomePanels.swift in Sources */,
@@ -4283,6 +4298,7 @@
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
 				59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */,
 				D30B0F301AA7D66300C01CA3 /* ThumbnailCell.swift in Sources */,
+				E640E85E1C73A45A00C5F072 /* PasscodeEntryViewController.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,

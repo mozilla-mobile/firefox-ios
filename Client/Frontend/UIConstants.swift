@@ -24,9 +24,11 @@ public struct UIConstants {
     // Static fonts
     static let DefaultChromeSize: CGFloat = 14
     static let DefaultChromeSmallSize: CGFloat = 11
+    static let PasscodeEntryFontSize: CGFloat = 36
     static let DefaultChromeFont: UIFont = UIFont.systemFontOfSize(DefaultChromeSize, weight: UIFontWeightRegular)
     static let DefaultChromeBoldFont = UIFont.boldSystemFontOfSize(DefaultChromeSize)
     static let DefaultChromeSmallFontBold = UIFont.boldSystemFontOfSize(DefaultChromeSmallSize)
+    static let PasscodeEntryFont = UIFont.systemFontOfSize(PasscodeEntryFontSize, weight: UIFontWeightBold)
 
     // These highlight colors are currently only used on Snackbar buttons when they're pressed
     static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)
@@ -83,9 +85,6 @@ private struct TempStrings {
     let backToThemesAccessibilityString = NSLocalizedString("Back to Themes", tableName: "LightweightThemes", comment: "Pending feature; currently unused string! Accessibility label for back button to theme chooser")
 
     // Bug 1198418 - Touch ID Passcode Strings
-    let setPasscode             = NSLocalizedString("Set Passcode", tableName: "AuthenticationManager", comment: "Screen title for Set Passcode")
-    let enterPasscode           = NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Title for entering a passcode")
-    let reenterPasscode         = NSLocalizedString("Re-enter passcode", tableName: "AuthenticationManager", comment: "Title for re-entering a passcode")
     let turnOffYourPasscode     = NSLocalizedString("Turn off your passcode.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when turning off passcode")
     let accessLogins            = NSLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
     let accessPBMode            = NSLocalizedString("Use your fingerprint to access Private Browsing now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing private browsing")
