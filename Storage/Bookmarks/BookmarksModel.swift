@@ -240,37 +240,6 @@ public class PrependedBookmarkFolder: BookmarkFolder {
     }
 }
 
-public class BookmarkFolderWithDefaults: BookmarkFolder {
-    private let folder: BookmarkFolder
-    private let sites: SuggestedSitesCursor
-
-    init(folder: BookmarkFolder, sites: SuggestedSitesCursor) {
-        self.folder = folder
-        self.sites = sites
-        super.init(guid: folder.guid, title: folder.title)
-    }
-
-    override public var count: Int {
-        return self.folder.count + self.sites.count
-    }
-
-    override public subscript(index: Int) -> BookmarkNode? {
-        if index < self.folder.count {
-            return self.folder[index]
-        }
-
-        if let site = self.sites[index - self.folder.count] {
-            return site.asBookmark()
-        }
-
-        return nil
-    }
-
-    override public func itemIsEditableAtIndex(index: Int) -> Bool {
-        return index < self.folder.count
-    }
-}
-
 /**
  * A trivial offline model factory that represents a simple hierarchy.
  */
