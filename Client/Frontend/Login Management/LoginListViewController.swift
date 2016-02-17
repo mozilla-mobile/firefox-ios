@@ -180,7 +180,7 @@ class LoginListViewController: UIViewController {
         tableView.reloadData()
         activeLoginQuery = nil
 
-        if loginDataSource.cursor?.count > 0 {
+        if loginDataSource.count > 0 {
             navigationItem.rightBarButtonItem?.enabled = true
         } else {
             navigationItem.rightBarButtonItem?.enabled = false
