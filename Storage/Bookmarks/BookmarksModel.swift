@@ -7,12 +7,12 @@ import Foundation
 import Shared
 
 /**
- * The immutable base interface for bookmarks and folders.
+ * The kinda-immutable base interface for bookmarks and folders.
  */
 public class BookmarkNode {
     public var id: Int? = nil
-    public var guid: GUID
-    public var title: String
+    public let guid: GUID
+    public let title: String
     public var favicon: Favicon? = nil
 
     init(guid: GUID, title: String) {
@@ -20,9 +20,7 @@ public class BookmarkNode {
         self.title = title
     }
 
-    public var canDelete: Bool {
-        return true
-    }
+    public var canDelete = false
 }
 
 public class BookmarkSeparator: BookmarkNode {
@@ -42,10 +40,7 @@ public class BookmarkItem: BookmarkNode {
     public init(guid: String, title: String, url: String) {
         self.url = url
         super.init(guid: guid, title: title)
-    }
-
-    override public var canDelete: Bool {
-        return true
+        self.canDelete = true
     }
 }
 
