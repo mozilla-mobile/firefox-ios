@@ -41,6 +41,18 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel(lastTabLabel)
     }
 
+    private func acceptClearPrivateData() {
+        tester().waitForViewWithAccessibilityLabel("Clear")
+        tester().tapViewWithAccessibilityLabel("Clear")
+        tester().waitForViewWithAccessibilityLabel("Clear Private Data")
+    }
+
+    private func cancelClearPrivateData() {
+        tester().waitForViewWithAccessibilityLabel("Clear")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().waitForViewWithAccessibilityLabel("Clear Private Data")
+    }
+
     private func clearPrivateData(clearables: Set<Clearable>) {
         let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
         let lastTabLabel = webView.title!.isEmpty ? "home" : webView.title!
@@ -57,6 +69,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         }
 
         tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
+        acceptClearPrivateData()
 
         closeClearPrivateDataDialog(lastTabLabel: lastTabLabel)
     }
@@ -98,6 +111,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         ].forEach { clearable, value in
             XCTAssertEqual(value, tester().waitForViewWithAccessibilityLabel(clearable.rawValue).accessibilityValue)
         }
+
 
         closeClearPrivateDataDialog(lastTabLabel: "home")
     }
