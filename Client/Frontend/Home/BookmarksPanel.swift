@@ -205,9 +205,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         // Separators themselves already have a full-width border, but let's force the issue
         // just in case.
         let this = self.source?.current[indexPath.row]
-        let below = self.source?.current[indexPath.row + 1]
-        if this is BookmarkSeparator || below is BookmarkSeparator {
-            return true
+        if (indexPath.row + 1) < self.source?.current.count {
+            let below = self.source?.current[indexPath.row + 1]
+            if this is BookmarkSeparator || below is BookmarkSeparator {
+                return true
+            }
         }
         return super.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath)
     }
