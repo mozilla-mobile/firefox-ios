@@ -321,7 +321,6 @@ class BrowserViewController: UIViewController {
             return true
         })
 
-
         log.debug("BVC setting up search loader…")
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
 

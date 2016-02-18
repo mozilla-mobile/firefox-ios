@@ -97,6 +97,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         startBrowsingButton.setTitle(IntroViewControllerUX.StartBrowsingButtonTitle, forState: UIControlState.Normal)
         startBrowsingButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         startBrowsingButton.addTarget(self, action: "SELstartBrowsing", forControlEvents: UIControlEvents.TouchUpInside)
+        startBrowsingButton.accessibilityIdentifier = "startBrowsingButton"
 
         view.addSubview(startBrowsingButton)
         startBrowsingButton.snp_makeConstraints { (make) -> Void in
