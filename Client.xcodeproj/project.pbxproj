@@ -543,7 +543,6 @@
 		E6EFB2801C52837F006232C8 /* SWXMLHash.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FB61C495782006EEEC3 /* SWXMLHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2811C52837F006232C8 /* SnapKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FA11C495268006EEEC3 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2821C52837F006232C8 /* WebImage.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F9A1C4950F2006EEEC3 /* WebImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E6EFB2831C52837F006232C8 /* KIF.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F981C494F74006EEEC3 /* KIF.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2841C52837F006232C8 /* Breakpad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F961C494E2A006EEEC3 /* Breakpad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2851C52837F006232C8 /* Base32.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F921C494C3A006EEEC3 /* Base32.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EFB2861C52837F006232C8 /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F851C494983006EEEC3 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -818,6 +817,34 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
+		D30EBB631C75503800105AE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EABD46AA1857A0C700A5F081;
+			remoteInfo = KIF;
+		};
+		D30EBB651C75503800105AE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EB60ECC1177F8C83005A041A;
+			remoteInfo = "Test Host";
+		};
+		D30EBB671C75503800105AE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EABD46CD1857A0F300A5F081;
+			remoteInfo = "KIF Tests";
+		};
+		D30EBB691C75503800105AE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9CC9673B1AD4B1B600576D13;
+			remoteInfo = KIFFramework;
+		};
 		D39FA1651A83E0EC00EE869C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -952,7 +979,6 @@
 				E6EFB2801C52837F006232C8 /* SWXMLHash.framework in Copy Frameworks */,
 				E6EFB2811C52837F006232C8 /* SnapKit.framework in Copy Frameworks */,
 				E6EFB2821C52837F006232C8 /* WebImage.framework in Copy Frameworks */,
-				E6EFB2831C52837F006232C8 /* KIF.framework in Copy Frameworks */,
 				E6EFB2841C52837F006232C8 /* Breakpad.framework in Copy Frameworks */,
 				E6EFB2851C52837F006232C8 /* Base32.framework in Copy Frameworks */,
 				E6EFB2861C52837F006232C8 /* Alamofire.framework in Copy Frameworks */,
@@ -1239,6 +1265,7 @@
 		D308E4E31A5306F500842685 /* SearchEngines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngines.swift; sourceTree = "<group>"; };
 		D30B0F2F1AA7D66300C01CA3 /* ThumbnailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailCell.swift; sourceTree = "<group>"; };
 		D30B101D1AA7F9C600C01CA3 /* HomePanels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePanels.swift; sourceTree = "<group>"; };
+		D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KIF.xcodeproj; path = Carthage/Checkouts/KIF/KIF.xcodeproj; sourceTree = "<group>"; };
 		D313BE971B2F5096009EF241 /* DomainAutocompleteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DomainAutocompleteTests.swift; sourceTree = "<group>"; };
 		D314E7F51A37B98700426A76 /* BrowserToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
 		D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
@@ -2191,6 +2218,17 @@
 			name = SWTableViewCell;
 			sourceTree = "<group>";
 		};
+		D30EBB5B1C75503800105AE9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D30EBB641C75503800105AE9 /* libKIF.a */,
+				D30EBB661C75503800105AE9 /* Test Host.app */,
+				D30EBB681C75503800105AE9 /* KIF Tests - XCTest.xctest */,
+				D30EBB6A1C75503800105AE9 /* KIF.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2603,8 +2641,8 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				7B604FC11C496005006EEEC3 /* Frameworks */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
+				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
 				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
 				7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
@@ -2612,8 +2650,8 @@
 				F84B21C01A090F8100AAB793 /* Client */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
+				7B604FC11C496005006EEEC3 /* Frameworks */,
 				28CE83B71A1D1D3200576538 /* FxAClient */,
-				7B3632E71C29879300D12AF9 /* Snapshot */,
 				E65C5BC51BEA4F6500D28BEF /* NativeRefTests */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
@@ -2621,6 +2659,7 @@
 				E4D567281ADECE2800F1EFE7 /* ReadingListTests */,
 				E4E0BB141AFBC9E4008D6260 /* Shared */,
 				E6F9650D1B2F1CF20034B023 /* SharedTests */,
+				7B3632E71C29879300D12AF9 /* Snapshot */,
 				2FCAE21B1ABB51F800877008 /* Storage */,
 				2FCAE22A1ABB51F800877008 /* StorageTests */,
 				28CE83B91A1D1D3200576538 /* Sync */,
@@ -3409,6 +3448,10 @@
 					ProjectRef = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
 				},
 				{
+					ProductGroup = D30EBB5B1C75503800105AE9 /* Products */;
+					ProjectRef = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
+				},
+				{
 					ProductGroup = 0B742CC71B32491400EE9264 /* Products */;
 					ProjectRef = 0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */;
 				},
@@ -3518,6 +3561,34 @@
 			fileType = wrapper.cfbundle;
 			path = "SQLiteCipher Mac Tests.xctest";
 			remoteRef = 7B9A62E81C4002B1005C83DC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D30EBB641C75503800105AE9 /* libKIF.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libKIF.a;
+			remoteRef = D30EBB631C75503800105AE9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D30EBB661C75503800105AE9 /* Test Host.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "Test Host.app";
+			remoteRef = D30EBB651C75503800105AE9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D30EBB681C75503800105AE9 /* KIF Tests - XCTest.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "KIF Tests - XCTest.xctest";
+			remoteRef = D30EBB671C75503800105AE9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D30EBB6A1C75503800105AE9 /* KIF.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KIF.framework;
+			remoteRef = D30EBB691C75503800105AE9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
