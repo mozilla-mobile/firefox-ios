@@ -17,7 +17,7 @@ enum ShortcutType: String {
     case NewTab
     case NewPrivateTab
     case OpenLastBookmark
-    case OpenLastTab
+    @available(*, deprecated=2.1) case OpenLastTab
 
     init?(fullType: String) {
         guard let last = fullType.componentsSeparatedByString(".").last else { return nil }
