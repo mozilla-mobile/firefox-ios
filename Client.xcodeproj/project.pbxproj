@@ -526,6 +526,9 @@
 		E69922171B94E3EF007C480D /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E69922121B94E3EF007C480D /* Licenses.html */; };
 		E69966991B72674B0036F797 /* RollingFileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69966981B72674B0036F797 /* RollingFileLogger.swift */; };
 		E69BEA5E1BC6A7F300EA6D04 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69BEA371BC6A79B00EA6D04 /* ArrayExtensions.swift */; };
+		E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */; };
+		E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06C81C76198000D0F926 /* AuthenticationManagerConstants.swift */; };
+		E69E06D01C765BB900D0F926 /* NSAttributedStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06CF1C765BB900D0F926 /* NSAttributedStringExtensions.swift */; };
 		E6A118F31C32DE98008989E8 /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A118F21C32DE98008989E8 /* SettingsTests.swift */; };
 		E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */; };
 		E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
@@ -1494,6 +1497,9 @@
 		E69922121B94E3EF007C480D /* Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Licenses.html; sourceTree = "<group>"; };
 		E69966981B72674B0036F797 /* RollingFileLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollingFileLogger.swift; sourceTree = "<group>"; };
 		E69BEA371BC6A79B00EA6D04 /* ArrayExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequirePasscodeIntervalViewController.swift; sourceTree = "<group>"; };
+		E69E06C81C76198000D0F926 /* AuthenticationManagerConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManagerConstants.swift; sourceTree = "<group>"; };
+		E69E06CF1C765BB900D0F926 /* NSAttributedStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSAttributedStringExtensions.swift; sourceTree = "<group>"; };
 		E6A118F21C32DE98008989E8 /* SettingsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInputTests.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
@@ -1947,6 +1953,7 @@
 			children = (
 				28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */,
 				E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */,
+				E69E06CF1C765BB900D0F926 /* NSAttributedStringExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -2600,10 +2607,12 @@
 		E692E3271C46E62D009D1240 /* AuthenticationManager */ = {
 			isa = PBXGroup;
 			children = (
+				E69E06C81C76198000D0F926 /* AuthenticationManagerConstants.swift */,
 				E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */,
 				E640E8691C73A47C00C5F072 /* PasscodeViews.swift */,
 				E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */,
 				E640E8671C73A46600C5F072 /* PasscodeConfirmViewController.swift */,
+				E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */,
 			);
 			path = AuthenticationManager;
 			sourceTree = "<group>";
@@ -4303,6 +4312,7 @@
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
+				E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */,
 				E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */,
@@ -4310,6 +4320,7 @@
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
 				0BD19A651A2530840084FBA7 /* Locking.swift in Sources */,
+				E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenPdfHelper.swift in Sources */,
 				74203E251B276B3D007D481D /* SessionRestoreHandler.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
@@ -4370,6 +4381,7 @@
 				0BA1E02E1B046F1E007675AF /* ErrorPageHelper.swift in Sources */,
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
 				59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */,
+				E69E06D01C765BB900D0F926 /* NSAttributedStringExtensions.swift in Sources */,
 				D30B0F301AA7D66300C01CA3 /* ThumbnailCell.swift in Sources */,
 				E640E85E1C73A45A00C5F072 /* PasscodeEntryViewController.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,

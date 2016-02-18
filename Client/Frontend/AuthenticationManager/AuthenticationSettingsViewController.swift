@@ -7,47 +7,19 @@ import UIKit
 import Shared
 import SwiftKeychainWrapper
 
-private let ImmediatelyInSeconds: Int32 = 0
-private let OneMinuteInSeconds: Int32 = 1 * 60
-private let FiveMinutesInSeconds: Int32 = 5 * 60
-private let TenMinutesInSeconds: Int32 = 10 * 60
-private let FifteenMinutesInSeconds: Int32 = 15 * 60
-private let OneHourInSeconds: Int32 = 1 * 60 * 60
-
-private let PrefKeyTouchIDEnabled = "authentication.touchIDEnabled"
-private let PrefKeyRequirePasscodeInterval = "authentication.requirePasscodeInterval"
-
-let KeychainKeyPasscode = "AppPasscode"
-
-struct AuthenticationStrings {
-    static let enterPasscode    = NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Title for entering a passcode")
-    static let reenterPasscode  = NSLocalizedString("Re-enter passcode", tableName: "AuthenticationManager", comment: "Title for re-entering a passcode")
-    static let setPasscode      = NSLocalizedString("Set Passcode", tableName: "AuthenticationManager", comment: "Screen title for Set Passcode")
-    static let turnOffPasscode  = NSLocalizedString("Turn Passcode Off", tableName: "AuthenticationManager", comment: "Title for setting to turn off passcode")
-    static let turnOnPasscode   = NSLocalizedString("Turn Passcode On", tableName: "AuthenticationManager", comment: "Title for setting to turn on passcode")
-    static let changePasscode   = NSLocalizedString("Change Passcode", tableName: "AuthenticationManager", comment: "Title for screen when changing your passcode")
-    static let enterNewPasscode = NSLocalizedString("Enter a new passcode", tableName: "AuthenticationManager", comment: "Title for screen when updating your existin passcode")
-}
-
-private extension NSAttributedString {
-    static func rowTitle(string: String) -> NSAttributedString {
-        return NSAttributedString(string: string, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
-    }
-
-    static func disabledRowTitle(string: String) -> NSAttributedString {
-        return NSAttributedString(string: string, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewDisabledRowTextColor])
-    }
-}
 
 class TurnPasscodeOnSetting: Setting {
+    let prefs: Prefs
+
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
-        super.init(title: NSAttributedString(string: AuthenticationStrings.turnOnPasscode, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
+        self.prefs = settings.profile.prefs
+        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOnPasscode),
                    delegate: delegate)
     }
 
     override func onClick(navigationController: UINavigationController?) {
         // Navigate to passcode configuration screen
-        let passcodeVC = PasscodeConfirmViewController.newPasscodeVC()
+        let passcodeVC = PasscodeConfirmViewController.newPasscodeVC(prefs: self.prefs)
         passcodeVC.title = AuthenticationStrings.setPasscode
         let passcodeNav = UINavigationController(rootViewController: passcodeVC)
         navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
@@ -55,13 +27,16 @@ class TurnPasscodeOnSetting: Setting {
 }
 
 class TurnPasscodeOffSetting: Setting {
+    let prefs: Prefs
+
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
-        super.init(title: NSAttributedString(string: AuthenticationStrings.turnOffPasscode, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
+        self.prefs = settings.profile.prefs
+        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOffPasscode),
                    delegate: delegate)
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        let passcodeVC = PasscodeConfirmViewController.removePasscodeVC()
+        let passcodeVC = PasscodeConfirmViewController.removePasscodeVC(prefs: self.prefs)
         passcodeVC.title = AuthenticationStrings.turnOffPasscode
         let passcodeNav = UINavigationController(rootViewController: passcodeVC)
         navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
@@ -69,10 +44,13 @@ class TurnPasscodeOffSetting: Setting {
 }
 
 class ChangePasscodeSetting: Setting {
+    let prefs: Prefs
+
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool) {
+        self.prefs = settings.profile.prefs
         let attributedTitle: NSAttributedString = (enabled ?? false) ?
-            NSAttributedString.rowTitle(AuthenticationStrings.changePasscode) :
-            NSAttributedString.disabledRowTitle(AuthenticationStrings.changePasscode)
+            NSAttributedString.tableRowTitle(AuthenticationStrings.changePasscode) :
+            NSAttributedString.disabledTableRowTitle(AuthenticationStrings.changePasscode)
 
         super.init(title: attributedTitle,
                    delegate: delegate,
@@ -80,7 +58,7 @@ class ChangePasscodeSetting: Setting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        let passcodeVC = PasscodeConfirmViewController.changePasscodeVC()
+        let passcodeVC = PasscodeConfirmViewController.changePasscodeVC(prefs: self.prefs)
         passcodeVC.title = AuthenticationStrings.changePasscode
         let passcodeNav = UINavigationController(rootViewController: passcodeVC)
         navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
@@ -88,39 +66,34 @@ class ChangePasscodeSetting: Setting {
 }
 
 class RequirePasscodeSetting: Setting {
-    private let intervalLookup = [
-        ImmediatelyInSeconds:       NSLocalizedString("Immediately", tableName: "AuthenticationManager", comment: "'Immediately' interval item for selecting when to require passcode"),
-        OneMinuteInSeconds:         NSLocalizedString("After 1 minute", tableName: "AuthenticationManager", comment: "'After 1 minute' interval item for selecting when to require passcode"),
-        FiveMinutesInSeconds:       NSLocalizedString("After 5 minutes", tableName: "AuthenticationManager", comment: "'After 5 minutes' interval item for selecting when to require passcode"),
-        TenMinutesInSeconds:        NSLocalizedString("After 10 minutes", tableName: "AuthenticationManager", comment: "'After 10 minutes' interval item for selecting when to require passcode"),
-        FifteenMinutesInSeconds:    NSLocalizedString("After 15 minutes", tableName: "AuthenticationManager", comment: "'After 15 minutes' interval item for selecting when to require passcode"),
-        OneHourInSeconds:           NSLocalizedString("After 1 hour", tableName: "AuthenticationManager", comment: "'After 1 hour' interval item for selecting when to require passcode"),
-    ]
+    let prefs: Prefs
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
     override var style: UITableViewCellStyle { return .Value1 }
 
     override var status: NSAttributedString {
-        if let interval = requireInterval, intervalTitle = intervalLookup[interval] {
-            return NSAttributedString(string: intervalTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        // Only show the interval if we are enabled and have an interval set.
+        if let interval = prefs.intForKey(PrefKeyRequirePasscodeInterval),
+           let valueType = PasscodeInterval(rawValue: interval)
+           where enabled
+        {
+            return NSAttributedString.disabledTableRowTitle(valueType.settingTitle)
         }
         return NSAttributedString(string: "")
     }
 
-    private var requireInterval: Int32?
-
-    init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, requireInterval: Int32? = nil, enabled: Bool? = nil) {
-        let title = NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Title for setting to require a passcode")
-        let attributedTitle = (enabled ?? true) ? NSAttributedString.rowTitle(title) : NSAttributedString.disabledRowTitle(title)
+    init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
+        self.prefs = settings.profile.prefs
+        let title = AuthenticationStrings.requirePasscode
+        let attributedTitle = (enabled ?? true) ? NSAttributedString.tableRowTitle(title) : NSAttributedString.disabledTableRowTitle(title)
         super.init(title: attributedTitle,
                    delegate: delegate,
                    enabled: enabled)
-        self.requireInterval = requireInterval
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        // Navigate to passcode configuration screen
+        navigationController?.pushViewController(RequirePasscodeIntervalViewController(prefs: self.prefs), animated: true)
     }
 }
 
@@ -185,7 +158,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         ])
 
         let requirePasscodeSection = SettingSection(title: nil, children: [
-            RequirePasscodeSetting(settings: self, delegate: nil, requireInterval: profile.prefs.intForKey(PrefKeyRequirePasscodeInterval), enabled: false),
+            RequirePasscodeSetting(settings: self, delegate: nil, enabled: false),
         ])
 
         settings += [
