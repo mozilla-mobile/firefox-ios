@@ -262,6 +262,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 quickActions.handleShortCutItem(shortcut, withBrowserViewController: browserViewController)
                 quickActions.launchedShortcutItem = nil
             }
+
+            // we've removed the Last Tab option, so we should remove any quick actions that we already have that are last tabs
+            // we do this after we've handled any quick actions that have been used to open the app so that we don't b0rk if
+            // the user has opened the app for the first time after upgrade with a Last Tab quick action
+            QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(ShortcutType.OpenLastTab, fromApplication: application)
         }
 
         // If we have a URL waiting to open, switch to non-private mode and open the URL.
@@ -404,16 +409,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let alertURL = notification.userInfo?[TabSendURLKey] as? String {
             if let urlToOpen = NSURL(string: alertURL) {
                 browserViewController.openURLInNewTab(urlToOpen)
-
-                if #available(iOS 9, *) {
-                    var userData = [QuickActions.TabURLKey: alertURL]
-                    if let title = notification.userInfo?[TabSendTitleKey] as? String where title.characters.count > 0 {
-                        userData[QuickActions.TabTitleKey] = title
-                    } else {
-                        userData[QuickActions.TabTitleKey] = alertURL
-                    }
-                    QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastTab, withUserData: userData, toApplication: UIApplication.sharedApplication())
-                }
             }
         }
     }
