@@ -47,7 +47,7 @@ class QuickActions: NSObject {
     static let TabTitleKey = "title"
 
     private let lastBookmarkTitle = NSLocalizedString("Open Last Bookmark", tableName: "3DTouchActions", comment: "String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch")
-    private let lastTabTitle = NSLocalizedString("Open Last Tab", tableName: "3DTouchActions", comment: "String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch")
+    private let _lastTabTitle = NSLocalizedString("Open Last Tab", tableName: "3DTouchActions", comment: "String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch")
 
     static var sharedInstance = QuickActions()
 
@@ -78,20 +78,6 @@ class QuickActions: NSObject {
                 dynamicShortcutItems[index] = openLastBookmarkShortcut
             } else {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
-            }
-        case .OpenLastTab:
-            let openLastTabShortcut = UIMutableApplicationShortcutItem(type: ShortcutType.OpenLastTab.type,
-                localizedTitle: lastTabTitle,
-                localizedSubtitle: userData[QuickActions.TabTitleKey] as? String,
-                icon: UIApplicationShortcutIcon(templateImageName: "quick_action_last_tab"),
-                userInfo: userData
-            )
-            if dynamicShortcutItems.isEmpty {
-                dynamicShortcutItems.append(openLastTabShortcut)
-            } else if dynamicShortcutItems[0].type == ShortcutType.OpenLastTab.type {
-                dynamicShortcutItems[0] = openLastTabShortcut
-            } else {
-                dynamicShortcutItems.insert(openLastTabShortcut, atIndex: 0)
             }
         default:
             log.warning("Cannot add static shortcut item of type \(type)")
@@ -129,6 +115,8 @@ class QuickActions: NSObject {
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: false)
         case .NewPrivateTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: true)
+        // even though we're removing OpenLastTab, it's possible that someone will use an existing last tab quick action to open the app
+        // the first time after upgrading, so we should still handle it
         case .OpenLastBookmark, .OpenLastTab:
             if let urlToOpen = (userData?[QuickActions.TabURLKey] as? String)?.asURL {
                 handleOpenURL(withBrowserViewController: browserViewController, urlToOpen: urlToOpen)
