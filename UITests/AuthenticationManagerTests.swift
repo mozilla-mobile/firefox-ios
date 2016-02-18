@@ -6,8 +6,15 @@ import Foundation
 import Storage
 @testable import Client
 import SwiftKeychainWrapper
+import Shared
 
 class AuthenticationManagerTests: KIFTestCase {
+    var prefs: Prefs!
+
+    override func setUp() {
+        super.setUp()
+        self.prefs = (UIApplication.sharedApplication().delegate as! AppDelegate).profile!.prefs
+    }
 
     private func openAuthenticationManager() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
@@ -23,13 +30,15 @@ class AuthenticationManagerTests: KIFTestCase {
 
     private func resetPasscode() {
         KeychainWrapper.removeObjectForKey(KeychainKeyPasscode)
+        prefs.removeObjectForKey(PrefKeyRequirePasscodeInterval)
     }
 
-    private func setPasscode(code: String) {
+    private func setPasscode(code: String, interval: PasscodeInterval) {
         KeychainWrapper.setString(code, forKey: KeychainKeyPasscode)
+        prefs.setInt(interval.rawValue, forKey: PrefKeyRequirePasscodeInterval)
     }
 
-    func testTurnOnPasscodeSetsPasscode() {
+    func testTurnOnPasscodeSetsPasscodeAndInterval() {
         resetPasscode()
 
         openAuthenticationManager()
@@ -53,13 +62,15 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
 
         XCTAssertEqual(KeychainWrapper.stringForKey(KeychainKeyPasscode)!, "1337")
+        XCTAssertNotNil(prefs.intForKey(PrefKeyRequirePasscodeInterval))
+        XCTAssertEqual(prefs.intForKey(PrefKeyRequirePasscodeInterval), 0)
 
         closeAuthenticationManager()
         resetPasscode()
     }
 
     func testTurnOffPasscode() {
-        setPasscode("1337")
+        setPasscode("1337", interval: .Immediately)
 
         openAuthenticationManager()
         tester().tapViewWithAccessibilityLabel("Turn Passcode Off")
@@ -81,12 +92,13 @@ class AuthenticationManagerTests: KIFTestCase {
 
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
         XCTAssertNil(KeychainWrapper.stringForKey(KeychainKeyPasscode))
+        XCTAssertNil(prefs.intForKey(PrefKeyRequirePasscodeInterval))
 
         closeAuthenticationManager()
     }
 
     func testChangePasscode() {
-        setPasscode("1337")
+        setPasscode("1337", interval: .Immediately)
 
         openAuthenticationManager()
         tester().tapViewWithAccessibilityLabel("Change Passcode")
@@ -108,6 +120,37 @@ class AuthenticationManagerTests: KIFTestCase {
 
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
         XCTAssertEqual(KeychainWrapper.stringForKey(KeychainKeyPasscode), "2337")
+
+        closeAuthenticationManager()
+    }
+
+    func testChangeRequirePasscodeInterval() {
+        setPasscode("1337", interval: .Immediately)
+
+        openAuthenticationManager()
+        tester().tapViewWithAccessibilityLabel("Require Passcode, Immediately")
+
+        let tableView = tester().waitForViewWithAccessibilityIdentifier("AuthenticationManager.passcodeIntervalTableView") as! UITableView
+        var immediatelyCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0))!
+        var oneHourCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0))!
+
+        XCTAssertEqual(immediatelyCell.accessoryType, UITableViewCellAccessoryType.Checkmark)
+        XCTAssertEqual(oneHourCell.accessoryType, UITableViewCellAccessoryType.None)
+
+        tester().tapRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0), inTableViewWithAccessibilityIdentifier: "AuthenticationManager.passcodeIntervalTableView")
+        immediatelyCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0))!
+        oneHourCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0))!
+
+        XCTAssertEqual(immediatelyCell.accessoryType, UITableViewCellAccessoryType.None)
+        XCTAssertEqual(oneHourCell.accessoryType, UITableViewCellAccessoryType.Checkmark)
+
+        XCTAssertEqual(prefs.intForKey(PrefKeyRequirePasscodeInterval), PasscodeInterval.OneHour.rawValue)
+
+        tester().tapViewWithAccessibilityLabel("Back")
+
+        let settingsTableView = tester().waitForViewWithAccessibilityIdentifier("AuthenticationManager.settingsTableView") as! UITableView
+        let requirePasscodeCell = settingsTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 1))!
+        XCTAssertEqual(requirePasscodeCell.detailTextLabel!.text, PasscodeInterval.OneHour.settingTitle)
 
         closeAuthenticationManager()
     }

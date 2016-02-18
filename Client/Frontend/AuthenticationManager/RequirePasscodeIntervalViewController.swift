@@ -33,6 +33,8 @@ class RequirePasscodeIntervalViewController: UITableViewController {
         super.viewDidLoad()
         title = AuthenticationStrings.requirePasscode
 
+        tableView.accessibilityIdentifier = "AuthenticationManager.passcodeIntervalTableView"
+
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
 

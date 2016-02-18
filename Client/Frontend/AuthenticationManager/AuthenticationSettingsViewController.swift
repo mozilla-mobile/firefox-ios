@@ -105,6 +105,8 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: Selector("passcodeStateChanged:"), name: NotificationPasscodeDidRemove, object: nil)
         notificationCenter.addObserver(self, selector: Selector("passcodeStateChanged:"), name: NotificationPasscodeDidCreate, object: nil)
+
+        tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
     }
 
     deinit {
