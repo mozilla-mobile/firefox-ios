@@ -44,6 +44,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
                 titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
+            BoolSetting(prefs: prefs, prefKey: AllowThirdPartyKeyboardsKey, defaultValue: false,
+                titleText: NSLocalizedString("Allow Third-Party Keyboards", comment: "Setting to enable third-party keyboards"), statusText: NSLocalizedString("Firefox needs to reopen for this change to take effect.", comment: "Setting value prop to enable third-party keyboards")),
         ]
 
         let accountChinaSyncSetting: [Setting]
@@ -140,7 +142,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         // Make account/sign-in and close private tabs rows taller, as per design specs.
         let section = settings[indexPath.section]
-        if let setting = section[indexPath.row] as? BoolSetting where setting.prefKey == "settings.closePrivateTabs" {
+        if let setting = section[indexPath.row] as? BoolSetting where setting.prefKey == "settings.closePrivateTabs" || setting.prefKey == AllowThirdPartyKeyboardsKey {
             return 64
         } else if section[indexPath.row] is ConnectSetting {
             return 64

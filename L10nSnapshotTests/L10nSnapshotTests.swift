@@ -46,4 +46,15 @@ class L10nSnapshotTests: XCTestCase {
         sleep(2)
         snapshot("Intro-5")
     }
+
+    func testSettingsTableView() {
+        let app = XCUIApplication()
+        app.buttons.matchingIdentifier("Show Tabs").element.tap()
+
+        sleep(2)
+        app.buttons.matchingIdentifier("settings").element.tap()
+
+        sleep(2)
+        snapshot("SettingsTableView")
+    }
 }

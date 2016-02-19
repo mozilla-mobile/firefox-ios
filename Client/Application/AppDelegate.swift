@@ -14,6 +14,7 @@ import WebImage
 private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
+let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -244,7 +245,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: String) -> Bool {
-        return extensionPointIdentifier != UIApplicationKeyboardExtensionPointIdentifier
+        if let thirdPartyKeyboardSettingBool = getProfile(application).prefs.boolForKey(AllowThirdPartyKeyboardsKey) where extensionPointIdentifier == UIApplicationKeyboardExtensionPointIdentifier {
+            return thirdPartyKeyboardSettingBool
+        }
+
+        return true
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.

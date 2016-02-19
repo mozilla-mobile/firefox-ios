@@ -59,6 +59,7 @@ class Setting {
     // Called when the cell is setup. Call if you need the default behaviour.
     func onConfigureCell(cell: UITableViewCell) {
         cell.detailTextLabel?.attributedText = status
+        cell.detailTextLabel?.numberOfLines = 0
         cell.textLabel?.attributedText = title
         cell.textLabel?.textAlignment = textAlignment
         cell.accessoryType = accessoryType
@@ -123,6 +124,8 @@ class SettingSection : Setting {
 // Takes and optional settingsDidChange callback and status text.
 class BoolSetting: Setting {
     let prefKey: String
+    // Padding to wrap the statusText earlier to avoid problematic localization
+    private let statusTextPadding = -130
 
     private let prefs: Prefs
     private let defaultValue: Bool
@@ -157,6 +160,13 @@ class BoolSetting: Setting {
         control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? defaultValue
         cell.accessoryView = control
+        if let titleLabel = cell.textLabel {
+            cell.detailTextLabel?.snp_makeConstraints { make in
+                make.left.equalTo(titleLabel)
+                make.right.equalTo(cell).offset(statusTextPadding)
+                make.top.equalTo(titleLabel.snp_bottom)
+            }
+        }
     }
 
     @objc func switchValueChanged(control: UISwitch) {
