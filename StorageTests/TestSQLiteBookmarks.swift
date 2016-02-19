@@ -19,89 +19,6 @@ private func getBrowserDB(filename: String, files: FileAccessor) -> BrowserDB? {
     return db
 }
 
-private extension BrowserDB {
-    func getGUIDs(sql: String) -> [GUID] {
-        func guidFactory(row: SDRow) -> GUID {
-            return row[0] as! GUID
-        }
-
-        guard let cursor = self.runQuery(sql, args: nil, factory: guidFactory).value.successValue else {
-            XCTFail("Unable to get cursor.")
-            return []
-        }
-        return cursor.asArray()
-    }
-
-    func getPositionsForChildrenOfParent(parent: GUID, fromTable table: String) -> [GUID: Int] {
-        let args: Args = [parent]
-        let factory: SDRow -> (GUID, Int) = {
-            return ($0["child"] as! GUID, $0["idx"] as! Int)
-        }
-        let cursor = self.runQuery("SELECT child, idx FROM \(table) WHERE parent = ?", args: args, factory: factory).value.successValue!
-        return cursor.reduce([:], combine: { (var dict, pair) in
-            if let (k, v) = pair {
-                dict[k] = v
-            }
-            return dict
-        })
-    }
-
-    func isLocallyDeleted(guid: GUID) -> Bool? {
-        let args: Args = [guid]
-        let cursor = self.runQuery("SELECT is_deleted FROM \(TableBookmarksLocal) WHERE guid = ?", args: args, factory: { $0.getBoolean("is_deleted") }).value.successValue!
-        return cursor[0]
-    }
-
-    func isOverridden(guid: GUID) -> Bool? {
-        let args: Args = [guid]
-        let cursor = self.runQuery("SELECT is_overridden FROM \(TableBookmarksMirror) WHERE guid = ?", args: args, factory: { $0.getBoolean("is_overridden") }).value.successValue!
-        return cursor[0]
-    }
-
-    func getSyncStatusForGUID(guid: GUID) -> SyncStatus? {
-        let args: Args = [guid]
-        let cursor = self.runQuery("SELECT sync_status FROM \(TableBookmarksLocal) WHERE guid = ?", args: args, factory: { $0[0] as! Int }).value.successValue!
-        if let raw = cursor[0] {
-            return SyncStatus(rawValue: raw)
-        }
-        return nil
-    }
-
-    func getRecordByURL(url: String, fromTable table: String) -> BookmarkMirrorItem {
-        let args: Args = [url]
-        return self.runQuery("SELECT * FROM \(table) WHERE bmkUri = ?", args: args, factory: BookmarkFactory.mirrorItemFactory).value.successValue![0]!
-    }
-
-    func getRecordByGUID(guid: GUID, fromTable table: String) -> BookmarkMirrorItem {
-        let args: Args = [guid]
-        return self.runQuery("SELECT * FROM \(table) WHERE guid = ?", args: args, factory: BookmarkFactory.mirrorItemFactory).value.successValue![0]!
-    }
-
-    func getChildrenOfFolder(folder: GUID) -> [GUID] {
-        let args: Args = [folder]
-        let sql =
-        "SELECT child FROM \(ViewBookmarksLocalStructureOnMirror) " +
-        "WHERE parent = ? " +
-        "ORDER BY idx ASC"
-        return self.runQuery(sql, args: args, factory: { $0[0] as! GUID }).value.successValue!.asArray()
-    }
-}
-
-// MARK: - The messy way to extend non-protocol generics.
-
-protocol Succeedable {
-    var isSuccess: Bool { get }
-}
-
-extension Maybe: Succeedable {
-}
-
-private extension Deferred where T: Succeedable {
-    func succeeded() {
-        self.value.isSuccess
-    }
-}
-
 // MARK: - Tests.
 
 class TestSQLiteBookmarks: XCTestCase {
@@ -118,6 +35,8 @@ class TestSQLiteBookmarks: XCTestCase {
         self.remove("TSQLBtestBufferStorage.db")
         self.remove("TSQLBtestLocalAndMirror.db")
         self.remove("TSQLBtestRecursiveAndURLDelete.db")
+        self.remove("TSQLBtestUnrooted.db")
+        self.remove("TSQLBtestTreeBuilding.db")
         super.tearDown()
     }
 
@@ -150,14 +69,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertTrue(bookmarks.hasDesktopBookmarks().value.successValue ?? true)
     }
 
-    func testRecursiveAndURLDelete() {
-        guard let db = getBrowserDB("TSQLBtestRecursiveAndURLDelete.db", files: self.files) else {
-            XCTFail("Unable to create browser DB.")
-            return
-        }
-
-        let bookmarks = SQLiteBookmarks(db: db)
-
+    private func createStockMirrorTree(db: BrowserDB) {
         // Set up a mirror tree.
         let mirrorQuery =
         "INSERT INTO \(TableBookmarksMirror) (guid, type, bmkUri, title, parentid, parentName, description, tags, keyword, is_overridden, server_modified, pos) " +
@@ -197,9 +109,11 @@ class TestSQLiteBookmarks: XCTestCase {
         "(?, ?, ?), " +
         "(?, ?, ?), " +
         "(?, ?, ?), " +
+        "(?, ?, ?), " +
         "(?, ?, ?) "
 
         let structureArgs: Args = [
+            BookmarkRoots.ToolbarFolderGUID, "folderAAAAAA", 0,
             BookmarkRoots.MenuFolderGUID, "folderBBBBBB", 0,
             "folderAAAAAA", "bookmark1001", 0,
             "folderAAAAAA", "separator101", 1,
@@ -210,11 +124,284 @@ class TestSQLiteBookmarks: XCTestCase {
             "folderCCCCCC", "bookmark2002", 0,
         ]
 
-        self.moveLocalToMirror(db)   // So we have the roots.
+        db.moveLocalToMirrorForTesting()   // So we have the roots.
         db.run([
             (sql: mirrorQuery, args: mirrorArgs),
             (sql: structureQuery, args: structureArgs),
         ]).succeeded()
+    }
+
+    private func isUnknown(folder: BookmarkTreeNode, withGUID: GUID) {
+        switch folder {
+        case .Unknown(let guid):
+            XCTAssertEqual(withGUID, guid)
+        default:
+            XCTFail("Not an unknown with GUID \(withGUID).")
+        }
+    }
+
+    private func isNonFolder(folder: BookmarkTreeNode, withGUID: GUID) {
+        switch folder {
+        case .NonFolder(let guid):
+            XCTAssertEqual(withGUID, guid)
+        default:
+            XCTFail("Not a non-folder with GUID \(withGUID).")
+        }
+    }
+
+    private func isFolder(folder: BookmarkTreeNode, withGUID: GUID) {
+        switch folder {
+        case .Folder(let record):
+            XCTAssertEqual(withGUID, record.guid)
+        default:
+            XCTFail("Not a folder with GUID \(withGUID).")
+        }
+    }
+
+    private func areFolders(folders: [BookmarkTreeNode], withGUIDs: [GUID]) {
+        folders.zip(withGUIDs).forEach { (node, guid) in
+            self.isFolder(node, withGUID: guid)
+        }
+    }
+
+    private func assertTreeIsEmpty(treeMaybe: Maybe<BookmarkTree>) {
+        guard let tree = treeMaybe.successValue else {
+            XCTFail("Couldn't get tree!")
+            return
+        }
+        XCTAssertTrue(tree.orphans.isEmpty)
+        XCTAssertTrue(tree.deleted.isEmpty)
+        XCTAssertTrue(tree.isEmpty)
+    }
+
+    private func assertTreeContainsOnlyRoots(treeMaybe: Maybe<BookmarkTree>) {
+        guard let tree = treeMaybe.successValue else {
+            XCTFail("Couldn't get tree!")
+            return
+        }
+
+        XCTAssertTrue(tree.orphans.isEmpty)
+        XCTAssertTrue(tree.deleted.isEmpty)
+        XCTAssertFalse(tree.isEmpty)
+        XCTAssertEqual(1, tree.subtrees.count)
+        if case let .Folder(guid, children) = tree.subtrees[0] {
+            XCTAssertEqual(guid, "root________")
+            XCTAssertEqual(4, children.count)
+            children.forEach { child in
+                guard case let .Folder(_, lower) = child where lower.isEmpty else {
+                    XCTFail("Child \(child) wasn't empty!")
+                    return
+                }
+            }
+        } else {
+            XCTFail("Tree didn't contain root.")
+        }
+    }
+
+    func testUnrootedBufferRowsDontAppearInTrees() {
+        guard let db = getBrowserDB("TSQLBtestUnrooted.db", files: self.files) else {
+            XCTFail("Unable to create browser DB.")
+            return
+        }
+
+        let bookmarks = SQLiteBookmarks(db: db)
+        self.assertTreeContainsOnlyRoots(bookmarks.treeForMirror().value)
+        self.assertTreeIsEmpty(bookmarks.treeForBuffer().value)
+        self.assertTreeContainsOnlyRoots(bookmarks.treeForLocal().value)
+
+        let args: Args = [
+            "unrooted0001", BookmarkNodeType.Bookmark.rawValue, 0, "somefolder01", "Some Folder", "I have no folder", "http://example.org/",
+            "rooted000002", BookmarkNodeType.Bookmark.rawValue, 0, "somefolder02", "Some Other Folder", "I have a folder", "http://example.org/",
+            "somefolder02", BookmarkNodeType.Folder.rawValue, 0, BookmarkRoots.MobileFolderGUID, "Mobile Bookmarks", "Some Other Folder",
+        ]
+        let now = NSDate.now()
+        let bufferSQL =
+        "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
+        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
+        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
+        "(\(now), ?, ?, ?, ?, ?, ?, NULL)"
+
+        let bufferStructureSQL = "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES ('somefolder02', 'rooted000002', 0)"
+        db.run(bufferSQL, withArgs: args).succeeded()
+        db.run(bufferStructureSQL).succeeded()
+
+        let tree = bookmarks.treeForBuffer().value.successValue!
+        XCTAssertFalse(tree.orphans.contains("somefolder02"))        // Folders are never orphans; they appear in subtrees instead.
+        XCTAssertFalse(tree.orphans.contains("rooted000002"))        // This tree contains its parent, so it's not an orphan.
+        XCTAssertTrue(tree.orphans.contains("unrooted0001"))
+        XCTAssertEqual(Set(tree.subtrees.map { $0.recordGUID }), Set(["somefolder02"]))
+    }
+
+    func testTreeBuilding() {
+        guard let db = getBrowserDB("TSQLBtestTreeBuilding.db", files: self.files) else {
+            XCTFail("Unable to create browser DB.")
+            return
+        }
+
+        let bookmarks = SQLiteBookmarks(db: db)
+        self.assertTreeContainsOnlyRoots(bookmarks.treeForMirror().value)
+        self.assertTreeIsEmpty(bookmarks.treeForBuffer().value)
+        self.assertTreeContainsOnlyRoots(bookmarks.treeForLocal().value)
+
+        self.createStockMirrorTree(db)
+        self.assertTreeIsEmpty(bookmarks.treeForBuffer().value)
+
+        // Local was emptied when we moved the roots to the mirror.
+        self.assertTreeIsEmpty(bookmarks.treeForLocal().value)
+
+        guard let tree = bookmarks.treeForMirror().value.successValue else {
+            XCTFail("Couldn't get tree!")
+            return
+        }
+
+        // Mirror is no longer empty.
+        XCTAssertFalse(tree.isEmpty)
+
+        // There's one root.
+        XCTAssertEqual(1, tree.subtrees.count)
+        if case let .Folder(guid, children) = tree.subtrees[0] {
+            XCTAssertEqual("root________", guid)
+            XCTAssertEqual(4, children.count)
+            self.areFolders(children, withGUIDs: BookmarkRoots.RootChildren)
+        } else {
+            XCTFail("Root should be a folder.")
+        }
+
+        // Every GUID is in the tree's nodes.
+        ["folderAAAAAA",
+         "folderBBBBBB",
+         "folderCCCCCC"].forEach {
+            isFolder(tree.lookup[$0]!, withGUID: $0)
+        }
+
+        ["separator101",
+         "bookmark1001",
+         "bookmark1002",
+         "bookmark2001",
+         "bookmark2002",
+         "bookmark3001"].forEach {
+            isNonFolder(tree.lookup[$0]!, withGUID: $0)
+        }
+
+        let expectedCount =
+        BookmarkRoots.RootChildren.count + 1 +  // The roots.
+        6 +          // Non-folders.
+        3            // Folders.
+
+        XCTAssertEqual(expectedCount, tree.lookup.count)
+
+        // There are no orphans and no deletions.
+        XCTAssertTrue(tree.orphans.isEmpty)
+        XCTAssertTrue(tree.deleted.isEmpty)
+
+        // root________
+        //   menu________
+        //     folderBBBBBB
+        //       bookmark3001
+        if case let .Folder(guidR, rootChildren) = tree.subtrees[0] {
+            XCTAssertEqual(guidR, "root________")
+            if case let .Folder(guidM, menuChildren) = rootChildren[0] {
+                XCTAssertEqual(guidM, "menu________")
+                if case let .Folder(guidB, bbbChildren) = menuChildren[0] {
+                    XCTAssertEqual(guidB, "folderBBBBBB")
+                    // BBB contains bookmark3001.
+                    if case let .NonFolder(guidBM) = bbbChildren[0] {
+                        XCTAssertEqual(guidBM, "bookmark3001")
+                    } else {
+                        XCTFail("First child of BBB should be bookmark3001.")
+                    }
+
+                    // BBB contains folderCCCCCC.
+                    if case let .Folder(guidBF, _) = bbbChildren[1] {
+                        XCTAssertEqual(guidBF, "folderCCCCCC")
+                    } else {
+                        XCTFail("Second child of BBB should be folderCCCCCC.")
+                    }
+                } else {
+                    XCTFail("First child of menu should be BBB.")
+                }
+            } else {
+                XCTFail("First child of root should be menu________")
+            }
+        } else {
+            XCTFail("First root should be root________")
+        }
+
+        // Add a bookmark. It'll override the folder.
+        bookmarks.insertBookmark("https://foo.com/".asURL!, title: "Foo", favicon: nil, intoFolder: "folderBBBBBB", withTitle: "BBB").succeeded()
+        let newlyInserted = db.getRecordByURL("https://foo.com/", fromTable: TableBookmarksLocal).guid
+
+        guard let local = bookmarks.treeForLocal().value.successValue else {
+            XCTFail("Couldn't get local tree!")
+            return
+        }
+
+        XCTAssertFalse(local.isEmpty)
+        XCTAssertEqual(4, local.lookup.count)   // Folder, new bookmark, original two children.
+        XCTAssertEqual(1, local.subtrees.count)
+        if case let .Folder(guid, children) = local.subtrees[0] {
+            XCTAssertEqual("folderBBBBBB", guid)
+
+            // We have shadows of the original two children.
+            XCTAssertEqual(3, children.count)
+            self.isUnknown(children[0], withGUID: "bookmark3001")
+            self.isUnknown(children[1], withGUID: "folderCCCCCC")
+            self.isNonFolder(children[2], withGUID: newlyInserted)
+        } else {
+            XCTFail("Root should be folderBBBBBB.")
+        }
+
+        // Insert partial data into the buffer.
+        // We insert:
+        let bufferArgs: Args = [
+            // * A folder whose parent isn't present in the structure.
+            "ihavenoparent", BookmarkNodeType.Folder.rawValue, 0, "myparentnoexist", "No Exist", "No Parent",
+            // * A folder with no children.
+            "ihavenochildren", BookmarkNodeType.Folder.rawValue, 0, "ihavenoparent", "No Parent", "No Children",
+            // * A folder that meets both criteria.
+            "xhavenoparent", BookmarkNodeType.Folder.rawValue, 0, "myparentnoexist", "No Exist", "No Parent And No Children",
+            // * A changed bookmark with no parent.
+            "changedbookmark", BookmarkNodeType.Bookmark.rawValue, 0, "folderCCCCCC", "CCC", "I changed", "http://change.org/",
+            // * A deleted record.
+            "iwasdeleted", BookmarkNodeType.Bookmark.rawValue,
+        ]
+
+        let now = NSDate.now()
+        let bufferSQL = "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
+        "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
+        "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
+        "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
+        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
+        "(\(now), ?, ?, 1, NULL, NULL, NULL, NULL) "
+
+        let bufferStructureSQL = "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES (?, ?, ?)"
+        let bufferStructureArgs: Args = ["ihavenoparent", "ihavenochildren", 0]
+        db.run([(bufferSQL, bufferArgs), (bufferStructureSQL, bufferStructureArgs)]).succeeded()
+
+        // Now build the tree.
+        guard let partialBuffer = bookmarks.treeForBuffer().value.successValue else {
+            XCTFail("Couldn't get buffer tree!")
+            return
+        }
+
+        XCTAssertEqual(partialBuffer.deleted, Set<GUID>(["iwasdeleted"]))
+        XCTAssertEqual(partialBuffer.orphans, Set<GUID>(["changedbookmark"]))
+        XCTAssertEqual(partialBuffer.subtreeGUIDs, Set<GUID>(["ihavenoparent", "xhavenoparent"]))
+        if case let .Folder(_, children) = partialBuffer.lookup["ihavenochildren"]! {
+            XCTAssertTrue(children.isEmpty)
+        } else {
+            XCTFail("Couldn't look up childless folder.")
+        }
+    }
+
+    func testRecursiveAndURLDelete() {
+        guard let db = getBrowserDB("TSQLBtestRecursiveAndURLDelete.db", files: self.files) else {
+            XCTFail("Unable to create browser DB.")
+            return
+        }
+
+        let bookmarks = SQLiteBookmarks(db: db)
+        self.createStockMirrorTree(db)
 
         let menuOverridden = BookmarkRoots.MenuFolderGUID
         XCTAssertFalse(db.isOverridden(menuOverridden) ?? true)
@@ -334,11 +521,12 @@ class TestSQLiteBookmarks: XCTestCase {
 
         // Add a local bookmark.
         let bookmarks = SQLiteBookmarks(db: db)
-        bookmarks.insertBookmark("http://example.org/".asURL!, title: "Example", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Mobile").succeeded()
+        bookmarks.insertBookmark("http://example.org/".asURL!, title: "Example", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "The Mobile").succeeded()
 
         let rowA = db.getRecordByURL("http://example.org/", fromTable: TableBookmarksLocal)
         XCTAssertEqual(rowA.bookmarkURI, "http://example.org/")
         XCTAssertEqual(rowA.title, "Example")
+        XCTAssertEqual(rowA.parentName, "The Mobile")
         XCTAssertEqual(rootGUIDs + [rowA.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
         XCTAssertEqual([rowA.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
         XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(rowA.guid))
@@ -369,7 +557,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(positionsAfterDelete[rowB.guid], 0)
 
         // Manually shuffle all of these into the mirror, as if we were fully synchronized.
-        self.moveLocalToMirror(db)
+        db.moveLocalToMirrorForTesting()
         XCTAssertEqual([], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
         XCTAssertEqual([], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure)"))
         XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
@@ -425,34 +613,6 @@ class TestSQLiteBookmarks: XCTestCase {
         // The mirror structure is unchanged after all this.
         XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
         XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
-    }
-
-    private func moveLocalToMirror(db: BrowserDB) {
-        // This is a risky process -- it's not the same logic that the real synchronizer uses
-        // (because I haven't written it yet), so it might end up lying. We do what we can.
-        let overrideSQL = "INSERT OR IGNORE INTO \(TableBookmarksMirror) " +
-                          "(guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos," +
-                          " description, tags, keyword, folderName, queryId, " +
-                          " is_overridden, server_modified, faviconID) " +
-                          "SELECT guid, type, bmkUri, title, parentid, parentName, " +
-                          "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, " +
-                          "0 AS is_overridden, \(NSDate.now()) AS server_modified, faviconID " +
-                          "FROM \(TableBookmarksLocal)"
-
-        // Copy its mirror structure.
-        let copySQL = "INSERT INTO \(TableBookmarksMirrorStructure) " +
-                      "SELECT * FROM \(TableBookmarksLocalStructure)"
-
-        // Throw away the old.
-        let deleteLocalStructureSQL = "DELETE FROM \(TableBookmarksLocalStructure)"
-        let deleteLocalSQL = "DELETE FROM \(TableBookmarksLocal)"
-
-        db.run([
-            overrideSQL,
-            copySQL,
-            deleteLocalStructureSQL,
-            deleteLocalSQL,
-        ]).succeeded()
     }
 
     /*
