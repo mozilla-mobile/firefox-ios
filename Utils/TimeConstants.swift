@@ -13,7 +13,8 @@ public let OneMonthInMilliseconds = 30 * OneDayInMilliseconds
 public let OneWeekInMilliseconds = 7 * OneDayInMilliseconds
 public let OneDayInMilliseconds = 24 * OneHourInMilliseconds
 public let OneHourInMilliseconds = 60 * OneMinuteInMilliseconds
-public let OneMinuteInMilliseconds: UInt64 = 60 * 1000
+public let OneMinuteInMilliseconds = 60 * OneSecondInMilliseconds
+public let OneSecondInMilliseconds: UInt64 = 1000
 
 extension NSDate {
     public class func now() -> Timestamp {

@@ -32,21 +32,21 @@ class PasscodeConfirmViewController: UIViewController {
     private var panes = [PasscodePane]()
     private var confirmCode: String?
     private var currentPaneIndex: Int = 0
-    private let prefs: Prefs
 
     private let confirmAction: PasscodeConfirmAction
+    private var authenticationInfo: AuthenticationKeychainInfo?
 
-    class func newPasscodeVC(prefs prefs: Prefs) -> PasscodeConfirmViewController {
-        let passcodeVC = PasscodeConfirmViewController(prefs: prefs, confirmAction: .Created)
+    class func newPasscodeVC() -> PasscodeConfirmViewController {
+        let passcodeVC = PasscodeConfirmViewController(confirmAction: .Created)
         passcodeVC.panes = [
-            PasscodePane(title: AuthenticationStrings.enterPasscode),
+            PasscodePane(title: AuthenticationStrings.enterAPasscode),
             PasscodePane(title: AuthenticationStrings.reenterPasscode),
         ]
         return passcodeVC
     }
 
-    class func changePasscodeVC(prefs prefs: Prefs) -> PasscodeConfirmViewController {
-        let passcodeVC = PasscodeConfirmViewController(prefs: prefs, confirmAction: .Changed)
+    class func changePasscodeVC() -> PasscodeConfirmViewController {
+        let passcodeVC = PasscodeConfirmViewController(confirmAction: .Changed)
         passcodeVC.panes = [
             PasscodePane(title: AuthenticationStrings.enterPasscode),
             PasscodePane(title: AuthenticationStrings.enterNewPasscode),
@@ -54,8 +54,8 @@ class PasscodeConfirmViewController: UIViewController {
         return passcodeVC
     }
 
-    class func removePasscodeVC(prefs prefs: Prefs) -> PasscodeConfirmViewController {
-        let passcodeVC = PasscodeConfirmViewController(prefs: prefs, confirmAction: .Removed)
+    class func removePasscodeVC() -> PasscodeConfirmViewController {
+        let passcodeVC = PasscodeConfirmViewController(confirmAction: .Removed)
         passcodeVC.panes = [
             PasscodePane(title: AuthenticationStrings.enterPasscode),
             PasscodePane(title: AuthenticationStrings.reenterPasscode),
@@ -63,9 +63,9 @@ class PasscodeConfirmViewController: UIViewController {
         return passcodeVC
     }
 
-    init(prefs: Prefs, confirmAction: PasscodeConfirmAction) {
-        self.prefs = prefs
+    init(confirmAction: PasscodeConfirmAction) {
         self.confirmAction = confirmAction
+        self.authenticationInfo = KeychainWrapper.authenticationInfo()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -139,7 +139,7 @@ extension PasscodeConfirmViewController: PasscodeInputViewDelegate {
         if currentPaneIndex == 0 {
             // Constraint: When removing or changing a passcode, we need to make sure that the first passcode they've
             // entered matches the one stored in the keychain
-            if (confirmAction == .Removed || confirmAction == .Changed) && code != KeychainWrapper.stringForKey(KeychainKeyPasscode) {
+            if (confirmAction == .Removed || confirmAction == .Changed) && code != authenticationInfo?.passcode {
                 // TODO: Show error for incorrect passcode
                 inputView.resetCode()
                 inputView.becomeFirstResponder()
@@ -184,18 +184,17 @@ extension PasscodeConfirmViewController: PasscodeInputViewDelegate {
         let notificationName: String
         switch confirmAction {
         case .Changed:
-            KeychainWrapper.setString(code, forKey: KeychainKeyPasscode)
+            authenticationInfo?.updatePasscode(code)
             notificationName = NotificationPasscodeDidChange
         case .Created:
-            KeychainWrapper.setString(code, forKey: KeychainKeyPasscode)
-            prefs.setInt(PasscodeInterval.Immediately.rawValue, forKey: PrefKeyRequirePasscodeInterval)
+            authenticationInfo = AuthenticationKeychainInfo(passcode: code)
             notificationName = NotificationPasscodeDidCreate
         case .Removed:
-            KeychainWrapper.removeObjectForKey(KeychainKeyPasscode)
-            prefs.removeObjectForKey(PrefKeyRequirePasscodeInterval)
+            authenticationInfo = nil
             notificationName = NotificationPasscodeDidRemove
         }
 
+        KeychainWrapper.setAuthenticationInfo(authenticationInfo)
         notificationCenter.postNotificationName(notificationName, object: nil)
     }
 }

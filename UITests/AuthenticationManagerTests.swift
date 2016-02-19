@@ -9,12 +9,6 @@ import SwiftKeychainWrapper
 import Shared
 
 class AuthenticationManagerTests: KIFTestCase {
-    var prefs: Prefs!
-
-    override func setUp() {
-        super.setUp()
-        self.prefs = (UIApplication.sharedApplication().delegate as! AppDelegate).profile!.prefs
-    }
 
     private func openAuthenticationManager() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
@@ -29,13 +23,13 @@ class AuthenticationManagerTests: KIFTestCase {
     }
 
     private func resetPasscode() {
-        KeychainWrapper.removeObjectForKey(KeychainKeyPasscode)
-        prefs.removeObjectForKey(PrefKeyRequirePasscodeInterval)
+        KeychainWrapper.setAuthenticationInfo(nil)
     }
 
     private func setPasscode(code: String, interval: PasscodeInterval) {
-        KeychainWrapper.setString(code, forKey: KeychainKeyPasscode)
-        prefs.setInt(interval.rawValue, forKey: PrefKeyRequirePasscodeInterval)
+        let info = AuthenticationKeychainInfo(passcode: code)
+        info.updateRequiredPasscodeInterval(interval)
+        KeychainWrapper.setAuthenticationInfo(info)
     }
 
     func testTurnOnPasscodeSetsPasscodeAndInterval() {
@@ -61,9 +55,9 @@ class AuthenticationManagerTests: KIFTestCase {
 
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
 
-        XCTAssertEqual(KeychainWrapper.stringForKey(KeychainKeyPasscode)!, "1337")
-        XCTAssertNotNil(prefs.intForKey(PrefKeyRequirePasscodeInterval))
-        XCTAssertEqual(prefs.intForKey(PrefKeyRequirePasscodeInterval), 0)
+        let info = KeychainWrapper.authenticationInfo()!
+        XCTAssertEqual(info.passcode!, "1337")
+        XCTAssertEqual(info.requiredPasscodeInterval, .Immediately)
 
         closeAuthenticationManager()
         resetPasscode()
@@ -74,7 +68,7 @@ class AuthenticationManagerTests: KIFTestCase {
 
         openAuthenticationManager()
         tester().tapViewWithAccessibilityLabel("Turn Passcode Off")
-        tester().waitForViewWithAccessibilityLabel("Enter a passcode")
+        tester().waitForViewWithAccessibilityLabel("Enter passcode")
 
         // Enter a passcode
         tester().tapViewWithAccessibilityLabel("1")
@@ -91,8 +85,7 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("7")
 
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
-        XCTAssertNil(KeychainWrapper.stringForKey(KeychainKeyPasscode))
-        XCTAssertNil(prefs.intForKey(PrefKeyRequirePasscodeInterval))
+        XCTAssertNil(KeychainWrapper.authenticationInfo())
 
         closeAuthenticationManager()
     }
@@ -102,7 +95,7 @@ class AuthenticationManagerTests: KIFTestCase {
 
         openAuthenticationManager()
         tester().tapViewWithAccessibilityLabel("Change Passcode")
-        tester().waitForViewWithAccessibilityLabel("Enter a passcode")
+        tester().waitForViewWithAccessibilityLabel("Enter passcode")
 
         // Enter a passcode
         tester().tapViewWithAccessibilityLabel("1")
@@ -119,7 +112,9 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("7")
 
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
-        XCTAssertEqual(KeychainWrapper.stringForKey(KeychainKeyPasscode), "2337")
+
+        let info = KeychainWrapper.authenticationInfo()!
+        XCTAssertEqual(info.passcode!, "2337")
 
         closeAuthenticationManager()
     }
@@ -144,7 +139,8 @@ class AuthenticationManagerTests: KIFTestCase {
         XCTAssertEqual(immediatelyCell.accessoryType, UITableViewCellAccessoryType.None)
         XCTAssertEqual(oneHourCell.accessoryType, UITableViewCellAccessoryType.Checkmark)
 
-        XCTAssertEqual(prefs.intForKey(PrefKeyRequirePasscodeInterval), PasscodeInterval.OneHour.rawValue)
+        let info = KeychainWrapper.authenticationInfo()!
+        XCTAssertEqual(info.requiredPasscodeInterval!, PasscodeInterval.OneHour)
 
         tester().tapViewWithAccessibilityLabel("Back")
 

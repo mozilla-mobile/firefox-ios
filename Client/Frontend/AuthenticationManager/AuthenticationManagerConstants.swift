@@ -3,13 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-
-let PrefKeyTouchIDEnabled = "authentication.touchIDEnabled"
-let PrefKeyRequirePasscodeInterval = "authentication.requirePasscodeInterval"
-let KeychainKeyPasscode = "AppPasscode"
+import Shared
 
 // Passcode intervals with rawValue in seconds.
-enum PasscodeInterval: Int32 {
+enum PasscodeInterval: Int {
     var settingTitle: String {
         switch self {
         case .Immediately:      return AuthenticationStrings.immediately
@@ -34,8 +31,14 @@ struct AuthenticationStrings {
     static let requirePasscode =
         NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Title for setting to require a passcode")
 
+    static let enterAPasscode =
+        NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Title above input for entering a passcode")
+
+    static let enterPasscodeTitle =
+        NSLocalizedString("Enter Passcode", tableName: "AuthenticationManager", comment: "Screen title for entering a passcode")
+
     static let enterPasscode =
-        NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Title for entering a passcode")
+        NSLocalizedString("Enter passcode", tableName: "AuthenticationManager", comment: "Title above input for entering passcode while removing/changing")
 
     static let reenterPasscode =
         NSLocalizedString("Re-enter passcode", tableName: "AuthenticationManager", comment: "Title for re-entering a passcode")

@@ -15,9 +15,11 @@ import SwiftKeychainWrapper
 /// Presented to the to user when asking for their passcode to validate entry into a part of the app.
 class PasscodeEntryViewController: UIViewController {
     weak var delegate: PasscodeEntryDelegate?
-    private let passcodePane = PasscodePane(title: AuthenticationStrings.enterPasscode)
+    private let passcodePane = PasscodePane()
+    private var authenticationInfo: AuthenticationKeychainInfo?
 
     init() {
+        self.authenticationInfo = KeychainWrapper.authenticationInfo()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -27,6 +29,7 @@ class PasscodeEntryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = AuthenticationStrings.enterPasscodeTitle
         view.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: Selector("dismiss"))
         automaticallyAdjustsScrollViewInsets = false
@@ -57,7 +60,9 @@ extension PasscodeEntryViewController {
 
 extension PasscodeEntryViewController: PasscodeInputViewDelegate {
     func passcodeInputView(inputView: PasscodeInputView, didFinishEnteringCode code: String) {
-        if let passcode = KeychainWrapper.stringForKey(KeychainKeyPasscode) where passcode == code {
+        if let passcode = authenticationInfo?.passcode where passcode == code {
+            authenticationInfo?.recordValidationTime()
+            KeychainWrapper.setAuthenticationInfo(authenticationInfo)
             delegate?.passcodeValidationDidSucceed()
         } else {
             // TODO: Show error for incorrect passcode
