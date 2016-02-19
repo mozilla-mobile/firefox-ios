@@ -164,6 +164,7 @@ class URLBarView: UIView {
         cancelButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         cancelButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         cancelButton.alpha = 0
+        cancelButton.accessibilityIdentifier = "URLBarView.cancelbutton"
         return cancelButton
     }()
 

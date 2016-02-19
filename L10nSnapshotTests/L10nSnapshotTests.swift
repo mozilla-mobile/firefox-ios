@@ -25,7 +25,7 @@ class L10nSnapshotTests: XCTestCase {
         super.tearDown()
     }
     
-    func testIntro() {
+    func test111Intro() {
         let app = XCUIApplication()
 
         snapshot("Intro-1")
@@ -45,5 +45,40 @@ class L10nSnapshotTests: XCTestCase {
         app.swipeLeft()
         sleep(2)
         snapshot("Intro-5")
+    }
+    
+    // At this point the app has started again and will not display the tour again.
+    
+    func test222InitialHomeScreen() {
+        sleep(2)
+        snapshot("InitialHomeScreen")
+
+        sleep(2)
+        let app = XCUIApplication()
+        let addressTextField = app.textFields.elementBoundByIndex(0)
+        addressTextField.tap()
+        snapshot("ActiveLocationField")
+
+        sleep(2)
+        addressTextField.tap()
+        snapshot("ActiveLocationField")
+
+        sleep(2)
+        addressTextField.tap()
+        addressTextField.typeText("foo")
+        snapshot("ActiveLocationFieldWithQueryEntered")
+        app.buttons.matchingIdentifier("URLBarView.cancelbutton").element.tap()
+
+        sleep(2)
+        addressTextField.pressForDuration(2.0)
+        snapshot("ContextMenuForLocationBar")
+        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
+        print(app.sheets.elementBoundByIndex(0).debugDescription)
+
+        sleep(2)
+        UIPasteboard.generalPasteboard().string = "https://www.mozilla.com"
+        addressTextField.pressForDuration(2.0)
+        snapshot("ContextMenuForLocationBarWithPasteboard")
+        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
     }
 }
