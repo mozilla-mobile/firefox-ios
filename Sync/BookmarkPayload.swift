@@ -9,6 +9,34 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
+public protocol MirrorItemable {
+    func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem
+}
+
+extension BookmarkMirrorItem {
+    func asPayload() -> BookmarkBasePayload {
+        return BookmarkType.somePayloadFromJSON(self.asJSON())
+    }
+
+    func asPayloadWithChildren(children: [GUID]?) -> BookmarkBasePayload {
+        let remappedChildren: [GUID]?
+        if let children = children {
+            if BookmarkRoots.RootGUID == self.guid {
+                // Only the root contains roots, and so only its children
+                // need to be translated.
+                remappedChildren = children.map(BookmarkRoots.translateOutgoingRootGUID)
+            } else {
+                remappedChildren = children
+            }
+        } else {
+            remappedChildren = nil
+        }
+
+        let json = self.asJSONWithChildren(remappedChildren)
+        return BookmarkType.somePayloadFromJSON(json)
+    }
+}
+
 /**
  * Hierarchy:
  * - BookmarkBasePayload
@@ -104,6 +132,25 @@ public class LivemarkPayload: BookmarkBasePayload {
 
         return true
     }
+
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Livemark, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.livemark(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString,
+            title: self["title"].asString,
+            description: self["description"].asString,
+            feedURI: self.feedURI!,
+            siteURI: self.siteURI!
+        )
+    }
 }
 
 public class SeparatorPayload: BookmarkBasePayload {
@@ -136,6 +183,22 @@ public class SeparatorPayload: BookmarkBasePayload {
         }
 
         return true
+    }
+
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Separator, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.separator(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            pos: self["pos"].asInt!
+        )
     }
 }
 
@@ -197,6 +260,24 @@ public class FolderPayload: BookmarkBasePayload {
         }
 
         return true
+    }
+
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Folder, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.folder(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString,
+            title: self["title"].asString!,
+            description: self["description"].asString,
+            children: self.children
+        )
     }
 }
 
@@ -263,9 +344,7 @@ public class BookmarkPayload: BookmarkBasePayload {
         return self["tags"].asArray?.flatMap { $0.asString } ?? []
     }()
 
-    // This goes here because extensions cannot override methods yet.
-    // The rest are in extension blocks at the end of this file.
-    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Bookmark, guid: self.id, modified: modified)
         }
@@ -346,9 +425,14 @@ public class BookmarkQueryPayload: BookmarkPayload {
     }
 }
 
-public class BookmarkBasePayload: CleartextPayloadJSON {
+public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
     private static let requiredStringFields: [String] = ["parentid", "type"]
     private static let optionalBooleanFields: [String] = ["hasDupe"]
+
+    static func deletedPayload(guid: GUID) -> BookmarkBasePayload {
+        let remappedGUID = BookmarkRoots.translateOutgoingRootGUID(guid)
+        return BookmarkBasePayload(JSON(["id": remappedGUID, "deleted": true]))
+    }
 
     func hasStringArrayField(name: String) -> Bool {
         guard let arr = self[name].asArray else {
@@ -450,71 +534,10 @@ public class BookmarkBasePayload: CleartextPayloadJSON {
 
         return self.hasDupe == p.hasDupe
     }
-}
 
-public protocol MirrorItemable {
-    func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem
-}
-
-extension BookmarkPayload: MirrorItemable {
-    // In the main class definition due to Swift compiler limitations.
-}
-
-extension FolderPayload: MirrorItemable {
+    // This goes here because extensions cannot override methods yet.
     public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
-        if self.deleted {
-            return BookmarkMirrorItem.deleted(.Folder, guid: self.id, modified: modified)
-        }
-
-        return BookmarkMirrorItem.folder(
-            self.id,
-            modified: modified,
-            hasDupe: self.hasDupe,
-            // TODO: these might need to be weakened if real-world data is dirty.
-            parentID: self["parentid"].asString!,
-            parentName: self["parentName"].asString,
-            title: self["title"].asString!,
-            description: self["description"].asString,
-            children: self.children
-        )
-    }
-}
-
-extension LivemarkPayload: MirrorItemable {
-    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
-        if self.deleted {
-            return BookmarkMirrorItem.deleted(.Livemark, guid: self.id, modified: modified)
-        }
-
-        return BookmarkMirrorItem.livemark(
-            self.id,
-            modified: modified,
-            hasDupe: self.hasDupe,
-            // TODO: these might need to be weakened if real-world data is dirty.
-            parentID: self["parentid"].asString!,
-            parentName: self["parentName"].asString,
-            title: self["title"].asString,
-            description: self["description"].asString,
-            feedURI: self.feedURI!,
-            siteURI: self.siteURI!
-        )
-    }
-}
-
-extension SeparatorPayload: MirrorItemable {
-    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
-        if self.deleted {
-            return BookmarkMirrorItem.deleted(.Separator, guid: self.id, modified: modified)
-        }
-
-        return BookmarkMirrorItem.separator(
-            self.id,
-            modified: modified,
-            hasDupe: self.hasDupe,
-            // TODO: these might need to be weakened if real-world data is dirty.
-            parentID: self["parentid"].asString!,
-            parentName: self["parentName"].asString!,
-            pos: self["pos"].asInt!
-        )
+        precondition(self.deleted, "Non-deleted items should have a specific type.")
+        return BookmarkMirrorItem.deleted(.Bookmark, guid: self.id, modified: modified)
     }
 }
