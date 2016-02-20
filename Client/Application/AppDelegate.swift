@@ -8,10 +8,13 @@ import AVFoundation
 import XCGLogger
 import Breakpad
 import MessageUI
+import WebImage
+
 
 private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
+let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -169,7 +172,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let profile = self.profile {
             return profile
         }
-        let p = BrowserProfile(localName: "profile", app: application)
+        let clearProfile = NSProcessInfo.processInfo().environment["MOZ_WIPE_PROFILE"] != nil
+        let p = BrowserProfile(localName: "profile", app: application, clear: clearProfile)
         self.profile = p
         return p
     }
@@ -241,7 +245,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: String) -> Bool {
-        return extensionPointIdentifier != UIApplicationKeyboardExtensionPointIdentifier
+        if let thirdPartyKeyboardSettingBool = getProfile(application).prefs.boolForKey(AllowThirdPartyKeyboardsKey) where extensionPointIdentifier == UIApplicationKeyboardExtensionPointIdentifier {
+            return thirdPartyKeyboardSettingBool
+        }
+
+        return true
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.

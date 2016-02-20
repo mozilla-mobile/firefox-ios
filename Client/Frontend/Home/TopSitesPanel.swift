@@ -6,6 +6,8 @@ import UIKit
 import Shared
 import XCGLogger
 import Storage
+import WebImage
+
 
 private let log = Logger.browserLogger
 

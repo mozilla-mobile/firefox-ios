@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 class TestAppDelegate: AppDelegate {
     override func getProfile(application: UIApplication) -> Profile {
@@ -14,6 +15,9 @@ class TestAppDelegate: AppDelegate {
         let profile = BrowserProfile(localName: "testProfile", app: application)
         _ = try? profile.files.removeFilesInDirectory()
         profile.prefs.clearAll()
+
+        // Don't show the What's New page.
+        profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
 
         // Skip the first run UI.
         profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)

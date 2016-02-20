@@ -13,6 +13,7 @@ import XCGLogger
 import Alamofire
 import Account
 import ReadingList
+import MobileCoreServices
 
 private let log = Logger.browserLogger
 
@@ -114,11 +115,11 @@ class BrowserViewController: UIViewController {
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 
-        guard let displayedPopoverController = self.displayedPopoverController where displayedPopoverController.isBeingPresented() else {
+        displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
+
+        guard let displayedPopoverController = self.displayedPopoverController else {
             return
         }
-
-        displayedPopoverController.dismissViewControllerAnimated(true, completion: nil)
 
         coordinator.animateAlongsideTransition(nil) { context in
             self.updateDisplayedPopoverProperties?()

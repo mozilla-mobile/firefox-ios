@@ -97,7 +97,7 @@ class TestSwiftData: XCTestCase {
             if safeQuery {
                 c = db.executeQuery("SELECT * FROM history", factory: { $0 })
             } else {
-                c = db.executeQueryUnsafe("SELECT * FROM history", factory: { $0 })
+                c = db.executeQueryUnsafe("SELECT * FROM history", factory: { $0 }, withArgs: nil)
             }
             return nil
         }

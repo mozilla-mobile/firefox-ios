@@ -105,7 +105,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForAnimationsToFinish()
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Sign In")
+        tester().tapViewWithAccessibilityLabel("Sign In to Firefox")
         tester().waitForViewWithAccessibilityLabel("Web content")
 
         // Go back to the home screen

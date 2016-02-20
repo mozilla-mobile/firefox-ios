@@ -116,7 +116,7 @@ class TopSitesTests: KIFTestCase {
 
     func testRotationAndDeleteShowsCorrectTile() {
         // Load in the top Alexa sites to populate some top site tiles with
-        let topDomainsPath = NSBundle(forClass: TopSitesTests.self).pathForResource("topdomains", ofType: "txt")!
+        let topDomainsPath = NSBundle.mainBundle().pathForResource("topdomains", ofType: "txt")!
         let data = try! NSString(contentsOfFile: topDomainsPath, encoding: NSUTF8StringEncoding)
         let topDomains = data.componentsSeparatedByString("\n")
         var collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView

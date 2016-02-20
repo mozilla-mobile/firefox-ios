@@ -4,6 +4,7 @@
 
 import UIKit
 import Storage
+import WebImage
 
 public extension UIImageView {
     public func setIcon(icon: Favicon?, withPlaceholder placeholder: UIImage) {

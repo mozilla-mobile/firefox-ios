@@ -8,20 +8,44 @@ public class DefaultSuggestedSites {
     public static let sites = [
         "default": [
             SuggestedSiteData(
-                url: "https://www.mozilla.org/about",
-                bgColor: "0xce4e41",
-                imageUrl: "asset://suggestedsites_mozilla",
-                faviconUrl: "asset://fxLogo",
+                url: "https://m.facebook.com/",
+                bgColor: "0x385185",
+                imageUrl: "asset://suggestedsites_facebook",
+                faviconUrl: "asset://defaultFavicon",
                 trackingId: 632,
-                title: NSLocalizedString("The Mozilla Project", comment: "Tile title for Mozilla")
+                title: NSLocalizedString("Facebook", comment: "Tile title for Facebook")
             ),
             SuggestedSiteData(
-                url: "https://support.mozilla.org/products/ios",
-                bgColor: "0xf37c00",
-                imageUrl: "asset://suggestedsites_fxsupport",
-                faviconUrl: "asset://mozLogo",
+                url: "https://m.youtube.com/",
+                bgColor: "0xcd201f",
+                imageUrl: "asset://suggestedsites_youtube",
+                faviconUrl: "asset://defaultFavicon",
                 trackingId: 631,
-                title: NSLocalizedString("Firefox Help and Support", comment: "Tile title for App Help")
+                title: NSLocalizedString("YouTube", comment: "Tile title for YouTube")
+            ),
+            SuggestedSiteData(
+                url: "https://www.amazon.com/",
+                bgColor: "0x000000",
+                imageUrl: "asset://suggestedsites_amazon",
+                faviconUrl: "asset://defaultFavicon",
+                trackingId: 630,
+                title: NSLocalizedString("Amazon", comment: "Tile title for Amazon")
+            ),
+            SuggestedSiteData(
+                url: "https://www.wikipedia.org/",
+                bgColor: "0x000000",
+                imageUrl: "asset://suggestedsites_wikipedia",
+                faviconUrl: "asset://defaultFavicon",
+                trackingId: 629,
+                title: NSLocalizedString("Wikipedia", comment: "Tile title for Wikipedia")
+            ),
+            SuggestedSiteData(
+                url: "https://mobile.twitter.com/",
+                bgColor: "0x55acee",
+                imageUrl: "asset://suggestedsites_twitter",
+                faviconUrl: "asset://defaultFavicon",
+                trackingId: 628,
+                title: NSLocalizedString("Twitter", comment: "Tile title for Twitter")
             )
         ],
         "zh_CN": [

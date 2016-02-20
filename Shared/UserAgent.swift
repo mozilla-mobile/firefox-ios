@@ -27,12 +27,16 @@ public class UserAgent {
      * Use this if you know that a value must have been computed before your
      * code runs, or you don't mind failure.
      */
-    public static func cachedUserAgent(checkiOSVersion checkiOSVersion: Bool = true) -> String? {
+    public static func cachedUserAgent(checkiOSVersion checkiOSVersion: Bool = true, checkFirefoxVersion: Bool = true) -> String? {
         let currentiOSVersion = UIDevice.currentDevice().systemVersion
         let lastiOSVersion = defaults.stringForKey("LastDeviceSystemVersionNumber")
 
+        let currentFirefoxVersion = AppInfo.appVersion
+        let lastFirefoxVersion = defaults.stringForKey("LastFirefoxVersionNumber")
+
         if let firefoxUA = defaults.stringForKey("UserAgent") {
-            if !checkiOSVersion || (lastiOSVersion == currentiOSVersion) {
+            if (!checkiOSVersion || (lastiOSVersion == currentiOSVersion))
+                && (!checkFirefoxVersion || (lastFirefoxVersion == currentFirefoxVersion)){
                 return firefoxUA
             }
         }
@@ -56,6 +60,7 @@ public class UserAgent {
         let appVersion = AppInfo.appVersion
         let currentiOSVersion = UIDevice.currentDevice().systemVersion
         defaults.setObject(currentiOSVersion,forKey: "LastDeviceSystemVersionNumber")
+        defaults.setObject(appVersion, forKey: "LastFirefoxVersionNumber")
         let userAgent = webView.stringByEvaluatingJavaScriptFromString("navigator.userAgent")!
 
         // Extract the WebKit version and use it as the Safari version.

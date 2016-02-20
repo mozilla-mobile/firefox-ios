@@ -7,6 +7,8 @@ import Shared
 import Alamofire
 import XCGLogger
 import Deferred
+import WebImage
+
 
 private let log = Logger.browserLogger
 private let queue = dispatch_queue_create("FaviconFetcher", DISPATCH_QUEUE_CONCURRENT)
@@ -84,13 +86,8 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                         return
                     }
                 }
-                let errorDescription: String?
-                if let error = error as? NSError {
-                    errorDescription = error.description
-                } else {
-                    errorDescription = "No content."
-                }
-                deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription!)))
+                let errorDescription = (error as NSError?)?.description ?? "No content."
+                deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription)))
             }
         }
         return deferred
