@@ -18,7 +18,7 @@ class TrivialBookmarkStorer: BookmarkStorer {
         self.uploader = uploader
     }
 
-    func applyUpstreamCompletionOp(op: UpstreamCompletionOp, itemSources: ItemSources) -> Deferred<Maybe<POSTResult>> {
+    func applyUpstreamCompletionOp(op: UpstreamCompletionOp, itemSources: ItemSources, trackingTimesInto local: LocalOverrideCompletionOp) -> Deferred<Maybe<POSTResult>> {
         log.debug("Uploading \(op.records.count) modified records.")
         log.debug("Uploading \(op.amendChildrenFromBuffer.count) amended buffer records.")
         log.debug("Uploading \(op.amendChildrenFromMirror.count) amended mirror records.")
@@ -66,6 +66,8 @@ class TrivialBookmarkStorer: BookmarkStorer {
                 failed[guid] = strings
             }
 
+            log.debug("Uploaded records got timestamp \(modified).")
+            local.setModifiedTime(modified, guids: result.success)
             return deferMaybe(result.modified)
         }
 

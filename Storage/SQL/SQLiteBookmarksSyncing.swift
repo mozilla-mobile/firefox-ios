@@ -911,7 +911,7 @@ public extension SQLiteBookmarkBufferStorage {
 }
 
 extension MergedSQLiteBookmarks {
-    public func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, withModifiedTimestamp timestamp: Timestamp, itemSources: ItemSources) -> Success {
+    public func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, itemSources: ItemSources) -> Success {
         log.debug("Applying local op to merged.")
         if op.isNoOp {
             log.debug("Nothing to do.")
@@ -998,13 +998,30 @@ extension MergedSQLiteBookmarks {
                     "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
                     "bmkUri, tags, keyword, folderName, queryId, faviconID,",
 
-                    // TODO: we actually need *multiple* timestamps here, or multiple accrued local ops, because
-                    // uploads occur in batches. Oops.
-                    "\(timestamp) AS server_modified",
+                    // This will be fixed up in batches after the initial copy.
+                    "0 AS server_modified",
                     "FROM \(TableBookmarksLocal) WHERE guid IN",
                     varlist,
                     ].joinWithSeparator(" ")
                 change(copySQL, args: args)
+            }
+
+            op.modifiedTimes.forEach { (time, guids) in
+                if err != nil { return }
+
+                // This will never be too big: we upload in chunks
+                // smaller than 999!
+                precondition(guids.count < BrowserDB.MaxVariableNumber)
+
+                log.debug("Swizzling server modified time to \(time) for \(guids.count) GUIDs.")
+                let args: Args = guids.map { $0 as AnyObject }
+                let varlist = BrowserDB.varlist(guids.count)
+                let updateSQL = [
+                    "UPDATE \(TableBookmarksMirror) SET server_modified = \(time)",
+                    "WHERE guid IN",
+                    varlist,
+                ].joinWithSeparator(" ")
+                change(updateSQL, args: args)
             }
 
             if err != nil {

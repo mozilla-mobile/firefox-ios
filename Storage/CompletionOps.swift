@@ -22,6 +22,7 @@ public class LocalOverrideCompletionOp: PerhapsNoOp {
 
     public var mirrorValuesToCopyFromBuffer: Set<GUID> = Set()         // No need to synthesize BookmarkMirrorItem instances in memory.
     public var mirrorValuesToCopyFromLocal: Set<GUID> = Set()
+    public var modifiedTimes: [Timestamp: [GUID]] = [:]                // Only for copy.
 
     public var isNoOp: Bool {
         return processedLocalChanges.isEmpty &&
@@ -31,6 +32,24 @@ public class LocalOverrideCompletionOp: PerhapsNoOp {
                mirrorItemsToInsert.isEmpty &&
                mirrorItemsToUpdate.isEmpty &&
                mirrorStructures.isEmpty
+    }
+
+    public func setModifiedTime(time: Timestamp, guids: [GUID]) {
+        var forCopy: [GUID] = []
+        for guid in guids {
+            // This saves us doing an UPDATE on these items.
+            if var item = self.mirrorItemsToInsert[guid] {
+                item.serverModified = time
+            } else if var item = self.mirrorItemsToUpdate[guid] {
+                item.serverModified = time
+            } else {
+                forCopy.append(guid)
+            }
+        }
+
+        if !forCopy.isEmpty {
+            modifiedTimes[time] = forCopy
+        }
     }
 
     public init() {
