@@ -19,7 +19,7 @@ public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalD
     func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>>
     func treesForEdges() -> Deferred<Maybe<(local: BookmarkTree, buffer: BookmarkTree)>>
     func treeForMirror() -> Deferred<Maybe<BookmarkTree>>
-    func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, withModifiedTimestamp timestamp: Timestamp, itemSources: ItemSources) -> Success
+    func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, itemSources: ItemSources) -> Success
 }
 
 public protocol BookmarkBufferStorage: class {
@@ -209,7 +209,7 @@ public func == (lhs: BookmarkMirrorItem, rhs: BookmarkMirrorItem) -> Bool {
 public struct BookmarkMirrorItem: Equatable {
     public let guid: GUID
     public let type: BookmarkNodeType
-    public let serverModified: Timestamp
+    public var serverModified: Timestamp
     public let isDeleted: Bool
     public let hasDupe: Bool
     public let parentID: GUID?

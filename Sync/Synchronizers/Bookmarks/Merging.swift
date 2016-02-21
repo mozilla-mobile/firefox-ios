@@ -13,7 +13,7 @@ private let log = Logger.syncLogger
 // Because generic protocols in Swift are a pain in the ass.
 public protocol BookmarkStorer: class {
     // TODO: this should probably return a timestamp.
-    func applyUpstreamCompletionOp(op: UpstreamCompletionOp, itemSources: ItemSources) -> Deferred<Maybe<POSTResult>>
+    func applyUpstreamCompletionOp(op: UpstreamCompletionOp, itemSources: ItemSources, trackingTimesInto local: LocalOverrideCompletionOp) -> Deferred<Maybe<POSTResult>>
 }
 
 public class UpstreamCompletionOp: PerhapsNoOp {
@@ -53,8 +53,8 @@ public class BookmarksMergeResult: PerhapsNoOp {
     }
 
     func applyToClient(client: BookmarkStorer, storage: SyncableBookmarks, buffer: BookmarkBufferStorage) -> Success {
-        return client.applyUpstreamCompletionOp(self.uploadCompletion, itemSources: self.itemSources)
-        >>== { storage.applyLocalOverrideCompletionOp(self.overrideCompletion, withModifiedTimestamp: $0.modified, itemSources: self.itemSources) }
+        return client.applyUpstreamCompletionOp(self.uploadCompletion, itemSources: self.itemSources, trackingTimesInto: self.overrideCompletion)
+         >>> { storage.applyLocalOverrideCompletionOp(self.overrideCompletion, itemSources: self.itemSources) }
          >>> { buffer.applyBufferCompletionOp(self.bufferCompletion, itemSources: self.itemSources) }
     }
 
