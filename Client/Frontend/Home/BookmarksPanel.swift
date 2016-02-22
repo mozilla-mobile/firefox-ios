@@ -26,6 +26,7 @@ struct BookmarksPanelUX {
     private static let BookmarkFolderChevronSize: CGFloat = 20
     private static let BookmarkFolderChevronLineWidth: CGFloat = 4.0
     private static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
+    private static let SeparatorRowHeight: CGFloat = 0.5
 }
 
 class BookmarksPanel: SiteTableViewController, HomePanel {
@@ -35,6 +36,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var bookmarkFolder: BookmarkFolder?
 
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
+    private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorIdentifier"
     private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
 
     private lazy var defaultIcon: UIImage = {
@@ -45,6 +47,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
 
+        self.tableView.registerClass(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.registerClass(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
         self.tableView.registerClass(BookmarkFolderTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BookmarkFolderHeaderViewIdentifier)
     }
@@ -60,14 +63,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // if we've not already set a source for this panel fetch a new model
-        // otherwise just use the existing source to select a folder
+        // If we've not already set a source for this panel, fetch a new model from
+        // the root; otherwise, just use the existing source to select a folder.
         guard let source = self.source else {
             // Get all the bookmarks split by folders
             if let bookmarkFolder = bookmarkFolder {
                 profile.bookmarks.modelForFolder(bookmarkFolder).upon(onModelFetched)
             } else {
-                profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID).upon(onModelFetched)
+                profile.bookmarks.modelForRoot().upon(onModelFetched)
             }
             return
         }
@@ -120,31 +123,30 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         guard let source = source, bookmark = source.current[indexPath.row] else { return super.tableView(tableView, cellForRowAtIndexPath: indexPath) }
-        let cell: UITableViewCell
-        if let _ = bookmark as? BookmarkFolder {
-            cell = tableView.dequeueReusableCellWithIdentifier(BookmarkFolderCellIdentifier, forIndexPath: indexPath)
-        } else {
-            cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+        switch (bookmark) {
+        case let item as BookmarkItem:
+            let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            if item.title.isEmpty {
+                cell.textLabel?.text = item.url
+            } else {
+                cell.textLabel?.text = item.title
+            }
             if let url = bookmark.favicon?.url.asURL where url.scheme == "asset" {
                 cell.imageView?.image = UIImage(named: url.host!)
             } else {
                 cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: self.defaultIcon)
             }
+            return cell
+        case is BookmarkSeparator:
+            return tableView.dequeueReusableCellWithIdentifier(BookmarkSeparatorCellIdentifier, forIndexPath: indexPath)
+        case let bookmark as BookmarkFolder:
+            let cell = tableView.dequeueReusableCellWithIdentifier(BookmarkFolderCellIdentifier, forIndexPath: indexPath)
+            cell.textLabel?.text = bookmark.title
+            return cell
+        default:
+            // This should never happen.
+            return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         }
-
-        switch (bookmark) {
-            case let item as BookmarkItem:
-                if item.title.isEmpty {
-                    cell.textLabel?.text = item.url
-                } else {
-                    cell.textLabel?.text = item.title
-                }
-            default:
-                // Bookmark folders don't have a good fallback if there's no title. :(
-                cell.textLabel?.text = bookmark.title
-        }
-
-        return cell
     }
 
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -174,6 +176,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return header
     }
 
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if let it = self.source?.current[indexPath.row] where it is BookmarkSeparator {
+            return BookmarksPanelUX.SeparatorRowHeight
+        }
+
+        return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+    }
+
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Don't show a header for the root. If there's no root (i.e. source == nil), we'll also show no header.
         if source == nil || parentFolders.isEmpty {
@@ -190,30 +200,47 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    override func tableView(tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // Show a full-width border for cells above separators, so they don't have a weird step.
+        // Separators themselves already have a full-width border, but let's force the issue
+        // just in case.
+        let this = self.source?.current[indexPath.row]
+        if (indexPath.row + 1) < self.source?.current.count {
+            let below = self.source?.current[indexPath.row + 1]
+            if this is BookmarkSeparator || below is BookmarkSeparator {
+                return true
+            }
+        }
+        return super.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath)
+    }
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        if let source = source {
-            let bookmark = source.current[indexPath.row]
+        guard let source = source else {
+            return
+        }
 
-            switch (bookmark) {
-            case let item as BookmarkItem:
-                homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: item.url)!, visitType: VisitType.Bookmark)
-                break
+        let bookmark = source.current[indexPath.row]
 
-            case let folder as BookmarkFolder:
-                let nextController = BookmarksPanel()
-                nextController.parentFolders = parentFolders + [source.current]
-                nextController.bookmarkFolder = folder
-                nextController.source = source
-                nextController.homePanelDelegate = self.homePanelDelegate
-                nextController.profile = self.profile
-                self.navigationController?.pushViewController(nextController, animated: true)
-                break
+        switch (bookmark) {
+        case let item as BookmarkItem:
+            homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: item.url)!, visitType: VisitType.Bookmark)
+            break
 
-            default:
-                // Weird.
-                break        // Just here until there's another executable statement (compiler requires one).
-            }
+        case let folder as BookmarkFolder:
+            log.debug("Selected \(folder.guid)")
+            let nextController = BookmarksPanel()
+            nextController.parentFolders = parentFolders + [source.current]
+            nextController.bookmarkFolder = folder
+            nextController.source = source
+            nextController.homePanelDelegate = self.homePanelDelegate
+            nextController.profile = self.profile
+            self.navigationController?.pushViewController(nextController, animated: true)
+            break
+
+        default:
+            // You can't do anything with separators.
+            break
         }
     }
 
@@ -222,11 +249,16 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        if source == nil {
+        guard let source = source else {
             return .None
         }
 
-        if source!.current.itemIsEditableAtIndex(indexPath.row) ?? false {
+        if source.current[indexPath.row] is BookmarkSeparator {
+            // Because the deletion block is too big.
+            return .None
+        }
+
+        if source.current.itemIsEditableAtIndex(indexPath.row) ?? false {
             return .Delete
         }
 
@@ -241,37 +273,36 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
-            if let bookmark = self.source?.current[indexPath.row] {
-                // Why the dispatches? Because we call success and failure on the DB
-                // queue, and so calling anything else that calls through to the DB will
-                // deadlock. This problem will go away when the bookmarks API switches to
-                // Deferred instead of using callbacks.
-                // TODO: it's now time for this.
-                self.profile.bookmarks.remove(bookmark).uponQueue(dispatch_get_main_queue()) { res in
-                    if let err = res.failureValue {
-                        self.onModelFailure(err)
-                        return
-                    }
-
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.source?.reloadData().upon {
-                            guard let model = $0.successValue else {
-                                self.onModelFailure($0.failureValue)
-                                return
-                            }
-                            dispatch_async(dispatch_get_main_queue()) {
-                                tableView.beginUpdates()
-                                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-                                self.source = model
-
-                                tableView.endUpdates()
-
-                                NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
-                            }
-                        }
-                    }
-                }
+            guard let bookmark = self.source?.current[indexPath.row] else {
+                return
             }
+
+            assert(!(bookmark is BookmarkFolder))
+            if bookmark is BookmarkFolder {
+                // TODO: check whether the folder is empty (excluding separators). If it isn't
+                // then we must ask the user to confirm. Bug 1232810.
+                log.debug("Deleting folder.")
+            }
+
+            log.debug("Removing rows \(indexPath).")
+
+            if let err = self.profile.bookmarks.removeByGUID(bookmark.guid).value.failureValue {
+                log.debug("Failed to remove \(bookmark.guid).")
+                self.onModelFailure(err)
+                return
+            }
+
+            guard let reloaded = self.source?.reloadData().value.successValue else {
+                log.debug("Failed to reload model.")
+                return
+            }
+
+            self.tableView.beginUpdates()
+            self.source = reloaded
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+            self.tableView.endUpdates()
+
+            NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added": false])
         })
 
         return [delete]
@@ -312,7 +343,8 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        // doing this here as TwoLineTableViewCell changes the imageView frame in it's layoutSubviews and we have to make sure it is right
+        // Do this here as TwoLineTableViewCell changes the imageView frame
+        // in its own layoutSubviews, and we have to make sure it is right.
         if let imageSize = imageView?.image?.size {
             imageView?.frame = CGRectMake(ImageMargin, (frame.height - imageSize.width) / 2, imageSize.width, imageSize.height)
         }

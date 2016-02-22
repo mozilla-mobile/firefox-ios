@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import XCGLogger
 
 private let log = Logger.syncLogger
 let BookmarksStorageVersion = 2
@@ -54,45 +53,12 @@ let BookmarksStorageVersion = 2
  * write, detected via X-I-U-S.
  */
 
-private func itemFromRecord(record: Record<BookmarkBasePayload>) -> BookmarkMirrorItem? {
-    guard let itemable = record as? MirrorItemable else {
-        return nil
-    }
-    return itemable.toMirrorItem(record.modified)
-}
-
-public class MirroringBookmarksSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
-    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
-        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "bookmarks")
-    }
-
-    override var storageVersion: Int {
-        return BookmarksStorageVersion
-    }
-
-    public func mirrorBookmarksToStorage(storage: BookmarkMirrorStorage, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
-        if let reason = self.reasonToNotSync(storageClient) {
-            return deferMaybe(.NotStarted(reason))
-        }
-
-        let encoder = RecordEncoder<BookmarkBasePayload>(decode: BookmarkType.somePayloadFromJSON, encode: { $0 })
-
-        guard let bookmarksClient = self.collectionClient(encoder, storageClient: storageClient) else {
-            log.error("Couldn't make bookmarks factory.")
-            return deferMaybe(FatalError(message: "Couldn't make bookmarks factory."))
-        }
-
-        let mirrorer = BookmarksMirrorer(storage: storage, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks")
-        return mirrorer.go(info, greenLight: greenLight) >>> always(SyncStatus.Completed)
-    }
-}
-
 public class BookmarksMirrorer {
     private let downloader: BatchingDownloader<BookmarkBasePayload>
-    private let storage: BookmarkMirrorStorage
+    private let storage: BookmarkBufferStorage
     private let batchSize: Int
 
-    public init(storage: BookmarkMirrorStorage, client: Sync15CollectionClient<BookmarkBasePayload>, basePrefs: Prefs, collection: String, batchSize: Int=100) {
+    public init(storage: BookmarkBufferStorage, client: Sync15CollectionClient<BookmarkBasePayload>, basePrefs: Prefs, collection: String, batchSize: Int=100) {
         self.storage = storage
         self.downloader = BatchingDownloader(collectionClient: client, basePrefs: basePrefs, collection: collection)
         self.batchSize = batchSize
@@ -108,7 +74,7 @@ public class BookmarksMirrorer {
 
     private func applyRecordsFromBatcher() -> Success {
         let retrieved = self.downloader.retrieve()
-        let records = retrieved.flatMap { ($0.payload as? MirrorItemable)?.toMirrorItem($0.modified) }
+        let records = retrieved.flatMap { ($0.payload as MirrorItemable).toMirrorItem($0.modified) }
         if records.isEmpty {
             log.debug("Got empty batch.")
             return succeed()

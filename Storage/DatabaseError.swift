@@ -14,11 +14,11 @@ public class DatabaseError: MaybeErrorType {
         return err?.localizedDescription ?? "Unknown database error."
     }
 
-    init(description: String) {
+    public init(description: String) {
         self.err = NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: description])
     }
 
-    init(err: NSError?) {
+    public init(err: NSError?) {
         self.err = err
     }
 }
