@@ -33,7 +33,7 @@ class L10nSnapshotTests: XCTestCase {
         super.tearDown()
     }
     
-    func testIntro() {
+    func test1Intro() {
         let app = XCUIApplication()
 
         snapshot("00Intro-1")
@@ -55,7 +55,7 @@ class L10nSnapshotTests: XCTestCase {
         snapshot("04Intro-5")
     }
 
-    func testClearPrivateData() {
+    func test2ClearPrivateData() {
 
         let loginUsername = "testtesto@mockmyid.com"
         let loginPassword = "testtesto@mockmyid.com"
@@ -71,12 +71,19 @@ class L10nSnapshotTests: XCTestCase {
 
         app.tables.cells["SignInToFirefox"].tap()
 
+        let passwordField = app.webViews.secureTextFields.elementBoundByIndex(0)
+        let exists = NSPredicate(format: "exists == 1")
+        expectationForPredicate(exists, evaluatedWithObject: passwordField, handler: nil)
+
+        waitForExpectationsWithTimeout(10, handler: nil)
+
         if app.webViews.textFields.elementBoundByIndex(0).exists {
             app.webViews.textFields.elementBoundByIndex(0).tap()
             app.webViews.textFields.elementBoundByIndex(0).typeText(loginUsername)
         }
-        app.webViews.secureTextFields.elementBoundByIndex(0).tap()
-        app.webViews.secureTextFields.elementBoundByIndex(0).typeText(loginPassword)
+
+        passwordField.tap()
+        passwordField.typeText(loginPassword)
         app.webViews.buttons.elementBoundByIndex(0).tap()
 
         snapshot("13SettingsTopWithAccount")
