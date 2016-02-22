@@ -10,6 +10,11 @@ import Shared
 
 class AuthenticationManagerTests: KIFTestCase {
 
+    override func tearDown() {
+        super.tearDown()
+        resetPasscode()
+    }
+
     private func openAuthenticationManager() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Settings")
@@ -60,7 +65,6 @@ class AuthenticationManagerTests: KIFTestCase {
         XCTAssertEqual(info.requiredPasscodeInterval, .Immediately)
 
         closeAuthenticationManager()
-        resetPasscode()
     }
 
     func testTurnOffPasscode() {
@@ -149,5 +153,103 @@ class AuthenticationManagerTests: KIFTestCase {
         XCTAssertEqual(requirePasscodeCell.detailTextLabel!.text, PasscodeInterval.OneHour.settingTitle)
 
         closeAuthenticationManager()
+    }
+
+    func testEnteringLoginsUsingPasscode() {
+        setPasscode("1337", interval: .Immediately)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+
+        // Enter wrong passcode
+        tester().tapViewWithAccessibilityLabel("2")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("7")
+
+        // Check for error
+        tester().waitForTimeInterval(2)
+
+        // Enter a passcode
+        tester().tapViewWithAccessibilityLabel("1")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("7")
+
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testEnteringLoginsUsingPasscodeWithImmediateInterval() {
+        setPasscode("1337", interval: .Immediately)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+
+        // Enter a passcode
+        tester().tapViewWithAccessibilityLabel("1")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("7")
+
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+
+        // Trying again should display passcode screen since we've set the interval to be immediately.
+        tester().tapViewWithAccessibilityLabel("Logins")
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testEnteringLoginsUsingPasscodeWithFiveMinutesInterval() {
+        setPasscode("1337", interval: .FiveMinutes)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+
+        // Enter a passcode
+        tester().tapViewWithAccessibilityLabel("1")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("7")
+
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+
+        // Trying again should not display the passcode screen since the interval is 5 minutes
+        tester().tapViewWithAccessibilityLabel("Logins")
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testEnteringLoginsWithNoPasscode() {
+        XCTAssertNil(KeychainWrapper.authenticationInfo())
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
     }
 }

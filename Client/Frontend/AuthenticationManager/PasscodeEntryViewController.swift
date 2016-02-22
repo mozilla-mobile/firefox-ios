@@ -66,6 +66,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
             delegate?.passcodeValidationDidSucceed()
         } else {
             // TODO: Show error for incorrect passcode
+            passcodePane.codeInputView.resetCode()
         }
     }
 }
