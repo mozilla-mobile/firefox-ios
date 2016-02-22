@@ -213,6 +213,16 @@ extension NSURL {
             return nil
         }
     }
+
+    public func isWebPage() -> Bool {
+        let httpSchemes = ["http", "https"]
+
+        if let _ = httpSchemes.indexOf(scheme) {
+            return true
+        }
+
+        return false
+    }
 }
 
 //MARK: Private Helpers

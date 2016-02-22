@@ -910,7 +910,7 @@ class BrowserViewController: UIViewController {
     private func updateURLBarDisplayURL(tab: Browser) {
         urlBar.currentURL = tab.displayURL
 
-        let isPage = (tab.displayURL != nil) ? isWebPage(tab.displayURL!) : false
+        let isPage = tab.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isWebPage: isPage)
 
         guard let url = tab.displayURL?.absoluteString else {
@@ -1735,16 +1735,6 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
-    }
-
-    private func isWebPage(url: NSURL) -> Bool {
-        let httpSchemes = ["http", "https"]
-
-        if let _ = httpSchemes.indexOf(url.scheme) {
-            return true
-        }
-
-        return false
     }
 
     private func updateTabCountUsingTabManager(tabManager: TabManager, animated: Bool = true) {
