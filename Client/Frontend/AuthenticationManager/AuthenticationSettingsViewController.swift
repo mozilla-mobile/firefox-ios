@@ -20,7 +20,9 @@ class TurnPasscodeOnSetting: Setting {
         // Navigate to passcode configuration screen
         let passcodeVC = PasscodeConfirmViewController.newPasscodeVC()
         passcodeVC.title = AuthenticationStrings.setPasscode
-        navigationController?.presentViewController(UINavigationController(rootViewController: passcodeVC), animated: true, completion: nil)
+        let passcodeNav = UINavigationController(rootViewController: passcodeVC)
+        passcodeNav.modalPresentationStyle = .FormSheet
+        navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
     }
 }
 
@@ -33,7 +35,9 @@ class TurnPasscodeOffSetting: Setting {
     override func onClick(navigationController: UINavigationController?) {
         let passcodeVC = PasscodeConfirmViewController.removePasscodeVC()
         passcodeVC.title = AuthenticationStrings.turnOffPasscode
-        navigationController?.presentViewController(UINavigationController(rootViewController: passcodeVC), animated: true, completion: nil)
+        let passcodeNav = UINavigationController(rootViewController: passcodeVC)
+        passcodeNav.modalPresentationStyle = .FormSheet
+        navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
     }
 }
 
@@ -51,7 +55,9 @@ class ChangePasscodeSetting: Setting {
     override func onClick(navigationController: UINavigationController?) {
         let passcodeVC = PasscodeConfirmViewController.changePasscodeVC()
         passcodeVC.title = AuthenticationStrings.changePasscode
-        navigationController?.presentViewController(UINavigationController(rootViewController: passcodeVC), animated: true, completion: nil)
+        let passcodeNav = UINavigationController(rootViewController: passcodeVC)
+        passcodeNav.modalPresentationStyle = .FormSheet
+        navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
     }
 }
 
@@ -162,7 +168,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 
 extension AuthenticationSettingsViewController {
     func passcodeStateChanged(notification: NSNotification) {
-        generateSettings()
+        settings = generateSettings()
         tableView.reloadData()
     }
 }
