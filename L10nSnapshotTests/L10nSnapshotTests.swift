@@ -4,6 +4,14 @@
 
 import XCTest
 
+/**
+ * IMPORTANT THING TO NOTE WHEN WRITING TESTS IN THIS CLASS:
+ * Does your test run in more than 1 language?
+ * If your test will only run successfully in 1 language then this test WILL NOT WORK
+ * for the l10n snapshots as they will be run in EVERY LANGUAGE we localise for.
+ * When writing your test, run against at least 2 different languages before submitting for Code Review.
+ * Thank You.
+ */
 class L10nSnapshotTests: XCTestCase {
         
     override func setUp() {
