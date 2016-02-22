@@ -509,7 +509,7 @@ class LoginsSetting: Setting {
                     // Update our authentication info's last validation timestamp so we don't ask again based
                     // on the set required interval
                     let authInfo = KeychainWrapper.authenticationInfo()
-                    authInfo?.recordValidationTime()
+                    authInfo?.recordValidation()
                     KeychainWrapper.setAuthenticationInfo(authInfo)
 
                     dispatch_async(dispatch_get_main_queue()) {

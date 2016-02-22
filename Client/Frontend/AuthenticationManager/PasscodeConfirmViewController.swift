@@ -19,7 +19,7 @@ enum PasscodeConfirmAction {
 private let PaneSwipeDuration: NSTimeInterval = 0.3
 
 /// Presented to the user when creating/removing/changing a passcode.
-class PasscodeConfirmViewController: UIViewController {
+class PasscodeConfirmViewController: BasePasscodeViewController {
     private lazy var pager: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.pagingEnabled = true
@@ -34,7 +34,6 @@ class PasscodeConfirmViewController: UIViewController {
     private var currentPaneIndex: Int = 0
 
     private let confirmAction: PasscodeConfirmAction
-    private var authenticationInfo: AuthenticationKeychainInfo?
 
     class func newPasscodeVC() -> PasscodeConfirmViewController {
         let passcodeVC = PasscodeConfirmViewController(confirmAction: .Created)
@@ -65,8 +64,7 @@ class PasscodeConfirmViewController: UIViewController {
 
     init(confirmAction: PasscodeConfirmAction) {
         self.confirmAction = confirmAction
-        self.authenticationInfo = KeychainWrapper.authenticationInfo()
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -75,10 +73,7 @@ class PasscodeConfirmViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: Selector("dismiss"))
         view.addSubview(pager)
-        automaticallyAdjustsScrollViewInsets = false
         panes.forEach { pager.addSubview($0) }
         pager.snp_makeConstraints { make in
             make.bottom.left.right.equalTo(self.view)
@@ -97,7 +92,14 @@ class PasscodeConfirmViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         panes.first?.codeInputView.delegate = self
-        panes.first?.codeInputView.becomeFirstResponder()
+
+        // Don't show the keyboard or allow typing if we're locked out. Also display the error.
+        if authenticationInfo?.isLocked() ?? false {
+            displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
+            panes.first?.codeInputView.userInteractionEnabled = false
+        } else {
+            panes.first?.codeInputView.becomeFirstResponder()
+        }
     }
 
     override func viewWillDisappear(animated: Bool) {
@@ -128,10 +130,6 @@ extension PasscodeConfirmViewController {
             self.pager.contentOffset = CGPoint(x: CGFloat(self.currentPaneIndex) * self.pager.frame.width, y: 0)
         }, completion: nil)
     }
-
-    @objc private func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
 }
 
 extension PasscodeConfirmViewController: PasscodeInputViewDelegate {
@@ -140,13 +138,13 @@ extension PasscodeConfirmViewController: PasscodeInputViewDelegate {
             // Constraint: When removing or changing a passcode, we need to make sure that the first passcode they've
             // entered matches the one stored in the keychain
             if (confirmAction == .Removed || confirmAction == .Changed) && code != authenticationInfo?.passcode {
-                // TODO: Show error for incorrect passcode
-                inputView.resetCode()
-                inputView.becomeFirstResponder()
+                failIncorrectPasscode(inputView: inputView)
                 return
             }
 
             confirmCode = code
+            // Clear out any previous errors if we are allowed to proceed
+            errorToast?.removeFromSuperview()
             scrollToNextPane()
             let nextPane = panes[currentPaneIndex]
             nextPane.codeInputView.becomeFirstResponder()
@@ -154,21 +152,55 @@ extension PasscodeConfirmViewController: PasscodeInputViewDelegate {
         } else if currentPaneIndex == 1 {
             // Constraint: When changing passcodes, the new passcode cannot match their old passcode.
             if confirmAction == .Changed && confirmCode == code {
-                // TODO: Show error telling the user that they need to enter a different passcode
-                resetConfirmation()
+                failMustBeDifferent()
                 return
             }
 
             // Constraint: When removing/creating passcodes, the first and confirmation codes must match.
             if (confirmAction == .Created || confirmAction == .Removed) && confirmCode != code {
-                // TODO: Show error telling the user that the passcodes must match
-                resetConfirmation()
+                failMismatchPasscode()
                 return
             }
 
             performActionAndNotify(confirmAction, forCode: code)
             dismiss()
         }
+    }
+
+    private func failMismatchPasscode() {
+        let mismatchPasscodeError
+            = NSLocalizedString("Passcodes didn't match. Try again.",
+                tableName: "AuthenticationManager",
+                comment: "Error message displayed to user when their confirming passcode doesn't match the first code.")
+        displayError(mismatchPasscodeError)
+        resetConfirmation()
+    }
+
+    private func failMustBeDifferent() {
+        let useNewPasscodeError
+            = NSLocalizedString("New passcode must be different than existing code.",
+                tableName: "AuthenticationManager",
+                comment: "Error message displayed when user tries to enter the same passcode as their existing code when changing it.")
+        displayError(useNewPasscodeError)
+        resetConfirmation()
+    }
+
+    private func failIncorrectPasscode(inputView inputView: PasscodeInputView) {
+        authenticationInfo?.recordFailedAttempt()
+        let numberOfAttempts = authenticationInfo?.failedAttempts ?? 0
+        if numberOfAttempts == AllowedPasscodeFailedAttempts {
+            authenticationInfo?.lockOutUser()
+            displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
+            inputView.userInteractionEnabled = false
+            resignFirstResponder()
+        } else {
+            displayError(String(format: AuthenticationStrings.incorrectAttemptsRemaining, (AllowedPasscodeFailedAttempts - numberOfAttempts)))
+        }
+
+        inputView.resetCode()
+
+        // Store mutations on authentication info object
+        KeychainWrapper.setAuthenticationInfo(authenticationInfo)
     }
 
     private func resetConfirmation() {
