@@ -692,17 +692,16 @@ class TabManagerNavDelegate : NSObject, WKNavigationDelegate {
     func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
         completionHandler: (NSURLSessionAuthChallengeDisposition,
         NSURLCredential?) -> Void) {
-            var disp: NSURLSessionAuthChallengeDisposition? = nil
-            for delegate in delegates {
-                delegate.webView?(webView, didReceiveAuthenticationChallenge: challenge) { (disposition, credential) in
-                    // Whoever calls this method first wins. All other calls are ignored.
-                    if disp != nil {
-                        return
-                    }
+            let authenticatingDelegates = delegates.filter {
+                $0.respondsToSelector("webView:didReceiveAuthenticationChallenge:completionHandler:")
+            }
 
-                    disp = disposition
-                    completionHandler(disposition, credential)
-                }
+            guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {
+                return completionHandler(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
+            }
+
+            firstAuthenticatingDelegate.webView?(webView, didReceiveAuthenticationChallenge: challenge) { (disposition, credential) in
+                completionHandler(disposition, credential)
             }
     }
 
