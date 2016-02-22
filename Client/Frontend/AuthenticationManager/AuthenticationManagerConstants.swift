@@ -75,4 +75,7 @@ struct AuthenticationStrings {
 
     static let oneHour =
         NSLocalizedString("After 1 hour", tableName: "AuthenticationManager", comment: "'After 1 hour' interval item for selecting when to require passcode")
+
+    static let loginsTouchReason =
+        NSLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
 }
