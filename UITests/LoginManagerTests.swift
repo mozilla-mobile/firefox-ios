@@ -638,4 +638,29 @@ class LoginManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Back")
         closeLoginManager()
     }
+
+    func testListEditButton() {
+        openLoginManager()
+
+        // Check that edit button is enabled when entries are present
+        tester().waitForViewWithAccessibilityLabel("Edit")
+        tester().tapViewWithAccessibilityLabel("Edit")
+
+        // Select all using select all button
+        tester().tapViewWithAccessibilityLabel("Select All")
+
+        // Delete all entries
+        tester().waitForViewWithAccessibilityLabel("Delete")
+        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForAnimationsToFinish()
+
+        tester().waitForViewWithAccessibilityLabel("Are you sure?")
+        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForAnimationsToFinish()
+
+        // Check that edit button has been disabled
+        tester().waitForViewWithAccessibilityLabel("Edit", traits: UIAccessibilityTraitNotEnabled)
+
+        closeLoginManager()
+    }
 }
