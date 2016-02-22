@@ -9,7 +9,6 @@ private let SectionToggles = 0
 private let SectionButton = 1
 private let NumberOfSections = 2
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
-private let HeaderFooterHeight: CGFloat = 44
 private let TogglesPrefKey = "clearprivatedata.toggles"
 
 private let log = Logger.browserLogger
@@ -56,7 +55,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: HeaderFooterHeight))
+        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: UIConstants.TableViewHeaderFooterHeight))
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
     }
@@ -159,7 +158,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return HeaderFooterHeight
+        return UIConstants.TableViewHeaderFooterHeight
     }
 
     @objc func switchValueChanged(toggle: UISwitch) {
