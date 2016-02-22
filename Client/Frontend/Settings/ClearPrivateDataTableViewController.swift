@@ -78,6 +78,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             cell.textLabel?.textAlignment = NSTextAlignment.Center
             cell.textLabel?.textColor = UIConstants.DestructiveRed
             cell.accessibilityTraits = UIAccessibilityTraitButton
+            cell.accessibilityIdentifier = "ClearPrivateData"
             clearButton = cell
         }
 
@@ -107,7 +108,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         guard indexPath.section == SectionButton else { return }
 
-        func clearPrivateData() {
+        func clearPrivateData(action: UIAlertAction) {
             let toggles = self.toggles
             self.clearables
                 .enumerate()
@@ -151,8 +152,9 @@ class ClearPrivateDataTableViewController: UITableViewController {
         } else {
             let alert = UIAlertController.clearPrivateDataAlert(clearPrivateData)
             self.presentViewController(alert, animated: true, completion: nil)
-            return
         }
+
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

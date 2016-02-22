@@ -141,6 +141,7 @@ class URLBarView: UIView {
         let tabsButton = TabsButton()
         tabsButton.titleLabel.text = "0"
         tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
+        tabsButton.accessibilityIdentifier = "ShowTabs"
         tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the browser toolbar")
         return tabsButton
     }()
