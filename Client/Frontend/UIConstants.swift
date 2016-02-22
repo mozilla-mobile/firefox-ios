@@ -88,6 +88,12 @@ private struct TempStrings {
     // Bug 1198418 - Touch ID Passcode Strings
     let turnOffYourPasscode     = NSLocalizedString("Turn off your passcode.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when turning off passcode")
     let accessPBMode            = NSLocalizedString("Use your fingerprint to access Private Browsing now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing private browsing")
+
+    let mismatchPasscodeError   = NSLocalizedString("Passcodes didn't match. Try again.", tableName: "AuthenticationManager", comment: "Error message displayed to user when their confirming passcode doesn't match the first code.")
+    let wrongPasscodeError      = NSLocalizedString("Incorrect passcode. Try again.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app")
+    let useNewPasscodeError     = NSLocalizedString("New passcode must be different than existing code.", tableName: "AuthenticationManager", comment: "Error message displayed when user tries to enter the same passcode as their existing code when changing it.")
+    let incorrectAttemptsRemaining = NSLocalizedString("Incorrect passcode. Try again (Attempts remaining: %d).", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining")
+    let maximumAttemptsReached  = NSLocalizedString("Maximum attempts reached. Please try again in an hour.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts.")
 }
 
 /// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.
