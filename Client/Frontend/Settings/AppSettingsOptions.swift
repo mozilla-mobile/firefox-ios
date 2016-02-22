@@ -33,6 +33,8 @@ class ConnectSetting: WithoutAccountSetting {
         return NSAttributedString(string: NSLocalizedString("Sign In to Firefox", comment: "Text message / button in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
+    override var accessibilityIdentifier: String? { return "SignInToFirefox" }
+
     override func onClick(navigationController: UINavigationController?) {
         let viewController = FxAContentViewController()
         viewController.delegate = self
@@ -49,6 +51,8 @@ class DisconnectSetting: WithAccountSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
     }
+
+    override var accessibilityIdentifier: String? { return "LogOut" }
 
     override func onClick(navigationController: UINavigationController?) {
         let alertController = UIAlertController(
@@ -503,6 +507,8 @@ class ClearPrivateDataSetting: Setting {
     var tabManager: TabManager!
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "ClearPrivateData" }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile

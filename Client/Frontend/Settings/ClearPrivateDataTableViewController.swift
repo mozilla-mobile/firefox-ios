@@ -79,6 +79,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             cell.textLabel?.textAlignment = NSTextAlignment.Center
             cell.textLabel?.textColor = UIConstants.DestructiveRed
             cell.accessibilityTraits = UIAccessibilityTraitButton
+            cell.accessibilityIdentifier = "ClearPrivateData"
             clearButton = cell
         }
 

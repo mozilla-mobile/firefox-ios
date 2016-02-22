@@ -41,6 +41,7 @@ class Setting {
 
     // The title shown on the pref.
     var title: NSAttributedString? { return _title }
+    var accessibilityIdentifier: String? { return nil }
 
     // An optional second line of text shown on the pref.
     var status: NSAttributedString? { return nil }
@@ -64,6 +65,9 @@ class Setting {
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
         cell.selectionStyle = enabled ? .Default : .None
+        cell.accessibilityIdentifier = accessibilityIdentifier
+        cell.accessibilityLabel = title?.string
+        cell.accessibilityTraits = UIAccessibilityTraitButton
     }
 
     // Called when the pref is tapped.
