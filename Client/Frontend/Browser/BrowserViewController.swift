@@ -1226,11 +1226,22 @@ extension BrowserViewController: URLBarDelegate {
         })
         longPressAlertController.addAction(cancelAction)
 
-        if let popoverPresentationController = longPressAlertController.popoverPresentationController {
-            popoverPresentationController.sourceView = urlBar
-            popoverPresentationController.sourceRect = urlBar.frame
-            popoverPresentationController.permittedArrowDirections = .Any
+        let setupPopover = { [unowned self] in
+            if let popoverPresentationController = longPressAlertController.popoverPresentationController {
+                popoverPresentationController.sourceView = urlBar
+                popoverPresentationController.sourceRect = urlBar.frame
+                popoverPresentationController.permittedArrowDirections = .Any
+                popoverPresentationController.delegate = self
+            }
         }
+
+        setupPopover()
+
+        if longPressAlertController.popoverPresentationController != nil {
+            displayedPopoverController = longPressAlertController
+            updateDisplayedPopoverProperties = setupPopover
+        }
+
         self.presentViewController(longPressAlertController, animated: true, completion: nil)
     }
 
