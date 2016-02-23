@@ -48,7 +48,7 @@ class SpotlightHelper: NSObject {
     }
 
     func update(pageContent: [String: String], forURL url: NSURL) {
-        if AboutUtils.isAboutURL(url) || url.scheme == "about" {
+        if !url.isWebPage() {
             return
         }
 
