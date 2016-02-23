@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Account
 import SwiftKeychainWrapper
+import LocalAuthentication
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -473,7 +474,7 @@ class LoginsSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
-        shouldPromptForAuthentication() ? showPasscodeValidation() : navigateToLoginsList()
+        shouldPromptForAuthentication() ? presentAuthentication() : navigateToLoginsList()
     }
 
     private func shouldPromptForAuthentication() -> Bool {
@@ -495,7 +496,33 @@ class LoginsSetting: Setting {
         return passcodeSet
     }
 
-    private func showPasscodeValidation() {
+    private func presentAuthentication() {
+        if profile.prefs.boolForKey(PrefsKeyTouchID) ?? false {
+            let localAuthContext = LAContext()
+            localAuthContext.localizedFallbackTitle = AuthenticationStrings.enterPasscode
+            localAuthContext.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: AuthenticationStrings.loginsTouchReason) { success, error in
+                if success {
+                    // Update our authentication info's last validation timestamp so we don't ask again based
+                    // on the set required interval
+                    let authInfo = KeychainWrapper.authenticationInfo()
+                    authInfo?.recordValidationTime()
+                    KeychainWrapper.setAuthenticationInfo(authInfo)
+
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.navigateToLoginsList()
+                    }
+                } else if let authError = error where authError.code == LAError.UserFallback.rawValue {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.presentPasscodeAuthentication()
+                    }
+                }
+            }
+        } else {
+            presentPasscodeAuthentication()
+        }
+    }
+
+    private func presentPasscodeAuthentication() {
         let passcodeVC = PasscodeEntryViewController()
         passcodeVC.delegate = self
         navigationController?.presentViewController(UINavigationController(rootViewController: passcodeVC), animated: true, completion: nil)

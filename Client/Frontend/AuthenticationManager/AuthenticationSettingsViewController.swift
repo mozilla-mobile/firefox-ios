@@ -6,6 +6,9 @@ import Foundation
 import UIKit
 import Shared
 import SwiftKeychainWrapper
+import LocalAuthentication
+
+public let PrefsKeyTouchID = "authentication.touchID"
 
 class TurnPasscodeOnSetting: Setting {
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
@@ -114,16 +117,19 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
             ChangePasscodeSetting(settings: self, delegate: nil, enabled: true)
         ])
 
-        let prefs = profile.prefs
-        let requirePasscodeSection = SettingSection(title: nil, children: [
-            RequirePasscodeSetting(settings: self),
-            BoolSetting(prefs: prefs,
-                prefKey: "touchid.logins",
-                defaultValue: false,
-                titleText: NSLocalizedString("Use Touch ID", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID")
-            ),
-        ])
+        var requirePasscodeSectionChildren: [Setting] = [RequirePasscodeSetting(settings: self)]
+        let localAuthContext = LAContext()
+        if localAuthContext.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
+            requirePasscodeSectionChildren.append(
+                BoolSetting(prefs: profile.prefs,
+                    prefKey: PrefsKeyTouchID,
+                    defaultValue: false,
+                    titleText: NSLocalizedString("Use Touch ID", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID")
+                )
+            )
+        }
 
+        let requirePasscodeSection = SettingSection(title: nil, children: requirePasscodeSectionChildren)
         settings += [
             passcodeSection,
             requirePasscodeSection,
