@@ -9,11 +9,10 @@ import SwiftKeychainWrapper
 import Shared
 
 class AuthenticationManagerTests: KIFTestCase {
-    var prefs: Prefs!
 
-    override func setUp() {
-        super.setUp()
-        self.prefs = (UIApplication.sharedApplication().delegate as! AppDelegate).profile!.prefs
+    override func tearDown() {
+        super.tearDown()
+        resetPasscode()
     }
 
     private func openAuthenticationManager() {
@@ -29,13 +28,13 @@ class AuthenticationManagerTests: KIFTestCase {
     }
 
     private func resetPasscode() {
-        KeychainWrapper.removeObjectForKey(KeychainKeyPasscode)
-        prefs.removeObjectForKey(PrefKeyRequirePasscodeInterval)
+        KeychainWrapper.setAuthenticationInfo(nil)
     }
 
     private func setPasscode(code: String, interval: PasscodeInterval) {
-        KeychainWrapper.setString(code, forKey: KeychainKeyPasscode)
-        prefs.setInt(interval.rawValue, forKey: PrefKeyRequirePasscodeInterval)
+        let info = AuthenticationKeychainInfo(passcode: code)
+        info.updateRequiredPasscodeInterval(interval)
+        KeychainWrapper.setAuthenticationInfo(info)
     }
 
     func testTurnOnPasscodeSetsPasscodeAndInterval() {
@@ -61,12 +60,11 @@ class AuthenticationManagerTests: KIFTestCase {
 
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
 
-        XCTAssertEqual(KeychainWrapper.stringForKey(KeychainKeyPasscode)!, "1337")
-        XCTAssertNotNil(prefs.intForKey(PrefKeyRequirePasscodeInterval))
-        XCTAssertEqual(prefs.intForKey(PrefKeyRequirePasscodeInterval), 0)
+        let info = KeychainWrapper.authenticationInfo()!
+        XCTAssertEqual(info.passcode!, "1337")
+        XCTAssertEqual(info.requiredPasscodeInterval, .Immediately)
 
         closeAuthenticationManager()
-        resetPasscode()
     }
 
     func testTurnOffPasscode() {
@@ -74,7 +72,7 @@ class AuthenticationManagerTests: KIFTestCase {
 
         openAuthenticationManager()
         tester().tapViewWithAccessibilityLabel("Turn Passcode Off")
-        tester().waitForViewWithAccessibilityLabel("Enter a passcode")
+        tester().waitForViewWithAccessibilityLabel("Enter passcode")
 
         // Enter a passcode
         tester().tapViewWithAccessibilityLabel("1")
@@ -91,8 +89,7 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("7")
 
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
-        XCTAssertNil(KeychainWrapper.stringForKey(KeychainKeyPasscode))
-        XCTAssertNil(prefs.intForKey(PrefKeyRequirePasscodeInterval))
+        XCTAssertNil(KeychainWrapper.authenticationInfo())
 
         closeAuthenticationManager()
     }
@@ -102,7 +99,7 @@ class AuthenticationManagerTests: KIFTestCase {
 
         openAuthenticationManager()
         tester().tapViewWithAccessibilityLabel("Change Passcode")
-        tester().waitForViewWithAccessibilityLabel("Enter a passcode")
+        tester().waitForViewWithAccessibilityLabel("Enter passcode")
 
         // Enter a passcode
         tester().tapViewWithAccessibilityLabel("1")
@@ -119,7 +116,9 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("7")
 
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
-        XCTAssertEqual(KeychainWrapper.stringForKey(KeychainKeyPasscode), "2337")
+
+        let info = KeychainWrapper.authenticationInfo()!
+        XCTAssertEqual(info.passcode!, "2337")
 
         closeAuthenticationManager()
     }
@@ -144,7 +143,8 @@ class AuthenticationManagerTests: KIFTestCase {
         XCTAssertEqual(immediatelyCell.accessoryType, UITableViewCellAccessoryType.None)
         XCTAssertEqual(oneHourCell.accessoryType, UITableViewCellAccessoryType.Checkmark)
 
-        XCTAssertEqual(prefs.intForKey(PrefKeyRequirePasscodeInterval), PasscodeInterval.OneHour.rawValue)
+        let info = KeychainWrapper.authenticationInfo()!
+        XCTAssertEqual(info.requiredPasscodeInterval!, PasscodeInterval.OneHour)
 
         tester().tapViewWithAccessibilityLabel("Back")
 
@@ -153,5 +153,103 @@ class AuthenticationManagerTests: KIFTestCase {
         XCTAssertEqual(requirePasscodeCell.detailTextLabel!.text, PasscodeInterval.OneHour.settingTitle)
 
         closeAuthenticationManager()
+    }
+
+    func testEnteringLoginsUsingPasscode() {
+        setPasscode("1337", interval: .Immediately)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+
+        // Enter wrong passcode
+        tester().tapViewWithAccessibilityLabel("2")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("7")
+
+        // Check for error
+        tester().waitForTimeInterval(2)
+
+        // Enter a passcode
+        tester().tapViewWithAccessibilityLabel("1")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("7")
+
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testEnteringLoginsUsingPasscodeWithImmediateInterval() {
+        setPasscode("1337", interval: .Immediately)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+
+        // Enter a passcode
+        tester().tapViewWithAccessibilityLabel("1")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("7")
+
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+
+        // Trying again should display passcode screen since we've set the interval to be immediately.
+        tester().tapViewWithAccessibilityLabel("Logins")
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testEnteringLoginsUsingPasscodeWithFiveMinutesInterval() {
+        setPasscode("1337", interval: .FiveMinutes)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+
+        // Enter a passcode
+        tester().tapViewWithAccessibilityLabel("1")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("3")
+        tester().tapViewWithAccessibilityLabel("7")
+
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+
+        // Trying again should not display the passcode screen since the interval is 5 minutes
+        tester().tapViewWithAccessibilityLabel("Logins")
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testEnteringLoginsWithNoPasscode() {
+        XCTAssertNil(KeychainWrapper.authenticationInfo())
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+        tester().waitForViewWithAccessibilityIdentifier("Login List")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
     }
 }

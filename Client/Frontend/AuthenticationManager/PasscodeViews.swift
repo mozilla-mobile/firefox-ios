@@ -126,7 +126,7 @@ class PasscodePane: UIView {
         }
     }
 
-    init(title: String) {
+    init(title: String? = nil) {
         super.init(frame: CGRectZero)
         backgroundColor = UIConstants.TableViewHeaderBackgroundColor
 

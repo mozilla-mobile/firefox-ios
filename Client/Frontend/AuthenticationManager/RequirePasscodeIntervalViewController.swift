@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SwiftKeychainWrapper
 
 /// Screen presented to the user when selecting the time interval before requiring a passcode
 class RequirePasscodeIntervalViewController: UITableViewController {
@@ -16,12 +17,10 @@ class RequirePasscodeIntervalViewController: UITableViewController {
         .OneHour
     ]
 
-    private let prefs: Prefs
     private let BasicCheckmarkCell = "BasicCheckmarkCell"
-    private var selectedInterval: PasscodeInterval?
+    private var authenticationInfo: AuthenticationKeychainInfo?
 
-    init(prefs: Prefs) {
-        self.prefs = prefs
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -53,9 +52,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if let intervalTime = prefs.intForKey(PrefKeyRequirePasscodeInterval) {
-            self.selectedInterval = PasscodeInterval(rawValue: intervalTime)
-        }
+        self.authenticationInfo = KeychainWrapper.authenticationInfo()
         tableView.reloadData()
     }
 
@@ -64,7 +61,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
         let option = intervalOptions[indexPath.row]
         let intervalTitle = NSAttributedString.tableRowTitle(option.settingTitle)
         cell.textLabel?.attributedText = intervalTitle
-        cell.accessoryType = selectedInterval == option ? .Checkmark : .None
+        cell.accessoryType = authenticationInfo?.requiredPasscodeInterval == option ? .Checkmark : .None
         return cell
     }
 
@@ -73,9 +70,8 @@ class RequirePasscodeIntervalViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let selectedOption = intervalOptions[indexPath.row]
-        selectedInterval = selectedOption
-        prefs.setInt(selectedOption.rawValue, forKey: PrefKeyRequirePasscodeInterval)
+        authenticationInfo?.updateRequiredPasscodeInterval(intervalOptions[indexPath.row])
+        KeychainWrapper.setAuthenticationInfo(authenticationInfo)
         tableView.reloadData()
     }
 }

@@ -518,6 +518,7 @@
 		E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */; };
 		E692E3291C46E62D009D1240 /* AuthenticationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */; };
 		E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */; };
+		E694AAF01C77AFEC00415F4B /* AuthenticationKeychainInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E694AAEF1C77AFEC00415F4B /* AuthenticationKeychainInfo.swift */; };
 		E695D8651C037E9F00D3FCCE /* FSUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E695D8631C037E9F00D3FCCE /* FSUtils.h */; };
 		E695D8661C037E9F00D3FCCE /* FSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E695D8641C037E9F00D3FCCE /* FSUtils.m */; };
 		E695D8681C03804F00D3FCCE /* FSUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695D8671C03804F00D3FCCE /* FSUtilsTests.swift */; };
@@ -1489,6 +1490,7 @@
 		E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppSettingsTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationSettingsViewController.swift; sourceTree = "<group>"; };
 		E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsOptions.swift; sourceTree = "<group>"; };
+		E694AAEF1C77AFEC00415F4B /* AuthenticationKeychainInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationKeychainInfo.swift; sourceTree = "<group>"; };
 		E695D8631C037E9F00D3FCCE /* FSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSUtils.h; sourceTree = "<group>"; };
 		E695D8641C037E9F00D3FCCE /* FSUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSUtils.m; sourceTree = "<group>"; };
 		E695D8671C03804F00D3FCCE /* FSUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSUtilsTests.swift; sourceTree = "<group>"; };
@@ -2607,6 +2609,7 @@
 		E692E3271C46E62D009D1240 /* AuthenticationManager */ = {
 			isa = PBXGroup;
 			children = (
+				E694AAEF1C77AFEC00415F4B /* AuthenticationKeychainInfo.swift */,
 				E69E06C81C76198000D0F926 /* AuthenticationManagerConstants.swift */,
 				E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */,
 				E640E8691C73A47C00C5F072 /* PasscodeViews.swift */,
@@ -4371,6 +4374,7 @@
 				28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
+				E694AAF01C77AFEC00415F4B /* AuthenticationKeychainInfo.swift in Sources */,
 				7B59FC471C68E9B600F58EF5 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
 				D39949F51C22461A00E2A03C /* RequestDesktopSiteActivity.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Browser.swift in Sources */,

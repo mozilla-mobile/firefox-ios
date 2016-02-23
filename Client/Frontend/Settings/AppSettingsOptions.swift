@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Account
+import SwiftKeychainWrapper
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -457,22 +458,61 @@ class SearchSetting: Setting {
 class LoginsSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
+    weak var navigationController: UINavigationController?
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
     init(settings: SettingsTableViewController, delegate: SettingsDelegate?) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
+        self.navigationController = settings.navigationController
 
         let loginsTitle = NSLocalizedString("Logins", comment: "Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.")
         super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
                    delegate: delegate)
     }
 
-    override func onClick(navigationController: UINavigationController?) {
+    override func onClick(_: UINavigationController?) {
+        shouldPromptForAuthentication() ? showPasscodeValidation() : navigateToLoginsList()
+    }
+
+    private func shouldPromptForAuthentication() -> Bool {
+        guard AppConstants.MOZ_AUTHENTICATION_MANAGER,
+              let authenticationInfo = KeychainWrapper.authenticationInfo() else {
+            return false
+        }
+
+        let passcodeSet = authenticationInfo.passcode != nil
+
+        // If we've validated before, check to see if we're past the validation interval. If not, only check to
+        // see if we have a passcode set.
+        if let lastValidationTime = authenticationInfo.lastPasscodeValidationTimestamp,
+           let requireInterval = authenticationInfo.requiredPasscodeInterval?.rawValue
+        {
+            return passcodeSet && NSDate.now() - lastValidationTime > UInt64(requireInterval) * (OneSecondInMilliseconds)
+        }
+
+        return passcodeSet
+    }
+
+    private func showPasscodeValidation() {
+        let passcodeVC = PasscodeEntryViewController()
+        passcodeVC.delegate = self
+        navigationController?.presentViewController(UINavigationController(rootViewController: passcodeVC), animated: true, completion: nil)
+    }
+
+    private func navigateToLoginsList() {
         let viewController = LoginListViewController(profile: profile)
         viewController.settingsDelegate = delegate
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+extension LoginsSetting: PasscodeEntryDelegate {
+    @objc func passcodeValidationDidSucceed() {
+        navigationController?.dismissViewControllerAnimated(true) {
+            self.navigateToLoginsList()
+        }
     }
 }
 
