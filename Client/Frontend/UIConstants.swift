@@ -104,4 +104,6 @@ private struct ObsoleteStrings {
     let settingsSearchSuggestions = NSLocalizedString("Show search suggestions", comment: "Label for show search suggestions setting.")
     let settingsSignIn = NSLocalizedString("Sign in", comment: "Text message / button in the settings table view")
     let clearPrivateHistoryData =  NSLocalizedString("History will be removed from all your connected devices. This cannot be undone.", tableName: "ClearHistoryConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device.")
+    let clearPrivateHistoryTitle = NSLocalizedString("Remove history from your Firefox Account?", tableName: "ClearHistoryConfirm", comment: "Title of the confirmation dialog shown when a user tries to clear history that's synced to another device.")
+    let clearButtonPrivateHistory = NSLocalizedString("Clear", tableName: "ClearHistoryConfirm", comment: "The button that clears history even when Sync is connected.")
 }

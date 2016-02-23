@@ -89,7 +89,7 @@ extension UIAlertController {
 
     class func clearPrivateDataAlert(okayCallback: (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
-            title: NSLocalizedString("Clear Private Data", tableName: "ClearPrivateDataConfirm", comment: "Title of the confirmation dialog shown when a user tries to clear private data."),
+            title: "",
             message: NSLocalizedString("This action will clear all of your private data. It cannot be undone.", tableName: "ClearPrivateDataConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear their private data."),
             preferredStyle: UIAlertControllerStyle.Alert
         )
@@ -101,7 +101,7 @@ extension UIAlertController {
         )
 
         let okayOption = UIAlertAction(
-            title: NSLocalizedString("Clear", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data."),
+            title: NSLocalizedString("OK", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data."),
             style: UIAlertActionStyle.Destructive,
             handler: okayCallback
         )
@@ -121,8 +121,8 @@ extension UIAlertController {
 
     class func clearSyncedHistoryAlert(okayCallback: (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
-            title: NSLocalizedString("Remove history from your Firefox Account?", tableName: "ClearHistoryConfirm", comment: "Title of the confirmation dialog shown when a user tries to clear history that's synced to another device."),
-            message: NSLocalizedString("This action will clear all of your private data, including history from all your synced devices. It cannot be undone.", tableName: "ClearHistoryConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device."),
+            title: "",
+            message: NSLocalizedString("This action will clear all of your private data, including history from your synced devices.", tableName: "ClearHistoryConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device."),
             preferredStyle: UIAlertControllerStyle.Alert
         )
 
@@ -133,7 +133,7 @@ extension UIAlertController {
         )
 
         let okayOption = UIAlertAction(
-            title: NSLocalizedString("Clear", tableName: "ClearHistoryConfirm", comment: "The button that clears history even when Sync is connected."),
+            title: NSLocalizedString("OK", tableName: "ClearHistoryConfirm", comment: "The confirmation button that clears history even when Sync is connected."),
             style: UIAlertActionStyle.Destructive,
             handler: okayCallback
         )
