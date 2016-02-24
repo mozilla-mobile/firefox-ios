@@ -57,13 +57,13 @@ class TrivialBookmarkStorer: BookmarkStorer {
 
         var modified: Timestamp = 0
         var success: [GUID] = []
-        var failed: [GUID: [String]] = [:]
+        var failed: [GUID: String] = [:]
 
         func onUpload(result: POSTResult) -> DeferredTimestamp {
             modified = result.modified
             success.appendContentsOf(result.success)
-            result.failed.forEach { guid, strings in
-                failed[guid] = strings
+            result.failed.forEach { guid, message in
+                failed[guid] = message
             }
 
             log.debug("Uploaded records got timestamp \(modified).")
