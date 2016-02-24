@@ -719,31 +719,36 @@ extension MergedSQLiteBookmarks: SyncableBookmarks {
 
 // MARK: - Validation of buffer contents.
 
-private let allBufferStructuresReferToRecords =
-"SELECT s.child AS pointee, s.parent AS pointer FROM " +
-"\(ViewBookmarksBufferStructureOnMirror) s LEFT JOIN \(ViewBookmarksBufferOnMirror) b " +
-"ON b.guid = s.child WHERE b.guid IS NULL"
+private let allBufferStructuresReferToRecords = [
+"SELECT s.child AS pointee, s.parent AS pointer FROM",
+ViewBookmarksBufferStructureOnMirror,
+"s LEFT JOIN",
+ViewBookmarksBufferOnMirror,
+"b ON b.guid = s.child WHERE b.guid IS NULL",
+].joinWithSeparator(" ")
 
-private let allNonDeletedBufferRecordsAreInStructure =
-"SELECT b.guid AS missing, b.parentid AS parent FROM " +
-"\(ViewBookmarksBufferOnMirror) b LEFT JOIN \(ViewBookmarksBufferStructureOnMirror) s " +
-"ON b.guid = s.child " +
-"WHERE s.child IS NULL AND " +
-"b.is_deleted IS 0 AND " +
-"b.parentid IS NOT '\(BookmarkRoots.RootGUID)'"
+private let allNonDeletedBufferRecordsAreInStructure = [
+"SELECT b.guid AS missing, b.parentid AS parent FROM",
+ViewBookmarksBufferOnMirror, "b LEFT JOIN",
+ViewBookmarksBufferStructureOnMirror,
+"s ON b.guid = s.child WHERE s.child IS NULL AND",
+"b.is_deleted IS 0 AND b.parentid IS NOT '\(BookmarkRoots.RootGUID)'",
+].joinWithSeparator(" ")
 
-private let allRecordsAreChildrenOnce =
-"SELECT s.child FROM \(ViewBookmarksBufferStructureOnMirror) s " +
-"INNER JOIN (" +
-"SELECT child, COUNT(*) AS dupes FROM \(ViewBookmarksBufferStructureOnMirror) " +
-"GROUP BY child HAVING dupes > 1" +
-") i ON s.child = i.child"
+private let allRecordsAreChildrenOnce = [
+"SELECT s.child FROM",
+ViewBookmarksBufferStructureOnMirror,
+"s INNER JOIN (",
+"SELECT child, COUNT(*) AS dupes FROM", ViewBookmarksBufferStructureOnMirror,
+"GROUP BY child HAVING dupes > 1",
+") i ON s.child = i.child",
+].joinWithSeparator(" ")
 
-private let bufferParentidMatchesStructure =
-"SELECT b.guid, b.parentid, s.parent, s.child, s.idx FROM " +
-"\(TableBookmarksBuffer) b JOIN \(TableBookmarksBufferStructure) s " +
-"ON b.guid = s.child " +
-"WHERE b.parentid IS NOT s.parent"
+private let bufferParentidMatchesStructure = [
+"SELECT b.guid, b.parentid, s.parent, s.child, s.idx FROM",
+TableBookmarksBuffer, "b JOIN", TableBookmarksBufferStructure,
+"s ON b.guid = s.child WHERE b.parentid IS NOT s.parent",
+].joinWithSeparator(" ")
 
 extension SQLiteBookmarkBufferStorage {
     public func validate() -> Success {
