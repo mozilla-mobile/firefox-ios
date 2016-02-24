@@ -290,7 +290,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-        pageControl.currentPage = page
         setActiveIntroView(introViews[page], forPage: page)
     }
 
@@ -300,6 +299,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         var percentage = currentHorizontalOffset / maximumHorizontalOffset
         var startColor: UIColor, endColor: UIColor
+
+        let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
+        pageControl.currentPage = page
 
         if(percentage < 0.5) {
             startColor = IntroViewControllerUX.Card1Color
