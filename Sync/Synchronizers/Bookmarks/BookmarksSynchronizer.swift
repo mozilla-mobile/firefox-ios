@@ -108,7 +108,7 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
         let storer = TrivialBookmarkStorer(uploader: { records, lastTimestamp, onUpload in
             // Default to our last fetch time for If-Unmodified-Since.
             let timestamp = lastTimestamp ?? self.lastFetched
-            return self.uploadRecords(records, by: 50, lastTimestamp: timestamp, storageClient: bookmarksClient, onUpload: onUpload)
+            return self.uploadRecordsInChunks(records, lastTimestamp: timestamp, storageClient: bookmarksClient, onUpload: onUpload)
               >>== effect(self.setTimestamp)
         })
         let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
