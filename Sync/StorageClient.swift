@@ -267,6 +267,7 @@ public class Sync15StorageClient {
     private let serverURI: NSURL
 
     public static let maxPayloadSizeBytes: Int = 1_000_000
+    public static let maxPayloadItemCount: Int = 100          // Bug 1250747 will raise this.
 
     var backoff: BackoffStorage
 
