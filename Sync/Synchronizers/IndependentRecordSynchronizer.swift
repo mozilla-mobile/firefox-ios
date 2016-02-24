@@ -133,9 +133,11 @@ extension TimestampedSingleCollectionSynchronizer {
         var batches: [[String]] = []
         var batch: [String] = []
         var bytes = 0
+        var count = 0
         sorted.forEach { line in
             let expectedBytes = bytes + line.1 + 1   // Include newlines.
-            if expectedBytes > Sync15StorageClient.maxPayloadSizeBytes {
+            if expectedBytes > Sync15StorageClient.maxPayloadSizeBytes ||
+               count >= Sync15StorageClient.maxPayloadItemCount {
                 if batch.isEmpty {
                     // Uh oh. We're screwed.
                     assertionFailure("Max record size hit before accruing any items.")
@@ -143,10 +145,12 @@ extension TimestampedSingleCollectionSynchronizer {
                     batches.append(batch)
                     batch = []
                     bytes = 0
+                    count = 0
                 }
             }
             batch.append(line.0)
             bytes += line.1 + 1
+            count += 1
         }
 
         // Catch the last one.
