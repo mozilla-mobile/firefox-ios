@@ -266,6 +266,8 @@ public class Sync15StorageClient {
     private let authorizer: Authorizer
     private let serverURI: NSURL
 
+    public static let maxPayloadSizeBytes: Int = 1_000_000
+
     var backoff: BackoffStorage
 
     let workQueue: dispatch_queue_t
@@ -429,9 +431,13 @@ public class Sync15StorageClient {
         return self.requestWrite(url, method: Method.POST.rawValue, body: body.toString(false), contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
+    func requestPOST(url: NSURL, body: [String], ifUnmodifiedSince: Timestamp?) -> Request {
+        let content = body.joinWithSeparator("\n")
+        return self.requestWrite(url, method: Method.POST.rawValue, body: content, contentType: "application/newlines", ifUnmodifiedSince: ifUnmodifiedSince)
+    }
+
     func requestPOST(url: NSURL, body: [JSON], ifUnmodifiedSince: Timestamp?) -> Request {
-        let body = body.map { $0.toString(false) }.joinWithSeparator("\n")
-        return self.requestWrite(url, method: Method.POST.rawValue, body: body, contentType: "application/newlines", ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestPOST(url, body: body.map { $0.toString(false) }, ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     /**
@@ -604,18 +610,19 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return self.collectionURI.URLByAppendingPathComponent(guid)
     }
 
-    public func post(records: [Record<T>], ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
+    // Exposed so we can batch by size.
+    public func serializeRecord(record: Record<T>) -> String? {
+        return self.encrypter.serializer(record)?.toString(false)
+    }
+
+    public func post(lines: [String], ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
         let deferred = Deferred<Maybe<StorageResponse<POSTResult>>>(defaultQueue: client.resultQueue)
 
         if self.client.checkBackoff(deferred) {
             return deferred
         }
 
-        // TODO: charset
-        // TODO: if any of these fail, we should do _something_. Right now we just ignore them.
-        let json = optFilter(records.map(self.encrypter.serializer))
-
-        let req = client.requestPOST(self.collectionURI, body: json, ifUnmodifiedSince: nil)
+        let req = client.requestPOST(self.collectionURI, body: lines, ifUnmodifiedSince: nil)
         req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, result) in
             if let json: JSON = result.value as? JSON,
                let result = POSTResult.fromJSON(json) {
@@ -629,6 +636,14 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         })
 
         return deferred
+    }
+
+    public func post(records: [Record<T>], ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
+
+        // TODO: charset
+        // TODO: if any of these fail, we should do _something_. Right now we just ignore them.
+        let lines = optFilter(records.map(self.serializeRecord))
+        return self.post(lines, ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     public func put(record: Record<T>, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
