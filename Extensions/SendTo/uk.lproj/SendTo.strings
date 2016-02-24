@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Доступні пристрої:";
+
+/* Close button in top navigation bar */
+"Close" = "Закрити";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Відкрийте Firefox, перейдіть до Налаштувань і увійдіть для продовження.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Надіслати";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Надіслати вкладку";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Ви не увійшли до облікового запису Firefox.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "У вас немає інших доступних для синхронізації пристроїв, підключених до цього облікового запису Firefox.";
+

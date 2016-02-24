@@ -1,0 +1,63 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 saat sonra";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 dəqiqə sonra";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 dəqiqə sonra";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 dəqiqə sonra";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 dəqiqə sonra";
+
+/* Title for setting to change passcode */
+"Change Passcode" = "Parolu dəyiş";
+
+/* Title for entering a passcode */
+"Enter a passcode" = "Parolu daxil et";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Dərhal";
+
+/* List item for Logins */
+"Logins" = "Daxil olmalar";
+
+/* List section title for passcode settings */
+"Passcode" = "Parol";
+
+/* List item for Private Browsing */
+"Private Browsing" = "Məxfi Səyahət";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Parolu təkrar daxil et";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Parolu tələb et";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Parolu qur";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Toxunma ID və Parol";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Parolu söndür";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Parolu aç";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Parolunuzu söndürün.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID for" = "Toxunma ID işlət:";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Daxil olmaları işlətmək üçün barmaq izinizi işlədin.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Məxfi Səyahət üçün barmaq izinizi işlədin.";
+

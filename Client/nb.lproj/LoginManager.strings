@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Er du sikker?";
+
+/* Clears the search input field and exits out of input mode */
+"Clear Search" = "Tøm søk";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopier";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Slett";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Velg ingen";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Åpne søkemodus";
+
+/* Hide password text selection menu item */
+"Hide" = "Skjul";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Sist endret %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Innlogginger";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Innlogginger vil bli fjernet permanent.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Innlogginger vil bli fjernet fra alle tilkoblede enheter.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Fant ingen innlogginger";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Åpne og fyll";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Vis";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Søk";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Søkefelt";
+
+/* Title for selecting all logins */
+"Select All" = "Merk alt";
+
+/* Title for password row in Login Detail View */
+"password" = "passord";
+
+/* Title for username row in Login Detail View */
+"username" = "brukernavn";
+
+/* Title for website row in Login Detail View */
+"website" = "nettside";
+

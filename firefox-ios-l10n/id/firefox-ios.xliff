@@ -1,0 +1,1808 @@
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="Client/3DTouchActions.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Add to Bookmarks">
+        <source>Add to Bookmarks</source>
+        <target>Tambahkan ke Markah</target>
+        <note>Label for preview action on Tab Tray Tab to add current tab to Bookmarks</note>
+      </trans-unit>
+      <trans-unit id="Add to Reading List">
+        <source>Add to Reading List</source>
+        <target>Tambahkan ke Daftar Baca</target>
+        <note>Label for preview action on Tab Tray Tab to add current tab to Reading List</note>
+      </trans-unit>
+      <trans-unit id="Close Tab">
+        <source>Close Tab</source>
+        <target>Tutup Tab</target>
+        <note>Label for preview action on Tab Tray Tab to close the current tab</note>
+      </trans-unit>
+      <trans-unit id="Copy URL">
+        <source>Copy URL</source>
+        <target>Salin URL</target>
+        <note>Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard</note>
+      </trans-unit>
+      <trans-unit id="Open Last Bookmark">
+        <source>Open Last Bookmark</source>
+        <target>Buka Markah Terakhir</target>
+        <note>String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch</note>
+      </trans-unit>
+      <trans-unit id="Open Last Tab">
+        <source>Open Last Tab</source>
+        <target>Buka Tab Terakhir</target>
+        <note>String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch</note>
+      </trans-unit>
+      <trans-unit id="Preview of %@">
+        <source>Preview of %@</source>
+        <target>Pratinjau %@</target>
+        <note>Accessibility Label for preview in Tab Tray of current tab</note>
+      </trans-unit>
+      <trans-unit id="Send to Device">
+        <source>Send to Device</source>
+        <target>Kirim ke Perangkat</target>
+        <note>Label for preview action on Tab Tray Tab to send the current tab to another device</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/AuthenticationManager.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="After 1 hour">
+        <source>After 1 hour</source>
+        <target>Setelah 1 jam</target>
+        <note>'After 1 hour' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="After 1 minute">
+        <source>After 1 minute</source>
+        <target>Setelah 1 menit</target>
+        <note>'After 1 minute' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="After 5 minutes">
+        <source>After 5 minutes</source>
+        <target>Setelah 5 menit</target>
+        <note>'After 5 minutes' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="After 10 minutes">
+        <source>After 10 minutes</source>
+        <target>Setelah 10 menit</target>
+        <note>'After 10 minutes' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="After 15 minutes">
+        <source>After 15 minutes</source>
+        <target>Setelah 15 menit</target>
+        <note>'After 15 minutes' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="Change Passcode">
+        <source>Change Passcode</source>
+        <target>Ubah kode akses</target>
+        <note>Title for setting to change passcode</note>
+      </trans-unit>
+      <trans-unit id="Enter a passcode">
+        <source>Enter a passcode</source>
+        <target>Masukkan kode akses</target>
+        <note>Title for entering a passcode</note>
+      </trans-unit>
+      <trans-unit id="Immediately">
+        <source>Immediately</source>
+        <target>Segera</target>
+        <note>'Immediately' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="Logins">
+        <source>Logins</source>
+        <target>Info Masuk</target>
+        <note>List item for Logins</note>
+      </trans-unit>
+      <trans-unit id="Passcode">
+        <source>Passcode</source>
+        <target>Kode Masuk</target>
+        <note>List section title for passcode settings</note>
+      </trans-unit>
+      <trans-unit id="Private Browsing">
+        <source>Private Browsing</source>
+        <target>Penjelajahan Pribadi</target>
+        <note>List item for Private Browsing</note>
+      </trans-unit>
+      <trans-unit id="Re-enter passcode">
+        <source>Re-enter passcode</source>
+        <target>Masukkan kembali kode akses</target>
+        <note>Title for re-entering a passcode</note>
+      </trans-unit>
+      <trans-unit id="Require Passcode">
+        <source>Require Passcode</source>
+        <target>Membutuhkan kode akses</target>
+        <note>Title for setting to require a passcode</note>
+      </trans-unit>
+      <trans-unit id="Set Passcode">
+        <source>Set Passcode</source>
+        <target>Setel kode akses</target>
+        <note>Screen title for Set Passcode</note>
+      </trans-unit>
+      <trans-unit id="Touch ID &amp; Passcode">
+        <source>Touch ID &amp; Passcode</source>
+        <target>Touch ID dan Kode Akses</target>
+        <note>Title for Touch ID/Passcode settings option</note>
+      </trans-unit>
+      <trans-unit id="Turn Passcode Off">
+        <source>Turn Passcode Off</source>
+        <target>Nonaktifkan Kode Akses</target>
+        <note>Title for setting to turn off passcode</note>
+      </trans-unit>
+      <trans-unit id="Turn Passcode On">
+        <source>Turn Passcode On</source>
+        <target>Aktifkan Kode Akses</target>
+        <note>Title for setting to turn on passcode</note>
+      </trans-unit>
+      <trans-unit id="Turn off your passcode.">
+        <source>Turn off your passcode.</source>
+        <target>Nonaktifkan kode akses Anda.</target>
+        <note>Touch ID prompt subtitle when turning off passcode</note>
+      </trans-unit>
+      <trans-unit id="Use Touch ID for">
+        <source>Use Touch ID for</source>
+        <target>Gunakan Touch ID untuk</target>
+        <note>List section title for when to use Touch ID</note>
+      </trans-unit>
+      <trans-unit id="Use your fingerprint to access Logins now.">
+        <source>Use your fingerprint to access Logins now.</source>
+        <target>Gunakan sidik jari Anda untuk mengakses Info Masuk sekarang.</target>
+        <note>Touch ID prompt subtitle when accessing logins</note>
+      </trans-unit>
+      <trans-unit id="Use your fingerprint to access Private Browsing now.">
+        <source>Use your fingerprint to access Private Browsing now.</source>
+        <target>Gunakan sidik jari Anda untuk mengakses Penjelajahan Pribadi sekarang.</target>
+        <note>Touch ID prompt subtitle when accessing private browsing</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/BookmarkPanel.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Delete">
+        <source>Delete</source>
+        <target>Hapus</target>
+        <note>Action button for deleting bookmarks in the bookmarks panel.</note>
+      </trans-unit>
+      <trans-unit id="Desktop Bookmarks">
+        <source>Desktop Bookmarks</source>
+        <target>Markah Desktop</target>
+        <note>The folder name for the virtual folder that contains all desktop bookmarks.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/ClearHistoryConfirm.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Cancel">
+        <source>Cancel</source>
+        <target>Batalkan</target>
+        <note>The cancel button when confirming clear history.</note>
+      </trans-unit>
+      <trans-unit id="Clear">
+        <source>Clear</source>
+        <target>Bersihkan</target>
+        <note>The button that clears history even when Sync is connected.</note>
+      </trans-unit>
+      <trans-unit id="History will be removed from all your connected devices. This cannot be undone.">
+        <source>History will be removed from all your connected devices. This cannot be undone.</source>
+        <target>Riwayat akan dihapus dari semua perangkat tersambung Anda. Ini tidak dapat diurungkan.</target>
+        <note>Description of the confirmation dialog shown when a user tries to clear history that's synced to another device.</note>
+      </trans-unit>
+      <trans-unit id="Remove history from your Firefox Account?">
+        <source>Remove history from your Firefox Account?</source>
+        <target>Hapus riwayat dari Firefox Account Anda?</target>
+        <note>Title of the confirmation dialog shown when a user tries to clear history that's synced to another device.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/ClearPrivateData.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Are you sure you want to clear all of your data? This will also close all open tabs.">
+        <source>Are you sure you want to clear all of your data? This will also close all open tabs.</source>
+        <target>Yakin ingin membersihkan semua data Anda? Proses ini juga akan menutup semua tab.</target>
+        <note>Message shown in the dialog prompting users if they want to clear everything</note>
+      </trans-unit>
+      <trans-unit id="Browsing History">
+        <source>Browsing History</source>
+        <target>Riwayat Penjelajahan</target>
+        <note>Settings item for clearing browsing history</note>
+      </trans-unit>
+      <trans-unit id="Cache">
+        <source>Cache</source>
+        <target>Tembolok</target>
+        <note>Settings item for clearing the cache</note>
+      </trans-unit>
+      <trans-unit id="Cancel">
+        <source>Cancel</source>
+        <target>Batal</target>
+        <note>Used as a button label in the dialog to cancel clear private data dialog</note>
+      </trans-unit>
+      <trans-unit id="Clear">
+        <source>Clear</source>
+        <target>Bersihkan</target>
+        <note>Used as a button label in the dialog to Clear private data dialog</note>
+      </trans-unit>
+      <trans-unit id="Clear Everything">
+        <source>Clear Everything</source>
+        <target>Bersihkan Semua</target>
+        <note>Title of the Clear private data dialog.</note>
+      </trans-unit>
+      <trans-unit id="Clear Private Data">
+        <source>Clear Private Data</source>
+        <target>Hapus Data Privat</target>
+        <note>Button in settings that clears private data for the selected items.
+   Navigation title in settings.</note>
+      </trans-unit>
+      <trans-unit id="Cookies">
+        <source>Cookies</source>
+        <target>Kuki</target>
+        <note>Settings item for clearing cookies</note>
+      </trans-unit>
+      <trans-unit id="Offline Website Data">
+        <source>Offline Website Data</source>
+        <target>Data Situs Web Luring</target>
+        <note>Settings item for clearing website data</note>
+      </trans-unit>
+      <trans-unit id="Saved Logins">
+        <source>Saved Logins</source>
+        <target>Info Masuk Tersimpan</target>
+        <note>Settings item for clearing passwords and login data</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/ErrorPages.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Open in Safari">
+        <source>Open in Safari</source>
+        <target>Buka di Safari</target>
+        <note>Shown in error pages for files that can't be shown and need to be downloaded.</note>
+      </trans-unit>
+      <trans-unit id="Try again">
+        <source>Try again</source>
+        <target>Coba lagi</target>
+        <note>Shown in error pages on a button that will try to load the page again</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/FindInPage.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Done">
+        <source>Done</source>
+        <target>Selesai</target>
+        <note>Done button in Find in Page Toolbar.</note>
+      </trans-unit>
+      <trans-unit id="Find in Page">
+        <source>Find in Page</source>
+        <target>Temukan di Halaman</target>
+        <note>Share action title</note>
+      </trans-unit>
+      <trans-unit id="Next in-page result">
+        <source>Next in-page result</source>
+        <target>Hasil pencarian selanjutnya dalam halaman</target>
+        <note>Accessibility label for next result button in Find in Page Toolbar.</note>
+      </trans-unit>
+      <trans-unit id="Previous in-page result">
+        <source>Previous in-page result</source>
+        <target>Hasil pencarian sebelumnya dalam halaman</target>
+        <note>Accessibility label for previous result button in Find in Page Toolbar.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/HistoryPanel.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Remove">
+        <source>Remove</source>
+        <target>Hapus</target>
+        <note>Action button for deleting history entries in the history panel.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Info.plist" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="NSLocationWhenInUseUsageDescription">
+        <source>Websites you visit may request your location.</source>
+        <target>Situs web yang Anda kunjungi dapat meminta lokasi Anda.</target>
+      </trans-unit>
+      <trans-unit id="ShortcutItemTitleNewPrivateTab">
+        <source>New Private Tab</source>
+        <target>Tab Pribadi Baru</target>
+      </trans-unit>
+      <trans-unit id="ShortcutItemTitleNewTab">
+        <source>New Tab</source>
+        <target>Tab Baru</target>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Intro.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Browse multiple Web pages at the same time with tabs.">
+        <source>Browse multiple Web pages at the same time with tabs.</source>
+        <target>Jelajahi banyak laman web secara bersamaan dengan tab.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Choose">
+        <source>Choose</source>
+        <target>Pilih</target>
+        <note>See http://mzl.la/1if9ODp</note>
+      </trans-unit>
+      <trans-unit id="Connect Firefox everywhere you use it.">
+        <source>Connect Firefox everywhere you use it.</source>
+        <target>Sambungkan Firefox di mana saja Anda menggunakannya.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Customize">
+        <source>Customize</source>
+        <target>Ubahsuai</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Easily switch between open pages with tabs.">
+        <source>Easily switch between open pages with tabs.</source>
+        <target>Mudah berpindah di antara halaman terbuka dengan tab.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Firefox and the cloud">
+        <source>Firefox and the cloud</source>
+        <target>Firefox dan awan</target>
+        <note>Accessibility label for an image. See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Introductory slide %@ of %@">
+        <source>Introductory slide %1$@ of %2$@</source>
+        <target>Lembar presentasi perkenalan %1$@ dari %2$@</target>
+        <note>String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3</note>
+      </trans-unit>
+      <trans-unit id="Organize">
+        <source>Organize</source>
+        <target>Kelola</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Personalize your Firefox just the way you like in Settings.">
+        <source>Personalize your Firefox just the way you like in Settings.</source>
+        <target>Ubahsuai Firefox sesuka Anda lewat Setelan.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Personalize your default search engine and more in Settings.">
+        <source>Personalize your default search engine and more in Settings.</source>
+        <target>Ubahsuai mesin pencari baku dan lainnya sesuka Anda lewat Setelan.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Share">
+        <source>Share</source>
+        <target>Bagikan</target>
+        <note>See http://mzl.la/1if9ODp</note>
+      </trans-unit>
+      <trans-unit id="Sign in to Firefox">
+        <source>Sign in to Firefox</source>
+        <target>Masuk ke Firefox</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Start Browsing">
+        <source>Start Browsing</source>
+        <target>Mulai Menjelajah</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Sync Your Devices.">
+        <source>Sync Your Devices.</source>
+        <target>Sinkronkan Perangkat Anda.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Tap, hold and move the Firefox icon into your dock for easy access.">
+        <source>Tap, hold and move the Firefox icon into your dock for easy access.</source>
+        <target>Ketuk, tahan, dan seret ikon Firefox ke dock agar mudah diakses.</target>
+        <note>See http://mzl.la/1if9ODp</note>
+      </trans-unit>
+      <trans-unit id="The Settings button is at the beginning of the Tabs Tray.">
+        <source>The Settings button is at the beginning of the Tabs Tray.</source>
+        <target>Tombol Setelan ada di awal Baki Tab.</target>
+        <note>Accessibility label for an image. See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.">
+        <source>The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.</source>
+        <target>Tombol Tampilkan tab ada di samping bidang teks Alamat dan Pencarian dan akan menampilkan jumlah tab yang terbuka.</target>
+        <note>Accessibility label for an image. See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Use the share sheet to send links from other apps to Firefox.">
+        <source>Use the share sheet to send links from other apps to Firefox.</source>
+        <target>Gunakan lembar berbagi untuk mengirimkan tautan dari aplikasi lain ke Firefox.</target>
+        <note>See http://mzl.la/1if9ODp</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/LightweightThemes.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Allow Firefox to use my Photos">
+        <source>Allow Firefox to use my Photos</source>
+        <target>Izinkan Firefox untuk menggunakan Foto saya.</target>
+        <note>Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet.</note>
+      </trans-unit>
+      <trans-unit id="Back to Themes">
+        <source>Back to Themes</source>
+        <target>Kembali ke Tema</target>
+        <note>Pending feature; currently unused string! Accessibility label for back button to theme chooser</note>
+      </trans-unit>
+      <trans-unit id="Choose">
+        <source>Choose</source>
+        <target>Pilih</target>
+        <note>Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker</note>
+      </trans-unit>
+      <trans-unit id="Choose Theme">
+        <source>Choose Theme</source>
+        <target>Pilih Tema</target>
+        <note>Pending feature; currently unused string! Accessibility label for settings row to enter theme settings</note>
+      </trans-unit>
+      <trans-unit id="Default Themes">
+        <source>Default Themes</source>
+        <target>Tema Standard</target>
+        <note>Pending feature; currently unused string! Accessibility label for themes subheader</note>
+      </trans-unit>
+      <trans-unit id="My Photos">
+        <source>My Photos</source>
+        <target>Foto Saya</target>
+        <note>Pending feature; currently unused string! Accessibility label for photo viewer</note>
+      </trans-unit>
+      <trans-unit id="Photos">
+        <source>Photos</source>
+        <target>Foto</target>
+        <note>Pending feature; currently unused string! Sub header for photo options in theme chooser</note>
+      </trans-unit>
+      <trans-unit id="Preview">
+        <source>Preview</source>
+        <target>Pratinjau</target>
+        <note>Pending feature; currently unused string! Button to show preview of selected theme</note>
+      </trans-unit>
+      <trans-unit id="Preview Theme">
+        <source>Preview Theme</source>
+        <target>Pratinjau Tema</target>
+        <note>Pending feature; currently unused string! Accessibility label for theme preview button</note>
+      </trans-unit>
+      <trans-unit id="Set">
+        <source>Set</source>
+        <target>Setel</target>
+        <note>Pending feature; currently unused string! Button to set selected theme as current theme</note>
+      </trans-unit>
+      <trans-unit id="Set Theme">
+        <source>Set Theme</source>
+        <target>Setel Tema</target>
+        <note>Pending feature; currently unused string! Accessibility label for set theme button</note>
+      </trans-unit>
+      <trans-unit id="Theme">
+        <source>Theme</source>
+        <target>Tema</target>
+        <note>Pending feature; currently unused string! Settings row to enter theme settings</note>
+      </trans-unit>
+      <trans-unit id="Themes">
+        <source>Themes</source>
+        <target>Tema</target>
+        <note>Pending feature; currently unused string! sub header for theme options in theme chooser</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Localizable.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="+">
+        <source>+</source>
+        <target>+</target>
+        <note>Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar.</note>
+      </trans-unit>
+      <trans-unit id="-">
+        <source>-</source>
+        <target>-</target>
+        <note>Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar.</note>
+      </trans-unit>
+      <trans-unit id="A username and password are being requested by %@.">
+        <source>A username and password are being requested by %@.</source>
+        <target>Nama pengguna dan sandi diminta oleh %@.</target>
+        <note>Authentication prompt message with no realm. Parameter is the hostname of the site</note>
+      </trans-unit>
+      <trans-unit id="A username and password are being requested by %@. The site says: %@">
+        <source>A username and password are being requested by %1$@. The site says: %2$@</source>
+        <target>Nama pengguna dan sandi diminta oleh %1$@. Situs menyatakan: %2$@</target>
+        <note>Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string</note>
+      </trans-unit>
+      <trans-unit id="Aa">
+        <source>Aa</source>
+        <target>Aa</target>
+        <note>Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar.</note>
+      </trans-unit>
+      <trans-unit id="About">
+        <source>About</source>
+        <target>Tentang</target>
+        <note>About settings section title</note>
+      </trans-unit>
+      <trans-unit id="Add Tab">
+        <source>Add Tab</source>
+        <target>Tambahkan Tab</target>
+        <note>Accessibility label for the Add Tab button in the Tab Tray.</note>
+      </trans-unit>
+      <trans-unit id="Add to Reading List">
+        <source>Add to Reading List</source>
+        <target>Tambahkan ke Daftar Bacaan</target>
+        <note>Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440</note>
+      </trans-unit>
+      <trans-unit id="Added page to Reading List">
+        <source>Added page to Reading List</source>
+        <target>Ditambahkan ke Daftar Baca</target>
+        <note>Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action.</note>
+      </trans-unit>
+      <trans-unit id="Address and Search">
+        <source>Address and Search</source>
+        <target>Alamat dan Pencarian</target>
+        <note>Accessibility label for address and search field, both words (Address, Search) are therefore nouns.</note>
+      </trans-unit>
+      <trans-unit id="Always Send">
+        <source>Always Send</source>
+        <target>Selalu Kirimkan</target>
+        <note>Used as a button label for crash dialog prompt</note>
+      </trans-unit>
+      <trans-unit id="Authentication required">
+        <source>Authentication required</source>
+        <target>Otentikasi dibutuhkan</target>
+        <note>Authentication prompt title</note>
+      </trans-unit>
+      <trans-unit id="Back">
+        <source>Back</source>
+        <target>Mundur</target>
+        <note>Accessibility Label for the browser toolbar Back button</note>
+      </trans-unit>
+      <trans-unit id="Block Pop-up Windows">
+        <source>Block Pop-up Windows</source>
+        <target>Blokir Jendela Sembulan</target>
+        <note>Block pop-up windows setting</note>
+      </trans-unit>
+      <trans-unit id="Bookmark">
+        <source>Bookmark</source>
+        <target>Markah</target>
+        <note>Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440</note>
+      </trans-unit>
+      <trans-unit id="Bookmarks">
+        <source>Bookmarks</source>
+        <target>Markah</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Brightness">
+        <source>Brightness</source>
+        <target>Kecerahan</target>
+        <note>Accessibility label for brightness adjustment slider in Reader Mode display settings</note>
+      </trans-unit>
+      <trans-unit id="Call">
+        <source>Call</source>
+        <target>Panggil</target>
+        <note>Alert Call Button</note>
+      </trans-unit>
+      <trans-unit id="Cancel">
+        <source>Cancel</source>
+        <target>Batal</target>
+        <note>Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker</note>
+      </trans-unit>
+      <trans-unit id="Changes color theme.">
+        <source>Changes color theme.</source>
+        <target>Ubah tema warna.</target>
+        <note>Accessibility hint for the color theme setting buttons in reader mode display settings</note>
+      </trans-unit>
+      <trans-unit id="Changes font type.">
+        <source>Changes font type.</source>
+        <target>Ubah jenis huruf.</target>
+        <note>Accessibility hint for the font type buttons in reader mode display settings</note>
+      </trans-unit>
+      <trans-unit id="Clear Private Data">
+        <source>Clear Private Data</source>
+        <target>Bersihkan Data Pribadi</target>
+        <note>Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.</note>
+      </trans-unit>
+      <trans-unit id="Close">
+        <source>Close</source>
+        <target>Tutup</target>
+        <note>Accessibility label for action denoting closing a tab in tab list (tray)</note>
+      </trans-unit>
+      <trans-unit id="Closing tab">
+        <source>Closing tab</source>
+        <target>Menutup tab</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Copy Address">
+        <source>Copy Address</source>
+        <target>Salin Alamat</target>
+        <note>Copy the URL from the location bar</note>
+      </trans-unit>
+      <trans-unit id="Copy Image">
+        <source>Copy Image</source>
+        <target>Salin Gambar</target>
+        <note>Context menu item for copying an image to the clipboard</note>
+      </trans-unit>
+      <trans-unit id="Copy Link">
+        <source>Copy Link</source>
+        <target>Salin Tautan</target>
+        <note>Context menu item for copying a link URL to the clipboard</note>
+      </trans-unit>
+      <trans-unit id="Could not add page to Reading List. Maybe it's already there?">
+        <source>Could not add page to Reading List. Maybe it's already there?</source>
+        <target>Tidak dapat menambahkan Daftar Baca. Mungkin sudah ada di daftar?</target>
+        <note>Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures.</note>
+      </trans-unit>
+      <trans-unit id="Could not add page to Reading list">
+        <source>Could not add page to Reading list</source>
+        <target>Tidak dapat menambahkan laman ke Daftar Baca</target>
+        <note>Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed.</note>
+      </trans-unit>
+      <trans-unit id="Could not load page.">
+        <source>Could not load page.</source>
+        <target>Tidak dapat memuat laman.</target>
+        <note>Error message that is shown in settings when there was a problem loading</note>
+      </trans-unit>
+      <trans-unit id="Create an account">
+        <source>Create an account</source>
+        <target>Buat akun</target>
+        <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Dark">
+        <source>Dark</source>
+        <target>Gelap</target>
+        <note>Dark theme setting in Reading View settings</note>
+      </trans-unit>
+      <trans-unit id="Debug: forget Sync auth state">
+        <source>Debug: forget Sync auth state</source>
+        <target>Debug: lupakan status otentikasi Sync</target>
+        <note>Debug option</note>
+      </trans-unit>
+      <trans-unit id="Debug: require password">
+        <source>Debug: require password</source>
+        <target>Debug: membutuhkan sandi</target>
+        <note>Debug option</note>
+      </trans-unit>
+      <trans-unit id="Debug: require upgrade">
+        <source>Debug: require upgrade</source>
+        <target>Debug: membutuhkan peningkatan</target>
+        <note>Debug option</note>
+      </trans-unit>
+      <trans-unit id="Decrease text size">
+        <source>Decrease text size</source>
+        <target>Kecilkan ukuran teks</target>
+        <note>Accessibility label for button decreasing font size in display settings of reader mode</note>
+      </trans-unit>
+      <trans-unit id="Default Search Engine">
+        <source>Default Search Engine</source>
+        <target>Mesin Pencari Baku</target>
+        <note>Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section.</note>
+      </trans-unit>
+      <trans-unit id="Disable additional page dialogs">
+        <source>Disable additional page dialogs</source>
+        <target>Tampilkan dialog laman lainnya</target>
+        <note>Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown</note>
+      </trans-unit>
+      <trans-unit id="Display Settings">
+        <source>Display Settings</source>
+        <target>Setelan Tampilan</target>
+        <note>Name for display settings button in reader mode. Display in the meaning of presentation, not monitor.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to save the password for %@ on %@?">
+        <source>Do you want to save the password for %1$@ on %2$@?</source>
+        <target>Ingin menyimpan sandi untuk %1$@ di %2$@?</target>
+        <note>Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to save the password on %@?">
+        <source>Do you want to save the password on %@?</source>
+        <target>Ingin menyimpan sandi di %@?</target>
+        <note>Prompt for saving a password with no username. The parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to update the password for %@ on %@?">
+        <source>Do you want to update the password for %1$@ on %2$@?</source>
+        <target>Ingin memperbarui sandi untuk %1$@ di %2$@?</target>
+        <note>Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to update the password on %@?">
+        <source>Do you want to update the password on %@?</source>
+        <target>Ingin memperbarui sandi di %@?</target>
+        <note>Prompt for updating a password with on username. The parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Don't Send">
+        <source>Don't Send</source>
+        <target>Jangan Kirim</target>
+        <note>Used as a button label for crash dialog prompt</note>
+      </trans-unit>
+      <trans-unit id="Done">
+        <source>Done</source>
+        <target>Selesai</target>
+        <note>Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button</note>
+      </trans-unit>
+      <trans-unit id="Double tap and hold to open history">
+        <source>Double tap and hold to open history</source>
+        <target>Ketuk ganda dan tetap tekan untuk membuka riwayat</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Enter your password to connect.">
+        <source>Enter your password to connect.</source>
+        <target>Masukkan sandi untuk tersambung.</target>
+        <note>Text message in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Firefox Help and Support">
+        <source>Firefox Help and Support</source>
+        <target>Bantuan dan Dukungan Firefox</target>
+        <note>Tile title for App Help</note>
+      </trans-unit>
+      <trans-unit id="Firefox will stop syncing with your account, but won&#8217;t delete any of your browsing data on this device.">
+        <source>Firefox will stop syncing with your account, but won&#8217;t delete any of your browsing data on this device.</source>
+        <target>Firefox akan berhenti menyinkronkan dengan akun Anda, tetapi tidak akan menghapus data penjelajahan pada perangkat ini.</target>
+        <note>Text of the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Firefox would like to access your Photos">
+        <source>Firefox would like to access your Photos</source>
+        <target>Firefox ingin mengakses Foto Anda</target>
+        <note>See http://mzl.la/1G7uHo7</note>
+      </trans-unit>
+      <trans-unit id="Forward">
+        <source>Forward</source>
+        <target>Maju</target>
+        <note>Accessibility Label for the browser toolbar Forward button</note>
+      </trans-unit>
+      <trans-unit id="General">
+        <source>General</source>
+        <target>Umum</target>
+        <note>General settings section title</note>
+      </trans-unit>
+      <trans-unit id="Get your open tabs, bookmarks, and passwords from your other devices.">
+        <source>Get your open tabs, bookmarks, and passwords from your other devices.</source>
+        <target>Dapatkan tab terbuka, markah, dan sandi dari perangkat lainnya.</target>
+        <note>A re-worded offer about Sync that emphasizes one-way data transfer, not syncing.</note>
+      </trans-unit>
+      <trans-unit id="Go">
+        <source>Go</source>
+        <target>Buka</target>
+        <note>Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened</note>
+      </trans-unit>
+      <trans-unit id="Go to copied URL?">
+        <source>Go to copied URL?</source>
+        <target>Buka ke URL yang disalin?</target>
+        <note>Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard</note>
+      </trans-unit>
+      <trans-unit id="Help">
+        <source>Help</source>
+        <target>Bantuan</target>
+        <note>Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ</note>
+      </trans-unit>
+      <trans-unit id="History">
+        <source>History</source>
+        <target>Riwayat</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Increase text size">
+        <source>Increase text size</source>
+        <target>Besarkan ukuran teks</target>
+        <note>Accessibility label for button increasing font size in display settings of reader mode</note>
+      </trans-unit>
+      <trans-unit id="Intro Tour Carousel">
+        <source>Intro Tour Carousel</source>
+        <target>Carousel Tur</target>
+        <note>Accessibility label for the introduction tour carousel</note>
+      </trans-unit>
+      <trans-unit id="Last month">
+        <source>Last month</source>
+        <target>Bulan sebelumnya</target>
+        <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="Last synced: %@">
+        <source>Last synced: %@</source>
+        <target>Disinkronkan terakhir: %@</target>
+        <note>Last synced time label beside Sync Now setting option. Argument is the relative date string.
+   Remote tabs last synced time. Argument is the relative date string.</note>
+      </trans-unit>
+      <trans-unit id="Last week">
+        <source>Last week</source>
+        <target>Minggu sebelumnya</target>
+        <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="Licenses">
+        <source>Licenses</source>
+        <target>Lisensi</target>
+        <note>Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG</note>
+      </trans-unit>
+      <trans-unit id="Light">
+        <source>Light</source>
+        <target>Terang</target>
+        <note>Light theme setting in Reading View settings</note>
+      </trans-unit>
+      <trans-unit id="Load original page">
+        <source>Load original page</source>
+        <target>Muat laman aslinya</target>
+        <note>Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app.</note>
+      </trans-unit>
+      <trans-unit id="Loading content&#8230;">
+        <source>Loading content&#8230;</source>
+        <target>Memuat konten&#8230;</target>
+        <note>Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app.</note>
+      </trans-unit>
+      <trans-unit id="Log Out">
+        <source>Log Out</source>
+        <target>Keluar</target>
+        <note>Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Log Out?">
+        <source>Log Out?</source>
+        <target>Keluar?</target>
+        <note>Title of the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Log in">
+        <source>Log in</source>
+        <target>Masuk</target>
+        <note>Authentication prompt log in button</note>
+      </trans-unit>
+      <trans-unit id="Logins">
+        <source>Logins</source>
+        <target>Info Masuk</target>
+        <note>Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.</note>
+      </trans-unit>
+      <trans-unit id="Looks like Firefox crashed previously. Would you like to restore your tabs?">
+        <source>Looks like Firefox crashed previously. Would you like to restore your tabs?</source>
+        <target>Tampaknya tadi Firefox mogok. Ingin memulihkan tab Anda?</target>
+        <note>Restore Tabs Prompt Description</note>
+      </trans-unit>
+      <trans-unit id="Mark as Read">
+        <source>Mark as Read</source>
+        <target>Tandai sebagai Dibaca</target>
+        <note>Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read</note>
+      </trans-unit>
+      <trans-unit id="Mark as Unread">
+        <source>Mark as Unread</source>
+        <target>Tandai sebagai Belum Dibaca</target>
+        <note>Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread</note>
+      </trans-unit>
+      <trans-unit id="Missing error">
+        <source>Missing error</source>
+        <target>Pesan kesalahan tidak tersedia</target>
+        <note>Error for a missing remote error number</note>
+      </trans-unit>
+      <trans-unit id="Missing message">
+        <source>Missing message</source>
+        <target>Pesan kesalahan tidak tersedia</target>
+        <note>Error for a missing remote error message</note>
+      </trans-unit>
+      <trans-unit id="Navigation Toolbar">
+        <source>Navigation Toolbar</source>
+        <target>Bilah Alat Navigasi</target>
+        <note>Accessibility label for the navigation toolbar displayed at the bottom of the screen.</note>
+      </trans-unit>
+      <trans-unit id="New tab: %@: %@">
+        <source>New tab: %1$@: %2$@</source>
+        <target>Tab baru: %1$@: %2$@</target>
+        <note>New tab [title] [url]</note>
+      </trans-unit>
+      <trans-unit id="New version available">
+        <source>New version available</source>
+        <target>Versi baru tersedia</target>
+        <note>Prompt title for application update</note>
+      </trans-unit>
+      <trans-unit id="No">
+        <source>No</source>
+        <target>Tidak</target>
+        <note>Restore Tabs Negative Action</note>
+      </trans-unit>
+      <trans-unit id="No tabs">
+        <source>No tabs</source>
+        <target>Tidak ada tab</target>
+        <note>Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray</note>
+      </trans-unit>
+      <trans-unit id="Not Now">
+        <source>Not Now</source>
+        <target>Jangan Sekarang</target>
+        <note>Label for button to cancel application update prompt</note>
+      </trans-unit>
+      <trans-unit id="Not now">
+        <source>Not now</source>
+        <target>Jangan sekarang</target>
+        <note>Button to not save the user's password</note>
+      </trans-unit>
+      <trans-unit id="OK">
+        <source>OK</source>
+        <target>Oke</target>
+        <note>Alert OK Button
+   Label for OK button in the application update prompt
+   OK button</note>
+      </trans-unit>
+      <trans-unit id="Okay">
+        <source>Okay</source>
+        <target>Oke</target>
+        <note>Restore Tabs Affirmative Action</note>
+      </trans-unit>
+      <trans-unit id="Oops! Firefox crashed">
+        <source>Oops! Firefox crashed</source>
+        <target>Waduh! Firefox mogok</target>
+        <note>Title for prompt displayed to user after the app crashes</note>
+      </trans-unit>
+      <trans-unit id="Open In New Tab">
+        <source>Open In New Tab</source>
+        <target>Buka di Tab Baru</target>
+        <note>Context menu item for opening a link in a new tab</note>
+      </trans-unit>
+      <trans-unit id="Open Settings">
+        <source>Open Settings</source>
+        <target>Buka Setelan</target>
+        <note>See http://mzl.la/1G7uHo7</note>
+      </trans-unit>
+      <trans-unit id="Open articles in Reader View by tapping the book icon when it appears in the title bar.">
+        <source>Open articles in Reader View by tapping the book icon when it appears in the title bar.</source>
+        <target>Buka artikel di Tampilan Baca dengan mengetuk ikon buku saat tampil di bilah judul.</target>
+        <note>See http://mzl.la/1LXbDOL</note>
+      </trans-unit>
+      <trans-unit id="Open in&#8230;">
+        <source>Open in&#8230;</source>
+        <target>Buka di&#8230;</target>
+        <note>String indicating that the file can be opened in another application on the device</note>
+      </trans-unit>
+      <trans-unit id="Opening %@">
+        <source>Opening %@</source>
+        <target>Membuka %@</target>
+        <note>Opening an external URL</note>
+      </trans-unit>
+      <trans-unit id="Pages you have visited recently will show up here.">
+        <source>Pages you have visited recently will show up here.</source>
+        <target>Laman yang pernah dikunjungi baru-baru ini akan tampil di sini.</target>
+        <note>See http://bit.ly/1I7Do4b</note>
+      </trans-unit>
+      <trans-unit id="Panel Chooser">
+        <source>Panel Chooser</source>
+        <target>Pemilih Panel</target>
+        <note>Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).</note>
+      </trans-unit>
+      <trans-unit id="Password">
+        <source>Password</source>
+        <target>Sandi</target>
+        <note>Password textbox in Authentication prompt</note>
+      </trans-unit>
+      <trans-unit id="Paste">
+        <source>Paste</source>
+        <target>Tempel</target>
+        <note>Paste the URL into the location bar</note>
+      </trans-unit>
+      <trans-unit id="Paste &amp; Go">
+        <source>Paste &amp; Go</source>
+        <target>Tempel &amp; Buka</target>
+        <note>Paste the URL into the location bar and visit</note>
+      </trans-unit>
+      <trans-unit id="Privacy">
+        <source>Privacy</source>
+        <target>Privasi</target>
+        <note>Privacy section title</note>
+      </trans-unit>
+      <trans-unit id="Privacy Policy">
+        <source>Privacy Policy</source>
+        <target>Kebijakan Privasi</target>
+        <note>Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/</note>
+      </trans-unit>
+      <trans-unit id="Quick-search Engines">
+        <source>Quick-search Engines</source>
+        <target>Mesin Cari Cepat</target>
+        <note>Title for quick-search engines settings section.</note>
+      </trans-unit>
+      <trans-unit id="Reader View">
+        <source>Reader View</source>
+        <target>Tampilan Baca</target>
+        <note>Accessibility label for the Reader View button</note>
+      </trans-unit>
+      <trans-unit id="Reading list">
+        <source>Reading list</source>
+        <target>Daftar bacaan</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Reload">
+        <source>Reload</source>
+        <target>Muat Ulang</target>
+        <note>Accessibility Label for the browser toolbar Reload button</note>
+      </trans-unit>
+      <trans-unit id="Remove">
+        <source>Remove</source>
+        <target>Hapus</target>
+        <note>Title for the button that removes a reading list item</note>
+      </trans-unit>
+      <trans-unit id="Remove from Reading List">
+        <source>Remove from Reading List</source>
+        <target>Hapus dari Daftar Bacaan</target>
+        <note>Name for button removing current article from reading list in reader mode</note>
+      </trans-unit>
+      <trans-unit id="Remove page">
+        <source>Remove page</source>
+        <target>Hapus laman</target>
+        <note>Button shown in editing mode to remove this site from the top sites panel.</note>
+      </trans-unit>
+      <trans-unit id="Request Desktop Site">
+        <source>Request Desktop Site</source>
+        <target>Minta Situs Desktop</target>
+        <note>Action Sheet Button for Requesting the Desktop Site
+   Share action title</note>
+      </trans-unit>
+      <trans-unit id="Request Mobile Site">
+        <source>Request Mobile Site</source>
+        <target>Minta Situs Seluler</target>
+        <note>Action Sheet Button for Requesting the Mobile Site
+   Share action title</note>
+      </trans-unit>
+      <trans-unit id="Sans-serif">
+        <source>Sans-serif</source>
+        <target>Sans-serif</target>
+        <note>Font type setting in the reading view settings</note>
+      </trans-unit>
+      <trans-unit id="Save Image">
+        <source>Save Image</source>
+        <target>Simpan Gambar</target>
+        <note>Context menu item for saving an image</note>
+      </trans-unit>
+      <trans-unit id="Save Logins">
+        <source>Save Logins</source>
+        <target>Simpan Info Masuk</target>
+        <note>Setting to enable the built-in password manager</note>
+      </trans-unit>
+      <trans-unit id="Save pages to your Reading List by tapping the book plus icon in the Reader View controls.">
+        <source>Save pages to your Reading List by tapping the book plus icon in the Reader View controls.</source>
+        <target>Simpan laman ke Daftar Baca dengan mengetuk ikon buku di kontrol Tampilan Baca.</target>
+        <note>See http://mzl.la/1LXbDOL</note>
+      </trans-unit>
+      <trans-unit id="Search">
+        <source>Search</source>
+        <target>Pencarian</target>
+        <note>Navigation title for search settings.
+   Open search section of settings</note>
+      </trans-unit>
+      <trans-unit id="Search or enter address">
+        <source>Search or enter address</source>
+        <target>Cari atau masukkan alamat</target>
+        <note>The text shown in the URL bar on about:home</note>
+      </trans-unit>
+      <trans-unit id="Searches for the suggestion">
+        <source>Searches for the suggestion</source>
+        <target>Cari dari saran</target>
+        <note>Accessibility hint describing the action performed when a search suggestion is clicked</note>
+      </trans-unit>
+      <trans-unit id="Secure connection">
+        <source>Secure connection</source>
+        <target>Sambungan aman</target>
+        <note>Accessibility label for the lock icon, which is only present if the connection is secure</note>
+      </trans-unit>
+      <trans-unit id="Send Crash Reports">
+        <source>Send Crash Reports</source>
+        <target>Kirim Laporan Mogok</target>
+        <note>Setting to enable the sending of crash reports</note>
+      </trans-unit>
+      <trans-unit id="Send Feedback">
+        <source>Send Feedback</source>
+        <target>Kirim Masukan</target>
+        <note>Show an input.mozilla.org page where people can submit feedback</note>
+      </trans-unit>
+      <trans-unit id="Send Report">
+        <source>Send Report</source>
+        <target>Kirim Laporan</target>
+        <note>Used as a button label for crash dialog prompt</note>
+      </trans-unit>
+      <trans-unit id="Send a crash report so Mozilla can fix the problem?">
+        <source>Send a crash report so Mozilla can fix the problem?</source>
+        <target>Kirimkan laporan mogok agar Mozilla bisa memperbaikinya?</target>
+        <note>Message displayed in the crash dialog above the buttons used to select when sending reports</note>
+      </trans-unit>
+      <trans-unit id="Sepia">
+        <source>Sepia</source>
+        <target>Sepia</target>
+        <note>Sepia theme setting in Reading View settings</note>
+      </trans-unit>
+      <trans-unit id="Serif">
+        <source>Serif</source>
+        <target>Serif</target>
+        <note>Font type setting in the reading view settings</note>
+      </trans-unit>
+      <trans-unit id="Settings">
+        <source>Settings</source>
+        <target>Setelan</target>
+        <note>Accessibility label for the Settings button in the Tab Tray.
+   Settings</note>
+      </trans-unit>
+      <trans-unit id="Share">
+        <source>Share</source>
+        <target>Bagikan</target>
+        <note>Accessibility Label for the browser toolbar Share button</note>
+      </trans-unit>
+      <trans-unit id="Share Link">
+        <source>Share Link</source>
+        <target>Bagikan Tautan</target>
+        <note>Context menu item for sharing a link URL</note>
+      </trans-unit>
+      <trans-unit id="Show Search Suggestions">
+        <source>Show Search Suggestions</source>
+        <target>Tampilkan Saran Pencarian</target>
+        <note>Label for show search suggestions setting.</note>
+      </trans-unit>
+      <trans-unit id="Show Tabs">
+        <source>Show Tabs</source>
+        <target>Tampilkan Tab</target>
+        <note>Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar</note>
+      </trans-unit>
+      <trans-unit id="Show Tour">
+        <source>Show Tour</source>
+        <target>Tampilkan Tur</target>
+        <note>Show the on-boarding screen again from the settings</note>
+      </trans-unit>
+      <trans-unit id="Show search suggestions">
+        <source>Show search suggestions</source>
+        <target>Tampilkan saran pencarian</target>
+        <note>Label for show search suggestions setting.</note>
+      </trans-unit>
+      <trans-unit id="Sign In">
+        <source>Sign In</source>
+        <target>Masuk</target>
+        <note>Text message / button in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Sign in">
+        <source>Sign in</source>
+        <target>Masuk</target>
+        <note>Text message / button in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Stop">
+        <source>Stop</source>
+        <target>Hentikan</target>
+        <note>Accessibility Label for the browser toolbar Stop button</note>
+      </trans-unit>
+      <trans-unit id="Support">
+        <source>Support</source>
+        <target>Dukungan</target>
+        <note>Support section title</note>
+      </trans-unit>
+      <trans-unit id="Swipe right or left with three fingers to close the tab.">
+        <source>Swipe right or left with three fingers to close the tab.</source>
+        <target>Gesek ke kanan atau ke kiri dengan tiga jari untuk menutup tab.</target>
+        <note>Accessibility hint for tab tray's displayed tab.</note>
+      </trans-unit>
+      <trans-unit id="Sync Now">
+        <source>Sync Now</source>
+        <target>Sinkronkan Sekarang</target>
+        <note>Sync Firefox Account</note>
+      </trans-unit>
+      <trans-unit id="Sync your tabs, bookmarks, passwords and more.">
+        <source>Sync your tabs, bookmarks, passwords and more.</source>
+        <target>Sinkronkan tab, markah, sandi, dan yang lain.</target>
+        <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Sync your tabs, passwords and more.">
+        <source>Sync your tabs, passwords and more.</source>
+        <target>Sinkronkan tab, sandi, dan yang lain.</target>
+        <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Synced tabs">
+        <source>Synced tabs</source>
+        <target>Tab disinkronkan</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Syncing&#8230;">
+        <source>Syncing&#8230;</source>
+        <target>Menyinkronkan&#8230;</target>
+        <note>Syncing Firefox Account</note>
+      </trans-unit>
+      <trans-unit id="Tab %@ of %@">
+        <source>Tab %1$@ of %2$@</source>
+        <target>Tab %1$@ dari %2$@</target>
+        <note>Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total.</note>
+      </trans-unit>
+      <trans-unit id="Tabs %@ to %@ of %@">
+        <source>Tabs %1$@ to %2$@ of %3$@</source>
+        <target>Tabs %1$@ hingga %2$@ dari %3$@</target>
+        <note>Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total.</note>
+      </trans-unit>
+      <trans-unit id="Tabs Tray">
+        <source>Tabs Tray</source>
+        <target>Baki Tab</target>
+        <note>Accessibility label for the Tabs Tray view.</note>
+      </trans-unit>
+      <trans-unit id="The Mozilla Project">
+        <source>The Mozilla Project</source>
+        <target>Proyek Mozilla</target>
+        <note>Tile title for Mozilla</note>
+      </trans-unit>
+      <trans-unit id="The page could not be displayed in Reader View.">
+        <source>The page could not be displayed in Reader View.</source>
+        <target>Laman ini tidak dapat ditampilkan di Tampilan Baca.</target>
+        <note>Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app.</note>
+      </trans-unit>
+      <trans-unit id="There is a new version available of Firefox Aurora. Tap OK to go to the download page.">
+        <source>There is a new version available of Firefox Aurora. Tap OK to go to the download page.</source>
+        <target>Tersedia versi baru Firefox Aurora. Ketuk Oke untuk membuka laman unduhannya.</target>
+        <note>Prompt message for application update</note>
+      </trans-unit>
+      <trans-unit id="There was a problem accessing tabs from your other devices. Try again in a few moments.">
+        <source>There was a problem accessing tabs from your other devices. Try again in a few moments.</source>
+        <target>Ada masalah saat membuka tab dari perangkat Anda lainnya. Coba beberapa saat lagi.</target>
+        <note>Error message in the remote tabs panel</note>
+      </trans-unit>
+      <trans-unit id="There was an error converting the page">
+        <source>There was an error converting the page</source>
+        <target>Terjadi kesalahan saat mengonversi laman</target>
+        <note>Error displayed when reader mode cannot be enabled</note>
+      </trans-unit>
+      <trans-unit id="This allows you to save the image to your Camera Roll.">
+        <source>This allows you to save the image to your Camera Roll.</source>
+        <target>Proses ini dibutuhkan agar Firefox dapat menyimpan gambar ke Rol Kamera.</target>
+        <note>See http://mzl.la/1G7uHo7</note>
+      </trans-unit>
+      <trans-unit id="This will open in another application">
+        <source>This will open in another application</source>
+        <target>Ini akan membuka di aplikasi lainnya</target>
+        <note>Opening an external app</note>
+      </trans-unit>
+      <trans-unit id="Today">
+        <source>Today</source>
+        <target>Hari Ini</target>
+        <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="Top sites">
+        <source>Top sites</source>
+        <target>Situs teratas</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Update">
+        <source>Update</source>
+        <target>Perbarui</target>
+        <note>Button to update the user's password</note>
+      </trans-unit>
+      <trans-unit id="Upgrade Firefox to connect.">
+        <source>Upgrade Firefox to connect.</source>
+        <target>Tingkatkan Firefox untuk menyambungkan.</target>
+        <note>Text message in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Use Compact Tabs">
+        <source>Use Compact Tabs</source>
+        <target>Gunakan Tab Ringkas</target>
+        <note>Setting to enable compact tabs in the tab overview</note>
+      </trans-unit>
+      <trans-unit id="Username">
+        <source>Username</source>
+        <target>Nama pengguna</target>
+        <note>Username textbox in Authentication prompt</note>
+      </trans-unit>
+      <trans-unit id="Verify your email address.">
+        <source>Verify your email address.</source>
+        <target>Verifikasikan alamat email Anda.</target>
+        <note>Text message in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Version %@ (%@)">
+        <source>Version %1$@ (%2$@)</source>
+        <target>Versi %1$@ (%2$@)</target>
+        <note>Version number of Firefox shown in settings</note>
+      </trans-unit>
+      <trans-unit id="View">
+        <source>View</source>
+        <target>Tampilkan</target>
+        <note>View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440</note>
+      </trans-unit>
+      <trans-unit id="Web content">
+        <source>Web content</source>
+        <target>Isi web</target>
+        <note>Accessibility label for the main web content view</note>
+      </trans-unit>
+      <trans-unit id="Welcome to Sync">
+        <source>Welcome to Sync</source>
+        <target>Selamat Datang di Sync</target>
+        <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Welcome to your Reading List">
+        <source>Welcome to your Reading List</source>
+        <target>Selamat Datang di Daftar Bacaan Anda</target>
+        <note>See http://mzl.la/1LXbDOL</note>
+      </trans-unit>
+      <trans-unit id="Well, this is embarrassing.">
+        <source>Well, this is embarrassing.</source>
+        <target>Memalukan.</target>
+        <note>Restore Tabs Prompt Title</note>
+      </trans-unit>
+      <trans-unit id="Yes">
+        <source>Yes</source>
+        <target>Ya</target>
+        <note>Button to save the user's password</note>
+      </trans-unit>
+      <trans-unit id="Yesterday">
+        <source>Yesterday</source>
+        <target>Kemarin</target>
+        <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="You don't have any other devices connected to this Firefox Account available to sync.">
+        <source>You don't have any other devices connected to this Firefox Account available to sync.</source>
+        <target>Anda tidak memiliki perangkat lain yang tersambung ke Firefox Account ini untuk disinkronkan.</target>
+        <note>Error message in the remote tabs panel</note>
+      </trans-unit>
+      <trans-unit id="You don't have any tabs open in Firefox on your other devices.">
+        <source>You don't have any tabs open in Firefox on your other devices.</source>
+        <target>Anda tidak memiliki tab terbuka di Firefox pada perangkat Anda lainnya.</target>
+        <note>Error message in the remote tabs panel</note>
+      </trans-unit>
+      <trans-unit id="Your Rights">
+        <source>Your Rights</source>
+        <target>Hak Anda</target>
+        <note>Your Rights settings section title</note>
+      </trans-unit>
+      <trans-unit id="computer">
+        <source>computer</source>
+        <target>komputer</target>
+        <note>Accessibility label for Desktop Computer (PC) image in remote tabs list</note>
+      </trans-unit>
+      <trans-unit id="just now">
+        <source>just now</source>
+        <target>baru saja</target>
+        <note>Relative time for a tab that was visited within the last few moments.</note>
+      </trans-unit>
+      <trans-unit id="mobile device">
+        <source>mobile device</source>
+        <target>perangkat seluler</target>
+        <note>Accessibility label for Mobile Device image in remote tabs list</note>
+      </trans-unit>
+      <trans-unit id="more than a month ago">
+        <source>more than a month ago</source>
+        <target>lebih dari sebulan lalu</target>
+        <note>Relative date for dates older than a month and less than two months.</note>
+      </trans-unit>
+      <trans-unit id="more than a week ago">
+        <source>more than a week ago</source>
+        <target>lebih dari seminggu lalu</target>
+        <note>Description for a date more than a week ago, but less than a month ago.</note>
+      </trans-unit>
+      <trans-unit id="read">
+        <source>read</source>
+        <target>dibaca</target>
+        <note>Accessibility label for read article in reading list. It's a past participle - functions as an adjective.</note>
+      </trans-unit>
+      <trans-unit id="this week">
+        <source>this week</source>
+        <target>minggu ini</target>
+        <note>Relative date for date in past week.</note>
+      </trans-unit>
+      <trans-unit id="today at %@">
+        <source>today at %@</source>
+        <target>hari ini pada %@</target>
+        <note>Relative date for date older than a minute.</note>
+      </trans-unit>
+      <trans-unit id="unread">
+        <source>unread</source>
+        <target>belum dibaca</target>
+        <note>Accessibility label for unread article in reading list. It's a past participle - functions as an adjective.</note>
+      </trans-unit>
+      <trans-unit id="yesterday">
+        <source>yesterday</source>
+        <target>kemarin</target>
+        <note>Relative date for yesterday.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/LoginManager.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Are you sure?">
+        <source>Are you sure?</source>
+        <target>Yakin?</target>
+        <note>Prompt title when deleting logins</note>
+      </trans-unit>
+      <trans-unit id="Clear Search">
+        <source>Clear Search</source>
+        <target>Bersihkan Pencarian</target>
+        <note>Clears the search input field and exits out of input mode</note>
+      </trans-unit>
+      <trans-unit id="Copy">
+        <source>Copy</source>
+        <target>Salin</target>
+        <note>Copy password text selection menu item</note>
+      </trans-unit>
+      <trans-unit id="Delete">
+        <source>Delete</source>
+        <target>Hapus</target>
+        <note>Button in login detail screen that deletes the current login</note>
+      </trans-unit>
+      <trans-unit id="Deselect All">
+        <source>Deselect All</source>
+        <target>Batalkan semua pilihan</target>
+        <note>Title for deselecting all selected logins</note>
+      </trans-unit>
+      <trans-unit id="Enter Search Mode">
+        <source>Enter Search Mode</source>
+        <target>Masuk ke Mode Pencarian</target>
+        <note>Accessibility label for entering search mode for logins</note>
+      </trans-unit>
+      <trans-unit id="Hide">
+        <source>Hide</source>
+        <target>Sembunyikan</target>
+        <note>Hide password text selection menu item</note>
+      </trans-unit>
+      <trans-unit id="Last modified %@">
+        <source>Last modified %@</source>
+        <target>Diubah terakhir %@</target>
+        <note>Footer label describing when the login was last modified with the timestamp as the parameter</note>
+      </trans-unit>
+      <trans-unit id="Logins">
+        <source>Logins</source>
+        <target>Info Masuk</target>
+        <note>Title for Logins List View screen</note>
+      </trans-unit>
+      <trans-unit id="Logins will be permanently removed.">
+        <source>Logins will be permanently removed.</source>
+        <target>Info masuk akan dihapus secara permanen.</target>
+        <note>Prompt message warning the user that deleting non-synced logins will permanently remove them</note>
+      </trans-unit>
+      <trans-unit id="Logins will be removed from all connected devices.">
+        <source>Logins will be removed from all connected devices.</source>
+        <target>Info masuk akan dihapus dari semua perangkat yang tersambung.</target>
+        <note>Prompt message warning the user that deleted logins will remove logins from all connected devices</note>
+      </trans-unit>
+      <trans-unit id="No logins found">
+        <source>No logins found</source>
+        <target>Tidak ada info masuk ditemukan</target>
+        <note>Title displayed when no logins are found after searching</note>
+      </trans-unit>
+      <trans-unit id="Open &amp; Fill">
+        <source>Open &amp; Fill</source>
+        <target>Buka &amp; Isi</target>
+        <note>Open and Fill website text selection menu item</note>
+      </trans-unit>
+      <trans-unit id="Reveal">
+        <source>Reveal</source>
+        <target>Tampilkan</target>
+        <note>Reveal password text selection menu item</note>
+      </trans-unit>
+      <trans-unit id="Search">
+        <source>Search</source>
+        <target>Cari</target>
+        <note>Title for the search field at the top of the Logins list screen</note>
+      </trans-unit>
+      <trans-unit id="Search Input Field">
+        <source>Search Input Field</source>
+        <target>Bidan Isian Pencarian</target>
+        <note>Accessibility label for the search input field in the Logins list</note>
+      </trans-unit>
+      <trans-unit id="Select All">
+        <source>Select All</source>
+        <target>Pilih Semua</target>
+        <note>Title for selecting all logins</note>
+      </trans-unit>
+      <trans-unit id="password">
+        <source>password</source>
+        <target>sandi</target>
+        <note>Title for password row in Login Detail View</note>
+      </trans-unit>
+      <trans-unit id="username">
+        <source>username</source>
+        <target>nama pengguna</target>
+        <note>Title for username row in Login Detail View</note>
+      </trans-unit>
+      <trans-unit id="website">
+        <source>website</source>
+        <target>situs web</target>
+        <note>Title for website row in Login Detail View</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/OnePasswordExtension.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="1Password Extension was cancelled by the user">
+        <source>1Password Extension was cancelled by the user</source>
+        <target>Ekstensi 1Password dibatalkan oleh pengguna</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="App Extension API is not available in this version of iOS">
+        <source>App Extension API is not available in this version of iOS</source>
+        <target>API Ekstensi Aplikasi tidak tersedia pada versi iOS ini</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to contact the 1Password Extension">
+        <source>Failed to contact the 1Password Extension</source>
+        <target>Gagal menghubungi Ekstensi 1Password</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to execute script that collects web page information">
+        <source>Failed to execute script that collects web page information</source>
+        <target>Gagal menjalankan skrip yang mengumpulkan informasi laman web</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to fill web page because script could not be evaluated">
+        <source>Failed to fill web page because script could not be evaluated</source>
+        <target>Gagal mengisi laman web karena skrip tidak dapat dievaluasi</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to fill web page because script is missing">
+        <source>Failed to fill web page because script is missing</source>
+        <target>Gagal mengisi laman web karena skrip tidak tersedia</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to obtain URL String from web view. The web view must be loaded completely when calling the 1Password Extension">
+        <source>Failed to obtain URL String from web view. The web view must be loaded completely when calling the 1Password Extension</source>
+        <target>Gagal mendapatkan String URL dari tampilan web. Tampilan web harus dimuat secara lengkap saat memanggil Ekstensi 1Password</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to parse information returned by 1Password Extension">
+        <source>Failed to parse information returned by 1Password Extension</source>
+        <target>Gagal mengurai informasi yang dikembalikan Ekstensi 1Password</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/PrivateBrowsing.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Close Private Tabs">
+        <source>Close Private Tabs</source>
+        <target>Tutup Tab Pribadi</target>
+        <note>Setting for closing private tabs</note>
+      </trans-unit>
+      <trans-unit id="Firefox won't remember any of your history or cookies, but new bookmarks will be saved.">
+        <source>Firefox won't remember any of your history or cookies, but new bookmarks will be saved.</source>
+        <target>Firefox tidak akan mengingat semua riwayat atau kuki, tetapi markah baru akan tetap disimpan.</target>
+        <note>Description text displayed when there are no open tabs while in private mode</note>
+      </trans-unit>
+      <trans-unit id="Learn More">
+        <source>Learn More</source>
+        <target>Pelajari Lebih Lanjut</target>
+        <note>Text button displayed when there are no tabs open while in private mode</note>
+      </trans-unit>
+      <trans-unit id="Off">
+        <source>Off</source>
+        <target>Nonaktifkan</target>
+        <note>Toggled OFF accessibility value</note>
+      </trans-unit>
+      <trans-unit id="On">
+        <source>On</source>
+        <target>Aktifkan</target>
+        <note>Toggled ON accessibility value</note>
+      </trans-unit>
+      <trans-unit id="Open In New Private Tab">
+        <source>Open In New Private Tab</source>
+        <target>Buka di Tab Pribadi Baru</target>
+        <note>Context menu option for opening a link in a new private tab</note>
+      </trans-unit>
+      <trans-unit id="Private Browsing">
+        <source>Private Browsing</source>
+        <target>Penjelajahan Pribadi</target>
+        <note>Title displayed for when there are no open tabs while in private mode</note>
+      </trans-unit>
+      <trans-unit id="Private Mode">
+        <source>Private Mode</source>
+        <target>Mode Pribadi</target>
+        <note>Accessibility label for toggling on/off private mode</note>
+      </trans-unit>
+      <trans-unit id="Turns private mode on or off">
+        <source>Turns private mode on or off</source>
+        <target>Aktifkan atau nonaktifkan mode pribadi</target>
+        <note>Accessiblity hint for toggling on/off private mode</note>
+      </trans-unit>
+      <trans-unit id="When Leaving Private Browsing">
+        <source>When Leaving Private Browsing</source>
+        <target>Saat Meninggalkan Penjelajahan Pribadi</target>
+        <note>Will be displayed in Settings under 'Close Private Tabs'</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Search.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="%@ search">
+        <source>%@ search</source>
+        <target>Pencarian %@</target>
+        <note>Label for search engine buttons. The argument corresponds to the name of the search engine.</note>
+      </trans-unit>
+      <trans-unit id="No">
+        <source>No</source>
+        <target>Tidak</target>
+        <note>For search suggestions prompt. This string should be short so it fits nicely on the prompt row.</note>
+      </trans-unit>
+      <trans-unit id="Search Settings">
+        <source>Search Settings</source>
+        <target>Setelan Pencarian</target>
+        <note>Label for search settings button.</note>
+      </trans-unit>
+      <trans-unit id="Search suggestions from %@">
+        <source>Search suggestions from %@</source>
+        <target>Saran pencarian dari %@</target>
+        <note>Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google</note>
+      </trans-unit>
+      <trans-unit id="Turn on search suggestions?">
+        <source>Turn on search suggestions?</source>
+        <target>Aktifkan saran pencarian?</target>
+        <note>Prompt shown before enabling provider search queries</note>
+      </trans-unit>
+      <trans-unit id="Yes">
+        <source>Yes</source>
+        <target>Ya</target>
+        <note>For search suggestions prompt. This string should be short so it fits nicely on the prompt row.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/SendAnonymousUsageData.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="More Info&#8230;">
+        <source>More Info&#8230;</source>
+        <target>Info lebih lanjut&#8230;</target>
+        <note>See http://bit.ly/1SmEXU1</note>
+      </trans-unit>
+      <trans-unit id="Send Anonymous Usage Data">
+        <source>Send Anonymous Usage Data</source>
+        <target>Kirimkan Data Penggunaan Anonim</target>
+        <note>See http://bit.ly/1SmEXU1</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/SendTo.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Available devices:">
+        <source>Available devices:</source>
+        <target>Perangkat tersedia:</target>
+        <note>Header for the list of devices table</note>
+      </trans-unit>
+      <trans-unit id="Close">
+        <source>Close</source>
+        <target>Tutup</target>
+        <note>Close button in top navigation bar</note>
+      </trans-unit>
+      <trans-unit id="Please open Firefox, go to Settings and sign in to continue.">
+        <source>Please open Firefox, go to Settings and sign in to continue.</source>
+        <target>Buka Firefox, lalu buka Setelan, dan masuk untuk melanjutkan.</target>
+        <note>See http://mzl.la/1ISlXnU</note>
+      </trans-unit>
+      <trans-unit id="Send">
+        <source>Send</source>
+        <target>Kirim</target>
+        <note>Navigation bar button to Send the current page to a device</note>
+      </trans-unit>
+      <trans-unit id="Send Tab">
+        <source>Send Tab</source>
+        <target>Kirim Tab</target>
+        <note>Title of the dialog that allows you to send a tab to a different device</note>
+      </trans-unit>
+      <trans-unit id="You are not signed in to your Firefox Account.">
+        <source>You are not signed in to your Firefox Account.</source>
+        <target>Anda tidak masuk ke Firefox Account Anda.</target>
+        <note>See http://mzl.la/1ISlXnU</note>
+      </trans-unit>
+      <trans-unit id="You don't have any other devices connected to this Firefox Account available to sync.">
+        <source>You don't have any other devices connected to this Firefox Account available to sync.</source>
+        <target>Anda tidak memiliki perangkat lainnya yang tersambung ke Firefox Account ini yang tersedia untuk disinkronkan.</target>
+        <note>Error message shown in the remote tabs panel</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Extensions/SendTo/Info.plist" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName">
+        <source>Send Tab</source>
+        <target>Kirim Tab</target>
+      </trans-unit>
+      </body>
+  </file>
+  <file original="Extensions/ShareTo/ShareTo.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Add">
+        <source>Add</source>
+        <target>Tambahkan</target>
+        <note>Add button in the share dialog</note>
+      </trans-unit>
+      <trans-unit id="Add to Bookmarks">
+        <source>Add to Bookmarks</source>
+        <target>Tambahkan ke Markah</target>
+        <note>On/off toggle to select adding this url to your bookmarks</note>
+      </trans-unit>
+      <trans-unit id="Add to Reading List">
+        <source>Add to Reading List</source>
+        <target>Tambahkan ke Daftar Bacaan</target>
+        <note>On/off toggle to select adding this url to your reading list</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Extensions/ViewLater/Info.plist" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName">
+        <source>View Later</source>
+        <target>Lihat Nanti</target>
+      </trans-unit>
+      </body>
+  </file>
+  <file original="Shared/Supporting Files/Shared.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="%@ on %@">
+        <source>%1$@ on %2$@</source>
+        <target>%1$@ di %2$@</target>
+        <note>A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Storage.strings" source-language="en" datatype="plaintext" target-language="id">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Bookmarks Menu">
+        <source>Bookmarks Menu</source>
+        <target>Menu Markah</target>
+        <note>The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Bookmarks Toolbar">
+        <source>Bookmarks Toolbar</source>
+        <target>Bilah Alat Markah</target>
+        <note>The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Mobile Bookmarks">
+        <source>Mobile Bookmarks</source>
+        <target>Markah Seluler</target>
+        <note>The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Unsorted Bookmarks">
+        <source>Unsorted Bookmarks</source>
+        <target>Markah Belum Diurut</target>
+        <note>The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Untitled">
+        <source>Untitled</source>
+        <target>Tanpa Judul</target>
+        <note>The default name for bookmark folders without titles.
+   The default name for bookmark nodes without titles.</note>
+      </trans-unit>
+    </body>
+  </file>
+  </xliff>

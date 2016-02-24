@@ -1,0 +1,12 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Ləğv et";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Təmizlə";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "Tarixçə bütün qoşulu cihazlarınızdan silinəcək. Bu geri alına bilinməyəcək.";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "Tarixçə Firefox Hesabınızdan silinsin?";
+
