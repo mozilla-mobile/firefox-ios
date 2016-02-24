@@ -164,6 +164,7 @@ class BoolSetting: Setting {
         control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? defaultValue
         cell.accessoryView = control
+        cell.selectionStyle = .None
         if let titleLabel = cell.textLabel {
             cell.detailTextLabel?.snp_makeConstraints { make in
                 make.left.equalTo(titleLabel)
