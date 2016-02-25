@@ -299,8 +299,8 @@ public class BookmarkPayload: BookmarkBasePayload {
         }
 
         if !self.hasStringArrayField("tags") {
-            log.warning("Bookmark \(self.id) missing tags array.")
-            return false
+            log.warning("Bookmark \(self.id) missing tags array. We'll replace with an empty array.")
+            // Ignore.
         }
 
         if !self.hasOptionalStringFields(BookmarkPayload.optionalBookmarkStringFields) {
@@ -344,6 +344,13 @@ public class BookmarkPayload: BookmarkBasePayload {
         return self["tags"].asArray?.flatMap { $0.asString } ?? []
     }()
 
+    lazy var tagsString: String = {
+        if self["tags"].isArray {
+            return self["tags"].toString()
+        }
+        return "[]"
+    }()
+
     override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Bookmark, guid: self.id, modified: modified)
@@ -359,7 +366,7 @@ public class BookmarkPayload: BookmarkBasePayload {
             title: self["title"].asString ?? "",
             description: self["description"].asString,
             URI: self["bmkUri"].asString!,
-            tags: self["tags"].toString(),           // Stringify it so we can put the array in the DB.
+            tags: self.tagsString,           // Stringify it so we can put the array in the DB.
             keyword: self["keyword"].asString
         )
     }
@@ -417,7 +424,7 @@ public class BookmarkQueryPayload: BookmarkPayload {
             title: self["title"].asString ?? "",
             description: self["description"].asString,
             URI: self["bmkUri"].asString!,
-            tags: self["tags"].toString(),           // Stringify it so we can put the array in the DB.
+            tags: self.tagsString,           // Stringify it so we can put the array in the DB.
             keyword: self["keyword"].asString,
             folderName: self["folderName"].asString,
             queryID: self["queryID"].asString
