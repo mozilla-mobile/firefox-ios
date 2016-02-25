@@ -106,12 +106,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         logoImageView.snp_makeConstraints { make in
             make.centerX.equalTo(overlayView)
 
-            // Checks if the device is an iPad or iPhone 6
-            if (traitCollection.horizontalSizeClass == .Regular && traitCollection.verticalSizeClass == .Regular) || UIScreen.mainScreen().bounds.size.height >= 667 {
-                make.centerY.equalTo(overlayView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset)
-            } else {
-                make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50)
-            }
+            // Sets proper top constraint for iPhone 6 in portait and for iPad.
+            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+
+            // Sets proper top constraint for iPhone 4, 5 in portrait.
+            make.top.greaterThanOrEqualTo(overlayView).offset(50)
         }
 
         let welcomeLabel = UILabel()
