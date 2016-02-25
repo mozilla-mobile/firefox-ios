@@ -28,6 +28,9 @@ struct BookmarksPanelUX {
     private static let BookmarkFolderChevronSize: CGFloat = 20
     private static let BookmarkFolderChevronLineWidth: CGFloat = 4.0
     private static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
+    private static let WelcomeScreenPadding: CGFloat = 15
+    private static let WelcomeScreenItemTextColor = UIColor.grayColor()
+    private static let WelcomeScreenItemWidth = 170
 }
 
 class BookmarksPanel: SiteTableViewController, HomePanel {
@@ -35,6 +38,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var source: BookmarksModel?
     var parentFolders = [BookmarkFolder]()
     var bookmarkFolder: BookmarkFolder?
+    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
     private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
@@ -93,6 +97,55 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    private func createEmptyStateOverlayView() -> UIView {
+        let overlayView = UIView()
+        overlayView.backgroundColor = UIColor.whiteColor()
+
+        let logoImageView = UIImageView(image: UIImage(named: "emptyBookmarks"))
+        overlayView.addSubview(logoImageView)
+        logoImageView.snp_makeConstraints { make in
+            make.centerX.equalTo(overlayView)
+
+            // Checks if the device is an iPad or iPhone 6
+            if (traitCollection.horizontalSizeClass == .Regular && traitCollection.verticalSizeClass == .Regular) || UIScreen.mainScreen().bounds.size.height >= 667 {
+                make.centerY.equalTo(overlayView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset)
+            } else {
+                make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50)
+            }
+        }
+
+        let welcomeLabel = UILabel()
+        overlayView.addSubview(welcomeLabel)
+        welcomeLabel.text = emptyBookmarksText
+        welcomeLabel.textAlignment = NSTextAlignment.Center
+        welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
+        welcomeLabel.textColor = BookmarksPanelUX.WelcomeScreenItemTextColor
+        welcomeLabel.numberOfLines = 2
+        welcomeLabel.adjustsFontSizeToFitWidth = true
+
+        welcomeLabel.snp_makeConstraints { make in
+            make.centerX.equalTo(overlayView)
+            make.top.equalTo(logoImageView.snp_bottom).offset(BookmarksPanelUX.WelcomeScreenPadding)
+            make.width.equalTo(BookmarksPanelUX.WelcomeScreenItemWidth)
+        }
+        
+        return overlayView
+    }
+
+    private func updateEmptyPanelState() {
+        if source?.current.count == 0 {
+            if self.emptyStateOverlayView.superview == nil {
+                self.view.addSubview(self.emptyStateOverlayView)
+                self.view.bringSubviewToFront(self.emptyStateOverlayView)
+                self.emptyStateOverlayView.snp_makeConstraints { make -> Void in
+                    make.edges.equalTo(self.tableView)
+                }
+            }
+        } else {
+            self.emptyStateOverlayView.removeFromSuperview()
+        }
+    }
+
     private func onModelFetched(result: Maybe<BookmarksModel>) {
         guard let model = result.successValue else {
             self.onModelFailure(result.failureValue)
@@ -105,6 +158,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         dispatch_async(dispatch_get_main_queue()) {
             self.source = model
             self.tableView.reloadData()
+            self.updateEmptyPanelState()
         }
     }
 
@@ -267,6 +321,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                                 self.source = model
 
                                 tableView.endUpdates()
+                                self.updateEmptyPanelState()
 
                                 NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
                             }

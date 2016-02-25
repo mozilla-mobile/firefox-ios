@@ -239,6 +239,10 @@ public class BookmarkNode {
         self.guid = guid
         self.title = title
     }
+
+    public var canDelete: Bool {
+        return true
+    }
 }
 
 /**
@@ -253,6 +257,10 @@ public class BookmarkItem: BookmarkNode {
         self.url = url
         super.init(guid: guid, title: title)
     }
+
+    override public var canDelete: Bool {
+        return true
+    }
 }
 
 /**
@@ -264,7 +272,7 @@ public class BookmarkFolder: BookmarkNode {
     public subscript(index: Int) -> BookmarkNode? { return nil }
 
     public func itemIsEditableAtIndex(index: Int) -> Bool {
-        return false
+        return self[index]?.canDelete ?? false
     }
 }
 
@@ -313,6 +321,10 @@ public class BookmarksModel {
      */
     public func reloadData() -> Deferred<Maybe<BookmarksModel>> {
         return modelFactory.modelForFolder(current)
+    }
+
+    public var canDelete: Bool {
+        return false
     }
 }
 
