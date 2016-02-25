@@ -594,10 +594,10 @@ extension SQLiteHistory: Favicons {
                     return 0
                 }
 
-                // Try to update the favicon ID column in the bookmarks table as well for this favicon
-                // if this site has been bookmarked
+                // Try to update the favicon ID column in each bookmarks table. There can be
+                // multiple bookmarks with a particular URI, and a mirror bookmark can be
+                // locally changed, so either or both of these statements can update multiple rows.
                 if let id = id {
-                    // Only one of these should do anything.
                     conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
                     conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
                 }
