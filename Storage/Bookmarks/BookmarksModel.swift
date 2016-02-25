@@ -7,12 +7,12 @@ import Foundation
 import Shared
 
 /**
- * The immutable base interface for bookmarks and folders.
+ * The kinda-immutable base interface for bookmarks and folders.
  */
 public class BookmarkNode {
     public var id: Int? = nil
-    public var guid: GUID
-    public var title: String
+    public let guid: GUID
+    public let title: String
     public var favicon: Favicon? = nil
 
     init(guid: GUID, title: String) {
