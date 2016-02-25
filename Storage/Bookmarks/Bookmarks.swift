@@ -323,15 +323,7 @@ public struct BookmarkMirrorItem: Equatable {
             take("parentName", titleForSpecialGUID(parentID) ?? self.parentName)
         }
 
-        switch self.type {
-
-        case .Query:
-            out["type"] = "query"
-            take("folderName", self.folderName)
-            take("queryId", self.queryID)
-            fallthrough
-        case .Bookmark:
-            out["type"] = "bookmark"
+        func takeBookmarkFields() {
             take("title", self.title)
             take("bmkUri", self.bookmarkURI)
             take("description", self.description)
@@ -346,14 +338,9 @@ public struct BookmarkMirrorItem: Equatable {
                 out["tags"] = []
             }
             take("keyword", self.keyword)
+        }
 
-        case .Livemark:
-            out["type"] = "livemark"
-            take("siteUri", self.siteURI)
-            take("feedUri", self.feedURI)
-            fallthrough
-        case .Folder:
-            out["type"] = "folder"
+        func takeFolderFields() {
             take("title", titleForSpecialGUID(self.guid) ?? self.title)
             take("description", self.description)
             if let children = children {
@@ -365,6 +352,29 @@ public struct BookmarkMirrorItem: Equatable {
                     out["children"] = children
                 }
             }
+        }
+
+        switch self.type {
+
+        case .Query:
+            out["type"] = "query"
+            take("folderName", self.folderName)
+            take("queryId", self.queryID)
+            takeBookmarkFields()
+
+        case .Bookmark:
+            out["type"] = "bookmark"
+            takeBookmarkFields()
+
+        case .Livemark:
+            out["type"] = "livemark"
+            take("siteUri", self.siteURI)
+            take("feedUri", self.feedURI)
+            takeFolderFields()
+
+        case .Folder:
+            out["type"] = "folder"
+            takeFolderFields()
 
         case .Separator:
             out["type"] = "separator"
