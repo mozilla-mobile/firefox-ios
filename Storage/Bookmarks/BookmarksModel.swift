@@ -66,8 +66,8 @@ public class BookmarkFolder: BookmarkNode {
  *
  * 'Refresh' means requesting a new model from the store.
  */
-public class BookmarksModel {
-    let modelFactory: BookmarksModelFactory
+public class BookmarksModel: BookmarksModelFactorySource {
+    public let modelFactory: BookmarksModelFactory
     public let current: BookmarkFolder
 
     public init(modelFactory: BookmarksModelFactory, root: BookmarkFolder) {
@@ -107,6 +107,10 @@ public class BookmarksModel {
     public var canDelete: Bool {
         return false
     }
+}
+
+public protocol BookmarksModelFactorySource {
+    var modelFactory: BookmarksModelFactory { get }
 }
 
 public protocol BookmarksModelFactory {

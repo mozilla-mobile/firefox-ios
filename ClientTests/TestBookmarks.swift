@@ -17,7 +17,7 @@ class TestBookmarks: ProfileTest {
             }
 
             let expectation = self.expectationWithDescription("asynchronous request")
-            profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID).upon { result in
+            profile.bookmarks.modelFactory.modelForFolder(BookmarkRoots.MobileFolderGUID).upon { result in
                 guard let model = result.successValue else {
                     XCTFail("Should not have failed to get mock bookmarks.")
                     expectation.fulfill()

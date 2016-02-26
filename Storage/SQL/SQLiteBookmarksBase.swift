@@ -7,7 +7,7 @@ import Shared
 
 private let log = Logger.syncLogger
 
-public class SQLiteBookmarks {
+public class SQLiteBookmarks: BookmarksModelFactorySource {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
 
@@ -17,5 +17,9 @@ public class SQLiteBookmarks {
     public init(db: BrowserDB) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
+    }
+
+    public var modelFactory: BookmarksModelFactory {
+        return SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local)
     }
 }
