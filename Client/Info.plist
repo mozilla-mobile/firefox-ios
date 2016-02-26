@@ -151,5 +151,7 @@
 	</array>
 	<key>Vendor</key>
 	<string>$(MOZ_VENDOR)</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
 </dict>
 </plist>
