@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:App Demo for iOS/App Demo for iOS.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:WebView Demo for iOS/WebView Demo for iOS.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:App Demo for iOS Swift/App Demo for iOS Swift.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:WebView Demo for iOS Swift/WebView Demo for iOS Swift.xcodeproj">
+   </FileRef>
+</Workspace>

@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Дайын";
+
+/* Share action title */
+"Find in Page" = "Беттен табу";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Беттен келесі нәтиже";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Беттен алдыңғы нәтиже";
+

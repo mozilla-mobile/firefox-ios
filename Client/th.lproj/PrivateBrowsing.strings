@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "ปิดแท็บส่วนตัว";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox จะไม่จดจำประวัติหรือคุกกี้ใด ๆ ของคุณ แต่ที่คั่นหน้าใหม่จะถูกบันทึกไว้";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "เรียนรู้เพิ่มเติม";
+
+/* Toggled OFF accessibility value */
+"Off" = "ปิด";
+
+/* Toggled ON accessibility value */
+"On" = "เปิด";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "เปิดในแท็บส่วนตัวใหม่";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "การท่องเว็บแบบส่วนตัว";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "โหมดส่วนตัว";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "เปิดหรือปิดโหมดส่วนตัว";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "เมื่อออกจากการท่องเว็บแบบส่วนตัว";
+

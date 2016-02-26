@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>XCGLogger (OS X).xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>30</integer>
+		</dict>
+		<key>XCGLogger (iOS).xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>29</integer>
+		</dict>
+		<key>XCGLogger (tvOS).xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>31</integer>
+		</dict>
+		<key>XCGLogger (watchOS).xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>32</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>5515A3DE1BA119FA0047BA31</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>554DF41619D76FE7005708BE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>55BB1EF51B79DC7500709779</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>55E3EE4419D76F280068C3A7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>55E3EE4F19D76F280068C3A7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>70CB94161B99E728007802FF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

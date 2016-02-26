@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Dispozitive disponibile:";
+
+/* Close button in top navigation bar */
+"Close" = "Închide";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Te rugăm să deschizi Firefox, să mergi la „setări” și să te autentifici pentru a continua.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Trimite";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Trimite fila";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Nu ești autentificat în contul tău Firefox.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Nu mai ai alte dispozitive conectate la acest cont Firefox ce pot fi sincronizate.";
+

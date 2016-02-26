@@ -1,0 +1,63 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Čez 1 uro";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Čez 1 minuto";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Čez 5 minut";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Čez 10 minut";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Čez 15 minut";
+
+/* Title for setting to change passcode */
+"Change Passcode" = "Spremeni geslo";
+
+/* Title for entering a passcode */
+"Enter a passcode" = "Vnesite geslo";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Takoj";
+
+/* List item for Logins */
+"Logins" = "Prijave";
+
+/* List section title for passcode settings */
+"Passcode" = "Geslo";
+
+/* List item for Private Browsing */
+"Private Browsing" = "Zasebno brskanje";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Ponovno vnesite geslo";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Zahtevaj geslo";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Nastavi geslo";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID in geslo";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Izključi geslo";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Vključi geslo";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Izključite svoje geslo.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID for" = "Uporabi Touch ID za";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Uporabite svoj prstni odtis za dostop do prijav.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Uporabite svoj prstni odtis za dostop do zasebnega brskanja.";
+

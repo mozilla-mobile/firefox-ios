@@ -1,0 +1,1808 @@
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="Client/3DTouchActions.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Add to Bookmarks">
+        <source>Add to Bookmarks</source>
+        <target>&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1047;&#1072;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>Label for preview action on Tab Tray Tab to add current tab to Bookmarks</note>
+      </trans-unit>
+      <trans-unit id="Add to Reading List">
+        <source>Add to Reading List</source>
+        <target>&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1089;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Label for preview action on Tab Tray Tab to add current tab to Reading List</note>
+      </trans-unit>
+      <trans-unit id="Close Tab">
+        <source>Close Tab</source>
+        <target>&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1091;</target>
+        <note>Label for preview action on Tab Tray Tab to close the current tab</note>
+      </trans-unit>
+      <trans-unit id="Copy URL">
+        <source>Copy URL</source>
+        <target>&#1050;&#1086;&#1087;&#1080;&#1088;&#1086;&#1074;&#1072;&#1090;&#1100; URL</target>
+        <note>Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard</note>
+      </trans-unit>
+      <trans-unit id="Open Last Bookmark">
+        <source>Open Last Bookmark</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1087;&#1086;&#1089;&#1083;&#1077;&#1076;&#1085;&#1102;&#1102; &#1079;&#1072;&#1082;&#1083;&#1072;&#1076;&#1082;&#1091;</target>
+        <note>String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch</note>
+      </trans-unit>
+      <trans-unit id="Open Last Tab">
+        <source>Open Last Tab</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1087;&#1086;&#1089;&#1083;&#1077;&#1076;&#1085;&#1102;&#1102; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1091;</target>
+        <note>String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch</note>
+      </trans-unit>
+      <trans-unit id="Preview of %@">
+        <source>Preview of %@</source>
+        <target>&#1055;&#1088;&#1077;&#1076;&#1087;&#1088;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088; %@</target>
+        <note>Accessibility Label for preview in Tab Tray of current tab</note>
+      </trans-unit>
+      <trans-unit id="Send to Device">
+        <source>Send to Device</source>
+        <target>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100; &#1085;&#1072; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1086;</target>
+        <note>Label for preview action on Tab Tray Tab to send the current tab to another device</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/AuthenticationManager.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="After 1 hour">
+        <source>After 1 hour</source>
+        <target>&#1063;&#1077;&#1088;&#1077;&#1079; 1 &#1095;&#1072;&#1089;</target>
+        <note>'After 1 hour' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="After 1 minute">
+        <source>After 1 minute</source>
+        <target>&#1063;&#1077;&#1088;&#1077;&#1079; 1 &#1084;&#1080;&#1085;&#1091;&#1090;&#1091;</target>
+        <note>'After 1 minute' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="After 5 minutes">
+        <source>After 5 minutes</source>
+        <target>&#1063;&#1077;&#1088;&#1077;&#1079; 5 &#1084;&#1080;&#1085;&#1091;&#1090;</target>
+        <note>'After 5 minutes' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="After 10 minutes">
+        <source>After 10 minutes</source>
+        <target>&#1063;&#1077;&#1088;&#1077;&#1079; 10 &#1084;&#1080;&#1085;&#1091;&#1090;</target>
+        <note>'After 10 minutes' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="After 15 minutes">
+        <source>After 15 minutes</source>
+        <target>&#1063;&#1077;&#1088;&#1077;&#1079; 15 &#1084;&#1080;&#1085;&#1091;&#1090;</target>
+        <note>'After 15 minutes' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="Change Passcode">
+        <source>Change Passcode</source>
+        <target>&#1057;&#1084;&#1077;&#1085;&#1080;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Title for setting to change passcode</note>
+      </trans-unit>
+      <trans-unit id="Enter a passcode">
+        <source>Enter a passcode</source>
+        <target>&#1042;&#1074;&#1077;&#1076;&#1080;&#1090;&#1077; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Title for entering a passcode</note>
+      </trans-unit>
+      <trans-unit id="Immediately">
+        <source>Immediately</source>
+        <target>&#1057;&#1088;&#1072;&#1079;&#1091;</target>
+        <note>'Immediately' interval item for selecting when to require passcode</note>
+      </trans-unit>
+      <trans-unit id="Logins">
+        <source>Logins</source>
+        <target>&#1051;&#1086;&#1075;&#1080;&#1085;&#1099;</target>
+        <note>List item for Logins</note>
+      </trans-unit>
+      <trans-unit id="Passcode">
+        <source>Passcode</source>
+        <target>&#1055;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>List section title for passcode settings</note>
+      </trans-unit>
+      <trans-unit id="Private Browsing">
+        <source>Private Browsing</source>
+        <target>&#1055;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1099;&#1081; &#1087;&#1088;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088;</target>
+        <note>List item for Private Browsing</note>
+      </trans-unit>
+      <trans-unit id="Re-enter passcode">
+        <source>Re-enter passcode</source>
+        <target>&#1055;&#1086;&#1074;&#1090;&#1086;&#1088;&#1080;&#1090;&#1077; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Title for re-entering a passcode</note>
+      </trans-unit>
+      <trans-unit id="Require Passcode">
+        <source>Require Passcode</source>
+        <target>&#1058;&#1088;&#1077;&#1073;&#1086;&#1074;&#1072;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Title for setting to require a passcode</note>
+      </trans-unit>
+      <trans-unit id="Set Passcode">
+        <source>Set Passcode</source>
+        <target>&#1047;&#1072;&#1076;&#1072;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Screen title for Set Passcode</note>
+      </trans-unit>
+      <trans-unit id="Touch ID &amp; Passcode">
+        <source>Touch ID &amp; Passcode</source>
+        <target>Touch ID &#1080; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Title for Touch ID/Passcode settings option</note>
+      </trans-unit>
+      <trans-unit id="Turn Passcode Off">
+        <source>Turn Passcode Off</source>
+        <target>&#1054;&#1090;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Title for setting to turn off passcode</note>
+      </trans-unit>
+      <trans-unit id="Turn Passcode On">
+        <source>Turn Passcode On</source>
+        <target>&#1042;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Title for setting to turn on passcode</note>
+      </trans-unit>
+      <trans-unit id="Turn off your passcode.">
+        <source>Turn off your passcode.</source>
+        <target>&#1054;&#1090;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1077; &#1074;&#1072;&#1096;&#1077;&#1075;&#1086; &#1087;&#1072;&#1088;&#1086;&#1083;&#1103;.</target>
+        <note>Touch ID prompt subtitle when turning off passcode</note>
+      </trans-unit>
+      <trans-unit id="Use Touch ID for">
+        <source>Use Touch ID for</source>
+        <target>&#1048;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100; Touch ID &#1076;&#1083;&#1103;</target>
+        <note>List section title for when to use Touch ID</note>
+      </trans-unit>
+      <trans-unit id="Use your fingerprint to access Logins now.">
+        <source>Use your fingerprint to access Logins now.</source>
+        <target>&#1044;&#1083;&#1103; &#1076;&#1086;&#1089;&#1090;&#1091;&#1087;&#1072; &#1082; &#1051;&#1086;&#1075;&#1080;&#1085;&#1072;&#1084; &#1090;&#1077;&#1087;&#1077;&#1088;&#1100; &#1080;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1091;&#1081;&#1090;&#1077; &#1086;&#1090;&#1087;&#1077;&#1095;&#1072;&#1090;&#1086;&#1082;.</target>
+        <note>Touch ID prompt subtitle when accessing logins</note>
+      </trans-unit>
+      <trans-unit id="Use your fingerprint to access Private Browsing now.">
+        <source>Use your fingerprint to access Private Browsing now.</source>
+        <target>&#1044;&#1083;&#1103; &#1076;&#1086;&#1089;&#1090;&#1091;&#1087;&#1072; &#1082; &#1055;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1086;&#1084;&#1091; &#1087;&#1088;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088;&#1091; &#1090;&#1077;&#1087;&#1077;&#1088;&#1100; &#1080;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1091;&#1081;&#1090;&#1077; &#1086;&#1090;&#1087;&#1077;&#1095;&#1072;&#1090;&#1086;&#1082;.</target>
+        <note>Touch ID prompt subtitle when accessing private browsing</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/BookmarkPanel.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Delete">
+        <source>Delete</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100;</target>
+        <note>Action button for deleting bookmarks in the bookmarks panel.</note>
+      </trans-unit>
+      <trans-unit id="Desktop Bookmarks">
+        <source>Desktop Bookmarks</source>
+        <target>&#1047;&#1072;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080; &#1076;&#1077;&#1089;&#1082;&#1090;&#1086;&#1087;&#1072;</target>
+        <note>The folder name for the virtual folder that contains all desktop bookmarks.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/ClearHistoryConfirm.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Cancel">
+        <source>Cancel</source>
+        <target>&#1054;&#1090;&#1084;&#1077;&#1085;&#1072;</target>
+        <note>The cancel button when confirming clear history.</note>
+      </trans-unit>
+      <trans-unit id="Clear">
+        <source>Clear</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100;</target>
+        <note>The button that clears history even when Sync is connected.</note>
+      </trans-unit>
+      <trans-unit id="History will be removed from all your connected devices. This cannot be undone.">
+        <source>History will be removed from all your connected devices. This cannot be undone.</source>
+        <target>&#1048;&#1089;&#1090;&#1086;&#1088;&#1080;&#1103; &#1073;&#1091;&#1076;&#1077;&#1090; &#1091;&#1076;&#1072;&#1083;&#1077;&#1085;&#1072; &#1089;&#1086; &#1074;&#1089;&#1077;&#1093; &#1087;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1105;&#1085;&#1085;&#1099;&#1093; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;. &#1069;&#1090;&#1086; &#1085;&#1077; &#1084;&#1086;&#1078;&#1077;&#1090; &#1073;&#1099;&#1090;&#1100; &#1086;&#1090;&#1084;&#1077;&#1085;&#1077;&#1085;&#1086;.</target>
+        <note>Description of the confirmation dialog shown when a user tries to clear history that's synced to another device.</note>
+      </trans-unit>
+      <trans-unit id="Remove history from your Firefox Account?">
+        <source>Remove history from your Firefox Account?</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100; &#1080;&#1089;&#1090;&#1086;&#1088;&#1080;&#1102; &#1080;&#1079; &#1074;&#1072;&#1096;&#1077;&#1075;&#1086; &#1040;&#1082;&#1082;&#1072;&#1091;&#1085;&#1090;&#1072; Firefox?</target>
+        <note>Title of the confirmation dialog shown when a user tries to clear history that's synced to another device.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/ClearPrivateData.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Are you sure you want to clear all of your data? This will also close all open tabs.">
+        <source>Are you sure you want to clear all of your data? This will also close all open tabs.</source>
+        <target>&#1042;&#1099; &#1091;&#1074;&#1077;&#1088;&#1077;&#1085;&#1099;, &#1095;&#1090;&#1086; &#1093;&#1086;&#1090;&#1080;&#1090;&#1077; &#1091;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100; &#1074;&#1089;&#1077; &#1074;&#1072;&#1096;&#1080; &#1076;&#1072;&#1085;&#1085;&#1099;&#1077;? &#1069;&#1090;&#1086; &#1090;&#1072;&#1082;&#1078;&#1077; &#1087;&#1088;&#1080;&#1074;&#1077;&#1076;&#1077;&#1090; &#1082; &#1079;&#1072;&#1082;&#1088;&#1099;&#1090;&#1080;&#1102; &#1074;&#1089;&#1077;&#1093; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1099;&#1093; &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;.</target>
+        <note>Message shown in the dialog prompting users if they want to clear everything</note>
+      </trans-unit>
+      <trans-unit id="Browsing History">
+        <source>Browsing History</source>
+        <target>&#1046;&#1091;&#1088;&#1085;&#1072;&#1083; &#1087;&#1086;&#1089;&#1077;&#1097;&#1077;&#1085;&#1080;&#1081;</target>
+        <note>Settings item for clearing browsing history</note>
+      </trans-unit>
+      <trans-unit id="Cache">
+        <source>Cache</source>
+        <target>&#1050;&#1101;&#1096;</target>
+        <note>Settings item for clearing the cache</note>
+      </trans-unit>
+      <trans-unit id="Cancel">
+        <source>Cancel</source>
+        <target>&#1054;&#1090;&#1084;&#1077;&#1085;&#1072;</target>
+        <note>Used as a button label in the dialog to cancel clear private data dialog</note>
+      </trans-unit>
+      <trans-unit id="Clear">
+        <source>Clear</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100;</target>
+        <note>Used as a button label in the dialog to Clear private data dialog</note>
+      </trans-unit>
+      <trans-unit id="Clear Everything">
+        <source>Clear Everything</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100; &#1074;&#1089;&#1105;</target>
+        <note>Title of the Clear private data dialog.</note>
+      </trans-unit>
+      <trans-unit id="Clear Private Data">
+        <source>Clear Private Data</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100; &#1083;&#1080;&#1095;&#1085;&#1099;&#1077; &#1076;&#1072;&#1085;&#1085;&#1099;&#1077;</target>
+        <note>Button in settings that clears private data for the selected items.
+   Navigation title in settings.</note>
+      </trans-unit>
+      <trans-unit id="Cookies">
+        <source>Cookies</source>
+        <target>&#1050;&#1091;&#1082;&#1080;</target>
+        <note>Settings item for clearing cookies</note>
+      </trans-unit>
+      <trans-unit id="Offline Website Data">
+        <source>Offline Website Data</source>
+        <target>&#1044;&#1072;&#1085;&#1085;&#1099;&#1077; &#1072;&#1074;&#1090;&#1086;&#1085;&#1086;&#1084;&#1085;&#1099;&#1093; &#1074;&#1077;&#1073;-&#1089;&#1072;&#1081;&#1090;&#1086;&#1074;</target>
+        <note>Settings item for clearing website data</note>
+      </trans-unit>
+      <trans-unit id="Saved Logins">
+        <source>Saved Logins</source>
+        <target>&#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1105;&#1085;&#1085;&#1099;&#1077; &#1083;&#1086;&#1075;&#1080;&#1085;&#1099;</target>
+        <note>Settings item for clearing passwords and login data</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/ErrorPages.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Open in Safari">
+        <source>Open in Safari</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1074; Safari</target>
+        <note>Shown in error pages for files that can't be shown and need to be downloaded.</note>
+      </trans-unit>
+      <trans-unit id="Try again">
+        <source>Try again</source>
+        <target>&#1055;&#1086;&#1087;&#1088;&#1086;&#1073;&#1086;&#1074;&#1072;&#1090;&#1100; &#1089;&#1085;&#1086;&#1074;&#1072;</target>
+        <note>Shown in error pages on a button that will try to load the page again</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/FindInPage.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Done">
+        <source>Done</source>
+        <target>&#1043;&#1086;&#1090;&#1086;&#1074;&#1086;</target>
+        <note>Done button in Find in Page Toolbar.</note>
+      </trans-unit>
+      <trans-unit id="Find in Page">
+        <source>Find in Page</source>
+        <target>&#1055;&#1086;&#1080;&#1089;&#1082; &#1085;&#1072; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1077;</target>
+        <note>Share action title</note>
+      </trans-unit>
+      <trans-unit id="Next in-page result">
+        <source>Next in-page result</source>
+        <target>&#1057;&#1083;&#1077;&#1076;&#1091;&#1102;&#1097;&#1080;&#1081; &#1088;&#1077;&#1079;&#1091;&#1083;&#1100;&#1090;&#1072;&#1090; &#1085;&#1072; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1077;</target>
+        <note>Accessibility label for next result button in Find in Page Toolbar.</note>
+      </trans-unit>
+      <trans-unit id="Previous in-page result">
+        <source>Previous in-page result</source>
+        <target>&#1055;&#1088;&#1077;&#1076;&#1099;&#1076;&#1091;&#1097;&#1080;&#1081; &#1088;&#1077;&#1079;&#1091;&#1083;&#1100;&#1090;&#1072;&#1090; &#1085;&#1072; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1077;</target>
+        <note>Accessibility label for previous result button in Find in Page Toolbar.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/HistoryPanel.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Remove">
+        <source>Remove</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100;</target>
+        <note>Action button for deleting history entries in the history panel.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Info.plist" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="NSLocationWhenInUseUsageDescription">
+        <source>Websites you visit may request your location.</source>
+        <target>&#1055;&#1086;&#1089;&#1077;&#1097;&#1072;&#1077;&#1084;&#1099;&#1077; &#1074;&#1072;&#1084; &#1074;&#1077;&#1073;-&#1089;&#1072;&#1081;&#1090;&#1099; &#1084;&#1086;&#1075;&#1091;&#1090; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1080;&#1090;&#1100; &#1074;&#1072;&#1096;&#1077; &#1084;&#1077;&#1089;&#1090;&#1086;&#1087;&#1086;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1077;.</target>
+      </trans-unit>
+      <trans-unit id="ShortcutItemTitleNewPrivateTab">
+        <source>New Private Tab</source>
+        <target>&#1055;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1072;&#1103; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1072;</target>
+      </trans-unit>
+      <trans-unit id="ShortcutItemTitleNewTab">
+        <source>New Tab</source>
+        <target>&#1053;&#1086;&#1074;&#1072;&#1103; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1072;</target>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Intro.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Browse multiple Web pages at the same time with tabs.">
+        <source>Browse multiple Web pages at the same time with tabs.</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1086;&#1081;&#1090;&#1077; &#1089;&#1088;&#1072;&#1079;&#1091; &#1084;&#1085;&#1086;&#1078;&#1077;&#1089;&#1090;&#1074;&#1086; &#1074;&#1077;&#1073;-&#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094; &#1087;&#1088;&#1080; &#1087;&#1086;&#1084;&#1086;&#1097;&#1080; &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Choose">
+        <source>Choose</source>
+        <target>&#1042;&#1099;&#1073;&#1080;&#1088;&#1072;&#1081;&#1090;&#1077;</target>
+        <note>See http://mzl.la/1if9ODp</note>
+      </trans-unit>
+      <trans-unit id="Connect Firefox everywhere you use it.">
+        <source>Connect Firefox everywhere you use it.</source>
+        <target>&#1055;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1077;&#1089;&#1100; &#1082; Firefox, &#1075;&#1076;&#1077; &#1073;&#1099; &#1074;&#1099; &#1085;&#1080; &#1085;&#1072;&#1093;&#1086;&#1076;&#1080;&#1083;&#1080;&#1089;&#1100;.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Customize">
+        <source>Customize</source>
+        <target>&#1048;&#1079;&#1084;&#1077;&#1085;&#1080;&#1090;&#1077;</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Easily switch between open pages with tabs.">
+        <source>Easily switch between open pages with tabs.</source>
+        <target>&#1051;&#1077;&#1075;&#1082;&#1086; &#1087;&#1077;&#1088;&#1077;&#1082;&#1083;&#1102;&#1095;&#1072;&#1081;&#1090;&#1077;&#1089;&#1100; &#1084;&#1077;&#1078;&#1076;&#1091; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1099;&#1084;&#1080; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1072;&#1084;&#1080; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Firefox and the cloud">
+        <source>Firefox and the cloud</source>
+        <target>Firefox &#1080; &#1086;&#1073;&#1083;&#1072;&#1082;&#1086;</target>
+        <note>Accessibility label for an image. See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Introductory slide %@ of %@">
+        <source>Introductory slide %1$@ of %2$@</source>
+        <target>&#1042;&#1074;&#1086;&#1076;&#1085;&#1099;&#1081; &#1089;&#1083;&#1072;&#1081;&#1076;: %1$@ &#1080;&#1079; %2$@</target>
+        <note>String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3</note>
+      </trans-unit>
+      <trans-unit id="Organize">
+        <source>Organize</source>
+        <target>&#1054;&#1088;&#1075;&#1072;&#1085;&#1080;&#1079;&#1091;&#1081;&#1090;&#1077;</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Personalize your Firefox just the way you like in Settings.">
+        <source>Personalize your Firefox just the way you like in Settings.</source>
+        <target>&#1047;&#1072;&#1081;&#1076;&#1080;&#1090;&#1077; &#1074; &#1055;&#1072;&#1088;&#1072;&#1084;&#1077;&#1090;&#1088;&#1099; &#1080; &#1085;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1090;&#1077; Firefox &#1087;&#1086; &#1089;&#1074;&#1086;&#1077;&#1084;&#1091; &#1074;&#1082;&#1091;&#1089;&#1091;.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Personalize your default search engine and more in Settings.">
+        <source>Personalize your default search engine and more in Settings.</source>
+        <target>&#1047;&#1072;&#1081;&#1076;&#1080;&#1090;&#1077; &#1074; &#1055;&#1072;&#1088;&#1072;&#1084;&#1077;&#1090;&#1088;&#1099; &#1080; &#1085;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1090;&#1077; &#1087;&#1086;&#1080;&#1089;&#1082;&#1086;&#1074;&#1091;&#1102; &#1089;&#1080;&#1089;&#1090;&#1077;&#1084;&#1091; &#1087;&#1086; &#1091;&#1084;&#1086;&#1083;&#1095;&#1072;&#1085;&#1080;&#1102; &#1080; &#1084;&#1085;&#1086;&#1075;&#1086;&#1077; &#1076;&#1088;&#1091;&#1075;&#1086;&#1077;.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Share">
+        <source>Share</source>
+        <target>&#1044;&#1077;&#1083;&#1080;&#1090;&#1077;&#1089;&#1100;</target>
+        <note>See http://mzl.la/1if9ODp</note>
+      </trans-unit>
+      <trans-unit id="Sign in to Firefox">
+        <source>Sign in to Firefox</source>
+        <target>&#1042;&#1086;&#1081;&#1090;&#1080; &#1074; Firefox</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Start Browsing">
+        <source>Start Browsing</source>
+        <target>&#1053;&#1072;&#1095;&#1072;&#1090;&#1100; &#1074;&#1077;&#1073;-&#1089;&#1105;&#1088;&#1092;&#1080;&#1085;&#1075;</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Sync Your Devices.">
+        <source>Sync Your Devices.</source>
+        <target>&#1057;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1080;&#1088;&#1091;&#1081;&#1090;&#1077; &#1089;&#1074;&#1086;&#1080; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072;.</target>
+        <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Tap, hold and move the Firefox icon into your dock for easy access.">
+        <source>Tap, hold and move the Firefox icon into your dock for easy access.</source>
+        <target>&#1044;&#1083;&#1103; &#1091;&#1089;&#1082;&#1086;&#1088;&#1077;&#1085;&#1080;&#1103; &#1076;&#1086;&#1089;&#1090;&#1091;&#1087;&#1072; &#1085;&#1072;&#1078;&#1084;&#1080;&#1090;&#1077;, &#1091;&#1076;&#1077;&#1088;&#1078;&#1080;&#1074;&#1072;&#1081;&#1090;&#1077; &#1080; &#1087;&#1077;&#1088;&#1077;&#1084;&#1077;&#1089;&#1090;&#1080;&#1090;&#1077; &#1079;&#1085;&#1072;&#1095;&#1086;&#1082; Firefox &#1074; &#1076;&#1086;&#1082;.</target>
+        <note>See http://mzl.la/1if9ODp</note>
+      </trans-unit>
+      <trans-unit id="The Settings button is at the beginning of the Tabs Tray.">
+        <source>The Settings button is at the beginning of the Tabs Tray.</source>
+        <target>&#1050;&#1085;&#1086;&#1087;&#1082;&#1072; &#1055;&#1072;&#1088;&#1072;&#1084;&#1077;&#1090;&#1088;&#1099; &#1085;&#1072;&#1093;&#1086;&#1076;&#1080;&#1090;&#1089;&#1103; &#1074; &#1085;&#1072;&#1095;&#1072;&#1083;&#1077; &#1051;&#1086;&#1090;&#1082;&#1072; &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;.</target>
+        <note>Accessibility label for an image. See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.">
+        <source>The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.</source>
+        <target>&#1050;&#1085;&#1086;&#1087;&#1082;&#1072; &#1055;&#1086;&#1082;&#1072;&#1079;&#1072;&#1090;&#1100; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080; &#1085;&#1072;&#1093;&#1086;&#1076;&#1080;&#1090;&#1089;&#1103; &#1088;&#1103;&#1076;&#1086;&#1084; &#1089; &#1090;&#1077;&#1082;&#1089;&#1090;&#1086;&#1074;&#1099;&#1084; &#1087;&#1086;&#1083;&#1077;&#1084; &#1040;&#1076;&#1088;&#1077;&#1089;&#1072; &#1080; &#1055;&#1086;&#1080;&#1089;&#1082;&#1072; &#1080; &#1086;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1072;&#1077;&#1090; &#1095;&#1080;&#1089;&#1083;&#1086; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1099;&#1093; &#1074; &#1076;&#1072;&#1085;&#1085;&#1099;&#1081; &#1084;&#1086;&#1084;&#1077;&#1085;&#1090; &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;.</target>
+        <note>Accessibility label for an image. See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Use the share sheet to send links from other apps to Firefox.">
+        <source>Use the share sheet to send links from other apps to Firefox.</source>
+        <target>&#1048;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1091;&#1081;&#1090;&#1077; &#1084;&#1077;&#1085;&#1102; &#1055;&#1086;&#1076;&#1077;&#1083;&#1080;&#1090;&#1100;&#1089;&#1103;, &#1095;&#1090;&#1086;&#1073;&#1099; &#1086;&#1090;&#1087;&#1088;&#1072;&#1074;&#1083;&#1103;&#1090;&#1100; &#1089;&#1089;&#1099;&#1083;&#1082;&#1080; &#1080;&#1079; &#1076;&#1088;&#1091;&#1075;&#1080;&#1093; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1081; &#1074; Firefox.</target>
+        <note>See http://mzl.la/1if9ODp</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/LightweightThemes.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Allow Firefox to use my Photos">
+        <source>Allow Firefox to use my Photos</source>
+        <target>&#1056;&#1072;&#1079;&#1088;&#1077;&#1096;&#1080;&#1090;&#1100; Firefox &#1080;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100; &#1084;&#1086;&#1080; &#1060;&#1086;&#1090;&#1086;</target>
+        <note>Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet.</note>
+      </trans-unit>
+      <trans-unit id="Back to Themes">
+        <source>Back to Themes</source>
+        <target>&#1042;&#1077;&#1088;&#1085;&#1091;&#1090;&#1100;&#1089;&#1103; &#1082; &#1090;&#1077;&#1084;&#1072;&#1084;</target>
+        <note>Pending feature; currently unused string! Accessibility label for back button to theme chooser</note>
+      </trans-unit>
+      <trans-unit id="Choose">
+        <source>Choose</source>
+        <target>&#1042;&#1099;&#1073;&#1088;&#1072;&#1090;&#1100;</target>
+        <note>Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker</note>
+      </trans-unit>
+      <trans-unit id="Choose Theme">
+        <source>Choose Theme</source>
+        <target>&#1042;&#1099;&#1073;&#1086;&#1088; &#1090;&#1077;&#1084;&#1099;</target>
+        <note>Pending feature; currently unused string! Accessibility label for settings row to enter theme settings</note>
+      </trans-unit>
+      <trans-unit id="Default Themes">
+        <source>Default Themes</source>
+        <target>&#1058;&#1077;&#1084;&#1099; &#1087;&#1086; &#1091;&#1084;&#1086;&#1083;&#1095;&#1072;&#1085;&#1080;&#1102;</target>
+        <note>Pending feature; currently unused string! Accessibility label for themes subheader</note>
+      </trans-unit>
+      <trans-unit id="My Photos">
+        <source>My Photos</source>
+        <target>&#1052;&#1086;&#1080; &#1060;&#1086;&#1090;&#1086;</target>
+        <note>Pending feature; currently unused string! Accessibility label for photo viewer</note>
+      </trans-unit>
+      <trans-unit id="Photos">
+        <source>Photos</source>
+        <target>&#1060;&#1086;&#1090;&#1086;</target>
+        <note>Pending feature; currently unused string! Sub header for photo options in theme chooser</note>
+      </trans-unit>
+      <trans-unit id="Preview">
+        <source>Preview</source>
+        <target>&#1055;&#1088;&#1077;&#1076;&#1087;&#1088;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088;</target>
+        <note>Pending feature; currently unused string! Button to show preview of selected theme</note>
+      </trans-unit>
+      <trans-unit id="Preview Theme">
+        <source>Preview Theme</source>
+        <target>&#1055;&#1088;&#1077;&#1076;&#1087;&#1088;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088; &#1090;&#1077;&#1084;&#1099;</target>
+        <note>Pending feature; currently unused string! Accessibility label for theme preview button</note>
+      </trans-unit>
+      <trans-unit id="Set">
+        <source>Set</source>
+        <target>&#1048;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100;</target>
+        <note>Pending feature; currently unused string! Button to set selected theme as current theme</note>
+      </trans-unit>
+      <trans-unit id="Set Theme">
+        <source>Set Theme</source>
+        <target>&#1048;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100; &#1090;&#1077;&#1084;&#1091;</target>
+        <note>Pending feature; currently unused string! Accessibility label for set theme button</note>
+      </trans-unit>
+      <trans-unit id="Theme">
+        <source>Theme</source>
+        <target>&#1058;&#1077;&#1084;&#1072;</target>
+        <note>Pending feature; currently unused string! Settings row to enter theme settings</note>
+      </trans-unit>
+      <trans-unit id="Themes">
+        <source>Themes</source>
+        <target>&#1058;&#1077;&#1084;&#1099;</target>
+        <note>Pending feature; currently unused string! sub header for theme options in theme chooser</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Localizable.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="+">
+        <source>+</source>
+        <target>+</target>
+        <note>Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar.</note>
+      </trans-unit>
+      <trans-unit id="-">
+        <source>-</source>
+        <target>-</target>
+        <note>Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar.</note>
+      </trans-unit>
+      <trans-unit id="A username and password are being requested by %@.">
+        <source>A username and password are being requested by %@.</source>
+        <target>%@ &#1079;&#1072;&#1087;&#1088;&#1072;&#1096;&#1080;&#1074;&#1072;&#1077;&#1090; &#1080;&#1084;&#1103; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1103; &#1080; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;.</target>
+        <note>Authentication prompt message with no realm. Parameter is the hostname of the site</note>
+      </trans-unit>
+      <trans-unit id="A username and password are being requested by %@. The site says: %@">
+        <source>A username and password are being requested by %1$@. The site says: %2$@</source>
+        <target>%1$@ &#1079;&#1072;&#1087;&#1088;&#1072;&#1096;&#1080;&#1074;&#1072;&#1077;&#1090; &#1080;&#1084;&#1103; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1103; &#1080; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;. &#1057;&#1072;&#1081;&#1090; &#1089;&#1086;&#1086;&#1073;&#1097;&#1072;&#1077;&#1090;: %2$@</target>
+        <note>Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string</note>
+      </trans-unit>
+      <trans-unit id="Aa">
+        <source>Aa</source>
+        <target>Aa</target>
+        <note>Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar.</note>
+      </trans-unit>
+      <trans-unit id="About">
+        <source>About</source>
+        <target>&#1054; &#1087;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1077;</target>
+        <note>About settings section title</note>
+      </trans-unit>
+      <trans-unit id="Add Tab">
+        <source>Add Tab</source>
+        <target>&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1091;</target>
+        <note>Accessibility label for the Add Tab button in the Tab Tray.</note>
+      </trans-unit>
+      <trans-unit id="Add to Reading List">
+        <source>Add to Reading List</source>
+        <target>&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1057;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440</note>
+      </trans-unit>
+      <trans-unit id="Added page to Reading List">
+        <source>Added page to Reading List</source>
+        <target>&#1057;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1072; &#1076;&#1086;&#1073;&#1072;&#1074;&#1083;&#1077;&#1085;&#1072; &#1074; &#1057;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action.</note>
+      </trans-unit>
+      <trans-unit id="Address and Search">
+        <source>Address and Search</source>
+        <target>&#1040;&#1076;&#1088;&#1077;&#1089; &#1080; &#1055;&#1086;&#1080;&#1089;&#1082;</target>
+        <note>Accessibility label for address and search field, both words (Address, Search) are therefore nouns.</note>
+      </trans-unit>
+      <trans-unit id="Always Send">
+        <source>Always Send</source>
+        <target>&#1042;&#1089;&#1077;&#1075;&#1076;&#1072; &#1086;&#1090;&#1087;&#1088;&#1072;&#1074;&#1083;&#1103;&#1090;&#1100;</target>
+        <note>Used as a button label for crash dialog prompt</note>
+      </trans-unit>
+      <trans-unit id="Authentication required">
+        <source>Authentication required</source>
+        <target>&#1058;&#1088;&#1077;&#1073;&#1091;&#1077;&#1090;&#1089;&#1103; &#1072;&#1091;&#1090;&#1077;&#1085;&#1090;&#1080;&#1092;&#1080;&#1082;&#1072;&#1094;&#1080;&#1103;</target>
+        <note>Authentication prompt title</note>
+      </trans-unit>
+      <trans-unit id="Back">
+        <source>Back</source>
+        <target>&#1053;&#1072;&#1079;&#1072;&#1076;</target>
+        <note>Accessibility Label for the browser toolbar Back button</note>
+      </trans-unit>
+      <trans-unit id="Block Pop-up Windows">
+        <source>Block Pop-up Windows</source>
+        <target>&#1041;&#1083;&#1086;&#1082;&#1080;&#1088;&#1086;&#1074;&#1082;&#1072; &#1074;&#1089;&#1087;&#1083;&#1099;&#1074;&#1072;&#1102;&#1097;&#1080;&#1093; &#1086;&#1082;&#1086;&#1085;</target>
+        <note>Block pop-up windows setting</note>
+      </trans-unit>
+      <trans-unit id="Bookmark">
+        <source>Bookmark</source>
+        <target>&#1047;&#1072;&#1083;&#1086;&#1078;&#1080;&#1090;&#1100;</target>
+        <note>Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440</note>
+      </trans-unit>
+      <trans-unit id="Bookmarks">
+        <source>Bookmarks</source>
+        <target>&#1047;&#1072;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Brightness">
+        <source>Brightness</source>
+        <target>&#1071;&#1088;&#1082;&#1086;&#1089;&#1090;&#1100;</target>
+        <note>Accessibility label for brightness adjustment slider in Reader Mode display settings</note>
+      </trans-unit>
+      <trans-unit id="Call">
+        <source>Call</source>
+        <target>&#1055;&#1086;&#1079;&#1074;&#1086;&#1085;&#1080;&#1090;&#1100;</target>
+        <note>Alert Call Button</note>
+      </trans-unit>
+      <trans-unit id="Cancel">
+        <source>Cancel</source>
+        <target>&#1054;&#1090;&#1084;&#1077;&#1085;&#1072;</target>
+        <note>Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker</note>
+      </trans-unit>
+      <trans-unit id="Changes color theme.">
+        <source>Changes color theme.</source>
+        <target>&#1048;&#1079;&#1084;&#1077;&#1085;&#1103;&#1077;&#1090; &#1094;&#1074;&#1077;&#1090;&#1086;&#1074;&#1091;&#1102; &#1090;&#1077;&#1084;&#1091;.</target>
+        <note>Accessibility hint for the color theme setting buttons in reader mode display settings</note>
+      </trans-unit>
+      <trans-unit id="Changes font type.">
+        <source>Changes font type.</source>
+        <target>&#1048;&#1079;&#1084;&#1077;&#1085;&#1103;&#1077;&#1090; &#1090;&#1080;&#1087; &#1096;&#1088;&#1080;&#1092;&#1090;&#1072;.</target>
+        <note>Accessibility hint for the font type buttons in reader mode display settings</note>
+      </trans-unit>
+      <trans-unit id="Clear Private Data">
+        <source>Clear Private Data</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100; &#1083;&#1080;&#1095;&#1085;&#1099;&#1077; &#1076;&#1072;&#1085;&#1085;&#1099;&#1077;</target>
+        <note>Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.</note>
+      </trans-unit>
+      <trans-unit id="Close">
+        <source>Close</source>
+        <target>&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100;</target>
+        <note>Accessibility label for action denoting closing a tab in tab list (tray)</note>
+      </trans-unit>
+      <trans-unit id="Closing tab">
+        <source>Closing tab</source>
+        <target>&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1080;&#1077; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Copy Address">
+        <source>Copy Address</source>
+        <target>&#1050;&#1086;&#1087;&#1080;&#1088;&#1086;&#1074;&#1072;&#1090;&#1100; &#1072;&#1076;&#1088;&#1077;&#1089;</target>
+        <note>Copy the URL from the location bar</note>
+      </trans-unit>
+      <trans-unit id="Copy Image">
+        <source>Copy Image</source>
+        <target>&#1050;&#1086;&#1087;&#1080;&#1088;&#1086;&#1074;&#1072;&#1090;&#1100; &#1080;&#1079;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1077;</target>
+        <note>Context menu item for copying an image to the clipboard</note>
+      </trans-unit>
+      <trans-unit id="Copy Link">
+        <source>Copy Link</source>
+        <target>&#1050;&#1086;&#1087;&#1080;&#1088;&#1086;&#1074;&#1072;&#1090;&#1100; &#1089;&#1089;&#1099;&#1083;&#1082;&#1091;</target>
+        <note>Context menu item for copying a link URL to the clipboard</note>
+      </trans-unit>
+      <trans-unit id="Could not add page to Reading List. Maybe it's already there?">
+        <source>Could not add page to Reading List. Maybe it's already there?</source>
+        <target>&#1053;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1076;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1091; &#1074; &#1057;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;. &#1052;&#1086;&#1078;&#1077;&#1090; &#1073;&#1099;&#1090;&#1100; &#1086;&#1085;&#1072; &#1091;&#1078;&#1077; &#1090;&#1072;&#1084;?</target>
+        <note>Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures.</note>
+      </trans-unit>
+      <trans-unit id="Could not add page to Reading list">
+        <source>Could not add page to Reading list</source>
+        <target>&#1053;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1076;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1091; &#1074; &#1057;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed.</note>
+      </trans-unit>
+      <trans-unit id="Could not load page.">
+        <source>Could not load page.</source>
+        <target>&#1053;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1079;&#1072;&#1075;&#1088;&#1091;&#1079;&#1080;&#1090;&#1100; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1091;.</target>
+        <note>Error message that is shown in settings when there was a problem loading</note>
+      </trans-unit>
+      <trans-unit id="Create an account">
+        <source>Create an account</source>
+        <target>&#1057;&#1086;&#1079;&#1076;&#1072;&#1090;&#1100; &#1072;&#1082;&#1082;&#1072;&#1091;&#1085;&#1090;</target>
+        <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Dark">
+        <source>Dark</source>
+        <target>&#1058;&#1105;&#1084;&#1085;&#1072;&#1103;</target>
+        <note>Dark theme setting in Reading View settings</note>
+      </trans-unit>
+      <trans-unit id="Debug: forget Sync auth state">
+        <source>Debug: forget Sync auth state</source>
+        <target>&#1054;&#1090;&#1083;&#1072;&#1076;&#1082;&#1072;: &#1079;&#1072;&#1073;&#1099;&#1090;&#1100; &#1089;&#1086;&#1089;&#1090;&#1086;&#1103;&#1085;&#1080;&#1077; &#1072;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1080; &#1089;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1072;&#1094;&#1080;&#1080;</target>
+        <note>Debug option</note>
+      </trans-unit>
+      <trans-unit id="Debug: require password">
+        <source>Debug: require password</source>
+        <target>&#1054;&#1090;&#1083;&#1072;&#1076;&#1082;&#1072;: &#1079;&#1072;&#1090;&#1088;&#1077;&#1073;&#1086;&#1074;&#1072;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Debug option</note>
+      </trans-unit>
+      <trans-unit id="Debug: require upgrade">
+        <source>Debug: require upgrade</source>
+        <target>&#1054;&#1090;&#1083;&#1072;&#1076;&#1082;&#1072;: &#1079;&#1072;&#1090;&#1088;&#1077;&#1073;&#1086;&#1074;&#1072;&#1090;&#1100; &#1086;&#1073;&#1085;&#1086;&#1074;&#1083;&#1077;&#1085;&#1080;&#1077;</target>
+        <note>Debug option</note>
+      </trans-unit>
+      <trans-unit id="Decrease text size">
+        <source>Decrease text size</source>
+        <target>&#1059;&#1084;&#1077;&#1085;&#1100;&#1096;&#1080;&#1090;&#1100; &#1088;&#1072;&#1079;&#1084;&#1077;&#1088; &#1096;&#1088;&#1080;&#1092;&#1090;&#1072;</target>
+        <note>Accessibility label for button decreasing font size in display settings of reader mode</note>
+      </trans-unit>
+      <trans-unit id="Default Search Engine">
+        <source>Default Search Engine</source>
+        <target>&#1055;&#1086;&#1080;&#1089;&#1082;&#1086;&#1074;&#1072;&#1103; &#1089;&#1080;&#1089;&#1090;&#1077;&#1084;&#1072; &#1087;&#1086; &#1091;&#1084;&#1086;&#1083;&#1095;&#1072;&#1085;&#1080;&#1102;</target>
+        <note>Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section.</note>
+      </trans-unit>
+      <trans-unit id="Disable additional page dialogs">
+        <source>Disable additional page dialogs</source>
+        <target>&#1054;&#1090;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1100; &#1076;&#1086;&#1087;&#1086;&#1083;&#1085;&#1080;&#1090;&#1077;&#1083;&#1100;&#1085;&#1099;&#1077; &#1076;&#1080;&#1072;&#1083;&#1086;&#1075;&#1086;&#1074;&#1099;&#1077; &#1086;&#1082;&#1085;&#1072; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1099;</target>
+        <note>Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown</note>
+      </trans-unit>
+      <trans-unit id="Display Settings">
+        <source>Display Settings</source>
+        <target>&#1055;&#1072;&#1088;&#1072;&#1084;&#1077;&#1090;&#1088;&#1099; &#1086;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Name for display settings button in reader mode. Display in the meaning of presentation, not monitor.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to save the password for %@ on %@?">
+        <source>Do you want to save the password for %1$@ on %2$@?</source>
+        <target>&#1042;&#1099; &#1093;&#1086;&#1090;&#1080;&#1090;&#1077; &#1089;&#1086;&#1093;&#1088;&#1072;&#1085;&#1080;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100; &#1076;&#1083;&#1103; %1$@ &#1085;&#1072; %2$@?</target>
+        <note>Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to save the password on %@?">
+        <source>Do you want to save the password on %@?</source>
+        <target>&#1042;&#1099; &#1093;&#1086;&#1090;&#1080;&#1090;&#1077; &#1089;&#1086;&#1093;&#1088;&#1072;&#1085;&#1080;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100; &#1085;&#1072; %@?</target>
+        <note>Prompt for saving a password with no username. The parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to update the password for %@ on %@?">
+        <source>Do you want to update the password for %1$@ on %2$@?</source>
+        <target>&#1042;&#1099; &#1093;&#1086;&#1090;&#1080;&#1090;&#1077; &#1086;&#1073;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100; &#1076;&#1083;&#1103; %1$@ &#1085;&#1072; %2$@?</target>
+        <note>Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to update the password on %@?">
+        <source>Do you want to update the password on %@?</source>
+        <target>&#1042;&#1099; &#1093;&#1086;&#1090;&#1080;&#1090;&#1077; &#1086;&#1073;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100; &#1085;&#1072; %@?</target>
+        <note>Prompt for updating a password with on username. The parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Don't Send">
+        <source>Don't Send</source>
+        <target>&#1053;&#1077; &#1086;&#1090;&#1087;&#1088;&#1072;&#1074;&#1083;&#1103;&#1090;&#1100;</target>
+        <note>Used as a button label for crash dialog prompt</note>
+      </trans-unit>
+      <trans-unit id="Done">
+        <source>Done</source>
+        <target>&#1043;&#1086;&#1090;&#1086;&#1074;&#1086;</target>
+        <note>Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button</note>
+      </trans-unit>
+      <trans-unit id="Double tap and hold to open history">
+        <source>Double tap and hold to open history</source>
+        <target>&#1044;&#1074;&#1072;&#1078;&#1076;&#1099; &#1085;&#1072;&#1078;&#1084;&#1080;&#1090;&#1077; &#1080; &#1091;&#1076;&#1077;&#1088;&#1078;&#1080;&#1074;&#1072;&#1081;&#1090;&#1077;, &#1095;&#1090;&#1086;&#1073;&#1099; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1078;&#1091;&#1088;&#1085;&#1072;&#1083;</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Enter your password to connect.">
+        <source>Enter your password to connect.</source>
+        <target>&#1042;&#1074;&#1077;&#1076;&#1080;&#1090;&#1077; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100; &#1076;&#1083;&#1103; &#1087;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1103;.</target>
+        <note>Text message in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Firefox Help and Support">
+        <source>Firefox Help and Support</source>
+        <target>&#1057;&#1087;&#1088;&#1072;&#1074;&#1082;&#1072; &#1080; &#1055;&#1086;&#1076;&#1076;&#1077;&#1088;&#1078;&#1082;&#1072; Firefox</target>
+        <note>Tile title for App Help</note>
+      </trans-unit>
+      <trans-unit id="Firefox will stop syncing with your account, but won&#8217;t delete any of your browsing data on this device.">
+        <source>Firefox will stop syncing with your account, but won&#8217;t delete any of your browsing data on this device.</source>
+        <target>Firefox &#1087;&#1088;&#1077;&#1082;&#1088;&#1072;&#1090;&#1080;&#1090; &#1089;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1072;&#1094;&#1080;&#1102; &#1089; &#1074;&#1072;&#1096;&#1080;&#1084; &#1072;&#1082;&#1082;&#1072;&#1091;&#1085;&#1090;&#1086;&#1084;, &#1085;&#1086; &#1085;&#1077; &#1073;&#1091;&#1076;&#1077;&#1090; &#1091;&#1076;&#1072;&#1083;&#1103;&#1090;&#1100; &#1085;&#1080;&#1095;&#1077;&#1075;&#1086; &#1080;&#1079; &#1074;&#1072;&#1096;&#1080;&#1093; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093; &#1074;&#1077;&#1073;-&#1089;&#1105;&#1088;&#1092;&#1080;&#1085;&#1075;&#1072; &#1085;&#1072; &#1101;&#1090;&#1086;&#1084; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1077;.</target>
+        <note>Text of the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Firefox would like to access your Photos">
+        <source>Firefox would like to access your Photos</source>
+        <target>Firefox &#1093;&#1086;&#1090;&#1077;&#1083; &#1073;&#1099; &#1087;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1076;&#1086;&#1089;&#1090;&#1091;&#1087; &#1082; &#1074;&#1072;&#1096;&#1080;&#1084; &#1060;&#1086;&#1090;&#1086;</target>
+        <note>See http://mzl.la/1G7uHo7</note>
+      </trans-unit>
+      <trans-unit id="Forward">
+        <source>Forward</source>
+        <target>&#1042;&#1087;&#1077;&#1088;&#1105;&#1076;</target>
+        <note>Accessibility Label for the browser toolbar Forward button</note>
+      </trans-unit>
+      <trans-unit id="General">
+        <source>General</source>
+        <target>&#1054;&#1089;&#1085;&#1086;&#1074;&#1085;&#1099;&#1077;</target>
+        <note>General settings section title</note>
+      </trans-unit>
+      <trans-unit id="Get your open tabs, bookmarks, and passwords from your other devices.">
+        <source>Get your open tabs, bookmarks, and passwords from your other devices.</source>
+        <target>&#1055;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1077; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1099;&#1077; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;, &#1079;&#1072;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080; &#1080; &#1087;&#1072;&#1088;&#1086;&#1083;&#1080; &#1089; &#1076;&#1088;&#1091;&#1075;&#1080;&#1093; &#1074;&#1072;&#1096;&#1080;&#1093; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;.</target>
+        <note>A re-worded offer about Sync that emphasizes one-way data transfer, not syncing.</note>
+      </trans-unit>
+      <trans-unit id="Go">
+        <source>Go</source>
+        <target>&#1055;&#1077;&#1088;&#1077;&#1081;&#1090;&#1080;</target>
+        <note>Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened</note>
+      </trans-unit>
+      <trans-unit id="Go to copied URL?">
+        <source>Go to copied URL?</source>
+        <target>&#1055;&#1077;&#1088;&#1077;&#1081;&#1090;&#1080; &#1085;&#1072; &#1089;&#1082;&#1086;&#1087;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1085;&#1099;&#1081; URL?</target>
+        <note>Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard</note>
+      </trans-unit>
+      <trans-unit id="Help">
+        <source>Help</source>
+        <target>&#1057;&#1087;&#1088;&#1072;&#1074;&#1082;&#1072;</target>
+        <note>Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ</note>
+      </trans-unit>
+      <trans-unit id="History">
+        <source>History</source>
+        <target>&#1046;&#1091;&#1088;&#1085;&#1072;&#1083;</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Increase text size">
+        <source>Increase text size</source>
+        <target>&#1059;&#1074;&#1077;&#1083;&#1080;&#1095;&#1080;&#1090;&#1100; &#1088;&#1072;&#1079;&#1084;&#1077;&#1088; &#1096;&#1088;&#1080;&#1092;&#1090;&#1072;</target>
+        <note>Accessibility label for button increasing font size in display settings of reader mode</note>
+      </trans-unit>
+      <trans-unit id="Intro Tour Carousel">
+        <source>Intro Tour Carousel</source>
+        <target>&#1050;&#1072;&#1088;&#1091;&#1089;&#1077;&#1083;&#1100; &#1074;&#1074;&#1086;&#1076;&#1085;&#1086;&#1075;&#1086; &#1090;&#1091;&#1088;&#1072;</target>
+        <note>Accessibility label for the introduction tour carousel</note>
+      </trans-unit>
+      <trans-unit id="Last month">
+        <source>Last month</source>
+        <target>&#1055;&#1086;&#1089;&#1083;&#1077;&#1076;&#1085;&#1080;&#1081; &#1084;&#1077;&#1089;&#1103;&#1094;</target>
+        <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="Last synced: %@">
+        <source>Last synced: %@</source>
+        <target>&#1055;&#1086;&#1089;&#1083;&#1077;&#1076;&#1085;&#1103;&#1103; &#1089;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103;: %@</target>
+        <note>Last synced time label beside Sync Now setting option. Argument is the relative date string.
+   Remote tabs last synced time. Argument is the relative date string.</note>
+      </trans-unit>
+      <trans-unit id="Last week">
+        <source>Last week</source>
+        <target>&#1055;&#1086;&#1089;&#1083;&#1077;&#1076;&#1085;&#1103;&#1103; &#1085;&#1077;&#1076;&#1077;&#1083;&#1103;</target>
+        <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="Licenses">
+        <source>Licenses</source>
+        <target>&#1051;&#1080;&#1094;&#1077;&#1085;&#1079;&#1080;&#1080;</target>
+        <note>Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG</note>
+      </trans-unit>
+      <trans-unit id="Light">
+        <source>Light</source>
+        <target>&#1057;&#1074;&#1077;&#1090;&#1083;&#1072;&#1103;</target>
+        <note>Light theme setting in Reading View settings</note>
+      </trans-unit>
+      <trans-unit id="Load original page">
+        <source>Load original page</source>
+        <target>&#1047;&#1072;&#1075;&#1088;&#1091;&#1079;&#1080;&#1090;&#1100; &#1080;&#1089;&#1093;&#1086;&#1076;&#1085;&#1091;&#1102; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1091;</target>
+        <note>Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app.</note>
+      </trans-unit>
+      <trans-unit id="Loading content&#8230;">
+        <source>Loading content&#8230;</source>
+        <target>&#1047;&#1072;&#1075;&#1088;&#1091;&#1079;&#1082;&#1072; &#1089;&#1086;&#1076;&#1077;&#1088;&#1078;&#1080;&#1084;&#1086;&#1075;&#1086;&#8230;</target>
+        <note>Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app.</note>
+      </trans-unit>
+      <trans-unit id="Log Out">
+        <source>Log Out</source>
+        <target>&#1042;&#1099;&#1081;&#1090;&#1080;</target>
+        <note>Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Log Out?">
+        <source>Log Out?</source>
+        <target>&#1042;&#1099;&#1081;&#1090;&#1080;?</target>
+        <note>Title of the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Log in">
+        <source>Log in</source>
+        <target>&#1042;&#1086;&#1081;&#1090;&#1080;</target>
+        <note>Authentication prompt log in button</note>
+      </trans-unit>
+      <trans-unit id="Logins">
+        <source>Logins</source>
+        <target>&#1051;&#1086;&#1075;&#1080;&#1085;&#1099;</target>
+        <note>Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.</note>
+      </trans-unit>
+      <trans-unit id="Looks like Firefox crashed previously. Would you like to restore your tabs?">
+        <source>Looks like Firefox crashed previously. Would you like to restore your tabs?</source>
+        <target>&#1055;&#1086;&#1093;&#1086;&#1078;&#1077;, &#1095;&#1090;&#1086; Firefox &#1088;&#1072;&#1085;&#1077;&#1077; &#1091;&#1087;&#1072;&#1083;. &#1042;&#1099; &#1093;&#1086;&#1090;&#1080;&#1090;&#1077; &#1074;&#1086;&#1089;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100; &#1074;&#1072;&#1096;&#1080; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;?</target>
+        <note>Restore Tabs Prompt Description</note>
+      </trans-unit>
+      <trans-unit id="Mark as Read">
+        <source>Mark as Read</source>
+        <target>&#1054;&#1090;&#1084;&#1077;&#1090;&#1080;&#1090;&#1100; &#1082;&#1072;&#1082; &#1087;&#1088;&#1086;&#1095;&#1080;&#1090;&#1072;&#1085;&#1085;&#1086;&#1077;</target>
+        <note>Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read</note>
+      </trans-unit>
+      <trans-unit id="Mark as Unread">
+        <source>Mark as Unread</source>
+        <target>&#1054;&#1090;&#1084;&#1077;&#1090;&#1080;&#1090;&#1100; &#1082;&#1072;&#1082; &#1085;&#1077;&#1087;&#1088;&#1086;&#1095;&#1080;&#1090;&#1072;&#1085;&#1085;&#1086;&#1077;</target>
+        <note>Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread</note>
+      </trans-unit>
+      <trans-unit id="Missing error">
+        <source>Missing error</source>
+        <target>&#1054;&#1090;&#1089;&#1091;&#1090;&#1089;&#1090;&#1074;&#1091;&#1077;&#1090; &#1085;&#1086;&#1084;&#1077;&#1088; &#1086;&#1096;&#1080;&#1073;&#1082;&#1080;</target>
+        <note>Error for a missing remote error number</note>
+      </trans-unit>
+      <trans-unit id="Missing message">
+        <source>Missing message</source>
+        <target>&#1054;&#1090;&#1089;&#1091;&#1090;&#1089;&#1090;&#1074;&#1091;&#1077;&#1090; &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1077;</target>
+        <note>Error for a missing remote error message</note>
+      </trans-unit>
+      <trans-unit id="Navigation Toolbar">
+        <source>Navigation Toolbar</source>
+        <target>&#1055;&#1072;&#1085;&#1077;&#1083;&#1100; &#1085;&#1072;&#1074;&#1080;&#1075;&#1072;&#1094;&#1080;&#1080;</target>
+        <note>Accessibility label for the navigation toolbar displayed at the bottom of the screen.</note>
+      </trans-unit>
+      <trans-unit id="New tab: %@: %@">
+        <source>New tab: %1$@: %2$@</source>
+        <target>&#1053;&#1086;&#1074;&#1072;&#1103; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1072;: %1$@: %2$@</target>
+        <note>New tab [title] [url]</note>
+      </trans-unit>
+      <trans-unit id="New version available">
+        <source>New version available</source>
+        <target>&#1044;&#1086;&#1089;&#1090;&#1091;&#1087;&#1085;&#1072; &#1085;&#1086;&#1074;&#1072;&#1103; &#1074;&#1077;&#1088;&#1089;&#1080;&#1103;</target>
+        <note>Prompt title for application update</note>
+      </trans-unit>
+      <trans-unit id="No">
+        <source>No</source>
+        <target>&#1053;&#1077;&#1090;</target>
+        <note>Restore Tabs Negative Action</note>
+      </trans-unit>
+      <trans-unit id="No tabs">
+        <source>No tabs</source>
+        <target>&#1042;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082; &#1085;&#1077;&#1090;</target>
+        <note>Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray</note>
+      </trans-unit>
+      <trans-unit id="Not Now">
+        <source>Not Now</source>
+        <target>&#1053;&#1077; &#1089;&#1077;&#1081;&#1095;&#1072;&#1089;</target>
+        <note>Label for button to cancel application update prompt</note>
+      </trans-unit>
+      <trans-unit id="Not now">
+        <source>Not now</source>
+        <target>&#1053;&#1077; &#1089;&#1077;&#1081;&#1095;&#1072;&#1089;</target>
+        <note>Button to not save the user's password</note>
+      </trans-unit>
+      <trans-unit id="OK">
+        <source>OK</source>
+        <target>OK</target>
+        <note>Alert OK Button
+   Label for OK button in the application update prompt
+   OK button</note>
+      </trans-unit>
+      <trans-unit id="Okay">
+        <source>Okay</source>
+        <target>&#1057;&#1086;&#1075;&#1083;&#1072;&#1089;&#1077;&#1085;</target>
+        <note>Restore Tabs Affirmative Action</note>
+      </trans-unit>
+      <trans-unit id="Oops! Firefox crashed">
+        <source>Oops! Firefox crashed</source>
+        <target>&#1054;&#1081;! Firefox &#1091;&#1087;&#1072;&#1083;</target>
+        <note>Title for prompt displayed to user after the app crashes</note>
+      </trans-unit>
+      <trans-unit id="Open In New Tab">
+        <source>Open In New Tab</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1074; &#1085;&#1086;&#1074;&#1086;&#1081; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1077;</target>
+        <note>Context menu item for opening a link in a new tab</note>
+      </trans-unit>
+      <trans-unit id="Open Settings">
+        <source>Open Settings</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1055;&#1072;&#1088;&#1072;&#1084;&#1077;&#1090;&#1088;&#1099;</target>
+        <note>See http://mzl.la/1G7uHo7</note>
+      </trans-unit>
+      <trans-unit id="Open articles in Reader View by tapping the book icon when it appears in the title bar.">
+        <source>Open articles in Reader View by tapping the book icon when it appears in the title bar.</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1074;&#1072;&#1081;&#1090;&#1077; &#1089;&#1090;&#1072;&#1090;&#1100;&#1080; &#1074; &#1042;&#1080;&#1076;&#1077; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;, &#1085;&#1072;&#1078;&#1072;&#1074; &#1085;&#1072; &#1079;&#1085;&#1072;&#1095;&#1086;&#1082; &#1082;&#1085;&#1080;&#1075;&#1080;, &#1082;&#1086;&#1075;&#1076;&#1072; &#1086;&#1085; &#1087;&#1086;&#1103;&#1074;&#1080;&#1090;&#1089;&#1103; &#1074; &#1089;&#1090;&#1088;&#1086;&#1082;&#1077; &#1079;&#1072;&#1075;&#1086;&#1083;&#1086;&#1074;&#1082;&#1072;.</target>
+        <note>See http://mzl.la/1LXbDOL</note>
+      </trans-unit>
+      <trans-unit id="Open in&#8230;">
+        <source>Open in&#8230;</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1074;&#8230;</target>
+        <note>String indicating that the file can be opened in another application on the device</note>
+      </trans-unit>
+      <trans-unit id="Opening %@">
+        <source>Opening %@</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1080;&#1077; %@</target>
+        <note>Opening an external URL</note>
+      </trans-unit>
+      <trans-unit id="Pages you have visited recently will show up here.">
+        <source>Pages you have visited recently will show up here.</source>
+        <target>&#1053;&#1077;&#1076;&#1072;&#1074;&#1085;&#1086; &#1087;&#1086;&#1089;&#1077;&#1097;&#1105;&#1085;&#1085;&#1099;&#1077; &#1074;&#1072;&#1084;&#1080; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1099; &#1087;&#1086;&#1103;&#1074;&#1103;&#1090;&#1089;&#1103; &#1079;&#1076;&#1077;&#1089;&#1100;.</target>
+        <note>See http://bit.ly/1I7Do4b</note>
+      </trans-unit>
+      <trans-unit id="Panel Chooser">
+        <source>Panel Chooser</source>
+        <target>&#1042;&#1099;&#1073;&#1086;&#1088; &#1087;&#1072;&#1085;&#1077;&#1083;&#1077;&#1081;</target>
+        <note>Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).</note>
+      </trans-unit>
+      <trans-unit id="Password">
+        <source>Password</source>
+        <target>&#1055;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Password textbox in Authentication prompt</note>
+      </trans-unit>
+      <trans-unit id="Paste">
+        <source>Paste</source>
+        <target>&#1042;&#1089;&#1090;&#1072;&#1074;&#1080;&#1090;&#1100;</target>
+        <note>Paste the URL into the location bar</note>
+      </trans-unit>
+      <trans-unit id="Paste &amp; Go">
+        <source>Paste &amp; Go</source>
+        <target>&#1042;&#1089;&#1090;&#1072;&#1074;&#1080;&#1090;&#1100; &#1080; &#1087;&#1077;&#1088;&#1077;&#1081;&#1090;&#1080;</target>
+        <note>Paste the URL into the location bar and visit</note>
+      </trans-unit>
+      <trans-unit id="Privacy">
+        <source>Privacy</source>
+        <target>&#1055;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1086;&#1089;&#1090;&#1100;</target>
+        <note>Privacy section title</note>
+      </trans-unit>
+      <trans-unit id="Privacy Policy">
+        <source>Privacy Policy</source>
+        <target>&#1055;&#1086;&#1083;&#1080;&#1090;&#1080;&#1082;&#1072; &#1087;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1086;&#1089;&#1090;&#1080;</target>
+        <note>Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/</note>
+      </trans-unit>
+      <trans-unit id="Quick-search Engines">
+        <source>Quick-search Engines</source>
+        <target>&#1057;&#1080;&#1089;&#1090;&#1077;&#1084;&#1099; &#1073;&#1099;&#1089;&#1090;&#1088;&#1086;&#1075;&#1086; &#1087;&#1086;&#1080;&#1089;&#1082;&#1072;</target>
+        <note>Title for quick-search engines settings section.</note>
+      </trans-unit>
+      <trans-unit id="Reader View">
+        <source>Reader View</source>
+        <target>&#1042;&#1080;&#1076; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Accessibility label for the Reader View button</note>
+      </trans-unit>
+      <trans-unit id="Reading list">
+        <source>Reading list</source>
+        <target>&#1057;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Reload">
+        <source>Reload</source>
+        <target>&#1054;&#1073;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100;</target>
+        <note>Accessibility Label for the browser toolbar Reload button</note>
+      </trans-unit>
+      <trans-unit id="Remove">
+        <source>Remove</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100;</target>
+        <note>Title for the button that removes a reading list item</note>
+      </trans-unit>
+      <trans-unit id="Remove from Reading List">
+        <source>Remove from Reading List</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100; &#1080;&#1079; &#1057;&#1087;&#1080;&#1089;&#1082;&#1072; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Name for button removing current article from reading list in reader mode</note>
+      </trans-unit>
+      <trans-unit id="Remove page">
+        <source>Remove page</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1091;</target>
+        <note>Button shown in editing mode to remove this site from the top sites panel.</note>
+      </trans-unit>
+      <trans-unit id="Request Desktop Site">
+        <source>Request Desktop Site</source>
+        <target>&#1047;&#1072;&#1087;&#1088;&#1086;&#1089;&#1080;&#1090;&#1100; &#1087;&#1086;&#1083;&#1085;&#1091;&#1102; &#1074;&#1077;&#1088;&#1089;&#1080;&#1102; &#1089;&#1072;&#1081;&#1090;&#1072;</target>
+        <note>Action Sheet Button for Requesting the Desktop Site
+   Share action title</note>
+      </trans-unit>
+      <trans-unit id="Request Mobile Site">
+        <source>Request Mobile Site</source>
+        <target>&#1047;&#1072;&#1087;&#1088;&#1086;&#1089;&#1080;&#1090;&#1100; &#1084;&#1086;&#1073;&#1080;&#1083;&#1100;&#1085;&#1091;&#1102; &#1074;&#1077;&#1088;&#1089;&#1080;&#1102; &#1089;&#1072;&#1081;&#1090;&#1072;</target>
+        <note>Action Sheet Button for Requesting the Mobile Site
+   Share action title</note>
+      </trans-unit>
+      <trans-unit id="Sans-serif">
+        <source>Sans-serif</source>
+        <target>&#1041;&#1077;&#1079; &#1079;&#1072;&#1089;&#1077;&#1095;&#1077;&#1082;</target>
+        <note>Font type setting in the reading view settings</note>
+      </trans-unit>
+      <trans-unit id="Save Image">
+        <source>Save Image</source>
+        <target>&#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1080;&#1090;&#1100; &#1080;&#1079;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1077;</target>
+        <note>Context menu item for saving an image</note>
+      </trans-unit>
+      <trans-unit id="Save Logins">
+        <source>Save Logins</source>
+        <target>&#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1103;&#1090;&#1100; &#1083;&#1086;&#1075;&#1080;&#1085;&#1099;</target>
+        <note>Setting to enable the built-in password manager</note>
+      </trans-unit>
+      <trans-unit id="Save pages to your Reading List by tapping the book plus icon in the Reader View controls.">
+        <source>Save pages to your Reading List by tapping the book plus icon in the Reader View controls.</source>
+        <target>&#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1103;&#1081;&#1090;&#1077; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1099; &#1074; &#1057;&#1087;&#1080;&#1089;&#1082;&#1077; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;, &#1085;&#1072;&#1078;&#1072;&#1074; &#1085;&#1072; &#1079;&#1085;&#1072;&#1095;&#1086;&#1082; &#1082;&#1085;&#1080;&#1075;&#1080; &#1089; &#1087;&#1083;&#1102;&#1089;&#1086;&#1084; &#1074; &#1091;&#1087;&#1088;&#1072;&#1074;&#1083;&#1077;&#1085;&#1080;&#1080; &#1042;&#1080;&#1076;&#1086;&#1084; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;.</target>
+        <note>See http://mzl.la/1LXbDOL</note>
+      </trans-unit>
+      <trans-unit id="Search">
+        <source>Search</source>
+        <target>&#1055;&#1086;&#1080;&#1089;&#1082;</target>
+        <note>Navigation title for search settings.
+   Open search section of settings</note>
+      </trans-unit>
+      <trans-unit id="Search or enter address">
+        <source>Search or enter address</source>
+        <target>&#1042;&#1074;&#1077;&#1076;&#1080;&#1090;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089; &#1080;&#1083;&#1080; &#1072;&#1076;&#1088;&#1077;&#1089;</target>
+        <note>The text shown in the URL bar on about:home</note>
+      </trans-unit>
+      <trans-unit id="Searches for the suggestion">
+        <source>Searches for the suggestion</source>
+        <target>&#1055;&#1086;&#1080;&#1089;&#1082; &#1087;&#1088;&#1077;&#1076;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1081;</target>
+        <note>Accessibility hint describing the action performed when a search suggestion is clicked</note>
+      </trans-unit>
+      <trans-unit id="Secure connection">
+        <source>Secure connection</source>
+        <target>&#1047;&#1072;&#1097;&#1080;&#1097;&#1105;&#1085;&#1085;&#1086;&#1077; &#1089;&#1086;&#1077;&#1076;&#1080;&#1085;&#1077;&#1085;&#1080;&#1077;</target>
+        <note>Accessibility label for the lock icon, which is only present if the connection is secure</note>
+      </trans-unit>
+      <trans-unit id="Send Crash Reports">
+        <source>Send Crash Reports</source>
+        <target>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1083;&#1103;&#1090;&#1100; &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1103; &#1086; &#1087;&#1072;&#1076;&#1077;&#1085;&#1080;&#1103;&#1093;</target>
+        <note>Setting to enable the sending of crash reports</note>
+      </trans-unit>
+      <trans-unit id="Send Feedback">
+        <source>Send Feedback</source>
+        <target>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100; &#1086;&#1090;&#1079;&#1099;&#1074;</target>
+        <note>Show an input.mozilla.org page where people can submit feedback</note>
+      </trans-unit>
+      <trans-unit id="Send Report">
+        <source>Send Report</source>
+        <target>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100; &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1077;</target>
+        <note>Used as a button label for crash dialog prompt</note>
+      </trans-unit>
+      <trans-unit id="Send a crash report so Mozilla can fix the problem?">
+        <source>Send a crash report so Mozilla can fix the problem?</source>
+        <target>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100; &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1077; &#1086; &#1087;&#1072;&#1076;&#1077;&#1085;&#1080;&#1080;, &#1095;&#1090;&#1086;&#1073;&#1099; Mozilla &#1084;&#1086;&#1075;&#1083;&#1072; &#1091;&#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1090;&#1100; &#1101;&#1090;&#1091; &#1087;&#1088;&#1086;&#1073;&#1083;&#1077;&#1084;&#1091;?</target>
+        <note>Message displayed in the crash dialog above the buttons used to select when sending reports</note>
+      </trans-unit>
+      <trans-unit id="Sepia">
+        <source>Sepia</source>
+        <target>&#1057;&#1077;&#1087;&#1080;&#1103;</target>
+        <note>Sepia theme setting in Reading View settings</note>
+      </trans-unit>
+      <trans-unit id="Serif">
+        <source>Serif</source>
+        <target>&#1057; &#1079;&#1072;&#1089;&#1077;&#1095;&#1082;&#1072;&#1084;&#1080;</target>
+        <note>Font type setting in the reading view settings</note>
+      </trans-unit>
+      <trans-unit id="Settings">
+        <source>Settings</source>
+        <target>&#1055;&#1072;&#1088;&#1072;&#1084;&#1077;&#1090;&#1088;&#1099;</target>
+        <note>Accessibility label for the Settings button in the Tab Tray.
+   Settings</note>
+      </trans-unit>
+      <trans-unit id="Share">
+        <source>Share</source>
+        <target>&#1055;&#1086;&#1076;&#1077;&#1083;&#1080;&#1090;&#1100;&#1089;&#1103;</target>
+        <note>Accessibility Label for the browser toolbar Share button</note>
+      </trans-unit>
+      <trans-unit id="Share Link">
+        <source>Share Link</source>
+        <target>&#1055;&#1086;&#1076;&#1077;&#1083;&#1080;&#1090;&#1100;&#1089;&#1103; &#1089;&#1089;&#1099;&#1083;&#1082;&#1086;&#1081;</target>
+        <note>Context menu item for sharing a link URL</note>
+      </trans-unit>
+      <trans-unit id="Show Search Suggestions">
+        <source>Show Search Suggestions</source>
+        <target>&#1054;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1072;&#1090;&#1100; &#1087;&#1086;&#1080;&#1089;&#1082;&#1086;&#1074;&#1099;&#1077; &#1087;&#1088;&#1077;&#1076;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Label for show search suggestions setting.</note>
+      </trans-unit>
+      <trans-unit id="Show Tabs">
+        <source>Show Tabs</source>
+        <target>&#1054;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1072;&#1090;&#1100; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar</note>
+      </trans-unit>
+      <trans-unit id="Show Tour">
+        <source>Show Tour</source>
+        <target>&#1055;&#1088;&#1086;&#1074;&#1077;&#1089;&#1090;&#1080; &#1090;&#1091;&#1088;</target>
+        <note>Show the on-boarding screen again from the settings</note>
+      </trans-unit>
+      <trans-unit id="Show search suggestions">
+        <source>Show search suggestions</source>
+        <target>&#1054;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1072;&#1090;&#1100; &#1087;&#1086;&#1080;&#1089;&#1082;&#1086;&#1074;&#1099;&#1077; &#1087;&#1088;&#1077;&#1076;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>Label for show search suggestions setting.</note>
+      </trans-unit>
+      <trans-unit id="Sign In">
+        <source>Sign In</source>
+        <target>&#1042;&#1086;&#1081;&#1090;&#1080;</target>
+        <note>Text message / button in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Sign in">
+        <source>Sign in</source>
+        <target>&#1042;&#1086;&#1081;&#1090;&#1080;</target>
+        <note>Text message / button in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Stop">
+        <source>Stop</source>
+        <target>&#1054;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100;</target>
+        <note>Accessibility Label for the browser toolbar Stop button</note>
+      </trans-unit>
+      <trans-unit id="Support">
+        <source>Support</source>
+        <target>&#1055;&#1086;&#1076;&#1076;&#1077;&#1088;&#1078;&#1082;&#1072;</target>
+        <note>Support section title</note>
+      </trans-unit>
+      <trans-unit id="Swipe right or left with three fingers to close the tab.">
+        <source>Swipe right or left with three fingers to close the tab.</source>
+        <target>&#1063;&#1090;&#1086;&#1073;&#1099; &#1079;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1091;, &#1087;&#1088;&#1086;&#1074;&#1077;&#1076;&#1080;&#1090;&#1077; &#1090;&#1088;&#1077;&#1084;&#1103; &#1087;&#1072;&#1083;&#1100;&#1094;&#1072;&#1084;&#1080; &#1074;&#1083;&#1077;&#1074;&#1086; &#1080;&#1083;&#1080; &#1074;&#1087;&#1088;&#1072;&#1074;&#1086;.</target>
+        <note>Accessibility hint for tab tray's displayed tab.</note>
+      </trans-unit>
+      <trans-unit id="Sync Now">
+        <source>Sync Now</source>
+        <target>&#1057;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1080;&#1088;&#1086;&#1074;&#1072;&#1090;&#1100;</target>
+        <note>Sync Firefox Account</note>
+      </trans-unit>
+      <trans-unit id="Sync your tabs, bookmarks, passwords and more.">
+        <source>Sync your tabs, bookmarks, passwords and more.</source>
+        <target>&#1057;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; &#1074;&#1072;&#1096;&#1080;&#1093; &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;, &#1079;&#1072;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;, &#1087;&#1072;&#1088;&#1086;&#1083;&#1077;&#1081; &#1080; &#1084;&#1085;&#1086;&#1075;&#1086;&#1075;&#1086; &#1076;&#1088;&#1091;&#1075;&#1086;&#1075;&#1086;.</target>
+        <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Sync your tabs, passwords and more.">
+        <source>Sync your tabs, passwords and more.</source>
+        <target>&#1057;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; &#1074;&#1072;&#1096;&#1080;&#1093; &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;, &#1087;&#1072;&#1088;&#1086;&#1083;&#1077;&#1081; &#1080; &#1084;&#1085;&#1086;&#1075;&#1086;&#1075;&#1086; &#1076;&#1088;&#1091;&#1075;&#1086;&#1075;&#1086;.</target>
+        <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Synced tabs">
+        <source>Synced tabs</source>
+        <target>&#1057;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1085;&#1099;&#1077; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Syncing&#8230;">
+        <source>Syncing&#8230;</source>
+        <target>&#1057;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103;&#8230;</target>
+        <note>Syncing Firefox Account</note>
+      </trans-unit>
+      <trans-unit id="Tab %@ of %@">
+        <source>Tab %1$@ of %2$@</source>
+        <target>%1$@ &#1080;&#1079; %2$@ &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;</target>
+        <note>Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total.</note>
+      </trans-unit>
+      <trans-unit id="Tabs %@ to %@ of %@">
+        <source>Tabs %1$@ to %2$@ of %3$@</source>
+        <target>&#1057; %1$@ &#1087;&#1086; %2$@ &#1080;&#1079; %3$@ &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;</target>
+        <note>Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total.</note>
+      </trans-unit>
+      <trans-unit id="Tabs Tray">
+        <source>Tabs Tray</source>
+        <target>&#1051;&#1086;&#1090;&#1086;&#1082; &#1074;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;</target>
+        <note>Accessibility label for the Tabs Tray view.</note>
+      </trans-unit>
+      <trans-unit id="The Mozilla Project">
+        <source>The Mozilla Project</source>
+        <target>&#1055;&#1088;&#1086;&#1077;&#1082;&#1090; Mozilla</target>
+        <note>Tile title for Mozilla</note>
+      </trans-unit>
+      <trans-unit id="The page could not be displayed in Reader View.">
+        <source>The page could not be displayed in Reader View.</source>
+        <target>&#1053;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1086;&#1090;&#1086;&#1073;&#1088;&#1072;&#1079;&#1080;&#1090;&#1100; &#1101;&#1090;&#1091; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1091; &#1074; &#1042;&#1080;&#1076;&#1077; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;.</target>
+        <note>Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app.</note>
+      </trans-unit>
+      <trans-unit id="There is a new version available of Firefox Aurora. Tap OK to go to the download page.">
+        <source>There is a new version available of Firefox Aurora. Tap OK to go to the download page.</source>
+        <target>&#1044;&#1086;&#1089;&#1090;&#1091;&#1087;&#1085;&#1072; &#1085;&#1086;&#1074;&#1072;&#1103; &#1074;&#1077;&#1088;&#1089;&#1080;&#1103; Firefox Aurora. &#1053;&#1072;&#1078;&#1084;&#1080;&#1090;&#1077; OK, &#1095;&#1090;&#1086;&#1073;&#1099; &#1087;&#1077;&#1088;&#1077;&#1081;&#1090;&#1080; &#1085;&#1072; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1091; &#1079;&#1072;&#1075;&#1088;&#1091;&#1079;&#1082;&#1080;.</target>
+        <note>Prompt message for application update</note>
+      </trans-unit>
+      <trans-unit id="There was a problem accessing tabs from your other devices. Try again in a few moments.">
+        <source>There was a problem accessing tabs from your other devices. Try again in a few moments.</source>
+        <target>&#1055;&#1088;&#1080; &#1076;&#1086;&#1089;&#1090;&#1091;&#1087;&#1077; &#1082; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1072;&#1084; &#1089; &#1076;&#1088;&#1091;&#1075;&#1080;&#1093; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074; &#1074;&#1086;&#1079;&#1085;&#1080;&#1082;&#1083;&#1072; &#1087;&#1088;&#1086;&#1073;&#1083;&#1077;&#1084;&#1072;. &#1055;&#1086;&#1076;&#1086;&#1078;&#1076;&#1080;&#1090;&#1077; &#1085;&#1077;&#1084;&#1085;&#1086;&#1075;&#1086; &#1080; &#1087;&#1086;&#1087;&#1088;&#1086;&#1073;&#1091;&#1081;&#1090;&#1077; &#1089;&#1085;&#1086;&#1074;&#1072;.</target>
+        <note>Error message in the remote tabs panel</note>
+      </trans-unit>
+      <trans-unit id="There was an error converting the page">
+        <source>There was an error converting the page</source>
+        <target>&#1055;&#1088;&#1080; &#1087;&#1088;&#1077;&#1086;&#1073;&#1088;&#1072;&#1079;&#1086;&#1074;&#1072;&#1085;&#1080;&#1080; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1099; &#1087;&#1088;&#1086;&#1080;&#1079;&#1086;&#1096;&#1083;&#1072; &#1086;&#1096;&#1080;&#1073;&#1082;&#1072;</target>
+        <note>Error displayed when reader mode cannot be enabled</note>
+      </trans-unit>
+      <trans-unit id="This allows you to save the image to your Camera Roll.">
+        <source>This allows you to save the image to your Camera Roll.</source>
+        <target>&#1069;&#1090;&#1086; &#1087;&#1086;&#1079;&#1074;&#1086;&#1083;&#1080;&#1090; &#1089;&#1086;&#1093;&#1088;&#1072;&#1085;&#1080;&#1090;&#1100; &#1080;&#1079;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1077; &#1074; &#1074;&#1072;&#1096;&#1091; &#171;&#1060;&#1086;&#1090;&#1086;&#1087;&#1083;&#1077;&#1085;&#1082;&#1091;&#187;.</target>
+        <note>See http://mzl.la/1G7uHo7</note>
+      </trans-unit>
+      <trans-unit id="This will open in another application">
+        <source>This will open in another application</source>
+        <target>&#1069;&#1090;&#1086; &#1073;&#1091;&#1076;&#1077;&#1090; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1086; &#1074; &#1076;&#1088;&#1091;&#1075;&#1086;&#1084; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1080;</target>
+        <note>Opening an external app</note>
+      </trans-unit>
+      <trans-unit id="Today">
+        <source>Today</source>
+        <target>&#1057;&#1077;&#1075;&#1086;&#1076;&#1085;&#1103;</target>
+        <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="Top sites">
+        <source>Top sites</source>
+        <target>&#1058;&#1086;&#1087; &#1089;&#1072;&#1081;&#1090;&#1086;&#1074;</target>
+        <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Update">
+        <source>Update</source>
+        <target>&#1054;&#1073;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100;</target>
+        <note>Button to update the user's password</note>
+      </trans-unit>
+      <trans-unit id="Upgrade Firefox to connect.">
+        <source>Upgrade Firefox to connect.</source>
+        <target>&#1044;&#1083;&#1103; &#1087;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1103; &#1086;&#1073;&#1085;&#1086;&#1074;&#1080;&#1090;&#1077; Firefox.</target>
+        <note>Text message in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Use Compact Tabs">
+        <source>Use Compact Tabs</source>
+        <target>&#1048;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100; &#1082;&#1086;&#1084;&#1087;&#1072;&#1082;&#1090;&#1085;&#1099;&#1077; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>Setting to enable compact tabs in the tab overview</note>
+      </trans-unit>
+      <trans-unit id="Username">
+        <source>Username</source>
+        <target>&#1048;&#1084;&#1103; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1103;</target>
+        <note>Username textbox in Authentication prompt</note>
+      </trans-unit>
+      <trans-unit id="Verify your email address.">
+        <source>Verify your email address.</source>
+        <target>&#1055;&#1086;&#1076;&#1090;&#1074;&#1077;&#1088;&#1076;&#1080;&#1090;&#1077; &#1089;&#1074;&#1086;&#1081; &#1072;&#1076;&#1088;&#1077;&#1089; &#1101;&#1083;. &#1087;&#1086;&#1095;&#1090;&#1099;.</target>
+        <note>Text message in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Version %@ (%@)">
+        <source>Version %1$@ (%2$@)</source>
+        <target>&#1042;&#1077;&#1088;&#1089;&#1080;&#1103; %1$@ (%2$@)</target>
+        <note>Version number of Firefox shown in settings</note>
+      </trans-unit>
+      <trans-unit id="View">
+        <source>View</source>
+        <target>&#1055;&#1088;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088;&#1077;&#1090;&#1100;</target>
+        <note>View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440</note>
+      </trans-unit>
+      <trans-unit id="Web content">
+        <source>Web content</source>
+        <target>&#1042;&#1077;&#1073;-&#1089;&#1086;&#1076;&#1077;&#1088;&#1078;&#1080;&#1084;&#1086;&#1077;</target>
+        <note>Accessibility label for the main web content view</note>
+      </trans-unit>
+      <trans-unit id="Welcome to Sync">
+        <source>Welcome to Sync</source>
+        <target>&#1044;&#1086;&#1073;&#1088;&#1086; &#1087;&#1086;&#1078;&#1072;&#1083;&#1086;&#1074;&#1072;&#1090;&#1100; &#1074; &#1057;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1072;&#1094;&#1080;&#1102;</target>
+        <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Welcome to your Reading List">
+        <source>Welcome to your Reading List</source>
+        <target>&#1044;&#1086;&#1073;&#1088;&#1086; &#1087;&#1086;&#1078;&#1072;&#1083;&#1086;&#1074;&#1072;&#1090;&#1100; &#1074; &#1074;&#1072;&#1096; &#1057;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>See http://mzl.la/1LXbDOL</note>
+      </trans-unit>
+      <trans-unit id="Well, this is embarrassing.">
+        <source>Well, this is embarrassing.</source>
+        <target>&#1054;&#1081;, &#1074;&#1086;&#1090; &#1074;&#1077;&#1076;&#1100; &#1085;&#1077;&#1079;&#1072;&#1076;&#1072;&#1095;&#1072;</target>
+        <note>Restore Tabs Prompt Title</note>
+      </trans-unit>
+      <trans-unit id="Yes">
+        <source>Yes</source>
+        <target>&#1044;&#1072;</target>
+        <note>Button to save the user's password</note>
+      </trans-unit>
+      <trans-unit id="Yesterday">
+        <source>Yesterday</source>
+        <target>&#1042;&#1095;&#1077;&#1088;&#1072;</target>
+        <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="You don't have any other devices connected to this Firefox Account available to sync.">
+        <source>You don't have any other devices connected to this Firefox Account available to sync.</source>
+        <target>&#1059; &#1074;&#1072;&#1089; &#1085;&#1077;&#1090; &#1085;&#1080; &#1086;&#1076;&#1085;&#1086;&#1075;&#1086; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072;, &#1087;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1085;&#1086;&#1075;&#1086; &#1082; &#1101;&#1090;&#1086;&#1084;&#1091; &#1040;&#1082;&#1082;&#1072;&#1091;&#1085;&#1090;&#1091; Firefox &#1080; &#1076;&#1086;&#1089;&#1090;&#1091;&#1087;&#1085;&#1086;&#1075;&#1086; &#1076;&#1083;&#1103; &#1089;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1072;&#1094;&#1080;&#1080;.</target>
+        <note>Error message in the remote tabs panel</note>
+      </trans-unit>
+      <trans-unit id="You don't have any tabs open in Firefox on your other devices.">
+        <source>You don't have any tabs open in Firefox on your other devices.</source>
+        <target>&#1053;&#1072; &#1074;&#1072;&#1096;&#1080;&#1093; &#1076;&#1088;&#1091;&#1075;&#1080;&#1093; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072;&#1093; &#1074; Firefox &#1085;&#1077; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1086; &#1085;&#1080; &#1086;&#1076;&#1085;&#1086;&#1081; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;.</target>
+        <note>Error message in the remote tabs panel</note>
+      </trans-unit>
+      <trans-unit id="Your Rights">
+        <source>Your Rights</source>
+        <target>&#1042;&#1072;&#1096;&#1080; &#1087;&#1088;&#1072;&#1074;&#1072;</target>
+        <note>Your Rights settings section title</note>
+      </trans-unit>
+      <trans-unit id="computer">
+        <source>computer</source>
+        <target>&#1082;&#1086;&#1084;&#1087;&#1100;&#1102;&#1090;&#1077;&#1088;</target>
+        <note>Accessibility label for Desktop Computer (PC) image in remote tabs list</note>
+      </trans-unit>
+      <trans-unit id="just now">
+        <source>just now</source>
+        <target>&#1087;&#1088;&#1103;&#1084;&#1086; &#1089;&#1077;&#1081;&#1095;&#1072;&#1089;</target>
+        <note>Relative time for a tab that was visited within the last few moments.</note>
+      </trans-unit>
+      <trans-unit id="mobile device">
+        <source>mobile device</source>
+        <target>&#1084;&#1086;&#1073;&#1080;&#1083;&#1100;&#1085;&#1086;&#1077; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1086;</target>
+        <note>Accessibility label for Mobile Device image in remote tabs list</note>
+      </trans-unit>
+      <trans-unit id="more than a month ago">
+        <source>more than a month ago</source>
+        <target>&#1073;&#1086;&#1083;&#1077;&#1077; &#1084;&#1077;&#1089;&#1103;&#1094;&#1072; &#1085;&#1072;&#1079;&#1072;&#1076;</target>
+        <note>Relative date for dates older than a month and less than two months.</note>
+      </trans-unit>
+      <trans-unit id="more than a week ago">
+        <source>more than a week ago</source>
+        <target>&#1073;&#1086;&#1083;&#1077;&#1077; &#1085;&#1077;&#1076;&#1077;&#1083;&#1080; &#1085;&#1072;&#1079;&#1072;&#1076;</target>
+        <note>Description for a date more than a week ago, but less than a month ago.</note>
+      </trans-unit>
+      <trans-unit id="read">
+        <source>read</source>
+        <target>&#1087;&#1088;&#1086;&#1095;&#1080;&#1090;&#1072;&#1085;&#1086;</target>
+        <note>Accessibility label for read article in reading list. It's a past participle - functions as an adjective.</note>
+      </trans-unit>
+      <trans-unit id="this week">
+        <source>this week</source>
+        <target>&#1085;&#1072; &#1101;&#1090;&#1086;&#1081; &#1085;&#1077;&#1076;&#1077;&#1083;&#1077;</target>
+        <note>Relative date for date in past week.</note>
+      </trans-unit>
+      <trans-unit id="today at %@">
+        <source>today at %@</source>
+        <target>&#1089;&#1077;&#1075;&#1086;&#1076;&#1085;&#1103; &#1074; %@</target>
+        <note>Relative date for date older than a minute.</note>
+      </trans-unit>
+      <trans-unit id="unread">
+        <source>unread</source>
+        <target>&#1085;&#1077;&#1087;&#1088;&#1086;&#1095;&#1080;&#1090;&#1072;&#1085;&#1086;</target>
+        <note>Accessibility label for unread article in reading list. It's a past participle - functions as an adjective.</note>
+      </trans-unit>
+      <trans-unit id="yesterday">
+        <source>yesterday</source>
+        <target>&#1074;&#1095;&#1077;&#1088;&#1072;</target>
+        <note>Relative date for yesterday.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/LoginManager.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Are you sure?">
+        <source>Are you sure?</source>
+        <target>&#1042;&#1099; &#1091;&#1074;&#1077;&#1088;&#1077;&#1085;&#1099;?</target>
+        <note>Prompt title when deleting logins</note>
+      </trans-unit>
+      <trans-unit id="Clear Search">
+        <source>Clear Search</source>
+        <target>&#1054;&#1095;&#1080;&#1089;&#1090;&#1080;&#1090;&#1100; &#1087;&#1086;&#1080;&#1089;&#1082;</target>
+        <note>Clears the search input field and exits out of input mode</note>
+      </trans-unit>
+      <trans-unit id="Copy">
+        <source>Copy</source>
+        <target>&#1050;&#1086;&#1087;&#1080;&#1088;&#1086;&#1074;&#1072;&#1090;&#1100;</target>
+        <note>Copy password text selection menu item</note>
+      </trans-unit>
+      <trans-unit id="Delete">
+        <source>Delete</source>
+        <target>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100;</target>
+        <note>Button in login detail screen that deletes the current login</note>
+      </trans-unit>
+      <trans-unit id="Deselect All">
+        <source>Deselect All</source>
+        <target>&#1057;&#1085;&#1103;&#1090;&#1100; &#1074;&#1099;&#1076;&#1077;&#1083;&#1077;&#1085;&#1080;&#1077; &#1089;&#1086; &#1074;&#1089;&#1077;&#1093;</target>
+        <note>Title for deselecting all selected logins</note>
+      </trans-unit>
+      <trans-unit id="Enter Search Mode">
+        <source>Enter Search Mode</source>
+        <target>&#1042;&#1086;&#1081;&#1090;&#1080; &#1074; &#1088;&#1077;&#1078;&#1080;&#1084; &#1087;&#1086;&#1080;&#1089;&#1082;&#1072;</target>
+        <note>Accessibility label for entering search mode for logins</note>
+      </trans-unit>
+      <trans-unit id="Hide">
+        <source>Hide</source>
+        <target>&#1057;&#1082;&#1088;&#1099;&#1090;&#1100;</target>
+        <note>Hide password text selection menu item</note>
+      </trans-unit>
+      <trans-unit id="Last modified %@">
+        <source>Last modified %@</source>
+        <target>&#1055;&#1086;&#1089;&#1083;&#1077;&#1076;&#1085;&#1077;&#1077; &#1080;&#1079;&#1084;&#1077;&#1085;&#1077;&#1085;&#1080;&#1077; %@</target>
+        <note>Footer label describing when the login was last modified with the timestamp as the parameter</note>
+      </trans-unit>
+      <trans-unit id="Logins">
+        <source>Logins</source>
+        <target>&#1051;&#1086;&#1075;&#1080;&#1085;&#1099;</target>
+        <note>Title for Logins List View screen</note>
+      </trans-unit>
+      <trans-unit id="Logins will be permanently removed.">
+        <source>Logins will be permanently removed.</source>
+        <target>&#1051;&#1086;&#1075;&#1080;&#1085;&#1099; &#1073;&#1091;&#1076;&#1091;&#1090; &#1073;&#1077;&#1079;&#1074;&#1086;&#1079;&#1074;&#1088;&#1072;&#1090;&#1085;&#1086; &#1091;&#1076;&#1072;&#1083;&#1077;&#1085;&#1099;.</target>
+        <note>Prompt message warning the user that deleting non-synced logins will permanently remove them</note>
+      </trans-unit>
+      <trans-unit id="Logins will be removed from all connected devices.">
+        <source>Logins will be removed from all connected devices.</source>
+        <target>&#1051;&#1086;&#1075;&#1080;&#1085;&#1099; &#1073;&#1091;&#1076;&#1091;&#1090; &#1091;&#1076;&#1072;&#1083;&#1077;&#1085;&#1099; &#1089;&#1086; &#1074;&#1089;&#1077;&#1093; &#1087;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1105;&#1085;&#1085;&#1099;&#1093; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;.</target>
+        <note>Prompt message warning the user that deleted logins will remove logins from all connected devices</note>
+      </trans-unit>
+      <trans-unit id="No logins found">
+        <source>No logins found</source>
+        <target>&#1051;&#1086;&#1075;&#1080;&#1085;&#1099; &#1085;&#1077; &#1085;&#1072;&#1081;&#1076;&#1077;&#1085;&#1099;</target>
+        <note>Title displayed when no logins are found after searching</note>
+      </trans-unit>
+      <trans-unit id="Open &amp; Fill">
+        <source>Open &amp; Fill</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1080; &#1047;&#1072;&#1087;&#1086;&#1083;&#1085;&#1080;&#1090;&#1100;</target>
+        <note>Open and Fill website text selection menu item</note>
+      </trans-unit>
+      <trans-unit id="Reveal">
+        <source>Reveal</source>
+        <target>&#1055;&#1086;&#1082;&#1072;&#1079;&#1072;&#1090;&#1100;</target>
+        <note>Reveal password text selection menu item</note>
+      </trans-unit>
+      <trans-unit id="Search">
+        <source>Search</source>
+        <target>&#1055;&#1086;&#1080;&#1089;&#1082;</target>
+        <note>Title for the search field at the top of the Logins list screen</note>
+      </trans-unit>
+      <trans-unit id="Search Input Field">
+        <source>Search Input Field</source>
+        <target>&#1055;&#1086;&#1083;&#1077; &#1074;&#1074;&#1086;&#1076;&#1072; &#1087;&#1086;&#1080;&#1089;&#1082;&#1072;</target>
+        <note>Accessibility label for the search input field in the Logins list</note>
+      </trans-unit>
+      <trans-unit id="Select All">
+        <source>Select All</source>
+        <target>&#1042;&#1099;&#1076;&#1077;&#1083;&#1080;&#1090;&#1100; &#1074;&#1089;&#1077;</target>
+        <note>Title for selecting all logins</note>
+      </trans-unit>
+      <trans-unit id="password">
+        <source>password</source>
+        <target>&#1087;&#1072;&#1088;&#1086;&#1083;&#1100;</target>
+        <note>Title for password row in Login Detail View</note>
+      </trans-unit>
+      <trans-unit id="username">
+        <source>username</source>
+        <target>&#1080;&#1084;&#1103; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1103;</target>
+        <note>Title for username row in Login Detail View</note>
+      </trans-unit>
+      <trans-unit id="website">
+        <source>website</source>
+        <target>&#1074;&#1077;&#1073;-&#1089;&#1072;&#1081;&#1090;</target>
+        <note>Title for website row in Login Detail View</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/OnePasswordExtension.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="1Password Extension was cancelled by the user">
+        <source>1Password Extension was cancelled by the user</source>
+        <target>&#1056;&#1072;&#1089;&#1096;&#1080;&#1088;&#1077;&#1085;&#1080;&#1077; 1Password &#1073;&#1099;&#1083;&#1086; &#1086;&#1090;&#1084;&#1077;&#1085;&#1077;&#1085;&#1086; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1077;&#1084;</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="App Extension API is not available in this version of iOS">
+        <source>App Extension API is not available in this version of iOS</source>
+        <target>App Extension API &#1085;&#1077; &#1076;&#1086;&#1089;&#1090;&#1091;&#1087;&#1085;&#1086; &#1074; &#1101;&#1090;&#1086;&#1081; &#1074;&#1077;&#1088;&#1089;&#1080;&#1080; iOS</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to contact the 1Password Extension">
+        <source>Failed to contact the 1Password Extension</source>
+        <target>&#1053;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1089;&#1074;&#1103;&#1079;&#1072;&#1090;&#1100;&#1089;&#1103; &#1089; &#1088;&#1072;&#1089;&#1096;&#1080;&#1088;&#1077;&#1085;&#1080;&#1077;&#1084; 1Password</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to execute script that collects web page information">
+        <source>Failed to execute script that collects web page information</source>
+        <target>&#1053;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1074;&#1099;&#1087;&#1086;&#1083;&#1085;&#1080;&#1090;&#1100; &#1089;&#1094;&#1077;&#1085;&#1072;&#1088;&#1080;&#1081;, &#1089;&#1086;&#1073;&#1080;&#1088;&#1072;&#1102;&#1097;&#1080;&#1081; &#1080;&#1085;&#1092;&#1086;&#1088;&#1084;&#1072;&#1094;&#1080;&#1102; &#1074;&#1077;&#1073;-&#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1099;</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to fill web page because script could not be evaluated">
+        <source>Failed to fill web page because script could not be evaluated</source>
+        <target>&#1053;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1079;&#1072;&#1087;&#1086;&#1083;&#1085;&#1080;&#1090;&#1100; &#1074;&#1077;&#1073;-&#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1091;, &#1090;&#1072;&#1082; &#1082;&#1072;&#1082; &#1089;&#1094;&#1077;&#1085;&#1072;&#1088;&#1080;&#1081; &#1085;&#1077; &#1084;&#1086;&#1078;&#1077;&#1090; &#1073;&#1099;&#1090;&#1100; &#1074;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to fill web page because script is missing">
+        <source>Failed to fill web page because script is missing</source>
+        <target>&#1053;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1079;&#1072;&#1087;&#1086;&#1083;&#1085;&#1080;&#1090;&#1100; &#1074;&#1077;&#1073;-&#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1091;, &#1090;&#1072;&#1082; &#1082;&#1072;&#1082; &#1089;&#1094;&#1077;&#1085;&#1072;&#1088;&#1080;&#1081; &#1086;&#1090;&#1089;&#1091;&#1090;&#1089;&#1090;&#1074;&#1091;&#1077;&#1090;</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to obtain URL String from web view. The web view must be loaded completely when calling the 1Password Extension">
+        <source>Failed to obtain URL String from web view. The web view must be loaded completely when calling the 1Password Extension</source>
+        <target>&#1048;&#1079; &#1074;&#1077;&#1073;-&#1087;&#1088;&#1077;&#1076;&#1089;&#1090;&#1072;&#1074;&#1083;&#1077;&#1085;&#1080;&#1103; &#1085;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1087;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1089;&#1090;&#1088;&#1086;&#1082;&#1091; URL. &#1055;&#1088;&#1080; &#1074;&#1099;&#1079;&#1086;&#1074;&#1077; &#1088;&#1072;&#1089;&#1096;&#1080;&#1088;&#1077;&#1085;&#1080;&#1103; 1Password &#1074;&#1077;&#1073;-&#1087;&#1088;&#1077;&#1076;&#1089;&#1090;&#1072;&#1074;&#1083;&#1077;&#1085;&#1080;&#1077; &#1076;&#1086;&#1083;&#1078;&#1085;&#1086; &#1073;&#1099;&#1090;&#1100; &#1087;&#1086;&#1083;&#1085;&#1086;&#1089;&#1090;&#1100;&#1102; &#1079;&#1072;&#1075;&#1088;&#1091;&#1078;&#1077;&#1085;&#1086;</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+      <trans-unit id="Failed to parse information returned by 1Password Extension">
+        <source>Failed to parse information returned by 1Password Extension</source>
+        <target>&#1053;&#1077; &#1091;&#1076;&#1072;&#1083;&#1086;&#1089;&#1100; &#1088;&#1072;&#1079;&#1086;&#1073;&#1088;&#1072;&#1090;&#1100; &#1076;&#1072;&#1085;&#1085;&#1099;&#1077;, &#1074;&#1086;&#1079;&#1074;&#1088;&#1072;&#1097;&#1105;&#1085;&#1085;&#1099;&#1077; &#1088;&#1072;&#1089;&#1096;&#1080;&#1088;&#1077;&#1085;&#1080;&#1077;&#1084; 1Password</target>
+        <note>1Password Extension Error Message</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/PrivateBrowsing.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Close Private Tabs">
+        <source>Close Private Tabs</source>
+        <target>&#1047;&#1072;&#1082;&#1088;&#1099;&#1074;&#1072;&#1090;&#1100; &#1087;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1099;&#1077; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>Setting for closing private tabs</note>
+      </trans-unit>
+      <trans-unit id="Firefox won't remember any of your history or cookies, but new bookmarks will be saved.">
+        <source>Firefox won't remember any of your history or cookies, but new bookmarks will be saved.</source>
+        <target>Firefox &#1085;&#1077; &#1073;&#1091;&#1076;&#1077;&#1090; &#1079;&#1072;&#1087;&#1086;&#1084;&#1080;&#1085;&#1072;&#1090;&#1100; &#1085;&#1080;&#1095;&#1077;&#1075;&#1086; &#1080;&#1079; &#1074;&#1072;&#1096;&#1077;&#1081; &#1080;&#1089;&#1090;&#1086;&#1088;&#1080;&#1080; &#1080;&#1083;&#1080; &#1082;&#1091;&#1082;, &#1085;&#1086; &#1085;&#1086;&#1074;&#1099;&#1077; &#1079;&#1072;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080; &#1073;&#1091;&#1076;&#1091;&#1090; &#1089;&#1086;&#1093;&#1088;&#1072;&#1085;&#1077;&#1085;&#1099;.</target>
+        <note>Description text displayed when there are no open tabs while in private mode</note>
+      </trans-unit>
+      <trans-unit id="Learn More">
+        <source>Learn More</source>
+        <target>&#1055;&#1086;&#1076;&#1088;&#1086;&#1073;&#1085;&#1077;&#1077;</target>
+        <note>Text button displayed when there are no tabs open while in private mode</note>
+      </trans-unit>
+      <trans-unit id="Off">
+        <source>Off</source>
+        <target>&#1054;&#1090;&#1082;&#1083;&#1102;&#1095;&#1105;&#1085;</target>
+        <note>Toggled OFF accessibility value</note>
+      </trans-unit>
+      <trans-unit id="On">
+        <source>On</source>
+        <target>&#1042;&#1082;&#1083;&#1102;&#1095;&#1105;&#1085;</target>
+        <note>Toggled ON accessibility value</note>
+      </trans-unit>
+      <trans-unit id="Open In New Private Tab">
+        <source>Open In New Private Tab</source>
+        <target>&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1074; &#1085;&#1086;&#1074;&#1086;&#1081; &#1087;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1086;&#1081; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1077;</target>
+        <note>Context menu option for opening a link in a new private tab</note>
+      </trans-unit>
+      <trans-unit id="Private Browsing">
+        <source>Private Browsing</source>
+        <target>&#1055;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1099;&#1081; &#1087;&#1088;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088;</target>
+        <note>Title displayed for when there are no open tabs while in private mode</note>
+      </trans-unit>
+      <trans-unit id="Private Mode">
+        <source>Private Mode</source>
+        <target>&#1055;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1099;&#1081; &#1088;&#1077;&#1078;&#1080;&#1084;</target>
+        <note>Accessibility label for toggling on/off private mode</note>
+      </trans-unit>
+      <trans-unit id="Turns private mode on or off">
+        <source>Turns private mode on or off</source>
+        <target>&#1042;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1100; &#1080;&#1083;&#1080; &#1086;&#1090;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1100; &#1087;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1099;&#1081; &#1088;&#1077;&#1078;&#1080;&#1084;</target>
+        <note>Accessiblity hint for toggling on/off private mode</note>
+      </trans-unit>
+      <trans-unit id="When Leaving Private Browsing">
+        <source>When Leaving Private Browsing</source>
+        <target>&#1055;&#1088;&#1080; &#1074;&#1099;&#1093;&#1086;&#1076;&#1077; &#1080;&#1079; &#1055;&#1088;&#1080;&#1074;&#1072;&#1090;&#1085;&#1086;&#1075;&#1086; &#1087;&#1088;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088;&#1072;</target>
+        <note>Will be displayed in Settings under 'Close Private Tabs'</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Search.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="%@ search">
+        <source>%@ search</source>
+        <target>&#1055;&#1086;&#1080;&#1089;&#1082; &#1074; %@</target>
+        <note>Label for search engine buttons. The argument corresponds to the name of the search engine.</note>
+      </trans-unit>
+      <trans-unit id="No">
+        <source>No</source>
+        <target>&#1053;&#1077;&#1090;</target>
+        <note>For search suggestions prompt. This string should be short so it fits nicely on the prompt row.</note>
+      </trans-unit>
+      <trans-unit id="Search Settings">
+        <source>Search Settings</source>
+        <target>&#1055;&#1072;&#1088;&#1072;&#1084;&#1077;&#1090;&#1088;&#1099; &#1087;&#1086;&#1080;&#1089;&#1082;&#1072;</target>
+        <note>Label for search settings button.</note>
+      </trans-unit>
+      <trans-unit id="Search suggestions from %@">
+        <source>Search suggestions from %@</source>
+        <target>&#1055;&#1086;&#1080;&#1089;&#1082;&#1086;&#1074;&#1099;&#1077; &#1087;&#1088;&#1077;&#1076;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103; &#1086;&#1090; %@</target>
+        <note>Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google</note>
+      </trans-unit>
+      <trans-unit id="Turn on search suggestions?">
+        <source>Turn on search suggestions?</source>
+        <target>&#1042;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1100; &#1087;&#1086;&#1080;&#1089;&#1082;&#1086;&#1074;&#1099;&#1077; &#1087;&#1088;&#1077;&#1076;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103;?</target>
+        <note>Prompt shown before enabling provider search queries</note>
+      </trans-unit>
+      <trans-unit id="Yes">
+        <source>Yes</source>
+        <target>&#1044;&#1072;</target>
+        <note>For search suggestions prompt. This string should be short so it fits nicely on the prompt row.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/SendAnonymousUsageData.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="More Info&#8230;">
+        <source>More Info&#8230;</source>
+        <target>&#1055;&#1086;&#1076;&#1088;&#1086;&#1073;&#1085;&#1077;&#1077;&#8230;</target>
+        <note>See http://bit.ly/1SmEXU1</note>
+      </trans-unit>
+      <trans-unit id="Send Anonymous Usage Data">
+        <source>Send Anonymous Usage Data</source>
+        <target>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1083;&#1103;&#1090;&#1100; &#1072;&#1085;&#1086;&#1085;&#1080;&#1084;&#1085;&#1099;&#1077; &#1076;&#1072;&#1085;&#1085;&#1099;&#1077; &#1086;&#1073; &#1080;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1085;&#1080;&#1080;</target>
+        <note>See http://bit.ly/1SmEXU1</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/SendTo.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Available devices:">
+        <source>Available devices:</source>
+        <target>&#1044;&#1086;&#1089;&#1090;&#1091;&#1087;&#1085;&#1099;&#1077; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072;:</target>
+        <note>Header for the list of devices table</note>
+      </trans-unit>
+      <trans-unit id="Close">
+        <source>Close</source>
+        <target>&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100;</target>
+        <note>Close button in top navigation bar</note>
+      </trans-unit>
+      <trans-unit id="Please open Firefox, go to Settings and sign in to continue.">
+        <source>Please open Firefox, go to Settings and sign in to continue.</source>
+        <target>&#1055;&#1086;&#1078;&#1072;&#1083;&#1091;&#1081;&#1089;&#1090;&#1072; &#1086;&#1090;&#1082;&#1088;&#1086;&#1081;&#1090;&#1077; Firefox, &#1087;&#1077;&#1088;&#1077;&#1081;&#1076;&#1080;&#1090;&#1077; &#1074; &#1055;&#1072;&#1088;&#1072;&#1084;&#1077;&#1090;&#1088;&#1099; &#1080; &#1074;&#1086;&#1081;&#1076;&#1080;&#1090;&#1077; &#1076;&#1083;&#1103; &#1087;&#1088;&#1086;&#1076;&#1086;&#1083;&#1078;&#1077;&#1085;&#1080;&#1103;.</target>
+        <note>See http://mzl.la/1ISlXnU</note>
+      </trans-unit>
+      <trans-unit id="Send">
+        <source>Send</source>
+        <target>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100;</target>
+        <note>Navigation bar button to Send the current page to a device</note>
+      </trans-unit>
+      <trans-unit id="Send Tab">
+        <source>Send Tab</source>
+        <target>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1091;</target>
+        <note>Title of the dialog that allows you to send a tab to a different device</note>
+      </trans-unit>
+      <trans-unit id="You are not signed in to your Firefox Account.">
+        <source>You are not signed in to your Firefox Account.</source>
+        <target>&#1042;&#1099; &#1085;&#1077; &#1074;&#1086;&#1096;&#1083;&#1080; &#1074; &#1089;&#1074;&#1086;&#1081; &#1040;&#1082;&#1082;&#1072;&#1091;&#1085;&#1090; Firefox.</target>
+        <note>See http://mzl.la/1ISlXnU</note>
+      </trans-unit>
+      <trans-unit id="You don't have any other devices connected to this Firefox Account available to sync.">
+        <source>You don't have any other devices connected to this Firefox Account available to sync.</source>
+        <target>&#1059; &#1074;&#1072;&#1089; &#1085;&#1077;&#1090; &#1085;&#1080; &#1086;&#1076;&#1085;&#1086;&#1075;&#1086; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072;, &#1087;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1085;&#1086;&#1075;&#1086; &#1082; &#1101;&#1090;&#1086;&#1084;&#1091; &#1040;&#1082;&#1082;&#1072;&#1091;&#1085;&#1090;&#1091; Firefox &#1080; &#1076;&#1086;&#1089;&#1090;&#1091;&#1087;&#1085;&#1086;&#1075;&#1086; &#1076;&#1083;&#1103; &#1089;&#1080;&#1085;&#1093;&#1088;&#1086;&#1085;&#1080;&#1079;&#1072;&#1094;&#1080;&#1080;.</target>
+        <note>Error message shown in the remote tabs panel</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Extensions/SendTo/Info.plist" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName">
+        <source>Send Tab</source>
+        <target>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074;&#1082;&#1083;&#1072;&#1076;&#1082;&#1091;</target>
+      </trans-unit>
+      </body>
+  </file>
+  <file original="Extensions/ShareTo/ShareTo.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Add">
+        <source>Add</source>
+        <target>&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100;</target>
+        <note>Add button in the share dialog</note>
+      </trans-unit>
+      <trans-unit id="Add to Bookmarks">
+        <source>Add to Bookmarks</source>
+        <target>&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1047;&#1072;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>On/off toggle to select adding this url to your bookmarks</note>
+      </trans-unit>
+      <trans-unit id="Add to Reading List">
+        <source>Add to Reading List</source>
+        <target>&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1057;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1083;&#1103; &#1095;&#1090;&#1077;&#1085;&#1080;&#1103;</target>
+        <note>On/off toggle to select adding this url to your reading list</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Extensions/ViewLater/Info.plist" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName">
+        <source>View Later</source>
+        <target>&#1055;&#1088;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088;&#1077;&#1090;&#1100; &#1087;&#1086;&#1079;&#1078;&#1077;</target>
+      </trans-unit>
+      </body>
+  </file>
+  <file original="Shared/Supporting Files/Shared.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="%@ on %@">
+        <source>%1$@ on %2$@</source>
+        <target>%1$@ &#1085;&#1072; %2$@</target>
+        <note>A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Storage.strings" source-language="en" datatype="plaintext" target-language="ru">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="7.2" build-num="7C68"/>
+    </header>
+    <body>
+      <trans-unit id="Bookmarks Menu">
+        <source>Bookmarks Menu</source>
+        <target>&#1052;&#1077;&#1085;&#1102; &#1079;&#1072;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;</target>
+        <note>The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Bookmarks Toolbar">
+        <source>Bookmarks Toolbar</source>
+        <target>&#1055;&#1072;&#1085;&#1077;&#1083;&#1100; &#1079;&#1072;&#1082;&#1083;&#1072;&#1076;&#1086;&#1082;</target>
+        <note>The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Mobile Bookmarks">
+        <source>Mobile Bookmarks</source>
+        <target>&#1052;&#1086;&#1073;&#1080;&#1083;&#1100;&#1085;&#1099;&#1077; &#1079;&#1072;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Unsorted Bookmarks">
+        <source>Unsorted Bookmarks</source>
+        <target>&#1053;&#1077;&#1087;&#1086;&#1076;&#1096;&#1080;&#1090;&#1099;&#1077; &#1079;&#1072;&#1082;&#1083;&#1072;&#1076;&#1082;&#1080;</target>
+        <note>The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Untitled">
+        <source>Untitled</source>
+        <target>&#1041;&#1077;&#1079; &#1080;&#1084;&#1077;&#1085;&#1080;</target>
+        <note>The default name for bookmark folders without titles.
+   The default name for bookmark nodes without titles.</note>
+      </trans-unit>
+    </body>
+  </file>
+  </xliff>

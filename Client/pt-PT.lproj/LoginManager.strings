@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Tem a certeza?";
+
+/* Clears the search input field and exits out of input mode */
+"Clear Search" = "Limpar pesquisa";
+
+/* Copy password text selection menu item */
+"Copy" = "Copiar";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Eliminar";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Desmarcar tudo";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Entrar no modo de pesquisa";
+
+/* Hide password text selection menu item */
+"Hide" = "Ocultar";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Última modificação %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Credenciais";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "As credenciais serão removidas para sempre.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "As credenciais serão removidas de todos os dispositivos ligados.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Não foram encontradas credenciais";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Abrir e preencher";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Revelar";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Pesquisar";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Pesquisar no campo de inserção";
+
+/* Title for selecting all logins */
+"Select All" = "Selecionar tudo";
+
+/* Title for password row in Login Detail View */
+"password" = "palavra-passe";
+
+/* Title for username row in Login Detail View */
+"username" = "nome de utilizador";
+
+/* Title for website row in Login Detail View */
+"website" = "website";
+
