@@ -13,14 +13,18 @@ public class BookmarkNode {
     public var id: Int? = nil
     public let guid: GUID
     public let title: String
+    public let isEditable: Bool
     public var favicon: Favicon? = nil
 
-    init(guid: GUID, title: String) {
+    init(guid: GUID, title: String, isEditable: Bool=false) {
         self.guid = guid
         self.title = title
+        self.isEditable = isEditable
     }
 
-    public var canDelete = false
+    public var canDelete: Bool {
+        return self.isEditable
+    }
 }
 
 public class BookmarkSeparator: BookmarkNode {
@@ -37,10 +41,9 @@ public class BookmarkSeparator: BookmarkNode {
 public class BookmarkItem: BookmarkNode {
     public let url: String!
 
-    public init(guid: String, title: String, url: String) {
+    public init(guid: String, title: String, url: String, isEditable: Bool=false) {
         self.url = url
-        super.init(guid: guid, title: title)
-        self.canDelete = true
+        super.init(guid: guid, title: title, isEditable: isEditable)
     }
 }
 
@@ -54,6 +57,10 @@ public class BookmarkFolder: BookmarkNode {
 
     public func itemIsEditableAtIndex(index: Int) -> Bool {
         return self[index]?.canDelete ?? false
+    }
+
+    override public var canDelete: Bool {
+        return false
     }
 }
 
