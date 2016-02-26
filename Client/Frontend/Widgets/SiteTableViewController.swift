@@ -52,9 +52,13 @@ class SiteTableViewHeader : UITableViewHeaderFooterView {
             make.height.equalTo(0.5)
         }
 
+        // A table view will initialize the header with CGSizeZero before applying the actual size. Hence, the label's constraints
+        // must not impose a minimum width on the content view.
         titleLabel.snp_makeConstraints { make in
-            make.left.equalTo(contentView).offset(SiteTableViewControllerUX.HeaderTextMargin)
-            make.right.equalTo(contentView).offset(-SiteTableViewControllerUX.HeaderTextMargin)
+            make.left.equalTo(contentView).offset(SiteTableViewControllerUX.HeaderTextMargin).priorityHigh()
+            make.right.equalTo(contentView).offset(-SiteTableViewControllerUX.HeaderTextMargin).priorityHigh()
+            make.left.greaterThanOrEqualTo(contentView) // Fallback for when the left space constraint breaks
+            make.right.lessThanOrEqualTo(contentView) // Fallback for when the right space constraint breaks
             make.centerY.equalTo(contentView)
         }
     }
