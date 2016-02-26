@@ -38,6 +38,7 @@ protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
+    func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
 }
 
@@ -223,6 +224,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
             prev = button
         }
+    }
+
+    func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType) {
+        return self.homePanel(homePanel, didSelectURL: url.asURL!, visitType: visitType)
     }
 
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType) {
