@@ -9,6 +9,10 @@ public class AppInfo {
         return NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
     }
 
+    public static var majorAppVersion: String {
+        return appVersion.componentsSeparatedByString(".").first ?? "0"
+    }
+
     /// Return the shared container identifier (also known as the app group) to be used with for example background
     /// http requests. It is the base bundle identifier with a "group." prefix.
     public static func sharedContainerIdentifier() -> String? {
