@@ -5,7 +5,7 @@
 import Foundation
 
 class URIFixup {
-    func getURL(entry: String) -> NSURL? {
+    static func getURL(entry: String) -> NSURL? {
         let trimmed = entry.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
         var url = NSURL(string: trimmed)
 

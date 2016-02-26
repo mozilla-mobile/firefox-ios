@@ -42,7 +42,6 @@ class BrowserViewController: UIViewController {
     private var statusBarOverlay: UIView!
     private(set) var toolbar: BrowserToolbar?
     private var searchController: SearchViewController?
-    private let uriFixup = URIFixup()
     private var screenshotHelper: ScreenshotHelper!
     private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
@@ -1282,20 +1281,15 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
-        var url = uriFixup.getURL(text)
-
         // If we can't make a valid URL, do a search query.
-        if url == nil {
-            url = profile.searchEngines.defaultEngine.searchURLForQuery(text)
-        }
-
         // If we still don't have a valid URL, something is broken. Give up.
-        if url == nil {
+        guard let url = URIFixup.getURL(text) ??
+                        profile.searchEngines.defaultEngine.searchURLForQuery(text) else {
             log.error("Error handling URL entry: \"\(text)\".")
             return
         }
 
-        finishEditingAndSubmit(url!, visitType: VisitType.Typed)
+        finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
 
     func urlBarDidEnterOverlayMode(urlBar: URLBarView) {
