@@ -553,20 +553,6 @@ extension BrowserDB {
     }
 }
 
-public class MergedSQLiteBookmarks: BookmarksModelFactorySource {
-    let local: SQLiteBookmarks
-    let buffer: SQLiteBookmarkBufferStorage
-
-    public var modelFactory: BookmarksModelFactory {
-        return local.modelFactory
-    }
-
-    public init(db: BrowserDB) {
-        self.local = SQLiteBookmarks(db: db)
-        self.buffer = SQLiteBookmarkBufferStorage(db: db)
-    }
-}
-
 extension MergedSQLiteBookmarks: BookmarkBufferStorage {
     public func isEmpty() -> Deferred<Maybe<Bool>> {
         return self.buffer.isEmpty()
