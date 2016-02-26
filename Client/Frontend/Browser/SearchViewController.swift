@@ -544,7 +544,7 @@ extension SearchViewController {
 
 extension SearchViewController: SuggestionCellDelegate {
     private func suggestionCell(suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String) {
-        var url = URIFixup().getURL(suggestion)
+        var url = URIFixup.getURL(suggestion)
         if url == nil {
             // Assume that only the default search engine can provide search suggestions.
             url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
