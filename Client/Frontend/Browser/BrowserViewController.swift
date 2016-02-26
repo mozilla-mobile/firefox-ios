@@ -521,7 +521,7 @@ class BrowserViewController: UIViewController {
 
         // TODO This is a temporary fix to make sure the What's New page will only show for new 2.1 installs
         // and not for people who upgrade from 2.0.
-        if profile.prefs.stringForKey(LatestAppVersionProfileKey) != "2.1" && DeviceInfo.hasConnectivity() {
+        if profile.prefs.stringForKey(LatestAppVersionProfileKey) != "2.0" && DeviceInfo.hasConnectivity() {
             if let whatsNewURL = SupportUtils.URLForTopic("new-ios") {
                 self.openURLInNewTab(whatsNewURL)
                 profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
