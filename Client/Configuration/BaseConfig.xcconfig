@@ -9,10 +9,10 @@ MOZ_APP_ID = fennecios@mozilla.org
 MOZ_BUNDLE_ID = org.mozilla.ios.$(MOZ_PRODUCT_NAME)
 
 // App Version
-MOZ_VERSION = 2.0
+MOZ_VERSION = 2.1
 
 // Build ID
-MOZ_BUILD_ID = 2000
+MOZ_BUILD_ID = 2
 
 // Product Name
 MOZ_SOCORRO_PRODUCT_NAME = FenneciOS
