@@ -117,9 +117,9 @@ extension SQLiteBookmarks {
      *
      * Sorry about the long line. If we break it, the indenting below gets crazy.
      */
-    func insertBookmarkInTransaction(deferred: Success, url: NSURL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String)(conn: SQLiteDBConnection, inout err: NSError?) -> Bool {
+    private func insertBookmarkInTransaction(deferred: Success, url: NSURL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String)(conn: SQLiteDBConnection, inout err: NSError?) -> Bool {
 
-        log.debug("Begun bookmark transaction on thread \(NSThread.currentThread())")
+        log.debug("Inserting bookmark in transaction on thread \(NSThread.currentThread())")
 
         // Keep going if this returns true.
         func change(sql: String, args: Args?, desc: String) -> Bool {
@@ -277,7 +277,7 @@ extension SQLiteBookmarks {
             return false
         }
 
-        log.debug("Wrapped up bookmark transaction on thread \(NSThread.currentThread())")
+        log.debug("Returning true to commit transaction on thread \(NSThread.currentThread())")
 
         /// Fill the deferred and commit the transaction.
         deferred.fill(Maybe(success: ()))
