@@ -405,7 +405,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         bookmarks.applyRecords(changedBufferRecords).succeeded()
 
         // Make local changes.
-        bookmarks.local.removeByGUID("folderDDDDDD").succeeded()
+        bookmarks.local.modelFactory.removeByGUID("folderDDDDDD").succeeded()
         bookmarks.local.insertBookmark("http://example.com/e".asURL!, title: "E", favicon: nil, intoFolder: "folderBBBBBB", withTitle: "B").succeeded()
         let insertedGUID = bookmarks.local.db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) WHERE title IS 'E'")[0]
 

@@ -106,7 +106,7 @@ public class MockProfile: Profile {
         return MockSyncManager()
     }()
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, SyncableBookmarks, LocalItemSource, MirrorItemSource, ShareToDestination> = {
+    lazy var bookmarks: protocol<BookmarksModelFactorySource, SyncableBookmarks, LocalItemSource, MirrorItemSource, ShareToDestination> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         let p = self.places
