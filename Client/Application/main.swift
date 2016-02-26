@@ -16,6 +16,8 @@ if AppConstants.IsRunningTest {
         appDelegate = AppDelegate.self
     case .Release:
         appDelegate = AppDelegate.self
+    case .Beta:
+        appDelegate = AppDelegate.self
     }
 }
 
