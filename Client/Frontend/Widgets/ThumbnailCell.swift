@@ -13,6 +13,7 @@ struct ThumbnailCellUX {
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x353535)
     static let LabelBackgroundColor = UIColor(white: 1.0, alpha: 0.5)
     static let LabelAlignment: NSTextAlignment = .Center
+    static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let InsetSize: CGFloat = 20
     static let InsetSizeCompact: CGFloat = 6
     static func insetsForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection) -> UIEdgeInsets {
@@ -172,6 +173,19 @@ class ThumbnailCell: UICollectionViewCell {
         return backgroundImage
     }()
 
+    lazy var selectedOverlay: UIView = {
+        let selectedOverlay = UIView()
+        selectedOverlay.backgroundColor = ThumbnailCellUX.SelectedOverlayColor
+        selectedOverlay.hidden = true
+        return selectedOverlay
+    }()
+
+    override var selected: Bool {
+        didSet {
+            self.selectedOverlay.hidden = !selected
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -188,12 +202,17 @@ class ThumbnailCell: UICollectionViewCell {
         }
         imageWrapper.addSubview(imageView)
         imageWrapper.addSubview(textWrapper)
+        imageWrapper.addSubview(selectedOverlay)
         textWrapper.addSubview(textLabel)
         contentView.addSubview(removeButton)
 
         textWrapper.snp_makeConstraints { make in
             make.bottom.equalTo(self.imageWrapper.snp_bottom) // .offset(ThumbnailCellUX.BorderWidth)
             make.left.right.equalTo(self.imageWrapper) // .offset(ThumbnailCellUX.BorderWidth)
+        }
+
+        selectedOverlay.snp_makeConstraints { make in
+            make.edges.equalTo(self.imageWrapper)
         }
 
         textLabel.snp_remakeConstraints { make in
