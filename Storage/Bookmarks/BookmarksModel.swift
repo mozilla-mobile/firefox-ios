@@ -74,11 +74,13 @@ public class BookmarkFolder: BookmarkNode {
  * 'Refresh' means requesting a new model from the store.
  */
 public class BookmarksModel: BookmarksModelFactorySource {
-    public let modelFactory: BookmarksModelFactory
+    private let factory: BookmarksModelFactory
+    public let modelFactory: Deferred<Maybe<BookmarksModelFactory>>
     public let current: BookmarkFolder
 
     public init(modelFactory: BookmarksModelFactory, root: BookmarkFolder) {
-        self.modelFactory = modelFactory
+        self.factory = modelFactory
+        self.modelFactory = deferMaybe(modelFactory)
         self.current = root
     }
 
@@ -86,21 +88,21 @@ public class BookmarksModel: BookmarksModelFactorySource {
      * Produce a new model rooted at the appropriate folder. Fails if the folder doesn't exist.
      */
     public func selectFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
-        return modelFactory.modelForFolder(folder)
+        return self.factory.modelForFolder(folder)
     }
 
     /**
      * Produce a new model rooted at the appropriate folder. Fails if the folder doesn't exist.
      */
     public func selectFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
-        return modelFactory.modelForFolder(guid)
+        return self.factory.modelForFolder(guid)
     }
 
     /**
      * Produce a new model rooted at the base of the hierarchy. Should never fail.
      */
     public func selectRoot() -> Deferred<Maybe<BookmarksModel>> {
-        return modelFactory.modelForRoot()
+        return self.factory.modelForRoot()
     }
 
     /**
@@ -108,7 +110,7 @@ public class BookmarksModel: BookmarksModelFactorySource {
      * the folder has been deleted from the backing store.
      */
     public func reloadData() -> Deferred<Maybe<BookmarksModel>> {
-        return modelFactory.modelForFolder(current)
+        return self.factory.modelForFolder(current)
     }
 
     public var canDelete: Bool {
@@ -117,7 +119,7 @@ public class BookmarksModel: BookmarksModelFactorySource {
 }
 
 public protocol BookmarksModelFactorySource {
-    var modelFactory: BookmarksModelFactory { get }
+    var modelFactory: Deferred<Maybe<BookmarksModelFactory>> { get }
 }
 
 public protocol BookmarksModelFactory {

@@ -822,10 +822,12 @@ class BrowserViewController: UIViewController {
     }
 
     private func removeBookmark(url: String) {
-        profile.bookmarks.modelFactory.removeByURL(url).uponQueue(dispatch_get_main_queue()) { res in
-            if res.isSuccess {
-                self.toolbar?.updateBookmarkStatus(false)
-                self.urlBar.updateBookmarkStatus(false)
+        profile.bookmarks.modelFactory >>== {
+            $0.removeByURL(url).uponQueue(dispatch_get_main_queue()) { res in
+                if res.isSuccess {
+                    self.toolbar?.updateBookmarkStatus(false)
+                    self.urlBar.updateBookmarkStatus(false)
+                }
             }
         }
     }
@@ -925,13 +927,15 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        profile.bookmarks.modelFactory.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { result in
-            guard let bookmarked = result.successValue else {
-                log.error("Error getting bookmark status: \(result.failureValue).")
-                return
-            }
+        profile.bookmarks.modelFactory >>== {
+            $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { result in
+                guard let bookmarked = result.successValue else {
+                    log.error("Error getting bookmark status: \(result.failureValue).")
+                    return
+                }
 
-            self.navigationToolbar.updateBookmarkStatus(bookmarked)
+                self.navigationToolbar.updateBookmarkStatus(bookmarked)
+            }
         }
     }
     // Mark: Opening New Tabs
@@ -1367,15 +1371,15 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 log.error("Bookmark error: No tab is selected, or no URL in tab.")
                 return
         }
-        profile.bookmarks.modelFactory.isBookmarked(url).uponQueue(dispatch_get_main_queue()) {
-            guard let isBookmarked = $0.successValue else {
-                log.error("Bookmark error: \($0.failureValue).")
-                return
-            }
-            if isBookmarked {
-                self.removeBookmark(url)
-            } else {
-                self.addBookmark(url, title: tab.title)
+
+        let title = tab.title
+        profile.bookmarks.modelFactory >>== {
+            $0.isBookmarked(url) >>== { isBookmarked in
+                if isBookmarked {
+                    self.removeBookmark(url)
+                } else {
+                    self.addBookmark(url, title: tab.title)
+                }
             }
         }
     }
@@ -1682,14 +1686,16 @@ extension BrowserViewController: TabManagerDelegate {
                 if AboutUtils.isAboutURL(webView.URL) {
                     // Indeed, because we don't show the toolbar at all, don't even blank the star.
                 } else {
-                    profile.bookmarks.modelFactory.isBookmarked(url).uponQueue(dispatch_get_main_queue()) {
-                        guard let isBookmarked = $0.successValue else {
-                            log.error("Error getting bookmark status: \($0.failureValue).")
-                            return
-                        }
+                    profile.bookmarks.modelFactory >>== {
+                        $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) {
+                            guard let isBookmarked = $0.successValue else {
+                                log.error("Error getting bookmark status: \($0.failureValue).")
+                                return
+                            }
 
-                        self.toolbar?.updateBookmarkStatus(isBookmarked)
-                        self.urlBar.updateBookmarkStatus(isBookmarked)
+                            self.toolbar?.updateBookmarkStatus(isBookmarked)
+                            self.urlBar.updateBookmarkStatus(isBookmarked)
+                        }
                     }
                 }
             } else {

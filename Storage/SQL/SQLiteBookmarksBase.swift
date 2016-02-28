@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Deferred
 import Foundation
 import Shared
 
@@ -19,7 +20,16 @@ public class SQLiteBookmarks: BookmarksModelFactorySource {
         self.favicons = FaviconsTable<Favicon>()
     }
 
-    public var modelFactory: BookmarksModelFactory {
-        return SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local)
+    public var modelFactory: Deferred<Maybe<BookmarksModelFactory>> {
+        struct Singleton {
+            static var token: dispatch_once_t = 0
+            static var instance: Deferred<Maybe<BookmarksModelFactory>>!
+        }
+
+        // We never need to fetch the factory more than once.
+        dispatch_once(&Singleton.token) {
+            Singleton.instance = deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local))
+        }
+        return Singleton.instance
     }
 }
