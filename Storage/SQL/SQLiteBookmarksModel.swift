@@ -778,12 +778,18 @@ public class MergedSQLiteBookmarks: BookmarksModelFactorySource {
     let local: SQLiteBookmarks
     let buffer: SQLiteBookmarkBufferStorage
 
-    public var modelFactory: BookmarksModelFactory {
-        // TODO: don't block! We can make this lazy.
-        if self.local.hasOnlyUnmergedRemoteBookmarks().value.successValue ?? false {
-            return UnsyncedBookmarksFallbackModelFactory(bookmarks: local)
+    // Figuring out our factory can require hitting the DB, so this is async.
+    // Note that we check *every time* -- we don't want to get stuck in a dead
+    // end when you might sync soon.
+    public var modelFactory: Deferred<Maybe<BookmarksModelFactory>> {
+        return self.local.hasOnlyUnmergedRemoteBookmarks() >>== { yes in
+            if yes {
+                log.debug("Only unmerged remote bookmarks; using fallback factory.")
+                return deferMaybe(UnsyncedBookmarksFallbackModelFactory(bookmarks: self.local))
+            }
+            log.debug("Using local+mirror bookmark factory.")
+            return self.local.modelFactory
         }
-        return local.modelFactory
     }
 
     public init(db: BrowserDB) {

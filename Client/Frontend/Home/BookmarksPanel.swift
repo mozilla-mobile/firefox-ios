@@ -74,9 +74,9 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         guard let source = self.source else {
             // Get all the bookmarks split by folders
             if let bookmarkFolder = bookmarkFolder {
-                profile.bookmarks.modelFactory.modelForFolder(bookmarkFolder).upon(onModelFetched)
+                profile.bookmarks.modelFactory >>== { $0.modelForFolder(bookmarkFolder).upon(self.onModelFetched) }
             } else {
-                profile.bookmarks.modelFactory.modelForRoot().upon(onModelFetched)
+                profile.bookmarks.modelFactory >>== { $0.modelForRoot().upon(self.onModelFetched) }
             }
             return
         }
@@ -293,10 +293,16 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             let nextController = BookmarksPanel()
             nextController.parentFolders = parentFolders + [source.current]
             nextController.bookmarkFolder = folder
-            nextController.source = BookmarksModel(modelFactory: source.modelFactory, root: folder)
             nextController.homePanelDelegate = self.homePanelDelegate
             nextController.profile = self.profile
-            self.navigationController?.pushViewController(nextController, animated: true)
+            source.modelFactory.uponQueue(dispatch_get_main_queue()) { maybe in
+                guard let factory = maybe.successValue else {
+                    // Nothing we can do.
+                    return
+                }
+                nextController.source = BookmarksModel(modelFactory: factory, root: folder)
+                self.navigationController?.pushViewController(nextController, animated: true)
+            }
             break
 
         default:
@@ -347,7 +353,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
             log.debug("Removing rows \(indexPath).")
 
-            if let err = source.modelFactory.removeByGUID(bookmark.guid).value.failureValue {
+            // Block to do this -- this is UI code.
+            guard let factory = source.modelFactory.value.successValue else {
+                log.error("Couldn't get model factory. This is unexpected.")
+                self.onModelFailure(DatabaseError(description: "Unable to get factory."))
+                return
+            }
+
+            if let err = factory.removeByGUID(bookmark.guid).value.failureValue {
                 log.debug("Failed to remove \(bookmark.guid).")
                 self.onModelFailure(err)
                 return

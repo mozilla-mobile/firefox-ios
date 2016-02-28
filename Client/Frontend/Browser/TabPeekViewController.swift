@@ -129,30 +129,43 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     }
 
     func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: ClientPickerViewControllerDelegate) {
-        guard let displayURL = tab?.url?.absoluteString where displayURL.characters.count > 0 else { return }
+        assert(NSThread.currentThread().isMainThread)
 
-        browserProfile.bookmarks.modelFactory.isBookmarked(displayURL).upon {
-            self.isBookmarked = $0.successValue ?? false
+        guard let tab = self.tab else {
+            return
         }
 
-        browserProfile.remoteClientsAndTabs.getClientGUIDs().upon {
-            if let clientGUIDs = $0.successValue {
-                self.hasRemoteClients = !clientGUIDs.isEmpty
-                let clientPickerController = ClientPickerViewController()
-                clientPickerController.clientPickerDelegate = clientPickerDelegate
-                clientPickerController.profile = browserProfile
-                if let url = self.tab?.url?.absoluteString {
-                    clientPickerController.shareItem = ShareItem(url: url, title: self.tab?.title, favicon: nil)
-                }
+        guard let displayURL = tab.url?.absoluteString where displayURL.characters.count > 0 else {
+            return
+        }
 
-                self.clientPicker = UINavigationController(rootViewController: clientPickerController)
+        let mainQueue = dispatch_get_main_queue()
+        browserProfile.bookmarks.modelFactory >>== {
+            $0.isBookmarked(displayURL).uponQueue(mainQueue) {
+                self.isBookmarked = $0.successValue ?? false
             }
         }
 
-        let result = browserProfile.readingList?.getRecordWithURL(displayURL).successValue!
-        isInReadingList = (result?.url.characters.count > 0) ?? false
+        browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(mainQueue) {
+            guard let clientGUIDs = $0.successValue else {
+                return
+            }
 
-        ignoreURL = isIgnoredURL(displayURL)
+            self.hasRemoteClients = !clientGUIDs.isEmpty
+            let clientPickerController = ClientPickerViewController()
+            clientPickerController.clientPickerDelegate = clientPickerDelegate
+            clientPickerController.profile = browserProfile
+            if let url = tab.url?.absoluteString {
+                clientPickerController.shareItem = ShareItem(url: url, title: tab.title, favicon: nil)
+            }
+
+            self.clientPicker = UINavigationController(rootViewController: clientPickerController)
+        }
+
+        let result = browserProfile.readingList?.getRecordWithURL(displayURL).successValue!
+
+        self.isInReadingList = (result?.url.characters.count > 0) ?? false
+        self.ignoreURL = isIgnoredURL(displayURL)
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
