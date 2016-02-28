@@ -688,23 +688,23 @@ extension SQLiteBookmarks: SearchableBookmarks {
 }
 
 extension SQLiteBookmarks {
+    // We're in sync (even partially) if the mirror is non-empty.
+    // We can show fallback desktop bookmarks if the mirror is empty and the buffer contains
+    // children of the roots.
     func hasOnlyUnmergedRemoteBookmarks() -> Deferred<Maybe<Bool>> {
-        return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksMirror)")
-            >>== { emptyMirror in
-                if !emptyMirror {
-                    return deferMaybe(false)
-                }
-
-                let parents: Args = [
-                    BookmarkRoots.MenuFolderGUID,
-                    BookmarkRoots.ToolbarFolderGUID,
-                    BookmarkRoots.UnfiledFolderGUID,
-                ]
-                let sql = "SELECT 1 FROM \(TableBookmarksBufferStructure) WHERE parent IN (?, ?, ?)"
-                return self.db.queryReturnsResults(sql, args: parents)
-        }
+        let parents: Args = [
+            BookmarkRoots.MenuFolderGUID,
+            BookmarkRoots.ToolbarFolderGUID,
+            BookmarkRoots.UnfiledFolderGUID,
+        ]
+        let sql = [
+            "SELECT",
+            "not exists(SELECT 1 FROM \(TableBookmarksMirror))",
+            "AND",
+            "exists(SELECT 1 FROM \(TableBookmarksBufferStructure) WHERE parent IN (?, ?, ?))",
+            ].joinWithSeparator(" ")
+        return self.db.runQuery(sql, args: parents, factory: { ($0[0] as! Int) == 1 }) >>== { deferMaybe($0[0]!) }
     }
-
 }
 
 // It's a factory where the root contains Desktop Bookmarks from the buffer, and
@@ -750,7 +750,6 @@ public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
                 return deferMaybe(BookmarksModel(modelFactory: self, root: prepended))
             }
         }
-
     }
 
     // Whenever async construction is necessary, we fall into a pattern of needing
