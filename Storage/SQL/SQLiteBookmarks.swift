@@ -217,7 +217,14 @@ public class SQLiteBookmarks: BookmarksModelFactory {
             return nil
         }
 
-        return SQLiteBookmarkFolder(guid: guid, title: title, children: children)
+        let folder = SQLiteBookmarkFolder(guid: guid, title: title, children: children)
+
+        // We add some suggested sites to the mobile bookmarks folder only.
+        if guid == BookmarkRoots.MobileFolderGUID {
+            return BookmarkFolderWithDefaults(folder: folder, sites: SuggestedSites)
+        }
+
+        return folder
     }
 
     public func modelForFolder(guid: String, title: String) -> Deferred<Maybe<BookmarksModel>> {
