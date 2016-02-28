@@ -66,7 +66,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
-    func testChangingDyamicFontOnBookmarks() {
+    func testChangingDynamicFontOnBookmarks() {
         DynamicFontUtils.restoreDynamicFontSize(tester())
 
         tester().tapViewWithAccessibilityIdentifier("url")
