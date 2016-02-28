@@ -60,10 +60,6 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("Bookmarks")
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Page 1")
-
-        // The "default" bookmarks (suggested sites) should now show here.
-        tester().waitForViewWithAccessibilityLabel("The Mozilla Project")
-        tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
     func testChangingDynamicFontOnBookmarks() {
