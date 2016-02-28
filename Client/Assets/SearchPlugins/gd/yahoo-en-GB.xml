@@ -6,18 +6,17 @@
 <ShortName>Yahoo.co.uk</ShortName>
 <InputEncoding>UTF-8</InputEncoding>
 <Image width="16" height="16">data:image/png;base64,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</Image>
-<Url type="application/x-suggestions+json" method="GET"
-     template="https://uk.search.yahoo.com/sugg/ff">
-  <Param name="output" value="fxjson" />
-  <Param name="appid" value="ffm" />
-  <Param name="command" value="{searchTerms}" />
-  <MozParam name="nresults" condition="pref" pref="maxSuggestions" />
+<Url type="application/x-suggestions+json" method="GET" template="https://uk.search.yahoo.com/sugg/ff">
+  <Param name="output" value="fxjson"/>
+  <Param name="appid" value="ffm"/>
+  <Param name="command" value="{searchTerms}"/>
+  <MozParam name="nresults" condition="pref" pref="maxSuggestions"/>
 </Url>
 <Url type="text/html" method="GET" template="https://uk.search.yahoo.com/search">
-  <Param name="p" value="{searchTerms}" />
-  <Param name="ei" value="UTF-8" />
-  <Param name="fr" value="mozmob1" />
-  <Param name="type" value="ios" />
+  <Param name="p" value="{searchTerms}"/>
+  <Param name="ei" value="UTF-8"/>
+  <Param name="fr" value="mozmob1"/>
+  <Param name="type" value="ios"/>
 </Url>
 <SearchForm>https://uk.search.yahoo.com/</SearchForm>
 </SearchPlugin>
