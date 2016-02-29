@@ -26,7 +26,7 @@ enum PasscodeInterval: Int {
     case OneHour        = 3600
 }
 
-// Strings used throughout the Authentication Manager
+// Strings used in multiple areas within the Authentication Manager
 struct AuthenticationStrings {
     static let requirePasscode =
         NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Title for setting to require a passcode")
@@ -78,4 +78,16 @@ struct AuthenticationStrings {
 
     static let loginsTouchReason =
         NSLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
+
+    static let wrongPasscodeError =
+        NSLocalizedString("Incorrect passcode. Try again.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app")
+
+    static let incorrectAttemptsRemaining =
+        NSLocalizedString("Incorrect passcode. Try again (Attempts remaining: %d).", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining")
+
+    static let maximumAttemptsReached =
+        NSLocalizedString("Maximum attempts reached. Please try again in an hour.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts.")
+
+    static let maximumAttemptsReachedNoTime =
+        NSLocalizedString("Maximum attempts reached. Please try again later.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts.")
 }
