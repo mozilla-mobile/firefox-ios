@@ -9,8 +9,9 @@ import subprocess
 import urllib
 
 def main():
-    if not os.path.exists("SearchPlugins"):
-        os.makedirs("SearchPlugins")
+    if os.path.exists("SearchPlugins"):
+        shutil.rmtree("SearchPlugins")
+    os.makedirs("SearchPlugins")
 
     # Copy the default en search engines since they aren't in an l10n repo.
     enPluginsSrc = os.path.join("SearchOverlays", "en")
