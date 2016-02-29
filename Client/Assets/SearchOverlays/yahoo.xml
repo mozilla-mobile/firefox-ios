@@ -1,0 +1,5 @@
+<SearchOverlay>
+  <append parent="//search:Url[@type='text/html']">
+    <Param name="type" value="ios"/>
+  </append>
+</SearchOverlay>
