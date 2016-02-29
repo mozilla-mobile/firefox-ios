@@ -1,6 +1,7 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
 <SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
     <ShortName>百度</ShortName>
     <Description>百度网页搜索</Description>
@@ -16,15 +17,13 @@
         <Param name="from" value="1000969b"/>
         <Param name="word" value="{searchTerms}"/>
     </Url>
-
     <!-- As of Bug 861164, we can do a client-side detection to determine whether a user is using
          tablet or a phone(relative to this case).
-         Note: The order of <URL> does NOT affect the way we pick between them.
+         Note: The order of <URL> DOES not affect the way we pick between them.
     -->
     <Url type="application/x-moz-tabletsearch" method="GET" template="https://m.baidu.com/s">
-        <Param name="from" value="1000969b"/>
-        <Param name="word" value="{searchTerms}"/>
+      <Param name="from" value="1000969b"/>
+      <Param name="word" value="{searchTerms}"/>
     </Url>
-
     <SearchForm>https://m.baidu.com/</SearchForm>
 </SearchPlugin>

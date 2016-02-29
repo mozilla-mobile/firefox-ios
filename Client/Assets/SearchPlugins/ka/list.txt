@@ -1,4 +1,4 @@
 amazondotcom
 google
 twitter
-wikipedia-vi
+wikipedia-ka

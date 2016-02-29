@@ -10,7 +10,7 @@
   <Param name="output" value="fxjson"/>
   <Param name="appid" value="ffm"/>
   <Param name="command" value="{searchTerms}"/>
-  <MozParam name="nresults" condition="pref" pref="maxSuggestions"/>
+  <Param name="nresults" value="4"/>
 </Url>
 <Url type="text/html" method="GET" template="https://fr.search.yahoo.com/search">
   <Param name="p" value="{searchTerms}"/>
