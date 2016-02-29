@@ -94,7 +94,9 @@ class FaviconsTable<T>: GenericTable<Favicon> {
             "WHERE \(TableFavicons).id NOT IN (" +
                 "SELECT faviconID FROM \(TableFaviconSites) " +
                 "UNION ALL " +
-                "SELECT faviconID FROM \(TableBookmarks) WHERE faviconID IS NOT NULL" +
+                "SELECT faviconID FROM \(TableBookmarksLocal) WHERE faviconID IS NOT NULL " +
+                "UNION ALL " +
+                "SELECT faviconID FROM \(TableBookmarksMirror) WHERE faviconID IS NOT NULL" +
             ")", nil)
     }
 }

@@ -1215,7 +1215,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func removeBookmark() -> Success {
-            return bookmarks.removeByURL("http://bookmarkedurl/")
+            return bookmarks.testFactory.removeByURL("http://bookmarkedurl/")
         }
 
         func checkFaviconWasRemovedForBookmark() -> Success {

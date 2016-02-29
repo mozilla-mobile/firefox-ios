@@ -14,7 +14,6 @@ public struct AppConstants {
 
     public static let IsRunningTest = NSClassFromString("XCTestCase") != nil
 
-
     /// Build Channel.
     public static let BuildChannel: AppBuildChannel = {
 #if MOZ_CHANNEL_AURORA
@@ -26,6 +25,9 @@ public struct AppConstants {
 #endif
     }()
 
+
+    /// Whether we just mirror (false) or actively merge and upload (true).
+    public static let shouldMergeBookmarks = false
 
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {

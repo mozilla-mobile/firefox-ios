@@ -532,7 +532,15 @@ extension SQLiteHistory: Favicons {
     }
 
     func getFaviconsForBookmarkedURL(url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
-        let sql = "SELECT \(TableFavicons).id AS id, \(TableFavicons).url AS url, \(TableFavicons).date AS date, \(TableFavicons).type AS type, \(TableFavicons).width AS width FROM \(TableFavicons), \(TableBookmarks) WHERE \(TableBookmarks).faviconID = \(TableFavicons).id AND \(TableBookmarks).url IS ?"
+        let sql =
+        "SELECT " +
+        "  \(TableFavicons).id AS id" +
+        ", \(TableFavicons).url AS url" +
+        ", \(TableFavicons).date AS date" +
+        ", \(TableFavicons).type AS type" +
+        ", \(TableFavicons).width AS width" +
+        " FROM \(TableFavicons), \(ViewBookmarksLocalOnMirror) AS bm" +
+        " WHERE bm.faviconID = \(TableFavicons).id AND bm.bmkUri IS ?"
         let args: Args = [url]
         return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
     }
@@ -586,10 +594,12 @@ extension SQLiteHistory: Favicons {
                     return 0
                 }
 
-                // Try to update the favicon ID column in the bookmarks table as well for this favicon
-                // if this site has been bookmarked
+                // Try to update the favicon ID column in each bookmarks table. There can be
+                // multiple bookmarks with a particular URI, and a mirror bookmark can be
+                // locally changed, so either or both of these statements can update multiple rows.
                 if let id = id {
-                    conn.executeChange("UPDATE \(TableBookmarks) SET faviconID = ? WHERE url = ?", withArgs: [id, site.url])
+                    conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
                 }
 
                 return id ?? 0

@@ -38,6 +38,7 @@ protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
+    func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
 }
 
@@ -223,6 +224,22 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
             prev = button
         }
+    }
+
+    func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType) {
+        // If we can't get a real URL out of what should be a URL, we let the user's
+        // default search engine give it a shot.
+        // Typically we'll be in this state if the user has tapped a bookmarked search template
+        // (e.g., "http://foo.com/bar/?query=%s"), and this will get them the same behavior as if
+        // they'd copied and pasted into the URL bar.
+        // See BrowserViewController.urlBar:didSubmitText:.
+        guard let url = URIFixup.getURL(url) ??
+                        profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
+            Logger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
+            return
+        }
+
+        return self.homePanel(homePanel, didSelectURL: url, visitType: visitType)
     }
 
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType) {
