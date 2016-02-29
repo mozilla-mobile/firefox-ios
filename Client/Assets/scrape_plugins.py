@@ -10,6 +10,11 @@ def main():
     if not os.path.exists("SearchPlugins"):
         os.makedirs("SearchPlugins")
 
+    # Copy the default en search engines since they aren't in an l10n repo.
+    enPluginsSrc = os.path.join("SearchOverlays", "en")
+    enPluginsDst = os.path.join("SearchPlugins", "en")
+    shutil.copytree(enPluginsSrc, enPluginsDst)
+
     locales = getLocaleList()
     for locale in locales:
         files = getFileList(locale)
