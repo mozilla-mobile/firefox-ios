@@ -27,7 +27,7 @@ public struct AppConstants {
 
 
     /// Whether we just mirror (false) or actively merge and upload (true).
-    public static let shouldMergeBookmarks = true
+    public static let shouldMergeBookmarks = false
 
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
