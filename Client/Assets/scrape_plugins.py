@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
 from lxml import html
+import json
 import os
 import requests
 import shutil
+import subprocess
 import urllib
 
 def main():
@@ -16,7 +18,12 @@ def main():
     shutil.copytree(enPluginsSrc, enPluginsDst)
 
     locales = getLocaleList()
+    supportedLocales = getSupportedLocales()
     for locale in locales:
+        if (locale not in supportedLocales):
+            print("skipping unsupported locale: %s" % locale)
+            continue
+
         files = getFileList(locale)
         if files == None:
             continue
@@ -36,6 +43,10 @@ def main():
         for file in files:
             downloadedFile = getFile(locale, file)
             shutil.move(downloadedFile, os.path.join(directory, file))
+
+def getSupportedLocales():
+    supportedLocales = subprocess.Popen("./get_supported_locales.swift", stdout=subprocess.PIPE).communicate()[0]
+    return json.loads(supportedLocales.replace("_", "-"))
 
 def getLocaleList():
     response = requests.get('http://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales')
