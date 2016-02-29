@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Hotovo";
+
+/* Share action title */
+"Find in Page" = "Hľadať na stránke";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Ďalší výskyt na stránke";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Predchádzajúci výskyt na stránke";
+
