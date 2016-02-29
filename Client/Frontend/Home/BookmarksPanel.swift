@@ -342,7 +342,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             if bookmark is BookmarkFolder {
                 // TODO: check whether the folder is empty (excluding separators). If it isn't
                 // then we must ask the user to confirm. Bug 1232810.
-                log.debug("Deleting folder.")
+                log.debug("Not deleting folder.")
+                return
             }
 
             log.debug("Removing rows \(indexPath).")
