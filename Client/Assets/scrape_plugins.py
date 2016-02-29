@@ -16,13 +16,20 @@ def main():
         if files == None:
             continue
 
-        print("found searchplugins")
+        print("  found search plugins")
+
+        directory = os.path.join("SearchPlugins", locale)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        # Get the default search engine for this locale.
+        default = getDefault(locale)
+        if default == None:
+            continue
+        saveDefault(locale, default)
 
         for file in files:
             downloadedFile = getFile(locale, file)
-            directory = os.path.join("SearchPlugins", locale)
-            if not os.path.exists(directory):
-                os.makedirs(directory)
             shutil.move(downloadedFile, os.path.join(directory, file))
 
 def getLocaleList():
@@ -44,6 +51,25 @@ def getFile(locale, file):
     url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/searchplugins/%s" % (locale, file)
     result = urllib.urlretrieve(url)
     return result[0]
+
+def getDefault(locale):
+    url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/chrome/region.properties" % locale
+    response = requests.get(url)
+    if not response.ok:
+        return
+
+    lines = response.text.strip().split("\n")
+    for line in lines:
+        values = line.strip().split("=")
+        if len(values) == 2 and values[0].strip() == "browser.search.defaultenginename":
+            default = values[1].strip()
+            print("  default: %s" % default)
+            return default
+
+def saveDefault(locale, default):
+    directory = os.path.join("SearchPlugins", locale, "default.txt")
+    file = open(directory, "w")
+    file.write(default.encode("UTF-8"))
 
 if __name__ == "__main__":
         main()
