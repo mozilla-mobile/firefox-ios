@@ -11,11 +11,6 @@ var MATCH_HIGHLIGHT_INACTIVE = "#ffde49";
 var SCROLL_INTERVAL_INCREMENT = 5;
 var SCROLL_INTERVAL_DURATION = 400;
 
-// window.find() sometimes gets stuck on a result, causing an infinite loop
-// when we try to search (e.g., Yahoo search result pages).
-// As a workaround, abort after failing too many times.
-var MAX_FAILURES = 100;
-
 var activeHighlightSpan = null;
 var lastSearch;
 var scrollInterval;
@@ -28,15 +23,93 @@ function debug(str) {
   }
 }
 
-function clearSelection() {
+function isElementVisible(elem) {
+  return getComputedStyle(elem).visibility !== "hidden";
+}
+
+function isRectInViewport(rect) {
+  var left = rect.left + document.body.scrollLeft;
+  var right = rect.right + document.body.scrollLeft;
+  var top = rect.top + document.body.scrollTop;
+  var bottom = rect.bottom + document.body.scrollTop;
+
+  return rect.width > 0 &&
+         rect.height > 0 &&
+         right >= 0 &&
+         bottom >= 0 &&
+         left <= document.body.scrollWidth &&
+         top <= document.body.scrollHeight;
+}
+
+function findMatches(text) {
+  // For case-insensitive matching.
+  var lowerText = text.toLocaleLowerCase();
+  var upperText = text.toLocaleUpperCase();
+
+  var matches = [];
+  var range = document.createRange();
+  var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  var textLength = text.length;
+  var node;
+  while (node = walker.nextNode()) {
+    var textContent = node.textContent;
+    findString: for (var i = 0; i < textContent.length - textLength + 1; ++i) {
+      for (var j = 0; j < textLength; ++j) {
+        var nextChar = textContent[i + j];
+        if (lowerText[j] !== nextChar && upperText[j] !== nextChar) {
+          continue findString;
+        }
+      }
+
+      // This node is a TextNode, not an Element. Its parent is the nearest Element.
+      var element = node.parentNode;
+
+      // Find the rect of just the text for this match.
+      range.setStart(node, i);
+      range.setEnd(node, i + textLength);
+      var textRect = range.getBoundingClientRect();
+
+      // We have a match, but we need to make sure it's visible. The condition
+      // below checks the following cases:
+      // * If this element or any of its parents has style visibility hidden.
+      //   The visibility style is inherited, so we need to check only this
+      //   element and not all of its ancestors.
+      // * If the highlight will be outside of the page's bounds. We determine
+      //   this by comparing the bounds of the text rect.
+      // * If the element style display is set to none. display:none collapses
+      //   the element's space, so this will again be detected by looking at
+      //   the text's rect: if the element is collapsed, the width and height
+      //   will be zero.
+      if (isElementVisible(element) && isRectInViewport(textRect)) {
+        matches.push({ node: node, index: i });
+
+        // Resume searching after this match to prevent overlapping results.
+        i += textLength- 1;
+      }
+    }
+  }
+
+  return matches;
+}
+
+function flattenNode(node) {
+  var parent = node.parentNode;
+  if (!parent) {
+    return;
+  }
+
+  while (node.firstChild) {
+    parent.insertBefore(node.firstChild, node);
+  }
+
+  node.remove();
+  parent.normalize();
+}
+
+function clearHighlights() {
   if (highlightSpans.length > 0) {
     for (var span of highlightSpans) {
-      var parent = span.parentNode;
-      while (span.firstChild) {
-        parent.insertBefore(span.firstChild, span);
-      }
-      parent.removeChild(span);
-      parent.normalize();
+      flattenNode(span);
     }
     highlightSpans = [];
   }
@@ -45,125 +118,49 @@ function clearSelection() {
 }
 
 function highlightAllMatches(text) {
-  debug("Searching: " + text)
+  debug("Searching: " + text);
 
-  // Mapping of rects that have been searched. Why? window.find() is buggy, to
-  // put it mildly. Sometimes it can infinitely loop in pages, even with
-  // wrapping disabled (test case: search "foo" on Yahoo; find "f"). As a
-  // workaround, remembering all processed rects can help us determine that
-  // we've already hit this match.
-  var matches = {};
+  clearHighlights();
 
-  var foundRanges = [];
-  clearSelection();
-
-  // Highlight and scroll to the next match. window.getSelection() can return a Range
-  // with no rects for input fields, so skip these.
-  //
-  // There are also weird issues on Google where window.getSelection() returns mis-sized,
-  // mis-aligned rects for the absolutely positioned search suggestions box. Some of these
-  // rect heights are 1px, so we can at least filter those.
-  var scrollTop = document.body.scrollTop;
-  var scrollLeft = document.body.scrollLeft;
-  var failures = 0;
-
-  // window.find() sometimes updates the scroll position of the page to the found selection
-  // (for example, nytimes.com). As a workaround, record the current scroll position,
-  // and reset it after we're done looking for results.
-  var startX = window.scrollX;
-  var startY = window.scrollY;
-
-  while (true) {
-    if (failures > MAX_FAILURES) {
-      debug("Reached max fail count; stopping search.");
-      break;
-    }
-
-    var found = window.find(text,
-        /* Case sensitive   */ false,
-        /* Search backwards */ false,
-        /* Wrap             */ false,
-        /* Whole word only  */ false,
-        /* Include iframes  */ false,
-        /* Show dialog      */ false);
-
-    if (!found) {
-      debug("No more results found.");
-      break;
-    }
-
-    var selection = window.getSelection();
-
-    if (selection.rangeCount == 0) {
-      debug("No matches found.");
-      break;
-    }
-
-    if (selection.isCollapsed) {
-      failures++;
-      debug("Skipping collapsed node.");
-      continue;
-    }
-
-    var rects = selection.getRangeAt(0).getClientRects();
-
-    if (!rects || rects.length == 0) {
-      debug("No rects in selection.");
-      continue;
-    }
-
-    var rect = rects[0];
-    debug("Checking rect: " + JSON.stringify(rect));
-
-    // Sometimes we get rects that aren't visible on the page. Skip them.
-    // Test case: http://i.word.com/idictionary/hey. Search "h". First results are outside page bounds.
-    var left = rect.left + scrollLeft;
-    var right = rect.right + scrollLeft;
-    var top = rect.top + scrollTop;
-    var bottom = rect.bottom + scrollTop;
-    if (right < 0 || left > document.body.scrollWidth ||
-        bottom < 0 || top > document.body.scrollHeight) {
-      debug("Skipping out-of-bounds rect.");
-      continue;
-    }
-
-    if (rect.width == 0 || rect.height == 0) {
-      debug("Skipping empty rect.");
-      continue;
-    }
-
-    var rectID = getIDForRect(rect);
-    if (matches[rectID]) {
-      debug("Already found this rect! Aborting.");
-      break;
-    }
-    matches[rectID] = true;
-
-    foundRanges.push(selection.getRangeAt(0));
+  if (!text.trim()) {
+    webkit.messageHandlers.findInPageHandler.postMessage({ totalResults: 0 });
+    return;
   }
 
-  window.scrollTo(startX, startY);
+  var range = document.createRange();
+  var matches = findMatches(text);
+  var highlightTemplate = document.createElement("span");
+  highlightTemplate.style.backgroundColor = MATCH_HIGHLIGHT_INACTIVE;
 
-  for (var range of foundRanges) {
-    var highlight = document.createElement("span");
-    highlight.style.backgroundColor = MATCH_HIGHLIGHT_INACTIVE;
+  // If there are multiple matches in the same node, inserting a highlight span before other matches
+  // in that node will invalidate other matches since the node itself changes. By iterating through
+  // results in reverse, we highlight matches last in the node first so earlier matches are unaffected.
+  for (var i = matches.length - 1; i >= 0; --i) {
+    var match = matches[i];
+    var highlight = highlightTemplate.cloneNode();
+
+    range.setStart(match.node, match.index);
+    range.setEnd(match.node, match.index + text.length);
     range.surroundContents(highlight);
-    highlightSpans.push(highlight);
+    highlightSpans.unshift(highlight);
   }
 
-  webkit.messageHandlers.findInPageHandler.postMessage({ totalResults: foundRanges.length });
-
-  debug(foundRanges.length + " highlighted rects created!");
+  debug(matches.length + " highlighted rects created!");
+  webkit.messageHandlers.findInPageHandler.postMessage({ totalResults: matches.length });
 }
 
 function getIDForRect(rect) {
   return rect.top + "," + rect.bottom + "," + rect.left + "," + rect.right;
 }
 
-function updateHighlightedSpan() {
+function updateActiveHighlight() {
   // Reset the color of the previous highlight.
   if (activeHighlightSpan) {
     activeHighlightSpan.style.backgroundColor = MATCH_HIGHLIGHT_INACTIVE;
+  }
+
+  if (!highlightSpans.length) {
+    return;
   }
 
   activeHighlightSpan = highlightSpans[activeIndex];
@@ -209,20 +206,18 @@ function updateSearch(text) {
     var totalResults = highlightSpans.length;
     activeIndex = (activeIndex + totalResults) % totalResults;
   } else {
-    // The search text changed, so scan the page for new results.
-    lastSearch = text;
-
     // Store the current active rect to decide which new match should be active.
     var activeHighlightRect = null;
     if (activeHighlightSpan) {
       activeHighlightRect = activeHighlightSpan.getBoundingClientRect();
     }
 
+    // The search text changed, so scan the page for new results.
     highlightAllMatches(text);
-    activeIndex = 0;
 
     // If we found a match at or after the last match, use that position
     // instead of starting again from the top.
+    activeIndex = 0;
     if (activeHighlightRect) {
       for (var i = 0; i < highlightSpans.length; i++) {
         var highlight = highlightSpans[i];
@@ -234,16 +229,15 @@ function updateSearch(text) {
         }
       }
     }
-  }
 
-  var currentResult = 0;
-  if (highlightSpans.length > 0) {
-    updateHighlightedSpan();
-    currentResult = activeIndex + 1;
+    lastSearch = text;
   }
 
   // Update the UI with the current match index.
+  var currentResult = highlightSpans.length ? activeIndex + 1 : 0;
   webkit.messageHandlers.findInPageHandler.postMessage({ currentResult: currentResult });
+
+  updateActiveHighlight();
 }
 
 
@@ -252,10 +246,6 @@ if (!window.__firefox__) {
 }
 
 window.__firefox__.find = function (text) {
-  // window.find() will move on from the last result. Reset the range so that
-  // we retry the last result in case it still matches the new search string.
-  window.getSelection().removeAllRanges();
-
   updateSearch(text);
 };
 
@@ -270,7 +260,7 @@ window.__firefox__.findPrevious = function (text) {
 };
 
 window.__firefox__.findDone = function () {
-  clearSelection();
+  clearHighlights();
   lastSearch = null;
 };
 
