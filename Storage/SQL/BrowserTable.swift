@@ -92,7 +92,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 14    // Bug 1141850.
+    static let DefaultVersion = 15    // Bug 1141850.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -291,8 +291,10 @@ public class BrowserTable: Table {
     ", mirror.parentid AS parentid" +
     ", mirror.parentName AS parentName" +
     ", mirror.feedUri AS feedUri" +
+    ", mirror.siteUri AS siteUri" +
     ", mirror.pos AS pos" +
     ", mirror.title AS title" +
+    ", mirror.description AS description" +
     ", mirror.bmkUri AS bmkUri" +
     ", mirror.folderName AS folderName" +
     ", null AS faviconID" +
@@ -312,8 +314,10 @@ public class BrowserTable: Table {
     ", parentid" +
     ", parentName" +
     ", feedUri" +
+    ", siteUri" +
     ", pos" +
     ", title" +
+    ", description" +
     ", bmkUri" +
     ", folderName" +
     ", null AS faviconID" +
@@ -334,10 +338,10 @@ public class BrowserTable: Table {
 
     private let localBookmarksView =
     "CREATE VIEW \(ViewBookmarksLocalOnMirror) AS " +
-    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID, 0 AS is_overridden " +
+    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, 0 AS is_overridden " +
     "FROM \(TableBookmarksMirror) WHERE is_overridden IS NOT 1 " +
     "UNION ALL " +
-    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID, 1 AS is_overridden " +
+    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, 1 AS is_overridden " +
     "FROM \(TableBookmarksLocal) WHERE is_deleted IS NOT 1"
 
     // TODO: phrase this without the subselect…
@@ -673,6 +677,20 @@ public class BrowserTable: Table {
             }
         }
 
+        if from == 14 && to >= 15 {
+            // We screwed up some of the views. Recreate them.
+            if !self.run(db, queries: [
+                "DROP VIEW IF EXISTS \(ViewBookmarksBufferStructureOnMirror)",
+                "DROP VIEW IF EXISTS \(ViewBookmarksLocalStructureOnMirror)",
+                "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
+                "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
+                self.bufferBookmarksView,
+                self.bufferBookmarksStructureView,
+                self.localBookmarksView,
+                self.localBookmarksStructureView]) {
+                return false
+            }
+        }
 
         return true
     }

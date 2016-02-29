@@ -253,7 +253,7 @@ extension SQLiteBookmarks {
         let varlist = BrowserDB.varlist(args.count)
 
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID, \(isEditable) AS isEditable " +
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, \(isEditable) AS isEditable " +
         "FROM \(direction.valueView) WHERE guid IN \(varlist) AND NOT is_deleted"
 
         if !includeIcon {
@@ -265,7 +265,8 @@ extension SQLiteBookmarks {
             "       bookmarks.is_deleted AS is_deleted,",
             "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName,",
             "       bookmarks.feedUri AS feedUri, bookmarks.pos AS pos, title AS title,",
-            "       bookmarks.bmkUri AS bmkUri, bookmarks.folderName AS folderName,",
+            "       bookmarks.bmkUri AS bmkUri, bookmarks.siteUri AS siteUri,",
+            "       bookmarks.folderName AS folderName,",
             "       bookmarks.isEditable AS isEditable,",
             "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType",
             "FROM (", values, ") AS bookmarks",
@@ -294,7 +295,7 @@ extension SQLiteBookmarks {
 
         let isEditable = (direction == .Local) ? 1 : 0
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID, \(isEditable) AS isEditable " +
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, \(isEditable) AS isEditable " +
         "FROM \(valueView)"
 
         // We exclude queries and dynamic containers, because we can't
@@ -316,6 +317,7 @@ extension SQLiteBookmarks {
         let fleshed =
         "SELECT vals.id AS id, vals.guid AS guid, vals.type AS type, vals.is_deleted AS is_deleted, " +
         "       vals.parentid AS parentid, vals.parentName AS parentName, vals.feedUri AS feedUri, " +
+        "       vals.siteUri AS siteUri," +
         "       vals.pos AS pos, vals.title AS title, vals.bmkUri AS bmkUri, vals.folderName AS folderName, " +
         "       vals.faviconID AS faviconID, " +
         "       vals.isEditable AS isEditable, " +
@@ -329,7 +331,8 @@ extension SQLiteBookmarks {
         "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type, " +
         "       bookmarks.is_deleted AS is_deleted, " +
         "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName, " +
-        "       bookmarks.feedUri AS feedUri, bookmarks.pos AS pos, title AS title, " +
+        "       bookmarks.feedUri AS feedUri, bookmarks.siteUri AS siteUri, " +
+        "       bookmarks.pos AS pos, title AS title, " +
         "       bookmarks.bmkUri AS bmkUri, bookmarks.folderName AS folderName, " +
         "       bookmarks.idx AS idx, bookmarks._parent AS _parent, " +
         "       bookmarks.isEditable AS isEditable, " +
