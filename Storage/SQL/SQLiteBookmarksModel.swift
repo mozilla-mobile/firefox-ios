@@ -192,6 +192,11 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     }
 
     func getDesktopRoots() -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+        if self.direction == .Buffer {
+            // The buffer never includes the Places root, so we look one level deeper.
+            return self.bookmarks.getRecordsWithGUIDs(BookmarkRoots.DesktopRoots, direction: self.direction, includeIcon: false)
+        }
+
         // We deliberately exclude the mobile folder, because we're inverting the containment
         // relationship here.
         let exclude = [BookmarkRoots.MobileFolderGUID, BookmarkRoots.RootGUID]
@@ -241,6 +246,34 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
 }
 
 extension SQLiteBookmarks {
+    private func getRecordsWithGUIDs(guids: [GUID], direction: Direction, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+
+        let isEditable = (direction == .Local) ? 1 : 0
+        let args: Args = guids.map { $0 as AnyObject }
+        let varlist = BrowserDB.varlist(args.count)
+
+        let values =
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID, \(isEditable) AS isEditable " +
+        "FROM \(direction.valueView) WHERE guid IN \(varlist) AND NOT is_deleted"
+
+        if !includeIcon {
+            return self.db.runQuery(values, args: args, factory: BookmarkFactory.factory)
+        }
+
+        let withIcon = [
+            "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type,",
+            "       bookmarks.is_deleted AS is_deleted,",
+            "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName,",
+            "       bookmarks.feedUri AS feedUri, bookmarks.pos AS pos, title AS title,",
+            "       bookmarks.bmkUri AS bmkUri, bookmarks.folderName AS folderName,",
+            "       bookmarks.isEditable AS isEditable,",
+            "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType",
+            "FROM (", values, ") AS bookmarks",
+            "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id",
+            ].joinWithSeparator(" ")
+
+        return self.db.runQuery(withIcon, args: args, factory: BookmarkFactory.factory)
+    }
 
     /**
      * Return the children of the provided parent.
