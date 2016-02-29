@@ -73,7 +73,6 @@ class TrivialBookmarkStorer: BookmarkStorer {
 
         // Chain the last upload timestamp right into our lastFetched timestamp.
         // This is what Sync clients tend to do, but we can probably do better.
-        // Upload 50 records at a time.
         return uploader(records, lastTimestamp: op.ifUnmodifiedSince, onUpload: onUpload)
             // As if we uploaded everything in one go.
             >>> { deferMaybe(POSTResult(modified: modified, success: success, failed: failed)) }
