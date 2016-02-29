@@ -1,6 +1,5 @@
-amazondotcom
 bing
 google
 twitter
-wikipedia-km
+wikipedia-lo
 yahoo
