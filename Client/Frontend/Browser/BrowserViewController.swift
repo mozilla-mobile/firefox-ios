@@ -1785,78 +1785,87 @@ extension BrowserViewController: WKNavigationDelegate {
             removeOpenInView()
         }
     }
-
-    private func openExternal(url: NSURL, prompt: Bool = true) {
-        if prompt {
-            // Ask the user if it's okay to open the url with UIApplication.
-            let alert = UIAlertController(
-                title: String(format: NSLocalizedString("Opening %@", comment:"Opening an external URL"), url),
-                message: NSLocalizedString("This will open in another application", comment: "Opening an external app"),
-                preferredStyle: UIAlertControllerStyle.Alert
-            )
-
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: { (action: UIAlertAction) in
-            }))
-
-            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment:"Alert OK Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
-                UIApplication.sharedApplication().openURL(url)
-            }))
-
-            presentViewController(alert, animated: true, completion: nil)
-        } else {
-            UIApplication.sharedApplication().openURL(url)
+    
+    // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise
+    // it could just be a visit to a regular page on maps.apple.com.
+    private func isAppleMapsURL(url: NSURL) -> Bool {
+        if url.scheme == "http" || url.scheme == "https" {
+            if url.host == "maps.apple.com" && url.query != nil {
+                return true
+            }
         }
+        return false
+    }
+    
+    // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com
+    // used to be in this list. I have removed them because they now redirect to itunes.apple.com. If we special case
+    // them then iOS will actually first open Safari, which then redirects to the app store. This works but it will
+    // leave a 'Back to Safari' button in the status bar, which we do not want.
+    private func isStoreURL(url: NSURL) -> Bool {
+        if url.scheme == "http" || url.scheme == "https" {
+            if url.host == "itunes.apple.com" {
+                return true
+            }
+        }
+        return false
     }
 
-    private func callExternal(url: NSURL) {
-        if let phoneNumber = url.resourceSpecifier.stringByRemovingPercentEncoding {
-            let alert = UIAlertController(title: phoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
-                UIApplication.sharedApplication().openURL(url)
-            }))
-            presentViewController(alert, animated: true, completion: nil)
-        }
-    }
+    // This is the place where we decide what to do with a new navigation action. There are a number of special schemes
+    // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
+    // method.
 
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
         guard let url = navigationAction.request.URL else {
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
         }
-
-        switch url.scheme {
-        case "about", "http", "https":
-            if isWhitelistedUrl(url) {
-                // If the url is whitelisted, we open it without prompting…
-                // … unless the NavigationType is Other, which means it is JavaScript- or Redirect-initiated.
-                openExternal(url, prompt: navigationAction.navigationType == WKNavigationType.Other)
-                decisionHandler(WKNavigationActionPolicy.Cancel)
-            } else {
-                if navigationAction.navigationType == .LinkActivated {
-                    resetSpoofedUserAgentIfRequired(webView, newURL: url)
-                } else if navigationAction.navigationType == .BackForward {
-                    restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
-                }
-                decisionHandler(WKNavigationActionPolicy.Allow)
-            }
-        case "tel":
-            callExternal(url)
-            decisionHandler(WKNavigationActionPolicy.Cancel)
-        default:
-            // If this is a scheme that we don't know how to handle, see if an external app
-            // can handle it. If not then we show an error page. In either case we cancel
-            // the request so that the webview does not see it.
-            if UIApplication.sharedApplication().canOpenURL(url) {
-                openExternal(url)
-            } else {
-                // Only show the error page if this was not a JavaScript initiated request. This prevents the error to overwrite apps that try to open native apps from an already loadeded page.
-                if navigationAction.navigationType != WKNavigationType.Other {
-                    ErrorPageHelper().showPage(NSError(domain: kCFErrorDomainCFNetwork as String, code: Int(CFNetworkErrors.CFErrorHTTPBadURL.rawValue), userInfo: [:]), forUrl: url, inWebView: webView)
-                }
+        
+        // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
+        // gives us the exact same behaviour as Safari. The only thing we do not do is nicely format the phone number,
+        // instead we present it as it was put in the URL.
+        
+        if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
+            if let phoneNumber = url.resourceSpecifier.stringByRemovingPercentEncoding {
+                let alert = UIAlertController(title: phoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
+                    UIApplication.sharedApplication().openURL(url)
+                }))
+                presentViewController(alert, animated: true, completion: nil)
             }
             decisionHandler(WKNavigationActionPolicy.Cancel)
+            return
         }
+        
+        // Second special case are a set of URLs that look like regular http links, but should be handed over to iOS
+        // instead of being loaded in the webview. Note that there is no point in calling canOpenURL() here, because
+        // iOS will always say yes. TODO Is this the same as isWhitelisted?
+        
+        if isAppleMapsURL(url) || isStoreURL(url) {
+            UIApplication.sharedApplication().openURL(url)
+            decisionHandler(WKNavigationActionPolicy.Cancel)
+            return
+        }
+        
+        // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
+        // always allow this.
+
+        if url.scheme == "http" || url.scheme == "https" {
+            if navigationAction.navigationType == .LinkActivated {
+                resetSpoofedUserAgentIfRequired(webView, newURL: url)
+            } else if navigationAction.navigationType == .BackForward {
+                restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
+            }
+            decisionHandler(WKNavigationActionPolicy.Allow)
+            return
+        }
+        
+        // Default to calling openURL(). What this does depends on the iOS version. On iOS 8, it will just work without
+        // prompting. On iOS9, depending on the scheme, iOS will prompt: "Firefox" wants to open "Twitter". It will ask
+        // every time. There is no way around this prompt. (TODO Confirm this is true by adding them to the Info.plist)
+        
+        UIApplication.sharedApplication().openURL(url)
+        decisionHandler(WKNavigationActionPolicy.Cancel)
     }
 
     func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
