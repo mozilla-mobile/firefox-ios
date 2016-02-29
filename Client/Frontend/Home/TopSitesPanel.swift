@@ -25,7 +25,7 @@ class TopSitesPanel: UIViewController {
 
     private var collection: TopSitesCollectionView? = nil
     private lazy var dataSource: TopSitesDataSource = {
-        return TopSitesDataSource(profile: self.profile, data: Cursor(status: .Failure, msg: "Nothing loaded yet"))
+        return TopSitesDataSource(profile: self.profile)
     }()
     private lazy var layout: TopSitesLayout = { return TopSitesLayout() }()
 
@@ -119,8 +119,9 @@ class TopSitesPanel: UIViewController {
     //MARK: Private Helpers
     private func updateDataSourceWithSites(result: Maybe<Cursor<Site>>) {
         if let data = result.successValue {
-            self.dataSource.data = data
+            self.dataSource.setHistorySites(data.asArray())
             self.dataSource.profile = self.profile
+            self.dataSource.filterSuggestedSites()
 
             // redraw now we've updated our sources
             self.collection?.collectionViewLayout.invalidateLayout()
@@ -132,10 +133,18 @@ class TopSitesPanel: UIViewController {
         collection?.indexPathsForVisibleItems().forEach(updateRemoveButtonStateForIndexPath)
     }
 
+    private func deleteTileForSuggestedSite(site: SuggestedSite) -> Success {
+        var deletedSuggestedSites = profile.prefs.arrayForKey("topSites.deletedSuggestedSites") as! [String]
+        deletedSuggestedSites.append(site.url)
+        profile.prefs.setObject(deletedSuggestedSites, forKey: "topSites.deletedSuggestedSites")
+        return succeed()
+    }
+
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
         collection?.userInteractionEnabled = false
 
-        let newSites = profile.history.removeSiteFromTopSites(site) >>> {
+        let deletion = site is SuggestedSite ? deleteTileForSuggestedSite(site as! SuggestedSite) :  profile.history.removeSiteFromTopSites(site)
+        let newSites = deletion >>> {
             self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit)
         }
 
@@ -151,9 +160,7 @@ class TopSitesPanel: UIViewController {
             return
         }
 
-        dataSource[indexPath.row] is SuggestedSite ?
-            cell.toggleRemoveButton(false) :
-            cell.toggleRemoveButton(editingThumbnails)
+        cell.toggleRemoveButton(editingThumbnails)
     }
 
     private func refreshTopSites(frecencyLimit: Int) {
@@ -177,7 +184,7 @@ class TopSitesPanel: UIViewController {
 
     private func deleteOrUpdateSites(result: Maybe<Cursor<Site>>, indexPath: NSIndexPath) {
         guard let collectionView = collection else { return }
-        // get the number of top sites items we have before we update the data sourcce 
+        // get the number of top sites items we have before we update the data source
         // this is so we know how many new top sites cells to add
         // as a sync may have brought in more results than we had previously
         let previousNumOfThumbnails = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
@@ -190,11 +197,10 @@ class TopSitesPanel: UIViewController {
         // now update the data source with the new data
         self.updateDataSourceWithSites(result)
 
-        let data = dataSource.data
         collection?.performBatchUpdates({
 
             // find out how many thumbnails, up the max for display, we can actually add
-            let numOfCellsFromData = data.count + SuggestedSites.count
+            let numOfCellsFromData = self.dataSource.count()
             let numOfThumbnails = min(numOfCellsFromData, self.layout.thumbnailCount)
 
             // If we have enough data to fill the tiles after the deletion, then delete the correct tile and insert any that are missing
@@ -272,7 +278,7 @@ extension TopSitesPanel: UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         if let thumbnailCell = cell as? ThumbnailCell {
             thumbnailCell.delegate = self
-            if editingThumbnails && indexPath.item < dataSource.data.count && thumbnailCell.removeButton.hidden {
+            if editingThumbnails && indexPath.item < dataSource.count() && thumbnailCell.removeButton.hidden {
                 thumbnailCell.removeButton.hidden = false
             }
         }
@@ -444,28 +450,30 @@ class TopSitesLayout: UICollectionViewLayout {
 }
 
 private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
-    var data: Cursor<Site>
     var profile: Profile
     var editingThumbnails: Bool = false
+    var suggestedSites: [SuggestedSite] = SuggestedSites.asArray()
+    var historySites: [Site] = []
 
     weak var collectionView: UICollectionView?
 
     private let blurQueue = dispatch_queue_create("FaviconBlurQueue", DISPATCH_QUEUE_CONCURRENT)
     private let BackgroundFadeInDuration: NSTimeInterval = 0.3
 
-    init(profile: Profile, data: Cursor<Site>) {
-        self.data = data
+    init(profile: Profile) {
         self.profile = profile
+        if profile.prefs.arrayForKey("topSites.deletedSuggestedSites") == nil {
+            profile.prefs.setObject([], forKey: "topSites.deletedSuggestedSites")
+        }
+        super.init()
+
+        self.filterSuggestedSites()
     }
 
     @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if data.status != .Success {
-            return 0
-        }
-
         // If there aren't enough data items to fill the grid, look for items in suggested sites.
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
-            return min(data.count + SuggestedSites.count, layout.thumbnailCount)
+            return min(count(), layout.thumbnailCount)
         }
 
         return 0
@@ -497,7 +505,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         FaviconFetcher.getForURL(siteURL, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
             guard let favicons = result.successValue where favicons.count > 0,
                   let url = favicons.first?.url.asURL,
-                  let indexOfSite = (self.data.asArray().indexOf { $0 == site }) else {
+                  let indexOfSite = (self.historySites.indexOf { $0 == site }) else {
                 return
             }
 
@@ -579,15 +587,31 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
     }
 
+    private func setHistorySites(historySites: [Site]) {
+        self.historySites = historySites
+    }
+
+    private func filterSuggestedSites() {
+        for url in profile.prefs.arrayForKey("topSites.deletedSuggestedSites") as! [String] {
+            let domainURL = NSURL(string: url)?.normalizedHost() ?? url
+            suggestedSites = suggestedSites.filter({ $0.tileURL.normalizedHost()?.URLString != domainURL.URLString })
+        }
+    }
+
     subscript(index: Int) -> Site? {
-        if data.status != .Success {
+        if count() == 0 {
             return nil
         }
 
-        if index >= data.count {
-            return SuggestedSites[index - data.count]
+        if index >= self.historySites.count {
+            return self.suggestedSites[index - self.historySites.count]
         }
-        return data[index] as Site?
+
+        return self.historySites[index] as Site?
+    }
+
+    private func count() -> Int {
+        return historySites.count + suggestedSites.count
     }
 
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -598,7 +622,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         let traitCollection = collectionView.traitCollection
         cell.updateLayoutForCollectionViewSize(collectionView.bounds.size, traitCollection: traitCollection)
 
-        if indexPath.item >= data.count {
+        if site is SuggestedSite {
             configureCell(cell, forSuggestedSite: site as! SuggestedSite)
         } else {
             configureCell(cell, forSite: site, isEditing: editingThumbnails, profile: profile)
