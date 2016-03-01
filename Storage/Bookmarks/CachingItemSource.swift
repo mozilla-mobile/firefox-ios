@@ -53,11 +53,11 @@ private class CachedSource {
         return succeed()
     }
 
-    func didSee(guid: GUID) {
+    func markSeen(guid: GUID) {
         self.seen.insert(guid)
     }
 
-    func didSee<T: CollectionType where T.Generator.Element == GUID>(guids: T) {
+    func markSeen<T: CollectionType where T.Generator.Element == GUID>(guids: T) {
         self.seen.unionInPlace(guids)
     }
 
@@ -91,7 +91,7 @@ public class CachingLocalItemSource: LocalItemSource {
         }
 
         return self.source.getLocalItemWithGUID(guid) >>== effect {
-            self.cache.didSee(guid)
+            self.cache.markSeen(guid)
             self.cache[guid] = $0
         }
     }
@@ -107,7 +107,7 @@ public class CachingLocalItemSource: LocalItemSource {
         }
 
         return self.source.getLocalItemsWithGUIDs(guids) >>== {
-            self.cache.didSee(guids)
+            self.cache.markSeen(guids)
             return self.cache.fill($0)
         }
     }
@@ -128,7 +128,7 @@ public class CachingMirrorItemSource: MirrorItemSource {
         }
 
         return self.source.getMirrorItemWithGUID(guid) >>== effect {
-            self.cache.didSee(guid)
+            self.cache.markSeen(guid)
             self.cache[guid] = $0
         }
     }
@@ -144,7 +144,7 @@ public class CachingMirrorItemSource: MirrorItemSource {
         }
 
         return self.source.getMirrorItemsWithGUIDs(guids) >>== {
-            self.cache.didSee(guids)
+            self.cache.markSeen(guids)
             return self.cache.fill($0)
         }
     }
@@ -165,7 +165,7 @@ public class CachingBufferItemSource: BufferItemSource {
         }
 
         return self.source.getBufferItemWithGUID(guid) >>== effect {
-            self.cache.didSee(guid)
+            self.cache.markSeen(guid)
             self.cache[guid] = $0
         }
     }
@@ -181,7 +181,7 @@ public class CachingBufferItemSource: BufferItemSource {
         }
 
         return self.source.getBufferItemsWithGUIDs(guids) >>== {
-            self.cache.didSee(guids)
+            self.cache.markSeen(guids)
             return self.cache.fill($0)
         }
     }
