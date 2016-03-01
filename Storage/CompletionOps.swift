@@ -35,7 +35,7 @@ public class LocalOverrideCompletionOp: PerhapsNoOp {
     }
 
     public func setModifiedTime(time: Timestamp, guids: [GUID]) {
-        var forCopy: [GUID] = []
+        var forCopy: [GUID] = self.modifiedTimes[time] ?? []
         for guid in guids {
             // This saves us doing an UPDATE on these items.
             if var item = self.mirrorItemsToInsert[guid] {
