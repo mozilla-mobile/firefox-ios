@@ -1,0 +1,51 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Переглядайте одночасно багато веб-сторінок за допомогою вкладок.";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "Обирайте";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "З'єднуйтесь з Firefox всюди, де ви його використовуєте.";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "Налаштовуйте";
+
+/* See http://mzl.la/1if9ODp */
+"Easily switch between open pages with tabs." = "Легко перемикайтеся між відкритими сторінками за допомогою вкладок.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox і хмара";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Вступний слайд %1$@ із %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "Організовуйте";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Персоналізуйте свій Firefox так, як вам зручно в Налаштуваннях.";
+
+/* See http://mzl.la/1if9ODp */
+"Personalize your default search engine and more in Settings." = "Персоналізуйте свій типовий засіб пошуку та інші параметри в налаштуваннях.";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "Діліться";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Увійти в Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Почати перегляд";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Торкніться, утримайте й перемістіть піктограму Firefox у свій док для легкого доступу.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "Кнопка налаштувань знаходиться на початку лотка вкладок.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Кнопка показу вкладок знаходиться поруч з текстовим полем адреси та пошуку і показує поточну кількість відкритих вкладок.";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "Використовуйте панель поширення для надсилання посилань з інших програм в Firefox.";
+

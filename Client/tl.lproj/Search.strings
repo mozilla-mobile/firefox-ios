@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "%@ hanap";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "Hindi";
+
+/* Label for search settings button. */
+"Search Settings" = "Settings ng paghahanap";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "Mga suhuwestiyon ng paghahanap mula sa %@";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "Buksan ang mga suhuwestiyon ng paghahanap.";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "Oo";
+

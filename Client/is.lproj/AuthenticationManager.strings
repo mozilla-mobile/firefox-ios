@@ -1,0 +1,54 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Eftir eina klukkustund";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Eftir eina mínútu";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Eftir fimm mínútur";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Eftir 10 mínútur";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Eftir 15 mínútur";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Breyta aðgangskóða";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Skrá aðgangskóða";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Strax";
+
+/* List section title for passcode settings */
+"Passcode" = "Aðgangskóði";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Slá aftur inn aðgangskóða";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Krefjast aðgangskóða";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Setja aðgangskóða";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Snerti auðkenning & aðgangskóði";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Slökkva á aðgangskóða";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Virkja aðgangskóða";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Slökkva á aðgangskóða.";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Nota fingraförin þín núna til að tengjast innskráningu.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Nota fingraförin þín núna til að tengjast huliðsglugga.";
+

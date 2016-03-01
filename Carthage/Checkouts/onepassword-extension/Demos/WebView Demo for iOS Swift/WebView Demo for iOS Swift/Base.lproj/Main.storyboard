@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="PEy-hN-KRP">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+    </dependencies>
+    <scenes>
+        <!--Web View Controller-->
+        <scene sceneID="N9E-we-WCd">
+            <objects>
+                <viewController id="PEy-hN-KRP" customClass="WebViewController" customModule="WebView_Demo_for_iOS_Swift" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NlG-Im-krk"/>
+                        <viewControllerLayoutGuide type="bottom" id="e4F-AU-a8r"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gW7-LE-s9s">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2pf-d3-xB8">
+                                <rect key="frame" x="0.0" y="63" width="600" height="537"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Search or enter website name" translatesAutoresizingMaskIntoConstraints="NO" id="Gvr-ci-v7c">
+                                <rect key="frame" x="86" y="19" width="514" height="44"/>
+                                <color key="barTintColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="webSearch" returnKeyType="search"/>
+                                <connections>
+                                    <outlet property="delegate" destination="PEy-hN-KRP" id="htm-12-hzg"/>
+                                </connections>
+                            </searchBar>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7T-G8-XtY">
+                                <rect key="frame" x="7" y="26" width="15" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="15" id="ZhC-gg-zKd"/>
+                                    <constraint firstAttribute="height" constant="30" id="r4Y-T5-DOY"/>
+                                </constraints>
+                                <state key="normal" title="&lt;">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="goBack:" destination="PEy-hN-KRP" eventType="touchDown" id="e3A-h9-ypn"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xeT-JZ-5Lc">
+                                <rect key="frame" x="30" y="26" width="15" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="15" id="0WQ-ux-3mA"/>
+                                </constraints>
+                                <state key="normal" title="&gt;">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="goForward:" destination="PEy-hN-KRP" eventType="touchDown" id="vMu-r5-cWk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9cc-V6-wAB" userLabel="1Password Button">
+                                <rect key="frame" x="54" y="26" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="SQq-i8-VvJ"/>
+                                </constraints>
+                                <state key="normal" image="onepassword-toolbar">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="fillUsing1Password:" destination="PEy-hN-KRP" eventType="touchDown" id="5w3-em-v26"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94117647059999998" green="0.92941176469999998" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                        <constraints>
+                            <constraint firstItem="Gvr-ci-v7c" firstAttribute="trailing" secondItem="2pf-d3-xB8" secondAttribute="trailing" id="3JQ-hk-5sf"/>
+                            <constraint firstItem="xeT-JZ-5Lc" firstAttribute="top" secondItem="9cc-V6-wAB" secondAttribute="top" id="4sA-IA-s4W"/>
+                            <constraint firstItem="2pf-d3-xB8" firstAttribute="leading" secondItem="gW7-LE-s9s" secondAttribute="leading" id="ABq-sz-Gp6"/>
+                            <constraint firstItem="R7T-G8-XtY" firstAttribute="top" secondItem="NlG-Im-krk" secondAttribute="bottom" constant="6" id="MLI-fZ-4qL"/>
+                            <constraint firstItem="xeT-JZ-5Lc" firstAttribute="bottom" secondItem="9cc-V6-wAB" secondAttribute="bottom" constant="-2" id="Nwm-XM-VzL"/>
+                            <constraint firstItem="9cc-V6-wAB" firstAttribute="leading" secondItem="xeT-JZ-5Lc" secondAttribute="trailing" constant="9" id="S5d-2g-RGK"/>
+                            <constraint firstAttribute="bottom" secondItem="2pf-d3-xB8" secondAttribute="bottom" id="Wa1-je-RLu"/>
+                            <constraint firstItem="R7T-G8-XtY" firstAttribute="top" secondItem="xeT-JZ-5Lc" secondAttribute="top" id="YVd-lM-hga"/>
+                            <constraint firstItem="R7T-G8-XtY" firstAttribute="leading" secondItem="gW7-LE-s9s" secondAttribute="leading" constant="7" id="gcq-Iy-BGK"/>
+                            <constraint firstItem="9cc-V6-wAB" firstAttribute="centerY" secondItem="Gvr-ci-v7c" secondAttribute="centerY" constant="1" id="lEe-A1-sXv"/>
+                            <constraint firstAttribute="trailing" secondItem="2pf-d3-xB8" secondAttribute="trailing" id="lGs-JH-Xgz"/>
+                            <constraint firstItem="Gvr-ci-v7c" firstAttribute="leading" secondItem="9cc-V6-wAB" secondAttribute="trailing" id="nF7-Lp-aCc"/>
+                            <constraint firstItem="xeT-JZ-5Lc" firstAttribute="leading" secondItem="R7T-G8-XtY" secondAttribute="trailing" constant="8" symbolic="YES" id="q0k-Vp-DuJ"/>
+                            <constraint firstItem="R7T-G8-XtY" firstAttribute="bottom" secondItem="xeT-JZ-5Lc" secondAttribute="bottom" id="tK6-rl-t2G"/>
+                            <constraint firstItem="2pf-d3-xB8" firstAttribute="top" secondItem="Gvr-ci-v7c" secondAttribute="bottom" id="u9G-Ow-Deb"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="LYh-Q1-dMy"/>
+                    <connections>
+                        <outlet property="onepasswordFillButton" destination="9cc-V6-wAB" id="Xon-YN-TmY"/>
+                        <outlet property="searchBar" destination="Gvr-ci-v7c" id="k2Y-CX-whn"/>
+                        <outlet property="webViewContainer" destination="2pf-d3-xB8" id="rh0-ia-5iC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6hW-NU-jmC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1284" y="795"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="onepassword-toolbar" width="27" height="27"/>
+    </resources>
+</document>

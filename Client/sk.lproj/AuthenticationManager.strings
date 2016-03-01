@@ -1,0 +1,54 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Po 1 hodine";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Po 1 minúte";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Po 5 minútach";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Po 10 minútach";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Po 15 minútach";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Zmeniť heslo";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Zadajte heslo";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Okamžite";
+
+/* List section title for passcode settings */
+"Passcode" = "Prístupový kód";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Znova zadajte heslo";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Vyžadovať zadanie hesla";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Nastaviť heslo";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID a heslo";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Vypnúť heslo";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Zapnúť heslo";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Vypnite vaše heslo.";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Použite odtlačok prsta a prejdete k svojim Prihláseniam.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Použite odtlačok prsta a prejdete do režimu Súkromné prehliadanie.";
+
