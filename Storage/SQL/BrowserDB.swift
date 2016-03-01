@@ -12,7 +12,7 @@ public let NotificationDatabaseWasRecreated = "NotificationDatabaseWasRecreated"
 
 private let log = Logger.syncLogger
 
-typealias Args = [AnyObject?]
+public typealias Args = [AnyObject?]
 
 protocol Changeable {
     func run(sql: String, withArgs args: Args?) -> Success
@@ -44,7 +44,7 @@ public class BrowserDB {
 
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
     // appear in a query string.
-    static let MaxVariableNumber = 999
+    public static let MaxVariableNumber = 999
 
     public init(filename: String, secretKey: String? = nil, files: FileAccessor) {
         log.debug("Initializing BrowserDB: \(filename).")
@@ -403,7 +403,7 @@ extension BrowserDB: Changeable {
         }
 
         var err: NSError? = nil
-        self.transaction(&err) { (conn, err) -> Bool in
+        let errorResult = self.transaction(&err) { (conn, err) -> Bool in
             for (sql, args) in commands {
                 err = conn.executeChange(sql, withArgs: args)
                 if let err = err {
@@ -414,7 +414,7 @@ extension BrowserDB: Changeable {
             return true
         }
 
-        if let err = err {
+        if let err = err ?? errorResult {
             return deferMaybe(DatabaseError(err: err))
         }
 

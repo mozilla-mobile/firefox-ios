@@ -221,7 +221,7 @@ public struct StorageResponse<T> {
 public struct POSTResult {
     public let modified: Timestamp
     public let success: [GUID]
-    public let failed: [GUID: [String]]
+    public let failed: [GUID: String]
 
     public static func fromJSON(json: JSON) -> POSTResult? {
         if json.isError {
@@ -233,14 +233,13 @@ public struct POSTResult {
            let f = json["failed"].asDictionary {
             var failed = false
             let asStringOrFail: JSON -> String = { $0.asString ?? { failed = true; return "" }() }
-            let asArrOrFail: JSON -> [String] = { $0.asArray?.map(asStringOrFail) ?? { failed = true; return [] }() }
 
             // That's the basic structure. Now let's transform the contents.
             let successGUIDs = s.map(asStringOrFail)
             if failed {
                 return nil
             }
-            let failedGUIDs = mapValues(f, f: asArrOrFail)
+            let failedGUIDs = mapValues(f, f: asStringOrFail)
             if failed {
                 return nil
             }

@@ -337,6 +337,15 @@ class RecordTests: XCTestCase {
         XCTAssertTrue(bookmark?.isValid() ?? false)
     }
 
+    func testQuery() {
+        let str = "{\"title\":\"Downloads\",\"parentName\":\"\",\"bmkUri\":\"place:transition=7&sort=4\",\"id\":\"7gdp9S1okhKf\",\"parentid\":\"rq6WHyfHkoUV\",\"type\":\"query\"}"
+        let query = BookmarkType.payloadFromJSON(JSON(string: str))
+        XCTAssertTrue(query is BookmarkQueryPayload)
+        let mirror = query?.toMirrorItem(NSDate.now())
+        let roundtrip = mirror?.asPayload()
+        XCTAssertTrue(roundtrip! is BookmarkQueryPayload)
+    }
+
     func testBookmarks() {
         let validBookmark = JSON([
             "id": "abcabcabcabc",
