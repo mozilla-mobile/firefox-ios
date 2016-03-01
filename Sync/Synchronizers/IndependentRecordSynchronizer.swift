@@ -162,8 +162,8 @@ extension TimestampedSingleCollectionSynchronizer {
         var batch: [String] = []
         var bytes = 0
         var count = 0
-        sorted.forEach { line in
-            let expectedBytes = bytes + line.1 + 1   // Include newlines.
+        sorted.forEach { (string, size) in
+            let expectedBytes = bytes + size + 1   // Include newlines.
             if expectedBytes > Sync15StorageClient.maxPayloadSizeBytes ||
                count >= Sync15StorageClient.maxPayloadItemCount {
                 batches.append(batch)
@@ -171,8 +171,8 @@ extension TimestampedSingleCollectionSynchronizer {
                 bytes = 0
                 count = 0
             }
-            batch.append(line.0)
-            bytes += line.1 + 1
+            batch.append(string)
+            bytes += size + 1
             count += 1
         }
 
