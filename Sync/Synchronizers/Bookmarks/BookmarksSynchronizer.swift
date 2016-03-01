@@ -73,7 +73,6 @@ class TrivialBookmarkStorer: BookmarkStorer {
 
         // Chain the last upload timestamp right into our lastFetched timestamp.
         // This is what Sync clients tend to do, but we can probably do better.
-        // Upload 50 records at a time.
         return uploader(records, lastTimestamp: op.ifUnmodifiedSince, onUpload: onUpload)
             // As if we uploaded everything in one go.
             >>> { deferMaybe(POSTResult(modified: modified, success: success, failed: failed)) }
@@ -108,7 +107,7 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
         let storer = TrivialBookmarkStorer(uploader: { records, lastTimestamp, onUpload in
             // Default to our last fetch time for If-Unmodified-Since.
             let timestamp = lastTimestamp ?? self.lastFetched
-            return self.uploadRecords(records, by: 50, lastTimestamp: timestamp, storageClient: bookmarksClient, onUpload: onUpload)
+            return self.uploadRecordsInChunks(records, lastTimestamp: timestamp, storageClient: bookmarksClient, onUpload: onUpload)
               >>== effect(self.setTimestamp)
         })
         let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
