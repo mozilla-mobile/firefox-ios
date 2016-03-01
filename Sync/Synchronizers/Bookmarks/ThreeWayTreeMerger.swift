@@ -1383,6 +1383,8 @@ class ThreeWayTreeMerger {
         // drops it from the local table) and deleting an item that's locally modified
         // (which drops it from the local table, and perhaps also from the mirror).
         // Either way, we put it in the list to drop.
+        // The former is `localOp.processedLocalChanges`, accumulated as we walk local.
+        // The latter is `mergedTree.deleteLocally`, accumulated as we process incoming deletions.
         localOp.processedLocalChanges.unionInPlace(mergedTree.deleteLocally)
 
         // Now walk the final tree to get the substantive changes.
