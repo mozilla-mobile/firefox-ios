@@ -1454,6 +1454,9 @@ extension BrowserViewController: BrowserDelegate {
         findInPageHelper.delegate = self
         browser.addHelper(findInPageHelper, name: FindInPageHelper.name())
 
+        let printHelper = PrintHelper(browser: browser)
+        browser.addHelper(printHelper, name: PrintHelper.name())
+
         let openURL = {(url: NSURL) -> Void in
             self.switchToTabForURLOrOpen(url)
         }
