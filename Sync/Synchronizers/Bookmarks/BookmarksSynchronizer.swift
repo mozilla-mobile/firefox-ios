@@ -192,7 +192,10 @@ class MergeApplier {
  * 2(b). Switch to the new mirror state. If this fails, we should find that our reconciled
  *       server contents apply neatly to our mirror and empty local, and we'll reach the
  *       same end state.
- *       Mirror state is applied in a sane order to respect relational constraints:
+ *
+ *       Mirror state is applied in a sane order to respect relational constraints, even though
+ *       we configure sqlite to defer constraint validation until the transaction is committed.
+ *       That means:
  *
  *       - Add any new records in the value table.
  *       - Change any existing records in the value table.
@@ -267,8 +270,9 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
         //   folder hierarchies out of localStructure, values out of local, and turning
         //   them into records. Do so in hierarchical order if we can, and set sortindex
         //   attributes to put folders first.
-        // * Upload those records in as many batches as necessary. Ensure that each batch
-        //   is consistent, if at all possible.
+        // * Upload those records in as few batches as possible. Ensure that each batch
+        //   is consistent, if at all possible, though we're hoping for server support for
+        //   atomic writes.
         // * Take everything in local that was successfully uploaded and move it into the
         //   mirror, using the timestamps we tracked from the upload.
         //
