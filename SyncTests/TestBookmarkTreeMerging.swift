@@ -131,7 +131,7 @@ private func getBrowserDBForFile(filename: String, files: FileAccessor) -> Brows
     return db
 }
 
-class SaneTestCase: XCTestCase {
+class FailFastTestCase: XCTestCase {
     // This is how to make an assertion failure stop the current test function
     // but continue with other test functions in the same test case.
     // See http://stackoverflow.com/a/27016786/22003
@@ -142,7 +142,7 @@ class SaneTestCase: XCTestCase {
     }
 }
 
-class TestBookmarkTreeMerging: SaneTestCase {
+class TestBookmarkTreeMerging: FailFastTestCase {
     let files = MockFiles()
 
     override func tearDown() {
@@ -905,7 +905,7 @@ class TestBookmarkTreeMerging: SaneTestCase {
     }
 }
 
-class TestMergedTree: SaneTestCase {
+class TestMergedTree: FailFastTestCase {
     func testInitialState() {
         let children = BookmarkRoots.RootChildren.map { BookmarkTreeNode.Unknown(guid: $0) }
         let root = BookmarkTreeNode.Folder(guid: BookmarkRoots.RootGUID, children: children)
