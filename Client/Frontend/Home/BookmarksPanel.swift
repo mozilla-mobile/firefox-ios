@@ -334,45 +334,38 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
-            if let bookmark = self.source?.current[indexPath.row] {
-                if bookmark is BookmarkFolder {
-                    // TODO: check whether the folder is empty (excluding separators). If it isn't
-                    // then we must ask the user to confirm. Bug 1232810.
-                    log.debug("Deleting folder.")
-                }
-
-                // Why the dispatches? Because we call success and failure on the DB
-                // queue, and so calling anything else that calls through to the DB will
-                // deadlock. This problem will go away when the bookmarks API switches to
-                // Deferred instead of using callbacks.
-                // TODO: it's now time for this.
-                self.profile.bookmarks.removeByGUID(bookmark.guid)
-                                      .uponQueue(dispatch_get_main_queue()) { res in
-                    if let err = res.failureValue {
-                        self.onModelFailure(err)
-                        return
-                    }
-
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.source?.reloadData().upon {
-                            guard let model = $0.successValue else {
-                                self.onModelFailure($0.failureValue)
-                                return
-                            }
-                            dispatch_async(dispatch_get_main_queue()) {
-                                tableView.beginUpdates()
-                                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-                                self.source = model
-
-                                tableView.endUpdates()
-                                self.updateEmptyPanelState()
-
-                                NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
-                            }
-                        }
-                    }
-                }
+            guard let bookmark = self.source?.current[indexPath.row] else {
+                return
             }
+
+            assert(!(bookmark is BookmarkFolder))
+            if bookmark is BookmarkFolder {
+                // TODO: check whether the folder is empty (excluding separators). If it isn't
+                // then we must ask the user to confirm. Bug 1232810.
+                log.debug("Not deleting folder.")
+                return
+            }
+
+            log.debug("Removing rows \(indexPath).")
+
+            if let err = self.profile.bookmarks.removeByGUID(bookmark.guid).value.failureValue {
+                log.debug("Failed to remove \(bookmark.guid).")
+                self.onModelFailure(err)
+                return
+            }
+
+            guard let reloaded = self.source?.reloadData().value.successValue else {
+                log.debug("Failed to reload model.")
+                return
+            }
+
+            self.tableView.beginUpdates()
+            self.source = reloaded
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+            self.tableView.endUpdates()
+            self.updateEmptyPanelState()
+
+            NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added": false])
         })
 
         return [delete]
