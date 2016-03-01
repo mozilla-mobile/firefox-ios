@@ -10,7 +10,7 @@ import Deferred
 
 private let log = Logger.syncLogger
 
-typealias ByteCount = Int
+public typealias ByteCount = Int
 
 class Uploader {
     /**
@@ -111,23 +111,51 @@ extension TimestampedSingleCollectionSynchronizer {
     }
 
     func uploadRecordsInChunks<T>(records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: POSTResult -> DeferredTimestamp) -> DeferredTimestamp {
+
+        // Obvious sanity.
+        precondition(Sync15StorageClient.maxRecordSizeBytes <= Sync15StorageClient.maxPayloadSizeBytes)
+
         if records.isEmpty {
             log.debug("No modified records to upload.")
             return deferMaybe(lastTimestamp)
         }
 
-        // Schwartzian transform.
+        var failedGUID: GUID? = nil
+        var largest: ByteCount = 0
+
+        // Schwartzian transform -- decorate, sort, undecorate.
         func decorate(record: Record<T>) -> (String, ByteCount)? {
-            guard let s = storageClient.serializeRecord(record) else {
-                // TODO: fail.
+            guard failedGUID == nil else {
+                // If we hit an over-sized record, or fail to serialize, we stop processing
+                // everything: we don't want to upload only some of the user's bookmarks.
                 return nil
             }
 
-            return (s, s.utf8.count)
+            guard let string = storageClient.serializeRecord(record) else {
+                failedGUID = record.id
+                return nil
+            }
+
+            let size = string.utf8.count
+            if size > largest {
+                largest = size
+                if size > Sync15StorageClient.maxRecordSizeBytes {
+                    // If we hit this case, we cannot ever successfully sync until the user
+                    // takes action. Let's hope they do.
+                    failedGUID = record.id
+                    return nil
+                }
+            }
+
+            return (string, size)
         }
 
         // Put small records first.
         let sorted = records.flatMap(decorate).sort { $0.1 < $1.1 }
+
+        if let failed = failedGUID {
+            return deferMaybe(RecordTooLargeError(size: largest, guid: failed))
+        }
 
         // Cut this up into chunks of a maximum size.
         var batches: [[String]] = []
@@ -138,15 +166,10 @@ extension TimestampedSingleCollectionSynchronizer {
             let expectedBytes = bytes + line.1 + 1   // Include newlines.
             if expectedBytes > Sync15StorageClient.maxPayloadSizeBytes ||
                count >= Sync15StorageClient.maxPayloadItemCount {
-                if batch.isEmpty {
-                    // Uh oh. We're screwed.
-                    assertionFailure("Max record size hit before accruing any items.")
-                } else {
-                    batches.append(batch)
-                    batch = []
-                    bytes = 0
-                    count = 0
-                }
+                batches.append(batch)
+                batch = []
+                bytes = 0
+                count = 0
             }
             batch.append(line.0)
             bytes += line.1 + 1

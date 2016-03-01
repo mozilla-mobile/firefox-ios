@@ -77,6 +77,20 @@ public class MalformedMetaGlobalError: MaybeErrorType {
     }
 }
 
+public class RecordTooLargeError: MaybeErrorType {
+    public let guid: GUID
+    public let size: ByteCount
+
+    public init(size: ByteCount, guid: GUID) {
+        self.size = size
+        self.guid = guid
+    }
+
+    public var description: String {
+        return "Record \(self.guid) too large: \(size) bytes."
+    }
+}
+
 /**
  * Raised when the storage client is refusing to make a request due to a known
  * server backoff.
@@ -265,7 +279,8 @@ public class Sync15StorageClient {
     private let authorizer: Authorizer
     private let serverURI: NSURL
 
-    public static let maxPayloadSizeBytes: Int = 1_000_000
+    public static let maxRecordSizeBytes: Int = 262_140       // A shade under 256KB.
+    public static let maxPayloadSizeBytes: Int = 1_000_000    // A shade under 1MB.
     public static let maxPayloadItemCount: Int = 100          // Bug 1250747 will raise this.
 
     var backoff: BackoffStorage
