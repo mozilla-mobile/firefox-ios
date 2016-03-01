@@ -96,6 +96,14 @@ class DomainAutocompleteTests: KIFTestCase {
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "YaH", completion: "oo.com/")
         tester().clearTextFromFirstResponder()
 
+        // Test that leading spaces still show suggestions.
+        tester().enterTextIntoCurrentFirstResponder("   yah")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "   yah", completion: "oo.com/")
+
+        // Test that trailing spaces do *not* show suggestions.
+        tester().enterTextIntoCurrentFirstResponder(" ")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "   yah ", completion: "")
+
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
