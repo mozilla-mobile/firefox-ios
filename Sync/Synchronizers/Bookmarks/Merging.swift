@@ -73,8 +73,14 @@ public class BookmarksMergeResult: PerhapsNoOp {
 // MARK: - Errors.
 
 public class BookmarksMergeError: MaybeErrorType {
+    private let error: ErrorType?
+
+    init(error: ErrorType?=nil) {
+        self.error = error
+    }
+
     public var description: String {
-        return "Merge error"
+        return "Merge error: \(self.error)"
     }
 }
 

@@ -847,7 +847,7 @@ class ThreeWayTreeMerger {
     // We'll end up looking at deletions and such as we go.
     // TODO: accumulate deletions into the three buckets as we go.
     //
-    // TODO: if a local or remote note is kept but put in a different folder, we actually
+    // TODO: if a local or remote node is kept but put in a different folder, we actually
     // need to generate a .New node, so we can take the parentid and parentNode that we
     // must preserve.
     func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
@@ -1040,10 +1040,10 @@ class ThreeWayTreeMerger {
                 let rem = self.remote.find(guid)
                 return try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
             }
-        } catch let error as BookmarksMergeConsistencyError {
+        } catch let error as MaybeErrorType {
             return deferMaybe(error)
-        } catch {
-            return deferMaybe(BookmarksMergeConsistencyError())
+        } catch let error {
+            return deferMaybe(BookmarksMergeError(error: error))
         }
 
         self.mergeAttempted = true
