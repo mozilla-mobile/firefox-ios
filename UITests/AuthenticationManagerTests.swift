@@ -100,6 +100,9 @@ class AuthenticationManagerTests: KIFTestCase {
         openAuthenticationManager()
         tester().tapViewWithAccessibilityLabel("Require Passcode")
 
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        enterPasscodeWithDigits("1337")
+
         let tableView = tester().waitForViewWithAccessibilityIdentifier("AuthenticationManager.passcodeIntervalTableView") as! UITableView
         var immediatelyCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0))!
         var oneHourCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0))!

@@ -8,7 +8,7 @@ import Shared
 import SwiftKeychainWrapper
 import LocalAuthentication
 
-public let PrefsKeyTouchID = "authentication.touchID"
+private let logger = Logger.browserLogger
 
 class TurnPasscodeOnSetting: Setting {
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
@@ -62,6 +62,8 @@ class ChangePasscodeSetting: Setting {
 }
 
 class RequirePasscodeSetting: Setting {
+    private weak var navigationController: UINavigationController?
+
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
     override var style: UITableViewCellStyle { return .Value1 }
@@ -76,6 +78,7 @@ class RequirePasscodeSetting: Setting {
     }
 
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
+        self.navigationController = settings.navigationController
         let title = AuthenticationStrings.requirePasscode
         let attributedTitle = (enabled ?? true) ? NSAttributedString.tableRowTitle(title) : NSAttributedString.disabledTableRowTitle(title)
         super.init(title: attributedTitle,
@@ -83,8 +86,101 @@ class RequirePasscodeSetting: Setting {
                    enabled: enabled)
     }
 
-    override func onClick(navigationController: UINavigationController?) {
+    override func onClick(_: UINavigationController?) {
+        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+            navigateToRequireInterval()
+            return
+        }
+
+        if AppConstants.MOZ_AUTHENTICATION_MANAGER && authInfo.requiresValidation() {
+            AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
+            success: {
+                self.navigateToRequireInterval()
+            },
+            fallback: {
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
+            })
+        } else {
+            self.navigateToRequireInterval()
+        }
+    }
+
+    private func navigateToRequireInterval() {
         navigationController?.pushViewController(RequirePasscodeIntervalViewController(), animated: true)
+    }
+}
+
+extension RequirePasscodeSetting: PasscodeEntryDelegate {
+    @objc func passcodeValidationDidSucceed() {
+        navigationController?.dismissViewControllerAnimated(true) {
+            self.navigateToRequireInterval()
+        }
+    }
+}
+
+class TouchIDSetting: Setting {
+    private let authInfo: AuthenticationKeychainInfo?
+
+    private weak var navigationController: UINavigationController?
+    private weak var switchControl: UISwitch?
+
+    init(title: NSAttributedString?, navigationController: UINavigationController? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
+        self.navigationController = navigationController
+        self.authInfo = KeychainWrapper.authenticationInfo()
+        super.init(title: title, delegate: delegate, enabled: enabled)
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+
+        // In order for us to recognize a tap gesture without toggling the switch,
+        // the switch is wrapped in a UIView which has a tap gesture recognizer. This way
+        // we can disable interaction of the switch and still handle tap events.
+        let control = UISwitch()
+        control.onTintColor = UIConstants.ControlTintColor
+        control.on = authInfo?.useTouchID ?? false
+        control.userInteractionEnabled = false
+        switchControl = control
+
+        let accessoryContainer = UIView(frame: control.frame)
+        accessoryContainer.addSubview(control)
+
+        let gesture = UITapGestureRecognizer(target: self, action: "switchTapped")
+        accessoryContainer.addGestureRecognizer(gesture)
+
+        cell.accessoryView = accessoryContainer
+    }
+
+    @objc private func switchTapped() {
+        guard let authInfo = authInfo else {
+            logger.error("Authentication info should always be present when modifying Touch ID preference.")
+            return
+        }
+
+        if authInfo.useTouchID {
+            AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
+            success: {
+                self.toggleTouchID(enabled: false)
+            },
+            fallback: {
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
+            })
+        } else {
+            toggleTouchID(enabled: true)
+        }
+    }
+
+    private func toggleTouchID(enabled enabled: Bool) {
+        authInfo?.useTouchID = enabled
+        KeychainWrapper.setAuthenticationInfo(authInfo)
+        switchControl?.setOn(enabled, animated: true)
+    }
+}
+
+extension TouchIDSetting: PasscodeEntryDelegate {
+    @objc func passcodeValidationDidSucceed() {
+        toggleTouchID(enabled: false)
+        navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
@@ -127,10 +223,11 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         let localAuthContext = LAContext()
         if localAuthContext.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
             requirePasscodeSectionChildren.append(
-                BoolSetting(prefs: profile.prefs,
-                    prefKey: PrefsKeyTouchID,
-                    defaultValue: false,
-                    titleText: NSLocalizedString("Use Touch ID", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID")
+                TouchIDSetting(
+                    title: NSAttributedString.tableRowTitle(
+                        NSLocalizedString("Use Touch ID", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID")
+                    ),
+                    navigationController: self.navigationController
                 )
             )
         }
