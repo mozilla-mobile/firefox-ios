@@ -9,6 +9,10 @@ import Shared
 private let log = Logger.syncLogger
 
 private class CachedSource {
+    // We track not just mappings between values and non-nil items, but also whether we've tried
+    // to look up a value at all. This allows us to distinguish between a cache miss and a
+    // cache hit that didn't find an item in the backing store.
+    // We expect, given our prefetching, that cache misses will be rare.
     private var cache: [GUID: BookmarkMirrorItem] = [:]
     private var seen: Set<GUID> = Set()
 
