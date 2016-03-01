@@ -51,7 +51,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     var normalizedEnteredText: String {
-        return enteredText.lowercaseString
+        return enteredText.lowercaseString.stringByTrimmingLeadingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
 
     override var text: String? {
@@ -76,7 +76,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         super.addTarget(self, action: "SELtextDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         notifyTextChanged = debounce(0.1, action: {
             if self.editing {
-                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText)
+                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText.stringByTrimmingLeadingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()))
             }
         })
     }
@@ -160,8 +160,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // Check that the length of the entered text is shorter than the length of the suggestion.
             // This ensures that completionActive is true only if there are remaining characters to
             // suggest (which will suppress the caret).
-            if suggestion.startsWith(normalizedEnteredText) && (enteredText).characters.count < suggestion.characters.count {
-                let endingString = suggestion.substringFromIndex(suggestion.startIndex.advancedBy(enteredText.characters.count))
+            if suggestion.startsWith(normalizedEnteredText) && normalizedEnteredText.characters.count < suggestion.characters.count {
+                let endingString = suggestion.substringFromIndex(suggestion.startIndex.advancedBy(normalizedEnteredText.characters.count))
                 let completedAndMarkedString = NSMutableAttributedString(string: enteredText + endingString)
                 completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSMakeRange(enteredText.characters.count, endingString.characters.count))
                 attributedText = completedAndMarkedString
