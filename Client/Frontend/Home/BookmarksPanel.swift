@@ -329,8 +329,72 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 }
             }
         })
+        
+        let editTitle = NSLocalizedString("Edit", tableName: "BookmarkPanel", comment: "Action button for editing bookmarks in the bookmarks panel.")
+        
+        let edit = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: editTitle, handler: { (action, indexPath) in
+            let messagePrefix = "Change the name for\n" // later localized
+            let urlTruncated = (self.source!.current[indexPath.row] as! BookmarkItem).url.ellipsize(maxLength: 30)
+            
+            let attributedMessage = NSMutableAttributedString()
+            attributedMessage.appendAttributedString(NSAttributedString(string: messagePrefix, attributes: [NSForegroundColorAttributeName : UIColor.blackColor(), NSFontAttributeName : UIFont.systemFontOfSize(13)]))
+            attributedMessage.appendAttributedString(NSAttributedString(string: urlTruncated, attributes: [NSForegroundColorAttributeName : UIColor.lightGrayColor(), NSFontAttributeName : UIFont.systemFontOfSize(13)]))
+            
+            let editAlertController = UIAlertController(title: "Edit bookmark title", message: "asdfasdf", preferredStyle: .Alert)
 
-        return [delete]
+            // change message to use attributed string
+            editAlertController.setValue(attributedMessage, forKey: "attributedMessage")
+            
+            // OK Action
+            let okAction = UIAlertAction(title: "OK", style: .Default) { (_) in
+                let bookmarkTitleTextField = editAlertController.textFields![0] as UITextField
+                let bookmark = self.source?.current[indexPath.row]!
+                bookmark?.title = bookmarkTitleTextField.text!
+                self.profile.bookmarks.updateTitle(bookmark!).uponQueue(dispatch_get_main_queue()) { res in
+                    if let err = res.failureValue {
+                        self.onModelFailure(err)
+                        return
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.source?.reloadData().upon {
+                            guard let model = $0.successValue else {
+                                self.onModelFailure($0.failureValue)
+                                return
+                            }
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.source = model
+                                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            editAlertController.addAction(okAction)
+            
+            // TextField
+            editAlertController.addTextFieldWithConfigurationHandler({ (textField) -> Void in
+                textField.placeholder = self.source?.current[indexPath.row]?.title
+                textField.text = self.source?.current[indexPath.row]?.title
+                
+                // Disable OK Button when the textfield is empty
+                NSNotificationCenter.defaultCenter().addObserverForName(UITextFieldTextDidChangeNotification, object: textField, queue: NSOperationQueue.mainQueue()) { (notification) in
+                    
+                    let whitespaceSet = NSCharacterSet.whitespaceCharacterSet()
+                    okAction.enabled = textField.text!.stringByTrimmingCharactersInSet(whitespaceSet) != ""
+                }
+            })
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
+            editAlertController.addAction(cancelAction)
+            
+            self.presentViewController(editAlertController, animated: true, completion: nil)
+        })
+
+
+        return [delete,edit]
+//        return [delete]
     }
 }
 

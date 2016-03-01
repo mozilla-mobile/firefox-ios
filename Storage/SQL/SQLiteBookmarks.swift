@@ -294,6 +294,21 @@ public class SQLiteBookmarks: BookmarksModelFactory {
             (sql, args),
         ])
     }
+    
+    public func updateTitle(bookmark: BookmarkNode) -> Success {
+        let sql: String
+        let args: Args
+        if let id = bookmark.id {
+            sql = "UPDATE \(TableBookmarks) SET title = ? WHERE id = ?"
+            args = [bookmark.title, id]
+        } else {
+            sql = "UPDATE \(TableBookmarks) SET title = ? WHERE guid = ?"
+            args = [bookmark.title, bookmark.guid]
+        }
+        return self.db.run([
+            (sql, args),
+        ])
+    }
 }
 
 extension SQLiteBookmarks: ShareToDestination {
@@ -645,7 +660,11 @@ extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
     public func removeByURL(url: String) -> Success {
         return deferMaybe(DatabaseError(description: "Can't remove records from the mirror."))
     }
-
+    
+    public func updateTitle(bookmark: BookmarkNode) -> Success {
+        return deferMaybe(DatabaseError(description: "Can't update records from mirror."))
+    }
+    
     public func clearBookmarks() -> Success {
         // This doesn't make sense for synced data just yet.
         log.debug("Mirror ignoring clearBookmarks.")
@@ -737,6 +756,10 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
         return self.local.removeByURL(url)
     }
 
+    public func updateTitle(bookmark: BookmarkNode) -> Success {
+        return self.local.updateTitle(bookmark)
+    }
+    
     public func clearBookmarks() -> Success {
         return self.local.clearBookmarks()
     }
