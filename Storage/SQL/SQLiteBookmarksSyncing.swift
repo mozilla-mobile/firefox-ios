@@ -553,16 +553,6 @@ extension BrowserDB {
     }
 }
 
-public class MergedSQLiteBookmarks {
-    let local: SQLiteBookmarks
-    let buffer: SQLiteBookmarkBufferStorage
-
-    public init(db: BrowserDB) {
-        self.local = SQLiteBookmarks(db: db)
-        self.buffer = SQLiteBookmarkBufferStorage(db: db)
-    }
-}
-
 extension MergedSQLiteBookmarks: BookmarkBufferStorage {
     public func isEmpty() -> Deferred<Maybe<Bool>> {
         return self.buffer.isEmpty()
@@ -635,47 +625,6 @@ extension MergedSQLiteBookmarks: LocalItemSource {
 extension MergedSQLiteBookmarks: ShareToDestination {
     public func shareItem(item: ShareItem) {
         self.local.shareItem(item)
-    }
-}
-
-extension MergedSQLiteBookmarks: BookmarksModelFactory {
-    public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
-        return self.local.modelForFolder(folder)
-    }
-
-    public func modelForFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
-        return self.local.modelForFolder(guid)
-    }
-
-    public func modelForFolder(guid: String, title: String) -> Deferred<Maybe<BookmarksModel>> {
-        return self.local.modelForFolder(guid, title: title)
-    }
-
-    public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
-        return self.local.modelForRoot()
-    }
-
-    // Whenever async construction is necessary, we fall into a pattern of needing
-    // a placeholder that behaves correctly for the period between kickoff and set.
-    public var nullModel: BookmarksModel {
-        return self.local.nullModel
-    }
-
-    public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
-        return self.local.isBookmarked(url)
-    }
-
-    public func removeByGUID(guid: GUID) -> Success {
-        log.debug("removeByGUID: \(guid)")
-        return self.local.removeByGUID(guid)
-    }
-
-    public func removeByURL(url: String) -> Success {
-        return self.local.removeByURL(url)
-    }
-
-    func clearBookmarks() -> Success {
-        return self.local.clearBookmarks()
     }
 }
 

@@ -9,65 +9,65 @@ import Shared
 private let log = Logger.syncLogger
 private let desktopBookmarksLabel = NSLocalizedString("Desktop Bookmarks", tableName: "BookmarkPanel", comment: "The folder name for the virtual folder that contains all desktop bookmarks.")
 
-extension SQLiteBookmarks: BookmarksModelFactory {
-    /**
-     * Return the children of the provided parent.
-     * Rows are ordered by positional index.
-     * This method is aware of is_overridden and deletion, using local override structure by preference.
-     * Note that a folder can be empty locally; we thus use the flag rather than looking at the structure itself.
-     */
-    private func getChildrenWithParent(parentGUID: GUID, excludingGUIDs: [GUID]?=nil, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+public enum Direction {
+    case Buffer
+    case Local
 
-        precondition(excludingGUIDs?.count < 100, "Sanity bound for the number of GUIDs we can exclude.")
-
-        let structure =
-        "SELECT parent, child AS guid, idx FROM \(ViewBookmarksLocalStructureOnMirror) " +
-        "WHERE parent = ?"
-
-        let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID " +
-        "FROM \(ViewBookmarksLocalOnMirror)"
-
-        // We exclude queries and dynamic containers, because we can't
-        // usefully display them.
-        let typeQuery = BookmarkNodeType.Query.rawValue
-        let typeDynamic = BookmarkNodeType.DynamicContainer.rawValue
-        let typeFilter = " vals.type NOT IN (\(typeQuery), \(typeDynamic))"
-
-        let args: Args
-        let exclusion: String
-        if let excludingGUIDs = excludingGUIDs {
-            args = ([parentGUID] + excludingGUIDs).map { $0 as AnyObject }
-            exclusion = "\(typeFilter) AND vals.guid NOT IN " + BrowserDB.varlist(excludingGUIDs.count)
-        } else {
-            args = [parentGUID]
-            exclusion = typeFilter
+    var structureTable: String {
+        switch self {
+        case .Local:
+            return TableBookmarksLocalStructure
+        case .Buffer:
+            return TableBookmarksBufferStructure
         }
+    }
 
-        let fleshed =
-        "SELECT vals.id AS id, vals.guid AS guid, vals.type AS type, vals.is_deleted AS is_deleted, " +
-        "       vals.parentid AS parentid, vals.parentName AS parentName, vals.feedUri AS feedUri, " +
-        "       vals.pos AS pos, vals.title AS title, vals.bmkUri AS bmkUri, vals.folderName AS folderName, " +
-        "       vals.faviconID AS faviconID, " +
-        "       structure.idx AS idx, " +
-        "       structure.parent AS _parent " +
-        "FROM (\(structure)) AS structure JOIN (\(values)) AS vals " +
-        "ON vals.guid = structure.guid " +
-        "WHERE " + exclusion
+    var valueTable: String {
+        switch self {
+        case .Local:
+            return TableBookmarksLocal
+        case .Buffer:
+            return TableBookmarksBuffer
+        }
+    }
 
-        let withIcon =
-        "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type, " +
-        "       bookmarks.is_deleted AS is_deleted, " +
-        "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName, " +
-        "       bookmarks.feedUri AS feedUri, bookmarks.pos AS pos, title AS title, " +
-        "       bookmarks.bmkUri AS bmkUri, bookmarks.folderName AS folderName, " +
-        "       bookmarks.idx AS idx, bookmarks._parent AS _parent, " +
-        "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
-        "FROM (\(fleshed)) AS bookmarks " +
-        "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
+    var valueView: String {
+        switch self {
+        case .Local:
+            return ViewBookmarksLocalOnMirror
+        case .Buffer:
+            return ViewBookmarksBufferOnMirror
+        }
+    }
 
-        let sql = (includeIcon ? withIcon : fleshed) + " ORDER BY idx ASC"
-        return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)
+    var structureView: String {
+        switch self {
+        case .Local:
+            return ViewBookmarksLocalStructureOnMirror
+        case .Buffer:
+            return ViewBookmarksBufferStructureOnMirror
+        }
+    }
+}
+
+public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
+    private let bookmarks: SQLiteBookmarks
+    private let direction: Direction
+
+    public init(bookmarks: SQLiteBookmarks, direction: Direction) {
+        self.bookmarks = bookmarks
+        self.direction = direction
+    }
+
+    private func withDifferentDirection(direction: Direction) -> SQLiteBookmarksModelFactory {
+        if self.direction == direction {
+            return self
+        }
+        return SQLiteBookmarksModelFactory(bookmarks: self.bookmarks, direction: direction)
+    }
+
+    private func getChildrenWithParent(parentGUID: GUID, excludingGUIDs: [GUID]?=nil, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+        return self.bookmarks.getChildrenWithParent(parentGUID, direction: self.direction, excludingGUIDs: excludingGUIDs, includeIcon: includeIcon)
     }
 
     private func getRootChildren() -> Deferred<Maybe<Cursor<BookmarkNode>>> {
@@ -95,6 +95,10 @@ extension SQLiteBookmarks: BookmarksModelFactory {
     }
 
     public func modelForFolder(guid: String, title: String) -> Deferred<Maybe<BookmarksModel>> {
+        if guid == BookmarkRoots.MobileFolderGUID {
+            return self.modelForRoot()
+        }
+
         if guid == BookmarkRoots.FakeDesktopFolderGUID {
             return self.modelForDesktopBookmarks()
         }
@@ -129,7 +133,7 @@ extension SQLiteBookmarks: BookmarksModelFactory {
 
     public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
         let sql = "SELECT id FROM " +
-            "(SELECT id FROM \(TableBookmarksLocal) WHERE " +
+            "(SELECT id FROM \(self.direction.valueTable) WHERE " +
             " bmkUri = ? AND is_deleted IS NOT 1" +
             " UNION ALL " +
             " SELECT id FROM \(TableBookmarksMirror) WHERE " +
@@ -137,10 +141,204 @@ extension SQLiteBookmarks: BookmarksModelFactory {
             " LIMIT 1)"
         let args: Args = [url, url]
 
-        return self.db.runQuery(sql, args: args, factory: { $0["id"] as! Int })
+        return self.bookmarks.db.runQuery(sql, args: args, factory: { $0["id"] as! Int })
             >>== { cursor in
                 return deferMaybe((cursor.status == .Success) && (cursor.count > 0))
         }
+    }
+
+    public func removeByURL(url: String) -> Success {
+        if self.direction == Direction.Buffer {
+            return deferMaybe(DatabaseError(description: "Refusing to remove URL from buffer in model."))
+        }
+
+        // Find all of the records for the provided URL. Don't bother with
+        // any that are already deleted!
+        return self.bookmarks.nonDeletedGUIDsForURL(url)
+          >>== self.bookmarks.removeGUIDs
+    }
+
+    public func removeByGUID(guid: GUID) -> Success {
+        if self.direction == Direction.Buffer {
+            return deferMaybe(DatabaseError(description: "Refusing to remove GUID from buffer in model."))
+        }
+
+        log.debug("removeByGUID: \(guid)")
+        return self.bookmarks.removeGUIDs([guid])
+    }
+
+    func hasDesktopBookmarks() -> Deferred<Maybe<Bool>> {
+        // This is very lazy, but it has the nice property of keeping Desktop Bookmarks visible
+        // for a while after you mark the last desktop child as deleted.
+        let parents: Args = [
+            // Local.
+            BookmarkRoots.MenuFolderGUID,
+            BookmarkRoots.ToolbarFolderGUID,
+            BookmarkRoots.UnfiledFolderGUID,
+
+            // Mirror.
+            BookmarkRoots.MenuFolderGUID,
+            BookmarkRoots.ToolbarFolderGUID,
+            BookmarkRoots.UnfiledFolderGUID,
+        ]
+
+        let sql =
+        "SELECT 1 FROM \(self.direction.structureTable) WHERE parent IN (?, ?, ?)" +
+        " UNION ALL " +
+        "SELECT 1 FROM \(TableBookmarksMirrorStructure) WHERE parent IN (?, ?, ?)" +
+        " LIMIT 1"
+
+        return self.bookmarks.db.queryReturnsResults(sql, args: parents)
+    }
+
+    func getDesktopRoots() -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+        if self.direction == .Buffer {
+            // The buffer never includes the Places root, so we look one level deeper.
+            return self.bookmarks.getRecordsWithGUIDs(BookmarkRoots.DesktopRoots, direction: self.direction, includeIcon: false)
+        }
+
+        // We deliberately exclude the mobile folder, because we're inverting the containment
+        // relationship here.
+        let exclude = [BookmarkRoots.MobileFolderGUID, BookmarkRoots.RootGUID]
+        return self.getChildrenWithParent(BookmarkRoots.RootGUID, excludingGUIDs: exclude, includeIcon: false)
+    }
+
+    /**
+     * Prepend the provided mobile bookmarks folder with a single folder.
+     * The prepended folder is "Desktop Bookmarks". It contains mirrored folders.
+     */
+    public func extendWithDesktopBookmarksFolder(mobile: BookmarkFolder, factory: BookmarksModelFactory) -> Deferred<Maybe<BookmarksModel>> {
+
+        func onlyMobile() -> Deferred<Maybe<BookmarksModel>> {
+            // No desktop bookmarks.
+            log.debug("No desktop bookmarks. Only showing mobile.")
+            return deferMaybe(BookmarksModel(modelFactory: factory, root: mobile))
+        }
+
+        return self.hasDesktopBookmarks() >>== { yes in
+            if !yes {
+                return onlyMobile()
+            }
+
+            return self.getDesktopRoots() >>== { cursor in
+                if cursor.count == 0 {
+                    // This shouldn't occur.
+                    return onlyMobile()
+                }
+
+                let desktop = self.folderForDesktopBookmarksCursor(cursor)
+                let prepended = PrependedBookmarkFolder(main: mobile, prepend: desktop)
+                return deferMaybe(BookmarksModel(modelFactory: factory, root: prepended))
+            }
+        }
+    }
+
+    private func modelForDesktopBookmarks() -> Deferred<Maybe<BookmarksModel>> {
+        return self.getDesktopRoots() >>== { cursor in
+            let desktop = self.folderForDesktopBookmarksCursor(cursor)
+            return deferMaybe(BookmarksModel(modelFactory: self, root: desktop))
+        }
+    }
+
+    private func folderForDesktopBookmarksCursor(cursor: Cursor<BookmarkNode>) -> SQLiteBookmarkFolder {
+        return SQLiteBookmarkFolder(guid: BookmarkRoots.FakeDesktopFolderGUID, title: desktopBookmarksLabel, children: cursor)
+    }
+}
+
+extension SQLiteBookmarks {
+    private func getRecordsWithGUIDs(guids: [GUID], direction: Direction, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+
+        let isEditable = (direction == .Local) ? 1 : 0
+        let args: Args = guids.map { $0 as AnyObject }
+        let varlist = BrowserDB.varlist(args.count)
+
+        let values =
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID, \(isEditable) AS isEditable " +
+        "FROM \(direction.valueView) WHERE guid IN \(varlist) AND NOT is_deleted"
+
+        if !includeIcon {
+            return self.db.runQuery(values, args: args, factory: BookmarkFactory.factory)
+        }
+
+        let withIcon = [
+            "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type,",
+            "       bookmarks.is_deleted AS is_deleted,",
+            "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName,",
+            "       bookmarks.feedUri AS feedUri, bookmarks.pos AS pos, title AS title,",
+            "       bookmarks.bmkUri AS bmkUri, bookmarks.folderName AS folderName,",
+            "       bookmarks.isEditable AS isEditable,",
+            "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType",
+            "FROM (", values, ") AS bookmarks",
+            "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id",
+            ].joinWithSeparator(" ")
+
+        return self.db.runQuery(withIcon, args: args, factory: BookmarkFactory.factory)
+    }
+
+    /**
+     * Return the children of the provided parent.
+     * Rows are ordered by positional index.
+     * This method is aware of is_overridden and deletion, using local override structure by preference.
+     * Note that a folder can be empty locally; we thus use the flag rather than looking at the structure itself.
+     */
+    func getChildrenWithParent(parentGUID: GUID, direction: Direction, excludingGUIDs: [GUID]?=nil, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+
+        precondition(excludingGUIDs?.count < 100, "Sanity bound for the number of GUIDs we can exclude.")
+
+        let valueView = direction.valueView
+        let structureView = direction.structureView
+
+        let structure =
+        "SELECT parent, child AS guid, idx FROM \(structureView) " +
+        "WHERE parent = ?"
+
+        let isEditable = (direction == .Local) ? 1 : 0
+        let values =
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, folderName, faviconID, \(isEditable) AS isEditable " +
+        "FROM \(valueView)"
+
+        // We exclude queries and dynamic containers, because we can't
+        // usefully display them.
+        let typeQuery = BookmarkNodeType.Query.rawValue
+        let typeDynamic = BookmarkNodeType.DynamicContainer.rawValue
+        let typeFilter = " vals.type NOT IN (\(typeQuery), \(typeDynamic))"
+
+        let args: Args
+        let exclusion: String
+        if let excludingGUIDs = excludingGUIDs {
+            args = ([parentGUID] + excludingGUIDs).map { $0 as AnyObject }
+            exclusion = "\(typeFilter) AND vals.guid NOT IN " + BrowserDB.varlist(excludingGUIDs.count)
+        } else {
+            args = [parentGUID]
+            exclusion = typeFilter
+        }
+
+        let fleshed =
+        "SELECT vals.id AS id, vals.guid AS guid, vals.type AS type, vals.is_deleted AS is_deleted, " +
+        "       vals.parentid AS parentid, vals.parentName AS parentName, vals.feedUri AS feedUri, " +
+        "       vals.pos AS pos, vals.title AS title, vals.bmkUri AS bmkUri, vals.folderName AS folderName, " +
+        "       vals.faviconID AS faviconID, " +
+        "       vals.isEditable AS isEditable, " +
+        "       structure.idx AS idx, " +
+        "       structure.parent AS _parent " +
+        "FROM (\(structure)) AS structure JOIN (\(values)) AS vals " +
+        "ON vals.guid = structure.guid " +
+        "WHERE " + exclusion
+
+        let withIcon =
+        "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type, " +
+        "       bookmarks.is_deleted AS is_deleted, " +
+        "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName, " +
+        "       bookmarks.feedUri AS feedUri, bookmarks.pos AS pos, title AS title, " +
+        "       bookmarks.bmkUri AS bmkUri, bookmarks.folderName AS folderName, " +
+        "       bookmarks.idx AS idx, bookmarks._parent AS _parent, " +
+        "       bookmarks.isEditable AS isEditable, " +
+        "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
+        "FROM (\(fleshed)) AS bookmarks " +
+        "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
+
+        let sql = (includeIcon ? withIcon : fleshed) + " ORDER BY idx ASC"
+        return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)
     }
 
     // This is only used from tests.
@@ -152,20 +350,8 @@ extension SQLiteBookmarks: BookmarksModelFactory {
         ])
     }
 
-    public func removeByURL(url: String) -> Success {
-        // Find all of the records for the provided URL. Don't bother with
-        // any that are already deleted!
-        return self.nonDeletedGUIDsForURL(url)
-          >>== self.removeGUIDs
-    }
-
-    public func removeByGUID(guid: GUID) -> Success {
-        log.debug("removeByGUID: \(guid)")
-        return self.removeGUIDs([guid])
-    }
-
     public func removeGUIDs(guids: [GUID]) -> Success {
-        log.debug("removeByGUIDs: \(guids)")
+        log.debug("removeGUIDs: \(guids)")
 
         // Override any parents that aren't already overridden. We're about to remove some
         // of their children.
@@ -374,7 +560,8 @@ class BookmarkFactory {
         let guid = row["guid"] as! String
         let url = row["siteUri"] as! String
         let title = row["title"] as? String ?? "Livemark"       // TODO
-        let bookmark = BookmarkItem(guid: guid, title: title, url: url)
+        let isEditable = row.getBoolean("isEditable")           // Defaults to false.
+        let bookmark = BookmarkItem(guid: guid, title: title, url: url, isEditable: isEditable)
         bookmark.id = id
         BookmarkFactory.addIcon(bookmark, row: row)
         return bookmark
@@ -386,7 +573,8 @@ class BookmarkFactory {
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
         let title = row["title"] as? String ?? SQLiteBookmarks.defaultItemTitle
-        let bookmark = BookmarkItem(guid: guid, title: title, url: "about:blank")
+        let isEditable = row.getBoolean("isEditable")           // Defaults to false.
+        let bookmark = BookmarkItem(guid: guid, title: title, url: "about:blank", isEditable: isEditable)
         bookmark.id = id
         BookmarkFactory.addIcon(bookmark, row: row)
         return bookmark
@@ -405,7 +593,8 @@ class BookmarkFactory {
         let guid = row["guid"] as! String
         let url = row["bmkUri"] as! String
         let title = row["title"] as? String ?? url
-        let bookmark = BookmarkItem(guid: guid, title: title, url: url)
+        let isEditable = row.getBoolean("isEditable")           // Defaults to false.
+        let bookmark = BookmarkItem(guid: guid, title: title, url: url, isEditable: isEditable)
         bookmark.id = id
         BookmarkFactory.addIcon(bookmark, row: row)
         return bookmark
@@ -414,11 +603,12 @@ class BookmarkFactory {
     private class func folderFactory(row: SDRow) -> BookmarkFolder {
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
+        let isEditable = row.getBoolean("isEditable")           // Defaults to false.
         let title = titleForSpecialGUID(guid) ??
                     row["title"] as? String ??
                     SQLiteBookmarks.defaultFolderTitle
 
-        let folder = BookmarkFolder(guid: guid, title: title)
+        let folder = BookmarkFolder(guid: guid, title: title, isEditable: isEditable)
         folder.id = id
         BookmarkFactory.addIcon(folder, row: row)
         return folder
@@ -531,75 +721,112 @@ extension SQLiteBookmarks: SearchableBookmarks {
 }
 
 extension SQLiteBookmarks {
-    func hasDesktopBookmarks() -> Deferred<Maybe<Bool>> {
-        // This is very lazy, but it has the nice property of keeping Desktop Bookmarks visible
-        // for a while after you mark the last desktop child as deleted.
+    // We're in sync (even partially) if the mirror is non-empty.
+    // We can show fallback desktop bookmarks if the mirror is empty and the buffer contains
+    // children of the roots.
+    func hasOnlyUnmergedRemoteBookmarks() -> Deferred<Maybe<Bool>> {
         let parents: Args = [
-            // Local.
-            BookmarkRoots.MenuFolderGUID,
-            BookmarkRoots.ToolbarFolderGUID,
-            BookmarkRoots.UnfiledFolderGUID,
-
-            // Mirror.
             BookmarkRoots.MenuFolderGUID,
             BookmarkRoots.ToolbarFolderGUID,
             BookmarkRoots.UnfiledFolderGUID,
         ]
+        let sql = [
+            "SELECT",
+            "not exists(SELECT 1 FROM \(TableBookmarksMirror))",
+            "AND",
+            "exists(SELECT 1 FROM \(TableBookmarksBufferStructure) WHERE parent IN (?, ?, ?))",
+            ].joinWithSeparator(" ")
+        return self.db.runQuery(sql, args: parents, factory: { ($0[0] as! Int) == 1 }) >>== { deferMaybe($0[0]!) }
+    }
+}
 
-        let sql =
-        "SELECT 1 FROM \(TableBookmarksLocalStructure) WHERE parent IN (?, ?, ?)" +
-        " UNION ALL " +
-        "SELECT 1 FROM \(TableBookmarksMirrorStructure) WHERE parent IN (?, ?, ?)" +
-        " LIMIT 1"
+// It's a factory where the root contains Desktop Bookmarks from the buffer, and
+// mobile bookmarks from local.
+public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
+    let localFactory: SQLiteBookmarksModelFactory
+    let bufferFactory: SQLiteBookmarksModelFactory
 
-        return self.db.queryReturnsResults(sql, args: parents)
+    init(bookmarks: SQLiteBookmarks) {
+        // This relies on SQLiteBookmarks being the storage for both directions.
+        self.localFactory = SQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .Local)
+        self.bufferFactory = SQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .Buffer)
     }
 
-    private func getDesktopRoots() -> Deferred<Maybe<Cursor<BookmarkNode>>> {
-        // We deliberately exclude the mobile folder, because we're inverting the containment
-        // relationship here.
-        let exclude = [BookmarkRoots.MobileFolderGUID, BookmarkRoots.RootGUID]
-        return self.getChildrenWithParent(BookmarkRoots.RootGUID, excludingGUIDs: exclude, includeIcon: false)
+    public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+        return self.modelForFolder(folder.guid, title: folder.title)
     }
 
-    /**
-     * Prepend the provided mobile bookmarks folder with a single folder.
-     * The prepended folder is "Desktop Bookmarks". It contains mirrored folders.
-     * We also *append* suggested sites.
-     */
-    public func extendWithDesktopBookmarksFolder(mobile: BookmarkFolder, factory: BookmarksModelFactory) -> Deferred<Maybe<BookmarksModel>> {
+    public func modelForFolder(guid: GUID) -> Deferred<Maybe<BookmarksModel>> {
+        return self.modelForFolder(guid, title: "")
+    }
 
-        func onlyMobile() -> Deferred<Maybe<BookmarksModel>> {
-            // No desktop bookmarks.
-            log.debug("No desktop bookmarks. Only showing mobile.")
-            return deferMaybe(BookmarksModel(modelFactory: factory, root: mobile))
+    public func modelForFolder(guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>> {
+        if guid == BookmarkRoots.MobileFolderGUID {
+            return self.modelForRoot()
         }
 
-        return self.hasDesktopBookmarks() >>== { yes in
-            if !yes {
-                return onlyMobile()
+        if guid == BookmarkRoots.FakeDesktopFolderGUID {
+            return self.bufferFactory.modelForFolder(guid, title: title)
+        }
+
+        return self.localFactory.modelForFolder(guid, title: title)
+    }
+
+    public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
+        log.debug("Getting model for fallback root.")
+        // Return a virtual model containing "Desktop bookmarks" prepended to the local mobile bookmarks.
+        return self.localFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile)
+            >>== { folder in
+            return self.bufferFactory.getDesktopRoots() >>== { cursor in
+                let desktop = self.bufferFactory.folderForDesktopBookmarksCursor(cursor)
+                let prepended = PrependedBookmarkFolder(main: folder, prepend: desktop)
+                return deferMaybe(BookmarksModel(modelFactory: self, root: prepended))
             }
+        }
+    }
 
-            return self.getDesktopRoots() >>== { cursor in
-                if cursor.count == 0 {
-                    return onlyMobile()
-                }
+    // Whenever async construction is necessary, we fall into a pattern of needing
+    // a placeholder that behaves correctly for the period between kickoff and set.
+    public var nullModel: BookmarksModel {
+        let children = Cursor<BookmarkNode>(status: .Failure, msg: "Null model")
+        let folder = SQLiteBookmarkFolder(guid: "Null", title: "Null", children: children)
+        return BookmarksModel(modelFactory: self, root: folder)
+    }
 
-                let desktop = self.folderForDesktopBookmarksCursor(cursor)
-                let prepended = PrependedBookmarkFolder(main: mobile, prepend: desktop)
-                return deferMaybe(BookmarksModel(modelFactory: factory, root: prepended))
+    public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
+        // We don't include buffer items in this check, because we can't un-star them!
+        return self.localFactory.isBookmarked(url)
+    }
+
+    public func removeByGUID(guid: GUID) -> Success {
+        return self.localFactory.removeByGUID(guid)
+    }
+
+    public func removeByURL(url: String) -> Success {
+        return self.localFactory.removeByURL(url)
+    }
+}
+
+public class MergedSQLiteBookmarks: BookmarksModelFactorySource {
+    let local: SQLiteBookmarks
+    let buffer: SQLiteBookmarkBufferStorage
+
+    // Figuring out our factory can require hitting the DB, so this is async.
+    // Note that we check *every time* -- we don't want to get stuck in a dead
+    // end when you might sync soon.
+    public var modelFactory: Deferred<Maybe<BookmarksModelFactory>> {
+        return self.local.hasOnlyUnmergedRemoteBookmarks() >>== { yes in
+            if yes {
+                log.debug("Only unmerged remote bookmarks; using fallback factory.")
+                return deferMaybe(UnsyncedBookmarksFallbackModelFactory(bookmarks: self.local))
             }
+            log.debug("Using local+mirror bookmark factory.")
+            return self.local.modelFactory
         }
     }
 
-    private func modelForDesktopBookmarks() -> Deferred<Maybe<BookmarksModel>> {
-        return self.getDesktopRoots() >>== { cursor in
-            let desktop = self.folderForDesktopBookmarksCursor(cursor)
-            return deferMaybe(BookmarksModel(modelFactory: self, root: desktop))
-        }
-    }
-
-    private func folderForDesktopBookmarksCursor(cursor: Cursor<BookmarkNode>) -> SQLiteBookmarkFolder {
-        return SQLiteBookmarkFolder(guid: BookmarkRoots.FakeDesktopFolderGUID, title: desktopBookmarksLabel, children: cursor)
+    public init(db: BrowserDB) {
+        self.local = SQLiteBookmarks(db: db)
+        self.buffer = SQLiteBookmarkBufferStorage(db: db)
     }
 }

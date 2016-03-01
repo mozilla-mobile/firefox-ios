@@ -110,18 +110,26 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
             return self.uploadRecordsInChunks(records, lastTimestamp: timestamp, storageClient: bookmarksClient, onUpload: onUpload)
               >>== effect(self.setTimestamp)
         })
-        let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
 
         // TODO: if the mirrorer tells us we're incomplete, then don't bother trying to sync!
         // We will need to extend the BookmarksMirrorer interface to allow us to see what's
         // going on.
-        let run = mirrorer.go(info, greenLight: greenLight)
-              >>> applier.go
+        let doMirror = mirrorer.go(info, greenLight: greenLight)
+
+        let run: SyncResult
+        if AppConstants.shouldMergeBookmarks {
+            let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
+            run = doMirror >>> applier.go
+        } else {
+            run = doMirror >>> always(SyncStatus.Completed)
+        }
+
         run.upon { _ in
             let end = NSDate.nowMicroseconds()
             let duration = end - start
-            log.info("Bookmark sync took \(duration)µs.")
+            log.info("Bookmark \(AppConstants.shouldMergeBookmarks ? "sync" : "mirroring") took \(duration)µs.")
         }
+
         return run
     }
 }

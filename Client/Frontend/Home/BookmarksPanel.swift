@@ -74,9 +74,9 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         guard let source = self.source else {
             // Get all the bookmarks split by folders
             if let bookmarkFolder = bookmarkFolder {
-                profile.bookmarks.modelForFolder(bookmarkFolder).upon(onModelFetched)
+                profile.bookmarks.modelFactory >>== { $0.modelForFolder(bookmarkFolder).upon(self.onModelFetched) }
             } else {
-                profile.bookmarks.modelForRoot().upon(onModelFetched)
+                profile.bookmarks.modelFactory >>== { $0.modelForRoot().upon(self.onModelFetched) }
             }
             return
         }
@@ -293,10 +293,16 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             let nextController = BookmarksPanel()
             nextController.parentFolders = parentFolders + [source.current]
             nextController.bookmarkFolder = folder
-            nextController.source = source
             nextController.homePanelDelegate = self.homePanelDelegate
             nextController.profile = self.profile
-            self.navigationController?.pushViewController(nextController, animated: true)
+            source.modelFactory.uponQueue(dispatch_get_main_queue()) { maybe in
+                guard let factory = maybe.successValue else {
+                    // Nothing we can do.
+                    return
+                }
+                nextController.source = BookmarksModel(modelFactory: factory, root: folder)
+                self.navigationController?.pushViewController(nextController, animated: true)
+            }
             break
 
         default:
@@ -327,14 +333,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-        if source == nil {
+        guard let source = self.source else {
             return [AnyObject]()
         }
 
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
-            guard let bookmark = self.source?.current[indexPath.row] else {
+            guard let bookmark = source.current[indexPath.row] else {
                 return
             }
 
@@ -348,13 +354,20 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
             log.debug("Removing rows \(indexPath).")
 
-            if let err = self.profile.bookmarks.removeByGUID(bookmark.guid).value.failureValue {
+            // Block to do this -- this is UI code.
+            guard let factory = source.modelFactory.value.successValue else {
+                log.error("Couldn't get model factory. This is unexpected.")
+                self.onModelFailure(DatabaseError(description: "Unable to get factory."))
+                return
+            }
+
+            if let err = factory.removeByGUID(bookmark.guid).value.failureValue {
                 log.debug("Failed to remove \(bookmark.guid).")
                 self.onModelFailure(err)
                 return
             }
 
-            guard let reloaded = self.source?.reloadData().value.successValue else {
+            guard let reloaded = source.reloadData().value.successValue else {
                 log.debug("Failed to reload model.")
                 return
             }

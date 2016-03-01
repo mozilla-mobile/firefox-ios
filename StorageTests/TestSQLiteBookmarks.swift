@@ -19,6 +19,12 @@ private func getBrowserDB(filename: String, files: FileAccessor) -> BrowserDB? {
     return db
 }
 
+extension SQLiteBookmarks {
+    var testFactory: SQLiteBookmarksModelFactory {
+        return SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local)
+    }
+}
+
 // MARK: - Tests.
 
 class TestSQLiteBookmarks: XCTestCase {
@@ -46,27 +52,28 @@ class TestSQLiteBookmarks: XCTestCase {
             return
         }
         let bookmarks = SQLiteBookmarks(db: db)
+        let factory = bookmarks.testFactory
 
         let url = "http://url1/"
         let u = url.asURL!
 
         bookmarks.addToMobileBookmarks(u, title: "Title", favicon: nil).succeeded()
-        let model = bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID).value.successValue
+        let model = factory.modelForFolder(BookmarkRoots.MobileFolderGUID).value.successValue
         XCTAssertEqual((model?.current[0] as? BookmarkItem)?.url, url)
-        XCTAssertTrue(bookmarks.isBookmarked(url).value.successValue ?? false)
-        bookmarks.removeByURL("").succeeded()
+        XCTAssertTrue(factory.isBookmarked(url).value.successValue ?? false)
+        factory.removeByURL("").succeeded()
 
         // Grab that GUID and move it into desktop bookmarks.
         let guid = (model?.current[0] as! BookmarkItem).guid
 
         // Desktop bookmarks.
-        XCTAssertFalse(bookmarks.hasDesktopBookmarks().value.successValue ?? true)
+        XCTAssertFalse(factory.hasDesktopBookmarks().value.successValue ?? true)
         let toolbar = BookmarkRoots.ToolbarFolderGUID
         XCTAssertTrue(bookmarks.db.run([
             "UPDATE \(TableBookmarksLocal) SET parentid = '\(toolbar)' WHERE guid = '\(guid)'",
             "UPDATE \(TableBookmarksLocalStructure) SET parent = '\(toolbar)' WHERE child = '\(guid)'",
             ]).value.isSuccess)
-        XCTAssertTrue(bookmarks.hasDesktopBookmarks().value.successValue ?? true)
+        XCTAssertTrue(factory.hasDesktopBookmarks().value.successValue ?? true)
     }
 
     private func createStockMirrorTree(db: BrowserDB) {
@@ -439,7 +446,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(false, db.isOverridden("bookmark3001"))
         XCTAssertNil(db.isLocallyDeleted("bookmark3001"))
 
-        bookmarks.removeByGUID("folderBBBBBB").succeeded()
+        bookmarks.testFactory.removeByGUID("folderBBBBBB").succeeded()
 
         XCTAssertEqual(true, db.isOverridden("folderBBBBBB"))
         XCTAssertEqual(true, db.isLocallyDeleted("folderBBBBBB"))
@@ -464,7 +471,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(false, db.isOverridden("bookmark1002"))
         XCTAssertNil(db.isLocallyDeleted("bookmark1002"))
 
-        bookmarks.removeByURL("http://example.org/1").succeeded()
+        bookmarks.testFactory.removeByURL("http://example.org/1").succeeded()
 
         // To conclude, check the entire hierarchy.
         // Menu: overridden, only the locally-added bookmark 2.
@@ -549,7 +556,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(positions[rowB.guid], 1)
 
         // Delete the first. sync_status was New, so the row was immediately deleted.
-        bookmarks.removeByURL("http://example.org/").succeeded()
+        bookmarks.testFactory.removeByURL("http://example.org/").succeeded()
         XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
         XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
         let positionsAfterDelete = db.getPositionsForChildrenOfParent(BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksLocalStructure)
@@ -592,7 +599,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(SyncStatus.Changed, db.getSyncStatusForGUID(BookmarkRoots.MobileFolderGUID))
 
         // If we delete the old record, we mark it as changed, and it's no longer in the structure.
-        bookmarks.removeByGUID(rowB.guid).succeeded()
+        bookmarks.testFactory.removeByGUID(rowB.guid).succeeded()
         XCTAssertEqual(SyncStatus.Changed, db.getSyncStatusForGUID(rowB.guid))
         XCTAssertEqual([rowC.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
@@ -605,7 +612,7 @@ class TestSQLiteBookmarks: XCTestCase {
 
         // Delete by URL.
         // If we delete the new records, they just go away -- there's no server version to delete.
-        bookmarks.removeByURL(rowC.bookmarkURI!).succeeded()
+        bookmarks.testFactory.removeByURL(rowC.bookmarkURI!).succeeded()
         XCTAssertNil(db.getSyncStatusForGUID(rowC.guid))
         XCTAssertNil(db.getSyncStatusForGUID(guidD))
         XCTAssertEqual([], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
