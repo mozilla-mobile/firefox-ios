@@ -100,6 +100,8 @@ public func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
 
 typealias StructureRow = (parent: GUID, child: GUID, type: BookmarkNodeType?)
 
+// This is really a forest, not a tree: it can have multiple 'subtrees'
+// and carries a collection of associated values.
 public struct BookmarkTree {
     // Records with no parents.
     public let subtrees: [BookmarkTreeNode]
@@ -195,6 +197,10 @@ public struct BookmarkTree {
         var nodes: [GUID: BookmarkTreeNode] = [:]
         var parents: [GUID: GUID] = [:]
         var remainingFolders = Set<GUID>()
+
+        // `tops` is the collection of things that we think are the roots of subtrees (until
+        // we're proved wrong). We add GUIDs here when we don't know their parents; if we get to
+        // the end and they're still here, they're roots.
         var tops = Set<GUID>()
         var notTops = Set<GUID>()
         var orphans = Set<GUID>()
