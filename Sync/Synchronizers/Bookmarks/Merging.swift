@@ -103,11 +103,11 @@ public class BookmarksMergeErrorTreeIsUnrooted: BookmarksMergeConsistencyError {
 }
 
 enum MergeState<T> {
-    case Unknown
-    case Unchanged
-    case Remote
-    case Local
-    case New(value: T)
+    case Unknown              // Default state.
+    case Unchanged            // Nothing changed: no work needed.
+    case Remote               // Take the associated remote value.
+    case Local                // Take the associated local value.
+    case New(value: T)        // Take this synthesized value.
 
     var isUnchanged: Bool {
         if case .Unchanged = self {
