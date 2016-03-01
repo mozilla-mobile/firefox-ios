@@ -70,7 +70,7 @@ public class MirroringBookmarksSynchronizer: TimestampedSingleCollectionSynchron
         return BookmarksStorageVersion
     }
 
-    public func mirrorBookmarksToStorage(storage: BookmarkMirrorStorage, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
+    public func mirrorBookmarksToStorage(storage: BookmarkBufferStorage, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
             return deferMaybe(.NotStarted(reason))
         }
@@ -89,10 +89,10 @@ public class MirroringBookmarksSynchronizer: TimestampedSingleCollectionSynchron
 
 public class BookmarksMirrorer {
     private let downloader: BatchingDownloader<BookmarkBasePayload>
-    private let storage: BookmarkMirrorStorage
+    private let storage: BookmarkBufferStorage
     private let batchSize: Int
 
-    public init(storage: BookmarkMirrorStorage, client: Sync15CollectionClient<BookmarkBasePayload>, basePrefs: Prefs, collection: String, batchSize: Int=100) {
+    public init(storage: BookmarkBufferStorage, client: Sync15CollectionClient<BookmarkBasePayload>, basePrefs: Prefs, collection: String, batchSize: Int=100) {
         self.storage = storage
         self.downloader = BatchingDownloader(collectionClient: client, basePrefs: basePrefs, collection: collection)
         self.batchSize = batchSize
