@@ -135,7 +135,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     private func updateEmptyPanelState() {
-        if source?.current.count == 0 {
+        if source?.current.count == 0 && source?.current.guid == BookmarkRoots.MobileFolderGUID {
             if self.emptyStateOverlayView.superview == nil {
                 self.view.addSubview(self.emptyStateOverlayView)
                 self.view.bringSubviewToFront(self.emptyStateOverlayView)
