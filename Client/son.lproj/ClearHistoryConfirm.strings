@@ -1,0 +1,12 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Naŋ";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Kaa";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "Taariki ga hun war jinay dobantey kul ga, tuusuyan kaŋ ši hin ka taafeeri.";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "Taariki kaa war Firefox kontey kul ga wala?";
+

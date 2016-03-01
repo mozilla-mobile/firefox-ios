@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Ha sur oc'h e fell deoc'h skarzhañ ho holl roadennoù ? Serret e vo an holl ivinelloù digor.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Roll istor ar merdeiñ";
+
+/* Settings item for clearing the cache */
+"Cache" = "Krubuilh";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Nullañ";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Skarzhañ";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Skarzhañ pep tra";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Skarzhañ ar roadennoù prevez";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Toupinoù";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Roadennoù ezlinenn al lec'hiennoù";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Titouroù kennaskañ enrollet";
+

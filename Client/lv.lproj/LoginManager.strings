@@ -1,0 +1,60 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Vai tiešām vēlaties?";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Attīrīt meklēšanu";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopēt";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Dzēst";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Noņemt visu";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Ieiet meklēšanas režīmā";
+
+/* Hide password text selection menu item */
+"Hide" = "Slēpt";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Pēdējo reizi mainīts %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Lietotājvārdi";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Lietotājvārdi tiks neatgriezeniski aizvākti.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Lietotājvārdi tiks aizvākta visās savienotajās ierīcēs. Šo darbību nevar atjaunot.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Nav neviena lietotājvārda";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Atvērt un aizpildīt";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Atklāt";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Meklēt";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Meklēšanas ievades lauks";
+
+/* Title for selecting all logins */
+"Select All" = "Izvēlēties visu";
+
+/* Title for password row in Login Detail View */
+"password" = "parole";
+
+/* Title for username row in Login Detail View */
+"username" = "lietotājvārds";
+
+/* Title for website row in Login Detail View */
+"website" = "mājas lapa";
+

@@ -1,0 +1,539 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Svetainė %@ prašo abonento vardo ir slaptažodžio.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Svetainė %1$@ prašo abonento vardo ir slaptažodžio. Svetainės pranešimas: „%2$@“";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Apie";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Pridėti kortelę";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Įtraukti į skaitinių sąrašą";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Tinklalapis įtrauktas į skaitinių sąrašą";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adresas ir paieška";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Visada perduoti";
+
+/* Authentication prompt title */
+"Authentication required" = "Reikalingas tapatumo nustatymas";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Atgal";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blokuoti iškylančiuosius langus";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Įtraukti į adresyną";
+
+/* Panel accessibility label */
+"Bookmarks" = "Adresynas";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Skaistis";
+
+/* Alert Call Button */
+"Call" = "Skambinti";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Atsisakyti";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Keičia spalvinę schemą.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Keičia šrifto stilių.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Valyti privačius duomenis";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Užverti";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Kortelės užvėrimas";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Kopijuoti adresą";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Kopijuoti paveikslą";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Kopijuoti saitą";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Nepavyko įtraukti tinklalapio į skaitinių sąrašą. Galbūt jis ten jau yra?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Nepavyko įtraukti tinklalapio į skaitinių sąrašą";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Nepavyko įkelti tinklalapio.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Sukurti paskyrą";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Tamsi";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Derinimas: pamiršti sinchronizavimo tapatumo būseną";
+
+/* Debug option */
+"Debug: require password" = "Derinimas: reikalauti slaptažodžio";
+
+/* Debug option */
+"Debug: require upgrade" = "Derinimas: reikalauti atnaujinimo";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Sumažinti tekstą";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Numatytoji ieškyklė";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Nebeleisti naujų dialogo langų";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Rodymo nuostatos";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Ar įsiminti naudotojo „%1$@“ slaptažodį svetainėje %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Ar įsiminti slaptažodį, naudojamą svetainėje %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Ar atnaujinti įsimintą naudotojo „%1$@“ slaptažodį svetainėje %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Ar atnaujinti įsimintą slaptažodį, naudojamą svetainėje %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Neperduoti";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Atlikta";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Dukart bakstelėkite ir palaikykite, jei norite atverti žurnalą";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Norėdami prisijungti įveskite slaptažodį.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "„Firefox“ nebesinchronizuos duomenų su jūsų paskyra, bet šiame įrenginyje jau esančių naršymo duomenų nepašalins.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "„Firefox“ prašo prieigos prie jūsų nuotraukų";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Pirmyn";
+
+/* General settings section title */
+"General" = "Bendros";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Gaukite atvertas korteles, adresyną bei slaptažodžius iš kitų savo įrenginių.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Atverti";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Atverti nukopijuotą URL adresą?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Žinynas";
+
+/* Panel accessibility label */
+"History" = "Žurnalas";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Padidinti tekstą";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Apžvalga";
+
+/* History tableview section header */
+"Last month" = "Praėjęs mėnuo";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Paskiausiai sinchronizuota: %@";
+
+/* History tableview section header */
+"Last week" = "Praėjusi savaitė";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licencijos";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Šviesi";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Įkelti pirminį tinklalapį";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Įkeliamas turinys…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Atsijungti";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Atsijungti?";
+
+/* Authentication prompt log in button */
+"Log in" = "Prisijungti";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Prisijungimai";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Panašu, kad „Firefox“ praėjusį kartą užstrigo. Ar norite atkurti savo korteles?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Pažymėti kaip skaitytą";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Pažymėti kaip neskaitytą";
+
+/* Error for a missing remote error number */
+"Missing error" = "Trūksta klaidos";
+
+/* Error for a missing remote error message */
+"Missing message" = "Trūksta pranešimo";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Naršymo juosta";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Nauja kortelė: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Yra nauja versija";
+
+/* Restore Tabs Negative Action */
+"No" = "Ne";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Nėra kortelių";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Ne dabar";
+
+/* Button to not save the user's password */
+"Not now" = "Ne dabar";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "Gerai";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Gerai";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Oi! „Firefox“ užstrigo";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Atverti naujoje kortelėje";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Atverti nuostatas";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Atverkite straipsnius skaitymo veiksenoje, bakstelėdami knygos piktogramą, pasirodančią antraštės juostoje.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Atverti per…";
+
+/* Opening an external URL */
+"Opening %@" = "Atveriama „%@“";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "Čia bus rodomi neseniai aplankyti tinklalapiai.";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Skydelių parinkimas";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Slaptažodis";
+
+/* Paste the URL into the location bar */
+"Paste" = "Įdėti";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Įdėti ir atverti";
+
+/* Privacy section title */
+"Privacy" = "Privatumas";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Privatumo nuostatai";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Sparčiosios ieškyklės";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Skaitymo rodinys";
+
+/* Panel accessibility label */
+"Reading list" = "Skaitinių sąrašas";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Atsiųsti iš naujo";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Pašalinti";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Pašalinti iš skaitinių sąrašo";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Pašalinti tinklalapį";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Prašyti ne mob. svetainės";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Prašyti mobilios svetainės";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Be užraitų";
+
+/* Context menu item for saving an image */
+"Save Image" = "Įrašyti paveikslą";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Įrašyti prisijungimus";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Įrašykite tinklalapius į savo skaitinių sąrašą, bakstelėdami knygos su pliusu piktogramą skaitymo veiksenos valdiklyje.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Paieška";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Ieškokite arba įveskite adresą";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Pasiūlymo paieškos";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Saugus ryšys";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "Siųsti strigčių pranešimus";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "Siųsti atsiliepimą";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Siųsti pranešimą";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Siųsti strigties pranešimą, kad „Mozilla“ galėtų išspręsti problemą?";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepija";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Su užraitais";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Nuostatos";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Dalintis";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Dalintis saitu";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Rodyti paieškos žodžių siūlymus";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Rodyti korteles";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Rodyti apžvalgą";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Rodyti paieškos žodžių siūlymus";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Prisijungti";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "Stabdyti";
+
+/* Support section title */
+"Support" = "Palaikymas";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Jei norite užverti kortelę, trimis pirštais nustumkite ją kairėn arba dešinėn.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Sinchronizuoti dabar";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "Sinchronizuokite savo korteles, adresyną, slaptažodžius ir kitką.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "Sinchronizuokite savo korteles, slaptažodžius ir kitką.";
+
+/* Panel accessibility label */
+"Synced tabs" = "Sinchronizuotos kortelės";
+
+/* Syncing Firefox Account */
+"Syncing…" = "Sinchronizuojama…";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "%1$@–oji kortelė iš %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "%1$@ – %2$@ kortelės iš %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Kortelių dėklas";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Šio tinklalapio atvaizduoti skaitymo veiksenoje nepavyko.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Jau išleista nauja „Firefox Aurora“ versija. Bakstelėkite „Gerai“, jei norite eiti į jos parsisiuntimo tinklalapį.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Nepavyko pasiekti kituose jūsų įrenginiuose esančių kortelių. Pabandykite kiek vėliau.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Konvertuojant tinklalapį įvyko klaida";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Tai jums leis paveikslą įrašyti į „Camera Roll“.";
+
+/* Opening an external app */
+"This will open in another application" = "Bus atverta kitoje programoje";
+
+/* History tableview section header */
+"Today" = "Šiandien";
+
+/* Panel accessibility label */
+"Top sites" = "Lankomiausios svetainės";
+
+/* Button to update the user's password */
+"Update" = "Atnaujinti";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Norėdami prisijungti, atnaujinkite „Firefox“.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Naudoti kompaktiškas korteles";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Naudotojo vardas";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Patikrinkite savo el. pašto adresą.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versija %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Peržiūrėti";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Saityno turinys";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Sveiki! Tai „Sync“";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Tai jūsų skaitinių sąrašas";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Et, nemalonu…";
+
+/* Button to save the user's password */
+"Yes" = "Taip";
+
+/* History tableview section header */
+"Yesterday" = "Vakar";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Su šia „Firefox“ paskyra nesate susieję jokių kitų sinchronizuoti galinčių įrenginių";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Kituose savo įrenginiuose su „Firefox“ neturite atvirų kortelių.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Jūsų teisės";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "kompiuteris";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ką tik";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobilusis įrenginys";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "daugiau nei prieš mėnesį";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "daugiau nei prieš savaitę";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "skaityta";
+
+/* Relative date for date in past week. */
+"this week" = "šią savaitę";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "šiandien %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "neskaityta";
+
+/* Relative date for yesterday. */
+"yesterday" = "vakar";
+
