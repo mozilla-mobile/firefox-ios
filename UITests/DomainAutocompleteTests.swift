@@ -89,6 +89,12 @@ class DomainAutocompleteTests: KIFTestCase {
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "an", completion: "swers.com/")
         tester().enterTextIntoCurrentFirstResponder("c")
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "anc", completion: "estry.com/")
+        tester().clearTextFromFirstResponder()
+
+        // Test mixed case autocompletion.
+        tester().enterTextIntoCurrentFirstResponder("YaH")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "YaH", completion: "oo.com/")
+        tester().clearTextFromFirstResponder()
 
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
