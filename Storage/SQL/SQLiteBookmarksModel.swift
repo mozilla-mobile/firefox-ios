@@ -86,14 +86,7 @@ extension SQLiteBookmarks: BookmarksModelFactory {
                 return deferMaybe(DatabaseError(description: "Couldn't get children: \(cursor.statusMessage)."))
             }
 
-            let folder = SQLiteBookmarkFolder(guid: guid, title: title, children: cursor)
-
-            // We add some suggested sites to the mobile bookmarks folder only.
-            if guid == BookmarkRoots.MobileFolderGUID {
-                return deferMaybe(BookmarkFolderWithDefaults(folder: folder, sites: SuggestedSites))
-            }
-
-            return deferMaybe(folder)
+            return deferMaybe(SQLiteBookmarkFolder(guid: guid, title: title, children: cursor))
         }
     }
 
