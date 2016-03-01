@@ -3095,7 +3095,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 288A2D9F1AB8B3260023ABC3 /* Build configuration list for PBXNativeTarget "Shared" */;
 			buildPhases = (
-				7B604F8D1C494A58006EEEC3 /* Copy Carthage Frameworks */,
 				288A2D811AB8B3260023ABC3 /* Sources */,
 				288A2D821AB8B3260023ABC3 /* Frameworks */,
 				288A2D831AB8B3260023ABC3 /* Headers */,
@@ -3114,7 +3113,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2FA436141ABB83B4008031D1 /* Build configuration list for PBXNativeTarget "Account" */;
 			buildPhases = (
-				7B604F8C1C494A1E006EEEC3 /* Copy Carthage Frameworks */,
 				2FA435F61ABB83B4008031D1 /* Sources */,
 				2FA435F71ABB83B4008031D1 /* Frameworks */,
 				2FA435F81ABB83B4008031D1 /* Headers */,
@@ -3136,7 +3134,6 @@
 			buildConfigurationList = 2FA436181ABB83B4008031D1 /* Build configuration list for PBXNativeTarget "AccountTests" */;
 			buildPhases = (
 				2FA436011ABB83B4008031D1 /* Sources */,
-				7B604F8B1C4949DB006EEEC3 /* Copy Carthage Frameworks */,
 				2FA436021ABB83B4008031D1 /* Frameworks */,
 				2FA436031ABB83B4008031D1 /* Resources */,
 			);
@@ -3248,7 +3245,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4BA8A581B4B0A1700BC2E95 /* Build configuration list for PBXNativeTarget "ViewLater" */;
 			buildPhases = (
-				7B604FA01C49516D006EEEC3 /* Copy Carthage Dependencies */,
 				E4BA8A271B4B0A1600BC2E95 /* Sources */,
 				E4BA8A281B4B0A1600BC2E95 /* Frameworks */,
 				E4BA8A291B4B0A1600BC2E95 /* Resources */,
@@ -3392,7 +3388,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F84B22551A0920C600AAB793 /* Build configuration list for PBXNativeTarget "ShareTo" */;
 			buildPhases = (
-				7B604F8E1C494A88006EEEC3 /* Copy Carthage Dependencies */,
 				F84B22451A0920C600AAB793 /* Sources */,
 				F84B22461A0920C600AAB793 /* Frameworks */,
 				F84B22471A0920C600AAB793 /* Resources */,
@@ -3412,7 +3407,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F84B22671A09210A00AAB793 /* Build configuration list for PBXNativeTarget "SendTo" */;
 			buildPhases = (
-				7B604F9F1C495159006EEEC3 /* Copy Carthage Dependencies */,
 				F84B22581A09210A00AAB793 /* Sources */,
 				F84B22591A09210A00AAB793 /* Frameworks */,
 				F84B225A1A09210A00AAB793 /* Resources */,
@@ -3894,74 +3888,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7B604F8B1C4949DB006EEEC3 /* Copy Carthage Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
-			);
-			name = "Copy Carthage Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		7B604F8C1C494A1E006EEEC3 /* Copy Carthage Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
-			);
-			name = "Copy Carthage Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		7B604F8D1C494A58006EEEC3 /* Copy Carthage Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Base32.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
-			);
-			name = "Copy Carthage Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		7B604F8E1C494A88006EEEC3 /* Copy Carthage Dependencies */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/WebImage.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SWXMLHash.framework",
-			);
-			name = "Copy Carthage Dependencies";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
 		7B604F8F1C494AAA006EEEC3 /* Copy Carthage Dependencies */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3978,38 +3904,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/GCDWebServers.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
-			);
-			name = "Copy Carthage Dependencies";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		7B604F9F1C495159006EEEC3 /* Copy Carthage Dependencies */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/WebImage.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SWXMLHash.framework",
-			);
-			name = "Copy Carthage Dependencies";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		7B604FA01C49516D006EEEC3 /* Copy Carthage Dependencies */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/WebImage.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
