@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 from lxml import html
 from lxml import etree
 import copy
@@ -29,14 +33,15 @@ def main():
     enPluginsDst = os.path.join("SearchPlugins", "en")
     shutil.copytree(enPluginsSrc, enPluginsDst)
 
-    locales = getLocaleList()
+    scraper = Scraper()
+    locales = scraper.getLocaleList()
     supportedLocales = getSupportedLocales()
     for locale in locales:
         if (locale not in supportedLocales):
             print("skipping unsupported locale: %s" % locale)
             continue
 
-        files = getFileList(locale)
+        files = scraper.getFileList(locale)
         if files == None:
             print("no files for locale: %s" % locale)
             continue
@@ -48,7 +53,7 @@ def main():
             os.makedirs(directory)
 
         # Get the default search engine for this locale.
-        default = getDefault(locale)
+        default = scraper.getDefault(locale)
         if default == None:
             continue
         saveDefault(locale, default)
@@ -63,7 +68,7 @@ def main():
                 shutil.copy(overlayPath, path)
                 continue
 
-            downloadedFile = getFile(locale, file)
+            downloadedFile = scraper.getFile(locale, file)
             name, extension = os.path.splitext(file)
 
             # Apply iOS-specific overlays for this engine if they are defined.
@@ -72,11 +77,7 @@ def main():
                 overlay = overlayForEngine(engine)
                 if overlay:
                     plugin = etree.parse(downloadedFile)
-                    for action in overlay:
-                        if action.tag == "replace":
-                            overlayReplace(target=action.get("target"), replacement=action[0], plugin=plugin)
-                        elif action.tag == "append":
-                            overlayAppend(parent=action.get("parent"), child=action[0], plugin=plugin)
+                    overlay.apply(plugin)
                     contents = header + etree.tostring(plugin.getroot(), encoding="utf-8", pretty_print=True)
                     with open(path, "w") as outfile:
                         outfile.write(contents)
@@ -93,68 +94,84 @@ def overlayForEngine(engine):
     path = os.path.join("SearchOverlays", "%s.xml" % engine)
     if not os.path.exists(path):
         return None
-    overlay = etree.parse(path)
-    return overlay.getroot().getchildren()
-
-def overlayReplace(target, replacement, plugin):
-    for element in plugin.xpath(target, namespaces=ns):
-        replacementCopy = copy.deepcopy(replacement)
-        element.getparent().replace(element, replacementCopy)
-
-        # Try to preserve indentation.
-        replacementCopy.tail = element.tail
-
-def overlayAppend(parent, child, plugin):
-    for element in plugin.xpath(parent, namespaces=ns):
-        childCopy = copy.deepcopy(child)
-        element.append(childCopy)
-
-        # Try to preserve indentation.
-        childCopy.tail = "\n"
-        previous = childCopy.getprevious()
-        if previous is not None:
-            prevPrevious = previous.getprevious()
-            if prevPrevious is not None:
-                previous.tail = prevPrevious.tail
-
-def getLocaleList():
-    response = requests.get('https://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales')
-    return response.text.strip().split("\n")
-
-def getFileList(locale):
-    print("scraping: %s..." % locale)
-    url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/file/default/mobile/searchplugins" % locale
-    response = requests.get(url)
-    if not response.ok:
-        return
-
-    tree = html.fromstring(response.content)
-    return tree.xpath('//a[@class="list"]/text()')
-
-def getFile(locale, file):
-    print("  downloading: %s..." % file)
-    url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/searchplugins/%s" % (locale, file)
-    result = urllib.urlretrieve(url)
-    return result[0]
-
-def getDefault(locale):
-    url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/chrome/region.properties" % locale
-    response = requests.get(url)
-    if not response.ok:
-        return
-
-    lines = response.text.strip().split("\n")
-    for line in lines:
-        values = line.strip().split("=")
-        if len(values) == 2 and values[0].strip() == "browser.search.defaultenginename":
-            default = values[1].strip()
-            print("  default: %s" % default)
-            return default
+    return Overlay(path)
 
 def saveDefault(locale, default):
     directory = os.path.join("SearchPlugins", locale, "default.txt")
     file = open(directory, "w")
     file.write(default.encode("UTF-8"))
+
+
+class Scraper:
+    def getLocaleList(self):
+        response = requests.get('https://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales')
+        return response.text.strip().split("\n")
+
+    def getFileList(self, locale):
+        print("scraping: %s..." % locale)
+        url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/file/default/mobile/searchplugins" % locale
+        response = requests.get(url)
+        if not response.ok:
+            return
+
+        tree = html.fromstring(response.content)
+        return tree.xpath('//a[@class="list"]/text()')
+
+    def getFile(self, locale, file):
+        print("  downloading: %s..." % file)
+        url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/searchplugins/%s" % (locale, file)
+        result = urllib.urlretrieve(url)
+        return result[0]
+
+    def getDefault(self, locale):
+        url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/chrome/region.properties" % locale
+        response = requests.get(url)
+        if not response.ok:
+            return
+
+        lines = response.text.strip().split("\n")
+        for line in lines:
+            values = line.strip().split("=")
+            if len(values) == 2 and values[0].strip() == "browser.search.defaultenginename":
+                default = values[1].strip()
+                print("  default: %s" % default)
+                return default
+
+
+class Overlay:
+    def __init__(self, path):
+        overlay = etree.parse(path)
+        self.actions = overlay.getroot().getchildren()
+
+    def apply(self, doc):
+        for action in self.actions:
+            if action.tag == "replace":
+                self.replace(target=action.get("target"), replacement=action[0], doc=doc)
+            elif action.tag == "append":
+                self.append(parent=action.get("parent"), child=action[0], doc=doc)
+
+    def replace(self, target, replacement, doc):
+        for element in doc.xpath(target, namespaces=ns):
+            replacementCopy = copy.deepcopy(replacement)
+            element.getparent().replace(element, replacementCopy)
+
+            # Try to preserve indentation.
+            replacementCopy.tail = element.tail
+
+    def append(self, parent, child, doc):
+        for element in doc.xpath(parent, namespaces=ns):
+            childCopy = copy.deepcopy(child)
+            element.append(childCopy)
+
+            # Try to preserve indentation.
+            childCopy.tail = "\n"
+            previous = childCopy.getprevious()
+            if previous is not None:
+                childCopy.tail = previous.tail
+                prevPrevious = previous.getprevious()
+                if prevPrevious is not None:
+                    previous.tail = prevPrevious.tail
+
 
 if __name__ == "__main__":
         main()
