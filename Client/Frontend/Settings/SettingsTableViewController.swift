@@ -387,6 +387,7 @@ class SettingsTableFooterView: UIView {
     var logo: UIImageView = {
         var image =  UIImageView(image: UIImage(named: "settingsFlatfox"))
         image.contentMode = UIViewContentMode.Center
+        image.accessibilityIdentifier = "SettingsTableFooterView.logo"
         return image
     }()
 
