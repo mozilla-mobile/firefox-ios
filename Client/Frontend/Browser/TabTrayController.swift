@@ -271,6 +271,7 @@ class TabTrayController: UIViewController {
         button.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
         button.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
         button.accessibilityValue = self.privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+        button.accessibilityIdentifier = "TabTrayController.togglePrivateMode"
         return button
     }()
 
