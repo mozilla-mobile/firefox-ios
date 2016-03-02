@@ -526,6 +526,7 @@
 		E65C5BDF1BEA522600D28BEF /* UIImage+Diff.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5BDB1BEA522600D28BEF /* UIImage+Diff.m */; };
 		E65C5BE01BEA522600D28BEF /* UIImage+Snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5BDD1BEA522600D28BEF /* UIImage+Snapshot.m */; };
 		E65C5BE41BEA525800D28BEF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E65C5BE21BEA525800D28BEF /* Info.plist */; };
+		E65D895A1C8753CE0006EA35 /* SystemUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65D89591C8753CE0006EA35 /* SystemUtils.swift */; };
 		E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660BDD81BB06521009AC090 /* TabsButton.swift */; };
 		E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660BE051BB0666D009AC090 /* InnerStrokedView.swift */; };
 		E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E663D5771BB341C4001EF30E /* ToggleButton.swift */; };
@@ -1516,6 +1517,7 @@
 		E65C5BDD1BEA522600D28BEF /* UIImage+Snapshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Snapshot.m"; sourceTree = "<group>"; };
 		E65C5BE21BEA525800D28BEF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E65C5BE31BEA525800D28BEF /* NativeRefTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NativeRefTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		E65D89591C8753CE0006EA35 /* SystemUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemUtils.swift; sourceTree = "<group>"; };
 		E660BDD81BB06521009AC090 /* TabsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsButton.swift; sourceTree = "<group>"; };
 		E660BE051BB0666D009AC090 /* InnerStrokedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InnerStrokedView.swift; sourceTree = "<group>"; };
 		E6639F171BF11E17002D0853 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -2486,6 +2488,7 @@
 				285D3B321B4332C00035FD22 /* NotificationConstants.swift */,
 				282731A11ABC9D2600AA1954 /* Prefs.swift */,
 				E69966981B72674B0036F797 /* RollingFileLogger.swift */,
+				E65D89591C8753CE0006EA35 /* SystemUtils.swift */,
 				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
 				B729F0691B75CBEF00745F7A /* UserAgent.swift */,
 				D3ACB4381AD33EBA00748D50 /* WeakList.swift */,
@@ -3997,6 +4000,7 @@
 				28E8BE7F1B792A89002CC733 /* AppInfo.swift in Sources */,
 				2FDE87541ABA3EBB005317B1 /* KeyboardHelper.swift in Sources */,
 				28532D0C1C4837F1000072D9 /* SetExtensions.swift in Sources */,
+				E65D895A1C8753CE0006EA35 /* SystemUtils.swift in Sources */,
 				282730F11ABC99C100AA1954 /* Functions.swift in Sources */,
 				D339C2831AD354B400C087BD /* Loader.swift in Sources */,
 				288501FB1AC0F63800E7F670 /* NSScannerExtensions.swift in Sources */,
