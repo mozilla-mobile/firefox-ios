@@ -172,8 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let profile = self.profile {
             return profile
         }
-        let clearProfile = NSProcessInfo.processInfo().environment["MOZ_WIPE_PROFILE"] != nil
-        let p = BrowserProfile(localName: "profile", app: application, clear: clearProfile)
+        let p = BrowserProfile(localName: "profile", app: application)
         self.profile = p
         return p
     }
