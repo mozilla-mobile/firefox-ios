@@ -559,7 +559,8 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     private func configureCell(cell: ThumbnailCell, forSuggestedSite site: SuggestedSite) {
         cell.textLabel.text = site.title.isEmpty ? NSURL(string: site.url)?.normalizedHostAndPath() : site.title
         cell.imageWrapper.backgroundColor = site.backgroundColor
-        cell.imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        cell.imageView.contentMode = .ScaleAspectFit
+        cell.imageView.layer.minificationFilter = kCAFilterTrilinear
         cell.accessibilityLabel = cell.textLabel.text
 
         guard let icon = site.wordmark.url.asURL,
