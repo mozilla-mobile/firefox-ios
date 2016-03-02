@@ -118,7 +118,7 @@ def overlayAppend(parent, child, plugin):
                 previous.tail = prevPrevious.tail
 
 def getLocaleList():
-    response = requests.get('http://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales')
+    response = requests.get('https://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales')
     return response.text.strip().split("\n")
 
 def getFileList(locale):

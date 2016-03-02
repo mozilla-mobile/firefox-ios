@@ -11,7 +11,7 @@ Locale-based search engines are imported from the Android l10n repos. To import 
 ## Import process
 The Android search engines are scraped from the Mercurial web frontend to the l10n repos.
 
-1. The list of all plugins is scraped from `http://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales`.
+1. The list of all plugins is scraped from `https://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales`.
 2. We only import search engines under supported locales on iOS. The list of supported locales is determined by running the `./get_supported_locales.swift` script from the scraping script.
 3. We then scrape `https://hg.mozilla.org/releases/l10n/mozilla-aurora/<locale>/file/default/mobile/searchplugins` to get the list of plugins for each locale, where `<locale>` is each locale scraped from step 1.
 4. Each file found in step 3 is downloaded into `SearchPlugins/<locale>`. If there are any locale-specific override directories present in `SearchOverlays`, the local files in this directory will be used instead of the downloaded file of the same name.
