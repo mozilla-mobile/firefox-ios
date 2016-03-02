@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
-    var openInFirefoxURL: NSURL? = nil
+    var openInFirefoxParams: LaunchParams? = nil
 
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Hold references to willFinishLaunching parameters for delayed app launch
@@ -218,34 +218,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-        if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) {
-            if components.scheme != "firefox" && components.scheme != "firefox-x-callback" {
-                return false
-            }
-            var url: String?
-            for item in (components.queryItems ?? []) as [NSURLQueryItem] {
-                switch item.name {
-                case "url":
-                    url = item.value
-                default: ()
-                }
-            }
-
-            if let url = url, newURL = NSURL(string: url.unescape()) {
-                // If we are active then we can ask the BVC to open the new tab right away. Else we remember the
-                // URL and we open it in applicationDidBecomeActive.
-                if application.applicationState == .Active {
-                    if #available(iOS 9, *) {
-                        self.browserViewController.switchToPrivacyMode(isPrivate: false)
-                    }
-                    self.browserViewController.openURLInNewTab(newURL)
-                } else {
-                    openInFirefoxURL = newURL
-                }
-                return true
+        guard let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) else {
+            return false
+        }
+        if components.scheme != "firefox" && components.scheme != "firefox-x-callback" {
+            return false
+        }
+        var url: String?
+        var isPrivate: Bool = false
+        for item in (components.queryItems ?? []) as [NSURLQueryItem] {
+            switch item.name {
+            case "url":
+                url = item.value
+            case "private":
+                isPrivate = NSString(string: item.value ?? "false").boolValue
+            default: ()
             }
         }
-        return false
+
+        let params: LaunchParams
+
+        if let url = url, newURL = NSURL(string: url.unescape()) {
+            params = LaunchParams(url: newURL, isPrivate: isPrivate)
+        } else {
+            params = LaunchParams(url: nil, isPrivate: isPrivate)
+        }
+
+        if application.applicationState == .Active {
+            // If we are active then we can ask the BVC to open the new tab right away. 
+            // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
+            launchFromURL(params)
+        } else {
+            openInFirefoxParams = params
+        }
+
+        return true
+    }
+
+    func launchFromURL(params: LaunchParams) {
+        let isPrivate = params.isPrivate ?? false
+        if let newURL = params.url {
+            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
+        } else {
+            self.browserViewController.openBlankNewTabAndFocus(isPrivate: isPrivate)
+        }
     }
 
     func application(application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: String) -> Bool {
@@ -285,15 +301,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(ShortcutType.OpenLastTab, fromApplication: application)
         }
 
-        // If we have a URL waiting to open, switch to non-private mode and open the URL.
-        if let url = openInFirefoxURL {
-            openInFirefoxURL = nil
-            // This needs to be scheduled so that the BVC is ready.
+        // Check if we have a URL from an external app or extension waiting to launch,
+        // then launch it on the main thread.
+        if let params = openInFirefoxParams {
+            openInFirefoxParams = nil
             dispatch_async(dispatch_get_main_queue()) {
-                if #available(iOS 9, *) {
-                    self.browserViewController.switchToPrivacyMode(isPrivate: false)
-                }
-                self.browserViewController.switchToTabForURLOrOpen(url)
+                self.launchFromURL(params)
             }
         }
     }
@@ -513,6 +526,11 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
         controller.dismissViewControllerAnimated(true, completion: nil)
         startApplication(application!, withLaunchOptions: self.launchOptions)
     }
+}
+
+struct LaunchParams {
+    let url: NSURL?
+    let isPrivate: Bool?
 }
 
 var activeCrashReporter: CrashReporter?
