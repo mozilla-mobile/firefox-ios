@@ -347,7 +347,7 @@ class TabTrayController: UIViewController {
         settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
         settingsButton.addTarget(self, action: "SELdidClickSettingsItem", forControlEvents: .TouchUpInside)
         settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
-        settingsButton.accessibilityIdentifier = "Settings"
+        settingsButton.accessibilityIdentifier = "TabTrayController.settingsButton"
 
         let flowLayout = TabTrayCollectionViewLayout()
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
