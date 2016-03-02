@@ -12,6 +12,7 @@ struct HomePanelDescriptor {
     let makeViewController: (profile: Profile) -> UIViewController
     let imageName: String
     let accessibilityLabel: String
+    let accessibilityIdentifier: String
 }
 
 class HomePanels {
@@ -21,7 +22,8 @@ class HomePanels {
                 TopSitesPanel(profile: profile)
             },
             imageName: "TopSites",
-            accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label")),
+            accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label"),
+            accessibilityIdentifier: "HomePanels.TopSites"),
 
         HomePanelDescriptor(
             makeViewController: { profile in
@@ -37,7 +39,8 @@ class HomePanels {
                 return controller
             },
             imageName: "Bookmarks",
-            accessibilityLabel: NSLocalizedString("Bookmarks", comment: "Panel accessibility label")),
+            accessibilityLabel: NSLocalizedString("Bookmarks", comment: "Panel accessibility label"),
+            accessibilityIdentifier: "HomePanels.Bookmarks"),
 
         HomePanelDescriptor(
             makeViewController: { profile in
@@ -46,7 +49,8 @@ class HomePanels {
                 return controller
             },
             imageName: "History",
-            accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label")),
+            accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label"),
+            accessibilityIdentifier: "HomePanels.History"),
 
         HomePanelDescriptor(
             makeViewController: { profile in
@@ -55,7 +59,8 @@ class HomePanels {
                 return controller
             },
             imageName: "SyncedTabs",
-            accessibilityLabel: NSLocalizedString("Synced tabs", comment: "Panel accessibility label")),
+            accessibilityLabel: NSLocalizedString("Synced tabs", comment: "Panel accessibility label"),
+            accessibilityIdentifier: "HomePanels.SyncedTabs"),
 
         HomePanelDescriptor(
             makeViewController: { profile in
@@ -64,6 +69,7 @@ class HomePanels {
                 return controller
             },
             imageName: "ReadingList",
-            accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label")),
+            accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label"),
+            accessibilityIdentifier: "HomePanels.ReadingList"),
     ]
 }

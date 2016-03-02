@@ -213,6 +213,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 button.setImage(image, forState: UIControlState.Selected)
             }
             button.accessibilityLabel = panel.accessibilityLabel
+            button.accessibilityIdentifier = panel.accessibilityIdentifier
             buttons.append(button)
 
             button.snp_remakeConstraints { make in
