@@ -52,4 +52,10 @@ class StringExtensionsTests: XCTestCase {
         // maxLength < 2.
         XCTAssertEqual("abcdefgh", "abcdefgh".ellipsize(maxLength: 0))
     }
+
+    func testStringByTrimmingLeadingCharactersInSet() {
+        XCTAssertEqual("foo   ", "   foo   ".stringByTrimmingLeadingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()))
+        XCTAssertEqual("foo456", "123foo456".stringByTrimmingLeadingCharactersInSet(NSCharacterSet.decimalDigitCharacterSet()))
+        XCTAssertEqual("", "123456".stringByTrimmingLeadingCharactersInSet(NSCharacterSet.decimalDigitCharacterSet()))
+    }
 }
