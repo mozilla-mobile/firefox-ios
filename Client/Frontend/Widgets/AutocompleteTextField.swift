@@ -50,6 +50,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
+    var normalizedEnteredText: String {
+        return enteredText.lowercaseString.stringByTrimmingLeadingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+    }
+
     override var text: String? {
         didSet {
             // SELtextDidChange is not called when directly setting the text property, so fire it manually.
@@ -72,7 +76,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         super.addTarget(self, action: "SELtextDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         notifyTextChanged = debounce(0.1, action: {
             if self.editing {
-                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText)
+                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText.stringByTrimmingLeadingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()))
             }
         })
     }
@@ -142,7 +146,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private func removeCompletionIfRequiredForEnteredString(string: String) {
         // If user-entered text does not start with previous suggestion then remove the completion.
         let actualEnteredString = enteredText + string
-        if !previousSuggestion.startsWith(actualEnteredString) {
+        if !previousSuggestion.startsWith(normalizedEnteredText) {
             removeCompletion()
         }
         enteredText = actualEnteredString
@@ -156,9 +160,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // Check that the length of the entered text is shorter than the length of the suggestion.
             // This ensures that completionActive is true only if there are remaining characters to
             // suggest (which will suppress the caret).
-            if suggestion.startsWith(enteredText) && (enteredText).characters.count < suggestion.characters.count {
-                let endingString = suggestion.substringFromIndex(suggestion.startIndex.advancedBy(enteredText.characters.count))
-                let completedAndMarkedString = NSMutableAttributedString(string: suggestion)
+            if suggestion.startsWith(normalizedEnteredText) && normalizedEnteredText.characters.count < suggestion.characters.count {
+                let endingString = suggestion.substringFromIndex(suggestion.startIndex.advancedBy(normalizedEnteredText.characters.count))
+                let completedAndMarkedString = NSMutableAttributedString(string: enteredText + endingString)
                 completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSMakeRange(enteredText.characters.count, endingString.characters.count))
                 attributedText = completedAndMarkedString
                 completionActive = true
