@@ -6,9 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch
 -----------
 
-This branch is for mainline development that will eventually ship as v3.0.
-
-See the __v2.x__ branch if you're doing stabilization work for v2.0.
+This branch is a stabilization branch, slated to become v3.0. See the __master__ branch if you're doing work for a 4.0 release.
 
 This branch works with Xcode 7.2.1, and supports iOS 8.3 and 9.x.
 
