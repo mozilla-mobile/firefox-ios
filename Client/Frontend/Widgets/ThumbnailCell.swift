@@ -269,7 +269,7 @@ class ThumbnailCell: UICollectionViewCell {
 
      - parameter size: Size of the container collection view
      */
-    func updateLayoutForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection) {
+    func updateLayoutForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection, forSuggestedSite: Bool) {
         let cellInsets = ThumbnailCellUX.insetsForCollectionViewSize(size,
             traitCollection: traitCollection)
         let imageInsets = ThumbnailCellUX.imageInsetsForCollectionViewSize(size,
@@ -289,6 +289,10 @@ class ThumbnailCell: UICollectionViewCell {
                 make.right.equalTo(self.imageWrapper).inset(imageInsets.right)
                 make.bottom.equalTo(textWrapper.snp_top).offset(-imageInsets.top)
             }
+        }
+
+        if forSuggestedSite {
+            self.imagePadding = 0.0
         }
     }
 }

@@ -318,7 +318,7 @@ class TopSitesLayout: UICollectionViewLayout {
         let size = collectionView?.bounds.size ?? CGSizeZero
         let traitCollection = collectionView!.traitCollection
         if traitCollection.horizontalSizeClass == .Compact {
-            // Landscape iPHone
+            // Landscape iPhone
             if traitCollection.verticalSizeClass == .Compact {
                 return 5
             }
@@ -596,10 +596,12 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         let site = self[indexPath.item]!
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
 
-        let traitCollection = collectionView.traitCollection
-        cell.updateLayoutForCollectionViewSize(collectionView.bounds.size, traitCollection: traitCollection)
+        let isSuggestedSite = indexPath.item >= data.count
 
-        if indexPath.item >= data.count {
+        let traitCollection = collectionView.traitCollection
+        cell.updateLayoutForCollectionViewSize(collectionView.bounds.size, traitCollection: traitCollection, forSuggestedSite: isSuggestedSite)
+
+        if isSuggestedSite {
             configureCell(cell, forSuggestedSite: site as! SuggestedSite)
         } else {
             configureCell(cell, forSite: site, isEditing: editingThumbnails, profile: profile)
