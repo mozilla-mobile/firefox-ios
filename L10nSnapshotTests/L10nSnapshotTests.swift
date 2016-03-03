@@ -53,14 +53,23 @@ class L10nSnapshotTests: XCTestCase {
         app.buttons["TabTrayController.settingsButton"].tap()
 
         var index = 1
-        snapshot("Settings-\(index)")
 
+        // Screenshot the settings by scrolling through it
+        snapshot("Settings-\(index)")
         let element = app.images["SettingsTableFooterView.logo"]
         while !element.visible() {
             app.swipeUp()
             sleep(2)
             index += 1
             snapshot("Settings-\(index)")
+        }
+
+        // Screenshot all the settings that have a
+        for cellName in ["Search", "Logins", "TouchIDPasscode", "ClearPrivateData"] {
+            app.tables.cells[cellName].tap()
+            index++
+            snapshot("Settings-\(index)")
+            app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
         }
     }
 
