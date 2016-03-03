@@ -111,23 +111,28 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
               >>== effect(self.setTimestamp)
         })
 
-        // TODO: if the mirrorer tells us we're incomplete, then don't bother trying to sync!
-        // We will need to extend the BookmarksMirrorer interface to allow us to see what's
-        // going on.
         let doMirror = mirrorer.go(info, greenLight: greenLight)
 
         let run: SyncResult
-        if AppConstants.shouldMergeBookmarks {
-            let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
-            run = doMirror >>> applier.go
+        if !AppConstants.shouldMergeBookmarks {
+            run = doMirror
         } else {
-            run = doMirror >>> always(SyncStatus.Completed)
+            let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
+            run = doMirror >>== { result in
+                // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
+                switch result {
+                case .Completed:
+                    return applier.go()
+                default:
+                    return deferMaybe(result)
+                }
+            }
         }
 
-        run.upon { _ in
+        run.upon { result in
             let end = NSDate.nowMicroseconds()
             let duration = end - start
-            log.info("Bookmark \(AppConstants.shouldMergeBookmarks ? "sync" : "mirroring") took \(duration)µs.")
+            log.info("Bookmark \(AppConstants.shouldMergeBookmarks ? "sync" : "mirroring") took \(duration)µs. Result was \(result.successValue?.description ?? result.failureValue?.description ?? "failure")")
         }
 
         return run

@@ -84,10 +84,10 @@ public class BookmarksMirrorer {
         return self.storage.applyRecords(records)
     }
 
-    public func go(info: InfoCollections, greenLight: () -> Bool) -> Success {
+    public func go(info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
         if !greenLight() {
             log.info("Green light turned red. Stopping mirror operation.")
-            return succeed()
+            return deferMaybe(SyncStatus.NotStarted(.RedLight))
         }
 
         log.debug("Downloading up to \(self.batchSize) records.")
@@ -95,7 +95,7 @@ public class BookmarksMirrorer {
                               .bind { result in
             guard let end = result.successValue else {
                 log.warning("Got failure: \(result.failureValue!)")
-                return succeed()
+                return deferMaybe(result.failureValue!)
             }
             switch end {
             case .Complete:
@@ -103,6 +103,7 @@ public class BookmarksMirrorer {
                 return self.applyRecordsFromBatcher()
                    >>> effect(self.downloader.advance)
                    >>> self.storage.doneApplyingRecordsAfterDownload
+                   >>> always(SyncStatus.Completed)
             case .Incomplete:
                 log.debug("Running another batch.")
                 // This recursion is fine because Deferred always pushes callbacks onto a queue.
@@ -111,11 +112,11 @@ public class BookmarksMirrorer {
                    >>> { self.go(info, greenLight: greenLight) }
             case .Interrupted:
                 log.info("Interrupted. Aborting batching this time.")
-                return succeed()
+                return deferMaybe(SyncStatus.Partial)
             case .NoNewData:
                 log.info("No new data. No need to continue batching.")
                 self.downloader.advance()
-                return succeed()
+                return deferMaybe(SyncStatus.Completed)
             }
         }
     }
