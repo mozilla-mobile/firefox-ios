@@ -263,7 +263,7 @@ extension SQLiteBookmarks {
         "FROM \(direction.valueView) WHERE guid IN \(varlist) AND NOT is_deleted"
 
         if !includeIcon {
-            return self.db.runQuery(values, args: args, factory: BookmarkFactory.factory)
+            return self.db.runQuery(values + " ORDER BY title ASC", args: args, factory: BookmarkFactory.factory)
         }
 
         let withIcon = [
@@ -277,6 +277,7 @@ extension SQLiteBookmarks {
             "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType",
             "FROM (", values, ") AS bookmarks",
             "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id",
+            "ORDER BY title ASC",
             ].joinWithSeparator(" ")
 
         return self.db.runQuery(withIcon, args: args, factory: BookmarkFactory.factory)
