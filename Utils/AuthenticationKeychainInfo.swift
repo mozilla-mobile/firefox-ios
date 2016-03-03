@@ -39,6 +39,7 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
     private(set) public var requiredPasscodeInterval: PasscodeInterval?
     private(set) public var lockOutInterval: NSTimeInterval?
     private(set) public var failedAttempts: Int
+    public var useTouchID: Bool
 
     // Timeout period before user can retry entering passcodes
     public var lockTimeInterval: NSTimeInterval = 15 * 60
@@ -47,6 +48,7 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         self.passcode = passcode
         self.requiredPasscodeInterval = .Immediately
         self.failedAttempts = 0
+        self.useTouchID = false
     }
 
     public func encodeWithCoder(aCoder: NSCoder) {
@@ -63,6 +65,7 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         aCoder.encodeObject(passcode, forKey: "passcode")
         aCoder.encodeObject(requiredPasscodeInterval?.rawValue, forKey: "requiredPasscodeInterval")
         aCoder.encodeInteger(failedAttempts, forKey: "failedAttempts")
+        aCoder.encodeBool(useTouchID, forKey: "useTouchID")
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -70,6 +73,7 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         self.lockOutInterval = (aDecoder.decodeObjectForKey("lockOutInterval") as? NSNumber)?.doubleValue
         self.passcode = aDecoder.decodeObjectForKey("passcode") as? String
         self.failedAttempts = aDecoder.decodeIntegerForKey("failedAttempts")
+        self.useTouchID = aDecoder.decodeBoolForKey("useTouchID")
         if let interval = aDecoder.decodeObjectForKey("requiredPasscodeInterval") as? NSNumber {
             self.requiredPasscodeInterval = PasscodeInterval(rawValue: interval.integerValue)
         }

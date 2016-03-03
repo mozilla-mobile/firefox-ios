@@ -478,47 +478,22 @@ class LoginsSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
-        shouldPromptForAuthentication() ? presentAuthentication() : navigateToLoginsList()
-    }
-
-    private func shouldPromptForAuthentication() -> Bool {
-        guard AppConstants.MOZ_AUTHENTICATION_MANAGER,
-              let authenticationInfo = KeychainWrapper.authenticationInfo() else {
-            return false
+        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+            navigateToLoginsList()
+            return
         }
-        return authenticationInfo.requiresValidation()
-    }
 
-    private func presentAuthentication() {
-        if profile.prefs.boolForKey(PrefsKeyTouchID) ?? false {
-            let localAuthContext = LAContext()
-            localAuthContext.localizedFallbackTitle = AuthenticationStrings.enterPasscode
-            localAuthContext.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: AuthenticationStrings.loginsTouchReason) { success, error in
-                if success {
-                    // Update our authentication info's last validation timestamp so we don't ask again based
-                    // on the set required interval
-                    let authInfo = KeychainWrapper.authenticationInfo()
-                    authInfo?.recordValidation()
-                    KeychainWrapper.setAuthenticationInfo(authInfo)
-
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.navigateToLoginsList()
-                    }
-                } else if let authError = error where authError.code == LAError.UserFallback.rawValue {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.presentPasscodeAuthentication()
-                    }
-                }
-            }
+        if AppConstants.MOZ_AUTHENTICATION_MANAGER && authInfo.requiresValidation() {
+            AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
+            success: {
+                self.navigateToLoginsList()
+            },
+            fallback: {
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
+            })
         } else {
-            presentPasscodeAuthentication()
+            self.navigateToLoginsList()
         }
-    }
-
-    private func presentPasscodeAuthentication() {
-        let passcodeVC = PasscodeEntryViewController()
-        passcodeVC.delegate = self
-        navigationController?.presentViewController(UINavigationController(rootViewController: passcodeVC), animated: true, completion: nil)
     }
 
     private func navigateToLoginsList() {
