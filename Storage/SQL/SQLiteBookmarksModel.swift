@@ -118,10 +118,14 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
 
     public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
         log.debug("Getting model for root.")
+        let getFolder = self.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile)
+        if self.direction == .Buffer {
+            return getFolder >>== self.modelWithRoot
+        }
+
         // Return a virtual model containing "Desktop bookmarks" prepended to the local mobile bookmarks.
-        return self.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile)
-            >>== { folder in
-                return self.extendWithDesktopBookmarksFolder(folder, factory: self)
+        return getFolder >>== { folder in
+            self.extendWithDesktopBookmarksFolder(folder, factory: self)
         }
     }
 
@@ -194,7 +198,9 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     func getDesktopRoots() -> Deferred<Maybe<Cursor<BookmarkNode>>> {
         if self.direction == .Buffer {
             // The buffer never includes the Places root, so we look one level deeper.
-            return self.bookmarks.getRecordsWithGUIDs(BookmarkRoots.DesktopRoots, direction: self.direction, includeIcon: false)
+            // Because this is a special-case overlay, we include Mobile Bookmarks here --
+            // that'll show bookmarks from other mobile devices.
+            return self.bookmarks.getRecordsWithGUIDs(BookmarkRoots.RootChildren, direction: self.direction, includeIcon: false)
         }
 
         // We deliberately exclude the mobile folder, because we're inverting the containment
@@ -732,12 +738,13 @@ extension SQLiteBookmarks {
             BookmarkRoots.MenuFolderGUID,
             BookmarkRoots.ToolbarFolderGUID,
             BookmarkRoots.UnfiledFolderGUID,
+            BookmarkRoots.MobileFolderGUID,
         ]
         let sql = [
             "SELECT",
             "not exists(SELECT 1 FROM \(TableBookmarksMirror))",
             "AND",
-            "exists(SELECT 1 FROM \(TableBookmarksBufferStructure) WHERE parent IN (?, ?, ?))",
+            "exists(SELECT 1 FROM \(TableBookmarksBufferStructure) WHERE parent IN (?, ?, ?, ?))",
             ].joinWithSeparator(" ")
         return self.db.runQuery(sql, args: parents, factory: { ($0[0] as! Int) == 1 }) >>== { deferMaybe($0[0]!) }
     }
