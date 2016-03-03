@@ -85,12 +85,20 @@ class ThumbnailCell: UICollectionViewCell {
 
     var imagePadding: CGFloat = 0 {
         didSet {
+            // Find out if our image is going to have fractional pixel width.
+            // If so, we inset by a tiny extra amount to get it down to an integer for better
+            // image scaling.
+            let parentWidth = self.imageWrapper.frame.width
+            let width = (parentWidth - imagePadding)
+            let fractionalW = width - floor(width)
+            let additionalW = fractionalW / 2
+
             imageView.snp_remakeConstraints { make in
                 let insets = UIEdgeInsets(top: imagePadding, left: imagePadding, bottom: imagePadding, right: imagePadding)
                 make.top.equalTo(self.imageWrapper).inset(insets.top)
-                make.left.equalTo(self.imageWrapper).inset(insets.left)
-                make.right.equalTo(self.imageWrapper).inset(insets.right)
                 make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding)
+                make.left.equalTo(self.imageWrapper).inset(insets.left + additionalW)
+                make.right.equalTo(self.imageWrapper).inset(insets.right + additionalW)
             }
             imageView.setNeedsUpdateConstraints()
         }
