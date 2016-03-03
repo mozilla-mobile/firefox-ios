@@ -117,68 +117,79 @@ class L10nSnapshotTests: XCTestCase {
         sleep(2)
     }
 
-//    func test99ClearPrivateData() {
-//
-//        let loginUsername = "testtesto@mockmyid.com"
-//        let loginPassword = "testtesto@mockmyid.com"
-//
-//
-//        let app = XCUIApplication()
-//        app.buttons["URLBarView.tabsButton"].tap()
-//        app.buttons["TabTrayController.settingsButton"].tap()
-//
-//        snapshot("10SettingsTopNoAccount")
-//
-//        clearPrivateData(prefix: "1", position: 1, postfix: "NoAccount")
-//
-//        app.tables.cells["SignInToFirefox"].tap()
-//
-//        let passwordField = app.webViews.secureTextFields.elementBoundByIndex(0)
-//        let exists = NSPredicate(format: "exists == 1")
-//        expectationForPredicate(exists, evaluatedWithObject: passwordField, handler: nil)
-//
-//        waitForExpectationsWithTimeout(10, handler: nil)
-//
-//        if app.webViews.textFields.elementBoundByIndex(0).exists {
-//            app.webViews.textFields.elementBoundByIndex(0).tap()
-//            app.webViews.textFields.elementBoundByIndex(0).typeText(loginUsername)
-//        }
-//
-//        passwordField.tap()
-//        passwordField.typeText(loginPassword)
-//        app.webViews.buttons.elementBoundByIndex(0).tap()
-//
-//        snapshot("13SettingsTopWithAccount")
-//
-//        clearPrivateData(prefix: "1", position: 4, postfix: "WithAccount")
-//
-//        let logOutCell = app.tables.cells["LogOut"]
-//        app.tables.elementBoundByIndex(0).scrollToElement(logOutCell)
-//        snapshot("16SettingsBottomWithAccount")
-//        logOutCell.tap()
-//        snapshot("17LogOutConfirm")
-//        app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
-//        snapshot("18SettingsBottomNoAccount")
-//    }
-//
-//    private func clearPrivateData(prefix prefix: String, var position: Int, postfix: String = "") {
-//
-//        let app = XCUIApplication()
-//
-//        let clearPrivateDataCell = app.tables.cells["ClearPrivateData"]
-//        clearPrivateDataCell.tap()
-//        snapshot("\(prefix)\(position++)ClearPrivateData\(postfix)")
-//
-//        let clearPrivateDataButton = app.tables.cells["ClearPrivateData"]
-//        clearPrivateDataButton.tap()
-//        snapshot("\(prefix)\(position++)ClearPrivateDataConfirm\(postfix)")
-//
-//        let button = app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(0)
-//        button.tap()
-//
-//        let navBar = app.navigationBars.elementBoundByIndex(0)
-//        navBar.buttons.elementBoundByIndex(0).tap()
-//    }
+    func test99ClearPrivateData() {
+
+        let loginUsername = "testtesto@mockmyid.com"
+        let loginPassword = "testtesto@mockmyid.com"
+
+
+        let app = XCUIApplication()
+        app.buttons["URLBarView.tabsButton"].tap()
+        app.buttons["TabTrayController.settingsButton"].tap()
+
+        snapshot("990SettingsTopNoAccount")
+
+        var logOutCell = app.tables.cells["LogOut"]
+        if logOutCell.exists {
+            logOutCell.tap()
+            app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
+        }
+
+        clearPrivateData(prefix: "99", position: 1, postfix: "NoAccount")
+
+        app.tables.cells["SignInToFirefox"].tap()
+
+        let passwordField = app.webViews.secureTextFields.elementBoundByIndex(0)
+        let exists = NSPredicate(format: "exists == 1")
+        expectationForPredicate(exists, evaluatedWithObject: passwordField, handler: nil)
+
+        waitForExpectationsWithTimeout(10, handler: nil)
+
+        let usernameField = app.webViews.textFields.elementBoundByIndex(0)
+        if !usernameField.exists {
+            app.webViews.links.elementBoundByIndex(1).tap()
+            expectationForPredicate(exists, evaluatedWithObject: usernameField, handler: nil)
+            waitForExpectationsWithTimeout(10, handler: nil)
+        }
+        usernameField.tap()
+        usernameField.typeText(loginUsername)
+
+        passwordField.tap()
+        sleep(2)
+        passwordField.typeText(loginPassword)
+        app.webViews.buttons.elementBoundByIndex(0).tap()
+
+        snapshot("993SettingsTopWithAccount")
+
+        clearPrivateData(prefix: "99", position: 4, postfix: "WithAccount")
+
+        logOutCell = app.tables.cells["LogOut"]
+        app.tables.elementBoundByIndex(0).scrollToElement(logOutCell)
+        snapshot("996SettingsBottomWithAccount")
+        logOutCell.tap()
+        snapshot("997LogOutConfirm")
+        app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
+        snapshot("998SettingsBottomNoAccount")
+    }
+
+    private func clearPrivateData(prefix prefix: String, var position: Int, postfix: String = "") {
+
+        let app = XCUIApplication()
+
+        let clearPrivateDataCell = app.tables.cells["ClearPrivateData"]
+        clearPrivateDataCell.tap()
+        snapshot("\(prefix)\(position++)ClearPrivateData\(postfix)")
+
+        let clearPrivateDataButton = app.tables.cells["ClearPrivateData"]
+        clearPrivateDataButton.tap()
+        snapshot("\(prefix)\(position++)ClearPrivateDataConfirm\(postfix)")
+
+        let button = app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(0)
+        button.tap()
+
+        let navBar = app.navigationBars.elementBoundByIndex(0)
+        navBar.buttons.elementBoundByIndex(0).tap()
+    }
 }
 
 extension XCUIElement {
