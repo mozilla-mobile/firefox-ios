@@ -486,18 +486,7 @@ class LoginsSetting: Setting {
               let authenticationInfo = KeychainWrapper.authenticationInfo() else {
             return false
         }
-
-        let passcodeSet = authenticationInfo.passcode != nil
-
-        // If we've validated before, check to see if we're past the validation interval. If not, only check to
-        // see if we have a passcode set.
-        if let lastValidationTime = authenticationInfo.lastPasscodeValidationTimestamp,
-           let requireInterval = authenticationInfo.requiredPasscodeInterval?.rawValue
-        {
-            return passcodeSet && NSDate.now() - lastValidationTime > UInt64(requireInterval) * (OneSecondInMilliseconds)
-        }
-
-        return passcodeSet
+        return authenticationInfo.requiresValidation()
     }
 
     private func presentAuthentication() {
