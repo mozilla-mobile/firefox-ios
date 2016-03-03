@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Pronto";
+
+/* Text selection menu item */
+"Find in Page" = "Localizar na página";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Próxima página de resultado";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Página anterior de resultado";
+

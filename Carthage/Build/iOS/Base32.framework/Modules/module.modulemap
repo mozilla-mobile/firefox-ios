@@ -1,0 +1,10 @@
+framework module Base32 {
+  umbrella header "Base32.h"
+
+  export *
+  module * { export * }
+}
+
+module Base32.Swift {
+    header "Base32-Swift.h"
+}

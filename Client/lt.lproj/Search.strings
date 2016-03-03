@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "„%@“ paieška";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "Ne";
+
+/* Label for search settings button. */
+"Search Settings" = "Paieškos nuostatos";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "Paieškos siūlymai iš „%@“";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "Įjungti paieškos siūlymus?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "Taip";
+

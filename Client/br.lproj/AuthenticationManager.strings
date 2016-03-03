@@ -1,0 +1,54 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Goude 1 eur";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Goude 1 vunutenn";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Goude 5 munutenn";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Goude 10 munutenn";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Goude 15 munutenn";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Kemmañ ar rineg-tremen";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Enankañ ur rineg-tremen";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Diouzhtu";
+
+/* List section title for passcode settings */
+"Passcode" = "Rineg-tremen";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Ad-bizskrivañ ar rineg-tremen";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Rineg-tremen dleet";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Lakaat ar rineg-tremen";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Naoudi stokañ & Rineg-tremen";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Diweredekaat ar rineg-tremen";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Gweredekaat ar rineg-tremen";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Diweredekait ho rineg-tremen";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Implijit ho roud-biz evit haeziñ an titouroù kennaskañ bremañ.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Implijit ho roud-biz evit haeziñ ar merdeiñ prevez bremañ.";
+

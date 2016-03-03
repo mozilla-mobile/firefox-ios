@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Po 1 hodźinje";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Po 1 mjeńšinje";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Po 5 mjeńšinach";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Po 10 mjeńšinach";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Po 15 mjeńšinach";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Hesłowy kod změnić";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "Hesłowy kod zapodać";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "Nowy hesłowy kod zapodać";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Hesłowy kod zapodać";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "Hesłowy kod zapodać";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Hnydom";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Wopačny hesłowy kod. Spytajće hišće raz (zbytne pospyty: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Wopačny hesłowy kod. Spytajće hišće raz.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Maksimalna ličba pospytow docpěta. Prošu spytajće hišće raz za jednu hodźinu.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Maksimalna ličba pospytow docpěta. Prošu spytajće pozdźišo hišće raz.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Nowy hesłowy kod dyrbi so wot eksistowaceho koda rozeznawać.";
+
+/* List section title for passcode settings */
+"Passcode" = "Hesłowy kod";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Hesłowej kodaj so njekryjetej. Spytajće hišće raz.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Hesłowy kod znowa zapodać";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Hesłowy kod požadać";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Hesłowy kod nastajić";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID a hesłowy kod";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Hesłowy kod znjemóžnić";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Hesłowy kod zmóžnić";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Znjemóžńće swój hesłowy kod.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Touch ID wužiwać";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Wužiwajće swój porstowy wotćišć, zo byšće nětko na přizjewjenja přistup měł.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Wužiwajće swój porstowy wotćišć, zo byšće nětko na priwatny modus přistup měł.";
+

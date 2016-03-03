@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Готово";
+
+/* Text selection menu item */
+"Find in Page" = "Знайти на сторінці";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Наступний результат на сторінці";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Попередній результат на сторінці";
+
