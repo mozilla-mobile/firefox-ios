@@ -5,8 +5,8 @@
 import Foundation
 import Shared
 
-// Passcode intervals with rawValue in seconds.
-enum PasscodeInterval: Int {
+// Strings for the passcode intervals.
+extension PasscodeInterval {
     var settingTitle: String {
         switch self {
         case .Immediately:      return AuthenticationStrings.immediately
@@ -17,13 +17,6 @@ enum PasscodeInterval: Int {
         case .OneHour:          return AuthenticationStrings.oneHour
         }
     }
-
-    case Immediately    = 0
-    case OneMinute      = 60
-    case FiveMinutes    = 300
-    case TenMinutes     = 600
-    case FifteenMinutes = 900
-    case OneHour        = 3600
 }
 
 // Strings used in multiple areas within the Authentication Manager

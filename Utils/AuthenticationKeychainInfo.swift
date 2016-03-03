@@ -3,14 +3,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Shared
 import SwiftKeychainWrapper
 
 public let KeychainKeyAuthenticationInfo = "authenticationInfo"
 public let AllowedPasscodeFailedAttempts = 3
 
+// Passcode intervals with rawValue in seconds.
+public enum PasscodeInterval: Int {
+    case Immediately    = 0
+    case OneMinute      = 60
+    case FiveMinutes    = 300
+    case TenMinutes     = 600
+    case FifteenMinutes = 900
+    case OneHour        = 3600
+}
+
 // MARK: - Helper methods for accessing Authentication information from the Keychain
-extension KeychainWrapper {
+public extension KeychainWrapper {
     class func authenticationInfo() -> AuthenticationKeychainInfo? {
         return KeychainWrapper.objectForKey(KeychainKeyAuthenticationInfo) as? AuthenticationKeychainInfo
     }
@@ -24,23 +33,23 @@ extension KeychainWrapper {
     }
 }
 
-class AuthenticationKeychainInfo: NSObject, NSCoding {
-    private(set) var lastPasscodeValidationInterval: NSTimeInterval?
-    private(set) var passcode: String?
-    private(set) var requiredPasscodeInterval: PasscodeInterval?
-    private(set) var lockOutInterval: NSTimeInterval?
-    private(set) var failedAttempts: Int
+public class AuthenticationKeychainInfo: NSObject, NSCoding {
+    private(set) public var lastPasscodeValidationInterval: NSTimeInterval?
+    private(set) public var passcode: String?
+    private(set) public var requiredPasscodeInterval: PasscodeInterval?
+    private(set) public var lockOutInterval: NSTimeInterval?
+    private(set) public var failedAttempts: Int
 
     // Timeout period before user can retry entering passcodes
-    var lockTimeInterval: NSTimeInterval = 15 * 60
+    public var lockTimeInterval: NSTimeInterval = 15 * 60
 
-    init(passcode: String) {
+    public init(passcode: String) {
         self.passcode = passcode
         self.requiredPasscodeInterval = .Immediately
         self.failedAttempts = 0
     }
 
-    func encodeWithCoder(aCoder: NSCoder) {
+    public func encodeWithCoder(aCoder: NSCoder) {
         if let lastPasscodeValidationInterval = lastPasscodeValidationInterval {
             let interval = NSNumber(double: lastPasscodeValidationInterval)
             aCoder.encodeObject(interval, forKey: "lastPasscodeValidationInterval")
@@ -56,7 +65,7 @@ class AuthenticationKeychainInfo: NSObject, NSCoding {
         aCoder.encodeInteger(failedAttempts, forKey: "failedAttempts")
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         self.lastPasscodeValidationInterval = (aDecoder.decodeObjectForKey("lastPasscodeValidationInterval") as? NSNumber)?.doubleValue
         self.lockOutInterval = (aDecoder.decodeObjectForKey("lockOutInterval") as? NSNumber)?.doubleValue
         self.passcode = aDecoder.decodeObjectForKey("passcode") as? String
@@ -68,7 +77,7 @@ class AuthenticationKeychainInfo: NSObject, NSCoding {
 }
 
 // MARK: - API
-extension AuthenticationKeychainInfo {
+public extension AuthenticationKeychainInfo {
     private func resetLockoutState() {
         self.failedAttempts = 0
         self.lockOutInterval = nil
