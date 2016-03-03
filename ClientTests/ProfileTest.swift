@@ -6,6 +6,7 @@
 import Foundation
 import Shared
 import Storage
+import SwiftKeychainWrapper
 
 import XCTest
 
@@ -15,5 +16,13 @@ import XCTest
 class ProfileTest: XCTestCase {
     func withTestProfile(callback: (profile: Profile) -> Void) {
         callback(profile: MockProfile())
+    }
+
+    func testNewProfileClearsExistingAuthenticationInfo() {
+        let authInfo = AuthenticationKeychainInfo(passcode: "1234")
+        KeychainWrapper.setAuthenticationInfo(authInfo)
+        XCTAssertNotNil(KeychainWrapper.authenticationInfo())
+        let _ = BrowserProfile(localName: "my_profile")
+        XCTAssertNil(KeychainWrapper.authenticationInfo())
     }
 }

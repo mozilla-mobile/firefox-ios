@@ -219,6 +219,7 @@ public class BrowserProfile: Profile {
             log.info("New profile. Removing old account metadata.")
             self.removeAccountMetadata()
             self.syncManager.onNewProfile()
+            self.removeExistingAuthenticationInfo()
             prefs.clearAll()
         }
 
@@ -466,6 +467,10 @@ public class BrowserProfile: Profile {
     func removeAccountMetadata() {
         self.prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
         KeychainWrapper.removeObjectForKey(self.name + ".account")
+    }
+
+    func removeExistingAuthenticationInfo() {
+        KeychainWrapper.setAuthenticationInfo(nil)
     }
 
     func removeAccount() {
