@@ -85,12 +85,20 @@ class ThumbnailCell: UICollectionViewCell {
 
     var imagePadding: CGFloat = 0 {
         didSet {
+            // Find out if our image is going to have fractional pixel width.
+            // If so, we inset by a tiny extra amount to get it down to an integer for better
+            // image scaling.
+            let parentWidth = self.imageWrapper.frame.width
+            let width = (parentWidth - imagePadding)
+            let fractionalW = width - floor(width)
+            let additionalW = fractionalW / 2
+
             imageView.snp_remakeConstraints { make in
                 let insets = UIEdgeInsets(top: imagePadding, left: imagePadding, bottom: imagePadding, right: imagePadding)
                 make.top.equalTo(self.imageWrapper).inset(insets.top)
-                make.left.equalTo(self.imageWrapper).inset(insets.left)
-                make.right.equalTo(self.imageWrapper).inset(insets.right)
                 make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding)
+                make.left.equalTo(self.imageWrapper).inset(insets.left + additionalW)
+                make.right.equalTo(self.imageWrapper).inset(insets.right + additionalW)
             }
             imageView.setNeedsUpdateConstraints()
         }
@@ -269,7 +277,7 @@ class ThumbnailCell: UICollectionViewCell {
 
      - parameter size: Size of the container collection view
      */
-    func updateLayoutForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection) {
+    func updateLayoutForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection, forSuggestedSite: Bool) {
         let cellInsets = ThumbnailCellUX.insetsForCollectionViewSize(size,
             traitCollection: traitCollection)
         let imageInsets = ThumbnailCellUX.imageInsetsForCollectionViewSize(size,
@@ -289,6 +297,10 @@ class ThumbnailCell: UICollectionViewCell {
                 make.right.equalTo(self.imageWrapper).inset(imageInsets.right)
                 make.bottom.equalTo(textWrapper.snp_top).offset(-imageInsets.top)
             }
+        }
+
+        if forSuggestedSite {
+            self.imagePadding = 0.0
         }
     }
 }
