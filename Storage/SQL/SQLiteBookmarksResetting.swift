@@ -37,8 +37,10 @@ extension SQLiteBookmarkBufferStorage: ResettableSyncStorage {
     }
 
     public func wipeBookmarks() -> Success {
-        return self.db.run("DELETE FROM \(TableBookmarksBuffer)")
-         >>> { self.db.run("DELETE FROM \(TableBookmarksBufferStructure)") }
+        return self.db.run([
+            "DELETE FROM \(TableBookmarksBufferStructure)",
+            "DELETE FROM \(TableBookmarksBuffer)",
+        ])
     }
 }
 
