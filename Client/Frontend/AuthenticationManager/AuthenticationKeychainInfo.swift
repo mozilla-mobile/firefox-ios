@@ -25,14 +25,14 @@ extension KeychainWrapper {
 }
 
 class AuthenticationKeychainInfo: NSObject, NSCoding {
-    private(set) var lastPasscodeValidationTimestamp: Timestamp?
+    private(set) var lastPasscodeValidationInterval: NSTimeInterval?
     private(set) var passcode: String?
     private(set) var requiredPasscodeInterval: PasscodeInterval?
-    private(set) var lockOutTimestamp: Timestamp?
+    private(set) var lockOutInterval: NSTimeInterval?
     private(set) var failedAttempts: Int
 
     // Timeout period before user can retry entering passcodes
-    var lockTimeInterval = 15 * OneMinuteInMilliseconds
+    var lockTimeInterval: NSTimeInterval = 15 * 60
 
     init(passcode: String) {
         self.passcode = passcode
@@ -41,14 +41,14 @@ class AuthenticationKeychainInfo: NSObject, NSCoding {
     }
 
     func encodeWithCoder(aCoder: NSCoder) {
-        if let lastPasscodeValidationTimestamp = lastPasscodeValidationTimestamp {
-            let timestampNumber = NSNumber(unsignedLongLong: lastPasscodeValidationTimestamp)
-            aCoder.encodeObject(timestampNumber, forKey: "lastPasscodeValidationTimestamp")
+        if let lastPasscodeValidationInterval = lastPasscodeValidationInterval {
+            let interval = NSNumber(double: lastPasscodeValidationInterval)
+            aCoder.encodeObject(interval, forKey: "lastPasscodeValidationInterval")
         }
 
-        if let lockOutTimestamp = lockOutTimestamp where isLocked() {
-            let timestampNumber = NSNumber(unsignedLongLong: lockOutTimestamp)
-            aCoder.encodeObject(timestampNumber, forKey: "lockOutTimestamp")
+        if let lockOutInterval = lockOutInterval where isLocked() {
+            let interval = NSNumber(double: lockOutInterval)
+            aCoder.encodeObject(interval, forKey: "lockOutInterval")
         }
 
         aCoder.encodeObject(passcode, forKey: "passcode")
@@ -57,8 +57,8 @@ class AuthenticationKeychainInfo: NSObject, NSCoding {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        self.lastPasscodeValidationTimestamp = (aDecoder.decodeObjectForKey("lastPasscodeValidationTimestamp") as? NSNumber)?.unsignedLongLongValue
-        self.lockOutTimestamp = (aDecoder.decodeObjectForKey("lockOutTimestamp") as? NSNumber)?.unsignedLongLongValue
+        self.lastPasscodeValidationInterval = (aDecoder.decodeObjectForKey("lastPasscodeValidationInterval") as? NSNumber)?.doubleValue
+        self.lockOutInterval = (aDecoder.decodeObjectForKey("lockOutInterval") as? NSNumber)?.doubleValue
         self.passcode = aDecoder.decodeObjectForKey("passcode") as? String
         self.failedAttempts = aDecoder.decodeIntegerForKey("failedAttempts")
         if let interval = aDecoder.decodeObjectForKey("requiredPasscodeInterval") as? NSNumber {
@@ -71,28 +71,28 @@ class AuthenticationKeychainInfo: NSObject, NSCoding {
 extension AuthenticationKeychainInfo {
     private func resetLockoutState() {
         self.failedAttempts = 0
-        self.lockOutTimestamp = nil
+        self.lockOutInterval = nil
     }
 
     func updatePasscode(passcode: String) {
         self.passcode = passcode
-        self.lastPasscodeValidationTimestamp = nil
+        self.lastPasscodeValidationInterval = nil
     }
 
     func updateRequiredPasscodeInterval(interval: PasscodeInterval) {
         self.requiredPasscodeInterval = interval
-        self.lastPasscodeValidationTimestamp = nil
+        self.lastPasscodeValidationInterval = nil
     }
 
     func recordValidation() {
         // Save the timestamp to remember the last time we successfully 
         // validated and clear out the failed attempts counter.
-        self.lastPasscodeValidationTimestamp = NSDate.now()
+        self.lastPasscodeValidationInterval = SystemUtils.systemUptime()
         resetLockoutState()
     }
 
     func lockOutUser() {
-        self.lockOutTimestamp = NSProcessInfo().systemUptimeTimestamp()
+        self.lockOutInterval = SystemUtils.systemUptime()
     }
 
     func recordFailedAttempt() {
@@ -100,17 +100,30 @@ extension AuthenticationKeychainInfo {
     }
 
     func isLocked() -> Bool {
-        if NSProcessInfo().systemUptimeTimestamp() < self.lockOutTimestamp {
+        if SystemUtils.systemUptime() < self.lockOutInterval {
             // Unlock and require passcode input
             resetLockoutState()
             return false
         }
-        return (NSProcessInfo().systemUptimeTimestamp() - (self.lockOutTimestamp ?? 0)) < lockTimeInterval
+        return (SystemUtils.systemUptime() - (self.lockOutInterval ?? 0)) < lockTimeInterval
     }
-}
 
-extension NSProcessInfo {
-    public func systemUptimeTimestamp() -> Timestamp {
-        return Timestamp(NSProcessInfo().systemUptime * NSTimeInterval(OneSecondInMilliseconds))
+    func requiresValidation() -> Bool {
+        // If there isn't a passcode, don't need validation.
+        guard let _ = passcode else {
+            return false
+        }
+
+        // Need to make sure we've validated in the past. If not, its a definite yes.
+        guard let lastValidationInterval = lastPasscodeValidationInterval,
+                  requireInterval = requiredPasscodeInterval
+        else {
+            return true
+        }
+
+        // We've authenticated before so lets see how long since. If the uptime is less than the last validation stamp,
+        // we probably restarted which means we should require validation.
+        return SystemUtils.systemUptime() - lastValidationInterval > Double(requireInterval.rawValue) ||
+               SystemUtils.systemUptime() < lastValidationInterval
     }
 }
