@@ -852,9 +852,9 @@ class ThreeWayTreeMerger {
     // must preserve.
     func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
         if let localGUID = localNode?.recordGUID {
-            log.debug("Merging nodes with GUID \(guid). Local match is \(localGUID).")
+            log.verbose("Merging nodes with GUID \(guid). Local match is \(localGUID).")
         } else {
-            log.debug("Merging nodes with GUID \(guid). No local match.")
+            log.verbose("Merging nodes with GUID \(guid). No local match.")
         }
 
         // TODO: if the local node has a different GUID, it's because we did a value-based
@@ -913,7 +913,7 @@ class ThreeWayTreeMerger {
         // We know we have a mirror, else we'd have a non-unknown edge.
         if (localNode?.isUnknown ?? true) && (remoteNode?.isUnknown ?? true) {
             precondition(mirrorNode != nil)
-            log.debug("Record \(guid) didn't change from mirror.")
+            log.verbose("Record \(guid) didn't change from mirror.")
 
             self.done.insert(guid)
             return try takeMirrorNode(mirrorNode!)
@@ -930,7 +930,7 @@ class ThreeWayTreeMerger {
                 // No remote. Node only exists locally.
                 // However! The children might be mentioned in the mirror or
                 // remote tree.
-                log.debug("Node \(guid) only exists locally.")
+                log.verbose("Node \(guid) only exists locally.")
                 return try takeLocalAndMergeChildren(loc)
             }
 
@@ -943,7 +943,7 @@ class ThreeWayTreeMerger {
             }
 
             // Node only exists remotely. Take it.
-            log.debug("Node \(guid) only exists remotely.")
+            log.verbose("Node \(guid) only exists remotely.")
             return try takeRemoteAndMergeChildren(rem)
         }
 
@@ -953,16 +953,16 @@ class ThreeWayTreeMerger {
                 log.debug("Both local and remote changes to mirror item \(guid). Resolving conflict.")
                 return try self.threeWayMerge(guid, localNode: loc, remoteNode: rem, mirrorNode: mirrorNode)
             }
-            log.debug("Local-only change to mirror item \(guid).")
+            log.verbose("Local-only change to mirror item \(guid).")
             return try takeLocalAndMergeChildren(loc, mirror: mirrorNode)
         }
 
         if let rem = remoteNode where !rem.isUnknown {
-            log.debug("Remote-only change to mirror item \(guid).")
+            log.verbose("Remote-only change to mirror item \(guid).")
             return try takeRemoteAndMergeChildren(rem, mirror: mirrorNode)
         }
 
-        log.debug("Record \(guid) didn't change from mirror.")
+        log.verbose("Record \(guid) didn't change from mirror.")
         return try takeMirrorNode(mirrorNode)
     }
 
@@ -1008,6 +1008,7 @@ class ThreeWayTreeMerger {
         log.debug("Processing \(self.localAllGUIDs.count) local changes and \(self.remoteAllGUIDs.count) remote changes.")
         log.debug("\(self.local.subtrees.count) local subtrees and \(self.remote.subtrees.count) remote subtrees.")
         log.debug("Local is adding \(self.localAdditions.count) records, and remote is adding \(self.remoteAdditions.count).")
+        log.debug("Local and remote have \(self.allDeletions.count) deletions.")
 
         if !conflictingGUIDs.isEmpty {
             log.warning("Expecting conflicts between local and remote: \(conflictingGUIDs.joinWithSeparator(", ")).")
