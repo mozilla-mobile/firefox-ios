@@ -119,4 +119,8 @@ public class BookmarksMirrorer {
             }
         }
     }
+
+    func advanceNextDownloadTimestampTo(timestamp: Timestamp) {
+        self.downloader.advanceTimestampTo(timestamp)
+    }
 }

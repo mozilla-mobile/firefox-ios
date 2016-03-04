@@ -108,7 +108,11 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
             // Default to our last fetch time for If-Unmodified-Since.
             let timestamp = lastTimestamp ?? self.lastFetched
             return self.uploadRecordsInChunks(records, lastTimestamp: timestamp, storageClient: bookmarksClient, onUpload: onUpload)
-              >>== effect(self.setTimestamp)
+              >>== effect { timestamp in
+                // We need to advance our batching downloader timestamp to match. See Bug 1253458.
+                self.setTimestamp(timestamp)
+                mirrorer.advanceNextDownloadTimestampTo(timestamp)
+            }
         })
 
         // TODO: if the mirrorer tells us we're incomplete, then don't bother trying to sync!
