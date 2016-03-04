@@ -138,6 +138,11 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         return self.downloadNextBatchWithLimit(limit, infoModified: modified)
     }
 
+    func advanceTimestampTo(timestamp: Timestamp) {
+        log.debug("Advancing downloader lastModified from \(self.lastModified) to \(timestamp).")
+        self.lastModified = timestamp
+    }
+
     // We're either fetching from our current base timestamp with no offset,
     // or the timestamp we were using when we last saved an offset.
     func fetchParameters() -> (String?, Timestamp) {
