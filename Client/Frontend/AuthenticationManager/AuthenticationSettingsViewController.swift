@@ -190,8 +190,9 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         navigationItem.title = NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Title for Touch ID/Passcode settings option")
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: Selector("passcodeStateChanged:"), name: NotificationPasscodeDidRemove, object: nil)
-        notificationCenter.addObserver(self, selector: Selector("passcodeStateChanged:"), name: NotificationPasscodeDidCreate, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("refreshSettings:"), name: NotificationPasscodeDidRemove, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("refreshSettings:"), name: NotificationPasscodeDidCreate, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("refreshSettings:"), name: UIApplicationDidBecomeActiveNotification, object: nil)
 
         tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
     }
@@ -200,6 +201,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.removeObserver(self, name: NotificationPasscodeDidRemove, object: nil)
         notificationCenter.removeObserver(self, name: NotificationPasscodeDidCreate, object: nil)
+        notificationCenter.removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -264,7 +266,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 }
 
 extension AuthenticationSettingsViewController {
-    func passcodeStateChanged(notification: NSNotification) {
+    func refreshSettings(notification: NSNotification) {
         settings = generateSettings()
         tableView.reloadData()
     }
