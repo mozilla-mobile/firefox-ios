@@ -5,3 +5,4 @@ wikipedia
 yahoo
 bing
 duckduckgo
+youtube
