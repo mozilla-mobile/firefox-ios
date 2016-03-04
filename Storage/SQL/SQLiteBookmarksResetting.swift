@@ -62,11 +62,9 @@ extension SQLiteBookmarks {
         // As implemented, this won't work correctly without ON DELETE CASCADE.
         assert(SwiftData.EnableForeignKeys)
 
-        // 1. Drop anything from the mirror that's overridden. It's already in
-        //    local, deleted or not.
-        //    The REFERENCES clause will drop old structure, too.
-        let removeOverridden =
-        "DELETE FROM \(TableBookmarksMirror) WHERE is_overridden IS 1"
+        // 1. Wait until we commit to complain about constraint violations.
+        let deferForeignKeys =
+        "PRAGMA defer_foreign_keys = ON"
 
         // 2. Drop anything from local that's deleted. We don't need to track the
         //    deletion now. Optional: keep them around if they're non-uploaded changes.
@@ -78,12 +76,12 @@ extension SQLiteBookmarks {
         let markLocalAsNew =
         "UPDATE \(TableBookmarksLocal) SET sync_status = \(SyncStatus.New.rawValue)"
 
-        // 4. Insert into local anything left in mirror.
+        // 4. Insert into local anything not overridden left in mirror.
         //    Note that we use the server modified time as our substitute local modified time.
         //    This will provide an ounce of conflict avoidance if the user re-links the same
         //    account at a later date.
         let copyMirrorContents =
-        "INSERT INTO \(TableBookmarksLocal) " +
+        "INSERT OR IGNORE INTO \(TableBookmarksLocal) " +
         "(sync_status, local_modified, " +
         " guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos," +
         " description, tags, keyword, folderName, queryId, faviconID) " +
@@ -92,7 +90,12 @@ extension SQLiteBookmarks {
         "server_modified AS local_modified, " +
         "guid, type, bmkUri, title, parentid, parentName, " +
         "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, faviconID " +
-        "FROM \(TableBookmarksMirror)"
+        "FROM \(TableBookmarksMirror) WHERE is_overridden IS 0"
+
+        // 5.(pre) I have a database right in front of me that violates an assumption: a full
+        // bookmarksMirrorStructure and an empty bookmarksMirror. Clean up, just in case.
+        let removeOverriddenStructure =
+        "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN (SELECT guid FROM \(TableBookmarksMirror) WHERE is_overridden IS 1)"
 
         // 5. Insert into localStructure anything left in mirrorStructure.
         //    This won't copy the structure of any folders that were already overridden --
@@ -108,10 +111,11 @@ extension SQLiteBookmarks {
         "DELETE FROM \(TableBookmarksMirror)"
 
         return db.run([
-            removeOverridden,
+            deferForeignKeys,
             removeLocalDeletions,
             markLocalAsNew,
             copyMirrorContents,
+            removeOverriddenStructure,
             copyMirrorStructure,
             removeMirrorStructure,
             removeMirrorContents,
