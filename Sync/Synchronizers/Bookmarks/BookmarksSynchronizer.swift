@@ -340,6 +340,7 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
                 switch (noIncoming, noOutgoing) {
                 case (true, true):
                     // Nothing to do!
+                    log.debug("No incoming and no outgoing records: no-op.")
                     return deferMaybe(BookmarksMergeResult.NoOp(ItemSources(local: self.storage, mirror: self.storage, buffer: self.buffer)))
                 case (true, false):
                     // No incoming records to apply. Unilaterally apply local changes.
