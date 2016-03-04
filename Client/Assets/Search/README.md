@@ -58,3 +58,6 @@ The root node of an overlay document must be a `SearchOverlay` element. It can h
 The `SearchOverlays` directory also contains directories that contain override files for each locale. This allows us to use the local versions of any files instead of the remote file of the same name.
 
 Note that we include an `en` override directory, which is a special case: the l10n search repos don't actually include `en` at all since these are part of the main Android repo. We maintain a full clone of the the `en` directory in `SearchOverlays`, which is used as the set of `en` engines for each import.
+
+### Tests
+Execute `./run_tests.py` to run tests. This uses test files in the `Tests` directory to check overlay behavior.

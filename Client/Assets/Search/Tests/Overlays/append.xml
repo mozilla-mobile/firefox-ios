@@ -1,0 +1,9 @@
+<SearchOverlay>
+  <!-- Test the append action. -->
+  <append parent="//search:Url[@type='text/html']">
+    <Param name="appended" value="child"/>
+  </append>
+  <append parent="//search:Url[@method='GET']">
+    <Param name="appended" value="child2"/>
+  </append>
+</SearchOverlay>
