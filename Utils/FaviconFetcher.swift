@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Storage
 import Shared
@@ -8,6 +8,7 @@ import Alamofire
 import XCGLogger
 import Deferred
 import WebImage
+import SWXMLHash
 
 
 private let log = Logger.browserLogger
@@ -21,9 +22,9 @@ class FaviconFetcherErrorType: MaybeErrorType {
 }
 
 /* A helper class to find the favicon associated with a URL.
- * This will load the page and parse any icons it finds out of it.
- * If that fails, it will attempt to find a favicon.ico in the root host domain.
- */
+* This will load the page and parse any icons it finds out of it.
+* If that fails, it will attempt to find a favicon.ico in the root host domain.
+*/
 public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     public static var userAgent: String = ""
     static let ExpirationTime = NSTimeInterval(60*60*24*7) // Only check for icons once a week
@@ -93,73 +94,84 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         return deferred
     }
 
+    private func iconTypeForLink(rel:String) -> IconType {
+        var iconType = IconType.Guess
+        switch (rel) {
+        case "shortcut icon":
+            iconType = .Icon
+        case "icon":
+            iconType = .Icon
+        case "apple-touch-icon":
+            iconType = .AppleIcon
+        case "apple-touch-icon-precomposed":
+            iconType = .AppleIconPrecomposed
+        default:
+            iconType = IconType.Guess
+        }
+        return iconType
+    }
+
     // Loads and parses an html document and tries to find any known favicon-type tags for the page
     private func parseHTMLForFavicons(url: NSURL) -> Deferred<Maybe<[Favicon]>> {
+
         return fetchDataForURL(url).bind({ result -> Deferred<Maybe<[Favicon]>> in
             var icons = [Favicon]()
-
-            if let data = result.successValue where result.isSuccess,
-               let element = RXMLElement(fromHTMLData: data) where element.isValid {
-                var reloadUrl: NSURL? = nil
-                element.iterate("head.meta") { meta in
-                    if let refresh = meta.attribute("http-equiv") where refresh == "Refresh",
-                        let content = meta.attribute("content"),
-                        let index = content.rangeOfString("URL="),
-                        let url = NSURL(string: content.substringFromIndex(index.startIndex.advancedBy(4))) {
-                            reloadUrl = url
-                    }
-                }
-
-                if let url = reloadUrl {
-                    return self.parseHTMLForFavicons(url)
-                }
-
-                var bestType = IconType.NoneFound
-                element.iterateWithRootXPath("//head//link[contains(@rel, 'icon')]") { link in
-                    var iconType: IconType? = nil
-                    if let rel = link.attribute("rel") {
-                        switch (rel) {
-                            case "shortcut icon":
-                                iconType = .Icon
-                            case "icon":
-                                iconType = .Icon
-                            case "apple-touch-icon":
-                                iconType = .AppleIcon
-                            case "apple-touch-icon-precomposed":
-                                iconType = .AppleIconPrecomposed
-                            default:
-                                iconType = nil
-                        }
-                    }
-
-                    guard let href = link.attribute("href") where iconType != nil else {
-                        return
-                    }
-
-                    if (href.endsWith(".ico")) {
-                        iconType = .Guess
-                    }
-
-                    if let type = iconType where !bestType.isPreferredTo(type),
-                        let iconUrl = NSURL(string: href, relativeToURL: url) {
-                            let icon = Favicon(url: iconUrl.absoluteString, date: NSDate(), type: type)
-                            // If we already have a list of Favicons going already, then add it…
-                            if (type == bestType) {
-                                icons.append(icon)
-                            } else {
-                                // otherwise, this is the first in a new best yet type.
-                                icons = [icon]
-                                bestType = type
-                            }
-                    }
-                }
-
-                // If we haven't got any options icons, then use the default at the root of the domain.
-                if let url = NSURL(string: "/favicon.ico", relativeToURL: url) where icons.isEmpty {
-                    let icon = Favicon(url: url.absoluteString, date: NSDate(), type: .Guess)
-                    icons = [icon]
-                }
+            guard let data = result.successValue where result.isSuccess else {
+                return deferMaybe(icons)
             }
+
+            let element = SWXMLHash.lazy(data)
+            var reloadUrl: NSURL? = nil
+
+            //lets see if this page requires a refresh to get the actual page
+            do {
+                let refreshNode = try element["html"]["head"]["meta"].withAttr("http-equiv", "Refresh").element
+                if let urlParam = refreshNode?.attributes["content"],
+                    let index = urlParam.rangeOfString("URL="),
+                    let url = NSURL(string: urlParam.substringFromIndex(index.startIndex.advancedBy(4))) {
+                        reloadUrl = url
+                    }
+            } catch {}
+
+
+            if let url = reloadUrl {
+              return self.parseHTMLForFavicons(url)
+            }
+
+            //map all the icon types to an array of Favicons
+            let headElement = element["html"]["head"]["link"]
+            let relAttributes = ["shortcut icon","icon","apple-touch-icon","apple-touch-icon-precomposed"]
+            let iconsMapped = relAttributes.flatMap({ (relIcon:String) -> Favicon? in
+                do {
+                    guard let iconHref = try headElement.withAttr("rel", relIcon).element?.attributes["href"] else {
+                        return nil
+                    }
+                    if let iconUrl = NSURL(string: iconHref, relativeToURL: url) {
+                        let type = iconHref.endsWith(".ico") ? IconType.Guess : self.iconTypeForLink(relIcon)
+                        let icon = Favicon(url: iconUrl.absoluteString, date: NSDate(), type: type)
+                        return icon
+                    }
+                } catch {
+                    return nil
+                }
+                return nil
+            })
+
+            //sort that array such that the first Item is the perferred type
+            icons = iconsMapped.sort({ (a:Favicon, b:Favicon) -> Bool in
+              return a.type.isPreferredTo(b.type)
+            })
+
+            // If we haven't got any options icons, then use the default at the root of the domain.
+            if let url = NSURL(string: "/favicon.ico", relativeToURL: url) where icons.isEmpty {
+                let icon = Favicon(url: url.absoluteString, date: NSDate(), type: .Guess)
+                icons.append(icon)
+            }
+            //only return the icon with the highest resolution
+            if let bestIcon = icons.first {
+                icons = [bestIcon]
+            }
+
             return deferMaybe(icons)
         })
     }
@@ -176,19 +188,19 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 options: SDWebImageOptions.LowPriority,
                 progress: nil,
                 completed: { (img, err, cacheType, success, url) -> Void in
-                fav = Favicon(url: url.absoluteString,
-                    type: icon.type)
+                    fav = Favicon(url: url.absoluteString,
+                        type: icon.type)
 
-                if let img = img {
-                    fav.width = Int(img.size.width)
-                    fav.height = Int(img.size.height)
-                    profile.favicons.addFavicon(fav, forSite: site)
-                } else {
-                    fav.width = 0
-                    fav.height = 0
-                }
+                    if let img = img {
+                        fav.width = Int(img.size.width)
+                        fav.height = Int(img.size.height)
+                        profile.favicons.addFavicon(fav, forSite: site)
+                    } else {
+                        fav.width = 0
+                        fav.height = 0
+                    }
 
-                deferred.fill(Maybe(success: fav))
+                    deferred.fill(Maybe(success: fav))
             })
         } else {
             return deferMaybe(FaviconFetcherErrorType(description: "Invalid URL \(url)"))
@@ -197,4 +209,3 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         return deferred
     }
 }
-
