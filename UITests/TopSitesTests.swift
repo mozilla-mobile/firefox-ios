@@ -72,7 +72,7 @@ class TopSitesTests: KIFTestCase {
         DynamicFontUtils.restoreDynamicFontSize(tester())
 
         createNewTab()
-        let thumbnail = tester().waitForViewWithAccessibilityLabel("The Mozilla Project")
+        let thumbnail = tester().waitForViewWithAccessibilityLabel("Facebook")
 
         let size = extractTextSizeFromThumbnail(thumbnail)
 
@@ -160,6 +160,38 @@ class TopSitesTests: KIFTestCase {
 
         // Close top sites
         tester().tapViewWithAccessibilityLabel("Cancel")
+    }
+
+    func testRemovingSuggestedSites() {
+        // Delete the first three suggested tiles from top sites
+        let collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
+        let firstCell = collection.visibleCells().first!
+        firstCell.longPressAtPoint(CGPointZero, duration: 3)
+        tester().tapViewWithAccessibilityLabel("Remove page")
+        tester().waitForAnimationsToFinish()
+
+        tester().tapViewWithAccessibilityLabel("Remove page")
+        tester().waitForAnimationsToFinish()
+
+        tester().tapViewWithAccessibilityLabel("Remove page")
+        tester().waitForAnimationsToFinish()
+
+        // Close editing mode
+        tester().tapViewWithAccessibilityLabel("Done")
+
+        // Open new tab to check if changes persisted
+        createNewTab()
+
+        // Check that there are two suggested tiles left
+        XCTAssertTrue(collection.visibleCells().count == 2)
+
+        // Close extra tab and prepare for tear down
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
+        let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+        tester().swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("home")
     }
 
     override func tearDown() {
