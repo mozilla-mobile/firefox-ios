@@ -1047,6 +1047,13 @@ class ThreeWayTreeMerger {
             return deferMaybe(BookmarksMergeError(error: error))
         }
 
+        // If the buffer contains deletions for records that aren't in the mirror or in local,
+        // then we'll never normally encounter them, and thus we'll never accept the deletion.
+        // Check for that here.
+        let additionalRemoteDeletions = self.remote.deleted.subtract(self.done)
+        log.debug("Additional remote deletions: \(additionalRemoteDeletions.count).")
+        self.merged.acceptRemoteDeletion.unionInPlace(additionalRemoteDeletions)
+
         self.mergeAttempted = true
 
         // Validate. Note that we might end up with *more* records than this -- records
