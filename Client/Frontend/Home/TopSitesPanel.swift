@@ -121,7 +121,7 @@ class TopSitesPanel: UIViewController {
         if let data = result.successValue {
             self.dataSource.setHistorySites(data.asArray())
             self.dataSource.profile = self.profile
-            self.dataSource.filterSuggestedSites()
+            self.dataSource.mergeSuggestedSites()
 
             // redraw now we've updated our sources
             self.collection?.collectionViewLayout.invalidateLayout()
@@ -143,8 +143,11 @@ class TopSitesPanel: UIViewController {
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
         collection?.userInteractionEnabled = false
 
-        let deletion = site is SuggestedSite ? deleteTileForSuggestedSite(site as! SuggestedSite) :  profile.history.removeSiteFromTopSites(site)
-        let newSites = deletion >>> {
+        if site is SuggestedSite {
+            deleteTileForSuggestedSite(site as! SuggestedSite)
+        }
+        
+        let newSites = profile.history.removeSiteFromTopSites(site) >>> {
             self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit)
         }
 
@@ -452,8 +455,8 @@ class TopSitesLayout: UICollectionViewLayout {
 private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var profile: Profile
     var editingThumbnails: Bool = false
-    var suggestedSites: [SuggestedSite] = []
-    var historySites: [Site] = []
+    var suggestedSites = [SuggestedSite]()
+    var sites = [Site]()
 
     weak var collectionView: UICollectionView?
 
@@ -503,7 +506,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         FaviconFetcher.getForURL(siteURL, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
             guard let favicons = result.successValue where favicons.count > 0,
                   let url = favicons.first?.url.asURL,
-                  let indexOfSite = (self.historySites.indexOf { $0 == site }) else {
+                  let indexOfSite = (self.sites.indexOf { $0 == site }) else {
                 return
             }
 
@@ -534,7 +537,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         //
         // Instead we'll painstakingly re-extract those things here.
 
-        let domainURL = NSURL(string: site.url)?.normalizedHost() ?? site.url
+        let domainURL = extractDomainURL(site.url)
         cell.textLabel.text = domainURL
         cell.accessibilityLabel = cell.textLabel.text
         cell.removeButton.hidden = !editing
@@ -587,14 +590,26 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func setHistorySites(historySites: [Site]) {
-        self.historySites = historySites
+        self.sites = historySites
     }
 
-    private func filterSuggestedSites() {
+    private func mergeSuggestedSites() {
+        suggestedSites = SuggestedSites.asArray()
         for url in profile.prefs.arrayForKey("topSites.deletedSuggestedSites") as! [String] {
-            let domainURL = NSURL(string: url)?.normalizedHost() ?? url
-            suggestedSites = SuggestedSites.asArray().filter({ $0.tileURL.normalizedHost()?.URLString != domainURL.URLString })
+            suggestedSites = suggestedSites.filter { extractDomainURL($0.url) != extractDomainURL(url) }
         }
+
+        sites = sites.map { site in
+            let domainURL = extractDomainURL(site.url)
+            if let index = (suggestedSites.indexOf { extractDomainURL($0.url) == domainURL }) {
+                let suggestedSite = suggestedSites[index]
+                suggestedSites.removeAtIndex(index)
+                return suggestedSite
+            }
+            return site
+        }
+
+        sites += suggestedSites as [Site]
     }
 
     subscript(index: Int) -> Site? {
@@ -602,15 +617,15 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             return nil
         }
 
-        if index >= self.historySites.count {
-            return self.suggestedSites[index - self.historySites.count]
-        }
-
-        return self.historySites[index] as Site?
+        return self.sites[index] as Site?
     }
 
     private func count() -> Int {
-        return historySites.count + suggestedSites.count
+        return sites.count
+    }
+
+    private func extractDomainURL(url: String) -> String {
+        return NSURL(string: url)?.normalizedHost() ?? url
     }
 
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
