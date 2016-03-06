@@ -429,10 +429,19 @@ extension TabManager {
                     return nil
                 }
 
-                let backList = browser.webView?.backForwardList.backList ?? []
-                let forwardList = browser.webView?.backForwardList.forwardList ?? []
-                let urls = (backList + [currentItem] + forwardList).map { $0.URL }
-                let currentPage = -forwardList.count
+                let urls: [NSURL]
+                let currentPage: Int
+
+                if AppConstants.MOZ_PERSIST_SESSION_HISTORY {
+                    let backList = browser.webView?.backForwardList.backList ?? []
+                    let forwardList = browser.webView?.backForwardList.forwardList ?? []
+                    urls = (backList + [currentItem] + forwardList).map { $0.URL }
+                    currentPage = -forwardList.count
+                } else {
+                    urls = [currentItem.URL]
+                    currentPage = 0
+                }
+
                 self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: browser.lastExecutedTime ?? NSDate.now())
             } else {
                 self.sessionData = browser.sessionData
