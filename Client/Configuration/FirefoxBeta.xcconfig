@@ -4,7 +4,7 @@
 
 #include "BaseConfig.xcconfig"
 
-MOZ_BUNDLE_DISPLAY_NAME = Firefox Beta
+MOZ_BUNDLE_DISPLAY_NAME = Firefox β
 
 MOZ_PRODUCT_NAME = FirefoxBeta
 
