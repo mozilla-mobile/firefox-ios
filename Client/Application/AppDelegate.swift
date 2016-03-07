@@ -9,7 +9,8 @@ import XCGLogger
 import Breakpad
 import MessageUI
 import WebImage
-
+import SwiftKeychainWrapper
+import LocalAuthentication
 
 private let log = Logger.browserLogger
 
@@ -141,6 +142,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             getProfile(application).prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
         }
+
+        log.debug("Updating authentication keychain state to reflect system state")
+        self.updateAuthenticationInfo()
+
         log.debug("Done with setting up the application.")
         return true
     }
@@ -311,6 +316,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
         let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
         tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
+    }
+
+    func applicationWillEnterForeground(application: UIApplication) {
+        // The reason we need to call this method here instead of `applicationDidBecomeActive`
+        // is that this method is only invoked whenever the application is entering the foreground where as 
+        // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
+        self.updateAuthenticationInfo()
+    }
+
+    private func updateAuthenticationInfo() {
+        if let authInfo = KeychainWrapper.authenticationInfo() {
+            if !LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
+                authInfo.useTouchID = false
+                KeychainWrapper.setAuthenticationInfo(authInfo)
+            }
+        }
     }
 
     private func setUpWebServer(profile: Profile) {
