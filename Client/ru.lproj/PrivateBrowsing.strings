@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Закрывать приватные вкладки";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox не будет запоминать ничего из вашей истории или кук, но новые закладки будут сохранены.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Подробнее";
+
+/* Toggled OFF accessibility value */
+"Off" = "Отключён";
+
+/* Toggled ON accessibility value */
+"On" = "Включён";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Открыть в новой приватной вкладке";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Приватный просмотр";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Приватный режим";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Включить или отключить приватный режим";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "При выходе из Приватного просмотра";
+

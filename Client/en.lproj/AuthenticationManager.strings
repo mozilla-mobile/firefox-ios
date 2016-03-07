@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "After 1 hour";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "After 1 minute";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "After 5 minutes";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "After 10 minutes";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "After 15 minutes";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Change Passcode";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "Enter Passcode";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "Enter a new passcode";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Enter a passcode";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "Enter passcode";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Immediately";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Incorrect passcode. Try again (Attempts remaining: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Incorrect passcode. Try again.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Maximum attempts reached. Please try again in an hour.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Maximum attempts reached. Please try again later.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "New passcode must be different than existing code.";
+
+/* List section title for passcode settings */
+"Passcode" = "Passcode";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Passcodes didn't match. Try again.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Re-enter passcode";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Require Passcode";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Set Passcode";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID & Passcode";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Turn Passcode Off";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Turn Passcode On";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Turn off your passcode.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Use Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Use your fingerprint to access Logins now.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Use your fingerprint to access Private Browsing now.";
+

@@ -1,0 +1,9 @@
+/* Add button in the share dialog */
+"Add" = "Pridėti";
+
+/* On/off toggle to select adding this url to your bookmarks */
+"Add to Bookmarks" = "Pridėti į adresyną";
+
+/* On/off toggle to select adding this url to your reading list */
+"Add to Reading List" = "Pridėti į skaitinių sąrašą";
+

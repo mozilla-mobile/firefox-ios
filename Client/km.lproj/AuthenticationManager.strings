@@ -1,0 +1,54 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "បន្ទាប់​ពី 1 ម៉ោង";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "បន្ទាប់​ពី 1 នាទី";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "បន្ទាប់​ពី 5 នាទី";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "បន្ទាប់​ពី 10 នាទី";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "បន្ទាប់​ពី 15 នាទី";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "ផ្លាស់ប្ដូរ​លេខកូដ";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "បញ្ចូល​លេខកូដ";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "ភ្លាមៗ";
+
+/* List section title for passcode settings */
+"Passcode" = "លេខ​កូដ";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "បញ្ចូល​កូដ​សម្ងាត់​ម្ដង​ទៀត ៖";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "ទាមទារ​លេខ​កូដ";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "កំណត់​លេខកូដ";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "ក្រយ៉ៅ​ដៃ និង​លេខកូដ";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "បិទ​លេខ​កូដ";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "បើក​លេខ​កូដ";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "បើក​លេខកូដ​របស់​អ្នក។";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ប្រើ​ស្នាម​ម្រាមដៃ​ដើម្បី​ចូល​ឥឡូវ​នេះ។";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "ប្រើ​ស្នាម​ម្រាម​ដៃ​ដើម្បី​ចូល​ដំណើរ​ការ​ការ​រុករក​ឯកជន​ឥឡូវ​នេះ។";
+

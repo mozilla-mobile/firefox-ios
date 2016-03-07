@@ -1,0 +1,539 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "ឈ្មោះ​អ្នក​ប្រើ និង​ពាក្យ​សម្ងាត់​​បាន​កំពុង​ស្នើ​ដោយ %@ ។";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "ឈ្មោះ​អ្នក​ប្រើ និង​ពាក្យ​សម្ងាត់​កំពុង​ត្រូវ​បាន​ស្នើ​ដោយ %1$@ ។ តំបន់បណ្ដាញ​​ប្រាប់​ថា៖ %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "អំពី";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "បន្ថែម​ផ្ទាំង";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "បន្ថែម​ទៅ​បញ្ជី​អាន";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "បាន​បន្ថែម​ទំព័រ​ទៅ​បញ្ជី​អាន";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "អាសយដ្ឋាន និង​ស្វែងរក";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "តែងតែ​ផ្ញើ​ជានិច្ច";
+
+/* Authentication prompt title */
+"Authentication required" = "ទាមទារ​​ការ​ផ្ដល់​សិទ្ធិ​អនុញ្ញាត";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "ថយក្រោយ";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ទប់ស្កាត់​បង្អួច​ដែល​លេចឡើង";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "ចំណាំ";
+
+/* Panel accessibility label */
+"Bookmarks" = "ចំណាំ";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ពន្លឺ";
+
+/* Alert Call Button */
+"Call" = "ហៅ";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "បោះបង់ចោល";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "ប្ដូរ​ពណ៌​រូបរាង។";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ប្ដូរ​ប្រភេទ​ពុម្ព​អក្សរ។";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "សម្អាត​ទិន្នន័យ​ឯកជន";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "បិទ";
+
+/* No comment provided by engineer. */
+"Closing tab" = "បិទ​ផ្ទាំង";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ចម្លង​អាសយដ្ឋាន";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "ចម្លង​រូបភាព";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "ចម្លង​តំណ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "មិន​អាច​បន្ថែម​ទំព័រ​ទៅ​បញ្ជី​អាន​បានទេ។ ប្រហែល​វា​មាន​នៅ​ទីនោះ​រួច​ហើយ?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "មិន​អាច​បន្ថែម​ទំព័រ​ទៅ​បញ្ជី​អាន​បាន​ទេ";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "មិន​អាច​ផ្ទុក​ទំព័រ​បាន​ទេ។";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "បង្កើត​គណនី";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "ងងឹត";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "កែ​កំហុស៖ បំភ្លេច​​សភាព​​អនុញ្ញាត​​ធ្វើ​សមកាលកម្ម";
+
+/* Debug option */
+"Debug: require password" = "កែ​កំហុស៖ ទាមទារ​ពាក្យ​សម្ងាត់";
+
+/* Debug option */
+"Debug: require upgrade" = "កែ​កំហុស៖ ទាមទារ​ដំឡើង​កំណែ";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "បន្ថយ​ទំហំ​អត្ថបទ";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "ម៉ាស៊ីន​ស្វែងរក​លំនាំដើម";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "បិទ​ប្រអប់​ទំព័រ​បន្ថែម";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "ការ​កំណត់​បង្ហាញ";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "តើ​អ្នក​ចង់​រក្សាទុក​ពាក្យ​សម្ងាត់​សម្រាប់ %1$@ នៅ​លើ %2$@ ដែរ​ ឬ​ទេ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "តើ​អ្នក​ចង់​រក្សាទុក​ពាក្យ​សម្ងាត់​នៅ​លើ​ %@ ដែរ ឬ​ទេ?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "តើ​អ្នក​ចង់​ធ្វើ​បច្ចុប្បន្នភាព​ពាក្យ​សម្ងាត់​សម្រាប់ %1$@ នៅ​លើ %2$@ ដែរ ឬ​ទេ?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "តើ​អ្នក​ចង់​ធ្វើ​បច្ចុប្បន្នភាព​ពាក្យ​សម្ងាត់​នៅ​លើ %@ ដែរ​ ឬ​ទេ?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "កុំ​ផ្ញើ";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "ធ្វើ​រួច";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "ប៉ះ​ទ្វេ​ដង​ឲ្យ​ជាប់​ដើម្បី​បើក​ប្រវត្តិ";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "បញ្ចូល​ពាក្យ​សម្ងាត់​របស់​អ្នក​ដើម្បី​តភ្ជាប់។";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox នឹង​ឈប់​ធ្វើ​សមកាលកម្ម​ជាមួយ​គណនី​របស់​អ្នក ប៉ុន្តែ​នឹង​មិន​លុប​ទិន្នន័យ​​ដែល​រក​មើល​​របស់​អ្នក​ណា​មួយ​​នៅ​លើ​ឧបករណ៍​នេះ​ទេ។";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox ចង់​ចូល​​​ប្រើ​រូបថត​របស់​អ្នក";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "បញ្ជូន​បន្ត";
+
+/* General settings section title */
+"General" = "ទូទៅ";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "ទទួល​បាន​ផ្ទាំង​ដែល​បើក ចំណាំ និង​ពាក្យ​សម្ងាត់​របស់​​អ្នក​ពី​ឧបករណ៍​ផ្សេងៗ​របស់​អ្នក។";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "ទៅ";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "ទៅ​កាន់ URL ដែល​បាន​ចម្លង​មែន​ទេ?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ជំនួយ";
+
+/* Panel accessibility label */
+"History" = "ប្រវត្តិ";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "បង្កើន​ទំហំ​អត្ថបទ";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "មើល​ការ​ណែនាំ​សាក​​ការ៉ូសែល";
+
+/* History tableview section header */
+"Last month" = "ខែ​មុន";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "បាន​ធ្វើ​សមកាល​កម្ម​ចុងក្រោយ៖ %@";
+
+/* History tableview section header */
+"Last week" = "សប្ដាហ៍​មុន";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "អាជ្ញាប័ណ្ណ";
+
+/* Light theme setting in Reading View settings */
+"Light" = "ភ្លឺ";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "ផ្ទុក​ទំព័រ​ដើម";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "កំពុង​ផ្ទុក​មាតិកា...";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "ចេញ";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "ចេញ?";
+
+/* Authentication prompt log in button */
+"Log in" = "ចូល";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "ចូល";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox ដូចជា​បាន​គាំង​កាល​ពី​មុន។ តើ​អ្នក​ចង់​ស្ដារ​ផ្ទាំង​របស់​អ្នក​មែន​ទេ?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "សម្គាល់​ថា​អាន";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "សម្គាល់​ថា​មិន​ទាន់​អាន";
+
+/* Error for a missing remote error number */
+"Missing error" = "កំហុស​ដែល​បាត់";
+
+/* Error for a missing remote error message */
+"Missing message" = "សារ​ដែល​បាត់";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "របារ​ឧបករណ៍​រុករក​";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "ផ្ទាំង​ថ្មី៖ %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "មាន​កំណែ​ថ្មី";
+
+/* Restore Tabs Negative Action */
+"No" = "ទេ";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "គ្មាន​ផ្ទាំង";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "មិន​មែន​ឥឡូវ";
+
+/* Button to not save the user's password */
+"Not now" = "មិន​មែន​ឥឡូវ";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "យល់ព្រម";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "យល់ព្រម";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "អូ! Firefox បាន​គាំង​ហើយ";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "បើក​នៅ​ក្នុង​ផ្ទាំង​ថ្មី";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "បើក​ការ​កំណត់";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "បើក​អត្ថបទ​នៅ​ក្នុង​​ទិដ្ឋភាព​អ្នក​អាន​ដោយ​ប៉ះ​រូបតំណាង​សៀវភៅ​នៅ​ពេល​វា​បង្ហាញ​នៅ​ក្នុង​របារ​ចំណងជើង។";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "បើក​ក្នុង...";
+
+/* Opening an external URL */
+"Opening %@" = "កំពុង​បើក %@";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "ទំព័រ​ដែល​អ្នក​បាន​ចូល​មើល​ថ្មីៗ​នឹង​បង្ហាញ​នៅ​ទីនេះ។";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "កម្មវិធី​ជ្រើស​ស្លាបព្រិល";
+
+/* Password textbox in Authentication prompt */
+"Password" = "ពាក្យ​សម្ងាត់";
+
+/* Paste the URL into the location bar */
+"Paste" = "បិទ​ភ្ជាប់";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "បិទ​ភ្ជាប់ & ទៅ";
+
+/* Privacy section title */
+"Privacy" = "ភាព​ឯកជន";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "គោលនយោបាយ​ឯកជន";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "ម៉ាស៊ីន​ស្វែងរក​រហ័ស";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "ទិដ្ឋភាព​អ្នក​មើល";
+
+/* Panel accessibility label */
+"Reading list" = "បញ្ជី​អាន";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "ផ្ទុក​ឡើងវិញ";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "លុប​ចេញ";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "លុប​ចេញពី​បញ្ជី​អាន";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "ទំព័រ​យកចេញ";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "ស្នើ​តំបន់បណ្ដាញ​ផ្ទៃតុ";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "ស្នើ​តំបន់បណ្ដាញ​ចល័ត";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "រក្សាទុក​រូបភាព";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "រក្សាទុក​ការ​ចូល";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "រក្សាទុក​ទំព័រ​​ទៅ​បញ្ជី​អាន​របស់​អ្នក​ដោយ​ប៉ះ​រូបតំណាងបូក​សៀវភៅ​នៅ​ក្នុង​ការ​គ្រប់គ្រង​ទិដ្ឋភាព​​អ្នក​អាន។";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "ស្វែងរក";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ស្វែងរក ឬ​បញ្ចូល​អាសយដ្ឋាន";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "ស្វែងរក​ការ​ស្នើ";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "ការ​តភ្ជាប់​សុវត្ថិភាព";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "ផ្ញើ​របាយការណ៍​ជាប់​គាំង";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "ផ្ញើ​មតិត្រឡប់";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "ផ្ញើ​របាយការណ៍";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "ផ្ញើ​របាយការណ៍​ជាប់​គាំង ​ដូច្នេះ Mozilla អាច​ដោះស្រាយ​បញ្ហា​បាន?";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "ការ​កំណត់";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "ចែករំលែក";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "ចែករំលែក​តំណ";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "បង្ហាញ​​សំណើ​ស្វែងរក";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "បង្ហាញ​ផ្ទាំង";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "បង្ហាញ​ការ​មើល​សាក";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "បង្ហាញ​ការ​ស្នើ​ស្វែងរក";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "ចូល";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "ឈប់";
+
+/* Support section title */
+"Support" = "ជួយគាំទ្រ";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "អូស​ម្រាម​ដៃ​បី​​ទៅ​ស្ដាំ ឬ​ឆ្វេង​​ដើម្បី​បិទ​ផ្ទាំង។";
+
+/* Sync Firefox Account */
+"Sync Now" = "ធ្វើ​សមកាលកម្ម​ឥឡូវ";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "ធ្វើ​សមកាលកម្ម​ផ្ទាំង ចំណាំ ពាក្យ​សម្ងាត់​របស់​អ្នក និង​អ្វី​​ច្រើន​ទៀត។";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "ធ្វើ​សមកាលកម្ម​ផ្ទាំង​របស់​អ្នក ពាក្យ​សម្ងាត់ និង​ច្រើន​ទៀត។";
+
+/* Panel accessibility label */
+"Synced tabs" = "ផ្ទាំង​បាន​ធ្វើ​សមកាលកម្ម";
+
+/* Syncing Firefox Account */
+"Syncing…" = "កំពុង​ធ្វើ​សមកាលកម្ម...";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "ផ្ទាំង %1$@ នៃ %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "ផ្ទាំង %1$@ ដល់ %2$@ នៃ %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "បន្ទះ​ផ្ទាំង";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "មិន​អាច​បង្ហាញ​ទំព័រ​នៅ​ក្នុង​ទិដ្ឋភាព​អ្នក​អាន​បាន​ទេ។";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "មាន​កំណែ Firefox Aurora ថ្មី។ សូម​ប៉ះ​យល់ព្រម​ដើម្បី​ទៅ​កាន់​ទំព័រ​ទាញ​យក។";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "មាន​បញ្ហា​ក្នុង​ការ​ចូល​ទៅ​ផ្ទាំង​ពី​ឧបករណ៍​ផ្សេង​របស់​អ្នក។ សូម​ព្យាយាម​ម្ដង​ទៀត​នៅ​ប៉ុន្មាន​នាទី​ទៀត។";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "មាន​បញ្ហា​ក្នុង​ការ​បម្លែង​ទំព័រ";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "នេះ​អាច​ឲ្យ​អ្នក​រក្សាតុក​រូបភាព​ទៅ​បញ្ជី​កាមេរ៉ា​របស់​អ្នក​បាន។";
+
+/* Opening an external app */
+"This will open in another application" = "វា​នឹង​បើក​នៅ​ក្នុង​កម្មវិធី​​ផ្សេង";
+
+/* History tableview section header */
+"Today" = "ថ្ងៃ​នេះ";
+
+/* Panel accessibility label */
+"Top sites" = "តំបន់បណ្ដាញ​ពេញ​និយម​បំផុត";
+
+/* Button to update the user's password */
+"Update" = "ធ្វើ​បច្ចុប្បន្នភាព";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "ដំឡើង​កំណែ Firefox ដើម្បី​ភ្ជាប់។";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "ប្រើ​ផ្ទាំង​ដែល​​​តូច​ចង្អៀត";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ឈ្មោះ​អ្នក​ប្រើ";
+
+/* Text message in the settings table view */
+"Verify your email address." = "បញ្ជាក់​អាសយដ្ឋាន​អ៊ីមែល​របស់​អ្នក។";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "កំណែ %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "មើល";
+
+/* Accessibility label for the main web content view */
+"Web content" = "មាតិកា​បណ្ដាញ";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "សូម​ស្វាគមន៍​​មក​កាន់​ការ​ធ្វើ​សមកាលកម្ម";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "សូម​ស្វាគមន៍​មក​កាន់​បញ្ជី​អាន​របស់​អ្នក";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "នេះ​ពិតជា​ខ្មាស​គេ​មែន។";
+
+/* Button to save the user's password */
+"Yes" = "បាទ/ចាស";
+
+/* History tableview section header */
+"Yesterday" = "ម្សិលមិញ";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "អ្នក​មិន​មាន​ឧបករណ៍​ផ្សេង​ណា​មួយ​បាន​ភ្ជាប់​ទៅ​គណនី Firefox ដែល​អាច​ប្រើ​​ដើម្បី​ធ្វើ​សមកាលកម្ម​​បាន​ទេ។";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "អ្នក​មិន​មាន​ផ្ទាំង​ណា​មួយ​បើក​ក្នុង Firefox លើ​ឧបករណ៍​ផ្សេង​របស់​អ្នក​ទេ។";
+
+/* Your Rights settings section title */
+"Your Rights" = "សិទ្ធិ​របស់​អ្នក";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "កុំព្យូទ័រ";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "អម្បាញ់មិញ​នេះ";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "ឧបករណ៍​ចល័ត";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "ជាង​មួយ​ខែ​មុន";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "ជាង​មួយ​សប្ដាហ៍​មុន";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "អាន";
+
+/* Relative date for date in past week. */
+"this week" = "សប្ដាហ៍​នេះ";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ថ្ងៃ​នេះ​នៅ %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "មិន​ទាន់​អាន";
+
+/* Relative date for yesterday. */
+"yesterday" = "ម្សិលមិញ";
+

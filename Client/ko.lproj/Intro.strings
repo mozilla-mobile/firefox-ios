@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "탭으로 여러 웹 페이지를 동시에 사용하세요.";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "선택";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "다양한 장소에서 Firefox를 서로 연결해 보세요.";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "개인화";
+
+/* See http://mzl.la/1if9ODp */
+"Easily switch between open pages with tabs." = "탭으로 열려있는 페이지를 쉽게 전환할 수 있습니다.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox와 구름";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "소개 슬라이드 %2$@ 중 %1$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "정리";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "원하는 모습으로 Firefox를 개인화하세요.";
+
+/* See http://mzl.la/1if9ODp */
+"Personalize your default search engine and more in Settings." = "설정에서 기본 검색엔진 등을 개인화 할 수 있습니다.";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "공유";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Firefox 로그인";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "사용하기";
+
+/* See http://mzl.la/1if9ODp */
+"Sync your Devices." = "기기를 동기화 합니다.";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Firefox 아이콘을 길게 탭해서 독에 올리면 쉽게 접근할 수 있습니다.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "설정 버튼은 탭 트레이 앞에 있습니다.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "탭 보기 버튼은 주소와 검색 텍스트 창 다음에 있고 현재 열려있는 탭의 수를 표시합니다.";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "공유 시트를 사용해서 다른 앱에서 Firefox로 링크를 보낼 수 있습니다.";
+

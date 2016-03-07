@@ -1,0 +1,18 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Batalkan";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Bersihkan";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "Riwayat akan dihapus dari semua perangkat tersambung Anda. Ini tidak dapat diurungkan.";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "OK";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "Hapus riwayat dari Firefox Account Anda?";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "Tindakan ini akan membersihkan seluruh data pribadi anda, termasuk riwayat dari gawai tersinkronisasi.";
+

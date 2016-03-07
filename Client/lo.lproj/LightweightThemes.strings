@@ -1,0 +1,39 @@
+/* Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet. */
+"Allow Firefox to use my Photos" = "ອະນຸຍາດໃຫ້ Firefox ເຂົ້າໄປນຳໃຊ້ຮູບພາບຂອງທ່ານ";
+
+/* Pending feature; currently unused string! Accessibility label for back button to theme chooser */
+"Back to Themes" = "ຍ້ອນກັບໄປຫາຊຸດປັບແຕ່ງ";
+
+/* Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker */
+"Choose" = "ເລືອກ";
+
+/* Pending feature; currently unused string! Accessibility label for settings row to enter theme settings */
+"Choose Theme" = "ເລືອກຊຸດປັບແຕ່ງ";
+
+/* Pending feature; currently unused string! Accessibility label for themes subheader */
+"Default Themes" = "ຊຸດປັບແຕ່ງພື້ນຖານ";
+
+/* Pending feature; currently unused string! Accessibility label for photo viewer */
+"My Photos" = "ຮູບພາບຂອງຂ້ອຍ";
+
+/* Pending feature; currently unused string! Sub header for photo options in theme chooser */
+"Photos" = "ຮູບພາບ";
+
+/* Pending feature; currently unused string! Button to show preview of selected theme */
+"Preview" = "ສະແດງຕົວຢ່າງ";
+
+/* Pending feature; currently unused string! Accessibility label for theme preview button */
+"Preview Theme" = "ສະແດງຕົວຢ່າງຂອງຊຸດປັບແຕ່ງ";
+
+/* Pending feature; currently unused string! Button to set selected theme as current theme */
+"Set" = "ຕັ້ງ";
+
+/* Pending feature; currently unused string! Accessibility label for set theme button */
+"Set Theme" = "ຕັ້ງຊຸດປັບແຕ່ງ";
+
+/* Pending feature; currently unused string! Settings row to enter theme settings */
+"Theme" = "ຊຸດປັບແຕ່ງ";
+
+/* Pending feature; currently unused string! sub header for theme options in theme chooser */
+"Themes" = "ຊຸດປັບແຕ່ງ";
+
