@@ -869,6 +869,9 @@ class BrowserViewController: UIViewController {
             guard let loading = change?[NSKeyValueChangeNewKey] as? Bool else { break }
             toolbar?.updateReloadStatus(loading)
             urlBar.updateReloadStatus(loading)
+            if (!loading) {
+                runScriptsOnWebView(webView)
+            }
         case KVOURL:
             if let tab = tabManager.selectedTab where tab.webView?.URL == nil {
                 log.debug("URL is nil!")
@@ -888,6 +891,10 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    private func runScriptsOnWebView(webView: WKWebView) {
+        webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler:nil)
+    }
+    
     private func updateUIForReaderHomeStateForTab(tab: Browser) {
         updateURLBarDisplayURL(tab)
         scrollController.showToolbars(animated: false)
