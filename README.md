@@ -51,7 +51,7 @@ Building the code
   ```
 
 1. Open `Client.xcodeproj` in Xcode.
-1. Build the `Client` scheme in Xcode.
+1. Build the `Fennec` scheme in Xcode.
 
 It is possible to use [App Code](https://www.jetbrains.com/objc/download/) instead of Xcode, but you will still require the Xcode developer tools.
 
