@@ -19,6 +19,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
             style: UIBarButtonItemStyle.Done,
             target: navigationController, action: "SELdone")
+        navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
     }
 
     override func generateSettings() -> [SettingSection] {

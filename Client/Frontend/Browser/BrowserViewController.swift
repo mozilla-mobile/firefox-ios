@@ -1785,7 +1785,7 @@ extension BrowserViewController: WKNavigationDelegate {
             removeOpenInView()
         }
     }
-    
+
     // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise
     // it could just be a visit to a regular page on maps.apple.com.
     private func isAppleMapsURL(url: NSURL) -> Bool {
@@ -1796,7 +1796,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
         return false
     }
-    
+
     // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com
     // used to be in this list. I have removed them because they now redirect to itunes.apple.com. If we special case
     // them then iOS will actually first open Safari, which then redirects to the app store. This works but it will
@@ -1819,11 +1819,11 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
         }
-        
+
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari. The only thing we do not do is nicely format the phone number,
         // instead we present it as it was put in the URL.
-        
+
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
             if let phoneNumber = url.resourceSpecifier.stringByRemovingPercentEncoding {
                 let alert = UIAlertController(title: phoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
@@ -1836,17 +1836,17 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
         }
-        
+
         // Second special case are a set of URLs that look like regular http links, but should be handed over to iOS
         // instead of being loaded in the webview. Note that there is no point in calling canOpenURL() here, because
         // iOS will always say yes. TODO Is this the same as isWhitelisted?
-        
+
         if isAppleMapsURL(url) || isStoreURL(url) {
             UIApplication.sharedApplication().openURL(url)
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
         }
-        
+
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
         // always allow this.
 
@@ -1859,11 +1859,11 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(WKNavigationActionPolicy.Allow)
             return
         }
-        
+
         // Default to calling openURL(). What this does depends on the iOS version. On iOS 8, it will just work without
         // prompting. On iOS9, depending on the scheme, iOS will prompt: "Firefox" wants to open "Twitter". It will ask
         // every time. There is no way around this prompt. (TODO Confirm this is true by adding them to the Info.plist)
-        
+
         UIApplication.sharedApplication().openURL(url)
         decisionHandler(WKNavigationActionPolicy.Cancel)
     }
@@ -1986,14 +1986,14 @@ extension BrowserViewController: WKUIDelegate {
             newTab = tabManager.addTab(navigationAction.request, configuration: configuration)
         }
         tabManager.selectTab(newTab)
-        
+
         // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not
         // get a reference to it which it can return from window.open() - this will end up as a
         // CFErrorHTTPBadURL being presented.
         guard let scheme = navigationAction.request.URL?.scheme.lowercaseString where SchemesAllowedToOpenPopups.contains(scheme) else {
             return nil
         }
-        
+
         return newTab.webView
     }
 

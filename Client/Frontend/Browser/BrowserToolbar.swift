@@ -201,10 +201,15 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
     private override init(frame: CGRect) {
         // And these have to be initialized in here or the compiler will get angry
         backButton = UIButton()
+        backButton.accessibilityIdentifier = "BrowserToolbar.backButton"
         forwardButton = UIButton()
+        forwardButton.accessibilityIdentifier = "BrowserToolbar.forwardButton"
         stopReloadButton = UIButton()
+        stopReloadButton.accessibilityIdentifier = "BrowserToolbar.stopReloadButton"
         shareButton = UIButton()
+        shareButton.accessibilityIdentifier = "BrowserToolbar.shareButton"
         bookmarkButton = UIButton()
+        bookmarkButton.accessibilityIdentifier = "BrowserToolbar.bookmarkButton"
         actionButtons = [backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton]
 
         super.init(frame: frame)
