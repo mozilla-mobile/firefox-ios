@@ -7,6 +7,7 @@ import UIKit
 public enum AppBuildChannel {
     case Developer
     case Aurora
+    case Fennec
     case Release
     case Beta
 }
@@ -22,6 +23,8 @@ public struct AppConstants {
     public static let BuildChannel: AppBuildChannel = {
 #if MOZ_CHANNEL_AURORA
     return AppBuildChannel.Aurora
+#elseif MOZ_CHANNEL_FENNEC
+    return AppBuildChannel.Fennec
 #elseif MOZ_CHANNEL_RELEASE
     return AppBuildChannel.Release
 #elseif MOZ_CHANNEL_BETA
@@ -61,6 +64,8 @@ public struct AppConstants {
     /// Enables/disables the Touch ID/passcode functionality and settings screen
     public static let MOZ_AUTHENTICATION_MANAGER: Bool = {
 #if MOZ_CHANNEL_AURORA
+    return false
+#elseif MOZ_CHANNEL_FENNEC
     return false
 #elseif MOZ_CHANNEL_RELEASE
     return false
