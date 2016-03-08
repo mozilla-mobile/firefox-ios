@@ -10,6 +10,7 @@ import Storage
 @objc
 protocol LoginTableViewCellDelegate: class {
     func didSelectOpenAndFillForCell(cell: LoginTableViewCell)
+    func shouldReturnAfterEditingDescription(cell: LoginTableViewCell) -> Bool
 }
 
 private struct LoginTableViewCellUX {
@@ -52,10 +53,14 @@ class LoginTableViewCell: UITableViewCell {
         label.autocorrectionType = .No
         label.accessibilityElementsHidden = true
         label.adjustsFontSizeToFitWidth = false
+        label.delegate = self
         return label
     }()
 
-    lazy var highlightedLabel: UILabel = {
+    // Exposing this label as internal/public causes the Xcode 7.2.1 compiler optimizer to
+    // produce a EX_BAD_ACCESS error when dequeuing the cell. For now, this label is made private
+    // and the text property is exposed using a get/set property below.
+    private lazy var highlightedLabel: UILabel = {
         let label = UILabel()
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
@@ -130,6 +135,15 @@ class LoginTableViewCell: UITableViewCell {
                 // Trigger a layout configuration if we changed to editing/not editing the description.
                 configureLayoutForStyle(self.style)
             }
+        }
+    }
+
+    var highlightedLabelTitle: String? {
+        get {
+            return highlightedLabel.text
+        }
+        set(newTitle) {
+            highlightedLabel.text = newTitle
         }
     }
 
@@ -320,5 +334,24 @@ extension LoginTableViewCell {
         descriptionLabel.text = login.hostname
         highlightedLabel.text = login.username
         iconImageView.image = UIImage(named: "faviconFox")
+    }
+}
+
+extension LoginTableViewCell: UITextFieldDelegate {
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        return self.delegate?.shouldReturnAfterEditingDescription(self) ?? true
+    }
+
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        if descriptionLabel.secureTextEntry {
+            displayDescriptionAsPassword = false
+        }
+        return true
+    }
+
+    func textFieldDidEndEditing(textField: UITextField) {
+        if descriptionLabel.secureTextEntry {
+            displayDescriptionAsPassword = true
+        }
     }
 }
