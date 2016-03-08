@@ -5576,6 +5576,7 @@
 		E601384C1C89EAE600DF9756 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = L10nSnapshotTests;
 			};
 			name = Fennec;
@@ -5583,6 +5584,7 @@
 		E601384D1C89EAE600DF9756 /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = L10nSnapshotTests;
 			};
 			name = Firefox;
@@ -5590,6 +5592,7 @@
 		E601384E1C89EAE600DF9756 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = L10nSnapshotTests;
 			};
 			name = FirefoxBeta;
@@ -5597,6 +5600,7 @@
 		E601384F1C89EAE600DF9756 /* FirefoxNightly */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = L10nSnapshotTests;
 			};
 			name = FirefoxNightly;
@@ -5604,6 +5608,7 @@
 		E60138501C89EAE600DF9756 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = L10nSnapshotTests;
 			};
 			name = FennecAurora;
@@ -5611,6 +5616,7 @@
 		E60138511C89EAE600DF9756 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = Fennec;
@@ -5618,6 +5624,7 @@
 		E60138521C89EAE600DF9756 /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = Firefox;
@@ -5625,6 +5632,7 @@
 		E60138531C89EAE600DF9756 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = FirefoxBeta;
@@ -5632,6 +5640,7 @@
 		E60138541C89EAE600DF9756 /* FirefoxNightly */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = FirefoxNightly;
@@ -5639,6 +5648,7 @@
 		E60138551C89EAE600DF9756 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = FennecAurora;
