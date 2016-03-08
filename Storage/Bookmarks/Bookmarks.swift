@@ -30,6 +30,9 @@ public protocol BookmarkBufferStorage: class {
     func validate() -> Success
     func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>>
     func applyBufferCompletionOp(op: BufferCompletionOp, itemSources: ItemSources) -> Success
+
+    // Only use for diagnostics.
+    func synchronousBufferCount() -> Int?
 }
 
 public protocol MirrorItemSource: class {
