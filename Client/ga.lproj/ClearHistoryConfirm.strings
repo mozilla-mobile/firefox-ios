@@ -1,0 +1,18 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Cealaigh";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Bánaigh";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "Scriosfar an stair ó gach gléas ceangailte. Ní féidir dul siar air seo.";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "Ceart go Leor";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "Scrios an stair ó do Chuntas Firefox?";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "Gheofar réidh le do shonraí pearsanta má dhéanfar seo, stair do ghléasanna sioncronaithe san áireamh.";
+

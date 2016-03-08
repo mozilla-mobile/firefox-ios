@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Жекелік беттерді жабу";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox сіздің шолу таризыңызды немесе cookies сақтамайды, бірақ, жаңа бетбелгілер сақталатын болады.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Көбірек білу";
+
+/* Toggled OFF accessibility value */
+"Off" = "Сөнд";
+
+/* Toggled ON accessibility value */
+"On" = "Іске қосулы";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Жаңа жекелік бетте ашу";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Жекелік шолу";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Жекелік шолу режимі";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Жекелік режимін іске қосады немесе сөндіреді";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Жекелік шолудан шығу кезінде";
+

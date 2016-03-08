@@ -1,0 +1,54 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Post unu horo";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Post unu minuto";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Post 5 minutoj";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Post 10 minutoj";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Post 15 minutoj";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Ŝanĝi paskodon";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Tajpu paskodon";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Tuj";
+
+/* List section title for passcode settings */
+"Passcode" = "Paskodo";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Retajpu paskodon";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Postuli paskodon";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Difini paskodon";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID kaj paskodo";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Malŝalti paskodon";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Ŝalti paskodon";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Malŝalti vian paskodon.";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Uzi vian fingrospuron por aliri la kreditilojn nun.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Uzi vian fingrospuron por aliri privatan retumon nun.";
+

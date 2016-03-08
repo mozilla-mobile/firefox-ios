@@ -1,0 +1,737 @@
+BCSymbolMap Version: 1.0
++[OnePasswordExtension sharedExtension]
+__39+[OnePasswordExtension sharedExtension]_block_invoke
+-[OnePasswordExtension isAppExtensionAvailable]
+-[OnePasswordExtension findLoginForURLString:forViewController:sender:completion:]
+__82-[OnePasswordExtension findLoginForURLString:forViewController:sender:completion:]_block_invoke
+__82-[OnePasswordExtension findLoginForURLString:forViewController:sender:completion:]_block_invoke_2
+__copy_helper_block_
+__destroy_helper_block_
+__copy_helper_block_56
+__destroy_helper_block_57
+-[OnePasswordExtension storeLoginForURLString:loginDetails:passwordGenerationOptions:forViewController:sender:completion:]
+__122-[OnePasswordExtension storeLoginForURLString:loginDetails:passwordGenerationOptions:forViewController:sender:completion:]_block_invoke
+__122-[OnePasswordExtension storeLoginForURLString:loginDetails:passwordGenerationOptions:forViewController:sender:completion:]_block_invoke_2
+__copy_helper_block_75
+__destroy_helper_block_76
+__copy_helper_block_78
+__destroy_helper_block_79
+-[OnePasswordExtension changePasswordForLoginForURLString:loginDetails:passwordGenerationOptions:forViewController:sender:completion:]
+__134-[OnePasswordExtension changePasswordForLoginForURLString:loginDetails:passwordGenerationOptions:forViewController:sender:completion:]_block_invoke
+__134-[OnePasswordExtension changePasswordForLoginForURLString:loginDetails:passwordGenerationOptions:forViewController:sender:completion:]_block_invoke_2
+__copy_helper_block_85
+__destroy_helper_block_86
+__copy_helper_block_88
+__destroy_helper_block_89
+-[OnePasswordExtension fillItemIntoWebView:forViewController:sender:showOnlyLogins:completion:]
+__95-[OnePasswordExtension fillItemIntoWebView:forViewController:sender:showOnlyLogins:completion:]_block_invoke
+__copy_helper_block_96
+__destroy_helper_block_97
+__95-[OnePasswordExtension fillItemIntoWebView:forViewController:sender:showOnlyLogins:completion:]_block_invoke103
+__copy_helper_block_104
+__destroy_helper_block_105
+-[OnePasswordExtension isOnePasswordExtensionActivityType:]
+-[OnePasswordExtension createExtensionItemForWebView:completion:]
+__65-[OnePasswordExtension createExtensionItemForWebView:completion:]_block_invoke
+__65-[OnePasswordExtension createExtensionItemForWebView:completion:]_block_invoke_2
+__copy_helper_block_132
+__destroy_helper_block_133
+__copy_helper_block_135
+__destroy_helper_block_136
+-[OnePasswordExtension fillReturnedItems:intoWebView:completion:]
+__65-[OnePasswordExtension fillReturnedItems:intoWebView:completion:]_block_invoke
+__65-[OnePasswordExtension fillReturnedItems:intoWebView:completion:]_block_invoke_2
+__copy_helper_block_143
+__destroy_helper_block_144
+__copy_helper_block_148
+__destroy_helper_block_149
+-[OnePasswordExtension isSystemAppExtensionAPIAvailable]
+-[OnePasswordExtension findLoginIn1PasswordWithURLString:collectedPageDetails:forWebViewController:sender:withWebView:showOnlyLogins:completion:]
+__145-[OnePasswordExtension findLoginIn1PasswordWithURLString:collectedPageDetails:forWebViewController:sender:withWebView:showOnlyLogins:completion:]_block_invoke
+__145-[OnePasswordExtension findLoginIn1PasswordWithURLString:collectedPageDetails:forWebViewController:sender:withWebView:showOnlyLogins:completion:]_block_invoke_2
+__145-[OnePasswordExtension findLoginIn1PasswordWithURLString:collectedPageDetails:forWebViewController:sender:withWebView:showOnlyLogins:completion:]_block_invoke_3
+__copy_helper_block_165
+__destroy_helper_block_166
+__copy_helper_block_168
+__destroy_helper_block_169
+__copy_helper_block_171
+__destroy_helper_block_172
+-[OnePasswordExtension fillItemIntoWKWebView:forViewController:sender:showOnlyLogins:completion:]
+__97-[OnePasswordExtension fillItemIntoWKWebView:forViewController:sender:showOnlyLogins:completion:]_block_invoke
+__97-[OnePasswordExtension fillItemIntoWKWebView:forViewController:sender:showOnlyLogins:completion:]_block_invoke_2
+__copy_helper_block_174
+__destroy_helper_block_175
+__copy_helper_block_179
+__destroy_helper_block_180
+-[OnePasswordExtension fillItemIntoUIWebView:webViewController:sender:showOnlyLogins:completion:]
+__97-[OnePasswordExtension fillItemIntoUIWebView:webViewController:sender:showOnlyLogins:completion:]_block_invoke
+__copy_helper_block_182
+__destroy_helper_block_183
+-[OnePasswordExtension executeFillScript:inWebView:completion:]
+__63-[OnePasswordExtension executeFillScript:inWebView:completion:]_block_invoke
+__copy_helper_block_212
+__destroy_helper_block_213
+-[OnePasswordExtension processExtensionItem:completion:]
+__56-[OnePasswordExtension processExtensionItem:completion:]_block_invoke
+__56-[OnePasswordExtension processExtensionItem:completion:]_block_invoke_2
+__copy_helper_block_232
+__destroy_helper_block_233
+__copy_helper_block_235
+__destroy_helper_block_236
+-[OnePasswordExtension activityViewControllerForItem:viewController:sender:typeIdentifier:]
+-[OnePasswordExtension createExtensionItemForURLString:webPageDetails:completion:]
+__82-[OnePasswordExtension createExtensionItemForURLString:webPageDetails:completion:]_block_invoke
+__copy_helper_block_269
+__destroy_helper_block_270
++[OnePasswordExtension systemAppExtensionAPINotAvailableError]
++[OnePasswordExtension extensionCancelledByUserError]
++[OnePasswordExtension failedToContactExtensionErrorWithActivityError:]
++[OnePasswordExtension failedToCollectFieldsErrorWithUnderlyingError:]
++[OnePasswordExtension failedToFillFieldsErrorWithLocalizedErrorMessage:underlyingError:]
++[OnePasswordExtension failedToLoadItemProviderDataErrorWithUnderlyingError:]
++[OnePasswordExtension failedToObtainURLStringFromWebViewError]
+-[OnePasswordExtension fillLoginIntoWebView:forViewController:sender:completion:]
+.str
+_unnamed_cfstring_
+.str1
+_unnamed_cfstring_2
+.str3
+_unnamed_cfstring_4
+.str5
+_unnamed_cfstring_6
+.str7
+_unnamed_cfstring_8
+.str9
+_unnamed_cfstring_10
+.str11
+_unnamed_cfstring_12
+.str13
+_unnamed_cfstring_14
+sharedExtension.onceToken
+sharedExtension.__sharedExtension
+OBJC_CLASSLIST_REFERENCES_$_
+OBJC_METH_VAR_NAME_
+OBJC_SELECTOR_REFERENCES_
+.str15
+__block_descriptor_tmp
+__block_literal_global
+OBJC_METH_VAR_NAME_16
+OBJC_SELECTOR_REFERENCES_17
+OBJC_CLASSLIST_REFERENCES_$_18
+OBJC_METH_VAR_NAME_19
+OBJC_SELECTOR_REFERENCES_20
+OBJC_CLASSLIST_REFERENCES_$_21
+.str22
+_unnamed_cfstring_23
+OBJC_METH_VAR_NAME_24
+OBJC_SELECTOR_REFERENCES_25
+OBJC_METH_VAR_NAME_26
+OBJC_SELECTOR_REFERENCES_27
+.str28
+_unnamed_cfstring_29
+OBJC_METH_VAR_NAME_30
+OBJC_SELECTOR_REFERENCES_31
+OBJC_CLASSLIST_REFERENCES_$_32
+OBJC_METH_VAR_NAME_33
+OBJC_SELECTOR_REFERENCES_34
+.str35
+_unnamed_cfstring_36
+OBJC_CLASSLIST_REFERENCES_$_37
+OBJC_METH_VAR_NAME_38
+OBJC_SELECTOR_REFERENCES_39
+OBJC_METH_VAR_NAME_40
+OBJC_SELECTOR_REFERENCES_41
+OBJC_METH_VAR_NAME_42
+OBJC_SELECTOR_REFERENCES_43
+.str44
+_unnamed_cfstring_45
+OBJC_METH_VAR_NAME_46
+OBJC_SELECTOR_REFERENCES_47
+OBJC_METH_VAR_NAME_48
+OBJC_SELECTOR_REFERENCES_49
+OBJC_METH_VAR_NAME_50
+OBJC_SELECTOR_REFERENCES_51
+.str52
+__block_descriptor_tmp53
+OBJC_METH_VAR_NAME_54
+OBJC_SELECTOR_REFERENCES_55
+.str58
+__block_descriptor_tmp59
+OBJC_METH_VAR_NAME_60
+OBJC_SELECTOR_REFERENCES_61
+OBJC_METH_VAR_NAME_62
+OBJC_SELECTOR_REFERENCES_63
+.str64
+_unnamed_cfstring_65
+OBJC_CLASSLIST_REFERENCES_$_66
+OBJC_METH_VAR_NAME_67
+OBJC_SELECTOR_REFERENCES_68
+OBJC_METH_VAR_NAME_69
+OBJC_SELECTOR_REFERENCES_70
+.str71
+_unnamed_cfstring_72
+.str73
+_unnamed_cfstring_74
+__block_descriptor_tmp77
+__block_descriptor_tmp80
+.str81
+_unnamed_cfstring_82
+.str83
+_unnamed_cfstring_84
+__block_descriptor_tmp87
+__block_descriptor_tmp90
+OBJC_CLASSLIST_REFERENCES_$_91
+OBJC_METH_VAR_NAME_92
+OBJC_SELECTOR_REFERENCES_93
+OBJC_METH_VAR_NAME_94
+OBJC_SELECTOR_REFERENCES_95
+.str98
+__block_descriptor_tmp99
+OBJC_METH_VAR_NAME_100
+OBJC_SELECTOR_REFERENCES_101
+OBJC_CLASSLIST_REFERENCES_$_102
+__block_descriptor_tmp106
+OBJC_METH_VAR_NAME_107
+OBJC_SELECTOR_REFERENCES_108
+.str109
+_unnamed_cfstring_110
+OBJC_METH_VAR_NAME_111
+OBJC_SELECTOR_REFERENCES_112
+.str113
+_unnamed_cfstring_114
+OBJC_METH_VAR_NAME_115
+OBJC_SELECTOR_REFERENCES_116
+OBJC_METH_VAR_NAME_117
+OBJC_SELECTOR_REFERENCES_118
+OBJC_METH_VAR_NAME_119
+OBJC_SELECTOR_REFERENCES_120
+OBJC_METH_VAR_NAME_121
+OBJC_SELECTOR_REFERENCES_122
+OBJC_METH_VAR_NAME_123
+OBJC_SELECTOR_REFERENCES_124
+.str125
+_unnamed_cfstring_126
+OBJC_METH_VAR_NAME_127
+OBJC_SELECTOR_REFERENCES_128
+OBJC_CLASSLIST_REFERENCES_$_129
+OBJC_METH_VAR_NAME_130
+OBJC_SELECTOR_REFERENCES_131
+__block_descriptor_tmp134
+.str137
+__block_descriptor_tmp138
+OBJC_METH_VAR_NAME_139
+OBJC_SELECTOR_REFERENCES_140
+OBJC_METH_VAR_NAME_141
+OBJC_SELECTOR_REFERENCES_142
+__block_descriptor_tmp145
+OBJC_METH_VAR_NAME_146
+OBJC_SELECTOR_REFERENCES_147
+__block_descriptor_tmp150
+OBJC_CLASSLIST_REFERENCES_$_151
+OBJC_METH_VAR_NAME_152
+OBJC_SELECTOR_REFERENCES_153
+OBJC_METH_VAR_NAME_154
+OBJC_SELECTOR_REFERENCES_155
+.str156
+_unnamed_cfstring_157
+OBJC_METH_VAR_NAME_158
+OBJC_SELECTOR_REFERENCES_159
+OBJC_CLASSLIST_REFERENCES_$_160
+OBJC_METH_VAR_NAME_161
+OBJC_SELECTOR_REFERENCES_162
+.str163
+_unnamed_cfstring_164
+__block_descriptor_tmp167
+__block_descriptor_tmp170
+__block_descriptor_tmp173
+__block_descriptor_tmp176
+OBJC_METH_VAR_NAME_177
+OBJC_SELECTOR_REFERENCES_178
+__block_descriptor_tmp181
+__block_descriptor_tmp184
+.str185
+_unnamed_cfstring_186
+OBJC_CLASSLIST_REFERENCES_$_187
+OBJC_METH_VAR_NAME_188
+OBJC_SELECTOR_REFERENCES_189
+.str190
+_unnamed_cfstring_191
+.str192
+_unnamed_cfstring_193
+.str194
+_unnamed_cfstring_195
+OBJC_METH_VAR_NAME_196
+OBJC_SELECTOR_REFERENCES_197
+OBJC_METH_VAR_NAME_198
+OBJC_SELECTOR_REFERENCES_199
+OBJC_METH_VAR_NAME_200
+OBJC_SELECTOR_REFERENCES_201
+.str202
+_unnamed_cfstring_203
+OBJC_METH_VAR_NAME_204
+OBJC_SELECTOR_REFERENCES_205
+.str206
+_unnamed_cfstring_207
+.str208
+_unnamed_cfstring_209
+.str210
+_unnamed_cfstring_211
+__block_descriptor_tmp214
+OBJC_METH_VAR_NAME_215
+OBJC_SELECTOR_REFERENCES_216
+.str217
+_unnamed_cfstring_218
+OBJC_CLASSLIST_REFERENCES_$_219
+OBJC_METH_VAR_NAME_220
+OBJC_SELECTOR_REFERENCES_221
+OBJC_METH_VAR_NAME_222
+OBJC_SELECTOR_REFERENCES_223
+OBJC_METH_VAR_NAME_224
+OBJC_SELECTOR_REFERENCES_225
+.str226
+_unnamed_cfstring_227
+.str228
+_unnamed_cfstring_229
+OBJC_METH_VAR_NAME_230
+OBJC_SELECTOR_REFERENCES_231
+__block_descriptor_tmp234
+__block_descriptor_tmp237
+OBJC_METH_VAR_NAME_238
+OBJC_SELECTOR_REFERENCES_239
+OBJC_CLASSLIST_REFERENCES_$_240
+OBJC_METH_VAR_NAME_241
+OBJC_SELECTOR_REFERENCES_242
+OBJC_METH_VAR_NAME_243
+OBJC_SELECTOR_REFERENCES_244
+OBJC_CLASSLIST_REFERENCES_$_245
+OBJC_METH_VAR_NAME_246
+OBJC_SELECTOR_REFERENCES_247
+OBJC_METH_VAR_NAME_248
+OBJC_SELECTOR_REFERENCES_249
+OBJC_CLASSLIST_REFERENCES_$_250
+OBJC_METH_VAR_NAME_251
+OBJC_SELECTOR_REFERENCES_252
+OBJC_CLASSLIST_REFERENCES_$_253
+OBJC_METH_VAR_NAME_254
+OBJC_SELECTOR_REFERENCES_255
+OBJC_METH_VAR_NAME_256
+OBJC_SELECTOR_REFERENCES_257
+OBJC_CLASSLIST_REFERENCES_$_258
+OBJC_METH_VAR_NAME_259
+OBJC_SELECTOR_REFERENCES_260
+OBJC_METH_VAR_NAME_261
+OBJC_SELECTOR_REFERENCES_262
+OBJC_METH_VAR_NAME_263
+OBJC_SELECTOR_REFERENCES_264
+OBJC_METH_VAR_NAME_265
+OBJC_SELECTOR_REFERENCES_266
+.str267
+_unnamed_cfstring_268
+__block_descriptor_tmp271
+.str272
+_unnamed_cfstring_273
+OBJC_METH_VAR_NAME_274
+OBJC_SELECTOR_REFERENCES_275
+.str276
+_unnamed_cfstring_277
+.str278
+_unnamed_cfstring_279
+.str280
+_unnamed_cfstring_281
+.str282
+_unnamed_cfstring_283
+.str284
+_unnamed_cfstring_285
+.str286
+_unnamed_cfstring_287
+.str288
+_unnamed_cfstring_289
+OBJC_METH_VAR_NAME_290
+OBJC_SELECTOR_REFERENCES_291
+OBJC_CLASS_NAME_
+OBJC_METH_VAR_NAME_292
+OBJC_METH_VAR_TYPE_
+OBJC_METH_VAR_TYPE_293
+OBJC_METH_VAR_TYPE_294
+l_OBJC_$_CLASS_METHODS_OnePasswordExtension
+l_OBJC_METACLASS_RO_$_OnePasswordExtension
+OBJC_METH_VAR_NAME_295
+OBJC_METH_VAR_TYPE_296
+OBJC_METH_VAR_NAME_297
+OBJC_METH_VAR_TYPE_298
+OBJC_METH_VAR_NAME_299
+OBJC_METH_VAR_TYPE_300
+OBJC_METH_VAR_NAME_301
+OBJC_METH_VAR_TYPE_302
+OBJC_METH_VAR_NAME_303
+OBJC_METH_VAR_TYPE_304
+OBJC_METH_VAR_NAME_305
+OBJC_METH_VAR_TYPE_306
+OBJC_METH_VAR_NAME_307
+OBJC_METH_VAR_TYPE_308
+OBJC_METH_VAR_TYPE_309
+OBJC_METH_VAR_TYPE_310
+OBJC_METH_VAR_NAME_311
+l_OBJC_$_INSTANCE_METHODS_OnePasswordExtension
+l_OBJC_CLASS_RO_$_OnePasswordExtension
+OBJC_LABEL_CLASS_$
+Apple LLVM version 7.0.2 (clang-700.1.81)
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/HU6EG2293KMS/ObjectiveC-2CD0WTQVXITO7.pcm
+ObjectiveC
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/objc
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/HU6EG2293KMS/WebKit-191TQZL5YBZQL.pcm
+WebKit
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/WebKit.framework
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/HU6EG2293KMS/MobileCoreServices-1YQ59ILDR3NYI.pcm
+MobileCoreServices
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/HU6EG2293KMS/UIKit-2LM3EQU7VVY4O.pcm
+UIKit
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/UIKit.framework
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/HU6EG2293KMS/Foundation-A3SOD99KJ0S9.pcm
+Foundation
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/Foundation.framework
+dispatch_get_main_queue
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/dispatch/queue.h
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/onepassword-extension
+_dispatch_once
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/dispatch/once.h
+-[OnePasswordExtension fillLoginIntoWebView:forViewController:sender:completion:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/onepassword-extension/OnePasswordExtension.m
++[OnePasswordExtension failedToObtainURLStringFromWebViewError]
++[OnePasswordExtension failedToLoadItemProviderDataErrorWithUnderlyingError:]
++[OnePasswordExtension failedToFillFieldsErrorWithLocalizedErrorMessage:underlyingError:]
++[OnePasswordExtension failedToCollectFieldsErrorWithUnderlyingError:]
++[OnePasswordExtension failedToContactExtensionErrorWithActivityError:]
++[OnePasswordExtension extensionCancelledByUserError]
++[OnePasswordExtension systemAppExtensionAPINotAvailableError]
+-[OnePasswordExtension createExtensionItemForURLString:webPageDetails:completion:]
+-[OnePasswordExtension activityViewControllerForItem:viewController:sender:typeIdentifier:]
+-[OnePasswordExtension processExtensionItem:completion:]
+-[OnePasswordExtension executeFillScript:inWebView:completion:]
+-[OnePasswordExtension fillItemIntoUIWebView:webViewController:sender:showOnlyLogins:completion:]
+-[OnePasswordExtension fillItemIntoWKWebView:forViewController:sender:showOnlyLogins:completion:]
+-[OnePasswordExtension findLoginIn1PasswordWithURLString:collectedPageDetails:forWebViewController:sender:withWebView:showOnlyLogins:completion:]
+-[OnePasswordExtension isSystemAppExtensionAPIAvailable]
+-[OnePasswordExtension fillReturnedItems:intoWebView:completion:]
+-[OnePasswordExtension createExtensionItemForWebView:completion:]
+-[OnePasswordExtension isOnePasswordExtensionActivityType:]
+-[OnePasswordExtension fillItemIntoWebView:forViewController:sender:showOnlyLogins:completion:]
+-[OnePasswordExtension changePasswordForLoginForURLString:loginDetails:passwordGenerationOptions:forViewController:sender:completion:]
+-[OnePasswordExtension storeLoginForURLString:loginDetails:passwordGenerationOptions:forViewController:sender:completion:]
+-[OnePasswordExtension findLoginForURLString:forViewController:sender:completion:]
+-[OnePasswordExtension isAppExtensionAvailable]
++[OnePasswordExtension sharedExtension]
+/Users/sleroux/Library/Developer/Xcode/DerivedData/1Password_Extension_Demos-cemyrzyohupokueeatwmesearbpd/Build/Intermediates/OnePasswordExtension.build/Release-iphoneos/OnePasswordExtension.build/DerivedSources/OnePasswordExtension_vers.c
+_ZL15__ARCLite__loadv
+_ZL30add_image_hook_autoreleasepoolPK11mach_headerl
+_ZL34__arclite_objc_autoreleasePoolPushv
+_ZL33__arclite_objc_autoreleasePoolPopPv
+_ZL19patch_lazy_pointersPK11mach_headerP7patch_tm
+_ZL42__arclite_NSArray_objectAtIndexedSubscriptP7NSArrayP13objc_selectorj
+_ZL53__arclite_NSMutableArray_setObject_atIndexedSubscriptP14NSMutableArrayP13objc_selectorP11objc_objectj
+_ZL46__arclite_NSDictionary_objectForKeyedSubscriptP12NSDictionaryP13objc_selectorP11objc_object
+_ZL47__arclite_NSOrderedSet_objectAtIndexedSubscriptP12NSOrderedSetP13objc_selectorj
+_ZL58__arclite_NSMutableOrderedSet_setObject_atIndexedSubscriptP19NSMutableOrderedSetP13objc_selectorP11objc_objectj
+_ZL58__arclite_NSMutableDictionary__setObject_forKeyedSubscriptP19NSMutableDictionaryP13objc_selectorP11objc_objectS4_
+_ZL18add_image_hook_ARCPK11mach_headerl
+_ZL36__arclite_object_setInstanceVariableP11objc_objectPKcPv
+_ZL24__arclite_object_setIvarP11objc_objectP9objc_ivarS0_
+_ZL21__arclite_object_copyP11objc_objectm
+_ZL21__arclite_objc_retainP11objc_object
+_ZL26__arclite_objc_retainBlockP11objc_object
+_ZL22__arclite_objc_releaseP11objc_object
+_ZL26__arclite_objc_autoreleaseP11objc_object
+_ZL32__arclite_objc_retainAutoreleaseP11objc_object
+_ZL37__arclite_objc_autoreleaseReturnValueP11objc_object
+_ZL43__arclite_objc_retainAutoreleaseReturnValueP11objc_object
+_ZL44__arclite_objc_retainAutoreleasedReturnValueP11objc_object
+_ZL26__arclite_objc_storeStrongPP11objc_objectS0_
+_ZL22add_image_hook_swiftV1PK11mach_headerl
+_ZL42__arclite_NSUndoManagerProxy_isKindOfClassP11objc_objectP13objc_selectorP10objc_class
+_ZL13replaceMethodP10objc_classP13objc_selectorPFP11objc_objectS4_S2_zEPS6_
+_ZL30__arclite_NSManagedObject_initP11objc_objectP13objc_selector
+_ZL41__arclite_NSManagedObject_allocWithEntityP11objc_objectP13objc_selectorS0_
+_ZL36__arclite_NSManagedObject_allocBatchP11objc_objectP13objc_selectorPS0_S0_j
+_ZL37__arclite_NSKKMS_fastIndexForKnownKeyP11objc_objectP13objc_selectorS0_
+_ZL28__arclite_NSKKMS_indexForKeyP11objc_objectP13objc_selectorS0_
+_ZL29__arclite_NSKKsD_objectForKeyP11objc_objectP13objc_selectorS0_
+_ZL35__arclite_NSKKsD_removeObjectForKeyP11objc_objectP13objc_selectorS0_
+_ZL33__arclite_NSKKsD_setObject_forKeyP11objc_objectP13objc_selectorS0_S0_
+_ZL41__arclite_NSKKsD_addEntriesFromDictionaryP11objc_objectP13objc_selectorP12NSDictionary
+_ZL28__arclite_objc_readClassPairP10objc_classPK15objc_image_info
+_ZL32__arclite_objc_allocateClassPairP10objc_classPKcm
+_ZL32__arclite_object_getIndexedIvarsP11objc_object
+_ZL23__arclite_objc_getClassPKc
+_ZL27__arclite_objc_getMetaClassPKc
+_ZL31__arclite_objc_getRequiredClassPKc
+_ZL26__arclite_objc_lookUpClassPKc
+_ZL26__arclite_objc_getProtocolPKc
+_ZL23__arclite_class_getNameP10objc_class
+_ZL26__arclite_protocol_getNameP8Protocol
+_ZL37__arclite_objc_copyClassNamesForImagePKcPj
+_ZL17transcribeMethodsP10objc_classP15glue_class_ro_t
+_ZL19transcribeProtocolsP10objc_classP15glue_class_ro_t
+_ZL20transcribePropertiesP10objc_classP15glue_class_ro_t
+_ZL14initialize_impP11objc_objectP13objc_selector
+_ZL18allocateMaybeSwiftP18glue_swift_class_tm
+_ZL22copySwiftV1MangledNamePKcb
+_ZL13demangledNamePKcb
+_ZL16scanMangledFieldRPKcS0_S1_Ri
+_ZL30arclite_uninitialized_functionv
+_ZL12cxxConstructP11objc_object
+_ZL20fixStringForCoreDataP11objc_object
+OBJC_METACLASS_$___ARCLite__
+_ZL24OBJC_CLASS_$___ARCLite__
+_ZL31OBJC_METACLASS_RO_$___ARCLite__
+_non_lazy_classes
+_ZL27OBJC_CLASS_RO_$___ARCLite__
+_ZL11_class_name
+_ZL32OBJC_$_CLASS_METHODS___ARCLite__
+_ZL17_load_method_name
+_ZL17_load_method_type
+_ZL23NSAutoreleasePool_class
+_ZZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+_ZGVZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+.str2
+OBJC_METH_VAR_NAME_3
+OBJC_SELECTOR_REFERENCES_4
+.str6
+OBJC_METH_VAR_NAME_8
+OBJC_SELECTOR_REFERENCES_9
+.str10
+OBJC_METH_VAR_NAME_11
+OBJC_SELECTOR_REFERENCES_12
+OBJC_METH_VAR_NAME_14
+OBJC_SELECTOR_REFERENCES_15
+.str16
+.str17
+OBJC_METH_VAR_NAME_18
+OBJC_SELECTOR_REFERENCES_19
+OBJC_METH_VAR_TYPE_20
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS___ARCLiteIndexedSubscripting__
+l_OBJC_$_PROTOCOL_METHOD_TYPES___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteIndexedSubscripting__
+OBJC_METH_VAR_NAME_21
+OBJC_SELECTOR_REFERENCES_22
+OBJC_METH_VAR_NAME_23
+OBJC_SELECTOR_REFERENCES_24
+OBJC_METH_VAR_NAME_25
+OBJC_SELECTOR_REFERENCES_26
+OBJC_METH_VAR_NAME_27
+OBJC_SELECTOR_REFERENCES_28
+OBJC_METH_VAR_TYPE_29
+OBJC_METH_VAR_TYPE_31
+OBJC_CLASS_NAME_32
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS___ARCLiteKeyedSubscripting__
+l_OBJC_$_PROTOCOL_METHOD_TYPES___ARCLiteKeyedSubscripting__
+l_OBJC_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteKeyedSubscripting__
+OBJC_SELECTOR_REFERENCES_36
+OBJC_METH_VAR_NAME_37
+OBJC_SELECTOR_REFERENCES_38
+OBJC_METH_VAR_NAME_39
+OBJC_SELECTOR_REFERENCES_40
+_ZZL18add_image_hook_ARCPK11mach_headerlE7patches
+_ZGVZL18add_image_hook_ARCPK11mach_headerlE7patches
+.str41
+.str42
+.str43
+.str45
+.str46
+.str47
+.str48
+.str49
+.str50
+.str51
+OBJC_METH_VAR_NAME_53
+OBJC_SELECTOR_REFERENCES_54
+OBJC_METH_VAR_NAME_55
+OBJC_SELECTOR_REFERENCES_56
+OBJC_METH_VAR_NAME_57
+OBJC_SELECTOR_REFERENCES_58
+.str59
+.str60
+_ZL30NSUndoManagerProxy_targetClass
+OBJC_METH_VAR_NAME_61
+OBJC_SELECTOR_REFERENCES_62
+.str63
+OBJC_METH_VAR_NAME_65
+OBJC_SELECTOR_REFERENCES_66
+_ZL29original_NSManagedObject_init
+_ZL40original_NSManagedObject_allocWithEntity
+_ZL35original_NSManagedObject_allocBatch
+_ZL25NSMutableDictionary_class
+_ZL22NSConstantString_class
+.str72
+_ZL14NSString_class
+OBJC_METH_VAR_NAME_74
+OBJC_SELECTOR_REFERENCES_75
+_ZL36original_NSKKMS_fastIndexForKnownKey
+OBJC_METH_VAR_NAME_76
+OBJC_SELECTOR_REFERENCES_77
+_ZL27original_NSKKMS_indexForKey
+.str78
+_ZL28original_NSKKsD_objectForKey
+_ZL34original_NSKKsD_removeObjectForKey
+_ZL32original_NSKKsD_setObject_forKey
+OBJC_METH_VAR_NAME_79
+OBJC_SELECTOR_REFERENCES_80
+_ZL40original_NSKKsD_addEntriesFromDictionary
+_ZZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+_ZGVZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+.str82
+_ZL31original_objc_allocateClassPair
+_ZL31original_object_getIndexedIvars
+.str84
+_ZL22original_objc_getClass
+.str85
+_ZL26original_objc_getMetaClass
+.str86
+_ZL30original_objc_getRequiredClass
+.str87
+_ZL25original_objc_lookUpClass
+.str88
+_ZL25original_objc_getProtocol
+.str89
+_ZL22original_class_getName
+.str90
+_ZL25original_protocol_getName
+.str91
+_ZL36original_objc_copyClassNamesForImage
+.str96
+.str97
+.str99
+.str100
+.str101
+.str102
+.str103
+_ZL12demangleLock
+_ZL9Demangled
+.str104
+.str105
+OBJC_METH_VAR_NAME_106
+OBJC_SELECTOR_REFERENCES_107
+OBJC_METH_VAR_NAME_108
+OBJC_SELECTOR_REFERENCES_109
+OBJC_METH_VAR_NAME_110
+OBJC_SELECTOR_REFERENCES_111
+OBJC_METH_VAR_NAME_112
+OBJC_SELECTOR_REFERENCES_113
+OBJC_METH_VAR_NAME_114
+OBJC_SELECTOR_REFERENCES_115
+OBJC_METH_VAR_NAME_116
+OBJC_SELECTOR_REFERENCES_117
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c++ -arch armv7 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -Wno-trigraphs -fno-exceptions -fno-rtti -mpascal-strings -Os -Wno-missing-field-initializers -Wmissing-prototypes -Wno-implicit-atomic-properties -Wno-arc-repeated-use-of-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -D NDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -miphoneos-version-min=4.3 -g -fno-threadsafe-statics -Wno-sign-conversion -fembed-bitcode -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-generated-files.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-own-target-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-all-target-headers.hmap -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-project-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Symbols/BuiltProducts/include -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/DerivedSources/armv7 -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/DerivedSources -F/Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Symbols/BuiltProducts -F/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk/System/Library/PrivateFrameworks -Wall -Wextra -Wno-gcc-compat -fgnu-inline-asm -MMD -MT dependencies -MF /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.d --serialize-diagnostics /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.dia -c /Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm -o /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.o -mlinker-version=253.9 -march=armv7a
+__arclite_NSKKsD_addEntriesFromDictionary
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65
+__arclite_NSKKsD_setObject_forKey
+__arclite_NSKKsD_removeObjectForKey
+__arclite_NSKKsD_objectForKey
+__arclite_NSKKMS_indexForKey
+fixStringForCoreData
+__arclite_NSKKMS_fastIndexForKnownKey
+__arclite_NSManagedObject_allocBatch
+__arclite_NSManagedObject_allocWithEntity
+cxxConstruct
+__arclite_NSManagedObject_init
+arclite_uninitialized_function
+replaceMethod
+__arclite_NSUndoManagerProxy_isKindOfClass
+patch_t<const char **(const char *, unsigned int *)>
+__arclite_objc_copyClassNamesForImage
+patch_t<const char *(Protocol *)>
+__arclite_protocol_getName
+patch_t<const char *(Class)>
+__isctype
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk/usr/include/ctype.h
+isdigit
+scanMangledField
+copySwiftV1DemangledName
+demangledName
+__arclite_class_getName
+patch_t<Protocol *(const char *)>
+__arclite_objc_getProtocol
+__arclite_objc_lookUpClass
+__arclite_objc_getRequiredClass
+__arclite_objc_getMetaClass
+patch_t<Class (const char *)>
+copySwiftV1MangledName
+__arclite_objc_getClass
+patch_t<void *(id)>
+word_align
+__arclite_object_getIndexedIvars
+patch_t<Class (Class, const char *, unsigned long)>
+allocateMaybeSwift
+isSwift
+metaclass
+__arclite_objc_allocateClassPair
+patch_t<Class (Class, const objc_image_info *)>
+initialize_imp
+property_list_nth
+transcribeProperties
+transcribeProtocols
+method_list_nth
+transcribeMethods
+alignment
+max
+ivar_list_nth
+transcribeIvars
+fastFlags
+ro
+__arclite_objc_readClassPair
+add_image_hook_swiftV1
+install_swiftV1
+patch_t<void (id *, id)>
+__arclite_objc_storeStrong
+__arclite_objc_retainAutoreleasedReturnValue
+__arclite_objc_retainAutoreleaseReturnValue
+__arclite_objc_autoreleaseReturnValue
+__arclite_objc_retainAutorelease
+__arclite_objc_autorelease
+patch_t<void (id)>
+__arclite_objc_release
+__arclite_objc_retainBlock
+patch_t<id (id)>
+__arclite_objc_retain
+patch_t<id (id, unsigned long)>
+fixupCopiedReferences
+classOrSuperClassesUseARR
+__arclite_object_copy
+patch_t<void (id, objc_ivar *, id)>
+isScannedOffset
+alignedInstanceStart
+_class_getInstanceStart
+data
+__arclite_class_usesAutomaticRetainRelease
+_ivar_getClass
+__arclite_object_setIvar
+patch_t<objc_ivar *(id, const char *, void *)>
+__arclite_object_setInstanceVariable
+add_image_hook_ARC
+install_ARC
+objc_collectingEnabled
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk/usr/include/objc/objc-auto.h
+__arclite_NSMutableDictionary__setObject_forKeyedSubscript
+addOrReplaceMethod
+install_dict_nil_value
+__arclite_NSMutableOrderedSet_setObject_atIndexedSubscript
+__arclite_NSOrderedSet_objectAtIndexedSubscript
+keyedGetter
+__arclite_NSDictionary_objectForKeyedSubscript
+__arclite_NSMutableArray_setObject_atIndexedSubscript
+indexedGetter
+__arclite_NSArray_objectAtIndexedSubscript
+addMethod
+install_subscripting
+patch_lazy_pointers
+patch_t<void (void *)>
+__arclite_objc_autoreleasePoolPop
+patch_t<void *()>
+__arclite_objc_autoreleasePoolPush
+add_image_hook_autoreleasepool
+install_autoreleasepool
+__ARCLite__load

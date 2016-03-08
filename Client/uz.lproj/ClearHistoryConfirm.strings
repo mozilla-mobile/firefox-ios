@@ -1,0 +1,12 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Bekor qilish";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Tozalash";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "Barcha ulangan qurilmalardan tarix o‘chiriladi. Keyin tarixni tiklab bo‘lmaydi.";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "Firefox hisobidan tarix o‘chirilsinmi?";
+

@@ -1,0 +1,3387 @@
+BCSymbolMap Version: 1.0
+-[GCDWebServerBodyDecoder initWithRequest:writer:]
+-[GCDWebServerBodyDecoder open:]
+-[GCDWebServerBodyDecoder writeData:error:]
+-[GCDWebServerBodyDecoder close:]
+-[GCDWebServerGZipDecoder open:]
+-[GCDWebServerGZipDecoder writeData:error:]
+-[GCDWebServerGZipDecoder close:]
+-[GCDWebServerRequest initWithMethod:url:headers:path:query:]
+-[GCDWebServerRequest hasBody]
+-[GCDWebServerRequest hasByteRange]
+-[GCDWebServerRequest attributeForKey:]
+-[GCDWebServerRequest open:]
+-[GCDWebServerRequest writeData:error:]
+-[GCDWebServerRequest close:]
+-[GCDWebServerRequest prepareForWriting]
+-[GCDWebServerRequest performOpen:]
+-[GCDWebServerRequest performWriteData:error:]
+-[GCDWebServerRequest performClose:]
+-[GCDWebServerRequest setAttribute:forKey:]
+-[GCDWebServerRequest localAddressString]
+-[GCDWebServerRequest remoteAddressString]
+-[GCDWebServerRequest description]
+-[GCDWebServerRequest method]
+-[GCDWebServerRequest URL]
+-[GCDWebServerRequest headers]
+-[GCDWebServerRequest path]
+-[GCDWebServerRequest query]
+-[GCDWebServerRequest contentType]
+-[GCDWebServerRequest contentLength]
+-[GCDWebServerRequest ifModifiedSince]
+-[GCDWebServerRequest ifNoneMatch]
+-[GCDWebServerRequest byteRange]
+-[GCDWebServerRequest acceptsGzipContentEncoding]
+-[GCDWebServerRequest usesChunkedTransferEncoding]
+-[GCDWebServerRequest localAddressData]
+-[GCDWebServerRequest setLocalAddressData:]
+-[GCDWebServerRequest remoteAddressData]
+-[GCDWebServerRequest setRemoteAddressData:]
+-[GCDWebServerRequest .cxx_destruct]
+.str
+_unnamed_cfstring_
+OBJC_CLASSLIST_SUP_REFS_$_
+OBJC_METH_VAR_NAME_
+OBJC_SELECTOR_REFERENCES_
+OBJC_IVAR_$_GCDWebServerBodyDecoder._request
+OBJC_IVAR_$_GCDWebServerBodyDecoder._writer
+OBJC_METH_VAR_NAME_1
+OBJC_SELECTOR_REFERENCES_2
+OBJC_METH_VAR_NAME_3
+OBJC_SELECTOR_REFERENCES_4
+OBJC_METH_VAR_NAME_5
+OBJC_SELECTOR_REFERENCES_6
+OBJC_CLASS_NAME_
+OBJC_METH_VAR_TYPE_
+OBJC_METH_VAR_TYPE_7
+OBJC_METH_VAR_TYPE_8
+OBJC_CLASS_NAME_9
+OBJC_METH_VAR_NAME_10
+OBJC_METH_VAR_TYPE_11
+OBJC_METH_VAR_NAME_12
+OBJC_METH_VAR_TYPE_13
+OBJC_METH_VAR_NAME_14
+OBJC_METH_VAR_TYPE_15
+OBJC_METH_VAR_NAME_16
+OBJC_METH_VAR_TYPE_17
+OBJC_METH_VAR_NAME_18
+OBJC_METH_VAR_TYPE_19
+OBJC_METH_VAR_NAME_20
+OBJC_METH_VAR_TYPE_21
+OBJC_METH_VAR_NAME_22
+OBJC_METH_VAR_TYPE_23
+OBJC_METH_VAR_NAME_24
+OBJC_METH_VAR_TYPE_25
+OBJC_METH_VAR_NAME_26
+OBJC_METH_VAR_NAME_27
+OBJC_METH_VAR_TYPE_28
+OBJC_METH_VAR_NAME_29
+OBJC_METH_VAR_TYPE_30
+OBJC_METH_VAR_NAME_31
+OBJC_METH_VAR_NAME_32
+OBJC_METH_VAR_TYPE_33
+OBJC_METH_VAR_NAME_34
+OBJC_METH_VAR_NAME_35
+OBJC_METH_VAR_TYPE_36
+OBJC_METH_VAR_NAME_37
+OBJC_METH_VAR_TYPE_38
+OBJC_METH_VAR_NAME_39
+OBJC_METH_VAR_NAME_40
+OBJC_METH_VAR_NAME_41
+OBJC_METH_VAR_TYPE_42
+OBJC_METH_VAR_NAME_43
+OBJC_CLASS_NAME_44
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_NSObject
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_OPT_NSObject
+OBJC_PROP_NAME_ATTR_
+OBJC_PROP_NAME_ATTR_45
+OBJC_PROP_NAME_ATTR_46
+OBJC_PROP_NAME_ATTR_47
+OBJC_PROP_NAME_ATTR_48
+OBJC_PROP_NAME_ATTR_49
+OBJC_PROP_NAME_ATTR_50
+l_OBJC_$_PROP_LIST_NSObject
+l_OBJC_$_PROTOCOL_METHOD_TYPES_NSObject
+l_OBJC_PROTOCOL_$_NSObject
+l_OBJC_LABEL_PROTOCOL_$_NSObject
+l_OBJC_$_PROTOCOL_REFS_GCDWebServerBodyWriter
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_GCDWebServerBodyWriter
+l_OBJC_$_PROTOCOL_METHOD_TYPES_GCDWebServerBodyWriter
+l_OBJC_PROTOCOL_$_GCDWebServerBodyWriter
+l_OBJC_LABEL_PROTOCOL_$_GCDWebServerBodyWriter
+l_OBJC_CLASS_PROTOCOLS_$_GCDWebServerBodyDecoder
+l_OBJC_METACLASS_RO_$_GCDWebServerBodyDecoder
+OBJC_METH_VAR_NAME_51
+OBJC_METH_VAR_TYPE_52
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerBodyDecoder
+OBJC_METH_VAR_NAME_53
+OBJC_METH_VAR_TYPE_54
+OBJC_METH_VAR_NAME_55
+OBJC_METH_VAR_TYPE_56
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerBodyDecoder
+l_OBJC_$_PROP_LIST_GCDWebServerBodyDecoder
+l_OBJC_CLASS_RO_$_GCDWebServerBodyDecoder
+OBJC_IVAR_$_GCDWebServerGZipDecoder._stream
+.str57
+OBJC_CLASSLIST_REFERENCES_$_
+.str58
+_unnamed_cfstring_59
+OBJC_METH_VAR_NAME_60
+OBJC_SELECTOR_REFERENCES_61
+OBJC_CLASSLIST_SUP_REFS_$_62
+OBJC_METH_VAR_NAME_63
+OBJC_SELECTOR_REFERENCES_64
+OBJC_METH_VAR_NAME_65
+OBJC_SELECTOR_REFERENCES_66
+OBJC_CLASSLIST_REFERENCES_$_67
+OBJC_METH_VAR_NAME_68
+OBJC_SELECTOR_REFERENCES_69
+OBJC_METH_VAR_NAME_70
+OBJC_SELECTOR_REFERENCES_71
+OBJC_METH_VAR_NAME_72
+OBJC_SELECTOR_REFERENCES_73
+OBJC_IVAR_$_GCDWebServerGZipDecoder._finished
+OBJC_METH_VAR_NAME_74
+OBJC_SELECTOR_REFERENCES_75
+OBJC_CLASS_NAME_76
+l_OBJC_METACLASS_RO_$_GCDWebServerGZipDecoder
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerGZipDecoder
+OBJC_METH_VAR_NAME_77
+OBJC_METH_VAR_TYPE_78
+OBJC_METH_VAR_NAME_79
+OBJC_METH_VAR_TYPE_80
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerGZipDecoder
+l_OBJC_CLASS_RO_$_GCDWebServerGZipDecoder
+OBJC_CLASSLIST_SUP_REFS_$_81
+OBJC_METH_VAR_NAME_82
+OBJC_SELECTOR_REFERENCES_83
+OBJC_IVAR_$_GCDWebServerRequest._method
+OBJC_IVAR_$_GCDWebServerRequest._url
+OBJC_IVAR_$_GCDWebServerRequest._headers
+OBJC_IVAR_$_GCDWebServerRequest._path
+OBJC_IVAR_$_GCDWebServerRequest._query
+.str84
+_unnamed_cfstring_85
+OBJC_METH_VAR_NAME_86
+OBJC_SELECTOR_REFERENCES_87
+OBJC_IVAR_$_GCDWebServerRequest._type
+.str88
+_unnamed_cfstring_89
+.str90
+_unnamed_cfstring_91
+OBJC_METH_VAR_NAME_92
+OBJC_SELECTOR_REFERENCES_93
+OBJC_IVAR_$_GCDWebServerRequest._chunked
+.str94
+_unnamed_cfstring_95
+OBJC_METH_VAR_NAME_96
+OBJC_SELECTOR_REFERENCES_97
+.str98
+_unnamed_cfstring_99
+OBJC_IVAR_$_GCDWebServerRequest._length
+.str100
+_unnamed_cfstring_101
+.str102
+_unnamed_cfstring_103
+.str104
+_unnamed_cfstring_105
+OBJC_IVAR_$_GCDWebServerRequest._modifiedSince
+.str106
+_unnamed_cfstring_107
+OBJC_IVAR_$_GCDWebServerRequest._noneMatch
+OBJC_IVAR_$_GCDWebServerRequest._range
+.str108
+_unnamed_cfstring_109
+.str110
+_unnamed_cfstring_111
+OBJC_METH_VAR_NAME_112
+OBJC_SELECTOR_REFERENCES_113
+OBJC_METH_VAR_NAME_114
+OBJC_SELECTOR_REFERENCES_115
+.str116
+_unnamed_cfstring_117
+OBJC_METH_VAR_NAME_118
+OBJC_SELECTOR_REFERENCES_119
+OBJC_METH_VAR_NAME_120
+OBJC_SELECTOR_REFERENCES_121
+OBJC_METH_VAR_NAME_122
+OBJC_SELECTOR_REFERENCES_123
+.str124
+_unnamed_cfstring_125
+OBJC_METH_VAR_NAME_126
+OBJC_SELECTOR_REFERENCES_127
+.str128
+_unnamed_cfstring_129
+.str130
+_unnamed_cfstring_131
+.str132
+_unnamed_cfstring_133
+OBJC_METH_VAR_NAME_134
+OBJC_SELECTOR_REFERENCES_135
+OBJC_IVAR_$_GCDWebServerRequest._gzipAccepted
+OBJC_CLASSLIST_REFERENCES_$_136
+OBJC_IVAR_$_GCDWebServerRequest._decoders
+OBJC_CLASSLIST_REFERENCES_$_137
+OBJC_IVAR_$_GCDWebServerRequest._attributes
+OBJC_IVAR_$_GCDWebServerRequest._writer
+OBJC_METH_VAR_NAME_138
+OBJC_SELECTOR_REFERENCES_139
+.str140
+_unnamed_cfstring_141
+OBJC_CLASSLIST_REFERENCES_$_142
+OBJC_SELECTOR_REFERENCES_143
+OBJC_METH_VAR_NAME_144
+OBJC_SELECTOR_REFERENCES_145
+OBJC_IVAR_$_GCDWebServerRequest._opened
+OBJC_METH_VAR_NAME_146
+OBJC_SELECTOR_REFERENCES_147
+OBJC_IVAR_$_GCDWebServerRequest._localAddress
+OBJC_IVAR_$_GCDWebServerRequest._remoteAddress
+OBJC_CLASSLIST_REFERENCES_$_148
+.str149
+_unnamed_cfstring_150
+OBJC_METH_VAR_NAME_151
+OBJC_SELECTOR_REFERENCES_152
+OBJC_METH_VAR_NAME_153
+OBJC_SELECTOR_REFERENCES_154
+OBJC_METH_VAR_NAME_155
+OBJC_SELECTOR_REFERENCES_156
+OBJC_METH_VAR_NAME_157
+OBJC_SELECTOR_REFERENCES_158
+OBJC_METH_VAR_NAME_159
+OBJC_SELECTOR_REFERENCES_160
+.str161
+_unnamed_cfstring_162
+OBJC_METH_VAR_NAME_163
+OBJC_SELECTOR_REFERENCES_164
+.str165
+_unnamed_cfstring_166
+OBJC_METH_VAR_NAME_167
+OBJC_SELECTOR_REFERENCES_168
+.str169
+_unnamed_cfstring_170
+OBJC_CLASS_NAME_171
+l_OBJC_CLASS_PROTOCOLS_$_GCDWebServerRequest
+l_OBJC_METACLASS_RO_$_GCDWebServerRequest
+OBJC_CLASS_NAME_172
+OBJC_METH_VAR_NAME_173
+OBJC_METH_VAR_TYPE_174
+OBJC_METH_VAR_NAME_175
+OBJC_METH_VAR_NAME_176
+OBJC_METH_VAR_NAME_177
+OBJC_METH_VAR_TYPE_178
+OBJC_METH_VAR_NAME_179
+OBJC_METH_VAR_TYPE_180
+OBJC_METH_VAR_NAME_181
+OBJC_METH_VAR_NAME_182
+OBJC_METH_VAR_NAME_183
+OBJC_METH_VAR_NAME_184
+OBJC_METH_VAR_TYPE_185
+OBJC_METH_VAR_NAME_186
+OBJC_METH_VAR_NAME_187
+OBJC_METH_VAR_NAME_188
+OBJC_METH_VAR_NAME_189
+OBJC_METH_VAR_NAME_190
+OBJC_METH_VAR_NAME_191
+OBJC_METH_VAR_NAME_192
+OBJC_METH_VAR_NAME_193
+OBJC_METH_VAR_NAME_194
+OBJC_METH_VAR_NAME_195
+OBJC_METH_VAR_NAME_196
+OBJC_METH_VAR_NAME_197
+OBJC_METH_VAR_TYPE_198
+OBJC_METH_VAR_NAME_199
+OBJC_METH_VAR_NAME_200
+OBJC_METH_VAR_NAME_201
+OBJC_METH_VAR_NAME_202
+OBJC_METH_VAR_TYPE_203
+OBJC_METH_VAR_NAME_204
+OBJC_METH_VAR_NAME_205
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerRequest
+OBJC_METH_VAR_NAME_206
+OBJC_METH_VAR_TYPE_207
+OBJC_METH_VAR_NAME_208
+OBJC_METH_VAR_TYPE_209
+OBJC_METH_VAR_NAME_210
+OBJC_METH_VAR_TYPE_211
+OBJC_METH_VAR_NAME_212
+OBJC_METH_VAR_NAME_213
+OBJC_METH_VAR_NAME_214
+OBJC_METH_VAR_NAME_215
+OBJC_METH_VAR_NAME_216
+OBJC_METH_VAR_TYPE_217
+OBJC_METH_VAR_NAME_218
+OBJC_METH_VAR_TYPE_219
+OBJC_METH_VAR_NAME_220
+OBJC_METH_VAR_NAME_221
+OBJC_METH_VAR_TYPE_222
+OBJC_METH_VAR_NAME_223
+OBJC_METH_VAR_NAME_224
+OBJC_METH_VAR_TYPE_225
+OBJC_METH_VAR_NAME_226
+OBJC_METH_VAR_NAME_227
+OBJC_METH_VAR_NAME_228
+OBJC_METH_VAR_TYPE_229
+OBJC_METH_VAR_NAME_230
+OBJC_METH_VAR_TYPE_231
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerRequest
+OBJC_PROP_NAME_ATTR_232
+OBJC_PROP_NAME_ATTR_233
+OBJC_PROP_NAME_ATTR_234
+OBJC_PROP_NAME_ATTR_235
+OBJC_PROP_NAME_ATTR_236
+OBJC_PROP_NAME_ATTR_237
+OBJC_PROP_NAME_ATTR_238
+OBJC_PROP_NAME_ATTR_239
+OBJC_PROP_NAME_ATTR_240
+OBJC_PROP_NAME_ATTR_241
+OBJC_PROP_NAME_ATTR_242
+OBJC_PROP_NAME_ATTR_243
+OBJC_PROP_NAME_ATTR_244
+OBJC_PROP_NAME_ATTR_245
+OBJC_PROP_NAME_ATTR_246
+OBJC_PROP_NAME_ATTR_247
+OBJC_PROP_NAME_ATTR_248
+OBJC_PROP_NAME_ATTR_249
+OBJC_PROP_NAME_ATTR_250
+OBJC_PROP_NAME_ATTR_251
+OBJC_PROP_NAME_ATTR_252
+OBJC_PROP_NAME_ATTR_253
+OBJC_PROP_NAME_ATTR_254
+OBJC_PROP_NAME_ATTR_255
+OBJC_PROP_NAME_ATTR_256
+OBJC_PROP_NAME_ATTR_257
+OBJC_PROP_NAME_ATTR_258
+OBJC_PROP_NAME_ATTR_259
+OBJC_PROP_NAME_ATTR_260
+OBJC_PROP_NAME_ATTR_261
+OBJC_PROP_NAME_ATTR_262
+l_OBJC_$_PROP_LIST_GCDWebServerRequest
+l_OBJC_CLASS_RO_$_GCDWebServerRequest
+OBJC_LABEL_CLASS_$
+Apple LLVM version 7.0.2 (clang-700.1.81)
+GCDWebServerIsValidByteRange
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServerPrivate.h
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer
+NSMakeRange
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSRange.h
+-[GCDWebServerRequest .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServerRequest.m
+-[GCDWebServerRequest setRemoteAddressData:]
+-[GCDWebServerRequest remoteAddressData]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServerRequest.h
+-[GCDWebServerRequest setLocalAddressData:]
+-[GCDWebServerRequest localAddressData]
+-[GCDWebServerRequest usesChunkedTransferEncoding]
+-[GCDWebServerRequest acceptsGzipContentEncoding]
+-[GCDWebServerRequest byteRange]
+-[GCDWebServerRequest ifNoneMatch]
+-[GCDWebServerRequest ifModifiedSince]
+-[GCDWebServerRequest contentLength]
+-[GCDWebServerRequest contentType]
+-[GCDWebServerRequest query]
+-[GCDWebServerRequest path]
+-[GCDWebServerRequest headers]
+-[GCDWebServerRequest URL]
+-[GCDWebServerRequest method]
+-[GCDWebServerRequest description]
+-[GCDWebServerRequest remoteAddressString]
+-[GCDWebServerRequest localAddressString]
+-[GCDWebServerRequest setAttribute:forKey:]
+-[GCDWebServerRequest performClose:]
+-[GCDWebServerRequest performWriteData:error:]
+-[GCDWebServerRequest performOpen:]
+-[GCDWebServerRequest prepareForWriting]
+-[GCDWebServerRequest close:]
+-[GCDWebServerRequest writeData:error:]
+-[GCDWebServerRequest open:]
+-[GCDWebServerRequest attributeForKey:]
+-[GCDWebServerRequest hasByteRange]
+-[GCDWebServerRequest hasBody]
+-[GCDWebServerRequest initWithMethod:url:headers:path:query:]
+-[GCDWebServerGZipDecoder close:]
+-[GCDWebServerGZipDecoder writeData:error:]
+-[GCDWebServerGZipDecoder open:]
+-[GCDWebServerBodyDecoder close:]
+-[GCDWebServerBodyDecoder writeData:error:]
+-[GCDWebServerBodyDecoder open:]
+-[GCDWebServerBodyDecoder initWithRequest:writer:]
++[GCDWebServerURLEncodedFormRequest mimeType]
+-[GCDWebServerURLEncodedFormRequest close:]
+-[GCDWebServerURLEncodedFormRequest description]
+-[GCDWebServerURLEncodedFormRequest arguments]
+-[GCDWebServerURLEncodedFormRequest .cxx_destruct]
+.str3
+_unnamed_cfstring_4
+OBJC_METH_VAR_NAME_7
+OBJC_SELECTOR_REFERENCES_8
+OBJC_METH_VAR_NAME_9
+OBJC_SELECTOR_REFERENCES_10
+OBJC_IVAR_$_GCDWebServerURLEncodedFormRequest._arguments
+OBJC_CLASSLIST_REFERENCES_$_11
+OBJC_SELECTOR_REFERENCES_13
+OBJC_SELECTOR_REFERENCES_15
+.str16
+_unnamed_cfstring_17
+OBJC_SELECTOR_REFERENCES_19
+OBJC_SELECTOR_REFERENCES_21
+OBJC_SELECTOR_REFERENCES_23
+OBJC_SELECTOR_REFERENCES_25
+OBJC_SELECTOR_REFERENCES_27
+.str28
+_unnamed_cfstring_29
+OBJC_METH_VAR_NAME_30
+OBJC_SELECTOR_REFERENCES_31
+OBJC_SELECTOR_REFERENCES_33
+l_OBJC_$_CLASS_METHODS_GCDWebServerURLEncodedFormRequest
+l_OBJC_METACLASS_RO_$_GCDWebServerURLEncodedFormRequest
+OBJC_CLASS_NAME_35
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerURLEncodedFormRequest
+OBJC_METH_VAR_TYPE_41
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerURLEncodedFormRequest
+OBJC_PROP_NAME_ATTR_42
+l_OBJC_$_PROP_LIST_GCDWebServerURLEncodedFormRequest
+l_OBJC_CLASS_RO_$_GCDWebServerURLEncodedFormRequest
+-[GCDWebServerURLEncodedFormRequest .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Requests/GCDWebServerURLEncodedFormRequest.m
+-[GCDWebServerURLEncodedFormRequest arguments]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Requests/GCDWebServerURLEncodedFormRequest.h
+-[GCDWebServerURLEncodedFormRequest description]
+-[GCDWebServerURLEncodedFormRequest close:]
++[GCDWebServerURLEncodedFormRequest mimeType]
+-[GCDWebServerConnection(Read) _readData:withLength:completionBlock:]
+__69-[GCDWebServerConnection(Read) _readData:withLength:completionBlock:]_block_invoke
+__69-[GCDWebServerConnection(Read) _readData:withLength:completionBlock:]_block_invoke_2
+__copy_helper_block_
+__destroy_helper_block_
+__copy_helper_block_12
+__destroy_helper_block_13
+-[GCDWebServerConnection(Read) _readHeaders:withCompletionBlock:]
+__65-[GCDWebServerConnection(Read) _readHeaders:withCompletionBlock:]_block_invoke
+__copy_helper_block_26
+__destroy_helper_block_27
+-[GCDWebServerConnection(Read) _readBodyWithRemainingLength:completionBlock:]
+__77-[GCDWebServerConnection(Read) _readBodyWithRemainingLength:completionBlock:]_block_invoke
+__copy_helper_block_44
+__destroy_helper_block_45
+-[GCDWebServerConnection(Read) _readNextBodyChunk:completionBlock:]
+_ScanHexNumber
+__67-[GCDWebServerConnection(Read) _readNextBodyChunk:completionBlock:]_block_invoke
+__copy_helper_block_59
+__destroy_helper_block_60
+-[GCDWebServerConnection(Write) _writeData:withCompletionBlock:]
+__64-[GCDWebServerConnection(Write) _writeData:withCompletionBlock:]_block_invoke
+__copy_helper_block_66
+__destroy_helper_block_67
+__64-[GCDWebServerConnection(Write) _writeData:withCompletionBlock:]_block_invoke70
+__copy_helper_block_75
+__destroy_helper_block_76
+-[GCDWebServerConnection(Write) _writeHeadersWithCompletionBlock:]
+-[GCDWebServerConnection(Write) _writeBodyWithCompletionBlock:]
+__63-[GCDWebServerConnection(Write) _writeBodyWithCompletionBlock:]_block_invoke
+__63-[GCDWebServerConnection(Write) _writeBodyWithCompletionBlock:]_block_invoke_2
+__copy_helper_block_97
+__destroy_helper_block_98
+__63-[GCDWebServerConnection(Write) _writeBodyWithCompletionBlock:]_block_invoke100
+__copy_helper_block_101
+__destroy_helper_block_102
+__copy_helper_block_106
+__destroy_helper_block_107
++[GCDWebServerConnection initialize]
+-[GCDWebServerConnection isUsingIPv6]
+-[GCDWebServerConnection _initializeResponseHeadersWithStatusCode:]
+-[GCDWebServerConnection _startProcessingRequest]
+__49-[GCDWebServerConnection _startProcessingRequest]_block_invoke
+__copy_helper_block_139
+__destroy_helper_block_140
+-[GCDWebServerConnection _finishProcessingRequest:]
+__51-[GCDWebServerConnection _finishProcessingRequest:]_block_invoke
+__copy_helper_block_191
+__destroy_helper_block_192
+__51-[GCDWebServerConnection _finishProcessingRequest:]_block_invoke197
+__51-[GCDWebServerConnection _finishProcessingRequest:]_block_invoke_2
+__copy_helper_block_200
+__destroy_helper_block_201
+__copy_helper_block_203
+__destroy_helper_block_204
+-[GCDWebServerConnection _readBodyWithLength:initialData:]
+__58-[GCDWebServerConnection _readBodyWithLength:initialData:]_block_invoke
+__copy_helper_block_217
+__destroy_helper_block_218
+-[GCDWebServerConnection _readChunkedBodyWithInitialData:]
+__58-[GCDWebServerConnection _readChunkedBodyWithInitialData:]_block_invoke
+__copy_helper_block_222
+__destroy_helper_block_223
+-[GCDWebServerConnection _readRequestHeaders]
+__45-[GCDWebServerConnection _readRequestHeaders]_block_invoke
+__45-[GCDWebServerConnection _readRequestHeaders]_block_invoke_2
+__copy_helper_block_266
+__destroy_helper_block_267
+__copy_helper_block_276
+__destroy_helper_block_277
+-[GCDWebServerConnection initWithServer:localAddress:remoteAddress:socket:]
+-[GCDWebServerConnection localAddressString]
+-[GCDWebServerConnection remoteAddressString]
+-[GCDWebServerConnection dealloc]
+-[GCDWebServerConnection server]
+-[GCDWebServerConnection localAddressData]
+-[GCDWebServerConnection remoteAddressData]
+-[GCDWebServerConnection totalBytesRead]
+-[GCDWebServerConnection totalBytesWritten]
+-[GCDWebServerConnection .cxx_destruct]
+-[GCDWebServerConnection(Subclassing) open]
+-[GCDWebServerConnection(Subclassing) didReadBytes:length:]
+-[GCDWebServerConnection(Subclassing) didWriteBytes:length:]
+-[GCDWebServerConnection(Subclassing) rewriteRequestURL:withMethod:headers:]
+-[GCDWebServerConnection(Subclassing) preflightRequest:]
+__56-[GCDWebServerConnection(Subclassing) preflightRequest:]_block_invoke
+__copy_helper_block_385
+__destroy_helper_block_386
+-[GCDWebServerConnection(Subclassing) processRequest:completion:]
+-[GCDWebServerConnection(Subclassing) overrideResponse:forRequest:]
+-[GCDWebServerConnection(Subclassing) abortRequest:withStatusCode:]
+__67-[GCDWebServerConnection(Subclassing) abortRequest:withStatusCode:]_block_invoke
+-[GCDWebServerConnection(Subclassing) close]
+_CRLFData
+_CRLFCRLFData
+_continueData
+_lastChunkData
+_digestAuthenticationNonce
+OBJC_IVAR_$_GCDWebServerConnection._socket
+__block_descriptor_tmp
+OBJC_IVAR_$_GCDWebServerConnection._bytesRead
+.str7
+.str8
+_unnamed_cfstring_9
+.str10
+_unnamed_cfstring_11
+.str14
+__block_descriptor_tmp15
+OBJC_SELECTOR_REFERENCES_17
+OBJC_IVAR_$_GCDWebServerConnection._requestMessage
+.str22
+_unnamed_cfstring_23
+.str24
+_unnamed_cfstring_25
+__block_descriptor_tmp29
+OBJC_SELECTOR_REFERENCES_35
+OBJC_IVAR_$_GCDWebServerConnection._request
+OBJC_METH_VAR_NAME_36
+OBJC_SELECTOR_REFERENCES_37
+OBJC_METH_VAR_NAME_38
+OBJC_SELECTOR_REFERENCES_39
+.str40
+_unnamed_cfstring_41
+.str42
+_unnamed_cfstring_43
+__block_descriptor_tmp46
+OBJC_CLASSLIST_REFERENCES_$_47
+.str48
+OBJC_METH_VAR_NAME_49
+OBJC_SELECTOR_REFERENCES_50
+OBJC_SELECTOR_REFERENCES_52
+.str53
+_unnamed_cfstring_54
+.str55
+_unnamed_cfstring_56
+OBJC_METH_VAR_NAME_57
+OBJC_SELECTOR_REFERENCES_58
+__block_descriptor_tmp61
+OBJC_METH_VAR_TYPE_62
+OBJC_METH_VAR_TYPE_63
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServerConnection_$_Read
+l_OBJC_$_CATEGORY_GCDWebServerConnection_$_Read
+OBJC_METH_VAR_NAME_64
+OBJC_SELECTOR_REFERENCES_65
+.str68
+__block_descriptor_tmp69
+OBJC_METH_VAR_NAME_71
+OBJC_SELECTOR_REFERENCES_72
+.str73
+_unnamed_cfstring_74
+__block_descriptor_tmp77
+OBJC_IVAR_$_GCDWebServerConnection._responseMessage
+OBJC_METH_VAR_NAME_78
+OBJC_SELECTOR_REFERENCES_79
+OBJC_IVAR_$_GCDWebServerConnection._response
+OBJC_METH_VAR_NAME_80
+OBJC_SELECTOR_REFERENCES_81
+OBJC_CLASSLIST_REFERENCES_$_82
+.str83
+_unnamed_cfstring_84
+OBJC_METH_VAR_NAME_85
+OBJC_SELECTOR_REFERENCES_86
+OBJC_METH_VAR_NAME_87
+OBJC_SELECTOR_REFERENCES_88
+OBJC_METH_VAR_NAME_89
+OBJC_SELECTOR_REFERENCES_90
+.str91
+_unnamed_cfstring_92
+OBJC_METH_VAR_NAME_93
+OBJC_SELECTOR_REFERENCES_94
+OBJC_METH_VAR_NAME_95
+OBJC_SELECTOR_REFERENCES_96
+__block_descriptor_tmp99
+__block_descriptor_tmp103
+__block_descriptor_tmp109
+OBJC_METH_VAR_NAME_110
+OBJC_SELECTOR_REFERENCES_111
+OBJC_CLASS_NAME_112
+OBJC_METH_VAR_NAME_113
+OBJC_METH_VAR_TYPE_114
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServerConnection_$_Write
+l_OBJC_$_CATEGORY_GCDWebServerConnection_$_Write
+.str115
+OBJC_METH_VAR_NAME_116
+OBJC_SELECTOR_REFERENCES_117
+.str118
+.str119
+.str120
+_unnamed_cfstring_121
+OBJC_IVAR_$_GCDWebServerConnection._localAddress
+OBJC_IVAR_$_GCDWebServerConnection._statusCode
+.str122
+_unnamed_cfstring_123
+.str126
+_unnamed_cfstring_127
+OBJC_IVAR_$_GCDWebServerConnection._server
+OBJC_METH_VAR_NAME_128
+OBJC_SELECTOR_REFERENCES_129
+OBJC_CLASSLIST_REFERENCES_$_132
+OBJC_METH_VAR_NAME_133
+OBJC_SELECTOR_REFERENCES_134
+OBJC_METH_VAR_NAME_135
+OBJC_SELECTOR_REFERENCES_136
+OBJC_METH_VAR_NAME_137
+OBJC_SELECTOR_REFERENCES_138
+.str141
+__block_descriptor_tmp142
+OBJC_METH_VAR_NAME_143
+OBJC_SELECTOR_REFERENCES_144
+OBJC_METH_VAR_NAME_145
+OBJC_SELECTOR_REFERENCES_146
+OBJC_METH_VAR_NAME_147
+OBJC_SELECTOR_REFERENCES_148
+OBJC_METH_VAR_NAME_149
+OBJC_SELECTOR_REFERENCES_150
+OBJC_IVAR_$_GCDWebServerConnection._virtualHEAD
+.str153
+_unnamed_cfstring_154
+.str171
+_unnamed_cfstring_172
+.str173
+_unnamed_cfstring_174
+OBJC_SELECTOR_REFERENCES_176
+.str177
+_unnamed_cfstring_178
+OBJC_SELECTOR_REFERENCES_180
+.str181
+_unnamed_cfstring_182
+.str183
+_unnamed_cfstring_184
+.str185
+_unnamed_cfstring_186
+.str187
+_unnamed_cfstring_188
+OBJC_SELECTOR_REFERENCES_190
+.str193
+__block_descriptor_tmp194
+OBJC_SELECTOR_REFERENCES_196
+OBJC_METH_VAR_NAME_198
+OBJC_SELECTOR_REFERENCES_199
+__block_descriptor_tmp202
+__block_descriptor_tmp205
+OBJC_SELECTOR_REFERENCES_206
+OBJC_METH_VAR_NAME_207
+OBJC_SELECTOR_REFERENCES_208
+.str209
+_unnamed_cfstring_210
+OBJC_METH_VAR_NAME_211
+OBJC_SELECTOR_REFERENCES_212
+.str213
+_unnamed_cfstring_214
+OBJC_SELECTOR_REFERENCES_216
+__block_descriptor_tmp219
+OBJC_SELECTOR_REFERENCES_221
+__block_descriptor_tmp224
+OBJC_METH_VAR_NAME_225
+OBJC_SELECTOR_REFERENCES_226
+.str227
+_unnamed_cfstring_228
+OBJC_METH_VAR_NAME_229
+OBJC_SELECTOR_REFERENCES_230
+.str231
+_unnamed_cfstring_232
+OBJC_METH_VAR_NAME_233
+OBJC_SELECTOR_REFERENCES_234
+OBJC_CLASSLIST_REFERENCES_$_235
+OBJC_METH_VAR_NAME_236
+OBJC_SELECTOR_REFERENCES_237
+OBJC_METH_VAR_NAME_238
+OBJC_SELECTOR_REFERENCES_239
+OBJC_METH_VAR_NAME_240
+OBJC_SELECTOR_REFERENCES_241
+OBJC_IVAR_$_GCDWebServerConnection._handler
+OBJC_METH_VAR_NAME_242
+OBJC_SELECTOR_REFERENCES_243
+OBJC_METH_VAR_NAME_244
+OBJC_SELECTOR_REFERENCES_245
+OBJC_METH_VAR_NAME_246
+OBJC_SELECTOR_REFERENCES_247
+OBJC_METH_VAR_NAME_248
+OBJC_SELECTOR_REFERENCES_249
+OBJC_METH_VAR_NAME_250
+OBJC_SELECTOR_REFERENCES_251
+OBJC_METH_VAR_NAME_252
+OBJC_SELECTOR_REFERENCES_253
+.str254
+_unnamed_cfstring_255
+OBJC_METH_VAR_NAME_256
+OBJC_SELECTOR_REFERENCES_257
+.str258
+_unnamed_cfstring_259
+OBJC_METH_VAR_NAME_260
+OBJC_SELECTOR_REFERENCES_261
+OBJC_METH_VAR_NAME_262
+OBJC_SELECTOR_REFERENCES_263
+OBJC_METH_VAR_NAME_264
+OBJC_SELECTOR_REFERENCES_265
+__block_descriptor_tmp268
+.str269
+_unnamed_cfstring_270
+.str271
+_unnamed_cfstring_272
+OBJC_CLASSLIST_REFERENCES_$_273
+OBJC_METH_VAR_NAME_274
+OBJC_SELECTOR_REFERENCES_275
+.str278
+__block_descriptor_tmp279
+OBJC_METH_VAR_NAME_280
+OBJC_SELECTOR_REFERENCES_281
+OBJC_IVAR_$_GCDWebServerConnection._remoteAddress
+OBJC_METH_VAR_NAME_282
+OBJC_SELECTOR_REFERENCES_283
+OBJC_METH_VAR_NAME_284
+OBJC_SELECTOR_REFERENCES_285
+OBJC_IVAR_$_GCDWebServerConnection._opened
+OBJC_METH_VAR_NAME_286
+OBJC_SELECTOR_REFERENCES_287
+.str288
+_unnamed_cfstring_289
+OBJC_METH_VAR_NAME_290
+OBJC_SELECTOR_REFERENCES_291
+OBJC_METH_VAR_NAME_292
+OBJC_SELECTOR_REFERENCES_293
+OBJC_METH_VAR_NAME_294
+OBJC_SELECTOR_REFERENCES_295
+OBJC_IVAR_$_GCDWebServerConnection._bytesWritten
+OBJC_IVAR_$_GCDWebServerConnection._responsePath
+OBJC_IVAR_$_GCDWebServerConnection._requestPath
+OBJC_CLASS_NAME_296
+OBJC_METH_VAR_NAME_297
+OBJC_METH_VAR_TYPE_298
+l_OBJC_$_CLASS_METHODS_GCDWebServerConnection
+l_OBJC_METACLASS_RO_$_GCDWebServerConnection
+OBJC_CLASS_NAME_299
+OBJC_METH_VAR_NAME_300
+OBJC_METH_VAR_TYPE_301
+OBJC_METH_VAR_TYPE_302
+OBJC_METH_VAR_TYPE_303
+OBJC_METH_VAR_TYPE_304
+OBJC_METH_VAR_NAME_305
+OBJC_METH_VAR_TYPE_306
+OBJC_METH_VAR_NAME_307
+OBJC_METH_VAR_TYPE_308
+OBJC_METH_VAR_NAME_309
+OBJC_METH_VAR_NAME_310
+OBJC_METH_VAR_NAME_311
+OBJC_METH_VAR_NAME_312
+OBJC_METH_VAR_TYPE_313
+OBJC_METH_VAR_NAME_314
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerConnection
+OBJC_METH_VAR_NAME_315
+OBJC_METH_VAR_TYPE_316
+OBJC_METH_VAR_NAME_317
+OBJC_METH_VAR_TYPE_318
+OBJC_METH_VAR_NAME_319
+OBJC_METH_VAR_NAME_320
+OBJC_METH_VAR_TYPE_321
+OBJC_METH_VAR_NAME_322
+OBJC_METH_VAR_TYPE_323
+OBJC_METH_VAR_NAME_324
+OBJC_METH_VAR_NAME_325
+OBJC_METH_VAR_TYPE_326
+OBJC_METH_VAR_NAME_327
+OBJC_METH_VAR_TYPE_328
+OBJC_METH_VAR_NAME_329
+OBJC_METH_VAR_TYPE_330
+OBJC_METH_VAR_NAME_331
+OBJC_METH_VAR_TYPE_332
+OBJC_METH_VAR_NAME_333
+OBJC_METH_VAR_NAME_334
+OBJC_METH_VAR_TYPE_335
+OBJC_METH_VAR_NAME_336
+OBJC_METH_VAR_NAME_337
+OBJC_IVAR_$_GCDWebServerConnection._connectionIndex
+OBJC_METH_VAR_NAME_338
+OBJC_METH_VAR_NAME_339
+OBJC_METH_VAR_TYPE_340
+OBJC_IVAR_$_GCDWebServerConnection._requestFD
+OBJC_METH_VAR_NAME_341
+OBJC_METH_VAR_NAME_342
+OBJC_IVAR_$_GCDWebServerConnection._responseFD
+OBJC_METH_VAR_NAME_343
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerConnection
+OBJC_PROP_NAME_ATTR_344
+OBJC_PROP_NAME_ATTR_345
+OBJC_PROP_NAME_ATTR_346
+OBJC_PROP_NAME_ATTR_347
+OBJC_PROP_NAME_ATTR_348
+OBJC_PROP_NAME_ATTR_349
+OBJC_PROP_NAME_ATTR_350
+OBJC_PROP_NAME_ATTR_351
+OBJC_PROP_NAME_ATTR_352
+OBJC_PROP_NAME_ATTR_353
+OBJC_PROP_NAME_ATTR_354
+OBJC_PROP_NAME_ATTR_355
+OBJC_PROP_NAME_ATTR_356
+OBJC_PROP_NAME_ATTR_357
+l_OBJC_$_PROP_LIST_GCDWebServerConnection
+l_OBJC_CLASS_RO_$_GCDWebServerConnection
+OBJC_METH_VAR_NAME_358
+OBJC_SELECTOR_REFERENCES_359
+_connectionCounter
+OBJC_CLASSLIST_REFERENCES_$_360
+OBJC_METH_VAR_NAME_361
+OBJC_SELECTOR_REFERENCES_362
+OBJC_METH_VAR_NAME_363
+OBJC_SELECTOR_REFERENCES_364
+OBJC_METH_VAR_NAME_365
+OBJC_SELECTOR_REFERENCES_366
+OBJC_METH_VAR_NAME_367
+OBJC_SELECTOR_REFERENCES_368
+.str369
+_unnamed_cfstring_370
+.str371
+_unnamed_cfstring_372
+OBJC_METH_VAR_NAME_373
+OBJC_SELECTOR_REFERENCES_374
+OBJC_METH_VAR_NAME_375
+OBJC_SELECTOR_REFERENCES_376
+.str377
+_unnamed_cfstring_378
+.str379
+_unnamed_cfstring_380
+OBJC_METH_VAR_NAME_381
+OBJC_SELECTOR_REFERENCES_382
+OBJC_METH_VAR_NAME_383
+OBJC_SELECTOR_REFERENCES_384
+.str387
+__block_descriptor_tmp388
+OBJC_CLASSLIST_REFERENCES_$_389
+OBJC_METH_VAR_NAME_390
+OBJC_SELECTOR_REFERENCES_391
+.str392
+_unnamed_cfstring_393
+OBJC_METH_VAR_NAME_394
+OBJC_SELECTOR_REFERENCES_395
+.str396
+_unnamed_cfstring_397
+OBJC_METH_VAR_NAME_398
+OBJC_SELECTOR_REFERENCES_399
+OBJC_METH_VAR_NAME_400
+OBJC_SELECTOR_REFERENCES_401
+.str402
+_unnamed_cfstring_403
+.str404
+_unnamed_cfstring_405
+.str406
+_unnamed_cfstring_407
+.str408
+_unnamed_cfstring_409
+.str410
+_unnamed_cfstring_411
+.str412
+_unnamed_cfstring_413
+.str414
+_unnamed_cfstring_415
+OBJC_METH_VAR_NAME_416
+OBJC_SELECTOR_REFERENCES_417
+.str418
+_unnamed_cfstring_419
+.str420
+_unnamed_cfstring_421
+.str422
+_unnamed_cfstring_423
+.str424
+_unnamed_cfstring_425
+OBJC_METH_VAR_NAME_426
+OBJC_SELECTOR_REFERENCES_427
+OBJC_METH_VAR_NAME_428
+OBJC_SELECTOR_REFERENCES_429
+OBJC_METH_VAR_NAME_430
+OBJC_SELECTOR_REFERENCES_431
+OBJC_METH_VAR_NAME_432
+OBJC_SELECTOR_REFERENCES_433
+OBJC_METH_VAR_NAME_434
+OBJC_SELECTOR_REFERENCES_435
+OBJC_METH_VAR_NAME_436
+OBJC_SELECTOR_REFERENCES_437
+OBJC_METH_VAR_NAME_438
+OBJC_SELECTOR_REFERENCES_439
+__block_descriptor_tmp440
+__block_literal_global
+.str441
+_unnamed_cfstring_442
+OBJC_CLASSLIST_REFERENCES_$_443
+OBJC_METH_VAR_NAME_444
+OBJC_SELECTOR_REFERENCES_445
+OBJC_METH_VAR_NAME_446
+OBJC_SELECTOR_REFERENCES_447
+OBJC_METH_VAR_NAME_448
+OBJC_SELECTOR_REFERENCES_449
+.str450
+_unnamed_cfstring_451
+.str452
+_unnamed_cfstring_453
+.str454
+_unnamed_cfstring_455
+.str456
+_unnamed_cfstring_457
+OBJC_SELECTOR_REFERENCES_458
+OBJC_SELECTOR_REFERENCES_459
+OBJC_METH_VAR_NAME_460
+OBJC_SELECTOR_REFERENCES_461
+.str462
+_unnamed_cfstring_463
+OBJC_CLASS_NAME_464
+OBJC_METH_VAR_TYPE_465
+OBJC_METH_VAR_TYPE_466
+OBJC_METH_VAR_TYPE_467
+OBJC_METH_VAR_TYPE_468
+OBJC_METH_VAR_TYPE_469
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServerConnection_$_Subclassing
+l_OBJC_$_CATEGORY_GCDWebServerConnection_$_Subclassing
+OBJC_METH_VAR_NAME_470
+OBJC_SELECTOR_REFERENCES_471
+.str472
+_unnamed_cfstring_473
+OBJC_LABEL_CATEGORY_$
+_CompareResources
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServerConnection.m
+CFBridgingRelease
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSObject.h
+-[GCDWebServerConnection(Subclassing) close]
+-[GCDWebServerConnection(Subclassing) abortRequest:withStatusCode:]
+-[GCDWebServerConnection(Subclassing) overrideResponse:forRequest:]
+-[GCDWebServerConnection(Subclassing) processRequest:completion:]
+-[GCDWebServerConnection(Subclassing) preflightRequest:]
+-[GCDWebServerConnection(Subclassing) rewriteRequestURL:withMethod:headers:]
+-[GCDWebServerConnection(Subclassing) didWriteBytes:length:]
+-[GCDWebServerConnection(Subclassing) didReadBytes:length:]
+-[GCDWebServerConnection(Subclassing) open]
+-[GCDWebServerConnection .cxx_destruct]
+-[GCDWebServerConnection totalBytesWritten]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServerConnection.h
+-[GCDWebServerConnection totalBytesRead]
+-[GCDWebServerConnection remoteAddressData]
+-[GCDWebServerConnection localAddressData]
+-[GCDWebServerConnection server]
+-[GCDWebServerConnection dealloc]
+-[GCDWebServerConnection remoteAddressString]
+-[GCDWebServerConnection localAddressString]
+-[GCDWebServerConnection initWithServer:localAddress:remoteAddress:socket:]
+-[GCDWebServerConnection _readRequestHeaders]
+-[GCDWebServerConnection _readChunkedBodyWithInitialData:]
+-[GCDWebServerConnection _readBodyWithLength:initialData:]
+-[GCDWebServerConnection _finishProcessingRequest:]
+-[GCDWebServerConnection _startProcessingRequest]
+-[GCDWebServerConnection _initializeResponseHeadersWithStatusCode:]
+-[GCDWebServerConnection isUsingIPv6]
++[GCDWebServerConnection initialize]
+-[GCDWebServerConnection(Write) _writeBodyWithCompletionBlock:]
+-[GCDWebServerConnection(Write) _writeHeadersWithCompletionBlock:]
+-[GCDWebServerConnection(Write) _writeData:withCompletionBlock:]
+-[GCDWebServerConnection(Read) _readNextBodyChunk:completionBlock:]
+-[GCDWebServerConnection(Read) _readBodyWithRemainingLength:completionBlock:]
+-[GCDWebServerConnection(Read) _readHeaders:withCompletionBlock:]
+-[GCDWebServerConnection(Read) _readData:withLength:completionBlock:]
+-[GCDWebServerDataRequest open:]
+-[GCDWebServerDataRequest writeData:error:]
+-[GCDWebServerDataRequest close:]
+-[GCDWebServerDataRequest description]
+-[GCDWebServerDataRequest data]
+-[GCDWebServerDataRequest .cxx_destruct]
+-[GCDWebServerDataRequest(Extensions) text]
+-[GCDWebServerDataRequest(Extensions) jsonObject]
+OBJC_IVAR_$_GCDWebServerDataRequest._data
+OBJC_CLASSLIST_REFERENCES_$_7
+OBJC_CLASSLIST_REFERENCES_$_10
+OBJC_METH_VAR_NAME_11
+OBJC_SELECTOR_REFERENCES_12
+OBJC_METH_VAR_NAME_13
+OBJC_SELECTOR_REFERENCES_14
+OBJC_METH_VAR_NAME_15
+OBJC_SELECTOR_REFERENCES_16
+OBJC_CLASSLIST_REFERENCES_$_17
+OBJC_IVAR_$_GCDWebServerDataRequest._jsonObject
+OBJC_IVAR_$_GCDWebServerDataRequest._text
+l_OBJC_METACLASS_RO_$_GCDWebServerDataRequest
+OBJC_CLASS_NAME_28
+OBJC_METH_VAR_TYPE_31
+OBJC_METH_VAR_TYPE_35
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerDataRequest
+OBJC_METH_VAR_TYPE_40
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerDataRequest
+OBJC_PROP_NAME_ATTR_43
+l_OBJC_$_PROP_LIST_GCDWebServerDataRequest
+l_OBJC_CLASS_RO_$_GCDWebServerDataRequest
+.str44
+_unnamed_cfstring_45
+OBJC_METH_VAR_NAME_46
+OBJC_SELECTOR_REFERENCES_47
+_unnamed_cfstring_49
+OBJC_CLASSLIST_REFERENCES_$_50
+OBJC_SELECTOR_REFERENCES_51
+OBJC_METH_VAR_NAME_52
+OBJC_SELECTOR_REFERENCES_53
+.str54
+_unnamed_cfstring_55
+OBJC_METH_VAR_NAME_56
+OBJC_SELECTOR_REFERENCES_57
+.str60
+_unnamed_cfstring_61
+OBJC_CLASSLIST_REFERENCES_$_62
+OBJC_CLASS_NAME_65
+OBJC_METH_VAR_NAME_66
+OBJC_METH_VAR_NAME_67
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServerDataRequest_$_Extensions
+OBJC_PROP_NAME_ATTR_68
+OBJC_PROP_NAME_ATTR_69
+OBJC_PROP_NAME_ATTR_70
+OBJC_PROP_NAME_ATTR_71
+l_OBJC_$_PROP_LIST_GCDWebServerDataRequest_$_Extensions
+l_OBJC_$_CATEGORY_GCDWebServerDataRequest_$_Extensions
+-[GCDWebServerDataRequest(Extensions) jsonObject]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Requests/GCDWebServerDataRequest.m
+-[GCDWebServerDataRequest(Extensions) text]
+-[GCDWebServerDataRequest .cxx_destruct]
+-[GCDWebServerDataRequest data]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Requests/GCDWebServerDataRequest.h
+-[GCDWebServerDataRequest description]
+-[GCDWebServerDataRequest close:]
+-[GCDWebServerDataRequest writeData:error:]
+-[GCDWebServerDataRequest open:]
+-[GCDWebServerMultiPart initWithControlName:contentType:]
+-[GCDWebServerMultiPart controlName]
+-[GCDWebServerMultiPart contentType]
+-[GCDWebServerMultiPart mimeType]
+-[GCDWebServerMultiPart .cxx_destruct]
+-[GCDWebServerMultiPartArgument initWithControlName:contentType:data:]
+-[GCDWebServerMultiPartArgument description]
+-[GCDWebServerMultiPartArgument data]
+-[GCDWebServerMultiPartArgument string]
+-[GCDWebServerMultiPartArgument .cxx_destruct]
+-[GCDWebServerMultiPartFile initWithControlName:contentType:fileName:temporaryPath:]
+-[GCDWebServerMultiPartFile dealloc]
+-[GCDWebServerMultiPartFile description]
+-[GCDWebServerMultiPartFile fileName]
+-[GCDWebServerMultiPartFile temporaryPath]
+-[GCDWebServerMultiPartFile .cxx_destruct]
++[GCDWebServerMIMEStreamParser initialize]
+-[GCDWebServerMIMEStreamParser initWithBoundary:defaultControlName:arguments:files:]
+-[GCDWebServerMIMEStreamParser dealloc]
+-[GCDWebServerMIMEStreamParser _parseData]
+-[GCDWebServerMIMEStreamParser appendBytes:length:]
+-[GCDWebServerMIMEStreamParser isAtEnd]
+-[GCDWebServerMIMEStreamParser .cxx_destruct]
++[GCDWebServerMultiPartFormRequest mimeType]
+-[GCDWebServerMultiPartFormRequest initWithMethod:url:headers:path:query:]
+-[GCDWebServerMultiPartFormRequest open:]
+-[GCDWebServerMultiPartFormRequest writeData:error:]
+-[GCDWebServerMultiPartFormRequest close:]
+-[GCDWebServerMultiPartFormRequest firstArgumentForControlName:]
+-[GCDWebServerMultiPartFormRequest firstFileForControlName:]
+-[GCDWebServerMultiPartFormRequest description]
+-[GCDWebServerMultiPartFormRequest arguments]
+-[GCDWebServerMultiPartFormRequest files]
+-[GCDWebServerMultiPartFormRequest .cxx_destruct]
+_newlineData
+_newlinesData
+_dashNewlineData
+OBJC_IVAR_$_GCDWebServerMultiPart._controlName
+OBJC_IVAR_$_GCDWebServerMultiPart._contentType
+OBJC_IVAR_$_GCDWebServerMultiPart._mimeType
+l_OBJC_METACLASS_RO_$_GCDWebServerMultiPart
+OBJC_CLASS_NAME_3
+OBJC_METH_VAR_NAME_4
+OBJC_METH_VAR_TYPE_6
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerMultiPart
+OBJC_METH_VAR_TYPE_12
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerMultiPart
+OBJC_PROP_NAME_ATTR_15
+OBJC_PROP_NAME_ATTR_16
+OBJC_PROP_NAME_ATTR_17
+OBJC_PROP_NAME_ATTR_18
+OBJC_PROP_NAME_ATTR_19
+l_OBJC_$_PROP_LIST_GCDWebServerMultiPart
+l_OBJC_CLASS_RO_$_GCDWebServerMultiPart
+OBJC_CLASSLIST_SUP_REFS_$_20
+OBJC_IVAR_$_GCDWebServerMultiPartArgument._data
+OBJC_SELECTOR_REFERENCES_22
+OBJC_METH_VAR_NAME_23
+OBJC_SELECTOR_REFERENCES_24
+.str25
+_unnamed_cfstring_26
+OBJC_SELECTOR_REFERENCES_28
+OBJC_SELECTOR_REFERENCES_30
+OBJC_IVAR_$_GCDWebServerMultiPartArgument._string
+.str31
+_unnamed_cfstring_32
+OBJC_METH_VAR_NAME_33
+OBJC_SELECTOR_REFERENCES_34
+OBJC_CLASS_NAME_40
+l_OBJC_METACLASS_RO_$_GCDWebServerMultiPartArgument
+OBJC_CLASS_NAME_41
+OBJC_METH_VAR_NAME_42
+OBJC_METH_VAR_TYPE_43
+OBJC_METH_VAR_NAME_44
+OBJC_METH_VAR_NAME_45
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerMultiPartArgument
+OBJC_METH_VAR_NAME_47
+OBJC_METH_VAR_TYPE_48
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerMultiPartArgument
+OBJC_PROP_NAME_ATTR_51
+OBJC_PROP_NAME_ATTR_52
+OBJC_PROP_NAME_ATTR_53
+l_OBJC_$_PROP_LIST_GCDWebServerMultiPartArgument
+l_OBJC_CLASS_RO_$_GCDWebServerMultiPartArgument
+OBJC_CLASSLIST_SUP_REFS_$_54
+OBJC_IVAR_$_GCDWebServerMultiPartFile._fileName
+OBJC_IVAR_$_GCDWebServerMultiPartFile._temporaryPath
+OBJC_SELECTOR_REFERENCES_56
+.str59
+_unnamed_cfstring_60
+OBJC_CLASS_NAME_61
+l_OBJC_METACLASS_RO_$_GCDWebServerMultiPartFile
+OBJC_CLASS_NAME_62
+OBJC_METH_VAR_TYPE_64
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerMultiPartFile
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerMultiPartFile
+OBJC_PROP_NAME_ATTR_72
+l_OBJC_$_PROP_LIST_GCDWebServerMultiPartFile
+l_OBJC_CLASS_RO_$_GCDWebServerMultiPartFile
+OBJC_CLASSLIST_REFERENCES_$_73
+.str74
+OBJC_METH_VAR_NAME_75
+OBJC_SELECTOR_REFERENCES_76
+.str77
+.str78
+.str79
+_unnamed_cfstring_80
+OBJC_METH_VAR_NAME_81
+OBJC_SELECTOR_REFERENCES_82
+OBJC_CLASSLIST_SUP_REFS_$_83
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._boundary
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._defaultcontrolName
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._arguments
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._files
+OBJC_CLASSLIST_REFERENCES_$_84
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._data
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._state
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._tmpFile
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._tmpPath
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._controlName
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._fileName
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._contentType
+OBJC_IVAR_$_GCDWebServerMIMEStreamParser._subParser
+.str97
+_unnamed_cfstring_98
+OBJC_METH_VAR_NAME_99
+OBJC_SELECTOR_REFERENCES_100
+OBJC_METH_VAR_NAME_101
+OBJC_SELECTOR_REFERENCES_102
+OBJC_METH_VAR_NAME_103
+OBJC_SELECTOR_REFERENCES_104
+OBJC_CLASSLIST_REFERENCES_$_105
+OBJC_METH_VAR_NAME_106
+OBJC_SELECTOR_REFERENCES_107
+OBJC_METH_VAR_NAME_108
+OBJC_SELECTOR_REFERENCES_109
+.str114
+_unnamed_cfstring_115
+OBJC_CLASSLIST_REFERENCES_$_134
+OBJC_METH_VAR_NAME_140
+OBJC_SELECTOR_REFERENCES_141
+OBJC_METH_VAR_NAME_142
+OBJC_METH_VAR_NAME_148
+OBJC_SELECTOR_REFERENCES_149
+OBJC_METH_VAR_NAME_150
+OBJC_SELECTOR_REFERENCES_151
+OBJC_CLASSLIST_REFERENCES_$_152
+OBJC_SELECTOR_REFERENCES_153
+OBJC_METH_VAR_NAME_154
+OBJC_SELECTOR_REFERENCES_155
+OBJC_CLASSLIST_REFERENCES_$_156
+OBJC_SELECTOR_REFERENCES_157
+OBJC_METH_VAR_NAME_158
+OBJC_SELECTOR_REFERENCES_159
+OBJC_CLASS_NAME_160
+OBJC_METH_VAR_NAME_161
+l_OBJC_$_CLASS_METHODS_GCDWebServerMIMEStreamParser
+l_OBJC_METACLASS_RO_$_GCDWebServerMIMEStreamParser
+OBJC_CLASS_NAME_162
+OBJC_METH_VAR_TYPE_163
+OBJC_METH_VAR_TYPE_164
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerMIMEStreamParser
+OBJC_METH_VAR_NAME_165
+OBJC_METH_VAR_NAME_166
+OBJC_METH_VAR_TYPE_168
+OBJC_METH_VAR_TYPE_169
+OBJC_METH_VAR_NAME_170
+OBJC_METH_VAR_TYPE_171
+OBJC_METH_VAR_NAME_172
+OBJC_METH_VAR_NAME_174
+OBJC_METH_VAR_TYPE_176
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerMIMEStreamParser
+l_OBJC_CLASS_RO_$_GCDWebServerMIMEStreamParser
+OBJC_CLASSLIST_SUP_REFS_$_179
+OBJC_METH_VAR_NAME_180
+OBJC_SELECTOR_REFERENCES_181
+OBJC_CLASSLIST_REFERENCES_$_182
+OBJC_IVAR_$_GCDWebServerMultiPartFormRequest._arguments
+OBJC_IVAR_$_GCDWebServerMultiPartFormRequest._files
+OBJC_IVAR_$_GCDWebServerMultiPartFormRequest._parser
+OBJC_CLASSLIST_REFERENCES_$_183
+.str184
+_unnamed_cfstring_185
+.str186
+_unnamed_cfstring_187
+OBJC_CLASSLIST_REFERENCES_$_188
+OBJC_SELECTOR_REFERENCES_192
+_unnamed_cfstring_194
+.str195
+_unnamed_cfstring_196
+OBJC_SELECTOR_REFERENCES_197
+OBJC_CLASSLIST_REFERENCES_$_198
+OBJC_SELECTOR_REFERENCES_201
+OBJC_SELECTOR_REFERENCES_203
+.str204
+_unnamed_cfstring_205
+OBJC_SELECTOR_REFERENCES_207
+.str208
+_unnamed_cfstring_209
+OBJC_SELECTOR_REFERENCES_211
+OBJC_SELECTOR_REFERENCES_215
+OBJC_CLASS_NAME_217
+l_OBJC_$_CLASS_METHODS_GCDWebServerMultiPartFormRequest
+l_OBJC_METACLASS_RO_$_GCDWebServerMultiPartFormRequest
+OBJC_CLASS_NAME_218
+OBJC_METH_VAR_TYPE_221
+OBJC_METH_VAR_NAME_222
+OBJC_METH_VAR_TYPE_223
+OBJC_METH_VAR_TYPE_226
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerMultiPartFormRequest
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerMultiPartFormRequest
+OBJC_PROP_NAME_ATTR_231
+l_OBJC_$_PROP_LIST_GCDWebServerMultiPartFormRequest
+l_OBJC_CLASS_RO_$_GCDWebServerMultiPartFormRequest
+-[GCDWebServerMultiPartFormRequest .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Requests/GCDWebServerMultiPartFormRequest.m
+-[GCDWebServerMultiPartFormRequest files]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Requests/GCDWebServerMultiPartFormRequest.h
+-[GCDWebServerMultiPartFormRequest arguments]
+-[GCDWebServerMultiPartFormRequest description]
+-[GCDWebServerMultiPartFormRequest firstFileForControlName:]
+-[GCDWebServerMultiPartFormRequest firstArgumentForControlName:]
+-[GCDWebServerMultiPartFormRequest close:]
+-[GCDWebServerMultiPartFormRequest writeData:error:]
+-[GCDWebServerMultiPartFormRequest open:]
+-[GCDWebServerMultiPartFormRequest initWithMethod:url:headers:path:query:]
++[GCDWebServerMultiPartFormRequest mimeType]
+-[GCDWebServerMIMEStreamParser .cxx_destruct]
+-[GCDWebServerMIMEStreamParser isAtEnd]
+-[GCDWebServerMIMEStreamParser appendBytes:length:]
+-[GCDWebServerMIMEStreamParser _parseData]
+-[GCDWebServerMIMEStreamParser dealloc]
+-[GCDWebServerMIMEStreamParser initWithBoundary:defaultControlName:arguments:files:]
++[GCDWebServerMIMEStreamParser initialize]
+-[GCDWebServerMultiPartFile .cxx_destruct]
+-[GCDWebServerMultiPartFile temporaryPath]
+-[GCDWebServerMultiPartFile fileName]
+-[GCDWebServerMultiPartFile description]
+-[GCDWebServerMultiPartFile dealloc]
+-[GCDWebServerMultiPartFile initWithControlName:contentType:fileName:temporaryPath:]
+-[GCDWebServerMultiPartArgument .cxx_destruct]
+-[GCDWebServerMultiPartArgument string]
+-[GCDWebServerMultiPartArgument data]
+-[GCDWebServerMultiPartArgument description]
+-[GCDWebServerMultiPartArgument initWithControlName:contentType:data:]
+-[GCDWebServerMultiPart .cxx_destruct]
+-[GCDWebServerMultiPart mimeType]
+-[GCDWebServerMultiPart contentType]
+-[GCDWebServerMultiPart controlName]
+-[GCDWebServerMultiPart initWithControlName:contentType:]
+-[GCDWebServerFileRequest initWithMethod:url:headers:path:query:]
+-[GCDWebServerFileRequest dealloc]
+-[GCDWebServerFileRequest open:]
+-[GCDWebServerFileRequest writeData:error:]
+-[GCDWebServerFileRequest close:]
+-[GCDWebServerFileRequest description]
+-[GCDWebServerFileRequest temporaryPath]
+-[GCDWebServerFileRequest .cxx_destruct]
+OBJC_IVAR_$_GCDWebServerFileRequest._temporaryPath
+OBJC_IVAR_$_GCDWebServerFileRequest._file
+OBJC_METH_VAR_NAME_17
+OBJC_SELECTOR_REFERENCES_18
+OBJC_CLASSLIST_REFERENCES_$_19
+OBJC_CLASSLIST_REFERENCES_$_22
+OBJC_METH_VAR_NAME_25
+OBJC_SELECTOR_REFERENCES_26
+.str27
+_unnamed_cfstring_28
+OBJC_CLASSLIST_REFERENCES_$_29
+.str34
+_unnamed_cfstring_35
+l_OBJC_METACLASS_RO_$_GCDWebServerFileRequest
+OBJC_CLASS_NAME_38
+OBJC_METH_VAR_TYPE_39
+OBJC_METH_VAR_TYPE_45
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerFileRequest
+OBJC_METH_VAR_NAME_48
+OBJC_METH_VAR_TYPE_49
+OBJC_METH_VAR_NAME_50
+OBJC_METH_VAR_TYPE_51
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerFileRequest
+l_OBJC_$_PROP_LIST_GCDWebServerFileRequest
+l_OBJC_CLASS_RO_$_GCDWebServerFileRequest
+OBJC_CLASSLIST_REFERENCES_$_53
+OBJC_CLASSLIST_REFERENCES_$_54
+GCDWebServerMakePosixError
+-[GCDWebServerFileRequest .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Requests/GCDWebServerFileRequest.m
+-[GCDWebServerFileRequest temporaryPath]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Requests/GCDWebServerFileRequest.h
+-[GCDWebServerFileRequest description]
+-[GCDWebServerFileRequest close:]
+-[GCDWebServerFileRequest writeData:error:]
+-[GCDWebServerFileRequest open:]
+-[GCDWebServerFileRequest dealloc]
+-[GCDWebServerFileRequest initWithMethod:url:headers:path:query:]
+-[GCDWebServerBodyEncoder initWithResponse:reader:]
+-[GCDWebServerBodyEncoder open:]
+-[GCDWebServerBodyEncoder readData:]
+-[GCDWebServerBodyEncoder close]
+-[GCDWebServerGZipEncoder initWithResponse:reader:]
+-[GCDWebServerGZipEncoder open:]
+-[GCDWebServerGZipEncoder readData:]
+-[GCDWebServerGZipEncoder close]
++[GCDWebServerResponse response]
+-[GCDWebServerResponse init]
+-[GCDWebServerResponse setValue:forAdditionalHeader:]
+-[GCDWebServerResponse hasBody]
+-[GCDWebServerResponse usesChunkedTransferEncoding]
+-[GCDWebServerResponse open:]
+-[GCDWebServerResponse readData:]
+-[GCDWebServerResponse close]
+-[GCDWebServerResponse prepareForReading]
+-[GCDWebServerResponse performOpen:]
+-[GCDWebServerResponse performReadDataWithCompletion:]
+-[GCDWebServerResponse performClose]
+-[GCDWebServerResponse description]
+-[GCDWebServerResponse contentType]
+-[GCDWebServerResponse setContentType:]
+-[GCDWebServerResponse contentLength]
+-[GCDWebServerResponse setContentLength:]
+-[GCDWebServerResponse statusCode]
+-[GCDWebServerResponse setStatusCode:]
+-[GCDWebServerResponse cacheControlMaxAge]
+-[GCDWebServerResponse setCacheControlMaxAge:]
+-[GCDWebServerResponse lastModifiedDate]
+-[GCDWebServerResponse setLastModifiedDate:]
+-[GCDWebServerResponse eTag]
+-[GCDWebServerResponse setETag:]
+-[GCDWebServerResponse isGZipContentEncodingEnabled]
+-[GCDWebServerResponse setGzipContentEncodingEnabled:]
+-[GCDWebServerResponse additionalHeaders]
+-[GCDWebServerResponse .cxx_destruct]
++[GCDWebServerResponse(Extensions) responseWithStatusCode:]
++[GCDWebServerResponse(Extensions) responseWithRedirect:permanent:]
+-[GCDWebServerResponse(Extensions) initWithStatusCode:]
+-[GCDWebServerResponse(Extensions) initWithRedirect:permanent:]
+OBJC_IVAR_$_GCDWebServerBodyEncoder._response
+OBJC_IVAR_$_GCDWebServerBodyEncoder._reader
+OBJC_METH_VAR_TYPE_9
+OBJC_CLASS_NAME_13
+OBJC_METH_VAR_TYPE_27
+OBJC_METH_VAR_NAME_28
+OBJC_METH_VAR_TYPE_29
+OBJC_METH_VAR_TYPE_32
+OBJC_METH_VAR_TYPE_34
+OBJC_METH_VAR_TYPE_37
+OBJC_METH_VAR_TYPE_46
+OBJC_CLASS_NAME_48
+OBJC_PROP_NAME_ATTR_54
+l_OBJC_$_PROTOCOL_REFS_GCDWebServerBodyReader
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_GCDWebServerBodyReader
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_OPT_GCDWebServerBodyReader
+l_OBJC_$_PROTOCOL_METHOD_TYPES_GCDWebServerBodyReader
+l_OBJC_PROTOCOL_$_GCDWebServerBodyReader
+l_OBJC_LABEL_PROTOCOL_$_GCDWebServerBodyReader
+l_OBJC_CLASS_PROTOCOLS_$_GCDWebServerBodyEncoder
+l_OBJC_METACLASS_RO_$_GCDWebServerBodyEncoder
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerBodyEncoder
+OBJC_METH_VAR_TYPE_58
+OBJC_METH_VAR_NAME_59
+OBJC_METH_VAR_TYPE_60
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerBodyEncoder
+l_OBJC_$_PROP_LIST_GCDWebServerBodyEncoder
+l_OBJC_CLASS_RO_$_GCDWebServerBodyEncoder
+OBJC_CLASSLIST_SUP_REFS_$_61
+OBJC_SELECTOR_REFERENCES_62
+.str65
+_unnamed_cfstring_66
+OBJC_SELECTOR_REFERENCES_68
+OBJC_IVAR_$_GCDWebServerGZipEncoder._stream
+.str69
+.str70
+_unnamed_cfstring_71
+OBJC_IVAR_$_GCDWebServerGZipEncoder._finished
+OBJC_CLASSLIST_REFERENCES_$_74
+OBJC_SELECTOR_REFERENCES_78
+OBJC_SELECTOR_REFERENCES_80
+OBJC_METH_VAR_NAME_83
+OBJC_SELECTOR_REFERENCES_84
+OBJC_CLASS_NAME_87
+l_OBJC_METACLASS_RO_$_GCDWebServerGZipEncoder
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerGZipEncoder
+OBJC_METH_VAR_NAME_88
+OBJC_METH_VAR_TYPE_89
+OBJC_METH_VAR_NAME_90
+OBJC_METH_VAR_TYPE_91
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerGZipEncoder
+l_OBJC_CLASS_RO_$_GCDWebServerGZipEncoder
+OBJC_SELECTOR_REFERENCES_92
+OBJC_CLASSLIST_SUP_REFS_$_93
+OBJC_IVAR_$_GCDWebServerResponse._type
+OBJC_IVAR_$_GCDWebServerResponse._length
+OBJC_IVAR_$_GCDWebServerResponse._status
+OBJC_IVAR_$_GCDWebServerResponse._maxAge
+OBJC_CLASSLIST_REFERENCES_$_94
+OBJC_IVAR_$_GCDWebServerResponse._headers
+OBJC_CLASSLIST_REFERENCES_$_95
+OBJC_IVAR_$_GCDWebServerResponse._encoders
+OBJC_CLASSLIST_REFERENCES_$_98
+OBJC_IVAR_$_GCDWebServerResponse._reader
+OBJC_IVAR_$_GCDWebServerResponse._gzipped
+OBJC_CLASSLIST_REFERENCES_$_101
+OBJC_METH_VAR_NAME_102
+OBJC_SELECTOR_REFERENCES_103
+OBJC_IVAR_$_GCDWebServerResponse._opened
+OBJC_SELECTOR_REFERENCES_105
+OBJC_CLASSLIST_REFERENCES_$_108
+.str109
+_unnamed_cfstring_110
+OBJC_METH_VAR_NAME_111
+OBJC_SELECTOR_REFERENCES_112
+.str113
+_unnamed_cfstring_114
+OBJC_METH_VAR_NAME_115
+OBJC_SELECTOR_REFERENCES_116
+.str117
+_unnamed_cfstring_118
+_unnamed_cfstring_120
+OBJC_IVAR_$_GCDWebServerResponse._lastModified
+.str121
+_unnamed_cfstring_122
+OBJC_IVAR_$_GCDWebServerResponse._eTag
+.str123
+_unnamed_cfstring_124
+OBJC_METH_VAR_NAME_125
+OBJC_SELECTOR_REFERENCES_126
+.str127
+_unnamed_cfstring_128
+OBJC_METH_VAR_NAME_129
+OBJC_SELECTOR_REFERENCES_130
+OBJC_METH_VAR_NAME_131
+OBJC_SELECTOR_REFERENCES_132
+.str139
+_unnamed_cfstring_140
+OBJC_METH_VAR_NAME_141
+OBJC_SELECTOR_REFERENCES_142
+OBJC_CLASS_NAME_143
+l_OBJC_$_CLASS_METHODS_GCDWebServerResponse
+l_OBJC_CLASS_PROTOCOLS_$_GCDWebServerResponse
+l_OBJC_METACLASS_RO_$_GCDWebServerResponse
+OBJC_CLASS_NAME_145
+OBJC_METH_VAR_TYPE_146
+OBJC_METH_VAR_NAME_152
+OBJC_METH_VAR_TYPE_156
+OBJC_METH_VAR_TYPE_158
+OBJC_METH_VAR_TYPE_160
+OBJC_METH_VAR_TYPE_162
+OBJC_METH_VAR_NAME_164
+OBJC_METH_VAR_NAME_168
+OBJC_METH_VAR_NAME_169
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerResponse
+OBJC_METH_VAR_TYPE_181
+OBJC_METH_VAR_TYPE_184
+OBJC_IVAR_$_GCDWebServerResponse._chunked
+OBJC_METH_VAR_NAME_185
+OBJC_METH_VAR_TYPE_189
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerResponse
+OBJC_PROP_NAME_ATTR_190
+OBJC_PROP_NAME_ATTR_191
+OBJC_PROP_NAME_ATTR_192
+OBJC_PROP_NAME_ATTR_193
+OBJC_PROP_NAME_ATTR_194
+OBJC_PROP_NAME_ATTR_195
+OBJC_PROP_NAME_ATTR_196
+OBJC_PROP_NAME_ATTR_197
+OBJC_PROP_NAME_ATTR_198
+OBJC_PROP_NAME_ATTR_199
+OBJC_PROP_NAME_ATTR_200
+OBJC_PROP_NAME_ATTR_201
+OBJC_PROP_NAME_ATTR_202
+OBJC_PROP_NAME_ATTR_203
+OBJC_PROP_NAME_ATTR_204
+OBJC_PROP_NAME_ATTR_205
+OBJC_PROP_NAME_ATTR_206
+OBJC_PROP_NAME_ATTR_207
+l_OBJC_$_PROP_LIST_GCDWebServerResponse
+l_OBJC_CLASS_RO_$_GCDWebServerResponse
+OBJC_SELECTOR_REFERENCES_209
+OBJC_SELECTOR_REFERENCES_214
+.str215
+_unnamed_cfstring_216
+OBJC_METH_VAR_TYPE_218
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServerResponse_$_Extensions
+l_OBJC_$_CATEGORY_CLASS_METHODS_GCDWebServerResponse_$_Extensions
+l_OBJC_$_CATEGORY_GCDWebServerResponse_$_Extensions
+-[GCDWebServerResponse(Extensions) initWithRedirect:permanent:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServerResponse.m
+-[GCDWebServerResponse(Extensions) initWithStatusCode:]
++[GCDWebServerResponse(Extensions) responseWithRedirect:permanent:]
++[GCDWebServerResponse(Extensions) responseWithStatusCode:]
+-[GCDWebServerResponse .cxx_destruct]
+-[GCDWebServerResponse additionalHeaders]
+-[GCDWebServerResponse setGzipContentEncodingEnabled:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServerResponse.h
+-[GCDWebServerResponse isGZipContentEncodingEnabled]
+-[GCDWebServerResponse setETag:]
+-[GCDWebServerResponse eTag]
+-[GCDWebServerResponse setLastModifiedDate:]
+-[GCDWebServerResponse lastModifiedDate]
+-[GCDWebServerResponse setCacheControlMaxAge:]
+-[GCDWebServerResponse cacheControlMaxAge]
+-[GCDWebServerResponse setStatusCode:]
+-[GCDWebServerResponse statusCode]
+-[GCDWebServerResponse setContentLength:]
+-[GCDWebServerResponse contentLength]
+-[GCDWebServerResponse setContentType:]
+-[GCDWebServerResponse contentType]
+-[GCDWebServerResponse description]
+-[GCDWebServerResponse performClose]
+-[GCDWebServerResponse performReadDataWithCompletion:]
+-[GCDWebServerResponse performOpen:]
+-[GCDWebServerResponse prepareForReading]
+-[GCDWebServerResponse close]
+-[GCDWebServerResponse readData:]
+-[GCDWebServerResponse open:]
+-[GCDWebServerResponse usesChunkedTransferEncoding]
+-[GCDWebServerResponse hasBody]
+-[GCDWebServerResponse setValue:forAdditionalHeader:]
+-[GCDWebServerResponse init]
++[GCDWebServerResponse response]
+-[GCDWebServerGZipEncoder close]
+-[GCDWebServerGZipEncoder readData:]
+-[GCDWebServerGZipEncoder open:]
+-[GCDWebServerGZipEncoder initWithResponse:reader:]
+-[GCDWebServerBodyEncoder close]
+-[GCDWebServerBodyEncoder readData:]
+-[GCDWebServerBodyEncoder open:]
+-[GCDWebServerBodyEncoder initWithResponse:reader:]
++[GCDWebServerFileResponse responseWithFile:]
++[GCDWebServerFileResponse responseWithFile:isAttachment:]
++[GCDWebServerFileResponse responseWithFile:byteRange:]
++[GCDWebServerFileResponse responseWithFile:byteRange:isAttachment:]
+-[GCDWebServerFileResponse initWithFile:]
+-[GCDWebServerFileResponse initWithFile:isAttachment:]
+-[GCDWebServerFileResponse initWithFile:byteRange:]
+-[GCDWebServerFileResponse initWithFile:byteRange:isAttachment:]
+-[GCDWebServerFileResponse open:]
+-[GCDWebServerFileResponse readData:]
+-[GCDWebServerFileResponse close]
+-[GCDWebServerFileResponse description]
+-[GCDWebServerFileResponse .cxx_destruct]
+OBJC_IVAR_$_GCDWebServerFileResponse._path
+OBJC_IVAR_$_GCDWebServerFileResponse._offset
+OBJC_IVAR_$_GCDWebServerFileResponse._size
+OBJC_METH_VAR_NAME_19
+OBJC_SELECTOR_REFERENCES_20
+.str21
+_unnamed_cfstring_22
+.str29
+_unnamed_cfstring_30
+OBJC_SELECTOR_REFERENCES_32
+OBJC_SELECTOR_REFERENCES_36
+.str37
+_unnamed_cfstring_38
+.str39
+_unnamed_cfstring_40
+OBJC_SELECTOR_REFERENCES_42
+OBJC_SELECTOR_REFERENCES_44
+OBJC_SELECTOR_REFERENCES_46
+OBJC_SELECTOR_REFERENCES_48
+.str49
+_unnamed_cfstring_50
+OBJC_IVAR_$_GCDWebServerFileResponse._file
+OBJC_METH_VAR_NAME_54
+OBJC_SELECTOR_REFERENCES_55
+OBJC_METH_VAR_NAME_58
+OBJC_SELECTOR_REFERENCES_59
+OBJC_CLASSLIST_REFERENCES_$_60
+OBJC_METH_VAR_NAME_61
+OBJC_METH_VAR_NAME_69
+OBJC_METH_VAR_TYPE_71
+OBJC_METH_VAR_TYPE_73
+OBJC_METH_VAR_TYPE_75
+l_OBJC_$_CLASS_METHODS_GCDWebServerFileResponse
+l_OBJC_METACLASS_RO_$_GCDWebServerFileResponse
+OBJC_METH_VAR_TYPE_82
+OBJC_METH_VAR_TYPE_83
+OBJC_METH_VAR_NAME_84
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerFileResponse
+OBJC_METH_VAR_TYPE_86
+OBJC_METH_VAR_TYPE_88
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerFileResponse
+l_OBJC_CLASS_RO_$_GCDWebServerFileResponse
+OBJC_CLASSLIST_REFERENCES_$_92
+_NSDateFromTimeSpec
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Responses/GCDWebServerFileResponse.m
+-[GCDWebServerFileResponse .cxx_destruct]
+-[GCDWebServerFileResponse description]
+-[GCDWebServerFileResponse close]
+-[GCDWebServerFileResponse readData:]
+-[GCDWebServerFileResponse open:]
+-[GCDWebServerFileResponse initWithFile:byteRange:isAttachment:]
+-[GCDWebServerFileResponse initWithFile:byteRange:]
+-[GCDWebServerFileResponse initWithFile:isAttachment:]
+-[GCDWebServerFileResponse initWithFile:]
++[GCDWebServerFileResponse responseWithFile:byteRange:isAttachment:]
++[GCDWebServerFileResponse responseWithFile:byteRange:]
++[GCDWebServerFileResponse responseWithFile:isAttachment:]
++[GCDWebServerFileResponse responseWithFile:]
++[GCDWebServerStreamedResponse responseWithContentType:streamBlock:]
++[GCDWebServerStreamedResponse responseWithContentType:asyncStreamBlock:]
+-[GCDWebServerStreamedResponse initWithContentType:streamBlock:]
+__64-[GCDWebServerStreamedResponse initWithContentType:streamBlock:]_block_invoke
+-[GCDWebServerStreamedResponse initWithContentType:asyncStreamBlock:]
+-[GCDWebServerStreamedResponse asyncReadDataWithCompletion:]
+-[GCDWebServerStreamedResponse description]
+-[GCDWebServerStreamedResponse .cxx_destruct]
+OBJC_IVAR_$_GCDWebServerStreamedResponse._block
+.str17
+OBJC_METH_VAR_NAME_21
+l_OBJC_$_CLASS_METHODS_GCDWebServerStreamedResponse
+l_OBJC_METACLASS_RO_$_GCDWebServerStreamedResponse
+OBJC_CLASS_NAME_22
+OBJC_METH_VAR_TYPE_24
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerStreamedResponse
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerStreamedResponse
+l_OBJC_CLASS_RO_$_GCDWebServerStreamedResponse
+-[GCDWebServerStreamedResponse .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Responses/GCDWebServerStreamedResponse.m
+-[GCDWebServerStreamedResponse description]
+-[GCDWebServerStreamedResponse asyncReadDataWithCompletion:]
+-[GCDWebServerStreamedResponse initWithContentType:asyncStreamBlock:]
+-[GCDWebServerStreamedResponse initWithContentType:streamBlock:]
++[GCDWebServerStreamedResponse responseWithContentType:asyncStreamBlock:]
++[GCDWebServerStreamedResponse responseWithContentType:streamBlock:]
++[GCDWebServerDataResponse responseWithData:contentType:]
+-[GCDWebServerDataResponse initWithData:contentType:]
+-[GCDWebServerDataResponse readData:]
+-[GCDWebServerDataResponse description]
+-[GCDWebServerDataResponse .cxx_destruct]
++[GCDWebServerDataResponse(Extensions) responseWithText:]
++[GCDWebServerDataResponse(Extensions) responseWithHTML:]
++[GCDWebServerDataResponse(Extensions) responseWithHTMLTemplate:variables:]
++[GCDWebServerDataResponse(Extensions) responseWithJSONObject:]
++[GCDWebServerDataResponse(Extensions) responseWithJSONObject:contentType:]
+-[GCDWebServerDataResponse(Extensions) initWithText:]
+-[GCDWebServerDataResponse(Extensions) initWithHTML:]
+-[GCDWebServerDataResponse(Extensions) initWithHTMLTemplate:variables:]
+__71-[GCDWebServerDataResponse(Extensions) initWithHTMLTemplate:variables:]_block_invoke
+-[GCDWebServerDataResponse(Extensions) initWithJSONObject:]
+-[GCDWebServerDataResponse(Extensions) initWithJSONObject:contentType:]
+OBJC_IVAR_$_GCDWebServerDataResponse._data
+OBJC_IVAR_$_GCDWebServerDataResponse._done
+OBJC_CLASSLIST_REFERENCES_$_15
+l_OBJC_$_CLASS_METHODS_GCDWebServerDataResponse
+l_OBJC_METACLASS_RO_$_GCDWebServerDataResponse
+OBJC_CLASS_NAME_25
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerDataResponse
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerDataResponse
+l_OBJC_CLASS_RO_$_GCDWebServerDataResponse
+OBJC_SELECTOR_REFERENCES_38
+OBJC_SELECTOR_REFERENCES_40
+.str47
+_unnamed_cfstring_48
+.str63
+_unnamed_cfstring_64
+OBJC_CLASSLIST_REFERENCES_$_65
+OBJC_SELECTOR_REFERENCES_67
+OBJC_CLASS_NAME_68
+OBJC_METH_VAR_TYPE_69
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServerDataResponse_$_Extensions
+OBJC_METH_VAR_NAME_73
+l_OBJC_$_CATEGORY_CLASS_METHODS_GCDWebServerDataResponse_$_Extensions
+l_OBJC_$_CATEGORY_GCDWebServerDataResponse_$_Extensions
+-[GCDWebServerDataResponse(Extensions) initWithJSONObject:contentType:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Responses/GCDWebServerDataResponse.m
+-[GCDWebServerDataResponse(Extensions) initWithJSONObject:]
+-[GCDWebServerDataResponse(Extensions) initWithHTMLTemplate:variables:]
+-[GCDWebServerDataResponse(Extensions) initWithHTML:]
+-[GCDWebServerDataResponse(Extensions) initWithText:]
++[GCDWebServerDataResponse(Extensions) responseWithJSONObject:contentType:]
++[GCDWebServerDataResponse(Extensions) responseWithJSONObject:]
++[GCDWebServerDataResponse(Extensions) responseWithHTMLTemplate:variables:]
++[GCDWebServerDataResponse(Extensions) responseWithHTML:]
++[GCDWebServerDataResponse(Extensions) responseWithText:]
+-[GCDWebServerDataResponse .cxx_destruct]
+-[GCDWebServerDataResponse description]
+-[GCDWebServerDataResponse readData:]
+-[GCDWebServerDataResponse initWithData:contentType:]
++[GCDWebServerDataResponse responseWithData:contentType:]
+-[GCDWebDAVServer(Methods) _checkSandboxedPath:]
+-[GCDWebDAVServer(Methods) _checkFileExtension:]
+-[GCDWebDAVServer(Methods) performOPTIONS:]
+-[GCDWebDAVServer(Methods) performGET:]
+__39-[GCDWebDAVServer(Methods) performGET:]_block_invoke
+-[GCDWebDAVServer(Methods) performPUT:]
+__39-[GCDWebDAVServer(Methods) performPUT:]_block_invoke
+__copy_helper_block_83
+__destroy_helper_block_84
+-[GCDWebDAVServer(Methods) performDELETE:]
+__42-[GCDWebDAVServer(Methods) performDELETE:]_block_invoke
+__copy_helper_block_110
+__destroy_helper_block_111
+-[GCDWebDAVServer(Methods) performMKCOL:]
+__41-[GCDWebDAVServer(Methods) performMKCOL:]_block_invoke
+__copy_helper_block_140
+__destroy_helper_block_141
+-[GCDWebDAVServer(Methods) performCOPY:isMove:]
+__47-[GCDWebDAVServer(Methods) performCOPY:isMove:]_block_invoke
+__copy_helper_block_189
+__destroy_helper_block_190
+__47-[GCDWebDAVServer(Methods) performCOPY:isMove:]_block_invoke194
+__copy_helper_block_195
+__destroy_helper_block_196
+-[GCDWebDAVServer(Methods) _addPropertyResponseForItem:resource:properties:xmlString:]
+-[GCDWebDAVServer(Methods) performPROPFIND:]
+-[GCDWebDAVServer(Methods) performLOCK:]
+-[GCDWebDAVServer(Methods) performUNLOCK:]
+-[GCDWebDAVServer initWithUploadDirectory:]
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke_2
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke_3
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke_4
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke_5
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke_6
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke_7
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke_8
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke_9
+__43-[GCDWebDAVServer initWithUploadDirectory:]_block_invoke_10
+-[GCDWebDAVServer uploadDirectory]
+-[GCDWebDAVServer allowedFileExtensions]
+-[GCDWebDAVServer setAllowedFileExtensions:]
+-[GCDWebDAVServer allowHiddenItems]
+-[GCDWebDAVServer setAllowHiddenItems:]
+-[GCDWebDAVServer .cxx_destruct]
+-[GCDWebDAVServer(Subclassing) shouldUploadFileAtPath:withTemporaryFile:]
+-[GCDWebDAVServer(Subclassing) shouldMoveItemFromPath:toPath:]
+-[GCDWebDAVServer(Subclassing) shouldCopyItemFromPath:toPath:]
+-[GCDWebDAVServer(Subclassing) shouldDeleteItemAtPath:]
+-[GCDWebDAVServer(Subclassing) shouldCreateDirectoryAtPath:]
+OBJC_IVAR_$_GCDWebDAVServer._uploadDirectory
+OBJC_IVAR_$_GCDWebDAVServer._allowedExtensions
+.str11
+_unnamed_cfstring_12
+.str15
+_unnamed_cfstring_16
+OBJC_CLASSLIST_REFERENCES_$_23
+OBJC_CLASSLIST_REFERENCES_$_28
+.str35
+_unnamed_cfstring_36
+OBJC_IVAR_$_GCDWebDAVServer._allowHidden
+OBJC_SELECTOR_REFERENCES_49
+OBJC_SELECTOR_REFERENCES_54
+_unnamed_cfstring_58
+OBJC_SELECTOR_REFERENCES_60
+.str61
+_unnamed_cfstring_62
+OBJC_SELECTOR_REFERENCES_70
+.str71
+_unnamed_cfstring_72
+OBJC_SELECTOR_REFERENCES_74
+_unnamed_cfstring_78
+__block_descriptor_tmp85
+OBJC_SELECTOR_REFERENCES_89
+__block_descriptor_tmp112
+OBJC_SELECTOR_REFERENCES_114
+OBJC_METH_VAR_NAME_121
+OBJC_SELECTOR_REFERENCES_122
+.str129
+_unnamed_cfstring_130
+OBJC_CLASSLIST_REFERENCES_$_131
+OBJC_METH_VAR_NAME_132
+OBJC_SELECTOR_REFERENCES_133
+.str136
+_unnamed_cfstring_137
+.str143
+_unnamed_cfstring_144
+.str145
+_unnamed_cfstring_146
+.str155
+_unnamed_cfstring_156
+.str157
+_unnamed_cfstring_158
+.str159
+_unnamed_cfstring_160
+.str163
+_unnamed_cfstring_164
+OBJC_SELECTOR_REFERENCES_166
+.str167
+_unnamed_cfstring_168
+OBJC_SELECTOR_REFERENCES_174
+.str175
+_unnamed_cfstring_176
+OBJC_SELECTOR_REFERENCES_178
+.str179
+_unnamed_cfstring_180
+OBJC_SELECTOR_REFERENCES_184
+OBJC_SELECTOR_REFERENCES_186
+OBJC_SELECTOR_REFERENCES_188
+__block_descriptor_tmp191
+OBJC_SELECTOR_REFERENCES_193
+__block_descriptor_tmp197
+.str198
+_unnamed_cfstring_199
+.str202
+_unnamed_cfstring_203
+OBJC_SELECTOR_REFERENCES_205
+.str206
+_unnamed_cfstring_207
+.str210
+_unnamed_cfstring_211
+.str212
+_unnamed_cfstring_213
+.str214
+_unnamed_cfstring_215
+.str216
+_unnamed_cfstring_217
+.str218
+_unnamed_cfstring_219
+.str222
+_unnamed_cfstring_223
+OBJC_SELECTOR_REFERENCES_225
+.str226
+_unnamed_cfstring_227
+OBJC_SELECTOR_REFERENCES_229
+.str230
+_unnamed_cfstring_231
+.str232
+_unnamed_cfstring_233
+.str234
+_unnamed_cfstring_235
+.str236
+_unnamed_cfstring_237
+.str238
+_unnamed_cfstring_239
+.str242
+_unnamed_cfstring_243
+.str250
+.str251
+.str252
+.str253
+.str255
+.str256
+.str257
+_unnamed_cfstring_258
+OBJC_METH_VAR_NAME_259
+OBJC_SELECTOR_REFERENCES_260
+OBJC_CLASSLIST_REFERENCES_$_261
+.str266
+_unnamed_cfstring_267
+.str268
+_unnamed_cfstring_269
+OBJC_METH_VAR_NAME_270
+OBJC_SELECTOR_REFERENCES_271
+.str272
+_unnamed_cfstring_273
+OBJC_CLASSLIST_REFERENCES_$_274
+.str275
+_unnamed_cfstring_276
+OBJC_METH_VAR_NAME_277
+OBJC_SELECTOR_REFERENCES_278
+.str279
+_unnamed_cfstring_280
+.str281
+_unnamed_cfstring_282
+OBJC_METH_VAR_NAME_283
+OBJC_SELECTOR_REFERENCES_284
+OBJC_METH_VAR_NAME_285
+OBJC_SELECTOR_REFERENCES_286
+OBJC_METH_VAR_NAME_287
+OBJC_SELECTOR_REFERENCES_288
+OBJC_METH_VAR_NAME_289
+OBJC_SELECTOR_REFERENCES_290
+.str291
+_unnamed_cfstring_292
+OBJC_CLASSLIST_REFERENCES_$_293
+.str296
+_unnamed_cfstring_297
+OBJC_METH_VAR_NAME_298
+OBJC_SELECTOR_REFERENCES_299
+OBJC_SELECTOR_REFERENCES_301
+.str302
+_unnamed_cfstring_303
+.str304
+_unnamed_cfstring_305
+.str306
+.str307
+OBJC_METH_VAR_NAME_308
+OBJC_SELECTOR_REFERENCES_309
+.str310
+.str311
+.str312
+.str313
+_unnamed_cfstring_314
+.str315
+_unnamed_cfstring_316
+.str317
+_unnamed_cfstring_318
+.str319
+_unnamed_cfstring_320
+.str321
+_unnamed_cfstring_322
+.str323
+_unnamed_cfstring_324
+OBJC_SELECTOR_REFERENCES_326
+.str327
+_unnamed_cfstring_328
+.str329
+_unnamed_cfstring_330
+.str331
+_unnamed_cfstring_332
+.str333
+_unnamed_cfstring_334
+.str335
+_unnamed_cfstring_336
+.str337
+_unnamed_cfstring_338
+.str339
+_unnamed_cfstring_340
+.str341
+_unnamed_cfstring_342
+.str343
+_unnamed_cfstring_344
+.str345
+_unnamed_cfstring_346
+.str347
+_unnamed_cfstring_348
+.str349
+_unnamed_cfstring_350
+OBJC_METH_VAR_NAME_351
+OBJC_SELECTOR_REFERENCES_352
+.str353
+_unnamed_cfstring_354
+.str355
+_unnamed_cfstring_356
+.str357
+_unnamed_cfstring_358
+.str359
+_unnamed_cfstring_360
+.str361
+_unnamed_cfstring_362
+OBJC_METH_VAR_TYPE_364
+OBJC_METH_VAR_NAME_366
+OBJC_METH_VAR_NAME_368
+OBJC_METH_VAR_NAME_369
+OBJC_METH_VAR_TYPE_370
+OBJC_METH_VAR_TYPE_371
+OBJC_METH_VAR_NAME_372
+OBJC_METH_VAR_NAME_374
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebDAVServer_$_Methods
+l_OBJC_$_CATEGORY_GCDWebDAVServer_$_Methods
+OBJC_METH_VAR_NAME_377
+OBJC_SELECTOR_REFERENCES_378
+OBJC_CLASSLIST_REFERENCES_$_381
+OBJC_METH_VAR_NAME_382
+OBJC_SELECTOR_REFERENCES_383
+.str385
+OBJC_CLASS_NAME_386
+__block_descriptor_tmp387
+OBJC_METH_VAR_NAME_388
+OBJC_SELECTOR_REFERENCES_389
+.str390
+_unnamed_cfstring_391
+OBJC_SELECTOR_REFERENCES_392
+OBJC_CLASS_NAME_393
+__block_descriptor_tmp394
+.str395
+_unnamed_cfstring_396
+OBJC_CLASSLIST_REFERENCES_$_397
+OBJC_SELECTOR_REFERENCES_398
+OBJC_CLASS_NAME_399
+__block_descriptor_tmp400
+.str401
+_unnamed_cfstring_402
+OBJC_SELECTOR_REFERENCES_403
+OBJC_CLASS_NAME_404
+__block_descriptor_tmp405
+OBJC_CLASSLIST_REFERENCES_$_408
+OBJC_SELECTOR_REFERENCES_409
+OBJC_CLASS_NAME_410
+__block_descriptor_tmp411
+OBJC_SELECTOR_REFERENCES_414
+OBJC_CLASS_NAME_415
+__block_descriptor_tmp416
+.str417
+_unnamed_cfstring_418
+OBJC_CLASS_NAME_419
+__block_descriptor_tmp420
+.str421
+_unnamed_cfstring_422
+OBJC_SELECTOR_REFERENCES_423
+OBJC_CLASS_NAME_424
+__block_descriptor_tmp425
+.str426
+_unnamed_cfstring_427
+OBJC_SELECTOR_REFERENCES_428
+OBJC_CLASS_NAME_429
+__block_descriptor_tmp430
+.str431
+_unnamed_cfstring_432
+OBJC_CLASS_NAME_434
+__block_descriptor_tmp435
+OBJC_CLASS_NAME_436
+l_OBJC_METACLASS_RO_$_GCDWebDAVServer
+OBJC_CLASS_NAME_437
+OBJC_METH_VAR_NAME_439
+OBJC_METH_VAR_TYPE_440
+OBJC_METH_VAR_NAME_441
+OBJC_METH_VAR_TYPE_442
+OBJC_METH_VAR_NAME_443
+OBJC_METH_VAR_TYPE_445
+OBJC_METH_VAR_TYPE_447
+OBJC_METH_VAR_TYPE_449
+l_OBJC_$_INSTANCE_METHODS_GCDWebDAVServer
+OBJC_METH_VAR_NAME_450
+OBJC_METH_VAR_TYPE_451
+OBJC_METH_VAR_NAME_452
+OBJC_METH_VAR_TYPE_453
+OBJC_METH_VAR_NAME_454
+OBJC_METH_VAR_TYPE_455
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebDAVServer
+OBJC_PROP_NAME_ATTR_456
+OBJC_PROP_NAME_ATTR_457
+OBJC_PROP_NAME_ATTR_458
+OBJC_PROP_NAME_ATTR_459
+OBJC_PROP_NAME_ATTR_460
+OBJC_PROP_NAME_ATTR_461
+OBJC_PROP_NAME_ATTR_462
+l_OBJC_$_PROP_LIST_GCDWebDAVServer
+l_OBJC_CLASS_RO_$_GCDWebDAVServer
+OBJC_CLASS_NAME_463
+OBJC_METH_VAR_TYPE_464
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebDAVServer_$_Subclassing
+l_OBJC_$_CATEGORY_GCDWebDAVServer_$_Subclassing
+.str465
+_unnamed_cfstring_466
+.str467
+_unnamed_cfstring_468
+.str469
+_unnamed_cfstring_470
+_XMLChildWithName
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebDAVServer/GCDWebDAVServer.m
+dispatch_get_main_queue
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/dispatch/queue.h
+_IsMacFinder
+-[GCDWebDAVServer(Subclassing) shouldCreateDirectoryAtPath:]
+-[GCDWebDAVServer(Subclassing) shouldDeleteItemAtPath:]
+-[GCDWebDAVServer(Subclassing) shouldCopyItemFromPath:toPath:]
+-[GCDWebDAVServer(Subclassing) shouldMoveItemFromPath:toPath:]
+-[GCDWebDAVServer(Subclassing) shouldUploadFileAtPath:withTemporaryFile:]
+-[GCDWebDAVServer .cxx_destruct]
+-[GCDWebDAVServer setAllowHiddenItems:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebDAVServer/GCDWebDAVServer.h
+-[GCDWebDAVServer allowHiddenItems]
+-[GCDWebDAVServer setAllowedFileExtensions:]
+-[GCDWebDAVServer allowedFileExtensions]
+-[GCDWebDAVServer uploadDirectory]
+-[GCDWebDAVServer initWithUploadDirectory:]
+-[GCDWebDAVServer(Methods) performUNLOCK:]
+-[GCDWebDAVServer(Methods) performLOCK:]
+-[GCDWebDAVServer(Methods) performPROPFIND:]
+-[GCDWebDAVServer(Methods) _addPropertyResponseForItem:resource:properties:xmlString:]
+-[GCDWebDAVServer(Methods) performCOPY:isMove:]
+-[GCDWebDAVServer(Methods) performMKCOL:]
+-[GCDWebDAVServer(Methods) performDELETE:]
+-[GCDWebDAVServer(Methods) performPUT:]
+-[GCDWebDAVServer(Methods) performGET:]
+-[GCDWebDAVServer(Methods) performOPTIONS:]
+-[GCDWebDAVServer(Methods) _checkFileExtension:]
+-[GCDWebDAVServer(Methods) _checkSandboxedPath:]
+-[GCDWebServerHandler initWithMatchBlock:asyncProcessBlock:]
+-[GCDWebServerHandler matchBlock]
+-[GCDWebServerHandler asyncProcessBlock]
+-[GCDWebServerHandler .cxx_destruct]
++[GCDWebServer initialize]
+-[GCDWebServer init]
+-[GCDWebServer dealloc]
+-[GCDWebServer _startBackgroundTask]
+__36-[GCDWebServer _startBackgroundTask]_block_invoke
+-[GCDWebServer _didConnect]
+-[GCDWebServer willStartConnection:]
+__36-[GCDWebServer willStartConnection:]_block_invoke
+__36-[GCDWebServer willStartConnection:]_block_invoke_2
+__copy_helper_block_85
+__destroy_helper_block_86
+__copy_helper_block_88
+__destroy_helper_block_89
+-[GCDWebServer _endBackgroundTask]
+-[GCDWebServer _didDisconnect]
+-[GCDWebServer didEndConnection:]
+__33-[GCDWebServer didEndConnection:]_block_invoke
+__33-[GCDWebServer didEndConnection:]_block_invoke_2
+__33-[GCDWebServer didEndConnection:]_block_invoke_3
+__copy_helper_block_99
+__destroy_helper_block_100
+__copy_helper_block_103
+__destroy_helper_block_104
+-[GCDWebServer bonjourName]
+-[GCDWebServer bonjourType]
+-[GCDWebServer addHandlerWithMatchBlock:processBlock:]
+__54-[GCDWebServer addHandlerWithMatchBlock:processBlock:]_block_invoke
+__copy_helper_block_109
+__destroy_helper_block_110
+-[GCDWebServer addHandlerWithMatchBlock:asyncProcessBlock:]
+-[GCDWebServer removeAllHandlers]
+-[GCDWebServer _createListeningSocket:localAddress:length:maxPendingConnections:error:]
+-[GCDWebServer _createDispatchSourceWithListeningSocket:isIPv6:]
+__64-[GCDWebServer _createDispatchSourceWithListeningSocket:isIPv6:]_block_invoke
+__copy_helper_block_131
+__destroy_helper_block_132
+__64-[GCDWebServer _createDispatchSourceWithListeningSocket:isIPv6:]_block_invoke134
+__copy_helper_block_144
+__destroy_helper_block_145
+-[GCDWebServer _start:]
+__23-[GCDWebServer _start:]_block_invoke
+__copy_helper_block_172
+__destroy_helper_block_173
+__23-[GCDWebServer _start:]_block_invoke178
+__copy_helper_block_181
+__destroy_helper_block_182
+_NetServiceRegisterCallBack
+_NetServiceResolveCallBack
+_DNSServiceCallBack
+_SocketCallBack
+__23-[GCDWebServer _start:]_block_invoke213
+__copy_helper_block_214
+__destroy_helper_block_215
+-[GCDWebServer _stop]
+__21-[GCDWebServer _stop]_block_invoke
+__21-[GCDWebServer _stop]_block_invoke224
+__copy_helper_block_225
+__destroy_helper_block_226
+-[GCDWebServer _didEnterBackground:]
+-[GCDWebServer _willEnterForeground:]
+-[GCDWebServer startWithOptions:error:]
+-[GCDWebServer isRunning]
+-[GCDWebServer stop]
+-[GCDWebServer delegate]
+-[GCDWebServer setDelegate:]
+-[GCDWebServer handlers]
+-[GCDWebServer port]
+-[GCDWebServer serverName]
+-[GCDWebServer authenticationRealm]
+-[GCDWebServer authenticationBasicAccounts]
+-[GCDWebServer authenticationDigestAccounts]
+-[GCDWebServer shouldAutomaticallyMapHEADToGET]
+-[GCDWebServer .cxx_destruct]
+-[GCDWebServer(Extensions) serverURL]
+-[GCDWebServer(Extensions) bonjourServerURL]
+-[GCDWebServer(Extensions) publicServerURL]
+-[GCDWebServer(Extensions) start]
+-[GCDWebServer(Extensions) startWithPort:bonjourName:]
+-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:processBlock:]
+__79-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:processBlock:]_block_invoke
+__copy_helper_block_370
+__destroy_helper_block_371
+-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:asyncProcessBlock:]
+__84-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:asyncProcessBlock:]_block_invoke
+__copy_helper_block_377
+__destroy_helper_block_378
+-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:processBlock:]
+__77-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:processBlock:]_block_invoke
+__copy_helper_block_382
+__destroy_helper_block_383
+-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:asyncProcessBlock:]
+__82-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:asyncProcessBlock:]_block_invoke
+__copy_helper_block_396
+__destroy_helper_block_397
+-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:processBlock:]
+__82-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:processBlock:]_block_invoke
+__copy_helper_block_400
+__destroy_helper_block_401
+-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:]
+__87-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:]_block_invoke
+__copy_helper_block_426
+__destroy_helper_block_427
+-[GCDWebServer(GETHandlers) addGETHandlerForPath:staticData:contentType:cacheAge:]
+__82-[GCDWebServer(GETHandlers) addGETHandlerForPath:staticData:contentType:cacheAge:]_block_invoke
+__copy_helper_block_443
+__destroy_helper_block_444
+-[GCDWebServer(GETHandlers) addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:]
+__100-[GCDWebServer(GETHandlers) addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:]_block_invoke
+__copy_helper_block_461
+__destroy_helper_block_462
+-[GCDWebServer(GETHandlers) _responseWithContentsOfDirectory:]
+-[GCDWebServer(GETHandlers) addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:]
+__110-[GCDWebServer(GETHandlers) addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:]_block_invoke
+__copy_helper_block_504
+__destroy_helper_block_505
+__110-[GCDWebServer(GETHandlers) addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:]_block_invoke507
+__copy_helper_block_527
+__destroy_helper_block_528
++[GCDWebServer(Logging) setLogLevel:]
+-[GCDWebServer(Logging) logVerbose:]
+-[GCDWebServer(Logging) logInfo:]
+-[GCDWebServer(Logging) logWarning:]
+-[GCDWebServer(Logging) logError:]
+-[GCDWebServer(Logging) logException:]
+-[GCDWebServer(Testing) setRecordingEnabled:]
+-[GCDWebServer(Testing) isRecordingEnabled]
+-[GCDWebServer(Testing) runTestsWithOptions:inDirectory:]
+_CreateHTTPMessageFromData
+_LogResult
+.str1
+_unnamed_cfstring_2
+.str5
+_unnamed_cfstring_6
+_unnamed_cfstring_8
+.str9
+_unnamed_cfstring_10
+.str13
+_unnamed_cfstring_14
+_unnamed_cfstring_18
+.str19
+_unnamed_cfstring_20
+.str23
+_unnamed_cfstring_24
+GCDWebServerLogMessage.levelNames
+.str32
+.str33
+.str36
+GCDWebServerLogMessage.enableLogging
+OBJC_SELECTOR_REFERENCES_41
+OBJC_SELECTOR_REFERENCES_43
+OBJC_SELECTOR_REFERENCES_45
+OBJC_IVAR_$_GCDWebServerHandler._matchBlock
+OBJC_IVAR_$_GCDWebServerHandler._asyncProcessBlock
+l_OBJC_METACLASS_RO_$_GCDWebServerHandler
+OBJC_CLASS_NAME_46
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerHandler
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServerHandler
+OBJC_PROP_NAME_ATTR_56
+OBJC_PROP_NAME_ATTR_57
+OBJC_PROP_NAME_ATTR_58
+l_OBJC_$_PROP_LIST_GCDWebServerHandler
+l_OBJC_CLASS_RO_$_GCDWebServerHandler
+OBJC_CLASSLIST_SUP_REFS_$_59
+OBJC_IVAR_$_GCDWebServer._syncQueue
+OBJC_IVAR_$_GCDWebServer._sourceGroup
+OBJC_IVAR_$_GCDWebServer._handlers
+OBJC_IVAR_$_GCDWebServer._backgroundTask
+_unnamed_cfstring_69
+.str72
+OBJC_IVAR_$_GCDWebServer._connected
+OBJC_IVAR_$_GCDWebServer._delegate
+OBJC_IVAR_$_GCDWebServer._activeConnections
+OBJC_IVAR_$_GCDWebServer._disconnectTimer
+__block_descriptor_tmp87
+__block_descriptor_tmp90
+OBJC_IVAR_$_GCDWebServer._suspendInBackground
+OBJC_IVAR_$_GCDWebServer._source4
+OBJC_METH_VAR_NAME_91
+OBJC_IVAR_$_GCDWebServer._disconnectDelay
+OBJC_METH_VAR_NAME_97
+OBJC_SELECTOR_REFERENCES_98
+.str101
+__block_descriptor_tmp102
+__block_descriptor_tmp105
+__block_descriptor_tmp108
+OBJC_IVAR_$_GCDWebServer._resolutionService
+.str111
+OBJC_CLASSLIST_REFERENCES_$_115
+OBJC_METH_VAR_NAME_117
+OBJC_SELECTOR_REFERENCES_118
+OBJC_METH_VAR_NAME_119
+OBJC_SELECTOR_REFERENCES_120
+.str125
+_unnamed_cfstring_126
+__block_descriptor_tmp133
+OBJC_CLASSLIST_REFERENCES_$_135
+OBJC_METH_VAR_NAME_136
+OBJC_SELECTOR_REFERENCES_137
+OBJC_IVAR_$_GCDWebServer._connectionClass
+.str142
+_unnamed_cfstring_143
+__block_descriptor_tmp146
+OBJC_IVAR_$_GCDWebServer._options
+OBJC_CLASSLIST_REFERENCES_$_147
+OBJC_METH_VAR_NAME_156
+.str158
+_unnamed_cfstring_159
+OBJC_IVAR_$_GCDWebServer._serverName
+OBJC_METH_VAR_NAME_160
+OBJC_SELECTOR_REFERENCES_161
+OBJC_IVAR_$_GCDWebServer._authenticationRealm
+OBJC_CLASSLIST_REFERENCES_$_162
+OBJC_IVAR_$_GCDWebServer._authenticationBasicAccounts
+OBJC_CLASSLIST_REFERENCES_$_163
+OBJC_SELECTOR_REFERENCES_165
+.str166
+_unnamed_cfstring_167
+OBJC_SELECTOR_REFERENCES_169
+OBJC_SELECTOR_REFERENCES_171
+.str174
+__block_descriptor_tmp175
+OBJC_SELECTOR_REFERENCES_177
+OBJC_IVAR_$_GCDWebServer._authenticationDigestAccounts
+__block_descriptor_tmp183
+OBJC_CLASSLIST_REFERENCES_$_184
+OBJC_IVAR_$_GCDWebServer._mapHEADToGET
+OBJC_IVAR_$_GCDWebServer._source6
+OBJC_IVAR_$_GCDWebServer._port
+OBJC_IVAR_$_GCDWebServer._bindToLocalhost
+.str191
+_unnamed_cfstring_192
+OBJC_IVAR_$_GCDWebServer._registrationService
+.str197
+_unnamed_cfstring_198
+.str199
+_unnamed_cfstring_200
+OBJC_IVAR_$_GCDWebServer._dnsService
+OBJC_IVAR_$_GCDWebServer._dnsSocket
+OBJC_IVAR_$_GCDWebServer._dnsSource
+.str201
+_unnamed_cfstring_202
+.str203
+_unnamed_cfstring_204
+.str205
+_unnamed_cfstring_206
+.str207
+_unnamed_cfstring_208
+OBJC_METH_VAR_NAME_209
+OBJC_SELECTOR_REFERENCES_210
+__block_descriptor_tmp216
+OBJC_IVAR_$_GCDWebServer._dnsAddress
+OBJC_IVAR_$_GCDWebServer._dnsPort
+.str220
+_unnamed_cfstring_221
+OBJC_SELECTOR_REFERENCES_223
+__block_descriptor_tmp227
+OBJC_CLASSLIST_REFERENCES_$_230
+OBJC_METH_VAR_NAME_231
+OBJC_SELECTOR_REFERENCES_232
+OBJC_METH_VAR_NAME_235
+OBJC_SELECTOR_REFERENCES_236
+OBJC_METH_VAR_NAME_237
+OBJC_SELECTOR_REFERENCES_238
+OBJC_METH_VAR_NAME_239
+OBJC_SELECTOR_REFERENCES_240
+OBJC_CLASS_NAME_241
+l_OBJC_$_CLASS_METHODS_GCDWebServer
+l_OBJC_METACLASS_RO_$_GCDWebServer
+OBJC_CLASS_NAME_243
+OBJC_METH_VAR_TYPE_244
+OBJC_METH_VAR_NAME_245
+OBJC_METH_VAR_TYPE_246
+OBJC_METH_VAR_NAME_247
+OBJC_METH_VAR_NAME_249
+OBJC_METH_VAR_TYPE_251
+OBJC_METH_VAR_TYPE_253
+OBJC_METH_VAR_TYPE_254
+OBJC_METH_VAR_TYPE_255
+OBJC_METH_VAR_TYPE_257
+OBJC_METH_VAR_NAME_258
+OBJC_METH_VAR_TYPE_259
+OBJC_METH_VAR_NAME_261
+OBJC_METH_VAR_NAME_263
+OBJC_METH_VAR_TYPE_265
+OBJC_METH_VAR_NAME_266
+OBJC_METH_VAR_NAME_267
+OBJC_METH_VAR_NAME_268
+OBJC_METH_VAR_NAME_269
+l_OBJC_$_INSTANCE_METHODS_GCDWebServer
+OBJC_METH_VAR_NAME_271
+OBJC_METH_VAR_TYPE_272
+OBJC_METH_VAR_NAME_273
+OBJC_METH_VAR_TYPE_274
+OBJC_METH_VAR_NAME_275
+OBJC_METH_VAR_TYPE_276
+OBJC_METH_VAR_TYPE_278
+OBJC_METH_VAR_NAME_279
+OBJC_METH_VAR_TYPE_280
+OBJC_METH_VAR_NAME_281
+OBJC_METH_VAR_TYPE_282
+OBJC_METH_VAR_TYPE_284
+OBJC_METH_VAR_TYPE_286
+OBJC_METH_VAR_TYPE_288
+OBJC_METH_VAR_TYPE_291
+OBJC_METH_VAR_NAME_293
+OBJC_METH_VAR_TYPE_294
+OBJC_METH_VAR_NAME_295
+OBJC_METH_VAR_NAME_296
+OBJC_METH_VAR_TYPE_297
+OBJC_METH_VAR_TYPE_299
+OBJC_METH_VAR_NAME_302
+OBJC_METH_VAR_NAME_303
+OBJC_METH_VAR_NAME_306
+OBJC_METH_VAR_TYPE_307
+OBJC_METH_VAR_TYPE_309
+OBJC_METH_VAR_TYPE_311
+OBJC_METH_VAR_NAME_313
+OBJC_METH_VAR_NAME_316
+OBJC_IVAR_$_GCDWebServer._recording
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebServer
+OBJC_PROP_NAME_ATTR_318
+OBJC_PROP_NAME_ATTR_319
+OBJC_PROP_NAME_ATTR_320
+OBJC_PROP_NAME_ATTR_321
+OBJC_PROP_NAME_ATTR_322
+OBJC_PROP_NAME_ATTR_323
+OBJC_PROP_NAME_ATTR_324
+OBJC_PROP_NAME_ATTR_325
+OBJC_PROP_NAME_ATTR_326
+OBJC_PROP_NAME_ATTR_327
+OBJC_PROP_NAME_ATTR_328
+OBJC_PROP_NAME_ATTR_329
+OBJC_PROP_NAME_ATTR_330
+OBJC_PROP_NAME_ATTR_331
+OBJC_PROP_NAME_ATTR_332
+OBJC_PROP_NAME_ATTR_333
+OBJC_PROP_NAME_ATTR_334
+OBJC_PROP_NAME_ATTR_335
+OBJC_PROP_NAME_ATTR_336
+OBJC_PROP_NAME_ATTR_337
+OBJC_PROP_NAME_ATTR_338
+l_OBJC_$_PROP_LIST_GCDWebServer
+l_OBJC_CLASS_RO_$_GCDWebServer
+OBJC_CLASSLIST_REFERENCES_$_341
+.str342
+_unnamed_cfstring_343
+OBJC_METH_VAR_NAME_344
+OBJC_SELECTOR_REFERENCES_345
+.str346
+_unnamed_cfstring_347
+OBJC_METH_VAR_NAME_348
+OBJC_SELECTOR_REFERENCES_349
+.str350
+_unnamed_cfstring_351
+OBJC_METH_VAR_NAME_352
+OBJC_SELECTOR_REFERENCES_353
+OBJC_METH_VAR_NAME_354
+OBJC_SELECTOR_REFERENCES_355
+OBJC_METH_VAR_NAME_356
+OBJC_SELECTOR_REFERENCES_357
+OBJC_SELECTOR_REFERENCES_360
+OBJC_CLASS_NAME_361
+OBJC_METH_VAR_NAME_362
+OBJC_METH_VAR_NAME_364
+OBJC_METH_VAR_TYPE_365
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServer_$_Extensions
+OBJC_PROP_NAME_ATTR_366
+OBJC_PROP_NAME_ATTR_367
+OBJC_PROP_NAME_ATTR_368
+OBJC_PROP_NAME_ATTR_369
+l_OBJC_$_PROP_LIST_GCDWebServer_$_Extensions
+l_OBJC_$_CATEGORY_GCDWebServer_$_Extensions
+__block_descriptor_tmp372
+OBJC_CLASS_NAME_380
+__block_descriptor_tmp381
+__block_descriptor_tmp384
+OBJC_METH_VAR_NAME_385
+OBJC_SELECTOR_REFERENCES_386
+_unnamed_cfstring_388
+OBJC_METH_VAR_NAME_389
+OBJC_SELECTOR_REFERENCES_390
+OBJC_CLASSLIST_REFERENCES_$_391
+OBJC_METH_VAR_NAME_392
+OBJC_SELECTOR_REFERENCES_393
+OBJC_CLASS_NAME_398
+__block_descriptor_tmp399
+__block_descriptor_tmp402
+OBJC_METH_VAR_NAME_403
+OBJC_SELECTOR_REFERENCES_404
+OBJC_CLASSLIST_REFERENCES_$_405
+OBJC_METH_VAR_NAME_406
+OBJC_SELECTOR_REFERENCES_407
+OBJC_METH_VAR_NAME_408
+OBJC_METH_VAR_NAME_410
+OBJC_SELECTOR_REFERENCES_411
+OBJC_METH_VAR_NAME_412
+OBJC_SELECTOR_REFERENCES_413
+OBJC_METH_VAR_NAME_414
+OBJC_SELECTOR_REFERENCES_415
+OBJC_METH_VAR_NAME_418
+OBJC_SELECTOR_REFERENCES_419
+OBJC_METH_VAR_NAME_420
+OBJC_SELECTOR_REFERENCES_421
+OBJC_METH_VAR_NAME_422
+OBJC_METH_VAR_NAME_424
+OBJC_SELECTOR_REFERENCES_425
+OBJC_CLASS_NAME_428
+__block_descriptor_tmp429
+OBJC_CLASS_NAME_430
+OBJC_METH_VAR_NAME_431
+OBJC_METH_VAR_TYPE_432
+OBJC_METH_VAR_NAME_433
+OBJC_METH_VAR_TYPE_434
+OBJC_METH_VAR_NAME_435
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServer_$_Handlers
+l_OBJC_$_CATEGORY_GCDWebServer_$_Handlers
+.str436
+_unnamed_cfstring_437
+OBJC_CLASSLIST_REFERENCES_$_438
+OBJC_SELECTOR_REFERENCES_440
+OBJC_SELECTOR_REFERENCES_442
+.str445
+__block_descriptor_tmp446
+OBJC_CLASSLIST_REFERENCES_$_448
+OBJC_METH_VAR_NAME_449
+OBJC_SELECTOR_REFERENCES_450
+OBJC_METH_VAR_NAME_451
+OBJC_SELECTOR_REFERENCES_452
+.str453
+_unnamed_cfstring_454
+.str455
+_unnamed_cfstring_456
+OBJC_METH_VAR_NAME_457
+OBJC_METH_VAR_NAME_459
+OBJC_SELECTOR_REFERENCES_460
+__block_descriptor_tmp463
+OBJC_CLASSLIST_REFERENCES_$_464
+OBJC_METH_VAR_NAME_465
+OBJC_SELECTOR_REFERENCES_466
+OBJC_METH_VAR_NAME_467
+OBJC_SELECTOR_REFERENCES_468
+OBJC_CLASSLIST_REFERENCES_$_469
+OBJC_METH_VAR_NAME_474
+OBJC_SELECTOR_REFERENCES_475
+.str476
+_unnamed_cfstring_477
+.str478
+_unnamed_cfstring_479
+.str480
+_unnamed_cfstring_481
+OBJC_METH_VAR_NAME_482
+OBJC_SELECTOR_REFERENCES_483
+OBJC_METH_VAR_NAME_484
+OBJC_SELECTOR_REFERENCES_485
+OBJC_METH_VAR_NAME_486
+OBJC_SELECTOR_REFERENCES_487
+.str488
+_unnamed_cfstring_489
+OBJC_METH_VAR_NAME_490
+OBJC_SELECTOR_REFERENCES_491
+.str492
+_unnamed_cfstring_493
+OBJC_METH_VAR_NAME_494
+OBJC_SELECTOR_REFERENCES_495
+.str496
+_unnamed_cfstring_497
+.str498
+_unnamed_cfstring_499
+OBJC_METH_VAR_NAME_500
+OBJC_SELECTOR_REFERENCES_501
+OBJC_METH_VAR_NAME_502
+OBJC_SELECTOR_REFERENCES_503
+__block_descriptor_tmp506
+OBJC_METH_VAR_NAME_508
+OBJC_SELECTOR_REFERENCES_509
+OBJC_METH_VAR_NAME_510
+OBJC_SELECTOR_REFERENCES_511
+OBJC_METH_VAR_NAME_512
+OBJC_SELECTOR_REFERENCES_513
+OBJC_METH_VAR_NAME_514
+OBJC_SELECTOR_REFERENCES_515
+OBJC_METH_VAR_NAME_516
+OBJC_SELECTOR_REFERENCES_517
+OBJC_METH_VAR_NAME_518
+OBJC_SELECTOR_REFERENCES_519
+OBJC_METH_VAR_NAME_520
+OBJC_SELECTOR_REFERENCES_521
+OBJC_METH_VAR_NAME_522
+OBJC_SELECTOR_REFERENCES_523
+OBJC_CLASSLIST_REFERENCES_$_524
+OBJC_METH_VAR_NAME_525
+OBJC_SELECTOR_REFERENCES_526
+OBJC_CLASS_NAME_529
+__block_descriptor_tmp530
+OBJC_SELECTOR_REFERENCES_531
+OBJC_CLASS_NAME_532
+OBJC_METH_VAR_NAME_533
+OBJC_METH_VAR_TYPE_534
+OBJC_METH_VAR_NAME_535
+OBJC_METH_VAR_TYPE_536
+OBJC_METH_VAR_TYPE_537
+OBJC_METH_VAR_NAME_538
+OBJC_METH_VAR_TYPE_539
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServer_$_GETHandlers
+l_OBJC_$_CATEGORY_GCDWebServer_$_GETHandlers
+.str540
+_unnamed_cfstring_541
+OBJC_CLASS_NAME_542
+OBJC_METH_VAR_NAME_543
+OBJC_METH_VAR_NAME_544
+OBJC_METH_VAR_NAME_545
+OBJC_METH_VAR_NAME_546
+OBJC_METH_VAR_NAME_547
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServer_$_Logging
+OBJC_METH_VAR_NAME_548
+OBJC_METH_VAR_TYPE_549
+l_OBJC_$_CATEGORY_CLASS_METHODS_GCDWebServer_$_Logging
+l_OBJC_$_CATEGORY_GCDWebServer_$_Logging
+.str550
+_unnamed_cfstring_551
+.str552
+_unnamed_cfstring_553
+OBJC_CLASSLIST_REFERENCES_$_554
+OBJC_METH_VAR_NAME_555
+OBJC_SELECTOR_REFERENCES_556
+OBJC_METH_VAR_NAME_557
+OBJC_SELECTOR_REFERENCES_558
+.str559
+_unnamed_cfstring_560
+.str561
+_unnamed_cfstring_562
+OBJC_METH_VAR_NAME_563
+OBJC_SELECTOR_REFERENCES_564
+OBJC_METH_VAR_NAME_565
+OBJC_SELECTOR_REFERENCES_566
+OBJC_METH_VAR_NAME_567
+OBJC_SELECTOR_REFERENCES_568
+.str569
+_unnamed_cfstring_570
+OBJC_METH_VAR_NAME_571
+OBJC_SELECTOR_REFERENCES_572
+OBJC_METH_VAR_NAME_573
+OBJC_SELECTOR_REFERENCES_574
+.str575
+_unnamed_cfstring_576
+OBJC_SELECTOR_REFERENCES_577
+.str578
+_unnamed_cfstring_579
+OBJC_METH_VAR_NAME_580
+OBJC_SELECTOR_REFERENCES_581
+.str582
+_unnamed_cfstring_583
+.str584
+_unnamed_cfstring_585
+OBJC_METH_VAR_NAME_586
+OBJC_SELECTOR_REFERENCES_587
+OBJC_METH_VAR_NAME_588
+OBJC_SELECTOR_REFERENCES_589
+.str590
+_unnamed_cfstring_591
+OBJC_SELECTOR_REFERENCES_592
+OBJC_CLASS_NAME_593
+OBJC_METH_VAR_NAME_594
+OBJC_METH_VAR_TYPE_595
+OBJC_METH_VAR_NAME_596
+OBJC_METH_VAR_NAME_597
+OBJC_METH_VAR_TYPE_598
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebServer_$_Testing
+OBJC_PROP_NAME_ATTR_599
+OBJC_PROP_NAME_ATTR_600
+l_OBJC_$_PROP_LIST_GCDWebServer_$_Testing
+l_OBJC_$_CATEGORY_GCDWebServer_$_Testing
+OBJC_CLASSLIST_REFERENCES_$_601
+OBJC_METH_VAR_NAME_602
+OBJC_SELECTOR_REFERENCES_603
+OBJC_METH_VAR_NAME_604
+OBJC_SELECTOR_REFERENCES_605
+OBJC_METH_VAR_NAME_606
+OBJC_SELECTOR_REFERENCES_607
+OBJC_METH_VAR_NAME_608
+OBJC_SELECTOR_REFERENCES_609
+OBJC_METH_VAR_NAME_610
+OBJC_SELECTOR_REFERENCES_611
+.str612
+_unnamed_cfstring_613
+.str614
+_unnamed_cfstring_615
+.str616
+_unnamed_cfstring_617
+.str618
+_unnamed_cfstring_619
+.str620
+_unnamed_cfstring_621
+OBJC_SELECTOR_REFERENCES_622
+OBJC_SELECTOR_REFERENCES_623
+OBJC_METH_VAR_NAME_624
+OBJC_SELECTOR_REFERENCES_625
+.str626
+_unnamed_cfstring_627
+OBJC_SELECTOR_REFERENCES_628
+.str629
+_unnamed_cfstring_630
+OBJC_METH_VAR_NAME_631
+OBJC_SELECTOR_REFERENCES_632
+OBJC_METH_VAR_NAME_633
+OBJC_SELECTOR_REFERENCES_634
+.str635
+OBJC_CLASSLIST_REFERENCES_$_636
+OBJC_METH_VAR_NAME_637
+OBJC_SELECTOR_REFERENCES_638
+OBJC_METH_VAR_NAME_639
+OBJC_SELECTOR_REFERENCES_640
+OBJC_METH_VAR_NAME_641
+OBJC_SELECTOR_REFERENCES_642
+_CreateHTTPMessageFromPerformingRequest
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServer.m
+_ExecuteMainThreadRunLoopSources
+_EncodeBase64
+_OSSwapInt16
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/libkern/arm/OSByteOrder.h
+_GetOption
+-[GCDWebServer(Testing) runTestsWithOptions:inDirectory:]
+-[GCDWebServer(Testing) isRecordingEnabled]
+-[GCDWebServer(Testing) setRecordingEnabled:]
+-[GCDWebServer(Logging) logException:]
+-[GCDWebServer(Logging) logError:]
+-[GCDWebServer(Logging) logWarning:]
+-[GCDWebServer(Logging) logInfo:]
+-[GCDWebServer(Logging) logVerbose:]
++[GCDWebServer(Logging) setLogLevel:]
+-[GCDWebServer(GETHandlers) addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:]
+-[GCDWebServer(GETHandlers) _responseWithContentsOfDirectory:]
+-[GCDWebServer(GETHandlers) addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:]
+-[GCDWebServer(GETHandlers) addGETHandlerForPath:staticData:contentType:cacheAge:]
+-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:]
+-[GCDWebServer(Handlers) addHandlerForMethod:pathRegex:requestClass:processBlock:]
+-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:asyncProcessBlock:]
+-[GCDWebServer(Handlers) addHandlerForMethod:path:requestClass:processBlock:]
+-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:asyncProcessBlock:]
+-[GCDWebServer(Handlers) addDefaultHandlerForMethod:requestClass:processBlock:]
+-[GCDWebServer(Extensions) startWithPort:bonjourName:]
+-[GCDWebServer(Extensions) start]
+-[GCDWebServer(Extensions) publicServerURL]
+-[GCDWebServer(Extensions) bonjourServerURL]
+-[GCDWebServer(Extensions) serverURL]
+-[GCDWebServer .cxx_destruct]
+-[GCDWebServer shouldAutomaticallyMapHEADToGET]
+-[GCDWebServer authenticationDigestAccounts]
+-[GCDWebServer authenticationBasicAccounts]
+-[GCDWebServer authenticationRealm]
+-[GCDWebServer serverName]
+-[GCDWebServer port]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServer.h
+-[GCDWebServer handlers]
+-[GCDWebServer setDelegate:]
+-[GCDWebServer delegate]
+-[GCDWebServer stop]
+-[GCDWebServer isRunning]
+-[GCDWebServer startWithOptions:error:]
+-[GCDWebServer _willEnterForeground:]
+-[GCDWebServer _didEnterBackground:]
+-[GCDWebServer _stop]
+-[GCDWebServer _start:]
+-[GCDWebServer _createDispatchSourceWithListeningSocket:isIPv6:]
+-[GCDWebServer _createListeningSocket:localAddress:length:maxPendingConnections:error:]
+-[GCDWebServer removeAllHandlers]
+-[GCDWebServer addHandlerWithMatchBlock:asyncProcessBlock:]
+-[GCDWebServer addHandlerWithMatchBlock:processBlock:]
+-[GCDWebServer bonjourType]
+-[GCDWebServer bonjourName]
+-[GCDWebServer didEndConnection:]
+-[GCDWebServer _didDisconnect]
+-[GCDWebServer _endBackgroundTask]
+-[GCDWebServer willStartConnection:]
+-[GCDWebServer _didConnect]
+-[GCDWebServer _startBackgroundTask]
+-[GCDWebServer dealloc]
+-[GCDWebServer init]
++[GCDWebServer initialize]
+-[GCDWebServerHandler .cxx_destruct]
+-[GCDWebServerHandler asyncProcessBlock]
+-[GCDWebServerHandler matchBlock]
+-[GCDWebServerHandler initWithMatchBlock:asyncProcessBlock:]
+GCDWebServerLogMessage
+__Block_byref_object_copy_
+__Block_byref_object_dispose_
+__GCDWebServerFormatRFC822_block_invoke
+__GCDWebServerParseRFC822_block_invoke
+__GCDWebServerFormatISO8601_block_invoke
+__copy_helper_block_62
+__destroy_helper_block_63
+__GCDWebServerParseISO8601_block_invoke
+__copy_helper_block_65
+__destroy_helper_block_66
+_dateFormatterRFC822
+_dateFormatterISO8601
+_dateFormatterQueue
+OBJC_CLASSLIST_REFERENCES_$_3
+OBJC_SELECTOR_REFERENCES_5
+OBJC_METH_VAR_NAME_6
+OBJC_SELECTOR_REFERENCES_7
+OBJC_SELECTOR_REFERENCES_11
+OBJC_CLASSLIST_REFERENCES_$_12
+OBJC_CLASSLIST_REFERENCES_$_33
+OBJC_CLASSLIST_REFERENCES_$_38
+OBJC_CLASSLIST_REFERENCES_$_49
+.str56
+__block_descriptor_tmp64
+__block_descriptor_tmp67
+_unnamed_cfstring_73
+_unnamed_cfstring_75
+.str76
+_unnamed_cfstring_77
+.str80
+_unnamed_cfstring_81
+GCDWebServerGetMimeTypeForExtension._overrides
+.str85
+_unnamed_cfstring_86
+.str87
+_unnamed_cfstring_88
+.str93
+_unnamed_cfstring_94
+.str95
+_unnamed_cfstring_96
+OBJC_CLASSLIST_REFERENCES_$_99
+OBJC_METH_VAR_NAME_100
+OBJC_SELECTOR_REFERENCES_101
+.str112
+_unnamed_cfstring_113
+GCDWebServerComputeMD5Digest
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Core/GCDWebServerFunctions.m
+GCDWebServerGetPrimaryIPAddress
+GCDWebServerStringFromSockAddr
+GCDWebServerParseURLEncodedForm
+GCDWebServerUnescapeURLString
+GCDWebServerEscapeURLString
+GCDWebServerGetMimeTypeForExtension
+GCDWebServerDescribeData
+GCDWebServerIsTextContentType
+GCDWebServerParseISO8601
+GCDWebServerFormatISO8601
+GCDWebServerParseRFC822
+GCDWebServerFormatRFC822
+GCDWebServerStringEncodingFromCharset
+GCDWebServerExtractHeaderValueParameter
+GCDWebServerTruncateHeaderValue
+GCDWebServerNormalizeHeaderValue
+GCDWebServerInitializeFunctions
++[GCDWebServerErrorResponse responseWithClientError:message:]
++[GCDWebServerErrorResponse responseWithServerError:message:]
++[GCDWebServerErrorResponse responseWithClientError:underlyingError:message:]
++[GCDWebServerErrorResponse responseWithServerError:underlyingError:message:]
+-[GCDWebServerErrorResponse initWithStatusCode:underlyingError:messageFormat:arguments:]
+-[GCDWebServerErrorResponse initWithClientError:message:]
+-[GCDWebServerErrorResponse initWithServerError:message:]
+-[GCDWebServerErrorResponse initWithClientError:underlyingError:message:]
+-[GCDWebServerErrorResponse initWithServerError:underlyingError:message:]
+OBJC_METH_VAR_TYPE_26
+l_OBJC_$_CLASS_METHODS_GCDWebServerErrorResponse
+l_OBJC_METACLASS_RO_$_GCDWebServerErrorResponse
+l_OBJC_$_INSTANCE_METHODS_GCDWebServerErrorResponse
+l_OBJC_CLASS_RO_$_GCDWebServerErrorResponse
+_unnamed_cfstring_34
+_EscapeHTMLString
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebServer/Responses/GCDWebServerErrorResponse.m
+-[GCDWebServerErrorResponse initWithServerError:underlyingError:message:]
+-[GCDWebServerErrorResponse initWithClientError:underlyingError:message:]
+-[GCDWebServerErrorResponse initWithServerError:message:]
+-[GCDWebServerErrorResponse initWithClientError:message:]
+-[GCDWebServerErrorResponse initWithStatusCode:underlyingError:messageFormat:arguments:]
++[GCDWebServerErrorResponse responseWithServerError:underlyingError:message:]
++[GCDWebServerErrorResponse responseWithClientError:underlyingError:message:]
++[GCDWebServerErrorResponse responseWithServerError:message:]
++[GCDWebServerErrorResponse responseWithClientError:message:]
+-[GCDWebUploader(Methods) _checkSandboxedPath:]
+-[GCDWebUploader(Methods) _checkFileExtension:]
+-[GCDWebUploader(Methods) _uniquePathForPath:]
+-[GCDWebUploader(Methods) listDirectory:]
+-[GCDWebUploader(Methods) downloadFile:]
+__40-[GCDWebUploader(Methods) downloadFile:]_block_invoke
+-[GCDWebUploader(Methods) uploadFile:]
+__38-[GCDWebUploader(Methods) uploadFile:]_block_invoke
+__copy_helper_block_135
+__destroy_helper_block_136
+-[GCDWebUploader(Methods) moveItem:]
+__36-[GCDWebUploader(Methods) moveItem:]_block_invoke
+__copy_helper_block_156
+__destroy_helper_block_157
+-[GCDWebUploader(Methods) deleteItem:]
+__38-[GCDWebUploader(Methods) deleteItem:]_block_invoke
+__copy_helper_block_171
+__destroy_helper_block_172
+-[GCDWebUploader(Methods) createDirectory:]
+__43-[GCDWebUploader(Methods) createDirectory:]_block_invoke
+__copy_helper_block_186
+__destroy_helper_block_187
+-[GCDWebUploader initWithUploadDirectory:]
+__42-[GCDWebUploader initWithUploadDirectory:]_block_invoke
+__copy_helper_block_277
+__destroy_helper_block_278
+__42-[GCDWebUploader initWithUploadDirectory:]_block_invoke286
+__42-[GCDWebUploader initWithUploadDirectory:]_block_invoke_2
+__42-[GCDWebUploader initWithUploadDirectory:]_block_invoke_3
+__42-[GCDWebUploader initWithUploadDirectory:]_block_invoke_4
+__42-[GCDWebUploader initWithUploadDirectory:]_block_invoke_5
+__42-[GCDWebUploader initWithUploadDirectory:]_block_invoke_6
+-[GCDWebUploader uploadDirectory]
+-[GCDWebUploader allowedFileExtensions]
+-[GCDWebUploader setAllowedFileExtensions:]
+-[GCDWebUploader allowHiddenItems]
+-[GCDWebUploader setAllowHiddenItems:]
+-[GCDWebUploader title]
+-[GCDWebUploader setTitle:]
+-[GCDWebUploader header]
+-[GCDWebUploader setHeader:]
+-[GCDWebUploader prologue]
+-[GCDWebUploader setPrologue:]
+-[GCDWebUploader epilogue]
+-[GCDWebUploader setEpilogue:]
+-[GCDWebUploader footer]
+-[GCDWebUploader setFooter:]
+-[GCDWebUploader .cxx_destruct]
+-[GCDWebUploader(Subclassing) shouldUploadFileAtPath:withTemporaryFile:]
+-[GCDWebUploader(Subclassing) shouldMoveItemFromPath:toPath:]
+-[GCDWebUploader(Subclassing) shouldDeleteItemAtPath:]
+-[GCDWebUploader(Subclassing) shouldCreateDirectoryAtPath:]
+OBJC_IVAR_$_GCDWebUploader._uploadDirectory
+OBJC_IVAR_$_GCDWebUploader._allowedExtensions
+OBJC_CLASSLIST_REFERENCES_$_37
+.str38
+_unnamed_cfstring_39
+OBJC_IVAR_$_GCDWebUploader._allowHidden
+.str46
+_unnamed_cfstring_47
+.str50
+_unnamed_cfstring_51
+_unnamed_cfstring_70
+OBJC_METH_VAR_NAME_76
+OBJC_SELECTOR_REFERENCES_77
+_unnamed_cfstring_79
+OBJC_CLASSLIST_REFERENCES_$_96
+_unnamed_cfstring_102
+.str103
+_unnamed_cfstring_104
+OBJC_METH_VAR_NAME_105
+OBJC_SELECTOR_REFERENCES_106
+.str107
+_unnamed_cfstring_108
+_unnamed_cfstring_116
+OBJC_METH_VAR_NAME_123
+OBJC_SELECTOR_REFERENCES_124
+.str131
+_unnamed_cfstring_132
+__block_descriptor_tmp137
+.str144
+_unnamed_cfstring_145
+.str146
+_unnamed_cfstring_147
+.str150
+_unnamed_cfstring_151
+.str152
+_unnamed_cfstring_153
+__block_descriptor_tmp158
+OBJC_SELECTOR_REFERENCES_162
+OBJC_SELECTOR_REFERENCES_170
+__block_descriptor_tmp173
+_unnamed_cfstring_175
+.str178
+_unnamed_cfstring_179
+.str182
+_unnamed_cfstring_183
+OBJC_SELECTOR_REFERENCES_185
+__block_descriptor_tmp188
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebUploader_$_Methods
+l_OBJC_$_CATEGORY_GCDWebUploader_$_Methods
+OBJC_CLASSLIST_REFERENCES_$_199
+OBJC_SELECTOR_REFERENCES_213
+OBJC_SELECTOR_REFERENCES_217
+OBJC_CLASSLIST_REFERENCES_$_220
+OBJC_CLASSLIST_REFERENCES_$_221
+OBJC_SELECTOR_REFERENCES_227
+OBJC_METH_VAR_NAME_232
+OBJC_SELECTOR_REFERENCES_233
+.str240
+_unnamed_cfstring_241
+.str248
+_unnamed_cfstring_249
+_unnamed_cfstring_253
+OBJC_CLASSLIST_REFERENCES_$_254
+_unnamed_cfstring_256
+OBJC_METH_VAR_NAME_257
+OBJC_SELECTOR_REFERENCES_258
+.str259
+_unnamed_cfstring_260
+.str261
+_unnamed_cfstring_262
+.str263
+_unnamed_cfstring_264
+.str265
+_unnamed_cfstring_266
+.str267
+_unnamed_cfstring_268
+.str273
+_unnamed_cfstring_274
+OBJC_SELECTOR_REFERENCES_276
+OBJC_CLASS_NAME_280
+__block_descriptor_tmp281
+.str284
+_unnamed_cfstring_285
+OBJC_CLASS_NAME_288
+__block_descriptor_tmp289
+.str290
+_unnamed_cfstring_291
+OBJC_SELECTOR_REFERENCES_292
+OBJC_CLASS_NAME_293
+__block_descriptor_tmp294
+.str295
+_unnamed_cfstring_296
+.str297
+_unnamed_cfstring_298
+OBJC_CLASSLIST_REFERENCES_$_299
+OBJC_SELECTOR_REFERENCES_300
+OBJC_CLASS_NAME_301
+__block_descriptor_tmp302
+.str303
+_unnamed_cfstring_304
+OBJC_CLASSLIST_REFERENCES_$_305
+OBJC_SELECTOR_REFERENCES_306
+OBJC_CLASS_NAME_307
+__block_descriptor_tmp308
+.str309
+_unnamed_cfstring_310
+OBJC_SELECTOR_REFERENCES_311
+OBJC_CLASS_NAME_312
+__block_descriptor_tmp313
+.str314
+_unnamed_cfstring_315
+OBJC_SELECTOR_REFERENCES_316
+OBJC_CLASS_NAME_317
+__block_descriptor_tmp318
+OBJC_IVAR_$_GCDWebUploader._title
+OBJC_IVAR_$_GCDWebUploader._header
+OBJC_IVAR_$_GCDWebUploader._prologue
+OBJC_IVAR_$_GCDWebUploader._epilogue
+OBJC_IVAR_$_GCDWebUploader._footer
+OBJC_CLASS_NAME_319
+l_OBJC_METACLASS_RO_$_GCDWebUploader
+OBJC_CLASS_NAME_320
+OBJC_METH_VAR_NAME_321
+OBJC_METH_VAR_TYPE_325
+OBJC_METH_VAR_NAME_326
+OBJC_METH_VAR_NAME_335
+l_OBJC_$_INSTANCE_METHODS_GCDWebUploader
+OBJC_METH_VAR_TYPE_339
+OBJC_METH_VAR_NAME_340
+OBJC_METH_VAR_TYPE_341
+OBJC_METH_VAR_TYPE_343
+OBJC_METH_VAR_NAME_345
+OBJC_METH_VAR_NAME_346
+OBJC_METH_VAR_NAME_347
+l_OBJC_$_INSTANCE_VARIABLES_GCDWebUploader
+OBJC_PROP_NAME_ATTR_358
+OBJC_PROP_NAME_ATTR_359
+OBJC_PROP_NAME_ATTR_360
+OBJC_PROP_NAME_ATTR_361
+OBJC_PROP_NAME_ATTR_362
+OBJC_PROP_NAME_ATTR_363
+OBJC_PROP_NAME_ATTR_364
+OBJC_PROP_NAME_ATTR_365
+l_OBJC_$_PROP_LIST_GCDWebUploader
+l_OBJC_CLASS_RO_$_GCDWebUploader
+OBJC_CLASS_NAME_366
+OBJC_METH_VAR_TYPE_367
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GCDWebUploader_$_Subclassing
+l_OBJC_$_CATEGORY_GCDWebUploader_$_Subclassing
+-[GCDWebUploader(Subclassing) shouldCreateDirectoryAtPath:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebUploader/GCDWebUploader.m
+-[GCDWebUploader(Subclassing) shouldDeleteItemAtPath:]
+-[GCDWebUploader(Subclassing) shouldMoveItemFromPath:toPath:]
+-[GCDWebUploader(Subclassing) shouldUploadFileAtPath:withTemporaryFile:]
+-[GCDWebUploader .cxx_destruct]
+-[GCDWebUploader setFooter:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/GCDWebServer/GCDWebUploader/GCDWebUploader.h
+-[GCDWebUploader footer]
+-[GCDWebUploader setEpilogue:]
+-[GCDWebUploader epilogue]
+-[GCDWebUploader setPrologue:]
+-[GCDWebUploader prologue]
+-[GCDWebUploader setHeader:]
+-[GCDWebUploader header]
+-[GCDWebUploader setTitle:]
+-[GCDWebUploader title]
+-[GCDWebUploader setAllowHiddenItems:]
+-[GCDWebUploader allowHiddenItems]
+-[GCDWebUploader setAllowedFileExtensions:]
+-[GCDWebUploader allowedFileExtensions]
+-[GCDWebUploader uploadDirectory]
+-[GCDWebUploader initWithUploadDirectory:]
+-[GCDWebUploader(Methods) createDirectory:]
+-[GCDWebUploader(Methods) deleteItem:]
+-[GCDWebUploader(Methods) moveItem:]
+-[GCDWebUploader(Methods) uploadFile:]
+-[GCDWebUploader(Methods) downloadFile:]
+-[GCDWebUploader(Methods) listDirectory:]
+-[GCDWebUploader(Methods) _uniquePathForPath:]
+-[GCDWebUploader(Methods) _checkFileExtension:]
+-[GCDWebUploader(Methods) _checkSandboxedPath:]
+_ZL15__ARCLite__loadv
+_ZL30add_image_hook_autoreleasepoolPK11mach_headerl
+_ZL34__arclite_objc_autoreleasePoolPushv
+_ZL33__arclite_objc_autoreleasePoolPopPv
+_ZL19patch_lazy_pointersPK11mach_headerP7patch_tm
+_ZL42__arclite_NSArray_objectAtIndexedSubscriptP7NSArrayP13objc_selectorj
+_ZL53__arclite_NSMutableArray_setObject_atIndexedSubscriptP14NSMutableArrayP13objc_selectorP11objc_objectj
+_ZL46__arclite_NSDictionary_objectForKeyedSubscriptP12NSDictionaryP13objc_selectorP11objc_object
+_ZL47__arclite_NSOrderedSet_objectAtIndexedSubscriptP12NSOrderedSetP13objc_selectorj
+_ZL58__arclite_NSMutableOrderedSet_setObject_atIndexedSubscriptP19NSMutableOrderedSetP13objc_selectorP11objc_objectj
+_ZL58__arclite_NSMutableDictionary__setObject_forKeyedSubscriptP19NSMutableDictionaryP13objc_selectorP11objc_objectS4_
+_ZL18add_image_hook_ARCPK11mach_headerl
+_ZL36__arclite_object_setInstanceVariableP11objc_objectPKcPv
+_ZL24__arclite_object_setIvarP11objc_objectP9objc_ivarS0_
+_ZL21__arclite_object_copyP11objc_objectm
+_ZL21__arclite_objc_retainP11objc_object
+_ZL26__arclite_objc_retainBlockP11objc_object
+_ZL22__arclite_objc_releaseP11objc_object
+_ZL26__arclite_objc_autoreleaseP11objc_object
+_ZL32__arclite_objc_retainAutoreleaseP11objc_object
+_ZL37__arclite_objc_autoreleaseReturnValueP11objc_object
+_ZL43__arclite_objc_retainAutoreleaseReturnValueP11objc_object
+_ZL44__arclite_objc_retainAutoreleasedReturnValueP11objc_object
+_ZL26__arclite_objc_storeStrongPP11objc_objectS0_
+_ZL22add_image_hook_swiftV1PK11mach_headerl
+_ZL42__arclite_NSUndoManagerProxy_isKindOfClassP11objc_objectP13objc_selectorP10objc_class
+_ZL13replaceMethodP10objc_classP13objc_selectorPFP11objc_objectS4_S2_zEPS6_
+_ZL30__arclite_NSManagedObject_initP11objc_objectP13objc_selector
+_ZL41__arclite_NSManagedObject_allocWithEntityP11objc_objectP13objc_selectorS0_
+_ZL36__arclite_NSManagedObject_allocBatchP11objc_objectP13objc_selectorPS0_S0_j
+_ZL37__arclite_NSKKMS_fastIndexForKnownKeyP11objc_objectP13objc_selectorS0_
+_ZL28__arclite_NSKKMS_indexForKeyP11objc_objectP13objc_selectorS0_
+_ZL29__arclite_NSKKsD_objectForKeyP11objc_objectP13objc_selectorS0_
+_ZL35__arclite_NSKKsD_removeObjectForKeyP11objc_objectP13objc_selectorS0_
+_ZL33__arclite_NSKKsD_setObject_forKeyP11objc_objectP13objc_selectorS0_S0_
+_ZL41__arclite_NSKKsD_addEntriesFromDictionaryP11objc_objectP13objc_selectorP12NSDictionary
+_ZL28__arclite_objc_readClassPairP10objc_classPK15objc_image_info
+_ZL32__arclite_objc_allocateClassPairP10objc_classPKcm
+_ZL32__arclite_object_getIndexedIvarsP11objc_object
+_ZL23__arclite_objc_getClassPKc
+_ZL27__arclite_objc_getMetaClassPKc
+_ZL31__arclite_objc_getRequiredClassPKc
+_ZL26__arclite_objc_lookUpClassPKc
+_ZL26__arclite_objc_getProtocolPKc
+_ZL23__arclite_class_getNameP10objc_class
+_ZL26__arclite_protocol_getNameP8Protocol
+_ZL37__arclite_objc_copyClassNamesForImagePKcPj
+_ZL17transcribeMethodsP10objc_classP15glue_class_ro_t
+_ZL19transcribeProtocolsP10objc_classP15glue_class_ro_t
+_ZL20transcribePropertiesP10objc_classP15glue_class_ro_t
+_ZL14initialize_impP11objc_objectP13objc_selector
+_ZL18allocateMaybeSwiftP18glue_swift_class_tm
+_ZL22copySwiftV1MangledNamePKcb
+_ZL13demangledNamePKcb
+_ZL16scanMangledFieldRPKcS0_S1_Ri
+_ZL30arclite_uninitialized_functionv
+_ZL12cxxConstructP11objc_object
+_ZL20fixStringForCoreDataP11objc_object
+OBJC_METACLASS_$___ARCLite__
+_ZL24OBJC_CLASS_$___ARCLite__
+_ZL31OBJC_METACLASS_RO_$___ARCLite__
+_non_lazy_classes
+_ZL27OBJC_CLASS_RO_$___ARCLite__
+_ZL11_class_name
+_ZL32OBJC_$_CLASS_METHODS___ARCLite__
+_ZL17_load_method_name
+_ZL17_load_method_type
+_ZL23NSAutoreleasePool_class
+_ZZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+_ZGVZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+.str2
+.str6
+OBJC_METH_VAR_NAME_8
+OBJC_SELECTOR_REFERENCES_9
+OBJC_METH_VAR_TYPE_20
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS___ARCLiteIndexedSubscripting__
+l_OBJC_$_PROTOCOL_METHOD_TYPES___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteIndexedSubscripting__
+OBJC_CLASS_NAME_32
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS___ARCLiteKeyedSubscripting__
+l_OBJC_$_PROTOCOL_METHOD_TYPES___ARCLiteKeyedSubscripting__
+l_OBJC_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteKeyedSubscripting__
+_ZZL18add_image_hook_ARCPK11mach_headerlE7patches
+_ZGVZL18add_image_hook_ARCPK11mach_headerlE7patches
+.str41
+.str43
+.str45
+.str51
+.str52
+_ZL30NSUndoManagerProxy_targetClass
+.str64
+_ZL29original_NSManagedObject_init
+_ZL40original_NSManagedObject_allocWithEntity
+_ZL35original_NSManagedObject_allocBatch
+_ZL25NSMutableDictionary_class
+_ZL22NSConstantString_class
+_ZL14NSString_class
+_ZL36original_NSKKMS_fastIndexForKnownKey
+_ZL27original_NSKKMS_indexForKey
+_ZL28original_NSKKsD_objectForKey
+_ZL34original_NSKKsD_removeObjectForKey
+_ZL32original_NSKKsD_setObject_forKey
+_ZL40original_NSKKsD_addEntriesFromDictionary
+_ZZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+_ZGVZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+.str81
+.str82
+_ZL31original_objc_allocateClassPair
+_ZL31original_object_getIndexedIvars
+_ZL22original_objc_getClass
+_ZL26original_objc_getMetaClass
+.str86
+_ZL30original_objc_getRequiredClass
+_ZL25original_objc_lookUpClass
+_ZL25original_objc_getProtocol
+.str89
+_ZL22original_class_getName
+_ZL25original_protocol_getName
+_ZL36original_objc_copyClassNamesForImage
+OBJC_METH_VAR_NAME_94
+OBJC_SELECTOR_REFERENCES_95
+.str96
+.str99
+_ZL12demangleLock
+_ZL9Demangled
+.str105
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c++ -arch armv7 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -Wno-trigraphs -fno-exceptions -fno-rtti -mpascal-strings -Os -Wno-missing-field-initializers -Wmissing-prototypes -Wno-implicit-atomic-properties -Wno-arc-repeated-use-of-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -D NDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -miphoneos-version-min=4.3 -g -fno-threadsafe-statics -Wno-sign-conversion -fembed-bitcode -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-generated-files.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-own-target-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-all-target-headers.hmap -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-project-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Symbols/BuiltProducts/include -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/DerivedSources/armv7 -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/DerivedSources -F/Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Symbols/BuiltProducts -F/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk/System/Library/PrivateFrameworks -Wall -Wextra -Wno-gcc-compat -fgnu-inline-asm -MMD -MT dependencies -MF /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.d --serialize-diagnostics /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.dia -c /Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm -o /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.o -mlinker-version=253.9 -march=armv7a
+__arclite_NSKKsD_addEntriesFromDictionary
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65
+__arclite_NSKKsD_setObject_forKey
+__arclite_NSKKsD_removeObjectForKey
+__arclite_NSKKsD_objectForKey
+__arclite_NSKKMS_indexForKey
+fixStringForCoreData
+__arclite_NSKKMS_fastIndexForKnownKey
+__arclite_NSManagedObject_allocBatch
+__arclite_NSManagedObject_allocWithEntity
+cxxConstruct
+__arclite_NSManagedObject_init
+arclite_uninitialized_function
+replaceMethod
+__arclite_NSUndoManagerProxy_isKindOfClass
+patch_t<const char **(const char *, unsigned int *)>
+__arclite_objc_copyClassNamesForImage
+patch_t<const char *(Protocol *)>
+__arclite_protocol_getName
+patch_t<const char *(Class)>
+__isctype
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk/usr/include/ctype.h
+isdigit
+scanMangledField
+copySwiftV1DemangledName
+demangledName
+__arclite_class_getName
+patch_t<Protocol *(const char *)>
+__arclite_objc_getProtocol
+__arclite_objc_lookUpClass
+__arclite_objc_getRequiredClass
+__arclite_objc_getMetaClass
+patch_t<Class (const char *)>
+copySwiftV1MangledName
+__arclite_objc_getClass
+patch_t<void *(id)>
+word_align
+__arclite_object_getIndexedIvars
+patch_t<Class (Class, const char *, unsigned long)>
+allocateMaybeSwift
+isSwift
+metaclass
+__arclite_objc_allocateClassPair
+patch_t<Class (Class, const objc_image_info *)>
+initialize_imp
+property_list_nth
+transcribeProperties
+transcribeProtocols
+method_list_nth
+transcribeMethods
+alignment
+max
+ivar_list_nth
+transcribeIvars
+fastFlags
+ro
+__arclite_objc_readClassPair
+add_image_hook_swiftV1
+install_swiftV1
+patch_t<void (id *, id)>
+__arclite_objc_storeStrong
+__arclite_objc_retainAutoreleasedReturnValue
+__arclite_objc_retainAutoreleaseReturnValue
+__arclite_objc_autoreleaseReturnValue
+__arclite_objc_retainAutorelease
+__arclite_objc_autorelease
+patch_t<void (id)>
+__arclite_objc_release
+__arclite_objc_retainBlock
+patch_t<id (id)>
+__arclite_objc_retain
+patch_t<id (id, unsigned long)>
+fixupCopiedReferences
+classOrSuperClassesUseARR
+__arclite_object_copy
+patch_t<void (id, objc_ivar *, id)>
+isScannedOffset
+alignedInstanceStart
+_class_getInstanceStart
+data
+__arclite_class_usesAutomaticRetainRelease
+_ivar_getClass
+__arclite_object_setIvar
+patch_t<objc_ivar *(id, const char *, void *)>
+__arclite_object_setInstanceVariable
+add_image_hook_ARC
+install_ARC
+objc_collectingEnabled
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk/usr/include/objc/objc-auto.h
+__arclite_NSMutableDictionary__setObject_forKeyedSubscript
+addOrReplaceMethod
+install_dict_nil_value
+__arclite_NSMutableOrderedSet_setObject_atIndexedSubscript
+__arclite_NSOrderedSet_objectAtIndexedSubscript
+keyedGetter
+__arclite_NSDictionary_objectForKeyedSubscript
+__arclite_NSMutableArray_setObject_atIndexedSubscript
+indexedGetter
+__arclite_NSArray_objectAtIndexedSubscript
+addMethod
+install_subscripting
+patch_lazy_pointers
+patch_t<void (void *)>
+__arclite_objc_autoreleasePoolPop
+patch_t<void *()>
+__arclite_objc_autoreleasePoolPush
+add_image_hook_autoreleasepool
+install_autoreleasepool
+__ARCLite__load

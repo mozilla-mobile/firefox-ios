@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Dien";
+
+/* Text selection menu item */
+"Find in Page" = "Sykje op side";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Folgjende resultaat op side";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Foarige resultaat op side";
+

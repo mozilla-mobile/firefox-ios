@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@/@PACKAGE_NAME@
+
+Name: google-breakpad-client
+Description: An open-source multi-platform crash reporting system
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lbreakpad_client @PTHREAD_LIBS@
+Cflags: -I${includedir} @PTHREAD_CFLAGS@

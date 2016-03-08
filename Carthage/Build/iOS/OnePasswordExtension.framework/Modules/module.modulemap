@@ -1,0 +1,6 @@
+framework module OnePasswordExtension {
+  umbrella header "OnePasswordExtension.h"
+
+  export *
+  module * { export * }
+}
