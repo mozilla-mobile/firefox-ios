@@ -53,7 +53,7 @@ Everything after this point is done from within Xcode.
 Run on the Simulator
 -----------------
 
-* Open `Client.xcodeproj` and make sure you have the *Client* scheme and a simulated device selected. The app should run on any simulator. We just have not tested very well on the *Resizable iPad* and *Resizable iPhone* simulators.
+* Open `Client.xcodeproj` and make sure you have the *Fennec* scheme and a simulated device selected. The app should run on any simulator. We just have not tested very well on the *Resizable iPad* and *Resizable iPhone* simulators.
 * Select *Product -> Run* and the application should build and run on the selected simulator.
 
 Run on a Device with Xcode 7 and a Free Developer Account
@@ -61,19 +61,11 @@ Run on a Device with Xcode 7 and a Free Developer Account
 
 > Only follow these instructions if you are using the new free personal developer accounts that Apple enabled with Xcode 7.
 
-In the following files, replace occurrences of `org.mozilla.ios` with your own unique reverse domain like for example `se.mydomain.ios`. If you do not own a domain, just use your full name like for example `jane.appleseed`.  
+Since the bundle identifier we use for Firefox is tied to our developer account, you'll need to generate your own identifier and update the existing configuration.
 
-Make sure you expand all the fields of the `.entitlements` files. Make sure you just replace the `org.mozilla.ios` part and keep prefixes like `group.` that some files contain.
-
-* `Client/Configuration/BaseConfig.xcconfig`
-* `Client/Info.plist`
-* `Client/Fennec.entitlements`
-* `Extensions/ShareTo/Info.plist`
-* `Extensions/ShareTo/Fennec.entitlements`
-* `Extensions/SendTo/Info.plist`
-* `Extensions/SendTo/Fennec.entitlements`
-* `Extensions/ViewLater/Info.plist`
-* `Extensions/ViewLater/Fennec.entitlements`
+1. Open Client/Configuration/Fennec.xcconfig
+2. Change MOZ_BUNDLE_ID to your own bundle identifier.
+3. Navigate to each of the application targets (Client/SendTo/ShareTo/ViewLater) and select your personal development account.
 
 If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 
@@ -92,7 +84,7 @@ These are instructions for development. Not production / distribution.
 
 Before you can run the application on your device, you need to setup a few things in the *Certificates, Identifiers & Profiles* section of the iOS Developer Center.
 
-> _Note_: When we mention `YOURREVEREDOMAIN` below, use your own domain in reverse notation like `com.example` or if you do not have your own domain, just use something unique and personal like `io.github.yourgithubusername`. Please do not use existing domain names which you do not own.
+> _Note_: When we mention `YOURREVERSEDOMAIN` below, use your own domain in reverse notation like `com.example` or if you do not have your own domain, just use something unique and personal like `io.github.yourgithubusername`. Please do not use existing domain names which you do not own.
 
 1. Create a Application Group. Name this group 'Fennec' and for its Identifier use `group.YOURREVERSEDOMAIN.Fennec`
 2. Create a new App Id. Name it 'Fennec'. Give it an Explicit App ID and set its Bundle Identifier to `YOURREVERSEDOMAIN.Fennec`. In the App Services section, select *App Groups*.
@@ -110,23 +102,15 @@ Now we are going to create three Provisioning Profiles that are linked to the Ap
 
 Now go to Xcode, *Preferences -> Accounts* and select your developer account. Hit the *View Details* button and then press the little reload button in the bottom left corner. This should sync the Provisioning Profiles and you should see the three profiles appear that you creates earlier.
 
-Almost done. The one thing missing is that we need to adjust the following files in the project:
+Almost done. The one thing missing is that we need to adjust the build configuration to use your new bundle identifier.
 
-* `Client/Configuration/BaseConfig.xcconfig`
-* `Client/Info.plist`
-* `Client/Fennec.entitlements`
-* `Extensions/ShareTo/Info.plist`
-* `Extensions/ShareTo/Fennec.entitlements`
-* `Extensions/SendTo/Info.plist`
-* `Extensions/SendTo/Fennec.entitlements`
-* `Extensions/ViewLater/Info.plist`
-* `Extensions/ViewLater/Fennec.entitlements`
-
-In all these files, replace occurrences of `org.mozilla.ios` with `YOURREVERSEDOMAIN`. Make sure you expand all the fields of the `.entitlements` files. Make sure you just replace the `org.mozilla.ios` part and keep prefixes like `group.` that some files contain.
+1. Open Client/Configuration/Fennec.xcconfig
+2. Change MOZ_BUNDLE_ID to `YOURREVERSEDOMAIN`.
+3. Navigate to each of the application targets (Client/SendTo/ShareTo/ViewLater) and your developer account.
 
 Before building, do *Product -> Clean Build Folder* (option-shift-command-k)
 
-You should now be able to build the *Client* scheme and run on your device.
+You should now be able to build the *Fennec* scheme and run on your device.
 
 We would love a Pull Request for a smarter Xcode project configuration or even a shell script that makes this process simpler.
 
