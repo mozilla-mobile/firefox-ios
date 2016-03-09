@@ -89,8 +89,8 @@ class Browser: NSObject, BrowserWebViewDelegate {
                 lastUsed: NSDate.now(),
                 icon: nil)
         } else if let sessionData = browser.sessionData where !sessionData.urls.isEmpty {
-            let history = Array(sessionData.urls.reverse())
-            if let displayURL = history.first where RemoteTab.shouldIncludeURL(displayURL) {
+            let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reverse())
+            if let displayURL = history.first {
                 return RemoteTab(clientGUID: nil,
                     URL: displayURL,
                     title: browser.displayTitle,
