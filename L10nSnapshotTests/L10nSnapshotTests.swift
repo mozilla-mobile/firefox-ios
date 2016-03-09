@@ -175,6 +175,11 @@ class L10nSnapshotTests: XCTestCase {
         snapshot("10ContextMenuReloadButton-02", waitForLoadingIndicator: false)
     }
 
+    func test11LocationDialog() {
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html")
+        snapshot("11LocationDialog-01")
+    }
+
     func test50ClearPrivateData() {
         let app = XCUIApplication()
         var index = 1
