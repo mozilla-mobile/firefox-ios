@@ -5059,10 +5059,11 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = FirefoxNightly;
 		};
@@ -5079,6 +5080,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5209,10 +5211,11 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Firefox;
 		};
@@ -5229,6 +5232,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5450,6 +5454,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5469,6 +5474,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5488,6 +5494,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5837,6 +5844,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5855,10 +5863,11 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = FennecAurora;
 		};
@@ -5875,6 +5884,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -6292,6 +6302,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -6310,10 +6321,11 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = FirefoxBeta;
 		};
@@ -6330,6 +6342,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -6689,10 +6702,11 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Fennec;
 		};
@@ -6709,6 +6723,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
