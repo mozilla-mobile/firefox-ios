@@ -3398,6 +3398,9 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
+					7BEB64401C7345600092C02E = {
+						TestTargetID = F84B21BD1A090F8100AAB793;
+					};
 					7BEB644F1C7345990092C02E = {
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5577,7 +5580,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = L10nSnapshotTests;
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
 			};
 			name = Fennec;
 		};
@@ -5585,7 +5591,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = L10nSnapshotTests;
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
 			};
 			name = Firefox;
 		};
@@ -5593,7 +5602,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = L10nSnapshotTests;
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
 			};
 			name = FirefoxBeta;
 		};
@@ -5601,7 +5613,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = L10nSnapshotTests;
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
 			};
 			name = FirefoxNightly;
 		};
@@ -5609,7 +5624,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = L10nSnapshotTests;
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
 			};
 			name = FennecAurora;
 		};
@@ -5617,6 +5635,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = Fennec;
@@ -5625,6 +5644,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = Firefox;
@@ -5633,6 +5653,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = FirefoxBeta;
@@ -5641,6 +5662,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = FirefoxNightly;
@@ -5649,6 +5671,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = FennecAurora;
