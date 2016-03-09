@@ -78,6 +78,7 @@ class InstructionsViewController: UIViewController {
         view.backgroundColor = UIColor.whiteColor()
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", tableName: "SendTo", comment: "Close button in top navigation bar"), style: UIBarButtonItemStyle.Done, target: self, action: "close")
+        navigationItem.leftBarButtonItem?.accessibilityIdentifier = "InstructionsViewController.navigationItem.leftBarButtonItem"
 
         setupHelpView(view,
             introText: NSLocalizedString("You are not signed in to your Firefox Account.", tableName: "SendTo", comment: "See http://mzl.la/1ISlXnU"),
