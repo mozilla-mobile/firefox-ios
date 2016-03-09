@@ -23,7 +23,7 @@ private let DefaultParameters =
         recenterAnimationDuration: 0.15)
 
 protocol SwipeAnimatorDelegate: class {
-    func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView)
+    func swipeAnimator(animator: SwipeAnimator, viewWillExitContainerBounds: UIView)
 }
 
 class SwipeAnimator: NSObject {
@@ -64,13 +64,13 @@ extension SwipeAnimator {
         // Calculate the edge to calculate distance from
         let translation = velocity.x >= 0 ? CGRectGetWidth(container.frame) : -CGRectGetWidth(container.frame)
         let timeStep = NSTimeInterval(abs(translation) / speed)
+        self.delegate?.swipeAnimator(self, viewWillExitContainerBounds: self.animatingView)
         UIView.animateWithDuration(timeStep, animations: {
             self.animatingView.transform = self.transformForTranslation(translation)
             self.animatingView.alpha = self.alphaForDistanceFromCenter(abs(translation))
         }, completion: { finished in
             if finished {
                 self.animatingView.alpha = 0
-                self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
             }
         })
     }
