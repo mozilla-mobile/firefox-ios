@@ -75,4 +75,19 @@ public struct AppConstants {
     return true
 #endif
     }()
+
+    /// Enables/disables the new Menu functionality
+    public static let MOZ_MENU: Bool = {
+        #if MOZ_CHANNEL_AURORA
+            return false
+        #elseif MOZ_CHANNEL_FENNEC
+            return false
+        #elseif MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #else
+            return true
+        #endif
+    }()
 }
