@@ -133,10 +133,6 @@ class Browser: NSObject, BrowserWebViewDelegate {
 
             self.webView = webView
             browserDelegate?.browser?(self, didCreateWebView: webView)
-
-            // lastTitle is used only when showing zombie tabs after a session restore.
-            // Since we now have a web view, lastTitle is no longer useful.
-            lastTitle = nil
         }
     }
 
@@ -208,7 +204,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
                 return title
             }
         }
-        return displayURL?.absoluteString ?? lastTitle ?? ""
+        return lastTitle ?? displayURL?.absoluteString ?? ""
     }
 
     var currentInitialURL: NSURL? {
