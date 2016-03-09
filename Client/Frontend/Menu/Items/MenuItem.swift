@@ -6,7 +6,6 @@ import Foundation
 
 
 struct MenuItem {
-    let name: String
     let title: String
     private let iconName: String
     private let selectedIconName: String
@@ -19,8 +18,7 @@ struct MenuItem {
         return UIImage(named: selectedIconName)
     }
 
-    init(name: String, title: String, icon: String, selectedIcon: String) {
-        self.name = name
+    init(title: String, icon: String, selectedIcon: String) {
         self.title = title
         self.iconName = icon
         self.selectedIconName = selectedIcon
