@@ -80,7 +80,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
     }
 
     class func toTab(browser: Browser) -> RemoteTab? {
-        if let displayURL = browser.displayURL where !isIgnoredURL(displayURL) {
+        if let displayURL = browser.displayURL where RemoteTab.shouldIncludeURL(displayURL) {
             let history = Array(browser.historyList.filter(RemoteTab.shouldIncludeURL).reverse())
             return RemoteTab(clientGUID: nil,
                 URL: displayURL,
@@ -90,7 +90,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
                 icon: nil)
         } else if let sessionData = browser.sessionData where !sessionData.urls.isEmpty {
             let history = Array(sessionData.urls.reverse())
-            if let displayURL = history.first where !isIgnoredURL(displayURL) {
+            if let displayURL = history.first where RemoteTab.shouldIncludeURL(displayURL) {
                 return RemoteTab(clientGUID: nil,
                     URL: displayURL,
                     title: browser.displayTitle,
@@ -208,7 +208,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
         }
 
         guard let lastTitle = lastTitle where !lastTitle.isEmpty else {
-            return  displayURL?.absoluteString ??  ""
+            return displayURL?.absoluteString ??  ""
         }
 
         return lastTitle
