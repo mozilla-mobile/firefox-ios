@@ -6,11 +6,11 @@ dependencies:
   cache_directories:
     - Carthage
   override:
-    - carthage bootstrap --platform ios
+    - /usr/local/bin/carthage bootstrap --platform ios
 
 test:
   override:
-    - xctool
+    - /usr/local/bin/xctool
       -scheme Fennec
       -sdk iphonesimulator9.2
       -arch "i386"
