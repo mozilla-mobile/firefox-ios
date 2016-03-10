@@ -49,8 +49,13 @@ public class DeviceInfo {
         return String(format: f, appName(), device)
     }
 
-    public class func identifierForVendor() -> NSUUID? {
-        return UIDevice.currentDevice().identifierForVendor
+    public class func clientIdentifier(prefs: Prefs) -> String {
+        if let id = prefs.stringForKey("clientIdentifier") {
+            return id
+        }
+        let id = NSUUID().UUIDString
+        prefs.setString(id, forKey: "clientIdentifier")
+        return id
     }
 
     public class func deviceModel() -> String {

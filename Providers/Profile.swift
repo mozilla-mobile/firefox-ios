@@ -631,7 +631,8 @@ public class BrowserProfile: Profile {
             let bufferRows = (self.profile.bookmarks as? MergedSQLiteBookmarks)?.synchronousBufferCount()
 
             self.doInBackgroundAfter(millis: 300) {
-                let ping = makeAdHocBookmarkMergePing(NSBundle.mainBundle(), attempt: attempt, bufferRows: bufferRows, valid: validations)
+                let id = DeviceInfo.clientIdentifier(self.prefs)
+                let ping = makeAdHocBookmarkMergePing(NSBundle.mainBundle(), clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations)
                 let payload = ping.toString()
                 guard let body = payload.dataUsingEncoding(NSUTF8StringEncoding) else {
                     log.debug("Invalid JSON!")
