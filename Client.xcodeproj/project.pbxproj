@@ -248,10 +248,14 @@
 		7B0B1B9D1C1B6A3F00DF4AB5 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BCAAB81B0537E300855D82 /* InstructionsViewController.swift */; };
 		7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */; };
 		7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3631E91C244FEE00D12AF9 /* Theme.swift */; };
+		7B421F271C91E88100340529 /* RoundedToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B421F261C91E88100340529 /* RoundedToolbar.swift */; };
 		7B42217A1C9303BD00340529 /* MenuToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4221791C9303BD00340529 /* MenuToolbarItem.swift */; };
-		7B4221ED1C93045200340529 /* MenuDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4221EA1C93045200340529 /* MenuDataSource.swift */; };
-		7B4221EE1C93045200340529 /* MenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4221EB1C93045200340529 /* MenuDelegate.swift */; };
-		7B4221EF1C93045200340529 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4221EC1C93045200340529 /* MenuView.swift */; };
+		7B4222441C93051500340529 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222421C93051500340529 /* MenuItem.swift */; };
+		7B4222451C93051500340529 /* MenuItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222431C93051500340529 /* MenuItemView.swift */; };
+		7B4222681C93052600340529 /* MenuConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222641C93052600340529 /* MenuConfiguration.swift */; };
+		7B4222691C93052600340529 /* MenuDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222651C93052600340529 /* MenuDataSource.swift */; };
+		7B42226A1C93052600340529 /* MenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222661C93052600340529 /* MenuDelegate.swift */; };
+		7B42226B1C93052600340529 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222671C93052600340529 /* MenuView.swift */; };
 		7B59FC3E1C68E9B600F58EF5 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B59FC351C68E9B600F58EF5 /* SWCellScrollView.m */; };
 		7B59FC3F1C68E9B600F58EF5 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B59FC351C68E9B600F58EF5 /* SWCellScrollView.m */; };
 		7B59FC401C68E9B600F58EF5 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B59FC351C68E9B600F58EF5 /* SWCellScrollView.m */; };
@@ -306,9 +310,6 @@
 		7BB20B6D1B71160200F1657F /* TopSitesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB20B6C1B71160200F1657F /* TopSitesTests.swift */; };
 		7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBFEE731BB405D900A305AA /* TabManagerTests.swift */; };
 		7BBFEEA01BB409F300A305AA /* AboutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */; };
-		7BC08E781C908D0E000906DE /* MenuItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC08E771C908D0E000906DE /* MenuItemView.swift */; };
-		7BC7B4661C903A900046E9D2 /* MenuConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC7B4651C903A900046E9D2 /* MenuConfiguration.swift */; };
-		7BC7B4741C903B8F0046E9D2 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC7B4731C903B8F0046E9D2 /* MenuItem.swift */; };
 		7BC7B4BE1C904BF90046E9D2 /* MenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC7B4BD1C904BF90046E9D2 /* MenuTests.swift */; };
 		7BEB64441C7345600092C02E /* L10nSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3632D31C2983F000D12AF9 /* L10nSnapshotTests.swift */; };
 		7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
@@ -1245,10 +1246,14 @@
 		7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearPrivateDataTests.swift; sourceTree = "<group>"; };
 		7B3631E91C244FEE00D12AF9 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		7B3632D31C2983F000D12AF9 /* L10nSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10nSnapshotTests.swift; sourceTree = "<group>"; };
+		7B421F261C91E88100340529 /* RoundedToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoundedToolbar.swift; path = ../Menu/Toolbar/RoundedToolbar.swift; sourceTree = "<group>"; };
 		7B4221791C9303BD00340529 /* MenuToolbarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuToolbarItem.swift; sourceTree = "<group>"; };
-		7B4221EA1C93045200340529 /* MenuDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuDataSource.swift; path = Menu/MenuDataSource.swift; sourceTree = "<group>"; };
-		7B4221EB1C93045200340529 /* MenuDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuDelegate.swift; path = Menu/MenuDelegate.swift; sourceTree = "<group>"; };
-		7B4221EC1C93045200340529 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuView.swift; path = Menu/MenuView.swift; sourceTree = "<group>"; };
+		7B4222421C93051500340529 /* MenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuItem.swift; path = Client/Frontend/Menu/Items/MenuItem.swift; sourceTree = SOURCE_ROOT; };
+		7B4222431C93051500340529 /* MenuItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuItemView.swift; path = Client/Frontend/Menu/Items/MenuItemView.swift; sourceTree = SOURCE_ROOT; };
+		7B4222641C93052600340529 /* MenuConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuConfiguration.swift; path = Menu/MenuConfiguration.swift; sourceTree = "<group>"; };
+		7B4222651C93052600340529 /* MenuDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuDataSource.swift; path = Menu/MenuDataSource.swift; sourceTree = "<group>"; };
+		7B4222661C93052600340529 /* MenuDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuDelegate.swift; path = Menu/MenuDelegate.swift; sourceTree = "<group>"; };
+		7B4222671C93052600340529 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuView.swift; path = Menu/MenuView.swift; sourceTree = "<group>"; };
 		7B59FC341C68E9B600F58EF5 /* SWCellScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWCellScrollView.h; path = ThirdParty/SWTableViewCell/PodFiles/SWCellScrollView.h; sourceTree = "<group>"; };
 		7B59FC351C68E9B600F58EF5 /* SWCellScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWCellScrollView.m; path = ThirdParty/SWTableViewCell/PodFiles/SWCellScrollView.m; sourceTree = "<group>"; };
 		7B59FC361C68E9B600F58EF5 /* SWLongPressGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWLongPressGestureRecognizer.h; path = ThirdParty/SWTableViewCell/PodFiles/SWLongPressGestureRecognizer.h; sourceTree = "<group>"; };
@@ -1282,9 +1287,6 @@
 		7BA8D1C61BA037F500C8AE9E /* OpenPdfHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPdfHelper.swift; sourceTree = "<group>"; };
 		7BB20B6C1B71160200F1657F /* TopSitesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesTests.swift; sourceTree = "<group>"; };
 		7BBFEE731BB405D900A305AA /* TabManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManagerTests.swift; sourceTree = "<group>"; };
-		7BC08E771C908D0E000906DE /* MenuItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuItemView.swift; sourceTree = "<group>"; };
-		7BC7B4651C903A900046E9D2 /* MenuConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuConfiguration.swift; path = Menu/MenuConfiguration.swift; sourceTree = "<group>"; };
-		7BC7B4731C903B8F0046E9D2 /* MenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
 		7BC7B4BD1C904BF90046E9D2 /* MenuTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTests.swift; sourceTree = "<group>"; };
 		7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = L10nSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BEB644E1C7345600092C02E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = L10nSnapshotTests/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -2229,8 +2231,7 @@
 			children = (
 				7B4221791C9303BD00340529 /* MenuToolbarItem.swift */,
 			);
-			name = Toolbar;
-			path = Menu/Toolbar;
+			path = Toolbar;
 			sourceTree = "<group>";
 		};
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
@@ -2294,19 +2295,15 @@
 			children = (
 				7BC7B4711C903B690046E9D2 /* Items */,
 				7B4221781C9303BD00340529 /* Toolbar */,
-				7BC7B4651C903A900046E9D2 /* MenuConfiguration.swift */,
-				7B4221EA1C93045200340529 /* MenuDataSource.swift */,
-				7B4221EB1C93045200340529 /* MenuDelegate.swift */,
-				7B4221EC1C93045200340529 /* MenuView.swift */,
 			);
-			name = Menu;
+			path = Menu;
 			sourceTree = "<group>";
 		};
 		7BC7B4711C903B690046E9D2 /* Items */ = {
 			isa = PBXGroup;
 			children = (
-				7BC7B4731C903B8F0046E9D2 /* MenuItem.swift */,
-				7BC08E771C908D0E000906DE /* MenuItemView.swift */,
+				7B4222421C93051500340529 /* MenuItem.swift */,
+				7B4222431C93051500340529 /* MenuItemView.swift */,
 			);
 			name = Items;
 			path = Menu/Items;
@@ -2352,6 +2349,7 @@
 		D38A1BEB1A9FA2CA00F6A386 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
+				7B421F261C91E88100340529 /* RoundedToolbar.swift */,
 				6BB2FD971B017DAB001A189B /* AuralProgressBar.swift */,
 				D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */,
 				E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */,
@@ -2919,6 +2917,10 @@
 				E49943F31AE6879C00BF9DE4 /* Intro */,
 				E63ED8DF1BFD254E0097D08E /* Login Management */,
 				7BC7B4571C903A6A0046E9D2 /* Menu */,
+				7B4222641C93052600340529 /* MenuConfiguration.swift */,
+				7B4222651C93052600340529 /* MenuDataSource.swift */,
+				7B4222661C93052600340529 /* MenuDelegate.swift */,
+				7B4222671C93052600340529 /* MenuView.swift */,
 				F84B21F51A0910F600AAB793 /* Reader */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
 				D3972BF01C22412B00035B87 /* Share */,
@@ -4302,11 +4304,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
+				7B421F271C91E88100340529 /* RoundedToolbar.swift in Sources */,
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */,
 				E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */,
+				7B4222681C93052600340529 /* MenuConfiguration.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				7B59FC441C68E9B600F58EF5 /* SWTableViewCell.m in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
@@ -4334,6 +4338,7 @@
 				E4CD9F2D1A6DC91200318571 /* BrowserLocationView.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
+				7B4222451C93051500340529 /* MenuItemView.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
@@ -4342,11 +4347,9 @@
 				0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */,
 				E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */,
 				0BF648111A9C54E900BA963C /* TopSitesPanel.swift in Sources */,
-				7B4221EE1C93045200340529 /* MenuDelegate.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
 				0BD19A651A2530840084FBA7 /* Locking.swift in Sources */,
-				7BC08E781C908D0E000906DE /* MenuItemView.swift in Sources */,
 				E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenPdfHelper.swift in Sources */,
 				74203E251B276B3D007D481D /* SessionRestoreHandler.swift in Sources */,
@@ -4368,13 +4371,12 @@
 				E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */,
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
-				7B4221EF1C93045200340529 /* MenuView.swift in Sources */,
 				E4A961341AC051360069AD6F /* ReadabilityBrowserHelper.swift in Sources */,
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				0B7100481B4C72D60046AF87 /* FaviconFetcher.swift in Sources */,
 				A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */,
+				7B4222691C93052600340529 /* MenuDataSource.swift in Sources */,
 				E4252A0E1AF01AE40028C684 /* Swizzling.m in Sources */,
-				7BC7B4741C903B8F0046E9D2 /* MenuItem.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
@@ -4391,7 +4393,6 @@
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
 				2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
-				7B4221ED1C93045200340529 /* MenuDataSource.swift in Sources */,
 				E4B3348C1BC01D8F004E2BFF /* AdjustIntegration.swift in Sources */,
 				7FB63CC91C08B27E0047F9A4 /* DynamicFontHelper.swift in Sources */,
 				D3C03E471C3C7C1500A07D5C /* MenuHelper.swift in Sources */,
@@ -4402,10 +4403,10 @@
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
-				7BC7B4661C903A900046E9D2 /* MenuConfiguration.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				7B59FC471C68E9B600F58EF5 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
 				D39949F51C22461A00E2A03C /* RequestDesktopSiteActivity.swift in Sources */,
+				7B4222441C93051500340529 /* MenuItem.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Browser.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				7B59FC3E1C68E9B600F58EF5 /* SWCellScrollView.m in Sources */,
@@ -4420,6 +4421,7 @@
 				E640E85E1C73A45A00C5F072 /* PasscodeEntryViewController.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
+				7B42226A1C93052600340529 /* MenuDelegate.swift in Sources */,
 				E65D89181C8647420006EA35 /* AppAuthenticator.swift in Sources */,
 				28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
@@ -4432,6 +4434,7 @@
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
 				7B59FC4A1C68E9B600F58EF5 /* SWUtilityButtonView.m in Sources */,
+				7B42226B1C93052600340529 /* MenuView.swift in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,
