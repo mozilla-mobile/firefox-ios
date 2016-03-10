@@ -10,7 +10,7 @@ This branch is for mainline development that will eventually ship as v4.0.
 
 See the __v3.x__ branch if you're doing stabilization work for v3.0.
 
-This branch works with Xcode 7.2.1, and supports iOS 8.3 and 9.x.
+This branch works with Xcode 7.2.1, and supports iOS 8.2 and 9.x.
 
 Please make sure you aim your pull requests in the right direction.
 
