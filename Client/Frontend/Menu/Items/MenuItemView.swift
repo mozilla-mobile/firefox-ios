@@ -26,6 +26,7 @@ public class MenuItemView: UIControl {
         titleLabel.numberOfLines = 2
         titleLabel.textAlignment = NSTextAlignment.Center
         titleLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
+        titleLabel.setContentHuggingPriority(UILayoutPriorityDefaultLow, forAxis: UILayoutConstraintAxis.Horizontal)
 
         self.addSubview(imageView)
 
@@ -57,6 +58,8 @@ public class MenuItemView: UIControl {
                 self.removeGestureRecognizer(recogniser)
             }
         }
+
+        self.snp_removeConstraints()
     }
 
     public func setTitle(title: String) {
