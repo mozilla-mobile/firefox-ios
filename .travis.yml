@@ -5,7 +5,7 @@ before_install:
   - brew upgrade xctool
   - brew upgrade carthage
   - carthage bootstrap --platform ios --no-use-binaries
-
+script: xctool build -scheme Fennec -sdk iphonesimulator9.2 -arch "i386" ONLY_ACTIVE_ARCH=NO VALID_ARCHS="i386 x86_64"
 
 #osx_image: beta-xcode6.3
 #language: objective-c
