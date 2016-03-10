@@ -390,6 +390,10 @@ public class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
         self.db = db
     }
 
+    public func synchronousBufferCount() -> Int? {
+        return self.db.runQuery("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", args: nil, factory: IntFactory).value.successValue?[0]
+    }
+
     /**
      * Remove child records for any folders that've been deleted or are empty.
      */
@@ -554,6 +558,10 @@ extension BrowserDB {
 }
 
 extension MergedSQLiteBookmarks: BookmarkBufferStorage {
+    public func synchronousBufferCount() -> Int? {
+        return self.buffer.synchronousBufferCount()
+    }
+
     public func isEmpty() -> Deferred<Maybe<Bool>> {
         return self.buffer.isEmpty()
     }
@@ -668,6 +676,12 @@ extension MergedSQLiteBookmarks: SyncableBookmarks {
 
 // MARK: - Validation of buffer contents.
 
+// Note that these queries tend to not have exceptions for deletions.
+// That's because a record can't be deleted in isolation -- if it's
+// deleted its parent should be changed, too -- and so our views will
+// correctly reflect that. We'll have updated rows in the structure table,
+// and updated values -- and thus a complete override -- for the parent and
+// the deleted child.
 private let allBufferStructuresReferToRecords = [
 "SELECT s.child AS pointee, s.parent AS pointer FROM",
 ViewBookmarksBufferStructureOnMirror,
@@ -699,26 +713,76 @@ TableBookmarksBuffer, "b JOIN", TableBookmarksBufferStructure,
 "s ON b.guid = s.child WHERE b.parentid IS NOT s.parent",
 ].joinWithSeparator(" ")
 
+public enum BufferInconsistency {
+    case MissingValues
+    case MissingStructure
+    case OverlappingStructure
+    case ParentIDDisagreement
+
+    public var query: String {
+        switch self {
+        case .MissingValues:
+            return allBufferStructuresReferToRecords
+        case .MissingStructure:
+            return allNonDeletedBufferRecordsAreInStructure
+        case .OverlappingStructure:
+            return allRecordsAreChildrenOnce
+        case .ParentIDDisagreement:
+            return bufferParentidMatchesStructure
+        }
+    }
+
+    public var trackingEvent: String {
+        switch self {
+        case .MissingValues:
+            return "missingvalues"
+        case .MissingStructure:
+            return "missingstructure"
+        case .OverlappingStructure:
+            return "overlappingstructure"
+        case .ParentIDDisagreement:
+            return "parentiddisagreement"
+        }
+    }
+
+    public var description: String {
+        switch self {
+        case .MissingValues:
+            return "Not all buffer structures refer to records."
+        case .MissingStructure:
+            return "Not all buffer records are in structure."
+        case .OverlappingStructure:
+            return "Some buffer structures refer to the same records."
+        case .ParentIDDisagreement:
+            return "Some buffer record parent IDs don't match structure."
+        }
+    }
+
+    public static let all: [BufferInconsistency] = [.MissingValues, .MissingStructure, .OverlappingStructure, .ParentIDDisagreement]
+}
+
 extension SQLiteBookmarkBufferStorage {
     public func validate() -> Success {
-        func yup(message: String) -> Bool -> Success {
-            return { truth in
-                guard truth else {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+
+        var validations: [String: Bool] = [:]
+        let deferred = BufferInconsistency.all.map { inc in
+            self.db.queryReturnsNoResults(inc.query) >>== { yes in
+                validations[inc.trackingEvent] = !yes
+                guard yes else {
+                    let message = inc.description
                     log.warning(message)
                     return deferMaybe(DatabaseError(description: message))
                 }
                 return succeed()
             }
+        }.allSucceed()
+
+        deferred.upon { success in
+            notificationCenter.postNotificationName(NotificationBookmarkBufferValidated, object: Box(validations))
         }
 
-        return [
-            (allBufferStructuresReferToRecords, "Not all buffer structures refer to records. Buffer is inconsistent."),
-            (allNonDeletedBufferRecordsAreInStructure, "Not all buffer records are in structure. Buffer is inconsistent."),
-            (allRecordsAreChildrenOnce, "Some buffer structures refer to the same records. Buffer is inconsistent."),
-            (bufferParentidMatchesStructure, "Some buffer records don't match structure. Buffer is inconsistent."),
-        ].map { (query, message) in
-            return self.db.queryReturnsNoResults(query) >>== yup(message)
-        }.allSucceed()
+        return deferred
     }
 
     public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {

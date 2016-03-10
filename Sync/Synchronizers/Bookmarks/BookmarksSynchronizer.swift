@@ -119,17 +119,21 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
 
         let run: SyncResult
         if !AppConstants.shouldMergeBookmarks {
-            run = doMirror
+            run = doMirror >>== effect({ result in
+                // Just validate to report statistics.
+                if case .Completed = result {
+                    log.debug("Validating completed buffer download.")
+                    buffer.validate()
+                }
+            })
         } else {
             run = doMirror >>== { result in
                 // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
-                switch result {
-                case .Completed:
+                if case .Completed = result {
                     let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
                     return applier.go()
-                default:
-                    return deferMaybe(result)
                 }
+                return deferMaybe(result)
             }
         }
 
