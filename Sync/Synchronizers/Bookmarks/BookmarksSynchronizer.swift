@@ -121,11 +121,23 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
         let doMirror = mirrorer.go(info, greenLight: greenLight)
 
         let run: SyncResult
-        if AppConstants.shouldMergeBookmarks {
-            let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
-            run = doMirror >>> applier.go
+        if !AppConstants.shouldMergeBookmarks {
+            run = doMirror >>== effect({ result in
+                // Just validate to report statistics.
+                if case .Completed = result {
+                    log.debug("Validating completed buffer download.")
+                    buffer.validate()
+                }
+            })
         } else {
-            run = doMirror >>> always(SyncStatus.Completed)
+            run = doMirror >>== { result in
+                // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
+                if case .Completed = result {
+                    let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
+                    return applier.go()
+                }
+                return deferMaybe(result)
+            }
         }
 
         run.upon { _ in
