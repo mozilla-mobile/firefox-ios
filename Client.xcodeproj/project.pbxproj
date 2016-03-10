@@ -253,10 +253,6 @@
 		7B421F271C91E88100340529 /* RoundedToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B421F261C91E88100340529 /* RoundedToolbar.swift */; };
 		7B4222441C93051500340529 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222421C93051500340529 /* MenuItem.swift */; };
 		7B4222451C93051500340529 /* MenuItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222431C93051500340529 /* MenuItemView.swift */; };
-		7B4222681C93052600340529 /* MenuConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222641C93052600340529 /* MenuConfiguration.swift */; };
-		7B4222691C93052600340529 /* MenuDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222651C93052600340529 /* MenuDataSource.swift */; };
-		7B42226A1C93052600340529 /* MenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222661C93052600340529 /* MenuDelegate.swift */; };
-		7B42226B1C93052600340529 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222671C93052600340529 /* MenuView.swift */; };
 		7B4222A81C9305A300340529 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222A71C9305A300340529 /* MenuViewController.swift */; };
 		7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B42406D1CA04CAC009B5C28 /* Menu.xcassets */; };
 		7B59FC3E1C68E9B600F58EF5 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B59FC351C68E9B600F58EF5 /* SWCellScrollView.m */; };
@@ -306,6 +302,10 @@
 		7B93432A1CAAD0A6005186B4 /* MenuPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9343291CAAD0A6005186B4 /* MenuPageView.swift */; };
 		7B9A61CD1C3EBFAE005C83DC /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9A61CC1C3EBFAE005C83DC /* RXMLElement.m */; };
 		7B9B967A1CAEB3E700E6791B /* MenuToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9B96791CAEB3E700E6791B /* MenuToolbarItem.swift */; };
+		7B9B96961CAEB49D00E6791B /* MenuConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9B96921CAEB49D00E6791B /* MenuConfiguration.swift */; };
+		7B9B96971CAEB49D00E6791B /* MenuDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9B96931CAEB49D00E6791B /* MenuDataSource.swift */; };
+		7B9B96981CAEB49D00E6791B /* MenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9B96941CAEB49D00E6791B /* MenuDelegate.swift */; };
+		7B9B96991CAEB49D00E6791B /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9B96951CAEB49D00E6791B /* MenuView.swift */; };
 		7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */; };
 		7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4A9451C4CED780091D032 /* GCDWebServers.framework */; };
 		7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4A9491C4CEFC70091D032 /* OnePasswordExtension.framework */; };
@@ -1260,10 +1260,6 @@
 		7B421F261C91E88100340529 /* RoundedToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoundedToolbar.swift; path = ../Menu/Toolbar/RoundedToolbar.swift; sourceTree = "<group>"; };
 		7B4222421C93051500340529 /* MenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuItem.swift; path = Client/Frontend/Menu/Items/MenuItem.swift; sourceTree = SOURCE_ROOT; };
 		7B4222431C93051500340529 /* MenuItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuItemView.swift; path = Client/Frontend/Menu/Items/MenuItemView.swift; sourceTree = SOURCE_ROOT; };
-		7B4222641C93052600340529 /* MenuConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuConfiguration.swift; sourceTree = "<group>"; };
-		7B4222651C93052600340529 /* MenuDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDataSource.swift; sourceTree = "<group>"; };
-		7B4222661C93052600340529 /* MenuDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDelegate.swift; sourceTree = "<group>"; };
-		7B4222671C93052600340529 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		7B4222A71C9305A300340529 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		7B42406D1CA04CAC009B5C28 /* Menu.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Menu.xcassets; sourceTree = "<group>"; };
 		7B59FC341C68E9B600F58EF5 /* SWCellScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWCellScrollView.h; path = ThirdParty/SWTableViewCell/PodFiles/SWCellScrollView.h; sourceTree = "<group>"; };
@@ -1295,6 +1291,10 @@
 		7B9A61CC1C3EBFAE005C83DC /* RXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RXMLElement.m; sourceTree = "<group>"; };
 		7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = ThirdParty/SQLite.swift/SQLite.xcodeproj; sourceTree = "<group>"; };
 		7B9B96791CAEB3E700E6791B /* MenuToolbarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuToolbarItem.swift; path = Client/Frontend/Menu/Toolbar/MenuToolbarItem.swift; sourceTree = SOURCE_ROOT; };
+		7B9B96921CAEB49D00E6791B /* MenuConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuConfiguration.swift; sourceTree = "<group>"; };
+		7B9B96931CAEB49D00E6791B /* MenuDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDataSource.swift; sourceTree = "<group>"; };
+		7B9B96941CAEB49D00E6791B /* MenuDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDelegate.swift; sourceTree = "<group>"; };
+		7B9B96951CAEB49D00E6791B /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabPeekViewController.swift; sourceTree = "<group>"; };
 		7BA4A9451C4CED780091D032 /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServers.framework; path = Carthage/Build/iOS/GCDWebServers.framework; sourceTree = "<group>"; };
 		7BA4A9491C4CEFC70091D032 /* OnePasswordExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OnePasswordExtension.framework; path = Carthage/Build/iOS/OnePasswordExtension.framework; sourceTree = "<group>"; };
@@ -2249,8 +2249,7 @@
 			children = (
 				7B9B96791CAEB3E700E6791B /* MenuToolbarItem.swift */,
 			);
-			name = Toolbar;
-			path = Menu/Toolbar;
+			path = Toolbar;
 			sourceTree = "<group>";
 		};
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
@@ -2325,10 +2324,10 @@
 				7BC7B4711C903B690046E9D2 /* Items */,
 				7B759F8F1C997CF00067AB79 /* ItemPages */,
 				7B4221781C9303BD00340529 /* Toolbar */,
-				7B4222641C93052600340529 /* MenuConfiguration.swift */,
-				7B4222651C93052600340529 /* MenuDataSource.swift */,
-				7B4222661C93052600340529 /* MenuDelegate.swift */,
-				7B4222671C93052600340529 /* MenuView.swift */,
+				7B9B96921CAEB49D00E6791B /* MenuConfiguration.swift */,
+				7B9B96931CAEB49D00E6791B /* MenuDataSource.swift */,
+				7B9B96941CAEB49D00E6791B /* MenuDelegate.swift */,
+				7B9B96951CAEB49D00E6791B /* MenuView.swift */,
 				7B4222A71C9305A300340529 /* MenuViewController.swift */,
 				7B42406D1CA04CAC009B5C28 /* Menu.xcassets */,
 			);
@@ -4351,7 +4350,6 @@
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */,
 				E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */,
-				7B4222681C93052600340529 /* MenuConfiguration.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				7B59FC441C68E9B600F58EF5 /* SWTableViewCell.m in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
@@ -4380,6 +4378,7 @@
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
 				7B4222451C93051500340529 /* MenuItemView.swift in Sources */,
+				7B9B96961CAEB49D00E6791B /* MenuConfiguration.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
@@ -4412,12 +4411,13 @@
 				E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */,
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
+				7B9B96981CAEB49D00E6791B /* MenuDelegate.swift in Sources */,
+				7B9B96971CAEB49D00E6791B /* MenuDataSource.swift in Sources */,
 				E4A961341AC051360069AD6F /* ReadabilityBrowserHelper.swift in Sources */,
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				0B7100481B4C72D60046AF87 /* FaviconFetcher.swift in Sources */,
 				A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */,
 				7B93431B1CAAD00D005186B4 /* TopAlignedCollectionViewFlowLayout.swift in Sources */,
-				7B4222691C93052600340529 /* MenuDataSource.swift in Sources */,
 				E4252A0E1AF01AE40028C684 /* Swizzling.m in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
@@ -4447,6 +4447,7 @@
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
+				7B9B96991CAEB49D00E6791B /* MenuView.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				7B59FC471C68E9B600F58EF5 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
 				D39949F51C22461A00E2A03C /* RequestDesktopSiteActivity.swift in Sources */,
@@ -4464,7 +4465,6 @@
 				E640E85E1C73A45A00C5F072 /* PasscodeEntryViewController.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
-				7B42226A1C93052600340529 /* MenuDelegate.swift in Sources */,
 				E65D89181C8647420006EA35 /* AppAuthenticator.swift in Sources */,
 				28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
@@ -4478,7 +4478,6 @@
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
 				7B59FC4A1C68E9B600F58EF5 /* SWUtilityButtonView.m in Sources */,
-				7B42226B1C93052600340529 /* MenuView.swift in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,
