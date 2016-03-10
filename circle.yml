@@ -5,9 +5,6 @@ machine:
 dependencies:
   cache_directories:
     - Carthage
-  pre:
-    - brew install xctool
-    - brew install carthage
   override:
     - carthage bootstrap --platform ios
 
