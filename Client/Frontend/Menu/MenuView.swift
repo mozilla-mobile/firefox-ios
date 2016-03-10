@@ -10,8 +10,11 @@ import UIKit
 
 class MenuView: UIView {
 
-    private var toolbar: UIToolbar
-    private var menuItemViewContainer: UIView
+    var toolbar: RoundedToolbar
+    var menuItemViewContainer: UIView
+
+    var openMenuImage: UIImageView
+    var menuFooterView: UIView
 
     var toolbarDelegate: MenuToolbarItemDelegate?
     var toolbarDataSource: MenuToolbarDataSource?
@@ -43,6 +46,12 @@ class MenuView: UIView {
         }
     }
 
+    var menuFooterHeight: CGFloat = 40 {
+        didSet {
+            self.setNeedsLayout()
+        }
+    }
+
     var nextPageIndex: Int?
 
     private var needsReload: Bool = true
@@ -52,23 +61,41 @@ class MenuView: UIView {
     private var toolbarItems = [UIBarButtonItem]()
 
     init() {
-        toolbar = UIToolbar()
+        toolbar = RoundedToolbar()
         toolbar.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
         menuItemViewContainer = UIView()
+        menuFooterView = UIView()
+        openMenuImage = UIImageView()
 
         super.init(frame: CGRectZero)
 
-        self.backgroundColor = UIColor.cyanColor()
-
+        toolbar.cornersToRound = [.TopLeft, .TopRight]
         self.addSubview(toolbar)
         toolbar.snp_makeConstraints { make in
+            make.height.equalTo(toolbarHeight)
             make.top.left.right.equalTo(self)
+        }
+
+        self.addSubview(menuFooterView)
+        // so it always displays the colour of the background
+        menuFooterView.backgroundColor = UIColor.clearColor()
+        menuFooterView.snp_makeConstraints { make in
+            make.height.equalTo(menuFooterHeight)
+            make.left.right.equalTo(self)
+            make.bottom.equalTo(self)
+        }
+
+        menuFooterView.addSubview(openMenuImage)
+        openMenuImage.snp_makeConstraints { make in
+            make.center.equalTo(menuFooterView)
+            make.height.equalTo(menuFooterView)
         }
 
         self.addSubview(menuItemViewContainer)
         menuItemViewContainer.snp_makeConstraints { make in
-            make.top.equalTo(toolbar.snp_bottom).inset(-itemPadding)
-            make.left.right.bottom.equalTo(self).inset(itemPadding)
+            make.top.equalTo(toolbar.snp_bottom)
+            make.left.right.equalTo(self)
+            make.bottom.equalTo(menuFooterView.snp_top)
         }
     }
 
@@ -82,6 +109,7 @@ class MenuView: UIView {
         reloadDataIfNeeded()
         layoutToolbar()
         layoutMenu()
+        layoutFooter()
         super.layoutSubviews()
     }
 
@@ -202,9 +230,6 @@ class MenuView: UIView {
     }
 
     private func layoutPage(pageIndex: Int, inout availableItems: [NSIndexPath: MenuItemView]) {
-
-        menuItemViewContainer.backgroundColor = UIColor.purpleColor()
-
         guard let itemDataSource = menuItemDataSource else { return }
 
         let numberOfPages = itemDataSource.numberOfPagesInMenuView(self)
@@ -249,6 +274,12 @@ class MenuView: UIView {
             availableItems.removeValueForKey(indexPath)
         }
 
+    }
+
+    private func layoutFooter() {
+        menuFooterView.snp_updateConstraints{ make in
+            make.height.equalTo(menuFooterHeight)
+        }
     }
 
     @objc private func toolbarButtonSelected(sender: UIBarButtonItem) {
