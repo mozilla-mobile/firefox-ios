@@ -452,7 +452,7 @@ class TopSitesLayout: UICollectionViewLayout {
 private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var profile: Profile
     var editingThumbnails: Bool = false
-    var suggestedSites: [SuggestedSite] = SuggestedSites.asArray()
+    var suggestedSites: [SuggestedSite] = []
     var historySites: [Site] = []
 
     weak var collectionView: UICollectionView?
@@ -466,8 +466,6 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             profile.prefs.setObject([], forKey: "topSites.deletedSuggestedSites")
         }
         super.init()
-
-        self.filterSuggestedSites()
     }
 
     @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -595,7 +593,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     private func filterSuggestedSites() {
         for url in profile.prefs.arrayForKey("topSites.deletedSuggestedSites") as! [String] {
             let domainURL = NSURL(string: url)?.normalizedHost() ?? url
-            suggestedSites = suggestedSites.filter({ $0.tileURL.normalizedHost()?.URLString != domainURL.URLString })
+            suggestedSites = SuggestedSites.asArray().filter({ $0.tileURL.normalizedHost()?.URLString != domainURL.URLString })
         }
     }
 
