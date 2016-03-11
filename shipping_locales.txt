@@ -3,6 +3,7 @@ bg
 br
 cs
 cy
+da
 de
 dsb
 en-US
