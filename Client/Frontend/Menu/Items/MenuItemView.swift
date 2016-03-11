@@ -10,6 +10,8 @@ import UIKit
  **/
 public class MenuItemView: UIControl {
 
+    var padding: CGFloat = 5.0
+
     private(set) public var imageView: UIImageView
     private(set) public var titleLabel: UILabel
 
@@ -20,13 +22,9 @@ public class MenuItemView: UIControl {
 
         super.init(frame: CGRectZero)
 
-        self.translatesAutoresizingMaskIntoConstraints = false
-
         titleLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         titleLabel.numberOfLines = 2
         titleLabel.textAlignment = NSTextAlignment.Center
-        titleLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
-        titleLabel.setContentHuggingPriority(UILayoutPriorityDefaultLow, forAxis: UILayoutConstraintAxis.Horizontal)
 
         self.addSubview(imageView)
 
@@ -38,14 +36,19 @@ public class MenuItemView: UIControl {
         }
 
         titleLabel.snp_makeConstraints { make in
-            make.top.equalTo(imageView.snp_bottom).offset(2.5).priorityLow()
-            make.left.right.equalTo(self)
-            make.bottom.equalTo(self).offset(-5)
+            make.top.equalTo(imageView.snp_bottom).offset(padding)
+            make.centerX.equalTo(self)
+            make.bottom.equalTo(self).offset(-padding)
         }
     }
 
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        titleLabel.preferredMaxLayoutWidth = self.bounds.size.width / 1.5
     }
 
     func prepareForReuse() {
