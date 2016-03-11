@@ -2040,27 +2040,6 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    /// Invoked when an error occurs during a committed main frame navigation.
-    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
-        if error.code == Int(CFNetworkErrors.CFURLErrorCancelled.rawValue) {
-            return
-        }
-
-        // Ignore the "Plug-in handled load" error. Which is more like a notification than an error.
-        // Note that there are no constants in the SDK for the WebKit domain or error codes.
-        if error.domain == "WebKitErrorDomain" && error.code == 204 {
-            return
-        }
-
-        if checkIfWebContentProcessHasCrashed(webView, error: error) {
-            return
-        }
-
-        if let url = error.userInfo["NSErrorFailingURLKey"] as? NSURL {
-            ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
-        }
-    }
-
     /// Invoked when an error occurs while starting to load data for the main frame.
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
