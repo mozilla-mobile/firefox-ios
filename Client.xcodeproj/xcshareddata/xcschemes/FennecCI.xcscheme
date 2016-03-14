@@ -125,6 +125,9 @@
                <Test
                   Identifier = "FxAClientTests/testLoginSuccess()">
                </Test>
+               <Test
+                  Identifier = "TabManagerTests/testTabManagerStoresChangesInDB()">
+               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference
