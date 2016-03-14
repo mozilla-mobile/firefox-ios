@@ -1,0 +1,18 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Avbryt";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Rensa";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "Historiken tas bort från alla dina anslutna enheter. Detta går inte att ångra.";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "OK";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "Ta bort historik från ditt Firefox Konto?";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "Denna handling kommer att ta bort all din privata data, inklusive historik från dina synkroniserade enheter.";
+

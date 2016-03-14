@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <scenes>
+        <!--View ControlleriOS-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewControlleriOS" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GIu-rR-F7C" userLabel="Button Track Simple Event">
+                                <rect key="frame" x="50" y="69" width="500" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Track Simple Event" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickTrackSimpleEvent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3rC-Zv-JNn"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qOy-JF-sz3" userLabel="Button Track Revenue Event">
+                                <rect key="frame" x="50" y="117" width="500" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Track Revenue Event" backgroundImage="button_background">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickTrackRevenueEvent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="AeX-jH-kSB"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WkT-aw-5FP" userLabel="Button Track Callback Event">
+                                <rect key="frame" x="50" y="165" width="500" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Track Callback Event" backgroundImage="button_background">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickTrackCallbackEvent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SJO-Tu-6xN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xdn-OV-t7P" userLabel="Button Track Partner Event">
+                                <rect key="frame" x="50" y="213" width="500" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Track Partner Event" backgroundImage="button_background">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickTrackPartnerEvent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0AJ-C9-R7U"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pcl-gg-Wh1" userLabel="Button Enable Offline Mode">
+                                <rect key="frame" x="50" y="261" width="500" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Enable Offline Mode" backgroundImage="button_background">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickEnableOfflineMode:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Kg-os-Zmk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CtA-LW-sfH" userLabel="Button Disable Offline Mode">
+                                <rect key="frame" x="50" y="309" width="500" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Disable Offline Mode" backgroundImage="button_background">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickDisableOfflineMode:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WHz-On-5as"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nz4-ql-pka" userLabel="Button Enable SDK">
+                                <rect key="frame" x="50" y="357" width="500" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Enable SDK" backgroundImage="button_background">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickEnableSdk:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7u3-QN-RuK"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-tK-3Xp" userLabel="Button Disable SDK">
+                                <rect key="frame" x="50" y="405" width="500" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Disable SDK" backgroundImage="button_background">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickDisableSdk:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bme-GZ-0U2"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h38-T3-Es8" userLabel="Button Is SDK Enabled">
+                                <rect key="frame" x="50" y="453" width="500" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Is SDK Enabled?" backgroundImage="button_background">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickIsSdkEnabled:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jnE-5E-SRO"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tuu-p7-EVw" userLabel="Button Forget This Device">
+                                <rect key="frame" x="50" y="501" width="500" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Forget This Device" backgroundImage="button_background">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickForgetThisDevice:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fa9-3K-l5X"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" red="0.96078431372549022" green="0.96470588235294119" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.61568627450980395" green="0.66666666666666663" blue="0.73725490196078436" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="Nz4-ql-pka" firstAttribute="leading" secondItem="CtA-LW-sfH" secondAttribute="leading" id="9GO-Cv-FrB" userLabel="Button Enable SDK - Left"/>
+                            <constraint firstItem="WkT-aw-5FP" firstAttribute="leading" secondItem="qOy-JF-sz3" secondAttribute="leading" id="CJF-Q6-e7Z" userLabel="Button Track Callback Event - Left"/>
+                            <constraint firstItem="h38-T3-Es8" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.56" id="F0k-JU-12S" userLabel="Button Is SDK Enabled - Center Y"/>
+                            <constraint firstItem="xdn-OV-t7P" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.76" id="L8f-G1-kEA" userLabel="Button Track Partner Event - Center Y"/>
+                            <constraint firstItem="pcl-gg-Wh1" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.92" id="NHS-Ap-Qt8" userLabel="Button Enable Offline Mode - Center Y"/>
+                            <constraint firstItem="G0l-tK-3Xp" firstAttribute="leading" secondItem="Nz4-ql-pka" secondAttribute="leading" id="NNY-X4-9w9" userLabel="Button Disable SDK - Left"/>
+                            <constraint firstItem="h38-T3-Es8" firstAttribute="leading" secondItem="G0l-tK-3Xp" secondAttribute="leading" id="Ppc-dh-GZU" userLabel="Button Is SDK Enabled - Left"/>
+                            <constraint firstItem="pcl-gg-Wh1" firstAttribute="leading" secondItem="xdn-OV-t7P" secondAttribute="leading" id="XPq-sX-TSb" userLabel="Button Enable Offline Mode - Left"/>
+                            <constraint firstItem="GIu-rR-F7C" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.28" id="aDo-L8-CW9" userLabel="Button Track Simple Event - Center Y"/>
+                            <constraint firstItem="WkT-aw-5FP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.6" id="aUl-TT-ZMO" userLabel="Button Track Callback Event - Center Y"/>
+                            <constraint firstItem="CtA-LW-sfH" firstAttribute="leading" secondItem="pcl-gg-Wh1" secondAttribute="leading" id="avj-OZ-xkQ" userLabel="Button Disable Offline Mode - Left"/>
+                            <constraint firstItem="GIu-rR-F7C" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" constant="-50" id="b67-VF-K9H" userLabel="Button Track Simple Event - Right"/>
+                            <constraint firstItem="GIu-rR-F7C" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="50" id="b9I-zW-S0s" userLabel="Button Track Simple Event - Left"/>
+                            <constraint firstItem="tuu-p7-EVw" firstAttribute="leading" secondItem="h38-T3-Es8" secondAttribute="leading" id="cdw-78-de7" userLabel="Button Forget This Device - Left"/>
+                            <constraint firstItem="xdn-OV-t7P" firstAttribute="leading" secondItem="WkT-aw-5FP" secondAttribute="leading" id="cpC-AL-syT" userLabel="Button Track Partner Event - Left"/>
+                            <constraint firstItem="CtA-LW-sfH" firstAttribute="trailing" secondItem="pcl-gg-Wh1" secondAttribute="trailing" id="gck-Oj-n7R" userLabel="Button Disable Offline Mode - Right"/>
+                            <constraint firstItem="tuu-p7-EVw" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.72" id="gdF-CI-1T2" userLabel="Button Forget This Device - Center Y"/>
+                            <constraint firstItem="qOy-JF-sz3" firstAttribute="leading" secondItem="GIu-rR-F7C" secondAttribute="leading" id="j38-xp-iIV" userLabel="Button Track Revenue Event - Left"/>
+                            <constraint firstItem="G0l-tK-3Xp" firstAttribute="trailing" secondItem="Nz4-ql-pka" secondAttribute="trailing" id="jEc-Dd-B2q" userLabel="Button Disable SDK - Right"/>
+                            <constraint firstItem="G0l-tK-3Xp" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.4" id="joa-iO-Ent" userLabel="Button Disable SDK - Center Y"/>
+                            <constraint firstItem="h38-T3-Es8" firstAttribute="trailing" secondItem="G0l-tK-3Xp" secondAttribute="trailing" id="myE-dE-ZRm" userLabel="Button Is SDK Enabled - Right"/>
+                            <constraint firstItem="Nz4-ql-pka" firstAttribute="trailing" secondItem="CtA-LW-sfH" secondAttribute="trailing" id="oII-Wo-jTT" userLabel="Button Enable SDK - Right"/>
+                            <constraint firstItem="tuu-p7-EVw" firstAttribute="trailing" secondItem="h38-T3-Es8" secondAttribute="trailing" id="oMl-zV-Nof" userLabel="Button Forget This Device - Right"/>
+                            <constraint firstItem="qOy-JF-sz3" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.44" id="qFt-9H-RmJ" userLabel="Button Track Revenue Event - Center Y"/>
+                            <constraint firstItem="Nz4-ql-pka" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.24" id="t8W-D5-kvX" userLabel="Button Enable SDK - Center Y"/>
+                            <constraint firstItem="xdn-OV-t7P" firstAttribute="trailing" secondItem="WkT-aw-5FP" secondAttribute="trailing" id="umj-lw-QZG" userLabel="Button Track Partner Event - Right"/>
+                            <constraint firstItem="CtA-LW-sfH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.08" id="wIb-2M-xGQ" userLabel="Button Disable Offline Mode - Center Y"/>
+                            <constraint firstItem="qOy-JF-sz3" firstAttribute="trailing" secondItem="GIu-rR-F7C" secondAttribute="trailing" id="xsR-c3-YDy" userLabel="Button Track Revenue Event - Right"/>
+                            <constraint firstItem="pcl-gg-Wh1" firstAttribute="trailing" secondItem="xdn-OV-t7P" secondAttribute="trailing" id="ys8-TB-urQ" userLabel="Button Enable Offline Mode - Right"/>
+                            <constraint firstItem="WkT-aw-5FP" firstAttribute="trailing" secondItem="qOy-JF-sz3" secondAttribute="trailing" id="yyn-6Y-nWx" userLabel="Button Track Callback Event - Right"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btnDisableOfflineMode" destination="CtA-LW-sfH" id="UOa-0z-Po4"/>
+                        <outlet property="btnDisableSdk" destination="G0l-tK-3Xp" id="iks-uV-FyX"/>
+                        <outlet property="btnEnableOfflineMode" destination="pcl-gg-Wh1" id="dvM-oT-sqK"/>
+                        <outlet property="btnEnableSdk" destination="Nz4-ql-pka" id="vww-HY-nni"/>
+                        <outlet property="btnForgetThisDevice" destination="tuu-p7-EVw" id="g4o-Fh-75M"/>
+                        <outlet property="btnIsSdkEnabled" destination="h38-T3-Es8" id="zaE-wQ-ZpV"/>
+                        <outlet property="btnTrackCallbackEvent" destination="WkT-aw-5FP" id="Ssd-iW-gs9"/>
+                        <outlet property="btnTrackPartnerEvent" destination="xdn-OV-t7P" id="efN-Ig-HCT"/>
+                        <outlet property="btnTrackRevenueEvent" destination="qOy-JF-sz3" id="sb2-Iu-Vks"/>
+                        <outlet property="btnTrackSimpleEvent" destination="GIu-rR-F7C" id="iYQ-cG-atT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="button_background" width="100" height="30"/>
+    </resources>
+</document>

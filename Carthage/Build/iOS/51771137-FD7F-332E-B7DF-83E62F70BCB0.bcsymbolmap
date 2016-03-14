@@ -1,0 +1,2661 @@
+BCSymbolMap Version: 1.0
++[ADJAdjustFactory packageHandlerForActivityHandler:startPaused:]
++[ADJAdjustFactory requestHandlerForPackageHandler:]
++[ADJAdjustFactory activityHandlerWithConfig:]
++[ADJAdjustFactory logger]
++[ADJAdjustFactory sessionInterval]
++[ADJAdjustFactory subsessionInterval]
++[ADJAdjustFactory timerInterval]
++[ADJAdjustFactory timerStart]
++[ADJAdjustFactory attributionHandlerForActivityHandler:withAttributionPackage:startPaused:hasDelegate:]
++[ADJAdjustFactory setPackageHandler:]
++[ADJAdjustFactory setRequestHandler:]
++[ADJAdjustFactory setActivityHandler:]
++[ADJAdjustFactory setLogger:]
++[ADJAdjustFactory setSessionInterval:]
++[ADJAdjustFactory setSubsessionInterval:]
++[ADJAdjustFactory setTimerInterval:]
++[ADJAdjustFactory setTimerStart:]
++[ADJAdjustFactory setAttributionHandler:]
+internalPackageHandler
+internalRequestHandler
+internalActivityHandler
+internalLogger
+internalAttributionHandler
+OBJC_CLASSLIST_REFERENCES_$_
+OBJC_METH_VAR_NAME_
+OBJC_SELECTOR_REFERENCES_
+OBJC_METH_VAR_NAME_1
+OBJC_SELECTOR_REFERENCES_2
+OBJC_CLASSLIST_REFERENCES_$_3
+OBJC_METH_VAR_NAME_4
+OBJC_SELECTOR_REFERENCES_5
+OBJC_METH_VAR_NAME_6
+OBJC_SELECTOR_REFERENCES_7
+OBJC_CLASSLIST_REFERENCES_$_8
+OBJC_METH_VAR_NAME_9
+OBJC_SELECTOR_REFERENCES_10
+OBJC_METH_VAR_NAME_11
+OBJC_SELECTOR_REFERENCES_12
+OBJC_CLASSLIST_REFERENCES_$_13
+OBJC_METH_VAR_NAME_14
+OBJC_SELECTOR_REFERENCES_15
+OBJC_METH_VAR_NAME_16
+OBJC_SELECTOR_REFERENCES_17
+internalSessionInterval
+intervalSubsessionInterval
+internalTimerInterval
+intervalTimerStart
+OBJC_CLASSLIST_REFERENCES_$_18
+OBJC_METH_VAR_NAME_19
+OBJC_SELECTOR_REFERENCES_20
+OBJC_METH_VAR_NAME_21
+OBJC_SELECTOR_REFERENCES_22
+OBJC_CLASS_NAME_
+OBJC_METH_VAR_NAME_23
+OBJC_METH_VAR_TYPE_
+OBJC_METH_VAR_NAME_24
+OBJC_METH_VAR_TYPE_25
+OBJC_METH_VAR_NAME_26
+OBJC_METH_VAR_NAME_27
+OBJC_METH_VAR_TYPE_28
+OBJC_METH_VAR_NAME_29
+OBJC_METH_VAR_TYPE_30
+OBJC_METH_VAR_NAME_31
+OBJC_METH_VAR_NAME_32
+OBJC_METH_VAR_NAME_33
+OBJC_METH_VAR_NAME_34
+OBJC_METH_VAR_TYPE_35
+OBJC_METH_VAR_NAME_36
+OBJC_METH_VAR_TYPE_37
+OBJC_METH_VAR_NAME_38
+OBJC_METH_VAR_NAME_39
+OBJC_METH_VAR_NAME_40
+OBJC_METH_VAR_NAME_41
+OBJC_METH_VAR_TYPE_42
+OBJC_METH_VAR_NAME_43
+OBJC_METH_VAR_NAME_44
+OBJC_METH_VAR_NAME_45
+OBJC_METH_VAR_NAME_46
+l_OBJC_$_CLASS_METHODS_ADJAdjustFactory
+l_OBJC_METACLASS_RO_$_ADJAdjustFactory
+l_OBJC_CLASS_RO_$_ADJAdjustFactory
+OBJC_LABEL_CLASS_$
+Apple LLVM version 7.0.2 (clang-700.1.81)
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/2HIKEUFK2WIUA/ObjectiveC-2CD0WTQVXITO7.pcm
+ObjectiveC
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/objc
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/2HIKEUFK2WIUA/Foundation-A3SOD99KJ0S9.pcm
+Foundation
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/Foundation.framework
++[ADJAdjustFactory setAttributionHandler:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJAdjustFactory.m
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk
++[ADJAdjustFactory setTimerStart:]
++[ADJAdjustFactory setTimerInterval:]
++[ADJAdjustFactory setSubsessionInterval:]
++[ADJAdjustFactory setSessionInterval:]
++[ADJAdjustFactory setLogger:]
++[ADJAdjustFactory setActivityHandler:]
++[ADJAdjustFactory setRequestHandler:]
++[ADJAdjustFactory setPackageHandler:]
++[ADJAdjustFactory attributionHandlerForActivityHandler:withAttributionPackage:startPaused:hasDelegate:]
++[ADJAdjustFactory timerStart]
++[ADJAdjustFactory timerInterval]
++[ADJAdjustFactory subsessionInterval]
++[ADJAdjustFactory sessionInterval]
++[ADJAdjustFactory logger]
++[ADJAdjustFactory activityHandlerWithConfig:]
++[ADJAdjustFactory requestHandlerForPackageHandler:]
++[ADJAdjustFactory packageHandlerForActivityHandler:startPaused:]
++[ADJActivityKindUtil activityKindFromString:]
++[ADJActivityKindUtil activityKindToString:]
+.str
+_unnamed_cfstring_
+.str1
+_unnamed_cfstring_2
+.str3
+_unnamed_cfstring_4
+.str5
+_unnamed_cfstring_6
+.str7
+_unnamed_cfstring_8
+OBJC_METH_VAR_NAME_10
+OBJC_METH_VAR_TYPE_11
+l_OBJC_$_CLASS_METHODS_ADJActivityKindUtil
+l_OBJC_METACLASS_RO_$_ADJActivityKindUtil
+l_OBJC_CLASS_RO_$_ADJActivityKindUtil
++[ADJActivityKindUtil activityKindToString:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJActivityKind.m
++[ADJActivityKindUtil activityKindFromString:]
++[ADJRequestHandler handlerWithPackageHandler:]
+-[ADJRequestHandler initWithPackageHandler:]
+-[ADJRequestHandler sendPackage:]
+__33-[ADJRequestHandler sendPackage:]_block_invoke
+__copy_helper_block_
+__destroy_helper_block_
+-[ADJRequestHandler sendInternal:]
+__34-[ADJRequestHandler sendInternal:]_block_invoke
+__copy_helper_block_39
+__destroy_helper_block_40
+-[ADJRequestHandler requestForPackage:]
+-[ADJRequestHandler bodyForParameters:]
+-[ADJRequestHandler internalQueue]
+-[ADJRequestHandler setInternalQueue:]
+-[ADJRequestHandler packageHandler]
+-[ADJRequestHandler setPackageHandler:]
+-[ADJRequestHandler logger]
+-[ADJRequestHandler setLogger:]
+-[ADJRequestHandler baseUrl]
+-[ADJRequestHandler setBaseUrl:]
+-[ADJRequestHandler .cxx_destruct]
+OBJC_CLASSLIST_SUP_REFS_$_
+OBJC_METH_VAR_NAME_3
+OBJC_SELECTOR_REFERENCES_4
+OBJC_METH_VAR_NAME_5
+OBJC_SELECTOR_REFERENCES_6
+OBJC_METH_VAR_NAME_7
+OBJC_SELECTOR_REFERENCES_8
+OBJC_CLASSLIST_REFERENCES_$_9
+OBJC_SELECTOR_REFERENCES_11
+OBJC_METH_VAR_NAME_12
+OBJC_SELECTOR_REFERENCES_13
+OBJC_CLASSLIST_REFERENCES_$_14
+OBJC_CLASSLIST_REFERENCES_$_15
+OBJC_METH_VAR_NAME_18
+OBJC_SELECTOR_REFERENCES_19
+OBJC_METH_VAR_NAME_20
+OBJC_SELECTOR_REFERENCES_21
+OBJC_METH_VAR_NAME_22
+OBJC_SELECTOR_REFERENCES_23
+OBJC_SELECTOR_REFERENCES_25
+__block_descriptor_tmp
+OBJC_SELECTOR_REFERENCES_27
+OBJC_METH_VAR_NAME_28
+OBJC_SELECTOR_REFERENCES_29
+.str30
+OBJC_SELECTOR_REFERENCES_32
+OBJC_SELECTOR_REFERENCES_34
+OBJC_METH_VAR_NAME_35
+OBJC_SELECTOR_REFERENCES_36
+OBJC_METH_VAR_NAME_37
+OBJC_SELECTOR_REFERENCES_38
+.str41
+__block_descriptor_tmp42
+OBJC_SELECTOR_REFERENCES_44
+OBJC_SELECTOR_REFERENCES_46
+OBJC_METH_VAR_NAME_47
+OBJC_SELECTOR_REFERENCES_48
+OBJC_CLASSLIST_REFERENCES_$_49
+OBJC_METH_VAR_NAME_50
+OBJC_SELECTOR_REFERENCES_51
+OBJC_METH_VAR_NAME_52
+OBJC_SELECTOR_REFERENCES_53
+.str54
+_unnamed_cfstring_55
+OBJC_METH_VAR_NAME_56
+OBJC_SELECTOR_REFERENCES_57
+.str58
+_unnamed_cfstring_59
+.str60
+_unnamed_cfstring_61
+OBJC_METH_VAR_NAME_62
+OBJC_SELECTOR_REFERENCES_63
+OBJC_METH_VAR_NAME_64
+OBJC_SELECTOR_REFERENCES_65
+.str66
+_unnamed_cfstring_67
+OBJC_METH_VAR_NAME_68
+OBJC_SELECTOR_REFERENCES_69
+OBJC_METH_VAR_NAME_70
+OBJC_SELECTOR_REFERENCES_71
+OBJC_METH_VAR_NAME_72
+OBJC_SELECTOR_REFERENCES_73
+OBJC_METH_VAR_NAME_74
+OBJC_SELECTOR_REFERENCES_75
+OBJC_CLASSLIST_REFERENCES_$_76
+OBJC_METH_VAR_NAME_77
+OBJC_SELECTOR_REFERENCES_78
+OBJC_METH_VAR_NAME_79
+OBJC_SELECTOR_REFERENCES_80
+OBJC_METH_VAR_NAME_81
+OBJC_SELECTOR_REFERENCES_82
+OBJC_IVAR_$_ADJRequestHandler._internalQueue
+OBJC_IVAR_$_ADJRequestHandler._packageHandler
+OBJC_IVAR_$_ADJRequestHandler._logger
+OBJC_IVAR_$_ADJRequestHandler._baseUrl
+OBJC_METH_VAR_NAME_83
+l_OBJC_$_CLASS_METHODS_ADJRequestHandler
+OBJC_METH_VAR_TYPE_84
+OBJC_METH_VAR_NAME_85
+OBJC_METH_VAR_TYPE_86
+OBJC_METH_VAR_TYPE_87
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_ADJRequestHandler
+l_OBJC_$_PROTOCOL_METHOD_TYPES_ADJRequestHandler
+l_OBJC_PROTOCOL_$_ADJRequestHandler
+l_OBJC_LABEL_PROTOCOL_$_ADJRequestHandler
+l_OBJC_CLASS_PROTOCOLS_$_ADJRequestHandler
+l_OBJC_METACLASS_RO_$_ADJRequestHandler
+OBJC_CLASS_NAME_88
+OBJC_METH_VAR_NAME_89
+OBJC_METH_VAR_TYPE_90
+OBJC_METH_VAR_TYPE_91
+l_OBJC_$_INSTANCE_METHODS_ADJRequestHandler
+OBJC_METH_VAR_NAME_92
+OBJC_METH_VAR_TYPE_93
+OBJC_METH_VAR_NAME_94
+OBJC_METH_VAR_TYPE_95
+OBJC_METH_VAR_NAME_96
+OBJC_METH_VAR_TYPE_97
+OBJC_METH_VAR_NAME_98
+OBJC_METH_VAR_TYPE_99
+l_OBJC_$_INSTANCE_VARIABLES_ADJRequestHandler
+OBJC_PROP_NAME_ATTR_
+OBJC_PROP_NAME_ATTR_100
+OBJC_PROP_NAME_ATTR_101
+OBJC_PROP_NAME_ATTR_102
+OBJC_PROP_NAME_ATTR_103
+OBJC_PROP_NAME_ATTR_104
+OBJC_PROP_NAME_ATTR_105
+OBJC_PROP_NAME_ATTR_106
+l_OBJC_$_PROP_LIST_ADJRequestHandler
+l_OBJC_CLASS_RO_$_ADJRequestHandler
+.str107
+-[ADJRequestHandler .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJRequestHandler.m
+-[ADJRequestHandler setBaseUrl:]
+-[ADJRequestHandler baseUrl]
+-[ADJRequestHandler setLogger:]
+-[ADJRequestHandler logger]
+-[ADJRequestHandler setPackageHandler:]
+-[ADJRequestHandler packageHandler]
+-[ADJRequestHandler setInternalQueue:]
+-[ADJRequestHandler internalQueue]
+-[ADJRequestHandler bodyForParameters:]
+-[ADJRequestHandler requestForPackage:]
+-[ADJRequestHandler sendInternal:]
+-[ADJRequestHandler sendPackage:]
+-[ADJRequestHandler initWithPackageHandler:]
++[ADJRequestHandler handlerWithPackageHandler:]
+-[UIDevice(ADJAdditions) adjTrackingEnabled]
+-[UIDevice(ADJAdditions) adjIdForAdvertisers]
+-[UIDevice(ADJAdditions) adjFbAttributionId]
+-[UIDevice(ADJAdditions) adjDeviceType]
+-[UIDevice(ADJAdditions) adjDeviceName]
+-[UIDevice(ADJAdditions) adjCreateUuid]
+-[UIDevice(ADJAdditions) adjVendorId]
+-[UIDevice(ADJAdditions) adjSetIad:triesV3Left:]
+-[UIDevice(ADJAdditions) adjSetIadWithDetails:ADClientSharedClientInstance:retriesLeft:]
+__88-[UIDevice(ADJAdditions) adjSetIadWithDetails:ADClientSharedClientInstance:retriesLeft:]_block_invoke
+-[UIDevice(ADJAdditions) adjSetIadWithDates:ADClientSharedClientInstance:]
+__74-[UIDevice(ADJAdditions) adjSetIadWithDates:ADClientSharedClientInstance:]_block_invoke
+__copy_helper_block_73
+__destroy_helper_block_74
+.str13
+_unnamed_cfstring_14
+.str15
+_unnamed_cfstring_16
+.str17
+_unnamed_cfstring_18
+.str19
+_unnamed_cfstring_20
+.str21
+_unnamed_cfstring_22
+.str23
+_unnamed_cfstring_24
+.str25
+_unnamed_cfstring_26
+OBJC_SELECTOR_REFERENCES_28
+.str29
+_unnamed_cfstring_30
+.str33
+OBJC_SELECTOR_REFERENCES_35
+OBJC_SELECTOR_REFERENCES_37
+OBJC_CLASSLIST_REFERENCES_$_38
+OBJC_SELECTOR_REFERENCES_40
+OBJC_SELECTOR_REFERENCES_42
+OBJC_CLASSLIST_REFERENCES_$_45
+OBJC_SELECTOR_REFERENCES_47
+.str48
+_unnamed_cfstring_49
+.str52
+_unnamed_cfstring_53
+.str56
+_unnamed_cfstring_57
+OBJC_METH_VAR_NAME_58
+OBJC_SELECTOR_REFERENCES_59
+OBJC_METH_VAR_NAME_60
+OBJC_SELECTOR_REFERENCES_61
+.str62
+_unnamed_cfstring_63
+OBJC_METH_VAR_NAME_67
+OBJC_SELECTOR_REFERENCES_68
+.str69
+_unnamed_cfstring_70
+OBJC_METH_VAR_NAME_71
+OBJC_SELECTOR_REFERENCES_72
+.str75
+__block_descriptor_tmp76
+OBJC_METH_VAR_NAME_78
+OBJC_METH_VAR_TYPE_79
+OBJC_METH_VAR_NAME_80
+OBJC_METH_VAR_NAME_82
+OBJC_METH_VAR_NAME_84
+OBJC_METH_VAR_TYPE_88
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_UIDevice_$_ADJAdditions
+l_OBJC_$_CATEGORY_UIDevice_$_ADJAdditions
+OBJC_LABEL_CATEGORY_$
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/2HIKEUFK2WIUA/CoreFoundation-10I2D2XL7L7X9.pcm
+CoreFoundation
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/2HIKEUFK2WIUA/iAd-1YQ59ILDR3NYI.pcm
+iAd
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/2HIKEUFK2WIUA/AdSupport-1YQ59ILDR3NYI.pcm
+AdSupport
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/2HIKEUFK2WIUA/Darwin-MI6WZSG1PNOM.pcm
+Darwin
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/2HIKEUFK2WIUA/UIKit-2LM3EQU7VVY4O.pcm
+UIKit
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/UIKit.framework
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJAdditions/UIDevice+ADJAdditions.m
+-[UIDevice(ADJAdditions) adjSetIadWithDates:ADClientSharedClientInstance:]
+-[UIDevice(ADJAdditions) adjSetIadWithDetails:ADClientSharedClientInstance:retriesLeft:]
+-[UIDevice(ADJAdditions) adjSetIad:triesV3Left:]
+-[UIDevice(ADJAdditions) adjVendorId]
+-[UIDevice(ADJAdditions) adjCreateUuid]
+-[UIDevice(ADJAdditions) adjDeviceName]
+-[UIDevice(ADJAdditions) adjDeviceType]
+-[UIDevice(ADJAdditions) adjFbAttributionId]
+-[UIDevice(ADJAdditions) adjIdForAdvertisers]
+-[UIDevice(ADJAdditions) adjTrackingEnabled]
+-[ADJActivityPackage description]
+-[ADJActivityPackage extendedString]
+-[ADJActivityPackage successMessage]
+-[ADJActivityPackage failureMessage]
+-[ADJActivityPackage initWithCoder:]
+-[ADJActivityPackage encodeWithCoder:]
+-[ADJActivityPackage path]
+-[ADJActivityPackage setPath:]
+-[ADJActivityPackage clientSdk]
+-[ADJActivityPackage setClientSdk:]
+-[ADJActivityPackage parameters]
+-[ADJActivityPackage setParameters:]
+-[ADJActivityPackage activityKind]
+-[ADJActivityPackage setActivityKind:]
+-[ADJActivityPackage suffix]
+-[ADJActivityPackage setSuffix:]
+-[ADJActivityPackage .cxx_destruct]
+OBJC_CLASSLIST_REFERENCES_$_1
+OBJC_METH_VAR_NAME_2
+OBJC_SELECTOR_REFERENCES_3
+.str11
+_unnamed_cfstring_12
+OBJC_METH_VAR_NAME_13
+OBJC_SELECTOR_REFERENCES_14
+OBJC_METH_VAR_NAME_15
+OBJC_SELECTOR_REFERENCES_16
+OBJC_SELECTOR_REFERENCES_24
+OBJC_METH_VAR_NAME_25
+OBJC_SELECTOR_REFERENCES_26
+OBJC_SELECTOR_REFERENCES_30
+.str31
+_unnamed_cfstring_32
+.str37
+_unnamed_cfstring_38
+_unnamed_cfstring_42
+.str43
+_unnamed_cfstring_44
+.str47
+_unnamed_cfstring_48
+OBJC_METH_VAR_NAME_49
+OBJC_SELECTOR_REFERENCES_50
+OBJC_METH_VAR_NAME_51
+OBJC_SELECTOR_REFERENCES_52
+.str53
+_unnamed_cfstring_54
+OBJC_METH_VAR_NAME_55
+OBJC_SELECTOR_REFERENCES_56
+.str57
+_unnamed_cfstring_58
+OBJC_METH_VAR_NAME_59
+OBJC_SELECTOR_REFERENCES_60
+.str61
+_unnamed_cfstring_62
+.str63
+_unnamed_cfstring_64
+OBJC_METH_VAR_NAME_65
+OBJC_SELECTOR_REFERENCES_66
+OBJC_METH_VAR_NAME_69
+OBJC_SELECTOR_REFERENCES_70
+OBJC_IVAR_$_ADJActivityPackage._path
+OBJC_IVAR_$_ADJActivityPackage._clientSdk
+OBJC_IVAR_$_ADJActivityPackage._parameters
+OBJC_IVAR_$_ADJActivityPackage._activityKind
+OBJC_IVAR_$_ADJActivityPackage._suffix
+OBJC_METH_VAR_NAME_73
+OBJC_METH_VAR_TYPE_74
+OBJC_METH_VAR_NAME_75
+OBJC_METH_VAR_TYPE_76
+OBJC_METH_VAR_TYPE_77
+OBJC_CLASS_NAME_78
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_NSCoding
+l_OBJC_$_PROTOCOL_METHOD_TYPES_NSCoding
+l_OBJC_PROTOCOL_$_NSCoding
+l_OBJC_LABEL_PROTOCOL_$_NSCoding
+l_OBJC_CLASS_PROTOCOLS_$_ADJActivityPackage
+l_OBJC_METACLASS_RO_$_ADJActivityPackage
+OBJC_CLASS_NAME_79
+OBJC_METH_VAR_TYPE_81
+l_OBJC_$_INSTANCE_METHODS_ADJActivityPackage
+OBJC_METH_VAR_NAME_91
+l_OBJC_$_INSTANCE_VARIABLES_ADJActivityPackage
+OBJC_PROP_NAME_ATTR_97
+OBJC_PROP_NAME_ATTR_98
+OBJC_PROP_NAME_ATTR_99
+l_OBJC_$_PROP_LIST_ADJActivityPackage
+l_OBJC_CLASS_RO_$_ADJActivityPackage
+-[ADJActivityPackage .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJActivityPackage.m
+-[ADJActivityPackage setSuffix:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJActivityPackage.h
+-[ADJActivityPackage suffix]
+-[ADJActivityPackage setActivityKind:]
+-[ADJActivityPackage activityKind]
+-[ADJActivityPackage setParameters:]
+-[ADJActivityPackage parameters]
+-[ADJActivityPackage setClientSdk:]
+-[ADJActivityPackage clientSdk]
+-[ADJActivityPackage setPath:]
+-[ADJActivityPackage path]
+-[ADJActivityPackage encodeWithCoder:]
+-[ADJActivityPackage initWithCoder:]
+-[ADJActivityPackage failureMessage]
+-[ADJActivityPackage successMessage]
+-[ADJActivityPackage extendedString]
+-[ADJActivityPackage description]
++[ADJConfig configWithAppToken:environment:]
+-[ADJConfig initWithAppToken:environment:]
+-[ADJConfig initWithoutCheckAppToken:environment:]
+-[ADJConfig initSelfWithAppToken:environment:]
+-[ADJConfig setDelegate:]
+-[ADJConfig checkEnvironment:]
+-[ADJConfig checkAppToken:]
+-[ADJConfig isValid]
+-[ADJConfig copyWithZone:]
+-[ADJConfig appToken]
+-[ADJConfig environment]
+-[ADJConfig sdkPrefix]
+-[ADJConfig setSdkPrefix:]
+-[ADJConfig defaultTracker]
+-[ADJConfig setDefaultTracker:]
+-[ADJConfig logLevel]
+-[ADJConfig setLogLevel:]
+-[ADJConfig eventBufferingEnabled]
+-[ADJConfig setEventBufferingEnabled:]
+-[ADJConfig delegate]
+-[ADJConfig hasDelegate]
+-[ADJConfig setHasDelegate:]
+-[ADJConfig .cxx_destruct]
+OBJC_IVAR_$_ADJConfig._appToken
+OBJC_IVAR_$_ADJConfig._environment
+OBJC_CLASSLIST_REFERENCES_$_17
+OBJC_IVAR_$_ADJConfig._delegate
+OBJC_CLASSLIST_REFERENCES_$_24
+_unnamed_cfstring_34
+.str39
+_unnamed_cfstring_40
+.str45
+_unnamed_cfstring_46
+OBJC_METH_VAR_NAME_53
+OBJC_SELECTOR_REFERENCES_54
+OBJC_METH_VAR_NAME_57
+OBJC_SELECTOR_REFERENCES_58
+OBJC_METH_VAR_NAME_61
+OBJC_SELECTOR_REFERENCES_62
+OBJC_METH_VAR_NAME_63
+OBJC_SELECTOR_REFERENCES_64
+OBJC_IVAR_$_ADJConfig._sdkPrefix
+OBJC_IVAR_$_ADJConfig._defaultTracker
+OBJC_IVAR_$_ADJConfig._logLevel
+OBJC_IVAR_$_ADJConfig._eventBufferingEnabled
+OBJC_IVAR_$_ADJConfig._hasDelegate
+l_OBJC_$_CLASS_METHODS_ADJConfig
+OBJC_CLASS_NAME_75
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_NSCopying
+l_OBJC_$_PROTOCOL_METHOD_TYPES_NSCopying
+l_OBJC_PROTOCOL_$_NSCopying
+l_OBJC_LABEL_PROTOCOL_$_NSCopying
+l_OBJC_CLASS_PROTOCOLS_$_ADJConfig
+l_OBJC_METACLASS_RO_$_ADJConfig
+OBJC_CLASS_NAME_76
+OBJC_METH_VAR_TYPE_78
+OBJC_METH_VAR_TYPE_83
+OBJC_METH_VAR_TYPE_85
+OBJC_METH_VAR_NAME_88
+l_OBJC_$_INSTANCE_METHODS_ADJConfig
+OBJC_METH_VAR_NAME_95
+OBJC_METH_VAR_NAME_97
+OBJC_METH_VAR_TYPE_98
+OBJC_METH_VAR_NAME_99
+OBJC_METH_VAR_TYPE_100
+l_OBJC_$_INSTANCE_VARIABLES_ADJConfig
+OBJC_CLASS_NAME_101
+OBJC_PROP_NAME_ATTR_107
+OBJC_PROP_NAME_ATTR_108
+OBJC_PROP_NAME_ATTR_109
+OBJC_PROP_NAME_ATTR_110
+OBJC_PROP_NAME_ATTR_111
+OBJC_PROP_NAME_ATTR_112
+OBJC_PROP_NAME_ATTR_113
+OBJC_PROP_NAME_ATTR_114
+OBJC_PROP_NAME_ATTR_115
+OBJC_PROP_NAME_ATTR_116
+l_OBJC_$_PROP_LIST_ADJConfig
+l_OBJC_CLASS_RO_$_ADJConfig
+-[ADJConfig .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJConfig.m
+-[ADJConfig setHasDelegate:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJConfig.h
+-[ADJConfig hasDelegate]
+-[ADJConfig delegate]
+-[ADJConfig setEventBufferingEnabled:]
+-[ADJConfig eventBufferingEnabled]
+-[ADJConfig setLogLevel:]
+-[ADJConfig logLevel]
+-[ADJConfig setDefaultTracker:]
+-[ADJConfig defaultTracker]
+-[ADJConfig setSdkPrefix:]
+-[ADJConfig sdkPrefix]
+-[ADJConfig environment]
+-[ADJConfig appToken]
+-[ADJConfig copyWithZone:]
+-[ADJConfig isValid]
+-[ADJConfig checkAppToken:]
+-[ADJConfig checkEnvironment:]
+-[ADJConfig setDelegate:]
+-[ADJConfig initSelfWithAppToken:environment:]
+-[ADJConfig initWithoutCheckAppToken:environment:]
+-[ADJConfig initWithAppToken:environment:]
++[ADJConfig configWithAppToken:environment:]
++[Adjust appDidLaunch:]
++[Adjust trackEvent:]
++[Adjust trackSubsessionStart]
++[Adjust trackSubsessionEnd]
++[Adjust setEnabled:]
++[Adjust isEnabled]
++[Adjust appWillOpenUrl:]
++[Adjust setDeviceToken:]
++[Adjust setOfflineMode:]
++[Adjust getInstance]
+__21+[Adjust getInstance]_block_invoke
+-[Adjust init]
+-[Adjust appDidLaunch:]
+-[Adjust trackEvent:]
+-[Adjust trackSubsessionStart]
+-[Adjust trackSubsessionEnd]
+-[Adjust setEnabled:]
+-[Adjust isEnabled]
+-[Adjust appWillOpenUrl:]
+-[Adjust setDeviceToken:]
+-[Adjust setOfflineMode:]
+-[Adjust checkActivityHandler]
+-[Adjust activityHandler]
+-[Adjust setActivityHandler:]
+-[Adjust logger]
+-[Adjust setLogger:]
+-[Adjust .cxx_destruct]
+OBJC_METH_VAR_NAME_17
+OBJC_SELECTOR_REFERENCES_18
+getInstance.defaultInstance
+getInstance.onceToken
+OBJC_CLASSLIST_REFERENCES_$_28
+.str35
+_unnamed_cfstring_36
+OBJC_IVAR_$_Adjust._activityHandler
+OBJC_IVAR_$_Adjust._logger
+OBJC_CLASS_NAME_45
+OBJC_METH_VAR_TYPE_46
+OBJC_METH_VAR_TYPE_47
+OBJC_METH_VAR_TYPE_48
+OBJC_METH_VAR_TYPE_49
+l_OBJC_$_CLASS_METHODS_Adjust
+l_OBJC_METACLASS_RO_$_Adjust
+OBJC_CLASS_NAME_50
+l_OBJC_$_INSTANCE_METHODS_Adjust
+OBJC_METH_VAR_TYPE_53
+OBJC_METH_VAR_NAME_54
+OBJC_METH_VAR_TYPE_55
+l_OBJC_$_INSTANCE_VARIABLES_Adjust
+OBJC_PROP_NAME_ATTR_56
+OBJC_PROP_NAME_ATTR_57
+OBJC_PROP_NAME_ATTR_58
+l_OBJC_$_PROP_LIST_Adjust
+l_OBJC_CLASS_RO_$_Adjust
+_dispatch_once
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/dispatch/once.h
+-[Adjust .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/Adjust.m
+-[Adjust setLogger:]
+-[Adjust logger]
+-[Adjust setActivityHandler:]
+-[Adjust activityHandler]
+-[Adjust checkActivityHandler]
+-[Adjust setOfflineMode:]
+-[Adjust setDeviceToken:]
+-[Adjust appWillOpenUrl:]
+-[Adjust isEnabled]
+-[Adjust setEnabled:]
+-[Adjust trackSubsessionEnd]
+-[Adjust trackSubsessionStart]
+-[Adjust trackEvent:]
+-[Adjust appDidLaunch:]
+-[Adjust init]
++[Adjust getInstance]
++[Adjust setOfflineMode:]
++[Adjust setDeviceToken:]
++[Adjust appWillOpenUrl:]
++[Adjust isEnabled]
++[Adjust setEnabled:]
++[Adjust trackSubsessionEnd]
++[Adjust trackSubsessionStart]
++[Adjust trackEvent:]
++[Adjust appDidLaunch:]
++[ADJEvent eventWithEventToken:]
+-[ADJEvent initWithEventToken:]
+-[ADJEvent addCallbackParameter:value:]
+-[ADJEvent addPartnerParameter:value:]
+-[ADJEvent setRevenue:currency:]
+-[ADJEvent setTransactionId:]
+-[ADJEvent callbackParameters]
+-[ADJEvent partnerParameters]
+-[ADJEvent checkEventToken:]
+-[ADJEvent checkRevenue:currency:]
+-[ADJEvent isValid]
+-[ADJEvent setReceipt:transactionId:]
+-[ADJEvent checkReceipt:transactionId:]
+-[ADJEvent isValidParameter:attributeType:parameterName:]
+-[ADJEvent copyWithZone:]
+-[ADJEvent eventToken]
+-[ADJEvent revenue]
+-[ADJEvent transactionId]
+-[ADJEvent currency]
+-[ADJEvent receipt]
+-[ADJEvent emptyReceipt]
+-[ADJEvent logger]
+-[ADJEvent setLogger:]
+-[ADJEvent callbackMutableParameters]
+-[ADJEvent setCallbackMutableParameters:]
+-[ADJEvent partnerMutableParameters]
+-[ADJEvent setPartnerMutableParameters:]
+-[ADJEvent .cxx_destruct]
+OBJC_CLASSLIST_REFERENCES_$_5
+OBJC_METH_VAR_NAME_8
+OBJC_SELECTOR_REFERENCES_9
+OBJC_IVAR_$_ADJEvent._eventToken
+.str12
+_unnamed_cfstring_13
+.str16
+_unnamed_cfstring_17
+OBJC_CLASSLIST_REFERENCES_$_20
+OBJC_CLASSLIST_REFERENCES_$_37
+OBJC_SELECTOR_REFERENCES_39
+OBJC_SELECTOR_REFERENCES_41
+OBJC_IVAR_$_ADJEvent._revenue
+OBJC_IVAR_$_ADJEvent._currency
+OBJC_IVAR_$_ADJEvent._transactionId
+OBJC_CLASSLIST_REFERENCES_$_42
+.str51
+_unnamed_cfstring_52
+.str55
+_unnamed_cfstring_56
+.str59
+_unnamed_cfstring_60
+.str65
+_unnamed_cfstring_66
+OBJC_IVAR_$_ADJEvent._emptyReceipt
+OBJC_IVAR_$_ADJEvent._receipt
+.str71
+_unnamed_cfstring_72
+.str73
+_unnamed_cfstring_74
+_unnamed_cfstring_76
+OBJC_SELECTOR_REFERENCES_84
+OBJC_SELECTOR_REFERENCES_86
+OBJC_METH_VAR_NAME_87
+OBJC_SELECTOR_REFERENCES_88
+OBJC_SELECTOR_REFERENCES_90
+OBJC_SELECTOR_REFERENCES_92
+OBJC_METH_VAR_NAME_93
+OBJC_SELECTOR_REFERENCES_94
+OBJC_SELECTOR_REFERENCES_96
+OBJC_SELECTOR_REFERENCES_98
+OBJC_IVAR_$_ADJEvent._logger
+OBJC_IVAR_$_ADJEvent._callbackMutableParameters
+OBJC_IVAR_$_ADJEvent._partnerMutableParameters
+l_OBJC_$_CLASS_METHODS_ADJEvent
+l_OBJC_CLASS_PROTOCOLS_$_ADJEvent
+l_OBJC_METACLASS_RO_$_ADJEvent
+OBJC_CLASS_NAME_102
+OBJC_METH_VAR_NAME_103
+OBJC_METH_VAR_TYPE_104
+OBJC_METH_VAR_NAME_105
+OBJC_METH_VAR_TYPE_106
+OBJC_METH_VAR_TYPE_107
+OBJC_METH_VAR_NAME_108
+OBJC_METH_VAR_TYPE_109
+OBJC_METH_VAR_NAME_110
+OBJC_METH_VAR_TYPE_111
+OBJC_METH_VAR_TYPE_112
+OBJC_METH_VAR_NAME_113
+OBJC_METH_VAR_TYPE_114
+OBJC_METH_VAR_TYPE_115
+OBJC_METH_VAR_NAME_116
+OBJC_METH_VAR_TYPE_117
+l_OBJC_$_INSTANCE_METHODS_ADJEvent
+OBJC_METH_VAR_NAME_118
+OBJC_METH_VAR_TYPE_119
+OBJC_METH_VAR_NAME_120
+OBJC_METH_VAR_TYPE_121
+OBJC_METH_VAR_NAME_122
+OBJC_METH_VAR_TYPE_123
+OBJC_METH_VAR_NAME_124
+OBJC_METH_VAR_NAME_125
+OBJC_METH_VAR_NAME_126
+OBJC_METH_VAR_TYPE_127
+OBJC_METH_VAR_NAME_128
+OBJC_METH_VAR_TYPE_129
+OBJC_METH_VAR_NAME_130
+OBJC_METH_VAR_TYPE_131
+OBJC_METH_VAR_NAME_132
+l_OBJC_$_INSTANCE_VARIABLES_ADJEvent
+OBJC_PROP_NAME_ATTR_133
+OBJC_PROP_NAME_ATTR_134
+OBJC_PROP_NAME_ATTR_135
+OBJC_PROP_NAME_ATTR_136
+OBJC_PROP_NAME_ATTR_137
+OBJC_PROP_NAME_ATTR_138
+OBJC_PROP_NAME_ATTR_139
+OBJC_PROP_NAME_ATTR_140
+OBJC_PROP_NAME_ATTR_141
+OBJC_PROP_NAME_ATTR_142
+OBJC_PROP_NAME_ATTR_143
+OBJC_PROP_NAME_ATTR_144
+OBJC_PROP_NAME_ATTR_145
+OBJC_PROP_NAME_ATTR_146
+OBJC_PROP_NAME_ATTR_147
+OBJC_PROP_NAME_ATTR_148
+OBJC_PROP_NAME_ATTR_149
+OBJC_PROP_NAME_ATTR_150
+OBJC_PROP_NAME_ATTR_151
+OBJC_PROP_NAME_ATTR_152
+l_OBJC_$_PROP_LIST_ADJEvent
+l_OBJC_CLASS_RO_$_ADJEvent
+-[ADJEvent .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJEvent.m
+-[ADJEvent setPartnerMutableParameters:]
+-[ADJEvent partnerMutableParameters]
+-[ADJEvent setCallbackMutableParameters:]
+-[ADJEvent callbackMutableParameters]
+-[ADJEvent setLogger:]
+-[ADJEvent logger]
+-[ADJEvent emptyReceipt]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJEvent.h
+-[ADJEvent receipt]
+-[ADJEvent currency]
+-[ADJEvent transactionId]
+-[ADJEvent revenue]
+-[ADJEvent eventToken]
+-[ADJEvent copyWithZone:]
+-[ADJEvent isValidParameter:attributeType:parameterName:]
+-[ADJEvent checkReceipt:transactionId:]
+-[ADJEvent setReceipt:transactionId:]
+-[ADJEvent isValid]
+-[ADJEvent checkRevenue:currency:]
+-[ADJEvent checkEventToken:]
+-[ADJEvent partnerParameters]
+-[ADJEvent callbackParameters]
+-[ADJEvent setTransactionId:]
+-[ADJEvent setRevenue:currency:]
+-[ADJEvent addPartnerParameter:value:]
+-[ADJEvent addCallbackParameter:value:]
+-[ADJEvent initWithEventToken:]
++[ADJEvent eventWithEventToken:]
++[ADJUtil initialize]
++[ADJUtil baseUrl]
++[ADJUtil clientSdk]
++[ADJUtil excludeFromBackup:]
++[ADJUtil formatSeconds1970:]
++[ADJUtil formatDate:]
++[ADJUtil buildJsonDict:]
++[ADJUtil getFullFilename:]
++[ADJUtil readObject:objectName:class:]
++[ADJUtil writeObject:filename:objectName:]
++[ADJUtil queryString:]
++[ADJUtil isNull:]
++[ADJUtil formatErrorMessage:systemErrorMessage:suffixErrorMessage:]
++[ADJUtil sendRequest:prefixErrorMessage:jsonResponseHandler:]
++[ADJUtil sendRequest:prefixErrorMessage:suffixErrorMessage:jsonResponseHandler:]
++[ADJUtil sendNSURLSessionRequest:prefixErrorMessage:suffixErrorMessage:jsonResponseHandler:]
+__93+[ADJUtil sendNSURLSessionRequest:prefixErrorMessage:suffixErrorMessage:jsonResponseHandler:]_block_invoke
++[ADJUtil sendNSURLConnectionRequest:prefixErrorMessage:suffixErrorMessage:jsonResponseHandler:]
++[ADJUtil completionHandler:response:error:prefixErrorMessage:suffixErrorMessage:]
++[ADJUtil convertDictionaryValues:]
+dateFormat
+OBJC_CLASSLIST_REFERENCES_$_7
+OBJC_CLASSLIST_REFERENCES_$_21
+.str28
+OBJC_CLASSLIST_REFERENCES_$_29
+OBJC_METH_VAR_NAME_30
+OBJC_SELECTOR_REFERENCES_31
+.str32
+_unnamed_cfstring_33
+OBJC_CLASSLIST_REFERENCES_$_36
+OBJC_CLASSLIST_REFERENCES_$_47
+OBJC_METH_VAR_NAME_48
+OBJC_SELECTOR_REFERENCES_49
+OBJC_CLASSLIST_REFERENCES_$_54
+OBJC_CLASSLIST_REFERENCES_$_67
+OBJC_CLASSLIST_REFERENCES_$_70
+OBJC_SELECTOR_REFERENCES_74
+.str77
+_unnamed_cfstring_78
+.str81
+_unnamed_cfstring_82
+.str83
+_unnamed_cfstring_84
+OBJC_CLASSLIST_REFERENCES_$_85
+OBJC_METH_VAR_NAME_86
+OBJC_SELECTOR_REFERENCES_87
+OBJC_SELECTOR_REFERENCES_89
+.str90
+_unnamed_cfstring_91
+.str92
+_unnamed_cfstring_93
+OBJC_CLASSLIST_REFERENCES_$_94
+OBJC_SELECTOR_REFERENCES_100
+OBJC_METH_VAR_NAME_101
+OBJC_SELECTOR_REFERENCES_102
+OBJC_CLASSLIST_REFERENCES_$_103
+.str104
+_unnamed_cfstring_105
+OBJC_METH_VAR_NAME_106
+OBJC_SELECTOR_REFERENCES_107
+OBJC_SELECTOR_REFERENCES_109
+OBJC_SELECTOR_REFERENCES_111
+OBJC_METH_VAR_NAME_112
+OBJC_SELECTOR_REFERENCES_113
+OBJC_METH_VAR_NAME_114
+OBJC_SELECTOR_REFERENCES_115
+.str116
+_unnamed_cfstring_117
+.str118
+_unnamed_cfstring_119
+OBJC_SELECTOR_REFERENCES_121
+OBJC_CLASSLIST_REFERENCES_$_122
+OBJC_METH_VAR_NAME_123
+OBJC_SELECTOR_REFERENCES_124
+.str125
+_unnamed_cfstring_126
+.str127
+_unnamed_cfstring_128
+OBJC_METH_VAR_NAME_129
+OBJC_SELECTOR_REFERENCES_130
+OBJC_METH_VAR_NAME_131
+OBJC_SELECTOR_REFERENCES_132
+.str133
+_unnamed_cfstring_134
+OBJC_METH_VAR_NAME_135
+OBJC_SELECTOR_REFERENCES_136
+OBJC_METH_VAR_NAME_137
+OBJC_SELECTOR_REFERENCES_138
+OBJC_CLASSLIST_REFERENCES_$_139
+OBJC_METH_VAR_NAME_140
+OBJC_SELECTOR_REFERENCES_141
+OBJC_METH_VAR_NAME_142
+OBJC_SELECTOR_REFERENCES_143
+.str144
+OBJC_METH_VAR_NAME_145
+OBJC_SELECTOR_REFERENCES_146
+OBJC_METH_VAR_NAME_147
+OBJC_SELECTOR_REFERENCES_148
+OBJC_CLASSLIST_REFERENCES_$_149
+OBJC_METH_VAR_NAME_150
+OBJC_SELECTOR_REFERENCES_151
+OBJC_METH_VAR_NAME_152
+OBJC_SELECTOR_REFERENCES_153
+OBJC_METH_VAR_NAME_154
+OBJC_SELECTOR_REFERENCES_155
+.str156
+_unnamed_cfstring_157
+OBJC_METH_VAR_NAME_158
+OBJC_SELECTOR_REFERENCES_159
+OBJC_METH_VAR_NAME_160
+OBJC_SELECTOR_REFERENCES_161
+OBJC_METH_VAR_NAME_162
+OBJC_SELECTOR_REFERENCES_163
+.str164
+_unnamed_cfstring_165
+OBJC_METH_VAR_NAME_166
+OBJC_SELECTOR_REFERENCES_167
+.str168
+_unnamed_cfstring_169
+.str170
+_unnamed_cfstring_171
+.str172
+_unnamed_cfstring_173
+OBJC_METH_VAR_NAME_174
+OBJC_SELECTOR_REFERENCES_175
+OBJC_CLASSLIST_REFERENCES_$_176
+OBJC_METH_VAR_NAME_177
+OBJC_SELECTOR_REFERENCES_178
+OBJC_METH_VAR_NAME_179
+OBJC_SELECTOR_REFERENCES_180
+OBJC_CLASSLIST_REFERENCES_$_181
+OBJC_METH_VAR_NAME_182
+OBJC_SELECTOR_REFERENCES_183
+OBJC_METH_VAR_NAME_184
+OBJC_SELECTOR_REFERENCES_185
+OBJC_METH_VAR_NAME_186
+OBJC_SELECTOR_REFERENCES_187
+OBJC_METH_VAR_NAME_188
+OBJC_METH_VAR_NAME_189
+OBJC_METH_VAR_TYPE_190
+OBJC_METH_VAR_NAME_191
+OBJC_METH_VAR_TYPE_192
+OBJC_METH_VAR_TYPE_193
+OBJC_METH_VAR_TYPE_194
+OBJC_METH_VAR_NAME_195
+OBJC_METH_VAR_TYPE_196
+OBJC_METH_VAR_NAME_197
+OBJC_METH_VAR_TYPE_198
+OBJC_METH_VAR_NAME_199
+OBJC_METH_VAR_TYPE_200
+OBJC_METH_VAR_TYPE_201
+OBJC_METH_VAR_NAME_202
+OBJC_METH_VAR_TYPE_203
+OBJC_METH_VAR_TYPE_204
+OBJC_METH_VAR_TYPE_205
+l_OBJC_$_CLASS_METHODS_ADJUtil
+l_OBJC_METACLASS_RO_$_ADJUtil
+l_OBJC_CLASS_RO_$_ADJUtil
++[ADJUtil convertDictionaryValues:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJUtil.m
++[ADJUtil completionHandler:response:error:prefixErrorMessage:suffixErrorMessage:]
++[ADJUtil sendNSURLConnectionRequest:prefixErrorMessage:suffixErrorMessage:jsonResponseHandler:]
++[ADJUtil sendNSURLSessionRequest:prefixErrorMessage:suffixErrorMessage:jsonResponseHandler:]
++[ADJUtil sendRequest:prefixErrorMessage:suffixErrorMessage:jsonResponseHandler:]
++[ADJUtil sendRequest:prefixErrorMessage:jsonResponseHandler:]
++[ADJUtil formatErrorMessage:systemErrorMessage:suffixErrorMessage:]
++[ADJUtil isNull:]
++[ADJUtil queryString:]
++[ADJUtil writeObject:filename:objectName:]
++[ADJUtil readObject:objectName:class:]
++[ADJUtil getFullFilename:]
++[ADJUtil buildJsonDict:]
++[ADJUtil formatDate:]
++[ADJUtil formatSeconds1970:]
++[ADJUtil excludeFromBackup:]
++[ADJUtil clientSdk]
++[ADJUtil baseUrl]
++[ADJUtil initialize]
++[ADJAttributionHandler handlerWithActivityHandler:withAttributionPackage:startPaused:hasDelegate:]
+-[ADJAttributionHandler initWithActivityHandler:withAttributionPackage:startPaused:hasDelegate:]
+__96-[ADJAttributionHandler initWithActivityHandler:withAttributionPackage:startPaused:hasDelegate:]_block_invoke
+-[ADJAttributionHandler checkAttribution:]
+__42-[ADJAttributionHandler checkAttribution:]_block_invoke
+__copy_helper_block_31
+__destroy_helper_block_32
+-[ADJAttributionHandler getAttributionWithDelay:]
+-[ADJAttributionHandler getAttribution]
+-[ADJAttributionHandler pauseSending]
+-[ADJAttributionHandler resumeSending]
+-[ADJAttributionHandler checkAttributionInternal:]
+-[ADJAttributionHandler getAttributionInternal]
+__47-[ADJAttributionHandler getAttributionInternal]_block_invoke
+__copy_helper_block_85
+__destroy_helper_block_86
+-[ADJAttributionHandler request]
+-[ADJAttributionHandler url]
+-[ADJAttributionHandler internalQueue]
+-[ADJAttributionHandler setInternalQueue:]
+-[ADJAttributionHandler activityHandler]
+-[ADJAttributionHandler setActivityHandler:]
+-[ADJAttributionHandler logger]
+-[ADJAttributionHandler setLogger:]
+-[ADJAttributionHandler timer]
+-[ADJAttributionHandler setTimer:]
+-[ADJAttributionHandler attributionPackage]
+-[ADJAttributionHandler setAttributionPackage:]
+-[ADJAttributionHandler paused]
+-[ADJAttributionHandler setPaused:]
+-[ADJAttributionHandler hasDelegate]
+-[ADJAttributionHandler setHasDelegate:]
+-[ADJAttributionHandler .cxx_destruct]
+__block_descriptor_tmp33
+.str38
+OBJC_CLASSLIST_REFERENCES_$_52
+OBJC_SELECTOR_REFERENCES_76
+.str87
+__block_descriptor_tmp88
+OBJC_CLASSLIST_REFERENCES_$_91
+OBJC_SELECTOR_REFERENCES_93
+OBJC_SELECTOR_REFERENCES_95
+OBJC_SELECTOR_REFERENCES_97
+.str98
+_unnamed_cfstring_99
+OBJC_METH_VAR_NAME_100
+OBJC_SELECTOR_REFERENCES_101
+OBJC_METH_VAR_NAME_102
+OBJC_SELECTOR_REFERENCES_103
+OBJC_CLASSLIST_REFERENCES_$_112
+.str113
+_unnamed_cfstring_114
+OBJC_METH_VAR_NAME_115
+OBJC_SELECTOR_REFERENCES_116
+OBJC_METH_VAR_NAME_117
+OBJC_SELECTOR_REFERENCES_118
+OBJC_CLASSLIST_REFERENCES_$_119
+OBJC_SELECTOR_REFERENCES_123
+OBJC_SELECTOR_REFERENCES_125
+OBJC_IVAR_$_ADJAttributionHandler._internalQueue
+OBJC_IVAR_$_ADJAttributionHandler._activityHandler
+OBJC_IVAR_$_ADJAttributionHandler._logger
+OBJC_IVAR_$_ADJAttributionHandler._timer
+OBJC_IVAR_$_ADJAttributionHandler._attributionPackage
+OBJC_IVAR_$_ADJAttributionHandler._paused
+OBJC_IVAR_$_ADJAttributionHandler._hasDelegate
+l_OBJC_$_CLASS_METHODS_ADJAttributionHandler
+OBJC_METH_VAR_TYPE_128
+OBJC_METH_VAR_NAME_133
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_ADJAttributionHandler
+l_OBJC_$_PROTOCOL_METHOD_TYPES_ADJAttributionHandler
+l_OBJC_PROTOCOL_$_ADJAttributionHandler
+l_OBJC_LABEL_PROTOCOL_$_ADJAttributionHandler
+l_OBJC_CLASS_PROTOCOLS_$_ADJAttributionHandler
+l_OBJC_METACLASS_RO_$_ADJAttributionHandler
+OBJC_CLASS_NAME_134
+OBJC_METH_VAR_TYPE_135
+OBJC_METH_VAR_TYPE_136
+OBJC_METH_VAR_TYPE_138
+OBJC_METH_VAR_TYPE_139
+l_OBJC_$_INSTANCE_METHODS_ADJAttributionHandler
+OBJC_METH_VAR_TYPE_141
+OBJC_METH_VAR_NAME_143
+OBJC_METH_VAR_TYPE_144
+OBJC_METH_VAR_TYPE_146
+OBJC_METH_VAR_TYPE_148
+OBJC_METH_VAR_NAME_149
+OBJC_METH_VAR_TYPE_150
+OBJC_METH_VAR_NAME_151
+OBJC_METH_VAR_TYPE_152
+l_OBJC_$_INSTANCE_VARIABLES_ADJAttributionHandler
+OBJC_PROP_NAME_ATTR_153
+OBJC_PROP_NAME_ATTR_154
+OBJC_PROP_NAME_ATTR_155
+OBJC_PROP_NAME_ATTR_156
+OBJC_PROP_NAME_ATTR_157
+OBJC_PROP_NAME_ATTR_158
+OBJC_PROP_NAME_ATTR_159
+OBJC_PROP_NAME_ATTR_160
+OBJC_PROP_NAME_ATTR_161
+OBJC_PROP_NAME_ATTR_162
+OBJC_PROP_NAME_ATTR_163
+OBJC_PROP_NAME_ATTR_164
+OBJC_PROP_NAME_ATTR_165
+l_OBJC_$_PROP_LIST_ADJAttributionHandler
+l_OBJC_CLASS_RO_$_ADJAttributionHandler
+.str166
+-[ADJAttributionHandler .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJAttributionHandler.m
+-[ADJAttributionHandler setHasDelegate:]
+-[ADJAttributionHandler hasDelegate]
+-[ADJAttributionHandler setPaused:]
+-[ADJAttributionHandler paused]
+-[ADJAttributionHandler setAttributionPackage:]
+-[ADJAttributionHandler attributionPackage]
+-[ADJAttributionHandler setTimer:]
+-[ADJAttributionHandler timer]
+-[ADJAttributionHandler setLogger:]
+-[ADJAttributionHandler logger]
+-[ADJAttributionHandler setActivityHandler:]
+-[ADJAttributionHandler activityHandler]
+-[ADJAttributionHandler setInternalQueue:]
+-[ADJAttributionHandler internalQueue]
+-[ADJAttributionHandler url]
+-[ADJAttributionHandler request]
+-[ADJAttributionHandler getAttributionInternal]
+-[ADJAttributionHandler checkAttributionInternal:]
+-[ADJAttributionHandler resumeSending]
+-[ADJAttributionHandler pauseSending]
+-[ADJAttributionHandler getAttribution]
+-[ADJAttributionHandler getAttributionWithDelay:]
+-[ADJAttributionHandler checkAttribution:]
+-[ADJAttributionHandler initWithActivityHandler:withAttributionPackage:startPaused:hasDelegate:]
++[ADJAttributionHandler handlerWithActivityHandler:withAttributionPackage:startPaused:hasDelegate:]
+-[ADJLogger setLogLevel:]
+-[ADJLogger verbose:]
+-[ADJLogger debug:]
+-[ADJLogger info:]
+-[ADJLogger warn:]
+-[ADJLogger error:]
+-[ADJLogger assert:]
+-[ADJLogger logLevel:format:parameters:]
++[ADJLogger LogLevelFromString:]
+-[ADJLogger loglevel]
+-[ADJLogger setLoglevel:]
+.str9
+_unnamed_cfstring_10
+.str27
+_unnamed_cfstring_28
+OBJC_IVAR_$_ADJLogger._loglevel
+l_OBJC_$_CLASS_METHODS_ADJLogger
+OBJC_METH_VAR_TYPE_45
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_ADJLogger
+l_OBJC_$_PROTOCOL_METHOD_TYPES_ADJLogger
+l_OBJC_PROTOCOL_$_ADJLogger
+l_OBJC_LABEL_PROTOCOL_$_ADJLogger
+l_OBJC_CLASS_PROTOCOLS_$_ADJLogger
+l_OBJC_METACLASS_RO_$_ADJLogger
+OBJC_METH_VAR_TYPE_54
+l_OBJC_$_INSTANCE_METHODS_ADJLogger
+OBJC_METH_VAR_TYPE_57
+l_OBJC_$_INSTANCE_VARIABLES_ADJLogger
+l_OBJC_$_PROP_LIST_ADJLogger
+l_OBJC_CLASS_RO_$_ADJLogger
+-[ADJLogger setLoglevel:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJLogger.m
+-[ADJLogger loglevel]
++[ADJLogger LogLevelFromString:]
+-[ADJLogger logLevel:format:parameters:]
+-[ADJLogger assert:]
+-[ADJLogger error:]
+-[ADJLogger warn:]
+-[ADJLogger info:]
+-[ADJLogger debug:]
+-[ADJLogger verbose:]
+-[ADJLogger setLogLevel:]
+-[ADJActivityState init]
+-[ADJActivityState resetSessionAttributes:]
+-[ADJActivityState addTransactionId:]
+-[ADJActivityState findTransactionId:]
+-[ADJActivityState description]
+-[ADJActivityState initWithCoder:]
+-[ADJActivityState encodeWithCoder:]
+-[ADJActivityState copyWithZone:]
+-[ADJActivityState uuid]
+-[ADJActivityState setUuid:]
+-[ADJActivityState enabled]
+-[ADJActivityState setEnabled:]
+-[ADJActivityState askingAttribution]
+-[ADJActivityState setAskingAttribution:]
+-[ADJActivityState eventCount]
+-[ADJActivityState setEventCount:]
+-[ADJActivityState sessionCount]
+-[ADJActivityState setSessionCount:]
+-[ADJActivityState subsessionCount]
+-[ADJActivityState setSubsessionCount:]
+-[ADJActivityState sessionLength]
+-[ADJActivityState setSessionLength:]
+-[ADJActivityState timeSpent]
+-[ADJActivityState setTimeSpent:]
+-[ADJActivityState lastActivity]
+-[ADJActivityState setLastActivity:]
+-[ADJActivityState transactionIds]
+-[ADJActivityState setTransactionIds:]
+-[ADJActivityState lastInterval]
+-[ADJActivityState setLastInterval:]
+-[ADJActivityState .cxx_destruct]
+OBJC_SELECTOR_REFERENCES_33
+OBJC_CLASSLIST_REFERENCES_$_40
+_unnamed_cfstring_88
+OBJC_SELECTOR_REFERENCES_104
+OBJC_SELECTOR_REFERENCES_106
+OBJC_IVAR_$_ADJActivityState._uuid
+OBJC_IVAR_$_ADJActivityState._enabled
+OBJC_IVAR_$_ADJActivityState._askingAttribution
+OBJC_IVAR_$_ADJActivityState._eventCount
+OBJC_IVAR_$_ADJActivityState._sessionCount
+OBJC_IVAR_$_ADJActivityState._subsessionCount
+OBJC_IVAR_$_ADJActivityState._sessionLength
+OBJC_IVAR_$_ADJActivityState._timeSpent
+OBJC_IVAR_$_ADJActivityState._lastActivity
+OBJC_IVAR_$_ADJActivityState._transactionIds
+OBJC_IVAR_$_ADJActivityState._lastInterval
+OBJC_METH_VAR_NAME_107
+OBJC_METH_VAR_TYPE_108
+OBJC_METH_VAR_NAME_109
+OBJC_METH_VAR_TYPE_110
+OBJC_CLASS_NAME_112
+OBJC_METH_VAR_TYPE_113
+OBJC_CLASS_NAME_114
+l_OBJC_CLASS_PROTOCOLS_$_ADJActivityState
+l_OBJC_METACLASS_RO_$_ADJActivityState
+OBJC_CLASS_NAME_115
+OBJC_METH_VAR_TYPE_116
+OBJC_METH_VAR_TYPE_118
+OBJC_METH_VAR_NAME_119
+OBJC_METH_VAR_TYPE_124
+OBJC_METH_VAR_TYPE_125
+OBJC_METH_VAR_TYPE_126
+l_OBJC_$_INSTANCE_METHODS_ADJActivityState
+OBJC_METH_VAR_TYPE_134
+OBJC_METH_VAR_NAME_138
+OBJC_METH_VAR_NAME_139
+OBJC_METH_VAR_TYPE_140
+OBJC_METH_VAR_NAME_141
+OBJC_METH_VAR_TYPE_142
+OBJC_METH_VAR_NAME_144
+l_OBJC_$_INSTANCE_VARIABLES_ADJActivityState
+OBJC_PROP_NAME_ATTR_166
+l_OBJC_$_PROP_LIST_ADJActivityState
+l_OBJC_CLASS_RO_$_ADJActivityState
+-[ADJActivityState .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJActivityState.m
+-[ADJActivityState setLastInterval:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJActivityState.h
+-[ADJActivityState lastInterval]
+-[ADJActivityState setTransactionIds:]
+-[ADJActivityState transactionIds]
+-[ADJActivityState setLastActivity:]
+-[ADJActivityState lastActivity]
+-[ADJActivityState setTimeSpent:]
+-[ADJActivityState timeSpent]
+-[ADJActivityState setSessionLength:]
+-[ADJActivityState sessionLength]
+-[ADJActivityState setSubsessionCount:]
+-[ADJActivityState subsessionCount]
+-[ADJActivityState setSessionCount:]
+-[ADJActivityState sessionCount]
+-[ADJActivityState setEventCount:]
+-[ADJActivityState eventCount]
+-[ADJActivityState setAskingAttribution:]
+-[ADJActivityState askingAttribution]
+-[ADJActivityState setEnabled:]
+-[ADJActivityState enabled]
+-[ADJActivityState setUuid:]
+-[ADJActivityState uuid]
+-[ADJActivityState copyWithZone:]
+-[ADJActivityState encodeWithCoder:]
+-[ADJActivityState initWithCoder:]
+-[ADJActivityState description]
+-[ADJActivityState findTransactionId:]
+-[ADJActivityState addTransactionId:]
+-[ADJActivityState resetSessionAttributes:]
+-[ADJActivityState init]
+-[NSData(ADJAdditions) adjEncodeBase64]
+_base64EncodingTable
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_NSData_$_ADJAdditions
+l_OBJC_$_CATEGORY_NSData_$_ADJAdditions
+-[NSData(ADJAdditions) adjEncodeBase64]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJAdditions/NSData+ADJAdditions.m
++[ADJTimerCycle timerWithBlock:queue:startTime:intervalTime:]
+-[ADJTimerCycle initBlock:queue:startTime:intervalTime:]
+-[ADJTimerCycle resume]
+-[ADJTimerCycle suspend]
+-[ADJTimerCycle startTime]
+-[ADJTimerCycle setStartTime:]
+-[ADJTimerCycle source]
+-[ADJTimerCycle setSource:]
+-[ADJTimerCycle suspended]
+-[ADJTimerCycle setSuspended:]
+-[ADJTimerCycle .cxx_destruct]
+OBJC_IVAR_$_ADJTimerCycle._startTime
+OBJC_IVAR_$_ADJTimerCycle._source
+OBJC_IVAR_$_ADJTimerCycle._suspended
+l_OBJC_$_CLASS_METHODS_ADJTimerCycle
+l_OBJC_METACLASS_RO_$_ADJTimerCycle
+OBJC_CLASS_NAME_14
+OBJC_METH_VAR_TYPE_16
+OBJC_METH_VAR_TYPE_20
+OBJC_METH_VAR_TYPE_22
+OBJC_METH_VAR_TYPE_23
+OBJC_METH_VAR_TYPE_24
+OBJC_METH_VAR_TYPE_26
+l_OBJC_$_INSTANCE_METHODS_ADJTimerCycle
+OBJC_METH_VAR_TYPE_32
+l_OBJC_$_INSTANCE_VARIABLES_ADJTimerCycle
+OBJC_PROP_NAME_ATTR_33
+OBJC_PROP_NAME_ATTR_34
+OBJC_PROP_NAME_ATTR_35
+OBJC_PROP_NAME_ATTR_36
+OBJC_PROP_NAME_ATTR_37
+l_OBJC_$_PROP_LIST_ADJTimerCycle
+l_OBJC_CLASS_RO_$_ADJTimerCycle
+-[ADJTimerCycle .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJTimerCycle.m
+-[ADJTimerCycle setSuspended:]
+-[ADJTimerCycle suspended]
+-[ADJTimerCycle setSource:]
+-[ADJTimerCycle source]
+-[ADJTimerCycle setStartTime:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJTimerCycle.h
+-[ADJTimerCycle startTime]
+-[ADJTimerCycle suspend]
+-[ADJTimerCycle resume]
+-[ADJTimerCycle initBlock:queue:startTime:intervalTime:]
++[ADJTimerCycle timerWithBlock:queue:startTime:intervalTime:]
+-[ADJPackageBuilder initWithDeviceInfo:activityState:config:createdAt:]
+-[ADJPackageBuilder buildSessionPackage]
+-[ADJPackageBuilder buildEventPackage:]
+-[ADJPackageBuilder buildClickPackage:]
+-[ADJPackageBuilder buildAttributionPackage]
+-[ADJPackageBuilder defaultActivityPackage]
+-[ADJPackageBuilder idsParameters]
+-[ADJPackageBuilder defaultParameters]
+-[ADJPackageBuilder injectDeviceInfoIds:intoParameters:]
+-[ADJPackageBuilder injectDeviceInfo:intoParameters:]
+-[ADJPackageBuilder injectConfig:intoParameters:]
+-[ADJPackageBuilder injectActivityState:intoParamters:]
+-[ADJPackageBuilder injectCreatedAt:intoParameters:]
+-[ADJPackageBuilder eventSuffix:]
+-[ADJPackageBuilder parameters:setString:forKey:]
+-[ADJPackageBuilder parameters:setInt:forKey:]
+-[ADJPackageBuilder parameters:setDate1970:forKey:]
+-[ADJPackageBuilder parameters:setDate:forKey:]
+-[ADJPackageBuilder parameters:setDuration:forKey:]
+-[ADJPackageBuilder parameters:setDictionaryJson:forKey:]
+-[ADJPackageBuilder parameters:setDictionary:forKey:]
+-[ADJPackageBuilder parameters:setBool:forKey:]
+-[ADJPackageBuilder parameters:setNumber:forKey:]
+-[ADJPackageBuilder attribution]
+-[ADJPackageBuilder setAttribution:]
+-[ADJPackageBuilder purchaseTime]
+-[ADJPackageBuilder setPurchaseTime:]
+-[ADJPackageBuilder clickTime]
+-[ADJPackageBuilder setClickTime:]
+-[ADJPackageBuilder iadDetails]
+-[ADJPackageBuilder setIadDetails:]
+-[ADJPackageBuilder deeplinkParameters]
+-[ADJPackageBuilder setDeeplinkParameters:]
+-[ADJPackageBuilder deviceInfo]
+-[ADJPackageBuilder setDeviceInfo:]
+-[ADJPackageBuilder activityState]
+-[ADJPackageBuilder setActivityState:]
+-[ADJPackageBuilder adjustConfig]
+-[ADJPackageBuilder setAdjustConfig:]
+-[ADJPackageBuilder createdAt]
+-[ADJPackageBuilder setCreatedAt:]
+-[ADJPackageBuilder .cxx_destruct]
+.str67
+_unnamed_cfstring_68
+.str89
+_unnamed_cfstring_90
+.str93
+_unnamed_cfstring_94
+.str97
+_unnamed_cfstring_98
+.str103
+_unnamed_cfstring_104
+OBJC_SELECTOR_REFERENCES_108
+.str109
+_unnamed_cfstring_110
+OBJC_METH_VAR_NAME_111
+OBJC_SELECTOR_REFERENCES_112
+.str117
+_unnamed_cfstring_118
+OBJC_SELECTOR_REFERENCES_120
+.str121
+_unnamed_cfstring_122
+.str129
+_unnamed_cfstring_130
+OBJC_SELECTOR_REFERENCES_134
+OBJC_SELECTOR_REFERENCES_145
+OBJC_METH_VAR_NAME_146
+OBJC_SELECTOR_REFERENCES_147
+OBJC_METH_VAR_NAME_148
+OBJC_SELECTOR_REFERENCES_149
+.str160
+_unnamed_cfstring_161
+OBJC_METH_VAR_NAME_170
+OBJC_SELECTOR_REFERENCES_171
+.str176
+_unnamed_cfstring_177
+OBJC_METH_VAR_NAME_178
+OBJC_SELECTOR_REFERENCES_179
+.str180
+_unnamed_cfstring_181
+.str184
+_unnamed_cfstring_185
+.str188
+_unnamed_cfstring_189
+OBJC_METH_VAR_NAME_190
+OBJC_SELECTOR_REFERENCES_191
+.str192
+_unnamed_cfstring_193
+OBJC_METH_VAR_NAME_194
+OBJC_SELECTOR_REFERENCES_195
+.str196
+_unnamed_cfstring_197
+OBJC_METH_VAR_NAME_198
+OBJC_SELECTOR_REFERENCES_199
+.str200
+_unnamed_cfstring_201
+OBJC_SELECTOR_REFERENCES_203
+.str204
+_unnamed_cfstring_205
+OBJC_METH_VAR_NAME_206
+OBJC_SELECTOR_REFERENCES_207
+.str208
+_unnamed_cfstring_209
+OBJC_METH_VAR_NAME_210
+OBJC_SELECTOR_REFERENCES_211
+.str212
+_unnamed_cfstring_213
+OBJC_METH_VAR_NAME_214
+OBJC_SELECTOR_REFERENCES_215
+.str216
+_unnamed_cfstring_217
+OBJC_METH_VAR_NAME_218
+OBJC_SELECTOR_REFERENCES_219
+.str220
+_unnamed_cfstring_221
+OBJC_METH_VAR_NAME_222
+OBJC_SELECTOR_REFERENCES_223
+OBJC_METH_VAR_NAME_224
+OBJC_SELECTOR_REFERENCES_225
+.str226
+_unnamed_cfstring_227
+OBJC_METH_VAR_NAME_228
+OBJC_SELECTOR_REFERENCES_229
+.str230
+_unnamed_cfstring_231
+OBJC_METH_VAR_NAME_232
+OBJC_SELECTOR_REFERENCES_233
+.str234
+_unnamed_cfstring_235
+OBJC_METH_VAR_NAME_236
+OBJC_SELECTOR_REFERENCES_237
+.str238
+_unnamed_cfstring_239
+OBJC_METH_VAR_NAME_240
+OBJC_SELECTOR_REFERENCES_241
+.str242
+_unnamed_cfstring_243
+.str244
+_unnamed_cfstring_245
+OBJC_METH_VAR_NAME_246
+OBJC_SELECTOR_REFERENCES_247
+OBJC_CLASSLIST_REFERENCES_$_248
+.str249
+_unnamed_cfstring_250
+OBJC_METH_VAR_NAME_251
+OBJC_SELECTOR_REFERENCES_252
+.str253
+_unnamed_cfstring_254
+OBJC_METH_VAR_NAME_255
+OBJC_SELECTOR_REFERENCES_256
+OBJC_METH_VAR_NAME_257
+OBJC_SELECTOR_REFERENCES_258
+OBJC_METH_VAR_NAME_259
+OBJC_SELECTOR_REFERENCES_260
+.str261
+_unnamed_cfstring_262
+OBJC_CLASSLIST_REFERENCES_$_263
+OBJC_METH_VAR_NAME_264
+OBJC_SELECTOR_REFERENCES_265
+OBJC_METH_VAR_NAME_266
+OBJC_SELECTOR_REFERENCES_267
+OBJC_METH_VAR_NAME_268
+OBJC_SELECTOR_REFERENCES_269
+OBJC_CLASSLIST_REFERENCES_$_270
+OBJC_METH_VAR_NAME_271
+OBJC_SELECTOR_REFERENCES_272
+OBJC_METH_VAR_NAME_273
+OBJC_SELECTOR_REFERENCES_274
+OBJC_METH_VAR_NAME_275
+OBJC_SELECTOR_REFERENCES_276
+OBJC_METH_VAR_NAME_277
+OBJC_SELECTOR_REFERENCES_278
+OBJC_METH_VAR_NAME_279
+OBJC_SELECTOR_REFERENCES_280
+OBJC_CLASSLIST_REFERENCES_$_281
+OBJC_METH_VAR_NAME_282
+OBJC_SELECTOR_REFERENCES_283
+OBJC_METH_VAR_NAME_284
+OBJC_SELECTOR_REFERENCES_285
+.str286
+_unnamed_cfstring_287
+OBJC_IVAR_$_ADJPackageBuilder._attribution
+OBJC_IVAR_$_ADJPackageBuilder._purchaseTime
+OBJC_IVAR_$_ADJPackageBuilder._clickTime
+OBJC_IVAR_$_ADJPackageBuilder._iadDetails
+OBJC_IVAR_$_ADJPackageBuilder._deeplinkParameters
+OBJC_IVAR_$_ADJPackageBuilder._deviceInfo
+OBJC_IVAR_$_ADJPackageBuilder._activityState
+OBJC_IVAR_$_ADJPackageBuilder._adjustConfig
+OBJC_IVAR_$_ADJPackageBuilder._createdAt
+l_OBJC_METACLASS_RO_$_ADJPackageBuilder
+OBJC_CLASS_NAME_288
+OBJC_METH_VAR_NAME_289
+OBJC_METH_VAR_NAME_290
+OBJC_METH_VAR_TYPE_291
+OBJC_METH_VAR_NAME_292
+OBJC_METH_VAR_TYPE_293
+OBJC_METH_VAR_NAME_294
+OBJC_METH_VAR_NAME_295
+OBJC_METH_VAR_TYPE_296
+OBJC_METH_VAR_TYPE_297
+OBJC_METH_VAR_TYPE_298
+OBJC_METH_VAR_TYPE_299
+OBJC_METH_VAR_TYPE_300
+OBJC_METH_VAR_TYPE_301
+OBJC_METH_VAR_NAME_302
+OBJC_METH_VAR_TYPE_303
+OBJC_METH_VAR_NAME_304
+OBJC_METH_VAR_TYPE_305
+OBJC_METH_VAR_NAME_306
+OBJC_METH_VAR_NAME_307
+OBJC_METH_VAR_NAME_308
+OBJC_METH_VAR_NAME_309
+OBJC_METH_VAR_TYPE_310
+OBJC_METH_VAR_TYPE_311
+l_OBJC_$_INSTANCE_METHODS_ADJPackageBuilder
+OBJC_METH_VAR_NAME_312
+OBJC_METH_VAR_TYPE_313
+OBJC_METH_VAR_NAME_314
+OBJC_METH_VAR_TYPE_315
+OBJC_METH_VAR_NAME_316
+OBJC_METH_VAR_NAME_317
+OBJC_METH_VAR_TYPE_318
+OBJC_METH_VAR_NAME_319
+OBJC_METH_VAR_NAME_320
+OBJC_METH_VAR_TYPE_321
+OBJC_METH_VAR_NAME_322
+OBJC_METH_VAR_TYPE_323
+OBJC_METH_VAR_NAME_324
+OBJC_METH_VAR_TYPE_325
+OBJC_METH_VAR_NAME_326
+OBJC_METH_VAR_TYPE_327
+l_OBJC_$_INSTANCE_VARIABLES_ADJPackageBuilder
+OBJC_PROP_NAME_ATTR_328
+OBJC_PROP_NAME_ATTR_329
+OBJC_PROP_NAME_ATTR_330
+OBJC_PROP_NAME_ATTR_331
+OBJC_PROP_NAME_ATTR_332
+OBJC_PROP_NAME_ATTR_333
+OBJC_PROP_NAME_ATTR_334
+OBJC_PROP_NAME_ATTR_335
+OBJC_PROP_NAME_ATTR_336
+OBJC_PROP_NAME_ATTR_337
+OBJC_PROP_NAME_ATTR_338
+OBJC_PROP_NAME_ATTR_339
+OBJC_PROP_NAME_ATTR_340
+OBJC_PROP_NAME_ATTR_341
+OBJC_PROP_NAME_ATTR_342
+OBJC_PROP_NAME_ATTR_343
+OBJC_PROP_NAME_ATTR_344
+l_OBJC_$_PROP_LIST_ADJPackageBuilder
+l_OBJC_CLASS_RO_$_ADJPackageBuilder
+-[ADJPackageBuilder .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJPackageBuilder.m
+-[ADJPackageBuilder setCreatedAt:]
+-[ADJPackageBuilder createdAt]
+-[ADJPackageBuilder setAdjustConfig:]
+-[ADJPackageBuilder adjustConfig]
+-[ADJPackageBuilder setActivityState:]
+-[ADJPackageBuilder activityState]
+-[ADJPackageBuilder setDeviceInfo:]
+-[ADJPackageBuilder deviceInfo]
+-[ADJPackageBuilder setDeeplinkParameters:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJPackageBuilder.h
+-[ADJPackageBuilder deeplinkParameters]
+-[ADJPackageBuilder setIadDetails:]
+-[ADJPackageBuilder iadDetails]
+-[ADJPackageBuilder setClickTime:]
+-[ADJPackageBuilder clickTime]
+-[ADJPackageBuilder setPurchaseTime:]
+-[ADJPackageBuilder purchaseTime]
+-[ADJPackageBuilder setAttribution:]
+-[ADJPackageBuilder attribution]
+-[ADJPackageBuilder parameters:setNumber:forKey:]
+-[ADJPackageBuilder parameters:setBool:forKey:]
+-[ADJPackageBuilder parameters:setDictionary:forKey:]
+-[ADJPackageBuilder parameters:setDictionaryJson:forKey:]
+-[ADJPackageBuilder parameters:setDuration:forKey:]
+-[ADJPackageBuilder parameters:setDate:forKey:]
+-[ADJPackageBuilder parameters:setDate1970:forKey:]
+-[ADJPackageBuilder parameters:setInt:forKey:]
+-[ADJPackageBuilder parameters:setString:forKey:]
+-[ADJPackageBuilder eventSuffix:]
+-[ADJPackageBuilder injectCreatedAt:intoParameters:]
+-[ADJPackageBuilder injectActivityState:intoParamters:]
+-[ADJPackageBuilder injectConfig:intoParameters:]
+-[ADJPackageBuilder injectDeviceInfo:intoParameters:]
+-[ADJPackageBuilder injectDeviceInfoIds:intoParameters:]
+-[ADJPackageBuilder defaultParameters]
+-[ADJPackageBuilder idsParameters]
+-[ADJPackageBuilder defaultActivityPackage]
+-[ADJPackageBuilder buildAttributionPackage]
+-[ADJPackageBuilder buildClickPackage:]
+-[ADJPackageBuilder buildEventPackage:]
+-[ADJPackageBuilder buildSessionPackage]
+-[ADJPackageBuilder initWithDeviceInfo:activityState:config:createdAt:]
++[ADJDeviceInfo deviceInfoWithSdkPrefix:]
+-[ADJDeviceInfo initWithSdkPrefix:]
+-[ADJDeviceInfo copyWithZone:]
+-[ADJDeviceInfo idForAdvertisers]
+-[ADJDeviceInfo setIdForAdvertisers:]
+-[ADJDeviceInfo fbAttributionId]
+-[ADJDeviceInfo setFbAttributionId:]
+-[ADJDeviceInfo trackingEnabled]
+-[ADJDeviceInfo setTrackingEnabled:]
+-[ADJDeviceInfo vendorId]
+-[ADJDeviceInfo setVendorId:]
+-[ADJDeviceInfo pushToken]
+-[ADJDeviceInfo setPushToken:]
+-[ADJDeviceInfo clientSdk]
+-[ADJDeviceInfo setClientSdk:]
+-[ADJDeviceInfo bundeIdentifier]
+-[ADJDeviceInfo setBundeIdentifier:]
+-[ADJDeviceInfo bundleVersion]
+-[ADJDeviceInfo setBundleVersion:]
+-[ADJDeviceInfo bundleShortVersion]
+-[ADJDeviceInfo setBundleShortVersion:]
+-[ADJDeviceInfo deviceType]
+-[ADJDeviceInfo setDeviceType:]
+-[ADJDeviceInfo deviceName]
+-[ADJDeviceInfo setDeviceName:]
+-[ADJDeviceInfo osName]
+-[ADJDeviceInfo setOsName:]
+-[ADJDeviceInfo systemVersion]
+-[ADJDeviceInfo setSystemVersion:]
+-[ADJDeviceInfo languageCode]
+-[ADJDeviceInfo setLanguageCode:]
+-[ADJDeviceInfo countryCode]
+-[ADJDeviceInfo setCountryCode:]
+-[ADJDeviceInfo .cxx_destruct]
+OBJC_CLASSLIST_REFERENCES_$_10
+.str40
+_unnamed_cfstring_41
+OBJC_METH_VAR_NAME_42
+OBJC_SELECTOR_REFERENCES_43
+OBJC_SELECTOR_REFERENCES_45
+.str50
+_unnamed_cfstring_51
+OBJC_SELECTOR_REFERENCES_55
+OBJC_CLASSLIST_REFERENCES_$_66
+OBJC_CLASSLIST_REFERENCES_$_71
+.str72
+_unnamed_cfstring_73
+OBJC_METH_VAR_NAME_76
+OBJC_SELECTOR_REFERENCES_77
+OBJC_SELECTOR_REFERENCES_79
+OBJC_SELECTOR_REFERENCES_81
+OBJC_SELECTOR_REFERENCES_83
+OBJC_SELECTOR_REFERENCES_85
+OBJC_METH_VAR_NAME_90
+OBJC_SELECTOR_REFERENCES_91
+OBJC_SELECTOR_REFERENCES_99
+OBJC_METH_VAR_NAME_104
+OBJC_SELECTOR_REFERENCES_105
+OBJC_IVAR_$_ADJDeviceInfo._idForAdvertisers
+OBJC_IVAR_$_ADJDeviceInfo._fbAttributionId
+OBJC_IVAR_$_ADJDeviceInfo._trackingEnabled
+OBJC_IVAR_$_ADJDeviceInfo._vendorId
+OBJC_IVAR_$_ADJDeviceInfo._pushToken
+OBJC_IVAR_$_ADJDeviceInfo._clientSdk
+OBJC_IVAR_$_ADJDeviceInfo._bundeIdentifier
+OBJC_IVAR_$_ADJDeviceInfo._bundleVersion
+OBJC_IVAR_$_ADJDeviceInfo._bundleShortVersion
+OBJC_IVAR_$_ADJDeviceInfo._deviceType
+OBJC_IVAR_$_ADJDeviceInfo._deviceName
+OBJC_IVAR_$_ADJDeviceInfo._osName
+OBJC_IVAR_$_ADJDeviceInfo._systemVersion
+OBJC_IVAR_$_ADJDeviceInfo._languageCode
+OBJC_IVAR_$_ADJDeviceInfo._countryCode
+l_OBJC_$_CLASS_METHODS_ADJDeviceInfo
+l_OBJC_CLASS_PROTOCOLS_$_ADJDeviceInfo
+l_OBJC_METACLASS_RO_$_ADJDeviceInfo
+OBJC_CLASS_NAME_113
+l_OBJC_$_INSTANCE_METHODS_ADJDeviceInfo
+OBJC_METH_VAR_NAME_127
+OBJC_METH_VAR_NAME_134
+OBJC_METH_VAR_NAME_136
+l_OBJC_$_INSTANCE_VARIABLES_ADJDeviceInfo
+l_OBJC_$_PROP_LIST_ADJDeviceInfo
+l_OBJC_CLASS_RO_$_ADJDeviceInfo
+-[ADJDeviceInfo .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJDeviceInfo.m
+-[ADJDeviceInfo setCountryCode:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJDeviceInfo.h
+-[ADJDeviceInfo countryCode]
+-[ADJDeviceInfo setLanguageCode:]
+-[ADJDeviceInfo languageCode]
+-[ADJDeviceInfo setSystemVersion:]
+-[ADJDeviceInfo systemVersion]
+-[ADJDeviceInfo setOsName:]
+-[ADJDeviceInfo osName]
+-[ADJDeviceInfo setDeviceName:]
+-[ADJDeviceInfo deviceName]
+-[ADJDeviceInfo setDeviceType:]
+-[ADJDeviceInfo deviceType]
+-[ADJDeviceInfo setBundleShortVersion:]
+-[ADJDeviceInfo bundleShortVersion]
+-[ADJDeviceInfo setBundleVersion:]
+-[ADJDeviceInfo bundleVersion]
+-[ADJDeviceInfo setBundeIdentifier:]
+-[ADJDeviceInfo bundeIdentifier]
+-[ADJDeviceInfo setClientSdk:]
+-[ADJDeviceInfo clientSdk]
+-[ADJDeviceInfo setPushToken:]
+-[ADJDeviceInfo pushToken]
+-[ADJDeviceInfo setVendorId:]
+-[ADJDeviceInfo vendorId]
+-[ADJDeviceInfo setTrackingEnabled:]
+-[ADJDeviceInfo trackingEnabled]
+-[ADJDeviceInfo setFbAttributionId:]
+-[ADJDeviceInfo fbAttributionId]
+-[ADJDeviceInfo setIdForAdvertisers:]
+-[ADJDeviceInfo idForAdvertisers]
+-[ADJDeviceInfo copyWithZone:]
+-[ADJDeviceInfo initWithSdkPrefix:]
++[ADJDeviceInfo deviceInfoWithSdkPrefix:]
+-[NSString(ADJAdditions) adjTrim]
+-[NSString(ADJAdditions) adjUrlEncode]
+-[NSString(ADJAdditions) adjRemoveColons]
++[NSString(ADJAdditions) adjJoin:]
++[NSString(ADJAdditions) adjIsEqual:toString:]
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_NSString_$_ADJAdditions
+OBJC_METH_VAR_TYPE_19
+OBJC_METH_VAR_TYPE_21
+l_OBJC_$_CATEGORY_CLASS_METHODS_NSString_$_ADJAdditions
+l_OBJC_$_CATEGORY_NSString_$_ADJAdditions
+CFBridgingRelease
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSObject.h
++[NSString(ADJAdditions) adjIsEqual:toString:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJAdditions/NSString+ADJAdditions.m
++[NSString(ADJAdditions) adjJoin:]
+-[NSString(ADJAdditions) adjRemoveColons]
+-[NSString(ADJAdditions) adjUrlEncode]
+-[NSString(ADJAdditions) adjTrim]
++[ADJPackageHandler handlerWithActivityHandler:startPaused:]
+-[ADJPackageHandler initWithActivityHandler:startPaused:]
+__57-[ADJPackageHandler initWithActivityHandler:startPaused:]_block_invoke
+-[ADJPackageHandler addPackage:]
+__32-[ADJPackageHandler addPackage:]_block_invoke
+__copy_helper_block_14
+__destroy_helper_block_15
+-[ADJPackageHandler sendFirstPackage]
+__37-[ADJPackageHandler sendFirstPackage]_block_invoke
+__copy_helper_block_19
+__destroy_helper_block_20
+-[ADJPackageHandler sendNextPackage]
+__36-[ADJPackageHandler sendNextPackage]_block_invoke
+__copy_helper_block_24
+__destroy_helper_block_25
+-[ADJPackageHandler closeFirstPackage]
+-[ADJPackageHandler pauseSending]
+-[ADJPackageHandler resumeSending]
+-[ADJPackageHandler finishedTracking:]
+-[ADJPackageHandler initInternal:startPaused:]
+-[ADJPackageHandler addInternal:]
+-[ADJPackageHandler sendFirstInternal]
+-[ADJPackageHandler sendNextInternal]
+-[ADJPackageHandler readPackageQueue]
+-[ADJPackageHandler writePackageQueue]
+-[ADJPackageHandler packageQueueFilename]
+-[ADJPackageHandler internalQueue]
+-[ADJPackageHandler setInternalQueue:]
+-[ADJPackageHandler sendingSemaphore]
+-[ADJPackageHandler setSendingSemaphore:]
+-[ADJPackageHandler activityHandler]
+-[ADJPackageHandler setActivityHandler:]
+-[ADJPackageHandler requestHandler]
+-[ADJPackageHandler setRequestHandler:]
+-[ADJPackageHandler logger]
+-[ADJPackageHandler setLogger:]
+-[ADJPackageHandler packageQueue]
+-[ADJPackageHandler setPackageQueue:]
+-[ADJPackageHandler paused]
+-[ADJPackageHandler setPaused:]
+-[ADJPackageHandler .cxx_destruct]
+__block_descriptor_tmp16
+__block_descriptor_tmp21
+__block_descriptor_tmp26
+.str64
+_unnamed_cfstring_65
+OBJC_METH_VAR_NAME_66
+OBJC_SELECTOR_REFERENCES_67
+.str74
+_unnamed_cfstring_75
+.str76
+_unnamed_cfstring_77
+OBJC_CLASSLIST_REFERENCES_$_80
+.str85
+_unnamed_cfstring_86
+OBJC_CLASSLIST_REFERENCES_$_95
+.str96
+_unnamed_cfstring_97
+OBJC_CLASSLIST_REFERENCES_$_104
+_unnamed_cfstring_108
+.str111
+_unnamed_cfstring_112
+OBJC_CLASSLIST_REFERENCES_$_115
+OBJC_SELECTOR_REFERENCES_117
+OBJC_CLASSLIST_REFERENCES_$_118
+OBJC_CLASSLIST_REFERENCES_$_121
+.str124
+_unnamed_cfstring_125
+.str126
+_unnamed_cfstring_127
+OBJC_SELECTOR_REFERENCES_129
+OBJC_IVAR_$_ADJPackageHandler._internalQueue
+OBJC_IVAR_$_ADJPackageHandler._sendingSemaphore
+OBJC_IVAR_$_ADJPackageHandler._activityHandler
+OBJC_IVAR_$_ADJPackageHandler._requestHandler
+OBJC_IVAR_$_ADJPackageHandler._logger
+OBJC_IVAR_$_ADJPackageHandler._packageQueue
+OBJC_IVAR_$_ADJPackageHandler._paused
+l_OBJC_$_CLASS_METHODS_ADJPackageHandler
+OBJC_METH_VAR_TYPE_133
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_ADJPackageHandler
+l_OBJC_$_PROTOCOL_METHOD_TYPES_ADJPackageHandler
+l_OBJC_PROTOCOL_$_ADJPackageHandler
+l_OBJC_LABEL_PROTOCOL_$_ADJPackageHandler
+l_OBJC_CLASS_PROTOCOLS_$_ADJPackageHandler
+l_OBJC_METACLASS_RO_$_ADJPackageHandler
+OBJC_CLASS_NAME_142
+OBJC_METH_VAR_TYPE_143
+OBJC_METH_VAR_TYPE_147
+l_OBJC_$_INSTANCE_METHODS_ADJPackageHandler
+OBJC_METH_VAR_TYPE_149
+OBJC_METH_VAR_TYPE_151
+OBJC_METH_VAR_TYPE_153
+OBJC_METH_VAR_TYPE_155
+OBJC_METH_VAR_NAME_156
+OBJC_METH_VAR_TYPE_157
+OBJC_METH_VAR_TYPE_159
+OBJC_METH_VAR_TYPE_161
+l_OBJC_$_INSTANCE_VARIABLES_ADJPackageHandler
+OBJC_PROP_NAME_ATTR_167
+OBJC_PROP_NAME_ATTR_168
+OBJC_PROP_NAME_ATTR_169
+OBJC_PROP_NAME_ATTR_170
+OBJC_PROP_NAME_ATTR_171
+OBJC_PROP_NAME_ATTR_172
+OBJC_PROP_NAME_ATTR_173
+OBJC_PROP_NAME_ATTR_174
+l_OBJC_$_PROP_LIST_ADJPackageHandler
+l_OBJC_CLASS_RO_$_ADJPackageHandler
+.str175
+-[ADJPackageHandler .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJPackageHandler.m
+-[ADJPackageHandler setPaused:]
+-[ADJPackageHandler paused]
+-[ADJPackageHandler setPackageQueue:]
+-[ADJPackageHandler packageQueue]
+-[ADJPackageHandler setLogger:]
+-[ADJPackageHandler logger]
+-[ADJPackageHandler setRequestHandler:]
+-[ADJPackageHandler requestHandler]
+-[ADJPackageHandler setActivityHandler:]
+-[ADJPackageHandler activityHandler]
+-[ADJPackageHandler setSendingSemaphore:]
+-[ADJPackageHandler sendingSemaphore]
+-[ADJPackageHandler setInternalQueue:]
+-[ADJPackageHandler internalQueue]
+-[ADJPackageHandler packageQueueFilename]
+-[ADJPackageHandler writePackageQueue]
+-[ADJPackageHandler readPackageQueue]
+-[ADJPackageHandler sendNextInternal]
+-[ADJPackageHandler sendFirstInternal]
+-[ADJPackageHandler addInternal:]
+-[ADJPackageHandler initInternal:startPaused:]
+-[ADJPackageHandler finishedTracking:]
+-[ADJPackageHandler resumeSending]
+-[ADJPackageHandler pauseSending]
+-[ADJPackageHandler closeFirstPackage]
+-[ADJPackageHandler sendNextPackage]
+-[ADJPackageHandler sendFirstPackage]
+-[ADJPackageHandler addPackage:]
+-[ADJPackageHandler initWithActivityHandler:startPaused:]
++[ADJPackageHandler handlerWithActivityHandler:startPaused:]
++[ADJActivityHandler handlerWithConfig:]
+-[ADJActivityHandler initWithConfig:]
+__37-[ADJActivityHandler initWithConfig:]_block_invoke
+-[ADJActivityHandler trackSubsessionStart]
+__42-[ADJActivityHandler trackSubsessionStart]_block_invoke
+-[ADJActivityHandler trackSubsessionEnd]
+__40-[ADJActivityHandler trackSubsessionEnd]_block_invoke
+__copy_helper_block_44
+__destroy_helper_block_45
+-[ADJActivityHandler trackEvent:]
+__33-[ADJActivityHandler trackEvent:]_block_invoke
+__copy_helper_block_49
+__destroy_helper_block_50
+-[ADJActivityHandler finishedTracking:]
+-[ADJActivityHandler launchDeepLink:]
+-[ADJActivityHandler setEnabled:]
+-[ADJActivityHandler setOfflineMode:]
+-[ADJActivityHandler isEnabled]
+-[ADJActivityHandler hasChangedState:nextState:trueMessage:falseMessage:]
+-[ADJActivityHandler updateState:pausingMessage:remainsPausedMessage:unPausingMessage:]
+-[ADJActivityHandler appWillOpenUrl:]
+__37-[ADJActivityHandler appWillOpenUrl:]_block_invoke
+__copy_helper_block_127
+__destroy_helper_block_128
+-[ADJActivityHandler setDeviceToken:]
+__37-[ADJActivityHandler setDeviceToken:]_block_invoke
+__copy_helper_block_132
+__destroy_helper_block_133
+-[ADJActivityHandler setIadDate:withPurchaseDate:]
+-[ADJActivityHandler setIadDetails:error:retriesLeft:]
+__54-[ADJActivityHandler setIadDetails:error:retriesLeft:]_block_invoke
+__copy_helper_block_180
+__destroy_helper_block_181
+-[ADJActivityHandler updateAttribution:]
+-[ADJActivityHandler launchAttributionDelegate]
+-[ADJActivityHandler setAskingAttribution:]
+-[ADJActivityHandler updateStatus]
+__34-[ADJActivityHandler updateStatus]_block_invoke
+__copy_helper_block_207
+__destroy_helper_block_208
+-[ADJActivityHandler initInternal]
+__34-[ADJActivityHandler initInternal]_block_invoke
+__copy_helper_block_250
+__destroy_helper_block_251
+-[ADJActivityHandler startInternal]
+-[ADJActivityHandler processSession]
+-[ADJActivityHandler checkAttributionState]
+-[ADJActivityHandler endInternal]
+-[ADJActivityHandler eventInternal:]
+-[ADJActivityHandler appWillOpenUrlInternal:]
+-[ADJActivityHandler readDeeplinkQueryString:adjustDeepLinks:attribution:]
+-[ADJActivityHandler trySetAttributionDeeplink:withKey:withValue:]
+-[ADJActivityHandler setDeviceTokenInternal:]
+-[ADJActivityHandler updateActivityState:]
+-[ADJActivityHandler writeActivityState]
+-[ADJActivityHandler writeAttribution]
+-[ADJActivityHandler readActivityState]
+-[ADJActivityHandler readAttribution]
+-[ADJActivityHandler transferSessionPackage:]
+-[ADJActivityHandler updateStatusInternal]
+-[ADJActivityHandler updateAttributionHandlerStatus]
+-[ADJActivityHandler updatePackageHandlerStatus]
+-[ADJActivityHandler paused]
+-[ADJActivityHandler startTimer]
+-[ADJActivityHandler stopTimer]
+-[ADJActivityHandler timerFiredInternal]
+-[ADJActivityHandler addNotificationObserver]
+-[ADJActivityHandler removeNotificationObserver]
+-[ADJActivityHandler checkTransactionId:]
+-[ADJActivityHandler checkEvent:]
+-[ADJActivityHandler internalQueue]
+-[ADJActivityHandler setInternalQueue:]
+-[ADJActivityHandler packageHandler]
+-[ADJActivityHandler setPackageHandler:]
+-[ADJActivityHandler attributionHandler]
+-[ADJActivityHandler setAttributionHandler:]
+-[ADJActivityHandler activityState]
+-[ADJActivityHandler setActivityState:]
+-[ADJActivityHandler timer]
+-[ADJActivityHandler setTimer:]
+-[ADJActivityHandler logger]
+-[ADJActivityHandler setLogger:]
+-[ADJActivityHandler delegate]
+-[ADJActivityHandler setDelegate:]
+-[ADJActivityHandler attribution]
+-[ADJActivityHandler setAttribution:]
+-[ADJActivityHandler adjustConfig]
+-[ADJActivityHandler setAdjustConfig:]
+-[ADJActivityHandler enabled]
+-[ADJActivityHandler offline]
+-[ADJActivityHandler setOffline:]
+-[ADJActivityHandler deviceInfo]
+-[ADJActivityHandler setDeviceInfo:]
+-[ADJActivityHandler .cxx_destruct]
+.str18
+_unnamed_cfstring_19
+OBJC_IVAR_$_ADJActivityHandler._enabled
+.str36
+__block_descriptor_tmp41
+__block_descriptor_tmp46
+__block_descriptor_tmp51
+OBJC_CLASSLIST_REFERENCES_$_65
+.str68
+_unnamed_cfstring_69
+OBJC_CLASSLIST_REFERENCES_$_72
+.str95
+_unnamed_cfstring_96
+.str105
+_unnamed_cfstring_106
+OBJC_METH_VAR_NAME_121
+OBJC_SELECTOR_REFERENCES_122
+OBJC_SELECTOR_REFERENCES_126
+__block_descriptor_tmp129
+OBJC_SELECTOR_REFERENCES_131
+__block_descriptor_tmp134
+.str135
+_unnamed_cfstring_136
+.str139
+_unnamed_cfstring_140
+OBJC_CLASSLIST_REFERENCES_$_141
+OBJC_CLASSLIST_REFERENCES_$_146
+OBJC_SELECTOR_REFERENCES_150
+OBJC_SELECTOR_REFERENCES_152
+OBJC_METH_VAR_NAME_153
+OBJC_SELECTOR_REFERENCES_154
+OBJC_METH_VAR_NAME_155
+OBJC_SELECTOR_REFERENCES_156
+.str157
+_unnamed_cfstring_158
+OBJC_METH_VAR_NAME_159
+OBJC_SELECTOR_REFERENCES_160
+OBJC_METH_VAR_NAME_161
+OBJC_SELECTOR_REFERENCES_162
+OBJC_METH_VAR_NAME_163
+OBJC_SELECTOR_REFERENCES_164
+.str165
+_unnamed_cfstring_166
+OBJC_METH_VAR_NAME_167
+OBJC_SELECTOR_REFERENCES_168
+.str169
+_unnamed_cfstring_170
+.str171
+_unnamed_cfstring_172
+OBJC_METH_VAR_NAME_173
+OBJC_SELECTOR_REFERENCES_174
+OBJC_CLASSLIST_REFERENCES_$_175
+OBJC_METH_VAR_NAME_176
+OBJC_SELECTOR_REFERENCES_177
+__block_descriptor_tmp182
+OBJC_METH_VAR_NAME_183
+OBJC_SELECTOR_REFERENCES_184
+.str185
+_unnamed_cfstring_186
+OBJC_METH_VAR_NAME_187
+OBJC_SELECTOR_REFERENCES_188
+OBJC_SELECTOR_REFERENCES_190
+OBJC_SELECTOR_REFERENCES_192
+OBJC_METH_VAR_NAME_193
+OBJC_SELECTOR_REFERENCES_194
+OBJC_SELECTOR_REFERENCES_196
+OBJC_SELECTOR_REFERENCES_198
+OBJC_SELECTOR_REFERENCES_200
+OBJC_METH_VAR_NAME_201
+OBJC_SELECTOR_REFERENCES_202
+OBJC_METH_VAR_NAME_203
+OBJC_SELECTOR_REFERENCES_204
+OBJC_METH_VAR_NAME_205
+OBJC_SELECTOR_REFERENCES_206
+__block_descriptor_tmp209
+OBJC_CLASSLIST_REFERENCES_$_210
+OBJC_METH_VAR_NAME_211
+OBJC_SELECTOR_REFERENCES_212
+OBJC_METH_VAR_NAME_213
+OBJC_SELECTOR_REFERENCES_214
+OBJC_METH_VAR_NAME_215
+OBJC_SELECTOR_REFERENCES_216
+OBJC_METH_VAR_NAME_217
+OBJC_SELECTOR_REFERENCES_218
+OBJC_METH_VAR_NAME_219
+OBJC_SELECTOR_REFERENCES_220
+OBJC_METH_VAR_NAME_221
+OBJC_SELECTOR_REFERENCES_222
+OBJC_METH_VAR_NAME_223
+OBJC_SELECTOR_REFERENCES_224
+OBJC_METH_VAR_NAME_225
+OBJC_SELECTOR_REFERENCES_226
+.str227
+_unnamed_cfstring_228
+OBJC_METH_VAR_NAME_229
+OBJC_SELECTOR_REFERENCES_230
+.str231
+_unnamed_cfstring_232
+OBJC_METH_VAR_NAME_233
+OBJC_SELECTOR_REFERENCES_234
+OBJC_METH_VAR_NAME_235
+OBJC_SELECTOR_REFERENCES_236
+OBJC_METH_VAR_NAME_237
+OBJC_SELECTOR_REFERENCES_238
+OBJC_METH_VAR_NAME_239
+OBJC_SELECTOR_REFERENCES_240
+OBJC_METH_VAR_NAME_241
+OBJC_SELECTOR_REFERENCES_242
+OBJC_METH_VAR_NAME_243
+OBJC_SELECTOR_REFERENCES_244
+OBJC_METH_VAR_NAME_245
+OBJC_SELECTOR_REFERENCES_246
+OBJC_CLASSLIST_REFERENCES_$_247
+OBJC_METH_VAR_NAME_248
+OBJC_SELECTOR_REFERENCES_249
+__block_descriptor_tmp252
+OBJC_METH_VAR_NAME_253
+OBJC_SELECTOR_REFERENCES_254
+OBJC_METH_VAR_NAME_261
+OBJC_SELECTOR_REFERENCES_262
+OBJC_METH_VAR_NAME_263
+OBJC_SELECTOR_REFERENCES_264
+OBJC_METH_VAR_NAME_265
+OBJC_SELECTOR_REFERENCES_266
+OBJC_CLASSLIST_REFERENCES_$_267
+OBJC_METH_VAR_NAME_270
+OBJC_SELECTOR_REFERENCES_271
+OBJC_METH_VAR_NAME_272
+OBJC_SELECTOR_REFERENCES_273
+OBJC_METH_VAR_NAME_274
+OBJC_SELECTOR_REFERENCES_275
+OBJC_METH_VAR_NAME_276
+OBJC_SELECTOR_REFERENCES_277
+.str278
+_unnamed_cfstring_279
+OBJC_METH_VAR_NAME_280
+OBJC_SELECTOR_REFERENCES_281
+OBJC_METH_VAR_NAME_286
+OBJC_SELECTOR_REFERENCES_287
+OBJC_METH_VAR_NAME_288
+OBJC_SELECTOR_REFERENCES_289
+OBJC_SELECTOR_REFERENCES_291
+OBJC_SELECTOR_REFERENCES_293
+OBJC_SELECTOR_REFERENCES_295
+OBJC_METH_VAR_NAME_296
+OBJC_SELECTOR_REFERENCES_297
+.str298
+_unnamed_cfstring_299
+OBJC_METH_VAR_NAME_300
+OBJC_SELECTOR_REFERENCES_301
+OBJC_SELECTOR_REFERENCES_303
+OBJC_SELECTOR_REFERENCES_305
+OBJC_SELECTOR_REFERENCES_307
+OBJC_SELECTOR_REFERENCES_309
+OBJC_METH_VAR_NAME_310
+OBJC_SELECTOR_REFERENCES_311
+OBJC_SELECTOR_REFERENCES_313
+OBJC_SELECTOR_REFERENCES_315
+OBJC_SELECTOR_REFERENCES_317
+OBJC_METH_VAR_NAME_318
+OBJC_SELECTOR_REFERENCES_319
+OBJC_SELECTOR_REFERENCES_321
+.str322
+_unnamed_cfstring_323
+OBJC_SELECTOR_REFERENCES_325
+OBJC_SELECTOR_REFERENCES_327
+OBJC_METH_VAR_NAME_328
+OBJC_SELECTOR_REFERENCES_329
+.str330
+_unnamed_cfstring_331
+OBJC_METH_VAR_NAME_332
+OBJC_SELECTOR_REFERENCES_333
+OBJC_CLASSLIST_REFERENCES_$_334
+OBJC_METH_VAR_NAME_335
+OBJC_SELECTOR_REFERENCES_336
+OBJC_CLASSLIST_REFERENCES_$_337
+OBJC_METH_VAR_NAME_338
+OBJC_SELECTOR_REFERENCES_339
+OBJC_METH_VAR_NAME_340
+OBJC_SELECTOR_REFERENCES_341
+OBJC_METH_VAR_NAME_342
+OBJC_SELECTOR_REFERENCES_343
+.str344
+_unnamed_cfstring_345
+OBJC_METH_VAR_NAME_346
+OBJC_SELECTOR_REFERENCES_347
+OBJC_METH_VAR_NAME_348
+OBJC_SELECTOR_REFERENCES_349
+OBJC_METH_VAR_NAME_350
+OBJC_SELECTOR_REFERENCES_351
+OBJC_METH_VAR_NAME_352
+OBJC_SELECTOR_REFERENCES_353
+OBJC_METH_VAR_NAME_354
+OBJC_SELECTOR_REFERENCES_355
+OBJC_METH_VAR_NAME_356
+OBJC_SELECTOR_REFERENCES_357
+OBJC_METH_VAR_NAME_358
+OBJC_SELECTOR_REFERENCES_359
+.str360
+_unnamed_cfstring_361
+OBJC_METH_VAR_NAME_362
+OBJC_SELECTOR_REFERENCES_363
+.str364
+_unnamed_cfstring_365
+OBJC_METH_VAR_NAME_366
+OBJC_SELECTOR_REFERENCES_367
+.str368
+_unnamed_cfstring_369
+OBJC_METH_VAR_NAME_370
+OBJC_SELECTOR_REFERENCES_371
+.str372
+_unnamed_cfstring_373
+OBJC_METH_VAR_NAME_374
+OBJC_SELECTOR_REFERENCES_375
+OBJC_METH_VAR_NAME_376
+OBJC_SELECTOR_REFERENCES_377
+OBJC_CLASSLIST_REFERENCES_$_378
+.str379
+_unnamed_cfstring_380
+OBJC_METH_VAR_NAME_381
+OBJC_SELECTOR_REFERENCES_382
+OBJC_METH_VAR_NAME_383
+OBJC_SELECTOR_REFERENCES_384
+.str385
+_unnamed_cfstring_386
+.str387
+_unnamed_cfstring_388
+OBJC_METH_VAR_NAME_389
+OBJC_SELECTOR_REFERENCES_390
+OBJC_METH_VAR_NAME_391
+OBJC_SELECTOR_REFERENCES_392
+OBJC_METH_VAR_NAME_393
+OBJC_SELECTOR_REFERENCES_394
+OBJC_METH_VAR_NAME_395
+OBJC_SELECTOR_REFERENCES_396
+.str397
+_unnamed_cfstring_398
+OBJC_METH_VAR_NAME_399
+OBJC_SELECTOR_REFERENCES_400
+.str401
+_unnamed_cfstring_402
+OBJC_CLASSLIST_REFERENCES_$_403
+OBJC_METH_VAR_NAME_404
+OBJC_SELECTOR_REFERENCES_405
+.str406
+_unnamed_cfstring_407
+OBJC_METH_VAR_NAME_408
+OBJC_SELECTOR_REFERENCES_409
+OBJC_METH_VAR_NAME_410
+OBJC_SELECTOR_REFERENCES_411
+OBJC_METH_VAR_NAME_412
+OBJC_SELECTOR_REFERENCES_413
+OBJC_METH_VAR_NAME_414
+OBJC_SELECTOR_REFERENCES_415
+OBJC_METH_VAR_NAME_416
+OBJC_SELECTOR_REFERENCES_417
+OBJC_METH_VAR_NAME_418
+OBJC_SELECTOR_REFERENCES_419
+OBJC_METH_VAR_NAME_420
+OBJC_SELECTOR_REFERENCES_421
+OBJC_METH_VAR_NAME_422
+OBJC_SELECTOR_REFERENCES_423
+OBJC_METH_VAR_NAME_424
+OBJC_SELECTOR_REFERENCES_425
+.str426
+_unnamed_cfstring_427
+OBJC_CLASSLIST_REFERENCES_$_428
+OBJC_METH_VAR_NAME_429
+OBJC_SELECTOR_REFERENCES_430
+OBJC_METH_VAR_NAME_431
+OBJC_SELECTOR_REFERENCES_432
+OBJC_METH_VAR_NAME_433
+OBJC_SELECTOR_REFERENCES_434
+OBJC_METH_VAR_NAME_435
+OBJC_SELECTOR_REFERENCES_436
+OBJC_METH_VAR_NAME_437
+OBJC_SELECTOR_REFERENCES_438
+.str439
+_unnamed_cfstring_440
+.str441
+_unnamed_cfstring_442
+OBJC_METH_VAR_NAME_443
+OBJC_SELECTOR_REFERENCES_444
+OBJC_METH_VAR_NAME_445
+OBJC_SELECTOR_REFERENCES_446
+.str447
+_unnamed_cfstring_448
+.str449
+_unnamed_cfstring_450
+.str451
+_unnamed_cfstring_452
+OBJC_IVAR_$_ADJActivityHandler._internalQueue
+OBJC_IVAR_$_ADJActivityHandler._packageHandler
+OBJC_IVAR_$_ADJActivityHandler._attributionHandler
+OBJC_IVAR_$_ADJActivityHandler._activityState
+OBJC_IVAR_$_ADJActivityHandler._timer
+OBJC_IVAR_$_ADJActivityHandler._logger
+OBJC_IVAR_$_ADJActivityHandler._delegate
+OBJC_IVAR_$_ADJActivityHandler._attribution
+OBJC_IVAR_$_ADJActivityHandler._adjustConfig
+OBJC_IVAR_$_ADJActivityHandler._offline
+OBJC_IVAR_$_ADJActivityHandler._deviceInfo
+OBJC_METH_VAR_NAME_453
+l_OBJC_$_CLASS_METHODS_ADJActivityHandler
+OBJC_METH_VAR_TYPE_454
+OBJC_METH_VAR_TYPE_455
+OBJC_METH_VAR_NAME_456
+OBJC_METH_VAR_TYPE_457
+OBJC_METH_VAR_TYPE_458
+OBJC_METH_VAR_NAME_459
+OBJC_METH_VAR_TYPE_460
+OBJC_METH_VAR_TYPE_461
+OBJC_METH_VAR_TYPE_462
+OBJC_METH_VAR_NAME_463
+OBJC_METH_VAR_TYPE_464
+OBJC_METH_VAR_NAME_465
+OBJC_METH_VAR_TYPE_466
+OBJC_METH_VAR_TYPE_467
+OBJC_METH_VAR_TYPE_468
+OBJC_METH_VAR_TYPE_469
+OBJC_METH_VAR_NAME_470
+OBJC_METH_VAR_TYPE_471
+OBJC_METH_VAR_TYPE_472
+OBJC_METH_VAR_NAME_473
+OBJC_METH_VAR_TYPE_474
+OBJC_METH_VAR_TYPE_475
+OBJC_METH_VAR_NAME_476
+OBJC_METH_VAR_TYPE_477
+OBJC_METH_VAR_TYPE_478
+OBJC_METH_VAR_NAME_479
+OBJC_METH_VAR_TYPE_480
+OBJC_METH_VAR_NAME_481
+OBJC_METH_VAR_NAME_482
+OBJC_METH_VAR_TYPE_483
+OBJC_METH_VAR_NAME_484
+OBJC_METH_VAR_TYPE_485
+OBJC_METH_VAR_NAME_486
+OBJC_METH_VAR_TYPE_487
+OBJC_METH_VAR_NAME_488
+OBJC_METH_VAR_NAME_489
+OBJC_METH_VAR_TYPE_490
+OBJC_METH_VAR_NAME_491
+OBJC_METH_VAR_NAME_492
+OBJC_METH_VAR_TYPE_493
+OBJC_METH_VAR_TYPE_494
+OBJC_METH_VAR_NAME_495
+OBJC_METH_VAR_NAME_496
+OBJC_METH_VAR_TYPE_497
+OBJC_METH_VAR_NAME_498
+OBJC_METH_VAR_NAME_499
+OBJC_METH_VAR_TYPE_500
+OBJC_METH_VAR_NAME_501
+OBJC_METH_VAR_TYPE_502
+OBJC_METH_VAR_NAME_503
+OBJC_METH_VAR_NAME_504
+OBJC_METH_VAR_TYPE_505
+OBJC_METH_VAR_NAME_506
+OBJC_CLASS_NAME_507
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_NSObject
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_OPT_NSObject
+OBJC_PROP_NAME_ATTR_508
+OBJC_PROP_NAME_ATTR_509
+OBJC_PROP_NAME_ATTR_510
+OBJC_PROP_NAME_ATTR_511
+OBJC_PROP_NAME_ATTR_512
+OBJC_PROP_NAME_ATTR_513
+l_OBJC_$_PROP_LIST_NSObject
+l_OBJC_$_PROTOCOL_METHOD_TYPES_NSObject
+l_OBJC_PROTOCOL_$_NSObject
+l_OBJC_LABEL_PROTOCOL_$_NSObject
+l_OBJC_$_PROTOCOL_REFS_ADJActivityHandler
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_ADJActivityHandler
+l_OBJC_$_PROTOCOL_METHOD_TYPES_ADJActivityHandler
+l_OBJC_PROTOCOL_$_ADJActivityHandler
+l_OBJC_LABEL_PROTOCOL_$_ADJActivityHandler
+l_OBJC_CLASS_PROTOCOLS_$_ADJActivityHandler
+l_OBJC_METACLASS_RO_$_ADJActivityHandler
+OBJC_CLASS_NAME_514
+OBJC_METH_VAR_TYPE_515
+OBJC_METH_VAR_TYPE_516
+OBJC_METH_VAR_NAME_517
+OBJC_METH_VAR_TYPE_518
+OBJC_METH_VAR_TYPE_519
+OBJC_METH_VAR_TYPE_520
+OBJC_METH_VAR_NAME_521
+l_OBJC_$_INSTANCE_METHODS_ADJActivityHandler
+OBJC_METH_VAR_NAME_522
+OBJC_METH_VAR_TYPE_523
+OBJC_METH_VAR_NAME_524
+OBJC_METH_VAR_NAME_525
+OBJC_METH_VAR_TYPE_526
+OBJC_METH_VAR_NAME_527
+OBJC_METH_VAR_TYPE_528
+OBJC_METH_VAR_NAME_529
+OBJC_METH_VAR_TYPE_530
+OBJC_METH_VAR_NAME_531
+OBJC_METH_VAR_TYPE_532
+OBJC_METH_VAR_NAME_533
+OBJC_METH_VAR_TYPE_534
+OBJC_METH_VAR_NAME_535
+OBJC_METH_VAR_TYPE_536
+OBJC_METH_VAR_NAME_537
+OBJC_METH_VAR_TYPE_538
+OBJC_METH_VAR_NAME_539
+OBJC_METH_VAR_TYPE_540
+OBJC_METH_VAR_NAME_541
+OBJC_METH_VAR_TYPE_542
+OBJC_METH_VAR_NAME_543
+OBJC_METH_VAR_TYPE_544
+l_OBJC_$_INSTANCE_VARIABLES_ADJActivityHandler
+OBJC_CLASS_NAME_545
+OBJC_PROP_NAME_ATTR_546
+OBJC_PROP_NAME_ATTR_547
+OBJC_PROP_NAME_ATTR_548
+OBJC_PROP_NAME_ATTR_549
+OBJC_PROP_NAME_ATTR_550
+OBJC_PROP_NAME_ATTR_551
+OBJC_PROP_NAME_ATTR_552
+OBJC_PROP_NAME_ATTR_553
+OBJC_PROP_NAME_ATTR_554
+OBJC_PROP_NAME_ATTR_555
+OBJC_PROP_NAME_ATTR_556
+OBJC_PROP_NAME_ATTR_557
+OBJC_PROP_NAME_ATTR_558
+OBJC_PROP_NAME_ATTR_559
+OBJC_PROP_NAME_ATTR_560
+OBJC_PROP_NAME_ATTR_561
+OBJC_PROP_NAME_ATTR_562
+OBJC_PROP_NAME_ATTR_563
+OBJC_PROP_NAME_ATTR_564
+OBJC_PROP_NAME_ATTR_565
+OBJC_PROP_NAME_ATTR_566
+OBJC_PROP_NAME_ATTR_567
+OBJC_PROP_NAME_ATTR_568
+OBJC_PROP_NAME_ATTR_569
+l_OBJC_$_PROP_LIST_ADJActivityHandler
+l_OBJC_CLASS_RO_$_ADJActivityHandler
+.str570
+-[ADJActivityHandler .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJActivityHandler.m
+-[ADJActivityHandler setDeviceInfo:]
+-[ADJActivityHandler deviceInfo]
+-[ADJActivityHandler setOffline:]
+-[ADJActivityHandler offline]
+-[ADJActivityHandler enabled]
+-[ADJActivityHandler setAdjustConfig:]
+-[ADJActivityHandler adjustConfig]
+-[ADJActivityHandler setAttribution:]
+-[ADJActivityHandler attribution]
+-[ADJActivityHandler setDelegate:]
+-[ADJActivityHandler delegate]
+-[ADJActivityHandler setLogger:]
+-[ADJActivityHandler logger]
+-[ADJActivityHandler setTimer:]
+-[ADJActivityHandler timer]
+-[ADJActivityHandler setActivityState:]
+-[ADJActivityHandler activityState]
+-[ADJActivityHandler setAttributionHandler:]
+-[ADJActivityHandler attributionHandler]
+-[ADJActivityHandler setPackageHandler:]
+-[ADJActivityHandler packageHandler]
+-[ADJActivityHandler setInternalQueue:]
+-[ADJActivityHandler internalQueue]
+-[ADJActivityHandler checkEvent:]
+-[ADJActivityHandler checkTransactionId:]
+-[ADJActivityHandler removeNotificationObserver]
+-[ADJActivityHandler addNotificationObserver]
+-[ADJActivityHandler timerFiredInternal]
+-[ADJActivityHandler stopTimer]
+-[ADJActivityHandler startTimer]
+-[ADJActivityHandler paused]
+-[ADJActivityHandler updatePackageHandlerStatus]
+-[ADJActivityHandler updateAttributionHandlerStatus]
+-[ADJActivityHandler updateStatusInternal]
+-[ADJActivityHandler transferSessionPackage:]
+-[ADJActivityHandler readAttribution]
+-[ADJActivityHandler readActivityState]
+-[ADJActivityHandler writeAttribution]
+-[ADJActivityHandler writeActivityState]
+-[ADJActivityHandler updateActivityState:]
+-[ADJActivityHandler setDeviceTokenInternal:]
+-[ADJActivityHandler trySetAttributionDeeplink:withKey:withValue:]
+-[ADJActivityHandler readDeeplinkQueryString:adjustDeepLinks:attribution:]
+-[ADJActivityHandler appWillOpenUrlInternal:]
+-[ADJActivityHandler eventInternal:]
+-[ADJActivityHandler endInternal]
+-[ADJActivityHandler checkAttributionState]
+-[ADJActivityHandler processSession]
+-[ADJActivityHandler startInternal]
+-[ADJActivityHandler initInternal]
+-[ADJActivityHandler updateStatus]
+-[ADJActivityHandler setAskingAttribution:]
+-[ADJActivityHandler launchAttributionDelegate]
+-[ADJActivityHandler updateAttribution:]
+-[ADJActivityHandler setIadDetails:error:retriesLeft:]
+-[ADJActivityHandler setIadDate:withPurchaseDate:]
+-[ADJActivityHandler setDeviceToken:]
+-[ADJActivityHandler appWillOpenUrl:]
+-[ADJActivityHandler updateState:pausingMessage:remainsPausedMessage:unPausingMessage:]
+-[ADJActivityHandler hasChangedState:nextState:trueMessage:falseMessage:]
+-[ADJActivityHandler isEnabled]
+-[ADJActivityHandler setOfflineMode:]
+-[ADJActivityHandler setEnabled:]
+-[ADJActivityHandler launchDeepLink:]
+-[ADJActivityHandler finishedTracking:]
+-[ADJActivityHandler trackEvent:]
+-[ADJActivityHandler trackSubsessionEnd]
+-[ADJActivityHandler trackSubsessionStart]
+-[ADJActivityHandler initWithConfig:]
++[ADJActivityHandler handlerWithConfig:]
++[ADJTimerOnce timerWithBlock:queue:]
+-[ADJTimerOnce initBlock:queue:]
+-[ADJTimerOnce fireIn]
+-[ADJTimerOnce startIn:]
+-[ADJTimerOnce startTime]
+-[ADJTimerOnce setStartTime:]
+-[ADJTimerOnce internalQueue]
+-[ADJTimerOnce setInternalQueue:]
+-[ADJTimerOnce source]
+-[ADJTimerOnce setSource:]
+-[ADJTimerOnce block]
+-[ADJTimerOnce setBlock:]
+-[ADJTimerOnce start]
+-[ADJTimerOnce fireDate]
+-[ADJTimerOnce setFireDate:]
+-[ADJTimerOnce .cxx_destruct]
+OBJC_IVAR_$_ADJTimerOnce._startTime
+OBJC_IVAR_$_ADJTimerOnce._internalQueue
+OBJC_IVAR_$_ADJTimerOnce._source
+OBJC_IVAR_$_ADJTimerOnce._block
+OBJC_IVAR_$_ADJTimerOnce._start
+OBJC_IVAR_$_ADJTimerOnce._fireDate
+l_OBJC_$_CLASS_METHODS_ADJTimerOnce
+l_OBJC_METACLASS_RO_$_ADJTimerOnce
+OBJC_CLASS_NAME_27
+OBJC_METH_VAR_TYPE_29
+OBJC_METH_VAR_TYPE_31
+OBJC_METH_VAR_TYPE_33
+OBJC_METH_VAR_TYPE_36
+OBJC_METH_VAR_TYPE_38
+OBJC_METH_VAR_TYPE_39
+OBJC_METH_VAR_TYPE_41
+l_OBJC_$_INSTANCE_METHODS_ADJTimerOnce
+OBJC_METH_VAR_TYPE_43
+OBJC_METH_VAR_TYPE_51
+l_OBJC_$_INSTANCE_VARIABLES_ADJTimerOnce
+OBJC_PROP_NAME_ATTR_54
+OBJC_PROP_NAME_ATTR_55
+OBJC_PROP_NAME_ATTR_59
+OBJC_PROP_NAME_ATTR_60
+OBJC_PROP_NAME_ATTR_61
+OBJC_PROP_NAME_ATTR_62
+OBJC_PROP_NAME_ATTR_63
+OBJC_PROP_NAME_ATTR_64
+l_OBJC_$_PROP_LIST_ADJTimerOnce
+l_OBJC_CLASS_RO_$_ADJTimerOnce
+-[ADJTimerOnce .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJTimerOnce.m
+-[ADJTimerOnce setFireDate:]
+-[ADJTimerOnce fireDate]
+-[ADJTimerOnce start]
+-[ADJTimerOnce setBlock:]
+-[ADJTimerOnce block]
+-[ADJTimerOnce setSource:]
+-[ADJTimerOnce source]
+-[ADJTimerOnce setInternalQueue:]
+-[ADJTimerOnce internalQueue]
+-[ADJTimerOnce setStartTime:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJTimerOnce.h
+-[ADJTimerOnce startTime]
+-[ADJTimerOnce startIn:]
+-[ADJTimerOnce fireIn]
+-[ADJTimerOnce initBlock:queue:]
++[ADJTimerOnce timerWithBlock:queue:]
++[ADJAttribution dataWithJsonDict:]
+-[ADJAttribution initWithJsonDict:]
+-[ADJAttribution isEqualToAttribution:]
+-[ADJAttribution dictionary]
+-[ADJAttribution description]
+-[ADJAttribution isEqual:]
+-[ADJAttribution hash]
+-[ADJAttribution copyWithZone:]
+-[ADJAttribution initWithCoder:]
+-[ADJAttribution encodeWithCoder:]
+-[ADJAttribution trackerToken]
+-[ADJAttribution setTrackerToken:]
+-[ADJAttribution trackerName]
+-[ADJAttribution setTrackerName:]
+-[ADJAttribution network]
+-[ADJAttribution setNetwork:]
+-[ADJAttribution campaign]
+-[ADJAttribution setCampaign:]
+-[ADJAttribution adgroup]
+-[ADJAttribution setAdgroup:]
+-[ADJAttribution creative]
+-[ADJAttribution setCreative:]
+-[ADJAttribution clickLabel]
+-[ADJAttribution setClickLabel:]
+-[ADJAttribution .cxx_destruct]
+.str20
+_unnamed_cfstring_21
+.str24
+_unnamed_cfstring_25
+_unnamed_cfstring_29
+OBJC_CLASSLIST_REFERENCES_$_53
+OBJC_IVAR_$_ADJAttribution._trackerToken
+OBJC_IVAR_$_ADJAttribution._trackerName
+OBJC_IVAR_$_ADJAttribution._network
+OBJC_IVAR_$_ADJAttribution._campaign
+OBJC_IVAR_$_ADJAttribution._adgroup
+OBJC_IVAR_$_ADJAttribution._creative
+OBJC_IVAR_$_ADJAttribution._clickLabel
+l_OBJC_$_CLASS_METHODS_ADJAttribution
+OBJC_METH_VAR_TYPE_89
+OBJC_CLASS_NAME_90
+l_OBJC_CLASS_PROTOCOLS_$_ADJAttribution
+l_OBJC_METACLASS_RO_$_ADJAttribution
+OBJC_CLASS_NAME_91
+OBJC_METH_VAR_TYPE_92
+OBJC_METH_VAR_TYPE_96
+l_OBJC_$_INSTANCE_METHODS_ADJAttribution
+l_OBJC_$_INSTANCE_VARIABLES_ADJAttribution
+OBJC_PROP_NAME_ATTR_117
+OBJC_PROP_NAME_ATTR_118
+OBJC_PROP_NAME_ATTR_119
+l_OBJC_$_PROP_LIST_ADJAttribution
+l_OBJC_CLASS_RO_$_ADJAttribution
+-[ADJAttribution .cxx_destruct]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJAttribution.m
+-[ADJAttribution setClickLabel:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/ios_sdk/Adjust/ADJAttribution.h
+-[ADJAttribution clickLabel]
+-[ADJAttribution setCreative:]
+-[ADJAttribution creative]
+-[ADJAttribution setAdgroup:]
+-[ADJAttribution adgroup]
+-[ADJAttribution setCampaign:]
+-[ADJAttribution campaign]
+-[ADJAttribution setNetwork:]
+-[ADJAttribution network]
+-[ADJAttribution setTrackerName:]
+-[ADJAttribution trackerName]
+-[ADJAttribution setTrackerToken:]
+-[ADJAttribution trackerToken]
+-[ADJAttribution encodeWithCoder:]
+-[ADJAttribution initWithCoder:]
+-[ADJAttribution copyWithZone:]
+-[ADJAttribution hash]
+-[ADJAttribution isEqual:]
+-[ADJAttribution description]
+-[ADJAttribution dictionary]
+-[ADJAttribution isEqualToAttribution:]
+-[ADJAttribution initWithJsonDict:]
++[ADJAttribution dataWithJsonDict:]
+/Users/sleroux/Library/Developer/Xcode/DerivedData/Adjust-fcikeaiuhltlpgauvksuepgqqukg/Build/Intermediates/Adjust.build/Release-iphoneos/AdjustSdk.build/DerivedSources/AdjustSdk_vers.c
