@@ -1,0 +1,51 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Tumingin ng iba't ibang Web pages gamit ang tabs.";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "Pumili";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Ikonek ang Firefox at gamitin kahit saan.";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "I-customize";
+
+/* See http://mzl.la/1if9ODp */
+"Easily switch between open pages with tabs." = "Madaliang pagpalitan ng mga bukas na pahinang may mga tab.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox at ang cloud";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Pangunahing slide %1$@ ng %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "Ayusin";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Gawing iyo ang Firefox gamit ang Settings";
+
+/* See http://mzl.la/1if9ODp */
+"Personalize your default search engine and more in Settings." = "Personalahin ang default search engine at iba pa sa Settings.";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "Ibahagi";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Sign in sa Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Simulang mag-Browse";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Pindutin, hawakan at ilipat ang Firefox icon sa iyong dock para sa madaliang access.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "Ang Settings ay nasa simula ng Tabs Tray";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Ang Show Tabs ay katabi ng lagdaan ng Address at Search. Nakadisplay dito ang mga bukas na tabs.";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "Gamitin ang share sheet upang maipadala ang mga link galing sa ibang app tungo sa Firefox.";
+

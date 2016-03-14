@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "پس از ۱ ساعت";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "پس از ۱ دقیقه";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "پس از ۵ دقیقه";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "پس از ۱۰ دقیقه";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "پس از ۱۵ دقیقه";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "تغییر گذرواژه";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "وارکردن کدعبور";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "وارد کردن کد عبور جدید";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "وارد کردن گذرواژه";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "وارد کردن کد عبور";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "فوری";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "کدعبور اشتباه. مجددا تلاش کنید (تلاش باقی ماند: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "کدعبور اشتباه‌. مجددا تلاش کنید.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "تمامی تلاش ها را انجام دادید. لطفا ۱ ساعت دیگر امتحان کنید.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "تمامی تلاش ها را انجام داده اید. لطفا بعدا مجددا تلاش کنید.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "می‌بایستی کد عبور جدید از کد فعلی متفاوت باشد.";
+
+/* List section title for passcode settings */
+"Passcode" = "گذرواژه";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "کدعبور یکسان نمی‌باشد. مجددا تلاش کنید.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "وارد‌کردن مجدد گذرواژه";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "گذرواژه لازم است";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "تنظیم گذرواژه";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "تشخیص دهنده لمسی یا گذرواژه";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "خاموش کردن گذرواژه";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "روشن کردن گذرواژه";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "خاموش کردن گذرواژه خود.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "استفاده از اعتبار لمسی";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "استفاده از اثرانگشت برای دسترسی به ورود.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "استفاده از اثرانگشت برای دسترسی به مرورشخصی.";
+

@@ -1,0 +1,569 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@에서 사용자 이름과 비밀번호를 요청합니다.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@에서 사용자 이름과 비밀번호를 요청합니다. 사이트 메시지: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "상세정보";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "탭 추가";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "읽기 목록에 추가";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "읽기 목록에 페이지 추가";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "주소와 검색";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "제 3자 키보드 허용";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "항상 보내기";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "인증 필요";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "뒤로";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "팝업창 차단";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "즐겨찾기";
+
+/* Panel accessibility label */
+"Bookmarks" = "즐겨찾기";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "저장된 즐겨찾기가 여기에 나타납니다.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "밝기";
+
+/* Alert Call Button */
+"Call" = "통화";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "취소";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "색상 테마 변경";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "서체 변경";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "개인 정보 삭제";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "닫기";
+
+/* No comment provided by engineer. */
+"Closing tab" = "탭 닫기";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "주소 복사";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "이미지 복사";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "링크 복사";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "읽기 목록에 페이지를 추가하지 못했습니다. 이미 추가하지 않았나요?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "읽기 목록에 페이지를 추가하지 못했습니다.";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "페이지를 열지 못했습니다.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "계정 생성";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "어두움";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "디버그: Sync 인증 상태 사라짐";
+
+/* Debug option */
+"Debug: require password" = "디버그: 비밀번호 필요";
+
+/* Debug option */
+"Debug: require upgrade" = "디버그: 업그레이드 필요";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "글자 크기 작게";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "기본 검색 엔진";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "더이상 페이지 경고창 보지 않음";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "화면 설정";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "%2$@의 %1$@ 비밀번호를 저장하시겠습니까?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "%@의 비밀번호를 저장하시겠습니까?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "%2$@의 %1$@ 비밀번호를 업데이트하시겠습니까?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "%@의 비밀번호를 업데이트하시겠습니까?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "보내지 않음";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "완료";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "방문복록을 열기위해서 더블탭한 후 누르고 계세요.";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "연결하기 위해서 비밀번호를 입력해 주세요.";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Firefox를 재시작 해야 변경사항이 적용됩니다.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox가 계정의 동기화를 중지하지만 기기의 브라우징 데이터는 삭제하지 않습니다.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox가 사진 정보에 접근하고자 합니다.";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "앞으로";
+
+/* General settings section title */
+"General" = "일반";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "다른 기긱에서 열려있는 탭과 즐겨찾기, 비밀번호를 가져오세요.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "이동";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "복사한 URL로 이동하겠습니까?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "도움말";
+
+/* Panel accessibility label */
+"History" = "방문목록";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "글자 크기 크게";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "처음 시작 정보";
+
+/* History tableview section header */
+"Last month" = "지난달";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "최종 동기화: %@";
+
+/* History tableview section header */
+"Last week" = "지난주";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "라이선스";
+
+/* Light theme setting in Reading View settings */
+"Light" = "밝음";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "원래 페이지 열기";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "내용 읽는중…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "로그아웃";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "로그아웃?";
+
+/* Authentication prompt log in button */
+"Log in" = "로그인";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "로그인";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "이전에 Firefox가 강제 종료되었습니다. 탭을 복구하시겠습니까?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "읽음으로 표시";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "안읽음으로 표시";
+
+/* Error for a missing remote error number */
+"Missing error" = "오류 누락";
+
+/* Error for a missing remote error message */
+"Missing message" = "메시지 누락";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "네비게이션 툴바";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "새탭: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "새 버전 있음";
+
+/* Restore Tabs Negative Action */
+"No" = "아니오";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "탭 없음";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "다음에";
+
+/* Button to not save the user's password */
+"Not now" = "저장 안함";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "확인";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "확인";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "이런! Firefox가 종료됐습니다.";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "새 탭에서 열기";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "설정 열기";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "제목줄 옆에 나오는 책모양 아이콘을 눌러서 읽기 모드로 글을 열어보세요.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "다음으로 열기…";
+
+/* Opening an external URL */
+"Opening %@" = "%@ 열기";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "최근 방문한 페이지가 여기에 나타납니다.";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "패널 선택";
+
+/* Password textbox in Authentication prompt */
+"Password" = "비밀번호";
+
+/* Paste the URL into the location bar */
+"Paste" = "붙이기";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "붙여서 가기";
+
+/* Privacy section title */
+"Privacy" = "개인정보";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "개인정보 보호정책";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "빠른 검색 엔진";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "읽기 모드";
+
+/* Panel accessibility label */
+"Reading list" = "읽기 목록";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "새로고침";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "삭제";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "읽기 목록에서 삭제";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "페이지 삭제";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "데스크톱 사이트 보기";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "모바일 사이트 보기";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "고딕체";
+
+/* Context menu item for saving an image */
+"Save Image" = "사진 저장";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "로그인 저장";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "읽기 모드 도구에 있는 책 플러스 아이콘을 눌러서 읽기 목록에 페이지를 저장하세요.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "검색";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "검색어나 주소 입력";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "추천 검색";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "보안 접속";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "오류 보고 보냄";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "의견 보내기";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "보고서 전송";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Mozilla가 문제를 고칠 수 있도록 보고서를 전송하시겠습니까?";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "세피아";
+
+/* Font type setting in the reading view settings */
+"Serif" = "명조체";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "설정";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "공유";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "링크 공유";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "검색 추천 보기";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "탭 보기";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "도움말 보기";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "검색 추천 보기";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Firefox에 로그인";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "로그인";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "다른 기기의 탭과 즐겨찾기, 비밀번호를 가져오기 위해서 로그인해 주세요.";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "정지";
+
+/* Support section title */
+"Support" = "지원";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "탭을 닫기 위해서 세 손가락으로 좌나 우로 스와이프하세요.";
+
+/* Sync Firefox Account */
+"Sync Now" = "지금 동기화";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "탭과 북마크, 비밀번호 등을 동기화하세요.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "탭과 비밀번호 등을 동기화하세요.";
+
+/* Panel accessibility label */
+"Synced tabs" = "동기화된 탭";
+
+/* Syncing Firefox Account */
+"Syncing…" = "동기화중…";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "%2$@개 중 %1$@ 번 째 탭";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "%3$@개 중 %1$@ 번에서 %2$@ 번 째 탭";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "탭 트레이";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "읽기 모드에서 볼 수 없는 페이지 입니다.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Firefox Aurora의 새 버전이 있습니다. 확인을 눌러서 다운로드 페이지를 방문하세요.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "다른 기기의 탭에 접근하는데 문제가 발생했습니다. 잠시후 다시 시도해 주세요.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "페이지를 변환하는데 오류가 발생했습니다.";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "카메라 롤에 사진을 저장할 수 있습니다.";
+
+/* Opening an external app */
+"This will open in another application" = "다른 어플리케이션에서 엽니다.";
+
+/* History tableview section header */
+"Today" = "오늘";
+
+/* Panel accessibility label */
+"Top sites" = "상위 사이트";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "업데이트";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "연결을 위해서 Firefox를 업그레이드합니다.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "작은 탭미리보기 사용";
+
+/* Username textbox in Authentication prompt */
+"Username" = "사용자 이름";
+
+/* Text message in the settings table view */
+"Verify your email address." = "이메일 주소를 확인해 주세요.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "버전 %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "보기";
+
+/* Accessibility label for the main web content view */
+"Web content" = "웹 콘텐츠";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Sync에 오신걸 환영합니다.";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "읽기 목록에 오신걸 환영합니다.";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "아, 이럴수가.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "예";
+
+/* History tableview section header */
+"Yesterday" = "어제";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "이 Firefox Account와 동기화된 다른 기기가 없습니다.";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "다른 기기에서 연 탭이 없습니다.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "사용자 권리";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "컴퓨터";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "방금전";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "모바일 기기";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "한달전";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "일주일전";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "읽었음";
+
+/* Relative date for date in past week. */
+"this week" = "이번주";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "오늘 %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "않읽음";
+
+/* Relative date for yesterday. */
+"yesterday" = "어제";
+

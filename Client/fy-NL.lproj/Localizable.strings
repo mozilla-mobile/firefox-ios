@@ -1,0 +1,569 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ freget om in brûkersnamme en wachtwurd.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ freget om in brûkersnamme en wachtwurd. De website meldt: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Oer";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Ljepblêd tafoegje";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Tafoegje oan lêslist";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Side oan lêslist tafoege";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adres en Sykje";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Toetseboerden fan tredden tastean";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Altyd ferstjoere";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Autentikaasje fereaske";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Tebek";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Pop-upfinsters blokkearje";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Blêdwizer";
+
+/* Panel accessibility label */
+"Bookmarks" = "Blêdwizers";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Hjir ferskine blêdwizers dy't jo bewarje.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Helderheid";
+
+/* Alert Call Button */
+"Call" = "Belje";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Annulearje";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Wiziget it kleuretema";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Wiziget it lettertype";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Priveegegevens wiskje";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Slute";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Ljepblêd wurdt sluten";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Adres kopiearje";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Ofbylding kopiearje";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Keppeling kopiearje";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Koe side net oan lêslist tafoegje. Miskien bestiet dizze al?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Koe side net oan lêslist tafoegje";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Koe side net lade.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Account oanmeitsje";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Donker";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Debug: Syng-autentikaasjesteat ferjitte";
+
+/* Debug option */
+"Debug: require password" = "Debug: wachtwurd fereaskje";
+
+/* Debug option */
+"Debug: require upgrade" = "Debug: fernijing fereaskje";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Tekstgrutte ferlytsje";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Standertsykmasine";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Ekstra sidedialoochfinsters útskeakelje";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Werjefte-ynstellingen";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Wolle jo it wachtwurd foar %1$@ op %2$@ bewarje?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Wolle jo it wachtwurd op %@ bewarje?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Wolle jo it wachtwurd foar %1$@ op %2$@ bywurkje?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Wolle jo it wachtwurd op %@ bywurkje?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Net ferstjoere";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Dien";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Dûbeltik en hâld fêst om skiednis te iepenjen";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Fier jo wachtwurd yn om ferbining te meitsjen.";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Firefox moat opnij iepene wurde om dizze wiziging troch te fieren.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox sil it syngronisearjen mei jo account stopje, mar gjin navigaasjegegevens op dit apparaat fuortsmite.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox freget om tagong ta jo foto’s";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Foarút";
+
+/* General settings section title */
+"General" = "Algemien";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Helje jo iepen ljepblêden, blêdwizers en wachtwurden fan jo oare apparaten op.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Gean";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Nei kopiearre URL gean?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Help";
+
+/* Panel accessibility label */
+"History" = "Skiednis";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Tekstgrutte fergrutsje";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Yntrotour-karrûsel";
+
+/* History tableview section header */
+"Last month" = "Foarige moanne";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Lêst syngronisearre: %@";
+
+/* History tableview section header */
+"Last week" = "Foarige wike";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Lisinsjes";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Ljocht";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Oarspronklike side lade";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Ynhâld lade…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Ofmelde";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Ofmelde?";
+
+/* Authentication prompt log in button */
+"Log in" = "Oanmelde";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Oanmeldingen";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "It liket derop dat Firefox earder ferûngelokke is. Wolle jo jo ljepblêden werstelle?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Markearje as lêzen";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Markearje as net lêzen";
+
+/* Error for a missing remote error number */
+"Missing error" = "Flaterkoade ûntbrekt";
+
+/* Error for a missing remote error message */
+"Missing message" = "Flatermelding ûntbrekt";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigaasjearkbalke";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Nij ljepblêd: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Nije ferzje beskikber";
+
+/* Restore Tabs Negative Action */
+"No" = "Nee";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Gjin ljepblêden";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "No net";
+
+/* Button to not save the user's password */
+"Not now" = "No net";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Okee";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Oeps! Firefox is ferûngelokke";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Iepenje yn nij ljepblêd";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Ynstellingen iepenje";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Iepenje artikelen yn de lêzerwerjefte troch op it boekpiktogram te tikken sa gau as dit yn de titelbalke ferskynt.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Iepenje yn…";
+
+/* Opening an external URL */
+"Opening %@" = "%@ iepenje";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "Hjir ferskine siden dy't jo koartlyn besocht hawwe.";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Panielkiezer";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Wachtwurd";
+
+/* Paste the URL into the location bar */
+"Paste" = "Plakke";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Plakke & Iepenje";
+
+/* Privacy section title */
+"Privacy" = "Privacy";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Privacybelied";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Fluchsykmasines";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Lêzerwerjefte";
+
+/* Panel accessibility label */
+"Reading list" = "Lêslist";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Fernije";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Fuortsmite";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Fuortsmite út lêslist";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Side fuortsmite";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Desktopwebsite opfreegje";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Mobile website opfreegje";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "Ofbylding bewarje";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Oanmeldingen bewarje";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Bewarje websiden nei jo lêslist troch op it boek-plus-piktogram yn de lêzerwerjeftebetsjinningen te tikken.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Sykje";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Fier sykterm of adres yn";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Siket nei de suggestje";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Befeilige ferbining";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "Ungelokrapporten ferstjoere";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "Kommentaar ferstjoere";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Rapport ferstjoere";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "In ûngelokrapport ferstjoere, sadat Mozilla it probleem ferhelpe kin?";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Ynstellingen";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Diele";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Keppeling diele";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Sykfoarstellen toane";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Ljepblêden toane";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Rûnlieding toane";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Sykfoarstellen toane";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Oanmelde by Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Oanmelde";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Meld jo oan om jo ljepblêden, blêdwizers en wachtwurden fan jo oare apparaten op te heljen.";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "Stopje";
+
+/* Support section title */
+"Support" = "Stipe";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Feegje mei trije fingers nei rjochts of nei links om it ljepblêd te sluten.";
+
+/* Sync Firefox Account */
+"Sync Now" = "No syngronisearje";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "Syngronisearje jo ljepblêden, blêdwizers, wachtwurden en mear.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "Syngronisearje jo ljepblêden, wachtwurden en mear.";
+
+/* Panel accessibility label */
+"Synced tabs" = "Syngronisearre ljepblêden";
+
+/* Syncing Firefox Account */
+"Syncing…" = "Syngronisearret…";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Ljepblêd %1$@ fan %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Ljepblêden %1$@ oant en mei %2$@ fan %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Ljepblêdefek";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "De side koe net yn de lêzerwerjefte werjûn wurde.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Der is in nije ferzje fan Firefox Aurora beskikber. Tik op OK om nei de downloadside te gean.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Der wie in probleem by it benaderjen fan ljepblêden fan jo oare apparaten. Probearje it oer inkele eagenblikken opnij.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Der is in flater bard by it konvertearjen fan de side";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Hjirtroch kinne jo de ôfbylding bewarje nei jo Filmrol.";
+
+/* Opening an external app */
+"This will open in another application" = "Dit wurdt yn in oare tapassing iepene";
+
+/* History tableview section header */
+"Today" = "Hjoed";
+
+/* Panel accessibility label */
+"Top sites" = "Topwebsites";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Bywurkje";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Fernij Firefox om ferbining te meitsjen.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Kompakte ljepblêden brûke";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Brûkersnamme";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Ferifiearje jo e-mailadres.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Ferzje %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Werjaan";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Webynhâld";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Wolkom by Sync";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Wolkom by jo lêslist";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Us ekskuses foar it ûngemak.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "Ja";
+
+/* History tableview section header */
+"Yesterday" = "Juster";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Jo hawwe gjin oare apparaten mei dizze Firefox-account keppele dy't jo syngronisearje kinne.";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Jo hawwe gjin ljepblêden iepene yn Firefox op jo oare apparaten.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Jo rjochten";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "kompjûter";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "sakrekt";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobyl apparaat";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "mear as in moanne lyn";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "mear as in wike lyn";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "lêzen";
+
+/* Relative date for date in past week. */
+"this week" = "dizze wike";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "hjoed om %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "net lêzen";
+
+/* Relative date for yesterday. */
+"yesterday" = "juster";
+

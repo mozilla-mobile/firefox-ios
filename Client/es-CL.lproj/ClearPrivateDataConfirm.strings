@@ -1,0 +1,6 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "Cancelar";
+
+/* The button that clears private data. */
+"OK" = "Aceptar";
+
