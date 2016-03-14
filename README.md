@@ -36,7 +36,13 @@ Building the code
 > __As of February 10, 2016, this project requires Xcode 7.2.1.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage). - __We REQUIRE 0.11 at this point__
+1. Install Carthage
+
+  ```shell
+  brew update
+  brew install carthage
+  ```
+
 1. Clone the repository:
 
   ```shell
