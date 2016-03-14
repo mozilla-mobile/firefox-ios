@@ -125,6 +125,7 @@
 		28A17B671BEC727500BC14ED /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A17B661BEC727500BC14ED /* Downloader.swift */; };
 		28AA941D1B97DCA800703DC6 /* BookmarkPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA941C1B97DCA800703DC6 /* BookmarkPayload.swift */; };
 		28B62ACE1BC745E7004A585A /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B62ACD1BC745E7004A585A /* Syncable.swift */; };
+		28BFA7251C8E5C3F0017C2BD /* TelemetryPing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BFA7241C8E5C3F0017C2BD /* TelemetryPing.swift */; };
 		28C28BFD1C51A3B900D5460E /* Merging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C28BFC1C51A3B900D5460E /* Merging.swift */; };
 		28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C4AB711AD42D4300D9ACE3 /* Clients.swift */; };
 		28C8B7851C852535006D8318 /* BookmarksPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C8B7841C852535006D8318 /* BookmarksPanelTests.swift */; };
@@ -1112,6 +1113,7 @@
 		28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilsTests.swift; sourceTree = "<group>"; };
 		28AA941C1B97DCA800703DC6 /* BookmarkPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkPayload.swift; sourceTree = "<group>"; };
 		28B62ACD1BC745E7004A585A /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncable.swift; sourceTree = "<group>"; };
+		28BFA7241C8E5C3F0017C2BD /* TelemetryPing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TelemetryPing.swift; path = Telemetry/TelemetryPing.swift; sourceTree = "<group>"; };
 		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CryptoTests.swift; path = SyncTests/CryptoTests.swift; sourceTree = "<group>"; };
 		28C0779D1A3B066000834FE5 /* RecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordTests.swift; path = SyncTests/RecordTests.swift; sourceTree = "<group>"; };
 		28C28BFC1C51A3B900D5460E /* Merging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Merging.swift; sourceTree = "<group>"; };
@@ -1917,6 +1919,14 @@
 				2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */,
 			);
 			name = Synchronizers;
+			sourceTree = "<group>";
+		};
+		28BFA7101C8E5C1A0017C2BD /* Telemetry */ = {
+			isa = PBXGroup;
+			children = (
+				28BFA7241C8E5C3F0017C2BD /* TelemetryPing.swift */,
+			);
+			name = Telemetry;
 			sourceTree = "<group>";
 		};
 		28C077911A3B05C200834FE5 /* SyncTests */ = {
@@ -2752,6 +2762,7 @@
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28C077911A3B05C200834FE5 /* SyncTests */,
 				E6231BFF1B90A34F005ABB0D /* System Dependencies */,
+				28BFA7101C8E5C1A0017C2BD /* Telemetry */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				E42CCDFF1A24C4E300B794D3 /* Utils */,
@@ -4002,6 +4013,7 @@
 				E6F9659E1B2F63A20034B023 /* NSStringExtensions.swift in Sources */,
 				E65D89811C8778940006EA35 /* AuthenticationKeychainInfo.swift in Sources */,
 				6BE4ACF91B0657180092AEBE /* Accessibility.swift in Sources */,
+				28BFA7251C8E5C3F0017C2BD /* TelemetryPing.swift in Sources */,
 				288A2DAA1AB8B3700023ABC3 /* Box.swift in Sources */,
 				281B2C081ADF4F29002917DC /* DeferredUtils.swift in Sources */,
 				B729F06A1B75CBEF00745F7A /* UserAgent.swift in Sources */,

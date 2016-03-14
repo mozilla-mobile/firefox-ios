@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Alamofire
 import Foundation
 import Account
 import ReadingList
@@ -609,6 +610,45 @@ public class BrowserProfile: Profile {
             center.addObserver(self, selector: "onDatabaseWasRecreated:", name: NotificationDatabaseWasRecreated, object: nil)
             center.addObserver(self, selector: "onLoginDidChange:", name: NotificationDataLoginDidChange, object: nil)
             center.addObserver(self, selector: "onFinishSyncing:", name: NotificationProfileDidFinishSyncing, object: nil)
+            center.addObserver(self, selector: "onBookmarkBufferValidated:", name: NotificationBookmarkBufferValidated, object: nil)
+        }
+
+        func onBookmarkBufferValidated(notification: NSNotification) {
+            guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
+                log.debug("Profile isn't sending usage data. Not sending bookmark event.")
+                return
+            }
+
+            guard let validations = (notification.object as? Box<[String: Bool]>)?.value else {
+                log.warning("Notification didn't have validations.")
+                return
+            }
+
+            let attempt: Int32 = self.prefs.intForKey("bookmarkvalidationattempt") ?? 1
+            self.prefs.setInt(attempt + 1, forKey: "bookmarkvalidationattempt")
+
+            // Capture the buffer count ASAP, not in the delayed op, because the merge could wipe it!
+            let bufferRows = (self.profile.bookmarks as? MergedSQLiteBookmarks)?.synchronousBufferCount()
+
+            self.doInBackgroundAfter(millis: 300) {
+                let id = DeviceInfo.clientIdentifier(self.prefs)
+                let ping = makeAdHocBookmarkMergePing(NSBundle.mainBundle(), clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations)
+                let payload = ping.toString()
+                guard let body = payload.dataUsingEncoding(NSUTF8StringEncoding) else {
+                    log.debug("Invalid JSON!")
+                    return
+                }
+
+                let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation".asURL!
+                let request = NSMutableURLRequest(URL: url)
+                request.HTTPMethod = "POST"
+                request.HTTPBody = body
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
+                    log.debug("Bookmark validation upload response: \(response?.statusCode ?? -1).")
+                }
+            }
         }
 
         deinit {
@@ -617,6 +657,7 @@ public class BrowserProfile: Profile {
             center.removeObserver(self, name: NotificationDatabaseWasRecreated, object: nil)
             center.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
             center.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+            center.removeObserver(self, name: NotificationBookmarkBufferValidated, object: nil)
         }
 
         private func handleRecreationOfDatabaseNamed(name: String?) -> Success {
