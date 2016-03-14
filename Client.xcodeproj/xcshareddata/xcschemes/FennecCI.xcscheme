@@ -131,6 +131,9 @@
                <Test
                   Identifier = "TestBookmarks/testBookmarks()">
                </Test>
+               <Test
+                  Identifier = "WebServerTests">
+               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference
