@@ -12,7 +12,7 @@ MOZ_BUNDLE_ID = org.mozilla.ios.$(MOZ_PRODUCT_NAME)
 MOZ_VERSION = 3.0
 
 // Build ID
-MOZ_BUILD_ID = 1
+MOZ_BUILD_ID = 5
 
 // Product Name
 MOZ_SOCORRO_PRODUCT_NAME = FenneciOS
