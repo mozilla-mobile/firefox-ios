@@ -1373,7 +1373,6 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 return
         }
 
-        let title = tab.title
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(url) >>== { isBookmarked in
                 if isBookmarked {
