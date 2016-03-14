@@ -128,6 +128,9 @@
                <Test
                   Identifier = "TabManagerTests/testTabManagerStoresChangesInDB()">
                </Test>
+               <Test
+                  Identifier = "TestBookmarks/testBookmarks()">
+               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference
