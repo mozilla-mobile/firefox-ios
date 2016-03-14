@@ -247,7 +247,8 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         super.viewDidLoad()
 
         tableView.accessibilityIdentifier = "ReadingTable"
-        tableView.rowHeight = ReadingListTableViewCellUX.RowHeight
+        tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.separatorColor = UIConstants.SeparatorColor
