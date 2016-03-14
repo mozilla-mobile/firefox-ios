@@ -1,0 +1,15 @@
+machine:
+  xcode:
+    version: 7.2
+  environment:
+    XCODE_SCHEME: FennecCI
+
+dependencies:
+  pre:
+    - carthage bootstrap --platform ios --no-use-binaries
+  cache_directories:
+    - "Carthage"
+    
+test:
+  override:
+    - xctool -scheme FennecCI -sdk iphonesimulator9.2 -arch "i386" ONLY_ACTIVE_ARCH=NO VALID_ARCHS="i386 x86_64" build build-tests
