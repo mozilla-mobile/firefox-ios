@@ -558,6 +558,7 @@
 		E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */; };
 		E6E4A9631BF0FA85008162D5 /* NSFileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E4A9621BF0FA85008162D5 /* NSFileManagerExtensions.swift */; };
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
+		E6ECF2381C974E0F00B0DC93 /* KIF.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D30EBB6A1C75503800105AE9 /* KIF.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6F965121B2F1CF20034B023 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
 		E6F9653F1B2F242E0034B023 /* NSMutableAttributedStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653D1B2F235A0034B023 /* NSMutableAttributedStringExtensions.swift */; };
@@ -983,6 +984,16 @@
 				E60138651C89EB7600DF9756 /* Shared.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E6ECF2371C974E0600B0DC93 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E6ECF2381C974E0F00B0DC93 /* KIF.framework in CopyFiles */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F84B22531A0920C600AAB793 /* Embed App Extensions */ = {
@@ -3183,6 +3194,7 @@
 				D39FA15B1A83E0EC00EE869C /* Sources */,
 				D39FA15C1A83E0EC00EE869C /* Frameworks */,
 				D39FA15D1A83E0EC00EE869C /* Resources */,
+				E6ECF2371C974E0600B0DC93 /* CopyFiles */,
 			);
 			buildRules = (
 			);
