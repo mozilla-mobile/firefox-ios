@@ -10,7 +10,7 @@ This branch is for mainline development that will eventually ship as v4.0.
 
 See the __v3.x__ branch if you're doing stabilization work for v3.0. If you are interested in fixing a bug on the __v3.x__ stabilization branch, take a look at the list of open bugs that are marked as [tracking 3.0](https://wiki.mozilla.org/Mobile/Triage#iOS_Tracking_3.0.2B).
 
-This branch works with Xcode 7.2.1, and supports iOS 8.2 and 9.x.
+This branch works with Xcode 7.2.1, and supports iOS 8.2 and 9.x. Although you can only run and debug from Xcode on a 9.2.1 device.
 
 Please make sure you aim your pull requests in the right direction.
 
