@@ -26,6 +26,7 @@ ns = { "search": "http://www.mozilla.org/2006/browser/search/" }
 def main():
     downloadLocales()
     copyOverrides()
+    verifyEngines()
 
 def downloadLocales():
     if os.path.exists("SearchPlugins"):
@@ -91,6 +92,20 @@ def copyOverrides():
             overrideDst = os.path.join(localeDst, file)
             print("  overriding: %s..." % file)
             shutil.copy(overrideSrc, overrideDst)
+
+def verifyEngines():
+    print("verifying engines...")
+    enDir = os.path.join("SearchPlugins", "en")
+    for locale in os.listdir("SearchPlugins"):
+        localeDir = os.path.join("SearchPlugins", locale)
+        with open(os.path.join(localeDir, "list.txt")) as f:
+            engineList = f.read().splitlines()
+
+        for engine in engineList:
+            path = os.path.join(localeDir, engine + ".xml")
+            enPath = os.path.join(enDir, engine + ".xml")
+            if not os.path.exists(path) and not os.path.exists(enPath):
+                print("  ERROR: missing engine %s for locale %s" % (engine, locale))
 
 def getSupportedLocales():
     supportedLocales = subprocess.Popen("./get_supported_locales.swift", stdout=subprocess.PIPE).communicate()[0]
