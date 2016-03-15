@@ -17,7 +17,7 @@ class PrefsTests: XCTestCase {
 
     func testClearPrefs() {
         prefs.setObject("foo", forKey: "bar")
-        XCTAssertEqual(prefs.stringForKey("bar")!, "foo")
+        XCTAssertEqual(prefs.stringForKey("bar")!, "fool")
 
         // Ensure clearing prefs is branch-specific.
         let otherPrefs = NSUserDefaultsPrefs(prefix: "othermockaccount")
