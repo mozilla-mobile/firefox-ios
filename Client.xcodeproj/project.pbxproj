@@ -489,6 +489,7 @@
 		E60222E31C6E57B20061C436 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9A62DB1C4002B1005C83DC /* SQLite.framework */; };
 		E60A60821B6BFC0B00F850D4 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A60811B6BFC0B00F850D4 /* CrashReporter.swift */; };
 		E60A60A11B6BFDDC00F850D4 /* CrashReporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A60A01B6BFDDC00F850D4 /* CrashReporterTests.swift */; };
+		E60A7E001C989C9A0029B65F /* BoolSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A7DFF1C989C9A0029B65F /* BoolSettingTableViewCell.swift */; };
 		E6108FF91C84E91C005D25E8 /* BasePasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6108FF81C84E91C005D25E8 /* BasePasscodeViewController.swift */; };
 		E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */; };
 		E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
@@ -1430,6 +1431,7 @@
 		E60961891B62B8C800DD640F /* Firefox.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Firefox.xcconfig; path = Configuration/Firefox.xcconfig; sourceTree = "<group>"; };
 		E60A60811B6BFC0B00F850D4 /* CrashReporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
 		E60A60A01B6BFDDC00F850D4 /* CrashReporterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrashReporterTests.swift; sourceTree = "<group>"; };
+		E60A7DFF1C989C9A0029B65F /* BoolSettingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoolSettingTableViewCell.swift; sourceTree = "<group>"; };
 		E6108FF81C84E91C005D25E8 /* BasePasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePasscodeViewController.swift; sourceTree = "<group>"; };
 		E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollingFileLoggerTests.swift; sourceTree = "<group>"; };
 		E6231C001B90A44F005ABB0D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -2001,6 +2003,7 @@
 				E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */,
 				2F44FC711A9E840300FD20CC /* SettingsNavigationController.swift */,
 				2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */,
+				E60A7DFF1C989C9A0029B65F /* BoolSettingTableViewCell.swift */,
 				E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */,
 				2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */,
 				2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */,
@@ -4308,6 +4311,7 @@
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
 				D3994A4A1C22813200E2A03C /* FindInPageActivity.swift in Sources */,
 				7B9A61CD1C3EBFAE005C83DC /* RXMLElement.m in Sources */,
+				E60A7E001C989C9A0029B65F /* BoolSettingTableViewCell.swift in Sources */,
 				E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */,
 				F84B22241A09122500AAB793 /* HomePanelViewController.swift in Sources */,

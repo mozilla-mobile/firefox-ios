@@ -15,21 +15,6 @@ private let Bug1204635_S2 = NSLocalizedString("Are you sure you want to clear al
 private let Bug1204635_S3 = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
 private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
 
-// A base TableViewCell, to help minimize initialization and allow recycling.
-class SettingsTableViewCell: UITableViewCell {
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        indentationWidth = 0
-        layoutMargins = UIEdgeInsetsZero
-        // So that the seperator line goes all the way to the left edge.
-        separatorInset = UIEdgeInsetsZero
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting {
     private var _title: NSAttributedString?
@@ -61,14 +46,18 @@ class Setting {
     func onConfigureCell(cell: UITableViewCell) {
         cell.detailTextLabel?.attributedText = status
         cell.detailTextLabel?.numberOfLines = 0
+
         cell.textLabel?.attributedText = title
         cell.textLabel?.textAlignment = textAlignment
+        cell.textLabel?.numberOfLines = 0
+
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
         cell.selectionStyle = enabled ? .Default : .None
         cell.accessibilityIdentifier = accessibilityIdentifier
         cell.accessibilityLabel = title?.string
         cell.accessibilityTraits = UIAccessibilityTraitButton
+        cell.separatorInset = UIEdgeInsetsZero
     }
 
     // Called when the pref is tapped.
@@ -159,19 +148,10 @@ class BoolSetting: Setting {
 
     override func onConfigureCell(cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
-        control.on = prefs.boolForKey(prefKey) ?? defaultValue
-        cell.accessoryView = control
+        guard let switchCell = cell as? BoolSettingTableViewCell else { return }
+        switchCell.switchControl.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        switchCell.switchControl.on = prefs.boolForKey(prefKey) ?? defaultValue
         cell.selectionStyle = .None
-        if let titleLabel = cell.textLabel {
-            cell.detailTextLabel?.snp_makeConstraints { make in
-                make.left.equalTo(titleLabel)
-                make.right.equalTo(cell).offset(statusTextPadding)
-                make.top.equalTo(titleLabel.snp_bottom)
-            }
-        }
     }
 
     @objc func switchValueChanged(control: UISwitch) {
@@ -248,7 +228,8 @@ class SettingsTableViewController: UITableViewController {
 
     typealias SettingsGenerator = (SettingsTableViewController, SettingsDelegate?) -> [SettingSection]
 
-    private let Identifier = "CellIdentifier"
+    private let DefaultCellIdentifier = "DefaultCellIdentifier"
+    private let BoolSettingCellIdentifier = "BoolSettingCellIdentifier"
     private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
     var settings = [SettingSection]()
 
@@ -260,12 +241,14 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
+        tableView.registerClass(BoolSettingTableViewCell.self, forCellReuseIdentifier: BoolSettingCellIdentifier)
         tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.tableFooterView = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
         
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.estimatedRowHeight = 44;
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -324,18 +307,20 @@ class SettingsTableViewController: UITableViewController {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             var cell: UITableViewCell!
-            if let _ = setting.status {
+            if setting is BoolSetting {
+                cell = tableView.dequeueReusableCellWithIdentifier(BoolSettingCellIdentifier, forIndexPath: indexPath)
+            } else if let _ = setting.status {
                 // Work around http://stackoverflow.com/a/9999821 and http://stackoverflow.com/a/25901083 by using a new cell.
                 // I could not make any setNeedsLayout solution work in the case where we disconnect and then connect a new account.
                 // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
-                cell = SettingsTableViewCell(style: setting.style, reuseIdentifier: nil)
+                cell = UITableViewCell(style: setting.style, reuseIdentifier: nil)
             } else {
-                cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath)
+                cell = tableView.dequeueReusableCellWithIdentifier(DefaultCellIdentifier, forIndexPath: indexPath)
             }
             setting.onConfigureCell(cell)
             return cell
         }
-        return tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath)
+        return tableView.dequeueReusableCellWithIdentifier(DefaultCellIdentifier, forIndexPath: indexPath)
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
