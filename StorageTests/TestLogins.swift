@@ -378,7 +378,6 @@ class TestSQLiteLoginsPerf: XCTestCase {
     }
 
     func addLogin(login: LoginData) -> Success {
-        log.debug("Add \(login)")
         return logins.addLogin(login)
     }
 
