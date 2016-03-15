@@ -24,18 +24,18 @@ header = """\
 ns = { "search": "http://www.mozilla.org/2006/browser/search/" }
 
 def main():
+    downloadLocales()
+    copyOverrides()
+
+def downloadLocales():
     if os.path.exists("SearchPlugins"):
         shutil.rmtree("SearchPlugins")
     os.makedirs("SearchPlugins")
 
-    # Copy the default en search engines since they aren't in an l10n repo.
-    enPluginsSrc = os.path.join("SearchOverlays", "en")
-    enPluginsDst = os.path.join("SearchPlugins", "en")
-    shutil.copytree(enPluginsSrc, enPluginsDst)
-
     scraper = Scraper()
     locales = scraper.getLocaleList()
     supportedLocales = getSupportedLocales()
+
     for locale in locales:
         if (locale not in supportedLocales):
             print("skipping unsupported locale: %s" % locale)
@@ -60,14 +60,6 @@ def main():
 
         for file in files:
             path = os.path.join(directory, file)
-
-            # If there are any locale-specific overrides, use them instead of the downloaded file.
-            overlayPath = os.path.join("SearchOverlays", locale, file)
-            if os.path.exists(overlayPath):
-                print("  copying override: %s..." % file)
-                shutil.copy(overlayPath, path)
-                continue
-
             downloadedFile = scraper.getFile(locale, file)
             name, extension = os.path.splitext(file)
 
@@ -85,6 +77,20 @@ def main():
 
             # Otherwise, just use the downloaded file as is.
             shutil.move(downloadedFile, path)
+
+def copyOverrides():
+    for locale in os.listdir("SearchOverrides"):
+        print("copying overrides for %s..." % locale)
+        localeSrc = os.path.join("SearchOverrides", locale)
+        localeDst = os.path.join("SearchPlugins", locale)
+        if not os.path.exists(localeDst):
+            os.makedirs(localeDst)
+
+        for file in os.listdir(localeSrc):
+            overrideSrc = os.path.join(localeSrc, file)
+            overrideDst = os.path.join(localeDst, file)
+            print("  overriding: %s..." % file)
+            shutil.copy(overrideSrc, overrideDst)
 
 def getSupportedLocales():
     supportedLocales = subprocess.Popen("./get_supported_locales.swift", stdout=subprocess.PIPE).communicate()[0]
