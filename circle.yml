@@ -6,7 +6,7 @@ machine:
 
 dependencies:
   pre:
-    - carthage bootstrap --platform ios --no-use-binaries
+    - ./bootstrap.sh
   cache_directories:
     - "Carthage"
     
