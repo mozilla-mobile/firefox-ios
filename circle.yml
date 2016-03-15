@@ -12,4 +12,5 @@ dependencies:
     
 test:
   override:
-    - xctool -scheme FennecCI -sdk iphonesimulator9.2 -arch "i386" ONLY_ACTIVE_ARCH=NO VALID_ARCHS="i386 x86_64" build build-tests
+    - xctool -reporter pretty -reporter junit:$CIRCLE_TEST_REPORTS/xcode/results.xml -reporter plain:$CIRCLE_ARTIFACTS/xctool.log CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= PROVISIONING_PROFILE= ONLY_ACTIVE_ARCH=NO VALID_ARCHS="i386 x86_64" -destination 'platform=iOS Simulator,name=iPhone 4s,OS=9.2' -sdk iphonesimulator -project 'Client.xcodeproj' -scheme "FennecCI" clean test -omit ClientTests:TabManagerTests,TestBookmarks/testBookmarks
+
