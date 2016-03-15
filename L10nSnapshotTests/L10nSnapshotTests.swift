@@ -180,6 +180,45 @@ class L10nSnapshotTests: XCTestCase {
         snapshot("11LocationDialog-01")
     }
 
+    // This is a fragile testcase because it depends on the specific position of items in the
+    // share sheet. This is pretty stable on the 9.2.1 simulator but may change with iOS releases.
+
+    func test12ShareSheetAndExtensions() {
+        let app = XCUIApplication()
+        loadWebPage("http://people.mozilla.org")
+        app.buttons["BrowserToolbar.shareButton"].tap()
+
+        app.collectionViews.elementBoundByIndex(0).swipeLeft()
+        app.collectionViews.elementBoundByIndex(0).buttons["More"].tap()
+        app.tables.switches.elementBoundByIndex(app.tables.switches.count-1).tap()
+        snapshot("12ShareSheetAndExtensions-01") // Shows Share Extension in a list
+        app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(1).tap()
+
+        app.collectionViews.elementBoundByIndex(1).swipeLeft()
+        app.collectionViews.elementBoundByIndex(1).buttons["More"].tap()
+        app.tables.switches.elementBoundByIndex(app.tables.switches.count-1).tap()
+        app.tables.switches.elementBoundByIndex(app.tables.switches.count-2).tap()
+        snapshot("12ShareSheetAndExtensions-02") // Shows Action Extensions in a list
+        app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(1).tap()
+
+        snapshot("12ShareSheetAndExtensions-03") // Shows all extensions in the share sheet
+
+        // At this point our extensions are all enabled. ShareTo has index 2, ViewLater 2, SendTab 3
+
+        // ShareTo
+        app.collectionViews.elementBoundByIndex(0).buttons.elementBoundByIndex(2).tap()
+        snapshot("12ShareSheetAndExtensions-03") // ShareTo
+        app.buttons["ShareDialogController.navigationItem.leftBarButtonItem"].tap()
+
+        sleep(2)
+
+        // SendTo
+        app.buttons["BrowserToolbar.shareButton"].tap()
+        app.collectionViews.elementBoundByIndex(1).buttons.elementBoundByIndex(3).tap()
+        snapshot("12ShareSheetAndExtensions-04") // SendTo - Empty state because not logged in
+        app.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"].tap()
+    }
+
     func test50ClearPrivateData() {
         let app = XCUIApplication()
         var index = 1
