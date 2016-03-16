@@ -351,6 +351,8 @@ class BrowserViewController: UIViewController {
         log.debug("BVC setting up constraints…")
         setupConstraints()
         log.debug("BVC done.")
+
+        self.presentViewController(MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Browser)), animated: false, completion: nil)
     }
 
     private func setupConstraints() {
@@ -1372,7 +1374,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 if isBookmarked {
                     self.removeBookmark(url)
                 } else {
-                    self.addBookmark(url, title: tab.title)
+                    self.addBookmark(url, title: title)
                 }
             }
         }
