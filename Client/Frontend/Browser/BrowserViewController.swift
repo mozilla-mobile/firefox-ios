@@ -352,7 +352,9 @@ class BrowserViewController: UIViewController {
         setupConstraints()
         log.debug("BVC done.")
 
-        self.presentViewController(MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Browser)), animated: false, completion: nil)
+        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.TabTray))
+        mvc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+        self.presentViewController(mvc, animated: false, completion: nil)
     }
 
     private func setupConstraints() {

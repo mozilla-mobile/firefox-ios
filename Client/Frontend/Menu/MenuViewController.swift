@@ -8,8 +8,11 @@ private let maxNumberOfItemsPerPage = 6
 
 class MenuViewController: UIViewController {
 
-    let colours = [UIColor.magentaColor(), UIColor.brownColor(), UIColor.greenColor(), UIColor.orangeColor(), UIColor.redColor(), UIColor.yellowColor()]
     var menuConfig: MenuConfiguration
+
+    private let isPrivate = false
+
+    private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
 
     init(withMenuConfig config: MenuConfiguration) {
         self.menuConfig = config
@@ -23,7 +26,9 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = UIColor.blueColor()
+        self.view.backgroundColor = popoverBackgroundColor
+
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissMenu:"))
 
         // Do any additional setup after loading the view.
         let menuView = MenuView()
@@ -39,15 +44,37 @@ class MenuViewController: UIViewController {
         menuView.menuItemDelegate = self
         menuView.toolbarDelegate = self
         menuView.toolbarDataSource = self
+        menuView.openMenuImage.image = MenuConfiguration.menuIcon
+        menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissMenu"))
 
-        menuView.backgroundColor = UIColor.orangeColor()
-        menuView.toolbar.backgroundColor = UIColor.cyanColor()
-        menuView.menuFooterView.backgroundColor = UIColor.cyanColor()
+        menuView.backgroundColor = menuConfig.menuBackgroundColorForMode(isPrivate: isPrivate)
+
+        menuView.toolbar.backgroundColor = menuConfig.toolbarColourForMode(isPrivate: isPrivate)
+        menuView.toolbar.cornersToRound = [.TopLeft, .TopRight]
+        menuView.toolbar.cornerRadius = CGSizeMake(5.0,5.0)
+        menuView.toolbar.clipsToBounds = false
+        // add a shadow to the bottom of the toolbar
+        menuView.toolbar.layer.shadowColor = UIColor.lightGrayColor().CGColor
+        menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
+        menuView.toolbar.layer.shadowOpacity = 0.4
+        menuView.toolbar.layer.shadowRadius = 0
+
+        menuView.toolbar.tintColor = menuConfig.toolbarTintColorForMode(isPrivate: isPrivate)
+        menuView.tintColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    @objc private func dismissMenu(recognizer: UITapGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.Ended {
+            view.backgroundColor = UIColor.clearColor()
+            self.dismissViewControllerAnimated(true, completion: {
+                self.view.backgroundColor = self.popoverBackgroundColor
+            })
+        }
     }
 
 }
@@ -82,9 +109,8 @@ extension MenuViewController: MenuItemDataSource {
         let menuItem = menuItems[indexPath.getMenuItemIndex()]
 
         menuItemView.setTitle(menuItem.title)
-        menuItemView.titleLabel.font = UIFont.systemFontOfSize(12)
-        menuItemView.titleLabel.textColor = UIColor.blackColor()
-        menuItemView.backgroundColor = colours[indexPath.item]
+        menuItemView.titleLabel.font = menuConfig.menuFont()
+        menuItemView.titleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
         if let icon = menuItem.icon {
             menuItemView.setImage(icon)
         }
