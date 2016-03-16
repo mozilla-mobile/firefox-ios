@@ -6,16 +6,25 @@ import UIKit
 
 private let maxNumberOfItemsPerPage = 6
 
+enum MenuViewPresentationStyle {
+    case Popover
+    case Modal
+}
+
 class MenuViewController: UIViewController {
 
     var menuConfig: MenuConfiguration
+    var presentationStyle: MenuViewPresentationStyle
 
-    private let isPrivate = false
+    var menuView: MenuView!
+
+    private let isPrivate = true
 
     private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
 
-    init(withMenuConfig config: MenuConfiguration) {
+    init(withMenuConfig config: MenuConfiguration, presentationStyle: MenuViewPresentationStyle) {
         self.menuConfig = config
+        self.presentationStyle = presentationStyle
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -26,41 +35,56 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = popoverBackgroundColor
-
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissMenu:"))
 
         // Do any additional setup after loading the view.
-        let menuView = MenuView()
+        menuView = MenuView(presentationStyle: self.presentationStyle)
         self.view.addSubview(menuView)
-
-        menuView.snp_makeConstraints { make in
-            make.left.equalTo(view.snp_left).offset(24)
-            make.right.equalTo(view.snp_right).offset(-24)
-            make.bottom.equalTo(view.snp_bottom)
-        }
 
         menuView.menuItemDataSource = self
         menuView.menuItemDelegate = self
         menuView.toolbarDelegate = self
         menuView.toolbarDataSource = self
-        menuView.openMenuImage.image = MenuConfiguration.menuIcon
-        menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissMenu"))
-
-        menuView.backgroundColor = menuConfig.menuBackgroundColorForMode(isPrivate: isPrivate)
 
         menuView.toolbar.backgroundColor = menuConfig.toolbarColourForMode(isPrivate: isPrivate)
-        menuView.toolbar.cornersToRound = [.TopLeft, .TopRight]
         menuView.toolbar.cornerRadius = CGSizeMake(5.0,5.0)
-        menuView.toolbar.clipsToBounds = false
-        // add a shadow to the bottom of the toolbar
-        menuView.toolbar.layer.shadowColor = UIColor.lightGrayColor().CGColor
-        menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
+        menuView.toolbar.tintColor = menuConfig.toolbarTintColorForMode(isPrivate: isPrivate)
+        menuView.toolbar.layer.shadowColor = isPrivate ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
         menuView.toolbar.layer.shadowOpacity = 0.4
         menuView.toolbar.layer.shadowRadius = 0
 
-        menuView.toolbar.tintColor = menuConfig.toolbarTintColorForMode(isPrivate: isPrivate)
+        menuView.backgroundColor = menuConfig.menuBackgroundColorForMode(isPrivate: isPrivate)
         menuView.tintColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
+
+        switch presentationStyle {
+        case .Popover:
+            self.view.backgroundColor = UIColor.clearColor()
+            menuView.toolbar.cornersToRound = [.BottomLeft, .BottomRight]
+            menuView.toolbar.clipsToBounds = false
+            // add a shadow to the tp[ of the toolbar
+            menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: -2)
+            menuView.snp_makeConstraints { make in
+                make.top.left.right.equalTo(view)
+            }
+            view.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
+
+        case .Modal:
+            self.view.backgroundColor = popoverBackgroundColor
+            menuView.toolbar.cornersToRound = [.TopLeft, .TopRight]
+            menuView.toolbar.clipsToBounds = false
+            // add a shadow to the bottom of the toolbar
+            menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
+
+            menuView.openMenuImage.image = MenuConfiguration.menuIcon
+            menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissMenu"))
+
+            menuView.snp_makeConstraints { make in
+                make.left.equalTo(view.snp_left).offset(24)
+                make.right.equalTo(view.snp_right).offset(-24)
+                make.bottom.equalTo(view.snp_bottom)
+            }
+        }
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,6 +99,11 @@ class MenuViewController: UIViewController {
                 self.view.backgroundColor = self.popoverBackgroundColor
             })
         }
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.preferredContentSize = self.menuView.bounds.size
     }
 
 }

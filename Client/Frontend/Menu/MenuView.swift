@@ -7,7 +7,6 @@ import UIKit
 class MenuView: UIView {
 
     var toolbar: RoundedToolbar
-    private let menuItemPageController = MenuPagingViewController()
 
     var openMenuImage: UIImageView
     var menuFooterView: UIView
@@ -16,6 +15,9 @@ class MenuView: UIView {
     var toolbarDataSource: MenuToolbarDataSource?
     var menuItemDelegate: MenuItemDelegate?
     var menuItemDataSource: MenuItemDataSource?
+
+    private let menuItemPageController = MenuPagingViewController()
+    private var presentationStyle: MenuViewPresentationStyle
 
     private var menuColor: UIColor = UIColor.clearColor() {
         didSet {
@@ -75,7 +77,8 @@ class MenuView: UIView {
     private var reusableItems = [MenuItemView]()
     private var toolbarItems = [UIBarButtonItem]()
 
-    init() {
+    init(presentationStyle: MenuViewPresentationStyle) {
+        self.presentationStyle = presentationStyle
         toolbar = RoundedToolbar()
         toolbar.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
         menuFooterView = UIView()
@@ -84,6 +87,43 @@ class MenuView: UIView {
 
         super.init(frame: CGRectZero)
 
+
+        let pageControllerView = menuItemPageController.view
+        self.addSubview(pageControllerView)
+
+        self.addSubview(toolbar)
+
+        switch presentationStyle {
+        case .Modal:
+            addFooter()
+            toolbar.snp_makeConstraints { make in
+                make.height.equalTo(toolbarHeight)
+                make.top.left.right.equalTo(self)
+            }
+
+            pageControllerView.snp_makeConstraints { make in
+                make.top.equalTo(toolbar.snp_bottom)
+                make.left.right.equalTo(self)
+                make.bottom.equalTo(menuFooterView.snp_top)
+            }
+        case .Popover:
+            pageControllerView.snp_makeConstraints { make in
+                make.top.left.right.equalTo(self)
+            }
+            toolbar.snp_makeConstraints { make in
+                make.top.equalTo(pageControllerView.snp_bottom)
+                make.height.equalTo(toolbarHeight)
+                make.bottom.left.right.equalTo(self)
+            }
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+
+    private func addFooter() {
         self.addSubview(menuFooterView)
         // so it always displays the colour of the background
         menuFooterView.backgroundColor = UIColor.clearColor()
@@ -98,28 +138,7 @@ class MenuView: UIView {
             make.center.equalTo(menuFooterView)
             make.height.equalTo(menuFooterView)
         }
-
-        let pageControllerView = menuItemPageController.view
-        self.addSubview(pageControllerView)
-
-        self.addSubview(toolbar)
-        toolbar.snp_makeConstraints { make in
-            make.height.equalTo(toolbarHeight)
-            make.top.left.right.equalTo(self)
-        }
-
-        pageControllerView.snp_makeConstraints { make in
-            make.top.equalTo(toolbar.snp_bottom)
-            make.left.right.equalTo(self)
-            make.bottom.equalTo(menuFooterView.snp_top)
-        }
     }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-
 
     override func layoutSubviews() {
         reloadDataIfNeeded()
