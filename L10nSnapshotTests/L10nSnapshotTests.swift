@@ -84,7 +84,7 @@ class L10nSnapshotTests: XCTestCase {
 
         // Screenshot all the settings that have a separate page
         for cellName in ["Search", "Logins", "TouchIDPasscode", "ClearPrivateData"] {
-            app.tables.cells[cellName].tap()
+            app.tables["AppSettingsTableViewController.tableView"].cells[cellName].tap()
             index++
             snapshot("03Settings-\(index)")
             app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
@@ -178,6 +178,8 @@ class L10nSnapshotTests: XCTestCase {
     func test11LocationDialog() {
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html")
         snapshot("11LocationDialog-01")
+        // TODO The load seems to dismiss the dialog and prevent it from showing for next test.
+        loadWebPage("http://people.mozilla.org")
     }
 
     func test50ClearPrivateData() {
@@ -238,6 +240,13 @@ class L10nSnapshotTests: XCTestCase {
         passwordField.tap()
         sleep(2)
         passwordField.typeText(loginPassword)
+
+        addUIInterruptionMonitorWithDescription("Location Dialog") { (alert) -> Bool in
+            mySnapshot("50ClearPrivateData-\(index)")
+            alert.buttons.elementBoundByIndex(1).tap()
+            return true
+        }
+
         app.webViews.buttons.elementBoundByIndex(0).tap()
 
         mySnapshot("50ClearPrivateData-\(index)")

@@ -20,6 +20,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
             style: UIBarButtonItemStyle.Done,
             target: navigationController, action: "SELdone")
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
+
+        tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
     }
 
     override func generateSettings() -> [SettingSection] {
