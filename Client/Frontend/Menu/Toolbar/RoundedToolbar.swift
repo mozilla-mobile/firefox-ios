@@ -16,6 +16,8 @@ class RoundedToolbar: UIToolbar {
         }
     }
 
+    var cornerRadius: CGSize = CGSizeZero
+
     var cornersToRound: UIRectCorner = [.AllCorners]
 
     /**
@@ -24,7 +26,7 @@ class RoundedToolbar: UIToolbar {
      */
     override func drawRect(rect: CGRect) {
         // Drawing code
-        let maskPath = UIBezierPath(roundedRect: rect, byRoundingCorners: cornersToRound, cornerRadii: CGSizeMake(10.0,10.0))
+        let maskPath = UIBezierPath(roundedRect: rect, byRoundingCorners: cornersToRound, cornerRadii: cornerRadius)
 
         // Create the shape layer and set its path
         let maskLayer = CAShapeLayer()

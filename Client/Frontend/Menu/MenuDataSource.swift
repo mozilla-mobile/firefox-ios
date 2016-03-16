@@ -25,6 +25,6 @@ protocol MenuItemDataSource {
     // for this page, the number of items that we will display
     func menuView(menuView: MenuView, numberOfItemsForPage page: Int) -> Int
 
-    // get the menu item for this page item
-    func menuView(menuView: MenuView, viewForItemAtIndexPath indexPath: NSIndexPath) -> MenuItemView
+    // get the menu cell for this page item
+    func menuView(menuView: MenuView, menuItemCellForIndexPath indexPath: NSIndexPath) -> MenuItemCollectionViewCell
 }
