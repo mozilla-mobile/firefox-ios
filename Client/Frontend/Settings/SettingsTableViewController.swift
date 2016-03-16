@@ -15,21 +15,6 @@ private let Bug1204635_S2 = NSLocalizedString("Are you sure you want to clear al
 private let Bug1204635_S3 = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
 private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
 
-// A base TableViewCell, to help minimize initialization and allow recycling.
-class SettingsTableViewCell: UITableViewCell {
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        indentationWidth = 0
-        layoutMargins = UIEdgeInsetsZero
-        // So that the seperator line goes all the way to the left edge.
-        separatorInset = UIEdgeInsetsZero
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting {
     private var _title: NSAttributedString?
@@ -63,12 +48,17 @@ class Setting {
         cell.detailTextLabel?.numberOfLines = 0
         cell.textLabel?.attributedText = title
         cell.textLabel?.textAlignment = textAlignment
+        cell.textLabel?.numberOfLines = 0
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
         cell.selectionStyle = enabled ? .Default : .None
         cell.accessibilityIdentifier = accessibilityIdentifier
         cell.accessibilityLabel = title?.string
         cell.accessibilityTraits = UIAccessibilityTraitButton
+        cell.indentationWidth = 0
+        cell.layoutMargins = UIEdgeInsetsZero
+        // So that the separator line goes all the way to the left edge.
+        cell.separatorInset = UIEdgeInsetsZero
     }
 
     // Called when the pref is tapped.
@@ -256,15 +246,23 @@ class SettingsTableViewController: UITableViewController {
     var profile: Profile!
     var tabManager: TabManager!
 
+    /// Used to calculate cell heights.
+    private lazy var dummyToggleCell: UITableViewCell = {
+        let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "dummyCell")
+        cell.accessoryView = UISwitch()
+        return cell
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.tableFooterView = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
         
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.estimatedRowHeight = 44
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -327,7 +325,7 @@ class SettingsTableViewController: UITableViewController {
                 // Work around http://stackoverflow.com/a/9999821 and http://stackoverflow.com/a/25901083 by using a new cell.
                 // I could not make any setNeedsLayout solution work in the case where we disconnect and then connect a new account.
                 // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
-                cell = SettingsTableViewCell(style: setting.style, reuseIdentifier: nil)
+                cell = UITableViewCell(style: setting.style, reuseIdentifier: nil)
             } else {
                 cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath)
             }
@@ -363,6 +361,17 @@ class SettingsTableViewController: UITableViewController {
         return headerView
     }
 
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let section = settings[indexPath.section]
+        // Workaround for calculating the height of default UITableViewCell cells with a subtitle under
+        // the title text label.
+        if let setting = section[indexPath.row] where setting is BoolSetting && setting.status != nil {
+            return calculateStatusCellHeightForSetting(setting)
+        }
+
+        return UITableViewAutomaticDimension
+    }
+
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // empty headers should be 13px high, but headers with text should be 44
         var height: CGFloat = 13
@@ -380,6 +389,30 @@ class SettingsTableViewController: UITableViewController {
         if let setting = section[indexPath.row] where setting.enabled {
             setting.onClick(navigationController)
         }
+    }
+
+    private func calculateStatusCellHeightForSetting(setting: Setting) -> CGFloat {
+        let topBottomMargin: CGFloat = 10
+
+        let tableWidth = tableView.frame.width
+        let accessoryWidth = dummyToggleCell.accessoryView!.frame.width
+        let insetsWidth = 2 * tableView.separatorInset.left
+        let width = tableWidth - accessoryWidth - insetsWidth
+
+        return
+            heightForLabel(dummyToggleCell.textLabel!, width: width, text: setting.title?.string) +
+            heightForLabel(dummyToggleCell.detailTextLabel!, width: width, text: setting.status?.string) +
+            2 * topBottomMargin
+    }
+
+    private func heightForLabel(label: UILabel, width: CGFloat, text: String?) -> CGFloat {
+        guard let text = text else { return 0 }
+
+        let size = CGSize(width: width, height: CGFloat.max)
+        let attrs = [NSFontAttributeName: label.font]
+        let boundingRect = NSString(string: text).boundingRectWithSize(size,
+            options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attrs, context: nil)
+        return boundingRect.height
     }
 }
 
