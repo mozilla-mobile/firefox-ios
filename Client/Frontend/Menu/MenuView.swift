@@ -1,17 +1,13 @@
-//
-//  MenuView.swift
-//  Client
-//
-//  Created by Emily Toop on 3/10/16.
-//  Copyright © 2016 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 
 class MenuView: UIView {
 
     var toolbar: RoundedToolbar
-    var menuItemViewContainer: UIView
+    private let menuItemPageController = MenuPagingViewController()
 
     var openMenuImage: UIImageView
     var menuFooterView: UIView
@@ -63,7 +59,6 @@ class MenuView: UIView {
     init() {
         toolbar = RoundedToolbar()
         toolbar.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
-        menuItemViewContainer = UIView()
         menuFooterView = UIView()
         openMenuImage = UIImageView()
 
@@ -91,8 +86,9 @@ class MenuView: UIView {
             make.height.equalTo(menuFooterView)
         }
 
-        self.addSubview(menuItemViewContainer)
-        menuItemViewContainer.snp_makeConstraints { make in
+        let pageControllerView = menuItemPageController.view
+        self.addSubview(pageControllerView)
+        pageControllerView.snp_makeConstraints { make in
             make.top.equalTo(toolbar.snp_bottom)
             make.left.right.equalTo(self)
             make.bottom.equalTo(menuFooterView.snp_top)
@@ -155,16 +151,10 @@ class MenuView: UIView {
     }
 
     private func loadMenu() {
-        let lastPageIndex = currentPageIndex - 1
-        if lastPageIndex >= 0 {
-            loadMenuForPageIndex(lastPageIndex)
-        }
+        let numberOfPages = menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0
 
-        loadMenuForPageIndex(currentPageIndex)
-
-        let nextPageIndex = currentPageIndex + 1
-        if nextPageIndex < menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0 {
-            loadMenuForPageIndex(nextPageIndex)
+        for pageIndex in 0..<numberOfPages {
+            loadMenuForPageIndex(pageIndex)
         }
     }
 
@@ -216,8 +206,9 @@ class MenuView: UIView {
         var availableItems = cachedItems
         cachedItems.removeAll()
 
+        menuItemPageController.viewControllers = []
         // get views for the previous page, if there is one
-        for pageIndex in currentPageIndex-1...currentPageIndex+1 {
+        for pageIndex in 0..<(menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0) {
             layoutPage(pageIndex, availableItems: &availableItems)
         }
 
@@ -237,42 +228,15 @@ class MenuView: UIView {
         if pageIndex < 0 || pageIndex >= numberOfPages { return }
 
         let numberOfItemsForPage = itemDataSource.menuView(self, numberOfItemsForPage: pageIndex)
-        let numberOfItemsInRow = itemDataSource.numberOfItemsPerRowInMenuView(self)
-
-        let numberOfRows = ceil(CGFloat(numberOfItemsForPage) / CGFloat(numberOfItemsInRow))
-        let height = itemPadding + (CGFloat(numberOfRows) * (CGFloat(menuRowHeight) + itemPadding))
-        menuItemViewContainer.snp_updateConstraints { make in
-            make.height.equalTo(height)
-        }
 
         for index in 0..<numberOfItemsForPage {
             let indexPath = NSIndexPath(forItem: index, inSection: pageIndex)
             guard let item = availableItems[indexPath] else { continue }
             cachedItems[indexPath] = item
-            menuItemViewContainer.addSubview(item)
-
-            // now properly lay out the cells
-            let row = floor(CGFloat(index) / CGFloat(numberOfItemsInRow))
-            let columnIndex = index - (Int(row) * numberOfItemsInRow)
-            let columnMultiplier = CGFloat(columnIndex)/CGFloat(numberOfItemsInRow)
-            let rowMultiplier = CGFloat(row) / CGFloat(numberOfRows)
-            item.snp_makeConstraints { make in
-                make.height.greaterThanOrEqualTo(menuItemViewContainer.snp_height).dividedBy(numberOfRows)
-                make.width.greaterThanOrEqualTo(menuItemViewContainer.snp_width).dividedBy(numberOfItemsInRow)
-                if columnMultiplier > 0 {
-                    make.left.equalTo(menuItemViewContainer.snp_right).multipliedBy(columnMultiplier)
-                } else {
-                    make.left.equalTo(menuItemViewContainer.snp_left)
-                }
-
-                if rowMultiplier > 0 {
-                    make.top.equalTo(menuItemViewContainer.snp_bottom).multipliedBy(rowMultiplier)
-                } else {
-                    make.top.equalTo(menuItemViewContainer.snp_top)
-                }
-            }
             availableItems.removeValueForKey(indexPath)
         }
+
+        menuItemPageController.viewControllers.append(menuPageControllerForPageIndex(pageIndex))
 
     }
 
@@ -289,5 +253,96 @@ class MenuView: UIView {
     
     func indexPathForView(itemView: MenuItemView) -> NSIndexPath? {
         return (cachedItems as NSDictionary).allKeysForObject(itemView).first as? NSIndexPath
+    }
+}
+
+extension  MenuView: MenuPageViewControllerDelegate {
+    func menuPageViewController(menuItemViewController: MenuPageViewController, didSelectMenuItem menuItem: MenuItemView, atIndexPath indexPath: NSIndexPath) {
+        menuItemDelegate?.menuView(self, didSelectItemAtIndexPath: indexPath)
+    }
+}
+
+extension MenuView: UIPageViewControllerDataSource {
+
+    func menuPageControllerForPageIndex(pageIndex: Int) -> MenuPageViewController {
+        let menuVC = MenuPageViewController()
+        menuVC.setItems(itemsForPageIndex(pageIndex), forPageIndex: pageIndex)
+        menuVC.delegate = self
+        menuVC.numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0)
+        menuVC.itemPadding = itemPadding
+        menuVC.menuRowHeight = CGFloat(menuRowHeight)
+        return menuVC
+    }
+
+    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
+        let nextPageIndex = (viewController as! MenuPageViewController).pageIndex + 1
+        if nextPageIndex < (menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0) {
+            return menuPageControllerForPageIndex(nextPageIndex)
+        }
+        return nil
+    }
+
+    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
+        let previousPageIndex = (viewController as! MenuPageViewController).pageIndex - 1
+        if previousPageIndex >= 0 {
+            return menuPageControllerForPageIndex(previousPageIndex)
+        }
+        return nil
+    }
+
+    private func itemsForPageIndex(pageIndex: Int) -> [MenuItemView] {
+
+        var itemsForPageIndex = [MenuItemView]()
+        let numberOfItemsForPage = menuItemDataSource?.menuView(self, numberOfItemsForPage: pageIndex) ?? 0
+        for index in 0..<numberOfItemsForPage {
+            let indexPath = NSIndexPath(forItem: index, inSection: pageIndex)
+            if let view = cachedItems[indexPath] ?? menuItemDataSource?.menuView(self, viewForItemAtIndexPath: indexPath) {
+                if cachedItems[indexPath] == nil {
+                    cachedItems[indexPath] = view
+                }
+
+                itemsForPageIndex.append(view)
+            }
+        }
+
+        return itemsForPageIndex
+    }
+
+    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
+        return (menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0)
+    }
+
+    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int {
+        return currentPageIndex + 1
+    }
+}
+
+extension MenuView: UIPageViewControllerDelegate {
+
+    func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController]) {
+        guard let nextVC = pendingViewControllers.first as? MenuPageViewController else { return }
+        nextPageIndex = nextVC.pageIndex
+    }
+
+    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        defer {
+            nextPageIndex = nil
+        }
+
+        guard completed, let nextIndex = nextPageIndex else { return }
+        currentPageIndex = nextIndex
+    }
+
+}
+
+extension UIPageViewController {
+    func getScrollView() -> UIScrollView? {
+        for subview in view.subviews {
+            if subview is UIScrollView {
+                return subview as? UIScrollView
+            }
+        }
+        
+        return nil
     }
 }
