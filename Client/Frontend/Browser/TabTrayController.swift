@@ -295,6 +295,8 @@ class TabTrayController: UIViewController {
         self.tabManager = tabManager
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
+
+        tabManager.addDelegate(self)
     }
 
     convenience init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate) {
@@ -306,20 +308,11 @@ class TabTrayController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.tabManager.removeDelegate(self)
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        tabManager.addDelegate(self)
-    }
-
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
+        self.tabManager.removeDelegate(self)
     }
 
     func SELDynamicFontChanged(notification: NSNotification) {
