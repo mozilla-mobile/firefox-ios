@@ -39,6 +39,7 @@ public class MenuItemView: UIControl {
             make.top.equalTo(imageView.snp_bottom).offset(padding)
             make.centerX.equalTo(self)
             make.bottom.equalTo(self).offset(-padding)
+            make.width.lessThanOrEqualTo(self.snp_width).dividedBy(1.5)
         }
     }
 

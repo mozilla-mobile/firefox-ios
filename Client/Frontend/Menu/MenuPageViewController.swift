@@ -15,6 +15,11 @@ public class MenuPageViewController: UIViewController {
     public var numberOfItemsInRow:CGFloat = 0
     public var itemPadding: CGFloat = 0
     public var menuRowHeight: CGFloat = 0
+    public var backgroundColor: UIColor = UIColor.clearColor() {
+        didSet {
+            view.backgroundColor = backgroundColor
+        }
+    }
 
     private let itemContainerView = UIView()
     private var items = [MenuItemView]()
@@ -31,7 +36,6 @@ public class MenuPageViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         view.addSubview(itemContainerView)
-        view.backgroundColor = UIColor.blackColor()
         numberOfRows = ceil(CGFloat(items.count) / numberOfItemsInRow)
 
         itemContainerView.restorationIdentifier = "ItemContainerView"
