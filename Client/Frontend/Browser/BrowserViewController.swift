@@ -892,6 +892,10 @@ class BrowserViewController: UIViewController {
     }
 
     private func runScriptsOnWebView(webView: WKWebView) {
+        //Running scripts here ensures that they are run even when wkwebview shows a cached page.
+        if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
+            webView.evaluateJavaScript("_firefox_ReaderMode.checkReadability()", completionHandler: nil)
+        }
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler:nil)
     }
     
@@ -1909,12 +1913,6 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             postLocationChangeNotificationForTab(tab, navigation: navigation)
-
-            // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
-            // because that event wil not always fire due to unreliable page caching. This will either let us know that
-            // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
-            // ignore the result because we are being called back asynchronous when the readermode status changes.
-            webView.evaluateJavaScript("_firefox_ReaderMode.checkReadability()", completionHandler: nil)
         }
 
         if tab === tabManager.selectedTab {
