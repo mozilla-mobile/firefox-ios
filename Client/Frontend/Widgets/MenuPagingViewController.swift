@@ -20,6 +20,19 @@ class MenuPagingViewController: UIViewController {
 
     private let containerView = UIView()
 
+    var backgroundColor: UIColor = UIColor.clearColor() {
+        didSet {
+            self.view.backgroundColor = backgroundColor
+        }
+    }
+    
+    var tintColor: UIColor = UIColor.blackColor() {
+        didSet {
+            pageControl.pageIndicatorTintColor = tintColor.colorWithAlphaComponent(0.5)
+            pageControl.currentPageIndicatorTintColor = tintColor
+        }
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
