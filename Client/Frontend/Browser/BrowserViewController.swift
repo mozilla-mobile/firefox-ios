@@ -352,9 +352,12 @@ class BrowserViewController: UIViewController {
         setupConstraints()
         log.debug("BVC done.")
 
-        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.TabTray))
-        mvc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.TabTray), presentationStyle: .Popover)
+        mvc.modalPresentationStyle = .Popover
         self.presentViewController(mvc, animated: false, completion: nil)
+
+        let popoverPresentationController = mvc.popoverPresentationController
+        popoverPresentationController?.sourceView = urlBar
     }
 
     private func setupConstraints() {
