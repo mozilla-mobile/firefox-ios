@@ -17,6 +17,25 @@ class MenuView: UIView {
     var menuItemDelegate: MenuItemDelegate?
     var menuItemDataSource: MenuItemDataSource?
 
+    private var menuColor: UIColor = UIColor.clearColor() {
+        didSet {
+            menuItemPageController.backgroundColor = menuColor
+            menuFooterView.backgroundColor = menuColor
+        }
+    }
+
+    override var backgroundColor: UIColor! {
+        get { return menuColor }
+
+        set { menuColor = newValue }
+    }
+    
+    override var tintColor: UIColor! {
+        didSet {
+            menuItemPageController.tintColor = tintColor
+        }
+    }
+
     var toolbarHeight: Float = 40.0 {
         didSet {
             self.setNeedsLayout()
@@ -61,15 +80,9 @@ class MenuView: UIView {
         toolbar.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
         menuFooterView = UIView()
         openMenuImage = UIImageView()
+        openMenuImage.contentMode = UIViewContentMode.ScaleAspectFit
 
         super.init(frame: CGRectZero)
-
-        toolbar.cornersToRound = [.TopLeft, .TopRight]
-        self.addSubview(toolbar)
-        toolbar.snp_makeConstraints { make in
-            make.height.equalTo(toolbarHeight)
-            make.top.left.right.equalTo(self)
-        }
 
         self.addSubview(menuFooterView)
         // so it always displays the colour of the background
@@ -88,6 +101,13 @@ class MenuView: UIView {
 
         let pageControllerView = menuItemPageController.view
         self.addSubview(pageControllerView)
+
+        self.addSubview(toolbar)
+        toolbar.snp_makeConstraints { make in
+            make.height.equalTo(toolbarHeight)
+            make.top.left.right.equalTo(self)
+        }
+
         pageControllerView.snp_makeConstraints { make in
             make.top.equalTo(toolbar.snp_bottom)
             make.left.right.equalTo(self)

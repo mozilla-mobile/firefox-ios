@@ -16,14 +16,41 @@ struct MenuConfiguration {
     let menuToolbarItems: [MenuToolbarItem]?
     let location: MenuLocation
 
-    static func menuConfigurationForLocation(location: MenuLocation) -> MenuConfiguration {
-        return MenuConfiguration(location: location, menuItems: menuItemsForLocation(location), toolbarItems: menuToolbarItemsForLocation(location))
-    }
-
     init(location: MenuLocation, menuItems: [MenuItem], toolbarItems: [MenuToolbarItem]?) {
         self.location = location
         self.menuItems = menuItems
         self.menuToolbarItems = toolbarItems
+    }
+
+    func toolbarColourForMode(isPrivate isPrivate: Bool = false) -> UIColor {
+        return isPrivate ? UIConstants.MenuToolbarBackgroundColorPrivate : UIConstants.MenuToolbarBackgroundColorNormal
+    }
+
+    func toolbarTintColorForMode(isPrivate isPrivate: Bool = false) -> UIColor {
+        return isPrivate ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuToolbarTintColorNormal
+    }
+
+    func menuBackgroundColorForMode(isPrivate isPrivate: Bool = false) -> UIColor {
+        return isPrivate ? UIConstants.MenuBackgroundColorPrivate : UIConstants.MenuBackgroundColorNormal
+    }
+
+    func menuTintColorForMode(isPrivate isPrivate: Bool = false) -> UIColor {
+        return isPrivate ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuBackgroundColorPrivate
+    }
+
+    func menuFont() -> UIFont {
+        return UIFont.systemFontOfSize(11)
+    }
+}
+
+// MARK: Static helper access function
+
+extension MenuConfiguration {
+
+    static let menuIcon = UIImage(named: "add")
+
+    static func menuConfigurationForLocation(location: MenuLocation) -> MenuConfiguration {
+        return MenuConfiguration(location: location, menuItems: menuItemsForLocation(location), toolbarItems: menuToolbarItemsForLocation(location))
     }
 
     // the items should be added to the array according to desired display order
