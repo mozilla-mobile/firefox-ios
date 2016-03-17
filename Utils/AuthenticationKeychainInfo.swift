@@ -21,10 +21,12 @@ public enum PasscodeInterval: Int {
 // MARK: - Helper methods for accessing Authentication information from the Keychain
 public extension KeychainWrapper {
     class func authenticationInfo() -> AuthenticationKeychainInfo? {
+        NSKeyedUnarchiver.setClass(AuthenticationKeychainInfo.self, forClassName: "AuthenticationKeychainInfo")
         return KeychainWrapper.objectForKey(KeychainKeyAuthenticationInfo) as? AuthenticationKeychainInfo
     }
 
     class func setAuthenticationInfo(info: AuthenticationKeychainInfo?) {
+        NSKeyedArchiver.setClassName("AuthenticationKeychainInfo", forClass: AuthenticationKeychainInfo.self)
         if let info = info {
             KeychainWrapper.setObject(info, forKey: KeychainKeyAuthenticationInfo)
         } else {
