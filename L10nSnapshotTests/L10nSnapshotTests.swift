@@ -176,10 +176,15 @@ class L10nSnapshotTests: XCTestCase {
     }
 
     func test11LocationDialog() {
+        addUIInterruptionMonitorWithDescription("Location Dialog") { (alert) -> Bool in
+            snapshot("11LocationDialog-01")
+            alert.buttons.elementBoundByIndex(0).tap()
+            return true
+        }
+
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html")
-        snapshot("11LocationDialog-01")
-        // TODO The load seems to dismiss the dialog and prevent it from showing for next test.
-        loadWebPage("http://people.mozilla.org")
+        // The interruption monitor will execute in between here
+        self.loadWebPage("http://people.mozilla.org")
     }
 
     // This is a fragile testcase because it depends on the specific position of items in the
@@ -259,9 +264,11 @@ class L10nSnapshotTests: XCTestCase {
         var logOutCell = app.tables.cells["LogOut"]
         if logOutCell.exists {
             logOutCell.tap()
+            sleep(2)
             app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
         }
 
+        sleep(2)
         clearPrivateData()
 
         app.tables.cells["SignInToFirefox"].tap()
@@ -295,12 +302,14 @@ class L10nSnapshotTests: XCTestCase {
 
         mySnapshot("50ClearPrivateData-\(index)")
 
+        sleep(2)
         clearPrivateData()
 
-        logOutCell = app.tables.cells["LogOut"]
-        app.tables.elementBoundByIndex(0).scrollToElement(logOutCell)
+        app.tables["AppSettingsTableViewController.tableView"].swipeUp()
+        app.tables["AppSettingsTableViewController.tableView"].swipeUp()
         mySnapshot("50ClearPrivateData-\(index)")
-        logOutCell.tap()
+
+        app.tables["AppSettingsTableViewController.tableView"].cells["LogOut"].tap()
         mySnapshot("50ClearPrivateData-\(index)")
         app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
         mySnapshot("50ClearPrivateData-\(index)")
