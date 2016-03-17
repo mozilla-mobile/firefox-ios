@@ -1827,6 +1827,13 @@ extension BrowserViewController: TabDelegate {
         tab.addHelper(spotlightHelper, name: SpotlightHelper.name())
 
         tab.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())
+
+        // U2F requires iOS 9, for access to WKSecurityOrigin
+        if #available(iOS 9, *) {
+            let u2fHelper = U2FHelper(tab: tab, openURL: openURL)
+            u2fHelper.delegate = self
+            tab.addHelper(u2fHelper, name: U2FHelper.name())
+        }
     }
 
     func tab(tab: Tab, willDeleteWebView webView: WKWebView) {
@@ -3321,6 +3328,19 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
 
     func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int) {
         findInPageBar?.totalResults = totalResults
+    }
+}
+
+@available(iOS 9, *)
+extension BrowserViewController: U2FHelperDelegate {
+    func u2fFinish(id id: String, response: U2FResponse) {
+        guard let json = response.toJSON() else { return }
+
+        dispatch_async(dispatch_get_main_queue()) {
+            guard let webView = self.tabManager.selectedTab?.webView else { return }
+            NSLog("__firefox__.u2f.finish({id:\"\(id)\",result:\(json)});")
+            webView.evaluateJavaScript("__firefox__.u2f.finish({id:\"\(id)\",result:\(json)});", completionHandler: nil)
+        }
     }
 }
 
