@@ -114,6 +114,7 @@ private extension ShareExtensionHelper {
         // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle identifier.
         return (activityType?.rangeOfString("password") != nil)
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
+            || (activityType == "com.dashlane.dashlanephonefinal.SafariExtension")
 
     }
 
