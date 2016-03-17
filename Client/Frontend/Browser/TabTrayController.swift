@@ -342,6 +342,7 @@ class TabTrayController: UIViewController {
         addTabButton.setImage(UIImage(named: "add"), forState: .Normal)
         addTabButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: .TouchUpInside)
         addTabButton.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+        addTabButton.accessibilityIdentifier = "TabTrayController.addTabButton"
 
         settingsButton = UIButton()
         settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
@@ -351,6 +352,7 @@ class TabTrayController: UIViewController {
 
         let flowLayout = TabTrayCollectionViewLayout()
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
+        collectionView.accessibilityIdentifier = "TabTrayController.collectionView"
 
         collectionView.dataSource = tabDataSource
         collectionView.delegate = tabLayoutDelegate
