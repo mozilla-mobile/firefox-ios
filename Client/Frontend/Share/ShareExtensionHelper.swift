@@ -122,6 +122,10 @@ private extension ShareExtensionHelper {
             return
         }
 
+        if selectedWebView.URL?.absoluteString == nil {
+            return
+        }
+
         // Add 1Password to share sheet
         OnePasswordExtension.sharedExtension().createExtensionItemForWebView(selectedWebView, completion: {(extensionItem, error) -> Void in
             if extensionItem == nil {
