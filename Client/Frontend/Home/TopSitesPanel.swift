@@ -589,8 +589,27 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
     }
 
-    private func setHistorySites(historySites: [Site]) {
-        self.sites = historySites
+    private func setHistorySites(var historySites: [Site]) {
+        // We requery every time we do a deletion. If the query contains a top site that's
+        // bubbled up that wasn't there previously (e.g., a page just finished loading
+        // in the background), it will change the index of any following site currently
+        // displayed. This, in turn, would cause sites to shuffle around, and we would
+        // possibly have duplicates if a site that's already visible has been reindexed
+        // to a newly added position, post-deletion.
+        //
+        // The fix? Go through our existing set of sites on an update and append new sites
+        // to the end. This preserves the ordering of existing sites, meaning the last
+        // index, post-deletion, will always be a new site. Of course, this is temporary;
+        // whenever the panel is reloaded, our transient, ordered state will be lost. But
+        // that's OK: top sites change frequently anyway.
+        self.sites = self.sites.filter { site in
+            if let index = historySites.indexOf(site) {
+                historySites.removeAtIndex(index)
+                return true
+            }
+
+            return false
+        } + historySites
     }
 
     private func mergeSuggestedSites() {
