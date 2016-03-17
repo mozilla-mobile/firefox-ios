@@ -119,13 +119,18 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
 
         let run: SyncResult
         if !AppConstants.shouldMergeBookmarks {
-            run = doMirror >>== effect({ result in
-                // Just validate to report statistics.
-                if case .Completed = result {
-                    log.debug("Validating completed buffer download.")
-                    buffer.validate()
-                }
-            })
+            if case .Release = AppConstants.BuildChannel {
+                // On release, just mirror; don't validate.
+                run = doMirror
+            } else {
+                run = doMirror >>== effect({ result in
+                    // Just validate to report statistics.
+                    if case .Completed = result {
+                        log.debug("Validating completed buffer download.")
+                        buffer.validate()
+                    }
+                })
+            }
         } else {
             run = doMirror >>== { result in
                 // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
