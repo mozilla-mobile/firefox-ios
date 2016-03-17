@@ -7,7 +7,7 @@ import Shared
 import XCGLogger
 import Storage
 import WebImage
-
+import Deferred
 
 private let log = Logger.browserLogger
 
@@ -146,14 +146,19 @@ class TopSitesPanel: UIViewController {
         if site is SuggestedSite {
             deleteTileForSuggestedSite(site as! SuggestedSite)
         }
-        
-        let newSites = profile.history.removeSiteFromTopSites(site) >>> {
-            self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit)
-        }
 
-        newSites.uponQueue(dispatch_get_main_queue()) { result in
-            self.deleteOrUpdateSites(result, indexPath: indexPath)
-            self.collection?.userInteractionEnabled = true
+        profile.history.removeSiteFromTopSites(site).uponQueue(dispatch_get_main_queue()) { _ in
+            // Remove the site from the current data source. Don't requery yet
+            // since a Sync or location change may have changed the data under us.
+            self.dataSource.sites = self.dataSource.sites.filter { $0 !== site }
+
+            // Update the UICollectionView.
+            self.deleteOrUpdateSites(indexPath) >>> {
+                // Finally, requery to pull in the latest sites.
+                self.reloadTopSitesWithLimit(self.maxFrecencyLimit).uponQueue(dispatch_get_main_queue()) { _ in
+                    self.collection?.userInteractionEnabled = true
+                }
+            }
         }
     }
 
@@ -185,40 +190,25 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    private func deleteOrUpdateSites(result: Maybe<Cursor<Site>>, indexPath: NSIndexPath) {
-        guard let collectionView = collection else { return }
-        // get the number of top sites items we have before we update the data source
-        // this is so we know how many new top sites cells to add
-        // as a sync may have brought in more results than we had previously
-        let previousNumOfThumbnails = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
+    private func deleteOrUpdateSites(indexPath: NSIndexPath) -> Success {
+        guard let collection = self.collection else { return succeed() }
 
-        // Exit early if the query failed in some way.
-        guard result.isSuccess else {
-            return
-        }
+        let result = Success()
 
-        // now update the data source with the new data
-        self.updateDataSourceWithSites(result)
+        collection.performBatchUpdates({
+            collection.deleteItemsAtIndexPaths([indexPath])
 
-        collection?.performBatchUpdates({
-
-            // find out how many thumbnails, up the max for display, we can actually add
-            let numOfCellsFromData = self.dataSource.count()
-            let numOfThumbnails = min(numOfCellsFromData, self.layout.thumbnailCount)
-
-            // If we have enough data to fill the tiles after the deletion, then delete the correct tile and insert any that are missing
-            if (numOfThumbnails >= previousNumOfThumbnails) {
-                self.collection?.deleteItemsAtIndexPaths([indexPath])
-                let indexesToAdd = ((previousNumOfThumbnails-1)..<numOfThumbnails).map{ NSIndexPath(forItem: $0, inSection: 0) }
-                self.collection?.insertItemsAtIndexPaths(indexesToAdd)
-            }
-            // If we don't have any data to backfill our tiles, just delete
-            else {
-                self.collection?.deleteItemsAtIndexPaths([indexPath])
+            // If we have more items in our data source, replace the deleted site with a new one.
+            let count = collection.numberOfItemsInSection(0) - 1
+            if count < self.dataSource.count() {
+                collection.insertItemsAtIndexPaths([ NSIndexPath(forItem: count, inSection: 0) ])
             }
         }, completion: { _ in
             self.updateAllRemoveButtonStates()
+            result.fill(Maybe(success: ()))
         })
+
+        return result
     }
 
     /**
@@ -260,8 +250,6 @@ class TopSitesPanel: UIViewController {
 extension TopSitesPanel: HomePanel {
     func endEditing() {
         editingThumbnails = false
-
-        collection?.reloadData()
     }
 }
 
