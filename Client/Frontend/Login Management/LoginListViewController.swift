@@ -46,9 +46,10 @@ class LoginListViewController: UIViewController {
 
     private let loadingStateView = LoadingLoginsView()
 
-    // Titles for selection/deselect buttons
+    // Titles for selection/deselect/delete buttons
     private let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Title for deselecting all selected logins")
     private let selectAllTitle = NSLocalizedString("Select All", tableName: "LoginManager", comment: "Title for selecting all logins")
+    private let deleteLoginTitle = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Button in login detail screen that deletes the current login")
 
     private lazy var selectionButton: UIButton = {
         let button = UIButton()
@@ -151,7 +152,7 @@ class LoginListViewController: UIViewController {
         // Show delete bar button item if we have selected any items
         if loginSelectionController.selectedCount > 0 {
             if (navigationItem.rightBarButtonItem == nil) {
-                navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Delete", style: .Plain, target: self, action: "SELdelete")
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .Plain, target: self, action: "SELdelete")
                 navigationItem.rightBarButtonItem?.tintColor = UIColor.redColor()
             }
         } else {

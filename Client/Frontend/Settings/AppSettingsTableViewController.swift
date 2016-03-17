@@ -142,18 +142,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
         return settings
     }
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        // Make account/sign-in and close private tabs rows taller, as per design specs.
-        let section = settings[indexPath.section]
-        if let setting = section[indexPath.row] as? BoolSetting where setting.prefKey == "settings.closePrivateTabs" || setting.prefKey == AllowThirdPartyKeyboardsKey {
-            return 64
-        } else if section[indexPath.row] is ConnectSetting {
-            return 64
-        }
-
-        return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
-    }
-
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if !profile.hasAccount() {
             let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
