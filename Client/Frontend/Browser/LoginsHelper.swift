@@ -156,18 +156,17 @@ class LoginsHelper: BrowserHelper {
         snackBar = TimerSnackBar(attrText: promptMessage,
             img: UIImage(named: "key"),
             buttons: [
-                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: NotNowButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.nowNowButton", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
                 }),
 
-                SnackButton(title: YesButtonTitle, callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: YesButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.yesButton", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.addLogin(login)
                 })
-
             ])
         browser?.addSnackbar(snackBar!)
     }
@@ -196,13 +195,13 @@ class LoginsHelper: BrowserHelper {
         snackBar = TimerSnackBar(attrText: promptMessage,
             img: UIImage(named: "key"),
             buttons: [
-                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: NotNowButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.nowNowButton", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
                 }),
 
-                SnackButton(title: UpdateButtonTitle, callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: UpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.updateLoginByGUID(guid, new: new,
