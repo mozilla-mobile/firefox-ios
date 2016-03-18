@@ -11,6 +11,30 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
+public extension WKWebViewConfiguration {
+    public func setPlaybackPref(property: String, value: Bool) {
+        if property == "allowsInlineMediaPlayback" {
+            self.allowsInlineMediaPlayback = value
+        } else if property == "allowsAirPlayForMediaPlayback" {
+            if #available(iOS 9, *) {
+                self.allowsAirPlayForMediaPlayback = value
+            } else {
+                self.mediaPlaybackAllowsAirPlay = value
+            }
+        } else if property == "allowsPictureInPictureMediaPlayback" {
+            if #available(iOS 9, *) {
+                self.allowsPictureInPictureMediaPlayback = value
+            }
+        } else if property == "requiresUserActionForMediaPlayback" {
+            if #available(iOS 9, *) {
+                self.requiresUserActionForMediaPlayback = value
+            } else {
+                self.mediaPlaybackRequiresUserAction = value
+            }
+        }
+    }
+}
+
 protocol TabHelper {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
@@ -152,6 +176,9 @@ class Tab: NSObject {
             configuration!.userContentController = WKUserContentController()
             configuration!.preferences = WKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
+            configuration!.setPlaybackPref("allowsInlineMediaPlayback", value: true)
+            configuration!.setPlaybackPref("allowsAirPlayForMediaPlayback", value: true)
+            configuration!.setPlaybackPref("allowsPictureInPictureMediaPlayback", value: true)
             let webView = TabWebView(frame: CGRectZero, configuration: configuration!)
             webView.delegate = self
             configuration = nil
