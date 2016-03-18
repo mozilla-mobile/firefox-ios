@@ -1,0 +1,2306 @@
+# SQLCipher
+# codec.test developed by Stephen Lombardo (Zetetic LLC) 
+# sjlombardo at zetetic dot net
+# http://zetetic.net
+# 
+# Copyright (c) 2009, ZETETIC LLC
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the ZETETIC LLC nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY ZETETIC LLC ''AS IS'' AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZETETIC LLC BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing code cipher features.
+#
+# NOTE: tester.tcl has overridden the definition of sqlite3 to 
+# automatically pass in a key value. Thus tests in this file
+# should explicitly close and open db with sqlite_orig in order
+# to bypass default key assignment.
+
+
+file delete -force test.db
+file delete -force test2.db
+file delete -force test3.db
+file delete -force test4.db
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set old_pending_byte [sqlite3_test_control_pending_byte 0x40000000]
+
+# If the library is not compiled with has_codec support then
+# skip all tests in this file.
+if {![sqlite_orig -has-codec]} {
+  finish_test
+  return
+}
+
+proc setup {file key} {
+  sqlite_orig db $file
+  execsql "PRAGMA key=$key;"
+  execsql {
+    CREATE table t1(a,b);
+    INSERT INTO t1 VALUES ('test1', 'test2'); 
+  } db
+  db close
+}
+
+proc get_cipher_provider {} {
+   sqlite_orig db test.db
+    return [execsql {
+            PRAGMA key = 'test';
+            PRAGMA cipher_provider;
+    }];
+}
+
+proc if_built_with_openssl {name cmd expected} {
+    if {[get_cipher_provider] == "openssl"} {
+        do_test $name $cmd $expected
+    }
+}
+
+proc if_built_with_libtomcrypt {name cmd expected} {
+    if {[get_cipher_provider] == "libtomcrypt"} {
+        do_test $name $cmd $expected
+    }
+}
+
+proc if_built_with_commoncrypto {name cmd expected} {
+     if {[get_cipher_provider] == "commoncrypto"} {
+        do_test $name $cmd $expected
+     }
+}
+
+proc cmpFilesChunked {file1 file2 {chunksize 16384}} {
+    set f1 [open $file1]; fconfigure $f1 -translation binary
+    set f2 [open $file2]; fconfigure $f2 -translation binary
+    while {1} {
+        set d1 [read $f1 $chunksize]
+        set d2 [read $f2 $chunksize]
+        set diff [string compare $d1 $d2]
+        if {$diff != 0 || [eof $f1] || [eof $f2]} {
+            close $f1; close $f2
+            return $diff
+        }
+    }
+    return 0
+}
+
+# The database is initially empty.
+# set an hex key create some basic data
+# create table and insert operations should work
+# close database, open it again with the same
+# hex key. verify that the table is readable
+# and the data just inserted is visible
+setup test.db "\"x'98483C6EB40B6C31A448C22A66DED3B5E5E8D5119CAC8327B655C8B5C4836481'\""
+do_test will-open-with-correct-raw-key {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = "x'98483C6EB40B6C31A448C22A66DED3B5E5E8D5119CAC8327B655C8B5C4836481'";
+    SELECT name FROM sqlite_master WHERE type='table';
+    SELECT * from t1;
+  }
+} {t1 test1 test2}
+db close
+file delete -force test.db
+
+# set an encryption key (non-hex) and create some basic data
+# create table and insert operations should work
+# close database, open it again with the same
+# key. verify that the table is readable
+# and the data just inserted is visible
+setup test.db "'testkey'"
+do_test will-open-with-correct-derived-key {
+
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT name FROM sqlite_master WHERE type='table';
+    SELECT * from t1;
+  }
+} {t1 test1 test2}
+db close
+file delete -force test.db
+
+# open the database and try to read from it without
+# providing a passphrase. verify that the 
+# an error is returned from the library
+setup test.db "'testkey'"
+do_test wont-open-without-key {
+  sqlite_orig db test.db
+  catchsql {
+    SELECT name FROM sqlite_master WHERE type='table';
+  }
+} {1 {file is encrypted or is not a database}}
+db close
+file delete -force test.db
+
+# open the database and try to set an invalid
+# passphrase. verify that an error is returned
+# and that data couldn't be read
+setup test.db "'testkey'"
+do_test wont-open-with-invalid-derived-key {
+  sqlite_orig db test.db
+  catchsql {
+    PRAGMA key = 'testkey2';
+    SELECT name FROM sqlite_master WHERE type='table';
+  }
+} {1 {file is encrypted or is not a database}}
+db close
+file delete -force test.db
+
+# open the database and try to set an invalid
+# hex key. verify that an error is returned
+# and that data couldn't be read
+setup test.db "'testkey'"
+do_test wont-open-with-invalid-raw-key {
+  sqlite_orig db test.db
+  catchsql {
+    PRAGMA key = "x'98483C6EB40B6C31A448C22A66DED3B5E5E8D5119CAC8327B655C8B5C4836480'";
+    SELECT name FROM sqlite_master WHERE type='table';
+  }
+} {1 {file is encrypted or is not a database}}
+db close
+file delete -force test.db
+
+# test a large number of inserts in a transaction to a memory database 
+do_test memory-database {
+  sqlite_orig db :memory:
+  execsql {
+    PRAGMA key = 'testkey3';
+    BEGIN;
+    CREATE TABLE t2(a,b);
+  }
+  for {set i 1} {$i<=25000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t2 VALUES($i,$r);" 
+  }
+  execsql {
+    COMMIT;
+    SELECT count(*) FROM t2;
+    DELETE FROM t2;
+    SELECT count(*) FROM t2;
+  } 
+} {25000 0}
+db close
+
+# test a large number of inserts in a transaction for multiple pages
+do_test multi-page-database {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    CREATE TABLE t2(a,b);
+    BEGIN;
+  }
+  for {set i 1} {$i<=25000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t2 VALUES($i,$r);" 
+  }
+  execsql {
+    COMMIT;
+    SELECT count(*) FROM t2;
+  } 
+} {25000}
+db close
+file delete -force test.db
+
+# test a rekey operation as the first op on a database
+# then test that now the new key opens the database
+# now close database re-open with new key
+setup test.db "'testkey'"
+do_test rekey-as-first-operation {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA rekey = 'testkeynew';
+  }
+  db close
+
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkeynew';
+    SELECT name FROM sqlite_master WHERE type='table';
+  }
+} {t1}
+db close
+file delete -force test.db
+
+# create a new database, insert some data
+# then rekey it with the same password
+do_test rekey-same-passkey {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'test123';
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');"
+  }
+
+  execsql {
+    COMMIT;
+    SELECT count(*) FROM t1;
+    PRAGMA rekey = 'test123';
+    SELECT count(*) FROM t1;
+  }
+} {1000 1000}
+db close
+file delete -force test.db
+
+# create a new database, insert some data
+# then rekey it. Make sure it is immediately
+# readable. Then close it and make sure it can be
+# read back 
+do_test rekey-and-query-1 {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'test123';
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');"
+  }
+
+  execsql {
+    COMMIT;
+    SELECT count(*) FROM t1;
+    PRAGMA rekey = 'test321';
+    SELECT count(*) FROM t1;
+  }
+} {1000 1000}
+
+db close
+
+do_test rekey-and-query-2 {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'test321';
+    SELECT count(*) FROM t1;
+  }
+} {1000}
+db close
+file delete -force test.db
+
+# create a new database, insert some data
+# delete about 50% of the data
+# write some new data
+# delete another 50%
+# then rekey it. Make sure it is immediately
+# readable. Then close it and make sure it can be
+# read back. This test will ensure that Secure Delete
+# is enabled and all pages are being written and are not
+# being optimized out by sqlite3PagerDontWrite
+do_test rekey-delete-and-query-1 {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'test123';
+    CREATE TABLE t1(a,b);
+    CREATE INDEX ta_a ON t1(a);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<1000} {incr i} {
+    set r [expr {int(rand()*32767)}]
+    set r1 [expr {int(rand()*32767)}]
+    execsql "INSERT INTO t1 VALUES($r,$r1);"
+  }
+  set r [expr {int(rand()*32767)}]
+  set r1 [expr {int(rand()*32767)}]
+  execsql "UPDATE t1 SET b = $r WHERE a < $r1;"
+
+  set r [expr {int(rand()*32767)}]
+
+  execsql "DELETE FROM t1 WHERE a < $r;"
+
+  execsql {
+    COMMIT;
+    SELECT (count(*) > 0) FROM t1;
+  }
+} {1}
+db close
+
+do_test rekey-delete-and-query-2 {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'test123';
+    PRAGMA rekey = 'test321';
+    SELECT count(*) > 1 FROM t1;
+    PRAGMA integrity_check;
+  }
+} {1 ok}
+db close
+
+do_test rekey-delete-and-query-3 {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'test321';
+    SELECT count(*) > 1 FROM t1;
+  }
+} {1}
+db close
+file delete -force test.db
+
+
+# same as previous test, but use WAL
+do_test rekey-delete-and-query-wal-1 {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'test123';
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a,b);
+    CREATE INDEX ta_a ON t1(a);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<1000} {incr i} {
+    set r [expr {int(rand()*32767)}]
+    set r1 [expr {int(rand()*32767)}]
+    execsql "INSERT INTO t1 VALUES($r,$r1);"
+  }
+  set r [expr {int(rand()*32767)}]
+  set r1 [expr {int(rand()*32767)}]
+  execsql "UPDATE t1 SET b = $r WHERE a < $r1;"
+
+  set r [expr {int(rand()*32767)}]
+
+  execsql "DELETE FROM t1 WHERE a < $r;"
+
+  execsql {
+    COMMIT;
+    SELECT (count(*) > 0) FROM t1;
+  }
+} {1}
+db close
+
+do_test rekey-delete-and-query-wal-2 {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'test123';
+    PRAGMA journal_mode = WAL;
+    PRAGMA rekey = 'test321';
+    SELECT count(*) > 1 FROM t1;
+    PRAGMA integrity_check;
+  }
+} {wal 1 ok}
+db close
+
+do_test rekey-delete-and-query-wal-3 {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'test321';
+    PRAGMA journal_mode = WAL;
+    SELECT count(*) > 1 FROM t1;
+  }
+} {wal 1}
+db close
+file delete -force test.db
+
+# attach an encrypted database
+# without specifying key, verify it fails
+# even if the source passwords are the same
+# because the kdf salts are different
+setup test.db "'testkey'"
+do_test attach-database-with-default-key {
+  sqlite_orig db2 test2.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_add_random = "x'deadbaad'";
+    CREATE TABLE t2(a,b);
+    INSERT INTO t2 VALUES ('test1', 'test2'); 
+  } db2
+ 
+  catchsql {
+    ATTACH 'test.db' AS db;
+  } db2
+    
+} {1 {file is encrypted or is not a database}}
+db2 close
+file delete -force test.db
+file delete -force test2.db
+
+# attach an encrypted database
+# without specifying key, verify it attaches
+# correctly when PRAGMA cipher_store_pass = 1
+# is set.
+do_test attach-database-with-default-key-using-cipher-store-pass {
+ 
+    sqlite_orig db1 test.db  
+    execsql {
+        PRAGMA key = 'testkey';
+        CREATE TABLE t1(a,b);
+        INSERT INTO t1(a,b) VALUES('foo', 'bar');        
+    } db1
+    db1 close
+
+    sqlite_orig db2 test2.db
+    execsql {
+      PRAGMA key = 'testkey';
+      CREATE TABLE t2(a,b);
+      INSERT INTO t2 VALUES ('test1', 'test2'); 
+    } db2
+    db2 close
+
+    sqlite_orig db1 test.db
+    execsql {
+        PRAGMA key = 'testkey';
+        PRAGMA cipher_store_pass = 1;
+        ATTACH DATABASE 'test2.db' as db2;
+        SELECT sqlcipher_export('db2');
+        DETACH DATABASE db2;
+    } db1
+    db1 close
+
+    sqlite_orig db2 test2.db  
+    execsql {
+        PRAGMA key = 'testkey';
+        SELECT * FROM t1;
+    } db2
+
+} {foo bar}
+db2 close
+file delete -force test.db
+file delete -force test2.db
+
+# attach an encrypted database
+# where both database have the same
+# key explicitly
+setup test.db "'testkey'"
+do_test attach-database-with-same-key {
+  sqlite_orig db2 test2.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    CREATE TABLE t2(a,b);
+    INSERT INTO t2 VALUES ('test1', 'test2'); 
+  } db2
+ 
+  execsql {
+    SELECT count(*) FROM t2;
+    ATTACH 'test.db' AS db KEY 'testkey';
+    SELECT count(*) FROM db.t1;
+  } db2
+
+} {1 1}
+db2 close
+file delete -force test.db
+file delete -force test2.db
+
+# attach an encrypted database
+# where databases have different keys
+setup test.db "'testkey'"
+do_test attach-database-with-different-keys {
+  sqlite_orig db2 test2.db
+
+  execsql {
+    PRAGMA key = 'testkey2';
+    CREATE TABLE t2(a,b);
+    INSERT INTO t2 VALUES ('test1', 'test2'); 
+  } db2
+  
+  execsql {
+    ATTACH 'test.db' AS db KEY 'testkey';
+    SELECT count(*) FROM db.t1;
+    SELECT count(*) FROM t2;
+  } db2
+
+} {1 1}
+db2 close
+file delete -force test.db
+file delete -force test2.db
+
+# test locking across multiple handles
+setup test.db "'testkey'"
+do_test locking-across-multiple-handles-start {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    BEGIN EXCLUSIVE;
+    INSERT INTO t1 VALUES(1,2);
+  } 
+  
+  sqlite_orig dba test.db
+  catchsql {
+    PRAGMA key = 'testkey';
+      SELECT count(*) FROM t1;
+  } dba
+
+ } {1 {database is locked}} 
+
+do_test locking-accross-multiple-handles-finish {
+ execsql {
+    COMMIT;
+  }
+
+  execsql {
+    SELECT count(*) FROM t1;
+  } dba
+} {2}
+db close
+dba close
+file delete -force test.db
+
+# alter schema
+setup test.db "'testkey'"
+do_test alter-schema {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    ALTER TABLE t1 ADD COLUMN c;
+    INSERT INTO t1 VALUES (1,2,3);
+    INSERT INTO t1 VALUES (1,2,4);
+    CREATE TABLE t1a (a);
+    INSERT INTO t1a VALUES ('teststring');
+  }
+  db close
+
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1 WHERE a IS NOT NULL;
+    SELECT count(*) FROM t1 WHERE c IS NOT NULL;
+    SELECT * FROM t1a;
+  } 
+
+} {3 2 teststring}
+db close
+file delete -force test.db
+
+# test alterations of KDF iterations and ciphers
+# rekey then add
+setup test.db "'testkey'"
+do_test non-standard-kdf-and-ciphers {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA rekey_kdf_iter = 1000;
+    PRAGMA rekey_cipher = 'aes-256-cfb';
+    PRAGMA rekey = 'testkey2';
+    INSERT INTO t1 VALUES (1,2);
+  } 
+  db close
+
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey2';
+    PRAGMA kdf_iter = 1000;
+    PRAGMA cipher = 'aes-256-cfb';
+    SELECT count(*) FROM t1;
+  } 
+
+} {2}
+db close
+file delete -force test.db
+
+# test alterations of CIPHER from CBC Mode requiring
+# IV to ECB mode that does not
+setup test.db "'testkey'"
+do_test rekey-from-cbc-to-ecb-no-iv {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,$r);" 
+  }
+  
+  execsql {
+    COMMIT;
+    PRAGMA rekey_kdf_iter = 1000;
+    PRAGMA rekey_cipher = 'aes-128-ecb';
+    PRAGMA rekey = 'testkey';
+  } 
+  db close
+
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA kdf_iter = 1000;
+    PRAGMA cipher = 'aes-128-ecb';
+    SELECT count(*) FROM t1;
+  } 
+
+} {1001}
+db close
+file delete -force test.db
+
+# test alterations of CIPHER from ECB Mode (no IV) to CBC Mode
+do_test rekey-from-ecb-to-cbc-with-iv {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher = 'aes-256-ecb';
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,$r);" 
+  }
+  
+  execsql {
+    COMMIT;
+    PRAGMA rekey_cipher = 'aes-256-cbc';
+    PRAGMA rekey = 'testkey';
+  } 
+  db close
+
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+  } 
+
+} {1000}
+db close
+file delete -force test.db
+
+# create an unencrypted database, attach a new encrypted volume
+# copy data between, verify the encypted database is good afterwards
+do_test unencrypted-attach {
+  sqlite_orig db test.db
+
+  execsql {
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  } 
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,$r);" 
+  }
+  
+  execsql {
+    COMMIT;
+    ATTACH DATABASE 'test2.db' AS db2 KEY 'testkey';
+    CREATE TABLE db2.t1(a,b);
+    INSERT INTO db2.t1 SELECT * FROM t1;
+    DETACH DATABASE db2;
+  }
+  
+  sqlite_orig db2 test2.db
+  execsql {
+    PRAGMA  key='testkey';
+    SELECT count(*) FROM t1;
+  } db2 
+} {1000}
+db2 close
+file delete -force test.db
+file delete -force test2.db
+
+# create an unencrypted database, attach a new encrypted volume
+# using a raw key copy data between, verify the encypted 
+# database is good afterwards 
+do_test unencrypted-attach-raw-key {
+  sqlite_orig db test.db
+
+  execsql {
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  } 
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,$r);" 
+  }
+  
+  execsql {
+    COMMIT;
+    ATTACH DATABASE 'test2.db' AS db2 KEY "x'10483C6EB40B6C31A448C22A66DED3B5E5E8D5119CAC8327B655C8B5C4836481'";
+    CREATE TABLE db2.t1(a,b);
+    INSERT INTO db2.t1 SELECT * FROM t1;
+    DETACH DATABASE db2;
+  }
+  
+  sqlite_orig db2 test2.db
+  execsql {
+    PRAGMA key="x'10483C6EB40B6C31A448C22A66DED3B5E5E8D5119CAC8327B655C8B5C4836481'";
+    SELECT count(*) FROM t1;
+  } db2 
+} {1000}
+db2 close
+file delete -force test.db
+file delete -force test2.db
+
+# create an encrypted database, attach an default-key encrypted volume
+# copy data between, verify the second database
+do_test encrypted-attach-default-key {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA  key='testkey';
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,$r);" 
+  }
+  
+  execsql {
+    COMMIT;
+    ATTACH DATABASE 'test2.db' AS test;
+    CREATE TABLE test.t1(a,b);
+    INSERT INTO test.t1 SELECT * FROM t1;
+    DETACH DATABASE test;
+  } 
+
+  sqlite_orig db2 test2.db
+
+  execsql {
+    PRAGMA  key='testkey';
+    SELECT count(*) FROM t1;
+  } db2
+} {1000}
+db close
+db2 close
+file delete -force test.db
+file delete -force test2.db
+
+# create an encrypted database, attach an unencrypted volume
+# copy data between, verify the unencypted database is good afterwards
+do_test encrypted-attach-unencrypted {
+  sqlite_orig db test.db
+
+  execsql {
+    CREATE TABLE t1(a,b);
+  } 
+
+  sqlite_orig db2 test2.db
+  execsql {
+    PRAGMA key = 'testkey';
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  }  db2
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,$r);" db2 
+  }
+  
+  execsql {
+    COMMIT;
+    ATTACH DATABASE 'test.db' AS test KEY '';
+    INSERT INTO test.t1 SELECT * FROM t1;
+    DETACH DATABASE test;
+  } db2
+
+  execsql {
+    SELECT count(*) FROM t1;
+  } 
+} {1000}
+db close
+db2 close
+file delete -force test.db
+file delete -force test2.db
+
+# create an unencrypted database, attach an unencrypted volume
+# copy data between, verify the unencypted database is good afterwards
+do_test unencrypted-attach-unencrypted {
+  sqlite_orig db test.db
+
+  execsql {
+    CREATE TABLE t1(a,b);
+  } 
+
+  sqlite_orig db2 test2.db
+  execsql {
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  }  db2
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,$r);" db2 
+  }
+  
+  execsql {
+    COMMIT;
+    ATTACH DATABASE 'test.db' AS test;
+    INSERT INTO test.t1 SELECT * FROM t1;
+    DETACH DATABASE test;
+  } db2
+
+  execsql {
+    SELECT count(*) FROM t1;
+  } 
+} {1000}
+db close
+db2 close
+file delete -force test.db
+file delete -force test2.db
+
+# 1. create a database with a custom page size, 
+# 2. create table and insert operations should work
+# 3. close database, open it again with the same
+#    key and page size
+# 4. verify that the table is readable
+#    and the data just inserted is visible
+do_test custom-pagesize {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_page_size = 4096;
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  }
+
+  execsql {
+    COMMIT;
+  } 
+
+  db close
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_page_size = 4096;
+    SELECT count(*) FROM t1;
+  }
+
+} {1000}
+db close
+
+# open the database with the default page size
+## and verfiy that it is not readable 
+do_test custom-pagesize-must-match {
+  sqlite_orig db test.db
+  catchsql {
+    PRAGMA key = 'testkey';
+    SELECT name FROM sqlite_master WHERE type='table';
+  }
+} {1 {file is encrypted or is not a database}}
+db close
+file delete -force test.db
+
+# 1. create a database and insert a bunch of data, close the database
+# 2. seek to the middle of a database page and write some junk
+# 3. Open the database and verify that the database is no longer readable
+do_test hmac-tamper-resistence {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  }
+
+  execsql {
+    COMMIT;
+  } 
+
+  db close
+
+  # write some junk into the hmac segment, leaving
+  # the page data valid but with an invalid signature
+  hexio_write test.db 1000 0000
+
+  sqlite_orig db test.db
+
+  catchsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+  }
+
+} {1 {file is encrypted or is not a database}}
+db close
+file delete -force test.db
+
+# 1. create a database and insert a bunch of data, close the database
+# 2. seek to the middle of a database page and write some junk
+# 3. Open the database and verify that the database is still readable
+do_test nohmac-not-tamper-resistent {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_use_hmac = OFF;
+    PRAGMA cipher_page_size = 1024;
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  }
+
+  execsql {
+    COMMIT;
+  } 
+
+  db close
+
+  # write some junk into the middle of the page
+  hexio_write test.db 2560 00
+
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_use_hmac = OFF;
+    PRAGMA cipher_page_size = 1024;
+    SELECT count(*) FROM t1;
+  }
+
+} {1000}
+db close
+file delete -force test.db
+
+# open a 1.1.8 database using the new code, HMAC disabled
+do_test open-1.1.8-database {
+  file copy -force sqlcipher-1.1.8-testkey.db test.db
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_use_hmac = off;
+    PRAGMA kdf_iter = 4000;
+    SELECT count(*) FROM t1;
+    SELECT distinct * FROM t1;
+  } 
+} {75709 1 1 one one 1 2 one two 1 2}
+db close
+file delete -force test.db
+
+# open a 1.1.8 database without hmac, then copy the data
+do_test attach-and-copy-1.1.8 {
+  sqlite_orig db sqlcipher-1.1.8-testkey.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_use_hmac = OFF;
+    PRAGMA kdf_iter = 4000;
+    ATTACH DATABASE 'test.db' AS db2 KEY 'testkey-hmac'; 
+    CREATE TABLE db2.t1(a,b);
+    INSERT INTO db2.t1 SELECT * FROM main.t1;
+    DETACH DATABASE db2;
+  }
+  db close
+
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey-hmac';
+    SELECT count(*) FROM t1;
+    SELECT distinct * FROM t1;
+  }
+} {75709 1 1 one one 1 2 one two 1 2}
+db close
+file delete -force test.db
+
+# open a standard database, then attach a new 
+# database with completely different options. 
+# copy data between them, and verify that the
+# new database can be opened with the proper data
+do_test attached-database-pragmas {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  } 
+
+  execsql {
+    COMMIT;
+    ATTACH DATABASE 'test2.db' AS db2 KEY 'testkey2'; 
+    PRAGMA db2.cipher_page_size = 4096;
+    PRAGMA db2.cipher = 'aes-128-cbc';
+    PRAGMA db2.kdf_iter = 1000;
+    PRAGMA db2.cipher_use_hmac = OFF;
+    CREATE TABLE db2.t1(a,b);
+    INSERT INTO db2.t1 SELECT * FROM main.t1;
+    DETACH DATABASE db2;
+  }
+  db close
+
+  sqlite_orig db test2.db
+  execsql {
+    PRAGMA key = 'testkey2';
+    PRAGMA cipher_page_size = 4096;
+    PRAGMA cipher = 'aes-128-cbc';
+    PRAGMA kdf_iter = 1000;
+    PRAGMA cipher_use_hmac = OFF;
+    SELECT count(*) FROM t1;
+  }
+} {1000}
+db close
+file delete -force test.db
+file delete -force test2.db
+
+# use the sqlcipher_export function
+# on a non-existent database. Verify 
+# the error gets through.
+do_test export-error {
+  sqlite_orig db test.db
+
+  catchsql {
+    PRAGMA key = 'testkey';
+    CREATE TABLE t1(a,b);
+    SELECT sqlcipher_export('nodb');
+  } 
+} {1 {unknown database nodb}}
+db close
+file delete -force test.db
+
+# use the sqlcipher_export function
+# to copy a complicated database. 
+# tests autoincrement fields,
+# indexes, views, and triggers,
+# tables and virtual tables
+do_test export-database {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    CREATE TABLE t1(a INTEGER PRIMARY KEY AUTOINCREMENT, b, c);
+    CREATE UNIQUE INDEX b_idx ON t1(b);
+    CREATE INDEX c_idx ON t1(c);
+
+    CREATE TABLE t2(b,c);
+    CREATE TRIGGER t2_after_insert AFTER INSERT ON t2
+    BEGIN 
+      INSERT INTO t1(b,c) VALUES (new.b, new.c);
+    END;
+
+    CREATE VIEW v1 AS
+      SELECT c FROM t1;
+
+    CREATE VIRTUAL TABLE fts USING fts3(a,b); 
+
+    BEGIN;
+    -- start with one known value
+    INSERT INTO t2 VALUES(1000000,'value 1000000');
+  }
+
+  for {set i 1} {$i<=999} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t2 VALUES($i,'value $r');" 
+  } 
+
+  execsql {
+    INSERT INTO fts SELECT b,c FROM t1;
+    COMMIT;
+
+    ATTACH DATABASE 'test2.db' AS db2 KEY 'testkey2'; 
+    PRAGMA db2.cipher_page_size = 4096;
+
+    SELECT sqlcipher_export('db2');
+
+    DETACH DATABASE db2;
+  }
+  db close
+
+  sqlite_orig db test2.db
+  execsql {
+    PRAGMA key = 'testkey2';
+    PRAGMA cipher_page_size = 4096;
+    SELECT count(*) FROM t1;
+    SELECT count(*) FROM v1;
+    SELECT count(*) FROM sqlite_sequence;
+    SELECT seq FROM sqlite_sequence WHERE name = 't1';
+    INSERT INTO t2 VALUES(10001, 'value 938383');
+    SELECT count(*) FROM t1; -- verify the trigger worked
+    SELECT seq FROM sqlite_sequence WHERE name = 't1'; -- verify that autoincrement worked
+    SELECT a FROM fts WHERE b MATCH '1000000';  
+  }
+} {1000 1000 1 1000 1001 1001 1000000}
+db close
+file delete -force test.db
+file delete -force test2.db
+
+# 1. create a database with WAL journal mode
+# 2. create table and insert operations should work
+# 3. close database, open it again
+# 4. verify that the table is present, readable, and that
+#    the journal mode is WAL
+do_test journal-mode-wal {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA journal_mode = WAL;
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  }
+
+  execsql {
+    COMMIT;
+  } 
+
+  db close
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+    PRAGMA journal_mode;
+  }
+
+} {1000 wal}
+db close
+file delete -force test.db
+
+# Test rekey as first operation on an empty database. should be a no-op
+do_test rekey-as-first-op {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA rekey = 'testkey';
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=100} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  }
+
+  execsql {
+    COMMIT;
+  } 
+
+  db close
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA rekey = 'testkey';
+    SELECT count(*) FROM t1;
+  }
+
+} {100}
+db close
+file delete -force test.db
+
+# Test rekey as first operation follwed by key
+do_test rekey-then-key-as-first-ops {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA rekey = '1234';
+    PRAGMA key = 'testkey';
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=100} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  }
+
+  execsql {
+    COMMIT;
+  } 
+
+  db close
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA rekey = '4321';
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+  }
+
+} {100}
+db close
+file delete -force test.db
+
+setup test.db "'testkey'"
+do_test multiple-key-calls-safe-1 {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cache_size = 0; 
+    SELECT name FROM sqlite_master WHERE type='table';
+  }
+} {t1} 
+
+do_test multiple-key-calls-safe-2 {
+  catchsql {
+    PRAGMA key = 'wrong key'; 
+    SELECT name FROM sqlite_master WHERE type='table';
+  }
+} {1 {file is encrypted or is not a database}}
+
+do_test multiple-key-calls-safe-3 {
+  execsql {
+    PRAGMA key = 'testkey'; 
+    SELECT name FROM sqlite_master WHERE type='table';
+  }
+} {t1} 
+
+db close
+file delete -force test.db
+
+# 1. create a database with a custom hmac kdf iteration count, 
+# 2. create table and insert operations should work
+# 3. close database, open it again with the same
+#    key and  hmac kdf iteration count
+# 4. verify that the table is readable
+#    and the data just inserted is visible
+do_test custom-hmac-kdf-iter {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA fast_kdf_iter = 10;
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=1000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  }
+
+  execsql {
+    COMMIT;
+  } 
+
+  db close
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA fast_kdf_iter = 10;
+    SELECT count(*) FROM t1;
+  }
+
+} {1000}
+db close
+
+# open the database with the default hmac
+# kdf iteration count
+# to verify that it is not readable 
+do_test custom-hmac-kdf-iter-must-match {
+  sqlite_orig db test.db
+  catchsql {
+    PRAGMA key = 'testkey';
+    SELECT name FROM sqlite_master WHERE type='table';
+  }
+} {1 {file is encrypted or is not a database}}
+db close
+file delete -force test.db
+
+# open the database and turn on auto_vacuum
+# then insert a bunch of data, delete it 
+# and verify that the file has become smaller
+# but can still be opened with the proper
+# key
+do_test auto-vacuum {
+  sqlite_orig db test.db
+  set rc {}
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA auto_vacuum=FULL;
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=10000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  }
+
+  lappend rc [execsql {
+    COMMIT;
+    SELECT count(*) FROM t1;
+  }]
+
+  # grab current size of file
+  set sz [file size test.db]
+  
+  # delete some records, and verify
+  # autovacuum removes them
+  execsql {
+    DELETE FROM t1 WHERE rowid > 5000;
+  } 
+
+  db close
+
+  # grab new file size, post
+  # autovacuum
+  set sz2 [file size test.db]
+
+  # verify that the new size is 
+  # smaller than the old size
+  if {$sz > $sz2} { lappend rc true }
+
+  sqlite_orig db test.db
+
+  lappend rc [execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+  }]
+
+} {10000 true 5000}
+db close
+file delete -force test.db
+
+# open the database then insert a bunch of data.
+# then delete it and run a manual vacuum
+# verify that the file has become smaller
+# but can still be opened with the proper
+# key
+do_test vacuum {
+  sqlite_orig db test.db
+  set rc {}
+
+  execsql {
+    PRAGMA key = 'testkey';
+    CREATE table t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<=10000} {incr i} {
+    set r [expr {int(rand()*500000)}]
+    execsql "INSERT INTO t1 VALUES($i,'value $r');" 
+  }
+
+  lappend rc [execsql {
+    COMMIT;
+    SELECT count(*) FROM t1;
+  }]
+
+  # grab current size of file
+  set sz [file size test.db]
+
+  execsql {
+    DELETE FROM t1 WHERE rowid > 5000;
+    VACUUM;
+  } 
+  db close
+
+  # grab new file size, post
+  # autovacuum
+  set sz2 [file size test.db]
+
+  # verify that the new size is 
+  # smaller than the old size
+  if {$sz > $sz2} { lappend rc true }
+
+  sqlite_orig db test.db
+  lappend rc [execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+  }]
+
+} {10000 true 5000}
+db close
+file delete -force test.db
+
+# test kdf_iter and other pragmas 
+# before a key is set. Verify that they
+# are no-ops
+do_test cipher-options-before-keys {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA kdf_iter = 1000;
+    PRAGMA cipher_page_size = 4096;
+    PRAGMA cipher = 'aes-128-cbc';
+    PRAGMA cipher_use_hmac = OFF;
+    PRAGMA key = 'testkey';
+    CREATE table t1(a,b);
+    INSERT INTO t1 VALUES(1,2);
+  }
+  db close
+
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+  }
+
+} {1}
+db close
+file delete -force test.db
+
+# open a 1.1.8 database (no HMAC, 4K iter), then 
+# try to open another 1.1.8 database. The
+# attached database should have the same hmac
+# setting as the original 
+do_test default-hmac-kdf-attach {
+  file copy -force sqlcipher-1.1.8-testkey.db test.db
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA cipher_default_use_hmac = OFF;
+    PRAGMA cipher_default_kdf_iter = 4000;
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+    ATTACH 'sqlcipher-1.1.8-testkey.db' AS db2 KEY 'testkey';
+    SELECT count(*) from db2.t1;
+    PRAGMA cipher_default_use_hmac = ON;
+    PRAGMA cipher_default_kdf_iter = 64000;
+  } 
+} {75709 75709}
+db close
+file delete -force test.db
+
+# open a 2.0 database (with HMAC), then 
+# try to a 1.1.8 database. this should 
+# fail because the hmac setting for the 
+# attached database is not compatible
+do_test attach-1.1.8-database-from-2.0-fails {
+  sqlite_orig db test.db
+  catchsql {
+    PRAGMA key = 'testkey';
+    CREATE table t1(a,b);
+    ATTACH 'sqlcipher-1.1.8-testkey.db' AS db2 KEY 'testkey';
+  } 
+} {1 {file is encrypted or is not a database}}
+db close
+file delete -force test.db
+
+# open a 2.0 database (with HMAC, 4k iter), then 
+# set the default hmac setting to OFF.
+# try to a 1.1.8 database. this should 
+# succeed now that hmac is off by default
+# before the attach
+do_test change-default-hmac-kdf-attach {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    CREATE table t1(a,b);
+    INSERT INTO t1(a,b) VALUES (1,2);
+  }
+  db close
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+    PRAGMA cipher_default_use_hmac = OFF;
+    PRAGMA cipher_default_kdf_iter = 4000;
+    ATTACH 'sqlcipher-1.1.8-testkey.db' AS db2 KEY 'testkey';
+    SELECT count(*) from db2.t1;
+    PRAGMA cipher_default_use_hmac = ON;
+    PRAGMA cipher_default_kdf_iter = 64000;
+  } 
+} {1 75709}
+db close
+file delete -force test.db
+
+# verify the pragma cipher_version
+# returns the currently configured
+# sqlcipher version
+do_test verify-pragma-cipher-version {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA cipher_version;
+    }
+} {3.3.1}
+db close
+file delete -force test.db
+
+# create a new database, insert some data
+# and delete some data with 
+# auto_vacuum on
+do_test auto-vacuum-full {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'test123';
+    PRAGMA auto_vacuum = FULL;
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<10000} {incr i} {
+    set r [expr {int(rand()*32767)}]
+    set r1 [expr {int(rand()*32767)}]
+    execsql "INSERT INTO t1 VALUES($r,$r1);"
+  }
+  set r [expr {int(rand()*32767)}]
+  execsql "DELETE FROM t1 WHERE a < $r;"
+
+  execsql {
+    COMMIT;
+    PRAGMA integrity_check;
+    PRAGMA freelist_count;
+    SELECT (count(*) > 0) FROM t1;
+  }
+} {ok 0 1}
+db close
+file delete -force test.db
+
+# create a new database, insert some data
+# and delete some data with 
+# auto_vacuum incremental 
+do_test auto-vacuum-incremental {
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'test123';
+    PRAGMA auto_vacuum = INCREMENTAL;
+    CREATE TABLE t1(a,b);
+    BEGIN;
+  }
+
+  for {set i 1} {$i<10000} {incr i} {
+    set r [expr {int(rand()*32767)}]
+    set r1 [expr {int(rand()*32767)}]
+    execsql "INSERT INTO t1 VALUES($r,$r1);"
+  }
+  set r [expr {int(rand()*32767)}]
+  execsql "DELETE FROM t1 WHERE a < $r;"
+
+  execsql {
+    COMMIT;
+    PRAGMA incremental_vacuum;
+    PRAGMA freelist_count; 
+    PRAGMA integrity_check;
+    SELECT (count(*) > 0) FROM t1;
+  }
+} {0 ok 1}
+db close
+file delete -force test.db
+
+
+# create a database with many hundred tables such that the schema
+# will overflow the first several pages of the database. verify the schema
+# is intact on open.
+do_test multipage-schema {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    BEGIN EXCLUSIVE;
+  } db
+  
+  for {set i 1} {$i<=300} {incr i} {
+    execsql "CREATE TABLE tab$i (a TEXT, b TEXT, c TEXT, d TEXT, e TEXT, f TEXT, g TEXT, h TEXT, i TEXT, j TEXT, k, TEXT, l, m TEXT, n TEXT, o TEXT, p TEXT);" db
+  }
+
+  execsql {
+    COMMIT;
+  } db
+
+  db close
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM sqlite_master where type = 'table';
+  } db
+
+} {300}
+db close
+file delete -force test.db
+
+# create a database with many hundred tables such that the schema
+# will overflow the first several pages of the database. this time, enable
+# autovacuum on the database, which will cause sqlite to do some "short reads"
+# after the end of the main database file. verify that there are no HMAC errors
+# resulting from the short reads, and that the schema is intact when 
+# the database is reopened
+do_test multipage-schema-autovacuum-shortread {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA auto_vacuum = FULL;
+    BEGIN EXCLUSIVE;
+  } db
+  
+  for {set i 1} {$i<=300} {incr i} {
+    execsql "CREATE TABLE tab$i (a TEXT, b TEXT, c TEXT, d TEXT, e TEXT, f TEXT, g TEXT, h TEXT, i TEXT, j TEXT, k, TEXT, l, m TEXT, n TEXT, o TEXT, p TEXT);" db
+  }
+
+  execsql {
+    COMMIT;
+  } db
+
+  db close
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM sqlite_master where type = 'table';
+  } db
+
+} {300}
+db close
+file delete -force test.db
+
+# same as multi-page-schema-autovacuum-shortread, except
+# using write ahead log mode
+do_test multipage-schema-autovacuum-shortread-wal {
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA auto_vacuum = FULL;
+    PRAGMA journal_mode = WAL;
+    BEGIN EXCLUSIVE;
+  } db
+  
+  for {set i 1} {$i<=300} {incr i} {
+    execsql "CREATE TABLE tab$i (a TEXT, b TEXT, c TEXT, d TEXT, e TEXT, f TEXT, g TEXT, h TEXT, i TEXT, j TEXT, k, TEXT, l, m TEXT, n TEXT, o TEXT, p TEXT);" db
+  }
+
+  execsql {
+    COMMIT;
+  } db
+
+  db close
+  sqlite_orig db test.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM sqlite_master where type = 'table';
+  } db
+} {300}
+db close
+file delete -force test.db
+
+# open a 3.0 database with little endian hmac page numbers (default)
+# verify it can be opened
+do_test open-3.0-le-database {
+  sqlite_orig db sqlcipher-3.0-testkey.db
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+    SELECT distinct * FROM t1;
+  } 
+} {78536 1 1 one one 1 2 one two}
+db close
+
+# open a 2.0 database with little endian hmac page numbers (default)
+# verify it can be opened
+do_test open-2.0-le-database {
+  sqlite_orig db sqlcipher-2.0-le-testkey.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA kdf_iter = 4000;
+    SELECT count(*) FROM t1;
+    SELECT distinct * FROM t1;
+  } 
+} {78536 1 1 one one 1 2 one two}
+db close
+
+# open a 2.0 database with big-endian hmac page numbers
+# verify it can be opened
+do_test open-2.0-be-database {
+  sqlite_orig db sqlcipher-2.0-be-testkey.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_hmac_pgno = be;
+    PRAGMA kdf_iter = 4000;
+    SELECT count(*) FROM t1;
+    SELECT distinct * FROM t1;
+  } 
+} {78536 1 1 one one 1 2 one two}
+db close
+
+# open a 2.0 database with big-endian hmac page numbers
+# attach a new database with little endian page numbers (default)
+# copy schema between the two, and verify the latter 
+# can be opened
+do_test be-to-le-migration {
+  sqlite_orig db sqlcipher-2.0-be-testkey.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_hmac_pgno = be;
+    PRAGMA kdf_iter = 4000;
+    ATTACH DATABASE 'test.db' AS db2 KEY 'testkey'; 
+    CREATE TABLE db2.t1(a,b);
+    INSERT INTO db2.t1 SELECT * FROM main.t1;
+    DETACH DATABASE db2;
+  }
+  db close
+
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM t1;
+    SELECT distinct * FROM t1;
+  }
+} {78536 1 1 one one 1 2 one two}
+db close
+file delete -force test.db
+
+# verify the pragma cipher_use_hmac
+# is set to true be default
+do_test verify-pragma-cipher-use-hmac-default {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher_use_hmac;
+    }
+} {1}
+db close
+file delete -force test.db
+
+# verify the pragma cipher_use_hmac
+# reports the flag turned off
+do_test verify-pragma-cipher-use-hmac-off {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher_use_hmac = off;
+        PRAGMA cipher_use_hmac;
+    }
+} {0}
+db close
+file delete -force test.db
+
+# verify the pragma default_cipher_use_hmac
+# is set to true by default
+do_test verify-pragma-cipher-default-use-hmac-default {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA cipher_default_use_hmac;
+    }
+} {1}
+db close
+file delete -force test.db
+
+# verify the pragma default_cipher_use_hmac
+# reports the flag turned off
+do_test verify-pragma-cipher-default-use-hmac-off {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA cipher_default_use_hmac = off;
+        PRAGMA cipher_default_use_hmac;
+        -- Be sure to turn cipher_default_use_hmac
+        -- back on or it will break later tests 
+        -- (it's a global flag)
+        PRAGMA cipher_default_use_hmac = ON;
+    }
+} {0}
+db close
+file delete -force test.db
+
+# verify the pragma default_cipher_kdf_iter
+# is set to 64000 by default
+do_test verify-pragma-cipher-default-kdf-iter-default {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA cipher_default_kdf_iter;
+    }
+} {64000}
+db close
+file delete -force test.db
+
+
+# verify the pragma default_cipher_kdf_ter
+# reports changes
+do_test verify-pragma-cipher-default-use-hmac-off {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA cipher_default_kdf_iter = 1000;
+        PRAGMA cipher_default_kdf_iter;
+        PRAGMA cipher_default_kdf_iter = 64000;
+    }
+} {1000}
+db close
+file delete -force test.db
+
+# verify the pragma kdf_iter
+# reports the default value
+do_test verify-pragma-kdf-iter-reports-default {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA kdf_iter;
+    }
+} {64000}
+db close
+file delete -force test.db
+
+# verify the pragma kdf_iter
+# reports value changed
+do_test verify-pragma-kdf-iter-reports-value-changed {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA kdf_iter = 8000;
+        PRAGMA kdf_iter;
+    }
+} {8000}
+db close
+file delete -force test.db
+
+# verify the pragma fast_kdf_iter
+# reports the default value
+do_test verify-pragma-fast-kdf-iter-reports-default {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA fast_kdf_iter;
+    }
+} {2}
+db close
+file delete -force test.db
+
+# verify the pragma fast_kdf_iter
+# reports value changed
+do_test verify-pragma-kdf-iter-reports-value-changed {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA fast_kdf_iter = 4000;
+        PRAGMA fast_kdf_iter;
+    }
+} {4000}
+db close
+file delete -force test.db
+
+# verify the pragma cipher_page_size
+# reports default value
+do_test verify-pragma-cipher-page-size-default {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher_page_size;
+    }
+} {1024}
+db close
+file delete -force test.db
+
+# verify the pragma cipher_page_size
+# reports change in value
+do_test verify-pragma-cipher-page-size-changed {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher_page_size = 4096;
+        PRAGMA cipher_page_size;
+    }
+} {4096}
+db close
+file delete -force test.db
+
+# verify invalid cipher does not cause segfault
+if_built_with_openssl verify-invalid-cipher-does-not-segfault {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher = 'junk';
+        PRAGMA cipher;
+    }
+} {AES-256-CBC}
+db close
+file delete -force test.db
+
+# verify setting cipher_store_pass before key
+# does not cause segfault
+do_test verify-cipher-store-pass-before-key-does-not-segfault {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA cipher_store_pass = 1;
+        PRAGMA key = 'test';
+    }
+} {}
+db close
+file delete -force test.db
+
+# verify the pragma cipher
+# reports the default value
+if_built_with_openssl verify-pragma-cipher-default {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher;
+    }
+} {AES-256-CBC}
+db close
+file delete -force test.db
+
+# verify the pragma cipher
+# reports a change in value
+if_built_with_openssl verify-pragma-cipher-changed {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher = 'AES-256-ECB';
+        PRAGMA cipher;
+    }
+} {AES-256-ECB}
+db close
+file delete -force test.db
+
+# verify the pragma cipher_hmac_salt_mask reports default
+do_test verify-pragma-hmac-salt-mask-reports-default {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher_hmac_salt_mask;
+    }
+} {3a}
+db close
+file delete -force test.db
+
+# verify the pragma cipher_hmac_salt_mask reports
+# reports value changed
+do_test verify-pragma-hmac-salt-mask-reports-value-changed {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher_hmac_salt_mask = "x'11'";
+        PRAGMA cipher_hmac_salt_mask;
+    }
+} {11}
+db close
+file delete -force test.db
+
+# verify the pragma cipher_hmac_pgno reports default
+do_test verify-pragma-hmac-pgno-reports-default {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher_hmac_pgno;
+    }
+} {le}
+db close
+file delete -force test.db
+
+# verify the pragma cipher_hmac_pgno 
+# reports value changed
+do_test verify-pragma-hmac-pgno-reports-value-changed {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher_hmac_pgno = be;
+        PRAGMA cipher_hmac_pgno;
+        PRAGMA cipher_hmac_pgno = native;
+        PRAGMA cipher_hmac_pgno;
+        PRAGMA cipher_hmac_pgno = le;
+        PRAGMA cipher_hmac_pgno;
+    }
+} {be native le}
+db close
+file delete -force test.db
+
+# open a 2.0 beta database with 4000 round hmac kdf and 0x00 
+# hmac salt mask 
+# verify it can be opened
+do_test open-2.0-beta-database {
+  sqlite_orig db sqlcipher-2.0-beta-testkey.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA kdf_iter = 4000;
+    PRAGMA fast_kdf_iter = 4000;
+    PRAGMA cipher_hmac_salt_mask = "x'00'";
+    SELECT count(*) FROM t1;
+    SELECT distinct * FROM t1;
+  } 
+} {38768 test-0-0 test-0-1 test-1-0 test-1-1}
+db close
+
+# open a 2.0 beta database 
+# attach a new standard database
+# copy schema between the two, and verify the latter 
+# can be opened
+do_test 2.0-beta-to-2.0-migration {
+  sqlite_orig db sqlcipher-2.0-beta-testkey.db
+
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_hmac_salt_mask = "x'00'";
+    PRAGMA kdf_iter = 4000;
+    PRAGMA fast_kdf_iter = 4000;
+    SELECT count(*) FROM sqlite_master;
+
+    PRAGMA cipher_hmac_salt_mask = "x'3a'";
+    ATTACH DATABASE 'test.db' AS db2 KEY 'testkey'; 
+    
+    CREATE TABLE db2.t1(a,b);
+    INSERT INTO db2.t1 SELECT * FROM main.t1;
+    DETACH DATABASE db2;
+  }
+  db close
+
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT distinct * FROM t1;
+  }
+} {test-0-0 test-0-1 test-1-0 test-1-1}
+db close
+file delete -force test.db
+
+if_built_with_libtomcrypt verify-default-cipher {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key='test';
+        PRAGMA cipher;
+    }
+} {rijndael}
+db close
+file delete -force test.db
+
+if_built_with_commoncrypto verify-default-cipher {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key='test';
+        PRAGMA cipher;
+    }
+} {aes-256-cbc}
+db close
+file delete -force test.db
+
+do_test migrate-1.1.8-database-to-3x-format {
+  file copy -force sqlcipher-1.1.8-testkey.db test.db
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_migrate;
+  }
+  db close
+    
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM sqlite_master;
+  }
+} {1}
+db close
+file delete -force test.db
+
+do_test migrate-2-0-le-database-to-3x-format {
+  file copy -force sqlcipher-2.0-le-testkey.db test.db
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    PRAGMA cipher_migrate;
+  }
+  db close
+    
+  sqlite_orig db test.db
+  execsql {
+    PRAGMA key = 'testkey';
+    SELECT count(*) FROM sqlite_master;
+  }
+} {1}
+db close
+file delete -force test.db
+
+do_test key-database-by-name {
+    sqlite_orig db test.db
+    execsql {
+        attach database 'new.db' as new;
+        pragma new.key = 'foo';
+        create table new.t1(a,b);
+        insert into new.t1(a,b) values('foo', 'bar');
+        detach database new;
+    }
+    db close
+
+    sqlite_orig db new.db
+    execsql {
+        pragma key = 'foo';
+        select * from t1;
+    }
+} {foo bar}
+db close
+file delete -force test.db
+file delete -force new.db
+
+do_test key-multiple-databases-with-different-keys-using-pragma {
+    sqlite_orig db test.db
+    execsql {
+        pragma key = 'foobar';
+        create table t1(a,b);
+        insert into t1(a,b) values('baz','qux');
+        attach database 'new.db' as new;
+        pragma new.key = 'foo';
+        create table new.t1(a,b);
+        insert into new.t1(a,b) values('foo', 'bar');
+        detach database new;
+    }
+    db close
+
+    sqlite_orig db new.db
+    execsql {
+        pragma key = 'foo';
+        attach database 'test.db' as test key 'foobar';
+        select * from t1;
+        select * from test.t1;
+    }
+} {foo bar baz qux}
+db close
+file delete -force test.db
+file delete -force new.db
+
+do_test rekey-database-by-name {
+    sqlite_orig db test.db
+    execsql {
+        attach database 'new.db' as new;
+        pragma new.key = 'foo';
+        create table new.t1(a,b);
+        insert into new.t1(a,b) values('foo', 'bar');
+        pragma new.rekey = 'bar';
+        detach database new;
+    }
+    db close
+
+    sqlite_orig db new.db
+    execsql {
+        pragma key = 'bar';
+        select * from t1;
+    }
+} {foo bar}
+db close
+file delete -force test.db
+file delete -force new.db
+
+# Requires SQLCipher to be built with -DSQLCIPHER_TEST
+if_built_with_libtomcrypt verify-random-data-alters-file-content {
+    file delete -force test.db
+    file delete -force test2.db
+    file delete -force test3.db
+    set rc {}
+    
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key="x'2DD29CA851E7B56E4697B0E1F08507293D761A05CE4D1B628663F411A8086D99'";
+        create table t1(a,b);
+    }
+    db close
+    sqlite_orig db test2.db
+    execsql {
+        PRAGMA key="x'2DD29CA851E7B56E4697B0E1F08507293D761A05CE4D1B628663F411A8086D99'";
+        create table t1(a,b);
+    }
+    db close
+    sqlite_orig db test3.db
+    execsql {
+        PRAGMA key="x'2DD29CA851E7B56E4697B0E1F08507293D761A05CE4D1B628663F411A8086D99'";
+        PRAGMA cipher_add_random = "x'deadbaad'";
+        create table t1(a,b);
+    }
+    db close
+    lappend rc [cmpFilesChunked test.db test2.db]
+    lappend rc [cmpFilesChunked test2.db test3.db]
+} {0 1}
+file delete -force test.db
+file delete -force test2.db
+file delete -force test3.db
+
+do_test can-migrate-with-keys-longer-than-64-characters {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = "012345678901234567890123456789012345678901234567890123456789012345";
+        PRAGMA kdf_iter = 4000;
+        PRAGMA user_version = 5;
+    }
+    db close
+
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = "012345678901234567890123456789012345678901234567890123456789012345";
+        PRAGMA cipher_migrate;
+    }
+    db close
+
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = "012345678901234567890123456789012345678901234567890123456789012345";
+        PRAGMA user_version;
+    }
+} {5}
+db close
+file delete -force test.db
+
+do_test can-migrate-with-raw-hex-key {
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = "x'2DD29CA851E7B56E4697B0E1F08507293D761A05CE4D1B628663F411A8086D99'";
+        PRAGMA kdf_iter = 4000;
+        PRAGMA cipher_use_hmac = off;
+        PRAGMA user_version = 5;
+    }
+    db close
+
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = "x'2DD29CA851E7B56E4697B0E1F08507293D761A05CE4D1B628663F411A8086D99'";
+        PRAGMA cipher_migrate;
+    }
+
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA key = "x'2DD29CA851E7B56E4697B0E1F08507293D761A05CE4D1B628663F411A8086D99'";
+        PRAGMA user_version;
+    }
+    
+} {5}
+db close
+file delete -force test.db
+
+do_test attach_database_with_non_default_page_size {
+    sqlite_orig db test2.db
+    execsql {
+        PRAGMA key = 'test';
+        PRAGMA cipher_page_size = 4096;
+        CREATE TABLE t1(a,b);
+        INSERT INTO t1(a,b) values('one for the money', 'two for the show');
+        INSERT INTO t1(a,b) values('three to get ready', 'now, go cat, go');
+    }
+    db close
+
+    sqlite_orig db test.db
+    execsql {
+        PRAGMA cipher_default_page_size = 4096;
+        PRAGMA key = 'test';
+        ATTACH DATABASE 'test2.db' as test2 KEY 'test';
+        SELECT count(*) FROM test2.t1;
+    }
+} {2}
+db close
+file delete -force test.db test2.db
+
+sqlite3_test_control_pending_byte $old_pending_byte
+finish_test

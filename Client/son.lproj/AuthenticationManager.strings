@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Guuru 1 banda ga";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Miniti 1 banda ga";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Miniti 5 banda ga";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Miniti 10 banda ga";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Miniti 15 banda ga";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Bisayan kufal barmay";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "Bisayankufal dam";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "Bisayankufal taaga dam";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Bisayankufal dam";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "Bisayankufal dam";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Sohõda tilyo";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Bisayankufal laala. Ceeci koyne (Šiiyan cindey: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Bisayankufal laala. Ceeci koyne.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Šiiyan hinnawey kul too. Ceeci koyne guuru foo ra.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Šiiyan hinnawey kul too. Ceeci koyne kayna da.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Bisayankufal taaga ga hima ka waani nda ibarantaa.";
+
+/* List section title for passcode settings */
+"Passcode" = "Bisayan kufal";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Bisayankufaley ši tenji. Ceeci koyne.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Bisayankufal dam taaga";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Bisayankufal waažibandi";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Bisayankufal kayandi";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Mooru tammaaha nda bisayankul";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Bisayankufal wii";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Bisayankufal tunandi";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "War bisayankufaloo wii.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Goyandi nda mooru tammaasa";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "War kanbe-ize šilbaa tee huruyan tammaasa sohõ.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "War kanbe-ize šilbaa ka sutura naaruyan tee sohõ.";
+

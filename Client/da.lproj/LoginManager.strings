@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Er du sikker?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Annuller";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Ryd søgning";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopier";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Slet";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Fravælg alle";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Aktiver søge-tilstand";
+
+/* Hide password text selection menu item */
+"Hide" = "Skjul";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Sidst ændret %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Logins";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Logins vil blive fjernet permanent.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Logins vil blive fjernet fra alle forbundne enheder.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Ingen logins fundet";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Åbn og udfyld";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Vis";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Søg";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Søge-inputs-felt";
+
+/* Title for selecting all logins */
+"Select All" = "Vælg alle";
+
+/* Title for password row in Login Detail View */
+"password" = "adgangskode";
+
+/* Title for username row in Login Detail View */
+"username" = "brugernavn";
+
+/* Title for website row in Login Detail View */
+"website" = "websted";
+

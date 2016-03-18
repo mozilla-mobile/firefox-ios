@@ -1,0 +1,12 @@
+// This file is required by current CocoaPods (0.39.0). 
+//  - Generates warning: Umbrella header for module 'SQLite' does not include header 'fts3_tokenizer.h'
+
+// Xcode generates its own correct ModuleMap, and Carthage does the same
+
+framework module SQLite {
+  umbrella header "SQLite.h"
+
+  export *
+  module * { export * }
+}
+
