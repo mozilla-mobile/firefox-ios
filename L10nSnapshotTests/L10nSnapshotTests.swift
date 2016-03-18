@@ -44,6 +44,44 @@ class L10nSnapshotTests: XCTestCase {
         }
     }
 
+    func loadWebPage(url: String, waitForOtherElementWithAriaLabel ariaLabel: String) {
+        let app = XCUIApplication()
+        UIPasteboard.generalPasteboard().string = url
+        app.textFields["url"].pressForDuration(2.0)
+        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
+
+        sleep(3) // TODO Otherwise we detect the body in the currently loaded document, before the new page has loaded
+
+        let webView = app.webViews.elementBoundByIndex(0)
+        let element = webView.otherElements[ariaLabel]
+        expectationForPredicate(NSPredicate(format: "exists == 1"), evaluatedWithObject: element, handler: nil)
+
+        waitForExpectationsWithTimeout(5.0) { (error) -> Void in
+            if error != nil {
+                XCTFail("Failed to detect element with ariaLabel=\(ariaLabel) on \(url): \(error)")
+            }
+        }
+    }
+
+    func loadWebPage(url: String, waitForLinkWithAriaLabel ariaLabel: String) {
+        let app = XCUIApplication()
+        UIPasteboard.generalPasteboard().string = url
+        app.textFields["url"].pressForDuration(2.0)
+        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
+
+        sleep(3) // TODO Otherwise we detect the body in the currently loaded document, before the new page has loaded
+
+        let webView = app.webViews.elementBoundByIndex(0)
+        let element = webView.links[ariaLabel]
+        expectationForPredicate(NSPredicate(format: "exists == 1"), evaluatedWithObject: element, handler: nil)
+
+        waitForExpectationsWithTimeout(5.0) { (error) -> Void in
+            if error != nil {
+                XCTFail("Failed to detect link with ariaLabel=\(ariaLabel) on \(url): \(error)")
+            }
+        }
+    }
+
     func test01Intro() {
         let app = XCUIApplication()
         snapshot("01Intro-1")
@@ -138,22 +176,23 @@ class L10nSnapshotTests: XCTestCase {
     func test08WebViewContextMenu() {
         let app = XCUIApplication()
 
-        // TODO Do we have more types of content that trigger a different kind of context menu?
-        let urls = [
-            "http://people.mozilla.org/~sarentz/fxios/testpages/link.html",
-            "http://people.mozilla.org/~sarentz/fxios/testpages/image.html",
-            "http://people.mozilla.org/~sarentz/fxios/testpages/imageWithLink.html"
-        ]
+        // Link
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/link.html", waitForOtherElementWithAriaLabel: "body")
+        app.webViews.elementBoundByIndex(0).links["link"].pressForDuration(2.0)
+        snapshot("08WebViewContextMenu-01")
+        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(app.sheets.elementBoundByIndex(0).buttons.count-1).tap()
 
-        for (index, url) in urls.enumerate() {
-            loadWebPage(url)
-            let webView = app.webViews.elementBoundByIndex(0)
-            let coordinate = webView.coordinateWithNormalizedOffset(CGVector(dx: 0.01, dy: 0.01))
-            coordinate.pressForDuration(2.0)
-            snapshot("08WebViewContextMenu-\(index + 1)")
-            // TODO Is there a nicer way to tap the bottom button in a sheet?
-            app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(app.sheets.elementBoundByIndex(0).buttons.count-1).tap()
-        }
+        // Image
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/image.html", waitForOtherElementWithAriaLabel: "body")
+        app.webViews.elementBoundByIndex(0).images["image"].pressForDuration(2.0)
+        snapshot("08WebViewContextMenu-02")
+        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(app.sheets.elementBoundByIndex(0).buttons.count-1).tap()
+
+        // Image inside Link
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/imageWithLink.html", waitForOtherElementWithAriaLabel: "body")
+        app.webViews.elementBoundByIndex(0).links["link"].pressForDuration(2.0)
+        snapshot("08WebViewContextMenu-03")
+        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(app.sheets.elementBoundByIndex(0).buttons.count-1).tap()
     }
 
     func test09WebViewAuthenticationDialog() {
@@ -167,7 +206,7 @@ class L10nSnapshotTests: XCTestCase {
 
     func test10ReloadButtonContextMenu() {
         let app = XCUIApplication()
-        loadWebPage("http://people.mozilla.org")
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
         app.buttons["BrowserToolbar.stopReloadButton"].pressForDuration(2.0)
         snapshot("10ContextMenuReloadButton-01", waitForLoadingIndicator: false)
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
@@ -184,7 +223,7 @@ class L10nSnapshotTests: XCTestCase {
 
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html")
         // The interruption monitor will execute in between here
-        self.loadWebPage("http://people.mozilla.org")
+        self.loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html")
     }
 
     // This is a fragile testcase because it depends on the specific position of items in the
@@ -192,7 +231,7 @@ class L10nSnapshotTests: XCTestCase {
 
     func test12ShareSheetAndExtensions() {
         let app = XCUIApplication()
-        loadWebPage("http://people.mozilla.org")
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
         app.buttons["BrowserToolbar.shareButton"].tap()
 
         app.collectionViews.elementBoundByIndex(0).swipeLeft()
