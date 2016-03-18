@@ -53,6 +53,7 @@ class MarketingSnapshotTests: XCTestCase {
             sleep(15) // TODO Need better mechanism to find out if page has finished loading. Also, mozilla.org/firefox/desktop will need more time to settle because it does animations.
         }
 
+        // Go back to the tabs tray, swipe it back to the top
         app.buttons["URLBarView.tabsButton"].tap()
         app.collectionViews["TabTrayController.collectionView"].swipeDown()
         snapshot("06-Tabs")
@@ -65,8 +66,27 @@ class MarketingSnapshotTests: XCTestCase {
         snapshot("07-PrivateBrowsing")
     }
 
-//    func test08SearchResults() {
-//    }
+    func test08SearchResults() {
+        let urls = [
+            "https://www.mozilla.org",
+            "https://support.mozilla.org/en-US/products/ios",
+            "https://en.wikipedia.org/wiki/Firefox",
+            "https://www.mozilla.org/firefox/ios",
+            "https://www.twitter.com/firefox"
+        ]
+
+        for url in urls {
+            loadWebPage(url, waitForLoadToFinish: false)
+            sleep(15) // TODO Need better mechanism to find out if page has finished loading. Also, mozilla.org/firefox/desktop will need more time to settle because it does animations.
+        }
+
+        app.textFields["url"].tap()
+        app.textFields["address"].typeText("firefox")
+        app.buttons["SearchViewController.promptYesButton"].tap()
+        let _ = NSData(contentsOfURL: NSURL(string: "http://localhost:6571/snapshottest/hidekeyboard")!)
+        sleep(3)
+        snapshot("08-SearchResults")
+    }
 
     private func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
         let LoadingTimeout: NSTimeInterval = 10
