@@ -18,7 +18,7 @@ class MenuViewController: UIViewController {
 
     var menuView: MenuView!
 
-    private let isPrivate = true
+    private let isPrivate = false
 
     private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
 
@@ -103,7 +103,10 @@ class MenuViewController: UIViewController {
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        self.preferredContentSize = self.menuView.bounds.size
+        if presentationStyle == .Popover {
+            self.preferredContentSize = self.menuView.bounds.size
+        }
+        self.popoverPresentationController?.backgroundColor = self.popoverBackgroundColor
     }
 
 }
