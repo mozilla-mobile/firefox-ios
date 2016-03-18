@@ -11,7 +11,6 @@ eo
 es
 es-CL
 es-MX
-fa
 fr
 fy-NL
 ga-IE
