@@ -351,13 +351,6 @@ class BrowserViewController: UIViewController {
         log.debug("BVC setting up constraints…")
         setupConstraints()
         log.debug("BVC done.")
-
-        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.TabTray), presentationStyle: .Popover)
-        mvc.modalPresentationStyle = .Popover
-        self.presentViewController(mvc, animated: false, completion: nil)
-
-        let popoverPresentationController = mvc.popoverPresentationController
-        popoverPresentationController?.sourceView = urlBar
     }
 
     private func setupConstraints() {
@@ -1379,7 +1372,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 if isBookmarked {
                     self.removeBookmark(url)
                 } else {
-                    self.addBookmark(url, title: title)
+                    self.addBookmark(url, title: self.title)
                 }
             }
         }
