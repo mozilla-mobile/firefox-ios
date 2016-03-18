@@ -258,6 +258,18 @@ class L10nSnapshotTests: XCTestCase {
         app.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"].tap()
     }
 
+    func test13PasswordSnackbar() {
+        let app = XCUIApplication()
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/password.html", waitForOtherElementWithAriaLabel: "body")
+        app.webViews.elementBoundByIndex(0).buttons["submit"].tap()
+        snapshot("13PasswordSnackbar-01")
+        app.buttons["SaveLoginPrompt.yesButton"].tap()
+        // The password is pre-filled with a random value so second this this will cause the update prompt
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/password.html", waitForOtherElementWithAriaLabel: "body")
+        app.webViews.elementBoundByIndex(0).buttons["submit"].tap()
+        snapshot("13PasswordSnackbar-02")
+    }
+
     func test50ClearPrivateData() {
         let app = XCUIApplication()
         var index = 1

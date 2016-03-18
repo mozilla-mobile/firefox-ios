@@ -29,7 +29,7 @@ class SnackButton : UIButton {
         return UIImage.createWithColor(size, color: UIConstants.HighlightColor)
     }()
 
-    init(title: String, callback: (bar: SnackBar) -> Void) {
+    init(title: String, accessibilityIdentifier: String, callback: (bar: SnackBar) -> Void) {
         self.callback = callback
 
         super.init(frame: CGRectZero)
@@ -40,6 +40,8 @@ class SnackButton : UIButton {
         setTitleColor(UIConstants.HighlightText, forState: .Highlighted)
 
         addTarget(self, action: "onClick", forControlEvents: .TouchUpInside)
+
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
 
     override init(frame: CGRect) {
