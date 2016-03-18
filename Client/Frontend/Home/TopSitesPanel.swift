@@ -121,7 +121,6 @@ class TopSitesPanel: UIViewController {
         if let data = result.successValue {
             self.dataSource.setHistorySites(data.asArray())
             self.dataSource.profile = self.profile
-            self.dataSource.mergeSuggestedSites()
 
             // redraw now we've updated our sources
             self.collection?.collectionViewLayout.invalidateLayout()
@@ -451,6 +450,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var editingThumbnails: Bool = false
     var suggestedSites = [SuggestedSite]()
     var sites = [Site]()
+    private var sitesInvalidated = true
 
     weak var collectionView: UICollectionView?
 
@@ -597,13 +597,20 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         // whenever the panel is reloaded, our transient, ordered state will be lost. But
         // that's OK: top sites change frequently anyway.
         self.sites = self.sites.filter { site in
-            if let index = historySites.indexOf(site) {
+            if let index = historySites.indexOf({ extractDomainURL($0.url) == extractDomainURL(site.url) }) {
                 historySites.removeAtIndex(index)
                 return true
             }
 
-            return false
+            return site is SuggestedSite
         } + historySites
+
+        // Since future updates to history sites will append to the previous result set,
+        // including suggested sites, we only need to do this once.
+        if sitesInvalidated {
+            sitesInvalidated = false
+            mergeSuggestedSites()
+        }
     }
 
     private func mergeSuggestedSites() {
