@@ -215,15 +215,8 @@ class L10nSnapshotTests: XCTestCase {
     }
 
     func test11LocationDialog() {
-        addUIInterruptionMonitorWithDescription("Location Dialog") { (alert) -> Bool in
-            snapshot("11LocationDialog-01")
-            alert.buttons.elementBoundByIndex(0).tap()
-            return true
-        }
-
-        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html")
-        // The interruption monitor will execute in between here
-        self.loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html")
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html", waitForOtherElementWithAriaLabel: "body")
+        snapshot("11LocationDialog-01")
     }
 
     // This is a fragile testcase because it depends on the specific position of items in the
