@@ -217,6 +217,7 @@ class L10nSnapshotTests: XCTestCase {
     func test11LocationDialog() {
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html", waitForOtherElementWithAriaLabel: "body")
         snapshot("11LocationDialog-01")
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
     }
 
     // This is a fragile testcase because it depends on the specific position of items in the
