@@ -225,17 +225,17 @@ class L10nSnapshotTests: XCTestCase {
 
     func test12ShareSheetAndExtensions() {
         let app = XCUIApplication()
-        loadWebPage("http://people.mozilla.org")
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
         app.buttons["BrowserToolbar.shareButton"].tap()
 
         app.collectionViews.elementBoundByIndex(0).swipeLeft()
-        app.collectionViews.elementBoundByIndex(0).buttons["More"].tap()
+        app.collectionViews.elementBoundByIndex(0).buttons.elementBoundByIndex(app.collectionViews.elementBoundByIndex(0).buttons.count-1).tap()
         app.tables.switches.elementBoundByIndex(app.tables.switches.count-1).tap()
         snapshot("12ShareSheetAndExtensions-01") // Shows Share Extension in a list
         app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(1).tap()
 
         app.collectionViews.elementBoundByIndex(1).swipeLeft()
-        app.collectionViews.elementBoundByIndex(1).buttons["More"].tap()
+        app.collectionViews.elementBoundByIndex(1).buttons.elementBoundByIndex(app.collectionViews.elementBoundByIndex(1).buttons.count-1).tap()
         app.tables.switches.elementBoundByIndex(app.tables.switches.count-1).tap()
         app.tables.switches.elementBoundByIndex(app.tables.switches.count-2).tap()
         snapshot("12ShareSheetAndExtensions-02") // Shows Action Extensions in a list
@@ -252,9 +252,14 @@ class L10nSnapshotTests: XCTestCase {
 
         sleep(2)
 
-        // SendTo
+        // SendTo- Depending on the locale, the Send To extension is in position 2 or 3
         app.buttons["BrowserToolbar.shareButton"].tap()
-        app.collectionViews.elementBoundByIndex(1).buttons.elementBoundByIndex(3).tap()
+        app.collectionViews.elementBoundByIndex(1).buttons.elementBoundByIndex(2).tap()
+        sleep(2)
+        if !app.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"].exists {
+            app.buttons["BrowserToolbar.shareButton"].tap()
+            app.collectionViews.elementBoundByIndex(1).buttons.elementBoundByIndex(3).tap()
+        }
         snapshot("12ShareSheetAndExtensions-04") // SendTo - Empty state because not logged in
         app.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"].tap()
     }
