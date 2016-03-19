@@ -306,7 +306,7 @@ class L10nSnapshotTests: XCTestCase {
 
         mySnapshot("50ClearPrivateData-\(index)")
 
-        var logOutCell = app.tables.cells["LogOut"]
+        let logOutCell = app.tables.cells["LogOut"]
         if logOutCell.exists {
             logOutCell.tap()
             sleep(2)
