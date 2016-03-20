@@ -144,6 +144,7 @@ protocol Profile: class {
     var readingList: ReadingListService? { get }
     var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
 
+    func background()
     func shutdown()
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
@@ -233,6 +234,25 @@ public class BrowserProfile: Profile {
     // Extensions don't have a UIApplication.
     convenience init(localName: String) {
         self.init(localName: localName, app: nil)
+    }
+
+    private func logProfileFDs() {
+        let openDescriptors = FSUtils.openFileDescriptors()
+        log.debug("Open file descriptors: ")
+        log.debug("----")
+        for (k, v) in openDescriptors {
+            if v.containsString(self.name) {
+                log.debug("  \(k): \(v)")
+            }
+        }
+        log.debug("----")
+    }
+
+    func background() {
+        log.debug("Backgrounding profile.")
+        if AppConstants.IsDebug {
+            self.logProfileFDs()
+        }
     }
 
     func shutdown() {
