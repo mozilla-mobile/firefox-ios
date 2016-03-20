@@ -631,22 +631,30 @@ public class BrowserProfile: Profile {
             let bufferRows = (self.profile.bookmarks as? MergedSQLiteBookmarks)?.synchronousBufferCount()
 
             self.doInBackgroundAfter(millis: 300) {
-                let id = DeviceInfo.clientIdentifier(self.prefs)
-                let ping = makeAdHocBookmarkMergePing(NSBundle.mainBundle(), clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations)
-                let payload = ping.toString()
-                guard let body = payload.dataUsingEncoding(NSUTF8StringEncoding) else {
-                    log.debug("Invalid JSON!")
-                    return
-                }
+                self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
+                    // We would love to include the version and OS etc. of each remote client,
+                    // but we don't store that information. For now, just do a count.
+                    let clientCount = clients.count
 
-                let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation".asURL!
-                let request = NSMutableURLRequest(URL: url)
-                request.HTTPMethod = "POST"
-                request.HTTPBody = body
-                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                    let id = DeviceInfo.clientIdentifier(self.prefs)
+                    let ping = makeAdHocBookmarkMergePing(NSBundle.mainBundle(), clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations, clientCount: clientCount)
+                    let payload = ping.toString()
 
-                Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
-                    log.debug("Bookmark validation upload response: \(response?.statusCode ?? -1).")
+                    log.debug("Payload is: \(payload)")
+                    guard let body = payload.dataUsingEncoding(NSUTF8StringEncoding) else {
+                        log.debug("Invalid JSON!")
+                        return
+                    }
+
+                    let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation".asURL!
+                    let request = NSMutableURLRequest(URL: url)
+                    request.HTTPMethod = "POST"
+                    request.HTTPBody = body
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                    Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
+                        log.debug("Bookmark validation upload response: \(response?.statusCode ?? -1).")
+                    }
                 }
             }
         }

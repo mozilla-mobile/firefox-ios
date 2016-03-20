@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-public func makeAdHocBookmarkMergePing(bundle: NSBundle, clientID: String, attempt: Int32, bufferRows: Int?, valid: [String: Bool]) -> JSON {
+public func makeAdHocBookmarkMergePing(bundle: NSBundle, clientID: String, attempt: Int32, bufferRows: Int?, valid: [String: Bool], clientCount: Int) -> JSON {
     let anyFailed = valid.reduce(false, combine: { $0 || $1.1 })
 
     var out: [String: AnyObject] = [
@@ -12,6 +12,8 @@ public func makeAdHocBookmarkMergePing(bundle: NSBundle, clientID: String, attem
         "id": clientID,
         "attempt": Int(attempt),
         "success": !anyFailed,
+        "date": NSDate().descriptionWithLocale(nil),
+        "clientCount": clientCount,
     ]
 
     if let bufferRows = bufferRows {
