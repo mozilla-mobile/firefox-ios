@@ -15,11 +15,13 @@ struct MenuConfiguration {
     let menuItems: [MenuItem]
     let menuToolbarItems: [MenuToolbarItem]?
     let location: MenuLocation
+    let numberOfItemsInRow: Int
 
-    init(location: MenuLocation, menuItems: [MenuItem], toolbarItems: [MenuToolbarItem]?) {
+    init(location: MenuLocation, menuItems: [MenuItem], toolbarItems: [MenuToolbarItem]?, numberOfItemsInRow: Int = 0) {
         self.location = location
         self.menuItems = menuItems
         self.menuToolbarItems = toolbarItems
+        self.numberOfItemsInRow = numberOfItemsInRow
     }
 
     func toolbarColourForMode(isPrivate isPrivate: Bool = false) -> UIColor {
@@ -50,7 +52,16 @@ extension MenuConfiguration {
     static let menuIcon = UIImage(named: "add")
 
     static func menuConfigurationForLocation(location: MenuLocation) -> MenuConfiguration {
-        return MenuConfiguration(location: location, menuItems: menuItemsForLocation(location), toolbarItems: menuToolbarItemsForLocation(location))
+        return MenuConfiguration(location: location, menuItems: menuItemsForLocation(location), toolbarItems: menuToolbarItemsForLocation(location), numberOfItemsInRow: numberOfMenuItemsPerRowForLocation(location))
+    }
+
+    private static func numberOfMenuItemsPerRowForLocation(location: MenuLocation) -> Int {
+        switch location {
+        case .TabTray:
+           return 4
+        default:
+            return 3
+        }
     }
 
     // the items should be added to the array according to desired display order
