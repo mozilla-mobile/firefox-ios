@@ -136,6 +136,11 @@
                BlueprintName = "UITests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "TopSitesTests/testChangingDyamicFontOnTopSites()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">

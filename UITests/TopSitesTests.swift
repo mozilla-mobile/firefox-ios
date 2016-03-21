@@ -68,6 +68,7 @@ class TopSitesTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
+    // Disabled (bug 1258544).
     func testChangingDyamicFontOnTopSites() {
         DynamicFontUtils.restoreDynamicFontSize(tester())
 
@@ -114,6 +115,7 @@ class TopSitesTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
+    // This test doesn't seem very useful...remove it? (bug 1258548)
     func testRotationAndDeleteShowsCorrectTile() {
         // Load in the top Alexa sites to populate some top site tiles with
         let topDomainsPath = NSBundle.mainBundle().pathForResource("topdomains", ofType: "txt")!
