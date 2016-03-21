@@ -75,7 +75,7 @@ class MenuViewController: UIViewController {
             // add a shadow to the bottom of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
 
-            menuView.openMenuImage.image = MenuConfiguration.menuIcon
+            menuView.openMenuImage.image = MenuConfiguration.menuIconForMode(isPrivate: isPrivate)
             menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissMenu"))
 
             menuView.snp_makeConstraints { make in
@@ -149,7 +149,7 @@ extension MenuViewController: MenuItemDataSource {
         menuItemView.setTitle(menuItem.title)
         menuItemView.titleLabel.font = menuConfig.menuFont()
         menuItemView.titleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
-        if let icon = menuItem.icon {
+        if let icon = menuItem.iconForMode(isPrivate: isPrivate) {
             menuItemView.setImage(icon)
         }
 
