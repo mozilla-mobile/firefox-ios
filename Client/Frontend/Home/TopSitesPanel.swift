@@ -142,7 +142,9 @@ class TopSitesPanel: UIViewController {
             deleteTileForSuggestedSite(site as! SuggestedSite)
         }
 
-        profile.history.removeSiteFromTopSites(site).uponQueue(dispatch_get_main_queue()) { _ in
+        profile.history.removeSiteFromTopSites(site).uponQueue(dispatch_get_main_queue()) { result in
+            guard result.isSuccess else { return }
+
             // Remove the site from the current data source. Don't requery yet
             // since a Sync or location change may have changed the data under us.
             self.dataSource.sites = self.dataSource.sites.filter { $0 !== site }
@@ -168,20 +170,21 @@ class TopSitesPanel: UIViewController {
     }
 
     private func refreshTopSites(frecencyLimit: Int) {
-        // Don't allow Sync or other notifications to change the data source if we're deleting a thumbnail.
-        // If we are, we'll refresh at the end, so we can drop this one.
-        if !(self.collection?.userInteractionEnabled ?? true) {
-            return
-        }
+        dispatch_async(dispatch_get_main_queue()) {
+            // Don't allow Sync or other notifications to change the data source if we're deleting a thumbnail.
+            if !(self.collection?.userInteractionEnabled ?? true) {
+                return
+            }
 
-        // Reload right away with whatever is in the cache, then check to see if the cache is invalid. If it's invalid,
-        // invalidate the cache and requery. This allows us to always show results right away if they are cached but
-        // also load in the up-to-date results asynchronously if needed
-        reloadTopSitesWithLimit(frecencyLimit) >>> {
-            self.profile.history.updateTopSitesCacheIfInvalidated() >>== { dirty in
-                if dirty {
-                    self.dataSource.invalidateSites()
-                    self.reloadTopSitesWithLimit(frecencyLimit)
+            // Reload right away with whatever is in the cache, then check to see if the cache is invalid.
+            // If it's invalid, invalidate the cache and requery. This allows us to always show results
+            // immediately while also loading up-to-date results asynchronously if needed.
+            self.reloadTopSitesWithLimit(frecencyLimit) >>> {
+                self.profile.history.updateTopSitesCacheIfInvalidated() >>== { dirty in
+                    if dirty {
+                        self.dataSource.sitesInvalidated = true
+                        self.reloadTopSitesWithLimit(frecencyLimit)
+                    }
                 }
             }
         }
@@ -586,7 +589,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     private func setHistorySites(var historySites: [Site]) {
         // Sites are invalidated and we have a new data set, so do a replace.
         if (sitesInvalidated) {
-            sites = []
+            self.sites = []
         }
 
         // We requery every time we do a deletion. If the query contains a top site that's
@@ -608,7 +611,9 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             }
 
             return site is SuggestedSite
-        } + historySites
+        }
+
+        self.sites += historySites
 
         // Since future updates to history sites will append to the previous result set,
         // including suggested sites, we only need to do this once.
@@ -635,11 +640,6 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
 
         sites += suggestedSites as [Site]
-    }
-
-    // Flags the next set of sites to do a replace, not a merge.
-    func invalidateSites() {
-        sitesInvalidated = true
     }
 
     subscript(index: Int) -> Site? {
