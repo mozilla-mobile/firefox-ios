@@ -293,15 +293,7 @@ class MenuView: UIView {
     func indexPathForView(itemView: MenuItemView) -> NSIndexPath? {
         return (cachedItems as NSDictionary).allKeysForObject(itemView).first as? NSIndexPath
     }
-}
 
-extension  MenuView: MenuPageViewControllerDelegate {
-    func menuPageViewController(menuItemViewController: MenuPageViewController, didSelectMenuItem menuItem: MenuItemView, atIndexPath indexPath: NSIndexPath) {
-        menuItemDelegate?.menuView(self, didSelectItemAtIndexPath: indexPath)
-    }
-}
-
-extension MenuView: UIPageViewControllerDataSource {
 
     func menuPageControllerForPageIndex(pageIndex: Int) -> MenuPageViewController {
         let menuVC = MenuPageViewController()
@@ -313,21 +305,6 @@ extension MenuView: UIPageViewControllerDataSource {
         return menuVC
     }
 
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
-        let nextPageIndex = (viewController as! MenuPageViewController).pageIndex + 1
-        if nextPageIndex < (menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0) {
-            return menuPageControllerForPageIndex(nextPageIndex)
-        }
-        return nil
-    }
-
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
-        let previousPageIndex = (viewController as! MenuPageViewController).pageIndex - 1
-        if previousPageIndex >= 0 {
-            return menuPageControllerForPageIndex(previousPageIndex)
-        }
-        return nil
-    }
 
     private func itemsForPageIndex(pageIndex: Int) -> [MenuItemView] {
 
@@ -346,42 +323,10 @@ extension MenuView: UIPageViewControllerDataSource {
 
         return itemsForPageIndex
     }
-
-    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
-        return (menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0)
-    }
-
-    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int {
-        return currentPageIndex + 1
-    }
 }
 
-extension MenuView: UIPageViewControllerDelegate {
-
-    func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController]) {
-        guard let nextVC = pendingViewControllers.first as? MenuPageViewController else { return }
-        nextPageIndex = nextVC.pageIndex
-    }
-
-    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        defer {
-            nextPageIndex = nil
-        }
-
-        guard completed, let nextIndex = nextPageIndex else { return }
-        currentPageIndex = nextIndex
-    }
-
-}
-
-extension UIPageViewController {
-    func getScrollView() -> UIScrollView? {
-        for subview in view.subviews {
-            if subview is UIScrollView {
-                return subview as? UIScrollView
-            }
-        }
-        
-        return nil
+extension  MenuView: MenuPageViewControllerDelegate {
+    func menuPageViewController(menuItemViewController: MenuPageViewController, didSelectMenuItem menuItem: MenuItemView, atIndexPath indexPath: NSIndexPath) {
+        menuItemDelegate?.menuView(self, didSelectItemAtIndexPath: indexPath)
     }
 }
