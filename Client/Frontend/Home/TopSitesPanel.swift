@@ -7,7 +7,7 @@ import Shared
 import XCGLogger
 import Storage
 import WebImage
-
+import Deferred
 
 private let log = Logger.browserLogger
 
@@ -121,11 +121,6 @@ class TopSitesPanel: UIViewController {
         if let data = result.successValue {
             self.dataSource.setHistorySites(data.asArray())
             self.dataSource.profile = self.profile
-            self.dataSource.mergeSuggestedSites()
-
-            // redraw now we've updated our sources
-            self.collection?.collectionViewLayout.invalidateLayout()
-            self.collection?.setNeedsLayout()
         }
     }
 
@@ -146,14 +141,22 @@ class TopSitesPanel: UIViewController {
         if site is SuggestedSite {
             deleteTileForSuggestedSite(site as! SuggestedSite)
         }
-        
-        let newSites = profile.history.removeSiteFromTopSites(site) >>> {
-            self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit)
-        }
 
-        newSites.uponQueue(dispatch_get_main_queue()) { result in
-            self.deleteOrUpdateSites(result, indexPath: indexPath)
-            self.collection?.userInteractionEnabled = true
+        profile.history.removeSiteFromTopSites(site).uponQueue(dispatch_get_main_queue()) { result in
+            guard result.isSuccess else { return }
+
+            // Remove the site from the current data source. Don't requery yet
+            // since a Sync or location change may have changed the data under us.
+            self.dataSource.sites = self.dataSource.sites.filter { $0 !== site }
+
+            // Update the UICollectionView.
+            self.deleteOrUpdateSites(indexPath) >>> {
+                // Finally, requery to pull in the latest sites.
+                self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit).uponQueue(dispatch_get_main_queue()) { result in
+                    self.updateDataSourceWithSites(result)
+                    self.collection?.userInteractionEnabled = true
+                }
+            }
         }
     }
 
@@ -167,12 +170,22 @@ class TopSitesPanel: UIViewController {
     }
 
     private func refreshTopSites(frecencyLimit: Int) {
-        // Reload right away with whatever is in the cache, then check to see if the cache is invalid. If it's invalid,
-        // invalidate the cache and requery. This allows us to always show results right away if they are cached but
-        // also load in the up-to-date results asynchronously if needed
-        reloadTopSitesWithLimit(frecencyLimit) >>> {
-            return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { result in
-                return result ? self.reloadTopSitesWithLimit(frecencyLimit) : succeed()
+        dispatch_async(dispatch_get_main_queue()) {
+            // Don't allow Sync or other notifications to change the data source if we're deleting a thumbnail.
+            if !(self.collection?.userInteractionEnabled ?? true) {
+                return
+            }
+
+            // Reload right away with whatever is in the cache, then check to see if the cache is invalid.
+            // If it's invalid, invalidate the cache and requery. This allows us to always show results
+            // immediately while also loading up-to-date results asynchronously if needed.
+            self.reloadTopSitesWithLimit(frecencyLimit) >>> {
+                self.profile.history.updateTopSitesCacheIfInvalidated() >>== { dirty in
+                    if dirty {
+                        self.dataSource.sitesInvalidated = true
+                        self.reloadTopSitesWithLimit(frecencyLimit)
+                    }
+                }
             }
         }
     }
@@ -185,40 +198,25 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    private func deleteOrUpdateSites(result: Maybe<Cursor<Site>>, indexPath: NSIndexPath) {
-        guard let collectionView = collection else { return }
-        // get the number of top sites items we have before we update the data source
-        // this is so we know how many new top sites cells to add
-        // as a sync may have brought in more results than we had previously
-        let previousNumOfThumbnails = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
+    private func deleteOrUpdateSites(indexPath: NSIndexPath) -> Success {
+        guard let collection = self.collection else { return succeed() }
 
-        // Exit early if the query failed in some way.
-        guard result.isSuccess else {
-            return
-        }
+        let result = Success()
 
-        // now update the data source with the new data
-        self.updateDataSourceWithSites(result)
+        collection.performBatchUpdates({
+            collection.deleteItemsAtIndexPaths([indexPath])
 
-        collection?.performBatchUpdates({
-
-            // find out how many thumbnails, up the max for display, we can actually add
-            let numOfCellsFromData = self.dataSource.count()
-            let numOfThumbnails = min(numOfCellsFromData, self.layout.thumbnailCount)
-
-            // If we have enough data to fill the tiles after the deletion, then delete the correct tile and insert any that are missing
-            if (numOfThumbnails >= previousNumOfThumbnails) {
-                self.collection?.deleteItemsAtIndexPaths([indexPath])
-                let indexesToAdd = ((previousNumOfThumbnails-1)..<numOfThumbnails).map{ NSIndexPath(forItem: $0, inSection: 0) }
-                self.collection?.insertItemsAtIndexPaths(indexesToAdd)
-            }
-            // If we don't have any data to backfill our tiles, just delete
-            else {
-                self.collection?.deleteItemsAtIndexPaths([indexPath])
+            // If we have more items in our data source, replace the deleted site with a new one.
+            let count = collection.numberOfItemsInSection(0) - 1
+            if count < self.dataSource.count() {
+                collection.insertItemsAtIndexPaths([ NSIndexPath(forItem: count, inSection: 0) ])
             }
         }, completion: { _ in
             self.updateAllRemoveButtonStates()
+            result.fill(Maybe(success: ()))
         })
+
+        return result
     }
 
     /**
@@ -260,8 +258,6 @@ class TopSitesPanel: UIViewController {
 extension TopSitesPanel: HomePanel {
     func endEditing() {
         editingThumbnails = false
-
-        collection?.reloadData()
     }
 }
 
@@ -457,6 +453,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var editingThumbnails: Bool = false
     var suggestedSites = [SuggestedSite]()
     var sites = [Site]()
+    private var sitesInvalidated = true
 
     weak var collectionView: UICollectionView?
 
@@ -589,8 +586,41 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
     }
 
-    private func setHistorySites(historySites: [Site]) {
-        self.sites = historySites
+    private func setHistorySites(var historySites: [Site]) {
+        // Sites are invalidated and we have a new data set, so do a replace.
+        if (sitesInvalidated) {
+            self.sites = []
+        }
+
+        // We requery every time we do a deletion. If the query contains a top site that's
+        // bubbled up that wasn't there previously (e.g., a page just finished loading
+        // in the background), it will change the index of any following site currently
+        // displayed. This, in turn, would cause sites to shuffle around, and we would
+        // possibly have duplicates if a site that's already visible has been reindexed
+        // to a newly added position, post-deletion.
+        //
+        // The fix? Go through our existing set of sites on an update and append new sites
+        // to the end. This preserves the ordering of existing sites, meaning the last
+        // index, post-deletion, will always be a new site. Of course, this is temporary;
+        // whenever the panel is reloaded, our transient, ordered state will be lost. But
+        // that's OK: top sites change frequently anyway.
+        self.sites = self.sites.filter { site in
+            if let index = historySites.indexOf({ extractDomainURL($0.url) == extractDomainURL(site.url) }) {
+                historySites.removeAtIndex(index)
+                return true
+            }
+
+            return site is SuggestedSite
+        }
+
+        self.sites += historySites
+
+        // Since future updates to history sites will append to the previous result set,
+        // including suggested sites, we only need to do this once.
+        if sitesInvalidated {
+            sitesInvalidated = false
+            mergeSuggestedSites()
+        }
     }
 
     private func mergeSuggestedSites() {
