@@ -53,7 +53,7 @@ public class MenuPageViewController: UIViewController {
 
         for (index, item) in items.enumerate() {
             itemContainerView.addSubview(item)
-            item.accessibilityIdentifier = "Menu.\(item.titleLabel.text)"
+            item.accessibilityIdentifier = "Menu.\(item.menuTitleLabel.text)"
 
             // now properly lay out the cells
             let row:CGFloat = floor(CGFloat(index) / numberOfItemsInRow)
