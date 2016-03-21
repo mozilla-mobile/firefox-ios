@@ -101,6 +101,12 @@ class MenuViewController: UIViewController {
         }
     }
 
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        if UI_USER_INTERFACE_IDIOM() == .Phone {
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if presentationStyle == .Popover {
