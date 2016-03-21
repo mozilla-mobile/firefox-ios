@@ -44,6 +44,11 @@ public class MenuPageViewController: UIViewController {
             make.edges.equalTo(view)
         }
 
+
+    }
+
+    public override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
         rowHeight = height / CGFloat(numberOfRows)
 
         for (index, item) in items.enumerate() {
