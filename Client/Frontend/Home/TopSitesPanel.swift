@@ -121,10 +121,6 @@ class TopSitesPanel: UIViewController {
         if let data = result.successValue {
             self.dataSource.setHistorySites(data.asArray())
             self.dataSource.profile = self.profile
-
-            // redraw now we've updated our sources
-            self.collection?.collectionViewLayout.invalidateLayout()
-            self.collection?.setNeedsLayout()
         }
     }
 
@@ -154,7 +150,8 @@ class TopSitesPanel: UIViewController {
             // Update the UICollectionView.
             self.deleteOrUpdateSites(indexPath) >>> {
                 // Finally, requery to pull in the latest sites.
-                self.reloadTopSitesWithLimit(self.maxFrecencyLimit).uponQueue(dispatch_get_main_queue()) { _ in
+                self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit).uponQueue(dispatch_get_main_queue()) { result in
+                    self.updateDataSourceWithSites(result)
                     self.collection?.userInteractionEnabled = true
                 }
             }
