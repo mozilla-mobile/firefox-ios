@@ -122,7 +122,7 @@ extension MenuViewController: MenuItemDataSource {
     }
 
     func numberOfItemsPerRowInMenuView(menuView: MenuView) -> Int {
-        return 3
+        return menuConfig.numberOfItemsInRow
     }
 
     func menuView(menuView: MenuView, numberOfItemsForPage page: Int) -> Int {
