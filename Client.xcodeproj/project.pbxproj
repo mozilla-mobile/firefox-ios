@@ -267,8 +267,6 @@
 		7B42226A1C93052600340529 /* MenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222661C93052600340529 /* MenuDelegate.swift */; };
 		7B42226B1C93052600340529 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222671C93052600340529 /* MenuView.swift */; };
 		7B4222A81C9305A300340529 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222A71C9305A300340529 /* MenuViewController.swift */; };
-		7B4222EE1C93191100340529 /* MenuPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4222ED1C93191100340529 /* MenuPageViewController.swift */; };
-		7B4223181C96DECE00340529 /* MenuPagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4223171C96DECE00340529 /* MenuPagingViewController.swift */; };
 		7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B42406D1CA04CAC009B5C28 /* Menu.xcassets */; };
 		7B59FC3E1C68E9B600F58EF5 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B59FC351C68E9B600F58EF5 /* SWCellScrollView.m */; };
 		7B59FC3F1C68E9B600F58EF5 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B59FC351C68E9B600F58EF5 /* SWCellScrollView.m */; };
@@ -322,6 +320,7 @@
 		7BA4A9661C4D008C0091D032 /* Deferred.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4A9631C4CFE840091D032 /* Deferred.framework */; };
 		7BA8D1C71BA037F500C8AE9E /* OpenPdfHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA8D1C61BA037F500C8AE9E /* OpenPdfHelper.swift */; };
 		7BB20B6D1B71160200F1657F /* TopSitesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB20B6C1B71160200F1657F /* TopSitesTests.swift */; };
+		7BB7056D1CB3BAAF002EF4A3 /* PagingMenuItemCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB7056C1CB3BAAE002EF4A3 /* PagingMenuItemCollectionViewLayout.swift */; };
 		7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBFEE731BB405D900A305AA /* TabManagerTests.swift */; };
 		7BBFEEA01BB409F300A305AA /* AboutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */; };
 		7BC7B4BE1C904BF90046E9D2 /* MenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC7B4BD1C904BF90046E9D2 /* MenuTests.swift */; };
@@ -1304,8 +1303,6 @@
 		7B4222661C93052600340529 /* MenuDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDelegate.swift; sourceTree = "<group>"; };
 		7B4222671C93052600340529 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		7B4222A71C9305A300340529 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
-		7B4222ED1C93191100340529 /* MenuPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuPageViewController.swift; sourceTree = "<group>"; };
-		7B4223171C96DECE00340529 /* MenuPagingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuPagingViewController.swift; path = ../Widgets/MenuPagingViewController.swift; sourceTree = "<group>"; };
 		7B42406D1CA04CAC009B5C28 /* Menu.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Menu.xcassets; sourceTree = "<group>"; };
 		7B59FC341C68E9B600F58EF5 /* SWCellScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWCellScrollView.h; path = ThirdParty/SWTableViewCell/PodFiles/SWCellScrollView.h; sourceTree = "<group>"; };
 		7B59FC351C68E9B600F58EF5 /* SWCellScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWCellScrollView.m; path = ThirdParty/SWTableViewCell/PodFiles/SWCellScrollView.m; sourceTree = "<group>"; };
@@ -1339,6 +1336,7 @@
 		7BA4A9631C4CFE840091D032 /* Deferred.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Deferred.framework; path = Carthage/Build/iOS/Deferred.framework; sourceTree = "<group>"; };
 		7BA8D1C61BA037F500C8AE9E /* OpenPdfHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPdfHelper.swift; sourceTree = "<group>"; };
 		7BB20B6C1B71160200F1657F /* TopSitesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesTests.swift; sourceTree = "<group>"; };
+		7BB7056C1CB3BAAE002EF4A3 /* PagingMenuItemCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PagingMenuItemCollectionViewLayout.swift; path = Client/Frontend/Menu/Items/PagingMenuItemCollectionViewLayout.swift; sourceTree = SOURCE_ROOT; };
 		7BBFEE731BB405D900A305AA /* TabManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManagerTests.swift; sourceTree = "<group>"; };
 		7BC7B4BD1C904BF90046E9D2 /* MenuTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTests.swift; sourceTree = "<group>"; };
 		7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = L10nSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2354,15 +2352,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7B759F8F1C997CF00067AB79 /* ItemPages */ = {
-			isa = PBXGroup;
-			children = (
-				7B4222ED1C93191100340529 /* MenuPageViewController.swift */,
-				7B4223171C96DECE00340529 /* MenuPagingViewController.swift */,
-			);
-			name = ItemPages;
-			sourceTree = "<group>";
-		};
 		7B95CD181C3AB2EE00638E31 /* MarketingUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -2401,7 +2390,6 @@
 			isa = PBXGroup;
 			children = (
 				7BC7B4711C903B690046E9D2 /* Items */,
-				7B759F8F1C997CF00067AB79 /* ItemPages */,
 				7B4221781C9303BD00340529 /* Toolbar */,
 				7B4222641C93052600340529 /* MenuConfiguration.swift */,
 				7B4222651C93052600340529 /* MenuDataSource.swift */,
@@ -2418,6 +2406,7 @@
 			children = (
 				7B4222421C93051500340529 /* MenuItem.swift */,
 				7B4222431C93051500340529 /* MenuItemView.swift */,
+				7BB7056C1CB3BAAE002EF4A3 /* PagingMenuItemCollectionViewLayout.swift */,
 			);
 			name = Items;
 			path = Menu/Items;
@@ -4573,13 +4562,13 @@
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
 				D3994A4A1C22813200E2A03C /* FindInPageActivity.swift in Sources */,
 				7B9A61CD1C3EBFAE005C83DC /* RXMLElement.m in Sources */,
-				7B4223181C96DECE00340529 /* MenuPagingViewController.swift in Sources */,
 				E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */,
 				7B4222A81C9305A300340529 /* MenuViewController.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */,
 				F84B22241A09122500AAB793 /* HomePanelViewController.swift in Sources */,
 				0B5142CC1AE1BAF50014D0B3 /* UIViewExtensions.swift in Sources */,
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
+				7BB7056D1CB3BAAF002EF4A3 /* PagingMenuItemCollectionViewLayout.swift in Sources */,
 				E65AB12C1B7CDADF00C2B47A /* SessionRestoreHelper.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
@@ -4610,7 +4599,6 @@
 				7B42217A1C9303BD00340529 /* MenuToolbarItem.swift in Sources */,
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
 				59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */,
-				7B4222EE1C93191100340529 /* MenuPageViewController.swift in Sources */,
 				E69E06D01C765BB900D0F926 /* NSAttributedStringExtensions.swift in Sources */,
 				D30B0F301AA7D66300C01CA3 /* ThumbnailCell.swift in Sources */,
 				E68E7ADA1CAC207400FDCA76 /* ChangePasscodeViewController.swift in Sources */,
