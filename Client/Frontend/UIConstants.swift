@@ -52,6 +52,9 @@ public struct UIConstants {
     // Firefox Orange
     static let ControlTintColor = UIColor(red: 240.0 / 255, green: 105.0 / 255, blue: 31.0 / 255, alpha: 1)
 
+    // Passcode dot gray
+    static let PasscodeDotColor = UIColor(rgb: 0x4A4A4A)
+
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
     static let ScreenshotQuality: Float = 0.3
 
