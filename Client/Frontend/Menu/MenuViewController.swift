@@ -146,11 +146,11 @@ extension MenuViewController: MenuItemDataSource {
         let menuItems = menuConfig.menuItems
         let menuItem = menuItems[indexPath.getMenuItemIndex()]
 
-        menuItemView.setTitle(menuItem.title)
-        menuItemView.titleLabel.font = menuConfig.menuFont()
-        menuItemView.titleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
+        menuItemView.menuTitleLabel.text = menuItem.title
+        menuItemView.menuTitleLabel.font = menuConfig.menuFont()
+        menuItemView.menuTitleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
         if let icon = menuItem.iconForMode(isPrivate: isPrivate) {
-            menuItemView.setImage(icon)
+            menuItemView.menuImageView.image = icon
         }
 
         return menuItemView
