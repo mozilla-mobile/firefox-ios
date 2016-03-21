@@ -35,7 +35,10 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissMenu:"))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissMenu(_:)))
+        gesture.delegate = self
+        gesture.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(gesture)
 
         // Do any additional setup after loading the view.
         menuView = MenuView(presentationStyle: self.presentationStyle)
@@ -76,7 +79,7 @@ class MenuViewController: UIViewController {
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
 
             menuView.openMenuImage.image = MenuConfiguration.menuIconForMode(isPrivate: isPrivate)
-            menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissMenu"))
+            menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissMenu(_:))))
 
             menuView.snp_makeConstraints { make in
                 make.left.equalTo(view.snp_left).offset(24)
@@ -118,6 +121,8 @@ class MenuViewController: UIViewController {
 }
 extension MenuViewController: MenuItemDelegate {
     func menuView(menu: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let selectedMenuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
+        print("Selected menu item '\(selectedMenuItem.title)")
     }
 }
 
@@ -140,20 +145,17 @@ extension MenuViewController: MenuItemDataSource {
         return maxNumberOfItemsPerPage
     }
 
-    func menuView(menuView: MenuView, viewForItemAtIndexPath indexPath: NSIndexPath) -> MenuItemView {
-        let menuItemView = menuView.dequeueReusableMenuItemViewForIndexPath(indexPath)
-
-        let menuItems = menuConfig.menuItems
-        let menuItem = menuItems[indexPath.getMenuItemIndex()]
-
-        menuItemView.setTitle(menuItem.title)
-        menuItemView.titleLabel.font = menuConfig.menuFont()
-        menuItemView.titleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
+    func menuView(menuView: MenuView, menuItemCellForIndexPath indexPath: NSIndexPath) -> MenuItemCollectionViewCell {
+        let cell = menuView.dequeueReusableCellForIndexPath(indexPath)
+        let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
+        cell.menuTitleLabel.text = menuItem.title
+        cell.accessibilityLabel = menuItem.title
+        cell.menuTitleLabel.font = menuConfig.menuFont()
+        cell.menuTitleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
         if let icon = menuItem.iconForMode(isPrivate: isPrivate) {
-            menuItemView.setImage(icon)
+            cell.menuImageView.image = icon
         }
-
-        return menuItemView
+        return cell
     }
 
     @objc private func didReceiveLongPress(recognizer: UILongPressGestureRecognizer) {
@@ -162,7 +164,7 @@ extension MenuViewController: MenuItemDataSource {
 
 extension MenuViewController: MenuToolbarDataSource {
     func numberOfToolbarItemsInMenuView(menuView: MenuView) -> Int {
-        guard let menuToolbarItems = menuConfig.menuToolbarItems else { return 0}
+        guard let menuToolbarItems = menuConfig.menuToolbarItems else { return 0 }
         return menuToolbarItems.count
     }
 
@@ -173,16 +175,31 @@ extension MenuViewController: MenuToolbarDataSource {
         }
         let item = menuToolbarItems[index]
         let toolbarItemView = UIBarButtonItem(image: item.icon, style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+        toolbarItemView.accessibilityLabel = item.title
         return toolbarItemView
     }
 }
 
 extension MenuViewController: MenuToolbarItemDelegate {
     func menuView(menuView: MenuView, didSelectItemAtIndex index: Int) {
+        let selectedMenuItem = menuConfig.menuToolbarItems![index]
+        print("Selected menu item '\(selectedMenuItem.title)")
     }
 }
 
-extension NSIndexPath {
+extension MenuViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+        let gestureView = gestureRecognizer.view
+        let loc = touch.locationInView(gestureView)
+        guard let tappedView = gestureView?.hitTest(loc, withEvent: nil) where tappedView == view || tappedView == menuView.openMenuImage else {
+            return false
+        }
+
+        return true
+    }
+}
+
+private extension NSIndexPath {
     func getMenuItemIndex() -> Int {
         return (section * maxNumberOfItemsPerPage) + row
     }
