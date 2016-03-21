@@ -60,23 +60,22 @@ class MenuPagingViewController: UIViewController {
     }
 
     override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
         pageSize = view.bounds.size
 
         pageControl.numberOfPages = viewControllers.count
         scrollView.subviews.forEach { $0.removeFromSuperview() }
+        super.viewWillLayoutSubviews()
         var maxPageHeight: CGFloat = 0.0
         for (index, page) in viewControllers.enumerate() {
             let pageView = page.view
-            // TODO: find a way to layout the pages using AutoLayout
-            // if I don't do this, the width pageView has is full screen width
-            // if I use constraints, view disappears.
-            // there must be a way of doing this with AutoLayout but I can't figure it out.
-            // If we can we get a lot for free.
-            // 1. better adaptability for things like right->left languages
-            // 2. more generic paging controller as it won't need access to height parameter of MenuPageViewController
-            pageView.frame = CGRectMake(CGFloat(index) * pageSize.width, 0, pageSize.width, pageView.bounds.height)
             scrollView.addSubview(pageView)
+
+            pageView.snp_makeConstraints { make in
+                make.left.equalTo(CGFloat(index) * pageSize.width)
+                make.top.equalTo(0)
+                make.width.equalTo(pageSize.width)
+                make.height.equalTo(pageView.bounds.height)
+            }
 
             if maxPageHeight < page.height {
                 maxPageHeight = page.height
