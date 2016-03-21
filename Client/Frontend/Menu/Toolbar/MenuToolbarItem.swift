@@ -7,7 +7,7 @@ import Foundation
 struct MenuToolbarItem {
 
     private let iconName: String
-    private let selectedIconName: String
+    private let privateModeIconName: String
 
     let title: String
 
@@ -15,13 +15,17 @@ struct MenuToolbarItem {
         return UIImage(named: iconName)
     }
 
-    var selectedIcon: UIImage? {
-        return UIImage(named: selectedIconName)
+    var privateModeIcon: UIImage? {
+        return UIImage(named: privateModeIconName)
     }
 
-    init(title: String, icon: String, selectedIcon: String) {
+    func iconForMode(isPrivate isPrivate: Bool = false) -> UIImage?  {
+        return isPrivate ? privateModeIcon : icon
+    }
+
+    init(title: String, icon: String, privateModeIcon: String) {
         self.title = title
         self.iconName = icon
-        self.selectedIconName = selectedIcon
+        self.privateModeIconName = privateModeIcon
     }
 }
