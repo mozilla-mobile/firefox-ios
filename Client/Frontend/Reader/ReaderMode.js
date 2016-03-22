@@ -55,8 +55,8 @@ var _firefox_ReaderMode = {
             return;
         }
 
-        this.debug({Type: "ReaderModeStateChange", Value: "StatusUnavailable"});
-        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "StatusUnavailable"});
+        this.debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
     },
 
     // Readerize the document. Since we did the actual readerization already in checkReadability, we
