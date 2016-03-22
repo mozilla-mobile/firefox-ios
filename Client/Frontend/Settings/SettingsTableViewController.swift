@@ -39,7 +39,7 @@ class Setting {
     var accessoryType: UITableViewCellAccessoryType { return .None }
 
     var textAlignment: NSTextAlignment { return .Left }
-    
+
     private(set) var enabled: Bool = true
 
     // Called when the cell is setup. Call if you need the default behaviour.
@@ -114,12 +114,27 @@ class SettingSection : Setting {
     }
 }
 
+private class PaddedSwitch: UIView {
+    private static let Padding: CGFloat = 8
+
+    init(switchView: UISwitch) {
+        super.init(frame: CGRectZero)
+
+        addSubview(switchView)
+
+        frame.size = CGSizeMake(switchView.frame.width + PaddedSwitch.Padding, switchView.frame.height)
+        switchView.frame.origin = CGPointMake(PaddedSwitch.Padding, 0)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 // A helper class for settings with a UISwitch.
 // Takes and optional settingsDidChange callback and status text.
 class BoolSetting: Setting {
     let prefKey: String
-    // Padding to wrap the statusText earlier to avoid problematic localization
-    private let statusTextPadding = -130
 
     private let prefs: Prefs
     private let defaultValue: Bool
@@ -149,18 +164,13 @@ class BoolSetting: Setting {
 
     override func onConfigureCell(cell: UITableViewCell) {
         super.onConfigureCell(cell)
+
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
         control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? defaultValue
-        cell.accessoryView = control
-        if let titleLabel = cell.textLabel {
-            cell.detailTextLabel?.snp_makeConstraints { make in
-                make.left.equalTo(titleLabel)
-                make.right.equalTo(cell).offset(statusTextPadding)
-                make.top.equalTo(titleLabel.snp_bottom)
-            }
-        }
+        cell.accessoryView = PaddedSwitch(switchView: control)
+        cell.selectionStyle = .None
     }
 
     @objc func switchValueChanged(control: UISwitch) {
@@ -255,11 +265,11 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.tableFooterView = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
-        
+
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         tableView.estimatedRowHeight = 44
