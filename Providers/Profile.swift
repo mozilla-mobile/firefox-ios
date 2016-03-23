@@ -614,6 +614,11 @@ public class BrowserProfile: Profile {
         }
 
         func onBookmarkBufferValidated(notification: NSNotification) {
+            // We don't send this ad hoc telemetry on the release channel.
+            guard AppConstants.BuildChannel != AppBuildChannel.Release else {
+                return
+            }
+
             guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
                 log.debug("Profile isn't sending usage data. Not sending bookmark event.")
                 return
