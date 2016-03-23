@@ -28,7 +28,7 @@ private struct HistoryPanelUX {
     static let WelcomeScreenItemWidth = 170
 }
 
-class HistoryPanel: SiteTableViewController, HomePanel {
+class HistoryPanel: SiteTableViewControllerLight, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
