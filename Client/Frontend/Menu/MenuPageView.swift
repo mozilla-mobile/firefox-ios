@@ -4,25 +4,32 @@
 
 import UIKit
 
-protocol MenuPageViewControllerDelegate: class {
-    func menuPageViewController(menuPageViewController: MenuPageViewController, didSelectMenuItem menuItem: MenuItemView, atIndexPath indexPath: NSIndexPath)
+protocol MenuPageViewDelegate: class {
+    func menuPageView(menuPageView: MenuPageView, didSelectMenuItem menuItem: MenuItemView, atIndexPath indexPath: NSIndexPath)
 }
 
-public class MenuPageViewController: UIViewController {
+public class MenuPageView: UIView {
 
-    weak var delegate: MenuPageViewControllerDelegate?
-    public private(set) var pageIndex: Int = 0
-    public var numberOfItemsInRow:CGFloat = 0
-    public var itemPadding: CGFloat = 0
-    public var menuRowHeight: CGFloat = 0
-    public var backgroundColor: UIColor = UIColor.clearColor() {
+    weak var delegate: MenuPageViewDelegate?
+    public var pageIndex: Int = 0 {
         didSet {
-            view.backgroundColor = backgroundColor
+            self.setNeedsLayout()
         }
     }
+    public var numberOfItemsInRow:CGFloat = 0 {
+        didSet {
+            numberOfRows = ceil(CGFloat(items.count) / numberOfItemsInRow)
+        }
+    }
+    public var itemPadding: CGFloat = 0
+    public var menuRowHeight: CGFloat = 0
 
     private let itemContainerView = UIView()
-    private var items = [MenuItemView]()
+    private var items = [MenuItemView]() {
+        didSet {
+            numberOfRows = ceil(CGFloat(items.count) / numberOfItemsInRow)
+        }
+    }
 
     private var numberOfRows:CGFloat = 0
     private var rowHeight: CGFloat = 0
@@ -31,25 +38,26 @@ public class MenuPageViewController: UIViewController {
         return itemPadding + (numberOfRows * (menuRowHeight + itemPadding))
     }
 
-    override public func viewDidLoad() {
-        super.viewDidLoad()
-
+    init() {
+        super.init(frame: CGRectZero)
+        backgroundColor = UIColor.clearColor()
         // Do any additional setup after loading the view.
-        view.addSubview(itemContainerView)
-        numberOfRows = ceil(CGFloat(items.count) / numberOfItemsInRow)
+        addSubview(itemContainerView)
 
         itemContainerView.restorationIdentifier = "ItemContainerView"
         itemContainerView.accessibilityIdentifier = "Menu.ItemContainerView"
         itemContainerView.snp_makeConstraints { make in
-            make.edges.equalTo(view)
+            make.left.top.right.equalTo(self)
         }
-
-
     }
 
-    public override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        rowHeight = height / CGFloat(numberOfRows)
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        rowHeight = self.bounds.size.height / CGFloat(numberOfRows)
 
         for (index, item) in items.enumerate() {
             itemContainerView.addSubview(item)
@@ -73,20 +81,16 @@ public class MenuPageViewController: UIViewController {
         }
     }
 
-    override public func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     func setItems(items: [MenuItemView], forPageIndex index:Int) {
         self.items = items
         self.pageIndex = index
+        self.setNeedsLayout()
     }
 
     func menuItemWasSelected(sender: MenuItemView) {
         print("Menu item selected")
         guard let selectedItemIndex = items.indexOf(sender) else { return }
-        delegate?.menuPageViewController(self, didSelectMenuItem: sender, atIndexPath: NSIndexPath(forItem: selectedItemIndex, inSection: pageIndex))
+        delegate?.menuPageView(self, didSelectMenuItem: sender, atIndexPath: NSIndexPath(forItem: selectedItemIndex, inSection: pageIndex))
     }
 
 }

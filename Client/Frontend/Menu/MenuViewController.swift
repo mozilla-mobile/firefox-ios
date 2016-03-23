@@ -93,6 +93,9 @@ class MenuViewController: UIViewController {
     }
 
     @objc private func dismissMenu(recognizer: UITapGestureRecognizer) {
+        let gestureView = recognizer.view
+        let loc = recognizer.locationInView(gestureView)
+        guard let tappedView = gestureView?.hitTest(loc, withEvent: nil) where tappedView == view else { return }
         if recognizer.state == UIGestureRecognizerState.Ended {
             view.backgroundColor = UIColor.clearColor()
             self.dismissViewControllerAnimated(true, completion: {

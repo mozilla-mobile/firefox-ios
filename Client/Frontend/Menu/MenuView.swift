@@ -6,35 +6,69 @@ import UIKit
 
 class MenuView: UIView {
 
-    var toolbar: RoundedToolbar
+    lazy var toolbar: RoundedToolbar = {
+        let toolbar = RoundedToolbar()
+        toolbar.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
+        return toolbar
+    }()
 
-    var openMenuImage: UIImageView
-    var menuFooterView: UIView
+    lazy var openMenuImage: UIImageView = {
+        let openMenuImage = UIImageView()
+        openMenuImage.contentMode = UIViewContentMode.ScaleAspectFit
+        return openMenuImage
+    }()
+
+    lazy var menuFooterView: UIView = UIView()
+    private lazy var pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.currentPage = 0
+        pageControl.hidesForSinglePage = true
+        pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
+        return pageControl
+    }()
 
     var toolbarDelegate: MenuToolbarItemDelegate?
     var toolbarDataSource: MenuToolbarDataSource?
     var menuItemDelegate: MenuItemDelegate?
     var menuItemDataSource: MenuItemDataSource?
 
-    private let menuItemPageController = MenuPagingViewController()
+    private let pagingCellReuseIdentifier = "PagingCellReuseIdentifier"
+
+    private lazy var menuPagingLayout: UICollectionViewFlowLayout = {
+        let layout = TopAlignedCollectionViewFlowLayout()
+        layout.scrollDirection = UICollectionViewScrollDirection.Horizontal
+        return layout
+    }()
+
+    private lazy var menuPagingView: UICollectionView = {
+        let pagingView = UICollectionView(frame: CGRectZero, collectionViewLayout: self.menuPagingLayout)
+        pagingView.registerClass(MenuPageCollectionViewCell.self, forCellWithReuseIdentifier: self.pagingCellReuseIdentifier)
+        pagingView.dataSource = self
+        pagingView.delegate = self
+        pagingView.showsHorizontalScrollIndicator = false
+        pagingView.pagingEnabled = true
+        return pagingView
+    }()
+
     private var presentationStyle: MenuViewPresentationStyle
 
     private var menuColor: UIColor = UIColor.clearColor() {
         didSet {
-            menuItemPageController.backgroundColor = menuColor
+            menuPagingView.backgroundColor = menuColor
+            pageControl.backgroundColor = menuColor
             menuFooterView.backgroundColor = menuColor
         }
     }
 
     override var backgroundColor: UIColor! {
-        get { return menuColor }
-
-        set { menuColor = newValue }
+        didSet {
+            menuColor = backgroundColor
+        }
     }
     
     override var tintColor: UIColor! {
         didSet {
-            menuItemPageController.tintColor = tintColor
+            menuPagingView.tintColor = tintColor
         }
     }
 
@@ -79,18 +113,11 @@ class MenuView: UIView {
 
     init(presentationStyle: MenuViewPresentationStyle) {
         self.presentationStyle = presentationStyle
-        toolbar = RoundedToolbar()
-        toolbar.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
-        menuFooterView = UIView()
-        openMenuImage = UIImageView()
-        openMenuImage.contentMode = UIViewContentMode.ScaleAspectFit
 
         super.init(frame: CGRectZero)
 
-
-        let pageControllerView = menuItemPageController.view
-        self.addSubview(pageControllerView)
-
+        self.addSubview(menuPagingView)
+        self.addSubview(pageControl)
         self.addSubview(toolbar)
 
         switch presentationStyle {
@@ -101,17 +128,28 @@ class MenuView: UIView {
                 make.top.left.right.equalTo(self)
             }
 
-            pageControllerView.snp_makeConstraints { make in
+            menuPagingView.snp_makeConstraints { make in
                 make.top.equalTo(toolbar.snp_bottom)
                 make.left.right.equalTo(self)
-                make.bottom.equalTo(menuFooterView.snp_top)
+                make.bottom.equalTo(pageControl.snp_top)
+                make.height.equalTo(100)
             }
+
+            pageControl.snp_makeConstraints { make in
+                make.bottom.equalTo(menuFooterView.snp_top)
+                make.centerX.equalTo(self)
+            }
+
         case .Popover:
-            pageControllerView.snp_makeConstraints { make in
+            menuPagingView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(self)
             }
+            pageControl.snp_makeConstraints { make in
+                make.top.equalTo(menuPagingView.snp_bottom)
+                make.centerX.equalTo(self)
+            }
             toolbar.snp_makeConstraints { make in
-                make.top.equalTo(pageControllerView.snp_bottom)
+                make.top.equalTo(pageControl.snp_bottom)
                 make.height.equalTo(toolbarHeight)
                 make.bottom.left.right.equalTo(self)
             }
@@ -121,7 +159,6 @@ class MenuView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
     private func addFooter() {
         self.addSubview(menuFooterView)
@@ -140,14 +177,23 @@ class MenuView: UIView {
         }
     }
 
-    override func layoutSubviews() {
-        reloadDataIfNeeded()
-        layoutToolbar()
-        layoutMenu()
-        layoutFooter()
-        super.layoutSubviews()
+    @objc func pageControlDidPage(sender: AnyObject) {
+        let pageSize = menuPagingView.bounds.size
+        let xOffset = pageSize.width * CGFloat(pageControl.currentPage)
+        menuPagingView.setContentOffset(CGPointMake(xOffset,0) , animated: true)
     }
 
+    @objc private func toolbarButtonSelected(sender: UIBarButtonItem) {
+        guard let selectedButtonIndex = toolbarItems.indexOf(sender) else { return }
+        toolbarDelegate?.menuView(self, didSelectItemAtIndex: selectedButtonIndex)
+    }
+
+    func indexPathForView(itemView: MenuItemView) -> NSIndexPath? {
+        return (cachedItems as NSDictionary).allKeysForObject(itemView).first as? NSIndexPath
+    }
+
+
+    // MARK : Menu Cell Management and Recycling
     func reloadData() {
         cachedItems.keys.forEach { path in
             cachedItems[path]?.removeFromSuperview()
@@ -191,10 +237,10 @@ class MenuView: UIView {
 
     private func loadMenu() {
         let numberOfPages = menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0
+        pageControl.numberOfPages = numberOfPages
+        pageControl.currentPage = currentPageIndex
 
-        for pageIndex in 0..<numberOfPages {
-            loadMenuForPageIndex(pageIndex)
-        }
+        loadMenuForPageIndex(currentPageIndex)
     }
 
     private func loadMenuForPageIndex(pageIndex: Int) {
@@ -219,6 +265,16 @@ class MenuView: UIView {
         }
     }
 
+    // MARK : Layout
+
+    override func layoutSubviews() {
+        reloadDataIfNeeded()
+        layoutToolbar()
+        layoutMenu()
+        layoutFooter()
+        super.layoutSubviews()
+    }
+
     private func layoutToolbar() {
         var displayToolbarItems = [UIBarButtonItem]()
         for (index, item) in toolbarItems.enumerate() {
@@ -241,15 +297,16 @@ class MenuView: UIView {
 
 
     private func layoutMenu() {
+        let menuHeight = self.collectionView(menuPagingView, layout: self.menuPagingLayout, sizeForItemAtIndexPath: NSIndexPath(forItem: 0, inSection: 0)).height
+        menuPagingView.snp_updateConstraints { make in
+            make.height.equalTo(menuHeight)
+        }
         // make a copy of cached items
         var availableItems = cachedItems
         cachedItems.removeAll()
 
-        menuItemPageController.viewControllers = []
-        // get views for the previous page, if there is one
-        for pageIndex in 0..<(menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0) {
-            layoutPage(pageIndex, availableItems: &availableItems)
-        }
+        // get views for the current page and if there is one, the previous and subsequent pages
+        layoutPage(currentPageIndex, availableItems: &availableItems)
 
         // add any unused views to reusable items
         for item in availableItems.values {
@@ -260,13 +317,7 @@ class MenuView: UIView {
     }
 
     private func layoutPage(pageIndex: Int, inout availableItems: [NSIndexPath: MenuItemView]) {
-        guard let itemDataSource = menuItemDataSource else { return }
-
-        let numberOfPages = itemDataSource.numberOfPagesInMenuView(self)
-
-        if pageIndex < 0 || pageIndex >= numberOfPages { return }
-
-        let numberOfItemsForPage = itemDataSource.menuView(self, numberOfItemsForPage: pageIndex)
+        let numberOfItemsForPage = menuItemDataSource?.menuView(self, numberOfItemsForPage: pageIndex) ?? 0
 
         for index in 0..<numberOfItemsForPage {
             let indexPath = NSIndexPath(forItem: index, inSection: pageIndex)
@@ -274,9 +325,6 @@ class MenuView: UIView {
             cachedItems[indexPath] = item
             availableItems.removeValueForKey(indexPath)
         }
-
-        menuItemPageController.viewControllers.append(menuPageControllerForPageIndex(pageIndex))
-
     }
 
     private func layoutFooter() {
@@ -284,30 +332,35 @@ class MenuView: UIView {
             make.height.equalTo(menuFooterHeight)
         }
     }
+}
 
-    @objc private func toolbarButtonSelected(sender: UIBarButtonItem) {
-        guard let selectedButtonIndex = toolbarItems.indexOf(sender) else { return }
-        toolbarDelegate?.menuView(self, didSelectItemAtIndex: selectedButtonIndex)
+extension  MenuView: MenuPageViewDelegate {
+    func menuPageView(menuPageView: MenuPageView, didSelectMenuItem menuItem: MenuItemView, atIndexPath indexPath: NSIndexPath) {
+        menuItemDelegate?.menuView(self, didSelectItemAtIndexPath: indexPath)
     }
-    
-    func indexPathForView(itemView: MenuItemView) -> NSIndexPath? {
-        return (cachedItems as NSDictionary).allKeysForObject(itemView).first as? NSIndexPath
-    }
+}
 
-
-    func menuPageControllerForPageIndex(pageIndex: Int) -> MenuPageViewController {
-        let menuVC = MenuPageViewController()
-        menuVC.setItems(itemsForPageIndex(pageIndex), forPageIndex: pageIndex)
-        menuVC.delegate = self
-        menuVC.numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0)
-        menuVC.itemPadding = itemPadding
-        menuVC.menuRowHeight = CGFloat(menuRowHeight)
-        return menuVC
+extension MenuView: UICollectionViewDataSource {
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 1
     }
 
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let numberOfPagesInView = menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0
+        return numberOfPagesInView
+    }
+
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(pagingCellReuseIdentifier, forIndexPath: indexPath) as! MenuPageCollectionViewCell
+        cell.pageView.setItems(itemsForPageIndex(indexPath.row), forPageIndex: indexPath.row)
+        cell.pageView.delegate = self
+        cell.pageView.numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0)
+        cell.pageView.itemPadding = itemPadding
+        cell.pageView.menuRowHeight = CGFloat(menuRowHeight)
+        return cell
+    }
 
     private func itemsForPageIndex(pageIndex: Int) -> [MenuItemView] {
-
         var itemsForPageIndex = [MenuItemView]()
         let numberOfItemsForPage = menuItemDataSource?.menuView(self, numberOfItemsForPage: pageIndex) ?? 0
         for index in 0..<numberOfItemsForPage {
@@ -325,8 +378,22 @@ class MenuView: UIView {
     }
 }
 
-extension  MenuView: MenuPageViewControllerDelegate {
-    func menuPageViewController(menuItemViewController: MenuPageViewController, didSelectMenuItem menuItem: MenuItemView, atIndexPath indexPath: NSIndexPath) {
-        menuItemDelegate?.menuView(self, didSelectItemAtIndexPath: indexPath)
+extension MenuView: UICollectionViewDelegateFlowLayout {
+
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let items = itemsForPageIndex(indexPath.row)
+        let numberOfRows = ceil(CGFloat(items.count) / CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0))
+        let menuHeight = itemPadding + (numberOfRows * (CGFloat(menuRowHeight) + itemPadding))
+        let size = CGSizeMake(collectionView.bounds.size.width - itemPadding, menuHeight)
+        return size
+    }
+
+}
+
+extension MenuView: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        let pageSize = menuPagingView.bounds.size
+        let selectedPageIndex = Int(floor((scrollView.contentOffset.x-pageSize.width/2)/pageSize.width))+1
+        pageControl.currentPage = Int(selectedPageIndex)
     }
 }

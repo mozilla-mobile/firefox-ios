@@ -12,8 +12,8 @@ public class MenuItemView: UIButton {
 
     var padding: CGFloat = 5.0
 
-    lazy private(set) public var menuImageView: UIImageView = UIImageView()
-    private(set) public var menuTitleLabel: UILabel = {
+    lazy public var menuImageView: UIImageView = UIImageView()
+    lazy public var menuTitleLabel: UILabel = {
         let menuTitleLabel = UILabel()
         menuTitleLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         menuTitleLabel.numberOfLines = 0
