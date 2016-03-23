@@ -171,6 +171,7 @@ class MenuView: UIView {
         }
 
         menuFooterView.addSubview(openMenuImage)
+        openMenuImage.accessibilityLabel = NSLocalizedString("Close Menu", tableName: "Menu", comment: "Accessibility Label attached to the button for closing the menu")
         openMenuImage.snp_makeConstraints { make in
             make.center.equalTo(menuFooterView)
             make.height.equalTo(menuFooterView)
