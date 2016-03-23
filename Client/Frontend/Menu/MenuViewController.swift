@@ -150,6 +150,7 @@ extension MenuViewController: MenuItemDataSource {
         let menuItem = menuItems[indexPath.getMenuItemIndex()]
 
         menuItemView.menuTitleLabel.text = menuItem.title
+        menuItemView.accessibilityLabel = menuItem.title
         menuItemView.menuTitleLabel.font = menuConfig.menuFont()
         menuItemView.menuTitleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
         if let icon = menuItem.iconForMode(isPrivate: isPrivate) {
@@ -176,6 +177,7 @@ extension MenuViewController: MenuToolbarDataSource {
         }
         let item = menuToolbarItems[index]
         let toolbarItemView = UIBarButtonItem(image: item.icon, style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+        toolbarItemView.accessibilityLabel = item.title
         return toolbarItemView
     }
 }
