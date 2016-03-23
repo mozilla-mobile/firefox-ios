@@ -190,7 +190,7 @@ class TouchIDSetting: Setting {
 class AuthenticationSettingsViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Title for Touch ID/Passcode settings option")
+        updateTitleForTouchIDState()
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: Selector("refreshSettings:"), name: NotificationPasscodeDidRemove, object: nil)
@@ -215,10 +215,18 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         }
     }
 
+    private func updateTitleForTouchIDState() {
+        if LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
+            navigationItem.title = AuthenticationStrings.touchIDPasscodeSetting
+        } else {
+            navigationItem.title = AuthenticationStrings.passcode
+        }
+    }
+
     private func passcodeEnabledSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
-        let passcodeSectionTitle = NSAttributedString(string: NSLocalizedString("Passcode", tableName: "AuthenticationManager", comment: "List section title for passcode settings"))
+        let passcodeSectionTitle = NSAttributedString(string: AuthenticationStrings.passcode)
         let passcodeSection = SettingSection(title: passcodeSectionTitle, children: [
             TurnPasscodeOffSetting(settings: self),
             ChangePasscodeSetting(settings: self, delegate: nil, enabled: true)
@@ -257,7 +265,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     private func passcodeDisabledSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
-        let passcodeSectionTitle = NSAttributedString(string: NSLocalizedString("Passcode", tableName: "AuthenticationManager", comment: "List section title for passcode settings"))
+        let passcodeSectionTitle = NSAttributedString(string: AuthenticationStrings.passcode)
         let passcodeSection = SettingSection(title: passcodeSectionTitle, children: [
             TurnPasscodeOnSetting(settings: self),
             ChangePasscodeSetting(settings: self, delegate: nil, enabled: false)
@@ -278,6 +286,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 
 extension AuthenticationSettingsViewController {
     func refreshSettings(notification: NSNotification) {
+        updateTitleForTouchIDState()
         settings = generateSettings()
         tableView.reloadData()
     }
