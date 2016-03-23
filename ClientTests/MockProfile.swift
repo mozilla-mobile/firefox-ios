@@ -106,6 +106,10 @@ public class MockProfile: Profile {
         return MockSyncManager()
     }()
 
+    lazy var certStore: CertStore = {
+        return CertStore()
+    }()
+
     lazy var bookmarks: protocol<BookmarksModelFactorySource, SyncableBookmarks, LocalItemSource, MirrorItemSource, ShareToDestination> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
