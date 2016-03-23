@@ -1,0 +1,20 @@
+language: objective-c
+matrix:
+  include:
+    - osx_image: xcode7.2
+      env: 'SIMULATOR="name=iPad Air,OS=9.2"'
+    - osx_image: xcode7
+      env: 'SIMULATOR="name=iPhone 6 Plus,OS=9.0"'
+    - osx_image: xcode6.4
+      env: 'SIMULATOR="name=iPhone 4s,OS=8.4"'
+    - env: 'SIMULATOR="name=iPad 2,OS=7.1"' # Default: Xcode 6.1
+
+before_install:
+  - xcrun simctl list
+  - brew update || brew update
+install:
+  - if [ -z "$(brew ls --versions coreutils)" ] ; then brew install coreutils ; fi
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+script:
+  - open -b com.apple.iphonesimulator # Workaround https://github.com/travis-ci/travis-ci/issues/3040
+  - env NSUnbufferedIO=YES xcodebuild test -scheme KIF -destination "platform=iOS Simulator,${SIMULATOR}" | xcpretty -c && exit ${PIPESTATUS[0]}

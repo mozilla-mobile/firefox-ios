@@ -25,7 +25,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(MOZ_BUILD_ID)</string>
+	<string>8</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>
