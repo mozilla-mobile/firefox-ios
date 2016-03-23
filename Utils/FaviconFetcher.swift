@@ -27,6 +27,10 @@ class FaviconFetcherErrorType: MaybeErrorType {
 public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     public static var userAgent: String = ""
     static let ExpirationTime = NSTimeInterval(60*60*24*7) // Only check for icons once a week
+    private static var characterToFaviconCache = [String : UIImage]()
+    static var defaultFavicon: UIImage = {
+        return UIImage(named: "defaultFavicon")!
+    }()
 
     class func getForURL(url: NSURL, profile: Profile) -> Deferred<Maybe<[Favicon]>> {
         let f = FaviconFetcher()
@@ -197,6 +201,31 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         }
 
         return deferred
+    }
+
+    // Returns the default favicon for a site based on the first letter of the site's domain
+    class func getDefaultFavicon(url: NSURL) -> UIImage {
+        if let letterFromUrl = url.baseDomain() {
+            let faviconLetter = String(letterFromUrl[letterFromUrl.startIndex]).uppercaseString
+            if let cachedFavicon = characterToFaviconCache[faviconLetter] {
+                return cachedFavicon
+            }
+
+            var faviconImage = UIImage()
+            let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize))
+            faviconLabel.text = faviconLetter
+            faviconLabel.textAlignment = .Center
+            faviconLabel.font = UIFont.systemFontOfSize(18, weight: UIFontWeightMedium)
+            faviconLabel.textColor = UIColor.grayColor()
+            UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
+            faviconLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+            faviconImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+
+            characterToFaviconCache[faviconLetter] = faviconImage
+            return faviconImage
+        }
+        return defaultFavicon
     }
 }
 

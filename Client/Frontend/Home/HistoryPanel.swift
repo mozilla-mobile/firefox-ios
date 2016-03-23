@@ -30,7 +30,6 @@ private struct HistoryPanelUX {
 
 class HistoryPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
-
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
 
     private let QueryLimit = 100
@@ -44,10 +43,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     // Reverse lookup from UI section to data category.
     private var sectionLookup = [SectionNumber: CategoryNumber]()
-
-    private lazy var defaultIcon: UIImage = {
-        return UIImage(named: "defaultFavicon")!
-    }()
 
     var refreshControl: UIRefreshControl?
 
@@ -231,7 +226,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         if let site = data[indexPath.row + category.offset] {
             if let cell = cell as? TwoLineTableViewCell {
                 cell.setLines(site.title, detailText: site.url)
-                cell.imageView?.setIcon(site.icon, withPlaceholder: self.defaultIcon)
+                cell.imageView?.setIcon(site.icon, withPlaceholder: FaviconFetcher.getDefaultFavicon(site.tileURL))
             }
         }
 

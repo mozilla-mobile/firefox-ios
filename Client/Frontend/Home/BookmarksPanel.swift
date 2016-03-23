@@ -45,10 +45,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorIdentifier"
     private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
 
-    private lazy var defaultIcon: UIImage = {
-        return UIImage(named: "defaultFavicon")!
-    }()
-    
     init() {
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BookmarksPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
@@ -194,8 +190,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             }
             if let url = bookmark.favicon?.url.asURL where url.scheme == "asset" {
                 cell.imageView?.image = UIImage(named: url.host!)
+            } else if let bookmarkURL = NSURL(string: item.url) {
+                cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: FaviconFetcher.getDefaultFavicon(bookmarkURL))
             } else {
-                cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: self.defaultIcon)
+                cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: FaviconFetcher.defaultFavicon)
             }
             return cell
         case is BookmarkSeparator:
@@ -212,7 +210,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if let cell = cell as? BookmarkFolderTableViewCell {
-            cell.textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+            cell.textLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
         }
     }
 
@@ -257,7 +255,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? BookmarkFolderTableViewHeader {
             // for some reason specifying the font in header view init is being ignored, so setting it here
-            header.textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+            header.textLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
         }
     }
 
@@ -403,7 +401,6 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
         self.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
         textLabel?.backgroundColor = UIColor.clearColor()
         textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
-        textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
 
         imageView?.image = UIImage(named: "bookmarkFolder")
 
