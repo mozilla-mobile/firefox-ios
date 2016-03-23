@@ -166,7 +166,7 @@ extension MenuViewController: MenuItemDataSource {
 
 extension MenuViewController: MenuToolbarDataSource {
     func numberOfToolbarItemsInMenuView(menuView: MenuView) -> Int {
-        guard let menuToolbarItems = menuConfig.menuToolbarItems else { return 0}
+        guard let menuToolbarItems = menuConfig.menuToolbarItems else { return 0 }
         return menuToolbarItems.count
     }
 

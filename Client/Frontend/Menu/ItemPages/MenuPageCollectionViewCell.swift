@@ -1,11 +1,6 @@
-//
-//  MenuPageCollectionViewCell.swift
-//  Client
-//
-//  Created by Emily Toop on 3/23/16.
-//  Copyright © 2016 Mozilla. All rights reserved.
-//
-
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import UIKit
 
 class MenuPageCollectionViewCell: UICollectionViewCell {
@@ -13,7 +8,7 @@ class MenuPageCollectionViewCell: UICollectionViewCell {
     var pageView: MenuPageView = MenuPageView()
 
     override init(frame: CGRect) {
-        super.init(frame: CGRectZero)
+        super.init(frame: frame)
 
         self.addSubview(self.pageView)
         self.pageView.snp_makeConstraints { make in

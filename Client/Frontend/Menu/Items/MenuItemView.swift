@@ -21,7 +21,6 @@ public class MenuItemView: UIButton {
         return menuTitleLabel
     }()
 
-    private var previousLocation: CGPoint?
     public init() {
         super.init(frame: CGRectZero)
 
