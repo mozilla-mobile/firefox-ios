@@ -316,6 +316,9 @@
 		7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBFEE731BB405D900A305AA /* TabManagerTests.swift */; };
 		7BBFEEA01BB409F300A305AA /* AboutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */; };
 		7BC7B4BE1C904BF90046E9D2 /* MenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC7B4BD1C904BF90046E9D2 /* MenuTests.swift */; };
+		7BC7BD481CA2AA400016AC25 /* MenuPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC7BD471CA2AA400016AC25 /* MenuPageCollectionViewCell.swift */; };
+		7BC7BD6C1CA2BC8F0016AC25 /* TopAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC7BD6B1CA2BC8F0016AC25 /* TopAlignedCollectionViewFlowLayout.swift */; };
+		7BC7BF6B1CA40A8B0016AC25 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC7BF6A1CA40A8B0016AC25 /* AppState.swift */; };
 		7BEB64441C7345600092C02E /* L10nSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3632D31C2983F000D12AF9 /* L10nSnapshotTests.swift */; };
 		7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
 		7BEB64511C7345990092C02E /* MarketingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B95CD191C3AB2EE00638E31 /* MarketingUITests.swift */; };
@@ -1298,6 +1301,9 @@
 		7BB20B6C1B71160200F1657F /* TopSitesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesTests.swift; sourceTree = "<group>"; };
 		7BBFEE731BB405D900A305AA /* TabManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManagerTests.swift; sourceTree = "<group>"; };
 		7BC7B4BD1C904BF90046E9D2 /* MenuTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTests.swift; sourceTree = "<group>"; };
+		7BC7BD471CA2AA400016AC25 /* MenuPageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuPageCollectionViewCell.swift; path = ItemPages/MenuPageCollectionViewCell.swift; sourceTree = "<group>"; };
+		7BC7BD6B1CA2BC8F0016AC25 /* TopAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopAlignedCollectionViewFlowLayout.swift; path = ItemPages/TopAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		7BC7BF6A1CA40A8B0016AC25 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = L10nSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BEB644E1C7345600092C02E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = L10nSnapshotTests/Info.plist; sourceTree = SOURCE_ROOT; };
 		7BEB645A1C7345990092C02E /* MarketingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarketingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2908,6 +2914,7 @@
 				E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */,
 				E6639F171BF11E17002D0853 /* Settings.bundle */,
 				7BEFC67F1BFF68C30059C952 /* QuickActions.swift */,
+				7BC7BF6A1CA40A8B0016AC25 /* AppState.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -4378,6 +4385,7 @@
 				74203E251B276B3D007D481D /* SessionRestoreHandler.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
+				7BC7BF6B1CA40A8B0016AC25 /* AppState.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
 				E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */,

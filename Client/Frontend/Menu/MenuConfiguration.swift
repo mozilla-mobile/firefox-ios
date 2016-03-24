@@ -4,20 +4,14 @@
 
 import Foundation
 
-enum MenuLocation {
-    case Browser
-    case HomePanels
-    case TabTray
-}
-
 struct MenuConfiguration {
 
     let menuItems: [MenuItem]
     let menuToolbarItems: [MenuToolbarItem]?
-    let location: MenuLocation
+    let location: AppLocation
     let numberOfItemsInRow: Int
 
-    init(location: MenuLocation, menuItems: [MenuItem], toolbarItems: [MenuToolbarItem]?, numberOfItemsInRow: Int = 0) {
+    init(location: AppLocation, menuItems: [MenuItem], toolbarItems: [MenuToolbarItem]?, numberOfItemsInRow: Int = 0) {
         self.location = location
         self.menuItems = menuItems
         self.menuToolbarItems = toolbarItems
@@ -53,11 +47,11 @@ extension MenuConfiguration {
         return isPrivate ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
     }
 
-    static func menuConfigurationForLocation(location: MenuLocation) -> MenuConfiguration {
+    static func menuConfigurationForLocation(location: AppLocation) -> MenuConfiguration {
         return MenuConfiguration(location: location, menuItems: menuItemsForLocation(location), toolbarItems: menuToolbarItemsForLocation(location), numberOfItemsInRow: numberOfMenuItemsPerRowForLocation(location))
     }
 
-    private static func numberOfMenuItemsPerRowForLocation(location: MenuLocation) -> Int {
+    private static func numberOfMenuItemsPerRowForLocation(location: AppLocation) -> Int {
         switch location {
         case .TabTray:
            return 4
@@ -67,7 +61,7 @@ extension MenuConfiguration {
     }
 
     // the items should be added to the array according to desired display order
-    private static func menuItemsForLocation(location: MenuLocation) -> [MenuItem] {
+    private static func menuItemsForLocation(location: AppLocation) -> [MenuItem] {
         let menuItems: [MenuItem]
         switch location {
         case .Browser:
@@ -83,7 +77,7 @@ extension MenuConfiguration {
     }
 
     // the items should be added to the array according to desired display order
-    private static func menuToolbarItemsForLocation(location: MenuLocation) -> [MenuToolbarItem]? {
+    private static func menuToolbarItemsForLocation(location: AppLocation) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
         switch location {
         case .Browser, .TabTray:
