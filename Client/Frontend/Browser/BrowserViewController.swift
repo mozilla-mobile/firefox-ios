@@ -91,6 +91,18 @@ class BrowserViewController: UIViewController {
         return toolbar ?? urlBar
     }
 
+    private var appState: AppState {
+        var appState = AppState()
+        appState.currentLocation = .Browser
+        if let url = self.urlBar?.currentURL {
+            appState.currentURL = url
+            appState.currentLocation = .Browser
+        } else {
+            appState.currentLocation = .HomePanels
+        }
+        return appState
+    }
+
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
