@@ -178,6 +178,8 @@ class URLBarView: UIView {
 
     lazy var shareButton: UIButton = { return UIButton() }()
 
+    lazy var menuButton: UIButton = { return UIButton() }()
+
     lazy var bookmarkButton: UIButton = { return UIButton() }()
 
     lazy var forwardButton: UIButton = { return UIButton() }()
@@ -187,7 +189,7 @@ class URLBarView: UIView {
     lazy var stopReloadButton: UIButton = { return UIButton() }()
 
     lazy var actionButtons: [UIButton] = {
-        return [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
+        return AppConstants.MOZ_MENU ? [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton] : [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
     }()
 
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
@@ -226,7 +228,11 @@ class URLBarView: UIView {
         addSubview(cancelButton)
 
         addSubview(shareButton)
-        addSubview(bookmarkButton)
+        if AppConstants.MOZ_MENU {
+            addSubview(menuButton)
+        } else {
+            addSubview(bookmarkButton)
+        }
         addSubview(forwardButton)
         addSubview(backButton)
         addSubview(stopReloadButton)
@@ -290,16 +296,30 @@ class URLBarView: UIView {
             make.size.equalTo(backButton)
         }
 
-        shareButton.snp_makeConstraints { make in
-            make.right.equalTo(self.bookmarkButton.snp_left)
-            make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
-        }
+        if AppConstants.MOZ_MENU {
+            shareButton.snp_makeConstraints { make in
+                make.right.equalTo(self.menuButton.snp_left)
+                make.centerY.equalTo(self)
+                make.size.equalTo(backButton)
+            }
 
-        bookmarkButton.snp_makeConstraints { make in
-            make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
-            make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
+            menuButton.snp_makeConstraints { make in
+                make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
+                make.centerY.equalTo(self)
+                make.size.equalTo(backButton)
+            }
+        } else {
+            shareButton.snp_makeConstraints { make in
+                make.right.equalTo(self.bookmarkButton.snp_left)
+                make.centerY.equalTo(self)
+                make.size.equalTo(backButton)
+            }
+
+            bookmarkButton.snp_makeConstraints { make in
+                make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
+                make.centerY.equalTo(self)
+                make.size.equalTo(backButton)
+            }
         }
     }
 
@@ -524,7 +544,11 @@ class URLBarView: UIView {
         self.cancelButton.hidden = false
         self.progressBar.hidden = false
         self.shareButton.hidden = !self.toolbarIsShowing
-        self.bookmarkButton.hidden = !self.toolbarIsShowing
+        if AppConstants.MOZ_MENU {
+            self.menuButton.hidden = !self.toolbarIsShowing
+        } else {
+            self.bookmarkButton.hidden = !self.toolbarIsShowing
+        }
         self.forwardButton.hidden = !self.toolbarIsShowing
         self.backButton.hidden = !self.toolbarIsShowing
         self.stopReloadButton.hidden = !self.toolbarIsShowing
@@ -534,7 +558,11 @@ class URLBarView: UIView {
         self.cancelButton.alpha = inOverlayMode ? 1 : 0
         self.progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         self.shareButton.alpha = inOverlayMode ? 0 : 1
-        self.bookmarkButton.alpha = inOverlayMode ? 0 : 1
+        if AppConstants.MOZ_MENU {
+            self.menuButton.alpha = inOverlayMode ? 0 : 1
+        } else {
+            self.bookmarkButton.alpha = inOverlayMode ? 0 : 1
+        }
         self.forwardButton.alpha = inOverlayMode ? 0 : 1
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
@@ -571,7 +599,11 @@ class URLBarView: UIView {
         self.cancelButton.hidden = !inOverlayMode
         self.progressBar.hidden = inOverlayMode
         self.shareButton.hidden = !self.toolbarIsShowing || inOverlayMode
-        self.bookmarkButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        if AppConstants.MOZ_MENU {
+            self.menuButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        } else {
+            self.bookmarkButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        }
         self.forwardButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.backButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.stopReloadButton.hidden = !self.toolbarIsShowing || inOverlayMode
@@ -634,7 +666,11 @@ extension URLBarView: BrowserToolbarProtocol {
     }
 
     func updatePageStatus(isWebPage isWebPage: Bool) {
-        bookmarkButton.enabled = isWebPage
+        if AppConstants.MOZ_MENU {
+            menuButton.enabled = isWebPage
+        } else {
+            bookmarkButton.enabled = isWebPage
+        }
         stopReloadButton.enabled = isWebPage
         shareButton.enabled = isWebPage
     }
@@ -646,7 +682,7 @@ extension URLBarView: BrowserToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-                    return [backButton, forwardButton, stopReloadButton, locationView, shareButton, bookmarkButton, tabsButton, progressBar]
+                    return AppConstants.MOZ_MENU ? [backButton, forwardButton, stopReloadButton, locationView, shareButton, menuButton, tabsButton, progressBar] : [backButton, forwardButton, stopReloadButton, locationView, shareButton, bookmarkButton, tabsButton, progressBar]
                 } else {
                     return [locationView, tabsButton, progressBar]
                 }
