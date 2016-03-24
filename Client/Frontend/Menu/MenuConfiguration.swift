@@ -72,6 +72,8 @@ extension MenuConfiguration {
             menuItems = [NewTabMenuItem, NewPrivateTabMenuItem, SettingsMenuItem]
         case .TabTray:
             menuItems = [NewTabMenuItem, NewPrivateTabMenuItem, CloseAllTabsMenuItem, SettingsMenuItem]
+        default:
+            menuItems = []
         }
         return menuItems
     }
@@ -82,7 +84,7 @@ extension MenuConfiguration {
         switch location {
         case .Browser, .TabTray:
             menuToolbarItems = [TopSitesMenuToolbarItem, BookmarksMenuToolbarItem, HistoryMenuToolbarItem, ReadingListMenuToolbarItem]
-        case .HomePanels:
+        default:
             menuToolbarItems = nil
         }
         return menuToolbarItems
