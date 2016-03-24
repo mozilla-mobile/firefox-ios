@@ -92,6 +92,11 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             let guid = rec.id
             let payload = rec.payload
 
+            guard payload.isValid() else {
+                log.warning("Login record \(guid) is invalid. Skipping.")
+                return succeed()
+            }
+
             // We apply deletions immediately. That might not be exactly what we want -- perhaps you changed
             // a password locally after deleting it remotely -- but it's expedient.
             if payload.deleted {

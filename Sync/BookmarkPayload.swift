@@ -61,35 +61,41 @@ public enum BookmarkType: String {
     }
 
     public static func payloadFromJSON(json: JSON) -> BookmarkBasePayload? {
+        if json["deleted"].asBool ?? false {
+            // Deleted records won't have a type.
+            return BookmarkBasePayload(json)
+        }
+
         guard let typeString = json["type"].asString else {
             return nil
         }
+
         guard let type = BookmarkType.init(rawValue: typeString) else {
             return nil
         }
 
-        let result: BookmarkBasePayload
         switch type {
         case microsummary:
             fallthrough
         case bookmark:
-            result = BookmarkPayload(json)
+            return BookmarkPayload(json)
         case folder:
-            result = FolderPayload(json)
+            return FolderPayload(json)
         case livemark:
-            result = LivemarkPayload(json)
+            return LivemarkPayload(json)
         case separator:
-            result = SeparatorPayload(json)
+            return SeparatorPayload(json)
         case query:
-            result = BookmarkQueryPayload(json)
+            return BookmarkQueryPayload(json)
+        }
+    }
+
+    public static func isValid(type: String?) -> Bool {
+        guard let type = type else {
+            return false
         }
 
-        if result.isValid() {
-            return result
-        }
-        let id = json["id"].asString ?? "<unknown>"
-        log.warning("Record \(id) of type \(type) was invalid.")
-        return nil
+        return BookmarkType.init(rawValue: type) != nil
     }
 }
 
@@ -483,6 +489,11 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
 
         if self["deleted"].asBool ?? false {
             return true
+        }
+
+        // If not deleted, we must be a specific, known, type!
+        if !BookmarkType.isValid(self["type"].asString) {
+            return false
         }
 
         if !(self["parentName"].isString || self.id == "places") {

@@ -74,14 +74,40 @@ public class BookmarksMirrorer {
 
     private func applyRecordsFromBatcher() -> Success {
         let retrieved = self.downloader.retrieve()
-        let records = retrieved.flatMap { ($0.payload as MirrorItemable).toMirrorItem($0.modified) }
-        if records.isEmpty {
+        let invalid = retrieved.filter { !$0.payload.isValid() }
+
+        if !invalid.isEmpty {
+            // There's nothing we can do with invalid input. There's also no point in
+            // tracking failing GUIDs here yet: if another client reuploads those records
+            // correctly, we'll encounter them routinely due to a newer timestamp.
+            // The only improvement we could make is to drop records from the buffer if we
+            // happen to see a new, invalid one before somehow syncing again, but that's
+            // unlikely enough that it's not worth doing.
+            //
+            // Bug 1258801 tracks recording telemetry for these invalid items, which is
+            // why we don't simply drop them on the ground at the download stage.
+            //
+            // We might also choose to perform certain simple recovery actions here: for example,
+            // bookmarks with null URIs are clearly invalid, and could be treated as if they
+            // weren't present on the server, or transparently deleted.
+            log.warning("Invalid records: \(invalid.map { $0.id }.joinWithSeparator(", ")).")
+        }
+
+        let mirrorItems = retrieved.flatMap { record -> BookmarkMirrorItem? in
+            guard record.payload.isValid() else {
+                return nil
+            }
+
+            return (record.payload as MirrorItemable).toMirrorItem(record.modified)
+        }
+
+        if mirrorItems.isEmpty {
             log.debug("Got empty batch.")
             return succeed()
         }
 
-        log.debug("Applying \(records.count) downloaded bookmarks.")
-        return self.storage.applyRecords(records)
+        log.debug("Applying \(mirrorItems.count) downloaded bookmarks.")
+        return self.storage.applyRecords(mirrorItems)
     }
 
     public func go(info: InfoCollections, greenLight: () -> Bool) -> SyncResult {

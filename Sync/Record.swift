@@ -50,18 +50,16 @@ public class Record<T: CleartextPayloadJSON> {
             return nil
         }
 
-        let payload = payloadFactory(envelope.payload)
-        if (payload == nil) {
+        guard let payload = payloadFactory(envelope.payload) else {
             log.error("Unable to parse payload.")
             return nil
         }
 
-        if payload!.isValid() {
-            return Record<T>(envelope: envelope, payload: payload!)
+        if !payload.isValid() {
+            log.warning("Invalid payload \(payload.toString(true)).")
         }
 
-        log.error("Invalid payload \(payload!.toString(true)).")
-        return nil
+        return Record<T>(envelope: envelope, payload: payload)
     }
 
     /**

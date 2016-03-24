@@ -36,7 +36,8 @@ public class EnvelopeJSON {
     }
 
     public var sortindex: Int {
-        return self.json["sortindex"].asInt ?? 0
+        let s = self.json["sortindex"]
+        return s.asInt ?? 0
     }
 
     public var modified: Timestamp {
