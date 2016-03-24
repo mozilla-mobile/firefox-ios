@@ -1387,6 +1387,57 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
     }
 }
 
+class TestSQLiteHistoryFilterSplitting: XCTestCase {
+    let history: SQLiteHistory = {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let prefs = MockProfilePrefs()
+        return SQLiteHistory(db: db, prefs: prefs)!
+    }()
+
+    func testWithSingleWord() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "?")
+        XCTAssert(stringArgsEqual(args, ["foo"]))
+    }
+
+    func testWithIdenticalWords() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo fo foo", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "?")
+        XCTAssert(stringArgsEqual(args, ["foo"]))
+    }
+
+    func testWithDistinctWords() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo bar", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "? AND ?")
+        XCTAssert(stringArgsEqual(args, ["foo", "bar"]))
+    }
+
+    func testWithDistinctWordsAndWhitespace() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("  foo    bar  ", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "? AND ?")
+        XCTAssert(stringArgsEqual(args, ["foo", "bar"]))
+    }
+
+    func testWithSubstrings() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo bar foobar", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "?")
+        XCTAssert(stringArgsEqual(args, ["foobar"]))
+    }
+
+    func testWithSubstringsAndIdenticalWords() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo bar foobar foobar", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "?")
+        XCTAssert(stringArgsEqual(args, ["foobar"]))
+    }
+
+    private func stringArgsEqual(one: Args, _ other: Args) -> Bool {
+        return one.elementsEqual(other, isEquivalent: { (oneElement: AnyObject?, otherElement: AnyObject?) -> Bool in
+            return (oneElement as! String) == (otherElement as! String)
+        })
+    }
+}
+
 // MARK - Private Test Helper Methods
 
 private enum VisitOrigin {

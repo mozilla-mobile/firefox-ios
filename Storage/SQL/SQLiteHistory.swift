@@ -368,20 +368,61 @@ extension SQLiteHistory: BrowserHistory {
         return (whereData, groupBy)
     }
 
+    private func computeWordsWithFilter(filter: String) -> [String] {
+        // Split filter on whitespace.
+        let words = filter.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+
+        // Remove substrings and duplicates.
+        // TODO: this can probably be improved.
+        return words.enumerate().filter({ (index: Int, word: String) in
+            if word.isEmpty {
+                return false
+            }
+
+            for i in words.indices where i != index {
+                if words[i].rangeOfString(word) != nil && (words[i].characters.count != word.characters.count || i < index) {
+                    return false
+                }
+            }
+
+            return true
+        }).map({ $0.1 })
+    }
+
+    /**
+     * Take input like "foo bar" and a template fragment and produce output like
+     *
+     *   ((x.y LIKE ?) OR (x.z LIKE ?)) AND ((x.y LIKE ?) OR (x.z LIKE ?))
+     *
+     * with args ["foo", "foo", "bar", "bar"].
+     */
+    internal func computeWhereFragmentWithFilter(filter: String, perWordFragment: String, perWordArgs: String -> Args) -> (fragment: String, args: Args) {
+        precondition(!filter.isEmpty)
+
+        let words = computeWordsWithFilter(filter)
+        assert(!words.isEmpty)
+
+        let fragment = Array(count: words.count, repeatedValue: perWordFragment).joinWithSeparator(" AND ")
+        let args = words.flatMap(perWordArgs)
+        return (fragment, args)
+    }
+
     private func getFilteredSitesByVisitDateWithLimit(limit: Int,
                                                       whereURLContains filter: String? = nil,
                                                       includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
-        if let filter = filter {
-            args = ["%\(filter)%", "%\(filter)%"]
+        if let filter = filter?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) where !filter.isEmpty {
+            let perWordFragment = "((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?))"
+            let perWordArgs: String -> Args = { ["%\($0)%", "%\($0)%"] }
+            let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(filter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
 
             // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = "WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) " +
-                          "AND (\(TableHistory).is_deleted = 0)"
+            whereClause = "WHERE (\(filterFragment))"
+            args = filterArgs
         } else {
-            args = []
             whereClause = "WHERE (\(TableHistory).is_deleted = 0)"
+            args = []
         }
 
         let ungroupedSQL =
@@ -456,14 +497,18 @@ extension SQLiteHistory: BrowserHistory {
         let args: Args?
         let whereClause: String
         let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
-        if let filter = filter {
-            args = ["%\(filter)%", "%\(filter)%"]
+
+        if let filter = filter?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) where !filter.isEmpty {
+            let perWordFragment = "((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?))"
+            let perWordArgs: String -> Args = { ["%\($0)%", "%\($0)%"] }
+            let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(filter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
 
             // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) \(whereFragment)"
+            whereClause = "WHERE (\(filterFragment))\(whereFragment)"
+            args = filterArgs
         } else {
+            whereClause = " WHERE (\(TableHistory).is_deleted = 0)\(whereFragment)"
             args = []
-            whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereFragment)"
         }
 
         // Innermost: grab history items and basic visit/domain metadata.
