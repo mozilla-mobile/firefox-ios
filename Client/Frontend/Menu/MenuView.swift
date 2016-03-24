@@ -15,6 +15,7 @@ class MenuView: UIView {
     lazy var openMenuImage: UIImageView = {
         let openMenuImage = UIImageView()
         openMenuImage.contentMode = UIViewContentMode.ScaleAspectFit
+        openMenuImage.userInteractionEnabled = true
         return openMenuImage
     }()
 
@@ -48,15 +49,17 @@ class MenuView: UIView {
         pagingView.delegate = self
         pagingView.showsHorizontalScrollIndicator = false
         pagingView.pagingEnabled = true
+        pagingView.backgroundColor = UIColor.clearColor()
         return pagingView
     }()
 
+    private var menuContainerView = UIView()
+
     private var presentationStyle: MenuViewPresentationStyle
 
-    private var menuColor: UIColor = UIColor.clearColor() {
+    var menuColor: UIColor = UIColor.clearColor() {
         didSet {
-            menuPagingView.backgroundColor = menuColor
-            pageControl.backgroundColor = menuColor
+            menuContainerView.backgroundColor = menuColor
             menuFooterView.backgroundColor = menuColor
         }
     }
@@ -115,8 +118,10 @@ class MenuView: UIView {
 
         super.init(frame: CGRectZero)
 
-        self.addSubview(menuPagingView)
-        self.addSubview(pageControl)
+        self.addSubview(menuContainerView)
+
+        menuContainerView.addSubview(menuPagingView)
+        menuContainerView.addSubview(pageControl)
         self.addSubview(toolbar)
 
         switch presentationStyle {
@@ -126,29 +131,39 @@ class MenuView: UIView {
                 make.height.equalTo(toolbarHeight)
                 make.top.left.right.equalTo(self)
             }
-
-            menuPagingView.snp_makeConstraints { make in
+            menuContainerView.snp_makeConstraints { make in
                 make.top.equalTo(toolbar.snp_bottom)
                 make.left.right.equalTo(self)
+                make.bottom.equalTo(menuFooterView.snp_top)
+            }
+
+            menuPagingView.snp_makeConstraints { make in
+                make.top.left.right.equalTo(menuContainerView)
                 make.bottom.equalTo(pageControl.snp_top)
-                make.height.equalTo(100)
+                make.height.equalTo(0)
             }
 
             pageControl.snp_makeConstraints { make in
-                make.bottom.equalTo(menuFooterView.snp_top)
+                make.bottom.equalTo(menuContainerView)
                 make.centerX.equalTo(self)
             }
 
         case .Popover:
+            menuContainerView.snp_makeConstraints { make in
+                make.bottom.equalTo(toolbar.snp_top)
+                make.left.right.top.equalTo(self)
+            }
+
             menuPagingView.snp_makeConstraints { make in
-                make.top.left.right.equalTo(self)
+                make.top.left.right.equalTo(menuContainerView)
+                make.bottom.equalTo(pageControl.snp_top)
+                make.height.equalTo(0)
             }
             pageControl.snp_makeConstraints { make in
-                make.top.equalTo(menuPagingView.snp_bottom)
+                make.bottom.equalTo(menuContainerView)
                 make.centerX.equalTo(self)
             }
             toolbar.snp_makeConstraints { make in
-                make.top.equalTo(pageControl.snp_bottom)
                 make.height.equalTo(toolbarHeight)
                 make.bottom.left.right.equalTo(self)
             }
@@ -232,11 +247,11 @@ class MenuView: UIView {
     // MARK : Layout
 
     override func layoutSubviews() {
+        super.layoutSubviews()
         reloadDataIfNeeded()
         layoutToolbar()
         layoutMenu()
         layoutFooter()
-        super.layoutSubviews()
     }
 
     private func layoutToolbar() {
@@ -266,7 +281,14 @@ class MenuView: UIView {
         menuPagingLayout.menuRowHeight = CGFloat(menuRowHeight)
 
         menuPagingView.snp_updateConstraints { make in
-            make.height.equalTo(menuPagingLayout.contentSize.height)
+            if presentationStyle == .Popover {
+                let maxNumberOfItemsForPage = CGFloat(self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) ?? 0)
+                let numberOfRows = ceil(CGFloat(maxNumberOfItemsForPage) / numberOfItemsInRow)
+                let menuHeight = itemPadding + (numberOfRows * (CGFloat(self.menuRowHeight) + itemPadding))
+                make.height.equalTo(menuHeight)
+            } else {
+                make.height.equalTo(menuPagingLayout.collectionViewContentSize().height)
+            }
         }
     }
 

@@ -50,29 +50,26 @@ class MenuViewController: UIViewController {
         menuView.toolbarDataSource = self
 
         menuView.toolbar.backgroundColor = menuConfig.toolbarColourForMode(isPrivate: isPrivate)
-        menuView.toolbar.cornerRadius = CGSizeMake(5.0,5.0)
         menuView.toolbar.tintColor = menuConfig.toolbarTintColorForMode(isPrivate: isPrivate)
         menuView.toolbar.layer.shadowColor = isPrivate ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
         menuView.toolbar.layer.shadowOpacity = 0.4
         menuView.toolbar.layer.shadowRadius = 0
 
-        menuView.backgroundColor = menuConfig.menuBackgroundColorForMode(isPrivate: isPrivate)
+        menuView.menuColor = menuConfig.menuBackgroundColorForMode(isPrivate: isPrivate)
         menuView.tintColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
 
         switch presentationStyle {
         case .Popover:
             self.view.backgroundColor = UIColor.clearColor()
-            menuView.toolbar.cornersToRound = [.BottomLeft, .BottomRight]
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the tp[ of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: -2)
             menuView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(view)
             }
-            view.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
-
         case .Modal:
             self.view.backgroundColor = popoverBackgroundColor
+            menuView.toolbar.cornerRadius = CGSizeMake(5.0,5.0)
             menuView.toolbar.cornersToRound = [.TopLeft, .TopRight]
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the bottom of the toolbar
@@ -105,7 +102,9 @@ class MenuViewController: UIViewController {
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        if UI_USER_INTERFACE_IDIOM() == .Phone {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        if UI_USER_INTERFACE_IDIOM() == .Phone &&
+            (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) {
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
@@ -113,7 +112,7 @@ class MenuViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if presentationStyle == .Popover {
-            self.preferredContentSize = self.menuView.bounds.size
+            self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
         }
         self.popoverPresentationController?.backgroundColor = self.popoverBackgroundColor
     }
