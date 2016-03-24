@@ -89,6 +89,14 @@ public enum BookmarkType: String {
             return BookmarkQueryPayload(json)
         }
     }
+
+    public static func isValid(type: String?) -> Bool {
+        guard let type = type else {
+            return false
+        }
+
+        return BookmarkType.init(rawValue: type) != nil
+    }
 }
 
 public class LivemarkPayload: BookmarkBasePayload {
@@ -481,6 +489,11 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
 
         if self["deleted"].asBool ?? false {
             return true
+        }
+
+        // If not deleted, we must be a specific, known, type!
+        if !BookmarkType.isValid(self["type"].asString) {
+            return false
         }
 
         if !(self["parentName"].isString || self.id == "places") {
