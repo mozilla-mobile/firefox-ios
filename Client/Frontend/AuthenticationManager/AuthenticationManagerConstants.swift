@@ -21,6 +21,12 @@ extension PasscodeInterval {
 
 // Strings used in multiple areas within the Authentication Manager
 struct AuthenticationStrings {
+    static let passcode =
+        NSLocalizedString("Passcode", tableName: "AuthenticationManager", comment: "List section title for passcode settings")
+
+    static let touchIDPasscodeSetting =
+        NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Title for Touch ID/Passcode settings option")
+
     static let requirePasscode =
         NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Title for setting to require a passcode")
 

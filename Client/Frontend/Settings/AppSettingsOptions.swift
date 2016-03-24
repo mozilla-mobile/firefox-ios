@@ -527,7 +527,12 @@ class TouchIDPasscodeSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
 
-        let title = NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Title for Touch ID/Passcode settings option")
+        let title: String
+        if LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
+            title = AuthenticationStrings.touchIDPasscodeSetting
+        } else {
+            title = AuthenticationStrings.passcode
+        }
         super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
                    delegate: delegate)
     }
