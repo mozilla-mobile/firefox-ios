@@ -700,6 +700,10 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
      * Unlike every other Sync client, we use the application/json format for fetching
      * multiple requests. The others use application/newlines. We don't want to write
      * another Serializer, and we're loading everything into memory anyway.
+     *
+     * It is the caller's responsibility to check whether the returned payloads are invalid.
+     *
+     * Only non-JSON and malformed envelopes will be dropped.
      */
     public func getSince(since: Timestamp, sort: SortOption?=nil, limit: Int?=nil, offset: String?=nil) -> Deferred<Maybe<StorageResponse<[Record<T>]>>> {
         let deferred = Deferred<Maybe<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
@@ -749,7 +753,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
                 return Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
             }
 
-            let records = optFilter(arr.map(recordify))
+            let records = arr.flatMap(recordify)
             let response = StorageResponse(value: records, response: response!)
             deferred.fill(Maybe(success: response))
         })

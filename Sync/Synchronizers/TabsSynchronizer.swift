@@ -85,7 +85,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
 
             func afterWipe() -> Success {
                 let doInsert: (Record<TabsPayload>) -> Deferred<Maybe<(Int)>> = { record in
-                    let remotes = record.payload.remoteTabs
+                    let remotes = record.payload.isValid() ? record.payload.remoteTabs : []
                     let ins = localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
                     ins.upon() { res in
                         if let inserted = res.successValue {
