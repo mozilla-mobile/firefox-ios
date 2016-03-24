@@ -782,11 +782,13 @@ class BrowserViewController: UIViewController {
                 toApplication: UIApplication.sharedApplication())
         }
 
-        // Dispatch to the main thread to update the UI
-        dispatch_async(dispatch_get_main_queue()) { _ in
-            self.animateBookmarkStar()
-            self.toolbar?.updateBookmarkStatus(true)
-            self.urlBar.updateBookmarkStatus(true)
+        if !AppConstants.MOZ_MENU {
+            // Dispatch to the main thread to update the UI
+            dispatch_async(dispatch_get_main_queue()) { _ in
+                self.animateBookmarkStar()
+                self.toolbar?.updateBookmarkStatus(true)
+                self.urlBar.updateBookmarkStatus(true)
+            }
         }
     }
 
@@ -822,10 +824,13 @@ class BrowserViewController: UIViewController {
 
     private func removeBookmark(url: String) {
         profile.bookmarks.modelFactory >>== {
-            $0.removeByURL(url).uponQueue(dispatch_get_main_queue()) { res in
+            $0.removeByURL(url)
+                .uponQueue(dispatch_get_main_queue()) { res in
                 if res.isSuccess {
-                    self.toolbar?.updateBookmarkStatus(false)
-                    self.urlBar.updateBookmarkStatus(false)
+                    if !AppConstants.MOZ_MENU {
+                        self.toolbar?.updateBookmarkStatus(false)
+                        self.urlBar.updateBookmarkStatus(false)
+                    }
                 }
             }
         }
@@ -836,8 +841,10 @@ class BrowserViewController: UIViewController {
             if bookmark.url == urlBar.currentURL?.absoluteString {
                 if let userInfo = notification.userInfo as? Dictionary<String, Bool>{
                     if let added = userInfo["added"]{
-                        self.toolbar?.updateBookmarkStatus(added)
-                        self.urlBar.updateBookmarkStatus(added)
+                        if !AppConstants.MOZ_MENU {
+                            self.toolbar?.updateBookmarkStatus(added)
+                            self.urlBar.updateBookmarkStatus(added)
+                        }
                     }
                 }
             }
@@ -929,18 +936,20 @@ class BrowserViewController: UIViewController {
         let isPage = tab.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isWebPage: isPage)
 
-        guard let url = tab.displayURL?.absoluteString else {
-            return
-        }
+        if !AppConstants.MOZ_MENU {
+            guard let url = tab.displayURL?.absoluteString else {
+                return
+            }
 
-        profile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { result in
-                guard let bookmarked = result.successValue else {
-                    log.error("Error getting bookmark status: \(result.failureValue).")
-                    return
+            profile.bookmarks.modelFactory >>== {
+                $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { result in
+                    guard let bookmarked = result.successValue else {
+                        log.error("Error getting bookmark status: \(result.failureValue).")
+                        return
+                    }
+
+                    self.navigationToolbar.updateBookmarkStatus(bookmarked)
                 }
-
-                self.navigationToolbar.updateBookmarkStatus(bookmarked)
             }
         }
     }
@@ -1366,9 +1375,44 @@ extension BrowserViewController: BrowserToolbarDelegate {
 //        presentViewController(controller, animated: true, completion: nil)
     }
 
+    func browserToolbarDidPressMenu(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
+        // check the trait collection
+        // open as modal if portrait
+        let mvc: MenuViewController
+        if self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular {
+            mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.TabTray), presentationStyle: .Modal)
+            mvc.modalPresentationStyle = .OverCurrentContext
+        } else {
+            // otherwise open as popover
+            mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.TabTray), presentationStyle: .Popover)
+            mvc.modalPresentationStyle = UIModalPresentationStyle.Popover
+
+            let setupPopover = { [unowned self] in
+                if let popoverPresentationController = mvc.popoverPresentationController {
+                    popoverPresentationController.backgroundColor = UIColor.clearColor()
+                    popoverPresentationController.delegate = self
+                    popoverPresentationController.sourceView = button
+                    popoverPresentationController.sourceRect = CGRect(x: button.frame.width/2, y: button.frame.size.height * 0.75, width: 1, height: 1)
+                    popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+                }
+            }
+
+            setupPopover()
+
+            if mvc.popoverPresentationController != nil {
+                displayedPopoverController = mvc
+                updateDisplayedPopoverProperties = setupPopover
+            }
+        }
+
+        self.presentViewController(mvc, animated: true, completion: nil)
+    }
+
+
+
     func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         guard let tab = tabManager.selectedTab,
-              let url = tab.displayURL?.absoluteString else {
+            let url = tab.displayURL?.absoluteString else {
                 log.error("Bookmark error: No tab is selected, or no URL in tab.")
                 return
         }
@@ -1688,9 +1732,10 @@ extension BrowserViewController: TabManagerDelegate {
                 // Don't bother fetching bookmark state for about/sessionrestore and about/home.
                 if AboutUtils.isAboutURL(webView.URL) {
                     // Indeed, because we don't show the toolbar at all, don't even blank the star.
-                } else {
+                } else if !AppConstants.MOZ_MENU {
                     profile.bookmarks.modelFactory >>== {
-                        $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) {
+                        $0.isBookmarked(url)
+                            .uponQueue(dispatch_get_main_queue()) {
                             guard let isBookmarked = $0.successValue else {
                                 log.error("Error getting bookmark status: \($0.failureValue).")
                                 return
