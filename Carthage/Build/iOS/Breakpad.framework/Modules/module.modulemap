@@ -1,0 +1,6 @@
+framework module Breakpad {
+  umbrella header "Breakpad.h"
+
+  export *
+  module * { export * }
+}

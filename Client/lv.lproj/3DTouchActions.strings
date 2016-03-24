@@ -1,0 +1,24 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "Pievienot grāmatzīmēm";
+
+/* Label for preview action on Tab Tray Tab to add current tab to Reading List */
+"Add to Reading List" = "Pievienot lasīšanas sarakstam";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "Aizvērt cilni";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "Kopēt adresi";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "Atvērt pēdējo grāmatzīmi";
+
+/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
+"Open Last Tab" = "Atvērt pēdējo cilni";
+
+/* Accessibility Label for preview in Tab Tray of current tab */
+"Preview of %@" = "%@ priekšskatījums";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "Sūtīt uz ierīci";
+

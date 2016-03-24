@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Сърфирайте из няколко уеб страници едновременно, чрез подпрозорци.";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "Избери";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Свържете се с Firefox, навсякъде където го използвате.";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "Персонализирайте";
+
+/* See http://mzl.la/1if9ODp */
+"Easily switch between open pages with tabs." = "Лесно превключване между отворените страници с подпрозорци.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox и облака";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Кадър с въведение %1$@ от %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "Организирайте";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Направете вашия Firefox точно такъв, какъвто го искате в Настройки.";
+
+/* See http://mzl.la/1if9ODp */
+"Personalize your default search engine and more in Settings." = "Персонализирай търсеща машина по подразбиране и още в Настройки.";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "Споделяне";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Вписване във Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Начало на сърфирането";
+
+/* See http://mzl.la/1if9ODp */
+"Sync your Devices." = "Синхронизирайте вашите устройства.";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Докоснете, задръжте и преместете иконата Firefox във вашия док за лесен достъп.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "Бутонът Настройки е най-отпред на лентата с подпрозорците.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Бутонът Показване на подпрозорците е до лентата за адрес и търсене и показва текущия брой отворени подпрозорци.";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "Използвайте share sheet за изпращане на връзки от други приложения до Firefox.";
+

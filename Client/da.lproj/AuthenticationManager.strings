@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Efter 1 time";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Efter 1 minut";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Efter 5 minutter";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Efter 10 minutter";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Efter 15 minutter";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Skift adgangskode";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "Indtast adgangskode";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "Indtast en ny adgangskode";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Indtast adgangskode";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "Indtast adgangskode";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Med det samme";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Forkert adgangskode. Prøv igen (%d forsøg tilbage).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Forkert adgangskode. Prøv igen.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Maksimalt antal forsøg nået. Forsøg igen om en time.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Maksimalt antal forsøg nået. Forsøg igen senere.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Den nye adgangskode skal være anderledes end den gamle.";
+
+/* List section title for passcode settings */
+"Passcode" = "Adgangskode";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Adgangskoderne var ikke ens. Prøv igen.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Indtast adgangskode igen";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Kræv adgangskode";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Angiv adgangskode";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID og adgangskode";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Slå adgangskode fra";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Slå adgangskode til";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Slå din adgangskode fra.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Brug Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Brug dit fingeraftryk til at få adgang til logins.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Brug dit fingeraftryk for at få adgang til privat browsing.";
+

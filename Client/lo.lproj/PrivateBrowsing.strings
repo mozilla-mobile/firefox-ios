@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "ປິດແທັບສ່ວນຕົວ";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ຈະບໍ່ບັນທຶກທຸກໆປະຫວັດການໃຊ້ງານ ຫລື ຄຸກກີຂອງທ່ານ, ແຕ່ວ່າຈະບັນທຶກບຸກມາກໃຫມ່ໄວ້.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* Toggled OFF accessibility value */
+"Off" = "ປິດ";
+
+/* Toggled ON accessibility value */
+"On" = "ເປີດ";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "ເປີດໃນແທັບສ່ວນຕົວໃຫມ່";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "ການຄົ້ນຫາແບບສ່ວນຕົວ";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "ໂມດສ່ວນຕົວ";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "ປິດ ຫລື ເປີດໂມດສ່ວນຕົວ";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "ເມື່ອອອກຈາກການຄົ້ນຫາແບບສ່ວນຕົວ";
+

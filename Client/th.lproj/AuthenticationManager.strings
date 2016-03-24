@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "หลังจาก 1 ชั่วโมง";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "หลังจาก 1 นาที";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "หลังจาก 5 นาที";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "หลังจาก 10 นาที";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "หลังจาก 15 นาที";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "เปลี่ยนรหัสผ่าน";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "ป้อนรหัสผ่าน";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "ป้อนรหัสผ่านใหม่";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "ป้อนรหัสผ่าน";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "ป้อนรหัสผ่าน";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "ในทันที";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "รหัสผ่านไม่ถูกต้อง ลองอีกครั้ง (จำนวนครั้งที่เหลือ: %d)";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "รหัสผ่านไม่ถูกต้อง ลองอีกครั้ง";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "ครบจำนวนครั้งสูงสุดแล้ว โปรดลองอีกครั้งในอีกชั่วโมง";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "ครบจำนวนครั้งสูงสุดแล้ว โปรดลองอีกครั้งในภายหลัง";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "รหัสผ่านใหม่ต้องแตกต่างจากรหัสที่มีอยู่เดิม";
+
+/* List section title for passcode settings */
+"Passcode" = "รหัสผ่าน";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "รหัสผ่านไม่ตรงกัน ลองอีกครั้ง";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "ป้อนรหัสผ่านอีกครั้ง";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "ต้องการรหัสผ่าน";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "ตั้งรหัสผ่าน";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID และรหัสผ่าน";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "ปิดรหัสผ่าน";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "เปิดรหัสผ่าน";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "ปิดรหัสผ่านของคุณ";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "ใช้ Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ใช้ลายนิ้วมือของคุณเพื่อเข้าถึงการเข้าสู่ระบบตอนนี้";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "ใช้ลายนิ้วมือของคุณเพื่อเข้าถึงการท่องเว็บแบบส่วนตัวตอนนี้";
+

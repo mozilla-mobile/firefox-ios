@@ -1,0 +1,1862 @@
+BCSymbolMap Version: 1.0
++[BreakpadController sharedInstance]
+-[BreakpadController init]
+-[BreakpadController initSingleton]
+-[BreakpadController dealloc]
+-[BreakpadController start:]
+__28-[BreakpadController start:]_block_invoke
+__copy_helper_block_
+__destroy_helper_block_
+-[BreakpadController stop]
+__26-[BreakpadController stop]_block_invoke
+__copy_helper_block_15
+__destroy_helper_block_16
+-[BreakpadController threadUnsafeSendReportWithConfiguration:withBreakpadRef:]
+-[BreakpadController setUploadingEnabled:]
+__42-[BreakpadController setUploadingEnabled:]_block_invoke
+__copy_helper_block_23
+__destroy_helper_block_24
+-[BreakpadController updateConfiguration:]
+-[BreakpadController resetConfiguration]
+-[BreakpadController setUploadingURL:]
+-[BreakpadController setUploadInterval:]
+-[BreakpadController setParametersToAddAtUploadTime:]
+-[BreakpadController addUploadParameter:forKey:]
+__48-[BreakpadController addUploadParameter:forKey:]_block_invoke
+__copy_helper_block_55
+__destroy_helper_block_56
+-[BreakpadController removeUploadParameterForKey:]
+__50-[BreakpadController removeUploadParameterForKey:]_block_invoke
+__copy_helper_block_58
+__destroy_helper_block_59
+-[BreakpadController didCrashLastSession]
+-[BreakpadController resetLastSessionCrashState]
+-[BreakpadController withBreakpadRef:]
+__38-[BreakpadController withBreakpadRef:]_block_invoke
+__copy_helper_block_80
+__destroy_helper_block_81
+-[BreakpadController hasReportToUpload:]
+__40-[BreakpadController hasReportToUpload:]_block_invoke
+__copy_helper_block_83
+__destroy_helper_block_84
+-[BreakpadController getCrashReportCount:]
+__42-[BreakpadController getCrashReportCount:]_block_invoke
+__copy_helper_block_86
+__destroy_helper_block_87
+-[BreakpadController getNextReportConfigurationOrSendDelay:]
+__60-[BreakpadController getNextReportConfigurationOrSendDelay:]_block_invoke
+__copy_helper_block_93
+__destroy_helper_block_94
+-[BreakpadController sendDelay]
+-[BreakpadController reportWillBeSent]
+-[BreakpadController sendStoredCrashReports]
+__44-[BreakpadController sendStoredCrashReports]_block_invoke
+__44-[BreakpadController sendStoredCrashReports]_block_invoke_2
+__copy_helper_block_109
+__destroy_helper_block_110
+__copy_helper_block_112
+__destroy_helper_block_113
+_ZZ36+[BreakpadController sharedInstance]E15sharedInstance_
+_ZGVZ36+[BreakpadController sharedInstance]E15sharedInstance_
+OBJC_CLASSLIST_REFERENCES_$_
+OBJC_METH_VAR_NAME_
+OBJC_SELECTOR_REFERENCES_
+OBJC_METH_VAR_NAME_1
+OBJC_SELECTOR_REFERENCES_2
+OBJC_CLASSLIST_SUP_REFS_$_
+OBJC_METH_VAR_NAME_3
+OBJC_SELECTOR_REFERENCES_4
+.str
+OBJC_IVAR_$_BreakpadController.queue_
+OBJC_IVAR_$_BreakpadController.enableUploads_
+OBJC_IVAR_$_BreakpadController.started_
+OBJC_METH_VAR_NAME_5
+OBJC_SELECTOR_REFERENCES_6
+OBJC_IVAR_$_BreakpadController.breakpadRef_
+__func__.-[BreakpadController dealloc]
+.str7
+.str8
+OBJC_IVAR_$_BreakpadController.configuration_
+OBJC_METH_VAR_NAME_9
+OBJC_SELECTOR_REFERENCES_10
+OBJC_IVAR_$_BreakpadController.uploadTimeParameters_
+OBJC_METH_VAR_NAME_11
+OBJC_SELECTOR_REFERENCES_12
+__func__.__28-[BreakpadController start:]_block_invoke
+.str13
+_unnamed_cfstring_
+.str14
+__block_descriptor_tmp
+__block_descriptor_tmp17
+OBJC_METH_VAR_NAME_18
+OBJC_SELECTOR_REFERENCES_19
+OBJC_CLASSLIST_REFERENCES_$_20
+OBJC_METH_VAR_NAME_21
+OBJC_SELECTOR_REFERENCES_22
+__block_descriptor_tmp25
+OBJC_METH_VAR_NAME_26
+OBJC_SELECTOR_REFERENCES_27
+.str28
+_unnamed_cfstring_29
+OBJC_METH_VAR_NAME_30
+OBJC_SELECTOR_REFERENCES_31
+OBJC_METH_VAR_NAME_32
+OBJC_SELECTOR_REFERENCES_33
+OBJC_METH_VAR_NAME_34
+OBJC_SELECTOR_REFERENCES_35
+OBJC_METH_VAR_NAME_36
+OBJC_SELECTOR_REFERENCES_37
+OBJC_CLASSLIST_REFERENCES_$_38
+OBJC_METH_VAR_NAME_39
+OBJC_SELECTOR_REFERENCES_40
+OBJC_METH_VAR_NAME_41
+OBJC_SELECTOR_REFERENCES_42
+OBJC_METH_VAR_NAME_43
+OBJC_SELECTOR_REFERENCES_44
+OBJC_METH_VAR_NAME_45
+OBJC_SELECTOR_REFERENCES_46
+.str47
+_unnamed_cfstring_48
+OBJC_METH_VAR_NAME_49
+OBJC_SELECTOR_REFERENCES_50
+OBJC_METH_VAR_NAME_51
+OBJC_SELECTOR_REFERENCES_52
+OBJC_IVAR_$_BreakpadController.uploadIntervalInSeconds_
+OBJC_METH_VAR_NAME_53
+OBJC_SELECTOR_REFERENCES_54
+__block_descriptor_tmp57
+__block_descriptor_tmp60
+.str61
+_unnamed_cfstring_62
+OBJC_METH_VAR_NAME_63
+OBJC_SELECTOR_REFERENCES_64
+OBJC_METH_VAR_NAME_65
+OBJC_SELECTOR_REFERENCES_66
+OBJC_CLASSLIST_REFERENCES_$_67
+OBJC_METH_VAR_NAME_68
+OBJC_SELECTOR_REFERENCES_69
+.str70
+_unnamed_cfstring_71
+OBJC_METH_VAR_NAME_72
+OBJC_SELECTOR_REFERENCES_73
+.str74
+_unnamed_cfstring_75
+OBJC_METH_VAR_NAME_76
+OBJC_SELECTOR_REFERENCES_77
+OBJC_METH_VAR_NAME_78
+OBJC_SELECTOR_REFERENCES_79
+__block_descriptor_tmp82
+__block_descriptor_tmp85
+__block_descriptor_tmp88
+OBJC_METH_VAR_NAME_89
+OBJC_SELECTOR_REFERENCES_90
+OBJC_METH_VAR_NAME_91
+OBJC_SELECTOR_REFERENCES_92
+__block_descriptor_tmp95
+OBJC_METH_VAR_NAME_96
+OBJC_SELECTOR_REFERENCES_97
+OBJC_METH_VAR_NAME_98
+OBJC_SELECTOR_REFERENCES_99
+OBJC_CLASSLIST_REFERENCES_$_100
+OBJC_METH_VAR_NAME_101
+OBJC_SELECTOR_REFERENCES_102
+OBJC_METH_VAR_NAME_103
+OBJC_SELECTOR_REFERENCES_104
+OBJC_METH_VAR_NAME_105
+OBJC_SELECTOR_REFERENCES_106
+OBJC_METH_VAR_NAME_107
+OBJC_SELECTOR_REFERENCES_108
+__block_descriptor_tmp111
+__block_descriptor_tmp114
+OBJC_CLASS_NAME_
+OBJC_METH_VAR_NAME_115
+OBJC_METH_VAR_TYPE_
+l_OBJC_$_CLASS_METHODS_BreakpadController
+l_OBJC_METACLASS_RO_$_BreakpadController
+OBJC_METH_VAR_TYPE_116
+OBJC_METH_VAR_NAME_117
+OBJC_METH_VAR_TYPE_118
+OBJC_METH_VAR_NAME_119
+OBJC_METH_VAR_NAME_120
+OBJC_METH_VAR_TYPE_121
+OBJC_METH_VAR_NAME_122
+OBJC_METH_VAR_NAME_123
+OBJC_METH_VAR_TYPE_124
+OBJC_METH_VAR_NAME_125
+OBJC_METH_VAR_TYPE_126
+OBJC_METH_VAR_NAME_127
+OBJC_METH_VAR_TYPE_128
+OBJC_METH_VAR_NAME_129
+OBJC_METH_VAR_NAME_130
+OBJC_METH_VAR_TYPE_131
+OBJC_METH_VAR_NAME_132
+OBJC_METH_VAR_NAME_133
+OBJC_METH_VAR_TYPE_134
+OBJC_METH_VAR_NAME_135
+OBJC_METH_VAR_NAME_136
+OBJC_METH_VAR_NAME_137
+OBJC_METH_VAR_TYPE_138
+l_OBJC_$_INSTANCE_METHODS_BreakpadController
+OBJC_METH_VAR_NAME_139
+OBJC_METH_VAR_TYPE_140
+OBJC_METH_VAR_NAME_141
+OBJC_METH_VAR_TYPE_142
+OBJC_METH_VAR_NAME_143
+OBJC_METH_VAR_TYPE_144
+OBJC_METH_VAR_NAME_145
+OBJC_METH_VAR_TYPE_146
+OBJC_METH_VAR_NAME_147
+OBJC_METH_VAR_NAME_148
+OBJC_METH_VAR_TYPE_149
+OBJC_METH_VAR_NAME_150
+OBJC_METH_VAR_TYPE_151
+l_OBJC_$_INSTANCE_VARIABLES_BreakpadController
+l_OBJC_CLASS_RO_$_BreakpadController
+_ZZN12_GLOBAL__N_111GetPlatformEvE20kHwMachineSysctlName
+OBJC_CLASSLIST_REFERENCES_$_152
+OBJC_METH_VAR_NAME_153
+OBJC_SELECTOR_REFERENCES_154
+.str155
+_unnamed_cfstring_156
+OBJC_LABEL_CLASS_$
+Apple LLVM version 7.0.2 (clang-700.1.81)
+dispatch_get_main_queue
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/dispatch/queue.h
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios
+~scoped_array
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/scoped_ptr.h
+get
+scoped_array
+GetPlatform
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/ios/BreakpadController.mm
+-[BreakpadController sendStoredCrashReports]
+-[BreakpadController reportWillBeSent]
+-[BreakpadController sendDelay]
+-[BreakpadController getNextReportConfigurationOrSendDelay:]
+-[BreakpadController getCrashReportCount:]
+-[BreakpadController hasReportToUpload:]
+-[BreakpadController withBreakpadRef:]
+-[BreakpadController resetLastSessionCrashState]
+-[BreakpadController didCrashLastSession]
+-[BreakpadController removeUploadParameterForKey:]
+-[BreakpadController addUploadParameter:forKey:]
+-[BreakpadController setParametersToAddAtUploadTime:]
+-[BreakpadController setUploadInterval:]
+-[BreakpadController setUploadingURL:]
+-[BreakpadController resetConfiguration]
+-[BreakpadController updateConfiguration:]
+-[BreakpadController setUploadingEnabled:]
+-[BreakpadController threadUnsafeSendReportWithConfiguration:withBreakpadRef:]
+-[BreakpadController stop]
+-[BreakpadController start:]
+-[BreakpadController dealloc]
+-[BreakpadController initSingleton]
+-[BreakpadController init]
++[BreakpadController sharedInstance]
+__clang_call_terminate
+_ZN15google_breakpad13PageAllocator5AllocEm
+_ZN15google_breakpad13PageAllocator9GetNPagesEm
+OBJC_METH_VAR_NAME_7
+OBJC_SELECTOR_REFERENCES_8
+__func__._ZN15google_breakpad29IosExceptionMinidumpGenerator17WriteThreadStreamEjP11MDRawThread
+.str11
+.str12
+first
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory
+__end_cap
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__split_buffer
+capacity
+deallocate
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/memory.h
+destroy
+__destroy<MDMemoryDescriptor>
+destroy<MDMemoryDescriptor>
+__destruct_at_end
+clear
+~__split_buffer
+__invalidate_all_iterators
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector
+__annotate_new
+move<MDMemoryDescriptor *&>
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/type_traits
+swap<MDMemoryDescriptor *>
+move<MDMemoryDescriptor &>
+move_if_noexcept<MDMemoryDescriptor>
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/utility
+forward<MDMemoryDescriptor>
+construct<MDMemoryDescriptor, MDMemoryDescriptor>
+__construct<MDMemoryDescriptor, MDMemoryDescriptor>
+__construct_backward<MDMemoryDescriptor *>
+data
+__annotate_contiguous_container
+__annotate_delete
+__swap_out_circular_buffer
+second
+__alloc
+GetNPages
+Alloc
+allocate
+__libcpp_compressed_pair_imp
+forward<google_breakpad::PageStdAllocator<MDMemoryDescriptor> &>
+forward<MDMemoryDescriptor *>
+__compressed_pair
+__split_buffer
+size
+max<unsigned long, std::__1::__less<unsigned long, unsigned long> >
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/algorithm
+max<unsigned long>
+max
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/limits
+max_size
+__max_size
+operator()
+min<unsigned long, std::__1::__less<unsigned long, unsigned long> >
+min<unsigned long>
+__recommend
+__push_back_slow_path<const MDMemoryDescriptor &>
+__done
+__to_raw_pointer<MDMemoryDescriptor>
+forward<const MDMemoryDescriptor &>
+construct<MDMemoryDescriptor, const MDMemoryDescriptor &>
+__construct<MDMemoryDescriptor, const MDMemoryDescriptor &>
+__RAII_IncreaseAnnotator
+push_back
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/minidump_file_writer.h
+Allocate
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/minidump_file_writer-inl.h
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/google_breakpad/common/minidump_size.h
+Flush
+~TypedMDRVA
+TypedMDRVA
+Copy
+AppendToMemory
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/ios/handler/ios_exception_minidump_generator.mm
+position
+UntypedMDRVA
+location
+SetExceptionInformation
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/handler/minidump_generator.h
+WriteThreadStream
+WriteExceptionStream
+GetLRFromException
+GetPCFromException
+WriteCrashingContextARM
+WriteCrashingContext
+~IosExceptionMinidumpGenerator
+IosExceptionMinidumpGenerator
+_ZNK15google_breakpad16NonAllocatingMapILm256ELm256ELm64EE14GetValueForKeyEPKc
+_ZN15google_breakpad16NonAllocatingMapILm256ELm256ELm64EE11SetKeyValueEPKcS3_
+_ZN15google_breakpad16NonAllocatingMapILm256ELm256ELm64EE9RemoveKeyEPKc
+_ZN8Breakpad6CreateEP12NSDictionary
+_ZN21ProtectedMemoryLockerC2EP23_opaque_pthread_mutex_tP24ProtectedMemoryAllocator
+_ZN21ProtectedMemoryLockerD2Ev
+.str1
+_unnamed_cfstring_2
+.str5
+_unnamed_cfstring_6
+_unnamed_cfstring_12
+OBJC_METH_VAR_NAME_13
+OBJC_SELECTOR_REFERENCES_14
+OBJC_METH_VAR_NAME_15
+OBJC_SELECTOR_REFERENCES_16
+.str17
+.str18
+_unnamed_cfstring_19
+OBJC_METH_VAR_NAME_20
+OBJC_SELECTOR_REFERENCES_21
+.str22
+_unnamed_cfstring_23
+.str24
+_unnamed_cfstring_25
+.str26
+_unnamed_cfstring_27
+.str30
+_unnamed_cfstring_31
+OBJC_CLASSLIST_REFERENCES_$_32
+OBJC_METH_VAR_NAME_33
+OBJC_SELECTOR_REFERENCES_34
+.str35
+_unnamed_cfstring_36
+.str37
+_unnamed_cfstring_38
+.str39
+_unnamed_cfstring_40
+.str41
+_unnamed_cfstring_42
+.str45
+_unnamed_cfstring_46
+.str51
+_unnamed_cfstring_52
+.str55
+OBJC_METH_VAR_NAME_56
+OBJC_SELECTOR_REFERENCES_57
+.str58
+.str59
+.str60
+.str62
+.str63
+.str64
+OBJC_METH_VAR_NAME_67
+OBJC_SELECTOR_REFERENCES_68
+OBJC_CLASSLIST_REFERENCES_$_69
+OBJC_METH_VAR_NAME_70
+OBJC_SELECTOR_REFERENCES_71
+OBJC_CLASSLIST_REFERENCES_$_74
+.str75
+_unnamed_cfstring_76
+OBJC_METH_VAR_NAME_77
+OBJC_SELECTOR_REFERENCES_78
+OBJC_METH_VAR_NAME_79
+OBJC_SELECTOR_REFERENCES_80
+OBJC_METH_VAR_NAME_81
+OBJC_SELECTOR_REFERENCES_82
+.str83
+_unnamed_cfstring_84
+OBJC_METH_VAR_NAME_85
+OBJC_SELECTOR_REFERENCES_86
+OBJC_CLASSLIST_REFERENCES_$_87
+OBJC_METH_VAR_NAME_88
+OBJC_SELECTOR_REFERENCES_89
+OBJC_METH_VAR_NAME_90
+OBJC_SELECTOR_REFERENCES_91
+OBJC_METH_VAR_NAME_92
+OBJC_SELECTOR_REFERENCES_93
+OBJC_METH_VAR_NAME_94
+OBJC_SELECTOR_REFERENCES_95
+OBJC_METH_VAR_NAME_100
+OBJC_SELECTOR_REFERENCES_101
+OBJC_METH_VAR_NAME_102
+OBJC_SELECTOR_REFERENCES_103
+OBJC_CLASSLIST_REFERENCES_$_104
+OBJC_METH_VAR_NAME_109
+OBJC_SELECTOR_REFERENCES_110
+.str111
+_unnamed_cfstring_112
+.str113
+_unnamed_cfstring_114
+.str115
+.str116
+.str117
+OBJC_METH_VAR_NAME_118
+OBJC_SELECTOR_REFERENCES_119
+.str120
+OBJC_METH_VAR_NAME_121
+OBJC_SELECTOR_REFERENCES_122
+OBJC_CLASSLIST_REFERENCES_$_123
+OBJC_METH_VAR_NAME_124
+OBJC_SELECTOR_REFERENCES_125
+OBJC_METH_VAR_NAME_126
+OBJC_SELECTOR_REFERENCES_127
+.str128
+.str129
+.str130
+.str131
+_unnamed_cfstring_132
+.str133
+.str134
+OBJC_SELECTOR_REFERENCES_136
+.str137
+.str138
+.str139
+.str140
+.str141
+.str142
+.str143
+.str144
+_unnamed_cfstring_145
+OBJC_METH_VAR_NAME_146
+OBJC_SELECTOR_REFERENCES_147
+.str148
+__func__._ZN21ProtectedMemoryLockerC2EP23_opaque_pthread_mutex_tP24ProtectedMemoryAllocator
+.str149
+.str150
+__func__._ZN21ProtectedMemoryLockerD2Ev
+__func__._ZNK15google_breakpad16NonAllocatingMapILm256ELm256ELm64EE14GetValueForKeyEPKc
+.str151
+.str152
+__func__._ZN15google_breakpad16NonAllocatingMapILm256ELm256ELm64EE11SetKeyValueEPKcS3_
+.str153
+.str154
+__func__._ZN15google_breakpad16NonAllocatingMapILm256ELm256ELm64EE9RemoveKeyEPKc
+operator=
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/simple_string_dictionary.h
+NonAllocatingMap
+__zero
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string
+basic_string
+Next
+Iterator
+RemoveKey
+is_active
+GetEntryForKey
+SetKeyValue
+length
+allocator
+GetConstEntryForKey
+GetValueForKey
+addressof<const char>
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__functional_base
+pointer_to
+__get_short_pointer
+__get_long_pointer
+__is_long
+__get_pointer
+__to_raw_pointer<const char>
+c_str
+~ProtectedMemoryLocker
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/ios/Breakpad.mm
+ProtectedMemoryLocker
+Breakpad
+Create
+GetFilePath
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/crash_generation/ConfigFile.h
+ConfigFile
+~ConfigFile
+IsDebuggerActive
+BreakpadGenerateReport
+BreakpadUploadData
+BreakpadHandleNetworkResponse
+BreakpadUploadNextReportWithParameters
+BreakpadUploadReportWithParametersAndConfiguration
+BreakpadGetNextReportConfiguration
+BreakpadUploadNextReport
+BreakpadGetCrashReportCount
+BreakpadRemoveKeyValue
+BreakpadKeyValue
+BreakpadRemoveUploadParameter
+BreakpadAddUploadParameter
+BreakpadSetKeyValue
+BreakpadRelease
+BreakpadCreate
+HandleUncaughtException
+HandleMinidump
+GenerateReport
+UploadData
+UploadNextReport
+UploadReportWithConfiguration
+HandleNetworkResponse
+NextCrashReportConfiguration
+NextCrashReportToUpload
+CrashReportsToUpload
+RemoveKeyValue
+KeyValue
+ExtractParameters
+~Breakpad
+Initialize
+SaveLastCrashState
+CrashFilterCallback
+UncaughtExceptionHandler
+HandleMinidumpCallback
+OBJC_CLASSLIST_REFERENCES_$_1
+OBJC_CLASSLIST_REFERENCES_$_2
+__func__._ZN15google_breakpad10ConfigFile16AppendConfigDataEPKcPKvm
+.str9
+.str10
+__func__._ZN15google_breakpad10ConfigFile9WriteFileEPKcPKNS_16NonAllocatingMapILm256ELm256ELm64EEES2_S2_
+.str15
+.str16
+.str19
+.str20
+.str21
+WriteFile
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/crash_generation/ConfigFile.mm
+AppendCrashTimeParameters
+AppendConfigString
+AppendConfigData
+WriteData
+EnsureDirectoryPathExists
+__breakpad_fdnlist<nlist_64>
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/handler/breakpad_nlist_64.cc
+breakpad_nlist_common<nlist_64>
+_OSSwapInt32
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/libkern/arm/OSByteOrder.h
+CFSwapInt32BigToHost
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFByteOrder.h
+__breakpad_fdnlist<nlist>
+breakpad_nlist_common<nlist>
+breakpad_nlist
+_ZN15google_breakpadL14ReadTaskStringEjy
+_ZN15google_breakpad12DynamicImageC2EPhmyNSt3__112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEmji
+.str2
+__func__._ZN15google_breakpad13DynamicImages20DetermineTaskCPUTypeEj
+.str3
+.str4
+ReadImageInfo<google_breakpad::MachO32>
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/handler/dynamic_images.cc
+__wrap_iter<google_breakpad::DynamicImageRef *>
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iterator
+operator-<const google_breakpad::DynamicImageRef *, const google_breakpad::DynamicImageRef *>
+__unwrap_iter<google_breakpad::DynamicImageRef *>
+__move<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef>
+move<google_breakpad::DynamicImageRef *, google_breakpad::DynamicImageRef *>
+__annotate_shrink
+operator==<const google_breakpad::DynamicImageRef *, const google_breakpad::DynamicImageRef *>
+operator!=<const google_breakpad::DynamicImageRef *>
+base
+operator-<const google_breakpad::DynamicImageRef *, google_breakpad::DynamicImageRef *>
+erase
+operator*
+operator==
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/handler/dynamic_images.h
+operator++
+operator==<google_breakpad::DynamicImageRef *, google_breakpad::DynamicImageRef *>
+operator!=<google_breakpad::DynamicImageRef *>
+adjacent_find<std::__1::__wrap_iter<google_breakpad::DynamicImageRef *>, std::__1::__equal_to<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef> &>
+unique<std::__1::__wrap_iter<google_breakpad::DynamicImageRef *>, std::__1::__equal_to<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef> >
+unique<std::__1::__wrap_iter<google_breakpad::DynamicImageRef *> >
+end
+__wrap_iter
+__make_iter
+begin
+__insertion_sort_incomplete<std::__1::__less<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef> &, google_breakpad::DynamicImageRef *>
+__insertion_sort_3<std::__1::__less<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef> &, google_breakpad::DynamicImageRef *>
+__sort5<std::__1::__less<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef> &, google_breakpad::DynamicImageRef *>
+__sort4<std::__1::__less<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef> &, google_breakpad::DynamicImageRef *>
+__sort3<std::__1::__less<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef> &, google_breakpad::DynamicImageRef *>
+swap<google_breakpad::DynamicImageRef>
+operator<
+__sort<std::__1::__less<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef> &, google_breakpad::DynamicImageRef *>
+sort<google_breakpad::DynamicImageRef *, std::__1::__less<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef> >
+sort<google_breakpad::DynamicImageRef *>
+sort<google_breakpad::DynamicImageRef>
+~vector
+~DynamicImage
+DynamicImageRef
+__push_back_slow_path<google_breakpad::DynamicImageRef>
+forward<google_breakpad::DynamicImageRef>
+construct<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef>
+__construct<google_breakpad::DynamicImageRef, google_breakpad::DynamicImageRef>
+GetVMSize
+IsValid
+~__vector_base
+__construct_range_forward<unsigned char>
+__construct_at_end<unsigned char *>
+__distance<unsigned char *>
+distance<unsigned char *>
+vector<unsigned char *>
+DynamicImage
+GetMemoryRegionSize
+ReadTaskString
+move<std::__1::allocator<char> &>
+__move_assign_alloc
+shrink_to_fit
+__set_short_size
+addressof<char>
+__set_long_size
+assign
+__move_assign
+move<google_breakpad::DynamicImageRef *&>
+swap<google_breakpad::DynamicImageRef *>
+move<google_breakpad::DynamicImageRef &>
+move_if_noexcept<google_breakpad::DynamicImageRef>
+forward<const google_breakpad::DynamicImageRef &>
+construct<google_breakpad::DynamicImageRef, const google_breakpad::DynamicImageRef &>
+__construct<google_breakpad::DynamicImageRef, const google_breakpad::DynamicImageRef &>
+__construct_backward<google_breakpad::DynamicImageRef *>
+forward<std::__1::allocator<google_breakpad::DynamicImageRef> &>
+reserve
+__vector_base
+vector
+ReadImageInfo<google_breakpad::MachO64>
+LookupSymbol<google_breakpad::MachO32>
+LookupSymbol<google_breakpad::MachO64>
+forward<google_breakpad::DynamicImageRef *>
+__vector_base_common
+GetFileTypeFromHeader<google_breakpad::MachO32>
+GetFileTypeFromHeader<google_breakpad::MachO64>
+FindTextSection<google_breakpad::MachO32>
+GetLoadAddress
+operator[]
+FindTextSection<google_breakpad::MachO64>
+__destroy<unsigned char>
+destroy<unsigned char>
+move<unsigned char *&>
+swap<unsigned char *>
+__construct_backward<unsigned char>
+__construct_at_end
+__allocate
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/new
+forward<std::__1::allocator<unsigned char> &>
+forward<unsigned char *>
+__to_raw_pointer<unsigned char>
+construct<unsigned char>
+__construct<unsigned char>
+__append
+resize
+GetNativeCPUType
+GetImageCount
+operator google_breakpad::DynamicImage *
+GetImage
+GetCPUType
+Is64Bit
+HasTaskDyldInfo
+__deallocate
+__to_raw_pointer<google_breakpad::DynamicImageRef>
+__destroy<google_breakpad::DynamicImageRef>
+destroy<google_breakpad::DynamicImageRef>
+DetermineTaskCPUType
+GetExecutableImageIndex
+GetExecutableImage
+ReadImageInfoForTask
+GetDyldAllImageInfosPointer
+DynamicImages
+GetFileType
+CalculateMemoryAndVersionInfo
+ReadTaskMemory
+_ZN15google_breakpad16ExceptionHandler13set_dump_pathERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE
+_ZN15google_breakpad17ScopedTaskSuspendD2Ev
+_ZN15google_breakpadL14gProtectedDataE
+__func__._ZN15google_breakpad16ExceptionHandler14InstallHandlerEv
+reset
+swap
+__get_short_size
+__get_long_size
+empty
+~scoped_ptr
+scoped_ptr
+exception
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/exception
+bad_alloc
+IsOutOfProcess
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/handler/exception_handler.h
+ExceptionParameters
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/handler/exception_handler.cc
+~ScopedTaskSuspend
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/scoped_task_suspend-inl.h
+ScopedTaskSuspend
+set_dump_path
+ResumeThreads
+SuspendThreads
+UpdateNextID
+SendMessageToHandlerThread
+Teardown
+Setup
+UninstallHandler
+InstallHandler
+SignalHandler
+WaitForMessage
+ForwardException
+WriteMinidumpWithException
+WriteMinidumpForChild
+WriteMinidump
+~ExceptionHandler
+ExceptionHandler
+breakpad_exc_server
+_ZN15google_breakpad10TypedMDRVAI14MDRawDirectoryE13AllocateArrayEm
+_ZN15google_breakpad10TypedMDRVAI14MDRawDirectoryE9CopyIndexEjPS1_
+_ZN15google_breakpad10TypedMDRVAI15MDRawThreadListE22AllocateObjectAndArrayEmm
+_ZN15google_breakpad10TypedMDRVAI15MDRawThreadListE20CopyIndexAfterObjectEjPKvm
+_ZN15google_breakpad10TypedMDRVAI15MDRawMemoryListE22AllocateObjectAndArrayEmm
+_ZN15google_breakpad10TypedMDRVAI15MDRawMemoryListE20CopyIndexAfterObjectEjPKvm
+_ZN15google_breakpad10TypedMDRVAI13MDCVInfoPDB70E22AllocateObjectAndArrayEmm
+_ZN15google_breakpad10TypedMDRVAI13MDCVInfoPDB70E20CopyIndexAfterObjectEjPKvm
+_ZN15google_breakpad10TypedMDRVAI15MDRawModuleListE22AllocateObjectAndArrayEmm
+_ZN15google_breakpad10TypedMDRVAI15MDRawModuleListE20CopyIndexAfterObjectEjPKvm
+_ZN15google_breakpad13PageAllocatorD2Ev
+_ZN15google_breakpad13PageAllocator7FreeAllEv
+_ZN15google_breakpad13DynamicImagesD2Ev
+_ZN15google_breakpad15wasteful_vectorI18MDMemoryDescriptorEC2EPNS_13PageAllocatorEj
+_unnamed_cfstring_4
+_ZZN15google_breakpad17MinidumpGenerator5WriteEPKcE7writers
+__func__._ZN15google_breakpad17MinidumpGenerator17CurrentPCForStackEPj
+.str6
+__func__._ZN15google_breakpad17MinidumpGenerator17WriteModuleStreamEjP11MDRawModule
+__func__._ZN15google_breakpad10TypedMDRVAI14MDRawDirectoryE13AllocateArrayEm
+__func__._ZN15google_breakpad10TypedMDRVAI14MDRawDirectoryE9CopyIndexEjPS1_
+__func__._ZN15google_breakpad10TypedMDRVAI15MDRawThreadListE22AllocateObjectAndArrayEmm
+__func__._ZN15google_breakpad10TypedMDRVAI15MDRawThreadListE20CopyIndexAfterObjectEjPKvm
+CopyIndexAfterObject
+AllocateObjectAndArray
+CopyIndex
+AllocateArray
+append
+forward<google_breakpad::PageStdAllocator<MDMemoryDescriptor> >
+PageStdAllocator
+wasteful_vector
+~FileID
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/file_id.h
+GetVersion
+GetVMAddrSlide
+GetVMAddr
+~DynamicImages
+FreeAll
+~PageAllocator
+~wasteful_vector
+PageAllocator
+WriteBreakpadInfoStream
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/handler/minidump_generator.cc
+WriteMiscInfoStream
+WriteModuleListStream
+WriteCVRecord
+FindExecutableModule
+WriteModuleStream
+WriteSystemInfoStream
+WriteMemoryListStream
+WriteThreadListStream
+GetThreadState
+WriteContextARM
+CurrentPCForStackARM
+WriteStackARM
+CurrentPCForStack
+WriteContext
+WriteStack
+WriteStackFromStartAddress
+CalculateStackSize
+Write
+UniqueNameInDirectory
+SetTaskContext
+GatherSystemInformation
+~MinidumpGenerator
+MinidumpGenerator
+__func__._ZN24ProtectedMemoryAllocatorC2Ej
+Unprotect
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/handler/protected_memory_allocator.cc
+Protect
+~ProtectedMemoryAllocator
+ProtectedMemoryAllocator
+-[Uploader initWithConfigFile:]
+_ZN12_GLOBAL__N_121readConfigurationDataEPKc
+-[Uploader initWithConfig:]
++[Uploader readConfigurationDataFromFile:]
+-[Uploader translateConfigurationData:]
+-[Uploader clientID]
+-[Uploader readLogFileData]
+-[Uploader readMinidumpData]
+-[Uploader createServerParameterDictionaries]
+-[Uploader dictionaryForServerType:]
+-[Uploader urlParameterDictionary]
+-[Uploader populateServerDictionary:]
+-[Uploader addServerParameter:forKey:]
+-[Uploader handleNetworkResponse:withError:]
+-[Uploader report]
+-[Uploader uploadData:name:]
+-[Uploader logUploadWithID:]
+-[Uploader parameters]
+-[Uploader dealloc]
+_ZN12_GLOBAL__N_110readStringEi
+_unnamed_cfstring_8
+OBJC_METH_VAR_NAME_17
+OBJC_SELECTOR_REFERENCES_18
+OBJC_METH_VAR_NAME_19
+OBJC_SELECTOR_REFERENCES_20
+OBJC_CLASSLIST_REFERENCES_$_23
+OBJC_METH_VAR_NAME_24
+OBJC_SELECTOR_REFERENCES_25
+OBJC_IVAR_$_Uploader.parameters_
+OBJC_METH_VAR_NAME_28
+OBJC_SELECTOR_REFERENCES_29
+OBJC_METH_VAR_NAME_38
+OBJC_SELECTOR_REFERENCES_39
+OBJC_CLASSLIST_REFERENCES_$_40
+OBJC_METH_VAR_NAME_47
+OBJC_SELECTOR_REFERENCES_48
+.str53
+_unnamed_cfstring_54
+OBJC_METH_VAR_NAME_55
+OBJC_SELECTOR_REFERENCES_56
+OBJC_CLASSLIST_REFERENCES_$_57
+OBJC_METH_VAR_NAME_58
+OBJC_SELECTOR_REFERENCES_59
+OBJC_METH_VAR_NAME_60
+OBJC_SELECTOR_REFERENCES_61
+_unnamed_cfstring_63
+OBJC_METH_VAR_NAME_64
+OBJC_SELECTOR_REFERENCES_65
+OBJC_METH_VAR_NAME_66
+OBJC_SELECTOR_REFERENCES_67
+.str68
+_unnamed_cfstring_69
+.str78
+.str79
+OBJC_CLASSLIST_REFERENCES_$_80
+OBJC_IVAR_$_Uploader.minidumpContents_
+OBJC_IVAR_$_Uploader.serverDictionary_
+OBJC_IVAR_$_Uploader.socorroDictionary_
+OBJC_IVAR_$_Uploader.googleDictionary_
+OBJC_IVAR_$_Uploader.extraServerVars_
+.str85
+_unnamed_cfstring_86
+.str87
+_unnamed_cfstring_88
+.str89
+_unnamed_cfstring_90
+.str91
+_unnamed_cfstring_92
+.str93
+_unnamed_cfstring_94
+.str95
+_unnamed_cfstring_96
+.str97
+_unnamed_cfstring_98
+.str99
+_unnamed_cfstring_100
+.str101
+_unnamed_cfstring_102
+.str103
+_unnamed_cfstring_104
+.str105
+_unnamed_cfstring_106
+.str107
+_unnamed_cfstring_108
+.str109
+_unnamed_cfstring_110
+_unnamed_cfstring_116
+_unnamed_cfstring_118
+.str119
+_unnamed_cfstring_120
+OBJC_SELECTOR_REFERENCES_124
+OBJC_SELECTOR_REFERENCES_126
+.str127
+OBJC_SELECTOR_REFERENCES_130
+OBJC_METH_VAR_NAME_131
+OBJC_SELECTOR_REFERENCES_132
+OBJC_CLASSLIST_REFERENCES_$_133
+OBJC_METH_VAR_NAME_134
+OBJC_SELECTOR_REFERENCES_135
+OBJC_SELECTOR_REFERENCES_137
+OBJC_METH_VAR_NAME_138
+OBJC_SELECTOR_REFERENCES_139
+_unnamed_cfstring_141
+_unnamed_cfstring_143
+OBJC_CLASSLIST_REFERENCES_$_144
+OBJC_SELECTOR_REFERENCES_146
+__func__.-[Uploader handleNetworkResponse:withError:]
+.str147
+_unnamed_cfstring_148
+OBJC_METH_VAR_NAME_149
+OBJC_SELECTOR_REFERENCES_150
+OBJC_METH_VAR_NAME_151
+OBJC_SELECTOR_REFERENCES_152
+OBJC_CLASSLIST_REFERENCES_$_153
+_unnamed_cfstring_155
+OBJC_METH_VAR_NAME_156
+OBJC_SELECTOR_REFERENCES_157
+OBJC_CLASSLIST_REFERENCES_$_158
+OBJC_METH_VAR_NAME_159
+OBJC_SELECTOR_REFERENCES_160
+OBJC_METH_VAR_NAME_161
+OBJC_SELECTOR_REFERENCES_162
+OBJC_METH_VAR_NAME_163
+OBJC_SELECTOR_REFERENCES_164
+OBJC_METH_VAR_NAME_165
+OBJC_SELECTOR_REFERENCES_166
+.str167
+_unnamed_cfstring_168
+OBJC_METH_VAR_NAME_169
+OBJC_SELECTOR_REFERENCES_170
+OBJC_IVAR_$_Uploader.logFileData_
+.str171
+_unnamed_cfstring_172
+OBJC_METH_VAR_NAME_173
+OBJC_SELECTOR_REFERENCES_174
+OBJC_METH_VAR_NAME_175
+OBJC_SELECTOR_REFERENCES_176
+OBJC_METH_VAR_NAME_177
+OBJC_SELECTOR_REFERENCES_178
+.str179
+OBJC_METH_VAR_NAME_180
+OBJC_SELECTOR_REFERENCES_181
+.str182
+_unnamed_cfstring_183
+.str184
+_unnamed_cfstring_185
+.str186
+.str187
+_unnamed_cfstring_188
+OBJC_METH_VAR_NAME_189
+OBJC_SELECTOR_REFERENCES_190
+OBJC_CLASSLIST_REFERENCES_$_191
+OBJC_METH_VAR_NAME_192
+OBJC_SELECTOR_REFERENCES_193
+OBJC_METH_VAR_NAME_194
+OBJC_SELECTOR_REFERENCES_195
+OBJC_CLASSLIST_REFERENCES_$_196
+OBJC_METH_VAR_NAME_197
+OBJC_SELECTOR_REFERENCES_198
+OBJC_METH_VAR_NAME_199
+OBJC_SELECTOR_REFERENCES_200
+OBJC_METH_VAR_NAME_201
+OBJC_SELECTOR_REFERENCES_202
+OBJC_METH_VAR_NAME_203
+OBJC_SELECTOR_REFERENCES_204
+OBJC_METH_VAR_NAME_205
+OBJC_SELECTOR_REFERENCES_206
+OBJC_METH_VAR_NAME_207
+OBJC_SELECTOR_REFERENCES_208
+OBJC_METH_VAR_NAME_209
+l_OBJC_$_CLASS_METHODS_Uploader
+l_OBJC_METACLASS_RO_$_Uploader
+OBJC_METH_VAR_NAME_210
+OBJC_METH_VAR_TYPE_211
+OBJC_METH_VAR_TYPE_212
+OBJC_METH_VAR_TYPE_213
+OBJC_METH_VAR_TYPE_214
+OBJC_METH_VAR_TYPE_215
+OBJC_METH_VAR_TYPE_216
+OBJC_METH_VAR_TYPE_217
+OBJC_METH_VAR_NAME_218
+OBJC_METH_VAR_TYPE_219
+OBJC_METH_VAR_NAME_220
+l_OBJC_$_INSTANCE_METHODS_Uploader
+OBJC_METH_VAR_NAME_221
+OBJC_METH_VAR_TYPE_222
+OBJC_METH_VAR_NAME_223
+OBJC_METH_VAR_TYPE_224
+OBJC_METH_VAR_NAME_225
+OBJC_METH_VAR_NAME_226
+OBJC_METH_VAR_NAME_227
+OBJC_METH_VAR_NAME_228
+OBJC_METH_VAR_NAME_229
+l_OBJC_$_INSTANCE_VARIABLES_Uploader
+l_OBJC_CLASS_RO_$_Uploader
+OBJC_METH_VAR_NAME_230
+OBJC_SELECTOR_REFERENCES_231
+OBJC_CLASSLIST_REFERENCES_$_232
+OBJC_METH_VAR_NAME_233
+OBJC_SELECTOR_REFERENCES_234
+OBJC_METH_VAR_NAME_235
+OBJC_SELECTOR_REFERENCES_236
+OBJC_METH_VAR_NAME_237
+OBJC_SELECTOR_REFERENCES_238
+OBJC_CLASSLIST_REFERENCES_$_239
+OBJC_METH_VAR_NAME_240
+OBJC_SELECTOR_REFERENCES_241
+OBJC_METH_VAR_NAME_242
+OBJC_SELECTOR_REFERENCES_243
+readData
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/mac/sender/uploader.mm
+readString
+readConfigurationData
+-[Uploader dealloc]
+-[Uploader parameters]
+-[Uploader logUploadWithID:]
+-[Uploader uploadData:name:]
+-[Uploader report]
+-[Uploader handleNetworkResponse:withError:]
+-[Uploader addServerParameter:forKey:]
+-[Uploader populateServerDictionary:]
+-[Uploader urlParameterDictionary]
+-[Uploader dictionaryForServerType:]
+-[Uploader createServerParameterDictionaries]
+-[Uploader readMinidumpData]
+-[Uploader readLogFileData]
+-[Uploader clientID]
+-[Uploader translateConfigurationData:]
++[Uploader readConfigurationDataFromFile:]
+-[Uploader initWithConfig:]
+-[Uploader initWithConfigFile:]
+_ZN15google_breakpad10TypedMDRVAI8MDStringE20CopyIndexAfterObjectEjPKvm
+_ZN15google_breakpad10TypedMDRVAI8MDStringE22AllocateObjectAndArrayEmm
+__func__._ZN15google_breakpad18MinidumpFileWriter4OpenEPKc
+__func__._ZN15google_breakpad18MinidumpFileWriter7SetFileEi
+__func__._ZN15google_breakpad18MinidumpFileWriter11WriteMemoryEPKvmP18MDMemoryDescriptor
+__func__._ZN15google_breakpad18MinidumpFileWriter8AllocateEm
+__func__._ZN15google_breakpad18MinidumpFileWriter4CopyEjPKvl
+__func__._ZN15google_breakpad10TypedMDRVAI8MDStringE20CopyIndexAfterObjectEjPKvm
+__func__._ZN15google_breakpad18MinidumpFileWriter15WriteStringCoreIwEEbPKT_jP20MDLocationDescriptor
+__func__._ZN15google_breakpad10TypedMDRVAI8MDStringE22AllocateObjectAndArrayEmm
+WriteStringCore<char>
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/client/minidump_file_writer.cc
+WriteStringCore<wchar_t>
+WriteMemory
+WriteString
+CopyStringToMDString
+Close
+SetFile
+Open
+~MinidumpFileWriter
+MinidumpFileWriter
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/simple_string_dictionary.cc
+isLegalUTF8
+firstByteMark
+trailingBytesForUTF8
+offsetsFromUTF8
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/convert_UTF.c
+ConvertUTF8toUTF32
+ConvertUTF32toUTF8
+ConvertUTF8toUTF16
+isLegalUTF8Sequence
+ConvertUTF16toUTF8
+ConvertUTF16toUTF32
+ConvertUTF32toUTF16
++[GTMLogger sharedLogger]
++[GTMLogger setSharedLogger:]
++[GTMLogger standardLogger]
++[GTMLogger standardLoggerWithStderr]
++[GTMLogger standardLoggerWithStdoutAndStderr]
++[GTMLogger standardLoggerWithPath:]
++[GTMLogger loggerWithWriter:formatter:filter:]
++[GTMLogger logger]
+-[GTMLogger init]
+-[GTMLogger initWithWriter:formatter:filter:]
+-[GTMLogger dealloc]
+-[GTMLogger writer]
+-[GTMLogger setWriter:]
+-[GTMLogger formatter]
+-[GTMLogger setFormatter:]
+-[GTMLogger filter]
+-[GTMLogger setFilter:]
+-[GTMLogger logDebug:]
+-[GTMLogger logInfo:]
+-[GTMLogger logError:]
+-[GTMLogger logAssert:]
+-[GTMLogger(GTMLoggerMacroHelpers) logFuncDebug:msg:]
+-[GTMLogger(GTMLoggerMacroHelpers) logFuncInfo:msg:]
+-[GTMLogger(GTMLoggerMacroHelpers) logFuncError:msg:]
+-[GTMLogger(GTMLoggerMacroHelpers) logFuncAssert:msg:]
+-[GTMLogger(PrivateMethods) logInternalFunc:format:valist:level:]
++[NSFileHandle(GTMFileHandleLogWriter) fileHandleForLoggingAtPath:mode:]
+-[NSFileHandle(GTMFileHandleLogWriter) logMessage:level:]
+-[NSArray(GTMArrayCompositeLogWriter) logMessage:level:]
+-[GTMLogger(GTMLoggerLogWriter) logMessage:level:]
+-[GTMLogBasicFormatter prettyNameForFunc:]
+-[GTMLogBasicFormatter stringForFunc:withFormat:valist:level:]
+-[GTMLogStandardFormatter init]
+-[GTMLogStandardFormatter dealloc]
+-[GTMLogStandardFormatter stringForFunc:withFormat:valist:level:]
+-[GTMLogLevelFilter filterAllowsMessage:level:]
+-[GTMLogNoFilter filterAllowsMessage:level:]
+-[GTMLogAllowedLevelFilter initWithAllowedLevels:]
+-[GTMLogAllowedLevelFilter init]
+-[GTMLogAllowedLevelFilter dealloc]
+-[GTMLogAllowedLevelFilter filterAllowsMessage:level:]
+-[GTMLogMininumLevelFilter initWithMinimumLevel:]
+-[GTMLogMaximumLevelFilter initWithMaximumLevel:]
+gSharedLogger
+OBJC_CLASSLIST_REFERENCES_$_7
+OBJC_METH_VAR_NAME_8
+OBJC_SELECTOR_REFERENCES_9
+OBJC_METH_VAR_NAME_10
+OBJC_SELECTOR_REFERENCES_11
+OBJC_CLASSLIST_REFERENCES_$_12
+OBJC_CLASSLIST_REFERENCES_$_19
+OBJC_METH_VAR_NAME_23
+OBJC_SELECTOR_REFERENCES_24
+OBJC_CLASSLIST_REFERENCES_$_25
+OBJC_CLASSLIST_REFERENCES_$_28
+OBJC_METH_VAR_NAME_29
+OBJC_SELECTOR_REFERENCES_30
+OBJC_CLASSLIST_REFERENCES_$_31
+OBJC_IVAR_$_GTMLogger.formatter_
+OBJC_IVAR_$_GTMLogger.filter_
+OBJC_IVAR_$_GTMLogger.writer_
+OBJC_METH_VAR_NAME_40
+OBJC_SELECTOR_REFERENCES_41
+OBJC_METH_VAR_NAME_42
+OBJC_SELECTOR_REFERENCES_43
+OBJC_METH_VAR_NAME_44
+OBJC_METH_VAR_TYPE_46
+OBJC_METH_VAR_NAME_48
+OBJC_METH_VAR_TYPE_50
+OBJC_METH_VAR_TYPE_51
+OBJC_METH_VAR_NAME_52
+l_OBJC_$_CLASS_METHODS_GTMLogger
+l_OBJC_METACLASS_RO_$_GTMLogger
+OBJC_METH_VAR_TYPE_53
+OBJC_METH_VAR_NAME_54
+OBJC_METH_VAR_NAME_57
+OBJC_METH_VAR_NAME_59
+l_OBJC_$_INSTANCE_METHODS_GTMLogger
+OBJC_METH_VAR_NAME_61
+OBJC_METH_VAR_TYPE_62
+OBJC_METH_VAR_TYPE_64
+OBJC_METH_VAR_TYPE_66
+l_OBJC_$_INSTANCE_VARIABLES_GTMLogger
+l_OBJC_CLASS_RO_$_GTMLogger
+OBJC_CLASS_NAME_67
+OBJC_METH_VAR_TYPE_69
+OBJC_METH_VAR_NAME_71
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GTMLogger_$_GTMLoggerMacroHelpers
+l_OBJC_$_CATEGORY_GTMLogger_$_GTMLoggerMacroHelpers
+OBJC_CLASSLIST_REFERENCES_$_73
+OBJC_METH_VAR_NAME_74
+OBJC_SELECTOR_REFERENCES_75
+OBJC_METH_VAR_NAME_80
+OBJC_SELECTOR_REFERENCES_81
+OBJC_CLASS_NAME_82
+OBJC_METH_VAR_TYPE_83
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GTMLogger_$_PrivateMethods
+l_OBJC_$_CATEGORY_GTMLogger_$_PrivateMethods
+OBJC_METH_VAR_NAME_84
+OBJC_SELECTOR_REFERENCES_85
+OBJC_METH_VAR_NAME_86
+OBJC_SELECTOR_REFERENCES_87
+OBJC_CLASS_NAME_94
+OBJC_METH_VAR_TYPE_95
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_NSFileHandle_$_GTMFileHandleLogWriter
+OBJC_METH_VAR_TYPE_96
+l_OBJC_$_CATEGORY_CLASS_METHODS_NSFileHandle_$_GTMFileHandleLogWriter
+OBJC_METH_VAR_TYPE_97
+OBJC_CLASS_NAME_98
+OBJC_METH_VAR_NAME_99
+OBJC_METH_VAR_TYPE_100
+OBJC_METH_VAR_TYPE_102
+OBJC_METH_VAR_NAME_104
+OBJC_METH_VAR_TYPE_105
+OBJC_METH_VAR_NAME_106
+OBJC_METH_VAR_TYPE_107
+OBJC_METH_VAR_NAME_108
+OBJC_METH_VAR_TYPE_109
+OBJC_METH_VAR_NAME_110
+OBJC_METH_VAR_TYPE_111
+OBJC_METH_VAR_NAME_112
+OBJC_METH_VAR_TYPE_113
+OBJC_METH_VAR_NAME_114
+OBJC_METH_VAR_TYPE_119
+OBJC_METH_VAR_TYPE_123
+OBJC_METH_VAR_TYPE_127
+OBJC_METH_VAR_NAME_128
+OBJC_CLASS_NAME_129
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_NSObject
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_OPT_NSObject
+OBJC_PROP_NAME_ATTR_
+OBJC_PROP_NAME_ATTR_130
+OBJC_PROP_NAME_ATTR_131
+OBJC_PROP_NAME_ATTR_132
+OBJC_PROP_NAME_ATTR_133
+OBJC_PROP_NAME_ATTR_134
+OBJC_PROP_NAME_ATTR_135
+l_OBJC_$_PROP_LIST_NSObject
+l_OBJC_$_PROTOCOL_METHOD_TYPES_NSObject
+l_OBJC_PROTOCOL_$_NSObject
+l_OBJC_LABEL_PROTOCOL_$_NSObject
+l_OBJC_$_PROTOCOL_REFS_GTMLogWriter
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_GTMLogWriter
+l_OBJC_$_PROTOCOL_METHOD_TYPES_GTMLogWriter
+l_OBJC_PROTOCOL_$_GTMLogWriter
+l_OBJC_LABEL_PROTOCOL_$_GTMLogWriter
+l_OBJC_CATEGORY_PROTOCOLS_$_NSFileHandle_$_GTMFileHandleLogWriter
+l_OBJC_$_PROP_LIST_NSFileHandle_$_GTMFileHandleLogWriter
+l_OBJC_$_CATEGORY_NSFileHandle_$_GTMFileHandleLogWriter
+l_OBJC_PROTOCOL_REFERENCE_$_GTMLogWriter
+OBJC_SELECTOR_REFERENCES_138
+OBJC_CLASS_NAME_139
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_NSArray_$_GTMArrayCompositeLogWriter
+l_OBJC_CATEGORY_PROTOCOLS_$_NSArray_$_GTMArrayCompositeLogWriter
+l_OBJC_$_PROP_LIST_NSArray_$_GTMArrayCompositeLogWriter
+l_OBJC_$_CATEGORY_NSArray_$_GTMArrayCompositeLogWriter
+OBJC_SELECTOR_REFERENCES_142
+OBJC_SELECTOR_REFERENCES_143
+OBJC_SELECTOR_REFERENCES_144
+OBJC_SELECTOR_REFERENCES_145
+OBJC_CLASS_NAME_146
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_GTMLogger_$_GTMLoggerLogWriter
+l_OBJC_CATEGORY_PROTOCOLS_$_GTMLogger_$_GTMLoggerLogWriter
+l_OBJC_$_PROP_LIST_GTMLogger_$_GTMLoggerLogWriter
+l_OBJC_$_CATEGORY_GTMLogger_$_GTMLoggerLogWriter
+OBJC_CLASSLIST_REFERENCES_$_147
+OBJC_SELECTOR_REFERENCES_149
+OBJC_SELECTOR_REFERENCES_151
+_unnamed_cfstring_153
+OBJC_METH_VAR_NAME_154
+OBJC_SELECTOR_REFERENCES_155
+.str156
+_unnamed_cfstring_157
+OBJC_METH_VAR_NAME_158
+OBJC_SELECTOR_REFERENCES_159
+.str160
+_unnamed_cfstring_161
+.str162
+_unnamed_cfstring_163
+OBJC_METH_VAR_NAME_164
+OBJC_SELECTOR_REFERENCES_165
+.str166
+_unnamed_cfstring_167
+OBJC_METH_VAR_NAME_168
+OBJC_SELECTOR_REFERENCES_169
+OBJC_CLASS_NAME_170
+OBJC_METH_VAR_TYPE_171
+OBJC_METH_VAR_TYPE_172
+OBJC_CLASS_NAME_173
+l_OBJC_$_PROTOCOL_REFS_GTMLogFormatter
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_GTMLogFormatter
+l_OBJC_$_PROTOCOL_METHOD_TYPES_GTMLogFormatter
+l_OBJC_PROTOCOL_$_GTMLogFormatter
+l_OBJC_LABEL_PROTOCOL_$_GTMLogFormatter
+l_OBJC_CLASS_PROTOCOLS_$_GTMLogBasicFormatter
+l_OBJC_METACLASS_RO_$_GTMLogBasicFormatter
+OBJC_METH_VAR_NAME_174
+l_OBJC_$_INSTANCE_METHODS_GTMLogBasicFormatter
+l_OBJC_$_PROP_LIST_GTMLogBasicFormatter
+l_OBJC_CLASS_RO_$_GTMLogBasicFormatter
+OBJC_CLASSLIST_SUP_REFS_$_175
+OBJC_CLASSLIST_REFERENCES_$_176
+OBJC_IVAR_$_GTMLogStandardFormatter.dateFormatter_
+_unnamed_cfstring_180
+OBJC_METH_VAR_NAME_181
+OBJC_SELECTOR_REFERENCES_182
+OBJC_CLASSLIST_REFERENCES_$_183
+OBJC_METH_VAR_NAME_184
+OBJC_SELECTOR_REFERENCES_185
+OBJC_METH_VAR_NAME_186
+OBJC_SELECTOR_REFERENCES_187
+OBJC_METH_VAR_NAME_188
+OBJC_SELECTOR_REFERENCES_189
+OBJC_IVAR_$_GTMLogStandardFormatter.pname_
+OBJC_METH_VAR_NAME_190
+OBJC_SELECTOR_REFERENCES_191
+OBJC_IVAR_$_GTMLogStandardFormatter.pid_
+OBJC_CLASSLIST_REFERENCES_$_192
+OBJC_METH_VAR_NAME_193
+OBJC_SELECTOR_REFERENCES_194
+OBJC_METH_VAR_NAME_195
+OBJC_SELECTOR_REFERENCES_196
+.str197
+_unnamed_cfstring_198
+OBJC_SELECTOR_REFERENCES_199
+OBJC_CLASS_NAME_200
+l_OBJC_METACLASS_RO_$_GTMLogStandardFormatter
+l_OBJC_$_INSTANCE_METHODS_GTMLogStandardFormatter
+OBJC_METH_VAR_TYPE_202
+OBJC_METH_VAR_TYPE_204
+OBJC_METH_VAR_TYPE_206
+l_OBJC_$_INSTANCE_VARIABLES_GTMLogStandardFormatter
+l_OBJC_CLASS_RO_$_GTMLogStandardFormatter
+OBJC_CLASS_NAME_207
+OBJC_METH_VAR_TYPE_208
+OBJC_METH_VAR_TYPE_209
+OBJC_CLASS_NAME_210
+l_OBJC_$_PROTOCOL_REFS_GTMLogFilter
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_GTMLogFilter
+l_OBJC_$_PROTOCOL_METHOD_TYPES_GTMLogFilter
+l_OBJC_PROTOCOL_$_GTMLogFilter
+l_OBJC_LABEL_PROTOCOL_$_GTMLogFilter
+l_OBJC_CLASS_PROTOCOLS_$_GTMLogLevelFilter
+l_OBJC_METACLASS_RO_$_GTMLogLevelFilter
+l_OBJC_$_INSTANCE_METHODS_GTMLogLevelFilter
+l_OBJC_$_PROP_LIST_GTMLogLevelFilter
+l_OBJC_CLASS_RO_$_GTMLogLevelFilter
+OBJC_CLASS_NAME_211
+l_OBJC_CLASS_PROTOCOLS_$_GTMLogNoFilter
+l_OBJC_METACLASS_RO_$_GTMLogNoFilter
+l_OBJC_$_INSTANCE_METHODS_GTMLogNoFilter
+l_OBJC_$_PROP_LIST_GTMLogNoFilter
+l_OBJC_CLASS_RO_$_GTMLogNoFilter
+OBJC_CLASSLIST_SUP_REFS_$_212
+OBJC_IVAR_$_GTMLogAllowedLevelFilter.allowedLevels_
+OBJC_METH_VAR_NAME_213
+OBJC_SELECTOR_REFERENCES_214
+OBJC_METH_VAR_NAME_215
+OBJC_SELECTOR_REFERENCES_216
+OBJC_CLASSLIST_REFERENCES_$_217
+OBJC_SELECTOR_REFERENCES_219
+OBJC_SELECTOR_REFERENCES_221
+OBJC_METH_VAR_NAME_222
+OBJC_SELECTOR_REFERENCES_223
+OBJC_CLASS_NAME_224
+l_OBJC_CLASS_PROTOCOLS_$_GTMLogAllowedLevelFilter
+l_OBJC_METACLASS_RO_$_GTMLogAllowedLevelFilter
+l_OBJC_$_INSTANCE_METHODS_GTMLogAllowedLevelFilter
+OBJC_METH_VAR_TYPE_226
+l_OBJC_$_INSTANCE_VARIABLES_GTMLogAllowedLevelFilter
+l_OBJC_$_PROP_LIST_GTMLogAllowedLevelFilter
+l_OBJC_CLASS_RO_$_GTMLogAllowedLevelFilter
+OBJC_CLASSLIST_SUP_REFS_$_227
+OBJC_CLASS_NAME_228
+l_OBJC_METACLASS_RO_$_GTMLogMininumLevelFilter
+OBJC_METH_VAR_TYPE_229
+l_OBJC_$_INSTANCE_METHODS_GTMLogMininumLevelFilter
+l_OBJC_CLASS_RO_$_GTMLogMininumLevelFilter
+OBJC_CLASSLIST_SUP_REFS_$_230
+OBJC_CLASS_NAME_231
+l_OBJC_METACLASS_RO_$_GTMLogMaximumLevelFilter
+l_OBJC_$_INSTANCE_METHODS_GTMLogMaximumLevelFilter
+l_OBJC_CLASS_RO_$_GTMLogMaximumLevelFilter
+.str232
+_unnamed_cfstring_233
+OBJC_METH_VAR_NAME_234
+OBJC_SELECTOR_REFERENCES_235
+OBJC_METH_VAR_NAME_236
+OBJC_SELECTOR_REFERENCES_237
+OBJC_METH_VAR_NAME_238
+OBJC_SELECTOR_REFERENCES_239
+.str240
+_unnamed_cfstring_241
+.str242
+_unnamed_cfstring_243
+OBJC_METH_VAR_NAME_244
+OBJC_SELECTOR_REFERENCES_245
+OBJC_CLASSLIST_REFERENCES_$_246
+OBJC_METH_VAR_NAME_247
+OBJC_SELECTOR_REFERENCES_248
+OBJC_METH_VAR_NAME_249
+OBJC_SELECTOR_REFERENCES_250
+OBJC_LABEL_CATEGORY_$
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/28UZ45W83138P/ObjectiveC-2CD0WTQVXITO7.pcm
+ObjectiveC
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/objc
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/28UZ45W83138P/Darwin-MI6WZSG1PNOM.pcm
+Darwin
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include
+/Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache/28UZ45W83138P/Foundation-A3SOD99KJ0S9.pcm
+Foundation
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/Foundation.framework
+NSMakeRange
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSRange.h
+IsVerboseLoggingEnabled
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/GTMLogger.m
+-[GTMLogMaximumLevelFilter initWithMaximumLevel:]
+-[GTMLogMininumLevelFilter initWithMinimumLevel:]
+-[GTMLogAllowedLevelFilter filterAllowsMessage:level:]
+-[GTMLogAllowedLevelFilter dealloc]
+-[GTMLogAllowedLevelFilter init]
+-[GTMLogAllowedLevelFilter initWithAllowedLevels:]
+-[GTMLogNoFilter filterAllowsMessage:level:]
+-[GTMLogLevelFilter filterAllowsMessage:level:]
+-[GTMLogStandardFormatter stringForFunc:withFormat:valist:level:]
+-[GTMLogStandardFormatter dealloc]
+-[GTMLogStandardFormatter init]
+-[GTMLogBasicFormatter stringForFunc:withFormat:valist:level:]
+-[GTMLogBasicFormatter prettyNameForFunc:]
+-[GTMLogger(GTMLoggerLogWriter) logMessage:level:]
+-[NSArray(GTMArrayCompositeLogWriter) logMessage:level:]
+-[NSFileHandle(GTMFileHandleLogWriter) logMessage:level:]
++[NSFileHandle(GTMFileHandleLogWriter) fileHandleForLoggingAtPath:mode:]
+-[GTMLogger(PrivateMethods) logInternalFunc:format:valist:level:]
+-[GTMLogger(GTMLoggerMacroHelpers) logFuncAssert:msg:]
+-[GTMLogger(GTMLoggerMacroHelpers) logFuncError:msg:]
+-[GTMLogger(GTMLoggerMacroHelpers) logFuncInfo:msg:]
+-[GTMLogger(GTMLoggerMacroHelpers) logFuncDebug:msg:]
+-[GTMLogger logAssert:]
+-[GTMLogger logError:]
+-[GTMLogger logInfo:]
+-[GTMLogger logDebug:]
+-[GTMLogger setFilter:]
+-[GTMLogger filter]
+-[GTMLogger setFormatter:]
+-[GTMLogger formatter]
+-[GTMLogger setWriter:]
+-[GTMLogger writer]
+-[GTMLogger dealloc]
+-[GTMLogger initWithWriter:formatter:filter:]
+-[GTMLogger init]
++[GTMLogger logger]
++[GTMLogger loggerWithWriter:formatter:filter:]
++[GTMLogger standardLoggerWithPath:]
++[GTMLogger standardLoggerWithStdoutAndStderr]
++[GTMLogger standardLoggerWithStderr]
++[GTMLogger standardLogger]
++[GTMLogger setSharedLogger:]
++[GTMLogger sharedLogger]
+-[HTTPMultipartUpload multipartBoundary]
+-[HTTPMultipartUpload formDataForKey:value:]
+-[HTTPMultipartUpload formDataForFileContents:name:]
+-[HTTPMultipartUpload formDataForFile:name:]
+-[HTTPMultipartUpload initWithURL:]
+-[HTTPMultipartUpload dealloc]
+-[HTTPMultipartUpload URL]
+-[HTTPMultipartUpload setParameters:]
+-[HTTPMultipartUpload parameters]
+-[HTTPMultipartUpload addFileAtPath:name:]
+-[HTTPMultipartUpload addFileContents:name:]
+-[HTTPMultipartUpload files]
+-[HTTPMultipartUpload send:]
+-[HTTPMultipartUpload response]
+_unnamed_cfstring_11
+OBJC_METH_VAR_NAME_12
+OBJC_SELECTOR_REFERENCES_13
+OBJC_CLASSLIST_REFERENCES_$_14
+OBJC_METH_VAR_NAME_25
+OBJC_SELECTOR_REFERENCES_26
+OBJC_CLASSLIST_REFERENCES_$_27
+OBJC_CLASSLIST_REFERENCES_$_36
+OBJC_METH_VAR_NAME_37
+OBJC_SELECTOR_REFERENCES_38
+OBJC_SELECTOR_REFERENCES_58
+OBJC_SELECTOR_REFERENCES_60
+.str65
+_unnamed_cfstring_66
+OBJC_METH_VAR_NAME_69
+OBJC_SELECTOR_REFERENCES_70
+OBJC_SELECTOR_REFERENCES_72
+OBJC_METH_VAR_NAME_73
+OBJC_SELECTOR_REFERENCES_74
+OBJC_METH_VAR_NAME_75
+OBJC_SELECTOR_REFERENCES_76
+OBJC_CLASSLIST_REFERENCES_$_77
+l_OBJC_METACLASS_RO_$_HTTPMultipartUpload
+OBJC_METH_VAR_TYPE_80
+OBJC_METH_VAR_TYPE_82
+OBJC_METH_VAR_TYPE_85
+OBJC_METH_VAR_NAME_87
+OBJC_METH_VAR_TYPE_88
+OBJC_METH_VAR_TYPE_92
+OBJC_METH_VAR_NAME_93
+l_OBJC_$_INSTANCE_METHODS_HTTPMultipartUpload
+OBJC_METH_VAR_TYPE_99
+OBJC_METH_VAR_TYPE_101
+OBJC_METH_VAR_TYPE_103
+l_OBJC_$_INSTANCE_VARIABLES_HTTPMultipartUpload
+l_OBJC_CLASS_RO_$_HTTPMultipartUpload
+-[HTTPMultipartUpload response]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/HTTPMultipartUpload.m
+-[HTTPMultipartUpload send:]
+-[HTTPMultipartUpload files]
+-[HTTPMultipartUpload addFileContents:name:]
+-[HTTPMultipartUpload addFileAtPath:name:]
+-[HTTPMultipartUpload parameters]
+-[HTTPMultipartUpload setParameters:]
+-[HTTPMultipartUpload URL]
+-[HTTPMultipartUpload dealloc]
+-[HTTPMultipartUpload initWithURL:]
+-[HTTPMultipartUpload formDataForFile:name:]
+-[HTTPMultipartUpload formDataForFileContents:name:]
+-[HTTPMultipartUpload formDataForKey:value:]
+-[HTTPMultipartUpload multipartBoundary]
+ConvertIdentifierToString
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/file_id.cc
+MachoIdentifier
+FileIdentifier
+FileID
+NXHostByteOrder
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/usr/include/architecture/byte_order.h
+IDWalkerCB
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/macho_id.cc
+UUIDWalkerCB
+WalkerCB
+WalkHeader
+MD5
+Adler32
+IDCommand
+UUIDCommand
+Update
+UpdateMD5
+UpdateCRC
+~MachoID
+MachoID
+ByteSwap
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/byteswap.h
+_OSSwapInt64
+breakpad_swap_section_64
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/macho_utilities.cc
+breakpad_swap_mach_header_64
+breakpad_swap_segment_command_64
+breakpad_swap_uuid_command
+__func__._ZN16MacFileUtilities11MachoWalker10WalkHeaderEii
+WalkHeaderCore
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/macho_walker.cc
+WalkHeader64AtOffset
+WalkHeaderAtOffset
+FindHeader
+CurrentHeader
+ReadBytes
+~MachoWalker
+MachoWalker
+_ZNK15google_breakpad12scoped_arrayIhEixEi
+__func__._ZNK15google_breakpad12scoped_arrayIhEixEi
+eq
+__find_first_of_ce<const char *, const char *, bool (*)(char, char)>
+__str_find_first_of<char, unsigned long, std::__1::char_traits<char>, 4294967295>
+find_first_of
+substr
+to_int_type
+find
+__str_find_first_not_of<char, unsigned long, std::__1::char_traits<char>, 4294967295>
+find_first_not_of
+CFRangeMake
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h
+IntegerValueAtIndex
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/mac/string_utilities.cc
+ConvertToString
+_ZN15google_breakpadL12MD5TransformEPjPKj
+MD5Transform
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/md5.cc
+MD5Final
+MD5Update
+MD5Init
+operator==<const unsigned short *, const unsigned short *>
+operator!=<const unsigned short *>
+construct<unsigned short>
+__construct<unsigned short>
+__wrap_iter<unsigned short *>
+move<unsigned short *&>
+swap<unsigned short *>
+__construct_forward<unsigned short>
+__construct_backward<unsigned short>
+forward<std::__1::allocator<unsigned short> &>
+forward<unsigned short *>
+__convert_to_integral
+__fill_n<unsigned short *, unsigned long, unsigned short>
+fill_n<unsigned short *, unsigned long, unsigned short>
+addressof<const unsigned short>
+__unwrap_iter<unsigned short *>
+__move_backward<unsigned short, unsigned short>
+move_backward<unsigned short *, unsigned short *>
+move<unsigned short &>
+forward<unsigned short>
+construct<unsigned short, unsigned short>
+__construct<unsigned short, unsigned short>
+__move_range
+forward<const unsigned short &>
+construct<unsigned short, const unsigned short &>
+__construct<unsigned short, const unsigned short &>
+operator-<const unsigned short *, unsigned short *>
+insert
+__to_raw_pointer<unsigned short>
+__destroy<unsigned short>
+destroy<unsigned short>
+Swap
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/google-breakpad-ios/src/common/string_conversion.cc
+UTF16ToUTF8
+UTF32ToUTF16Char
+UTF32ToUTF16
+UTF8ToUTF16Char
+UTF8ToUTF16
+/Users/sleroux/Library/Developer/Xcode/DerivedData/Breakpad-fjwwuxszxfxfkdcgpmkrnxwsjjdd/Build/Intermediates/Breakpad.build/Release-iphoneos/Breakpad.build/DerivedSources/Breakpad_vers.c
+_ZL15__ARCLite__loadv
+_ZL30add_image_hook_autoreleasepoolPK11mach_headerl
+_ZL34__arclite_objc_autoreleasePoolPushv
+_ZL33__arclite_objc_autoreleasePoolPopPv
+_ZL19patch_lazy_pointersPK11mach_headerP7patch_tm
+_ZL42__arclite_NSArray_objectAtIndexedSubscriptP7NSArrayP13objc_selectorj
+_ZL53__arclite_NSMutableArray_setObject_atIndexedSubscriptP14NSMutableArrayP13objc_selectorP11objc_objectj
+_ZL46__arclite_NSDictionary_objectForKeyedSubscriptP12NSDictionaryP13objc_selectorP11objc_object
+_ZL47__arclite_NSOrderedSet_objectAtIndexedSubscriptP12NSOrderedSetP13objc_selectorj
+_ZL58__arclite_NSMutableOrderedSet_setObject_atIndexedSubscriptP19NSMutableOrderedSetP13objc_selectorP11objc_objectj
+_ZL58__arclite_NSMutableDictionary__setObject_forKeyedSubscriptP19NSMutableDictionaryP13objc_selectorP11objc_objectS4_
+_ZL18add_image_hook_ARCPK11mach_headerl
+_ZL36__arclite_object_setInstanceVariableP11objc_objectPKcPv
+_ZL24__arclite_object_setIvarP11objc_objectP9objc_ivarS0_
+_ZL21__arclite_object_copyP11objc_objectm
+_ZL21__arclite_objc_retainP11objc_object
+_ZL26__arclite_objc_retainBlockP11objc_object
+_ZL22__arclite_objc_releaseP11objc_object
+_ZL26__arclite_objc_autoreleaseP11objc_object
+_ZL32__arclite_objc_retainAutoreleaseP11objc_object
+_ZL37__arclite_objc_autoreleaseReturnValueP11objc_object
+_ZL43__arclite_objc_retainAutoreleaseReturnValueP11objc_object
+_ZL44__arclite_objc_retainAutoreleasedReturnValueP11objc_object
+_ZL26__arclite_objc_storeStrongPP11objc_objectS0_
+_ZL22add_image_hook_swiftV1PK11mach_headerl
+_ZL42__arclite_NSUndoManagerProxy_isKindOfClassP11objc_objectP13objc_selectorP10objc_class
+_ZL13replaceMethodP10objc_classP13objc_selectorPFP11objc_objectS4_S2_zEPS6_
+_ZL30__arclite_NSManagedObject_initP11objc_objectP13objc_selector
+_ZL41__arclite_NSManagedObject_allocWithEntityP11objc_objectP13objc_selectorS0_
+_ZL36__arclite_NSManagedObject_allocBatchP11objc_objectP13objc_selectorPS0_S0_j
+_ZL37__arclite_NSKKMS_fastIndexForKnownKeyP11objc_objectP13objc_selectorS0_
+_ZL28__arclite_NSKKMS_indexForKeyP11objc_objectP13objc_selectorS0_
+_ZL29__arclite_NSKKsD_objectForKeyP11objc_objectP13objc_selectorS0_
+_ZL35__arclite_NSKKsD_removeObjectForKeyP11objc_objectP13objc_selectorS0_
+_ZL33__arclite_NSKKsD_setObject_forKeyP11objc_objectP13objc_selectorS0_S0_
+_ZL41__arclite_NSKKsD_addEntriesFromDictionaryP11objc_objectP13objc_selectorP12NSDictionary
+_ZL28__arclite_objc_readClassPairP10objc_classPK15objc_image_info
+_ZL32__arclite_objc_allocateClassPairP10objc_classPKcm
+_ZL32__arclite_object_getIndexedIvarsP11objc_object
+_ZL23__arclite_objc_getClassPKc
+_ZL27__arclite_objc_getMetaClassPKc
+_ZL31__arclite_objc_getRequiredClassPKc
+_ZL26__arclite_objc_lookUpClassPKc
+_ZL26__arclite_objc_getProtocolPKc
+_ZL23__arclite_class_getNameP10objc_class
+_ZL26__arclite_protocol_getNameP8Protocol
+_ZL37__arclite_objc_copyClassNamesForImagePKcPj
+_ZL17transcribeMethodsP10objc_classP15glue_class_ro_t
+_ZL19transcribeProtocolsP10objc_classP15glue_class_ro_t
+_ZL20transcribePropertiesP10objc_classP15glue_class_ro_t
+_ZL14initialize_impP11objc_objectP13objc_selector
+_ZL18allocateMaybeSwiftP18glue_swift_class_tm
+_ZL22copySwiftV1MangledNamePKcb
+_ZL13demangledNamePKcb
+_ZL16scanMangledFieldRPKcS0_S1_Ri
+_ZL30arclite_uninitialized_functionv
+_ZL12cxxConstructP11objc_object
+_ZL20fixStringForCoreDataP11objc_object
+OBJC_METACLASS_$___ARCLite__
+_ZL24OBJC_CLASS_$___ARCLite__
+_ZL31OBJC_METACLASS_RO_$___ARCLite__
+_non_lazy_classes
+_ZL27OBJC_CLASS_RO_$___ARCLite__
+_ZL11_class_name
+_ZL32OBJC_$_CLASS_METHODS___ARCLite__
+_ZL17_load_method_name
+_ZL17_load_method_type
+_ZL23NSAutoreleasePool_class
+_ZZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+_ZGVZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+OBJC_METH_VAR_NAME_14
+OBJC_SELECTOR_REFERENCES_15
+OBJC_METH_VAR_TYPE_20
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS___ARCLiteIndexedSubscripting__
+l_OBJC_$_PROTOCOL_METHOD_TYPES___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteIndexedSubscripting__
+OBJC_METH_VAR_NAME_27
+OBJC_SELECTOR_REFERENCES_28
+OBJC_METH_VAR_TYPE_29
+OBJC_METH_VAR_TYPE_31
+OBJC_CLASS_NAME_32
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS___ARCLiteKeyedSubscripting__
+l_OBJC_$_PROTOCOL_METHOD_TYPES___ARCLiteKeyedSubscripting__
+l_OBJC_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteKeyedSubscripting__
+OBJC_SELECTOR_REFERENCES_36
+_ZZL18add_image_hook_ARCPK11mach_headerlE7patches
+_ZGVZL18add_image_hook_ARCPK11mach_headerlE7patches
+.str42
+.str43
+.str44
+.str46
+.str48
+.str49
+.str50
+.str52
+_ZL30NSUndoManagerProxy_targetClass
+OBJC_SELECTOR_REFERENCES_62
+_ZL29original_NSManagedObject_init
+_ZL40original_NSManagedObject_allocWithEntity
+_ZL35original_NSManagedObject_allocBatch
+_ZL25NSMutableDictionary_class
+.str71
+_ZL22NSConstantString_class
+.str72
+_ZL14NSString_class
+.str73
+_ZL36original_NSKKMS_fastIndexForKnownKey
+_ZL27original_NSKKMS_indexForKey
+_ZL28original_NSKKsD_objectForKey
+_ZL34original_NSKKsD_removeObjectForKey
+_ZL32original_NSKKsD_setObject_forKey
+_ZL40original_NSKKsD_addEntriesFromDictionary
+_ZZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+_ZGVZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+.str81
+.str82
+_ZL31original_objc_allocateClassPair
+_ZL31original_object_getIndexedIvars
+.str84
+_ZL22original_objc_getClass
+_ZL26original_objc_getMetaClass
+.str86
+_ZL30original_objc_getRequiredClass
+_ZL25original_objc_lookUpClass
+.str88
+_ZL25original_objc_getProtocol
+_ZL22original_class_getName
+.str90
+_ZL25original_protocol_getName
+_ZL36original_objc_copyClassNamesForImage
+.str96
+.str98
+.str100
+.str102
+_ZL12demangleLock
+_ZL9Demangled
+.str104
+OBJC_SELECTOR_REFERENCES_107
+OBJC_SELECTOR_REFERENCES_109
+OBJC_SELECTOR_REFERENCES_111
+OBJC_SELECTOR_REFERENCES_113
+OBJC_SELECTOR_REFERENCES_115
+OBJC_METH_VAR_NAME_116
+OBJC_SELECTOR_REFERENCES_117
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c++ -arch armv7 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -Wno-trigraphs -fno-exceptions -fno-rtti -mpascal-strings -Os -Wno-missing-field-initializers -Wmissing-prototypes -Wno-implicit-atomic-properties -Wno-arc-repeated-use-of-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -D NDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -miphoneos-version-min=4.3 -g -fno-threadsafe-statics -Wno-sign-conversion -fembed-bitcode -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-generated-files.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-own-target-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-all-target-headers.hmap -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-project-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Symbols/BuiltProducts/include -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/DerivedSources/armv7 -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/DerivedSources -F/Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Symbols/BuiltProducts -F/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk/System/Library/PrivateFrameworks -Wall -Wextra -Wno-gcc-compat -fgnu-inline-asm -MMD -MT dependencies -MF /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.d --serialize-diagnostics /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.dia -c /Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm -o /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~172/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.o -mlinker-version=253.9 -march=armv7a
+__arclite_NSKKsD_addEntriesFromDictionary
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65
+__arclite_NSKKsD_setObject_forKey
+__arclite_NSKKsD_removeObjectForKey
+__arclite_NSKKsD_objectForKey
+__arclite_NSKKMS_indexForKey
+fixStringForCoreData
+__arclite_NSKKMS_fastIndexForKnownKey
+__arclite_NSManagedObject_allocBatch
+__arclite_NSManagedObject_allocWithEntity
+cxxConstruct
+__arclite_NSManagedObject_init
+arclite_uninitialized_function
+replaceMethod
+__arclite_NSUndoManagerProxy_isKindOfClass
+patch_t<const char **(const char *, unsigned int *)>
+__arclite_objc_copyClassNamesForImage
+patch_t<const char *(Protocol *)>
+__arclite_protocol_getName
+patch_t<const char *(Class)>
+__isctype
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk/usr/include/ctype.h
+isdigit
+scanMangledField
+copySwiftV1DemangledName
+demangledName
+__arclite_class_getName
+patch_t<Protocol *(const char *)>
+__arclite_objc_getProtocol
+__arclite_objc_lookUpClass
+__arclite_objc_getRequiredClass
+__arclite_objc_getMetaClass
+patch_t<Class (const char *)>
+copySwiftV1MangledName
+__arclite_objc_getClass
+patch_t<void *(id)>
+word_align
+__arclite_object_getIndexedIvars
+patch_t<Class (Class, const char *, unsigned long)>
+allocateMaybeSwift
+isSwift
+metaclass
+__arclite_objc_allocateClassPair
+patch_t<Class (Class, const objc_image_info *)>
+initialize_imp
+property_list_nth
+transcribeProperties
+transcribeProtocols
+method_list_nth
+transcribeMethods
+alignment
+ivar_list_nth
+transcribeIvars
+fastFlags
+ro
+__arclite_objc_readClassPair
+add_image_hook_swiftV1
+install_swiftV1
+patch_t<void (id *, id)>
+__arclite_objc_storeStrong
+__arclite_objc_retainAutoreleasedReturnValue
+__arclite_objc_retainAutoreleaseReturnValue
+__arclite_objc_autoreleaseReturnValue
+__arclite_objc_retainAutorelease
+__arclite_objc_autorelease
+patch_t<void (id)>
+__arclite_objc_release
+__arclite_objc_retainBlock
+patch_t<id (id)>
+__arclite_objc_retain
+patch_t<id (id, unsigned long)>
+fixupCopiedReferences
+classOrSuperClassesUseARR
+__arclite_object_copy
+patch_t<void (id, objc_ivar *, id)>
+isScannedOffset
+alignedInstanceStart
+_class_getInstanceStart
+__arclite_class_usesAutomaticRetainRelease
+_ivar_getClass
+__arclite_object_setIvar
+patch_t<objc_ivar *(id, const char *, void *)>
+__arclite_object_setInstanceVariable
+add_image_hook_ARC
+install_ARC
+objc_collectingEnabled
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.Internal.sdk/usr/include/objc/objc-auto.h
+__arclite_NSMutableDictionary__setObject_forKeyedSubscript
+addOrReplaceMethod
+install_dict_nil_value
+__arclite_NSMutableOrderedSet_setObject_atIndexedSubscript
+__arclite_NSOrderedSet_objectAtIndexedSubscript
+keyedGetter
+__arclite_NSDictionary_objectForKeyedSubscript
+__arclite_NSMutableArray_setObject_atIndexedSubscript
+indexedGetter
+__arclite_NSArray_objectAtIndexedSubscript
+addMethod
+install_subscripting
+patch_lazy_pointers
+patch_t<void (void *)>
+__arclite_objc_autoreleasePoolPop
+patch_t<void *()>
+__arclite_objc_autoreleasePoolPush
+add_image_hook_autoreleasepool
+install_autoreleasepool
+__ARCLite__load

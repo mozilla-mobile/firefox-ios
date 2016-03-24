@@ -1,0 +1,569 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ bir kullanıcı adı ve parola istiyor.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ bir kullanıcı adı ve parola istiyor. Sitenin mesajı: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Hakkında";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Sekme ekle";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Okuma Listesi'ne ekle";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Sahifa \"O‘qish ro‘yxati\"ga qo‘shildi";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adres ve arama";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Uchinchi tomon klaviaturalariga ruxsat berish";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Doimo jo‘natish";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Kimlik doğrulaması gerekli";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Geri";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Paydo bo‘luvchi oynalarni bloklash";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Yer imi";
+
+/* Panel accessibility label */
+"Bookmarks" = "Yer imleri";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Saqlangan xatcho‘plar bu yerda ko‘rinadi.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Parlaklık";
+
+/* Alert Call Button */
+"Call" = "Ara";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "İptal";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Renk temasını değiştirir.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Yazı tipi türünü değiştirir.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Maxfiy ma’lumotlarni tozalash";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Kapat";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Ichki oyna yopilmoqda";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Adresi kopyala";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Resmi kopyala";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Bağlantıyı kopyala";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Sahifani \"O‘qish ro‘yxati\"ga qo‘sha olmadingizmi? Balkim, ilgari qo‘shilgandir?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Sahifa \"O‘qish ro‘yxati\"ga qo‘shilmadi";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Sahifasi yuklanmadi.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Hisob yaratish";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Koyu";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Tuzatish: Sinx uchun tasdiqdan o‘tish holati unutildi";
+
+/* Debug option */
+"Debug: require password" = "Tuzatish: parolni kiriting";
+
+/* Debug option */
+"Debug: require upgrade" = "Tuzatish: yangilashingiz lozim";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Metin boyutunu küçült";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Standart qidiruv tizimi";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Qo‘shimcha sahifa oynalarini o‘chirib qo‘yish";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Görünüm ayarları";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "%1$@ uchun parolni %2$@’ga saqlashni xohlaysizmi?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Parolni %@’ga saqlashni xohlaysizmi?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "%1$@ uchun parolni %2$@’da yangilashni xohlaysizmi?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "%@’dagi parolni yangilashni xohlaysizmi?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Jo‘natilmasin";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Tayyor";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Tarixni ochish uchun ikki marta bosing va ushlab turing";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Ulanish uchun parolingizni kiriting.";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "O‘zgarish kuchga kirishi uchun Firefox qayta ochilishi kerak.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox hisobingiz bilan sinxronlashni to‘xtatadi, ammo qurilmangizdagi ko‘rish tarixingizni o‘chirmaydi.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox \"Rasmlar\"ingizdan foydalanmoqchi";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Oldinga";
+
+/* General settings section title */
+"General" = "Umumiy";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Boshqa qurilmalardagi ochiq ichki oynalar, xatcho‘plar va parollarni olish.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "O‘tish";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Nusxa olingan URL manziliga o‘tilsinmi?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Yordam";
+
+/* Panel accessibility label */
+"History" = "Tarix";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Metin boyutunu büyüt";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Karusel sayohatiga kirish";
+
+/* History tableview section header */
+"Last month" = "O‘tgan oy";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "So‘nggi marta sinxornlangan: %@";
+
+/* History tableview section header */
+"Last week" = "O‘tgan hafta";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Litsenziyalar";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Yorqin";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Asl sahifani yuklash";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Tarkib yuklanmoqda…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Chiqish";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Chiqishni xohlaysizmi?";
+
+/* Authentication prompt log in button */
+"Log in" = "Kirish";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Loginlar";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox’da oldinroq nosozlik ro‘y berganga o‘xshaydi. Ichki oynalarni tiklashni xohlaysizmi?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "O‘qilgan deb belgilash";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "O‘qilmagan deb belgilash";
+
+/* Error for a missing remote error number */
+"Missing error" = "Xatolik kiritilmagan";
+
+/* Error for a missing remote error message */
+"Missing message" = "Xabar kiritilmagan";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigatsiya paneli";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Yangi ichki oyna: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Yangi versiya mavjud";
+
+/* Restore Tabs Negative Action */
+"No" = "Yoʻq";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Ichki oynalar yo‘q";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Hozir emas";
+
+/* Button to not save the user's password */
+"Not now" = "Hozir emas";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "OK";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Obbo! Firefox’da nosozlik ro‘y berdi";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Yeni sekmede aç";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Sozlamalarni ochish";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Kitobning rasmchasi nom panelida paydo bo‘lsa, uning ustiga bosib, maqolalarni \"O‘qish rejimi\"da ochishingiz mumkin.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Ochish:";
+
+/* Opening an external URL */
+"Opening %@" = "%@ ochilmoqda";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "Oldinroq kirilgan sahifalar bu yerda ko‘rinadi.";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Panel tanlagich";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Parol";
+
+/* Paste the URL into the location bar */
+"Paste" = "Qo‘yish";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Qo‘yish va o‘tish";
+
+/* Privacy section title */
+"Privacy" = "Maxfiylik";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Maxfiylik siyosati";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Tezkor qidiruv tizimlari";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "O‘qish rejimi";
+
+/* Panel accessibility label */
+"Reading list" = "O‘qish ro‘yxati";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Yangilash";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Olib tashlash";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Okuma Listesi'nden kaldır";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Sahifani olib tashlash";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Saytning to‘liq versiyasi";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Saytning mobil versiyasi";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "Resmi kaydet";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Loginlarni saqlash";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "\"O‘qish rejimi\" boshqaruvlaridagi \"kitob +\" rasmchasi ustiga bosib, sahifalarni \"O‘qish ro‘yxati\"ga qo‘shishingiz mumkin.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Izlash";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Izlang yoki manzilni kiriting";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Tavsiyalar uchun izlash";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Xavfsiz ulanish";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "Nosozlik ma’lumotini jo‘natish";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "Mulohaza jo‘natish";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Hisobot jo‘natish";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Mozilla muammolarni bartaraf qilish uchun nosozlik hisobotlari jo‘natilsinmi?";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepiya";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Sozlamalar";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Bo‘lishish";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Havolani bo‘lishish";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Izlash bo‘yicha tavsiyalarni ko‘rsatish";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Ichki oynalarni ko‘rsatish";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Sayohatni ko‘rsatish";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Izlash bo‘yicha tavsiyalarni ko‘rsatish";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Firefox hisobiga kirish";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Kirish";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Ichki oynalar, xatcho‘plar va parollarni boshqa qurilmalardan olish uchun hisobingizga kiring.";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "To‘xtatish";
+
+/* Support section title */
+"Support" = "Destek";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Ichki oynani yopish uchun 3 ta barmog‘ingiz bilan o‘ngga yoki chapga silang.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Hozir sinxronlash";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "Ichki oynalar, xatcho‘plar, parollar va boshqalarni sinxronlang.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "Ichki oynalar, parollar va boshqalarni sinxronlang.";
+
+/* Panel accessibility label */
+"Synced tabs" = "Sinxronlangan ichki oynalar";
+
+/* Syncing Firefox Account */
+"Syncing…" = "Sinxronlanmoqda…";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Ichki oynalar: %1$@/%2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Ichki oynalar: %1$@ %2$@’ga/%3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Ichki oynalar vositasi";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Sahifani \"Ko‘rish usuli\"da ko‘rsatib bo‘lmaydi.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Firefox Aurora’ning yangi versiyasi chiqdi. Yuklab olish sahifasiga o‘tish uchun OK tugmasini bosing.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Boshqa qurilmalardan ichki oynalarga kirishda muammo bo‘lyaptimi? Bir necha daqiqadan so‘ng urinib ko‘ring.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Sahifa formatini o‘zgartirishda xato yuz berdi";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "U rasmni kamera jildiga saqlashga ruxsat beradi.";
+
+/* Opening an external app */
+"This will open in another application" = "Bu boshqa ilova dasturda ochiladi";
+
+/* History tableview section header */
+"Today" = "Bugun";
+
+/* Panel accessibility label */
+"Top sites" = "Yuqori reytingli saytlar";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Yangilash";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Ulanish uchun Firefox’ni yangilang.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Dar sekmeleri kullan";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Foydalanuvchi";
+
+/* Text message in the settings table view */
+"Verify your email address." = "E-pochta manzilingizni tasdiqlang.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versiyasi: %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Ko‘rish";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Veb sayt";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Sinxronlashga xush kelibsiz";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "\"O‘qish ro‘yxati\"ga xush kelibsiz";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Uzr, bu sharmandali holat.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "Ha";
+
+/* History tableview section header */
+"Yesterday" = "Kecha";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Sizning sinxronlash uchun ushbu Firefox hisobi’ga ulanadigan boshqa qurilmalaringiz yo‘q.";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Bosha qurilmalarda Firefox’da ochilgan hech qanday ichki oynalaringiz yo‘q.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Huquqlaringiz";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "bilgisayar";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "hozirgina";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobil cihaz";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "bir oydan oldinroq";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "bir haftadan oldinroq";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "o‘qish";
+
+/* Relative date for date in past week. */
+"this week" = "bu hafta";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "bugun: %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "o‘qilmagan";
+
+/* Relative date for yesterday. */
+"yesterday" = "kecha";
+
