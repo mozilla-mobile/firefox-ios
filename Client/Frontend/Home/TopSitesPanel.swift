@@ -20,17 +20,8 @@ extension CGSize {
     }
 }
 
-struct TopSitesPanelUX {
-    private static let EmptyStateTitleTextColor = UIColor.darkGrayColor()
-    private static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15
-    private static let WelcomeScreenPadding: CGFloat = 15
-    private static let WelcomeScreenItemTextColor = UIColor.grayColor()
-    private static let WelcomeScreenItemWidth = 170
-}
-
 class TopSitesPanel: UIViewController {
     weak var homePanelDelegate: HomePanelDelegate?
-    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
     private var collection: TopSitesCollectionView? = nil
     private lazy var dataSource: TopSitesDataSource = {
@@ -104,8 +95,6 @@ class TopSitesPanel: UIViewController {
         self.dataSource.collectionView = self.collection
         self.profile.history.setTopSitesCacheSize(Int32(maxFrecencyLimit))
         self.refreshTopSites(maxFrecencyLimit)
-
-        self.updateEmptyPanelState()
     }
 
     deinit {
@@ -127,72 +116,11 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    private func createEmptyStateOverlayView() -> UIView {
-        let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.whiteColor()
-
-        let logoImageView = UIImageView(image: UIImage(named: "emptyTopSites"))
-        overlayView.addSubview(logoImageView)
-
-        let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
-        titleLabel.text = NSLocalizedString("topsites.emptystate.title", value: "Welcome to Top Sites", comment: "The title for the empty Top Sites state")
-        titleLabel.textAlignment = NSTextAlignment.Center
-        titleLabel.textColor = TopSitesPanelUX.EmptyStateTitleTextColor
-        overlayView.addSubview(titleLabel)
-
-        let descriptionLabel = UILabel()
-        descriptionLabel.text = NSLocalizedString("topsites.emptystate.description", value: "Your most visited sites will show up here.", comment: "Description label for the empty Top Sites state.")
-        descriptionLabel.textAlignment = NSTextAlignment.Center
-        descriptionLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        descriptionLabel.textColor = TopSitesPanelUX.WelcomeScreenItemTextColor
-        descriptionLabel.numberOfLines = 2
-        descriptionLabel.adjustsFontSizeToFitWidth = true
-        overlayView.addSubview(descriptionLabel)
-
-        logoImageView.snp_makeConstraints { make in
-            make.centerX.equalTo(overlayView)
-
-            // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
-
-            // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(overlayView).offset(50)
-        }
-
-        titleLabel.snp_makeConstraints { make in
-            make.top.equalTo(logoImageView).offset(TopSitesPanelUX.EmptyStateTopPaddingInBetweenItems)
-            make.centerX.equalTo(logoImageView)
-        }
-
-        descriptionLabel.snp_makeConstraints { make in
-            make.centerX.equalTo(overlayView)
-            make.top.equalTo(titleLabel).offset(TopSitesPanelUX.WelcomeScreenPadding)
-            make.width.equalTo(TopSitesPanelUX.WelcomeScreenItemWidth)
-        }
-
-        return overlayView
-    }
-
-    private func updateEmptyPanelState() {
-        if dataSource.count() == 0 {
-            if self.emptyStateOverlayView.superview == nil {
-                self.view.addSubview(self.emptyStateOverlayView)
-                self.emptyStateOverlayView.snp_makeConstraints { make -> Void in
-                    make.edges.equalTo(self.view)
-                }
-            }
-        } else {
-            self.emptyStateOverlayView.removeFromSuperview()
-        }
-    }
-
     //MARK: Private Helpers
     private func updateDataSourceWithSites(result: Maybe<Cursor<Site>>) {
         if let data = result.successValue {
             self.dataSource.setHistorySites(data.asArray())
             self.dataSource.profile = self.profile
-            self.updateEmptyPanelState()
         }
     }
 
