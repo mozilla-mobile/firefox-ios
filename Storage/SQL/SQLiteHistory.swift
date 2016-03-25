@@ -425,35 +425,40 @@ extension SQLiteHistory: BrowserHistory {
             args = []
         }
 
-        let ungroupedSQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
-        "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
-        "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
-        "COALESCE(count(\(TableVisits).is_local), 0) AS visitCount " +
-        "FROM \(TableHistory) " +
-        "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
-        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
-        whereClause + " GROUP BY historyID"
+        let ungroupedSQL = [
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain,",
+        "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate,",
+        "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate,",
+        "COALESCE(count(\(TableVisits).is_local), 0) AS visitCount",
+        "FROM \(TableHistory)",
+        "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id",
+        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id",
+        whereClause,
+        "GROUP BY historyID",
+        ].joinWithSeparator(" ")
 
-        let historySQL =
-        "SELECT historyID, url, title, guid, domain_id, domain, visitCount, " +
-        "max(localVisitDate) AS localVisitDate, " +
-        "max(remoteVisitDate) AS remoteVisitDate " +
-        "FROM (" + ungroupedSQL + ") " +
-        "WHERE (visitCount > 0) " +    // Eliminate dead rows from coalescing.
-        "GROUP BY historyID " +
-        "ORDER BY max(localVisitDate, remoteVisitDate) DESC " +
-        "LIMIT \(limit) "
+        let historySQL = [
+        "SELECT historyID, url, title, guid, domain_id, domain, visitCount,",
+        "max(localVisitDate) AS localVisitDate,",
+        "max(remoteVisitDate) AS remoteVisitDate",
+        "FROM (", ungroupedSQL, ")",
+        "WHERE (visitCount > 0)",    // Eliminate dead rows from coalescing.
+        "GROUP BY historyID",
+        "ORDER BY max(localVisitDate, remoteVisitDate) DESC",
+        "LIMIT \(limit)",
+        ].joinWithSeparator(" ")
 
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
             // We do this so that we limit and filter *before* joining against icons.
-            let sql = "SELECT " +
-                "historyID, url, title, guid, domain_id, domain, " +
-                "localVisitDate, remoteVisitDate, visitCount, " +
-                "iconID, iconURL, iconDate, iconType, iconWidth " +
-                "FROM (\(historySQL)) LEFT OUTER JOIN " +
-                "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+            let sql = [
+            "SELECT",
+            "historyID, url, title, guid, domain_id, domain,",
+            "localVisitDate, remoteVisitDate, visitCount, ",
+            "iconID, iconURL, iconDate, iconType, iconWidth ",
+            "FROM (", historySQL, ") LEFT OUTER JOIN ",
+            "view_history_id_favicon ON historyID = view_history_id_favicon.id",
+            ].joinWithSeparator(" ")
             let factory = SQLiteHistory.iconHistoryColumnFactory
             return db.runQuery(sql, args: args, factory: factory)
         }
