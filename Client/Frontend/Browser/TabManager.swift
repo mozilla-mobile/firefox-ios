@@ -232,9 +232,10 @@ class TabManager : NSObject {
     }
 
     @available(iOS 9, *)
-    private func addTab(request: NSURLRequest? = nil, var configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Browser {
+    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Browser {
         assert(NSThread.isMainThread())
 
+        var configuration: WKWebViewConfiguration! = configuration
         if configuration == nil {
             configuration = isPrivate ? privateConfiguration : self.configuration
         }

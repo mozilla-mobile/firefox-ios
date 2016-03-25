@@ -16,13 +16,13 @@ protocol InstructionsViewControllerDelegate: class {
     func instructionsViewControllerDidClose(instructionsViewController: InstructionsViewController)
 }
 
-private func highlightLink(var s: NSString, withColor color: UIColor) -> NSAttributedString {
+private func highlightLink(s: NSString, withColor color: UIColor) -> NSAttributedString {
     let start = s.rangeOfString("<")
     if start.location == NSNotFound {
         return NSAttributedString(string: s as String)
     }
 
-    s = s.stringByReplacingCharactersInRange(start, withString: "")
+    var s: NSString = s.stringByReplacingCharactersInRange(start, withString: "")
     let end = s.rangeOfString(">")
     s = s.stringByReplacingCharactersInRange(end, withString: "")
     let a = NSMutableAttributedString(string: s as String)

@@ -586,7 +586,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
     }
 
-    private func setHistorySites(var historySites: [Site]) {
+    private func setHistorySites(historySites: [Site]) {
         // Sites are invalidated and we have a new data set, so do a replace.
         if (sitesInvalidated) {
             self.sites = []
@@ -604,6 +604,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         // index, post-deletion, will always be a new site. Of course, this is temporary;
         // whenever the panel is reloaded, our transient, ordered state will be lost. But
         // that's OK: top sites change frequently anyway.
+        var historySites: [Site] = historySites
         self.sites = self.sites.filter { site in
             if let index = historySites.indexOf({ extractDomainURL($0.url) == extractDomainURL(site.url) }) {
                 historySites.removeAtIndex(index)
