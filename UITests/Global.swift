@@ -10,11 +10,11 @@ import WebKit
 let LabelAddressAndSearch = "Address and Search"
 
 extension XCTestCase {
-    func tester(file: String = __FILE__, _ line: Int = __LINE__) -> KIFUITestActor {
+    func tester(file: String = #file, _ line: Int = #line) -> KIFUITestActor {
         return KIFUITestActor(inFile: file, atLine: line, delegate: self)
     }
 
-    func system(file: String = __FILE__, _ line: Int = __LINE__) -> KIFSystemTestActor {
+    func system(file: String = #file, _ line: Int = #line) -> KIFSystemTestActor {
         return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
     }
 }
