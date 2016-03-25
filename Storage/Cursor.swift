@@ -69,7 +69,8 @@ public class Cursor<T>: TypedCursor {
                 return nil
             }
 
-            return self[nextIndex++]
+            defer { nextIndex += 1 }
+            return self[nextIndex]
         }
     }
 

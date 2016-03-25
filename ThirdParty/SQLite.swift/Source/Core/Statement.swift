@@ -272,7 +272,11 @@ extension Cursor : SequenceType {
     public func generate() -> AnyGenerator<Binding?> {
         var idx = 0
         return AnyGenerator {
-            idx >= self.columnCount ? Optional<Binding?>.None : self[idx++]
+            if idx >= self.columnCount {
+                return Optional<Binding?>.None
+            }
+            defer { idx += 1 }
+            return self[idx]
         }
     }
 

@@ -370,7 +370,8 @@ extension JSON : SequenceType {
         case let o as NSArray:
             var i = -1
             return AnyGenerator() {
-                if ++i == o.count { return nil }
+                i += 1
+                if i == o.count { return nil }
                 return (i, JSON(o[i]))
             }
         case let o as NSDictionary:

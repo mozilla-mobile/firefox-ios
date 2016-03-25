@@ -115,7 +115,8 @@ class TestSwiftData: XCTestCase {
             }
         }
 
-        return addSite(BrowserTable(), url: "http://url/\(urlCounter++)", title: "title\(urlCounter++)")
+        defer { urlCounter += 1 }
+        return addSite(BrowserTable(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
     }
 
     private func addSite(table: BrowserTable, url: String, title: String) -> NSError? {
@@ -175,7 +176,7 @@ class TestSwiftData: XCTestCase {
         var i = 0;
         for s in t {
             XCTAssertEqual(s!, data[i], "Subscript zero returns the correct data");
-            i++;
+            i += 1;
         }
 
         // Test creating a failed cursor

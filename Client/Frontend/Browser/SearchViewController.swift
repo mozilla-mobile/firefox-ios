@@ -671,7 +671,7 @@ private class SuggestionCell: UITableViewCell {
                 // Only move to the next row if there's already a suggestion on this row.
                 // Otherwise, the suggestion is too big to fit and will be resized below.
                 if currentLeft > textLeft {
-                    currentRow++
+                    currentRow += 1
                     if currentRow >= SearchViewControllerUX.SuggestionCellMaxRows {
                         // Don't draw this button if it doesn't fit on the row.
                         button.frame = CGRectZero

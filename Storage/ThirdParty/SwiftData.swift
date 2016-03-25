@@ -958,7 +958,7 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T> {
                 break
             }
 
-            count++
+            count += 1
 
             let row = SDRow(statement: statement, columns: columns)
             let result = factory(row)
@@ -1023,7 +1023,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
         var count = 0
         self.sqlStatus = sqlite3_step(statement.pointer)
         while self.sqlStatus != SQLITE_DONE {
-            count++
+            count += 1
             self.sqlStatus = sqlite3_step(statement.pointer)
         }
 
@@ -1038,7 +1038,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
         // This untangles all of the columns and values for this row when its created
         let columnCount = sqlite3_column_count(self.statement.pointer)
         var columns = [String]()
-        for var i: Int32 = 0; i < columnCount; ++i {
+        for var i: Int32 = 0; i < columnCount; i += 1 {
             let columnName = String.fromCString(sqlite3_column_name(self.statement.pointer, i))!
             columns.append(columnName)
         }

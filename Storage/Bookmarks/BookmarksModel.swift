@@ -159,7 +159,11 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
         }
 
         public mutating func next() -> BookmarkNode? {
-            return index < children.count ? children[index++] : nil
+            if index < children.count {
+                defer { index += 1 }
+                return children[index]
+            }
+            return nil
         }
     }
 
