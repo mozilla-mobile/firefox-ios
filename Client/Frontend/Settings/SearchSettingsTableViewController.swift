@@ -30,7 +30,7 @@ class SearchSettingsTableViewController: UITableViewController {
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is SettingsNavigationController) {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done button label for search settings table"), style: .Done, target: self, action: "SELDismiss")
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done button label for search settings table"), style: .Done, target: self, action: #selector(SearchSettingsTableViewController.SELDismiss))
         }
 
         let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 44))
@@ -61,7 +61,7 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
                 let toggle = UISwitch()
                 toggle.onTintColor = UIConstants.ControlTintColor
-                toggle.addTarget(self, action: "SELdidToggleSearchSuggestions:", forControlEvents: UIControlEvents.ValueChanged)
+                toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.SELdidToggleSearchSuggestions(_:)), forControlEvents: UIControlEvents.ValueChanged)
                 toggle.on = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
                 cell.selectionStyle = .None
@@ -82,7 +82,7 @@ class SearchSettingsTableViewController: UITableViewController {
             toggle.onTintColor = UIConstants.ControlTintColor
             // This is an easy way to get from the toggle control to the corresponding index.
             toggle.tag = index
-            toggle.addTarget(self, action: "SELdidToggleEngine:", forControlEvents: UIControlEvents.ValueChanged)
+            toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.SELdidToggleEngine(_:)), forControlEvents: UIControlEvents.ValueChanged)
             toggle.on = model.isEngineEnabled(engine)
 
             cell.editingAccessoryView = toggle
