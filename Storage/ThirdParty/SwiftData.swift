@@ -798,7 +798,7 @@ class SDRow: SequenceType {
     // Allow iterating through the row. This is currently broken.
     func generate() -> AnyGenerator<Any> {
         let nextIndex = 0
-        return anyGenerator() {
+        return AnyGenerator() {
             // This crashes the compiler. Yay!
             if (nextIndex < self.columnNames.count) {
                 return nil // self.getValue(nextIndex)
