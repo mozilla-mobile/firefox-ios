@@ -96,15 +96,15 @@ extension String {
 
 }
 
-@warn_unused_result func infix<T>(lhs: Expressible, _ rhs: Expressible, wrap: Bool = true, function: String = __FUNCTION__) -> Expression<T> {
+@warn_unused_result func infix<T>(lhs: Expressible, _ rhs: Expressible, wrap: Bool = true, function: String = #function) -> Expression<T> {
     return function.infix(lhs, rhs, wrap: wrap)
 }
 
-@warn_unused_result func wrap<T>(expression: Expressible, function: String = __FUNCTION__) -> Expression<T> {
+@warn_unused_result func wrap<T>(expression: Expressible, function: String = #function) -> Expression<T> {
     return function.wrap(expression)
 }
 
-@warn_unused_result func wrap<T>(expressions: [Expressible], function: String = __FUNCTION__) -> Expression<T> {
+@warn_unused_result func wrap<T>(expressions: [Expressible], function: String = #function) -> Expression<T> {
     return function.wrap(", ".join(expressions))
 }
 
