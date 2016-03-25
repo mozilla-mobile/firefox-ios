@@ -1038,7 +1038,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
         // This untangles all of the columns and values for this row when its created
         let columnCount = sqlite3_column_count(self.statement.pointer)
         var columns = [String]()
-        for var i: Int32 = 0; i < columnCount; i += 1 {
+        for i: Int32 in 0 ..< columnCount {
             let columnName = String.fromCString(sqlite3_column_name(self.statement.pointer, i))!
             columns.append(columnName)
         }
