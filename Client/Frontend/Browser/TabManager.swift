@@ -47,7 +47,7 @@ class TabManager : NSObject {
 
     func removeDelegate(delegate: TabManagerDelegate) {
         assert(NSThread.isMainThread())
-        for var i = 0; i < delegates.count; i++ {
+        for var i = 0; i < delegates.count; i += 1 {
             let del = delegates[i]
             if delegate === del.get() {
                 delegates.removeAtIndex(i)

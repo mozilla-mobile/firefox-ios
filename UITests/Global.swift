@@ -276,8 +276,11 @@ class BrowserUtils {
         for _ in 0 ..< historyTable.numberOfSections {
             for _ in 0 ..< historyTable.numberOfRowsInSection(0) {
                 clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
-                if numberOfTests > -1 && ++index == numberOfTests {
-                    return
+                if numberOfTests > -1 {
+                    index += 1
+                    if index == numberOfTests {
+                        return
+                    }
                 }
             }
         }

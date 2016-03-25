@@ -310,7 +310,8 @@ private extension BookmarkMirrorItem {
         let parent = self.guid
         var idx = 0
         return self.children?.map { child in
-            let ret: Args = [parent, child, idx++]
+            let ret: Args = [parent, child, idx]
+            idx += 1
             return ret
         } ?? []
     }

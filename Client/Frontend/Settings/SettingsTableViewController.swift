@@ -94,7 +94,7 @@ class SettingSection : Setting {
         var count = 0
         for setting in children {
             if !setting.hidden {
-                count++
+                count += 1
             }
         }
         return count
@@ -107,7 +107,7 @@ class SettingSection : Setting {
                 if i == val {
                     return setting
                 }
-                i++
+                i += 1
             }
         }
         return nil

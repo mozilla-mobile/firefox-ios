@@ -69,7 +69,9 @@ public class Cursor<T>: TypedCursor {
                 return nil
             }
 
-            return self[nextIndex++]
+            let result = self[nextIndex]
+            nextIndex += 1
+            return result
         }
     }
 

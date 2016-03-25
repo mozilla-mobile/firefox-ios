@@ -371,7 +371,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
 
     func removeAllSnackbars() {
         // Enumerate backwards here because we'll remove items from the list as we go.
-        for var i = bars.count-1; i >= 0; i-- {
+        for var i = bars.count-1; i >= 0; i -= 1 {
             let bar = bars[i]
             removeSnackbar(bar)
         }
@@ -379,7 +379,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
 
     func expireSnackbars() {
         // Enumerate backwards here because we may remove items from the list as we go.
-        for var i = bars.count-1; i >= 0; i-- {
+        for var i = bars.count-1; i >= 0; i -= 1 {
             let bar = bars[i]
             if !bar.shouldPersist(self) {
                 removeSnackbar(bar)
