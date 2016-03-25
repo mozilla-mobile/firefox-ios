@@ -105,7 +105,8 @@ extension BrowserDB {
             return ($0["child"] as! GUID, $0["idx"] as! Int)
         }
         let cursor = self.runQuery("SELECT child, idx FROM \(table) WHERE parent = ?", args: args, factory: factory).value.successValue!
-        return cursor.reduce([:], combine: { (var dict, pair) in
+        return cursor.reduce([:], combine: { (dict, pair) in
+            var dict = dict
             if let (k, v) = pair {
                 dict[k] = v
             }
