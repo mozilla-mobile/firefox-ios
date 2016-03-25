@@ -248,7 +248,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
             }
 
             if ErrorPageHelper.isErrorPageURL(url) {
-                let decodedURL = ErrorPageHelper.decodeURL(url)
+                let decodedURL = ErrorPageHelper.originalURLFromQuery(url)
                 if !AboutUtils.isAboutURL(decodedURL) {
                     return decodedURL
                 } else {

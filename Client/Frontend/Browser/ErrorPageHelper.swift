@@ -107,14 +107,13 @@ class ErrorPageHelper {
     }
 
     class func register(server: WebServer) {
-        server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse! in
-            let url: NSURL? = ErrorPageHelper.decodeURL(request.URL)
 
-            if url == nil {
+        server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse! in
+            guard let url = ErrorPageHelper.originalURLFromQuery(request.URL) else {
                 return GCDWebServerResponse(statusCode: 404)
             }
 
-            if let index = self.redirecting.indexOf(url!) {
+            if let index = self.redirecting.indexOf(url) {
                 self.redirecting.removeAtIndex(index)
 
                 let errCode = Int((request.query["code"] as! String))
@@ -164,8 +163,8 @@ class ErrorPageHelper {
     func showPage(error: NSError, forUrl url: NSURL, inWebView webView: WKWebView) {
         // Don't show error pages for error pages.
         if ErrorPageHelper.isErrorPageURL(url) {
-            if let previousUrl = ErrorPageHelper.decodeURL(url),
-               let index = ErrorPageHelper.redirecting.indexOf(previousUrl) {
+            if let previousURL = ErrorPageHelper.originalURLFromQuery(url),
+               let index = ErrorPageHelper.redirecting.indexOf(previousURL) {
                 ErrorPageHelper.redirecting.removeAtIndex(index)
             }
             return
@@ -175,9 +174,15 @@ class ErrorPageHelper {
         // (instead of redirecting to the original URL).
         ErrorPageHelper.redirecting.append(url)
 
-        let errorUrl = "\(WebServer.sharedInstance.base)/errors/error.html?url=\(url.absoluteString.escape() ?? String())&code=\(error.code)&domain=\(error.domain)&description=\(error.localizedDescription.escape())"
-        let request = NSURLRequest(URL: errorUrl.asURL!)
-        webView.loadRequest(request)
+        let components = NSURLComponents(string: WebServer.sharedInstance.base + "/errors/error.html")!
+        components.queryItems = [
+            NSURLQueryItem(name: "url", value: url.absoluteString),
+            NSURLQueryItem(name: "code", value: String(error.code)),
+            NSURLQueryItem(name: "domain", value: error.domain),
+            NSURLQueryItem(name: "description", value: error.localizedDescription)
+        ]
+
+        webView.loadRequest(NSURLRequest(URL: components.URL!))
     }
 
     class func isErrorPageURL(url: NSURL) -> Bool {
@@ -187,15 +192,12 @@ class ErrorPageHelper {
         return false
     }
 
-    class func decodeURL(url: NSURL) -> NSURL? {
-        let query = url.getQuery()
-        if let queryUrl = query["url"] {
-            let escaped = NSURL(string: queryUrl.unescape())
-            if let escaped = escaped where isErrorPageURL(escaped) {
-                return decodeURL(escaped)
-            }
-            return escaped
+    class func originalURLFromQuery(url: NSURL) -> NSURL? {
+        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+        if let queryURL = components?.queryItems?.filter({ $0.name == "url" }).first?.value {
+            return NSURL(string: queryURL)
         }
+
         return nil
     }
 }
@@ -213,7 +215,7 @@ extension ErrorPageHelper: BrowserHelper {
         if let url = message.frameInfo.request.URL {
             if message.frameInfo.mainFrame && ErrorPageHelper.isErrorPageURL(url) {
                 if let res = message.body as? [String: String],
-                   let url = ErrorPageHelper.decodeURL(url) {
+                   let url = ErrorPageHelper.originalURLFromQuery(url) {
                     let type = res["type"]
                     if type == "openInSafari" {
                         UIApplication.sharedApplication().openURL(url)
