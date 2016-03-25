@@ -651,7 +651,9 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
         visibleCells = visibleCells.filter { !CGRectIsEmpty(CGRectIntersection($0.frame, bounds)) }
 
         let cells = visibleCells.map { self.collectionView.indexPathForCell($0)! }
-        let indexPaths = cells.sort { $0.section < $1.section || ($0.section == $1.section && $0.row < $1.row) }
+        let indexPaths = cells.sort { (a: NSIndexPath, b: NSIndexPath) -> Bool in
+            return a.section < b.section || (a.section == b.section && a.row < b.row)
+        }
 
         if indexPaths.count == 0 {
             return NSLocalizedString("No tabs", comment: "Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray")
