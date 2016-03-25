@@ -32,7 +32,11 @@ let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
 let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
 let ViewBookmarksLocalOnMirror = "view_bookmarksLocal_on_mirror"
 let ViewBookmarksLocalStructureOnMirror = "view_bookmarksLocalStructure_on_mirror"
+let ViewAllBookmarks = "view_all_bookmarks"
+let ViewAwesomebarBookmarks = "view_awesomebar_bookmarks"
+let ViewAwesomebarBookmarksWithIcons = "view_awesomebar_bookmarks_with_favicons"
 
+let ViewHistoryVisits = "view_history_visits"
 let ViewWidestFaviconsForSites = "view_favicons_widest"
 let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
 let ViewIconForURL = "view_icon_for_url"
@@ -72,6 +76,10 @@ private let AllViews: [String] = [
     ViewBookmarksBufferStructureOnMirror,
     ViewBookmarksLocalOnMirror,
     ViewBookmarksLocalStructureOnMirror,
+    ViewAllBookmarks,
+    ViewAwesomebarBookmarks,
+    ViewAwesomebarBookmarksWithIcons,
+    ViewHistoryVisits,
 ]
 
 private let AllIndices: [String] = [
@@ -92,7 +100,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 15    // Bug 1141850.
+    static let DefaultVersion = 16    // Bug 1185038.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -356,6 +364,52 @@ public class BrowserTable: Table {
     "WHERE " +
     "((SELECT is_overridden FROM \(TableBookmarksMirror) WHERE guid = parent) IS NOT 1) "
 
+    // This view exists only to allow for text searching of URLs and titles in the awesomebar.
+    // As such, we cheat a little: we include buffer, non-overridden mirror, and local.
+    // Usually this will be indistinguishable from a more sophisticated approach, and it's way
+    // easier.
+    private let allBookmarksView =
+    "CREATE VIEW \(ViewAllBookmarks) AS " +
+    "SELECT guid, bmkUri AS url, title, description, faviconID FROM " +
+    "\(TableBookmarksMirror) WHERE " +
+    "type = \(BookmarkNodeType.Bookmark.rawValue) AND is_overridden IS 0 AND is_deleted IS 0 " +
+    "UNION ALL " +
+    "SELECT guid, bmkUri AS url, title, description, faviconID FROM " +
+    "\(TableBookmarksLocal) WHERE " +
+    "type = \(BookmarkNodeType.Bookmark.rawValue) AND is_deleted IS 0 " +
+    "UNION ALL " +
+    "SELECT guid, bmkUri AS url, title, description, -1 AS faviconID FROM " +
+    "\(TableBookmarksBuffer) WHERE " +
+    "type = \(BookmarkNodeType.Bookmark.rawValue) AND is_deleted IS 0"
+
+    // This smushes together remote and local visits. So it goes.
+    private let historyVisitsView =
+    "CREATE VIEW \(ViewHistoryVisits) AS " +
+    "SELECT h.url AS url, MAX(v.date) AS visitDate FROM " +
+    "\(TableHistory) h JOIN \(TableVisits) v ON v.siteID = h.id " +
+    "GROUP BY h.id"
+
+    // Join all bookmarks against history to find the most recent visit.
+    // visits.
+    private let awesomebarBookmarksView =
+    "CREATE VIEW \(ViewAwesomebarBookmarks) AS " +
+    "SELECT b.guid AS guid, b.url AS url, b.title AS title, " +
+    "b.description AS description, b.faviconID AS faviconID, " +
+    "h.visitDate AS visitDate " +
+    "FROM \(ViewAllBookmarks) b " +
+    "LEFT JOIN " +
+    "\(ViewHistoryVisits) h ON b.url = h.url"
+
+    private let awesomebarBookmarksWithIconsView =
+    "CREATE VIEW \(ViewAwesomebarBookmarksWithIcons) AS " +
+    "SELECT b.guid AS guid, b.url AS url, b.title AS title, " +
+    "b.description AS description, b.visitDate AS visitDate, " +
+    "f.id AS iconID, f.url AS iconURL, f.date AS iconDate, " +
+    "f.type AS iconType, f.width AS iconWidth " +
+    "FROM \(ViewAwesomebarBookmarks) b " +
+    "LEFT JOIN " +
+    "\(TableFavicons) f ON f.id = b.faviconID"
+
     func create(db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
@@ -493,6 +547,10 @@ public class BrowserTable: Table {
             self.localBookmarksStructureView,
             self.bufferBookmarksView,
             self.bufferBookmarksStructureView,
+            allBookmarksView,
+            historyVisitsView,
+            awesomebarBookmarksView,
+            awesomebarBookmarksWithIconsView,
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -689,6 +747,16 @@ public class BrowserTable: Table {
                 self.bufferBookmarksStructureView,
                 self.localBookmarksView,
                 self.localBookmarksStructureView]) {
+                return false
+            }
+        }
+
+        if from < 16 && to >= 16 {
+            if !self.run(db, queries: [
+                allBookmarksView,
+                historyVisitsView,
+                awesomebarBookmarksView,
+                awesomebarBookmarksWithIconsView]) {
                 return false
             }
         }
