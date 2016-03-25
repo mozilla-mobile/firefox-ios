@@ -67,7 +67,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             let control = UISwitch()
             control.onTintColor = UIConstants.ControlTintColor
-            control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+            control.addTarget(self, action: #selector(ClearPrivateDataTableViewController.switchValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
             control.on = toggles[indexPath.item]
             cell.accessoryView = control
             cell.selectionStyle = .None

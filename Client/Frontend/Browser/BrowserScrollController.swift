@@ -55,7 +55,7 @@ class BrowserScrollingController: NSObject {
     }
 
     private lazy var panGesture: UIPanGestureRecognizer = {
-        let panGesture = UIPanGestureRecognizer(target: self, action: "handlePan:")
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(BrowserScrollingController.handlePan(_:)))
         panGesture.maximumNumberOfTouches = 1
         panGesture.delegate = self
         return panGesture

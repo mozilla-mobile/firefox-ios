@@ -53,9 +53,9 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataClearedHistory, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationDynamicFontChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
     }
 
     override func viewDidLoad() {
@@ -107,7 +107,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func addRefreshControl() {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = refresh
         self.tableView.addSubview(refresh)
     }

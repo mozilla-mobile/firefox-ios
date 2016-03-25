@@ -58,7 +58,7 @@ class FindInPageBar: UIView {
 
         backgroundColor = UIColor.whiteColor()
 
-        searchText.addTarget(self, action: "SELdidTextChange:", forControlEvents: UIControlEvents.EditingChanged)
+        searchText.addTarget(self, action: #selector(FindInPageBar.SELdidTextChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         searchText.textColor = FindInPageUX.SearchTextColor
         searchText.font = FindInPageUX.SearchTextFont
         searchText.autocapitalizationType = UITextAutocapitalizationType.None
@@ -73,20 +73,20 @@ class FindInPageBar: UIView {
         previousButton.setImage(UIImage(named: "find_previous"), forState: UIControlState.Normal)
         previousButton.setTitleColor(FindInPageUX.ButtonColor, forState: UIControlState.Normal)
         previousButton.accessibilityLabel = NSLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
-        previousButton.addTarget(self, action: "SELdidFindPrevious:", forControlEvents: UIControlEvents.TouchUpInside)
+        previousButton.addTarget(self, action: #selector(FindInPageBar.SELdidFindPrevious(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(previousButton)
 
         nextButton.setImage(UIImage(named: "find_next"), forState: UIControlState.Normal)
         nextButton.setTitleColor(FindInPageUX.ButtonColor, forState: UIControlState.Normal)
         nextButton.accessibilityLabel = NSLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Accessibility label for next result button in Find in Page Toolbar.")
-        nextButton.addTarget(self, action: "SELdidFindNext:", forControlEvents: UIControlEvents.TouchUpInside)
+        nextButton.addTarget(self, action: #selector(FindInPageBar.SELdidFindNext(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(nextButton)
 
         let closeButton = UIButton()
         closeButton.setImage(UIImage(named: "find_close"), forState: UIControlState.Normal)
         closeButton.setTitleColor(FindInPageUX.ButtonColor, forState: UIControlState.Normal)
         closeButton.accessibilityLabel = NSLocalizedString("Done", tableName: "FindInPage", comment: "Done button in Find in Page Toolbar.")
-        closeButton.addTarget(self, action: "SELdidPressClose:", forControlEvents: UIControlEvents.TouchUpInside)
+        closeButton.addTarget(self, action: #selector(FindInPageBar.SELdidPressClose(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(closeButton)
 
         let topBorder = UIView()
