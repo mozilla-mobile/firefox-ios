@@ -583,10 +583,10 @@ extension TabManager {
         if count == 0 && !AppConstants.IsRunningTest && !DebugSettingsBundleOptions.skipSessionRestore {
             // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
             let _ = Try(
-                `withTry`: { () -> Void in
+                withTry: { () -> Void in
                     self.restoreTabsInternal()
                 },
-                `catch`: { exception in
+                catch: { exception in
                     print("Failed to restore tabs: \(exception)")
                 }
             )

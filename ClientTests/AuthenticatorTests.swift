@@ -46,7 +46,7 @@ class MockMalformableLogin: LoginData {
         self.hostname = hostname
         self.password = password
         self.username = username
-        self.protectionSpace = NSURLProtectionSpace(host: hostname, port: 0, `protocol`: nil, realm: nil, authenticationMethod: nil)
+        self.protectionSpace = NSURLProtectionSpace(host: hostname, port: 0, protocol: nil, realm: nil, authenticationMethod: nil)
         self.formSubmitURL = formSubmitURL
     }
 
@@ -88,7 +88,7 @@ class AuthenticatorTests: XCTestCase {
         let credential = NSURLCredential(user: username, password: password, persistence: .None)
         let protectionSpace = NSURLProtectionSpace(host: host,
             port: port,
-            `protocol`: scheme,
+            protocol: scheme,
             realm: "Secure Site",
             authenticationMethod: nil)
         return NSURLAuthenticationChallenge(protectionSpace: protectionSpace,
