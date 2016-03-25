@@ -14,7 +14,7 @@ public enum CursorStatus {
 }
 
 public protocol TypedCursor: SequenceType {
-    typealias T
+    associatedtype T
     var count: Int { get }
     var status: CursorStatus { get }
     var statusMessage: String { get }

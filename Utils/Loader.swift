@@ -8,7 +8,7 @@ import Foundation
  * Interface for listening to Loader updates.
  */
 public protocol LoaderListener: class {
-    typealias T
+    associatedtype T
     func loader(dataLoaded data: T)
 }
 

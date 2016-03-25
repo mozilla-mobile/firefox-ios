@@ -5,7 +5,7 @@
 /// The type conformed to by all boxes.
 public protocol BoxType {
 	/// The type of the wrapped value.
-	typealias Value
+	associatedtype Value
 
 	/// Initializes an intance of the type with a value.
 	init(_ value: Value)

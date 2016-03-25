@@ -30,7 +30,7 @@ public func *(_: Expression<Binding>?, _: Expression<Binding>?) -> Expression<Vo
 
 public protocol _OptionalType {
 
-    typealias WrappedType
+    associatedtype WrappedType
 
 }
 
