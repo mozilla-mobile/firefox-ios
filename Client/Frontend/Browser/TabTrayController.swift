@@ -7,6 +7,7 @@ import UIKit
 import SnapKit
 import Storage
 import ReadingList
+import Shared
 
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
@@ -222,7 +223,6 @@ class TabCell: UICollectionViewCell {
     }
 }
 
-@available(iOS 9, *)
 struct PrivateModeStrings {
     static let toggleAccessibilityLabel = NSLocalizedString("Private Mode", tableName: "PrivateBrowsing", comment: "Accessibility label for toggling on/off private mode")
     static let toggleAccessibilityHint = NSLocalizedString("Turns private mode on or off", tableName: "PrivateBrowsing", comment: "Accessiblity hint for toggling on/off private mode")
@@ -243,37 +243,26 @@ class TabTrayController: UIViewController {
     weak var delegate: TabTrayDelegate?
 
     var collectionView: UICollectionView!
-    var navBar: UIView!
-    var addTabButton: UIButton!
-    var settingsButton: UIButton!
+    var toolbar = UIToolbar()
+
+    weak var maskButton: ToggleButton?
     var collectionViewTransitionSnapshot: UIView?
 
     private(set) internal var privateMode: Bool = false {
         didSet {
-            if #available(iOS 9, *) {
-                togglePrivateMode.selected = privateMode
-                togglePrivateMode.accessibilityValue = privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
-                tabDataSource.tabs = tabsToDisplay
-                collectionView?.reloadData()
+            if let maskButton = maskButton {
+                updateMaskButtonState(maskButton)
             }
+
+            tabDataSource.tabs = tabsToDisplay
+            styleToolbar(isPrivate: privateMode)
+            collectionView?.reloadData()
         }
     }
 
     private var tabsToDisplay: [Browser] {
         return self.privateMode ? tabManager.privateTabs : tabManager.normalTabs
     }
-
-    @available(iOS 9, *)
-    lazy var togglePrivateMode: ToggleButton = {
-        let button = ToggleButton()
-        button.setImage(UIImage(named: "smallPrivateMask"), forState: UIControlState.Normal)
-        button.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), forControlEvents: .TouchUpInside)
-        button.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
-        button.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
-        button.accessibilityValue = self.privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
-        button.accessibilityIdentifier = "TabTrayController.togglePrivateMode"
-        return button
-    }()
 
     @available(iOS 9, *)
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
@@ -322,51 +311,31 @@ class TabTrayController: UIViewController {
         self.collectionView.reloadData()
     }
 
+
+
 // MARK: View Controller Callbacks
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
-        navBar = UIView()
-        navBar.backgroundColor = TabTrayControllerUX.BackgroundColor
-
-        addTabButton = UIButton()
-        addTabButton.setImage(UIImage(named: "add"), forState: .Normal)
-        addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
-        addTabButton.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
-        addTabButton.accessibilityIdentifier = "TabTrayController.addTabButton"
-
-        settingsButton = UIButton()
-        settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
-        settingsButton.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
-        settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
-        settingsButton.accessibilityIdentifier = "TabTrayController.settingsButton"
-
-        let flowLayout = TabTrayCollectionViewLayout()
+        let flowLayout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
 
         collectionView.dataSource = tabDataSource
         collectionView.delegate = tabLayoutDelegate
-
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
         collectionView.registerClass(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
         view.addSubview(collectionView)
-        view.addSubview(navBar)
-        view.addSubview(addTabButton)
-        view.addSubview(settingsButton)
+        view.addSubview(toolbar)
 
         makeConstraints()
+        configureToolbarForTraitCollection(self.traitCollection)
+        styleToolbar(isPrivate: privateMode)
 
         if #available(iOS 9, *) {
-            view.addSubview(togglePrivateMode)
-            togglePrivateMode.snp_makeConstraints { make in
-                make.right.equalTo(addTabButton.snp_left).offset(-10)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-                make.centerY.equalTo(self.navBar)
-            }
-
             view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
             emptyPrivateTabsView.alpha = privateMode && tabManager.privateTabs.count == 0 ? 1 : 0
             emptyPrivateTabsView.snp_makeConstraints { make in
@@ -393,6 +362,7 @@ class TabTrayController: UIViewController {
 
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
+        configureToolbarForTraitCollection(traitCollection)
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -407,25 +377,13 @@ class TabTrayController: UIViewController {
     }
 
     private func makeConstraints() {
-        navBar.snp_makeConstraints { make in
-            make.top.equalTo(snp_topLayoutGuideBottom)
-            make.height.equalTo(UIConstants.ToolbarHeight)
-            make.left.right.equalTo(self.view)
-        }
-
-        addTabButton.snp_makeConstraints { make in
-            make.trailing.bottom.equalTo(self.navBar)
-            make.size.equalTo(UIConstants.ToolbarHeight)
-        }
-
-        settingsButton.snp_makeConstraints { make in
-            make.leading.bottom.equalTo(self.navBar)
-            make.size.equalTo(UIConstants.ToolbarHeight)
-        }
-
         collectionView.snp_makeConstraints { make in
-            make.top.equalTo(navBar.snp_bottom)
-            make.left.right.bottom.equalTo(self.view)
+            make.edges.equalTo(self.view)
+        }
+
+        toolbar.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(view)
+            make.height.equalTo(UIConstants.ToolbarHeight)
         }
     }
 
@@ -480,7 +438,7 @@ class TabTrayController: UIViewController {
             tabManager.removeAllPrivateTabsAndNotify(false)
         }
 
-        togglePrivateMode.setSelected(privateMode, animated: true)
+        maskButton?.setSelected(privateMode, animated: true)
         collectionView.layoutSubviews()
 
         let toView: UIView
@@ -550,6 +508,59 @@ class TabTrayController: UIViewController {
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
+    }
+}
+
+// MARK: - Toolbar Configuration
+extension TabTrayController {
+    private func styleToolbar(isPrivate isPrivate: Bool) {
+        toolbar.tintColor = isPrivate ? .whiteColor() : .toolbarTintColor()
+        toolbar.barTintColor = isPrivate ? .toolbarTintColor() : nil
+    }
+
+    private func configureToolbarForTraitCollection(traitCollection: UITraitCollection) {
+        let addButton = UIBarButtonItem(image: UIImage(named: "add"), style: .Plain, target: self, action: #selector(TabTrayController.SELdidClickAddTab))
+        addButton.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+        addButton.accessibilityIdentifier = "TabTrayController.addTabButton"
+
+        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings"), style: .Plain, target: self, action: #selector(TabTrayController.SELdidClickSettingsItem))
+        settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+        settingsButton.accessibilityIdentifier = "TabTrayController.settingsButton"
+
+        var toolbarItems = [addButton, UIBarButtonItem.flexibleSpaceItem(), settingsButton, UIBarButtonItem.flexibleSpaceItem()]
+
+        if #available(iOS 9, *) {
+            let maskButton = ToggleButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+            maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), forControlEvents: .TouchUpInside)
+            maskButton.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
+            maskButton.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
+            maskButton.accessibilityIdentifier = "TabTrayController.togglePrivateMode"
+            updateMaskButtonState(maskButton)
+            self.maskButton = maskButton
+            toolbarItems.append(UIBarButtonItem.customButtonItem(maskButton))
+        } else {
+            toolbarItems.append(UIBarButtonItem.fixedSpaceItem())
+        }
+
+        // On iPad/landscape iPhone, we want the 3 buttons to be centered. Add in fixed space buttons to add
+        // padding between the edges and the buttons.
+        if traitCollection.horizontalSizeClass == .Regular ||
+            (traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Compact) {
+            toolbarItems =
+                [UIBarButtonItem.fixedSpaceItem(), UIBarButtonItem.flexibleSpaceItem()] +
+                toolbarItems +
+                [UIBarButtonItem.flexibleSpaceItem(), UIBarButtonItem.fixedSpaceItem()]
+        }
+
+        toolbar.setItems(toolbarItems, animated: false)
+    }
+
+    private func updateMaskButtonState(maskButton: ToggleButton) {
+        let maskImage = UIImage(named: "smallPrivateMask")?.imageWithRenderingMode(.AlwaysTemplate)
+        maskButton.imageView?.tintColor = privateMode ? .whiteColor() : .toolbarTintColor()
+        maskButton.setImage(maskImage, forState: .Normal)
+        maskButton.selected = privateMode
+        maskButton.accessibilityValue = privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
     }
 }
 
@@ -835,23 +846,6 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
 
     @objc func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
-    }
-}
-
-// There seems to be a bug with UIKit where when the UICollectionView changes its contentSize
-// from > frame.size to <= frame.size: the contentSet animation doesn't properly happen and 'jumps' to the
-// final state.
-// This workaround forces the contentSize to always be larger than the frame size so the animation happens more
-// smoothly. This also makes the tabs be able to 'bounce' when there are not enough to fill the screen, which I
-// think is fine, but if needed we can disable user scrolling in this case.
-private class TabTrayCollectionViewLayout: UICollectionViewFlowLayout {
-    private override func collectionViewContentSize() -> CGSize {
-        var calculatedSize = super.collectionViewContentSize()
-        let collectionViewHeight = collectionView?.bounds.size.height ?? 0
-        if calculatedSize.height < collectionViewHeight && collectionViewHeight > 0 {
-            calculatedSize.height = collectionViewHeight + 1
-        }
-        return calculatedSize
     }
 }
 

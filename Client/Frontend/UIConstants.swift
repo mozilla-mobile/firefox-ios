@@ -5,6 +5,12 @@
 import Foundation
 import Shared
 
+public extension UIColor {
+    class func toolbarTintColor() -> UIColor {
+        return UIColor(rgb: 0x4A4A4A)
+    }
+}
+
 public struct UIConstants {
     static let DefaultHomePage = NSURL(string: "\(WebServer.sharedInstance.base)/about/home/#panel=0")!
 

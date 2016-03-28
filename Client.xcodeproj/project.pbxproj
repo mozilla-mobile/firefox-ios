@@ -531,6 +531,7 @@
 		E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E663D5771BB341C4001EF30E /* ToggleButton.swift */; };
 		E66464911C10CA9C00AF05CE /* SearchInputViewRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66464901C10CA9C00AF05CE /* SearchInputViewRefTests.swift */; };
 		E66464EE1C10D98000AF05CE /* AssertionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66464ED1C10D98000AF05CE /* AssertionUtils.swift */; };
+		E66880331CA9B2F1005C6556 /* UIBarButtonItemExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66880321CA9B2F1005C6556 /* UIBarButtonItemExtensions.swift */; };
 		E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */; };
 		E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
@@ -1492,6 +1493,7 @@
 		E663D5771BB341C4001EF30E /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		E66464901C10CA9C00AF05CE /* SearchInputViewRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputViewRefTests.swift; sourceTree = "<group>"; };
 		E66464ED1C10D98000AF05CE /* AssertionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssertionUtils.swift; sourceTree = "<group>"; };
+		E66880321CA9B2F1005C6556 /* UIBarButtonItemExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemExtensions.swift; sourceTree = "<group>"; };
 		E66C5B461BDA81050051AA93 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTests.swift; sourceTree = "<group>"; };
@@ -1836,6 +1838,7 @@
 				2891CEC31ADC7F2900427D3C /* NSURLExtensions.swift */,
 				28532D0B1C4837F1000072D9 /* SetExtensions.swift */,
 				2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */,
+				E66880321CA9B2F1005C6556 /* UIBarButtonItemExtensions.swift */,
 				D35275151AA8D13B00E9C906 /* UIColorExtensions.swift */,
 				0BB5B2BB1AC0AB9F0052877D /* UIImageExtensions.swift */,
 				0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */,
@@ -3971,6 +3974,7 @@
 				E65D895A1C8753CE0006EA35 /* SystemUtils.swift in Sources */,
 				282730F11ABC99C100AA1954 /* Functions.swift in Sources */,
 				D339C2831AD354B400C087BD /* Loader.swift in Sources */,
+				E66880331CA9B2F1005C6556 /* UIBarButtonItemExtensions.swift in Sources */,
 				288501FB1AC0F63800E7F670 /* NSScannerExtensions.swift in Sources */,
 				E6F9659E1B2F63A20034B023 /* NSStringExtensions.swift in Sources */,
 				E65D89811C8778940006EA35 /* AuthenticationKeychainInfo.swift in Sources */,
