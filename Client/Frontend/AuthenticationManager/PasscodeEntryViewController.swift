@@ -53,6 +53,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
             KeychainWrapper.setAuthenticationInfo(authenticationInfo)
             delegate?.passcodeValidationDidSucceed()
         } else {
+            passcodePane.shakePasscode()
             authenticationInfo?.recordFailedAttempt()
             let numberOfAttempts = authenticationInfo?.failedAttempts ?? 0
             if numberOfAttempts == AllowedPasscodeFailedAttempts {

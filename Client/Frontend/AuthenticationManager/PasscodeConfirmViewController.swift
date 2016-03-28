@@ -138,6 +138,7 @@ extension PasscodeConfirmViewController: PasscodeInputViewDelegate {
             // Constraint: When removing or changing a passcode, we need to make sure that the first passcode they've
             // entered matches the one stored in the keychain
             if (confirmAction == .Removed || confirmAction == .Changed) && code != authenticationInfo?.passcode {
+                panes[currentPaneIndex].shakePasscode()
                 failIncorrectPasscode(inputView: inputView)
                 return
             }
