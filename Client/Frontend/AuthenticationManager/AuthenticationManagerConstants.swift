@@ -78,6 +78,12 @@ struct AuthenticationStrings {
     static let loginsTouchReason =
         NSLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
 
+    static let requirePasscodeTouchReason =
+        NSLocalizedString("Use your fingerprint to access configuring your required passcode interval.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing  the require passcode setting")
+
+    static let disableTouchReason =
+        NSLocalizedString("Use your fingerprint to disable Touch ID.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when disabling Touch ID")
+
     static let wrongPasscodeError =
         NSLocalizedString("Incorrect passcode. Try again.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app")
 
