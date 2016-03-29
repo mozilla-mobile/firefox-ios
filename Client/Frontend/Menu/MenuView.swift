@@ -384,10 +384,13 @@ extension MenuView: UICollectionViewDelegateFlowLayout {
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let items = itemsForPageIndex(indexPath.row)
-        let numberOfRows = ceil(CGFloat(items.count) / CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0))
-        let menuHeight = itemPadding + (numberOfRows * (CGFloat(menuRowHeight) + itemPadding))
-        let size = CGSizeMake(collectionView.bounds.size.width - itemPadding, menuHeight)
-        return size
+        if(items.count > 0) {
+            let numberOfRows = ceil(CGFloat(items.count) / CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0))
+            let menuHeight = itemPadding + (numberOfRows * (CGFloat(menuRowHeight) + itemPadding))
+            let size = CGSizeMake(collectionView.bounds.size.width - itemPadding, menuHeight)
+            return size
+        }
+        return CGSizeZero
     }
 
 }
