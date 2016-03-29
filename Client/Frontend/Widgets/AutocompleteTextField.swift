@@ -73,7 +73,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     private func commonInit() {
         super.delegate = self
-        super.addTarget(self, action: "SELtextDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        super.addTarget(self, action: #selector(AutocompleteTextField.SELtextDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         notifyTextChanged = debounce(0.1, action: {
             if self.editing {
                 self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText.stringByTrimmingLeadingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()))

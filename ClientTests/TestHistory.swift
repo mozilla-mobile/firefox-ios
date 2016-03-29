@@ -96,7 +96,7 @@ class TestHistory : ProfileTest {
             self.measureBlock({ () -> Void in
                 for _ in 0...self.NumCmds {
                     self.addSite(h, url: "https://someurl\(j).com/", title: "title \(j)")
-                    j++
+                    j += 1
                 }
                 self.clear(h)
             })
@@ -113,7 +113,7 @@ class TestHistory : ProfileTest {
             for _ in 0...self.NumCmds {
                 self.addSite(h, url: "https://someurl\(j).com/", title: "title \(j)")
                 urls["https://someurl\(j).com/"] = "title \(j)"
-                j++
+                j += 1
             }
 
             self.measureBlock({ () -> Void in
@@ -136,7 +136,7 @@ class TestHistory : ProfileTest {
             for _ in 0..<self.NumThreads {
                 var history = profile.history as BrowserHistory
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
-                    counter++
+                    counter += 1
                     if counter == self.NumThreads {
                         expectation.fulfill()
                     }
@@ -156,7 +156,7 @@ class TestHistory : ProfileTest {
             let expectation = self.expectationWithDescription("Wait for history")
             for _ in 0..<self.NumThreads {
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
-                    counter++
+                    counter += 1
                     if counter == self.NumThreads {
                         expectation.fulfill()
                     }

@@ -172,7 +172,8 @@ public class BrowserTable: Table {
         BookmarkRoots.RootChildren.forEach { guid in
             structureArgs.append(BookmarkRoots.RootGUID)
             structureArgs.append(guid)
-            structureArgs.append(idx++)
+            structureArgs.append(idx)
+            idx += 1
         }
 
         // Note that we specify an empty title and parentName for these records. We should

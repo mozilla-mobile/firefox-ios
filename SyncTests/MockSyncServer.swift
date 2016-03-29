@@ -228,7 +228,8 @@ class MockSyncServer {
             }
 
             // Record the next continuation and return the first slice of records.
-            let next = "\(self.offsets++)"
+            let next = "\(self.offsets)"
+            self.offsets += 1
             let (returned, remaining) = splitArray(remainder, at: limit)
             self.continuations[next] = remaining
             log.debug("Returning \(limit) items; next continuation is \(next).")
@@ -266,7 +267,8 @@ class MockSyncServer {
         }
 
         if let limit = spec.limit where items.count > limit {
-            let next = "\(self.offsets++)"
+            let next = "\(self.offsets)"
+            self.offsets += 1
             let (returned, remaining) = splitArray(items, at: limit)
             self.continuations[next] = remaining
             return (returned, next)

@@ -24,7 +24,7 @@
 
 public protocol ExpressionType : Expressible { // extensions cannot have inheritance clauses
 
-    typealias UnderlyingType = Void
+    associatedtype UnderlyingType = Void
 
     var template: String { get }
     var bindings: [Binding?] { get }
@@ -78,7 +78,11 @@ extension Expressible {
         let expressed = expression
         var idx = 0
         return expressed.template.characters.reduce("") { template, character in
-            return template + (character == "?" ? transcode(expressed.bindings[idx++]) : String(character))
+            if character == "?" {
+                defer { idx += 1 }
+                return template + transcode(expressed.bindings[idx])
+            }
+            return template + String(character)
         }
     }
 

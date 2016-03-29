@@ -157,7 +157,7 @@ class TouchIDSetting: Setting {
         let accessoryContainer = UIView(frame: control.frame)
         accessoryContainer.addSubview(control)
 
-        let gesture = UITapGestureRecognizer(target: self, action: "switchTapped")
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(TouchIDSetting.switchTapped))
         accessoryContainer.addGestureRecognizer(gesture)
 
         cell.accessoryView = accessoryContainer
@@ -193,9 +193,9 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         updateTitleForTouchIDState()
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: Selector("refreshSettings:"), name: NotificationPasscodeDidRemove, object: nil)
-        notificationCenter.addObserver(self, selector: Selector("refreshSettings:"), name: NotificationPasscodeDidCreate, object: nil)
-        notificationCenter.addObserver(self, selector: Selector("refreshSettings:"), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NotificationPasscodeDidRemove, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NotificationPasscodeDidCreate, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
 
         tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
     }

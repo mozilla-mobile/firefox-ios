@@ -217,7 +217,8 @@ private class TwoLineCellHelper {
     func mergeAccessibilityLabels(labels: [AnyObject?]?) {
         let labels = labels ?? [textLabel, imageView, detailTextLabel]
 
-        let label = labels.map({ (var label: AnyObject?) -> NSAttributedString? in
+        let label = labels.map({ (label: AnyObject?) -> NSAttributedString? in
+            var label = label
             if let view = label as? UIView {
                 label = view.valueForKey("accessibilityLabel")
             }

@@ -47,7 +47,7 @@ class TabManager : NSObject {
 
     func removeDelegate(delegate: TabManagerDelegate) {
         assert(NSThread.isMainThread())
-        for var i = 0; i < delegates.count; i++ {
+        for i in 0 ..< delegates.count {
             let del = delegates[i]
             if delegate === del.get() {
                 delegates.removeAtIndex(i)
@@ -106,7 +106,7 @@ class TabManager : NSObject {
 
         addNavigationDelegate(self)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "prefsDidChange", name: NSUserDefaultsDidChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabManager.prefsDidChange), name: NSUserDefaultsDidChangeNotification, object: nil)
     }
 
     deinit {
@@ -232,19 +232,18 @@ class TabManager : NSObject {
     }
 
     @available(iOS 9, *)
-    private func addTab(request: NSURLRequest? = nil, var configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Browser {
+    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Browser {
         assert(NSThread.isMainThread())
 
-        if configuration == nil {
-            configuration = isPrivate ? privateConfiguration : self.configuration
-        }
+        // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
+        let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
         
         let tab = Browser(configuration: configuration, isPrivate: isPrivate)
         configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
 
-    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool) -> Browser {
+    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, flushToDisk: Bool, zombie: Bool) -> Browser {
         assert(NSThread.isMainThread())
 
         let tab = Browser(configuration: configuration ?? self.configuration)
@@ -583,10 +582,10 @@ extension TabManager {
         if count == 0 && !AppConstants.IsRunningTest && !DebugSettingsBundleOptions.skipSessionRestore {
             // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
             let _ = Try(
-                `withTry`: { () -> Void in
+                withTry: { () -> Void in
                     self.restoreTabsInternal()
                 },
-                `catch`: { exception in
+                catch: { exception in
                     print("Failed to restore tabs: \(exception)")
                 }
             )
@@ -693,7 +692,7 @@ class TabManagerNavDelegate : NSObject, WKNavigationDelegate {
         completionHandler: (NSURLSessionAuthChallengeDisposition,
         NSURLCredential?) -> Void) {
             let authenticatingDelegates = delegates.filter {
-                $0.respondsToSelector("webView:didReceiveAuthenticationChallenge:completionHandler:")
+                $0.respondsToSelector(#selector(WKNavigationDelegate.webView(_:didReceiveAuthenticationChallenge:completionHandler:)))
             }
 
             guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {

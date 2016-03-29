@@ -15,7 +15,8 @@ public extension SetGenerator {
         var count: Int = 0
         var out: [Element] = []
 
-        while count++ < n {
+        while count < n {
+            count += 1
             guard let val = self.next() else {
                 if out.isEmpty {
                     return nil

@@ -50,8 +50,8 @@ class AuralProgressBar {
 
             connectPlayerNodes()
 
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleAudioEngineConfigurationDidChangeNotification:"), name: AVAudioEngineConfigurationChangeNotification, object: nil)
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleAudioSessionInterruptionNotification:"), name: AVAudioSessionInterruptionNotification, object: nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UI.handleAudioEngineConfigurationDidChangeNotification(_:)), name: AVAudioEngineConfigurationChangeNotification, object: nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UI.handleAudioSessionInterruptionNotification(_:)), name: AVAudioSessionInterruptionNotification, object: nil)
         }
 
         deinit {

@@ -10,11 +10,11 @@ import WebKit
 let LabelAddressAndSearch = "Address and Search"
 
 extension XCTestCase {
-    func tester(file: String = __FILE__, _ line: Int = __LINE__) -> KIFUITestActor {
+    func tester(file: String = #file, _ line: Int = #line) -> KIFUITestActor {
         return KIFUITestActor(inFile: file, atLine: line, delegate: self)
     }
 
-    func system(file: String = __FILE__, _ line: Int = __LINE__) -> KIFSystemTestActor {
+    func system(file: String = #file, _ line: Int = #line) -> KIFSystemTestActor {
         return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
     }
 }
@@ -276,8 +276,11 @@ class BrowserUtils {
         for _ in 0 ..< historyTable.numberOfSections {
             for _ in 0 ..< historyTable.numberOfRowsInSection(0) {
                 clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
-                if numberOfTests > -1 && ++index == numberOfTests {
-                    return
+                if numberOfTests > -1 {
+                    index += 1
+                    if index == numberOfTests {
+                        return
+                    }
                 }
             }
         }
