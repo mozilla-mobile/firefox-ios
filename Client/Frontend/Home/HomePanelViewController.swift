@@ -103,7 +103,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         updateButtons()
 
         // Gesture recognizer to dismiss the keyboard in the URLBarView when the buttonContainerView is tapped
-        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELhandleDismissKeyboardGestureRecognizer:")
+        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HomePanelViewController.SELhandleDismissKeyboardGestureRecognizer(_:)))
         dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
     }
@@ -205,7 +205,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         for panel in panels {
             let button = UIButton()
             buttonContainerView.addSubview(button)
-            button.addTarget(self, action: "SELtappedButton:", forControlEvents: UIControlEvents.TouchUpInside)
+            button.addTarget(self, action: #selector(HomePanelViewController.SELtappedButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             if let image = UIImage(named: "panelIcon\(panel.imageName)") {
                 button.setImage(image, forState: UIControlState.Normal)
             }
@@ -268,7 +268,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         if editing {
             let button = UIButton(type: UIButtonType.System)
             button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), forState: UIControlState.Normal)
-            button.addTarget(self, action: "endEditing:", forControlEvents: UIControlEvents.TouchUpInside)
+            button.addTarget(self, action: #selector(HomePanelViewController.endEditing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             button.transform = translateDown
             button.titleLabel?.textAlignment = .Right
             self.buttonContainerView.addSubview(button)

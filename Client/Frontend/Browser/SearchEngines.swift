@@ -38,7 +38,7 @@ class SearchEngines {
         self.disabledEngineNames = getDisabledEngineNames()
         self.orderedEngines = getOrderedEngines()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELdidResetPrompt:", name: "SearchEnginesPromptReset", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SearchEngines.SELdidResetPrompt(_:)), name: "SearchEnginesPromptReset", object: nil)
     }
 
     deinit {

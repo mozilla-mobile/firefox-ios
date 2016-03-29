@@ -62,8 +62,8 @@ class LoginDetailViewController: UIViewController {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillHideMenuController", name: UIMenuControllerWillHideMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDetailViewController.SELwillShowMenuController), name: UIMenuControllerWillShowMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDetailViewController.SELwillHideMenuController), name: UIMenuControllerWillHideMenuNotification, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -73,7 +73,7 @@ class LoginDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginDetailViewController.SELedit))
 
         tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
@@ -324,12 +324,12 @@ extension LoginDetailViewController {
         let cell = tableView.cellForRowAtIndexPath(InfoItem.UsernameItem.indexPath) as! LoginTableViewCell
         cell.descriptionLabel.becomeFirstResponder()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "SELdoneEditing")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(LoginDetailViewController.SELdoneEditing))
     }
 
     func SELdoneEditing() {
         editingInfo = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginDetailViewController.SELedit))
 
         // We only care to update if we changed something
         guard let username = usernameField?.text,
@@ -378,7 +378,7 @@ extension LoginDetailViewController {
         menuControllerCell = nil
 
         // Re-add observer
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDetailViewController.SELwillShowMenuController), name: UIMenuControllerWillShowMenuNotification, object: nil)
     }
 }
 
