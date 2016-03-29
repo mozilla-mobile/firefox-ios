@@ -599,7 +599,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(ChinaSyncServiceSetting.switchValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? true
         cell.accessoryView = control
         cell.selectionStyle = .None

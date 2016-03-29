@@ -101,7 +101,7 @@ public class CachingLocalItemSource: LocalItemSource {
     }
 
     public func prefetchLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
-        log.debug("Prefetching \(guids.count) local items: \(guids.prefix(10))….")
+        log.debug("Prefetching \(guids.count) local items: \(guids.prefix(10).joinWithSeparator(", "))….")
         if guids.isEmpty {
             return succeed()
         }
@@ -138,7 +138,7 @@ public class CachingMirrorItemSource: MirrorItemSource {
     }
 
     public func prefetchMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
-        log.debug("Prefetching \(guids.count) mirror items: \(guids.prefix(10))….")
+        log.debug("Prefetching \(guids.count) mirror items: \(guids.prefix(10).joinWithSeparator(", "))….")
         if guids.isEmpty {
             return succeed()
         }
@@ -175,7 +175,7 @@ public class CachingBufferItemSource: BufferItemSource {
     }
 
     public func prefetchBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
-        log.debug("Prefetching \(guids.count) buffer items: \(guids.prefix(10))….")
+        log.debug("Prefetching \(guids.count) buffer items: \(guids.prefix(10).joinWithSeparator(", "))….")
         if guids.isEmpty {
             return succeed()
         }

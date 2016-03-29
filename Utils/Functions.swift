@@ -217,7 +217,7 @@ public func debounce(delay:NSTimeInterval, action:()->()) -> ()->() {
         if let timer = timer {
             timer.invalidate()
         }
-        timer = NSTimer(timeInterval: delay, target: callback, selector: #selector(Callback.go), userInfo: nil, repeats: false)
+        timer = NSTimer(timeInterval: delay, target: callback, selector: "go", userInfo: nil, repeats: false)
         NSRunLoop.currentRunLoop().addTimer(timer!, forMode: NSDefaultRunLoopMode)
     }
 }

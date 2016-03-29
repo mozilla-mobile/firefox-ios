@@ -28,8 +28,7 @@ extension Module {
         return FTS4([column] + more)
     }
 
-    @warn_unused_result public static func FTS4(columns: [Expressible] = [], tokenize tokenizer: Tokenizer? = nil) -> Module {
-        var columns: [Expressible] = columns
+    @warn_unused_result public static func FTS4(var columns: [Expressible] = [], tokenize tokenizer: Tokenizer? = nil) -> Module {
         if let tokenizer = tokenizer {
             columns.append("=".join([Expression<Void>(literal: "tokenize"), Expression<Void>(literal: tokenizer.description)]))
         }

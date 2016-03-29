@@ -34,9 +34,9 @@ class BrowserPrintPageRenderer: UIPrintPageRenderer {
         }
     }
 
-    override func drawFooterForPageAtIndex(pageIndex: Int, inRect headerRect: CGRect) {
+    override func drawFooterForPageAtIndex(pageIndex: Int, var inRect headerRect: CGRect) {
         let headerInsets = UIEdgeInsets(top: CGRectGetMinY(headerRect), left: PrintedPageUX.PageInsets, bottom: CGRectGetMaxY(paperRect) - CGRectGetMaxY(headerRect), right: PrintedPageUX.PageInsets)
-        let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
+        headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // url on left
         self.drawTextAtPoint(browser!.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
@@ -46,9 +46,9 @@ class BrowserPrintPageRenderer: UIPrintPageRenderer {
         self.drawTextAtPoint(pageNumberString, rect: headerRect, onLeft: false)
     }
 
-    override func drawHeaderForPageAtIndex(pageIndex: Int, inRect headerRect: CGRect) {
+    override func drawHeaderForPageAtIndex(pageIndex: Int, var inRect headerRect: CGRect) {
         let headerInsets = UIEdgeInsets(top: CGRectGetMinY(headerRect), left: PrintedPageUX.PageInsets, bottom: CGRectGetMaxY(paperRect) - CGRectGetMaxY(headerRect), right: PrintedPageUX.PageInsets)
-        let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
+        headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // page title on left
         self.drawTextAtPoint(browser!.displayTitle, rect: headerRect, onLeft: true)

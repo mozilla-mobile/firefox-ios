@@ -13,11 +13,11 @@ import Foundation
 }
 
 public class MenuHelper: NSObject {
-    public static let SelectorCopy: Selector = #selector(MenuHelperInterface.menuHelperCopy(_:))
-    public static let SelectorHide: Selector = #selector(MenuHelperInterface.menuHelperSecure(_:))
-    public static let SelectorOpenAndFill: Selector = #selector(MenuHelperInterface.menuHelperOpenAndFill(_:))
-    public static let SelectorReveal: Selector = #selector(MenuHelperInterface.menuHelperReveal(_:))
-    public static let SelectorFindInPage: Selector = #selector(MenuHelperInterface.menuHelperFindInPage(_:))
+    public static let SelectorCopy: Selector = "menuHelperCopy:"
+    public static let SelectorHide: Selector = "menuHelperSecure:"
+    public static let SelectorOpenAndFill: Selector = "menuHelperOpenAndFill:"
+    public static let SelectorReveal: Selector = "menuHelperReveal:"
+    public static let SelectorFindInPage: Selector = "menuHelperFindInPage:"
 
     public class var defaultHelper: MenuHelper {
         struct Singleton {

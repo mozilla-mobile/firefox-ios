@@ -93,7 +93,7 @@ class SettingSection : Setting {
         var count = 0
         for setting in children {
             if !setting.hidden {
-                count += 1
+                count++
             }
         }
         return count
@@ -106,7 +106,7 @@ class SettingSection : Setting {
                 if i == val {
                     return setting
                 }
-                i += 1
+                i++
             }
         }
         return nil
@@ -166,7 +166,7 @@ class BoolSetting: Setting {
 
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? defaultValue
 
         cell.accessoryView = PaddedSwitch(switchView: control)
@@ -281,9 +281,9 @@ class SettingsTableViewController: UITableViewController {
 
         settings = generateSettings()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SettingsTableViewController.SELfirefoxAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELsyncDidChangeState", name: NotificationProfileDidStartSyncing, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELsyncDidChangeState", name: NotificationProfileDidFinishSyncing, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELfirefoxAccountDidChange", name: NotificationFirefoxAccountChanged, object: nil)
 
         tableView.reloadData()
     }

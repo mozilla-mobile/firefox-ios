@@ -75,10 +75,10 @@ class TopSitesPanel: UIViewController {
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationProfileDidFinishSyncing, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataClearedHistory, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -657,7 +657,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
     }
 
-    private func setHistorySites(historySites: [Site]) {
+    private func setHistorySites(var historySites: [Site]) {
         // Sites are invalidated and we have a new data set, so do a replace.
         if (sitesInvalidated) {
             self.sites = []
@@ -675,7 +675,6 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         // index, post-deletion, will always be a new site. Of course, this is temporary;
         // whenever the panel is reloaded, our transient, ordered state will be lost. But
         // that's OK: top sites change frequently anyway.
-        var historySites: [Site] = historySites
         self.sites = self.sites.filter { site in
             if let index = historySites.indexOf({ extractDomainURL($0.url) == extractDomainURL(site.url) }) {
                 historySites.removeAtIndex(index)

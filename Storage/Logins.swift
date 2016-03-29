@@ -253,7 +253,7 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
             port = 0
         }
 
-        self.protectionSpace = NSURLProtectionSpace(host: host, port: port, protocol: scheme, realm: nil, authenticationMethod: nil)
+        self.protectionSpace = NSURLProtectionSpace(host: host, port: port, `protocol`: scheme, realm: nil, authenticationMethod: nil)
     }
 
     convenience init(hostname: String, username: String, password: String) {

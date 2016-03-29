@@ -218,8 +218,8 @@ private func transformHeaderFooterForBVC(bvc: BrowserViewController, toFrame fin
     bvc.headerBackdrop.transform = headerForTransform
 }
 
-private func footerTransform( frame: CGRect, toFrame finalFrame: CGRect, container: UIView) -> CGAffineTransform {
-    let frame = container.convertRect(frame, toView: container)
+private func footerTransform(var frame: CGRect, toFrame finalFrame: CGRect, container: UIView) -> CGAffineTransform {
+    frame = container.convertRect(frame, toView: container)
     let endY = CGRectGetMaxY(finalFrame) - (frame.size.height / 2)
     let endX = CGRectGetMidX(finalFrame)
     let translation = CGPoint(x: endX - CGRectGetMidX(frame), y: endY - CGRectGetMidY(frame))
@@ -232,8 +232,8 @@ private func footerTransform( frame: CGRect, toFrame finalFrame: CGRect, contain
     return transform
 }
 
-private func headerTransform(frame: CGRect, toFrame finalFrame: CGRect, container: UIView) -> CGAffineTransform {
-    let frame = container.convertRect(frame, toView: container)
+private func headerTransform(var frame: CGRect, toFrame finalFrame: CGRect, container: UIView) -> CGAffineTransform {
+    frame = container.convertRect(frame, toView: container)
     let endY = CGRectGetMinY(finalFrame) + (frame.size.height / 2)
     let endX = CGRectGetMidX(finalFrame)
     let translation = CGPoint(x: endX - CGRectGetMidX(frame), y: endY - CGRectGetMidY(frame))

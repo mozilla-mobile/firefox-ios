@@ -63,8 +63,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                 return Deferred(value: result)
             }
 
-            failures += 1
-            if failures > maxFailures {
+            if ++failures > maxFailures {
                 return Deferred(value: result)
             }
 

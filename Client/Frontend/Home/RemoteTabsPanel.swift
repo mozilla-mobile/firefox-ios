@@ -46,7 +46,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RemoteTabsPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -75,13 +75,13 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        refreshControl?.addTarget(self, action: #selector(RemoteTabsPanel.SELrefreshTabs), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl?.addTarget(self, action: "SELrefreshTabs", forControlEvents: UIControlEvents.ValueChanged)
         refreshTabs()
     }
 
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        refreshControl?.removeTarget(self, action: #selector(RemoteTabsPanel.SELrefreshTabs), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl?.removeTarget(self, action: "SELrefreshTabs", forControlEvents: UIControlEvents.ValueChanged)
     }
 
     func notificationReceived(notification: NSNotification) {
@@ -431,12 +431,12 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
-        signInButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELsignIn), forControlEvents: UIControlEvents.TouchUpInside)
+        signInButton.addTarget(self, action: "SELsignIn", forControlEvents: UIControlEvents.TouchUpInside)
         contentView.addSubview(signInButton)
 
         createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), forState: .Normal)
         createAnAccountButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
-        createAnAccountButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELcreateAnAccount), forControlEvents: UIControlEvents.TouchUpInside)
+        createAnAccountButton.addTarget(self, action: "SELcreateAnAccount", forControlEvents: UIControlEvents.TouchUpInside)
         contentView.addSubview(createAnAccountButton)
 
         imageView.snp_makeConstraints { (make) -> Void in

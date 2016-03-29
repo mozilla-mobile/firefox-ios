@@ -13,7 +13,7 @@ class BackForwardListViewController: UIViewController, UITableViewDelegate, UITa
         let toolbar = UIToolbar()
         view.addSubview(toolbar)
 
-        let doneItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done button label on back forward list screen"), style: .Done, target: self, action: #selector(BackForwardListViewController.SELdidClickDone))
+        let doneItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done button label on back forward list screen"), style: .Done, target: self, action: "SELdidClickDone")
         let spacer = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         toolbar.items = [doneItem, spacer]
 

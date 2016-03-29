@@ -77,7 +77,7 @@ class TestBrowserDB: XCTestCase {
 
         let center = NSNotificationCenter.defaultCenter()
         let listener = MockListener()
-        center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
+        center.addObserver(listener, selector: "onDatabaseWasRecreated:", name: NotificationDatabaseWasRecreated, object: nil)
         defer { center.removeObserver(listener) }
 
         // It'll still fail, but it moved our old DB.

@@ -129,19 +129,19 @@ class BrowserLocationView: UIView {
     private lazy var readerModeButton: ReaderModeButton = {
         let readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
-        readerModeButton.addTarget(self, action: #selector(BrowserLocationView.SELtapReaderModeButton), forControlEvents: .TouchUpInside)
-        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(BrowserLocationView.SELlongPressReaderModeButton(_:))))
+        readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: .TouchUpInside)
+        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "SELlongPressReaderModeButton:"))
         readerModeButton.isAccessibilityElement = true
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
-        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(BrowserLocationView.SELreaderModeCustomAction))]
+        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: "SELreaderModeCustomAction")]
         return readerModeButton
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(BrowserLocationView.SELlongPressLocation(_:)))
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(BrowserLocationView.SELtapLocation(_:)))
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: "SELlongPressLocation:")
+        tapRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocation:")
 
         addSubview(urlTextField)
         addSubview(lockImageView)

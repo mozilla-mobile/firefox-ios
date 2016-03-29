@@ -86,7 +86,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
                 if self.tabs.insert(connection, item: tab, err: &err) > 0 {
-                    inserted += 1
+                    ++inserted
                 } else {
                     if let err = err {
                         log.warning("Got error \(err).")
@@ -288,7 +288,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 for client in clients {
                     if let commandID = self.commands.insert(connection, item: command.withClientGUID(client.guid), err: &err) {
                         log.verbose("Inserted command: \(commandID)")
-                        numberOfInserts += 1
+                        ++numberOfInserts
                     } else {
                         if let err = err {
                             log.debug("insertCommands:forClients failed: \(err)")

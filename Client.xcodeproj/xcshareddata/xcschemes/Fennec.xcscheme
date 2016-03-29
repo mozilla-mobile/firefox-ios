@@ -22,10 +22,10 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "NO"
+            buildForRunning = "YES"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F84B21D21A090F8100AAB793"
@@ -36,10 +36,10 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "NO"
+            buildForRunning = "YES"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D39FA15E1A83E0EC00EE869C"
@@ -50,10 +50,10 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "NO"
+            buildForRunning = "YES"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FA436041ABB83B4008031D1"
@@ -64,10 +64,10 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "NO"
+            buildForRunning = "YES"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "282731671ABC9BE700AA1954"
@@ -78,10 +78,10 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "NO"
+            buildForRunning = "YES"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4D567211ADECE2700F1EFE7"
@@ -92,10 +92,10 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
