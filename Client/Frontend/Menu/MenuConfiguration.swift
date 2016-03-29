@@ -21,24 +21,45 @@ struct MenuConfiguration {
         self.appState = appState
     }
 
-    func toolbarColourForMode(isPrivate isPrivate: Bool = false) -> UIColor {
-        return isPrivate ? UIConstants.MenuToolbarBackgroundColorPrivate : UIConstants.MenuToolbarBackgroundColorNormal
+    func isPrivateMode() -> Bool {
+        let isPrivateMode: Bool
+        switch(appState) {
+        case .Browser(_, _, _, _, let isPrivate):
+            isPrivateMode = isPrivate
+        case .HomePanels(_, let isPrivate):
+            isPrivateMode = isPrivate
+        case .TabsTray(let isPrivate):
+            isPrivateMode = isPrivate
+        default:
+            isPrivateMode = false
+        }
+
+        return isPrivateMode
     }
 
-    func toolbarTintColorForMode(isPrivate isPrivate: Bool = false) -> UIColor {
-        return isPrivate ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuToolbarTintColorNormal
+    func toolbarColour() -> UIColor {
+
+        return isPrivateMode() ? UIConstants.MenuToolbarBackgroundColorPrivate : UIConstants.MenuToolbarBackgroundColorNormal
     }
 
-    func menuBackgroundColorForMode(isPrivate isPrivate: Bool = false) -> UIColor {
-        return isPrivate ? UIConstants.MenuBackgroundColorPrivate : UIConstants.MenuBackgroundColorNormal
+    func toolbarTintColor() -> UIColor {
+        return isPrivateMode() ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuToolbarTintColorNormal
     }
 
-    func menuTintColorForMode(isPrivate isPrivate: Bool = false) -> UIColor {
-        return isPrivate ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuBackgroundColorPrivate
+    func menuBackgroundColor() -> UIColor {
+        return isPrivateMode() ? UIConstants.MenuBackgroundColorPrivate : UIConstants.MenuBackgroundColorNormal
+    }
+
+    func menuTintColor() -> UIColor {
+        return isPrivateMode() ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuBackgroundColorPrivate
     }
 
     func menuFont() -> UIFont {
         return UIFont.systemFontOfSize(11)
+    }
+
+    func menuIcon() -> UIImage? {
+        return isPrivateMode() ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
     }
 
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
@@ -84,10 +105,6 @@ struct MenuConfiguration {
 // MARK: Static helper access function
 
 extension MenuConfiguration {
-
-    static func menuIconForMode(isPrivate isPrivate: Bool = false) -> UIImage? {
-        return isPrivate ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
-    }
 
     private static var NewTabMenuItem: MenuItem {
         return MenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
