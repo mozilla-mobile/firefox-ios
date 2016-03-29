@@ -6,16 +6,19 @@ import Foundation
 
 struct MenuConfiguration {
 
-    let menuItems: [MenuItem]
-    let menuToolbarItems: [MenuToolbarItem]?
-    let location: AppLocation
-    let numberOfItemsInRow: Int
+    internal private(set) var menuItems = [MenuItem]()
+    internal private(set) var menuToolbarItems: [MenuToolbarItem]?
+    internal var appState: AppState {
+        didSet {
+            menuItems = menuItemsForAppState(appState)
+            menuToolbarItems = menuToolbarItemsForAppState(appState)
+            numberOfItemsInRow = numberOfMenuItemsPerRowForAppState(appState)
+        }
+    }
+    internal private(set) var numberOfItemsInRow: Int = 0
 
-    init(location: AppLocation, menuItems: [MenuItem], toolbarItems: [MenuToolbarItem]?, numberOfItemsInRow: Int = 0) {
-        self.location = location
-        self.menuItems = menuItems
-        self.menuToolbarItems = toolbarItems
-        self.numberOfItemsInRow = numberOfItemsInRow
+    init(appState: AppState) {
+        self.appState = appState
     }
 
     func toolbarColourForMode(isPrivate isPrivate: Bool = false) -> UIColor {
@@ -37,6 +40,45 @@ struct MenuConfiguration {
     func menuFont() -> UIFont {
         return UIFont.systemFontOfSize(11)
     }
+
+    private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
+        switch appState {
+        case .TabsTray(_):
+            return 4
+        default:
+            return 3
+        }
+    }
+
+    // the items should be added to the array according to desired display order
+    private func menuItemsForAppState(appState: AppState) -> [MenuItem] {
+        let menuItems: [MenuItem]
+        switch appState {
+        case .Browser(_,_,_,_,_):
+            // TODO: filter out menu items that are not to be displayed given the current app state
+            // (i.e. whether the current browser URL is bookmarked or not)
+            menuItems = [MenuConfiguration.FindInPageMenuItem, MenuConfiguration.RequestDesktopMenuItem, MenuConfiguration.RequestMobileMenuItem, MenuConfiguration.SettingsMenuItem, MenuConfiguration.NewTabMenuItem, MenuConfiguration.NewPrivateTabMenuItem, MenuConfiguration.AddBookmarkMenuItem, MenuConfiguration.RemoveBookmarkMenuItem]
+        case .HomePanels(_,_):
+            menuItems = [MenuConfiguration.NewTabMenuItem, MenuConfiguration.NewPrivateTabMenuItem, MenuConfiguration.SettingsMenuItem]
+        case .TabsTray(_):
+            menuItems = [MenuConfiguration.NewTabMenuItem, MenuConfiguration.NewPrivateTabMenuItem, MenuConfiguration.CloseAllTabsMenuItem, MenuConfiguration.SettingsMenuItem]
+        default:
+            menuItems = []
+        }
+        return menuItems
+    }
+
+    // the items should be added to the array according to desired display order
+    private func menuToolbarItemsForAppState(appState: AppState) -> [MenuToolbarItem]? {
+        let menuToolbarItems: [MenuToolbarItem]?
+        switch appState {
+        case .Browser(_,_,_,_,_), .TabsTray(_):
+            menuToolbarItems = [MenuConfiguration.TopSitesMenuToolbarItem, MenuConfiguration.BookmarksMenuToolbarItem, MenuConfiguration.HistoryMenuToolbarItem, MenuConfiguration.ReadingListMenuToolbarItem]
+        default:
+            menuToolbarItems = nil
+        }
+        return menuToolbarItems
+    }
 }
 
 // MARK: Static helper access function
@@ -45,49 +87,6 @@ extension MenuConfiguration {
 
     static func menuIconForMode(isPrivate isPrivate: Bool = false) -> UIImage? {
         return isPrivate ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
-    }
-
-    static func menuConfigurationForLocation(location: AppLocation) -> MenuConfiguration {
-        return MenuConfiguration(location: location, menuItems: menuItemsForLocation(location), toolbarItems: menuToolbarItemsForLocation(location), numberOfItemsInRow: numberOfMenuItemsPerRowForLocation(location))
-    }
-
-    private static func numberOfMenuItemsPerRowForLocation(location: AppLocation) -> Int {
-        switch location {
-        case .TabTray:
-           return 4
-        default:
-            return 3
-        }
-    }
-
-    // the items should be added to the array according to desired display order
-    private static func menuItemsForLocation(location: AppLocation) -> [MenuItem] {
-        let menuItems: [MenuItem]
-        switch location {
-        case .Browser:
-            // TODO: filter out menu items that are not to be displayed given the current app state
-            // (i.e. whether the current browser URL is bookmarked or not)
-            menuItems = [FindInPageMenuItem, RequestDesktopMenuItem, RequestMobileMenuItem, SettingsMenuItem, NewTabMenuItem, NewPrivateTabMenuItem, AddBookmarkMenuItem, RemoveBookmarkMenuItem]
-        case .HomePanels:
-            menuItems = [NewTabMenuItem, NewPrivateTabMenuItem, SettingsMenuItem]
-        case .TabTray:
-            menuItems = [NewTabMenuItem, NewPrivateTabMenuItem, CloseAllTabsMenuItem, SettingsMenuItem]
-        default:
-            menuItems = []
-        }
-        return menuItems
-    }
-
-    // the items should be added to the array according to desired display order
-    private static func menuToolbarItemsForLocation(location: AppLocation) -> [MenuToolbarItem]? {
-        let menuToolbarItems: [MenuToolbarItem]?
-        switch location {
-        case .Browser, .TabTray:
-            menuToolbarItems = [TopSitesMenuToolbarItem, BookmarksMenuToolbarItem, HistoryMenuToolbarItem, ReadingListMenuToolbarItem]
-        default:
-            menuToolbarItems = nil
-        }
-        return menuToolbarItems
     }
 
     private static var NewTabMenuItem: MenuItem {

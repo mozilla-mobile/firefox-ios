@@ -90,19 +90,7 @@ class BrowserViewController: UIViewController {
     var navigationToolbar: BrowserToolbarProtocol {
         return toolbar ?? urlBar
     }
-
-    private var appState: AppState {
-        var appState = AppState()
-        appState.currentLocation = .Browser
-        if let url = self.urlBar?.currentURL {
-            appState.currentURL = url
-            appState.currentLocation = .Browser
-        } else {
-            appState.currentLocation = .HomePanels
-        }
-        return appState
-    }
-
+    
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
@@ -681,6 +669,7 @@ class BrowserViewController: UIViewController {
             }
         }
         homePanelController?.selectedButtonIndex = newSelectedButtonIndex
+        AppState.homePanelState = newSelectedButtonIndex
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
@@ -794,6 +783,10 @@ class BrowserViewController: UIViewController {
                 toApplication: UIApplication.sharedApplication())
         }
 
+        if url == (AppState.url?.absoluteString ?? "") {
+            AppState.bookmarked = true
+        }
+
         if !AppConstants.MOZ_MENU {
             // Dispatch to the main thread to update the UI
             dispatch_async(dispatch_get_main_queue()) { _ in
@@ -839,6 +832,9 @@ class BrowserViewController: UIViewController {
             $0.removeByURL(url)
                 .uponQueue(dispatch_get_main_queue()) { res in
                 if res.isSuccess {
+                    if url == (AppState.url?.absoluteString ?? "") {
+                        AppState.bookmarked = false
+                    }
                     if !AppConstants.MOZ_MENU {
                         self.toolbar?.updateBookmarkStatus(false)
                         self.urlBar.updateBookmarkStatus(false)
@@ -853,6 +849,7 @@ class BrowserViewController: UIViewController {
             if bookmark.url == urlBar.currentURL?.absoluteString {
                 if let userInfo = notification.userInfo as? Dictionary<String, Bool>{
                     if let added = userInfo["added"]{
+                        AppState.bookmarked = added
                         if !AppConstants.MOZ_MENU {
                             self.toolbar?.updateBookmarkStatus(added)
                             self.urlBar.updateBookmarkStatus(added)
@@ -948,20 +945,26 @@ class BrowserViewController: UIViewController {
         let isPage = tab.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isWebPage: isPage)
 
-        if !AppConstants.MOZ_MENU {
-            guard let url = tab.displayURL?.absoluteString else {
-                return
-            }
+        guard let url = urlBar.currentURL,
+            let urlString = tab.displayURL?.absoluteString else {
+            return
+        }
 
-            profile.bookmarks.modelFactory >>== {
-                $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { result in
-                    guard let bookmarked = result.successValue else {
-                        log.error("Error getting bookmark status: \(result.failureValue).")
-                        return
-                    }
+        AppState.url = url
 
+        profile.bookmarks.modelFactory >>== {
+            $0.isBookmarked(urlString).uponQueue(dispatch_get_main_queue()) { result in
+                guard let bookmarked = result.successValue else {
+                    log.error("Error getting bookmark status: \(result.failureValue).")
+                    return
+                }
+
+                if AppConstants.MOZ_MENU {
+                    AppState.bookmarked = bookmarked
+                } else {
                     self.navigationToolbar.updateBookmarkStatus(bookmarked)
                 }
+
             }
         }
     }
@@ -970,7 +973,7 @@ class BrowserViewController: UIViewController {
     @available(iOS 9, *)
     func switchToPrivacyMode(isPrivate isPrivate: Bool ){
         applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
-
+        AppState.isPrivate = isPrivate
         let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
         if tabTrayController.privateMode != isPrivate {
             tabTrayController.changePrivacyMode(isPrivate)
@@ -1389,9 +1392,10 @@ extension BrowserViewController: BrowserToolbarDelegate {
 
     func browserToolbarDidPressMenu(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         // check the trait collection
-        // open as modal if portrait
+        // open as modal if portrait iphone
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
-        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Browser), presentationStyle: presentationStyle)
+        let menuConfig = MenuConfiguration(appState: AppState.getAppStateForViewController(self))
+        let mvc = MenuViewController(withMenuConfig: menuConfig, presentationStyle: presentationStyle)
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         let setupPopover = { [unowned self] in
@@ -1731,6 +1735,7 @@ extension BrowserViewController: TabManagerDelegate {
 
             addOpenInViewIfNeccessary(webView.URL)
 
+            // Do we need to check the bookmark status here when we have doe this already in updateURLBarDisplayURL?
             if let url = webView.URL?.absoluteString {
                 // Don't bother fetching bookmark state for about/sessionrestore and about/home.
                 if AboutUtils.isAboutURL(webView.URL) {
@@ -2486,6 +2491,7 @@ extension BrowserViewController: FxAContentViewControllerDelegate {
 
         // TODO: Error handling.
         let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
+        AppState.hasAccount = true
         profile.setAccount(account)
         if let account = self.profile.getAccount() {
             account.advance()

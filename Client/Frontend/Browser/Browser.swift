@@ -397,6 +397,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
     @available(iOS 9, *)
     func toggleDesktopSite() {
         desktopSite = !desktopSite
+        AppState.isDesktop = desktopSite
         reload()
     }
 

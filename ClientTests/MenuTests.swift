@@ -18,7 +18,8 @@ class MenuTests: XCTestCase {
     }
 
     func testMenuConfigurationForBrowser() {
-        let browserConfiguration = MenuConfiguration.menuConfigurationForLocation(.Browser)
+        let appState: AppState = .Browser(currentURL: NSURL(string: "http://google.com")!, isBookmarked: true, isDesktopSite: true, hasAccount: true, isPrivate: false)
+        let browserConfiguration = MenuConfiguration(appState: appState)
         XCTAssertEqual(browserConfiguration.menuItems.count, 8)
         XCTAssertEqual(browserConfiguration.menuItems[0].title, MenuConfiguration.FindInPageTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[1].title, MenuConfiguration.ViewDesktopSiteTitleString)
@@ -39,7 +40,8 @@ class MenuTests: XCTestCase {
     }
 
     func testMenuConfigurationForHomePanels() {
-        let homePanelConfiguration = MenuConfiguration.menuConfigurationForLocation(.HomePanels)
+        let appState: AppState = .HomePanels(selectedPanelIndex: 0, isPrivate: false)
+        let homePanelConfiguration = MenuConfiguration(appState: appState)
         XCTAssertEqual(homePanelConfiguration.menuItems.count, 3)
         XCTAssertEqual(homePanelConfiguration.menuItems[0].title, MenuConfiguration.NewTabTitleString)
         XCTAssertEqual(homePanelConfiguration.menuItems[1].title, MenuConfiguration.NewPrivateTabTitleString)
@@ -49,7 +51,8 @@ class MenuTests: XCTestCase {
     }
 
     func testMenuConfigurationForTabTray() {
-        let tabTrayConfiguration = MenuConfiguration.menuConfigurationForLocation(.TabTray)
+        let appState: AppState = .TabsTray(isPrivate: false)
+        let tabTrayConfiguration = MenuConfiguration(appState: appState)
         XCTAssertEqual(tabTrayConfiguration.menuItems.count, 4)
         XCTAssertEqual(tabTrayConfiguration.menuItems[0].title, MenuConfiguration.NewTabTitleString)
         XCTAssertEqual(tabTrayConfiguration.menuItems[1].title, MenuConfiguration.NewPrivateTabTitleString)
