@@ -10,15 +10,20 @@ struct MenuConfiguration {
     internal private(set) var menuToolbarItems: [MenuToolbarItem]?
     internal var appState: AppState {
         didSet {
-            menuItems = menuItemsForAppState(appState)
-            menuToolbarItems = menuToolbarItemsForAppState(appState)
-            numberOfItemsInRow = numberOfMenuItemsPerRowForAppState(appState)
+            updateAppState(appState)
         }
     }
     internal private(set) var numberOfItemsInRow: Int = 0
 
     init(appState: AppState) {
         self.appState = appState
+        updateAppState(self.appState)
+    }
+
+    private mutating func updateAppState(appState: AppState) {
+        menuItems = menuItemsForAppState(appState)
+        menuToolbarItems = menuToolbarItemsForAppState(appState)
+        numberOfItemsInRow = numberOfMenuItemsPerRowForAppState(appState)
     }
 
     func isPrivateMode() -> Bool {
