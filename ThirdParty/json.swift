@@ -369,14 +369,13 @@ extension JSON : SequenceType {
         switch _value {
         case let o as NSArray:
             var i = -1
-            return AnyGenerator() {
-                i += 1
-                if i == o.count { return nil }
+            return anyGenerator() {
+                if ++i == o.count { return nil }
                 return (i, JSON(o[i]))
             }
         case let o as NSDictionary:
             let ks = o.allKeys.reverse()
-            return AnyGenerator() {
+            return anyGenerator() {
                 if ks.isEmpty { return nil }
                 if let k = ks.last as? String {
                     return (k, JSON(o.valueForKey(k)!))
@@ -385,7 +384,7 @@ extension JSON : SequenceType {
                 }
             }
         default:
-            return AnyGenerator() { nil }
+            return anyGenerator() { nil }
         }
     }
     public func mutableCopyOfTheObject() -> AnyObject {

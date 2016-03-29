@@ -146,7 +146,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
-        deleteAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.DeleteButtonTitleText, target: self, selector: #selector(ReadingListTableViewCell.deleteActionActivated))
+        deleteAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.DeleteButtonTitleText, target: self, selector: "deleteActionActivated")
 
         rightUtilityButtons = [deleteButton]
 
@@ -157,7 +157,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
         markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
-        markAsReadAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.MarkAsReadButtonTitleText, target: self, selector: #selector(ReadingListTableViewCell.markAsReadActionActivated))
+        markAsReadAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.MarkAsReadButtonTitleText, target: self, selector: "markAsReadActionActivated")
 
         leftUtilityButtons = [markAsReadButton]
 
@@ -235,8 +235,8 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ReadingListPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ReadingListPanel.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init!(coder aDecoder: NSCoder) {

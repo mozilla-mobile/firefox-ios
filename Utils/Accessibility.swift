@@ -24,7 +24,7 @@ extension AccessibleAction { // UIAccessibilityCustomAction
     }
 
     public var accessibilityCustomAction: UIAccessibilityCustomAction {
-        return UIAccessibilityCustomAction(name: name, target: self, selector: #selector(AccessibleAction.SELperformAccessibilityAction))
+        return UIAccessibilityCustomAction(name: name, target: self, selector: "SELperformAccessibilityAction")
     }
 }
 

@@ -127,7 +127,7 @@ class ThumbnailCell: UICollectionViewCell {
     }
 
     lazy var longPressGesture: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(ThumbnailCell.SELdidLongPress))
+        return UILongPressGestureRecognizer(target: self, action: "SELdidLongPress")
     }()
 
     lazy var textWrapper: UIView = {
@@ -168,7 +168,7 @@ class ThumbnailCell: UICollectionViewCell {
         let removeButton = UIButton()
         removeButton.exclusiveTouch = true
         removeButton.setImage(UIImage(named: "TileCloseButton"), forState: UIControlState.Normal)
-        removeButton.addTarget(self, action: #selector(ThumbnailCell.SELdidRemove), forControlEvents: UIControlEvents.TouchUpInside)
+        removeButton.addTarget(self, action: "SELdidRemove", forControlEvents: UIControlEvents.TouchUpInside)
         removeButton.accessibilityLabel = NSLocalizedString("Remove page", comment: "Button shown in editing mode to remove this site from the top sites panel.")
         removeButton.hidden = true
         removeButton.imageEdgeInsets = ThumbnailCellUX.RemoveButtonInsets

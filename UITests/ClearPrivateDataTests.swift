@@ -252,7 +252,7 @@ private class CachedPageServer {
     func start() -> String {
         let webServer = GCDWebServer()
         webServer.addHandlerForMethod("GET", path: "/cachedPage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            self.requests += 1
+            self.requests++
             return GCDWebServerDataResponse(HTML: "<html><head><title>Cached page</title></head><body>Cache test</body></html>")
         }
 

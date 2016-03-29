@@ -261,10 +261,10 @@ class BrowserViewController: UIViewController {
         log.debug("BVC viewDidLoad…")
         super.viewDidLoad()
         log.debug("BVC super viewDidLoad called.")
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELBookmarkStatusDidChange(_:)), name: BookmarkStatusChangedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappWillResignActiveNotification), name: UIApplicationWillResignActiveNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappDidBecomeActiveNotification), name: UIApplicationDidBecomeActiveNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappDidEnterBackgroundNotification), name: UIApplicationDidEnterBackgroundNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELBookmarkStatusDidChange:", name: BookmarkStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappWillResignActiveNotification", name: UIApplicationWillResignActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappDidBecomeActiveNotification", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappDidEnterBackgroundNotification", name: UIApplicationDidEnterBackgroundNotification, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         log.debug("BVC adding footer and header…")
@@ -294,7 +294,7 @@ class BrowserViewController: UIViewController {
         log.debug("BVC setting up top touch area…")
         topTouchArea = UIButton()
         topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), forControlEvents: UIControlEvents.TouchUpInside)
+        topTouchArea.addTarget(self, action: "SELtappedTopArea", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(topTouchArea)
 
         log.debug("BVC setting up URL bar…")
@@ -902,7 +902,7 @@ class BrowserViewController: UIViewController {
         if let url = tab.url {
             if ReaderModeUtils.isReaderModeURL(url) {
                 showReaderModeBar(animated: false)
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELDynamicFontChanged:", name: NotificationDynamicFontChanged, object: nil)
             } else {
                 hideReaderModeBar(animated: false)
                 NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
@@ -2403,7 +2403,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             let signInVC = FxAContentViewController()
             signInVC.delegate = self
             signInVC.url = profile.accountConfiguration.signInURL
-            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
+            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "dismissSignInViewController")
             vcToPresent = signInVC
         }
 

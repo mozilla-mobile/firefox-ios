@@ -170,7 +170,7 @@ public class SQLiteLogins: BrowserLogins {
 
         let protectionSpace = NSURLProtectionSpace(host: host,
             port: port,
-            protocol: scheme,
+            `protocol`: scheme,
             realm: row["httpRealm"] as? String,
             authenticationMethod: nil)
 

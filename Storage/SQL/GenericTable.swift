@@ -48,7 +48,7 @@ protocol Table: SectionCreator, SectionUpdater {
  * or something else interesting.
  */
 protocol BaseTable: Table {
-    associatedtype Type
+    typealias Type
     func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int?
     func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
     func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int

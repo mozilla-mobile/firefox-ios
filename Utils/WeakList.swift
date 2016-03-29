@@ -39,7 +39,7 @@ public class WeakList<T: AnyObject>: SequenceType {
     public func generate() -> AnyGenerator<T> {
         var index = 0
 
-        return AnyGenerator(){
+        return anyGenerator(){
             if index >= self.items.count {
                 return nil
             }

@@ -14,7 +14,7 @@ public enum CursorStatus {
 }
 
 public protocol TypedCursor: SequenceType {
-    associatedtype T
+    typealias T
     var count: Int { get }
     var status: CursorStatus { get }
     var statusMessage: String { get }
@@ -64,14 +64,12 @@ public class Cursor<T>: TypedCursor {
 
     public func generate() -> AnyGenerator<T?> {
         var nextIndex = 0
-        return AnyGenerator() {
+        return anyGenerator() {
             if (nextIndex >= self.count || self.status != CursorStatus.Success) {
                 return nil
             }
 
-            let result = self[nextIndex]
-            nextIndex += 1
-            return result
+            return self[nextIndex++]
         }
     }
 

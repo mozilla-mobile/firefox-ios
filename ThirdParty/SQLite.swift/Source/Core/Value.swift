@@ -33,9 +33,9 @@ public protocol Number : Binding {}
 
 public protocol Value : Expressible { // extensions cannot have inheritance clauses
 
-    associatedtype ValueType = Self
+    typealias ValueType = Self
 
-    associatedtype Datatype : Binding
+    typealias Datatype : Binding
 
     static var declaredDatatype: String { get }
 

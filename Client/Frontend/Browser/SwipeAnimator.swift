@@ -45,7 +45,7 @@ class SwipeAnimator: NSObject {
 
         super.init()
 
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(SwipeAnimator.SELdidPan(_:)))
+        let panGesture = UIPanGestureRecognizer(target: self, action: Selector("SELdidPan:"))
         container.addGestureRecognizer(panGesture)
         panGesture.delegate = self
     }

@@ -798,7 +798,7 @@ class SDRow: SequenceType {
     // Allow iterating through the row. This is currently broken.
     func generate() -> AnyGenerator<Any> {
         let nextIndex = 0
-        return AnyGenerator() {
+        return anyGenerator() {
             // This crashes the compiler. Yay!
             if (nextIndex < self.columnNames.count) {
                 return nil // self.getValue(nextIndex)
@@ -958,7 +958,7 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T> {
                 break
             }
 
-            count += 1
+            count++
 
             let row = SDRow(statement: statement, columns: columns)
             let result = factory(row)
@@ -1023,7 +1023,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
         var count = 0
         self.sqlStatus = sqlite3_step(statement.pointer)
         while self.sqlStatus != SQLITE_DONE {
-            count += 1
+            count++
             self.sqlStatus = sqlite3_step(statement.pointer)
         }
 
@@ -1038,7 +1038,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
         // This untangles all of the columns and values for this row when its created
         let columnCount = sqlite3_column_count(self.statement.pointer)
         var columns = [String]()
-        for i: Int32 in 0 ..< columnCount {
+        for var i: Int32 = 0; i < columnCount; ++i {
             let columnName = String.fromCString(sqlite3_column_name(self.statement.pointer, i))!
             columns.append(columnName)
         }

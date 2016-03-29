@@ -33,14 +33,12 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         return f.loadFavicons(url, profile: profile)
     }
 
-    private func loadFavicons(url: NSURL, profile: Profile, oldIcons: [Favicon] = [Favicon]()) -> Deferred<Maybe<[Favicon]>> {
+    private func loadFavicons(url: NSURL, profile: Profile, var oldIcons: [Favicon] = [Favicon]()) -> Deferred<Maybe<[Favicon]>> {
         if isIgnoredURL(url) {
             return deferMaybe(FaviconFetcherErrorType(description: "Not fetching ignored URL to find favicons."))
         }
 
         let deferred = Deferred<Maybe<[Favicon]>>()
-        
-        var oldIcons: [Favicon] = oldIcons
 
         dispatch_async(queue) { _ in
             self.parseHTMLForFavicons(url).bind({ (result: Maybe<[Favicon]>) -> Deferred<[Maybe<Favicon>]> in

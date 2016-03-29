@@ -204,9 +204,9 @@ public class BrowserProfile: Profile {
         }
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onLocationChange(_:)), name: NotificationOnLocationChange, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onProfileDidFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPrivateDataClearedHistory(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: NotificationOnLocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onProfileDidFinishSyncing:"), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onPrivateDataClearedHistory:"), name: NotificationPrivateDataClearedHistory, object: nil)
 
 
         if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
@@ -607,10 +607,10 @@ public class BrowserProfile: Profile {
             super.init()
 
             let center = NSNotificationCenter.defaultCenter()
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onLoginDidChange(_:)), name: NotificationDataLoginDidChange, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onBookmarkBufferValidated(_:)), name: NotificationBookmarkBufferValidated, object: nil)
+            center.addObserver(self, selector: "onDatabaseWasRecreated:", name: NotificationDatabaseWasRecreated, object: nil)
+            center.addObserver(self, selector: "onLoginDidChange:", name: NotificationDataLoginDidChange, object: nil)
+            center.addObserver(self, selector: "onFinishSyncing:", name: NotificationProfileDidFinishSyncing, object: nil)
+            center.addObserver(self, selector: "onBookmarkBufferValidated:", name: NotificationBookmarkBufferValidated, object: nil)
         }
 
         func onBookmarkBufferValidated(notification: NSNotification) {
@@ -840,7 +840,7 @@ public class BrowserProfile: Profile {
             }
 
             let interval = FifteenMinutes
-            let selector = #selector(BrowserSyncManager.syncOnTimer)
+            let selector = Selector("syncOnTimer")
             log.debug("Starting sync timer.")
             self.syncTimer = repeatingTimerAtInterval(interval, selector: selector)
         }

@@ -139,7 +139,7 @@ class TopSitesTests: KIFTestCase {
             let expected = tester().waitForViewWithAccessibilityLabel("test\(i).com") as! UICollectionViewCell
             let cell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0))
             XCTAssertEqual(cell, expected)
-            item += 1
+            item++
         }
     }
 
