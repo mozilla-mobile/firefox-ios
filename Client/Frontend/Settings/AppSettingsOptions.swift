@@ -489,6 +489,7 @@ class LoginsSetting: Setting {
 
         if AppConstants.MOZ_AUTHENTICATION_MANAGER && authInfo.requiresValidation() {
             AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
+            touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.navigateToLoginsList()
             },
