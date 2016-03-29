@@ -267,9 +267,7 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
     }
 
     func updatePageStatus(isWebPage isWebPage: Bool) {
-        if AppConstants.MOZ_MENU {
-            menuButton.enabled = isWebPage
-        } else {
+        if !AppConstants.MOZ_MENU {
             bookmarkButton.enabled = isWebPage
         }
         stopReloadButton.enabled = isWebPage
