@@ -1,15 +1,15 @@
 Building Firefox for iOS
 ========================
 
-Prerequisites, as of *February 13, 2016*:
+Prerequisites, as of *March 28, 2016*:
 
-* Mac OS X 10.11.3
-* Xcode 7.2.1 GM with the iOS 9.2.1 GM SDK (Betas not supported)
+* Mac OS X 10.11.4
+* Xcode 7.3 GM with the iOS 9.3 GM SDK (Betas not supported)
 * Carthage 0.15 via Homebrew or direct install via https://github.com/Carthage/Carthage/releases/tag/0.15
 
 When running on a device:
 
-* A device that supports iOS 9.2.1 GM
+* A device that supports iOS 9.3 GM
 * One of the following:
  * A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS DevCenter*
  * A free developer account, new with Xcode 7
@@ -38,15 +38,13 @@ brew switch carthage 0.15
 
 If the `brew switch` does not work because Carthage 0.15 is not available, you will have to `brew uninstall carthage' and install the binary distribution manually from https://github.com/Carthage/Carthage/releases/tag/0.15
 
-You can now execute our `checkout.sh` script:
+You can now execute our `bootstrap.sh` script:
 
 ```
-./checkout.sh
+./bootstrap.sh
 ```
 
-> If checkout fails with an error like `fatal: Not a git repository (or any of the parent directories): .git` you may have to remove the `~/Library/Caches/org.carthage.CarthageKit` directory first. See [this Carthage issue](https://github.com/Carthage/Carthage/issues/407)
-
-At this point you have checked out the source code for both the Firefox for iOS project and it's dependencies. You can now build and run the application.
+At this point you have checked out the source code for both the Firefox for iOS project and built it's dependencies. You can now build and run the application.
 
 Everything after this point is done from within Xcode.
 
