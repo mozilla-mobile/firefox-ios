@@ -80,14 +80,24 @@ struct MenuConfiguration {
     private func menuItemsForAppState(appState: AppState) -> [MenuItem] {
         let menuItems: [MenuItem]
         switch appState {
-        case .Browser(_,_,_,_,_):
+        case .Browser(_,let isBookmarked, let isDesktop, _, _):
             // TODO: filter out menu items that are not to be displayed given the current app state
             // (i.e. whether the current browser URL is bookmarked or not)
-            menuItems = [MenuConfiguration.FindInPageMenuItem, MenuConfiguration.RequestDesktopMenuItem, MenuConfiguration.RequestMobileMenuItem, MenuConfiguration.SettingsMenuItem, MenuConfiguration.NewTabMenuItem, MenuConfiguration.NewPrivateTabMenuItem, MenuConfiguration.AddBookmarkMenuItem, MenuConfiguration.RemoveBookmarkMenuItem]
+            menuItems = [MenuConfiguration.FindInPageMenuItem,
+                         isDesktop ? MenuConfiguration.RequestMobileMenuItem : MenuConfiguration.RequestDesktopMenuItem,
+                         MenuConfiguration.SettingsMenuItem,
+                         MenuConfiguration.NewTabMenuItem,
+                         MenuConfiguration.NewPrivateTabMenuItem,
+                         isBookmarked ? MenuConfiguration.RemoveBookmarkMenuItem : MenuConfiguration.AddBookmarkMenuItem]
         case .HomePanels(_,_):
-            menuItems = [MenuConfiguration.NewTabMenuItem, MenuConfiguration.NewPrivateTabMenuItem, MenuConfiguration.SettingsMenuItem]
+            menuItems = [MenuConfiguration.NewTabMenuItem,
+                         MenuConfiguration.NewPrivateTabMenuItem,
+                         MenuConfiguration.SettingsMenuItem]
         case .TabsTray(_):
-            menuItems = [MenuConfiguration.NewTabMenuItem, MenuConfiguration.NewPrivateTabMenuItem, MenuConfiguration.CloseAllTabsMenuItem, MenuConfiguration.SettingsMenuItem]
+            menuItems = [MenuConfiguration.NewTabMenuItem,
+                         MenuConfiguration.NewPrivateTabMenuItem,
+                         MenuConfiguration.CloseAllTabsMenuItem,
+                         MenuConfiguration.SettingsMenuItem]
         default:
             menuItems = []
         }
@@ -99,7 +109,10 @@ struct MenuConfiguration {
         let menuToolbarItems: [MenuToolbarItem]?
         switch appState {
         case .Browser(_,_,_,_,_), .TabsTray(_):
-            menuToolbarItems = [MenuConfiguration.TopSitesMenuToolbarItem, MenuConfiguration.BookmarksMenuToolbarItem, MenuConfiguration.HistoryMenuToolbarItem, MenuConfiguration.ReadingListMenuToolbarItem]
+            menuToolbarItems = [MenuConfiguration.TopSitesMenuToolbarItem,
+                                MenuConfiguration.BookmarksMenuToolbarItem,
+                                MenuConfiguration.HistoryMenuToolbarItem,
+                                MenuConfiguration.ReadingListMenuToolbarItem]
         default:
             menuToolbarItems = nil
         }
