@@ -3,6 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import SnapKit
+
 private struct PasscodeUX {
     static let TitleVerticalSpacing: CGFloat = 32
     static let DigitSize: CGFloat = 30
@@ -88,16 +90,23 @@ class PasscodeInputView: UIView, UIKeyInput {
     }
 
     override func drawRect(rect: CGRect) {
-        let offset = floor(rect.width / CGFloat(passcodeSize))
-        let size = CGSize(width: offset, height: rect.height)
-        let containerRect = CGRect(origin: CGPointZero, size: size)
-        // Chop up our rect into n containers and draw each digit centered inside.
+        let circleSize = CGSize(width: 14, height: 14)
+
         (0..<passcodeSize).forEach { index in
-            let characterToDraw = index < inputtedCode.characters.count ? filledDigitString : blankDigitString
-            var boundingRect = characterToDraw.boundingRectWithSize(size, options: [], context: nil)
-            boundingRect.center = containerRect.center
-            boundingRect = CGRectApplyAffineTransform(boundingRect, CGAffineTransformMakeTranslation(floor(CGFloat(index) * offset), 0))
-            characterToDraw.drawInRect(boundingRect)
+            let context = UIGraphicsGetCurrentContext()
+            CGContextSetLineWidth(context, 1)
+            CGContextSetStrokeColorWithColor(context, UIConstants.PasscodeDotColor.CGColor)
+            CGContextSetFillColorWithColor(context, UIConstants.PasscodeDotColor.CGColor)
+
+            let offset = floor(rect.width / CGFloat(passcodeSize))
+            var circleRect = CGRect(origin: CGPointZero, size: circleSize)
+            circleRect.center = CGPoint(x: (offset * CGFloat(index + 1))  - offset / 2, y: rect.height / 2)
+
+            if index < inputtedCode.characters.count {
+                CGContextFillEllipseInRect(context, circleRect)
+            } else {
+                CGContextStrokeEllipseInRect(context, circleRect)
+            }
         }
     }
 }
@@ -105,6 +114,8 @@ class PasscodeInputView: UIView, UIKeyInput {
 /// A pane that gets displayed inside the PasscodeViewController that displays a title and a passcode input field.
 class PasscodePane: UIView {
     let codeInputView = PasscodeInputView(passcodeSize: 4)
+
+    var codeViewCenterConstraint: Constraint?
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -147,9 +158,21 @@ class PasscodePane: UIView {
         }
 
         codeInputView.snp_makeConstraints { make in
-            make.centerX.equalTo(centerContainer)
+            codeViewCenterConstraint = make.centerX.equalTo(centerContainer).constraint
             make.bottom.equalTo(centerContainer)
             make.size.equalTo(PasscodeUX.PasscodeFieldSize)
+        }
+    }
+
+    func shakePasscode() {
+        UIView.animateWithDuration(0.1, animations: {
+                self.codeViewCenterConstraint?.updateOffset(-10)
+                self.layoutIfNeeded()
+        }) { complete in
+            UIView.animateWithDuration(0.1) {
+                self.codeViewCenterConstraint?.updateOffset(0)
+                self.layoutIfNeeded()
+            }
         }
     }
 

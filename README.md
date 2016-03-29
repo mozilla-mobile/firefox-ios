@@ -33,7 +33,7 @@ https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScroll
 Building the code
 -----------------
 
-> __As of February 10, 2016, this project requires Xcode 7.2.1.__
+> __As of March 28, 2016, this project requires Xcode 7.3.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage
@@ -53,7 +53,7 @@ Building the code
 
   ```shell
   cd firefox-ios
-  sh ./checkout.sh
+  sh ./bootstrap.sh
   ```
 
 1. Open `Client.xcodeproj` in Xcode.

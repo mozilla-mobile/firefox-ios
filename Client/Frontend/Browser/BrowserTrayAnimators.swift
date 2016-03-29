@@ -47,7 +47,7 @@ private extension TrayToBrowserAnimator {
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(false)
         tabTray.collectionView.alpha = 0
         tabCollectionViewSnapshot.frame = tabTray.collectionView.frame
-        container.insertSubview(tabCollectionViewSnapshot, aboveSubview: tabTray.view)
+        container.insertSubview(tabCollectionViewSnapshot, atIndex: 0)
 
         // Create a fake cell to use for the upscaling animation
         let startingFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView, atIndex: expandFromIndex)
@@ -85,13 +85,7 @@ private extension TrayToBrowserAnimator {
             tabCollectionViewSnapshot.transform = CGAffineTransformMakeScale(0.9, 0.9)
             tabCollectionViewSnapshot.alpha = 0
 
-            // Push out the navigation bar buttons
-            let buttonOffset = tabTray.addTabButton.frame.width + TabTrayControllerUX.ToolbarButtonOffset
-            tabTray.addTabButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
-            tabTray.settingsButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -buttonOffset , 0)
-            if #available(iOS 9, *) {
-                tabTray.togglePrivateMode.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
-            }
+            tabTray.toolbar.transform = CGAffineTransformMakeTranslation(0, UIConstants.ToolbarHeight)
         }, completion: { finished in
             // Remove any of the views we used for the animation
             cell.removeFromSuperview()
@@ -149,7 +143,7 @@ private extension BrowserToTrayAnimator {
         tabCollectionViewSnapshot.frame = tabTray.collectionView.frame
         tabCollectionViewSnapshot.transform = CGAffineTransformMakeScale(0.9, 0.9)
         tabCollectionViewSnapshot.alpha = 0
-        tabTray.view.addSubview(tabCollectionViewSnapshot)
+        tabTray.view.insertSubview(tabCollectionViewSnapshot, belowSubview: tabTray.toolbar)
 
         container.addSubview(cell)
         cell.layoutIfNeeded()
@@ -168,6 +162,7 @@ private extension BrowserToTrayAnimator {
             tabTray.collectionView.hidden = true
             let finalFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView,
                 atIndex: scrollToIndex)
+            tabTray.toolbar.transform = CGAffineTransformMakeTranslation(0, UIConstants.ToolbarHeight)
 
             UIView.animateWithDuration(self.transitionDuration(transitionContext),
                 delay: 0, usingSpringWithDamping: 1,
@@ -185,11 +180,8 @@ private extension BrowserToTrayAnimator {
                 bvc.footer.alpha = 0
                 tabCollectionViewSnapshot.alpha = 1
 
-                var viewsToReset: [UIView?] = [tabCollectionViewSnapshot, tabTray.addTabButton, tabTray.settingsButton]
-                if #available(iOS 9, *) {
-                    viewsToReset.append(tabTray.togglePrivateMode)
-                }
-                resetTransformsForViews(viewsToReset)
+                tabTray.toolbar.transform = CGAffineTransformIdentity
+                resetTransformsForViews([tabCollectionViewSnapshot])
             }, completion: { finished in
                 // Remove any of the views we used for the animation
                 cell.removeFromSuperview()
