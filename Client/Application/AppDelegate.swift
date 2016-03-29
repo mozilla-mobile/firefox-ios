@@ -304,10 +304,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var taskId: UIBackgroundTaskIdentifier = 0
         taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
             log.warning("Running out of background time, but we have a profile shutdown pending.")
+            self.profile?.shutdown()
             application.endBackgroundTask(taskId)
         }
 
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+        self.profile?.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
             self.profile?.shutdown()
             application.endBackgroundTask(taskId)
         }

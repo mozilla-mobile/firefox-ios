@@ -226,6 +226,8 @@
 		394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */; };
 		39A359E41BFCCE94006B9E87 /* SpotlightHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A359E31BFCCE94006B9E87 /* SpotlightHelper.swift */; };
 		39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */; };
+		39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */; };
+		39E65D371CA5CB0E00C63CE3 /* AsyncReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E65D351CA5CAF200C63CE3 /* AsyncReducer.swift */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
@@ -1216,6 +1218,8 @@
 		394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSuggestedSites.swift; sourceTree = "<group>"; };
 		39A359E31BFCCE94006B9E87 /* SpotlightHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotlightHelper.swift; path = Helpers/SpotlightHelper.swift; sourceTree = "<group>"; };
 		39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SpotlightHelper.js; sourceTree = "<group>"; };
+		39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducerTests.swift; sourceTree = "<group>"; };
+		39E65D351CA5CAF200C63CE3 /* AsyncReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducer.swift; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
@@ -2464,6 +2468,7 @@
 				B729F0691B75CBEF00745F7A /* UserAgent.swift */,
 				D3ACB4381AD33EBA00748D50 /* WeakList.swift */,
 				287DA9D51AE06D220055AC35 /* Extensions */,
+				39E65D351CA5CAF200C63CE3 /* AsyncReducer.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -2686,6 +2691,7 @@
 		E6F9650D1B2F1CF20034B023 /* SharedTests */ = {
 			isa = PBXGroup;
 			children = (
+				39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */,
 				28786E541AB0F5FA009EA9EF /* DeferredTests.swift */,
 				E695D8671C03804F00D3FCCE /* FSUtilsTests.swift */,
 				E4E25CCA1CA99E7400D0F088 /* HexExtensionsTests.swift */,
@@ -3966,6 +3972,7 @@
 				E6E4A9631BF0FA85008162D5 /* NSFileManagerExtensions.swift in Sources */,
 				D3ACB4541AD33F2200748D50 /* WeakList.swift in Sources */,
 				28E8BE7F1B792A89002CC733 /* AppInfo.swift in Sources */,
+				39E65D371CA5CB0E00C63CE3 /* AsyncReducer.swift in Sources */,
 				2FDE87541ABA3EBB005317B1 /* KeyboardHelper.swift in Sources */,
 				28532D0C1C4837F1000072D9 /* SetExtensions.swift in Sources */,
 				E65D895A1C8753CE0006EA35 /* SystemUtils.swift in Sources */,
@@ -4238,6 +4245,7 @@
 				28532BEB1C472015000072D9 /* UtilsTests.swift in Sources */,
 				28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */,
 				E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */,
+				39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */,
 				E4E7EB6D1C4AED5E0094275D /* SupportUtilsTests.swift in Sources */,
 				E4E25CCB1CA99E7400D0F088 /* HexExtensionsTests.swift in Sources */,
 				E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */,

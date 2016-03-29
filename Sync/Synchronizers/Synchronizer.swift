@@ -107,6 +107,7 @@ public enum SyncNotStartedReason {
     case StorageFormatTooNew(expected: Int)  // This'll disappear eventually; we'll wipe the server and upload m/g.
     case StateMachineNotReady                // Because we're not done implementing.
     case RedLight
+    case Unknown                             // Likely a programming error.
 
     var description: String {
         switch self {
