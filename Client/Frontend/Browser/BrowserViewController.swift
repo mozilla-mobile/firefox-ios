@@ -679,6 +679,7 @@ class BrowserViewController: UIViewController {
             if finished {
                 self.webViewContainer.accessibilityElementsHidden = true
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+                AppState.url = nil
             }
         })
         view.setNeedsUpdateConstraints()
@@ -697,6 +698,7 @@ class BrowserViewController: UIViewController {
                     self.homePanelController = nil
                     self.webViewContainer.accessibilityElementsHidden = false
                     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+                    AppState.url = self.urlBar.currentURL
 
                     // Refresh the reading view toolbar since the article record may have changed
                     if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
