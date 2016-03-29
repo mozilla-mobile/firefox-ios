@@ -50,7 +50,7 @@ class MenuViewController: UIViewController {
         menuView.toolbar.layer.shadowOpacity = 0.4
         menuView.toolbar.layer.shadowRadius = 0
 
-        menuView.backgroundColor = menuConfig.menuBackgroundColor()
+        menuView.menuColor = menuConfig.menuBackgroundColor()
         menuView.tintColor = menuConfig.menuTintColor()
 
         switch presentationStyle {
