@@ -1380,11 +1380,11 @@ extension BrowserViewController: BrowserToolbarDelegate {
         // open as modal if portrait
         let mvc: MenuViewController
         if self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular {
-            mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.TabTray), presentationStyle: .Modal)
+            mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Browser), presentationStyle: .Modal)
             mvc.modalPresentationStyle = .OverCurrentContext
         } else {
             // otherwise open as popover
-            mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.TabTray), presentationStyle: .Popover)
+            mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Browser), presentationStyle: .Popover)
             mvc.modalPresentationStyle = UIModalPresentationStyle.Popover
 
             let setupPopover = { [unowned self] in
