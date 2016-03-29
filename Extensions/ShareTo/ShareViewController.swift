@@ -89,7 +89,12 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the NavigationItem
 
         navItem = UINavigationItem()
-        navItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(ShareDialogController.cancel))
+        navItem.leftBarButtonItem = UIBarButtonItem(
+            title: NSLocalizedString("Cancel", tableName: "ShareTo", comment: "Button title for cancelling Share screen"),
+            style: .Plain,
+            target: self,
+            action: #selector(ShareDialogController.cancel)
+        )
         navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarCancelButtonFont], forState: UIControlState.Normal)
         navItem.leftBarButtonItem?.accessibilityIdentifier = "ShareDialogController.navigationItem.leftBarButtonItem"
 
