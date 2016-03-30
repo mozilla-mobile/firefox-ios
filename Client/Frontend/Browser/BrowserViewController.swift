@@ -35,6 +35,7 @@ private struct BrowserViewControllerUX {
 
 class BrowserViewController: UIViewController {
     var homePanelController: HomePanelViewController?
+    var menuViewController: MenuViewController?
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
@@ -1396,8 +1397,8 @@ extension BrowserViewController: BrowserToolbarDelegate {
         // check the trait collection
         // open as modal if portrait iphone
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
-        let menuConfig = MenuConfiguration(appState: AppState.getAppStateForViewController(self))
-        let mvc = MenuViewController(withMenuConfig: menuConfig, presentationStyle: presentationStyle)
+        let appState = AppState.getAppStateForViewController(self)
+        let mvc = MenuViewController(forAppState: appState, presentationStyle: presentationStyle)
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         let setupPopover = { [unowned self] in
@@ -1417,7 +1418,9 @@ extension BrowserViewController: BrowserToolbarDelegate {
             updateDisplayedPopoverProperties = setupPopover
         }
 
-        self.presentViewController(mvc, animated: true, completion: nil)
+        self.presentViewController(mvc, animated: true) {
+            self.menuViewController = mvc
+        }
     }
 
 

@@ -13,15 +13,22 @@ enum MenuViewPresentationStyle {
 
 class MenuViewController: UIViewController {
 
-    var menuConfig: MenuConfiguration
+    private var menuConfig: MenuConfiguration
+    var appState: AppState {
+        didSet {
+            self.menuConfig = MenuConfiguration(appState: appState)
+            self.menuView.setNeedsReload()
+        }
+    }
     var presentationStyle: MenuViewPresentationStyle
 
     var menuView: MenuView!
 
     private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
 
-    init(withMenuConfig config: MenuConfiguration, presentationStyle: MenuViewPresentationStyle) {
-        self.menuConfig = config
+    init(forAppState appState: AppState, presentationStyle: MenuViewPresentationStyle) {
+        self.appState = appState
+        self.menuConfig = MenuConfiguration(appState: appState)
         self.presentationStyle = presentationStyle
         super.init(nibName: nil, bundle: nil)
     }
