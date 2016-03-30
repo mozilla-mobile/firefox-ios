@@ -102,7 +102,8 @@ class MenuViewController: UIViewController {
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        if UI_USER_INTERFACE_IDIOM() == .Phone && presentationStyle == .Modal {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        if (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) {
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
