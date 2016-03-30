@@ -15,6 +15,7 @@ class MenuView: UIView {
     lazy var openMenuImage: UIImageView = {
         let openMenuImage = UIImageView()
         openMenuImage.contentMode = UIViewContentMode.ScaleAspectFit
+        openMenuImage.userInteractionEnabled = true
         return openMenuImage
     }()
 
