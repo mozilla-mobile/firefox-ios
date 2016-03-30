@@ -33,7 +33,7 @@ class PasscodeEntryViewController: BasePasscodeViewController {
 
         // Don't show the keyboard or allow typing if we're locked out. Also display the error.
         if authenticationInfo?.isLocked() ?? false {
-            displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
+            displayLockoutError()
             passcodePane.codeInputView.userInteractionEnabled = false
         } else {
             passcodePane.codeInputView.becomeFirstResponder()
@@ -54,16 +54,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
             delegate?.passcodeValidationDidSucceed()
         } else {
             passcodePane.shakePasscode()
-            authenticationInfo?.recordFailedAttempt()
-            let numberOfAttempts = authenticationInfo?.failedAttempts ?? 0
-            if numberOfAttempts == AllowedPasscodeFailedAttempts {
-                authenticationInfo?.lockOutUser()
-                displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
-                passcodePane.codeInputView.userInteractionEnabled = false
-                resignFirstResponder()
-            } else {
-                displayError(String(format: AuthenticationStrings.incorrectAttemptsRemaining, (AllowedPasscodeFailedAttempts - numberOfAttempts)))
-            }
+            failIncorrectPasscode(inputView: inputView)
             passcodePane.codeInputView.resetCode()
 
             // Store mutations on authentication info object
