@@ -1378,31 +1378,25 @@ extension BrowserViewController: BrowserToolbarDelegate {
     func browserToolbarDidPressMenu(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         // check the trait collection
         // open as modal if portrait
-        let mvc: MenuViewController
-        if self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular {
-            mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Browser), presentationStyle: .Modal)
-            mvc.modalPresentationStyle = .OverCurrentContext
-        } else {
-            // otherwise open as popover
-            mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Browser), presentationStyle: .Popover)
-            mvc.modalPresentationStyle = UIModalPresentationStyle.Popover
+        let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
+        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Browser), presentationStyle: presentationStyle)
+        mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
-            let setupPopover = { [unowned self] in
-                if let popoverPresentationController = mvc.popoverPresentationController {
-                    popoverPresentationController.backgroundColor = UIColor.clearColor()
-                    popoverPresentationController.delegate = self
-                    popoverPresentationController.sourceView = button
-                    popoverPresentationController.sourceRect = CGRect(x: button.frame.width/2, y: button.frame.size.height * 0.75, width: 1, height: 1)
-                    popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
-                }
+        let setupPopover = { [unowned self] in
+            if let popoverPresentationController = mvc.popoverPresentationController {
+                popoverPresentationController.backgroundColor = UIColor.clearColor()
+                popoverPresentationController.delegate = self
+                popoverPresentationController.sourceView = button
+                popoverPresentationController.sourceRect = CGRect(x: button.frame.width/2, y: button.frame.size.height * 0.75, width: 1, height: 1)
+                popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
             }
+        }
 
-            setupPopover()
+        setupPopover()
 
-            if mvc.popoverPresentationController != nil {
-                displayedPopoverController = mvc
-                updateDisplayedPopoverProperties = setupPopover
-            }
+        if mvc.popoverPresentationController != nil {
+            displayedPopoverController = mvc
+            updateDisplayedPopoverProperties = setupPopover
         }
 
         self.presentViewController(mvc, animated: true, completion: nil)
@@ -2181,12 +2175,6 @@ extension BrowserViewController: ReaderModeDelegate {
         self.showReaderModeBar(animated: true)
         browser.showContent(true)
     }
-
-    // Returning None here makes sure that the Popover is actually presented as a Popover and
-    // not as a full-screen modal, which is the default on compact device classes.
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return UIModalPresentationStyle.None
-    }
 }
 
 // MARK: - UIPopoverPresentationControllerDelegate
@@ -2195,6 +2183,14 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
         displayedPopoverController = nil
         updateDisplayedPopoverProperties = nil
+    }
+}
+
+extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
+    // Returning None here makes sure that the Popover is actually presented as a Popover and
+    // not as a full-screen modal, which is the default on compact device classes.
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.None
     }
 }
 
