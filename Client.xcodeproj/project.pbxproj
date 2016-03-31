@@ -392,6 +392,7 @@
 		E41F0D9B1ADFFC5600FC7387 /* ReadingListError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */; };
 		E4252A0E1AF01AE40028C684 /* Swizzling.m in Sources */ = {isa = PBXBuildFile; fileRef = E4252A0D1AF01AE40028C684 /* Swizzling.m */; };
 		E42CCDE81A23A73D00B794D3 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
+		E4400AD61C9B9BDB00A1789D /* SnapshotTestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4400AD51C9B9BDB00A1789D /* SnapshotTestHandler.swift */; };
 		E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4424B1F1AC6EBE100F44C38 /* ReaderSettings.xcassets */; };
 		E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4424B3B1AC71FB400F44C38 /* FiraSans-Book.ttf */; };
 		E444F7DC1B4B1B7E00FEB19B /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
@@ -1359,6 +1360,7 @@
 		E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListError.swift; sourceTree = "<group>"; };
 		E4252A0D1AF01AE40028C684 /* Swizzling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Swizzling.m; sourceTree = "<group>"; };
 		E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExtensionUtils.swift; path = ../Utils/ExtensionUtils.swift; sourceTree = "<group>"; };
+		E4400AD51C9B9BDB00A1789D /* SnapshotTestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotTestHandler.swift; sourceTree = "<group>"; };
 		E4424B1F1AC6EBE100F44C38 /* ReaderSettings.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ReaderSettings.xcassets; sourceTree = "<group>"; };
 		E4424B3B1AC71FB400F44C38 /* FiraSans-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Book.ttf"; sourceTree = "<group>"; };
 		E46C51C11B41ADD800EB349F /* Try.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Try.h; sourceTree = "<group>"; };
@@ -2845,6 +2847,7 @@
 				E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */,
 				E6639F171BF11E17002D0853 /* Settings.bundle */,
 				7BEFC67F1BFF68C30059C952 /* QuickActions.swift */,
+				E4400AD51C9B9BDB00A1789D /* SnapshotTestHandler.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -4300,6 +4303,7 @@
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
+				E4400AD61C9B9BDB00A1789D /* SnapshotTestHandler.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
 				E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */,
@@ -5686,6 +5690,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
+				TEST_TARGET_NAME = Client;
 			};
 			name = Fennec;
 		};
@@ -5695,6 +5700,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
+				TEST_TARGET_NAME = Client;
 			};
 			name = Firefox;
 		};
@@ -5704,6 +5710,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
+				TEST_TARGET_NAME = Client;
 			};
 			name = FirefoxBeta;
 		};
@@ -5713,6 +5720,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
+				TEST_TARGET_NAME = Client;
 			};
 			name = FirefoxNightly;
 		};
@@ -5722,6 +5730,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
+				TEST_TARGET_NAME = Client;
 			};
 			name = FennecAurora;
 		};

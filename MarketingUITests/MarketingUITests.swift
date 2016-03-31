@@ -6,113 +6,104 @@ import XCTest
 
 class MarketingSnapshotTests: XCTestCase {
 
-    let LoadingTimeout: NSTimeInterval = 60
-    let exists = NSPredicate(format: "exists = true")
-    let loaded = NSPredicate(format: "value BEGINSWITH '100'")
-
-    var sleep = false
+    var app: XCUIApplication!
 
     override func setUp() {
         super.setUp()
-
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        let app = XCUIApplication()
+        app = XCUIApplication()
         setupSnapshot(app)
         app.launch()
-    }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-
-    func loadWebPage(url: String, testForAutocompleteDialog: Bool = false) {
-        let app = XCUIApplication()
-        let addressTextField = app.textFields.elementBoundByIndex(0)
-        addressTextField.tap()
-        addressTextField.typeText(url)
-        if testForAutocompleteDialog {
-            //            for var idx:UInt = 0; idx < app.buttons.count; idx++ {
-            //                let button = app.buttons.elementBoundByIndex(idx)
-            //                print("\(button.identifier): \(button.value)")
-            //            }
-            app.buttons.elementBoundByIndex(8).tap()
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            XCUIDevice.sharedDevice().orientation = .LandscapeLeft
         }
-        let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
-        expectationForPredicate(exists, evaluatedWithObject: progressIndicator, handler: nil)
-        expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)
-        app.typeText("\n")
-        waitForExpectationsWithTimeout(LoadingTimeout, handler: nil)
     }
 
-    func testTakeMarketingScreenshots() {
-
-        let app = XCUIApplication()
-
-        // dismiss the intro tour
-        app.buttons.elementBoundByIndex(1).tap()
-        snapshot("00TopSites")
-
-        // go to synced tabs home screen
-        app.buttons.elementBoundByIndex(4).tap()
-        snapshot("03SyncedTabs")
-
-        // return to top sites
-        app.buttons.elementBoundByIndex(1).tap()
-
-        // create new tab
-        app.staticTexts.firstWithName("1").tap()
-        let addTabButton = app.buttons.elementBoundByIndex(3)
-        addTabButton.tap()
-
-        // load some web pages in some new tabs
-        loadWebPage("http://twitter.com", testForAutocompleteDialog: true)
-
-        app.staticTexts.firstWithName("2").tap()
-        addTabButton.tap()
-        loadWebPage("https://mozilla.org/firefox/desktop")
-
-        app.staticTexts.firstWithName("3").tap()
-        addTabButton.tap()
-        loadWebPage("https://mozilla.org")
-        app.staticTexts.firstWithName("4").tap()
-        addTabButton.tap()
-
-        loadWebPage("firefox")
-        loadWebPage("https://mozilla.org/firefox/new")
-        app.staticTexts.firstWithName("5").tap()
-        snapshot("02TabTray")
-
-        // return to first tab
-        app.collectionViews.firstMatchingType(.Cell).tap()
-        let addressTextField = app.textFields.elementBoundByIndex(0)
-        addressTextField.tap()
-
-        // perform a search but don't complete (we're testing autocomplete here)
-        addressTextField.typeText("firef")
-        snapshot("01SearchResults")
-
-        // cancel search
-        app.buttons.elementBoundByIndex(1).tap()
+    func test01Homescreen() {
+        app.buttons["IntroViewController.startBrowsingButton"].tap()
+        snapshot("01-HomeScreen")
     }
 
-}
+//    func test02Bookmarks() {
+//    }
+//
+//    func test03History() {
+//    }
+//
+//    func test04Sync() {
+//    }
+//
+//    func test05ReadingList() {
+//    }
 
-extension XCUIElementQuery {
-    func firstWithName(name: String) -> XCUIElement {
-        let values = self.containingPredicate(NSPredicate(format: "label = '\(name)'"))
-        if values.count > 0 {
-            return values.elementBoundByIndex(0)
+    func test06Tabs() {
+        let urls = [
+            "https://www.twitter.com",
+            "https://www.mozilla.org/firefox/desktop",
+            "https://www.flickr.com",
+            "https://www.mozilla.org",
+            "https://www.mozilla.org/firefox/developer"
+        ]
+
+        for (index, url) in urls.enumerate() {
+            // Open a new tab, load the page
+            app.buttons["URLBarView.tabsButton"].tap()
+            app.buttons["TabTrayController.addTabButton"].tap()
+            loadWebPage(url, waitForLoadToFinish: false)
+            sleep(15) // TODO Need better mechanism to find out if page has finished loading. Also, mozilla.org/firefox/desktop will need more time to settle because it does animations.
         }
 
-        return self.elementBoundByIndex(0)
+        // Go back to the tabs tray, swipe it back to the top
+        app.buttons["URLBarView.tabsButton"].tap()
+        app.collectionViews["TabTrayController.collectionView"].swipeDown()
+        snapshot("06-Tabs")
     }
-    
-    func firstMatchingType( type: XCUIElementType) -> XCUIElement {
-        return self.childrenMatchingType(type).elementBoundByIndex(0)
+
+    func test07PrivateBrowsing() {
+        let app = XCUIApplication()
+        app.buttons["URLBarView.tabsButton"].tap()
+        app.buttons["TabTrayController.togglePrivateMode"].tap()
+        snapshot("07-PrivateBrowsing")
+    }
+
+    func test08SearchResults() {
+        let urls = [
+            "https://www.mozilla.org",
+            "https://support.mozilla.org/en-US/products/ios",
+            "https://en.wikipedia.org/wiki/Firefox",
+            "https://www.mozilla.org/firefox/ios",
+            "https://www.twitter.com/firefox"
+        ]
+
+        for url in urls {
+            loadWebPage(url, waitForLoadToFinish: false)
+            sleep(15) // TODO Need better mechanism to find out if page has finished loading. Also, mozilla.org/firefox/desktop will need more time to settle because it does animations.
+        }
+
+        app.textFields["url"].tap()
+        app.textFields["address"].typeText("firefox")
+        app.buttons["SearchViewController.promptYesButton"].tap()
+        let _ = NSData(contentsOfURL: NSURL(string: "http://localhost:6571/snapshottest/hidekeyboard")!)
+        sleep(3)
+        snapshot("08-SearchResults")
+    }
+
+    private func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
+        let LoadingTimeout: NSTimeInterval = 10
+        let exists = NSPredicate(format: "exists = true")
+        let loaded = NSPredicate(format: "value BEGINSWITH '100'")
+
+        let app = XCUIApplication()
+
+        UIPasteboard.generalPasteboard().string = url
+        app.textFields["url"].pressForDuration(2.0)
+        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
+
+        if waitForLoadToFinish {
+            let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
+            expectationForPredicate(exists, evaluatedWithObject: progressIndicator, handler: nil)
+            expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)
+            waitForExpectationsWithTimeout(LoadingTimeout, handler: nil)
+        }
     }
 }
