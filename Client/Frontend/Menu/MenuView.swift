@@ -24,7 +24,7 @@ class MenuView: UIView {
         let pageControl = UIPageControl()
         pageControl.currentPage = 0
         pageControl.hidesForSinglePage = true
-        pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
+        pageControl.addTarget(self, action: #selector(self.pageControlDidPage(_:)), forControlEvents: UIControlEvents.ValueChanged)
         return pageControl
     }()
 
