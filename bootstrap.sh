@@ -12,6 +12,15 @@
 # Use the --force option to force a rebuild of the dependencies.
 #
 
-if [ "$1" == "--force" ] || [ ! -d Carthage ]; then
-    carthage bootstrap --platform ios --no-use-binaries
+if [ "$1" == "--force" ]; then
+    rm -rf Carthage
+fi
+
+if ! cmp -s Cartfile.resolved Carthage/Cartfile.resolved; then
+  rm -rf Carthage
+fi
+
+if [ ! -d Carthage ]; then
+  carthage bootstrap --verbose --platform ios
+  cp Cartfile.resolved Carthage/Cartfile.resolved
 fi
