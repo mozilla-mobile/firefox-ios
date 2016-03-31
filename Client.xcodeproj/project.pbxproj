@@ -404,6 +404,8 @@
 		E4483B5A1ADED63300B485A7 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E46C51C31B41ADD800EB349F /* Try.m in Sources */ = {isa = PBXBuildFile; fileRef = E46C51C21B41ADD800EB349F /* Try.m */; };
 		E46C51C41B41ADD800EB349F /* Try.m in Sources */ = {isa = PBXBuildFile; fileRef = E46C51C21B41ADD800EB349F /* Try.m */; };
+		E47536ED1C85412C0022CC69 /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47536EC1C85412C0022CC69 /* PrintHelper.swift */; };
+		E47536FC1C85415F0022CC69 /* PrintHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = E47536FB1C85415E0022CC69 /* PrintHelper.js */; };
 		E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */; };
 		E487B2331AC1C64300F3E86F /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7561A793CF20022C5E0 /* FiraSans-Regular.ttf */; };
 		E487B24E1AC1C66400F3E86F /* FiraSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7571A793CF20022C5E0 /* FiraSans-SemiBold.ttf */; };
@@ -1361,6 +1363,8 @@
 		E4424B3B1AC71FB400F44C38 /* FiraSans-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Book.ttf"; sourceTree = "<group>"; };
 		E46C51C11B41ADD800EB349F /* Try.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Try.h; sourceTree = "<group>"; };
 		E46C51C21B41ADD800EB349F /* Try.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Try.m; sourceTree = "<group>"; };
+		E47536EC1C85412C0022CC69 /* PrintHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrintHelper.swift; sourceTree = "<group>"; };
+		E47536FB1C85415E0022CC69 /* PrintHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = PrintHelper.js; sourceTree = "<group>"; };
 		E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeBarView.swift; sourceTree = "<group>"; };
 		E49943F41AE6879C00BF9DE4 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		E49943F61AE69EDD00BF9DE4 /* Intro.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Intro.xcassets; sourceTree = "<group>"; };
@@ -2412,6 +2416,7 @@
 				0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */,
 				7BA8D1C61BA037F500C8AE9E /* OpenPdfHelper.swift */,
 				D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */,
+				E47536EC1C85412C0022CC69 /* PrintHelper.swift */,
 				E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */,
 				D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */,
 				D308E4E31A5306F500842685 /* SearchEngines.swift */,
@@ -2855,6 +2860,7 @@
 				0BF42D381A7C0E8900889E28 /* Favicons.js */,
 				D3B692401B9F9CC8004B87A4 /* FindInPage.js */,
 				0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */,
+				E47536FB1C85415E0022CC69 /* PrintHelper.js */,
 				39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */,
 				E49C0EB01B46109C009092BB /* WindowCloseHelper.js */,
 				D37524861C6E8B5A00A5F6C2 /* topdomains.txt */,
@@ -3812,6 +3818,7 @@
 				E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */,
 				E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
+				E47536FC1C85415F0022CC69 /* PrintHelper.js in Resources */,
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
 				2F834D161A80629A006A0B7B /* FxASignIn.js in Resources */,
 				D3BA7E0C1B0E902A00153782 /* ContextMenu.js in Resources */,
@@ -4303,6 +4310,7 @@
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
 				E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */,
+				E47536ED1C85412C0022CC69 /* PrintHelper.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenPdfHelper.swift in Sources */,
 				74203E251B276B3D007D481D /* SessionRestoreHandler.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
