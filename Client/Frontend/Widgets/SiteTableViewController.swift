@@ -68,6 +68,22 @@ class SiteTableViewHeader : UITableViewHeaderFooterView {
     }
 }
 
+class SiteTableViewLightHeader : SiteTableViewHeader {
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+
+        topBorder.backgroundColor = UIColor.whiteColor()
+        bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+
+        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+        contentView.backgroundColor = UIColor.whiteColor()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 /**
  * Provides base shared functionality for site rows and headers.
  */
@@ -150,5 +166,12 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return false
+    }
+}
+
+class SiteTableViewControllerLight : SiteTableViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.registerClass(SiteTableViewLightHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
     }
 }
