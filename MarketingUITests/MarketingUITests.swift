@@ -24,6 +24,10 @@ class MarketingSnapshotTests: XCTestCase {
         snapshot("01-HomeScreen")
     }
 
+    func test01HomescreenCustomTopSites() {
+        // TODO Needs list of sites
+    }
+
 //    func test02Bookmarks() {
 //    }
 //
@@ -37,6 +41,7 @@ class MarketingSnapshotTests: XCTestCase {
 //    }
 
     func test06Tabs() {
+        
         let urls = [
             "https://www.twitter.com",
             "https://www.mozilla.org/firefox/desktop",
@@ -66,7 +71,14 @@ class MarketingSnapshotTests: XCTestCase {
         snapshot("07-PrivateBrowsing")
     }
 
-    func test08SearchResults() {
+    func test08PrivateBrowsingTabs() {
+        let app = XCUIApplication()
+        app.buttons["URLBarView.tabsButton"].tap()
+        app.buttons["TabTrayController.togglePrivateMode"].tap()
+        snapshot("07-PrivateBrowsing")
+    }
+
+    func test09SearchResults() {
         let urls = [
             "https://www.mozilla.org",
             "https://support.mozilla.org/en-US/products/ios",
