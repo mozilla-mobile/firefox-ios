@@ -1374,7 +1374,15 @@ extension BrowserViewController: TabToolbarDelegate {
         // check the trait collection
         // open as modal if portrait
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
-        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Tab), presentationStyle: presentationStyle)
+        let appState = AppState()
+        if let homePanelController = self.homePanelController {
+            appState.location = AppLocation.HomePanels
+            appState.homePanelIndex = homePanelController.selectedButtonIndex
+        } else {
+            appState.location = AppLocation.Tab
+            appState.tabState = tabManager.selectedTab
+        }
+        let mvc = MenuViewController(withAppState: appState, presentationStyle: presentationStyle)
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         let setupPopover = { [unowned self] in
