@@ -27,19 +27,7 @@ struct MenuConfiguration {
     }
 
     func isPrivateMode() -> Bool {
-        let isPrivateMode: Bool
-        switch(appState) {
-        case .Browser(_, _, _, _, let isPrivate):
-            isPrivateMode = isPrivate
-        case .HomePanels(_, let isPrivate):
-            isPrivateMode = isPrivate
-        case .TabsTray(let isPrivate):
-            isPrivateMode = isPrivate
-        default:
-            isPrivateMode = false
-        }
-
-        return isPrivateMode
+        return true
     }
 
     func toolbarColour() -> UIColor {
@@ -68,8 +56,9 @@ struct MenuConfiguration {
     }
 
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
-        switch appState {
-        case .TabsTray(_):
+        guard let location = appState.location else { return 0 }
+        switch location {
+        case .TabsTray:
             return 4
         default:
             return 3
@@ -79,21 +68,24 @@ struct MenuConfiguration {
     // the items should be added to the array according to desired display order
     private func menuItemsForAppState(appState: AppState) -> [MenuItem] {
         let menuItems: [MenuItem]
-        switch appState {
-        case .Browser(_,let isBookmarked, let isDesktop, _, _):
+        guard let location = appState.location else { return [] }
+        switch location {
+        case .Tab:
+            let isDesktop = false
+            let isBookmarked = false
             // TODO: filter out menu items that are not to be displayed given the current app state
-            // (i.e. whether the current browser URL is bookmarked or not)
+            // (i.e. whether the current tab URL is bookmarked or not)
             menuItems = [MenuConfiguration.FindInPageMenuItem,
                          isDesktop ? MenuConfiguration.RequestMobileMenuItem : MenuConfiguration.RequestDesktopMenuItem,
                          MenuConfiguration.SettingsMenuItem,
                          MenuConfiguration.NewTabMenuItem,
                          MenuConfiguration.NewPrivateTabMenuItem,
                          isBookmarked ? MenuConfiguration.RemoveBookmarkMenuItem : MenuConfiguration.AddBookmarkMenuItem]
-        case .HomePanels(_,_):
+        case .HomePanels:
             menuItems = [MenuConfiguration.NewTabMenuItem,
                          MenuConfiguration.NewPrivateTabMenuItem,
                          MenuConfiguration.SettingsMenuItem]
-        case .TabsTray(_):
+        case .TabsTray:
             menuItems = [MenuConfiguration.NewTabMenuItem,
                          MenuConfiguration.NewPrivateTabMenuItem,
                          MenuConfiguration.CloseAllTabsMenuItem,
@@ -107,8 +99,9 @@ struct MenuConfiguration {
     // the items should be added to the array according to desired display order
     private func menuToolbarItemsForAppState(appState: AppState) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
-        switch appState {
-        case .Browser(_,_,_,_,_), .TabsTray(_):
+        guard let location = appState.location else { return nil }
+        switch location {
+        case .Tab, .TabsTray:
             menuToolbarItems = [MenuConfiguration.TopSitesMenuToolbarItem,
                                 MenuConfiguration.BookmarksMenuToolbarItem,
                                 MenuConfiguration.HistoryMenuToolbarItem,

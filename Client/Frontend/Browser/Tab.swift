@@ -11,22 +11,22 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-protocol BrowserHelper {
+protocol TabHelper {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
 }
 
 @objc
-protocol BrowserDelegate {
-    func browser(browser: Browser, didAddSnackbar bar: SnackBar)
-    func browser(browser: Browser, didRemoveSnackbar bar: SnackBar)
-    func browser(browser: Browser, didSelectFindInPageForSelection selection: String)
-    optional func browser(browser: Browser, didCreateWebView webView: WKWebView)
-    optional func browser(browser: Browser, willDeleteWebView webView: WKWebView)
+protocol TabDelegate {
+    func tab(tab: Tab, didAddSnackbar bar: SnackBar)
+    func tab(tab: Tab, didRemoveSnackbar bar: SnackBar)
+    func tab(tab: Tab, didSelectFindInPageForSelection selection: String)
+    optional func tab(tab: Tab, didCreateWebView webView: WKWebView)
+    optional func tab(tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-class Browser: NSObject, BrowserWebViewDelegate {
+class Tab: NSObject, TabWebViewDelegate {
     private var _isPrivate: Bool = false
     internal private(set) var isPrivate: Bool {
         get {
@@ -42,7 +42,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
     }
 
     var webView: WKWebView? = nil
-    var browserDelegate: BrowserDelegate? = nil
+    var tabDelegate: TabDelegate? = nil
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
@@ -64,8 +64,8 @@ class Browser: NSObject, BrowserWebViewDelegate {
     private var helperManager: HelperManager? = nil
     private var configuration: WKWebViewConfiguration? = nil
 
-    /// Any time a browser tries to make requests to display a Javascript Alert and we are not the active
-    /// browser instance, queue it for later until we become foregrounded.
+    /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
+    /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
 
     init(configuration: WKWebViewConfiguration) {
@@ -79,21 +79,21 @@ class Browser: NSObject, BrowserWebViewDelegate {
         self.isPrivate = isPrivate
     }
 
-    class func toTab(browser: Browser) -> RemoteTab? {
-        if let displayURL = browser.displayURL where RemoteTab.shouldIncludeURL(displayURL) {
-            let history = Array(browser.historyList.filter(RemoteTab.shouldIncludeURL).reverse())
+    class func toRemoteTab(tab: Tab) -> RemoteTab? {
+        if let displayURL = tab.displayURL where RemoteTab.shouldIncludeURL(displayURL) {
+            let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reverse())
             return RemoteTab(clientGUID: nil,
                 URL: displayURL,
-                title: browser.displayTitle,
+                title: tab.displayTitle,
                 history: history,
                 lastUsed: NSDate.now(),
                 icon: nil)
-        } else if let sessionData = browser.sessionData where !sessionData.urls.isEmpty {
+        } else if let sessionData = tab.sessionData where !sessionData.urls.isEmpty {
             let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reverse())
             if let displayURL = history.first {
                 return RemoteTab(clientGUID: nil,
                     URL: displayURL,
-                    title: browser.displayTitle,
+                    title: tab.displayTitle,
                     history: history,
                     lastUsed: sessionData.lastUsedTime,
                     icon: nil)
@@ -117,7 +117,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
             configuration!.userContentController = WKUserContentController()
             configuration!.preferences = WKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
-            let webView = BrowserWebView(frame: CGRectZero, configuration: configuration!)
+            let webView = TabWebView(frame: CGRectZero, configuration: configuration!)
             webView.delegate = self
             configuration = nil
 
@@ -134,12 +134,12 @@ class Browser: NSObject, BrowserWebViewDelegate {
             restore(webView)
 
             self.webView = webView
-            browserDelegate?.browser?(self, didCreateWebView: webView)
+            tabDelegate?.tab?(self, didCreateWebView: webView)
         }
     }
 
     func restore(webView: WKWebView) {
-        // Pulls restored session data from a previous SavedTab to load into the Browser. If it's nil, a session restore
+        // Pulls restored session data from a previous SavedTab to load into the Tab. If it's nil, a session restore
         // has already been triggered via custom URL, so we use the last request to trigger it again; otherwise,
         // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
         // to trigger the session restore via custom handlers
@@ -169,7 +169,7 @@ class Browser: NSObject, BrowserWebViewDelegate {
 
     deinit {
         if let webView = webView {
-            browserDelegate?.browser?(self, willDeleteWebView: webView)
+            tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
     }
 
@@ -327,11 +327,11 @@ class Browser: NSObject, BrowserWebViewDelegate {
         }
     }
 
-    func addHelper(helper: BrowserHelper, name: String) {
+    func addHelper(helper: TabHelper, name: String) {
         helperManager!.addHelper(helper, name: name)
     }
 
-    func getHelper(name name: String) -> BrowserHelper? {
+    func getHelper(name name: String) -> TabHelper? {
         return helperManager?.getHelper(name: name)
     }
 
@@ -359,13 +359,13 @@ class Browser: NSObject, BrowserWebViewDelegate {
 
     func addSnackbar(bar: SnackBar) {
         bars.append(bar)
-        browserDelegate?.browser(self, didAddSnackbar: bar)
+        tabDelegate?.tab(self, didAddSnackbar: bar)
     }
 
     func removeSnackbar(bar: SnackBar) {
         if let index = bars.indexOf(bar) {
             bars.removeAtIndex(index)
-            browserDelegate?.browser(self, didRemoveSnackbar: bar)
+            tabDelegate?.tab(self, didRemoveSnackbar: bar)
         }
     }
 
@@ -397,7 +397,6 @@ class Browser: NSObject, BrowserWebViewDelegate {
     @available(iOS 9, *)
     func toggleDesktopSite() {
         desktopSite = !desktopSite
-        AppState.isDesktop = desktopSite
         reload()
     }
 
@@ -418,13 +417,13 @@ class Browser: NSObject, BrowserWebViewDelegate {
         }
     }
 
-    private func browserWebView(browserWebView: BrowserWebView, didSelectFindInPageForSelection selection: String) {
-        browserDelegate?.browser(self, didSelectFindInPageForSelection: selection)
+    private func tabWebView(tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
+        tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
     }
 }
 
 private class HelperManager: NSObject, WKScriptMessageHandler {
-    private var helpers = [String: BrowserHelper]()
+    private var helpers = [String: TabHelper]()
     private weak var webView: WKWebView?
 
     init(webView: WKWebView) {
@@ -442,31 +441,31 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
         }
     }
 
-    func addHelper(helper: BrowserHelper, name: String) {
+    func addHelper(helper: TabHelper, name: String) {
         if let _ = helpers[name] {
             assertionFailure("Duplicate helper added: \(name)")
         }
 
         helpers[name] = helper
 
-        // If this helper handles script messages, then get the handler name and register it. The Browser
-        // receives all messages and then dispatches them to the right BrowserHelper.
+        // If this helper handles script messages, then get the handler name and register it. The tab
+        // receives all messages and then dispatches them to the right TabHelper.
         if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
             webView?.configuration.userContentController.addScriptMessageHandler(self, name: scriptMessageHandlerName)
         }
     }
 
-    func getHelper(name name: String) -> BrowserHelper? {
+    func getHelper(name name: String) -> TabHelper? {
         return helpers[name]
     }
 }
 
-private protocol BrowserWebViewDelegate: class {
-    func browserWebView(browserWebView: BrowserWebView, didSelectFindInPageForSelection selection: String)
+private protocol TabWebViewDelegate: class {
+    func tabWebView(tabWebView: TabWebView, didSelectFindInPageForSelection selection: String)
 }
 
-private class BrowserWebView: WKWebView, MenuHelperInterface {
-    private weak var delegate: BrowserWebViewDelegate?
+private class TabWebView: WKWebView, MenuHelperInterface {
+    private weak var delegate: TabWebViewDelegate?
 
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
         return action == MenuHelper.SelectorFindInPage
@@ -475,7 +474,7 @@ private class BrowserWebView: WKWebView, MenuHelperInterface {
     @objc func menuHelperFindInPage(sender: NSNotification) {
         evaluateJavaScript("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
-            self.delegate?.browserWebView(self, didSelectFindInPageForSelection: selection)
+            self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
         }
     }
 

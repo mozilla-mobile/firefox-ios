@@ -7,7 +7,7 @@ import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
-class BrowserScrollingController: NSObject {
+class TabScrollingController: NSObject {
     enum ScrollDirection {
         case Up
         case Down
@@ -19,7 +19,7 @@ class BrowserScrollingController: NSObject {
         case Animating
     }
 
-    weak var browser: Browser? {
+    weak var tab: Tab? {
         willSet {
             self.scrollView?.delegate = nil
             self.scrollView?.removeGestureRecognizer(panGesture)
@@ -55,13 +55,13 @@ class BrowserScrollingController: NSObject {
     }
 
     private lazy var panGesture: UIPanGestureRecognizer = {
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(BrowserScrollingController.handlePan(_:)))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan(_:)))
         panGesture.maximumNumberOfTouches = 1
         panGesture.delegate = self
         return panGesture
     }()
 
-    private var scrollView: UIScrollView? { return browser?.webView?.scrollView }
+    private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
     private var contentOffset: CGPoint { return scrollView?.contentOffset ?? CGPointZero }
     private var contentSize: CGSize { return scrollView?.contentSize ?? CGSizeZero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
@@ -112,13 +112,13 @@ class BrowserScrollingController: NSObject {
     }
 }
 
-private extension BrowserScrollingController {
-    func browserIsLoading() -> Bool {
-        return browser?.loading ?? true
+private extension TabScrollingController {
+    func tabIsLoading() -> Bool {
+        return tab?.loading ?? true
     }
 
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
-        if browserIsLoading() {
+        if tabIsLoading() {
             return
         }
 
@@ -213,16 +213,16 @@ private extension BrowserScrollingController {
     }
 }
 
-extension BrowserScrollingController: UIGestureRecognizerDelegate {
+extension TabScrollingController: UIGestureRecognizerDelegate {
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }
 
-extension BrowserScrollingController: UIScrollViewDelegate {
+extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if browserIsLoading() {
+        if tabIsLoading() {
             return
         }
 

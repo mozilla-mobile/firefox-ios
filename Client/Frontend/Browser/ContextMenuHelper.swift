@@ -8,8 +8,8 @@ protocol ContextMenuHelperDelegate: class {
     func contextMenuHelper(contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UILongPressGestureRecognizer)
 }
 
-class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
-    private weak var browser: Browser?
+class ContextMenuHelper: NSObject, TabHelper, UIGestureRecognizerDelegate {
+    private weak var tab: Tab?
     weak var delegate: ContextMenuHelperDelegate?
     private let gestureRecognizer = UILongPressGestureRecognizer()
     private weak var selectionGestureRecognizer: UIGestureRecognizer?
@@ -30,18 +30,18 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
         return !UIAccessibilityIsVoiceOverRunning()
     }
 
-    required init(browser: Browser) {
+    required init(tab: Tab) {
         super.init()
-        self.browser = browser
+        self.tab = tab
 
         let path = NSBundle.mainBundle().pathForResource("ContextMenu", ofType: "js")!
         let source = try! NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String
         let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
-        browser.webView!.configuration.userContentController.addUserScript(userScript)
+        tab.webView!.configuration.userContentController.addUserScript(userScript)
 
         // Add a gesture recognizer that disables the built-in context menu gesture recognizer.
         gestureRecognizer.delegate = self
-        browser.webView!.addGestureRecognizer(gestureRecognizer)
+        tab.webView!.addGestureRecognizer(gestureRecognizer)
     }
 
     func scriptMessageHandlerName() -> String? {

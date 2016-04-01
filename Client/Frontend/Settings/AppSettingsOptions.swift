@@ -67,7 +67,6 @@ class DisconnectSetting: WithAccountSetting {
             })
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert"), style: .Destructive) { (action) in
-                AppState.hasAccount = false
                 self.settings.profile.removeAccount()
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()

@@ -4,47 +4,15 @@
 
 import Foundation
 
-enum AppState {
-    case Browser(currentURL: NSURL, isBookmarked: Bool, isDesktopSite: Bool, hasAccount: Bool, isPrivate: Bool)
-    case HomePanels(selectedPanelIndex: Int, isPrivate: Bool)
-    case TabsTray(isPrivate: Bool)
-    case Loading
+class AppState {
+    var tab: Tab?
+    var homePanelIndex: Int?
+    var profile: Profile?
+    var location: AppLocation?
+}
 
-    static func getAppStateForViewController(viewController: UIViewController) -> AppState {
-        if viewController.isKindOfClass(BrowserViewController) {
-            return getBrowserState()
-        } else if viewController.isKindOfClass(HomePanelViewController) {
-            return getHomePanelsState()
-        } else if viewController.isKindOfClass(TabTrayController) {
-            return getTabsTrayState()
-        }
-
-        return getLoadingState()
-    }
-
-    private static func getBrowserState() -> AppState {
-        guard let url = url else {
-            return getHomePanelsState()
-        }
-        return .Browser(currentURL: url, isBookmarked: bookmarked, isDesktopSite: isDesktop, hasAccount: hasAccount, isPrivate: isPrivate)
-    }
-
-    private static func getHomePanelsState() -> AppState {
-        return .HomePanels(selectedPanelIndex: homePanelState ?? 0, isPrivate: isPrivate)
-    }
-
-    private static func getTabsTrayState() -> AppState {
-        return .TabsTray(isPrivate: isPrivate)
-    }
-
-    private static func getLoadingState() -> AppState {
-        return .Loading
-    }
-
-    static var url: NSURL?
-    static var bookmarked: Bool = false
-    static var isDesktop: Bool = false
-    static var hasAccount: Bool = false
-    static var isPrivate: Bool = false
-    static var homePanelState: Int?
+enum AppLocation {
+    case Tab
+    case HomePanels
+    case TabsTray
 }

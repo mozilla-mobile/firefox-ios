@@ -47,7 +47,7 @@ class TabManagerTests: XCTestCase {
         // test that non-private tabs are saved to the db
         // add some non-private tabs to the tab manager
         for _ in 0..<3 {
-            let tab = Browser(configuration: configuration)
+            let tab = Tab(configuration: configuration)
             manager.configureTab(tab, request: NSURLRequest(URL: NSURL(string: "http://yahoo.com")!), flushToDisk: false, zombie: false)
         }
 
@@ -65,7 +65,7 @@ class TabManagerTests: XCTestCase {
         if #available(iOS 9, *) {
             // create some private tabs
             for _ in 0..<3 {
-                let tab = Browser(configuration: configuration, isPrivate: true)
+                let tab = Tab(configuration: configuration, isPrivate: true)
                 manager.configureTab(tab, request: NSURLRequest(URL: NSURL(string: "http://yahoo.com")!), flushToDisk: false, zombie: false)
             }
 

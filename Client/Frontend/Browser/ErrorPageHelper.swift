@@ -200,7 +200,7 @@ class ErrorPageHelper {
     }
 }
 
-extension ErrorPageHelper: BrowserHelper {
+extension ErrorPageHelper: TabHelper {
     static func name() -> String {
         return "ErrorPageHelper"
     }
