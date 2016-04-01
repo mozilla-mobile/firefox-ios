@@ -78,12 +78,12 @@ struct AppMenuConfiguration: MenuConfiguration {
         let menuItems: [MenuItem]
         switch appState {
         case .Tab(let tabState):
-                menuItems = [AppMenuConfiguration.FindInPageMenuItem,
-                         tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem,
-                         AppMenuConfiguration.SettingsMenuItem,
-                         AppMenuConfiguration.NewTabMenuItem,
-                         AppMenuConfiguration.NewPrivateTabMenuItem,
-                         tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem]
+            menuItems = [AppMenuConfiguration.FindInPageMenuItem,
+                     tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem,
+                     AppMenuConfiguration.SettingsMenuItem,
+                     AppMenuConfiguration.NewTabMenuItem,
+                     AppMenuConfiguration.NewPrivateTabMenuItem,
+                     tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem]
         case .HomePanels:
             menuItems = [AppMenuConfiguration.NewTabMenuItem,
                          AppMenuConfiguration.NewPrivateTabMenuItem,

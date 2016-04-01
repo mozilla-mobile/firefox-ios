@@ -1427,7 +1427,6 @@ extension BrowserViewController: TabToolbarDelegate {
         menuViewController = mvc
     }
 
-
     func tabToolbarDidPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard let tab = tabManager.selectedTab,
             let url = tab.displayURL?.absoluteString else {
