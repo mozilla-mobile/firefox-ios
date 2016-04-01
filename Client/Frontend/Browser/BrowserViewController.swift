@@ -783,6 +783,8 @@ class BrowserViewController: UIViewController {
                 toApplication: UIApplication.sharedApplication())
         }
 
+        self.tabManager.selectedTab?.isBookmarked = true
+
         if !AppConstants.MOZ_MENU {
             // Dispatch to the main thread to update the UI
             dispatch_async(dispatch_get_main_queue()) { _ in
@@ -827,11 +829,12 @@ class BrowserViewController: UIViewController {
         profile.bookmarks.modelFactory >>== {
             $0.removeByURL(url)
                 .uponQueue(dispatch_get_main_queue()) { res in
-                if res.isSuccess {
-                    if !AppConstants.MOZ_MENU {
-                        self.toolbar?.updateBookmarkStatus(false)
-                        self.urlBar.updateBookmarkStatus(false)
-                    }
+                    if res.isSuccess {
+                        self.tabManager.selectedTab?.isBookmarked = false
+                        if !AppConstants.MOZ_MENU {
+                            self.toolbar?.updateBookmarkStatus(false)
+                            self.urlBar.updateBookmarkStatus(false)
+                        }
                 }
             }
         }
@@ -842,6 +845,7 @@ class BrowserViewController: UIViewController {
             if bookmark.url == urlBar.currentURL?.absoluteString {
                 if let userInfo = notification.userInfo as? Dictionary<String, Bool>{
                     if let added = userInfo["added"]{
+                        self.tabManager.selectedTab?.isBookmarked = added
                         if !AppConstants.MOZ_MENU {
                             self.toolbar?.updateBookmarkStatus(added)
                             self.urlBar.updateBookmarkStatus(added)
@@ -937,8 +941,7 @@ class BrowserViewController: UIViewController {
         let isPage = tab.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isWebPage: isPage)
 
-        guard let url = urlBar.currentURL,
-            let urlString = tab.displayURL?.absoluteString else {
+        guard let urlString = tab.displayURL?.absoluteString else {
             return
         }
 
@@ -948,6 +951,7 @@ class BrowserViewController: UIViewController {
                     log.error("Error getting bookmark status: \(result.failureValue).")
                     return
                 }
+                self.tabManager.selectedTab?.isBookmarked = bookmarked
 
                 if !AppConstants.MOZ_MENU {
                     self.navigationToolbar.updateBookmarkStatus(bookmarked)
@@ -1382,6 +1386,14 @@ extension BrowserViewController: TabToolbarDelegate {
         // open as modal if portrait iphone
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
         let appState = AppState()
+        // check to see whether we are in home panel mode or browser mode
+        if let homePanelController = self.homePanelController {
+            appState.location = AppLocation.HomePanels
+            appState.homePanelIndex = homePanelController.selectedButtonIndex
+        } else {
+            appState.location = AppLocation.Tab
+            appState.tab = tabManager.selectedTab
+        }
         let mvc = MenuViewController(forAppState: appState, presentationStyle: presentationStyle)
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
@@ -1418,6 +1430,7 @@ extension BrowserViewController: TabToolbarDelegate {
 
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(url) >>== { isBookmarked in
+                self.tabManager.selectedTab?.isBookmarked = isBookmarked
                 if isBookmarked {
                     self.removeBookmark(url)
                 } else {
@@ -1737,6 +1750,7 @@ extension BrowserViewController: TabManagerDelegate {
                                 log.error("Error getting bookmark status: \($0.failureValue).")
                                 return
                             }
+                            self.tabManager.selectedTab?.isBookmarked = isBookmarked
 
                             self.toolbar?.updateBookmarkStatus(isBookmarked)
                             self.urlBar.updateBookmarkStatus(isBookmarked)
@@ -2480,6 +2494,7 @@ extension BrowserViewController: FxAContentViewControllerDelegate {
 
         // TODO: Error handling.
         let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
+
         profile.setAccount(account)
         if let account = self.profile.getAccount() {
             account.advance()

@@ -27,7 +27,10 @@ struct MenuConfiguration {
     }
 
     func isPrivateMode() -> Bool {
-        return true
+        guard let tab = appState.tab else {
+            return false
+        }
+        return tab.isPrivate
     }
 
     func toolbarColour() -> UIColor {
@@ -71,16 +74,18 @@ struct MenuConfiguration {
         guard let location = appState.location else { return [] }
         switch location {
         case .Tab:
-            let isDesktop = false
-            let isBookmarked = false
-            // TODO: filter out menu items that are not to be displayed given the current app state
-            // (i.e. whether the current tab URL is bookmarked or not)
-            menuItems = [MenuConfiguration.FindInPageMenuItem,
-                         isDesktop ? MenuConfiguration.RequestMobileMenuItem : MenuConfiguration.RequestDesktopMenuItem,
-                         MenuConfiguration.SettingsMenuItem,
-                         MenuConfiguration.NewTabMenuItem,
-                         MenuConfiguration.NewPrivateTabMenuItem,
-                         isBookmarked ? MenuConfiguration.RemoveBookmarkMenuItem : MenuConfiguration.AddBookmarkMenuItem]
+            if let tab = appState.tab {
+                menuItems = [MenuConfiguration.FindInPageMenuItem,
+                             tab.desktopSite ? MenuConfiguration.RequestMobileMenuItem : MenuConfiguration.RequestDesktopMenuItem,
+                             MenuConfiguration.SettingsMenuItem,
+                             MenuConfiguration.NewTabMenuItem,
+                             MenuConfiguration.NewPrivateTabMenuItem,
+                             tab.isBookmarked ? MenuConfiguration.RemoveBookmarkMenuItem : MenuConfiguration.AddBookmarkMenuItem]
+            } else {
+                menuItems = [MenuConfiguration.NewTabMenuItem,
+                     MenuConfiguration.NewPrivateTabMenuItem,
+                     MenuConfiguration.SettingsMenuItem]
+            }
         case .HomePanels:
             menuItems = [MenuConfiguration.NewTabMenuItem,
                          MenuConfiguration.NewPrivateTabMenuItem,
@@ -90,8 +95,6 @@ struct MenuConfiguration {
                          MenuConfiguration.NewPrivateTabMenuItem,
                          MenuConfiguration.CloseAllTabsMenuItem,
                          MenuConfiguration.SettingsMenuItem]
-        default:
-            menuItems = []
         }
         return menuItems
     }

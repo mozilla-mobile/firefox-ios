@@ -5,9 +5,8 @@
 import Foundation
 
 class AppState {
-    var tab: Tab?
+    weak var tab: TabState?
     var homePanelIndex: Int?
-    var profile: Profile?
     var location: AppLocation?
 }
 

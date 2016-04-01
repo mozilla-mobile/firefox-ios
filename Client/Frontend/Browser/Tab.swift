@@ -26,7 +26,14 @@ protocol TabDelegate {
     optional func tab(tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-class Tab: NSObject, TabWebViewDelegate {
+protocol TabState: class {
+    var isPrivate: Bool { get }
+    var isBookmarked: Bool { get set }
+    var desktopSite: Bool { get set }
+    var url: NSURL? { get }
+}
+
+class Tab: NSObject, TabState {
     private var _isPrivate: Bool = false
     internal private(set) var isPrivate: Bool {
         get {
@@ -41,6 +48,11 @@ class Tab: NSObject, TabWebViewDelegate {
         }
     }
 
+    var isBookmarked = false
+    /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
+    /// be managed by the web view's navigation delegate.
+    var desktopSite: Bool = false
+
     var webView: WKWebView? = nil
     var tabDelegate: TabDelegate? = nil
     var bars = [SnackBar]()
@@ -53,10 +65,6 @@ class Tab: NSObject, TabWebViewDelegate {
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
-
-    /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
-    /// be managed by the web view's navigation delegate.
-    var desktopSite: Bool = false
 
     private(set) var screenshot: UIImage?
     var screenshotUUID: NSUUID?
@@ -416,7 +424,9 @@ class Tab: NSObject, TabWebViewDelegate {
             alert.cancel()
         }
     }
+}
 
+extension Tab: TabWebViewDelegate {
     private func tabWebView(tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
     }
