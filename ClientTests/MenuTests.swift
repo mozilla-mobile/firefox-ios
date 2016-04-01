@@ -18,7 +18,7 @@ class MenuTests: XCTestCase {
     }
 
     func testMenuConfigurationForBrowser() {
-        let browserConfiguration = MenuConfiguration.menuConfigurationForLocation(.Browser)
+        let browserConfiguration = MenuConfiguration.menuConfigurationForLocation(.Tab)
         XCTAssertEqual(browserConfiguration.menuItems.count, 8)
         XCTAssertEqual(browserConfiguration.menuItems[0].title, MenuConfiguration.FindInPageTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[1].title, MenuConfiguration.ViewDesktopSiteTitleString)

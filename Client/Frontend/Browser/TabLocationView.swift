@@ -10,16 +10,16 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-protocol BrowserLocationViewDelegate {
-    func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
-    func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView)
-    func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
+protocol TabLocationViewDelegate {
+    func tabLocationViewDidTapLocation(tabLocationView: TabLocationView)
+    func tabLocationViewDidLongPressLocation(tabLocationView: TabLocationView)
+    func tabLocationViewDidTapReaderMode(tabLocationView: TabLocationView)
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
-    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView) -> Bool
-    func browserLocationViewLocationAccessibilityActions(browserLocationView: BrowserLocationView) -> [UIAccessibilityCustomAction]?
+    func tabLocationViewDidLongPressReaderMode(tabLocationView: TabLocationView) -> Bool
+    func tabLocationViewLocationAccessibilityActions(tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
 
-struct BrowserLocationViewUX {
+struct TabLocationViewUX {
     static let HostFontColor = UIColor.blackColor()
     static let BaseURLFontColor = UIColor.grayColor()
     static let BaseURLPitch = 0.75
@@ -44,16 +44,16 @@ struct BrowserLocationViewUX {
     }()
 }
 
-class BrowserLocationView: UIView {
-    var delegate: BrowserLocationViewDelegate?
+class TabLocationView: UIView {
+    var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
 
-    dynamic var baseURLFontColor: UIColor = BrowserLocationViewUX.BaseURLFontColor {
+    dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
     }
 
-    dynamic var hostFontColor: UIColor = BrowserLocationViewUX.HostFontColor {
+    dynamic var hostFontColor: UIColor = TabLocationViewUX.HostFontColor {
         didSet { updateTextWithURL() }
     }
 
@@ -129,19 +129,19 @@ class BrowserLocationView: UIView {
     private lazy var readerModeButton: ReaderModeButton = {
         let readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
-        readerModeButton.addTarget(self, action: #selector(BrowserLocationView.SELtapReaderModeButton), forControlEvents: .TouchUpInside)
-        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(BrowserLocationView.SELlongPressReaderModeButton(_:))))
+        readerModeButton.addTarget(self, action: #selector(TabLocationView.SELtapReaderModeButton), forControlEvents: .TouchUpInside)
+        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressReaderModeButton(_:))))
         readerModeButton.isAccessibilityElement = true
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
-        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(BrowserLocationView.SELreaderModeCustomAction))]
+        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(TabLocationView.SELreaderModeCustomAction))]
         return readerModeButton
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(BrowserLocationView.SELlongPressLocation(_:)))
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(BrowserLocationView.SELtapLocation(_:)))
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressLocation(_:)))
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(TabLocationView.SELtapLocation(_:)))
 
         addSubview(urlTextField)
         addSubview(lockImageView)
@@ -149,12 +149,12 @@ class BrowserLocationView: UIView {
 
         lockImageView.snp_makeConstraints { make in
             make.leading.centerY.equalTo(self)
-            make.width.equalTo(self.lockImageView.intrinsicContentSize().width + CGFloat(BrowserLocationViewUX.LocationContentInset * 2))
+            make.width.equalTo(self.lockImageView.intrinsicContentSize().width + CGFloat(TabLocationViewUX.LocationContentInset * 2))
         }
 
         readerModeButton.snp_makeConstraints { make in
             make.trailing.centerY.equalTo(self)
-            make.width.equalTo(self.readerModeButton.intrinsicContentSize().width + CGFloat(BrowserLocationViewUX.LocationContentInset * 2))
+            make.width.equalTo(self.readerModeButton.intrinsicContentSize().width + CGFloat(TabLocationViewUX.LocationContentInset * 2))
         }
     }
 
@@ -176,13 +176,13 @@ class BrowserLocationView: UIView {
             make.top.bottom.equalTo(self)
 
             if lockImageView.hidden {
-                make.leading.equalTo(self).offset(BrowserLocationViewUX.LocationContentInset)
+                make.leading.equalTo(self).offset(TabLocationViewUX.LocationContentInset)
             } else {
                 make.leading.equalTo(self.lockImageView.snp_trailing)
             }
 
             if readerModeButton.hidden {
-                make.trailing.equalTo(self).offset(-BrowserLocationViewUX.LocationContentInset)
+                make.trailing.equalTo(self).offset(-TabLocationViewUX.LocationContentInset)
             } else {
                 make.trailing.equalTo(self.readerModeButton.snp_leading)
             }
@@ -192,27 +192,27 @@ class BrowserLocationView: UIView {
     }
 
     func SELtapReaderModeButton() {
-        delegate?.browserLocationViewDidTapReaderMode(self)
+        delegate?.tabLocationViewDidTapReaderMode(self)
     }
 
     func SELlongPressReaderModeButton(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
-            delegate?.browserLocationViewDidLongPressReaderMode(self)
+            delegate?.tabLocationViewDidLongPressReaderMode(self)
         }
     }
 
     func SELlongPressLocation(recognizer: UITapGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
-            delegate?.browserLocationViewDidLongPressLocation(self)
+            delegate?.tabLocationViewDidLongPressLocation(self)
         }
     }
 
     func SELtapLocation(recognizer: UITapGestureRecognizer) {
-        delegate?.browserLocationViewDidTapLocation(self)
+        delegate?.tabLocationViewDidTapLocation(self)
     }
 
     func SELreaderModeCustomAction() -> Bool {
-        return delegate?.browserLocationViewDidLongPressReaderMode(self) ?? false
+        return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
 
     private func updateTextWithURL() {
@@ -222,8 +222,8 @@ class BrowserLocationView: UIView {
             let nsRange = NSMakeRange(0, httplessURL.characters.count)
             attributedString.addAttribute(NSForegroundColorAttributeName, value: baseURLFontColor, range: nsRange)
             attributedString.colorSubstring(baseDomain, withColor: hostFontColor)
-            attributedString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(double: BrowserLocationViewUX.BaseURLPitch), range: nsRange)
-            attributedString.pitchSubstring(baseDomain, withPitch: BrowserLocationViewUX.HostPitch)
+            attributedString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(double: TabLocationViewUX.BaseURLPitch), range: nsRange)
+            attributedString.pitchSubstring(baseDomain, withPitch: TabLocationViewUX.HostPitch)
             urlTextField.attributedText = attributedString
         } else {
             // If we're unable to highlight the domain, just use the URL as is.
@@ -232,7 +232,7 @@ class BrowserLocationView: UIView {
     }
 }
 
-extension BrowserLocationView: UIGestureRecognizerDelegate {
+extension TabLocationView: UIGestureRecognizerDelegate {
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
@@ -243,18 +243,18 @@ extension BrowserLocationView: UIGestureRecognizerDelegate {
     }
 }
 
-extension BrowserLocationView: AccessibilityActionsSource {
+extension TabLocationView: AccessibilityActionsSource {
     func accessibilityCustomActionsForView(view: UIView) -> [UIAccessibilityCustomAction]? {
         if view === urlTextField {
-            return delegate?.browserLocationViewLocationAccessibilityActions(self)
+            return delegate?.tabLocationViewLocationAccessibilityActions(self)
         }
         return nil
     }
 }
 
-extension BrowserLocationView: Themeable {
+extension TabLocationView: Themeable {
     func applyTheme(themeName: String) {
-        guard let theme = BrowserLocationViewUX.Themes[themeName] else {
+        guard let theme = TabLocationViewUX.Themes[themeName] else {
             log.error("Unable to apply unknown theme \(themeName)")
             return
         }
