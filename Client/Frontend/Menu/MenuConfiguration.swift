@@ -5,7 +5,7 @@
 import Foundation
 
 enum MenuLocation {
-    case Browser
+    case Tab
     case HomePanels
     case TabTray
 }
@@ -70,7 +70,7 @@ extension MenuConfiguration {
     private static func menuItemsForLocation(location: MenuLocation) -> [MenuItem] {
         let menuItems: [MenuItem]
         switch location {
-        case .Browser:
+        case .Tab:
             // TODO: filter out menu items that are not to be displayed given the current app state
             // (i.e. whether the current browser URL is bookmarked or not)
             menuItems = [FindInPageMenuItem, RequestDesktopMenuItem, RequestMobileMenuItem, SettingsMenuItem, NewTabMenuItem, NewPrivateTabMenuItem, AddBookmarkMenuItem, RemoveBookmarkMenuItem]
@@ -86,7 +86,7 @@ extension MenuConfiguration {
     private static func menuToolbarItemsForLocation(location: MenuLocation) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
         switch location {
-        case .Browser, .TabTray:
+        case .Tab, .TabTray:
             menuToolbarItems = [TopSitesMenuToolbarItem, BookmarksMenuToolbarItem, HistoryMenuToolbarItem, ReadingListMenuToolbarItem]
         case .HomePanels:
             menuToolbarItems = nil
