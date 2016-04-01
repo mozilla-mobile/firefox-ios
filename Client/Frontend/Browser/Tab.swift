@@ -26,7 +26,14 @@ protocol TabDelegate {
     optional func tab(tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-class Tab: NSObject, TabWebViewDelegate {
+protocol TabState: class {
+    var isPrivate: Bool { get }
+    var desktopSite: Bool { get set }
+    var isBookmarked: Bool { get set }
+    var url: NSURL? { get }
+}
+
+class Tab: NSObject, TabState {
     private var _isPrivate: Bool = false
     internal private(set) var isPrivate: Bool {
         get {
@@ -57,6 +64,7 @@ class Tab: NSObject, TabWebViewDelegate {
     /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
     /// be managed by the web view's navigation delegate.
     var desktopSite: Bool = false
+    var isBookmarked: Bool = false
 
     private(set) var screenshot: UIImage?
     var screenshotUUID: NSUUID?
@@ -416,7 +424,9 @@ class Tab: NSObject, TabWebViewDelegate {
             alert.cancel()
         }
     }
+}
 
+extension Tab: TabWebViewDelegate {
     private func tabWebView(tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
     }
