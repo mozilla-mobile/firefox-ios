@@ -17,7 +17,6 @@ class RoundedToolbar: UIToolbar {
     }
 
     var cornerRadius: CGSize = CGSizeZero
-
     var cornersToRound: UIRectCorner = [.AllCorners]
 
     /**
