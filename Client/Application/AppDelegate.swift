@@ -508,9 +508,9 @@ extension AppDelegate: UINavigationControllerDelegate {
 }
 
 extension AppDelegate: TabManagerStateDelegate {
-    func tabManagerWillStoreTabs(tabs: [Browser]) {
+    func tabManagerWillStoreTabs(tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.flatMap( Browser.toTab )
+        let storedTabs: [RemoteTab] = tabs.flatMap( Tab.toTab )
 
         // Don't insert into the DB immediately. We tend to contend with more important
         // work like querying for top sites.

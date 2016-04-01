@@ -11,8 +11,8 @@ import Deferred
 
 private let log = Logger.browserLogger
 
-class LoginsHelper: BrowserHelper {
-    private weak var browser: Browser?
+class LoginsHelper: TabHelper {
+    private weak var tab: Tab?
     private let profile: Profile
     private var snackBar: SnackBar?
 
@@ -25,13 +25,13 @@ class LoginsHelper: BrowserHelper {
         return "LoginsHelper"
     }
 
-    required init(browser: Browser, profile: Profile) {
-        self.browser = browser
+    required init(tab: Tab, profile: Profile) {
+        self.tab = tab
         self.profile = profile
 
         if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
             let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
-            browser.webView!.configuration.userContentController.addUserScript(userScript)
+            tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
 
@@ -146,25 +146,25 @@ class LoginsHelper: BrowserHelper {
         }
 
         if snackBar != nil {
-            browser?.removeSnackbar(snackBar!)
+            tab?.removeSnackbar(snackBar!)
         }
 
         snackBar = TimerSnackBar(attrText: promptMessage,
             img: UIImage(named: "key"),
             buttons: [
                 SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton", callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
+                    self.tab?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
                 }),
 
                 SnackButton(title: Strings.LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton", callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
+                    self.tab?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.addLogin(login)
                 })
             ])
-        browser?.addSnackbar(snackBar!)
+        tab?.addSnackbar(snackBar!)
     }
 
     private func promptUpdateFromLogin(login old: LoginData, toLogin new: LoginData) {
@@ -185,26 +185,26 @@ class LoginsHelper: BrowserHelper {
         let promptMessage = NSAttributedString(string: formatted)
 
         if snackBar != nil {
-            browser?.removeSnackbar(snackBar!)
+            tab?.removeSnackbar(snackBar!)
         }
 
         snackBar = TimerSnackBar(attrText: promptMessage,
             img: UIImage(named: "key"),
             buttons: [
                 SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.dontSaveButton", callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
+                    self.tab?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
                 }),
 
                 SnackButton(title: Strings.LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
+                    self.tab?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.updateLoginByGUID(guid, new: new,
                                                           significant: new.isSignificantlyDifferentFrom(old))
                 })
             ])
-        browser?.addSnackbar(snackBar!)
+        tab?.addSnackbar(snackBar!)
     }
 
     private func requestLogins(login: LoginData, requestId: String) {
@@ -219,7 +219,7 @@ class LoginsHelper: BrowserHelper {
 
             let json = JSON(jsonObj)
             let src = "window.__firefox__.logins.inject(\(json.toString()))"
-            self.browser?.webView?.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
+            self.tab?.webView?.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
             })
         }
     }
