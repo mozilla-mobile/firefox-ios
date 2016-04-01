@@ -36,6 +36,7 @@ private struct BrowserViewControllerUX {
 class BrowserViewController: UIViewController {
     var homePanelController: HomePanelViewController?
     var webViewContainer: UIView!
+    var menuViewController: MenuViewController?
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
@@ -651,7 +652,9 @@ class BrowserViewController: UIViewController {
             homePanelController = HomePanelViewController()
             homePanelController!.profile = profile
             homePanelController!.delegate = self
+            homePanelController!.appStateDelegate = self
             homePanelController!.url = tabManager.selectedTab?.displayURL
+            homePanelController!.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
             homePanelController!.view.alpha = 0
 
             addChildViewController(homePanelController!)
@@ -1129,6 +1132,25 @@ class BrowserViewController: UIViewController {
         // Make the web view the first responder so that it can show the selection menu.
         return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
     }
+
+    private func getCurrentAppState() -> AppState {
+        guard let homePanelController = self.homePanelController else {
+            if let tab = tabManager.selectedTab {
+                return .Tab(tabState: tab.tabState)
+            }
+            return .Loading
+        }
+        return .HomePanels(homePanelState: homePanelController.homePanelState)
+    }
+}
+
+extension BrowserViewController: AppStateDelegate {
+
+    func appDidUpdateState(appState: AppState) {
+        if AppConstants.MOZ_MENU {
+            menuViewController?.appState = appState
+        }
+    }
 }
 
 /**
@@ -1374,7 +1396,8 @@ extension BrowserViewController: TabToolbarDelegate {
         // check the trait collection
         // open as modal if portrait
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
-        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Tab), presentationStyle: presentationStyle)
+        let mvc = MenuViewController(withAppState: getCurrentAppState(), presentationStyle: presentationStyle)
+        mvc.delegate = self
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         let setupPopover = { [unowned self] in
@@ -1395,9 +1418,8 @@ extension BrowserViewController: TabToolbarDelegate {
         }
 
         self.presentViewController(mvc, animated: true, completion: nil)
+        menuViewController = mvc
     }
-
-
 
     func tabToolbarDidPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard let tab = tabManager.selectedTab,
@@ -1425,6 +1447,12 @@ extension BrowserViewController: TabToolbarDelegate {
             let sourceView = self.navigationToolbar.shareButton
             presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
         }
+    }
+}
+
+extension BrowserViewController: MenuViewControllerDelegate {
+    func menuViewControllerDidDismiss(menuViewController: MenuViewController) {
+        self.menuViewController = nil
     }
 }
 
@@ -1781,6 +1809,7 @@ extension BrowserViewController: TabManagerDelegate {
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self
+        tab.appStateDelegate = self
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {

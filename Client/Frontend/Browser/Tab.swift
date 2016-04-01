@@ -26,7 +26,14 @@ protocol TabDelegate {
     optional func tab(tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-class Tab: NSObject, TabWebViewDelegate {
+struct TabState {
+    var isPrivate: Bool = false
+    var desktopSite: Bool = false
+    var isBookmarked: Bool = false
+    var url: NSURL?
+}
+
+class Tab: NSObject {
     private var _isPrivate: Bool = false
     internal private(set) var isPrivate: Bool {
         get {
@@ -37,12 +44,20 @@ class Tab: NSObject, TabWebViewDelegate {
             }
         }
         set {
-            _isPrivate = newValue
+            if _isPrivate != newValue {
+                _isPrivate = newValue
+                self.updateAppState()
+            }
         }
+    }
+
+    var tabState: TabState {
+        return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url)
     }
 
     var webView: WKWebView? = nil
     var tabDelegate: TabDelegate? = nil
+    weak var appStateDelegate: AppStateDelegate?
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
@@ -56,7 +71,20 @@ class Tab: NSObject, TabWebViewDelegate {
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
     /// be managed by the web view's navigation delegate.
-    var desktopSite: Bool = false
+    var desktopSite: Bool = false {
+        didSet {
+            if oldValue != desktopSite {
+                self.updateAppState()
+            }
+        }
+    }
+    var isBookmarked: Bool = false {
+        didSet {
+            if oldValue != isBookmarked {
+                self.updateAppState()
+            }
+        }
+    }
 
     private(set) var screenshot: UIImage?
     var screenshotUUID: NSUUID?
@@ -103,6 +131,10 @@ class Tab: NSObject, TabWebViewDelegate {
         return nil
     }
 
+    private func updateAppState() {
+        self.appStateDelegate?.appDidUpdateState(.Tab(tabState: self.tabState))
+    }
+
     weak var navigationDelegate: WKNavigationDelegate? {
         didSet {
             if let webView = webView {
@@ -134,6 +166,7 @@ class Tab: NSObject, TabWebViewDelegate {
             restore(webView)
 
             self.webView = webView
+            self.webView?.addObserver(self, forKeyPath: "URL", options: .New, context: nil)
             tabDelegate?.tab?(self, didCreateWebView: webView)
         }
     }
@@ -170,6 +203,7 @@ class Tab: NSObject, TabWebViewDelegate {
     deinit {
         if let webView = webView {
             tabDelegate?.tab?(self, willDeleteWebView: webView)
+            webView.removeObserver(self, forKeyPath: "URL")
         }
     }
 
@@ -417,6 +451,17 @@ class Tab: NSObject, TabWebViewDelegate {
         }
     }
 
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        guard let webView = object as? WKWebView where webView == self.webView,
+            let path = keyPath where path == "URL" else {
+            return assertionFailure("Unhandled KVO key: \(keyPath)")
+        }
+
+        updateAppState()
+    }
+}
+
+extension Tab: TabWebViewDelegate {
     private func tabWebView(tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
     }
