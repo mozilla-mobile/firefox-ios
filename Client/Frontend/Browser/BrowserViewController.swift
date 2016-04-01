@@ -957,37 +957,31 @@ class BrowserViewController: UIViewController {
         self.tabTrayController = tabTrayController
     }
 
-    func switchToTabForURLOrOpen(url: NSURL) {
+    func switchToTabForURLOrOpen(url: NSURL, isPrivate: Bool = false) {
         let tab = tabManager.getTabForURL(url)
         popToBrowser(tab)
         if let tab = tab {
             tabManager.selectTab(tab)
         } else {
-            openURLInNewTab(url)
+            openURLInNewTab(url, isPrivate: isPrivate)
         }
     }
 
-    func openURLInNewTab(url: NSURL) {
-        if #available(iOS 9, *) {
-            openURLInNewTab(url, isPrivate: tabTrayController?.privateMode ?? false)
-        } else {
-            tabManager.addTabAndSelect(NSURLRequest(URL: url))
-        }
-    }
-
-    @available(iOS 9, *)
-    func openURLInNewTab(url: NSURL?, isPrivate: Bool) {
+    func openURLInNewTab(url: NSURL?, isPrivate: Bool = false) {
         let request: NSURLRequest?
         if let url = url {
             request = NSURLRequest(URL: url)
         } else {
             request = nil
         }
-        switchToPrivacyMode(isPrivate: isPrivate)
-        tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+        if #available(iOS 9, *) {
+            switchToPrivacyMode(isPrivate: isPrivate)
+            tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+        } else {
+            tabManager.addTabAndSelect(request)
+        }
     }
 
-    @available(iOS 9, *)
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
         popToBrowser()
         openURLInNewTab(nil, isPrivate: isPrivate)
