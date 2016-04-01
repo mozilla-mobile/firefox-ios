@@ -10,13 +10,13 @@ private struct PrintedPageUX {
     static let PageMarginScale = CGFloat(0.5)
 }
 
-class BrowserPrintPageRenderer: UIPrintPageRenderer {
-    private weak var browser: Browser?
+class TabPrintPageRenderer: UIPrintPageRenderer {
+    private weak var tab: Tab?
     let textAttributes = [NSFontAttributeName: PrintedPageUX.PageTextFont]
     let dateString: String
 
-    required init(browser: Browser) {
-        self.browser = browser
+    required init(tab: Tab) {
+        self.tab = tab
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = .ShortStyle
         dateFormatter.timeStyle = .ShortStyle
@@ -27,8 +27,8 @@ class BrowserPrintPageRenderer: UIPrintPageRenderer {
         self.footerHeight = PrintedPageUX.PageMarginScale * PrintedPageUX.PageInsets
         self.headerHeight = PrintedPageUX.PageMarginScale * PrintedPageUX.PageInsets
 
-        if let browser = self.browser {
-            let formatter = browser.webView!.viewPrintFormatter()
+        if let tab = self.tab {
+            let formatter = tab.webView!.viewPrintFormatter()
             formatter.perPageContentInsets = UIEdgeInsets(top: PrintedPageUX.PageInsets, left: PrintedPageUX.PageInsets, bottom: PrintedPageUX.PageInsets, right: PrintedPageUX.PageInsets)
             addPrintFormatter(formatter, startingAtPageAtIndex: 0)
         }
@@ -39,7 +39,7 @@ class BrowserPrintPageRenderer: UIPrintPageRenderer {
         let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // url on left
-        self.drawTextAtPoint(browser!.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
+        self.drawTextAtPoint(tab!.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
 
         // page number on right
         let pageNumberString = "\(pageIndex + 1)"
@@ -51,7 +51,7 @@ class BrowserPrintPageRenderer: UIPrintPageRenderer {
         let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // page title on left
-        self.drawTextAtPoint(browser!.displayTitle, rect: headerRect, onLeft: true)
+        self.drawTextAtPoint(tab!.displayTitle, rect: headerRect, onLeft: true)
 
         // date on right
         self.drawTextAtPoint(dateString, rect: headerRect, onLeft: false)

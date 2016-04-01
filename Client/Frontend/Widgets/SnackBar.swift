@@ -174,7 +174,7 @@ class SnackBar: UIView {
      * Override this class or use a class like CountdownSnackbar if you want things expire
      * - returns: true if the snackbar should be kept alive
      */
-    func shouldPersist(browser: Browser) -> Bool {
+    func shouldPersist(tab: Tab) -> Bool {
         return true
     }
 
@@ -292,11 +292,11 @@ class TimerSnackBar: SnackBar {
         self.timer = nil
     }
 
-    override func shouldPersist(browser: Browser) -> Bool {
+    override func shouldPersist(tab: Tab) -> Bool {
         if !showing {
             return timer != nil
         }
 
-        return super.shouldPersist(browser)
+        return super.shouldPersist(tab)
     }
 }

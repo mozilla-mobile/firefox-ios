@@ -232,8 +232,8 @@ struct PrivateModeStrings {
 
 protocol TabTrayDelegate: class {
     func tabTrayDidDismiss(tabTray: TabTrayController)
-    func tabTrayDidAddBookmark(tab: Browser)
-    func tabTrayDidAddToReadingList(tab: Browser) -> ReadingListClientRecord?
+    func tabTrayDidAddBookmark(tab: Tab)
+    func tabTrayDidAddToReadingList(tab: Tab) -> ReadingListClientRecord?
     func tabTrayRequestsPresentationOf(viewController viewController: UIViewController)
 }
 
@@ -259,7 +259,7 @@ class TabTrayController: UIViewController {
         }
     }
 
-    private var tabsToDisplay: [Browser] {
+    private var tabsToDisplay: [Tab] {
         return self.privateMode ? tabManager.privateTabs : tabManager.normalTabs
     }
 
@@ -538,7 +538,7 @@ class TabTrayController: UIViewController {
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
         self.collectionView.performBatchUpdates({ _ in
-            var tab: Browser
+            var tab: Tab
             if #available(iOS 9, *) {
                 tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
             } else {
@@ -586,13 +586,13 @@ extension TabTrayController: PresentingModalViewControllerDelegate {
 }
 
 extension TabTrayController: TabManagerDelegate {
-    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
+    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
     }
 
-    func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
+    func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {
     }
 
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
+    func tabManager(tabManager: TabManager, didAddTab tab: Tab) {
         // Get the index of the added tab from it's set (private or normal)
         guard let index = tabsToDisplay.indexOf(tab) else { return }
 
@@ -610,7 +610,7 @@ extension TabTrayController: TabManagerDelegate {
         })
     }
 
-    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {
         let removedIndex = tabDataSource.removeTab(tab)
         self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
 
@@ -701,9 +701,9 @@ extension TabTrayController: SettingsDelegate {
 
 private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     unowned var cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>
-    private var tabs: [Browser]
+    private var tabs: [Tab]
 
-    init(tabs: [Browser], cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>) {
+    init(tabs: [Tab], cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>) {
         self.cellDelegate = cellDelegate
         self.tabs = tabs
         super.init()
@@ -716,7 +716,7 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
 
      - returns: The index of the removed tab, -1 if tab did not exist
      */
-    func removeTab(tabToRemove: Browser) -> Int {
+    func removeTab(tabToRemove: Tab) -> Int {
         var index: Int = -1
         for (i, tab) in tabs.enumerate() {
             if tabToRemove === tab {
@@ -733,7 +733,7 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
 
      - parameter tab: Tab to add
      */
-    func addTab(tab: Browser) {
+    func addTab(tab: Tab) {
         tabs.append(tab)
     }
 
@@ -942,15 +942,15 @@ private class EmptyPrivateTabsView: UIView {
 @available(iOS 9.0, *)
 extension TabTrayController: TabPeekDelegate {
 
-    func tabPeekDidAddBookmark(tab: Browser) {
+    func tabPeekDidAddBookmark(tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
     }
 
-    func tabPeekDidAddToReadingList(tab: Browser) -> ReadingListClientRecord? {
+    func tabPeekDidAddToReadingList(tab: Tab) -> ReadingListClientRecord? {
         return delegate?.tabTrayDidAddToReadingList(tab)
     }
 
-    func tabPeekDidCloseTab(tab: Browser) {
+    func tabPeekDidCloseTab(tab: Tab) {
         if let index = self.tabDataSource.tabs.indexOf(tab),
             let cell = self.collectionView?.cellForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) as? TabCell {
             cell.SELclose()
