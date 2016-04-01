@@ -18,12 +18,18 @@ class MenuViewController: UIViewController {
 
     var menuView: MenuView!
 
-    private let isPrivate = false
+    var appState: AppState {
+        didSet {
+            menuConfig.appState = appState
+            menuView.setNeedsLayout()
+        }
+    }
 
     private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
 
-    init(withMenuConfig config: MenuConfiguration, presentationStyle: MenuViewPresentationStyle) {
-        self.menuConfig = config
+    init(withAppState appState: AppState, presentationStyle: MenuViewPresentationStyle) {
+        self.appState = appState
+        menuConfig = MenuConfiguration(appState: appState)
         self.presentationStyle = presentationStyle
         super.init(nibName: nil, bundle: nil)
     }
@@ -49,14 +55,14 @@ class MenuViewController: UIViewController {
         menuView.toolbarDelegate = self
         menuView.toolbarDataSource = self
 
-        menuView.toolbar.backgroundColor = menuConfig.toolbarColourForMode(isPrivate: isPrivate)
-        menuView.toolbar.tintColor = menuConfig.toolbarTintColorForMode(isPrivate: isPrivate)
-        menuView.toolbar.layer.shadowColor = isPrivate ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
+        menuView.toolbar.backgroundColor = menuConfig.toolbarColour()
+        menuView.toolbar.tintColor = menuConfig.toolbarTintColor()
+        menuView.toolbar.layer.shadowColor = menuConfig.isPrivateMode() ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
         menuView.toolbar.layer.shadowOpacity = 0.4
         menuView.toolbar.layer.shadowRadius = 0
 
-        menuView.menuColor = menuConfig.menuBackgroundColorForMode(isPrivate: isPrivate)
-        menuView.tintColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
+        menuView.menuColor = menuConfig.menuBackgroundColor()
+        menuView.tintColor = menuConfig.menuTintColor()
 
         switch presentationStyle {
         case .Popover:
@@ -75,7 +81,7 @@ class MenuViewController: UIViewController {
             // add a shadow to the bottom of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
 
-            menuView.openMenuImage.image = MenuConfiguration.menuIconForMode(isPrivate: isPrivate)
+            menuView.openMenuImage.image = menuConfig.menuIcon()
             menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissMenu(_:))))
 
             menuView.snp_makeConstraints { make in
@@ -150,8 +156,8 @@ extension MenuViewController: MenuItemDataSource {
         cell.menuTitleLabel.text = menuItem.title
         cell.accessibilityLabel = menuItem.title
         cell.menuTitleLabel.font = menuConfig.menuFont()
-        cell.menuTitleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
-        if let icon = menuItem.iconForMode(isPrivate: isPrivate) {
+        cell.menuTitleLabel.textColor = menuConfig.menuTintColor()
+        if let icon = menuItem.iconForMode(isPrivate: menuConfig.isPrivateMode()) {
             cell.menuImageView.image = icon
         }
         return cell
