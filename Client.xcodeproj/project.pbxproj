@@ -296,6 +296,7 @@
 		7B604FC01C495FD1006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
 		7B6050011C49653B006EEEC3 /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B6050001C49653B006EEEC3 /* AdjustSdk.framework */; };
 		7B6FF7911C74A2C00007E196 /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F9A1C4950F2006EEEC3 /* WebImage.framework */; };
+		7B72E8221CAEC78100FB1D1C /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72E8211CAEC78100FB1D1C /* AppState.swift */; };
 		7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */; };
 		7B93431A1CAAD00D005186B4 /* MenuPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9343181CAAD00D005186B4 /* MenuPageCollectionViewCell.swift */; };
 		7B93431B1CAAD00D005186B4 /* TopAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9343191CAAD00D005186B4 /* TopAlignedCollectionViewFlowLayout.swift */; };
@@ -1282,6 +1283,7 @@
 		7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 		7B6050001C49653B006EEEC3 /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
 		7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
+		7B72E8211CAEC78100FB1D1C /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChevronView.swift; sourceTree = "<group>"; };
 		7B9343181CAAD00D005186B4 /* MenuPageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuPageCollectionViewCell.swift; path = ItemPages/MenuPageCollectionViewCell.swift; sourceTree = "<group>"; };
 		7B9343191CAAD00D005186B4 /* TopAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopAlignedCollectionViewFlowLayout.swift; path = ItemPages/TopAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -2919,6 +2921,7 @@
 				E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */,
 				E6639F171BF11E17002D0853 /* Settings.bundle */,
 				7BEFC67F1BFF68C30059C952 /* QuickActions.swift */,
+				7B72E8211CAEC78100FB1D1C /* AppState.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -4384,6 +4387,7 @@
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
 				E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
+				7B72E8221CAEC78100FB1D1C /* AppState.swift in Sources */,
 				0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */,
 				E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */,
 				0BF648111A9C54E900BA963C /* TopSitesPanel.swift in Sources */,
