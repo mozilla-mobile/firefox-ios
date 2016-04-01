@@ -8,18 +8,18 @@ import Storage
 import WebImage
 
 
-class FaviconManager : BrowserHelper {
+class FaviconManager : TabHelper {
     let profile: Profile!
-    weak var browser: Browser?
+    weak var tab: Tab?
 
-    init(browser: Browser, profile: Profile) {
+    init(tab: Tab, profile: Profile) {
         self.profile = profile
-        self.browser = browser
+        self.tab = tab
 
         if let path = NSBundle.mainBundle().pathForResource("Favicons", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
                 let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-                browser.webView!.configuration.userContentController.addUserScript(userScript)
+                tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
     }
@@ -34,8 +34,8 @@ class FaviconManager : BrowserHelper {
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         let manager = SDWebImageManager.sharedManager()
-        self.browser?.favicons.removeAll(keepCapacity: false)
-        if let tab = self.browser,
+        self.tab?.favicons.removeAll(keepCapacity: false)
+        if let tab = self.tab,
             let currentURL = tab.url,
             let url = tab.url?.absoluteString {
                 let site = Site(url: url, title: "")
@@ -83,12 +83,12 @@ class FaviconManager : BrowserHelper {
         }
     }
 
-    func makeFaviconAvailable(tab: Browser, atURL url: NSURL, favicon: Favicon, withImage image: UIImage) {
+    func makeFaviconAvailable(tab: Tab, atURL url: NSURL, favicon: Favicon, withImage image: UIImage) {
         let helper = tab.getHelper(name: "SpotlightHelper") as? SpotlightHelper
         helper?.updateImage(image, forURL: url)
     }
 
-    func noFaviconAvailable(tab: Browser, atURL url: NSURL) {
+    func noFaviconAvailable(tab: Tab, atURL url: NSURL) {
         let helper = tab.getHelper(name: "SpotlightHelper") as? SpotlightHelper
         helper?.updateImage(forURL: url)
 

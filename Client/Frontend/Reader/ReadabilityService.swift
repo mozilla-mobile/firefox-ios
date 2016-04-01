@@ -16,11 +16,11 @@ enum ReadabilityOperationResult {
     case Timeout
 }
 
-class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowserHelperDelegate {
+class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityTabHelperDelegate {
     var url: NSURL
     var semaphore: dispatch_semaphore_t
     var result: ReadabilityOperationResult?
-    var browser: Browser!
+    var tab: Tab!
     var readerModeCache: ReaderModeCache
 
     init(url: NSURL, readerModeCache: ReaderModeCache) {
@@ -39,18 +39,18 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowse
 
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             let configuration = WKWebViewConfiguration()
-            self.browser = Browser(configuration: configuration)
-            self.browser.createWebview()
-            self.browser.navigationDelegate = self
+            self.tab = Tab(configuration: configuration)
+            self.tab.createWebview()
+            self.tab.navigationDelegate = self
 
-            if let readabilityBrowserHelper = ReadabilityBrowserHelper(browser: self.browser) {
-                readabilityBrowserHelper.delegate = self
-                self.browser.addHelper(readabilityBrowserHelper, name: ReadabilityBrowserHelper.name())
+            if let readabilityTabHelper = ReadabilityTabHelper(tab: self.tab) {
+                readabilityTabHelper.delegate = self
+                self.tab.addHelper(readabilityTabHelper, name: ReadabilityTabHelper.name())
             }
 
             // Load the page in the webview. This either fails with a navigation error, or we get a readability
             // callback. Or it takes too long, in which case the semaphore times out.
-            self.browser.loadRequest(NSURLRequest(URL: self.url))
+            self.tab.loadRequest(NSURLRequest(URL: self.url))
         })
 
         if dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, Int64(Double(ReadabilityTaskDefaultTimeout) * Double(NSEC_PER_SEC)))) != 0 {
@@ -88,7 +88,7 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowse
         dispatch_semaphore_signal(semaphore)
     }
 
-    func readabilityBrowserHelper(readabilityBrowserHelper: ReadabilityBrowserHelper, didFinishWithReadabilityResult readabilityResult: ReadabilityResult) {
+    func readabilityTabHelper(readabilityTabHelper: ReadabilityTabHelper, didFinishWithReadabilityResult readabilityResult: ReadabilityResult) {
         result = ReadabilityOperationResult.Success(readabilityResult)
         dispatch_semaphore_signal(semaphore)
     }

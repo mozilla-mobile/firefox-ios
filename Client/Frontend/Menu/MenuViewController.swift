@@ -13,17 +13,22 @@ enum MenuViewPresentationStyle {
 
 class MenuViewController: UIViewController {
 
-    var menuConfig: MenuConfiguration
+    private var menuConfig: MenuConfiguration
+    var appState: AppState {
+        didSet {
+            self.menuConfig = MenuConfiguration(appState: appState)
+            self.menuView.setNeedsReload()
+        }
+    }
     var presentationStyle: MenuViewPresentationStyle
 
     var menuView: MenuView!
 
-    private let isPrivate = false
-
     private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
 
-    init(withMenuConfig config: MenuConfiguration, presentationStyle: MenuViewPresentationStyle) {
-        self.menuConfig = config
+    init(forAppState appState: AppState, presentationStyle: MenuViewPresentationStyle) {
+        self.appState = appState
+        self.menuConfig = MenuConfiguration(appState: appState)
         self.presentationStyle = presentationStyle
         super.init(nibName: nil, bundle: nil)
     }
@@ -46,14 +51,14 @@ class MenuViewController: UIViewController {
         menuView.toolbarDelegate = self
         menuView.toolbarDataSource = self
 
-        menuView.toolbar.backgroundColor = menuConfig.toolbarColourForMode(isPrivate: isPrivate)
-        menuView.toolbar.tintColor = menuConfig.toolbarTintColorForMode(isPrivate: isPrivate)
-        menuView.toolbar.layer.shadowColor = isPrivate ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
+        menuView.toolbar.backgroundColor = menuConfig.toolbarColour()
+        menuView.toolbar.tintColor = menuConfig.toolbarTintColor()
+        menuView.toolbar.layer.shadowColor = menuConfig.isPrivateMode() ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
         menuView.toolbar.layer.shadowOpacity = 0.4
         menuView.toolbar.layer.shadowRadius = 0
 
-        menuView.backgroundColor = menuConfig.menuBackgroundColorForMode(isPrivate: isPrivate)
-        menuView.tintColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
+        menuView.menuColor = menuConfig.menuBackgroundColor()
+        menuView.tintColor = menuConfig.menuTintColor()
 
         switch presentationStyle {
         case .Popover:
@@ -72,7 +77,7 @@ class MenuViewController: UIViewController {
             // add a shadow to the bottom of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
 
-            menuView.openMenuImage.image = MenuConfiguration.menuIconForMode(isPrivate: isPrivate)
+            menuView.openMenuImage.image = menuConfig.menuIcon()
             menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissMenu(_:))))
 
             menuView.snp_makeConstraints { make in
@@ -151,8 +156,8 @@ extension MenuViewController: MenuItemDataSource {
         menuItemView.menuTitleLabel.text = menuItem.title
         menuItemView.accessibilityLabel = menuItem.title
         menuItemView.menuTitleLabel.font = menuConfig.menuFont()
-        menuItemView.menuTitleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
-        if let icon = menuItem.iconForMode(isPrivate: isPrivate) {
+        menuItemView.menuTitleLabel.textColor = menuConfig.menuTintColor()
+        if let icon = menuItem.iconForMode(isPrivate: menuConfig.isPrivateMode()) {
             menuItemView.menuImageView.image = icon
         }
 

@@ -4,95 +4,121 @@
 
 import Foundation
 
-enum MenuLocation {
-    case Browser
-    case HomePanels
-    case TabTray
-}
-
 struct MenuConfiguration {
 
-    let menuItems: [MenuItem]
-    let menuToolbarItems: [MenuToolbarItem]?
-    let location: MenuLocation
-    let numberOfItemsInRow: Int
+    internal private(set) var menuItems = [MenuItem]()
+    internal private(set) var menuToolbarItems: [MenuToolbarItem]?
+    internal var appState: AppState {
+        didSet {
+            updateAppState(appState)
+        }
+    }
+    internal private(set) var numberOfItemsInRow: Int = 0
 
-    init(location: MenuLocation, menuItems: [MenuItem], toolbarItems: [MenuToolbarItem]?, numberOfItemsInRow: Int = 0) {
-        self.location = location
-        self.menuItems = menuItems
-        self.menuToolbarItems = toolbarItems
-        self.numberOfItemsInRow = numberOfItemsInRow
+    init(appState: AppState) {
+        self.appState = appState
+        updateAppState(self.appState)
     }
 
-    func toolbarColourForMode(isPrivate isPrivate: Bool = false) -> UIColor {
-        return isPrivate ? UIConstants.MenuToolbarBackgroundColorPrivate : UIConstants.MenuToolbarBackgroundColorNormal
+    private mutating func updateAppState(appState: AppState) {
+        menuItems = menuItemsForAppState(appState)
+        menuToolbarItems = menuToolbarItemsForAppState(appState)
+        numberOfItemsInRow = numberOfMenuItemsPerRowForAppState(appState)
     }
 
-    func toolbarTintColorForMode(isPrivate isPrivate: Bool = false) -> UIColor {
-        return isPrivate ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuToolbarTintColorNormal
+    func isPrivateMode() -> Bool {
+        guard let tab = appState.tab else {
+            return false
+        }
+        return tab.isPrivate
     }
 
-    func menuBackgroundColorForMode(isPrivate isPrivate: Bool = false) -> UIColor {
-        return isPrivate ? UIConstants.MenuBackgroundColorPrivate : UIConstants.MenuBackgroundColorNormal
+    func toolbarColour() -> UIColor {
+
+        return isPrivateMode() ? UIConstants.MenuToolbarBackgroundColorPrivate : UIConstants.MenuToolbarBackgroundColorNormal
     }
 
-    func menuTintColorForMode(isPrivate isPrivate: Bool = false) -> UIColor {
-        return isPrivate ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuBackgroundColorPrivate
+    func toolbarTintColor() -> UIColor {
+        return isPrivateMode() ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuToolbarTintColorNormal
+    }
+
+    func menuBackgroundColor() -> UIColor {
+        return isPrivateMode() ? UIConstants.MenuBackgroundColorPrivate : UIConstants.MenuBackgroundColorNormal
+    }
+
+    func menuTintColor() -> UIColor {
+        return isPrivateMode() ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuBackgroundColorPrivate
     }
 
     func menuFont() -> UIFont {
         return UIFont.systemFontOfSize(11)
     }
-}
 
-// MARK: Static helper access function
-
-extension MenuConfiguration {
-
-    static func menuIconForMode(isPrivate isPrivate: Bool = false) -> UIImage? {
-        return isPrivate ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
+    func menuIcon() -> UIImage? {
+        return isPrivateMode() ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
     }
 
-    static func menuConfigurationForLocation(location: MenuLocation) -> MenuConfiguration {
-        return MenuConfiguration(location: location, menuItems: menuItemsForLocation(location), toolbarItems: menuToolbarItemsForLocation(location), numberOfItemsInRow: numberOfMenuItemsPerRowForLocation(location))
-    }
-
-    private static func numberOfMenuItemsPerRowForLocation(location: MenuLocation) -> Int {
+    private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
+        guard let location = appState.location else { return 0 }
         switch location {
-        case .TabTray:
-           return 4
+        case .TabsTray:
+            return 4
         default:
             return 3
         }
     }
 
     // the items should be added to the array according to desired display order
-    private static func menuItemsForLocation(location: MenuLocation) -> [MenuItem] {
+    private func menuItemsForAppState(appState: AppState) -> [MenuItem] {
         let menuItems: [MenuItem]
+        guard let location = appState.location else { return [] }
         switch location {
-        case .Browser:
-            // TODO: filter out menu items that are not to be displayed given the current app state
-            // (i.e. whether the current browser URL is bookmarked or not)
-            menuItems = [FindInPageMenuItem, RequestDesktopMenuItem, RequestMobileMenuItem, SettingsMenuItem, NewTabMenuItem, NewPrivateTabMenuItem, AddBookmarkMenuItem, RemoveBookmarkMenuItem]
+        case .Tab:
+            if let tab = appState.tab {
+                menuItems = [MenuConfiguration.FindInPageMenuItem,
+                             tab.desktopSite ? MenuConfiguration.RequestMobileMenuItem : MenuConfiguration.RequestDesktopMenuItem,
+                             MenuConfiguration.SettingsMenuItem,
+                             MenuConfiguration.NewTabMenuItem,
+                             MenuConfiguration.NewPrivateTabMenuItem,
+                             tab.isBookmarked ? MenuConfiguration.RemoveBookmarkMenuItem : MenuConfiguration.AddBookmarkMenuItem]
+            } else {
+                menuItems = [MenuConfiguration.NewTabMenuItem,
+                     MenuConfiguration.NewPrivateTabMenuItem,
+                     MenuConfiguration.SettingsMenuItem]
+            }
         case .HomePanels:
-            menuItems = [NewTabMenuItem, NewPrivateTabMenuItem, SettingsMenuItem]
-        case .TabTray:
-            menuItems = [NewTabMenuItem, NewPrivateTabMenuItem, CloseAllTabsMenuItem, SettingsMenuItem]
+            menuItems = [MenuConfiguration.NewTabMenuItem,
+                         MenuConfiguration.NewPrivateTabMenuItem,
+                         MenuConfiguration.SettingsMenuItem]
+        case .TabsTray:
+            menuItems = [MenuConfiguration.NewTabMenuItem,
+                         MenuConfiguration.NewPrivateTabMenuItem,
+                         MenuConfiguration.CloseAllTabsMenuItem,
+                         MenuConfiguration.SettingsMenuItem]
         }
         return menuItems
     }
 
     // the items should be added to the array according to desired display order
-    private static func menuToolbarItemsForLocation(location: MenuLocation) -> [MenuToolbarItem]? {
+    private func menuToolbarItemsForAppState(appState: AppState) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
+        guard let location = appState.location else { return nil }
         switch location {
-        case .Browser, .TabTray:
-            menuToolbarItems = [TopSitesMenuToolbarItem, BookmarksMenuToolbarItem, HistoryMenuToolbarItem, ReadingListMenuToolbarItem]
-        case .HomePanels:
+        case .Tab, .TabsTray:
+            menuToolbarItems = [MenuConfiguration.TopSitesMenuToolbarItem,
+                                MenuConfiguration.BookmarksMenuToolbarItem,
+                                MenuConfiguration.HistoryMenuToolbarItem,
+                                MenuConfiguration.ReadingListMenuToolbarItem]
+        default:
             menuToolbarItems = nil
         }
         return menuToolbarItems
     }
+}
+
+// MARK: Static helper access function
+
+extension MenuConfiguration {
 
     private static var NewTabMenuItem: MenuItem {
         return MenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")

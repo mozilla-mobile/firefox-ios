@@ -9,13 +9,13 @@ import OnePasswordExtension
 private let log = Logger.browserLogger
 
 class ShareExtensionHelper: NSObject {
-    private weak var selectedTab: Browser?
+    private weak var selectedTab: Tab?
 
     private let selectedURL: NSURL
     private var onePasswordExtensionItem: NSExtensionItem!
     private let activities: [UIActivity]
 
-    init(url: NSURL, tab: Browser?, activities: [UIActivity]) {
+    init(url: NSURL, tab: Tab?, activities: [UIActivity]) {
         self.selectedURL = url
         self.selectedTab = tab
         self.activities = activities
@@ -30,7 +30,7 @@ class ShareExtensionHelper: NSObject {
         activityItems.append(printInfo)
 
         if let tab = selectedTab {
-            activityItems.append(BrowserPrintPageRenderer(browser: tab))
+            activityItems.append(TabPrintPageRenderer(tab: tab))
         }
 
         if let title = selectedTab?.title {

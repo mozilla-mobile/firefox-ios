@@ -24,9 +24,11 @@ class MenuView: UIView {
         let pageControl = UIPageControl()
         pageControl.currentPage = 0
         pageControl.hidesForSinglePage = true
-        pageControl.addTarget(self, action: "pageControlDidPage:", forControlEvents: UIControlEvents.ValueChanged)
+        pageControl.addTarget(self, action: #selector(self.pageControlDidPage(_:)), forControlEvents: UIControlEvents.ValueChanged)
         return pageControl
     }()
+
+    lazy var menuContainerView: UIView = UIView()
 
     var toolbarDelegate: MenuToolbarItemDelegate?
     var toolbarDataSource: MenuToolbarDataSource?
@@ -53,17 +55,12 @@ class MenuView: UIView {
 
     private var presentationStyle: MenuViewPresentationStyle
 
-    private var menuColor: UIColor = UIColor.clearColor() {
+    var menuColor: UIColor = UIColor.clearColor() {
         didSet {
-            menuPagingView.backgroundColor = menuColor
-            pageControl.backgroundColor = menuColor
-            menuFooterView.backgroundColor = menuColor
-        }
-    }
-
-    override var backgroundColor: UIColor! {
-        didSet {
-            menuColor = backgroundColor
+            menuContainerView.backgroundColor = menuColor
+            menuPagingView.backgroundColor = UIColor.clearColor()
+            pageControl.backgroundColor = UIColor.clearColor()
+            menuFooterView.backgroundColor = UIColor.clearColor()
         }
     }
     
@@ -117,8 +114,9 @@ class MenuView: UIView {
 
         super.init(frame: CGRectZero)
 
-        self.addSubview(menuPagingView)
-        self.addSubview(pageControl)
+        menuContainerView.addSubview(menuPagingView)
+        menuContainerView.addSubview(pageControl)
+        self.addSubview(menuContainerView)
         self.addSubview(toolbar)
 
         switch presentationStyle {
@@ -129,28 +127,38 @@ class MenuView: UIView {
                 make.top.left.right.equalTo(self)
             }
 
-            menuPagingView.snp_makeConstraints { make in
+            menuContainerView.snp_makeConstraints { make in
                 make.top.equalTo(toolbar.snp_bottom)
-                make.left.right.equalTo(self)
+                make.bottom.left.right.equalTo(self)
+            }
+
+            menuPagingView.snp_makeConstraints { make in
+                make.top.left.right.equalTo(menuContainerView)
                 make.bottom.equalTo(pageControl.snp_top)
                 make.height.equalTo(100)
             }
 
             pageControl.snp_makeConstraints { make in
                 make.bottom.equalTo(menuFooterView.snp_top)
-                make.centerX.equalTo(self)
+                make.centerX.equalTo(menuContainerView)
             }
 
         case .Popover:
-            menuPagingView.snp_makeConstraints { make in
+
+            menuContainerView.snp_makeConstraints { make in
+                make.bottom.equalTo(toolbar.snp_top)
                 make.top.left.right.equalTo(self)
+            }
+
+            menuPagingView.snp_makeConstraints { make in
+                make.top.left.right.equalTo(menuContainerView)
             }
             pageControl.snp_makeConstraints { make in
                 make.top.equalTo(menuPagingView.snp_bottom)
-                make.centerX.equalTo(self)
+                make.centerX.equalTo(menuContainerView)
             }
             toolbar.snp_makeConstraints { make in
-                make.top.equalTo(pageControl.snp_bottom)
+                make.top.equalTo(menuContainerView.snp_bottom)
                 make.height.equalTo(toolbarHeight)
                 make.bottom.left.right.equalTo(self)
             }
@@ -162,13 +170,12 @@ class MenuView: UIView {
     }
 
     private func addFooter() {
-        self.addSubview(menuFooterView)
+        menuContainerView.addSubview(menuFooterView)
         // so it always displays the colour of the background
         menuFooterView.backgroundColor = UIColor.clearColor()
         menuFooterView.snp_makeConstraints { make in
             make.height.equalTo(menuFooterHeight)
-            make.left.right.equalTo(self)
-            make.bottom.equalTo(self)
+            make.bottom.left.right.equalTo(menuContainerView)
         }
 
         menuFooterView.addSubview(openMenuImage)
@@ -384,10 +391,13 @@ extension MenuView: UICollectionViewDelegateFlowLayout {
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let items = itemsForPageIndex(indexPath.row)
-        let numberOfRows = ceil(CGFloat(items.count) / CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0))
-        let menuHeight = itemPadding + (numberOfRows * (CGFloat(menuRowHeight) + itemPadding))
-        let size = CGSizeMake(collectionView.bounds.size.width - itemPadding, menuHeight)
-        return size
+        if(items.count > 0) {
+            let numberOfRows = ceil(CGFloat(items.count) / CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0))
+            let menuHeight = itemPadding + (numberOfRows * (CGFloat(menuRowHeight) + itemPadding))
+            let size = CGSizeMake(collectionView.bounds.size.width - itemPadding, menuHeight)
+            return size
+        }
+        return CGSizeZero
     }
 
 }

@@ -91,8 +91,8 @@ class URLBarView: UIView {
     }
 
     weak var delegate: URLBarDelegate?
-    weak var browserToolbarDelegate: BrowserToolbarDelegate?
-    var helper: BrowserToolbarHelper?
+    weak var tabToolbarDelegate: TabToolbarDelegate?
+    var helper: TabToolbarHelper?
     var isTransitioning: Bool = false {
         didSet {
             if isTransitioning {
@@ -240,7 +240,7 @@ class URLBarView: UIView {
         locationContainer.addSubview(locationView)
         addSubview(locationContainer)
 
-        helper = BrowserToolbarHelper(toolbar: self)
+        helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
 
         // Make sure we hide any views that shouldn't be showing in non-overlay mode.
@@ -459,7 +459,7 @@ class URLBarView: UIView {
 
                 self.tabsButton.insideButton.layer.opacity = 1
                 self.tabsButton.insideButton.layer.transform = CATransform3DIdentity
-                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
+                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
 
                 if finished {
                     self.tabsButton.titleLabel.text = count.description
@@ -641,7 +641,7 @@ class URLBarView: UIView {
     }
 }
 
-extension URLBarView: BrowserToolbarProtocol {
+extension URLBarView: TabToolbarProtocol {
     func updateBackStatus(canGoBack: Bool) {
         backButton.enabled = canGoBack
     }
