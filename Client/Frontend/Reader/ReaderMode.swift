@@ -205,16 +205,16 @@ struct ReadabilityResult {
 
 /// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
 protocol ReaderModeDelegate {
-    func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forBrowser browser: Browser)
-    func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForBrowser browser: Browser)
+    func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
+    func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
 }
 
 let ReaderModeNamespace = "_firefox_ReaderMode"
 
-class ReaderMode: BrowserHelper {
+class ReaderMode: TabHelper {
     var delegate: ReaderModeDelegate?
 
-    private weak var browser: Browser?
+    private weak var tab: Tab?
     var state: ReaderModeState = ReaderModeState.Unavailable
     private var originalURL: NSURL?
 
@@ -222,14 +222,14 @@ class ReaderMode: BrowserHelper {
         return "ReaderMode"
     }
 
-    required init(browser: Browser) {
-        self.browser = browser
+    required init(tab: Tab) {
+        self.tab = tab
 
         // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
         if let path = NSBundle.mainBundle().pathForResource("Readability", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
                 let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-                browser.webView!.configuration.userContentController.addUserScript(userScript)
+                tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
 
@@ -237,7 +237,7 @@ class ReaderMode: BrowserHelper {
         if let path = NSBundle.mainBundle().pathForResource("ReaderMode", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
                 let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-                browser.webView!.configuration.userContentController.addUserScript(userScript)
+                tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
     }
@@ -249,15 +249,15 @@ class ReaderMode: BrowserHelper {
     private func handleReaderPageEvent(readerPageEvent: ReaderPageEvent) {
         switch readerPageEvent {
             case .PageShow:
-                if let browser = browser {
-                    delegate?.readerMode(self, didDisplayReaderizedContentForBrowser: browser)
+                if let tab = tab {
+                    delegate?.readerMode(self, didDisplayReaderizedContentForTab: tab)
                 }
         }
     }
 
     private func handleReaderModeStateChange(state: ReaderModeState) {
         self.state = state
-        delegate?.readerMode(self, didChangeReaderModeState: state, forBrowser: browser!)
+        delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab!)
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
@@ -282,7 +282,7 @@ class ReaderMode: BrowserHelper {
     var style: ReaderModeStyle = DefaultReaderModeStyle {
         didSet {
             if state == ReaderModeState.Active {
-                browser!.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: {
+                tab!.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: {
                     (object, error) -> Void in
                     return
                 })

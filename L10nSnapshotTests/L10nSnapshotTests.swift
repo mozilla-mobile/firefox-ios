@@ -207,10 +207,10 @@ class L10nSnapshotTests: XCTestCase {
     func test10ReloadButtonContextMenu() {
         let app = XCUIApplication()
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
-        app.buttons["BrowserToolbar.stopReloadButton"].pressForDuration(2.0)
+        app.buttons["TabToolbar.stopReloadButton"].pressForDuration(2.0)
         snapshot("10ContextMenuReloadButton-01", waitForLoadingIndicator: false)
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
-        app.buttons["BrowserToolbar.stopReloadButton"].pressForDuration(2.0)
+        app.buttons["TabToolbar.stopReloadButton"].pressForDuration(2.0)
         snapshot("10ContextMenuReloadButton-02", waitForLoadingIndicator: false)
     }
 
@@ -226,7 +226,7 @@ class L10nSnapshotTests: XCTestCase {
     func test12ShareSheetAndExtensions() {
         let app = XCUIApplication()
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
-        app.buttons["BrowserToolbar.shareButton"].tap()
+        app.buttons["TabToolbar.shareButton"].tap()
 
         app.collectionViews.elementBoundByIndex(0).swipeLeft()
         app.collectionViews.elementBoundByIndex(0).buttons.elementBoundByIndex(app.collectionViews.elementBoundByIndex(0).buttons.count-1).tap()
@@ -253,11 +253,11 @@ class L10nSnapshotTests: XCTestCase {
         sleep(2)
 
         // SendTo- Depending on the locale, the Send To extension is in position 2 or 3
-        app.buttons["BrowserToolbar.shareButton"].tap()
+        app.buttons["TabToolbar.shareButton"].tap()
         app.collectionViews.elementBoundByIndex(1).buttons.elementBoundByIndex(2).tap()
         sleep(2)
         if !app.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"].exists {
-            app.buttons["BrowserToolbar.shareButton"].tap()
+            app.buttons["TabToolbar.shareButton"].tap()
             app.collectionViews.elementBoundByIndex(1).buttons.elementBoundByIndex(3).tap()
         }
         snapshot("12ShareSheetAndExtensions-04") // SendTo - Empty state because not logged in
