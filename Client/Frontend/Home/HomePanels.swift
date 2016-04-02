@@ -44,23 +44,16 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = HistoryPanel()
-                controller.profile = profile
+                let history = HistoryPanel()
+                history.profile = profile
+                let controller = UINavigationController(rootViewController: history)
+                controller.setNavigationBarHidden(true, animated: false)
+                controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
             },
             imageName: "History",
             accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.History"),
-
-        HomePanelDescriptor(
-            makeViewController: { profile in
-                let controller = RemoteTabsPanel()
-                controller.profile = profile
-                return controller
-            },
-            imageName: "SyncedTabs",
-            accessibilityLabel: NSLocalizedString("Synced tabs", comment: "Panel accessibility label"),
-            accessibilityIdentifier: "HomePanels.SyncedTabs"),
 
         HomePanelDescriptor(
             makeViewController: { profile in
