@@ -269,7 +269,7 @@ class L10nSnapshotTests: XCTestCase {
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/password.html", waitForOtherElementWithAriaLabel: "body")
         app.webViews.elementBoundByIndex(0).buttons["submit"].tap()
         snapshot("13PasswordSnackbar-01")
-        app.buttons["SaveLoginPrompt.yesButton"].tap()
+        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
         // The password is pre-filled with a random value so second this this will cause the update prompt
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/password.html", waitForOtherElementWithAriaLabel: "body")
         app.webViews.elementBoundByIndex(0).buttons["submit"].tap()

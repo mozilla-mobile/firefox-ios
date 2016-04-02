@@ -11,10 +11,6 @@ import Deferred
 
 private let log = Logger.browserLogger
 
-private let NotNowButtonTitle = NSLocalizedString("Not now", comment: "Button to not save the user's password")
-private let UpdateButtonTitle = NSLocalizedString("Update", comment: "Button to update the user's password")
-private let YesButtonTitle = NSLocalizedString("Yes", comment: "Button to save the user's password")
-
 class LoginsHelper: BrowserHelper {
     private weak var browser: Browser?
     private let profile: Profile
@@ -142,10 +138,10 @@ class LoginsHelper: BrowserHelper {
 
         let promptMessage: NSAttributedString
         if let username = login.username {
-            let promptStringFormat = NSLocalizedString("Do you want to save the password for %@ on %@?", comment: "Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptSaveLogin.Title", value: "Save login %@ for %@?", comment: "Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
             promptMessage = NSAttributedString(string: String(format: promptStringFormat, username, login.hostname))
         } else {
-            let promptStringFormat = NSLocalizedString("Do you want to save the password on %@?", comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.")
+            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptSavePassword.Title", value: "Save password for %@?", comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.")
             promptMessage = NSAttributedString(string: String(format: promptStringFormat, login.hostname))
         }
 
@@ -156,13 +152,13 @@ class LoginsHelper: BrowserHelper {
         snackBar = TimerSnackBar(attrText: promptMessage,
             img: UIImage(named: "key"),
             buttons: [
-                SnackButton(title: NotNowButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.nowNowButton", callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
                 }),
 
-                SnackButton(title: YesButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.yesButton", callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: Strings.LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.addLogin(login)
@@ -180,10 +176,10 @@ class LoginsHelper: BrowserHelper {
 
         let formatted: String
         if let username = new.username {
-            let promptStringFormat = NSLocalizedString("Do you want to update the password for %@ on %@?", comment: "Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptUpdateLogin.Title", value: "Update login for %@ on %@?", comment: "Prompt for updating a login. The first parameter is the username being saved. The second parameter is the hostname of the site.")
             formatted = String(format: promptStringFormat, username, new.hostname)
         } else {
-            let promptStringFormat = NSLocalizedString("Do you want to update the password on %@?", comment: "Prompt for updating a password with on username. The parameter is the hostname of the site.")
+            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptUpdatePassword.Title", value: "Update password for %@?", comment: "Prompt for updating a password with on username. The parameter is the hostname of the site.")
             formatted = String(format: promptStringFormat, new.hostname)
         }
         let promptMessage = NSAttributedString(string: formatted)
@@ -195,13 +191,13 @@ class LoginsHelper: BrowserHelper {
         snackBar = TimerSnackBar(attrText: promptMessage,
             img: UIImage(named: "key"),
             buttons: [
-                SnackButton(title: NotNowButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.nowNowButton", callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.dontSaveButton", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
                 }),
 
-                SnackButton(title: UpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: Strings.LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.updateLoginByGUID(guid, new: new,
