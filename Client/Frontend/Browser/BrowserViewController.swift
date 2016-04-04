@@ -653,6 +653,7 @@ class BrowserViewController: UIViewController {
             homePanelController!.profile = profile
             homePanelController!.delegate = self
             homePanelController!.url = tabManager.selectedTab?.displayURL
+            homePanelController!.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
             homePanelController!.view.alpha = 0
 
             addChildViewController(homePanelController!)
@@ -1141,7 +1142,7 @@ class BrowserViewController: UIViewController {
             }
             return .Loading
         }
-        return .HomePanels(index: homePanelController.selectedButtonIndex ?? 0)
+        return .HomePanels(homePanelState: homePanelController.homePanelState)
     }
 }
 

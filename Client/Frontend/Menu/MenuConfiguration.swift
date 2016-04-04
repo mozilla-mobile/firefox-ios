@@ -23,6 +23,8 @@ struct MenuConfiguration {
         switch(appState) {
         case .Tab(let tabState):
             return tabState.isPrivate
+        case .HomePanels(homePanelState: let homePanelState):
+            return homePanelState.isPrivate
         case .TabTray(let isPrivate):
             return isPrivate
         default:
