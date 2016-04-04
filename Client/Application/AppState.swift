@@ -6,7 +6,7 @@ import Foundation
 
 enum AppState {
     case Tab(tabState: TabState)
-    case HomePanels(index: Int)
+    case HomePanels(homePanelState: HomePanelState)
     case TabTray(isPrivate: Bool)
     case Loading
 }
