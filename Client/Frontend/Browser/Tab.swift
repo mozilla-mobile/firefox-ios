@@ -26,14 +26,18 @@ protocol TabDelegate {
     optional func tab(tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-protocol TabState: class {
-    var isPrivate: Bool { get }
-    var desktopSite: Bool { get set }
-    var isBookmarked: Bool { get set }
-    var url: NSURL? { get }
+protocol TabStateDelegate {
+    func tabDidUpdateTabState(tabState: TabState)
 }
 
-class Tab: NSObject, TabState {
+struct TabState {
+    var isPrivate: Bool = false
+    var desktopSite: Bool = false
+    var isBookmarked: Bool = false
+    var url: NSURL?
+}
+
+class Tab: NSObject {
     private var _isPrivate: Bool = false
     internal private(set) var isPrivate: Bool {
         get {
@@ -48,8 +52,13 @@ class Tab: NSObject, TabState {
         }
     }
 
+    var tabState: TabState {
+        return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url)
+    }
+
     var webView: WKWebView? = nil
     var tabDelegate: TabDelegate? = nil
+    var tabStateDelegate: TabStateDelegate?
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
