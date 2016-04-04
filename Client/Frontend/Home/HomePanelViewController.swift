@@ -53,6 +53,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     var panels: [HomePanelDescriptor]!
     var url: NSURL?
     weak var delegate: HomePanelViewControllerDelegate?
+    weak var appStateDelegate: AppStateDelegate?
 
     private var buttonContainerView: UIView!
     private var buttonContainerBottomBorderView: UIView!

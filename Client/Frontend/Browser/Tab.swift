@@ -26,10 +26,6 @@ protocol TabDelegate {
     optional func tab(tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-protocol TabStateDelegate {
-    func tabDidUpdateTabState(tabState: TabState)
-}
-
 struct TabState {
     var isPrivate: Bool = false
     var desktopSite: Bool = false
@@ -58,7 +54,7 @@ class Tab: NSObject {
 
     var webView: WKWebView? = nil
     var tabDelegate: TabDelegate? = nil
-    var tabStateDelegate: TabStateDelegate?
+    weak var appStateDelegate: AppStateDelegate?
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
