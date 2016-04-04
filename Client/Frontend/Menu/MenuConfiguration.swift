@@ -16,20 +16,7 @@ struct MenuConfiguration {
         menuItems = menuItemsForAppState(appState)
         menuToolbarItems = menuToolbarItemsForAppState(appState)
         numberOfItemsInRow = numberOfMenuItemsPerRowForAppState(appState)
-        isPrivateMode = isPrivateMode(appState)
-    }
-
-    private func isPrivateMode(appState: AppState) -> Bool {
-        switch(appState) {
-        case .Tab(let tabState):
-            return tabState.isPrivate
-        case .HomePanels(homePanelState: let homePanelState):
-            return homePanelState.isPrivate
-        case .TabTray(let isPrivate):
-            return isPrivate
-        default:
-            return false
-        }
+        isPrivateMode = appState.isPrivate()
     }
 
     func toolbarColour() -> UIColor {
