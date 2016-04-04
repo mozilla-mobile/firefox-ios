@@ -100,55 +100,55 @@ struct MenuConfiguration {
 extension MenuConfiguration {
 
     private static var NewTabMenuItem: MenuItem {
-        return MenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
+        return FirefoxMenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
     }
 
     private static var NewPrivateTabMenuItem: MenuItem {
-        return MenuItem(title: NewPrivateTabTitleString, icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
+        return FirefoxMenuItem(title: NewPrivateTabTitleString, icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
     }
 
     private static var AddBookmarkMenuItem: MenuItem {
-        return MenuItem(title: AddBookmarkTitleString, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm")
+        return FirefoxMenuItem(title: AddBookmarkTitleString, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm")
     }
 
     private static var RemoveBookmarkMenuItem: MenuItem {
-        return MenuItem(title: RemoveBookmarkTitleString, icon: "menu-RemoveBookmark", privateModeIcon: "menu-RemoveBookmark")
+        return FirefoxMenuItem(title: RemoveBookmarkTitleString, icon: "menu-RemoveBookmark", privateModeIcon: "menu-RemoveBookmark")
     }
 
     private static var FindInPageMenuItem: MenuItem {
-        return MenuItem(title: FindInPageTitleString, icon: "menu-FindInPage", privateModeIcon: "menu-FindInPage-pbm")
+        return FirefoxMenuItem(title: FindInPageTitleString, icon: "menu-FindInPage", privateModeIcon: "menu-FindInPage-pbm")
     }
 
     private static var RequestDesktopMenuItem: MenuItem {
-        return MenuItem(title: ViewDesktopSiteTitleString, icon: "menu-RequestDesktopSite", privateModeIcon: "menu-RequestDesktopSite-pbm")
+        return FirefoxMenuItem(title: ViewDesktopSiteTitleString, icon: "menu-RequestDesktopSite", privateModeIcon: "menu-RequestDesktopSite-pbm")
     }
 
     private static var RequestMobileMenuItem: MenuItem {
-        return MenuItem(title: ViewMobileSiteTitleString, icon: "menu-ViewMobile", privateModeIcon: "menu-ViewMobile-pbm")
+        return FirefoxMenuItem(title: ViewMobileSiteTitleString, icon: "menu-ViewMobile", privateModeIcon: "menu-ViewMobile-pbm")
     }
 
     private static var SettingsMenuItem: MenuItem {
-        return MenuItem(title: SettingsTitleString, icon: "menu-Settings", privateModeIcon: "menu-Settings-pbm")
+        return FirefoxMenuItem(title: SettingsTitleString, icon: "menu-Settings", privateModeIcon: "menu-Settings-pbm")
     }
 
     private static var CloseAllTabsMenuItem: MenuItem {
-        return MenuItem(title: CloseAllTabsTitleString, icon: "menu-CloseTabs", privateModeIcon: "menu-CloseTabs-pbm")
+        return FirefoxMenuItem(title: CloseAllTabsTitleString, icon: "menu-CloseTabs", privateModeIcon: "menu-CloseTabs-pbm")
     }
 
     private static var TopSitesMenuToolbarItem: MenuToolbarItem {
-        return MenuToolbarItem(title: TopSitesTitleString, icon: "menu-panel-TopSites", privateModeIcon: "menu-panel-TopSites-pbm")
+        return FirefoxMenuToolbarItem(title: TopSitesTitleString, icon: "menu-panel-TopSites")
     }
 
     private static var BookmarksMenuToolbarItem: MenuToolbarItem {
-        return MenuToolbarItem(title: BookmarksTitleString, icon: "menu-panel-Bookmarks", privateModeIcon: "menu-panel-Bookmarks-pbm")
+        return FirefoxMenuToolbarItem(title: BookmarksTitleString, icon: "menu-panel-Bookmarks")
     }
 
     private static var HistoryMenuToolbarItem: MenuToolbarItem {
-        return MenuToolbarItem(title: HistoryTitleString, icon: "menu-panel-History", privateModeIcon: "menu-panel-History-pbm")
+        return FirefoxMenuToolbarItem(title: HistoryTitleString, icon: "menu-panel-History")
     }
 
     private static var ReadingListMenuToolbarItem: MenuToolbarItem {
-        return  MenuToolbarItem(title: ReadingListTitleString, icon: "menu-panel-ReadingList", privateModeIcon: "menu-panel-ReadingList-pbm")
+        return  FirefoxMenuToolbarItem(title: ReadingListTitleString, icon: "menu-panel-ReadingList")
     }
 
     static let NewTabTitleString = NSLocalizedString("New Tab", tableName: "Menu", comment: "String describing the action of creating a new tab from the menu")
