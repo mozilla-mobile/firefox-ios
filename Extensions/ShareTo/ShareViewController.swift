@@ -90,7 +90,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
 
         navItem = UINavigationItem()
         navItem.leftBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("Cancel", tableName: "ShareTo", comment: "Button title for cancelling Share screen"),
+            title: NSLocalizedString("ShareTo.Cancel.Button", value: "Cancel", comment: "Button title for cancelling Share screen"),
             style: .Plain,
             target: self,
             action: #selector(ShareDialogController.cancel)

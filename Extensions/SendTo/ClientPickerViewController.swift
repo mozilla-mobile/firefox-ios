@@ -48,7 +48,7 @@ class ClientPickerViewController: UITableViewController {
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(ClientPickerViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("Cancel", tableName: "SendTo", comment: "Button title for cancelling SendTo screen"),
+            title: NSLocalizedString("SendTo.Cancel.Button", value: "Cancel", comment: "Button title for cancelling SendTo screen"),
             style: .Plain,
             target: self,
             action:  #selector(ClientPickerViewController.cancel)
