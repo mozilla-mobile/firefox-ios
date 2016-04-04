@@ -47,7 +47,13 @@ class ClientPickerViewController: UITableViewController {
         title = NSLocalizedString("Send Tab", tableName: "SendTo", comment: "Title of the dialog that allows you to send a tab to a different device")
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(ClientPickerViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(ClientPickerViewController.cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: NSLocalizedString("SendTo.Cancel.Button", value: "Cancel", comment: "Button title for cancelling SendTo screen"),
+            style: .Plain,
+            target: self,
+            action:  #selector(ClientPickerViewController.cancel)
+        )
+
         tableView.registerClass(ClientPickerTableViewHeaderCell.self, forCellReuseIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier)
         tableView.registerClass(ClientPickerTableViewCell.self, forCellReuseIdentifier: ClientPickerTableViewCell.CellIdentifier)
         tableView.registerClass(ClientPickerNoClientsTableViewCell.self, forCellReuseIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier)
