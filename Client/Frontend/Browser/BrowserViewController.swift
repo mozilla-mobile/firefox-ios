@@ -36,6 +36,7 @@ private struct BrowserViewControllerUX {
 class BrowserViewController: UIViewController {
     var homePanelController: HomePanelViewController?
     var webViewContainer: UIView!
+    var menuViewController: MenuViewController?
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
@@ -676,6 +677,7 @@ class BrowserViewController: UIViewController {
             self.homePanelController!.view.alpha = 1
         }, completion: { finished in
             if finished {
+                self.menuViewController?.appState = self.getCurrentAppState()
                 self.webViewContainer.accessibilityElementsHidden = true
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             }
@@ -701,6 +703,8 @@ class BrowserViewController: UIViewController {
                     if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
                         self.showReaderModeBar(animated: false)
                     }
+
+                    self.menuViewController?.appState = self.getCurrentAppState()
                 }
             })
         }
@@ -1135,6 +1139,22 @@ class BrowserViewController: UIViewController {
         // Make the web view the first responder so that it can show the selection menu.
         return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
     }
+
+    private func getCurrentAppState() -> AppState {
+        guard let homePanelController = self.homePanelController else {
+            if let tab = tabManager.selectedTab {
+                return .Tab(tabState: tab.tabState)
+            }
+            return .Loading
+        }
+        return .HomePanels(index: homePanelController.selectedButtonIndex ?? 0)
+    }
+}
+
+extension BrowserViewController: TabStateDelegate {
+    func tabDidUpdateTabState(tabState: TabState) {
+        menuViewController?.appState = .Tab(tabState: tabState)
+    }
 }
 
 /**
@@ -1380,15 +1400,8 @@ extension BrowserViewController: TabToolbarDelegate {
         // check the trait collection
         // open as modal if portrait
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
-        let appState = AppState()
-        if let homePanelController = self.homePanelController {
-            appState.location = AppLocation.HomePanels
-            appState.homePanelIndex = homePanelController.selectedButtonIndex
-        } else {
-            appState.location = AppLocation.Tab
-            appState.tabState = tabManager.selectedTab
-        }
-        let mvc = MenuViewController(withAppState: appState, presentationStyle: presentationStyle)
+        let mvc = MenuViewController(withAppState: getCurrentAppState(), presentationStyle: presentationStyle)
+        mvc.delegate = self
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         let setupPopover = { [unowned self] in
@@ -1409,8 +1422,8 @@ extension BrowserViewController: TabToolbarDelegate {
         }
 
         self.presentViewController(mvc, animated: true, completion: nil)
+        menuViewController = mvc
     }
-
 
 
     func tabToolbarDidPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1439,6 +1452,12 @@ extension BrowserViewController: TabToolbarDelegate {
             let sourceView = self.navigationToolbar.shareButton
             presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
         }
+    }
+}
+
+extension BrowserViewController: MenuViewControllerDelegate {
+    func menuViewControllerDidDismiss(menuViewController: MenuViewController) {
+        self.menuViewController = nil
     }
 }
 
@@ -1795,6 +1814,7 @@ extension BrowserViewController: TabManagerDelegate {
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self
+        tab.tabStateDelegate = self
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {

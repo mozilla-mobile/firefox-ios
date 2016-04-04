@@ -4,14 +4,9 @@
 
 import Foundation
 
-enum AppLocation {
-    case Tab
-    case HomePanels
-    case TabTray
-}
-
-class AppState {
-    weak var tabState: TabState?
-    var homePanelIndex: Int?
-    var location: AppLocation?
+enum AppState {
+    case Tab(tabState: TabState)
+    case HomePanels(index: Int)
+    case TabTray(isPrivate: Bool)
+    case Loading
 }
