@@ -8,46 +8,43 @@ struct MenuConfiguration {
 
     internal private(set) var menuItems = [MenuItem]()
     internal private(set) var menuToolbarItems: [MenuToolbarItem]?
-    internal var appState: AppState {
-        didSet {
-            updateAppState(appState)
-        }
-    }
     internal private(set) var numberOfItemsInRow: Int = 0
 
-    init(appState: AppState) {
-        self.appState = appState
-        updateAppState(self.appState)
-    }
+    internal private(set) var isPrivateMode: Bool = false
 
-    private mutating func updateAppState(appState: AppState) {
+    init(appState: AppState) {
         menuItems = menuItemsForAppState(appState)
         menuToolbarItems = menuToolbarItemsForAppState(appState)
         numberOfItemsInRow = numberOfMenuItemsPerRowForAppState(appState)
+        isPrivateMode = isPrivateMode(appState)
     }
 
-    func isPrivateMode() -> Bool {
-        guard let tab = appState.tabState else {
+    private func isPrivateMode(appState: AppState) -> Bool {
+        switch(appState) {
+        case .Tab(let tabState):
+            return tabState.isPrivate
+        case .TabTray(let isPrivate):
+            return isPrivate
+        default:
             return false
         }
-        return tab.isPrivate
     }
 
     func toolbarColour() -> UIColor {
 
-        return isPrivateMode() ? UIConstants.MenuToolbarBackgroundColorPrivate : UIConstants.MenuToolbarBackgroundColorNormal
+        return isPrivateMode ? UIConstants.MenuToolbarBackgroundColorPrivate : UIConstants.MenuToolbarBackgroundColorNormal
     }
 
     func toolbarTintColor() -> UIColor {
-        return isPrivateMode() ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuToolbarTintColorNormal
+        return isPrivateMode ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuToolbarTintColorNormal
     }
 
     func menuBackgroundColor() -> UIColor {
-        return isPrivateMode() ? UIConstants.MenuBackgroundColorPrivate : UIConstants.MenuBackgroundColorNormal
+        return isPrivateMode ? UIConstants.MenuBackgroundColorPrivate : UIConstants.MenuBackgroundColorNormal
     }
 
     func menuTintColor() -> UIColor {
-        return isPrivateMode() ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuBackgroundColorPrivate
+        return isPrivateMode ? UIConstants.MenuToolbarTintColorPrivate : UIConstants.MenuBackgroundColorPrivate
     }
 
     func menuFont() -> UIFont {
@@ -55,12 +52,11 @@ struct MenuConfiguration {
     }
 
     func menuIcon() -> UIImage? {
-        return isPrivateMode() ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
+        return isPrivateMode ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
     }
 
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
-        guard let location = appState.location else { return 0 }
-        switch location {
+        switch appState {
         case .TabTray:
             return 4
         default:
@@ -71,21 +67,14 @@ struct MenuConfiguration {
     // the items should be added to the array according to desired display order
     private func menuItemsForAppState(appState: AppState) -> [MenuItem] {
         let menuItems: [MenuItem]
-        guard let location = appState.location else { return [] }
-        switch location {
-        case .Tab:
-            if let tab = appState.tabState {
+        switch appState {
+        case .Tab(let tabState):
                 menuItems = [MenuConfiguration.FindInPageMenuItem,
-                             tab.desktopSite ? MenuConfiguration.RequestMobileMenuItem : MenuConfiguration.RequestDesktopMenuItem,
-                             MenuConfiguration.SettingsMenuItem,
-                             MenuConfiguration.NewTabMenuItem,
-                             MenuConfiguration.NewPrivateTabMenuItem,
-                             tab.isBookmarked ? MenuConfiguration.RemoveBookmarkMenuItem : MenuConfiguration.AddBookmarkMenuItem]
-            } else {
-                menuItems = [MenuConfiguration.NewTabMenuItem,
-                             MenuConfiguration.NewPrivateTabMenuItem,
-                             MenuConfiguration.SettingsMenuItem]
-            }
+                         tabState.desktopSite ? MenuConfiguration.RequestMobileMenuItem : MenuConfiguration.RequestDesktopMenuItem,
+                         MenuConfiguration.SettingsMenuItem,
+                         MenuConfiguration.NewTabMenuItem,
+                         MenuConfiguration.NewPrivateTabMenuItem,
+                         tabState.isBookmarked ? MenuConfiguration.RemoveBookmarkMenuItem : MenuConfiguration.AddBookmarkMenuItem]
         case .HomePanels:
             menuItems = [MenuConfiguration.NewTabMenuItem,
                          MenuConfiguration.NewPrivateTabMenuItem,
@@ -95,6 +84,8 @@ struct MenuConfiguration {
                          MenuConfiguration.NewPrivateTabMenuItem,
                          MenuConfiguration.CloseAllTabsMenuItem,
                          MenuConfiguration.SettingsMenuItem]
+        default:
+            menuItems = []
         }
         return menuItems
     }
@@ -102,8 +93,7 @@ struct MenuConfiguration {
     // the items should be added to the array according to desired display order
     private func menuToolbarItemsForAppState(appState: AppState) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
-        guard let location = appState.location else { return nil }
-        switch location {
+        switch appState {
         case .Tab, .TabTray:
             menuToolbarItems = [MenuConfiguration.TopSitesMenuToolbarItem,
                                 MenuConfiguration.BookmarksMenuToolbarItem,

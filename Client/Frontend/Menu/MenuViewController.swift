@@ -6,6 +6,10 @@ import UIKit
 
 private let maxNumberOfItemsPerPage = 6
 
+protocol MenuViewControllerDelegate {
+    func menuViewControllerDidDismiss(menuViewController: MenuViewController)
+}
+
 enum MenuViewPresentationStyle {
     case Popover
     case Modal
@@ -15,12 +19,13 @@ class MenuViewController: UIViewController {
 
     var menuConfig: MenuConfiguration
     var presentationStyle: MenuViewPresentationStyle
+    var delegate: MenuViewControllerDelegate?
 
     var menuView: MenuView!
 
     var appState: AppState {
         didSet {
-            menuConfig.appState = appState
+            menuConfig = MenuConfiguration(appState: appState)
             menuView.setNeedsLayout()
         }
     }
@@ -57,7 +62,7 @@ class MenuViewController: UIViewController {
 
         menuView.toolbar.backgroundColor = menuConfig.toolbarColour()
         menuView.toolbar.tintColor = menuConfig.toolbarTintColor()
-        menuView.toolbar.layer.shadowColor = menuConfig.isPrivateMode() ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
+        menuView.toolbar.layer.shadowColor = menuConfig.isPrivateMode ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
         menuView.toolbar.layer.shadowOpacity = 0.4
         menuView.toolbar.layer.shadowRadius = 0
 
@@ -103,6 +108,7 @@ class MenuViewController: UIViewController {
             view.backgroundColor = UIColor.clearColor()
             self.dismissViewControllerAnimated(true, completion: {
                 self.view.backgroundColor = self.popoverBackgroundColor
+                self.delegate?.menuViewControllerDidDismiss(self)
             })
         }
     }
@@ -157,7 +163,7 @@ extension MenuViewController: MenuItemDataSource {
         cell.accessibilityLabel = menuItem.title
         cell.menuTitleLabel.font = menuConfig.menuFont()
         cell.menuTitleLabel.textColor = menuConfig.menuTintColor()
-        if let icon = menuItem.iconForMode(isPrivate: menuConfig.isPrivateMode()) {
+        if let icon = menuItem.iconForMode(isPrivate: menuConfig.isPrivateMode) {
             cell.menuImageView.image = icon
         }
         return cell
