@@ -6,6 +6,8 @@ import Foundation
 import Shared
 import SwiftKeychainWrapper
 
+/// Base UIViewController subclass containing methods for displaying common error messaging 
+/// for the various Passcode configuration screens.
 class BasePasscodeViewController: UIViewController {
     var authenticationInfo: AuthenticationKeychainInfo?
 
@@ -28,7 +30,14 @@ class BasePasscodeViewController: UIViewController {
         automaticallyAdjustsScrollViewInsets = false
     }
 
-    func displayError(text: String) {
+    func dismiss() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+
+// MARK: - Error Helpers
+extension BasePasscodeViewController {
+    private func displayError(text: String) {
         errorToast?.removeFromSuperview()
         errorToast = {
             let toast = ErrorToast()
@@ -43,7 +52,41 @@ class BasePasscodeViewController: UIViewController {
         }()
     }
 
-    func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func displayLockoutError() {
+        displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
+    }
+
+    func failMismatchPasscode() {
+        let mismatchPasscodeError
+            = NSLocalizedString("Passcodes didn't match. Try again.",
+                tableName: "AuthenticationManager",
+                comment: "Error message displayed to user when their confirming passcode doesn't match the first code.")
+        displayError(mismatchPasscodeError)
+    }
+
+    func failMustBeDifferent() {
+        let useNewPasscodeError
+            = NSLocalizedString("New passcode must be different than existing code.",
+                tableName: "AuthenticationManager",
+                comment: "Error message displayed when user tries to enter the same passcode as their existing code when changing it.")
+        displayError(useNewPasscodeError)
+    }
+
+    func failIncorrectPasscode(inputView inputView: PasscodeInputView) {
+        authenticationInfo?.recordFailedAttempt()
+        let numberOfAttempts = authenticationInfo?.failedAttempts ?? 0
+        if numberOfAttempts == AllowedPasscodeFailedAttempts {
+            authenticationInfo?.lockOutUser()
+            displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
+            inputView.userInteractionEnabled = false
+            resignFirstResponder()
+        } else {
+            displayError(String(format: AuthenticationStrings.incorrectAttemptsRemaining, (AllowedPasscodeFailedAttempts - numberOfAttempts)))
+        }
+
+        inputView.resetCode()
+
+        // Store mutations on authentication info object
+        KeychainWrapper.setAuthenticationInfo(authenticationInfo)
     }
 }
