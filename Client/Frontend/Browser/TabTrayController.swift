@@ -245,6 +245,7 @@ class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
+    weak var appStateDelegate: AppStateDelegate?
 
     var collectionView: UICollectionView!
     var navBar: UIView!
