@@ -4,6 +4,26 @@
 
 import Foundation
 
+public struct Strings {}
+
+// SendTo extension.
+extension Strings {
+    public static let SendToCancelButton = NSLocalizedString("SendTo.Cancel.Button", value: "Cancel", comment: "Button title for cancelling SendTo screen")
+}
+
+// ShareTo extension.
+extension Strings {
+    public static let ShareToCancelButton = NSLocalizedString("ShareTo.Cancel.Button", value: "Cancel", comment: "Button title for cancelling Share screen")
+}
+
+// Top Sites.
+extension Strings {
+    public static let TopSitesEmptyStateDescription = NSLocalizedString("TopSites.EmptyState.Description", value: "Your most visited sites will show up here.", comment: "Description label for the empty Top Sites state.")
+    public static let TopSitesEmptyStateTitle = NSLocalizedString("TopSites.EmptyState.Title", value: "Welcome to Top Sites", comment: "The title for the empty Top Sites state")
+}
+
+
+
 /// Strings that will be used for features that haven't yet landed.
 private func prelandedStrings() {
     // Bug 1182303 - Checkbox to block alert spam.

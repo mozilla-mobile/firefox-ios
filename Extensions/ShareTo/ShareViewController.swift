@@ -3,6 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 import Storage
 
 struct ShareDestination {
@@ -90,7 +91,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
 
         navItem = UINavigationItem()
         navItem.leftBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("ShareTo.Cancel.Button", value: "Cancel", comment: "Button title for cancelling Share screen"),
+            title: Strings.ShareToCancelButton,
             style: .Plain,
             target: self,
             action: #selector(ShareDialogController.cancel)
