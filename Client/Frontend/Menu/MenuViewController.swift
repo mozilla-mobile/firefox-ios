@@ -25,7 +25,7 @@ class MenuViewController: UIViewController {
 
     var appState: AppState {
         didSet {
-            menuConfig = MenuConfiguration(appState: appState)
+            menuConfig = FirefoxMenuConfiguration(appState: appState)
             menuView.setNeedsLayout()
         }
     }
@@ -34,7 +34,7 @@ class MenuViewController: UIViewController {
 
     init(withAppState appState: AppState, presentationStyle: MenuViewPresentationStyle) {
         self.appState = appState
-        menuConfig = MenuConfiguration(appState: appState)
+        menuConfig = FirefoxMenuConfiguration(appState: appState)
         self.presentationStyle = presentationStyle
         super.init(nibName: nil, bundle: nil)
     }
@@ -59,7 +59,7 @@ class MenuViewController: UIViewController {
 
         menuView.toolbar.backgroundColor = menuConfig.toolbarColour()
         menuView.toolbar.tintColor = menuConfig.toolbarTintColor()
-        menuView.toolbar.layer.shadowColor = menuConfig.isPrivateMode ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
+        menuView.toolbar.layer.shadowColor = menuConfig.shadowColor().CGColor
         menuView.toolbar.layer.shadowOpacity = 0.4
         menuView.toolbar.layer.shadowRadius = 0
 
