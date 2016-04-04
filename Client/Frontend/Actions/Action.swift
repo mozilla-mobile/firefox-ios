@@ -4,5 +4,9 @@
 
 import Foundation
 
+protocol ActionDelegate: class {
+    func performAction(action: Action, withAppState appState: AppState)
+}
+
 protocol Action {
 }

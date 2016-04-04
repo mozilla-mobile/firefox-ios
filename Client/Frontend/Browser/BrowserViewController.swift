@@ -1158,6 +1158,26 @@ extension BrowserViewController: AppStateDelegate {
     }
 }
 
+extension BrowserViewController: ActionDelegate {
+    func performAction(action: Action, withAppState appState: AppState) {
+        print("performing action \(action) withAppState: \(appState)")
+        switch action {
+        case let tabAction as SwitchToNewTabAction:
+            dispatch_async(dispatch_get_main_queue()) {
+                let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
+                tabAction.performActionWithAppState(appState, tabManager: self.tabManager, tabTrayController: tabTrayController, themer: self)
+            }
+        case let tabAction as SwitchToNewPrivateTabAction:
+            dispatch_async(dispatch_get_main_queue()) {
+                let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
+                tabAction.performActionWithAppState(appState, tabManager: self.tabManager, tabTrayController: tabTrayController, themer: self)
+            }
+        default:
+            log.debug("WARNING: Handling unknown action of type \(action)")
+        }
+    }
+}
+
 /**
  * History visit management.
  * TODO: this should be expanded to track various visit types; see Bug 1166084.
@@ -1403,6 +1423,7 @@ extension BrowserViewController: TabToolbarDelegate {
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
         let mvc = MenuViewController(withAppState: getCurrentAppState(), presentationStyle: presentationStyle)
         mvc.delegate = self
+        mvc.actionDelegate = self
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         let setupPopover = { [unowned self] in

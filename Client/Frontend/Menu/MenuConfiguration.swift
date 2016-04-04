@@ -120,11 +120,11 @@ struct FirefoxMenuConfiguration: MenuConfiguration {
 extension FirefoxMenuConfiguration {
 
     private static var NewTabMenuItem: MenuItem {
-        return FirefoxMenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
+        return FirefoxMenuItem(title: NewTabTitleString, action: SwitchToNewTabAction(), icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
     }
 
     private static var NewPrivateTabMenuItem: MenuItem {
-        return FirefoxMenuItem(title: NewPrivateTabTitleString, icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
+        return FirefoxMenuItem(title: NewPrivateTabTitleString, action: SwitchToNewPrivateTabAction(), icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
     }
 
     private static var AddBookmarkMenuItem: MenuItem {
