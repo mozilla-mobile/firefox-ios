@@ -652,6 +652,7 @@ class BrowserViewController: UIViewController {
             homePanelController = HomePanelViewController()
             homePanelController!.profile = profile
             homePanelController!.delegate = self
+            homePanelController!.appStateDelegate = self
             homePanelController!.url = tabManager.selectedTab?.displayURL
             homePanelController!.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
             homePanelController!.view.alpha = 0
@@ -1152,9 +1153,10 @@ class BrowserViewController: UIViewController {
     }
 }
 
-extension BrowserViewController: TabStateDelegate {
-    func tabDidUpdateTabState(tabState: TabState) {
-        menuViewController?.appState = .Tab(tabState: tabState)
+extension BrowserViewController: AppStateDelegate {
+
+    func appDidUpdateState(appState: AppState) {
+        menuViewController?.appState = appState
     }
 }
 
@@ -1815,7 +1817,7 @@ extension BrowserViewController: TabManagerDelegate {
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self
-        tab.tabStateDelegate = self
+        tab.appStateDelegate = self
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {
