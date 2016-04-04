@@ -6,6 +6,8 @@ import UIKit
 
 private let ImageSize: CGFloat = 24
 private let ImageMargin: CGFloat = 12
+private let BadgeSize: CGFloat = 16
+private let BadgeMargin: CGFloat = 16
 private let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x333333)
 private let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.grayColor()
 private let DetailTextTopMargin = CGFloat(5)
@@ -51,6 +53,15 @@ class TwoLineTableViewCell: UITableViewCell {
         super.prepareForReuse()
         separatorInset = UIEdgeInsetsMake(0, ImageSize + 2 * ImageMargin, 0, 0)
         twoLineHelper.setupDynamicFonts()
+    }
+
+    func setRightBadge(badge: UIImage?) {
+        if let badge = badge {
+            self.accessoryView = UIImageView(image: badge)
+        } else {
+            self.accessoryView = nil
+        }
+        twoLineHelper.hasRightBadge = badge != nil
     }
 
     func setLines(text: String?, detailText: String?) {
@@ -161,6 +172,7 @@ private class TwoLineCellHelper {
     var textLabel: UILabel!
     var detailTextLabel: UILabel!
     var imageView: UIImageView!
+    var hasRightBadge: Bool = false
 
     // TODO: Not ideal. We should figure out a better way to get this initialized.
     func setUpViews(container: UIView, textLabel: UILabel, detailTextLabel: UILabel, imageView: UIImageView) {
@@ -196,12 +208,14 @@ private class TwoLineCellHelper {
         if detailTextLabelHeight > 0 {
             contentHeight += detailTextLabelHeight + DetailTextTopMargin
         }
-        
+
+        let textRightInset: CGFloat = hasRightBadge ? (BadgeSize + BadgeMargin) : 0
+
         imageView.frame = CGRectMake(ImageMargin, (height - ImageSize) / 2, ImageSize, ImageSize)
         textLabel.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
-            container.frame.width - textLeft - ImageMargin, textLabelHeight)
+            container.frame.width - textLeft - ImageMargin - textRightInset, textLabelHeight)
         detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + DetailTextTopMargin,
-            container.frame.width - textLeft - ImageMargin, detailTextLabelHeight)
+            container.frame.width - textLeft - ImageMargin - textRightInset, detailTextLabelHeight)
     }
 
     func setLines(text: String?, detailText: String?) {
