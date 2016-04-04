@@ -4,28 +4,27 @@
 
 import Foundation
 
-struct MenuToolbarItem {
+protocol MenuToolbarItem {
+    var title: String { get }
+    func iconForState(appState: AppState) -> UIImage?
+}
+
+struct FirefoxMenuToolbarItem: MenuToolbarItem {
 
     private let iconName: String
-    private let privateModeIconName: String
 
     let title: String
 
-    var icon: UIImage? {
+    private var icon: UIImage? {
         return UIImage(named: iconName)
     }
 
-    var privateModeIcon: UIImage? {
-        return UIImage(named: privateModeIconName)
+    func iconForState(appState: AppState) -> UIImage?  {
+        return icon
     }
 
-    func iconForMode(isPrivate isPrivate: Bool = false) -> UIImage?  {
-        return isPrivate ? privateModeIcon : icon
-    }
-
-    init(title: String, icon: String, privateModeIcon: String) {
+    init(title: String, icon: String) {
         self.title = title
         self.iconName = icon
-        self.privateModeIconName = privateModeIcon
     }
 }
