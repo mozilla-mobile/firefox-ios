@@ -679,7 +679,6 @@ class BrowserViewController: UIViewController {
             self.homePanelController!.view.alpha = 1
         }, completion: { finished in
             if finished {
-                self.menuViewController?.appState = self.getCurrentAppState()
                 self.webViewContainer.accessibilityElementsHidden = true
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             }
@@ -705,8 +704,6 @@ class BrowserViewController: UIViewController {
                     if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
                         self.showReaderModeBar(animated: false)
                     }
-
-                    self.menuViewController?.appState = self.getCurrentAppState()
                 }
             })
         }
@@ -1150,7 +1147,9 @@ class BrowserViewController: UIViewController {
 extension BrowserViewController: AppStateDelegate {
 
     func appDidUpdateState(appState: AppState) {
-        menuViewController?.appState = appState
+        if AppConstants.MOZ_MENU {
+            menuViewController?.appState = appState
+        }
     }
 }
 
