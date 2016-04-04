@@ -265,6 +265,9 @@ class TabTrayController: UIViewController {
                 tabDataSource.tabs = tabsToDisplay
                 collectionView?.reloadData()
             }
+            if oldValue != privateMode {
+                updateAppState()
+            }
         }
     }
 
@@ -559,6 +562,10 @@ class TabTrayController: UIViewController {
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
+    }
+
+    private func updateAppState() {
+        self.appStateDelegate?.appDidUpdateState(.TabTray(tabTrayState: self.tabTrayState))
     }
 }
 

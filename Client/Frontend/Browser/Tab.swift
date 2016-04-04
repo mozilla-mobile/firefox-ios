@@ -44,7 +44,10 @@ class Tab: NSObject {
             }
         }
         set {
-            _isPrivate = newValue
+            if _isPrivate != newValue {
+                _isPrivate = newValue
+                self.updateAppState()
+            }
         }
     }
 
@@ -68,8 +71,20 @@ class Tab: NSObject {
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
     /// be managed by the web view's navigation delegate.
-    var desktopSite: Bool = false
-    var isBookmarked: Bool = false
+    var desktopSite: Bool = false {
+        didSet {
+            if oldValue != desktopSite {
+                self.updateAppState()
+            }
+        }
+    }
+    var isBookmarked: Bool = false {
+        didSet {
+            if oldValue != isBookmarked {
+                self.updateAppState()
+            }
+        }
+    }
 
     private(set) var screenshot: UIImage?
     var screenshotUUID: NSUUID?
@@ -116,6 +131,10 @@ class Tab: NSObject {
         return nil
     }
 
+    private func updateAppState() {
+        self.appStateDelegate?.appDidUpdateState(.Tab(tabState: self.tabState))
+    }
+
     weak var navigationDelegate: WKNavigationDelegate? {
         didSet {
             if let webView = webView {
@@ -147,6 +166,7 @@ class Tab: NSObject {
             restore(webView)
 
             self.webView = webView
+            self.webView?.addObserver(self, forKeyPath: "URL", options: .New, context: nil)
             tabDelegate?.tab?(self, didCreateWebView: webView)
         }
     }
@@ -183,6 +203,7 @@ class Tab: NSObject {
     deinit {
         if let webView = webView {
             tabDelegate?.tab?(self, willDeleteWebView: webView)
+            webView.removeObserver(self, forKeyPath: "URL")
         }
     }
 
@@ -428,6 +449,15 @@ class Tab: NSObject {
         alertQueue.forEach { alert in
             alert.cancel()
         }
+    }
+
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        guard let webView = object as? WKWebView where webView == self.webView,
+            let path = keyPath where path == "URL"else {
+            return assertionFailure("Unhandled KVO key: \(keyPath)")
+        }
+
+        updateAppState()
     }
 }
 
