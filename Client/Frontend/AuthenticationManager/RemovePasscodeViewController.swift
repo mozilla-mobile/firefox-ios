@@ -10,14 +10,11 @@ let NotificationPasscodeDidRemove   = "NotificationPasscodeDidRemove"
 
 /// Displayed to the user when removing a passcode.
 class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputViewDelegate {
-    private var confirmCode: String?
-
     override init() {
         super.init()
         self.title = AuthenticationStrings.turnOffPasscode
         self.panes = [
             PasscodePane(title: AuthenticationStrings.enterPasscode),
-            PasscodePane(title: AuthenticationStrings.reenterPasscode),
         ]
     }
     
@@ -38,35 +35,16 @@ class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
     }
 
     func passcodeInputView(inputView: PasscodeInputView, didFinishEnteringCode code: String) {
-        switch currentPaneIndex {
-        case 0:
-            // Constraint: Passcode must match current passcode before continuing.
-            if code != authenticationInfo?.passcode {
-                panes[currentPaneIndex].shakePasscode()
-                failIncorrectPasscode(inputView: inputView)
-                return
-            }
-
-            confirmCode = code
-            authenticationInfo?.recordValidation()
-
-            errorToast?.removeFromSuperview()
-            scrollToNextAndSelect()
-        case 1:
-            // Constraint: The first and confirmation codes must match.
-            if confirmCode != code {
-                failMismatchPasscode()
-                resetAllInputFields()
-                scrollToPreviousAndSelect()
-                confirmCode = nil
-                return
-            }
-
-            removePasscode()
-            dismiss()
-        default:
-            break
+        if code != authenticationInfo?.passcode {
+            panes[currentPaneIndex].shakePasscode()
+            failIncorrectPasscode(inputView: inputView)
+            return
         }
+
+        authenticationInfo?.recordValidation()
+        errorToast?.removeFromSuperview()
+        removePasscode()
+        dismiss()
     }
 
     private func removePasscode() {

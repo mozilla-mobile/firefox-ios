@@ -69,8 +69,6 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Turn Passcode Off")
         tester().waitForViewWithAccessibilityLabel("Enter passcode")
         enterPasscodeWithDigits("1337")
-        tester().waitForViewWithAccessibilityLabel("Re-enter passcode")
-        enterPasscodeWithDigits("1337")
         tester().waitForViewWithAccessibilityLabel("Touch ID & Passcode")
         XCTAssertNil(KeychainWrapper.authenticationInfo())
 
@@ -322,23 +320,20 @@ class AuthenticationManagerTests: KIFTestCase {
         closeAuthenticationManager()
     }
 
-    func testPasscodesMustMatchWhenRemoving() {
+    func testPasscodeMustBeCorrectWhenRemoving() {
         setPasscode("1337", interval: .Immediately)
 
         openAuthenticationManager()
         tester().tapViewWithAccessibilityLabel("Turn Passcode Off")
 
         tester().waitForViewWithAccessibilityLabel("Enter passcode")
+        enterPasscodeWithDigits("2337")
+
+        tester().waitForViewWithAccessibilityLabel(String(format: AuthenticationStrings.incorrectAttemptsRemaining, 2))
+
         enterPasscodeWithDigits("1337")
+        tester().tapViewWithAccessibilityLabel("Touch ID & Passcode")
 
-        tester().waitForViewWithAccessibilityLabel("Re-enter passcode")
-        enterPasscodeWithDigits("1234")
-
-        // Should display error and take us back to first pane
-        tester().waitForViewWithAccessibilityLabel("Passcodes didn't match. Try again.")
-        tester().waitForViewWithAccessibilityLabel("Enter passcode")
-
-        tester().tapViewWithAccessibilityLabel("Cancel")
         closeAuthenticationManager()
     }
 }
