@@ -4,22 +4,26 @@
 
 import Foundation
 
+protocol MenuItem {
+    var title: String { get }
+    func iconForState(appState: AppState) -> UIImage?
+}
 
-struct MenuItem {
+struct FirefoxMenuItem: MenuItem {
     let title: String
     private let iconName: String
     private let privateModeIconName: String
 
-    var icon: UIImage? {
+    private var icon: UIImage? {
         return UIImage(named: iconName)
     }
 
-    var privateModeIcon: UIImage? {
+    private var privateModeIcon: UIImage? {
         return UIImage(named: privateModeIconName)
     }
 
-    func iconForMode(isPrivate isPrivate: Bool = false) -> UIImage?  {
-        return isPrivate ? privateModeIcon : icon
+    func iconForState(appState: AppState) -> UIImage?  {
+        return appState.isPrivate() ? privateModeIcon : icon
     }
 
     init(title: String, icon: String, privateModeIcon: String) {

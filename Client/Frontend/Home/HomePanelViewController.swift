@@ -42,12 +42,18 @@ protocol HomePanelDelegate: class {
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
 }
 
+struct HomePanelState {
+    var isPrivate: Bool = false
+    var selectedIndex: Int = 0
+}
+
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [HomePanelDescriptor]!
     var url: NSURL?
     weak var delegate: HomePanelViewControllerDelegate?
+    weak var appStateDelegate: AppStateDelegate?
 
     private var buttonContainerView: UIView!
     private var buttonContainerBottomBorderView: UIView!
@@ -56,6 +62,18 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     private var finishEditingButton: UIButton?
     private var editingPanel: HomePanel?
+
+    var isPrivateMode: Bool = false {
+        didSet {
+            if oldValue != isPrivateMode {
+                self.updateAppState()
+            }
+        }
+    }
+
+    var homePanelState: HomePanelState {
+        return HomePanelState(isPrivate: isPrivateMode, selectedIndex: selectedButtonIndex ?? 0)
+    }
 
     override func viewDidLoad() {
         view.backgroundColor = HomePanelViewControllerUX.BackgroundColor
@@ -108,6 +126,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
     }
 
+    private func updateAppState() {
+        self.appStateDelegate?.appDidUpdateState(.HomePanels(homePanelState: homePanelState))
+    }
+
     func SELhandleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
         view.window?.rootViewController?.view.endEditing(true)
     }
@@ -147,6 +169,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                     }
                 }
             }
+            self.updateAppState()
         }
     }
 

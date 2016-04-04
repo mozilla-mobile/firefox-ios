@@ -6,6 +6,10 @@ import UIKit
 
 private let maxNumberOfItemsPerPage = 6
 
+protocol MenuViewControllerDelegate {
+    func menuViewControllerDidDismiss(menuViewController: MenuViewController)
+}
+
 enum MenuViewPresentationStyle {
     case Popover
     case Modal
@@ -15,15 +19,22 @@ class MenuViewController: UIViewController {
 
     var menuConfig: MenuConfiguration
     var presentationStyle: MenuViewPresentationStyle
+    var delegate: MenuViewControllerDelegate?
 
     var menuView: MenuView!
 
-    private let isPrivate = false
+    var appState: AppState {
+        didSet {
+            menuConfig = FirefoxMenuConfiguration(appState: appState)
+            menuView.setNeedsLayout()
+        }
+    }
 
     private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
 
-    init(withMenuConfig config: MenuConfiguration, presentationStyle: MenuViewPresentationStyle) {
-        self.menuConfig = config
+    init(withAppState appState: AppState, presentationStyle: MenuViewPresentationStyle) {
+        self.appState = appState
+        menuConfig = FirefoxMenuConfiguration(appState: appState)
         self.presentationStyle = presentationStyle
         super.init(nibName: nil, bundle: nil)
     }
@@ -46,14 +57,14 @@ class MenuViewController: UIViewController {
         menuView.toolbarDelegate = self
         menuView.toolbarDataSource = self
 
-        menuView.toolbar.backgroundColor = menuConfig.toolbarColourForMode(isPrivate: isPrivate)
-        menuView.toolbar.tintColor = menuConfig.toolbarTintColorForMode(isPrivate: isPrivate)
-        menuView.toolbar.layer.shadowColor = isPrivate ? UIColor.darkGrayColor().CGColor : UIColor.lightGrayColor().CGColor
+        menuView.toolbar.backgroundColor = menuConfig.toolbarColour()
+        menuView.toolbar.tintColor = menuConfig.toolbarTintColor()
+        menuView.toolbar.layer.shadowColor = menuConfig.shadowColor().CGColor
         menuView.toolbar.layer.shadowOpacity = 0.4
         menuView.toolbar.layer.shadowRadius = 0
 
-        menuView.backgroundColor = menuConfig.menuBackgroundColorForMode(isPrivate: isPrivate)
-        menuView.tintColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
+        menuView.backgroundColor = menuConfig.menuBackgroundColor()
+        menuView.tintColor = menuConfig.menuTintColor()
 
         switch presentationStyle {
         case .Popover:
@@ -72,7 +83,7 @@ class MenuViewController: UIViewController {
             // add a shadow to the bottom of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
 
-            menuView.openMenuImage.image = MenuConfiguration.menuIconForMode(isPrivate: isPrivate)
+            menuView.openMenuImage.image = menuConfig.menuIcon()
             menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissMenu(_:))))
 
             menuView.snp_makeConstraints { make in
@@ -97,6 +108,7 @@ class MenuViewController: UIViewController {
             view.backgroundColor = UIColor.clearColor()
             self.dismissViewControllerAnimated(true, completion: {
                 self.view.backgroundColor = self.popoverBackgroundColor
+                self.delegate?.menuViewControllerDidDismiss(self)
             })
         }
     }
@@ -151,8 +163,8 @@ extension MenuViewController: MenuItemDataSource {
         menuItemView.menuTitleLabel.text = menuItem.title
         menuItemView.accessibilityLabel = menuItem.title
         menuItemView.menuTitleLabel.font = menuConfig.menuFont()
-        menuItemView.menuTitleLabel.textColor = menuConfig.menuTintColorForMode(isPrivate: isPrivate)
-        if let icon = menuItem.iconForMode(isPrivate: isPrivate) {
+        menuItemView.menuTitleLabel.textColor = menuConfig.menuTintColor()
+        if let icon = menuItem.iconForState(appState) {
             menuItemView.menuImageView.image = icon
         }
 
@@ -175,7 +187,7 @@ extension MenuViewController: MenuToolbarDataSource {
             return UIBarButtonItem(title: nil, style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
         }
         let item = menuToolbarItems[index]
-        let toolbarItemView = UIBarButtonItem(image: item.icon, style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+        let toolbarItemView = UIBarButtonItem(image: item.iconForState(appState), style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
         toolbarItemView.accessibilityLabel = item.title
         return toolbarItemView
     }
