@@ -4,13 +4,29 @@
 
 import Foundation
 
-struct MenuConfiguration {
+protocol MenuConfiguration {
+
+    var menuItems: [MenuItem] { get }
+    var menuToolbarItems: [MenuToolbarItem]? { get }
+    var numberOfItemsInRow: Int { get }
+
+    init(appState: AppState)
+    func toolbarColour() -> UIColor
+    func toolbarTintColor() -> UIColor
+    func menuBackgroundColor() -> UIColor
+    func menuTintColor() -> UIColor
+    func menuFont() -> UIFont
+    func menuIcon() -> UIImage?
+    func shadowColor() -> UIColor
+}
+
+struct FirefoxMenuConfiguration: MenuConfiguration {
 
     internal private(set) var menuItems = [MenuItem]()
     internal private(set) var menuToolbarItems: [MenuToolbarItem]?
     internal private(set) var numberOfItemsInRow: Int = 0
 
-    internal private(set) var isPrivateMode: Bool = false
+    private(set) var isPrivateMode: Bool = false
 
     init(appState: AppState) {
         menuItems = menuItemsForAppState(appState)
@@ -44,6 +60,10 @@ struct MenuConfiguration {
         return isPrivateMode ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
     }
 
+    func shadowColor() -> UIColor {
+        return isPrivateMode ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
+    }
+
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
         switch appState {
         case .TabTray:
@@ -58,21 +78,21 @@ struct MenuConfiguration {
         let menuItems: [MenuItem]
         switch appState {
         case .Tab(let tabState):
-                menuItems = [MenuConfiguration.FindInPageMenuItem,
-                         tabState.desktopSite ? MenuConfiguration.RequestMobileMenuItem : MenuConfiguration.RequestDesktopMenuItem,
-                         MenuConfiguration.SettingsMenuItem,
-                         MenuConfiguration.NewTabMenuItem,
-                         MenuConfiguration.NewPrivateTabMenuItem,
-                         tabState.isBookmarked ? MenuConfiguration.RemoveBookmarkMenuItem : MenuConfiguration.AddBookmarkMenuItem]
+                menuItems = [FirefoxMenuConfiguration.FindInPageMenuItem,
+                         tabState.desktopSite ? FirefoxMenuConfiguration.RequestMobileMenuItem : FirefoxMenuConfiguration.RequestDesktopMenuItem,
+                         FirefoxMenuConfiguration.SettingsMenuItem,
+                         FirefoxMenuConfiguration.NewTabMenuItem,
+                         FirefoxMenuConfiguration.NewPrivateTabMenuItem,
+                         tabState.isBookmarked ? FirefoxMenuConfiguration.RemoveBookmarkMenuItem : FirefoxMenuConfiguration.AddBookmarkMenuItem]
         case .HomePanels:
-            menuItems = [MenuConfiguration.NewTabMenuItem,
-                         MenuConfiguration.NewPrivateTabMenuItem,
-                         MenuConfiguration.SettingsMenuItem]
+            menuItems = [FirefoxMenuConfiguration.NewTabMenuItem,
+                         FirefoxMenuConfiguration.NewPrivateTabMenuItem,
+                         FirefoxMenuConfiguration.SettingsMenuItem]
         case .TabTray:
-            menuItems = [MenuConfiguration.NewTabMenuItem,
-                         MenuConfiguration.NewPrivateTabMenuItem,
-                         MenuConfiguration.CloseAllTabsMenuItem,
-                         MenuConfiguration.SettingsMenuItem]
+            menuItems = [FirefoxMenuConfiguration.NewTabMenuItem,
+                         FirefoxMenuConfiguration.NewPrivateTabMenuItem,
+                         FirefoxMenuConfiguration.CloseAllTabsMenuItem,
+                         FirefoxMenuConfiguration.SettingsMenuItem]
         default:
             menuItems = []
         }
@@ -84,10 +104,10 @@ struct MenuConfiguration {
         let menuToolbarItems: [MenuToolbarItem]?
         switch appState {
         case .Tab, .TabTray:
-            menuToolbarItems = [MenuConfiguration.TopSitesMenuToolbarItem,
-                                MenuConfiguration.BookmarksMenuToolbarItem,
-                                MenuConfiguration.HistoryMenuToolbarItem,
-                                MenuConfiguration.ReadingListMenuToolbarItem]
+            menuToolbarItems = [FirefoxMenuConfiguration.TopSitesMenuToolbarItem,
+                                FirefoxMenuConfiguration.BookmarksMenuToolbarItem,
+                                FirefoxMenuConfiguration.HistoryMenuToolbarItem,
+                                FirefoxMenuConfiguration.ReadingListMenuToolbarItem]
         default:
             menuToolbarItems = nil
         }
@@ -97,7 +117,7 @@ struct MenuConfiguration {
 
 // MARK: Static helper access function
 
-extension MenuConfiguration {
+extension FirefoxMenuConfiguration {
 
     private static var NewTabMenuItem: MenuItem {
         return FirefoxMenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
