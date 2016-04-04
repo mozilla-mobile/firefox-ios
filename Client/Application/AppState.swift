@@ -7,6 +7,19 @@ import Foundation
 enum AppState {
     case Tab(tabState: TabState)
     case HomePanels(homePanelState: HomePanelState)
-    case TabTray(isPrivate: Bool)
+    case TabTray(tabTrayState: TabTrayState)
     case Loading
+
+    func isPrivate() -> Bool {
+        switch self {
+        case .Tab(let tabState):
+            return tabState.isPrivate
+        case .HomePanels(let homePanelState):
+            return homePanelState.isPrivate
+        case .TabTray(let tabTrayState):
+            return tabTrayState.isPrivate
+        default:
+            return false
+        }
+    }
 }
