@@ -63,7 +63,13 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     private var finishEditingButton: UIButton?
     private var editingPanel: HomePanel?
 
-    var isPrivateMode: Bool = false
+    var isPrivateMode: Bool = false {
+        didSet {
+            if oldValue != isPrivateMode {
+                self.updateAppState()
+            }
+        }
+    }
 
     var homePanelState: HomePanelState {
         return HomePanelState(isPrivate: isPrivateMode, selectedIndex: selectedButtonIndex ?? 0)
@@ -120,6 +126,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
     }
 
+    private func updateAppState() {
+        self.appStateDelegate?.appDidUpdateState(.HomePanels(homePanelState: homePanelState))
+    }
+
     func SELhandleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
         view.window?.rootViewController?.view.endEditing(true)
     }
@@ -159,6 +169,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                     }
                 }
             }
+            self.updateAppState()
         }
     }
 
