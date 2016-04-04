@@ -4,6 +4,10 @@
 
 import Foundation
 
+protocol AppStateDelegate: class {
+    func appDidUpdateState(appState: AppState)
+}
+
 enum AppState {
     case Tab(tabState: TabState)
     case HomePanels(homePanelState: HomePanelState)
