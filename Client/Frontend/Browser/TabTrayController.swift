@@ -237,6 +237,10 @@ protocol TabTrayDelegate: class {
     func tabTrayRequestsPresentationOf(viewController viewController: UIViewController)
 }
 
+struct TabTrayState {
+    var isPrivate: Bool = false
+}
+
 class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
@@ -247,6 +251,10 @@ class TabTrayController: UIViewController {
     var addTabButton: UIButton!
     var settingsButton: UIButton!
     var collectionViewTransitionSnapshot: UIView?
+
+    var tabTrayState: TabTrayState {
+        return TabTrayState(isPrivate: self.privateMode)
+    }
 
     private(set) internal var privateMode: Bool = false {
         didSet {
