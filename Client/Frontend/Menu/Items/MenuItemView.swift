@@ -42,6 +42,7 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
         }
 
         self.isAccessibilityElement = true
+        self.userInteractionEnabled = true
     }
 
     required init?(coder aDecoder: NSCoder) {
