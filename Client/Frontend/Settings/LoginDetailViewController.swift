@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import Shared
+import SwiftKeychainWrapper
 
 private enum InfoItem: Int {
     case TitleItem = 0
@@ -25,7 +26,7 @@ private struct LoginDetailUX {
     static let SeparatorHeight: CGFloat = 44
 }
 
-class LoginDetailViewController: UIViewController {
+class LoginDetailViewController: SensitiveViewController {
 
     private let profile: Profile
 

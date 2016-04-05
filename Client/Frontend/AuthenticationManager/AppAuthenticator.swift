@@ -8,7 +8,7 @@ import SwiftKeychainWrapper
 import LocalAuthentication
 
 class AppAuthenticator {
-    static func presentAuthenticationUsingInfo(authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, fallback: (() -> Void)?) {
+    static func presentAuthenticationUsingInfo(authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {
         if authenticationInfo.useTouchID {
             let localAuthContext = LAContext()
             localAuthContext.localizedFallbackTitle = AuthenticationStrings.enterPasscode
@@ -18,13 +18,25 @@ class AppAuthenticator {
                     // on the set required interval
                     authenticationInfo.recordValidation()
                     KeychainWrapper.setAuthenticationInfo(authenticationInfo)
-
                     dispatch_async(dispatch_get_main_queue()) {
                         success?()
                     }
-                } else if let authError = error where authError.code == LAError.UserFallback.rawValue {
-                    dispatch_async(dispatch_get_main_queue()) {
+                    return
+                }
+
+                guard let authError = error,
+                          code = LAError(rawValue: authError.code) else {
+                    return
+                }
+
+                dispatch_async(dispatch_get_main_queue()) {
+                    switch code {
+                    case .UserFallback:
                         fallback?()
+                    case .UserCancel:
+                        cancel?()
+                    default:
+                        cancel?()
                     }
                 }
             }
