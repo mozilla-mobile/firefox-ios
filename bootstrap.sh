@@ -20,7 +20,15 @@ if ! cmp -s Cartfile.resolved Carthage/Cartfile.resolved; then
   rm -rf Carthage
 fi
 
+# Only enable this on the Xcode Server because it times out if it does not
+# get any output for some time while building the dependencies.
+
+CARTHAGE_VERBOSE=""
+if [ ! -z "$XCS_BOT_ID"  ]; then
+  CARTHAGE_VERBOSE="--verbose"
+fi
+
 if [ ! -d Carthage ]; then
-  carthage bootstrap --verbose --platform ios
+  carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --no-use-binaries
   cp Cartfile.resolved Carthage/Cartfile.resolved
 fi
