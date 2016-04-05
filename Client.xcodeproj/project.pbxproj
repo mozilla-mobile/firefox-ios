@@ -368,6 +368,7 @@
 		D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D39FA16B1A83E17800EE869C /* CoreGraphics.framework */; };
 		D39FA1811A83E84900EE869C /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39FA1801A83E84900EE869C /* Global.swift */; };
 		D39FA1831A83E87900EE869C /* NavigationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39FA1821A83E87900EE869C /* NavigationTests.swift */; };
+		D3A14C221CB3145E00253BC6 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35210E01CB2F16600FC5DCB /* Strings.swift */; };
 		D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994951A3686BD008AD1AC /* BrowserViewController.swift */; };
 		D3A9949D1A3686BD008AD1AC /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994961A3686BD008AD1AC /* Browser.swift */; };
 		D3ACB4541AD33F2200748D50 /* WeakList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3ACB4381AD33EBA00748D50 /* WeakList.swift */; };
@@ -519,7 +520,6 @@
 		E63ED8091BFCF9770097D08E /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B9A1BEA4E7100D28BEF /* SwiftSupport.swift */; };
 		E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED8E01BFD25580097D08E /* LoginListViewController.swift */; };
 		E640E85E1C73A45A00C5F072 /* PasscodeEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */; };
-		E640E8681C73A46600C5F072 /* PasscodeConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E8671C73A46600C5F072 /* PasscodeConfirmViewController.swift */; };
 		E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E8691C73A47C00C5F072 /* PasscodeViews.swift */; };
 		E640E8701C73BCF500C5F072 /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E86F1C73BCF500C5F072 /* AuthenticationManagerTests.swift */; };
 		E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */; };
@@ -547,6 +547,10 @@
 		E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */; };
+		E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E7ACA1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift */; };
+		E68E7ADA1CAC207400FDCA76 /* ChangePasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E7AD91CAC207400FDCA76 /* ChangePasscodeViewController.swift */; };
+		E68E7ADC1CAC208200FDCA76 /* SetupPasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E7ADB1CAC208200FDCA76 /* SetupPasscodeViewController.swift */; };
+		E68E7ADE1CAC208A00FDCA76 /* RemovePasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E7ADD1CAC208A00FDCA76 /* RemovePasscodeViewController.swift */; };
 		E6927EC01C7B6FB800D03F75 /* ErrorToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */; };
 		E6927ECF1C7B722300D03F75 /* ErrorToastRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6927ECE1C7B722300D03F75 /* ErrorToastRefTests.swift */; };
 		E692E3291C46E62D009D1240 /* AuthenticationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */; };
@@ -1331,6 +1335,7 @@
 		D34510871ACF415700EC27F0 /* SearchLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchLoader.swift; sourceTree = "<group>"; };
 		D34DC84D1A16C40C00D49B7B /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Profile.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D34E33021BA793C2006135F0 /* loginForm.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = loginForm.html; sourceTree = "<group>"; };
+		D35210E01CB2F16600FC5DCB /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Strings.swift; path = ../Client/Frontend/Strings.swift; sourceTree = "<group>"; };
 		D35275151AA8D13B00E9C906 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		D36998881AD70A0A00650C6C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		D37524861C6E8B5A00A5F6C2 /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
@@ -1488,7 +1493,6 @@
 		E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
 		E63ED8E01BFD25580097D08E /* LoginListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
 		E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeEntryViewController.swift; sourceTree = "<group>"; };
-		E640E8671C73A46600C5F072 /* PasscodeConfirmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeConfirmViewController.swift; sourceTree = "<group>"; };
 		E640E8691C73A47C00C5F072 /* PasscodeViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeViews.swift; sourceTree = "<group>"; };
 		E640E86F1C73BCF500C5F072 /* AuthenticationManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManagerTests.swift; sourceTree = "<group>"; };
 		E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertControllerExtensions.swift; path = Extensions/UIAlertControllerExtensions.swift; sourceTree = "<group>"; };
@@ -1528,6 +1532,10 @@
 		E682F53C1C89E72600ECB6B2 /* FennecAurora.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FennecAurora.xcconfig; path = Configuration/FennecAurora.xcconfig; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsTableViewController.swift; sourceTree = "<group>"; };
+		E68E7ACA1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingPasscodeViewController.swift; sourceTree = "<group>"; };
+		E68E7AD91CAC207400FDCA76 /* ChangePasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasscodeViewController.swift; sourceTree = "<group>"; };
+		E68E7ADB1CAC208200FDCA76 /* SetupPasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupPasscodeViewController.swift; sourceTree = "<group>"; };
+		E68E7ADD1CAC208A00FDCA76 /* RemovePasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemovePasscodeViewController.swift; sourceTree = "<group>"; };
 		E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorToast.swift; sourceTree = "<group>"; };
 		E6927ECE1C7B722300D03F75 /* ErrorToastRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorToastRefTests.swift; sourceTree = "<group>"; };
 		E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationSettingsViewController.swift; sourceTree = "<group>"; };
@@ -2601,6 +2609,7 @@
 		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D35210E01CB2F16600FC5DCB /* Strings.swift */,
 				E4E0BB151AFBC9E4008D6260 /* Shared-Bridging-Header.h */,
 				E4E0BB161AFBC9E4008D6260 /* Supporting Files */,
 			);
@@ -2714,17 +2723,28 @@
 			path = ThirdParty/Apple;
 			sourceTree = SOURCE_ROOT;
 		};
+		E68E7ADF1CAC209000FDCA76 /* PasscodeConfiguration */ = {
+			isa = PBXGroup;
+			children = (
+				E640E8691C73A47C00C5F072 /* PasscodeViews.swift */,
+				E6108FF81C84E91C005D25E8 /* BasePasscodeViewController.swift */,
+				E68E7ACA1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift */,
+				E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */,
+				E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */,
+				E68E7AD91CAC207400FDCA76 /* ChangePasscodeViewController.swift */,
+				E68E7ADB1CAC208200FDCA76 /* SetupPasscodeViewController.swift */,
+				E68E7ADD1CAC208A00FDCA76 /* RemovePasscodeViewController.swift */,
+			);
+			name = PasscodeConfiguration;
+			sourceTree = "<group>";
+		};
 		E692E3271C46E62D009D1240 /* AuthenticationManager */ = {
 			isa = PBXGroup;
 			children = (
+				E68E7ADF1CAC209000FDCA76 /* PasscodeConfiguration */,
 				E69E06C81C76198000D0F926 /* AuthenticationManagerConstants.swift */,
 				E65D89171C8647420006EA35 /* AppAuthenticator.swift */,
 				E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */,
-				E640E8691C73A47C00C5F072 /* PasscodeViews.swift */,
-				E6108FF81C84E91C005D25E8 /* BasePasscodeViewController.swift */,
-				E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */,
-				E640E8671C73A46600C5F072 /* PasscodeConfirmViewController.swift */,
-				E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */,
 			);
 			path = AuthenticationManager;
 			sourceTree = "<group>";
@@ -4087,6 +4107,7 @@
 				282731A21ABC9D2600AA1954 /* Prefs.swift in Sources */,
 				2F13E77F1AC0BFF200D75081 /* StringExtensions.swift in Sources */,
 				2816EFDE1B33E00300522243 /* AppConstants.swift in Sources */,
+				D3A14C221CB3145E00253BC6 /* Strings.swift in Sources */,
 				2F0624D51AE58C7800FA022C /* KeychainCache.swift in Sources */,
 				D328175B1BD07BA900185845 /* NSCharacterSetExtensions.swift in Sources */,
 				E635D25E1B729DEE0078962F /* Logger.swift in Sources */,
@@ -4356,6 +4377,7 @@
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
+				E68E7ADC1CAC208200FDCA76 /* SetupPasscodeViewController.swift in Sources */,
 				7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */,
 				E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
@@ -4376,6 +4398,7 @@
 				D3BE7B481B05596800641031 /* AuroraAppDelegate.swift in Sources */,
 				DD31E0FB1B382B520077078A /* BrowserPrintPageRenderer.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
+				E68E7ADE1CAC208A00FDCA76 /* RemovePasscodeViewController.swift in Sources */,
 				E46C51C31B41ADD800EB349F /* Try.m in Sources */,
 				74C027451B2A348C001B1E88 /* SessionData.swift in Sources */,
 				D314E7F71A37B98700426A76 /* BrowserToolbar.swift in Sources */,
@@ -4408,7 +4431,6 @@
 				0BF42D371A7C0B8E00889E28 /* FaviconManager.swift in Sources */,
 				39A359E41BFCCE94006B9E87 /* SpotlightHelper.swift in Sources */,
 				6BB2FD981B017DAB001A189B /* AuralProgressBar.swift in Sources */,
-				E640E8681C73A46600C5F072 /* PasscodeConfirmViewController.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* BrowserScrollController.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
 				E6927EC01C7B6FB800D03F75 /* ErrorToast.swift in Sources */,
@@ -4437,6 +4459,7 @@
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
 				2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
+				E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				E4B3348C1BC01D8F004E2BFF /* AdjustIntegration.swift in Sources */,
 				7FB63CC91C08B27E0047F9A4 /* DynamicFontHelper.swift in Sources */,
@@ -4461,6 +4484,7 @@
 				59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */,
 				E69E06D01C765BB900D0F926 /* NSAttributedStringExtensions.swift in Sources */,
 				D30B0F301AA7D66300C01CA3 /* ThumbnailCell.swift in Sources */,
+				E68E7ADA1CAC207400FDCA76 /* ChangePasscodeViewController.swift in Sources */,
 				E640E85E1C73A45A00C5F072 /* PasscodeEntryViewController.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,

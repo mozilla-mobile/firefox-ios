@@ -61,7 +61,7 @@ public class Favicon: Identifiable {
 
 // TODO: Site shouldn't have all of these optional decorators. Include those in the
 // cursor results, perhaps as a tuple.
-public class Site : Identifiable {
+public class Site: Identifiable {
     public var id: Int? = nil
     var guid: String? = nil
 
@@ -74,9 +74,15 @@ public class Site : Identifiable {
      // Sites may have multiple favicons. We'll return the largest.
     public var icon: Favicon?
     public var latestVisit: Visit?
+    public let bookmarked: Bool?
 
-    public init(url: String, title: String) {
+    public convenience init(url: String, title: String) {
+        self.init(url: url, title: title, bookmarked: false)
+    }
+
+    public init(url: String, title: String, bookmarked: Bool?) {
         self.url = url
         self.title = title
+        self.bookmarked = bookmarked
     }
 }

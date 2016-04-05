@@ -874,7 +874,7 @@ class TestSQLiteHistory: XCTestCase {
 
             >>> { history.storeRemoteVisits([siteVisitBR1], forGUID: siteB.guid!) }
 
-            >>> { history.getSitesByFrecencyWithLimit(3)
+            >>> { history.getSitesByFrecencyWithHistoryLimit(3)
                 >>== { (sites: Cursor) -> Success in
                     XCTAssertEqual(3, sites.count)
 
@@ -1007,13 +1007,13 @@ class TestSQLiteHistory: XCTestCase {
             return history.insertOrUpdatePlace(site13, modified: NSDate.nowMicroseconds())
         }).bind({ guid in
             XCTAssertEqual(guid.successValue!, initialGuid, "Guid is correct")
-            return history.getSitesByFrecencyWithLimit(10)
+            return history.getSitesByFrecencyWithHistoryLimit(10)
         }).bind({ (sites: Maybe<Cursor<Site>>) -> Success in
             XCTAssert(sites.successValue!.count == 2, "2 sites returned")
             return history.removeSiteFromTopSites(site11)
         }).bind({ success in
             XCTAssertTrue(success.isSuccess, "Remove was successful")
-            return history.getSitesByFrecencyWithLimit(10)
+            return history.getSitesByFrecencyWithHistoryLimit(10)
         }).upon({ (sites: Maybe<Cursor<Site>>) in
             XCTAssert(sites.successValue!.count == 1, "1 site returned")
             expectation.fulfill()
@@ -1064,7 +1064,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func checkSitesByFrecency(f: Cursor<Site> -> Success) -> () -> Success {
             return {
-                history.getSitesByFrecencyWithLimit(10)
+                history.getSitesByFrecencyWithHistoryLimit(10)
                     >>== f
             }
         }
@@ -1078,7 +1078,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func checkSitesWithFilter(filter: String, f: Cursor<Site> -> Success) -> () -> Success {
             return {
-                history.getSitesByFrecencyWithLimit(10, whereURLContains: filter)
+                history.getSitesByFrecencyWithHistoryLimit(10, whereURLContains: filter)
                 >>== f
             }
         }
@@ -1360,7 +1360,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
 
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                history.getSitesByFrecencyWithLimit(10, includeIcon: false).value
+                history.getSitesByFrecencyWithHistoryLimit(10, includeIcon: false).value
             }
             self.stopMeasuring()
         }

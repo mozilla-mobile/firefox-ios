@@ -63,6 +63,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private let searchEngineScrollView = ButtonScrollView()
     private let searchEngineScrollViewContent = UIView()
 
+    private lazy var bookmarkedBadge: UIImage = {
+        return UIImage(named: "bookmarked_passive")!
+    }()
+
     private lazy var defaultIcon: UIImage = {
         return UIImage(named: "defaultFavicon")!
     }()
@@ -520,8 +524,10 @@ extension SearchViewController {
             let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
             if let site = data[indexPath.row] {
                 if let cell = cell as? TwoLineTableViewCell {
+                    let isBookmark = site.bookmarked ?? false
                     cell.setLines(site.title, detailText: site.url)
                     cell.imageView?.setIcon(site.icon, withPlaceholder: self.defaultIcon)
+                    cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
                 }
             }
             return cell

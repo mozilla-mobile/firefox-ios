@@ -3,6 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 import Storage
 
 struct ShareDestination {
@@ -89,7 +90,12 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the NavigationItem
 
         navItem = UINavigationItem()
-        navItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(ShareDialogController.cancel))
+        navItem.leftBarButtonItem = UIBarButtonItem(
+            title: Strings.ShareToCancelButton,
+            style: .Plain,
+            target: self,
+            action: #selector(ShareDialogController.cancel)
+        )
         navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarCancelButtonFont], forState: UIControlState.Normal)
         navItem.leftBarButtonItem?.accessibilityIdentifier = "ShareDialogController.navigationItem.leftBarButtonItem"
 

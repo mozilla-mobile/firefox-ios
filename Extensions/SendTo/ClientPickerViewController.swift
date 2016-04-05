@@ -3,6 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 import Storage
 import SnapKit
 
@@ -47,7 +48,13 @@ class ClientPickerViewController: UITableViewController {
         title = NSLocalizedString("Send Tab", tableName: "SendTo", comment: "Title of the dialog that allows you to send a tab to a different device")
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(ClientPickerViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(ClientPickerViewController.cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: Strings.SendToCancelButton,
+            style: .Plain,
+            target: self,
+            action:  #selector(ClientPickerViewController.cancel)
+        )
+
         tableView.registerClass(ClientPickerTableViewHeaderCell.self, forCellReuseIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier)
         tableView.registerClass(ClientPickerTableViewCell.self, forCellReuseIdentifier: ClientPickerTableViewCell.CellIdentifier)
         tableView.registerClass(ClientPickerNoClientsTableViewCell.self, forCellReuseIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier)

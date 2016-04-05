@@ -135,13 +135,13 @@ class TopSitesPanel: UIViewController {
 
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
-        titleLabel.text = NSLocalizedString("topsites.emptystate.title", value: "Welcome to Top Sites", comment: "The title for the empty Top Sites state")
+        titleLabel.text = Strings.TopSitesEmptyStateTitle
         titleLabel.textAlignment = NSTextAlignment.Center
         titleLabel.textColor = TopSitesPanelUX.EmptyStateTitleTextColor
         overlayView.addSubview(titleLabel)
 
         let descriptionLabel = UILabel()
-        descriptionLabel.text = NSLocalizedString("topsites.emptystate.description", value: "Your most visited sites will show up here.", comment: "Description label for the empty Top Sites state.")
+        descriptionLabel.text = Strings.TopSitesEmptyStateDescription
         descriptionLabel.textAlignment = NSTextAlignment.Center
         descriptionLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         descriptionLabel.textColor = TopSitesPanelUX.WelcomeScreenItemTextColor

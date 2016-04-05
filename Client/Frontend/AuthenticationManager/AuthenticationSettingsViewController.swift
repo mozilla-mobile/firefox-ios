@@ -10,6 +10,11 @@ import LocalAuthentication
 
 private let logger = Logger.browserLogger
 
+private func presentNavAsFormSheet(presented: UINavigationController, presenter: UINavigationController?) {
+    presented.modalPresentationStyle = .FormSheet
+    presenter?.presentViewController(presented, animated: true, completion: nil)
+}
+
 class TurnPasscodeOnSetting: Setting {
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
         super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOnPasscode),
@@ -17,12 +22,8 @@ class TurnPasscodeOnSetting: Setting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        // Navigate to passcode configuration screen
-        let passcodeVC = PasscodeConfirmViewController.newPasscodeVC()
-        passcodeVC.title = AuthenticationStrings.setPasscode
-        let passcodeNav = UINavigationController(rootViewController: passcodeVC)
-        passcodeNav.modalPresentationStyle = .FormSheet
-        navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
+        presentNavAsFormSheet(UINavigationController(rootViewController: SetupPasscodeViewController()),
+                              presenter: navigationController)
     }
 }
 
@@ -33,11 +34,8 @@ class TurnPasscodeOffSetting: Setting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        let passcodeVC = PasscodeConfirmViewController.removePasscodeVC()
-        passcodeVC.title = AuthenticationStrings.turnOffPasscode
-        let passcodeNav = UINavigationController(rootViewController: passcodeVC)
-        passcodeNav.modalPresentationStyle = .FormSheet
-        navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
+        presentNavAsFormSheet(UINavigationController(rootViewController: RemovePasscodeViewController()),
+                              presenter: navigationController)
     }
 }
 
@@ -53,11 +51,8 @@ class ChangePasscodeSetting: Setting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        let passcodeVC = PasscodeConfirmViewController.changePasscodeVC()
-        passcodeVC.title = AuthenticationStrings.changePasscode
-        let passcodeNav = UINavigationController(rootViewController: passcodeVC)
-        passcodeNav.modalPresentationStyle = .FormSheet
-        navigationController?.presentViewController(passcodeNav, animated: true, completion: nil)
+        presentNavAsFormSheet(UINavigationController(rootViewController: ChangePasscodeViewController()),
+                              presenter: navigationController)
     }
 }
 
