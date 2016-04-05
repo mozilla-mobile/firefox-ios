@@ -358,6 +358,7 @@
 		D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */; };
 		D38A1BF01A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */; };
 		D38A1BF11A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */; };
+		D38A1EE01CB458EC0080C842 /* CertError.html in Resources */ = {isa = PBXBuildFile; fileRef = D38A1EDF1CB458EC0080C842 /* CertError.html */; };
 		D38B2D8A1A8D98D00040E6B5 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D38B2D8B1A8D98D10040E6B5 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D38B2D8C1A8D98D90040E6B5 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
@@ -1350,6 +1351,7 @@
 		D37DE2C91CA356F900A5EC69 /* testcert2.pem */ = {isa = PBXFileReference; lastKnownFileType = file; path = testcert2.pem; sourceTree = "<group>"; };
 		D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
 		D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SiteTableViewControllerHeader.xib; sourceTree = "<group>"; };
+		D38A1EDF1CB458EC0080C842 /* CertError.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CertError.html; sourceTree = "<group>"; };
 		D38F02D01C05127100175932 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		D38F036F1C06387900175932 /* AuthenticationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTests.swift; sourceTree = "<group>"; };
 		D3968F241A38FE8500CEFD3B /* TabManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
@@ -2931,6 +2933,7 @@
 			children = (
 				D30684F01C84F12A002D8D82 /* SearchPlugins */,
 				0BA1E02F1B051A07007675AF /* NetError.css */,
+				D38A1EDF1CB458EC0080C842 /* CertError.html */,
 				0BA1E00D1B03FB0B007675AF /* NetError.html */,
 				746B6A781B277C1800EA83E3 /* SessionRestore.html */,
 				D3BA7E0B1B0E902A00153782 /* ContextMenu.js */,
@@ -3904,6 +3907,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D38A1EE01CB458EC0080C842 /* CertError.html in Resources */,
 				0BA1E0301B051A07007675AF /* NetError.css in Resources */,
 				E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */,
 				F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */,

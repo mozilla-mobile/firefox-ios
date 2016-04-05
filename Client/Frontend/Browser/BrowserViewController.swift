@@ -1873,6 +1873,15 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
 
+        // If this is a certificate challenge, see if the certificate has previously been
+        // accepted by the user.
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+           let trust = challenge.protectionSpace.serverTrust,
+           let cert = SecTrustGetCertificateAtIndex(trust, 0) where profile.certStore.containsCertificate(cert) {
+            completionHandler(NSURLSessionAuthChallengeDisposition.UseCredential, NSURLCredential(forTrust: trust))
+            return
+        }
+
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic ||
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest ||
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
