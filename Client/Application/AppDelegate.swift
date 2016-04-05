@@ -351,7 +351,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setUpWebServer(profile: Profile) {
         let server = WebServer.sharedInstance
         ReaderModeHandlers.register(server, profile: profile)
-        ErrorPageHelper.register(server)
+        ErrorPageHelper.register(server, certStore: profile.certStore)
         AboutHomeHandler.register(server)
         AboutLicenseHandler.register(server)
         SessionRestoreHandler.register(server)
