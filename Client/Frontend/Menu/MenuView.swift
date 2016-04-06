@@ -49,15 +49,17 @@ class MenuView: UIView {
         pagingView.delegate = self
         pagingView.showsHorizontalScrollIndicator = false
         pagingView.pagingEnabled = true
+        pagingView.backgroundColor = UIColor.clearColor()
         return pagingView
     }()
 
+    private var menuContainerView = UIView()
+
     private var presentationStyle: MenuViewPresentationStyle
 
-    private var menuColor: UIColor = UIColor.clearColor() {
+    var menuColor: UIColor = UIColor.clearColor() {
         didSet {
-            menuPagingView.backgroundColor = menuColor
-            pageControl.backgroundColor = menuColor
+            menuContainerView.backgroundColor = menuColor
             menuFooterView.backgroundColor = menuColor
         }
     }
@@ -116,8 +118,10 @@ class MenuView: UIView {
 
         super.init(frame: CGRectZero)
 
-        self.addSubview(menuPagingView)
-        self.addSubview(pageControl)
+        self.addSubview(menuContainerView)
+
+        menuContainerView.addSubview(menuPagingView)
+        menuContainerView.addSubview(pageControl)
         self.addSubview(toolbar)
 
         switch presentationStyle {
@@ -127,29 +131,37 @@ class MenuView: UIView {
                 make.height.equalTo(toolbarHeight)
                 make.top.left.right.equalTo(self)
             }
-
-            menuPagingView.snp_makeConstraints { make in
+            menuContainerView.snp_makeConstraints { make in
                 make.top.equalTo(toolbar.snp_bottom)
                 make.left.right.equalTo(self)
+                make.bottom.equalTo(menuFooterView.snp_top)
+            }
+
+            menuPagingView.snp_makeConstraints { make in
+                make.top.left.right.equalTo(menuContainerView)
                 make.bottom.equalTo(pageControl.snp_top)
                 make.height.equalTo(100)
             }
 
             pageControl.snp_makeConstraints { make in
-                make.bottom.equalTo(menuFooterView.snp_top)
+                make.bottom.equalTo(menuContainerView)
                 make.centerX.equalTo(self)
             }
 
         case .Popover:
-            menuPagingView.snp_makeConstraints { make in
+            menuContainerView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(self)
+            }
+
+            menuPagingView.snp_makeConstraints { make in
+                make.top.left.right.equalTo(menuContainerView)
             }
             pageControl.snp_makeConstraints { make in
                 make.top.equalTo(menuPagingView.snp_bottom)
                 make.centerX.equalTo(self)
             }
             toolbar.snp_makeConstraints { make in
-                make.top.equalTo(pageControl.snp_bottom)
+                make.top.equalTo(menuContainerView.snp_bottom)
                 make.height.equalTo(toolbarHeight)
                 make.bottom.left.right.equalTo(self)
             }
