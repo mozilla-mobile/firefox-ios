@@ -186,27 +186,14 @@ class TabManager : NSObject {
         }
     }
 
-    @available(iOS 9, *)
-    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Tab {
+    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool = false) -> Tab {
         return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
-    @available(iOS 9, *)
-    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Tab {
+    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool = false) -> Tab {
         let tab = addTab(request, configuration: configuration, isPrivate: isPrivate)
         selectTab(tab)
         return tab
-    }
-
-    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Tab {
-        let tab = addTab(request, configuration: configuration)
-        selectTab(tab)
-        return tab
-    }
-
-    // This method is duplicated to hide the flushToDisk option from consumers.
-    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Tab {
-        return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false)
     }
 
     func addTabsForURLs(urls: [NSURL], zombie: Bool) {
@@ -231,22 +218,19 @@ class TabManager : NSObject {
         }
     }
 
-    @available(iOS 9, *)
-    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Tab {
+    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool = false) -> Tab {
         assert(NSThread.isMainThread())
 
-        // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
-        let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
+        let newConfiguration: WKWebViewConfiguration
+        if #available(iOS 9, *) {
+            // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
+           newConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
+        } else {
+            // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
+           newConfiguration = configuration ?? self.configuration
+        }
         
-        let tab = Tab(configuration: configuration, isPrivate: isPrivate)
-        configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie)
-        return tab
-    }
-
-    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, flushToDisk: Bool, zombie: Bool) -> Tab {
-        assert(NSThread.isMainThread())
-
-        let tab = Tab(configuration: configuration ?? self.configuration)
+        let tab = Tab(configuration: newConfiguration, isPrivate: isPrivate)
         configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }

@@ -96,12 +96,7 @@ class Tab: NSObject {
     /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
 
-    init(configuration: WKWebViewConfiguration) {
-        self.configuration = configuration
-    }
-
-    @available(iOS 9, *)
-    init(configuration: WKWebViewConfiguration, isPrivate: Bool) {
+    init(configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         self.configuration = configuration
         super.init()
         self.isPrivate = isPrivate
