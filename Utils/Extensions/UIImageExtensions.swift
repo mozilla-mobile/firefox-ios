@@ -57,4 +57,8 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return scaledImage
     }
+
+    public static func templateImageNamed(name: String) -> UIImage? {
+        return UIImage(named: name)?.imageWithRenderingMode(.AlwaysTemplate)
+    }
 }
