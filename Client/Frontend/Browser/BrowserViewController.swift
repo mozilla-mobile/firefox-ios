@@ -957,67 +957,31 @@ class BrowserViewController: UIViewController {
         }
     }
     // Mark: Opening New Tabs
-
-    @available(iOS 9, *)
-    func switchToPrivacyMode(isPrivate isPrivate: Bool ){
-        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
-
-        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-        if tabTrayController.privateMode != isPrivate {
-            tabTrayController.changePrivacyMode(isPrivate)
-        }
-        self.tabTrayController = tabTrayController
-    }
-
     func switchToTabForURLOrOpen(url: NSURL) {
-        let tab = tabManager.getTabForURL(url)
-        popToTab(tab)
-        if let tab = tab {
-            tabManager.selectTab(tab)
-        } else {
-            openURLInNewTab(url)
-        }
+        TabAction().performAction(.OpenExistingTabOrOpenNew(isPrivate: tabTrayController?.privateMode ?? false,
+            url: url,
+            tabManager: tabManager,
+            currentViewController: self,
+            tabTrayController: tabTrayController,
+            themer: self))
     }
 
-    func openURLInNewTab(url: NSURL) {
-        if #available(iOS 9, *) {
-            openURLInNewTab(url, isPrivate: tabTrayController?.privateMode ?? false)
-        } else {
-            tabManager.addTabAndSelect(NSURLRequest(URL: url))
-        }
-    }
-
-    @available(iOS 9, *)
-    func openURLInNewTab(url: NSURL?, isPrivate: Bool) {
-        let request: NSURLRequest?
-        if let url = url {
-            request = NSURLRequest(URL: url)
-        } else {
-            request = nil
-        }
-        switchToPrivacyMode(isPrivate: isPrivate)
-        tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+    func openURLInNewTab(url: NSURL, isPrivate: Bool = false) {
+        TabAction().performAction(.OpenNewTab(isPrivate: tabTrayController?.privateMode ?? false,
+            url: url,
+            tabManager: tabManager,
+            tabTrayController: tabTrayController,
+            themer: self,
+            inBackground: false))
     }
 
     @available(iOS 9, *)
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
-        popToTab()
-        openURLInNewTab(nil, isPrivate: isPrivate)
-        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
-    }
-
-    private func popToTab(forTab: Tab? = nil) {
-        guard let currentViewController = navigationController?.topViewController else {
-                return
-        }
-        if let presentedViewController = currentViewController.presentedViewController {
-            presentedViewController.dismissViewControllerAnimated(false, completion: nil)
-        }
-        // if a tab already exists and the top VC is not the BVC then pop the top VC, otherwise don't.
-        if currentViewController != self,
-            let _ = forTab {
-            self.navigationController?.popViewControllerAnimated(true)
-        }
+        TabAction().performAction(.OpenNewTabAndFocus(isPrivate: isPrivate,
+            url: nil,
+            tabManager: tabManager,
+            urlBar: urlBar,
+            currentViewController: self))
     }
 
     // Mark: User Agent Spoofing
@@ -1154,6 +1118,33 @@ extension BrowserViewController: AppStateDelegate {
     func appDidUpdateState(appState: AppState) {
         if AppConstants.MOZ_MENU {
             menuViewController?.appState = appState
+        }
+    }
+}
+
+extension BrowserViewController: MenuActionDelegate {
+    func performAction(action: MenuAction, withAppState appState: AppState) {
+        switch action {
+        case .OpenNewNormalTab:
+            self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: self.profile, tabTrayDelegate: self)
+            dispatch_async(dispatch_get_main_queue()) {
+                TabAction().performAction(.OpenNewTab(isPrivate: false,
+                    url: nil,
+                    tabManager: self.tabManager,
+                    tabTrayController: self.tabTrayController,
+                    themer: self,
+                    inBackground: false))
+            }
+        case .OpenNewPrivateTab:
+            self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: self.profile, tabTrayDelegate: self)
+            dispatch_async(dispatch_get_main_queue()) {
+                TabAction().performAction(.OpenNewTab(isPrivate: true,
+                    url: nil,
+                    tabManager: self.tabManager,
+                    tabTrayController: self.tabTrayController,
+                    themer: self,
+                    inBackground: false))
+            }
         }
     }
 }
@@ -1403,6 +1394,7 @@ extension BrowserViewController: TabToolbarDelegate {
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
         let mvc = MenuViewController(withAppState: getCurrentAppState(), presentationStyle: presentationStyle)
         mvc.delegate = self
+        mvc.actionDelegate = self
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         let setupPopover = { [unowned self] in
@@ -2540,7 +2532,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let newTabTitle = NSLocalizedString("Open In New Tab", comment: "Context menu item for opening a link in a new tab")
                 let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url))
+                        TabAction().performAction(.OpenNewTab(isPrivate: false,
+                            url: url,
+                            tabManager: self.tabManager,
+                            tabTrayController: self.tabTrayController,
+                            themer: self,
+                            inBackground: true))
                     })
                 }
                 actionSheetController.addAction(openNewTabAction)
@@ -2550,7 +2547,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let openNewPrivateTabTitle = NSLocalizedString("Open In New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
                 let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url), isPrivate: true)
+                        TabAction().performAction(.OpenNewTab(isPrivate: true,
+                            url: url,
+                            tabManager: self.tabManager,
+                            tabTrayController: self.tabTrayController,
+                            themer: self,
+                            inBackground: true))
                     })
                 }
                 actionSheetController.addAction(openNewPrivateTabAction)

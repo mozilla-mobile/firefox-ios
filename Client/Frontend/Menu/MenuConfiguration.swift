@@ -20,6 +20,16 @@ protocol MenuConfiguration {
     func shadowColor() -> UIColor
 }
 
+
+protocol MenuActionDelegate: class {
+    func performAction(action: MenuAction, withAppState appState: AppState)
+}
+
+enum MenuAction {
+    case OpenNewNormalTab
+    case OpenNewPrivateTab
+}
+
 struct FirefoxMenuConfiguration: MenuConfiguration {
 
     internal private(set) var menuItems = [MenuItem]()
@@ -120,11 +130,11 @@ struct FirefoxMenuConfiguration: MenuConfiguration {
 extension FirefoxMenuConfiguration {
 
     private static var NewTabMenuItem: MenuItem {
-        return FirefoxMenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
+        return FirefoxMenuItem(title: NewTabTitleString, action: .OpenNewNormalTab, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
     }
 
     private static var NewPrivateTabMenuItem: MenuItem {
-        return FirefoxMenuItem(title: NewPrivateTabTitleString, icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
+        return FirefoxMenuItem(title: NewPrivateTabTitleString, action: .OpenNewPrivateTab, icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
     }
 
     private static var AddBookmarkMenuItem: MenuItem {

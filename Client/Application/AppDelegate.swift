@@ -235,10 +235,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // If we are active then we can ask the BVC to open the new tab right away. Else we remember the
                 // URL and we open it in applicationDidBecomeActive.
                 if application.applicationState == .Active {
-                    if #available(iOS 9, *) {
-                        self.browserViewController.switchToPrivacyMode(isPrivate: false)
-                    }
-                    self.browserViewController.openURLInNewTab(newURL)
+                    self.browserViewController.openURLInNewTab(newURL, isPrivate: false)
                 } else {
                     openInFirefoxURL = newURL
                 }
@@ -290,9 +287,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             openInFirefoxURL = nil
             // This needs to be scheduled so that the BVC is ready.
             dispatch_async(dispatch_get_main_queue()) {
-                if #available(iOS 9, *) {
-                    self.browserViewController.switchToPrivacyMode(isPrivate: false)
-                }
                 self.browserViewController.switchToTabForURLOrOpen(url)
             }
         }

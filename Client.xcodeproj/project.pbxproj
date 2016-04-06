@@ -302,6 +302,8 @@
 		7B6050011C49653B006EEEC3 /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B6050001C49653B006EEEC3 /* AdjustSdk.framework */; };
 		7B6FF7911C74A2C00007E196 /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F9A1C4950F2006EEEC3 /* WebImage.framework */; };
 		7B72E8221CAEC78100FB1D1C /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72E8211CAEC78100FB1D1C /* AppState.swift */; };
+		7B72E9131CB2AD7200FB1D1C /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72E9121CB2AD7200FB1D1C /* Action.swift */; };
+		7B72E9201CB2ADFB00FB1D1C /* TabActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72E91F1CB2ADFB00FB1D1C /* TabActions.swift */; };
 		7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */; };
 		7B9A61CD1C3EBFAE005C83DC /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9A61CC1C3EBFAE005C83DC /* RXMLElement.m */; };
 		7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */; };
@@ -1287,6 +1289,8 @@
 		7B6050001C49653B006EEEC3 /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
 		7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		7B72E8211CAEC78100FB1D1C /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		7B72E9121CB2AD7200FB1D1C /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		7B72E91F1CB2ADFB00FB1D1C /* TabActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabActions.swift; sourceTree = "<group>"; };
 		7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChevronView.swift; sourceTree = "<group>"; };
 		7B95CD191C3AB2EE00638E31 /* MarketingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketingUITests.swift; sourceTree = "<group>"; };
 		7B9A61CB1C3EBFAE005C83DC /* RXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RXMLElement.h; sourceTree = "<group>"; };
@@ -2272,6 +2276,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7B72E9041CB2AD5B00FB1D1C /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				7B72E9121CB2AD7200FB1D1C /* Action.swift */,
+				7B72E91F1CB2ADFB00FB1D1C /* TabActions.swift */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
+		7B759F8F1C997CF00067AB79 /* ItemPages */ = {
+			isa = PBXGroup;
+			children = (
+				7B9343181CAAD00D005186B4 /* MenuPageCollectionViewCell.swift */,
+				7B9343191CAAD00D005186B4 /* TopAlignedCollectionViewFlowLayout.swift */,
+			);
+			name = ItemPages;
+			sourceTree = "<group>";
+		};
 		7B95CD181C3AB2EE00638E31 /* MarketingUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -2938,6 +2960,7 @@
 			isa = PBXGroup;
 			children = (
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
+				7B72E9041CB2AD5B00FB1D1C /* Actions */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
 				D3A994941A368691008AD1AC /* Browser */,
 				7B0B1B9C1C1B69F500DF4AB5 /* Extensions */,
@@ -4421,6 +4444,8 @@
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				7BB7056D1CB3BAAF002EF4A3 /* PagingMenuItemCollectionViewLayout.swift in Sources */,
 				E65AB12C1B7CDADF00C2B47A /* SessionRestoreHelper.swift in Sources */,
+				7B72E9201CB2ADFB00FB1D1C /* TabActions.swift in Sources */,
+				7B72E9131CB2AD7200FB1D1C /* Action.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
