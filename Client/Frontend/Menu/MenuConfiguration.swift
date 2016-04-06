@@ -20,6 +20,16 @@ protocol MenuConfiguration {
     func shadowColor() -> UIColor
 }
 
+
+protocol MenuActionDelegate: class {
+    func performAction(action: MenuAction, withAppState appState: AppState)
+}
+
+enum MenuAction {
+    case OpenNewNormalTab
+    case OpenNewPrivateTab
+}
+
 struct FirefoxMenuConfiguration: MenuConfiguration {
 
     internal private(set) var menuItems = [MenuItem]()

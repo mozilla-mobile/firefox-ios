@@ -20,7 +20,7 @@ class MenuViewController: UIViewController {
     var menuConfig: MenuConfiguration
     var presentationStyle: MenuViewPresentationStyle
     weak var delegate: MenuViewControllerDelegate?
-    weak var actionDelegate: ActionDelegate?
+    weak var actionDelegate: MenuActionDelegate?
 
     var menuView: MenuView!
 

@@ -6,13 +6,13 @@ import Foundation
 
 protocol MenuItem {
     var title: String { get }
-    var action: Action? { get }
+    var action: MenuAction? { get }
     func iconForState(appState: AppState) -> UIImage?
 }
 
 struct FirefoxMenuItem: MenuItem {
     let title: String
-    let action: Action?
+    let action: MenuAction?
     private let iconName: String
     private let privateModeIconName: String
 
@@ -28,7 +28,7 @@ struct FirefoxMenuItem: MenuItem {
         return appState.isPrivate() ? privateModeIcon : icon
     }
 
-    init(title: String, action: Action? = nil, icon: String, privateModeIcon: String) {
+    init(title: String, action: MenuAction? = nil, icon: String, privateModeIcon: String) {
         self.title = title
         self.iconName = icon
         self.privateModeIconName = privateModeIcon
