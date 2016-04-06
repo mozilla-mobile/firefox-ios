@@ -49,7 +49,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = NSLocalizedString("Clear Private Data", tableName: "ClearPrivateData", comment: "Navigation title in settings.")
+        title = Strings.SettingsClearPrivateDataTitle
 
         tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
@@ -74,7 +74,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             control.tag = indexPath.item
         } else {
             assert(indexPath.section == SectionButton)
-            cell.textLabel?.text = NSLocalizedString("Clear Private Data", tableName: "ClearPrivateData", comment: "Button in settings that clears private data for the selected items.")
+            cell.textLabel?.text = Strings.SettingsClearPrivateDataClearButton
             cell.textLabel?.textAlignment = NSTextAlignment.Center
             cell.textLabel?.textColor = UIConstants.DestructiveRed
             cell.accessibilityTraits = UIAccessibilityTraitButton

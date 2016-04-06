@@ -37,14 +37,20 @@ private func prelandedStrings() {
     _ = NSLocalizedString("Use your fingerprint to access Private Browsing now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing private browsing")
 }
 
-/// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.
+/// Old strings that will be removed in a future version. We keep these around for l10n backwards compatibility.
 private func obsoleteStrings() {
+    // v1.0
     _ = NSLocalizedString("Browse multiple Web pages at the same time with tabs.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     _ = NSLocalizedString("Personalize your Firefox just the way you like in Settings.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     _ = NSLocalizedString("Connect Firefox everywhere you use it.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     _ = NSLocalizedString("Show search suggestions", comment: "Label for show search suggestions setting.")
     _ = NSLocalizedString("Sign in", comment: "Text message / button in the settings table view")
+
+    // v3.0
     _ = NSLocalizedString("History will be removed from all your connected devices. This cannot be undone.", tableName: "ClearHistoryConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device.")
     _ = NSLocalizedString("Remove history from your Firefox Account?", tableName: "ClearHistoryConfirm", comment: "Title of the confirmation dialog shown when a user tries to clear history that's synced to another device.")
     _ = NSLocalizedString("Clear", tableName: "ClearHistoryConfirm", comment: "The button that clears history even when Sync is connected.")
+    _ = NSLocalizedString("Clear Private Data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
+    _ = NSLocalizedString("Clear Private Data", tableName: "ClearPrivateData", comment: "Navigation title in settings.")
+    _ = NSLocalizedString("Clear Private Data", tableName: "ClearPrivateData", comment: "Button in settings that clears private data for the selected items.")
 }

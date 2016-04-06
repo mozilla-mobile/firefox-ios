@@ -556,7 +556,7 @@ class ClearPrivateDataSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
 
-        let clearTitle = NSLocalizedString("Clear Private Data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
+        let clearTitle = Strings.SettingsClearPrivateDataSectionName
         super.init(title: NSAttributedString(string: clearTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
