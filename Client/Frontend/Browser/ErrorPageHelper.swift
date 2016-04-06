@@ -138,69 +138,69 @@ class ErrorPageHelper {
                 return GCDWebServerResponse(statusCode: 404)
             }
 
-            if let index = self.redirecting.indexOf(url) {
-                self.redirecting.removeAtIndex(index)
+            guard let index = self.redirecting.indexOf(url) else {
+                return GCDWebServerDataResponse(redirect: url, permanent: false)
+            }
 
-                guard let code = request.query["code"] as? String,
-                      let errCode = Int(code),
-                      let errDescription = request.query["description"] as? String,
-                      let errURLString = request.query["url"] as? String,
-                      let errURLDomain = NSURL(string: errURLString)?.host,
-                      var errDomain = request.query["domain"] as? String else {
+            self.redirecting.removeAtIndex(index)
+
+            guard let code = request.query["code"] as? String,
+                  let errCode = Int(code),
+                  let errDescription = request.query["description"] as? String,
+                  let errURLString = request.query["url"] as? String,
+                  let errURLDomain = NSURL(string: errURLString)?.host,
+                  var errDomain = request.query["domain"] as? String else {
+                return GCDWebServerResponse(statusCode: 404)
+            }
+
+            var asset = NSBundle.mainBundle().pathForResource("NetError", ofType: "html")
+            var variables = [
+                "error_code": "\(errCode ?? -1)",
+                "error_title": errDescription ?? "",
+                "short_description": errDomain,
+            ]
+
+            let tryAgain = NSLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
+            var actions = "<button onclick='window.location.reload()'>\(tryAgain)</button>"
+
+            if errDomain == kCFErrorDomainCFNetwork as String {
+                if let code = CFNetworkErrors(rawValue: Int32(errCode)) {
+                    errDomain = self.cfErrorToName(code)
+                }
+            } else if errDomain == ErrorPageHelper.MozDomain {
+                if errCode == ErrorPageHelper.MozErrorDownloadsNotEnabled {
+                    let downloadInSafari = NSLocalizedString("Open in Safari", tableName: "ErrorPages", comment: "Shown in error pages for files that can't be shown and need to be downloaded.")
+
+                    // Overwrite the normal try-again action.
+                    actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
+                }
+                errDomain = ""
+            } else if CertErrors.contains(errCode) {
+                guard let certError = request.query["certerror"] as? String else {
                     return GCDWebServerResponse(statusCode: 404)
                 }
 
-                var asset = NSBundle.mainBundle().pathForResource("NetError", ofType: "html")
-                var variables = [
-                    "error_code": "\(errCode ?? -1)",
-                    "error_title": errDescription ?? "",
-                    "short_description": errDomain,
-                ]
-
-                let tryAgain = NSLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
-                var actions = "<button onclick='window.location.reload()'>\(tryAgain)</button>"
-
-                if errDomain == kCFErrorDomainCFNetwork as String {
-                    if let code = CFNetworkErrors(rawValue: Int32(errCode)) {
-                        errDomain = self.cfErrorToName(code)
-                    }
-                } else if errDomain == ErrorPageHelper.MozDomain {
-                    if errCode == ErrorPageHelper.MozErrorDownloadsNotEnabled {
-                        let downloadInSafari = NSLocalizedString("Open in Safari", tableName: "ErrorPages", comment: "Shown in error pages for files that can't be shown and need to be downloaded.")
-
-                        // Overwrite the normal try-again action.
-                        actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
-                    }
-                    errDomain = ""
-                } else if CertErrors.contains(errCode) {
-                    guard let certError = request.query["certerror"] as? String else {
-                        return GCDWebServerResponse(statusCode: 404)
-                    }
-
-                    asset = NSBundle.mainBundle().pathForResource("CertError", ofType: "html")
-                    actions = "<button onclick='history.back()'>\(Strings.ErrorPagesGoBackButton)</button>"
-                    variables["error_title"] = Strings.ErrorPagesCertWarningTitle
-                    variables["cert_error"] = certError
-                    variables["long_description"] = String(format: Strings.ErrorPagesCertWarningDescription, "<b>\(errURLDomain)</b>")
-                    variables["advanced_button"] = Strings.ErrorPagesAdvancedButton
-                    variables["warning_description"] = Strings.ErrorPagesCertWarningDescription
-                    variables["warning_advanced1"] = Strings.ErrorPagesAdvancedWarning1
-                    variables["warning_advanced2"] = Strings.ErrorPagesAdvancedWarning2
-                    variables["warning_actions"] =
-                        "<p><a href='#' onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitOnce)\"})'>\(Strings.ErrorPagesVisitOnceButton)</button></p>" +
-                        "<p><a href='#' onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitAlways)\"})'>\(Strings.ErrorPagesVisitAlwaysButton)</button></p>"
-                }
-
-                variables["actions"] = actions
-
-                let response = GCDWebServerDataResponse(HTMLTemplate: asset, variables: variables)
-                response.setValue("no cache", forAdditionalHeader: "Pragma")
-                response.setValue("no-cache,must-revalidate", forAdditionalHeader: "Cache-Control")
-                response.setValue(NSDate().description, forAdditionalHeader: "Expires")
-                return response
-            } else {
-                return GCDWebServerDataResponse(redirect: url, permanent: false)
+                asset = NSBundle.mainBundle().pathForResource("CertError", ofType: "html")
+                actions = "<button onclick='history.back()'>\(Strings.ErrorPagesGoBackButton)</button>"
+                variables["error_title"] = Strings.ErrorPagesCertWarningTitle
+                variables["cert_error"] = certError
+                variables["long_description"] = String(format: Strings.ErrorPagesCertWarningDescription, "<b>\(errURLDomain)</b>")
+                variables["advanced_button"] = Strings.ErrorPagesAdvancedButton
+                variables["warning_description"] = Strings.ErrorPagesCertWarningDescription
+                variables["warning_advanced1"] = Strings.ErrorPagesAdvancedWarning1
+                variables["warning_advanced2"] = Strings.ErrorPagesAdvancedWarning2
+                variables["warning_actions"] =
+                    "<p><a href='javascript:webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitOnce)\"})'>\(Strings.ErrorPagesVisitOnceButton)</button></p>" +
+                    "<p><a href='javascript:webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitAlways)\"})'>\(Strings.ErrorPagesVisitAlwaysButton)</button></p>"
             }
+
+            variables["actions"] = actions
+
+            let response = GCDWebServerDataResponse(HTMLTemplate: asset, variables: variables)
+            response.setValue("no cache", forAdditionalHeader: "Pragma")
+            response.setValue("no-cache,must-revalidate", forAdditionalHeader: "Cache-Control")
+            response.setValue(NSDate().description, forAdditionalHeader: "Expires")
+            return response
         })
 
         server.registerHandlerForMethod("GET", module: "errors", resource: "NetError.css", handler: { (request) -> GCDWebServerResponse! in
@@ -260,7 +260,7 @@ class ErrorPageHelper {
 
     class func originalURLFromQuery(url: NSURL) -> NSURL? {
         let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
-        if let queryURL = components?.queryItems?.filter({ $0.name == "url" }).first?.value {
+        if let queryURL = components?.queryItems?.find({ $0.name == "url" })?.value {
             return NSURL(string: queryURL)
         }
 
