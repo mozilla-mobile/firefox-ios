@@ -1160,20 +1160,19 @@ extension BrowserViewController: AppStateDelegate {
 
 extension BrowserViewController: ActionDelegate {
     func performAction(action: Action, withAppState appState: AppState) {
-        print("performing action \(action) withAppState: \(appState)")
         switch action {
-        case let tabAction as SwitchToNewTabAction:
+        case .OpenNewNormalTab:
+            self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
             dispatch_async(dispatch_get_main_queue()) {
-                let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
-                tabAction.performActionWithAppState(appState, tabManager: self.tabManager, tabTrayController: tabTrayController, themer: self)
+                let tabAction = TabAction()
+                tabAction.performActionOfType(.OpenNewTab(isPrivate: false, tabManager: self.tabManager, tabTrayController: self.tabTrayController, themer: self))
             }
-        case let tabAction as SwitchToNewPrivateTabAction:
+        case .OpenNewPrivateTab:
+            self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
             dispatch_async(dispatch_get_main_queue()) {
-                let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
-                tabAction.performActionWithAppState(appState, tabManager: self.tabManager, tabTrayController: tabTrayController, themer: self)
+                let tabAction = TabAction()
+                tabAction.performActionOfType(.OpenNewTab(isPrivate: true, tabManager: self.tabManager, tabTrayController: self.tabTrayController, themer: self))
             }
-        default:
-            log.debug("WARNING: Handling unknown action of type \(action)")
         }
     }
 }

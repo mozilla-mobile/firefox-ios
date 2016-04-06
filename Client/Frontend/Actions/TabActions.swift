@@ -4,34 +4,32 @@
 
 import Foundation
 
-private protocol TabAction {
-    func openTab(isPrivate: Bool, tabManager: TabManager, tabTrayController: TabTrayController, themer: Themeable)
-}
-
-extension TabAction {
-    func openTab(isPrivate: Bool, tabManager: TabManager, tabTrayController: TabTrayController, themer: Themeable) {
-        if #available(iOS 9, *) {
-            if isPrivate != tabTrayController.privateMode {
-                themer.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
-                tabTrayController.changePrivacyMode(isPrivate)
-
+struct TabAction: Actionable {
+    func performActionOfType(type: ActionType) {
+        switch(type) {
+        case .OpenNewTab(let isPrivate, let tabManager, let tabTrayController, let themer):
+            if let tabTrayController = tabTrayController where tabTrayController.privateMode != isPrivate {
+                switchToPrivacyMode(isPrivate, tabTrayController: tabTrayController, themer: themer)
             }
-            tabManager.addTabAndSelect(isPrivate: isPrivate)
-        } else {
-            tabManager.addTabAndSelect()
+            openNewTab(isPrivate, tabManager: tabManager)
+        default: break
         }
     }
-}
 
-struct SwitchToNewTabAction: TabAction, Action {
-    func performActionWithAppState(appState: AppState, tabManager: TabManager, tabTrayController: TabTrayController, themer: Themeable) {
-        self.openTab(false, tabManager: tabManager, tabTrayController: tabTrayController, themer: themer)
+    private func switchToPrivacyMode(isPrivate: Bool, tabTrayController: TabTrayController, themer: Themeable?) {
+        if #available(iOS 9, *) {
+            if let themer = themer {
+                themer.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+            }
+            tabTrayController.changePrivacyMode(isPrivate)
+        }
     }
-}
 
-struct SwitchToNewPrivateTabAction: TabAction, Action {
-
-    func performActionWithAppState(appState: AppState, tabManager: TabManager, tabTrayController: TabTrayController, themer: Themeable) {
-        self.openTab(true, tabManager: tabManager, tabTrayController: tabTrayController, themer: themer)
+    private func openNewTab(isPrivate: Bool = false, url: NSURLRequest? = nil, tabManager: TabManager, inBackground: Bool = false) {
+        if inBackground {
+            tabManager.addTab(url, isPrivate: isPrivate)
+        } else {
+            tabManager.addTabAndSelect(url, isPrivate: isPrivate)
+        }
     }
 }
