@@ -4,16 +4,7 @@
 
 import Foundation
 
-protocol ActionDelegate: class {
-    func performAction(action: Action, withAppState appState: AppState)
-}
-
 enum Action {
-    case OpenNewNormalTab
-    case OpenNewPrivateTab
-}
-
-enum ActionType {
     // Tab Actions
     case OpenNewTab(isPrivate: Bool, tabManager: TabManager, tabTrayController: TabTrayController?, themer: Themeable?)
     case OpenExistingTabOrOpenNew(tabManager: TabManager, tabTrayController: TabTrayController?, themer: Themeable?)
@@ -21,5 +12,5 @@ enum ActionType {
 }
 
 protocol Actionable {
-    func performActionOfType(type: ActionType)
+    func performAction(action: Action)
 }

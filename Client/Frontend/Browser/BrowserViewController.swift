@@ -1158,20 +1158,20 @@ extension BrowserViewController: AppStateDelegate {
     }
 }
 
-extension BrowserViewController: ActionDelegate {
-    func performAction(action: Action, withAppState appState: AppState) {
+extension BrowserViewController: MenuActionDelegate {
+    func performAction(action: MenuAction, withAppState appState: AppState) {
         switch action {
         case .OpenNewNormalTab:
             self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
             dispatch_async(dispatch_get_main_queue()) {
                 let tabAction = TabAction()
-                tabAction.performActionOfType(.OpenNewTab(isPrivate: false, tabManager: self.tabManager, tabTrayController: self.tabTrayController, themer: self))
+                tabAction.performAction(.OpenNewTab(isPrivate: false, tabManager: self.tabManager, tabTrayController: self.tabTrayController, themer: self))
             }
         case .OpenNewPrivateTab:
             self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
             dispatch_async(dispatch_get_main_queue()) {
                 let tabAction = TabAction()
-                tabAction.performActionOfType(.OpenNewTab(isPrivate: true, tabManager: self.tabManager, tabTrayController: self.tabTrayController, themer: self))
+                tabAction.performAction(.OpenNewTab(isPrivate: true, tabManager: self.tabManager, tabTrayController: self.tabTrayController, themer: self))
             }
         }
     }

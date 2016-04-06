@@ -5,8 +5,8 @@
 import Foundation
 
 struct TabAction: Actionable {
-    func performActionOfType(type: ActionType) {
-        switch(type) {
+    func performAction(action: Action) {
+        switch(action) {
         case .OpenNewTab(let isPrivate, let tabManager, let tabTrayController, let themer):
             if let tabTrayController = tabTrayController where tabTrayController.privateMode != isPrivate {
                 switchToPrivacyMode(isPrivate, tabTrayController: tabTrayController, themer: themer)
