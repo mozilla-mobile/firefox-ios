@@ -7,12 +7,18 @@ import Foundation
 struct TabAction: Actionable {
     func performAction(action: Action) {
         switch(action) {
-        case .OpenNewTab(let isPrivate, let tabManager, let tabTrayController, let themer):
+        case .OpenNewTab(let isPrivate, let url, let tabManager, let tabTrayController, let themer):
             if let tabTrayController = tabTrayController where tabTrayController.privateMode != isPrivate {
                 switchToPrivacyMode(isPrivate, tabTrayController: tabTrayController, themer: themer)
             }
-            openNewTab(isPrivate, tabManager: tabManager)
-        default: break
+            openNewTab(isPrivate, url: url, tabManager: tabManager)
+        case .OpenExistingTabOrOpenNew(let isPrivate, let url, let tabManager, let currentViewController, let tabTrayController, let themer):
+            if let tabTrayController = tabTrayController where tabTrayController.privateMode != isPrivate {
+                switchToPrivacyMode(isPrivate, tabTrayController: tabTrayController, themer: themer)
+            }
+            switchToTabForURLOrOpen(isPrivate, url: url, tabManager: tabManager, currentViewController: currentViewController)
+        case .OpenNewTabAndFocus(let isPrivate, let url, let tabManager, let urlBar, let currentViewController):
+            openNewTabAndFocus(isPrivate, url: url, tabManager: tabManager, currentViewController: currentViewController, urlBar: urlBar)
         }
     }
 
@@ -25,11 +31,50 @@ struct TabAction: Actionable {
         }
     }
 
-    private func openNewTab(isPrivate: Bool = false, url: NSURLRequest? = nil, tabManager: TabManager, inBackground: Bool = false) {
-        if inBackground {
-            tabManager.addTab(url, isPrivate: isPrivate)
+    private func openNewTab(isPrivate: Bool = false, url: NSURL? = nil, tabManager: TabManager, inBackground: Bool = false) {
+        let urlRequest: NSURLRequest?
+        if let url = url {
+            urlRequest = NSURLRequest(URL: url)
         } else {
-            tabManager.addTabAndSelect(url, isPrivate: isPrivate)
+            urlRequest = nil
+        }
+        if inBackground {
+            tabManager.addTab(urlRequest, isPrivate: isPrivate)
+        } else {
+            tabManager.addTabAndSelect(urlRequest, isPrivate: isPrivate)
+        }
+    }
+
+    private func switchToTabForURLOrOpen(isPrivate: Bool = false, url: NSURL?, tabManager: TabManager, currentViewController: UIViewController) {
+        let tab: Tab?
+        if let url = url {
+            tab = tabManager.getTabForURL(url)
+        } else {
+            tab = nil
+        }
+        popToTab(tab, currentViewController: currentViewController)
+        if let tab = tab {
+            tabManager.selectTab(tab)
+        } else {
+            openNewTab(isPrivate, url: url, tabManager: tabManager)
+        }
+    }
+
+    private func openNewTabAndFocus(isPrivate: Bool, url: NSURL?, tabManager: TabManager, currentViewController: UIViewController, urlBar: URLBarView) {
+        switchToTabForURLOrOpen(isPrivate, url: url, tabManager: tabManager, currentViewController: currentViewController)
+        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+    }
+
+    private func popToTab(forTab: Tab? = nil, currentViewController: UIViewController) {
+        guard let topViewController = currentViewController.navigationController?.topViewController else {
+            return
+        }
+        if let presentedViewController = topViewController.presentedViewController {
+            presentedViewController.dismissViewControllerAnimated(false, completion: nil)
+        }
+        // if a tab already exists and the top VC is not the BVC then pop the top VC, otherwise don't.
+        if topViewController != currentViewController {
+            currentViewController.navigationController?.popViewControllerAnimated(true)
         }
     }
 }

@@ -957,67 +957,30 @@ class BrowserViewController: UIViewController {
         }
     }
     // Mark: Opening New Tabs
-
-    @available(iOS 9, *)
-    func switchToPrivacyMode(isPrivate isPrivate: Bool ){
-        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
-
-        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-        if tabTrayController.privateMode != isPrivate {
-            tabTrayController.changePrivacyMode(isPrivate)
-        }
-        self.tabTrayController = tabTrayController
-    }
-
     func switchToTabForURLOrOpen(url: NSURL) {
-        let tab = tabManager.getTabForURL(url)
-        popToTab(tab)
-        if let tab = tab {
-            tabManager.selectTab(tab)
-        } else {
-            openURLInNewTab(url)
-        }
+        TabAction().performAction(.OpenExistingTabOrOpenNew(isPrivate: tabTrayController?.privateMode ?? false,
+            url: url,
+            tabManager: tabManager,
+            currentViewController: self,
+            tabTrayController: tabTrayController,
+            themer: self))
     }
 
-    func openURLInNewTab(url: NSURL) {
-        if #available(iOS 9, *) {
-            openURLInNewTab(url, isPrivate: tabTrayController?.privateMode ?? false)
-        } else {
-            tabManager.addTabAndSelect(NSURLRequest(URL: url))
-        }
-    }
-
-    @available(iOS 9, *)
-    func openURLInNewTab(url: NSURL?, isPrivate: Bool) {
-        let request: NSURLRequest?
-        if let url = url {
-            request = NSURLRequest(URL: url)
-        } else {
-            request = nil
-        }
-        switchToPrivacyMode(isPrivate: isPrivate)
-        tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+    func openURLInNewTab(url: NSURL, isPrivate: Bool = false) {
+        TabAction().performAction(.OpenNewTab(isPrivate: tabTrayController?.privateMode ?? false,
+            url: url,
+            tabManager: tabManager,
+            tabTrayController: tabTrayController,
+            themer: self))
     }
 
     @available(iOS 9, *)
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
-        popToTab()
-        openURLInNewTab(nil, isPrivate: isPrivate)
-        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
-    }
-
-    private func popToTab(forTab: Tab? = nil) {
-        guard let currentViewController = navigationController?.topViewController else {
-                return
-        }
-        if let presentedViewController = currentViewController.presentedViewController {
-            presentedViewController.dismissViewControllerAnimated(false, completion: nil)
-        }
-        // if a tab already exists and the top VC is not the BVC then pop the top VC, otherwise don't.
-        if currentViewController != self,
-            let _ = forTab {
-            self.navigationController?.popViewControllerAnimated(true)
-        }
+        TabAction().performAction(.OpenNewTabAndFocus(isPrivate: isPrivate,
+            url: nil,
+            tabManager: tabManager,
+            urlBar: urlBar,
+            currentViewController: self))
     }
 
     // Mark: User Agent Spoofing
@@ -1162,16 +1125,22 @@ extension BrowserViewController: MenuActionDelegate {
     func performAction(action: MenuAction, withAppState appState: AppState) {
         switch action {
         case .OpenNewNormalTab:
-            self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
+            self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: self.profile, tabTrayDelegate: self)
             dispatch_async(dispatch_get_main_queue()) {
-                let tabAction = TabAction()
-                tabAction.performAction(.OpenNewTab(isPrivate: false, tabManager: self.tabManager, tabTrayController: self.tabTrayController, themer: self))
+                TabAction().performAction(.OpenNewTab(isPrivate: false,
+                    url: nil,
+                    tabManager: self.tabManager,
+                    tabTrayController: self.tabTrayController,
+                    themer: self))
             }
         case .OpenNewPrivateTab:
-            self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
+            self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: self.profile, tabTrayDelegate: self)
             dispatch_async(dispatch_get_main_queue()) {
-                let tabAction = TabAction()
-                tabAction.performAction(.OpenNewTab(isPrivate: true, tabManager: self.tabManager, tabTrayController: self.tabTrayController, themer: self))
+                TabAction().performAction(.OpenNewTab(isPrivate: true,
+                    url: nil,
+                    tabManager: self.tabManager,
+                    tabTrayController: self.tabTrayController,
+                    themer: self))
             }
         }
     }
