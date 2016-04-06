@@ -6,7 +6,7 @@ import Foundation
 
 enum Action {
     // Tab Actions
-    case OpenNewTab(isPrivate: Bool, url: NSURL?, tabManager: TabManager, tabTrayController: TabTrayController?, themer: Themeable?)
+    case OpenNewTab(isPrivate: Bool, url: NSURL?, tabManager: TabManager, tabTrayController: TabTrayController?, themer: Themeable?, inBackground: Bool)
     case OpenExistingTabOrOpenNew(isPrivate: Bool, url: NSURL, tabManager: TabManager, currentViewController: UIViewController, tabTrayController: TabTrayController?, themer: Themeable?)
     case OpenNewTabAndFocus(isPrivate: Bool, url: NSURL?, tabManager: TabManager, urlBar: URLBarView, currentViewController: UIViewController)
 }

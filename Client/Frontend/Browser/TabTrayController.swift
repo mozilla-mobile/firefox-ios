@@ -550,13 +550,12 @@ class TabTrayController: UIViewController {
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
         self.collectionView.performBatchUpdates({ _ in
-            var tab: Tab
-            if #available(iOS 9, *) {
-                tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
-            } else {
-                tab = self.tabManager.addTab(request)
-            }
-            self.tabManager.selectTab(tab)
+            TabAction().performAction(.OpenNewTab(isPrivate: self.privateMode,
+                url: request?.URL,
+                tabManager: self.tabManager,
+                tabTrayController: self,
+                themer: nil,
+                inBackground: false))
         }, completion: { finished in
             if finished {
                 self.navigationController?.popViewControllerAnimated(true)

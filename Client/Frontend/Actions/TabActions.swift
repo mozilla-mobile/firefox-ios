@@ -7,11 +7,12 @@ import Foundation
 struct TabAction: Actionable {
     func performAction(action: Action) {
         switch(action) {
-        case .OpenNewTab(let isPrivate, let url, let tabManager, let tabTrayController, let themer):
-            if let tabTrayController = tabTrayController where tabTrayController.privateMode != isPrivate {
+        case .OpenNewTab(let isPrivate, let url, let tabManager, let tabTrayController, let themer, let inBackground):
+            if !inBackground,
+                let tabTrayController = tabTrayController where tabTrayController.privateMode != isPrivate {
                 switchToPrivacyMode(isPrivate, tabTrayController: tabTrayController, themer: themer)
             }
-            openNewTab(isPrivate, url: url, tabManager: tabManager)
+            openNewTab(isPrivate, url: url, tabManager: tabManager, inBackground: inBackground)
         case .OpenExistingTabOrOpenNew(let isPrivate, let url, let tabManager, let currentViewController, let tabTrayController, let themer):
             if let tabTrayController = tabTrayController where tabTrayController.privateMode != isPrivate {
                 switchToPrivacyMode(isPrivate, tabTrayController: tabTrayController, themer: themer)

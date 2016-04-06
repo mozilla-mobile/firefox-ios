@@ -971,7 +971,8 @@ class BrowserViewController: UIViewController {
             url: url,
             tabManager: tabManager,
             tabTrayController: tabTrayController,
-            themer: self))
+            themer: self,
+            inBackground: false))
     }
 
     @available(iOS 9, *)
@@ -1131,7 +1132,8 @@ extension BrowserViewController: MenuActionDelegate {
                     url: nil,
                     tabManager: self.tabManager,
                     tabTrayController: self.tabTrayController,
-                    themer: self))
+                    themer: self,
+                    inBackground: false))
             }
         case .OpenNewPrivateTab:
             self.tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: self.profile, tabTrayDelegate: self)
@@ -1140,7 +1142,8 @@ extension BrowserViewController: MenuActionDelegate {
                     url: nil,
                     tabManager: self.tabManager,
                     tabTrayController: self.tabTrayController,
-                    themer: self))
+                    themer: self,
+                    inBackground: false))
             }
         }
     }
@@ -2529,7 +2532,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let newTabTitle = NSLocalizedString("Open In New Tab", comment: "Context menu item for opening a link in a new tab")
                 let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url))
+                        TabAction().performAction(.OpenNewTab(isPrivate: false,
+                            url: url,
+                            tabManager: self.tabManager,
+                            tabTrayController: self.tabTrayController,
+                            themer: self,
+                            inBackground: true))
                     })
                 }
                 actionSheetController.addAction(openNewTabAction)
@@ -2539,7 +2547,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let openNewPrivateTabTitle = NSLocalizedString("Open In New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
                 let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url), isPrivate: true)
+                        TabAction().performAction(.OpenNewTab(isPrivate: true,
+                            url: url,
+                            tabManager: self.tabManager,
+                            tabTrayController: self.tabTrayController,
+                            themer: self,
+                            inBackground: true))
                     })
                 }
                 actionSheetController.addAction(openNewPrivateTabAction)
