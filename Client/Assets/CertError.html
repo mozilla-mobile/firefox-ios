@@ -20,31 +20,25 @@
     </script>
   </head>
 
-  <body dir="&locale.dir;">
-
+  <body>
     <!-- PAGE CONTAINER (for styling purposes only) -->
     <div id="errorPageContainer">
-
       <!-- Error Title -->
       <div id="errorTitle">
         <h1 id="errorTitleText">%error_title%</h1>
       </div>
 
-      <!-- LONG CONTENT (the section most likely to require scrolling) -->
-      <div id="errorLongContent">
+      <!-- Buttons -->
+      <div id="actions">%actions%</div>
 
-        <!-- Short Description -->
-        <div id="errorShortDesc">
-          <p id="errorShortDescText">%short_description%</p>
-        </div>
-
-        <!-- Buttons -->
-        <div id="actions">%actions%</div>
-      </div>
-
+      <p>%long_description%</p>
+      <button>%advanced_button%</button>
+      <p>%cert_error%</p>
+      <p>%warning_advanced1%</p>
+      <p>%warning_advanced2%</p>
+      <div>%warning_actions%</div>
     </div>
-  </div>
-  <div id="decoration"></div>
 
+    <div id="decoration"></div>
   </body>
 </html>
