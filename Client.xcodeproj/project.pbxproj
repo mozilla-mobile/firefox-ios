@@ -340,6 +340,7 @@
 		D32109941B8CFD62006D5B74 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
 		D328175B1BD07BA900185845 /* NSCharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32817591BD07B6F00185845 /* NSCharacterSetExtensions.swift */; };
 		D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */; };
+		D331DFCA1CB6E9EE009B5DA2 /* OldStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */; };
 		D339C2831AD354B400C087BD /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D339C2821AD354B400C087BD /* Loader.swift */; };
 		D33B5B7C1AF1AFC100F4DDE6 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33B5B7B1AF1AFC100F4DDE6 /* SearchTests.swift */; };
 		D343DCD91C445EE600D7EEE8 /* FindInPageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D343DCD81C445EE600D7EEE8 /* FindInPageTests.swift */; };
@@ -1328,6 +1329,7 @@
 		D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotHelper.swift; sourceTree = "<group>"; };
 		D32817591BD07B6F00185845 /* NSCharacterSetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCharacterSetExtensions.swift; sourceTree = "<group>"; };
 		D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSwiftData.swift; sourceTree = "<group>"; };
+		D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OldStrings.swift; sourceTree = "<group>"; };
 		D339C2821AD354B400C087BD /* Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
 		D33B5B7B1AF1AFC100F4DDE6 /* SearchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
 		D343DCD81C445EE600D7EEE8 /* FindInPageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageTests.swift; sourceTree = "<group>"; };
@@ -2939,6 +2941,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
 				D3A994941A368691008AD1AC /* Browser */,
@@ -4393,6 +4396,7 @@
 				0B3E7DB81B27A7F600E2E84D /* AboutUtils.swift in Sources */,
 				D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */,
 				0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */,
+				D331DFCA1CB6E9EE009B5DA2 /* OldStrings.swift in Sources */,
 				D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
 				D3BE7B481B05596800641031 /* AuroraAppDelegate.swift in Sources */,
