@@ -6,7 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch
 -----------
 
-This branch is for mainline development that will eventually ship as v4.0.
+This branch is a stabilization branch, slated to become v4.0. See the __master__ branch if you're doing work for a 5.0 release.
 
 See the __v3.x__ branch if you're doing stabilization work for v3.0. If you are interested in fixing a bug on the __v3.x__ stabilization branch, take a look at the list of open bugs that are marked as [tracking 3.0](https://wiki.mozilla.org/Mobile/Triage#iOS_Tracking_3.0.2B).
 
