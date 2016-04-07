@@ -1873,6 +1873,15 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
 
+        // If this is a certificate challenge, see if the certificate has previously been
+        // accepted by the user.
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+           let trust = challenge.protectionSpace.serverTrust,
+           let cert = SecTrustGetCertificateAtIndex(trust, 0) where profile.certStore.containsCertificate(cert) {
+            completionHandler(NSURLSessionAuthChallengeDisposition.UseCredential, NSURLCredential(forTrust: trust))
+            return
+        }
+
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic ||
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest ||
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
@@ -2037,27 +2046,6 @@ extension BrowserViewController: WKUIDelegate {
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
         } else {
             completionHandler(nil)
-        }
-    }
-
-    /// Invoked when an error occurs during a committed main frame navigation.
-    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
-        if error.code == Int(CFNetworkErrors.CFURLErrorCancelled.rawValue) {
-            return
-        }
-
-        // Ignore the "Plug-in handled load" error. Which is more like a notification than an error.
-        // Note that there are no constants in the SDK for the WebKit domain or error codes.
-        if error.domain == "WebKitErrorDomain" && error.code == 204 {
-            return
-        }
-
-        if checkIfWebContentProcessHasCrashed(webView, error: error) {
-            return
-        }
-
-        if let url = error.userInfo["NSErrorFailingURLKey"] as? NSURL {
-            ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
     }
 

@@ -144,6 +144,7 @@ protocol Profile: class {
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
     var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
+    var certStore: CertStore { get }
 
     func shutdown()
 
@@ -365,6 +366,10 @@ public class BrowserProfile: Profile {
 
     lazy var syncManager: SyncManager = {
         return BrowserSyncManager(profile: self)
+    }()
+
+    lazy var certStore: CertStore = {
+        return CertStore()
     }()
 
     private func getSyncDelegate() -> SyncDelegate {
