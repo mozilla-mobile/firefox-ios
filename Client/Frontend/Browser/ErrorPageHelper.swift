@@ -14,7 +14,6 @@ class ErrorPageHelper {
 
     private static let MessageOpenInSafari = "openInSafari"
     private static let MessageCertVisitOnce = "certVisitOnce"
-    private static let MessageCertVisitAlways = "certVisitAlways"
 
     // When an error page is intentionally loaded, its added to this set. If its in the set, we show
     // it as an error page. If its not, we assume someone is trying to reload this page somehow, and
@@ -190,8 +189,7 @@ class ErrorPageHelper {
                 variables["warning_advanced1"] = Strings.ErrorPagesAdvancedWarning1
                 variables["warning_advanced2"] = Strings.ErrorPagesAdvancedWarning2
                 variables["warning_actions"] =
-                    "<p><a href='javascript:webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitOnce)\"})'>\(Strings.ErrorPagesVisitOnceButton)</button></p>" +
-                    "<p><a href='javascript:webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitAlways)\"})'>\(Strings.ErrorPagesVisitAlwaysButton)</button></p>"
+                    "<p><a href='javascript:webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitOnce)\"})'>\(Strings.ErrorPagesVisitOnceButton)</button></p>"
             }
 
             variables["actions"] = actions
@@ -286,8 +284,7 @@ extension ErrorPageHelper: BrowserHelper {
             switch type {
             case ErrorPageHelper.MessageOpenInSafari:
                 UIApplication.sharedApplication().openURL(originalURL)
-            case ErrorPageHelper.MessageCertVisitOnce: fallthrough
-            case ErrorPageHelper.MessageCertVisitAlways: // TODO: Bug 1259284
+            case ErrorPageHelper.MessageCertVisitOnce:
                 if let cert = certFromErrorURL(errorURL) {
                     ErrorPageHelper.certStore?.addCertificate(cert)
                     message.webView?.reload()

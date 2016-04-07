@@ -37,6 +37,5 @@ extension Strings {
     public static let ErrorPagesCertWarningDescription = NSLocalizedString("ErrorPages.CertWarning.Description", value: "The owner of %@ has configured their website improperly. To protect your information from being stolen, Firefox has not connected to this website.", comment: "Warning text on the certificate error page")
     public static let ErrorPagesCertWarningTitle = NSLocalizedString("ErrorPages.CertWarning.Title", value: "Your connection is not private", comment: "Title on the certificate error page")
     public static let ErrorPagesGoBackButton = NSLocalizedString("ErrorPages.GoBack.Button", value: "Go Back", comment: "Label for button to go back from the error page")
-    public static let ErrorPagesVisitAlwaysButton = NSLocalizedString("ErrorPages.VisitAlways.Button", value: "Visit site anyway and remember my choice", comment: "Button label to permanently continue to the site from the certificate error page")
     public static let ErrorPagesVisitOnceButton = NSLocalizedString("ErrorPages.VisitOnce.Button", value: "Visit site anyway", comment: "Button label to temporarily continue to the site from the certificate error page")
 }
