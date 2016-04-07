@@ -69,6 +69,18 @@ class BrowserLocationView: UIView {
         }
     }
 
+    var editing: Bool = false {
+        didSet {
+            if !lockImageView.hidden {
+                lockLeadingConstraint?.updateOffset(editing ? -lockTextOffset + CGFloat(BrowserLocationViewUX.LocationContentInset) : 0)
+            }
+
+            if !readerModeButton.hidden {
+                readerButtonTrailingConstraint?.updateOffset(editing ? readerTextOffset - CGFloat(BrowserLocationViewUX.LocationContentInset): 0)
+            }
+        }
+    }
+
     var readerModeState: ReaderModeState {
         get {
             return readerModeButton.readerModeState
@@ -81,13 +93,13 @@ class BrowserLocationView: UIView {
                 if wasHidden != readerModeButton.hidden {
                     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
                 }
+                setNeedsUpdateConstraints()
                 UIView.animateWithDuration(0.1, animations: { () -> Void in
                     if newReaderModeState == ReaderModeState.Unavailable {
                         self.readerModeButton.alpha = 0.0
                     } else {
                         self.readerModeButton.alpha = 1.0
                     }
-                    self.setNeedsUpdateConstraints()
                     self.layoutIfNeeded()
                 })
             }
@@ -129,32 +141,67 @@ class BrowserLocationView: UIView {
     private lazy var readerModeButton: ReaderModeButton = {
         let readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
-        readerModeButton.addTarget(self, action: #selector(BrowserLocationView.SELtapReaderModeButton), forControlEvents: .TouchUpInside)
-        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(BrowserLocationView.SELlongPressReaderModeButton(_:))))
+        readerModeButton.addTarget(self, action: #selector(BrowserLocationView.tapReaderModeButton), forControlEvents: .TouchUpInside)
+        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(BrowserLocationView.longPressReaderModeButton(_:))))
         readerModeButton.isAccessibilityElement = true
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
-        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(BrowserLocationView.SELreaderModeCustomAction))]
+        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(BrowserLocationView.readerModeCustomAction))]
         return readerModeButton
     }()
+
+    private var lockLeadingConstraint: Constraint?
+    private var readerButtonTrailingConstraint: Constraint?
+
+    private var lockTextOffset: CGFloat {
+        return self.lockImageView.intrinsicContentSize().width + CGFloat(BrowserLocationViewUX.LocationContentInset * 2)
+    }
+
+    private var readerTextOffset: CGFloat {
+        return self.readerModeButton.intrinsicContentSize().width + CGFloat(BrowserLocationViewUX.LocationContentInset * 2)
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(BrowserLocationView.SELlongPressLocation(_:)))
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(BrowserLocationView.SELtapLocation(_:)))
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(BrowserLocationView.longPressLocation(_:)))
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(BrowserLocationView.tapLocation(_:)))
 
         addSubview(urlTextField)
         addSubview(lockImageView)
         addSubview(readerModeButton)
+    }
 
-        lockImageView.snp_makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.equalTo(self.lockImageView.intrinsicContentSize().width + CGFloat(BrowserLocationViewUX.LocationContentInset * 2))
+    override func updateConstraints() {
+        super.updateConstraints()
+
+        urlTextField.snp_remakeConstraints { make in
+            make.top.bottom.equalTo(self)
+
+            if lockImageView.hidden {
+                make.leading.equalTo(self).offset(BrowserLocationViewUX.LocationContentInset)
+            } else {
+                make.leading.equalTo(lockImageView.snp_trailing)
+            }
+
+            if readerModeButton.hidden {
+                make.trailing.equalTo(self).offset(-BrowserLocationViewUX.LocationContentInset)
+            } else {
+                make.trailing.equalTo(readerModeButton.snp_leading)
+            }
         }
 
-        readerModeButton.snp_makeConstraints { make in
-            make.trailing.centerY.equalTo(self)
-            make.width.equalTo(self.readerModeButton.intrinsicContentSize().width + CGFloat(BrowserLocationViewUX.LocationContentInset * 2))
+        lockImageView.snp_remakeConstraints { make in
+            lockLeadingConstraint = make.leading.equalTo(self).offset(
+                editing ? -lockTextOffset + CGFloat(BrowserLocationViewUX.LocationContentInset) : 0).constraint
+            make.centerY.equalTo(self)
+            make.width.equalTo(lockImageView.hidden ? 0 : lockTextOffset)
+        }
+
+        readerModeButton.snp_remakeConstraints { make in
+            readerButtonTrailingConstraint = make.trailing.equalTo(self).offset(
+                editing ? readerTextOffset - CGFloat(BrowserLocationViewUX.LocationContentInset) : 0).constraint
+            make.centerY.equalTo(self)
+            make.width.equalTo(readerModeButton.hidden ? 0 : readerTextOffset)
         }
     }
 
@@ -170,48 +217,31 @@ class BrowserLocationView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    override func updateConstraints() {
-        urlTextField.snp_remakeConstraints { make in
-            make.top.bottom.equalTo(self)
-
-            if lockImageView.hidden {
-                make.leading.equalTo(self).offset(BrowserLocationViewUX.LocationContentInset)
-            } else {
-                make.leading.equalTo(self.lockImageView.snp_trailing)
-            }
-
-            if readerModeButton.hidden {
-                make.trailing.equalTo(self).offset(-BrowserLocationViewUX.LocationContentInset)
-            } else {
-                make.trailing.equalTo(self.readerModeButton.snp_leading)
-            }
-        }
-
-        super.updateConstraints()
-    }
-
-    func SELtapReaderModeButton() {
+// MARK: - Selectors
+extension BrowserLocationView {
+    func tapReaderModeButton() {
         delegate?.browserLocationViewDidTapReaderMode(self)
     }
 
-    func SELlongPressReaderModeButton(recognizer: UILongPressGestureRecognizer) {
+    func longPressReaderModeButton(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
             delegate?.browserLocationViewDidLongPressReaderMode(self)
         }
     }
 
-    func SELlongPressLocation(recognizer: UITapGestureRecognizer) {
+    func longPressLocation(recognizer: UITapGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
             delegate?.browserLocationViewDidLongPressLocation(self)
         }
     }
 
-    func SELtapLocation(recognizer: UITapGestureRecognizer) {
+    func tapLocation(recognizer: UITapGestureRecognizer) {
         delegate?.browserLocationViewDidTapLocation(self)
     }
 
-    func SELreaderModeCustomAction() -> Bool {
+    func readerModeCustomAction() -> Bool {
         return delegate?.browserLocationViewDidLongPressReaderMode(self) ?? false
     }
 

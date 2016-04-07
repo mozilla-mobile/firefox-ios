@@ -40,6 +40,13 @@ extension Strings {
     public static let ErrorPagesVisitOnceButton = NSLocalizedString("ErrorPages.VisitOnce.Button", value: "Visit site anyway", comment: "Button label to temporarily continue to the site from the certificate error page")
 }
 
+// Browser Chrome
+extension Strings {
+    public static let ChromeAddressAccessibilityLabel =
+        NSLocalizedString("Chrome.Accessibility.AddressAndSearch.Label",
+                          value: "Address and Search",
+                          comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+}
 // Logins Helper.
 extension Strings {
     public static let LoginsHelperSaveLoginButtonTitle = NSLocalizedString("LoginsHelper.SaveLogin.Button", value: "Save Login", comment: "Button to save the user's password")

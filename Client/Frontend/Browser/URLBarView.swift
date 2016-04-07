@@ -10,7 +10,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-struct URLBarViewUX {
+private struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
     static let TextFieldContentInset = UIOffsetMake(9, 5)
@@ -57,23 +57,66 @@ struct URLBarViewUX {
 }
 
 protocol URLBarDelegate: class {
-    func urlBarDidPressTabs(urlBar: URLBarView)
-    func urlBarDidPressReaderMode(urlBar: URLBarView)
+    func urlBarDidPressTabs(urlBar: URLBarViewProtocol)
+    func urlBarDidPressReaderMode(urlBar: URLBarViewProtocol)
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
-    func urlBarDidLongPressReaderMode(urlBar: URLBarView) -> Bool
-    func urlBarDidPressStop(urlBar: URLBarView)
-    func urlBarDidPressReload(urlBar: URLBarView)
-    func urlBarDidEnterOverlayMode(urlBar: URLBarView)
-    func urlBarDidLeaveOverlayMode(urlBar: URLBarView)
-    func urlBarDidLongPressLocation(urlBar: URLBarView)
-    func urlBarLocationAccessibilityActions(urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
-    func urlBarDidPressScrollToTop(urlBar: URLBarView)
-    func urlBar(urlBar: URLBarView, didEnterText text: String)
-    func urlBar(urlBar: URLBarView, didSubmitText text: String)
+    func urlBarDidLongPressReaderMode(urlBar: URLBarViewProtocol) -> Bool
+    func urlBarDidPressStop(urlBar: URLBarViewProtocol)
+    func urlBarDidPressReload(urlBar: URLBarViewProtocol)
+    func urlBarDidEnterOverlayMode(urlBar: URLBarViewProtocol)
+    func urlBarDidLeaveOverlayMode(urlBar: URLBarViewProtocol)
+    func urlBarDidLongPressLocation(urlBar: URLBarViewProtocol)
+    func urlBarLocationAccessibilityActions(urlBar: URLBarViewProtocol) -> [UIAccessibilityCustomAction]?
+    func urlBarDidPressScrollToTop(urlBar: URLBarViewProtocol)
+    func urlBar(urlBar: URLBarViewProtocol, didEnterText text: String)
+    func urlBar(urlBar: URLBarViewProtocol, didSubmitText text: String)
     func urlBarDisplayTextForURL(url: NSURL?) -> String?
 }
 
-class URLBarView: UIView {
+protocol URLBarViewProtocol: Themeable {
+    var view: UIView { get }
+
+    var locationBorderColor: UIColor { get }
+    var locationActiveBorderColor: UIColor { get }
+
+    weak var delegate: URLBarDelegate? { get }
+    weak var browserToolbarDelegate: BrowserToolbarDelegate? { get }
+
+    var helper: BrowserToolbarHelper? { get }
+    var isTransitioning: Bool { get set }
+    var toolbarIsShowing: Bool { get }
+    var inOverlayMode: Bool { get }
+
+    var locationView: BrowserLocationView { get }
+    var shareButton: UIButton { get }
+    var bookmarkButton: UIButton { get }
+    var forwardButton: UIButton { get }
+    var backButton: UIButton { get }
+    var stopReloadButton: UIButton { get }
+
+    var actionButtons: [UIButton] { get }
+
+    var currentURL: NSURL? { get set }
+
+    func updateAlphaForSubviews(alpha: CGFloat)
+    func updateTabCount(count: Int, animated: Bool)
+    func updateProgressBar(progress: Float)
+    func updateReaderModeState(state: ReaderModeState)
+
+    func setAutocompleteSuggestion(suggestion: String?)
+    func setShowToolbar(shouldShow: Bool)
+
+    func enterOverlayMode(locationText: String?, pasted: Bool)
+    func leaveOverlayMode(didCancel cancel: Bool)
+
+    func SELdidClickCancel()
+}
+
+class URLBarView: UIView, URLBarViewProtocol {
+    var view: UIView {
+        return self
+    }
+
     // Additional UIAppearance-configurable properties
     dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
         didSet {
@@ -596,15 +639,15 @@ class URLBarView: UIView {
         })
     }
 
-    func SELdidClickAddTab() {
+    @objc func SELdidClickAddTab() {
         delegate?.urlBarDidPressTabs(self)
     }
 
-    func SELdidClickCancel() {
+    @objc func SELdidClickCancel() {
         leaveOverlayMode(didCancel: true)
     }
 
-    func SELtappedScrollToTopArea() {
+    @objc func SELtappedScrollToTopArea() {
         delegate?.urlBarDidPressScrollToTop(self)
     }
 }
@@ -838,6 +881,7 @@ private class CurveView: UIView {
 }
 
 class ToolbarTextField: AutocompleteTextField {
+
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
         var theme = Theme()

@@ -21,10 +21,10 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
  */
 class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
     private let profile: Profile
-    private let urlBar: URLBarView
+    private let urlBar: URLBarViewProtocol
     private var inProgress: Cancellable? = nil
 
-    init(profile: Profile, urlBar: URLBarView) {
+    init(profile: Profile, urlBar: URLBarViewProtocol) {
         self.profile = profile
         self.urlBar = urlBar
         super.init()
