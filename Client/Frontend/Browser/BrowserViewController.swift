@@ -772,8 +772,9 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func addBookmark(url: String, title: String?) {
-        let shareItem = ShareItem(url: url, title: title, favicon: nil)
+    func addBookmark(tabState: TabState) {
+        guard let url = tabState.url else { return }
+        let shareItem = ShareItem(url: url.absoluteString, title: tabState.title, favicon: tabState.favicon)
         profile.bookmarks.shareItem(shareItem)
         if #available(iOS 9, *) {
             var userData = [QuickActions.TabURLKey: shareItem.url]
@@ -783,6 +784,9 @@ class BrowserViewController: UIViewController {
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
                 withUserData: userData,
                 toApplication: UIApplication.sharedApplication())
+        }
+        if let tab = tabManager.getTabForURL(url) {
+            tab.isBookmarked = true
         }
 
         if !AppConstants.MOZ_MENU {
@@ -825,11 +829,15 @@ class BrowserViewController: UIViewController {
         })
     }
 
-    private func removeBookmark(url: String) {
+    private func removeBookmark(tabState: TabState) {
+        guard let url = tabState.url else { return }
         profile.bookmarks.modelFactory >>== {
-            $0.removeByURL(url)
+            $0.removeByURL(url.absoluteString)
                 .uponQueue(dispatch_get_main_queue()) { res in
                 if res.isSuccess {
+                    if let tab = self.tabManager.getTabForURL(url) {
+                        tab.isBookmarked = false
+                    }
                     if !AppConstants.MOZ_MENU {
                         self.toolbar?.updateBookmarkStatus(false)
                         self.urlBar.updateBookmarkStatus(false)
@@ -844,6 +852,9 @@ class BrowserViewController: UIViewController {
             if bookmark.url == urlBar.currentURL?.absoluteString {
                 if let userInfo = notification.userInfo as? Dictionary<String, Bool>{
                     if let added = userInfo["added"]{
+                        if let tab = self.tabManager.getTabForURL(urlBar.currentURL!) {
+                            tab.isBookmarked = false
+                        }
                         if !AppConstants.MOZ_MENU {
                             self.toolbar?.updateBookmarkStatus(added)
                             self.urlBar.updateBookmarkStatus(added)
@@ -939,18 +950,18 @@ class BrowserViewController: UIViewController {
         let isPage = tab.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isWebPage: isPage)
 
-        if !AppConstants.MOZ_MENU {
-            guard let url = tab.displayURL?.absoluteString else {
-                return
-            }
+        guard let url = tab.displayURL?.absoluteString else {
+            return
+        }
 
-            profile.bookmarks.modelFactory >>== {
-                $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { result in
-                    guard let bookmarked = result.successValue else {
-                        log.error("Error getting bookmark status: \(result.failureValue).")
-                        return
-                    }
-
+        profile.bookmarks.modelFactory >>== {
+            $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { [unowned tab] result in
+                guard let bookmarked = result.successValue else {
+                    log.error("Error getting bookmark status: \(result.failureValue).")
+                    return
+                }
+                tab.isBookmarked = bookmarked
+                if !AppConstants.MOZ_MENU {
                     self.navigationToolbar.updateBookmarkStatus(bookmarked)
                 }
             }
@@ -1187,7 +1198,14 @@ extension BrowserViewController: MenuActionDelegate {
                     tab.toggleDesktopSite()
                 }
             }
-
+        case .ToggleBookmarkStatus:
+            switch appState {
+            case .Tab(let tabState):
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.toggleBookmarkForTabState(tabState)
+                }
+            default: break
+            }
         default: break
         }
     }
@@ -1462,23 +1480,22 @@ extension BrowserViewController: TabToolbarDelegate {
         menuViewController = mvc
     }
 
+    func toggleBookmarkForTabState(tabState: TabState) {
+        if tabState.isBookmarked {
+            self.removeBookmark(tabState)
+        } else {
+            self.addBookmark(tabState)
+        }
+    }
 
     func tabToolbarDidPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard let tab = tabManager.selectedTab,
-            let url = tab.displayURL?.absoluteString else {
+            let _ = tab.displayURL?.absoluteString else {
                 log.error("Bookmark error: No tab is selected, or no URL in tab.")
                 return
         }
 
-        profile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(url) >>== { isBookmarked in
-                if isBookmarked {
-                    self.removeBookmark(url)
-                } else {
-                    self.addBookmark(url, title: tab.title)
-                }
-            }
-        }
+        toggleBookmarkForTabState(tab.tabState)
     }
 
     func tabToolbarDidLongPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1791,8 +1808,8 @@ extension BrowserViewController: TabManagerDelegate {
                 // Don't bother fetching bookmark state for about/sessionrestore and about/home.
                 if AboutUtils.isAboutURL(webView.URL) {
                     // Indeed, because we don't show the toolbar at all, don't even blank the star.
-                } else if !AppConstants.MOZ_MENU {
-                    profile.bookmarks.modelFactory >>== {
+                } else {
+                    profile.bookmarks.modelFactory >>== { [unowned tab] in
                         $0.isBookmarked(url)
                             .uponQueue(dispatch_get_main_queue()) {
                             guard let isBookmarked = $0.successValue else {
@@ -1800,8 +1817,11 @@ extension BrowserViewController: TabManagerDelegate {
                                 return
                             }
 
-                            self.toolbar?.updateBookmarkStatus(isBookmarked)
-                            self.urlBar.updateBookmarkStatus(isBookmarked)
+                            tab.isBookmarked = isBookmarked
+                            if !AppConstants.MOZ_MENU {
+                                self.toolbar?.updateBookmarkStatus(isBookmarked)
+                                self.urlBar.updateBookmarkStatus(isBookmarked)
+                            }
                         }
                     }
                 }
@@ -2730,7 +2750,7 @@ extension BrowserViewController: TabTrayDelegate {
 
     func tabTrayDidAddBookmark(tab: Tab) {
         guard let url = tab.url?.absoluteString where url.characters.count > 0 else { return }
-        self.addBookmark(url, title: tab.title)
+        self.addBookmark(tab.tabState)
     }
 
 
