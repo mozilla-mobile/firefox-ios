@@ -20,6 +20,25 @@ protocol MenuConfiguration {
     func shadowColor() -> UIColor
 }
 
+
+protocol MenuActionDelegate: class {
+    func performAction(action: MenuAction, withAppState appState: AppState)
+}
+
+enum MenuAction {
+    case OpenNewNormalTab
+    @available(iOS 9, *) case OpenNewPrivateTab
+    case FindInPage
+    @available(iOS 9, *) case ToggleBrowsingMode
+    case ToggleBookmarkStatus
+    case OpenSettings
+    case CloseAllTabs
+    case OpenTopSites
+    case OpenBookmarks
+    case OpenHistory
+    case OpenReadingList
+}
+
 struct FirefoxMenuConfiguration: MenuConfiguration {
 
     internal private(set) var menuItems = [MenuItem]()
@@ -75,24 +94,32 @@ struct FirefoxMenuConfiguration: MenuConfiguration {
 
     // the items should be added to the array according to desired display order
     private func menuItemsForAppState(appState: AppState) -> [MenuItem] {
-        let menuItems: [MenuItem]
+        var menuItems = [MenuItem]()
         switch appState {
         case .Tab(let tabState):
-                menuItems = [FirefoxMenuConfiguration.FindInPageMenuItem,
-                         tabState.desktopSite ? FirefoxMenuConfiguration.RequestMobileMenuItem : FirefoxMenuConfiguration.RequestDesktopMenuItem,
-                         FirefoxMenuConfiguration.SettingsMenuItem,
-                         FirefoxMenuConfiguration.NewTabMenuItem,
-                         FirefoxMenuConfiguration.NewPrivateTabMenuItem,
-                         tabState.isBookmarked ? FirefoxMenuConfiguration.RemoveBookmarkMenuItem : FirefoxMenuConfiguration.AddBookmarkMenuItem]
+            menuItems.append(FirefoxMenuConfiguration.FindInPageMenuItem)
+            if #available(iOS 9, *) {
+                menuItems.append(tabState.desktopSite ? FirefoxMenuConfiguration.RequestMobileMenuItem : FirefoxMenuConfiguration.RequestDesktopMenuItem)
+            }
+            menuItems.append(FirefoxMenuConfiguration.SettingsMenuItem)
+            menuItems.append(FirefoxMenuConfiguration.NewTabMenuItem)
+            if #available(iOS 9, *) {
+                menuItems.append(FirefoxMenuConfiguration.NewPrivateTabMenuItem)
+            }
+            menuItems.append(tabState.isBookmarked ? FirefoxMenuConfiguration.RemoveBookmarkMenuItem : FirefoxMenuConfiguration.AddBookmarkMenuItem)
         case .HomePanels:
-            menuItems = [FirefoxMenuConfiguration.NewTabMenuItem,
-                         FirefoxMenuConfiguration.NewPrivateTabMenuItem,
-                         FirefoxMenuConfiguration.SettingsMenuItem]
+            menuItems.append(FirefoxMenuConfiguration.NewTabMenuItem)
+            if #available(iOS 9, *) {
+                menuItems.append(FirefoxMenuConfiguration.NewPrivateTabMenuItem)
+            }
+            menuItems.append(FirefoxMenuConfiguration.SettingsMenuItem)
         case .TabTray:
-            menuItems = [FirefoxMenuConfiguration.NewTabMenuItem,
-                         FirefoxMenuConfiguration.NewPrivateTabMenuItem,
-                         FirefoxMenuConfiguration.CloseAllTabsMenuItem,
-                         FirefoxMenuConfiguration.SettingsMenuItem]
+            menuItems.append(FirefoxMenuConfiguration.NewTabMenuItem)
+            if #available(iOS 9, *) {
+                menuItems.append(FirefoxMenuConfiguration.NewPrivateTabMenuItem)
+            }
+            menuItems.append(FirefoxMenuConfiguration.CloseAllTabsMenuItem)
+            menuItems.append(FirefoxMenuConfiguration.SettingsMenuItem)
         default:
             menuItems = []
         }
@@ -120,55 +147,58 @@ struct FirefoxMenuConfiguration: MenuConfiguration {
 extension FirefoxMenuConfiguration {
 
     private static var NewTabMenuItem: MenuItem {
-        return FirefoxMenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
+        return FirefoxMenuItem(title: NewTabTitleString, action: .OpenNewNormalTab, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
     }
 
+    @available(iOS 9, *)
     private static var NewPrivateTabMenuItem: MenuItem {
-        return FirefoxMenuItem(title: NewPrivateTabTitleString, icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
+        return FirefoxMenuItem(title: NewPrivateTabTitleString, action: .OpenNewPrivateTab, icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
     }
 
     private static var AddBookmarkMenuItem: MenuItem {
-        return FirefoxMenuItem(title: AddBookmarkTitleString, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm")
+        return FirefoxMenuItem(title: AddBookmarkTitleString, action: .ToggleBookmarkStatus, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm")
     }
 
     private static var RemoveBookmarkMenuItem: MenuItem {
-        return FirefoxMenuItem(title: RemoveBookmarkTitleString, icon: "menu-RemoveBookmark", privateModeIcon: "menu-RemoveBookmark")
+        return FirefoxMenuItem(title: RemoveBookmarkTitleString, action: .ToggleBookmarkStatus, icon: "menu-RemoveBookmark", privateModeIcon: "menu-RemoveBookmark")
     }
 
     private static var FindInPageMenuItem: MenuItem {
-        return FirefoxMenuItem(title: FindInPageTitleString, icon: "menu-FindInPage", privateModeIcon: "menu-FindInPage-pbm")
+        return FirefoxMenuItem(title: FindInPageTitleString, action: .FindInPage, icon: "menu-FindInPage", privateModeIcon: "menu-FindInPage-pbm")
     }
 
+    @available(iOS 9, *)
     private static var RequestDesktopMenuItem: MenuItem {
-        return FirefoxMenuItem(title: ViewDesktopSiteTitleString, icon: "menu-RequestDesktopSite", privateModeIcon: "menu-RequestDesktopSite-pbm")
+        return FirefoxMenuItem(title: ViewDesktopSiteTitleString, action: .ToggleBrowsingMode, icon: "menu-RequestDesktopSite", privateModeIcon: "menu-RequestDesktopSite-pbm")
     }
 
+    @available(iOS 9, *)
     private static var RequestMobileMenuItem: MenuItem {
-        return FirefoxMenuItem(title: ViewMobileSiteTitleString, icon: "menu-ViewMobile", privateModeIcon: "menu-ViewMobile-pbm")
+        return FirefoxMenuItem(title: ViewMobileSiteTitleString, action: .ToggleBrowsingMode, icon: "menu-ViewMobile", privateModeIcon: "menu-ViewMobile-pbm")
     }
 
     private static var SettingsMenuItem: MenuItem {
-        return FirefoxMenuItem(title: SettingsTitleString, icon: "menu-Settings", privateModeIcon: "menu-Settings-pbm")
+        return FirefoxMenuItem(title: SettingsTitleString, action: .OpenSettings, icon: "menu-Settings", privateModeIcon: "menu-Settings-pbm")
     }
 
     private static var CloseAllTabsMenuItem: MenuItem {
-        return FirefoxMenuItem(title: CloseAllTabsTitleString, icon: "menu-CloseTabs", privateModeIcon: "menu-CloseTabs-pbm")
+        return FirefoxMenuItem(title: CloseAllTabsTitleString, action: .CloseAllTabs, icon: "menu-CloseTabs", privateModeIcon: "menu-CloseTabs-pbm")
     }
 
     private static var TopSitesMenuToolbarItem: MenuToolbarItem {
-        return FirefoxMenuToolbarItem(title: TopSitesTitleString, icon: "menu-panel-TopSites")
+        return FirefoxMenuToolbarItem(title: TopSitesTitleString, action: .OpenTopSites, icon: "menu-panel-TopSites")
     }
 
     private static var BookmarksMenuToolbarItem: MenuToolbarItem {
-        return FirefoxMenuToolbarItem(title: BookmarksTitleString, icon: "menu-panel-Bookmarks")
+        return FirefoxMenuToolbarItem(title: BookmarksTitleString, action: .OpenBookmarks, icon: "menu-panel-Bookmarks")
     }
 
     private static var HistoryMenuToolbarItem: MenuToolbarItem {
-        return FirefoxMenuToolbarItem(title: HistoryTitleString, icon: "menu-panel-History")
+        return FirefoxMenuToolbarItem(title: HistoryTitleString, action: .OpenHistory, icon: "menu-panel-History")
     }
 
     private static var ReadingListMenuToolbarItem: MenuToolbarItem {
-        return  FirefoxMenuToolbarItem(title: ReadingListTitleString, icon: "menu-panel-ReadingList")
+        return  FirefoxMenuToolbarItem(title: ReadingListTitleString, action: .OpenReadingList, icon: "menu-panel-ReadingList")
     }
 
     static let NewTabTitleString = NSLocalizedString("New Tab", tableName: "Menu", comment: "String describing the action of creating a new tab from the menu")
