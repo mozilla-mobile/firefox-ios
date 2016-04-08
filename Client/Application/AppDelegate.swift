@@ -464,7 +464,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func addBookmark(notification: UILocalNotification) {
         if let alertURL = notification.userInfo?[TabSendURLKey] as? String,
             let title = notification.userInfo?[TabSendTitleKey] as? String {
-                browserViewController.addBookmark(alertURL, title: title)
+            let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: alertURL), title: title, favicon: nil)
+                browserViewController.addBookmark(tabState)
 
                 if #available(iOS 9, *) {
                     let userData = [QuickActions.TabURLKey: alertURL,
