@@ -137,8 +137,18 @@ class MenuViewController: UIViewController {
 }
 extension MenuViewController: MenuItemDelegate {
     func menuView(menu: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let menuItemAction = menuConfig.menuItems[indexPath.getMenuItemIndex()].action
-        self.actionDelegate?.performAction(menuItemAction, withAppState: appState)
+        let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
+        guard let animation = menuItem.animation else {
+            return performMenuActionForItem(menuItem)
+        }
+        let menuItemCell = self.menuView(menuView, menuItemCellForIndexPath: indexPath)
+        animation.animateFromView(menuItemCell.menuImageView, offset: nil) { finished in
+            self.performMenuActionForItem(menuItem)
+        }
+    }
+
+    private func performMenuActionForItem(menuItem: MenuItem) {
+        self.actionDelegate?.performAction(menuItem.action, withAppState: appState)
         dismissMenu()
     }
 }
