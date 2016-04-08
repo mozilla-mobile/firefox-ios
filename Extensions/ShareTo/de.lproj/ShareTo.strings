@@ -1,0 +1,9 @@
+/* Add button in the share dialog */
+"Add" = "Hinzufügen";
+
+/* On/off toggle to select adding this url to your bookmarks */
+"Add to Bookmarks" = "Zu Lesezeichen hinzufügen";
+
+/* On/off toggle to select adding this url to your reading list */
+"Add to Reading List" = "Zur Leseliste hinzufügen";
+

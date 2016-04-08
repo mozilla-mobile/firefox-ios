@@ -1,0 +1,70 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* About settings section title */
+"About" = "ಬಗ್ಗೆ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ಟ್ಯಾಬ್ ಸೇರಿಸು";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "ಓದುಗ ಪಟ್ಟಿಗೆ ಸೇರಿಸು";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "ಹಿಂದೆ";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ಪಾಪ್-ಅಪ್ ಕಿಟಕಿಗಳನ್ನು ತಡೆ ಹಿಡಿ";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "ಪುಟ ಗುರುತು";
+
+/* Panel accessibility label */
+"Bookmarks" = "ಪುಟಗುರುತುಗಳು";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "ನೀವು ಉಳಿಸುವ ಬುಕ್‌ಮಾರ್ಕ್‌ಗಳು ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ಪ್ರಕಾಶಮಾನ";
+
+/* Alert Call Button */
+"Call" = "ಕರೆ";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "ರದ್ದು";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "ಬಣ್ಣದ ಥೀಮ್‍ ಬದಲಾಯಿಸುತ್ತದೆ.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "‍ಅಕ್ಷರ ಶೈಲಿ ಬದಲಾಯಿಸು.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "ಖಾಸಗಿ ದತ್ತಾಂಶವನ್ನು ಖಾಲಿಮಾಡು";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ಮುಚ್ಚು";
+
+/* No comment provided by engineer. */
+"Closing tab" = "ಟ್ಯಾಬ್ ಮುಚ್ಚಲಾಗುತ್ತಿದೆ";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು‍";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "ಚಿತ್ರವನ್ನು ನಕಲಿಸು";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "ಕೊಂಡಿ ನಕಲಿಸು‍";
+
