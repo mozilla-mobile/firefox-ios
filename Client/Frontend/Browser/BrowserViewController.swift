@@ -1153,6 +1153,18 @@ class BrowserViewController: UIViewController {
         }
         return .HomePanels(homePanelState: homePanelController.homePanelState)
     }
+
+    private func openSettings() {
+        let settingsTableViewController = AppSettingsTableViewController()
+        settingsTableViewController.profile = profile
+        settingsTableViewController.tabManager = tabManager
+        settingsTableViewController.settingsDelegate = self
+
+        let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
+        controller.popoverDelegate = self
+        controller.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
 }
 
 extension BrowserViewController: AppStateDelegate {
@@ -1202,16 +1214,8 @@ extension BrowserViewController: MenuActionDelegate {
             default: break
             }
         case .OpenSettings:
-            let settingsTableViewController = AppSettingsTableViewController()
-            settingsTableViewController.profile = profile
-            settingsTableViewController.tabManager = tabManager
-            settingsTableViewController.settingsDelegate = self
-
-            let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
-            controller.popoverDelegate = self
-            controller.modalPresentationStyle = UIModalPresentationStyle.FormSheet
             dispatch_async(dispatch_get_main_queue()) {
-                self.presentViewController(controller, animated: true, completion: nil)
+                self.openSettings()
             }
         default: break
         }
