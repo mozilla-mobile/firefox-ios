@@ -812,22 +812,7 @@ class BrowserViewController: UIViewController {
             button = self.urlBar.bookmarkButton
         }
 
-        let offToolbar = CGAffineTransformMakeTranslation(0, offset)
-
-        UIView.animateWithDuration(BrowserViewControllerUX.BookmarkStarAnimationDuration, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 2.0, options: [], animations: { () -> Void in
-            button.transform = offToolbar
-            let rotation = CABasicAnimation(keyPath: "transform.rotation")
-            rotation.toValue = CGFloat(M_PI * 2.0)
-            rotation.cumulative = true
-            rotation.duration = BrowserViewControllerUX.BookmarkStarAnimationDuration + 0.075
-            rotation.repeatCount = 1.0
-            rotation.timingFunction = CAMediaTimingFunction(controlPoints: 0.32, 0.70 ,0.18 ,1.00)
-            button.imageView?.layer.addAnimation(rotation, forKey: "rotateStar")
-        }, completion: { finished in
-            UIView.animateWithDuration(BrowserViewControllerUX.BookmarkStarAnimationDuration, delay: 0.15, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: { () -> Void in
-                button.transform = CGAffineTransformIdentity
-            }, completion: nil)
-        })
+        JumpAndSpinAnimator.animateFromView(button.imageView ?? button, offset: offset, completion: nil)
     }
 
     private func removeBookmark(tabState: TabState) {

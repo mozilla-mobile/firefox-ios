@@ -155,7 +155,7 @@ extension AppMenuConfiguration {
     }
 
     private static var AddBookmarkMenuItem: MenuItem {
-        return AppMenuItem(title: AddBookmarkTitleString, action: .ToggleBookmarkStatus, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm")
+        return AppMenuItem(title: AddBookmarkTitleString, action: .ToggleBookmarkStatus, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm", animation: JumpAndSpinAnimator())
     }
 
     private static var RemoveBookmarkMenuItem: MenuItem {
