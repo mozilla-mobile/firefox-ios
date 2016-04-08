@@ -31,6 +31,8 @@ struct TabState {
     var desktopSite: Bool = false
     var isBookmarked: Bool = false
     var url: NSURL?
+    var title: String?
+    var favicon: Favicon?
 }
 
 class Tab: NSObject {
@@ -52,7 +54,7 @@ class Tab: NSObject {
     }
 
     var tabState: TabState {
-        return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url)
+        return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url, title: displayTitle, favicon: displayFavicon)
     }
 
     var webView: WKWebView? = nil
