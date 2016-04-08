@@ -1202,6 +1202,25 @@ extension BrowserViewController: MenuActionDelegate {
             dispatch_async(dispatch_get_main_queue()) {
                 self.openSettings()
             }
+        case .OpenTopSites:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.openURLInNewTab(UIConstants.DefaultHomePage)
+            }
+        case .OpenBookmarks:
+            dispatch_async(dispatch_get_main_queue()) {
+                let bookmarkPanelURL = NSURL(string:"#panel=1", relativeToURL: UIConstants.AboutHomePage)!
+                self.openURLInNewTab(bookmarkPanelURL)
+            }
+        case .OpenHistory:
+            dispatch_async(dispatch_get_main_queue()) {
+                let historyPanelURL = NSURL(string:"#panel=2", relativeToURL: UIConstants.AboutHomePage)!
+                self.openURLInNewTab(historyPanelURL)
+            }
+        case .OpenReadingList:
+            dispatch_async(dispatch_get_main_queue()) {
+                let readingListPanelURL = NSURL(string:"#panel=4", relativeToURL: UIConstants.AboutHomePage)!
+                self.openURLInNewTab(readingListPanelURL)
+            }
         default: break
         }
     }
