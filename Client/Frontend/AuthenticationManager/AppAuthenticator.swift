@@ -8,11 +8,11 @@ import SwiftKeychainWrapper
 import LocalAuthentication
 
 class AppAuthenticator {
-    static func presentAuthenticationUsingInfo(authenticationInfo: AuthenticationKeychainInfo, success: (() -> Void)?, fallback: (() -> Void)?) {
+    static func presentAuthenticationUsingInfo(authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, fallback: (() -> Void)?) {
         if authenticationInfo.useTouchID {
             let localAuthContext = LAContext()
             localAuthContext.localizedFallbackTitle = AuthenticationStrings.enterPasscode
-            localAuthContext.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: AuthenticationStrings.loginsTouchReason) { didSucceed, error in
+            localAuthContext.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: touchIDReason) { didSucceed, error in
                 if didSucceed {
                     // Update our authentication info's last validation timestamp so we don't ask again based
                     // on the set required interval
