@@ -138,10 +138,16 @@ class MenuViewController: UIViewController {
 extension MenuViewController: MenuItemDelegate {
     func menuView(menu: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
+        let menuItemCell = self.menuView(menuView, menuItemCellForIndexPath: indexPath)
+        if let icon = menuItem.selectedIconForState(appState) {
+            menuItemCell.menuImageView.image = icon
+        } else {
+            menuItemCell.menuImageView.image = menuItemCell.menuImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
+            menuItemCell.menuImageView.tintColor = menuConfig.selectedItemTintColor()
+        }
         guard let animation = menuItem.animation else {
             return performMenuActionForItem(menuItem)
         }
-        let menuItemCell = self.menuView(menuView, menuItemCellForIndexPath: indexPath)
         animation.animateFromView(menuItemCell.menuImageView, offset: nil) { finished in
             self.performMenuActionForItem(menuItem)
         }

@@ -18,6 +18,7 @@ protocol MenuConfiguration {
     func menuFont() -> UIFont
     func menuIcon() -> UIImage?
     func shadowColor() -> UIColor
+    func selectedItemTintColor() -> UIColor
 }
 
 
@@ -81,6 +82,10 @@ struct FirefoxMenuConfiguration: MenuConfiguration {
 
     func shadowColor() -> UIColor {
         return isPrivateMode ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
+    }
+
+    func selectedItemTintColor() -> UIColor {
+        return UIConstants.MenuSelectedItemTintColor
     }
 
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
@@ -156,7 +161,7 @@ extension FirefoxMenuConfiguration {
     }
 
     private static var AddBookmarkMenuItem: MenuItem {
-        return FirefoxMenuItem(title: AddBookmarkTitleString, action: .ToggleBookmarkStatus, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm", animation: JumpAndSpinAnimator())
+        return FirefoxMenuItem(title: AddBookmarkTitleString, action: .ToggleBookmarkStatus, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm", selectedIcon: "menu-RemoveBookmark", animation: JumpAndSpinAnimator())
     }
 
     private static var RemoveBookmarkMenuItem: MenuItem {
