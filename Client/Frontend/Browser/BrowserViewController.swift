@@ -671,7 +671,7 @@ class BrowserViewController: UIViewController {
                 newSelectedButtonIndex = lastInt
             }
         }
-        homePanelController?.selectedButtonIndex = newSelectedButtonIndex
+        homePanelController?.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
@@ -1204,22 +1204,19 @@ extension BrowserViewController: MenuActionDelegate {
             }
         case .OpenTopSites:
             dispatch_async(dispatch_get_main_queue()) {
-                self.openURLInNewTab(UIConstants.DefaultHomePage)
+                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(.TopSites)!)
             }
         case .OpenBookmarks:
             dispatch_async(dispatch_get_main_queue()) {
-                let bookmarkPanelURL = NSURL(string:"#panel=1", relativeToURL: UIConstants.AboutHomePage)!
-                self.openURLInNewTab(bookmarkPanelURL)
+                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!)
             }
         case .OpenHistory:
             dispatch_async(dispatch_get_main_queue()) {
-                let historyPanelURL = NSURL(string:"#panel=2", relativeToURL: UIConstants.AboutHomePage)!
-                self.openURLInNewTab(historyPanelURL)
+                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(.History)!)
             }
         case .OpenReadingList:
             dispatch_async(dispatch_get_main_queue()) {
-                let readingListPanelURL = NSURL(string:"#panel=4", relativeToURL: UIConstants.AboutHomePage)!
-                self.openURLInNewTab(readingListPanelURL)
+                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(.ReadingList)!)
             }
         default: break
         }

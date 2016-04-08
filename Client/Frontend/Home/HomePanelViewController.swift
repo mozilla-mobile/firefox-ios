@@ -47,6 +47,14 @@ struct HomePanelState {
     var selectedIndex: Int = 0
 }
 
+enum HomePanelType: Int {
+    case TopSites = 0
+    case Bookmarks = 1
+    case History = 2
+    case SyncedTabs = 3
+    case ReadingList = 4
+}
+
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
@@ -72,7 +80,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     var homePanelState: HomePanelState {
-        return HomePanelState(isPrivate: isPrivateMode, selectedIndex: selectedButtonIndex ?? 0)
+        return HomePanelState(isPrivate: isPrivateMode, selectedIndex: selectedPanel?.rawValue ?? 0)
     }
 
     override func viewDidLoad() {
@@ -134,14 +142,14 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         view.window?.rootViewController?.view.endEditing(true)
     }
 
-    var selectedButtonIndex: Int? = nil {
+    var selectedPanel: HomePanelType? = nil {
         didSet {
-            if oldValue == selectedButtonIndex {
+            if oldValue == selectedPanel {
                 // Prevent flicker, allocations, and disk access: avoid duplicate view controllers.
                 return
             }
 
-            if let index = oldValue {
+            if let index = oldValue?.rawValue {
                 if index < buttons.count {
                     let currentButton = buttons[index]
                     currentButton.selected = false
@@ -150,7 +158,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
             hideCurrentPanel()
 
-            if let index = selectedButtonIndex {
+            if let index = selectedPanel?.rawValue {
                 if index < buttons.count {
                     let newButton = buttons[index]
                     newButton.selected = true
@@ -160,7 +168,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                     let panel = self.panels[index].makeViewController(profile: profile)
                     let accessibilityLabel = self.panels[index].accessibilityLabel
                     if let panelController = panel as? UINavigationController,
-                     let rootPanel = panelController.viewControllers.first {
+                        let rootPanel = panelController.viewControllers.first {
                         setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
                         self.showPanel(panelController)
                     } else {
@@ -204,7 +212,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func SELtappedButton(sender: UIButton!) {
         for (index, button) in buttons.enumerate() {
             if (button == sender) {
-                selectedButtonIndex = index
+                selectedPanel = HomePanelType(rawValue: index)
                 delegate?.homePanelViewController(self, didSelectPanel: index)
                 break
             }
@@ -312,5 +320,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 self.finishEditingButton = nil
             }
         })
+    }
+
+    static func urlForHomePanelOfType(type: HomePanelType) -> NSURL? {
+        return NSURL(string:"#panel=\(type.rawValue)", relativeToURL: UIConstants.AboutHomePage)
     }
 }
