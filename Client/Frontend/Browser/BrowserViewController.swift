@@ -1177,7 +1177,10 @@ extension BrowserViewController: MenuActionDelegate {
                     self.openURLInNewTab(nil, isPrivate: true)
                 }
             }
-
+        case .FindInPage:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.updateFindInPageVisibility(visible: true)
+            }
         default: break
         }
     }
