@@ -18,6 +18,7 @@ protocol MenuConfiguration {
     func menuFont() -> UIFont
     func menuIcon() -> UIImage?
     func shadowColor() -> UIColor
+    func selectedItemTintColor() -> UIColor
 }
 
 protocol MenuActionDelegate: class {
@@ -80,6 +81,10 @@ struct AppMenuConfiguration: MenuConfiguration {
 
     func shadowColor() -> UIColor {
         return isPrivateMode ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
+    }
+
+    func selectedItemTintColor() -> UIColor {
+        return UIConstants.MenuSelectedItemTintColor
     }
 
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
@@ -155,7 +160,7 @@ extension AppMenuConfiguration {
     }
 
     private static var AddBookmarkMenuItem: MenuItem {
-        return AppMenuItem(title: AddBookmarkTitleString, action: .ToggleBookmarkStatus, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm", animation: JumpAndSpinAnimator())
+        return AppMenuItem(title: AddBookmarkTitleString, action: .ToggleBookmarkStatus, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm", selectedIcon: "menu-RemoveBookmark", animation: JumpAndSpinAnimator())
     }
 
     private static var RemoveBookmarkMenuItem: MenuItem {
