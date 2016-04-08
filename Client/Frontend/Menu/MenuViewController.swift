@@ -134,28 +134,34 @@ class MenuViewController: UIViewController {
         self.popoverPresentationController?.backgroundColor = self.popoverBackgroundColor
     }
 
+    private func performMenuAction(action: MenuAction) {
+        self.actionDelegate?.performAction(action, withAppState: appState)
+        dismissMenu()
+    }
+
+    private func performMenuAction(action: MenuAction, withAnimation animation: Animatable, onView view: UIView) {
+        animation.animateFromView(view, offset: nil) { finished in
+            self.performMenuAction(action)
+        }
+    }
+
 }
 extension MenuViewController: MenuItemDelegate {
     func menuView(menu: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
         let menuItemCell = self.menuView(menuView, menuItemCellForIndexPath: indexPath)
+
         if let icon = menuItem.selectedIconForState(appState) {
             menuItemCell.menuImageView.image = icon
         } else {
             menuItemCell.menuImageView.image = menuItemCell.menuImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
             menuItemCell.menuImageView.tintColor = menuConfig.selectedItemTintColor()
         }
-        guard let animation = menuItem.animation else {
-            return performMenuActionForItem(menuItem)
-        }
-        animation.animateFromView(menuItemCell.menuImageView, offset: nil) { finished in
-            self.performMenuActionForItem(menuItem)
-        }
-    }
 
-    private func performMenuActionForItem(menuItem: MenuItem) {
-        self.actionDelegate?.performAction(menuItem.action, withAppState: appState)
-        dismissMenu()
+        guard let animation = menuItem.animation else {
+            return performMenuAction(menuItem.action)
+        }
+        performMenuAction(menuItem.action, withAnimation: animation, onView: menuItemCell.menuImageView)
     }
 }
 
@@ -215,8 +221,8 @@ extension MenuViewController: MenuToolbarDataSource {
 
 extension MenuViewController: MenuToolbarItemDelegate {
     func menuView(menuView: MenuView, didSelectItemAtIndex index: Int) {
-        let selectedMenuItem = menuConfig.menuToolbarItems![index]
-        print("Selected menu item '\(selectedMenuItem.title)")
+        let menuToolbarItem = menuConfig.menuToolbarItems![index]
+        return performMenuAction(menuToolbarItem.action)
     }
 }
 
