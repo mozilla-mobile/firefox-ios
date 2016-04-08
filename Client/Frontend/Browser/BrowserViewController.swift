@@ -1180,6 +1180,14 @@ extension BrowserViewController: MenuActionDelegate {
             dispatch_async(dispatch_get_main_queue()) {
                 self.updateFindInPageVisibility(visible: true)
             }
+        case .ToggleBrowsingMode:
+            if #available(iOS 9, *) {
+                guard let tab = tabManager.selectedTab else { break }
+                dispatch_async(dispatch_get_main_queue()) { [unowned tab] in
+                    tab.toggleDesktopSite()
+                }
+            }
+
         default: break
         }
     }
