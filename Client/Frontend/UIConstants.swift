@@ -6,7 +6,8 @@ import Foundation
 import Shared
 
 public struct UIConstants {
-    static let DefaultHomePage = NSURL(string: "\(WebServer.sharedInstance.base)/about/home/#panel=0")!
+    static let AboutHomePage = NSURL(string: "\(WebServer.sharedInstance.base)/about/home/")!
+    static let DefaultHomePage = NSURL(string:"#panel=0", relativeToURL: AboutHomePage)!
 
     static let AppBackgroundColor = UIColor.blackColor()
     static let PrivateModePurple = UIColor(red: 207 / 255, green: 104 / 255, blue: 255 / 255, alpha: 1)
