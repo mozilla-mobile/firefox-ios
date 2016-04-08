@@ -1207,8 +1207,34 @@ extension BrowserViewController: MenuActionDelegate {
                 }
             default: break
             }
+        case .OpenSettings:
+            let settingsTableViewController = AppSettingsTableViewController()
+            settingsTableViewController.profile = profile
+            settingsTableViewController.tabManager = tabManager
+            settingsTableViewController.settingsDelegate = self
+
+            let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
+            controller.popoverDelegate = self
+            controller.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+            dispatch_async(dispatch_get_main_queue()) {
+                self.presentViewController(controller, animated: true, completion: nil)
+            }
         default: break
         }
+    }
+}
+
+
+extension BrowserViewController: SettingsDelegate {
+    func settingsOpenURLInNewTab(url: NSURL) {
+        self.openURLInNewTab(url)
+    }
+}
+
+
+extension BrowserViewController: PresentingModalViewControllerDelegate {
+    func dismissPresentedModalViewController(modalViewController: UIViewController, animated: Bool) {
+        self.dismissViewControllerAnimated(animated, completion: nil)
     }
 }
 
