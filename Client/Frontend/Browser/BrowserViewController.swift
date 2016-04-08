@@ -1159,6 +1159,30 @@ extension BrowserViewController: AppStateDelegate {
     }
 }
 
+extension BrowserViewController: MenuActionDelegate {
+    func performAction(action: MenuAction, withAppState appState: AppState) {
+        switch action {
+        case .OpenNewNormalTab:
+            dispatch_async(dispatch_get_main_queue()) {
+                if #available(iOS 9, *) {
+                    self.openURLInNewTab(nil, isPrivate: false)
+                } else {
+                    self.tabManager.addTabAndSelect(nil)
+                }
+            }
+        // this is a case that is only available in iOS9
+        case .OpenNewPrivateTab:
+            if #available(iOS 9, *) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.openURLInNewTab(nil, isPrivate: true)
+                }
+            }
+
+        default: break
+        }
+    }
+}
+
 /**
  * History visit management.
  * TODO: this should be expanded to track various visit types; see Bug 1166084.
@@ -1404,6 +1428,7 @@ extension BrowserViewController: TabToolbarDelegate {
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
         let mvc = MenuViewController(withAppState: getCurrentAppState(), presentationStyle: presentationStyle)
         mvc.delegate = self
+        mvc.actionDelegate = self
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         let setupPopover = { [unowned self] in

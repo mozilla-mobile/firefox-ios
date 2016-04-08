@@ -6,6 +6,7 @@ import Foundation
 
 protocol MenuToolbarItem {
     var title: String { get }
+    var action: MenuAction { get }
     func iconForState(appState: AppState) -> UIImage?
 }
 
@@ -14,6 +15,7 @@ struct AppMenuToolbarItem: MenuToolbarItem {
     private let iconName: String
 
     let title: String
+    let action: MenuAction
 
     private var icon: UIImage? {
         return UIImage(named: iconName)
@@ -23,8 +25,9 @@ struct AppMenuToolbarItem: MenuToolbarItem {
         return icon
     }
 
-    init(title: String, icon: String) {
+    init(title: String, action: MenuAction, icon: String) {
         self.title = title
+        self.action = action
         self.iconName = icon
     }
 }
