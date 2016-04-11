@@ -140,7 +140,7 @@ class MenuView: UIView {
             menuPagingView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(menuContainerView)
                 make.bottom.equalTo(pageControl.snp_top)
-                make.height.equalTo(100)
+                make.height.equalTo(0)
             }
 
             pageControl.snp_makeConstraints { make in
@@ -150,18 +150,20 @@ class MenuView: UIView {
 
         case .Popover:
             menuContainerView.snp_makeConstraints { make in
-                make.top.left.right.equalTo(self)
+                make.bottom.equalTo(toolbar.snp_top)
+                make.left.right.top.equalTo(self)
             }
 
             menuPagingView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(menuContainerView)
+                make.bottom.equalTo(pageControl.snp_top)
+                make.height.equalTo(0)
             }
             pageControl.snp_makeConstraints { make in
-                make.top.equalTo(menuPagingView.snp_bottom)
+                make.bottom.equalTo(menuContainerView)
                 make.centerX.equalTo(self)
             }
             toolbar.snp_makeConstraints { make in
-                make.top.equalTo(menuContainerView.snp_bottom)
                 make.height.equalTo(toolbarHeight)
                 make.bottom.left.right.equalTo(self)
             }
@@ -245,11 +247,11 @@ class MenuView: UIView {
     // MARK : Layout
 
     override func layoutSubviews() {
+        super.layoutSubviews()
         reloadDataIfNeeded()
         layoutToolbar()
         layoutMenu()
         layoutFooter()
-        super.layoutSubviews()
     }
 
     private func layoutToolbar() {
@@ -279,7 +281,14 @@ class MenuView: UIView {
         menuPagingLayout.menuRowHeight = CGFloat(menuRowHeight)
 
         menuPagingView.snp_updateConstraints { make in
-            make.height.equalTo(menuPagingLayout.contentSize.height)
+            if presentationStyle == .Popover {
+                let maxNumberOfItemsForPage = CGFloat(self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) ?? 0)
+                let numberOfRows = ceil(CGFloat(maxNumberOfItemsForPage) / numberOfItemsInRow)
+                let menuHeight = itemPadding + (numberOfRows * (CGFloat(self.menuRowHeight) + itemPadding))
+                make.height.equalTo(menuHeight)
+            } else {
+                make.height.equalTo(menuPagingLayout.collectionViewContentSize().height)
+            }
         }
     }
 
