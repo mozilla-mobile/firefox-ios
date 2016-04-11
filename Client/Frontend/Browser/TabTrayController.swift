@@ -250,7 +250,7 @@ class TabTrayController: UIViewController {
 
     var collectionView: UICollectionView!
     var navBar: UIView!
-    var addTabButton: UIButton!
+    var addTabButton: UIButton?
     var settingsButton: UIButton!
     var menuButton: UIButton?
     var collectionViewTransitionSnapshot: UIView?
@@ -345,19 +345,6 @@ class TabTrayController: UIViewController {
         navBar = UIView()
         navBar.backgroundColor = TabTrayControllerUX.BackgroundColor
 
-        addTabButton = UIButton()
-        addTabButton.setImage(UIImage(named: "add"), forState: .Normal)
-        addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
-        addTabButton.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
-        addTabButton.accessibilityIdentifier = "TabTrayController.addTabButton"
-
-        settingsButton = UIButton()
-        settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
-        settingsButton.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
-        settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
-        settingsButton.accessibilityIdentifier = "TabTrayController.settingsButton"
-
-
         let flowLayout = TabTrayCollectionViewLayout()
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
 
@@ -369,7 +356,28 @@ class TabTrayController: UIViewController {
 
         view.addSubview(collectionView)
         view.addSubview(navBar)
-        view.addSubview(addTabButton)
+
+        if AppConstants.MOZ_MENU {
+            self.menuButton = UIButton()
+            menuButton?.setImage(UIImage(named: "bottomNav-menu-pbm"), forState: .Normal)
+            menuButton?.addTarget(self, action: #selector(TabTrayController.didTapMenu), forControlEvents: .TouchUpInside)
+            menuButton?.accessibilityLabel = NSLocalizedString("Open Menu", comment: "Accessibility label for opening the Menu button in the Tab Tray.")
+            menuButton?.accessibilityIdentifier = "TabTrayController.menuButton"
+            view.addSubview(menuButton!)
+        } else {
+            addTabButton = UIButton()
+            addTabButton?.setImage(UIImage(named: "add"), forState: .Normal)
+            addTabButton?.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
+            addTabButton?.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+            addTabButton?.accessibilityIdentifier = "TabTrayController.addTabButton"
+            view.addSubview(addTabButton!)
+        }
+
+        settingsButton = UIButton()
+        settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
+        settingsButton.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
+        settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+        settingsButton.accessibilityIdentifier = "TabTrayController.settingsButton"
         view.addSubview(settingsButton)
 
 
@@ -378,7 +386,11 @@ class TabTrayController: UIViewController {
         if #available(iOS 9, *) {
             view.addSubview(togglePrivateMode)
             togglePrivateMode.snp_makeConstraints { make in
-                make.right.equalTo(addTabButton.snp_left).offset(-10)
+                if AppConstants.MOZ_MENU {
+                    make.right.equalTo(menuButton!.snp_left).offset(-10)
+                } else {
+                    make.right.equalTo(addTabButton!.snp_left).offset(-10)
+                }
                 make.size.equalTo(UIConstants.ToolbarHeight)
                 make.centerY.equalTo(self.navBar)
             }
@@ -396,24 +408,6 @@ class TabTrayController: UIViewController {
             // register for previewing delegate to enable peek and pop if force touch feature available
             if traitCollection.forceTouchCapability == .Available {
                 registerForPreviewingWithDelegate(self, sourceView: view)
-            }
-        }
-        if AppConstants.MOZ_MENU {
-            self.menuButton = UIButton()
-            menuButton?.setImage(UIImage(named: "bottomNav-menu-pbm"), forState: .Normal)
-            menuButton?.addTarget(self, action: #selector(TabTrayController.didTapMenu), forControlEvents: .TouchUpInside)
-            menuButton?.accessibilityLabel = NSLocalizedString("Open Menu", comment: "Accessibility label for opening the Menu button in the Tab Tray.")
-            menuButton?.accessibilityIdentifier = "TabTrayController.menuButton"
-            view.addSubview(menuButton!)
-
-            menuButton!.snp_makeConstraints { make in
-                if #available(iOS 9, *) {
-                    make.right.equalTo(togglePrivateMode.snp_left).offset(-10)
-                } else {
-                    make.right.equalTo(addTabButton.snp_left).offset(-10)
-                }
-                make.size.equalTo(UIConstants.ToolbarHeight)
-                make.centerY.equalTo(self.navBar)
             }
         }
 
@@ -447,9 +441,16 @@ class TabTrayController: UIViewController {
             make.left.right.equalTo(self.view)
         }
 
-        addTabButton.snp_makeConstraints { make in
-            make.trailing.bottom.equalTo(self.navBar)
-            make.size.equalTo(UIConstants.ToolbarHeight)
+        if AppConstants.MOZ_MENU {
+            menuButton!.snp_makeConstraints { make in
+                make.trailing.bottom.equalTo(self.navBar)
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            }
+        } else {
+            addTabButton!.snp_makeConstraints { make in
+                make.trailing.bottom.equalTo(self.navBar)
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            }
         }
 
         settingsButton.snp_makeConstraints { make in
