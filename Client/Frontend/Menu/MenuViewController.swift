@@ -8,6 +8,7 @@ private let maxNumberOfItemsPerPage = 6
 
 protocol MenuViewControllerDelegate: class {
     func menuViewControllerDidDismiss(menuViewController: MenuViewController)
+    func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool
 }
 
 enum MenuViewPresentationStyle {
@@ -120,8 +121,7 @@ class MenuViewController: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        if UI_USER_INTERFACE_IDIOM() == .Phone &&
-            (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) {
+        if delegate?.shouldCloseMenu(self, forTraitCollection: self.traitCollection) ?? false {
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }

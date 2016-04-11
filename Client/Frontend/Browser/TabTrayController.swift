@@ -496,12 +496,10 @@ class TabTrayController: UIViewController {
 
     @objc
     private func didTapMenu() {
-        print("Menu Tapped")
-
-        let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
-        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: presentationStyle)
+        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: .Popover)
+        mvc.delegate = self
         mvc.actionDelegate = self
-        mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
+        mvc.modalPresentationStyle = .Popover
 
         if let popoverPresentationController = mvc.popoverPresentationController {
             popoverPresentationController.backgroundColor = UIColor.clearColor()
@@ -1081,6 +1079,14 @@ extension TabTrayController: UIAdaptivePresentationControllerDelegate, UIPopover
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
+    }
+}
+
+extension TabTrayController: MenuViewControllerDelegate {
+    func menuViewControllerDidDismiss(menuViewController: MenuViewController) { }
+
+    func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool {
+        return false
     }
 }
 
