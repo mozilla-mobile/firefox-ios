@@ -1545,6 +1545,11 @@ extension BrowserViewController: MenuViewControllerDelegate {
     func menuViewControllerDidDismiss(menuViewController: MenuViewController) {
         self.menuViewController = nil
     }
+
+    func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool {
+        return UI_USER_INTERFACE_IDIOM() == .Phone &&
+            (traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular)
+    }
 }
 
 extension BrowserViewController: WindowCloseHelperDelegate {

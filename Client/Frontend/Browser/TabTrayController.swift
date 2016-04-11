@@ -7,6 +7,7 @@ import UIKit
 import SnapKit
 import Storage
 import ReadingList
+import Shared
 
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
@@ -249,8 +250,9 @@ class TabTrayController: UIViewController {
 
     var collectionView: UICollectionView!
     var navBar: UIView!
-    var addTabButton: UIButton!
+    var addTabButton: UIButton?
     var settingsButton: UIButton!
+    var menuButton: UIButton?
     var collectionViewTransitionSnapshot: UIView?
 
     var tabTrayState: TabTrayState {
@@ -343,18 +345,6 @@ class TabTrayController: UIViewController {
         navBar = UIView()
         navBar.backgroundColor = TabTrayControllerUX.BackgroundColor
 
-        addTabButton = UIButton()
-        addTabButton.setImage(UIImage(named: "add"), forState: .Normal)
-        addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
-        addTabButton.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
-        addTabButton.accessibilityIdentifier = "TabTrayController.addTabButton"
-
-        settingsButton = UIButton()
-        settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
-        settingsButton.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
-        settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
-        settingsButton.accessibilityIdentifier = "TabTrayController.settingsButton"
-
         let flowLayout = TabTrayCollectionViewLayout()
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
 
@@ -366,15 +356,41 @@ class TabTrayController: UIViewController {
 
         view.addSubview(collectionView)
         view.addSubview(navBar)
-        view.addSubview(addTabButton)
+
+        if AppConstants.MOZ_MENU {
+            self.menuButton = UIButton()
+            menuButton?.setImage(UIImage(named: "bottomNav-menu-pbm"), forState: .Normal)
+            menuButton?.addTarget(self, action: #selector(TabTrayController.didTapMenu), forControlEvents: .TouchUpInside)
+            menuButton?.accessibilityLabel = NSLocalizedString("Open Menu", comment: "Accessibility label for opening the Menu button in the Tab Tray.")
+            menuButton?.accessibilityIdentifier = "TabTrayController.menuButton"
+            view.addSubview(menuButton!)
+        } else {
+            addTabButton = UIButton()
+            addTabButton?.setImage(UIImage(named: "add"), forState: .Normal)
+            addTabButton?.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
+            addTabButton?.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+            addTabButton?.accessibilityIdentifier = "TabTrayController.addTabButton"
+            view.addSubview(addTabButton!)
+        }
+
+        settingsButton = UIButton()
+        settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
+        settingsButton.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
+        settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+        settingsButton.accessibilityIdentifier = "TabTrayController.settingsButton"
         view.addSubview(settingsButton)
+
 
         makeConstraints()
 
         if #available(iOS 9, *) {
             view.addSubview(togglePrivateMode)
             togglePrivateMode.snp_makeConstraints { make in
-                make.right.equalTo(addTabButton.snp_left).offset(-10)
+                if AppConstants.MOZ_MENU {
+                    make.right.equalTo(menuButton!.snp_left).offset(-10)
+                } else {
+                    make.right.equalTo(addTabButton!.snp_left).offset(-10)
+                }
                 make.size.equalTo(UIConstants.ToolbarHeight)
                 make.centerY.equalTo(self.navBar)
             }
@@ -425,9 +441,16 @@ class TabTrayController: UIViewController {
             make.left.right.equalTo(self.view)
         }
 
-        addTabButton.snp_makeConstraints { make in
-            make.trailing.bottom.equalTo(self.navBar)
-            make.size.equalTo(UIConstants.ToolbarHeight)
+        if AppConstants.MOZ_MENU {
+            menuButton!.snp_makeConstraints { make in
+                make.trailing.bottom.equalTo(self.navBar)
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            }
+        } else {
+            addTabButton!.snp_makeConstraints { make in
+                make.trailing.bottom.equalTo(self.navBar)
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            }
         }
 
         settingsButton.snp_makeConstraints { make in
@@ -469,6 +492,24 @@ class TabTrayController: UIViewController {
             let learnMoreRequest = NSURLRequest(URL: "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(langID)/private-browsing-ios".asURL!)
             openNewTab(learnMoreRequest)
         }
+    }
+
+    @objc
+    private func didTapMenu() {
+        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: .Popover)
+        mvc.delegate = self
+        mvc.actionDelegate = self
+        mvc.modalPresentationStyle = .Popover
+
+        if let popoverPresentationController = mvc.popoverPresentationController {
+            popoverPresentationController.backgroundColor = UIColor.clearColor()
+            popoverPresentationController.delegate = self
+            popoverPresentationController.sourceView = menuButton!
+            popoverPresentationController.sourceRect = CGRect(x: menuButton!.frame.width/2, y: menuButton!.frame.size.height * 0.75, width: 1, height: 1)
+            popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+        }
+
+        self.presentViewController(mvc, animated: true, completion: nil)
     }
 
     @available(iOS 9, *)
@@ -567,6 +608,11 @@ class TabTrayController: UIViewController {
     private func updateAppState() {
         self.appStateDelegate?.appDidUpdateState(.TabTray(tabTrayState: self.tabTrayState))
     }
+
+    private func closeTabsForCurrentTray() {
+        tabManager.removeTabs(tabsToDisplay)
+        self.collectionView.reloadData()
+    }
 }
 
 // MARK: - App Notifications
@@ -627,24 +673,29 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {
+        // it is possible that we are removing a tab that we are not currently displaying
+        // through the Close All Tabs feature (which will close tabs that are not in our current privacy mode)
+        // check this before removing the item from the collection
         let removedIndex = tabDataSource.removeTab(tab)
-        self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
+        if removedIndex > -1 {
+            self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
 
-        // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
-        // animation has finished which causes cells that animate from above to suddenly 'appear'. This
-        // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
-        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
-            let visibleCount = collectionView.indexPathsForVisibleItems().count
-            var offscreenIndexPaths = [NSIndexPath]()
-            for i in 0..<(tabsToDisplay.count - visibleCount) {
-                offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
+            // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
+            // animation has finished which causes cells that animate from above to suddenly 'appear'. This
+            // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
+            if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
+                let visibleCount = collectionView.indexPathsForVisibleItems().count
+                var offscreenIndexPaths = [NSIndexPath]()
+                for i in 0..<(tabsToDisplay.count - visibleCount) {
+                    offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
+                }
+                self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
             }
-            self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
-        }
 
-        if #available(iOS 9, *) {
-            if privateTabsAreEmpty() {
-                emptyPrivateTabsView.alpha = 1
+            if #available(iOS 9, *) {
+                if privateTabsAreEmpty() {
+                    emptyPrivateTabsView.alpha = 1
+                }
             }
         }
     }
@@ -737,10 +788,10 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         for (i, tab) in tabs.enumerate() {
             if tabToRemove === tab {
                 index = i
+                tabs.removeAtIndex(index)
                 break
             }
         }
-        tabs.removeAtIndex(index)
         return index
     }
 
@@ -1020,5 +1071,72 @@ extension TabTrayController: ClientPickerViewControllerDelegate {
 
     func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) {
         clientPickerViewController.dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+
+extension TabTrayController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
+    // Returning None here makes sure that the Popover is actually presented as a Popover and
+    // not as a full-screen modal, which is the default on compact device classes.
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.None
+    }
+}
+
+extension TabTrayController: MenuViewControllerDelegate {
+    func menuViewControllerDidDismiss(menuViewController: MenuViewController) { }
+
+    func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool {
+        return false
+    }
+}
+
+extension TabTrayController: MenuActionDelegate {
+    func performMenuAction(action: MenuAction, withAppState appState: AppState) {
+        switch action {
+        case .OpenNewNormalTab:
+            dispatch_async(dispatch_get_main_queue()) {
+                if #available(iOS 9, *) {
+                    if self.privateMode {
+                        self.SELdidTogglePrivateMode()
+                    }
+                }
+                self.openNewTab()
+            }
+        // this is a case that is only available in iOS9
+        case .OpenNewPrivateTab:
+            if #available(iOS 9, *) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    if !self.privateMode {
+                        self.SELdidTogglePrivateMode()
+                    }
+                    self.openNewTab()
+                }
+            }
+        case .OpenSettings:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.SELdidClickSettingsItem()
+            }
+        case .CloseAllTabs:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.closeTabsForCurrentTray()
+            }
+        case .OpenTopSites:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.TopSites)!))
+            }
+        case .OpenBookmarks:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!))
+            }
+        case .OpenHistory:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.History)!))
+            }
+        case .OpenReadingList:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.ReadingList)!))
+            }
+        default: break
+        }
     }
 }
