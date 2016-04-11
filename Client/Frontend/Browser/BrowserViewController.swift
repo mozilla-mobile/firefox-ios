@@ -1162,7 +1162,7 @@ extension BrowserViewController: AppStateDelegate {
 }
 
 extension BrowserViewController: MenuActionDelegate {
-    func performAction(action: MenuAction, withAppState appState: AppState) {
+    func performMenuAction(action: MenuAction, withAppState appState: AppState) {
         switch action {
         case .OpenNewNormalTab:
             dispatch_async(dispatch_get_main_queue()) {
