@@ -1208,20 +1208,26 @@ extension BrowserViewController: MenuActionDelegate {
                 self.openSettings()
             }
         case .OpenTopSites:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(.TopSites)!)
-            }
+            openHomePanel(.TopSites, forAppState: appState)
         case .OpenBookmarks:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!)
-            }
+            openHomePanel(.Bookmarks, forAppState: appState)
         case .OpenHistory:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(.History)!)
-            }
+            openHomePanel(.History, forAppState: appState)
         case .OpenReadingList:
+            openHomePanel(.ReadingList, forAppState: appState)
+        default: break
+        }
+    }
+
+    private func openHomePanel(panel: HomePanelType, forAppState appState: AppState) {
+        switch appState {
+        case .Tab(_):
             dispatch_async(dispatch_get_main_queue()) {
-                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(.ReadingList)!)
+                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(panel)!)
+            }
+        case .HomePanels(_):
+            dispatch_async(dispatch_get_main_queue()) {
+                self.homePanelController?.selectedPanel = panel
             }
         default: break
         }
