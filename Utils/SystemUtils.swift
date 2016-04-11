@@ -35,37 +35,38 @@ extension SystemUtils {
     // and not accessible from extension when the device is locked. Thus, we can tell if an extension is being run
     // when the device is locked.
     public static func onFirstRun() {
-        if let lockFileURL = lockedDeviceURL,
-                lockFile = lockFileURL.path {
-            let fm = NSFileManager.defaultManager()
-            if fm.fileExistsAtPath(lockFile) {
-                return
-            }
-            let contents = "Device is unlocked".dataUsingEncoding(NSUTF8StringEncoding)
-            fm.createFileAtPath(lockFile, contents: contents, attributes: [NSFileProtectionKey : NSFileProtectionComplete])
+        guard let lockFileURL = lockedDeviceURL,
+                lockFile = lockFileURL.path else {
+                    return
         }
+
+        let fm = NSFileManager.defaultManager()
+        if fm.fileExistsAtPath(lockFile) {
+            return
+        }
+        let contents = "Device is unlocked".dataUsingEncoding(NSUTF8StringEncoding)
+        fm.createFileAtPath(lockFile, contents: contents, attributes: [NSFileProtectionKey : NSFileProtectionComplete])
     }
 
     private static var lockedDeviceURL: NSURL? {
-        let groupIdentifier = AppInfo.sharedContainerIdentifier()
-        if let groupIdentifier = groupIdentifier {
-            let directoryURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(groupIdentifier)
-            return directoryURL?.URLByAppendingPathComponent("security.dummy")
+        guard let groupIdentifier = AppInfo.sharedContainerIdentifier() else {
+            return nil
         }
-        return nil
+        let directoryURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(groupIdentifier)
+        return directoryURL?.URLByAppendingPathComponent("security.dummy")
     }
 
     public static func isDeviceLocked() -> Bool {
-        if let lockFileURL = lockedDeviceURL {
-            do {
-                let _ = try NSData(contentsOfURL: lockFileURL, options: .DataReadingMappedIfSafe)
-                return false
-            } catch let err as NSError {
-                return err.code == 257
-            } catch _ {
-                return true
-            }
+        guard let lockFileURL = lockedDeviceURL else {
+            return true
         }
-        return true
+        do {
+            let _ = try NSData(contentsOfURL: lockFileURL, options: .DataReadingMappedIfSafe)
+            return false
+        } catch let err as NSError {
+            return err.code == 257
+        } catch _ {
+            return true
+        }
     }
 }

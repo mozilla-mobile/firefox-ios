@@ -9,124 +9,163 @@ import SnapKit
 
 private let log = Logger.browserLogger
 
-private let privateBrowsingColor = UIColor(colorString: "CE6EFC")
+
+
+struct TodayUX {
+    static let privateBrowsingColor = UIColor(colorString: "CE6EFC")
+    static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
+
+    static let linkTextSize: CGFloat = 10.0
+    static let labelTextSize: CGFloat = 14.0
+    static let imageButtonTextSize: CGFloat = 14.0
+
+    static let buttonContainerHeight = 88
+
+    static let verticalWidgetMargin: CGFloat = 10
+    static let horizontalWidgetMargin: CGFloat = 10
+
+    static let buttonContainerMultipleOfScreen = 0.6
+    static let copiedLinkHeightOfButtonMultple = 0.5
+}
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding {
 
-    private lazy var newTabLabel: UILabel = {
-        return self.createButtonLabel(NSLocalizedString("TodayWidget.NewTabButtonLabel", value: "New Tab", tableName: "Today", comment: "New Tab button label"))
-    }()
+    private lazy var newTabButton: ImageButtonWithLabel = {
+        let imageButton = ImageButtonWithLabel()
+        imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .TouchUpInside)
 
-    private lazy var newPrivateTabLabel: UILabel = {
-        return self.createButtonLabel(NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", value: "New Private Tab", tableName: "Today", comment: "New Private Tab button label"), color: privateBrowsingColor)
-    }()
-
-    private lazy var newTabButton: UIButton = {
-        let button = UIButton()
-        button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .TouchUpInside)
+        let button = imageButton.button
         button.setImage(UIImage(named: "new_tab_button_normal"), forState: .Normal)
         button.setImage(UIImage(named: "new_tab_button_highlight"), forState: .Highlighted)
-        return button
+
+        let label = imageButton.label
+        label.text = NSLocalizedString("TodayWidget.NewTabButtonLabel", value: "New Tab", tableName: "Today", comment: "New Tab button label")
+        label.textColor = UIColor.whiteColor()
+        label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
+
+        imageButton.sizeToFit()
+        return imageButton
     }()
 
-    private lazy var newPrivateTabButton: UIButton = {
-        let button = UIButton()
-        button.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .TouchUpInside)
+    private lazy var newPrivateTabButton: ImageButtonWithLabel = {
+        let imageButton = ImageButtonWithLabel()
+        imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .TouchUpInside)
+
+        let button = imageButton.button
         button.setImage(UIImage(named: "new_private_tab_button_normal"), forState: .Normal)
         button.setImage(UIImage(named: "new_private_tab_button_highlight"), forState: .Highlighted)
+
+        let label = imageButton.label
+        label.text = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", value: "New Private Tab", tableName: "Today", comment: "New Private Tab button label")
+        label.textColor = TodayUX.privateBrowsingColor
+        label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
+
+        return imageButton
+    }()
+
+    private lazy var openCopiedLinkButton: ButtonWithSublabel = {
+        let button = ButtonWithSublabel()
+        
+        button.setTitle(NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", value: "Go to copied link", tableName: "Today", comment: "Go to link on clipboard"), forState: .Normal)
+        button.addTarget(self, action: #selector(onPressOpenClibpoard), forControlEvents: .TouchUpInside)
+        button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .Highlighted)
+
+        button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
+        button.setImage(UIImage(named: "copy_link_icon"), forState: .Normal)
+
+        button.subtitleLabel.font = UIFont.systemFontOfSize(TodayUX.linkTextSize)
+
         return button
     }()
 
-    private lazy var openURLFromClipboardView: UIView = {
-        let view = UIView()
-        let button = UIButton()
-        button.setTitle(NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", value: "Go to copied link", tableName: "Today", comment: "Go to link on clipboard"), forState: .Normal)
-        button.addTarget(self, action: #selector(onPressOpenClibpoard), forControlEvents: .TouchUpInside)
+    private lazy var buttonContainer: UIView = UIView()
 
-        return view
-    }()
+    private var copiedURL: NSURL? {
+        if let string = UIPasteboard.generalPasteboard().string,
+            url = NSURL(string: string) where url.isWebPage() {
+            return url
+        } else {
+            return nil
+        }
+    }
+
+    private var hasCopiedURL: Bool {
+        return copiedURL != nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let buttonContainer = UIView()
         view.addSubview(buttonContainer)
-
-//        view.backgroundColor = UIColor.blueColor()
-//        buttonContainer.backgroundColor = UIColor.redColor()
-
-        buttonContainer.snp_makeConstraints { make in
-            make.width.equalTo(view.snp_width).multipliedBy(0.8)
-            make.centerX.equalTo(view.snp_centerX)
-        }
 
         // New tab button and label.
         buttonContainer.addSubview(newTabButton)
         newTabButton.snp_makeConstraints { make in
-            make.topMargin.equalTo(10)
-            make.leading.equalTo(buttonContainer.snp_leading).offset(44)
-            make.height.width.equalTo(44)
+            make.top.equalTo(buttonContainer)
+            make.left.equalTo(buttonContainer)
         }
 
-        buttonContainer.addSubview(newTabLabel)
-        alignButton(newTabButton, withLabel: newTabLabel)
-
-        // New tab button and label.
+        // New private tab button and label.
         buttonContainer.addSubview(newPrivateTabButton)
         newPrivateTabButton.snp_makeConstraints { make in
             make.centerY.equalTo(newTabButton.snp_centerY)
-            make.size.equalTo(newTabButton.snp_size)
-            make.trailing.equalTo(buttonContainer.snp_trailing).offset(-44)
+            make.right.equalTo(buttonContainer.snp_right)
         }
 
-        buttonContainer.addSubview(newPrivateTabLabel)
-        alignButton(newPrivateTabButton, withLabel: newPrivateTabLabel, leftOf: newTabLabel)
-
         buttonContainer.snp_makeConstraints { make in
-            make.height.equalTo(newTabButton.snp_height).multipliedBy(2.0)
+            make.width.equalTo(view.snp_width).multipliedBy(TodayUX.buttonContainerMultipleOfScreen)
+            make.centerX.equalTo(view.snp_centerX)
+            make.top.equalTo(view.snp_top).offset(10)
+            make.height.equalTo(TodayUX.buttonContainerHeight).priorityLow()
+        }
+
+        view.addSubview(openCopiedLinkButton)
+
+        openCopiedLinkButton.snp_makeConstraints { make in
+            make.bottom.equalTo(view.snp_bottom)
+            make.width.equalTo(view.snp_width)
+            make.centerX.equalTo(view.snp_centerX)
+            make.height.equalTo(buttonContainer.snp_height).multipliedBy(TodayUX.copiedLinkHeightOfButtonMultple)
         }
 
         view.snp_makeConstraints { make in
-            make.height.equalTo(buttonContainer.snp_height).priorityLow()
+            let multiple = !hasCopiedURL ? 1.0 : (1.0 + TodayUX.copiedLinkHeightOfButtonMultple)
+            make.height.equalTo(self.buttonContainer.snp_height).multipliedBy(multiple)
         }
-        view.systemLayoutSizeFittingSize(CGSizeZero)
+    }
 
-        updateOpenClipboardButton()
+    func updateCopiedLink() {
+        if let url = self.copiedURL {
+            self.openCopiedLinkButton.hidden = false
+            self.openCopiedLinkButton.subtitleLabel.hidden = SystemUtils.isDeviceLocked()
+            self.openCopiedLinkButton.subtitleLabel.text = url.absoluteString
+        } else {
+            self.openCopiedLinkButton.hidden = true
+        }
+
+        self.view.setNeedsLayout()
     }
 
     func widgetMarginInsetsForProposedMarginInsets(defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, 0, 0, 0)
+        return UIEdgeInsetsMake(0, 0, TodayUX.verticalWidgetMargin, TodayUX.horizontalWidgetMargin)
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-
-    private func alignButton(button: UIButton, withLabel label: UILabel, leftOf leftLabel: UILabel? = nil) {
-        label.snp_makeConstraints { make in
-            make.centerX.equalTo(button.snp_centerX)
-            make.centerY.equalTo(button.snp_centerY).offset(39)
-            if let leftLabel = leftLabel {
-                make.centerX.equalTo(leftLabel.snp_centerX).offset(44).priorityLow()
-            }
+    private func alignButton(leftButton: ImageButtonWithLabel, rightButton: ImageButtonWithLabel) {
+        rightButton.label.snp_makeConstraints { make in
+            make.centerY.equalTo(leftButton.label.snp_centerY)
+            make.left.equalTo(leftButton.label.snp_right).offset(44).priorityLow()
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     func widgetPerformUpdateWithCompletionHandler(completionHandler: ((NCUpdateResult) -> Void)) {
         // Perform any setup necessary in order to update the view.
-        updateOpenClipboardButton()
-
-        // If an error is encountered, use NCUpdateResult.Failed
-        // If there's no update required, use NCUpdateResult.NoData
-        // If there's an update, use NCUpdateResult.NewData
-
-        completionHandler(NCUpdateResult.NewData)
+        dispatch_async(dispatch_get_main_queue()) {
+            // updates need to be made on the main thread
+            self.updateCopiedLink()
+            // and we need to call the completion handler in every branch.
+            completionHandler(NCUpdateResult.NewData)
+        }
     }
 
     // MARK: Button and label creation
@@ -158,19 +197,122 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     @objc func onPressOpenClibpoard(view: UIView) {
         if let urlString = UIPasteboard.generalPasteboard().string,
             _ = NSURL(string: urlString) {
-            openContainingApp(urlString)
+            let encodedString =
+                urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+            openContainingApp("firefox://?url=\(encodedString)")
+        }
+    }
+}
+
+extension UIButton {
+    func setBackgroundColor(color: UIColor, forState state: UIControlState) {
+        let colorView = UIView(frame: CGRectMake(0, 0, 1, 1))
+        colorView.backgroundColor = color
+
+        UIGraphicsBeginImageContext(colorView.bounds.size)
+        if let context = UIGraphicsGetCurrentContext() {
+            colorView.layer.renderInContext(context)
+        }
+        let colorImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        self.setBackgroundImage(colorImage, forState: state)
+    }
+}
+
+class ImageButtonWithLabel: UIView {
+
+    lazy var button = UIButton()
+
+    lazy var label = UILabel()
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init() {
+        super.init(frame: CGRectZero)
+        performLayout()
+    }
+
+    func performLayout() {
+        addSubview(button)
+        addSubview(label)
+        userInteractionEnabled = true
+
+        button.snp_makeConstraints { make in
+            make.top.equalTo(self)
+            make.left.equalTo(self)
+            make.centerX.equalTo(self)
+        }
+
+        snp_makeConstraints { make in
+            make.width.equalTo(label)
+            make.height.equalTo(button)
+        }
+
+        label.snp_makeConstraints { make in
+            make.centerX.equalTo(button.snp_centerX)
+            make.centerY.equalTo(button.snp_centerY).offset(39)
         }
     }
 
-    func updateOpenClipboardButton() {
-        log.info("Checking clipboard")
-        if let string = UIPasteboard.generalPasteboard().string,
-            _ = NSURL(string: string) {
-                log.info("We have a URL!")
-                openURLFromClipboardView.hidden = false
-        } else {
-            openURLFromClipboardView.hidden = true
+    func addTarget(target: AnyObject?, action: Selector, forControlEvents events: UIControlEvents) {
+        button.addTarget(target, action: action, forControlEvents: events)
+    }
+}
+
+class ButtonWithSublabel: UIButton {
+    lazy var subtitleLabel: UILabel = UILabel()
+
+    lazy var label: UILabel = UILabel()
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    convenience init() {
+        self.init(frame: CGRectZero)
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        performLayout()
+    }
+
+    private func performLayout() {
+        self.snp_removeConstraints()
+
+        let titleLabel = self.label
+        titleLabel.textColor = UIColor.whiteColor()
+
+        self.titleLabel?.removeFromSuperview()
+        addSubview(titleLabel)
+
+        let imageView = self.imageView!
+
+        let subtitleLabel = self.subtitleLabel
+        subtitleLabel.textColor = UIColor.whiteColor()
+        self.addSubview(subtitleLabel)
+
+        imageView.snp_remakeConstraints { make in
+            make.centerY.equalTo(titleLabel.snp_centerY)
+            make.left.equalTo(self.snp_left).offset(22)
         }
 
+        titleLabel.snp_remakeConstraints { make in
+            make.top.equalTo(self.snp_top).offset(10)
+            make.left.equalTo(imageView.snp_right).offset(10).priorityLow()
+        }
+
+        subtitleLabel.snp_makeConstraints { make in
+            make.left.equalTo(titleLabel.snp_left)
+            make.top.equalTo(titleLabel.snp_bottom)
+        }
+    }
+
+    override func setTitle(text: String?, forState state: UIControlState) {
+        self.label.text = text
+        super.setTitle(text, forState: state)
     }
 }
