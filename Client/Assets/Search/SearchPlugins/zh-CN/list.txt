@@ -1,5 +1,5 @@
 baidu
-taobao
 bing
 google
+taobao
 wikipedia-zh-CN

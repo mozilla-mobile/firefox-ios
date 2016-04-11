@@ -1,2 +1,6 @@
+bing
+duckduckgo
 google
+twitter
 wikipedia-sr
+yahoo
