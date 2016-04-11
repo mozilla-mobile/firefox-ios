@@ -135,7 +135,7 @@ class MenuViewController: UIViewController {
     }
 
     private func performMenuAction(action: MenuAction) {
-        self.actionDelegate?.performAction(action, withAppState: appState)
+        self.actionDelegate?.performMenuAction(action, withAppState: appState)
         dismissMenu()
     }
 
