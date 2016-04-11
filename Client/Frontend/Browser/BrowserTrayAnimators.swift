@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 
 class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
@@ -86,8 +87,14 @@ private extension TrayToBrowserAnimator {
             tabCollectionViewSnapshot.alpha = 0
 
             // Push out the navigation bar buttons
-            let buttonOffset = tabTray.addTabButton.frame.width + TabTrayControllerUX.ToolbarButtonOffset
-            tabTray.addTabButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
+            let buttonOffset: CGFloat
+            if AppConstants.MOZ_MENU {
+                buttonOffset = tabTray.menuButton!.frame.width + TabTrayControllerUX.ToolbarButtonOffset
+                tabTray.menuButton!.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
+            } else {
+                buttonOffset = tabTray.addTabButton!.frame.width + TabTrayControllerUX.ToolbarButtonOffset
+                tabTray.addTabButton!.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
+            }
             tabTray.settingsButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -buttonOffset , 0)
             if #available(iOS 9, *) {
                 tabTray.togglePrivateMode.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)

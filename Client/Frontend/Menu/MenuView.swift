@@ -156,7 +156,7 @@ class MenuView: UIView {
 
             menuPagingView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(menuContainerView)
-                make.bottom.equalTo(pageControl.snp_top)
+                make.bottom.equalTo(pageControl.snp_top).offset(-itemPadding)
                 make.height.equalTo(0)
             }
             pageControl.snp_makeConstraints { make in
