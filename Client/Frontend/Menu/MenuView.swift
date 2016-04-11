@@ -281,14 +281,10 @@ class MenuView: UIView {
         menuPagingLayout.menuRowHeight = CGFloat(menuRowHeight)
 
         menuPagingView.snp_updateConstraints { make in
-            if presentationStyle == .Popover {
-                let maxNumberOfItemsForPage = CGFloat(self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) ?? 0)
-                let numberOfRows = ceil(CGFloat(maxNumberOfItemsForPage) / numberOfItemsInRow)
-                let menuHeight = itemPadding + (numberOfRows * (CGFloat(self.menuRowHeight) + itemPadding))
-                make.height.equalTo(menuHeight)
-            } else {
-                make.height.equalTo(menuPagingLayout.collectionViewContentSize().height)
-            }
+            let maxNumberOfItemsForPage = CGFloat(self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) ?? 0)
+            let numberOfRows = ceil(CGFloat(maxNumberOfItemsForPage) / numberOfItemsInRow)
+            let menuHeight = itemPadding + (numberOfRows * (CGFloat(self.menuRowHeight) + itemPadding))
+            make.height.equalTo(menuHeight)
         }
     }
 
