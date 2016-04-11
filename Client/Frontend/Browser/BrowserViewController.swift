@@ -709,7 +709,8 @@ class BrowserViewController: UIViewController {
     private func updateInContentHomePanel(url: NSURL?) {
         if !urlBar.inOverlayMode {
             if AboutUtils.isAboutHomeURL(url){
-                showHomePanelController(inline: (tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
+                let showInline = AppConstants.MOZ_MENU || ((tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
+                showHomePanelController(inline: showInline)
             } else {
                 hideHomePanelController()
             }
@@ -1373,7 +1374,13 @@ extension BrowserViewController: BrowserToolbarDelegate {
         // check the trait collection
         // open as modal if portrait
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
-        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(.Browser), presentationStyle: presentationStyle)
+        let location: MenuLocation
+        if self.homePanelController == nil {
+            location = .Browser
+        } else {
+            location = .HomePanels
+        }
+        let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(location), presentationStyle: presentationStyle)
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         let setupPopover = { [unowned self] in
@@ -1718,9 +1725,7 @@ extension BrowserViewController: TabManagerDelegate {
 
             if let url = webView.URL?.absoluteString {
                 // Don't bother fetching bookmark state for about/sessionrestore and about/home.
-                if AboutUtils.isAboutURL(webView.URL) {
-                    // Indeed, because we don't show the toolbar at all, don't even blank the star.
-                } else if !AppConstants.MOZ_MENU {
+                if !AppConstants.MOZ_MENU && !AboutUtils.isAboutURL(webView.URL) {
                     profile.bookmarks.modelFactory >>== {
                         $0.isBookmarked(url)
                             .uponQueue(dispatch_get_main_queue()) {
