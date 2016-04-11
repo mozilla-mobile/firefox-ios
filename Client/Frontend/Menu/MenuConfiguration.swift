@@ -22,7 +22,7 @@ protocol MenuConfiguration {
 }
 
 protocol MenuActionDelegate: class {
-    func performAction(action: MenuAction, withAppState appState: AppState)
+    func performMenuAction(action: MenuAction, withAppState appState: AppState)
 }
 
 enum MenuAction {
