@@ -609,8 +609,8 @@ class TabTrayController: UIViewController {
         self.appStateDelegate?.appDidUpdateState(.TabTray(tabTrayState: self.tabTrayState))
     }
 
-    private func closeAllTabs() {
-        tabManager.removeAll()
+    private func closeTabsForCurrentTray() {
+        tabManager.removeTabs(tabsToDisplay)
         self.collectionView.reloadData()
     }
 }
@@ -1118,7 +1118,7 @@ extension TabTrayController: MenuActionDelegate {
             }
         case .CloseAllTabs:
             dispatch_async(dispatch_get_main_queue()) {
-                self.closeAllTabs()
+                self.closeTabsForCurrentTray()
             }
         case .OpenTopSites:
             dispatch_async(dispatch_get_main_queue()) {
