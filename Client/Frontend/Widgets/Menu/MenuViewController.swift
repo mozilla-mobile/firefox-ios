@@ -23,7 +23,11 @@ class MenuViewController: UIViewController {
     weak var delegate: MenuViewControllerDelegate?
     weak var actionDelegate: MenuActionDelegate?
 
-    let menuTransitionDelegate: UIViewControllerTransitioningDelegate = MenuPresentationAnimator()
+    var menuTransitionDelegate: UIViewControllerTransitioningDelegate? {
+        didSet {
+            self.transitioningDelegate = menuTransitionDelegate
+        }
+    }
 
     var menuView: MenuView!
 
@@ -42,7 +46,6 @@ class MenuViewController: UIViewController {
         self.presentationStyle = presentationStyle
         super.init(nibName: nil, bundle: nil)
 
-        self.transitioningDelegate = menuTransitionDelegate
     }
 
     required init?(coder aDecoder: NSCoder) {
