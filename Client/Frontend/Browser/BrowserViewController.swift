@@ -1476,6 +1476,7 @@ extension BrowserViewController: TabToolbarDelegate {
         let mvc = MenuViewController(withAppState: getCurrentAppState(), presentationStyle: presentationStyle)
         mvc.delegate = self
         mvc.actionDelegate = self
+        mvc.menuTransitionDelegate = MenuPresentationAnimator()
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
 
