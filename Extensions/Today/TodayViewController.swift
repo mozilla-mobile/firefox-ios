@@ -15,11 +15,11 @@ private let privateBrowsingColor = UIColor(colorString: "CE6EFC")
 class TodayViewController: UIViewController, NCWidgetProviding {
 
     private lazy var newTabLabel: UILabel = {
-        return self.createButtonLabel(NSLocalizedString("New Tab", tableName: "Today", comment: "New Tab button label"))
+        return self.createButtonLabel(NSLocalizedString("TodayWidget.NewTabButtonLabel", value: "New Tab", tableName: "Today", comment: "New Tab button label"))
     }()
 
     private lazy var newPrivateTabLabel: UILabel = {
-        return self.createButtonLabel(NSLocalizedString("New Private Tab", tableName: "Today", comment: "New Private Tab button label"), color: privateBrowsingColor)
+        return self.createButtonLabel(NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", value: "New Private Tab", tableName: "Today", comment: "New Private Tab button label"), color: privateBrowsingColor)
     }()
 
     private lazy var newTabButton: UIButton = {
@@ -41,7 +41,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     private lazy var openURLFromClipboardView: UIView = {
         let view = UIView()
         let button = UIButton()
-        button.setTitle(NSLocalizedString("Go to copied link", tableName: "Today", comment: "Go to link on clipboard"), forState: .Normal)
+        button.setTitle(NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", value: "Go to copied link", tableName: "Today", comment: "Go to link on clipboard"), forState: .Normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), forControlEvents: .TouchUpInside)
 
         return view
