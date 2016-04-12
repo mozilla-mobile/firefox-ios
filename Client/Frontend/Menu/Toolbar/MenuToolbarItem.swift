@@ -9,7 +9,7 @@ protocol MenuToolbarItem {
     func iconForState(appState: AppState) -> UIImage?
 }
 
-struct FirefoxMenuToolbarItem: MenuToolbarItem {
+struct AppMenuToolbarItem: MenuToolbarItem {
 
     private let iconName: String
 

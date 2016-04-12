@@ -453,7 +453,7 @@ class Tab: NSObject {
 
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
         guard let webView = object as? WKWebView where webView == self.webView,
-            let path = keyPath where path == "URL"else {
+            let path = keyPath where path == "URL" else {
             return assertionFailure("Unhandled KVO key: \(keyPath)")
         }
 
