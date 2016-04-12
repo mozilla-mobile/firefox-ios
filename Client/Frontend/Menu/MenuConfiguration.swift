@@ -11,7 +11,7 @@ protocol MenuConfiguration {
     var numberOfItemsInRow: Int { get }
 
     init(appState: AppState)
-    func toolbarColour() -> UIColor
+    func toolbarColor() -> UIColor
     func toolbarTintColor() -> UIColor
     func menuBackgroundColor() -> UIColor
     func menuTintColor() -> UIColor
@@ -20,7 +20,7 @@ protocol MenuConfiguration {
     func shadowColor() -> UIColor
 }
 
-struct FirefoxMenuConfiguration: MenuConfiguration {
+struct AppMenuConfiguration: MenuConfiguration {
 
     internal private(set) var menuItems = [MenuItem]()
     internal private(set) var menuToolbarItems: [MenuToolbarItem]?
@@ -35,7 +35,7 @@ struct FirefoxMenuConfiguration: MenuConfiguration {
         isPrivateMode = appState.isPrivate()
     }
 
-    func toolbarColour() -> UIColor {
+    func toolbarColor() -> UIColor {
 
         return isPrivateMode ? UIConstants.MenuToolbarBackgroundColorPrivate : UIConstants.MenuToolbarBackgroundColorNormal
     }
@@ -78,21 +78,21 @@ struct FirefoxMenuConfiguration: MenuConfiguration {
         let menuItems: [MenuItem]
         switch appState {
         case .Tab(let tabState):
-                menuItems = [FirefoxMenuConfiguration.FindInPageMenuItem,
-                         tabState.desktopSite ? FirefoxMenuConfiguration.RequestMobileMenuItem : FirefoxMenuConfiguration.RequestDesktopMenuItem,
-                         FirefoxMenuConfiguration.SettingsMenuItem,
-                         FirefoxMenuConfiguration.NewTabMenuItem,
-                         FirefoxMenuConfiguration.NewPrivateTabMenuItem,
-                         tabState.isBookmarked ? FirefoxMenuConfiguration.RemoveBookmarkMenuItem : FirefoxMenuConfiguration.AddBookmarkMenuItem]
+                menuItems = [AppMenuConfiguration.FindInPageMenuItem,
+                         tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem,
+                         AppMenuConfiguration.SettingsMenuItem,
+                         AppMenuConfiguration.NewTabMenuItem,
+                         AppMenuConfiguration.NewPrivateTabMenuItem,
+                         tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem]
         case .HomePanels:
-            menuItems = [FirefoxMenuConfiguration.NewTabMenuItem,
-                         FirefoxMenuConfiguration.NewPrivateTabMenuItem,
-                         FirefoxMenuConfiguration.SettingsMenuItem]
+            menuItems = [AppMenuConfiguration.NewTabMenuItem,
+                         AppMenuConfiguration.NewPrivateTabMenuItem,
+                         AppMenuConfiguration.SettingsMenuItem]
         case .TabTray:
-            menuItems = [FirefoxMenuConfiguration.NewTabMenuItem,
-                         FirefoxMenuConfiguration.NewPrivateTabMenuItem,
-                         FirefoxMenuConfiguration.CloseAllTabsMenuItem,
-                         FirefoxMenuConfiguration.SettingsMenuItem]
+            menuItems = [AppMenuConfiguration.NewTabMenuItem,
+                         AppMenuConfiguration.NewPrivateTabMenuItem,
+                         AppMenuConfiguration.CloseAllTabsMenuItem,
+                         AppMenuConfiguration.SettingsMenuItem]
         default:
             menuItems = []
         }
@@ -104,10 +104,10 @@ struct FirefoxMenuConfiguration: MenuConfiguration {
         let menuToolbarItems: [MenuToolbarItem]?
         switch appState {
         case .Tab, .TabTray:
-            menuToolbarItems = [FirefoxMenuConfiguration.TopSitesMenuToolbarItem,
-                                FirefoxMenuConfiguration.BookmarksMenuToolbarItem,
-                                FirefoxMenuConfiguration.HistoryMenuToolbarItem,
-                                FirefoxMenuConfiguration.ReadingListMenuToolbarItem]
+            menuToolbarItems = [AppMenuConfiguration.TopSitesMenuToolbarItem,
+                                AppMenuConfiguration.BookmarksMenuToolbarItem,
+                                AppMenuConfiguration.HistoryMenuToolbarItem,
+                                AppMenuConfiguration.ReadingListMenuToolbarItem]
         default:
             menuToolbarItems = nil
         }
@@ -117,58 +117,58 @@ struct FirefoxMenuConfiguration: MenuConfiguration {
 
 // MARK: Static helper access function
 
-extension FirefoxMenuConfiguration {
+extension AppMenuConfiguration {
 
     private static var NewTabMenuItem: MenuItem {
-        return FirefoxMenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
+        return AppMenuItem(title: NewTabTitleString, icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
     }
 
     private static var NewPrivateTabMenuItem: MenuItem {
-        return FirefoxMenuItem(title: NewPrivateTabTitleString, icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
+        return AppMenuItem(title: NewPrivateTabTitleString, icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
     }
 
     private static var AddBookmarkMenuItem: MenuItem {
-        return FirefoxMenuItem(title: AddBookmarkTitleString, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm")
+        return AppMenuItem(title: AddBookmarkTitleString, icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm")
     }
 
     private static var RemoveBookmarkMenuItem: MenuItem {
-        return FirefoxMenuItem(title: RemoveBookmarkTitleString, icon: "menu-RemoveBookmark", privateModeIcon: "menu-RemoveBookmark")
+        return AppMenuItem(title: RemoveBookmarkTitleString, icon: "menu-RemoveBookmark", privateModeIcon: "menu-RemoveBookmark")
     }
 
     private static var FindInPageMenuItem: MenuItem {
-        return FirefoxMenuItem(title: FindInPageTitleString, icon: "menu-FindInPage", privateModeIcon: "menu-FindInPage-pbm")
+        return AppMenuItem(title: FindInPageTitleString, icon: "menu-FindInPage", privateModeIcon: "menu-FindInPage-pbm")
     }
 
     private static var RequestDesktopMenuItem: MenuItem {
-        return FirefoxMenuItem(title: ViewDesktopSiteTitleString, icon: "menu-RequestDesktopSite", privateModeIcon: "menu-RequestDesktopSite-pbm")
+        return AppMenuItem(title: ViewDesktopSiteTitleString, icon: "menu-RequestDesktopSite", privateModeIcon: "menu-RequestDesktopSite-pbm")
     }
 
     private static var RequestMobileMenuItem: MenuItem {
-        return FirefoxMenuItem(title: ViewMobileSiteTitleString, icon: "menu-ViewMobile", privateModeIcon: "menu-ViewMobile-pbm")
+        return AppMenuItem(title: ViewMobileSiteTitleString, icon: "menu-ViewMobile", privateModeIcon: "menu-ViewMobile-pbm")
     }
 
     private static var SettingsMenuItem: MenuItem {
-        return FirefoxMenuItem(title: SettingsTitleString, icon: "menu-Settings", privateModeIcon: "menu-Settings-pbm")
+        return AppMenuItem(title: SettingsTitleString, icon: "menu-Settings", privateModeIcon: "menu-Settings-pbm")
     }
 
     private static var CloseAllTabsMenuItem: MenuItem {
-        return FirefoxMenuItem(title: CloseAllTabsTitleString, icon: "menu-CloseTabs", privateModeIcon: "menu-CloseTabs-pbm")
+        return AppMenuItem(title: CloseAllTabsTitleString, icon: "menu-CloseTabs", privateModeIcon: "menu-CloseTabs-pbm")
     }
 
     private static var TopSitesMenuToolbarItem: MenuToolbarItem {
-        return FirefoxMenuToolbarItem(title: TopSitesTitleString, icon: "menu-panel-TopSites")
+        return AppMenuToolbarItem(title: TopSitesTitleString, icon: "menu-panel-TopSites")
     }
 
     private static var BookmarksMenuToolbarItem: MenuToolbarItem {
-        return FirefoxMenuToolbarItem(title: BookmarksTitleString, icon: "menu-panel-Bookmarks")
+        return AppMenuToolbarItem(title: BookmarksTitleString, icon: "menu-panel-Bookmarks")
     }
 
     private static var HistoryMenuToolbarItem: MenuToolbarItem {
-        return FirefoxMenuToolbarItem(title: HistoryTitleString, icon: "menu-panel-History")
+        return AppMenuToolbarItem(title: HistoryTitleString, icon: "menu-panel-History")
     }
 
     private static var ReadingListMenuToolbarItem: MenuToolbarItem {
-        return  FirefoxMenuToolbarItem(title: ReadingListTitleString, icon: "menu-panel-ReadingList")
+        return  AppMenuToolbarItem(title: ReadingListTitleString, icon: "menu-panel-ReadingList")
     }
 
     static let NewTabTitleString = NSLocalizedString("New Tab", tableName: "Menu", comment: "String describing the action of creating a new tab from the menu")
