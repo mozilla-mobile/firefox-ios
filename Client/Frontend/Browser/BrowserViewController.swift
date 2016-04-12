@@ -1823,6 +1823,12 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // Fixes 1261457 - Rich text editor fails because requests to about:blank are blocked
+        if url.scheme == "about" && url.resourceSpecifier == "blank" {
+            decisionHandler(WKNavigationActionPolicy.Allow)
+            return
+        }
+
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari. The only thing we do not do is nicely format the phone number,
         // instead we present it as it was put in the URL.
