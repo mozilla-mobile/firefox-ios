@@ -1387,6 +1387,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
             location = .HomePanels
         }
         let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(location), presentationStyle: presentationStyle)
+        mvc.menuTransitionDelegate = MenuPresentationAnimator()
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
 
