@@ -249,6 +249,7 @@
 		7B0B1B791C1B69C900DF4AB5 /* ClientPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BCAAD81B05380B00855D82 /* ClientPickerViewController.swift */; };
 		7B0B1B9D1C1B6A3F00DF4AB5 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BCAAB81B0537E300855D82 /* InstructionsViewController.swift */; };
 		7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */; };
+		7B31E6851CBC09DC00A57805 /* MenuPresentationAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B31E6841CBC09DC00A57805 /* MenuPresentationAnimator.swift */; };
 		7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3631E91C244FEE00D12AF9 /* Theme.swift */; };
 		7B421F271C91E88100340529 /* RoundedToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B421F261C91E88100340529 /* RoundedToolbar.swift */; };
 		7B42217A1C9303BD00340529 /* MenuToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4221791C9303BD00340529 /* MenuToolbarItem.swift */; };
@@ -1253,6 +1254,7 @@
 		74C027441B2A348C001B1E88 /* SessionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionData.swift; sourceTree = "<group>"; };
 		74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsContentViewController.swift; sourceTree = "<group>"; };
 		7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearPrivateDataTests.swift; sourceTree = "<group>"; };
+		7B31E6841CBC09DC00A57805 /* MenuPresentationAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuPresentationAnimator.swift; sourceTree = "<group>"; };
 		7B3631E91C244FEE00D12AF9 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		7B3632D31C2983F000D12AF9 /* L10nSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10nSnapshotTests.swift; sourceTree = "<group>"; };
 		7B421F261C91E88100340529 /* RoundedToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoundedToolbar.swift; path = ../Menu/Toolbar/RoundedToolbar.swift; sourceTree = "<group>"; };
@@ -2315,6 +2317,7 @@
 				7B4222671C93052600340529 /* MenuView.swift */,
 				7B4222A71C9305A300340529 /* MenuViewController.swift */,
 				7B42406D1CA04CAC009B5C28 /* Menu.xcassets */,
+				7B31E6841CBC09DC00A57805 /* MenuPresentationAnimator.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -4356,6 +4359,7 @@
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
 				E46C51C31B41ADD800EB349F /* Try.m in Sources */,
 				74C027451B2A348C001B1E88 /* SessionData.swift in Sources */,
+				7B31E6851CBC09DC00A57805 /* MenuPresentationAnimator.swift in Sources */,
 				D314E7F71A37B98700426A76 /* BrowserToolbar.swift in Sources */,
 				0BB5B2891AC0A2B90052877D /* Toolbar.swift in Sources */,
 				E6108FF91C84E91C005D25E8 /* BasePasscodeViewController.swift in Sources */,

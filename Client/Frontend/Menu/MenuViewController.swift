@@ -16,6 +16,8 @@ class MenuViewController: UIViewController {
     var menuConfig: MenuConfiguration
     var presentationStyle: MenuViewPresentationStyle
 
+    let menuTransitionDelegate: UIViewControllerTransitioningDelegate = MenuPresentationAnimator()
+
     var menuView: MenuView!
 
     private let isPrivate = false
@@ -26,6 +28,8 @@ class MenuViewController: UIViewController {
         self.menuConfig = config
         self.presentationStyle = presentationStyle
         super.init(nibName: nil, bundle: nil)
+
+        self.transitioningDelegate = menuTransitionDelegate
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,6 +38,7 @@ class MenuViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = popoverBackgroundColor.colorWithAlphaComponent(0.0)
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissMenu(_:)))
         gesture.delegate = self
@@ -60,7 +65,6 @@ class MenuViewController: UIViewController {
 
         switch presentationStyle {
         case .Popover:
-            self.view.backgroundColor = UIColor.clearColor()
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the tp[ of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: -2)
@@ -68,7 +72,6 @@ class MenuViewController: UIViewController {
                 make.top.left.right.equalTo(view)
             }
         case .Modal:
-            self.view.backgroundColor = popoverBackgroundColor
             menuView.toolbar.cornerRadius = CGSizeMake(5.0,5.0)
             menuView.toolbar.cornersToRound = [.TopLeft, .TopRight]
             menuView.toolbar.clipsToBounds = false
@@ -115,6 +118,11 @@ class MenuViewController: UIViewController {
             self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
         }
         self.popoverPresentationController?.backgroundColor = self.popoverBackgroundColor
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        self.view.backgroundColor = popoverBackgroundColor
     }
 
 }

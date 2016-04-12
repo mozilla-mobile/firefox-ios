@@ -1389,6 +1389,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
         let mvc = MenuViewController(withMenuConfig: MenuConfiguration.menuConfigurationForLocation(location), presentationStyle: presentationStyle)
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
+
         let setupPopover = { [unowned self] in
             if let popoverPresentationController = mvc.popoverPresentationController {
                 popoverPresentationController.backgroundColor = UIColor.clearColor()
@@ -1405,7 +1406,8 @@ extension BrowserViewController: BrowserToolbarDelegate {
             displayedPopoverController = mvc
             updateDisplayedPopoverProperties = setupPopover
         }
-
+//        let menuPresentationTransitionManager = MenuPresentationAnimator()
+//        mvc.transitioningDelegate = menuPresentationTransitionManager
         self.presentViewController(mvc, animated: true, completion: nil)
     }
 
