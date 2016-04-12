@@ -55,4 +55,11 @@ private func obsoleteStrings() {
     _ = NSLocalizedString("Clear Private Data", tableName: "ClearPrivateData", comment: "Button in settings that clears private data for the selected items.")
     _ = NSLocalizedString("Opening %@", comment:"Opening an external URL")
     _ = NSLocalizedString("This will open in another application", comment: "Opening an external app")
+    _ = NSLocalizedString("Not now", comment: "Button to not save the user's password")
+    _ = NSLocalizedString("Update", comment: "Button to update the user's password")
+    _ = NSLocalizedString("Yes", comment: "Button to save the user's password")
+    _ = NSLocalizedString("Do you want to save the password for %@ on %@?", comment: "Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+    _ = NSLocalizedString("Do you want to save the password on %@?", comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.")
+    _ = NSLocalizedString("Do you want to update the password for %@ on %@?", comment: "Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+    _ = NSLocalizedString("Do you want to update the password on %@?", comment: "Prompt for updating a password with on username. The parameter is the hostname of the site.")
 }
