@@ -4,13 +4,16 @@
 
 import UIKit
 
-private let ImageSize: CGFloat = 24
-private let ImageMargin: CGFloat = 12
-private let BadgeSize: CGFloat = 16
-private let BadgeMargin: CGFloat = 16
-private let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x333333)
-private let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.grayColor()
-private let DetailTextTopMargin = CGFloat(5)
+struct TwoLineCellUX {
+    static let ImageSize: CGFloat = 25
+    static let BorderViewMargin: CGFloat = 13
+    static let BadgeSize: CGFloat = 16
+    static let BadgeMargin: CGFloat = 16
+    static let BorderFrameSize: CGFloat = 32
+    static let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x333333)
+    static let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.grayColor()
+    static let DetailTextTopMargin: CGFloat = 5
+}
 
 class TwoLineTableViewCell: UITableViewCell {
     private let twoLineHelper = TwoLineCellHelper()
@@ -37,7 +40,7 @@ class TwoLineTableViewCell: UITableViewCell {
 
         indentationWidth = 0
         layoutMargins = UIEdgeInsetsZero
-        separatorInset = UIEdgeInsetsMake(0, ImageSize + 2 * ImageMargin, 0, 0)
+        separatorInset = UIEdgeInsetsMake(0, TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, 0, 0)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -51,7 +54,7 @@ class TwoLineTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        separatorInset = UIEdgeInsetsMake(0, ImageSize + 2 * ImageMargin, 0, 0)
+        separatorInset = UIEdgeInsetsMake(0, TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, 0, 0)
         twoLineHelper.setupDynamicFonts()
     }
 
@@ -70,6 +73,40 @@ class TwoLineTableViewCell: UITableViewCell {
 
     func mergeAccessibilityLabels(views: [AnyObject?]? = nil) {
         twoLineHelper.mergeAccessibilityLabels(views)
+    }
+}
+
+class HistoryTableViewCell: TwoLineTableViewCell {
+    let borderView = UIView()
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+        contentView.addSubview(borderView)
+        separatorInset = UIEdgeInsetsMake(0, TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin, 0, 0)
+
+        borderView.frame = CGRectMake(TwoLineCellUX.BorderViewMargin, TwoLineCellUX.BorderViewMargin, TwoLineCellUX.BorderFrameSize, TwoLineCellUX.BorderFrameSize)
+        borderView.layer.borderWidth = 0.5
+        borderView.layer.borderColor = UIColor.grayColor().CGColor
+
+        twoLineHelper.hasBorderView = true
+
+        twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        twoLineHelper.layoutSubviews()
+
+        imageView!.center = borderView.center
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        separatorInset = UIEdgeInsetsMake(0, TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin, 0, 0)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -172,6 +209,7 @@ private class TwoLineCellHelper {
     var textLabel: UILabel!
     var detailTextLabel: UILabel!
     var imageView: UIImageView!
+    var hasBorderView: Bool = false
     var hasRightBadge: Bool = false
 
     // TODO: Not ideal. We should figure out a better way to get this initialized.
@@ -187,35 +225,35 @@ private class TwoLineCellHelper {
             self.container.backgroundColor = UIColor.clearColor()
         }
 
-        textLabel.textColor = TextColor
-        detailTextLabel.textColor = DetailTextColor
+        textLabel.textColor = TwoLineCellUX.TextColor
+        detailTextLabel.textColor = TwoLineCellUX.DetailTextColor
         setupDynamicFonts()
 
         imageView.contentMode = .ScaleAspectFill
     }
 
     func setupDynamicFonts() {
-        textLabel.font = UIFont.systemFontOfSize(DynamicFontHelper.defaultHelper.DefaultMediumFontSize, weight: UIFontWeightMedium)
-        detailTextLabel.font = UIFont.systemFontOfSize(DynamicFontHelper.defaultHelper.DefaultSmallFontSize, weight: UIFontWeightRegular)
+        textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
+        detailTextLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallHistoryPanel
     }
 
     func layoutSubviews() {
         let height = container.frame.height
-        let textLeft = ImageSize + 2 * ImageMargin
+        let textLeft = hasBorderView ? TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin : TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin
         let textLabelHeight = textLabel.intrinsicContentSize().height
         let detailTextLabelHeight = detailTextLabel.intrinsicContentSize().height
         var contentHeight = textLabelHeight
         if detailTextLabelHeight > 0 {
-            contentHeight += detailTextLabelHeight + DetailTextTopMargin
+            contentHeight += detailTextLabelHeight + TwoLineCellUX.DetailTextTopMargin
         }
 
-        let textRightInset: CGFloat = hasRightBadge ? (BadgeSize + BadgeMargin) : 0
+        let textRightInset: CGFloat = hasRightBadge ? (TwoLineCellUX.BadgeSize + TwoLineCellUX.BadgeMargin) : 0
 
-        imageView.frame = CGRectMake(ImageMargin, (height - ImageSize) / 2, ImageSize, ImageSize)
+        imageView.frame = CGRectMake(TwoLineCellUX.BorderViewMargin, (height - TwoLineCellUX.ImageSize) / 2, TwoLineCellUX.ImageSize, TwoLineCellUX.ImageSize)
         textLabel.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
-            container.frame.width - textLeft - ImageMargin - textRightInset, textLabelHeight)
-        detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + DetailTextTopMargin,
-            container.frame.width - textLeft - ImageMargin - textRightInset, detailTextLabelHeight)
+            container.frame.width - textLeft - TwoLineCellUX.BorderViewMargin - textRightInset, textLabelHeight)
+        detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + TwoLineCellUX.DetailTextTopMargin,
+            container.frame.width - textLeft - TwoLineCellUX.BorderViewMargin - textRightInset, detailTextLabelHeight)
     }
 
     func setLines(text: String?, detailText: String?) {

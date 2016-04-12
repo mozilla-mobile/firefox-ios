@@ -29,13 +29,13 @@ class SiteTableViewHeader : UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        topBorder.backgroundColor = UIColor.whiteColor()
         bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        contentView.backgroundColor = UIColor.whiteColor()
 
-        titleLabel.font = SiteTableViewControllerUX.HeaderFont
+        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         titleLabel.textColor = SiteTableViewControllerUX.HeaderTextColor
         titleLabel.textAlignment = .Left
-        contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
 
         addSubview(topBorder)
         addSubview(bottomBorder)
@@ -93,7 +93,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerClass(TwoLineTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.registerClass(HistoryTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.registerClass(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag

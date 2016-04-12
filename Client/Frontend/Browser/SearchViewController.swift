@@ -67,16 +67,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return UIImage(named: "bookmarked_passive")!
     }()
 
-    private lazy var defaultIcon: UIImage = {
-        return UIImage(named: "defaultFavicon")!
-    }()
-
     // Cell for the suggestion flow layout. Since heightForHeaderInSection is called *before*
     // cellForRowAtIndexPath, we create the cell to find its height before it's added to the table.
     private let suggestionCell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
 
     private var suggestionPrompt: UIView?
-
     static var userAgent: String?
 
     init(isPrivate: Bool) {
@@ -526,8 +521,8 @@ extension SearchViewController {
                 if let cell = cell as? TwoLineTableViewCell {
                     let isBookmark = site.bookmarked ?? false
                     cell.setLines(site.title, detailText: site.url)
-                    cell.imageView?.setIcon(site.icon, withPlaceholder: self.defaultIcon)
                     cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
+                    cell.imageView?.setIcon(site.icon, withPlaceholder: FaviconFetcher.getDefaultFavicon(site.tileURL))
                 }
             }
             return cell
