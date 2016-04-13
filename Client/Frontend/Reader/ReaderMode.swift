@@ -249,7 +249,9 @@ class ReaderMode: BrowserHelper {
     private func handleReaderPageEvent(readerPageEvent: ReaderPageEvent) {
         switch readerPageEvent {
             case .PageShow:
-                delegate?.readerMode(self, didDisplayReaderizedContentForBrowser: browser!)
+                if let browser = browser {
+                    delegate?.readerMode(self, didDisplayReaderizedContentForBrowser: browser)
+                }
         }
     }
 
