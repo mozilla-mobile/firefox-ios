@@ -205,6 +205,11 @@ class ErrorPageHelper {
             let path = NSBundle(forClass: self).pathForResource("NetError", ofType: "css")!
             return GCDWebServerDataResponse(data: NSData(contentsOfFile: path), contentType: "text/css")
         })
+
+        server.registerHandlerForMethod("GET", module: "errors", resource: "CertError.css", handler: { (request) -> GCDWebServerResponse! in
+            let path = NSBundle(forClass: self).pathForResource("CertError", ofType: "css")!
+            return GCDWebServerDataResponse(data: NSData(contentsOfFile: path), contentType: "text/css")
+        })
     }
 
     func showPage(error: NSError, forUrl url: NSURL, inWebView webView: WKWebView) {
