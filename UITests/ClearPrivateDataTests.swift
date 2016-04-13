@@ -42,8 +42,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     private func acceptClearPrivateData() {
-        tester().waitForViewWithAccessibilityLabel("Clear")
-        tester().tapViewWithAccessibilityLabel("Clear")
+        tester().waitForViewWithAccessibilityLabel("OK")
+        tester().tapViewWithAccessibilityLabel("OK")
         tester().waitForViewWithAccessibilityLabel("Clear Private Data")
     }
 

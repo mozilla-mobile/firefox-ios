@@ -7,6 +7,10 @@ import WebKit
 @testable import Storage
 @testable import Client
 
+/**
+ * WARNING: top sites deletion tests are flaky and sometimes fail.
+ * Bug raised for this https://bugzilla.mozilla.org/show_bug.cgi?id=1264286
+ */
 class TopSitesTests: KIFTestCase {
     private var webRoot: String!
 
@@ -136,8 +140,8 @@ class TopSitesTests: KIFTestCase {
     private func verifyTopSites(collection: UICollectionView, range: Range<Int>) {
         var item = 0
         for i in range.reverse() {
-            let expected = tester().waitForViewWithAccessibilityLabel("test\(i).com") as! UICollectionViewCell
-            let cell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0))
+            let expected = tester().waitForViewWithAccessibilityLabel("test\(i).com")
+            let cell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as! ThumbnailCell
             XCTAssertEqual(cell, expected)
             item += 1
         }
