@@ -6,6 +6,9 @@ import Foundation
 import Shared
 import UIKit
 import Deferred
+import XCGLogger
+
+private var log = XCGLogger.defaultInstance()
 
 private class DiskImageStoreErrorType: MaybeErrorType {
     let description: String
@@ -83,7 +86,11 @@ public class DiskImageStore {
 
         for key in keysToDelete {
             let path = NSString(string: filesDir).stringByAppendingPathComponent(key)
-            try! NSFileManager.defaultManager().removeItemAtPath(path)
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(path)
+            } catch {
+                log.warning("Failed to remove DiskImageStore item at \(path): \(error)")
+            }
         }
 
         self.keys = self.keys.intersect(keys)
