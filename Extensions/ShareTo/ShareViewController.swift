@@ -57,8 +57,6 @@ private struct ShareDialogControllerUX {
     static let TableRowFontMinScale: CGFloat = 0.8
     static let TableRowTintColor = UIColor(red:0.427, green:0.800, blue:0.102, alpha:1.0)           // Green tint for the checkmark
     static let TableRowTextColor = UIColor(rgb: 0x555555)
-
-    static let TableHeight = 88                                                                     // Height of 2 standard 44px cells
 }
 
 class ShareDialogController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -99,8 +97,10 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarCancelButtonFont], forState: UIControlState.Normal)
         navItem.leftBarButtonItem?.accessibilityIdentifier = "ShareDialogController.navigationItem.leftBarButtonItem"
 
-        navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", tableName: "ShareTo", comment: "Add button in the share dialog"), style: UIBarButtonItemStyle.Done, target: self, action: #selector(ShareDialogController.add))
-        navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarAddButtonFont], forState: UIControlState.Normal)
+        if item.isShareable() {
+            navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", tableName: "ShareTo", comment: "Add button in the share dialog"), style: UIBarButtonItemStyle.Done, target: self, action: #selector(ShareDialogController.add))
+            navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarAddButtonFont], forState: UIControlState.Normal)
+        }
 
         let logo = UIImageView(frame: CGRect(x: 0, y: 0, width: ShareDialogControllerUX.NavigationBarIconSize, height: ShareDialogControllerUX.NavigationBarIconSize))
         logo.image = UIImage(named: "Icon-Small")
@@ -169,6 +169,13 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
 
         // TODO See Bug 1102516 - Use Snappy to define share extension layout constraints
 
+        let tableHeight: CGFloat
+        if item.isShareable() {
+            tableHeight = ShareDialogControllerUX.TableRowHeight * CGFloat(ShareDestinations.count)
+        } else {
+            tableHeight = ShareDialogControllerUX.TableRowHeight
+        }
+
         let constraints = [
             "H:|[nav]|",
             "V:|[nav]",
@@ -185,7 +192,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
 
             "H:|[table]|",
             "V:[divider][table]",
-            "V:[table(\(ShareDialogControllerUX.TableHeight))]|"
+            "V:[table(\(tableHeight))]|"
         ]
 
         for constraint in constraints {
@@ -210,7 +217,11 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ShareDestinations.count
+        if item.isShareable() {
+            return ShareDestinations.count
+        } else {
+            return 1
+        }
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -219,29 +230,38 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : ShareDialogControllerUX.TableRowTextColor
-        cell.textLabel?.font = ShareDialogControllerUX.TableRowFont
-        cell.accessoryType = selectedShareDestinations.containsObject(ShareDestinations[indexPath.row].code) ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
-        cell.tintColor = ShareDialogControllerUX.TableRowTintColor
-        cell.layoutMargins = UIEdgeInsetsZero
-        cell.textLabel?.text = ShareDestinations[indexPath.row].name
-        cell.textLabel?.adjustsFontSizeToFitWidth = true
-        cell.textLabel?.minimumScaleFactor = ShareDialogControllerUX.TableRowFontMinScale
-        cell.imageView?.image = UIImage(named: ShareDestinations[indexPath.row].image)
+        if item.isShareable() {
+            cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : ShareDialogControllerUX.TableRowTextColor
+            cell.textLabel?.font = ShareDialogControllerUX.TableRowFont
+            cell.accessoryType = selectedShareDestinations.containsObject(ShareDestinations[indexPath.row].code) ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
+            cell.tintColor = ShareDialogControllerUX.TableRowTintColor
+            cell.layoutMargins = UIEdgeInsetsZero
+            cell.textLabel?.text = ShareDestinations[indexPath.row].name
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell.textLabel?.minimumScaleFactor = ShareDialogControllerUX.TableRowFontMinScale
+            cell.imageView?.image = UIImage(named: ShareDestinations[indexPath.row].image)
+        } else {
+            cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : ShareDialogControllerUX.TableRowTextColor
+            cell.textLabel?.font = ShareDialogControllerUX.TableRowFont
+            cell.textLabel?.text = "This item is not shareable"
+            cell.textLabel?.textAlignment = .Center
+        }
         return cell
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
 
-        let code = ShareDestinations[indexPath.row].code
-        if selectedShareDestinations.containsObject(code) {
-            selectedShareDestinations.removeObject(code)
-        } else {
-            selectedShareDestinations.addObject(code)
+        if item.isShareable() {
+            let code = ShareDestinations[indexPath.row].code
+            if selectedShareDestinations.containsObject(code) {
+                selectedShareDestinations.removeObject(code)
+            } else {
+                selectedShareDestinations.addObject(code)
+            }
+            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            
+            navItem.rightBarButtonItem?.enabled = (selectedShareDestinations.count != 0)
         }
-        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-        
-        navItem.rightBarButtonItem?.enabled = (selectedShareDestinations.count != 0)
     }
 }
