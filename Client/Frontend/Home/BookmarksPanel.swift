@@ -86,6 +86,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         } else {
             source.selectFolder(BookmarkRoots.MobileFolderGUID).upon(onModelFetched)
         }
+        self.tableView.accessibilityIdentifier = "Bookmarks List"
     }
 
     func notificationReceived(notification: NSNotification) {
