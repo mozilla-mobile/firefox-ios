@@ -128,6 +128,20 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         ensureMobileSite()
     }
 
+    func testToggleBetweenMobileAndDesktopSiteFromMenu() {
+        // Load URL and ensure that we are on the mobile site initially
+        loadURL("\(webRoot)/numberedPage.html?page=1", webViewElementAccessibilityLabel: "Page 1")
+        ensureMobileSiteFromMenu()
+
+        // Request desktop site and ensure that we get it
+        requestDesktopSiteFromMenu("Page 1")
+        ensureDesktopSiteFromMenu()
+
+        // Request mobile site and ensure that we get it
+        requestMobileSiteFromMenu("Page 1")
+        ensureMobileSiteFromMenu()
+    }
+
     func testNavigationPreservesDesktopSiteOnSameHost() {
         // Load URL and ensure that we are on the mobile site initially
         loadURL("\(webRoot)/numberedPage.html?page=1", webViewElementAccessibilityLabel: "Page 1")
@@ -229,6 +243,33 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
         tester().tapViewWithAccessibilityLabel("Request Desktop Site")
         tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
+    }
+
+    private func requestDesktopSiteFromMenu(webViewElementAccessibilityLabel: String) {
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().waitForViewWithAccessibilityLabel("View Desktop Site")
+        tester().tapViewWithAccessibilityLabel("View Desktop Site")
+        tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
+    }
+
+    private func requestMobileSiteFromMenu(webViewElementAccessibilityLabel: String) {
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().waitForViewWithAccessibilityLabel("View Mobile Site")
+        tester().tapViewWithAccessibilityLabel("View Mobile Site")
+        tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
+    }
+
+
+    private func ensureMobileSiteFromMenu() {
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().waitForViewWithAccessibilityLabel("View Desktop Site")
+        tester().tapViewWithAccessibilityLabel("Close Menu")
+    }
+
+    private func ensureDesktopSiteFromMenu() {
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().waitForViewWithAccessibilityLabel("View Mobile Site")
+        tester().tapViewWithAccessibilityLabel("Close Menu")
     }
 
     override func tearDown() {
