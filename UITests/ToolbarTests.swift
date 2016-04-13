@@ -59,7 +59,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForTappableViewWithAccessibilityLabel("Forward")
         tester().waitForTappableViewWithAccessibilityLabel("Reload")
         tester().waitForTappableViewWithAccessibilityLabel("Share")
-        tester().waitForTappableViewWithAccessibilityLabel("Bookmark")
+        tester().waitForTappableViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().swipeViewWithAccessibilityLabel("Page 1", inDirection: KIFSwipeDirection.Left)
 
@@ -71,7 +71,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         let forward = tester().waitForViewWithAccessibilityLabel("Forward") as! UIButton
         let reload = tester().waitForViewWithAccessibilityLabel("Reload") as! UIButton
         let share = tester().waitForViewWithAccessibilityLabel("Share") as! UIButton
-        let bookmark = tester().waitForViewWithAccessibilityLabel("Bookmark") as! UIButton
+        let bookmark = tester().waitForViewWithAccessibilityLabel("Menu") as! UIButton
         
         XCTAssertFalse(back.enabled, "Back button should be disabled")
         XCTAssertFalse(forward.enabled, "Forward button should be disabled")
