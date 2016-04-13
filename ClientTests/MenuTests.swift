@@ -18,50 +18,70 @@ class MenuTests: XCTestCase {
     }
 
     func testMenuConfigurationForBrowser() {
-        let browserConfiguration = MenuConfiguration.menuConfigurationForLocation(.Tab)
-        XCTAssertEqual(browserConfiguration.menuItems.count, 8)
-        XCTAssertEqual(browserConfiguration.menuItems[0].title, MenuConfiguration.FindInPageTitleString)
-        XCTAssertEqual(browserConfiguration.menuItems[1].title, MenuConfiguration.ViewDesktopSiteTitleString)
-        XCTAssertEqual(browserConfiguration.menuItems[2].title, MenuConfiguration.ViewMobileSiteTitleString)
-        XCTAssertEqual(browserConfiguration.menuItems[3].title, MenuConfiguration.SettingsTitleString)
-        XCTAssertEqual(browserConfiguration.menuItems[4].title, MenuConfiguration.NewTabTitleString)
-        XCTAssertEqual(browserConfiguration.menuItems[5].title, MenuConfiguration.NewPrivateTabTitleString)
-        XCTAssertEqual(browserConfiguration.menuItems[6].title, MenuConfiguration.AddBookmarkTitleString)
-        XCTAssertEqual(browserConfiguration.menuItems[7].title, MenuConfiguration.RemoveBookmarkTitleString)
+        var tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        var browserConfiguration = FirefoxMenuConfiguration(appState: .Tab(tabState: tabState))
+        XCTAssertEqual(browserConfiguration.menuItems.count, 6)
+        XCTAssertEqual(browserConfiguration.menuItems[0].title, FirefoxMenuConfiguration.FindInPageTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[1].title, FirefoxMenuConfiguration.ViewDesktopSiteTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[2].title, FirefoxMenuConfiguration.SettingsTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[3].title, FirefoxMenuConfiguration.NewTabTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[4].title, FirefoxMenuConfiguration.NewPrivateTabTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[5].title, FirefoxMenuConfiguration.AddBookmarkTitleString)
 
 
         XCTAssertNotNil(browserConfiguration.menuToolbarItems)
         XCTAssertEqual(browserConfiguration.menuToolbarItems!.count, 4)
-        XCTAssertEqual(browserConfiguration.menuToolbarItems![0].title, MenuConfiguration.TopSitesTitleString)
-        XCTAssertEqual(browserConfiguration.menuToolbarItems![1].title, MenuConfiguration.BookmarksTitleString)
-        XCTAssertEqual(browserConfiguration.menuToolbarItems![2].title, MenuConfiguration.HistoryTitleString)
-        XCTAssertEqual(browserConfiguration.menuToolbarItems![3].title, MenuConfiguration.ReadingListTitleString)
+        XCTAssertEqual(browserConfiguration.menuToolbarItems![0].title, FirefoxMenuConfiguration.TopSitesTitleString)
+        XCTAssertEqual(browserConfiguration.menuToolbarItems![1].title, FirefoxMenuConfiguration.BookmarksTitleString)
+        XCTAssertEqual(browserConfiguration.menuToolbarItems![2].title, FirefoxMenuConfiguration.HistoryTitleString)
+        XCTAssertEqual(browserConfiguration.menuToolbarItems![3].title, FirefoxMenuConfiguration.ReadingListTitleString)
+
+
+        tabState = TabState(isPrivate: true, desktopSite: true, isBookmarked: true, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        browserConfiguration = FirefoxMenuConfiguration(appState: .Tab(tabState: tabState))
+        XCTAssertEqual(browserConfiguration.menuItems.count, 6)
+        XCTAssertEqual(browserConfiguration.menuItems[0].title, FirefoxMenuConfiguration.FindInPageTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[1].title, FirefoxMenuConfiguration.ViewMobileSiteTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[2].title, FirefoxMenuConfiguration.SettingsTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[3].title, FirefoxMenuConfiguration.NewTabTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[4].title, FirefoxMenuConfiguration.NewPrivateTabTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[5].title, FirefoxMenuConfiguration.RemoveBookmarkTitleString)
+
+
+        XCTAssertNotNil(browserConfiguration.menuToolbarItems)
+        XCTAssertEqual(browserConfiguration.menuToolbarItems!.count, 4)
+        XCTAssertEqual(browserConfiguration.menuToolbarItems![0].title, FirefoxMenuConfiguration.TopSitesTitleString)
+        XCTAssertEqual(browserConfiguration.menuToolbarItems![1].title, FirefoxMenuConfiguration.BookmarksTitleString)
+        XCTAssertEqual(browserConfiguration.menuToolbarItems![2].title, FirefoxMenuConfiguration.HistoryTitleString)
+        XCTAssertEqual(browserConfiguration.menuToolbarItems![3].title, FirefoxMenuConfiguration.ReadingListTitleString)
     }
 
     func testMenuConfigurationForHomePanels() {
-        let homePanelConfiguration = MenuConfiguration.menuConfigurationForLocation(.HomePanels)
+        let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
+        let homePanelConfiguration = FirefoxMenuConfiguration(appState: .HomePanels(homePanelState: homePanelState))
         XCTAssertEqual(homePanelConfiguration.menuItems.count, 3)
-        XCTAssertEqual(homePanelConfiguration.menuItems[0].title, MenuConfiguration.NewTabTitleString)
-        XCTAssertEqual(homePanelConfiguration.menuItems[1].title, MenuConfiguration.NewPrivateTabTitleString)
-        XCTAssertEqual(homePanelConfiguration.menuItems[2].title, MenuConfiguration.SettingsTitleString)
+        XCTAssertEqual(homePanelConfiguration.menuItems[0].title, FirefoxMenuConfiguration.NewTabTitleString)
+        XCTAssertEqual(homePanelConfiguration.menuItems[1].title, FirefoxMenuConfiguration.NewPrivateTabTitleString)
+        XCTAssertEqual(homePanelConfiguration.menuItems[2].title, FirefoxMenuConfiguration.SettingsTitleString)
 
         XCTAssertNil(homePanelConfiguration.menuToolbarItems)
     }
 
     func testMenuConfigurationForTabTray() {
-        let tabTrayConfiguration = MenuConfiguration.menuConfigurationForLocation(.TabTray)
+        let tabTrayState = TabTrayState(isPrivate: false)
+        let tabTrayConfiguration = FirefoxMenuConfiguration(appState: .TabTray(tabTrayState: tabTrayState))
         XCTAssertEqual(tabTrayConfiguration.menuItems.count, 4)
-        XCTAssertEqual(tabTrayConfiguration.menuItems[0].title, MenuConfiguration.NewTabTitleString)
-        XCTAssertEqual(tabTrayConfiguration.menuItems[1].title, MenuConfiguration.NewPrivateTabTitleString)
-        XCTAssertEqual(tabTrayConfiguration.menuItems[2].title, MenuConfiguration.CloseAllTabsTitleString)
-        XCTAssertEqual(tabTrayConfiguration.menuItems[3].title, MenuConfiguration.SettingsTitleString)
+        XCTAssertEqual(tabTrayConfiguration.menuItems[0].title, FirefoxMenuConfiguration.NewTabTitleString)
+        XCTAssertEqual(tabTrayConfiguration.menuItems[1].title, FirefoxMenuConfiguration.NewPrivateTabTitleString)
+        XCTAssertEqual(tabTrayConfiguration.menuItems[2].title, FirefoxMenuConfiguration.CloseAllTabsTitleString)
+        XCTAssertEqual(tabTrayConfiguration.menuItems[3].title, FirefoxMenuConfiguration.SettingsTitleString)
 
         XCTAssertNotNil(tabTrayConfiguration.menuToolbarItems)
         XCTAssertEqual(tabTrayConfiguration.menuToolbarItems!.count, 4)
-        XCTAssertEqual(tabTrayConfiguration.menuToolbarItems![0].title, MenuConfiguration.TopSitesTitleString)
-        XCTAssertEqual(tabTrayConfiguration.menuToolbarItems![1].title, MenuConfiguration.BookmarksTitleString)
-        XCTAssertEqual(tabTrayConfiguration.menuToolbarItems![2].title, MenuConfiguration.HistoryTitleString)
-        XCTAssertEqual(tabTrayConfiguration.menuToolbarItems![3].title, MenuConfiguration.ReadingListTitleString)
+        XCTAssertEqual(tabTrayConfiguration.menuToolbarItems![0].title, FirefoxMenuConfiguration.TopSitesTitleString)
+        XCTAssertEqual(tabTrayConfiguration.menuToolbarItems![1].title, FirefoxMenuConfiguration.BookmarksTitleString)
+        XCTAssertEqual(tabTrayConfiguration.menuToolbarItems![2].title, FirefoxMenuConfiguration.HistoryTitleString)
+        XCTAssertEqual(tabTrayConfiguration.menuToolbarItems![3].title, FirefoxMenuConfiguration.ReadingListTitleString)
     }
 
 }
