@@ -138,7 +138,7 @@ class LoginsHelper: BrowserHelper {
 
         let promptMessage: NSAttributedString
         if let username = login.username {
-            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptSaveLogin.Title", value: "Save login %@ for %@?", comment: "Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptSaveLogin.Title", value: "Save login %@ for %@?", comment: "Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site.")
             promptMessage = NSAttributedString(string: String(format: promptStringFormat, username, login.hostname))
         } else {
             let promptStringFormat = NSLocalizedString("LoginsHelper.PromptSavePassword.Title", value: "Save password for %@?", comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.")
@@ -176,10 +176,10 @@ class LoginsHelper: BrowserHelper {
 
         let formatted: String
         if let username = new.username {
-            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptUpdateLogin.Title", value: "Update login for %@ on %@?", comment: "Prompt for updating a login. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptUpdateLogin.Title", value: "Update login %@ for %@?", comment: "Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site.")
             formatted = String(format: promptStringFormat, username, new.hostname)
         } else {
-            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptUpdatePassword.Title", value: "Update password for %@?", comment: "Prompt for updating a password with on username. The parameter is the hostname of the site.")
+            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptUpdatePassword.Title", value: "Update password for %@?", comment: "Prompt for updating a password with no username. The parameter is the hostname of the site.")
             formatted = String(format: promptStringFormat, new.hostname)
         }
         let promptMessage = NSAttributedString(string: formatted)
