@@ -16,6 +16,9 @@ class MenuView: UIView {
         let openMenuImage = UIImageView()
         openMenuImage.contentMode = UIViewContentMode.ScaleAspectFit
         openMenuImage.userInteractionEnabled = true
+        openMenuImage.isAccessibilityElement = true
+        openMenuImage.accessibilityTraits = UIAccessibilityTraitButton
+        openMenuImage.accessibilityLabel =  NSLocalizedString("Close Menu", tableName: "Menu", comment: "Accessibility label describing the button that closes the menu when open")
         return openMenuImage
     }()
 
