@@ -100,4 +100,17 @@ class FindInPageTests: KIFTestCase {
     private func clickFindPrevious() {
         tester().tapViewWithAccessibilityLabel("Previous in-page result")
     }
+
+    func testOpenFindInPageFromMenu() {
+        let testURL = "\(webRoot)/findPage.html"
+
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(testURL)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("nullam")
+
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("Find In Page")
+        XCTAssertTrue(tester().viewExistsWithLabel("Done"))
+        tester().tapViewWithAccessibilityLabel("Done")
+    }
 }
