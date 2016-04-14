@@ -1169,67 +1169,53 @@ extension BrowserViewController: AppStateDelegate {
 
 extension BrowserViewController: MenuActionDelegate {
     func performMenuAction(action: MenuAction, withAppState appState: AppState) {
-        switch action {
-        case .OpenNewNormalTab:
-            dispatch_async(dispatch_get_main_queue()) {
+        if let menuAction = AppMenuAction(rawValue: action.action) {
+            switch menuAction {
+            case .OpenNewNormalTab:
                 if #available(iOS 9, *) {
                     self.openURLInNewTab(nil, isPrivate: false)
                 } else {
                     self.tabManager.addTabAndSelect(nil)
                 }
-            }
-        // this is a case that is only available in iOS9
-        case .OpenNewPrivateTab:
-            if #available(iOS 9, *) {
-                dispatch_async(dispatch_get_main_queue()) {
+            // this is a case that is only available in iOS9
+            case .OpenNewPrivateTab:
+                if #available(iOS 9, *) {
                     self.openURLInNewTab(nil, isPrivate: true)
                 }
-            }
-        case .FindInPage:
-            dispatch_async(dispatch_get_main_queue()) {
+            case .FindInPage:
                 self.updateFindInPageVisibility(visible: true)
-            }
-        case .ToggleBrowsingMode:
-            if #available(iOS 9, *) {
-                guard let tab = tabManager.selectedTab else { break }
-                dispatch_async(dispatch_get_main_queue()) { [unowned tab] in
+            case .ToggleBrowsingMode:
+                if #available(iOS 9, *) {
+                    guard let tab = tabManager.selectedTab else { break }
                     tab.toggleDesktopSite()
                 }
-            }
-        case .ToggleBookmarkStatus:
-            switch appState {
-            case .Tab(let tabState):
-                dispatch_async(dispatch_get_main_queue()) {
+            case .ToggleBookmarkStatus:
+                switch appState {
+                case .Tab(let tabState):
                     self.toggleBookmarkForTabState(tabState)
+                default: break
                 }
+            case .OpenSettings:
+                self.openSettings()
+            case .OpenTopSites:
+                openHomePanel(.TopSites, forAppState: appState)
+            case .OpenBookmarks:
+                openHomePanel(.Bookmarks, forAppState: appState)
+            case .OpenHistory:
+                openHomePanel(.History, forAppState: appState)
+            case .OpenReadingList:
+                openHomePanel(.ReadingList, forAppState: appState)
             default: break
             }
-        case .OpenSettings:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openSettings()
-            }
-        case .OpenTopSites:
-            openHomePanel(.TopSites, forAppState: appState)
-        case .OpenBookmarks:
-            openHomePanel(.Bookmarks, forAppState: appState)
-        case .OpenHistory:
-            openHomePanel(.History, forAppState: appState)
-        case .OpenReadingList:
-            openHomePanel(.ReadingList, forAppState: appState)
-        default: break
         }
     }
 
     private func openHomePanel(panel: HomePanelType, forAppState appState: AppState) {
         switch appState {
         case .Tab(_):
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(panel)!)
-            }
+            self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(panel)!)
         case .HomePanels(_):
-            dispatch_async(dispatch_get_main_queue()) {
-                self.homePanelController?.selectedPanel = panel
-            }
+            self.homePanelController?.selectedPanel = panel
         default: break
         }
     }
