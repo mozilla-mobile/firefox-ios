@@ -396,15 +396,17 @@ class TabManager : NSObject {
     }
 
     func prefsDidChange() {
-        let allowPopups = !(self.prefs.boolForKey("blockPopups") ?? true)
-        // Each tab may have its own configuration, so we should tell each of them in turn.
-        for tab in tabs {
-            tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-        }
-        // The default tab configurations also need to change.
-        self.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-        if #available(iOS 9, *) {
-            self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+        dispatch_async(dispatch_get_main_queue()) {
+            let allowPopups = !(self.prefs.boolForKey("blockPopups") ?? true)
+            // Each tab may have its own configuration, so we should tell each of them in turn.
+            for tab in self.tabs {
+                tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+            }
+            // The default tab configurations also need to change.
+            self.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+            if #available(iOS 9, *) {
+                self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+            }
         }
     }
 
