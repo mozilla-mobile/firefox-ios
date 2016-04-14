@@ -422,6 +422,8 @@
 		E47536ED1C85412C0022CC69 /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47536EC1C85412C0022CC69 /* PrintHelper.swift */; };
 		E47536FC1C85415F0022CC69 /* PrintHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = E47536FB1C85415E0022CC69 /* PrintHelper.js */; };
 		E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */; };
+		E4791B9C1CC035FD00C6D77B /* testcert1.pem in Resources */ = {isa = PBXBuildFile; fileRef = D37DE2C81CA356F900A5EC69 /* testcert1.pem */; };
+		E4791BAA1CC0360200C6D77B /* testcert2.pem in Resources */ = {isa = PBXBuildFile; fileRef = D37DE2C91CA356F900A5EC69 /* testcert2.pem */; };
 		E487B2331AC1C64300F3E86F /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7561A793CF20022C5E0 /* FiraSans-Regular.ttf */; };
 		E487B24E1AC1C66400F3E86F /* FiraSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7571A793CF20022C5E0 /* FiraSans-SemiBold.ttf */; };
 		E487B24F1AC1CC9200F3E86F /* FiraSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */; };
@@ -3828,7 +3830,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4791B9C1CC035FD00C6D77B /* testcert1.pem in Resources */,
 				39E65D191CA455A900C63CE3 /* Images.xcassets in Resources */,
+				E4791BAA1CC0360200C6D77B /* testcert2.pem in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
