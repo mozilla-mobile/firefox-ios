@@ -27,7 +27,7 @@ class MenuViewController: UIViewController {
 
     var appState: AppState {
         didSet {
-            menuConfig = AppMenuConfiguration(appState: appState)
+            menuConfig = menuConfig.menuForState(appState)
             menuView.setNeedsLayout()
         }
     }
@@ -135,7 +135,13 @@ class MenuViewController: UIViewController {
     }
 
     private func performMenuAction(action: MenuAction) {
-        self.actionDelegate?.performMenuAction(action, withAppState: appState)
+        // this is so that things can happen while the menu is dismissing, but not before the menu is dismissed
+        // waiting for the menu to dismiss felt too long (menu dismissed, then thing happened)
+        // whereas this way things happen as the menu is dismissing, but the menu is already dismissed
+        // to performing actions that do things like open other modal views can still occur and they feel snappy
+        dispatch_async(dispatch_get_main_queue()) {
+            self.actionDelegate?.performMenuAction(action, withAppState: self.appState)
+        }
         dismissMenu()
     }
 

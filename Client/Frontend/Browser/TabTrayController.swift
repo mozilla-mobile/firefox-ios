@@ -251,7 +251,7 @@ class TabTrayController: UIViewController {
     var collectionView: UICollectionView!
     var navBar: UIView!
     var addTabButton: UIButton?
-    var settingsButton: UIButton!
+    var settingsButton: UIButton?
     var menuButton: UIButton?
     var collectionViewTransitionSnapshot: UIView?
 
@@ -371,14 +371,15 @@ class TabTrayController: UIViewController {
             addTabButton?.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
             addTabButton?.accessibilityIdentifier = "TabTrayController.addTabButton"
             view.addSubview(addTabButton!)
+
+            settingsButton = UIButton()
+            settingsButton?.setImage(UIImage(named: "settings"), forState: .Normal)
+            settingsButton?.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
+            settingsButton?.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+            settingsButton?.accessibilityIdentifier = "TabTrayController.settingsButton"
+            view.addSubview(settingsButton!)
         }
 
-        settingsButton = UIButton()
-        settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
-        settingsButton.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
-        settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
-        settingsButton.accessibilityIdentifier = "TabTrayController.settingsButton"
-        view.addSubview(settingsButton)
 
 
         makeConstraints()
@@ -451,11 +452,11 @@ class TabTrayController: UIViewController {
                 make.trailing.bottom.equalTo(self.navBar)
                 make.size.equalTo(UIConstants.ToolbarHeight)
             }
-        }
 
-        settingsButton.snp_makeConstraints { make in
-            make.leading.bottom.equalTo(self.navBar)
-            make.size.equalTo(UIConstants.ToolbarHeight)
+            settingsButton!.snp_makeConstraints { make in
+                make.leading.bottom.equalTo(self.navBar)
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            }
         }
 
         collectionView.snp_makeConstraints { make in
@@ -1092,51 +1093,53 @@ extension TabTrayController: MenuViewControllerDelegate {
 
 extension TabTrayController: MenuActionDelegate {
     func performMenuAction(action: MenuAction, withAppState appState: AppState) {
-        switch action {
-        case .OpenNewNormalTab:
-            dispatch_async(dispatch_get_main_queue()) {
-                if #available(iOS 9, *) {
-                    if self.privateMode {
-                        self.SELdidTogglePrivateMode()
-                    }
-                }
-                self.openNewTab()
-            }
-        // this is a case that is only available in iOS9
-        case .OpenNewPrivateTab:
-            if #available(iOS 9, *) {
+        if let menuAction = AppMenuAction(rawValue: action.action) {
+            switch menuAction {
+            case .OpenNewNormalTab:
                 dispatch_async(dispatch_get_main_queue()) {
-                    if !self.privateMode {
-                        self.SELdidTogglePrivateMode()
+                    if #available(iOS 9, *) {
+                        if self.privateMode {
+                            self.SELdidTogglePrivateMode()
+                        }
                     }
                     self.openNewTab()
                 }
+            // this is a case that is only available in iOS9
+            case .OpenNewPrivateTab:
+                if #available(iOS 9, *) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if !self.privateMode {
+                            self.SELdidTogglePrivateMode()
+                        }
+                        self.openNewTab()
+                    }
+                }
+            case .OpenSettings:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.SELdidClickSettingsItem()
+                }
+            case .CloseAllTabs:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.closeTabsForCurrentTray()
+                }
+            case .OpenTopSites:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.TopSites)!))
+                }
+            case .OpenBookmarks:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!))
+                }
+            case .OpenHistory:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.History)!))
+                }
+            case .OpenReadingList:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.ReadingList)!))
+                }
+            default: break
             }
-        case .OpenSettings:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.SELdidClickSettingsItem()
-            }
-        case .CloseAllTabs:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.closeTabsForCurrentTray()
-            }
-        case .OpenTopSites:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.TopSites)!))
-            }
-        case .OpenBookmarks:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!))
-            }
-        case .OpenHistory:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.History)!))
-            }
-        case .OpenReadingList:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.ReadingList)!))
-            }
-        default: break
         }
     }
 }
