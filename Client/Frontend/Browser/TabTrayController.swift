@@ -1092,51 +1092,53 @@ extension TabTrayController: MenuViewControllerDelegate {
 
 extension TabTrayController: MenuActionDelegate {
     func performMenuAction(action: MenuAction, withAppState appState: AppState) {
-        switch action {
-        case .OpenNewNormalTab:
-            dispatch_async(dispatch_get_main_queue()) {
-                if #available(iOS 9, *) {
-                    if self.privateMode {
-                        self.SELdidTogglePrivateMode()
-                    }
-                }
-                self.openNewTab()
-            }
-        // this is a case that is only available in iOS9
-        case .OpenNewPrivateTab:
-            if #available(iOS 9, *) {
+        if let menuAction = AppMenuAction(rawValue: action.action) {
+            switch menuAction {
+            case .OpenNewNormalTab:
                 dispatch_async(dispatch_get_main_queue()) {
-                    if !self.privateMode {
-                        self.SELdidTogglePrivateMode()
+                    if #available(iOS 9, *) {
+                        if self.privateMode {
+                            self.SELdidTogglePrivateMode()
+                        }
                     }
                     self.openNewTab()
                 }
+            // this is a case that is only available in iOS9
+            case .OpenNewPrivateTab:
+                if #available(iOS 9, *) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if !self.privateMode {
+                            self.SELdidTogglePrivateMode()
+                        }
+                        self.openNewTab()
+                    }
+                }
+            case .OpenSettings:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.SELdidClickSettingsItem()
+                }
+            case .CloseAllTabs:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.closeTabsForCurrentTray()
+                }
+            case .OpenTopSites:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.TopSites)!))
+                }
+            case .OpenBookmarks:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!))
+                }
+            case .OpenHistory:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.History)!))
+                }
+            case .OpenReadingList:
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.ReadingList)!))
+                }
+            default: break
             }
-        case .OpenSettings:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.SELdidClickSettingsItem()
-            }
-        case .CloseAllTabs:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.closeTabsForCurrentTray()
-            }
-        case .OpenTopSites:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.TopSites)!))
-            }
-        case .OpenBookmarks:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!))
-            }
-        case .OpenHistory:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.History)!))
-            }
-        case .OpenReadingList:
-            dispatch_async(dispatch_get_main_queue()) {
-                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.ReadingList)!))
-            }
-        default: break
         }
     }
 }
