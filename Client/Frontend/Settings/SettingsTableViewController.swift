@@ -52,7 +52,15 @@ class Setting {
         cell.accessoryView = nil
         cell.selectionStyle = enabled ? .Default : .None
         cell.accessibilityIdentifier = accessibilityIdentifier
-        cell.accessibilityLabel = title?.string
+        if let title = title?.string {
+            if let detailText = cell.detailTextLabel?.text {
+                cell.accessibilityLabel = "\(title), \(detailText)"
+            } else if let status = status?.string {
+                cell.accessibilityLabel = "\(title), \(status)"
+            } else {
+                cell.accessibilityLabel = title
+            }
+        }
         cell.accessibilityTraits = UIAccessibilityTraitButton
         cell.indentationWidth = 0
         cell.layoutMargins = UIEdgeInsetsZero
@@ -168,7 +176,13 @@ class BoolSetting: Setting {
         control.onTintColor = UIConstants.ControlTintColor
         control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? defaultValue
-
+        if let title = title {
+            if let status = status {
+                control.accessibilityLabel = "\(title.string), \(status.string)"
+            } else {
+                control.accessibilityLabel = title.string
+            }
+        }
         cell.accessoryView = PaddedSwitch(switchView: control)
         cell.selectionStyle = .None
     }
