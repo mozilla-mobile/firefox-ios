@@ -216,7 +216,6 @@ class MenuView: UIView {
         loadMenu()
 
         needsReload = false
-        menuPagingView.reloadData()
     }
 
     private func loadToolbar() {
@@ -234,11 +233,14 @@ class MenuView: UIView {
         let numberOfPages = menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0
         pageControl.numberOfPages = numberOfPages
         pageControl.currentPage = currentPageIndex
+        menuPagingView.reloadData()
     }
 
     func setNeedsReload() {
-        needsReload = true
-        setNeedsLayout()
+        if !needsReload {
+            needsReload = true
+            setNeedsLayout()
+        }
     }
 
     private func reloadDataIfNeeded() {

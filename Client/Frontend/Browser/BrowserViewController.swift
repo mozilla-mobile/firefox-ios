@@ -1531,6 +1531,8 @@ extension BrowserViewController: TabToolbarDelegate {
 extension BrowserViewController: MenuViewControllerDelegate {
     func menuViewControllerDidDismiss(menuViewController: MenuViewController) {
         self.menuViewController = nil
+        displayedPopoverController = nil
+        updateDisplayedPopoverProperties = nil
     }
 
     func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool {

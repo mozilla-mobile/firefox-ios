@@ -28,7 +28,7 @@ class MenuViewController: UIViewController {
     var appState: AppState {
         didSet {
             menuConfig = menuConfig.menuForState(appState)
-            menuView.setNeedsLayout()
+            self.reloadView()
         }
     }
 
@@ -134,6 +134,10 @@ class MenuViewController: UIViewController {
         self.popoverPresentationController?.backgroundColor = self.popoverBackgroundColor
     }
 
+    private func reloadView() {
+        menuView.setNeedsReload()
+    }
+
     private func performMenuAction(action: MenuAction) {
         // this is so that things can happen while the menu is dismissing, but not before the menu is dismissed
         // waiting for the menu to dismiss felt too long (menu dismissed, then thing happened)
@@ -192,6 +196,7 @@ extension MenuViewController: MenuItemDataSource {
 
     func menuView(menuView: MenuView, menuItemCellForIndexPath indexPath: NSIndexPath) -> MenuItemCollectionViewCell {
         let cell = menuView.dequeueReusableCellForIndexPath(indexPath)
+        assert(indexPath.getMenuItemIndex() < menuConfig.menuItems.count, "The menu item index \(indexPath.getMenuItemIndex()) should always be less than the number of menu items \(menuConfig.menuItems.count)")
         let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
         cell.menuTitleLabel.text = menuItem.title
         cell.accessibilityLabel = menuItem.title
@@ -246,6 +251,6 @@ extension MenuViewController: UIGestureRecognizerDelegate {
 
 private extension NSIndexPath {
     func getMenuItemIndex() -> Int {
-        return (section * maxNumberOfItemsPerPage) + row
+        return (section * maxNumberOfItemsPerPage) + item
     }
 }
