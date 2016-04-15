@@ -1130,13 +1130,14 @@ class BrowserViewController: UIViewController {
     }
 
     private func getCurrentAppState() -> AppState {
-        guard let homePanelController = self.homePanelController else {
-            if let tab = tabManager.selectedTab {
-                return .Tab(tabState: tab.tabState)
+        guard let tab = tabManager.selectedTab,
+        let displayURL = tab.displayURL where displayURL.absoluteString.characters.count > 0 else {
+            if let homePanelController = homePanelController {
+                return .HomePanels(homePanelState: homePanelController.homePanelState)
             }
             return .Loading
         }
-        return .HomePanels(homePanelState: homePanelController.homePanelState)
+        return .Tab(tabState: tab.tabState)
     }
 
     private func openSettings() {
