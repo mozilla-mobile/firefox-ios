@@ -335,14 +335,16 @@ class TabManager : NSObject {
     func removeAllPrivateTabsAndNotify(notify: Bool) {
         privateTabs.forEach({ removeTab($0, flushToDisk: true, notify: notify) })
     }
-    
-    func removeAll() {
-        let tabs = self.tabs
 
+    func removeTabs(tabs: [Tab]) {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false, notify: true)
         }
         storeChanges()
+    }
+    
+    func removeAll() {
+        removeTabs(self.tabs)
     }
 
     func getIndex(tab: Tab) -> Int {

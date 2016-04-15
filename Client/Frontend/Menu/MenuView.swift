@@ -16,6 +16,9 @@ class MenuView: UIView {
         let openMenuImage = UIImageView()
         openMenuImage.contentMode = UIViewContentMode.ScaleAspectFit
         openMenuImage.userInteractionEnabled = true
+        openMenuImage.isAccessibilityElement = true
+        openMenuImage.accessibilityTraits = UIAccessibilityTraitButton
+        openMenuImage.accessibilityLabel =  NSLocalizedString("Close Menu", tableName: "Menu", comment: "Accessibility label describing the button that closes the menu when open")
         return openMenuImage
     }()
 
@@ -156,7 +159,7 @@ class MenuView: UIView {
 
             menuPagingView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(menuContainerView)
-                make.bottom.equalTo(pageControl.snp_top)
+                make.bottom.equalTo(pageControl.snp_top).offset(-itemPadding)
                 make.height.equalTo(0)
             }
             pageControl.snp_makeConstraints { make in
@@ -281,14 +284,10 @@ class MenuView: UIView {
         menuPagingLayout.menuRowHeight = CGFloat(menuRowHeight)
 
         menuPagingView.snp_updateConstraints { make in
-            if presentationStyle == .Popover {
-                let maxNumberOfItemsForPage = CGFloat(self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) ?? 0)
-                let numberOfRows = ceil(CGFloat(maxNumberOfItemsForPage) / numberOfItemsInRow)
-                let menuHeight = itemPadding + (numberOfRows * (CGFloat(self.menuRowHeight) + itemPadding))
-                make.height.equalTo(menuHeight)
-            } else {
-                make.height.equalTo(menuPagingLayout.collectionViewContentSize().height)
-            }
+            let maxNumberOfItemsForPage = CGFloat(self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) ?? 0)
+            let numberOfRows = ceil(CGFloat(maxNumberOfItemsForPage) / numberOfItemsInRow)
+            let menuHeight = itemPadding + (numberOfRows * (CGFloat(self.menuRowHeight) + itemPadding))
+            make.height.equalTo(menuHeight)
         }
     }
 

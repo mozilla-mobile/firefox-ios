@@ -6,8 +6,9 @@ import UIKit
 
 private let maxNumberOfItemsPerPage = 6
 
-protocol MenuViewControllerDelegate {
+protocol MenuViewControllerDelegate: class {
     func menuViewControllerDidDismiss(menuViewController: MenuViewController)
+    func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool
 }
 
 enum MenuViewPresentationStyle {
@@ -19,13 +20,14 @@ class MenuViewController: UIViewController {
 
     var menuConfig: MenuConfiguration
     var presentationStyle: MenuViewPresentationStyle
-    var delegate: MenuViewControllerDelegate?
+    weak var delegate: MenuViewControllerDelegate?
+    weak var actionDelegate: MenuActionDelegate?
 
     var menuView: MenuView!
 
     var appState: AppState {
         didSet {
-            menuConfig = AppMenuConfiguration(appState: appState)
+            menuConfig = menuConfig.menuForState(appState)
             menuView.setNeedsLayout()
         }
     }
@@ -46,7 +48,7 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissMenu(_:)))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:)))
         gesture.delegate = self
         gesture.cancelsTouchesInView = false
         self.view.addGestureRecognizer(gesture)
@@ -87,7 +89,7 @@ class MenuViewController: UIViewController {
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
 
             menuView.openMenuImage.image = menuConfig.menuIcon()
-            menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissMenu(_:))))
+            menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:))))
 
             menuView.snp_makeConstraints { make in
                 make.left.equalTo(view.snp_left).offset(24)
@@ -103,20 +105,23 @@ class MenuViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @objc private func dismissMenu(recognizer: UITapGestureRecognizer) {
+    @objc private func tapToDismissMenu(recognizer: UITapGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Ended {
-            view.backgroundColor = UIColor.clearColor()
-            self.dismissViewControllerAnimated(true, completion: {
-                self.view.backgroundColor = self.popoverBackgroundColor
-                self.delegate?.menuViewControllerDidDismiss(self)
-            })
+            dismissMenu()
         }
+    }
+
+    private func dismissMenu() {
+        view.backgroundColor = UIColor.clearColor()
+        self.dismissViewControllerAnimated(true, completion: {
+            self.view.backgroundColor = self.popoverBackgroundColor
+            self.delegate?.menuViewControllerDidDismiss(self)
+        })
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        if UI_USER_INTERFACE_IDIOM() == .Phone &&
-            (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) {
+        if delegate?.shouldCloseMenu(self, forTraitCollection: self.traitCollection) ?? false {
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
@@ -129,11 +134,40 @@ class MenuViewController: UIViewController {
         self.popoverPresentationController?.backgroundColor = self.popoverBackgroundColor
     }
 
+    private func performMenuAction(action: MenuAction) {
+        // this is so that things can happen while the menu is dismissing, but not before the menu is dismissed
+        // waiting for the menu to dismiss felt too long (menu dismissed, then thing happened)
+        // whereas this way things happen as the menu is dismissing, but the menu is already dismissed
+        // to performing actions that do things like open other modal views can still occur and they feel snappy
+        dispatch_async(dispatch_get_main_queue()) {
+            self.actionDelegate?.performMenuAction(action, withAppState: self.appState)
+        }
+        dismissMenu()
+    }
+
+    private func performMenuAction(action: MenuAction, withAnimation animation: Animatable, onView view: UIView) {
+        animation.animateFromView(view, offset: nil) { finished in
+            self.performMenuAction(action)
+        }
+    }
+
 }
 extension MenuViewController: MenuItemDelegate {
     func menuView(menu: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let selectedMenuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
-        print("Selected menu item '\(selectedMenuItem.title)")
+        let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
+        let menuItemCell = self.menuView(menuView, menuItemCellForIndexPath: indexPath)
+
+        if let icon = menuItem.selectedIconForState(appState) {
+            menuItemCell.menuImageView.image = icon
+        } else {
+            menuItemCell.menuImageView.image = menuItemCell.menuImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
+            menuItemCell.menuImageView.tintColor = menuConfig.selectedItemTintColor()
+        }
+
+        guard let animation = menuItem.animation else {
+            return performMenuAction(menuItem.action)
+        }
+        performMenuAction(menuItem.action, withAnimation: animation, onView: menuItemCell.menuImageView)
     }
 }
 
@@ -193,8 +227,8 @@ extension MenuViewController: MenuToolbarDataSource {
 
 extension MenuViewController: MenuToolbarItemDelegate {
     func menuView(menuView: MenuView, didSelectItemAtIndex index: Int) {
-        let selectedMenuItem = menuConfig.menuToolbarItems![index]
-        print("Selected menu item '\(selectedMenuItem.title)")
+        let menuToolbarItem = menuConfig.menuToolbarItems![index]
+        return performMenuAction(menuToolbarItem.action)
     }
 }
 

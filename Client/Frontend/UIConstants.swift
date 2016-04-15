@@ -6,7 +6,8 @@ import Foundation
 import Shared
 
 public struct UIConstants {
-    static let DefaultHomePage = NSURL(string: "\(WebServer.sharedInstance.base)/about/home/#panel=0")!
+    static let AboutHomePage = NSURL(string: "\(WebServer.sharedInstance.base)/about/home/")!
+    static let DefaultHomePage = NSURL(string:"#panel=0", relativeToURL: AboutHomePage)!
 
     static let AppBackgroundColor = UIColor.blackColor()
     static let PrivateModePurple = UIColor(red: 207 / 255, green: 104 / 255, blue: 255 / 255, alpha: 1)
@@ -48,6 +49,7 @@ public struct UIConstants {
     static let MenuToolbarTintColorPrivate = UIColor.whiteColor()
     static let MenuBackgroundColorNormal = UIColor(red: 223/255, green: 223/255, blue: 223/255, alpha: 1.0)
     static let MenuBackgroundColorPrivate = UIColor(red: 59/255, green: 59/255, blue: 59/255, alpha: 1.0)
+    static let MenuSelectedItemTintColor = UIColor(red: 0.30, green: 0.62, blue: 1.0, alpha: 1.0)
 
     // settings
     static let TableViewHeaderBackgroundColor = UIColor(red: 242/255, green: 245/255, blue: 245/255, alpha: 1.0)
