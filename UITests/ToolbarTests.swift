@@ -45,9 +45,8 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Open new tab and then go back to previous tab to test navigation buttons.
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        let addTabButton = tester().waitForViewWithAccessibilityLabel("Add Tab") as! UIButton
-        addTabButton.tap()
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Tab")
         tester().waitForViewWithAccessibilityLabel("Web content")
 
         tester().tapViewWithAccessibilityLabel("Show Tabs")
@@ -71,13 +70,13 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         let forward = tester().waitForViewWithAccessibilityLabel("Forward") as! UIButton
         let reload = tester().waitForViewWithAccessibilityLabel("Reload") as! UIButton
         let share = tester().waitForViewWithAccessibilityLabel("Share") as! UIButton
-        let bookmark = tester().waitForViewWithAccessibilityLabel("Menu") as! UIButton
+        let menu = tester().waitForViewWithAccessibilityLabel("Menu") as! UIButton
         
         XCTAssertFalse(back.enabled, "Back button should be disabled")
         XCTAssertFalse(forward.enabled, "Forward button should be disabled")
         XCTAssertFalse(reload.enabled, "Reload button should be disabled")
         XCTAssertFalse(share.enabled, "Share button should be disabled")
-        XCTAssertFalse(bookmark.enabled, "Bookmark button should be disabled")
+        XCTAssertTrue(menu.enabled, "Menu button should be enabled")
 
         // Rotates back to previous orientation
         UIDevice.currentDevice().setValue(previousOrientation, forKey: "orientation")

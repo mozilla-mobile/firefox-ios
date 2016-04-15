@@ -56,8 +56,8 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
         // now open another tab and test it works too
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        let addTabButton = tester().waitForViewWithAccessibilityLabel("Add Tab") as? UIButton
-        addTabButton?.tap()
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Tab")
         tester().waitForViewWithAccessibilityLabel("Web content")
         let url2 = "\(webRoot)/scrollablePage.html?page=2"
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -81,7 +81,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
     func testTapSignInShowsFxAFromTour() {
         // Launch the tour from the settings
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().waitForAnimationsToFinish()
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().waitForAnimationsToFinish()
@@ -96,12 +96,11 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForViewWithAccessibilityLabel("Web content")
         tester().tapViewWithAccessibilityLabel("Cancel")
         tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("home")
     }
 
     func testTapSigninShowsFxAFromSettings() {
         // Navigation to the settings to select the signin option
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().waitForAnimationsToFinish()
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().waitForAnimationsToFinish()
@@ -111,7 +110,6 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         // Go back to the home screen
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("home")
     }
 
     func testToggleBetweenMobileAndDesktopSite() {

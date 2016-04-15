@@ -21,7 +21,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     private func openLoginManager() {
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Logins")
     }
@@ -29,7 +29,6 @@ class LoginManagerTests: KIFTestCase {
     private func closeLoginManager() {
         tester().tapViewWithAccessibilityLabel("Back")
         tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("home")
     }
 
     private func generateLogins() {
@@ -224,6 +223,7 @@ class LoginManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Private Mode")
 
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Logins")
 

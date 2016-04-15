@@ -49,8 +49,8 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         checkBookmarked()
 
         // Load a different page in a new tab
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Tab")
 
         tester().tapViewWithAccessibilityIdentifier("url")
         let url2 = "\(webRoot)/numberedPage.html?page=2"
