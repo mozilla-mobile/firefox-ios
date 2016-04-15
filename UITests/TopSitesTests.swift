@@ -19,8 +19,8 @@ class TopSitesTests: KIFTestCase {
     }
 
     func createNewTab(){
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Tab")
         tester().waitForViewWithAccessibilityLabel("Search or enter address")
     }
 

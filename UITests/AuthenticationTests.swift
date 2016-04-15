@@ -33,7 +33,7 @@ class AuthenticationTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Save the credentials.
-        tester().tapViewWithAccessibilityLabel("Yes")
+        tester().tapViewWithAccessibilityLabel("Save Login")
 
         logOut()
         loadAuthPage()
@@ -43,9 +43,8 @@ class AuthenticationTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Add a private tab.
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Private Tab")
 
         loadAuthPage()
 

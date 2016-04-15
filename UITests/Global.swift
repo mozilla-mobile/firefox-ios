@@ -399,8 +399,7 @@ class SimplePageServer {
 
 class SearchUtils {
     static func navigateToSearchSettings(tester: KIFUITestActor, engine: String = "Yahoo") {
-        tester.tapViewWithAccessibilityLabel("Show Tabs")
-        tester.waitForViewWithAccessibilityLabel("Tabs Tray")
+        tester.tapViewWithAccessibilityLabel("Menu")
         tester.tapViewWithAccessibilityLabel("Settings")
         tester.waitForViewWithAccessibilityLabel("Settings")
         tester.tapViewWithAccessibilityLabel("Search, \(engine)")
@@ -410,7 +409,6 @@ class SearchUtils {
     static func navigateFromSearchSettings(tester: KIFUITestActor) {
         tester.tapViewWithAccessibilityLabel("Settings")
         tester.tapViewWithAccessibilityLabel("Done")
-        tester.tapViewWithAccessibilityLabel("home")
     }
 
     // Given that we're at the Search Settings sheet, select the named search engine as the default.
