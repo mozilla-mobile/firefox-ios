@@ -9,5 +9,6 @@ github "fluffyemily/SwiftKeychainWrapper" "e3805fbdef595151f299b2b8c1b89760fc711
 github "DaveWoodCom/XCGLogger" "Version_3.2"
 github "fluffyemily/google-breakpad-ios" "da0576e03efe9e921f8ed08126d99c7fe6f75e8d"
 github "adjust/ios_sdk" "v4.5.0"
-github "AgileBits/onepassword-extension" "22d595de49f6f2ccd18d0087ef80a4b0c9311c13"
-github "mozilla/readability" "e2974ca825d49972641f6bdda5dbd66daddef0c8"
+github "iziz/libPhoneNumber-iOS" "0.8.11"
+github "AgileBits/onepassword-extension" "fdfb415ce768933c31e4ad5022e18779f5270be2"
+github "mozilla/readability" "c3c91a739beab6fd067404cd7610f6d64f53ad5a"
