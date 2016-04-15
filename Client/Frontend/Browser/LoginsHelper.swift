@@ -21,6 +21,10 @@ class LoginsHelper: BrowserHelper {
         return profile.logins
     }
 
+    var isPrivate: Bool {
+        return browser?.isPrivate ?? false
+    }
+
     class func name() -> String {
         return "LoginsHelper"
     }
@@ -45,7 +49,7 @@ class LoginsHelper: BrowserHelper {
 
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
         // right before requesting login data. See bug 1194567 for more context.
-        if let url = message.frameInfo.request.URL {
+        if let url = message.frameInfo.request.URL where url.scheme != "http" {
             // Since responses go to the main frame, make sure we only listen for main frame requests
             // to avoid XSS attacks.
             if message.frameInfo.mainFrame && type == "request" {
@@ -55,7 +59,7 @@ class LoginsHelper: BrowserHelper {
                    let requestId = res["requestId"] as? String {
                     requestLogins(login, requestId: requestId)
                 }
-            } else if type == "submit" {
+            } else if !isPrivate && type == "submit" {
                 if self.profile.prefs.boolForKey("saveLogins") ?? true {
                     if let login = Login.fromScript(url, script: res) {
                         setCredentials(login)

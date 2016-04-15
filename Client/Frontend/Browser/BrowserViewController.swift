@@ -1423,11 +1423,8 @@ extension BrowserViewController: BrowserDelegate {
         let favicons = FaviconManager(browser: browser, profile: profile)
         browser.addHelper(favicons, name: FaviconManager.name())
 
-        // only add the logins helper if the tab is not a private browsing tab
-        if !browser.isPrivate {
-            let logins = LoginsHelper(browser: browser, profile: profile)
-            browser.addHelper(logins, name: LoginsHelper.name())
-        }
+        let logins = LoginsHelper(browser: browser, profile: profile)
+        browser.addHelper(logins, name: LoginsHelper.name())
 
         let contextMenuHelper = ContextMenuHelper(browser: browser)
         contextMenuHelper.delegate = self
