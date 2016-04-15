@@ -94,8 +94,8 @@ private extension TrayToBrowserAnimator {
             } else {
                 buttonOffset = tabTray.addTabButton!.frame.width + TabTrayControllerUX.ToolbarButtonOffset
                 tabTray.addTabButton!.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
+                tabTray.settingsButton?.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -buttonOffset , 0)
             }
-            tabTray.settingsButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -buttonOffset , 0)
             if #available(iOS 9, *) {
                 tabTray.togglePrivateMode.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
             }
