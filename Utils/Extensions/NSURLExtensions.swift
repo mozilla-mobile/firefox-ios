@@ -223,6 +223,10 @@ extension NSURL {
 
         return false
     }
+
+    public var isLocal: Bool {
+        return host == "localhost" || host == "127.0.0.1"
+    }
 }
 
 //MARK: Private Helpers

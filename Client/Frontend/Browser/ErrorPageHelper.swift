@@ -251,7 +251,7 @@ class ErrorPageHelper {
         }
 
         components.queryItems = queryItems
-        webView.loadRequest(NSURLRequest(URL: components.URL!))
+        webView.loadRequest(PrivilegedRequest(URL: components.URL!))
     }
 
     class func isErrorPageURL(url: NSURL) -> Bool {

@@ -96,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.error("Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
         }
 
-        let defaultRequest = NSURLRequest(URL: UIConstants.DefaultHomePage)
+        let defaultRequest = PrivilegedRequest(URL: UIConstants.DefaultHomePage)
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
         log.debug("Configuring tabManager…")
