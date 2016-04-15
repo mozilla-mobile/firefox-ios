@@ -27,3 +27,45 @@ public struct SystemUtils {
         return NSTimeInterval(now - tv_sec)
     }
 }
+
+extension SystemUtils {
+    // This should be run on first run of the application. 
+    // It shouldn't be run from an extension.
+    // Its function is to write a lock file that is only accessible from the application, 
+    // and not accessible from extension when the device is locked. Thus, we can tell if an extension is being run
+    // when the device is locked.
+    public static func onFirstRun() {
+        if let lockFileURL = lockedDeviceURL,
+                lockFile = lockFileURL.path {
+            let fm = NSFileManager.defaultManager()
+            if fm.fileExistsAtPath(lockFile) {
+                return
+            }
+            let contents = "Device is unlocked".dataUsingEncoding(NSUTF8StringEncoding)
+            fm.createFileAtPath(lockFile, contents: contents, attributes: [NSFileProtectionKey : NSFileProtectionComplete])
+        }
+    }
+
+    private static var lockedDeviceURL: NSURL? {
+        let groupIdentifier = AppInfo.sharedContainerIdentifier()
+        if let groupIdentifier = groupIdentifier {
+            let directoryURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(groupIdentifier)
+            return directoryURL?.URLByAppendingPathComponent("security.dummy")
+        }
+        return nil
+    }
+
+    public static func isDeviceLocked() -> Bool {
+        if let lockFileURL = lockedDeviceURL {
+            do {
+                let _ = try NSData(contentsOfURL: lockFileURL, options: .DataReadingMappedIfSafe)
+                return false
+            } catch let err as NSError {
+                return err.code == 257
+            } catch _ {
+                return true
+            }
+        }
+        return true
+    }
+}
