@@ -145,7 +145,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         log.debug("Updating authentication keychain state to reflect system state")
         self.updateAuthenticationInfo()
-
+        SystemUtils.onFirstRun()
+        
         log.debug("Done with setting up the application.")
         return true
     }
