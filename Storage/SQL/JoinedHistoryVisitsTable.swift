@@ -122,7 +122,7 @@ class JoinedHistoryVisitsTable: Table {
     }
 
     func factory(result: SDRow) -> (site: Site, visit: Visit) {
-        let site = Site(url: result["siteUrl"] as! String, title: result["title"] as? String ?? "")
+        let site = Site(url: result["siteUrl"] as! String, title: result["title"] as String ?? "")
         site.guid = result["guid"] as? String
         site.id = result["historyId"] as? Int
 
