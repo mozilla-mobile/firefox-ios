@@ -251,7 +251,7 @@ class TabTrayController: UIViewController {
     var collectionView: UICollectionView!
     var navBar: UIView!
     var addTabButton: UIButton?
-    var settingsButton: UIButton!
+    var settingsButton: UIButton?
     var menuButton: UIButton?
     var collectionViewTransitionSnapshot: UIView?
 
@@ -371,14 +371,15 @@ class TabTrayController: UIViewController {
             addTabButton?.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
             addTabButton?.accessibilityIdentifier = "TabTrayController.addTabButton"
             view.addSubview(addTabButton!)
+
+            settingsButton = UIButton()
+            settingsButton?.setImage(UIImage(named: "settings"), forState: .Normal)
+            settingsButton?.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
+            settingsButton?.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+            settingsButton?.accessibilityIdentifier = "TabTrayController.settingsButton"
+            view.addSubview(settingsButton!)
         }
 
-        settingsButton = UIButton()
-        settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
-        settingsButton.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
-        settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
-        settingsButton.accessibilityIdentifier = "TabTrayController.settingsButton"
-        view.addSubview(settingsButton)
 
 
         makeConstraints()
@@ -451,11 +452,11 @@ class TabTrayController: UIViewController {
                 make.trailing.bottom.equalTo(self.navBar)
                 make.size.equalTo(UIConstants.ToolbarHeight)
             }
-        }
 
-        settingsButton.snp_makeConstraints { make in
-            make.leading.bottom.equalTo(self.navBar)
-            make.size.equalTo(UIConstants.ToolbarHeight)
+            settingsButton!.snp_makeConstraints { make in
+                make.leading.bottom.equalTo(self.navBar)
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            }
         }
 
         collectionView.snp_makeConstraints { make in
