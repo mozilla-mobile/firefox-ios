@@ -281,7 +281,7 @@ class BrowserViewController: UIViewController {
         if let selectedTab = tabManager.selectedTab {
             if selectedTab.canGoBack {
                 tabManager.selectedTab?.goBack()
-               return true
+                return true
             }
         }
         return false
