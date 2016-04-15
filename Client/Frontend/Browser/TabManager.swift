@@ -87,14 +87,15 @@ class TabManager {
     func removeTab(tab: Browser) {
         // If the removed tab was selected, find the new tab to select.
         if tab === selectedTab {
-            let index = getIndex(tab)
-            if index + 1 < count {
-                selectTab(tabs[index + 1])
-            } else if index - 1 >= 0 {
-                selectTab(tabs[index - 1])
-            } else {
-                assert(count == 1, "Removing last tab")
-                selectTab(nil)
+            if let index = getIndex(tab) {
+                if index + 1 < count {
+                    selectTab(tabs[index + 1])
+                } else if index - 1 >= 0 {
+                    selectTab(tabs[index - 1])
+                } else {
+                    assert(count == 1, "Removing last tab")
+                    selectTab(nil)
+                }
             }
         }
 
@@ -110,7 +111,7 @@ class TabManager {
         delegate?.tabManager(self, didRemoveTab: tab)
     }
 
-    private func getIndex(tab: Browser) -> Int {
+    private func getIndex(tab: Browser) -> Int? {
         for i in 0..<count {
             if tabs[i] === tab {
                 return i
@@ -118,6 +119,6 @@ class TabManager {
         }
         
         assertionFailure("Tab not in tabs list")
-        return -1
+        return nil
     }
 }
