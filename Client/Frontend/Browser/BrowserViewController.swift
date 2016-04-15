@@ -764,7 +764,7 @@ class BrowserViewController: UIViewController {
             resetSpoofedUserAgentIfRequired(webView, newURL: url)
         }
 
-        if let nav = tab.loadRequest(NSURLRequest(URL: url)) {
+        if let nav = tab.loadRequest(PrivilegedRequest(URL: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
@@ -1829,6 +1829,12 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        if !navigationAction.isAllowed {
+            log.warning("Denying unprivileged request: \(navigationAction.request)")
+            decisionHandler(WKNavigationActionPolicy.Cancel)
+            return
+        }
+
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
 
@@ -1993,6 +1999,11 @@ private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data"]
 extension BrowserViewController: WKUIDelegate {
     func webView(webView: WKWebView, createWebViewWithConfiguration configuration: WKWebViewConfiguration, forNavigationAction navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard let currentTab = tabManager.selectedTab else { return nil }
+
+        if !navigationAction.isAllowed {
+            log.warning("Denying unprivileged request: \(navigationAction.request)")
+            return nil
+        }
 
         screenshotHelper.takeScreenshot(currentTab)
 
@@ -2231,7 +2242,7 @@ extension BrowserViewController {
                         try self.readerModeCache.put(currentURL, readabilityResult)
                     } catch _ {
                     }
-                    if let nav = webView.loadRequest(NSURLRequest(URL: readerModeURL)) {
+                    if let nav = webView.loadRequest(PrivilegedRequest(URL: readerModeURL)) {
                         self.ignoreNavigationInTab(tab, navigation: nav)
                     }
                 }
@@ -2730,5 +2741,12 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
 extension BrowserViewController: JSPromptAlertControllerDelegate {
     func promptAlertControllerDidDismiss(alertController: JSPromptAlertController) {
         showQueuedAlertIfAvailable()
+    }
+}
+
+private extension WKNavigationAction {
+    /// Allow local requests only if the request is privileged.
+    private var isAllowed: Bool {
+        return !(request.URL?.isLocal ?? false) || request.isPrivileged
     }
 }
