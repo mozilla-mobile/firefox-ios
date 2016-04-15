@@ -67,7 +67,7 @@ private class PasswordsTable<T>: GenericTable<Password> {
 
     override var factory: ((row: SDRow) -> Password)? {
         return { row -> Password in
-            let site = Site(url: row["hostname"] as? String ?? "", title: "")
+            let site = Site(url: row["hostname"] as String ?? "", title: "")
             let pw = Password(site: site, username: row["username"] as? String ?? "", password: row["password"] as? String ?? "")
 
             pw.httpRealm = row["httpRealm"] as? String ?? ""
