@@ -182,6 +182,7 @@ class BoolSetting: Setting {
             } else {
                 control.accessibilityLabel = title.string
             }
+            cell.accessibilityLabel = nil
         }
         cell.accessoryView = PaddedSwitch(switchView: control)
         cell.selectionStyle = .None

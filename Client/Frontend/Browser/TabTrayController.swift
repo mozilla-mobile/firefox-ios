@@ -361,7 +361,7 @@ class TabTrayController: UIViewController {
             self.menuButton = UIButton()
             menuButton?.setImage(UIImage(named: "bottomNav-menu-pbm"), forState: .Normal)
             menuButton?.addTarget(self, action: #selector(TabTrayController.didTapMenu), forControlEvents: .TouchUpInside)
-            menuButton?.accessibilityLabel = NSLocalizedString("Open Menu", comment: "Accessibility label for opening the Menu button in the Tab Tray.")
+            menuButton?.accessibilityLabel = NSLocalizedString("Menu", comment: "Accessibility label for opening the Menu button in the Tab Tray.")
             menuButton?.accessibilityIdentifier = "TabTrayController.menuButton"
             view.addSubview(menuButton!)
         } else {
