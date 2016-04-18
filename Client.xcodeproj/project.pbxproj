@@ -2132,14 +2132,15 @@
 			isa = PBXGroup;
 			children = (
 				E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */,
+				E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */,
+				0B62EFD11AD63CD100ACB9CD /* Clearables.swift */,
+				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
+				39AC59191CC574AA0042C2F5 /* HomePageSettingsViewController.swift */,
+				2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */,
+				2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */,
+				74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */,
 				2F44FC711A9E840300FD20CC /* SettingsNavigationController.swift */,
 				2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */,
-				E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */,
-				2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */,
-				2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */,
-				0B62EFD11AD63CD100ACB9CD /* Clearables.swift */,
-				74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */,
-				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
