@@ -603,7 +603,7 @@ class TabTrayController: UIViewController {
     }
 
     private func updateAppState() {
-//        self.appStateDelegate?.appDidUpdateState(tabTrayState)
+        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     private func closeTabsForCurrentTray() {
