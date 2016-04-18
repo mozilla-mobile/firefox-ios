@@ -8,22 +8,10 @@ protocol AppStateDelegate: class {
     func appDidUpdateState(appState: AppState)
 }
 
-enum AppState {
-    case Tab(tabState: TabState)
-    case HomePanels(homePanelState: HomePanelState)
-    case TabTray(tabTrayState: TabTrayState)
-    case Loading
+protocol StateProvider {
+    var state: AppState { get set }
+}
 
-    func isPrivate() -> Bool {
-        switch self {
-        case .Tab(let tabState):
-            return tabState.isPrivate
-        case .HomePanels(let homePanelState):
-            return homePanelState.isPrivate
-        case .TabTray(let tabTrayState):
-            return tabTrayState.isPrivate
-        default:
-            return false
-        }
-    }
+protocol AppState: State {
+    var isPrivate: Bool { get set }
 }

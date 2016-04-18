@@ -4,15 +4,18 @@
 
 import Foundation
 
+protocol State {
+}
+
 protocol MenuConfiguration {
 
-    func menuForState(appState: AppState) -> MenuConfiguration
+    func menuForState(state: State) -> MenuConfiguration
 
     var menuItems: [MenuItem] { get }
     var menuToolbarItems: [MenuToolbarItem]? { get }
     var numberOfItemsInRow: Int { get }
 
-    init(appState: AppState)
+    init(state: State)
     func toolbarColor() -> UIColor
     func toolbarTintColor() -> UIColor
     func menuBackgroundColor() -> UIColor
@@ -25,7 +28,7 @@ protocol MenuConfiguration {
 }
 
 protocol MenuActionDelegate: class {
-    func performMenuAction(action: MenuAction, withAppState appState: AppState)
+    func performMenuAction(action: MenuAction, withState state: State)
 }
 
 struct MenuAction {

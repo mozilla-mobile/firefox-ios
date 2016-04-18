@@ -42,9 +42,9 @@ protocol HomePanelDelegate: class {
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
 }
 
-struct HomePanelState {
+struct HomePanelState: AppState {
     var isPrivate: Bool = false
-    var selectedIndex: Int = 0
+    var selectedPanel: HomePanelType = .TopSites
 }
 
 enum HomePanelType: Int {
@@ -77,10 +77,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 self.updateAppState()
             }
         }
-    }
-
-    var homePanelState: HomePanelState {
-        return HomePanelState(isPrivate: isPrivateMode, selectedIndex: selectedPanel?.rawValue ?? 0)
     }
 
     override func viewDidLoad() {
@@ -135,7 +131,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     private func updateAppState() {
-        self.appStateDelegate?.appDidUpdateState(.HomePanels(homePanelState: homePanelState))
+//        self.appStateDelegate?.appDidUpdateState(.HomePanels(homePanelState: homePanelState))
     }
 
     func SELhandleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
@@ -324,5 +320,18 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     static func urlForHomePanelOfType(type: HomePanelType) -> NSURL? {
         return NSURL(string:"#panel=\(type.rawValue)", relativeToURL: UIConstants.AboutHomePage)
+    }
+}
+
+extension HomePanelViewController: StateProvider {
+    var state: AppState {
+        get {
+            return HomePanelState(isPrivate: isPrivateMode, selectedPanel: selectedPanel ?? .TopSites)
+        }
+
+        set {
+            isPrivateMode = newValue.isPrivate
+            selectedPanel = (newValue as? HomePanelState)?.selectedPanel ?? .TopSites
+        }
     }
 }

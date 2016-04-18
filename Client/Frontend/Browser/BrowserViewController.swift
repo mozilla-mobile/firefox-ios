@@ -1137,15 +1137,15 @@ class BrowserViewController: UIViewController {
         return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
     }
 
-    private func getCurrentAppState() -> AppState {
+    private func getCurrentAppState() -> AppState? {
         guard let tab = tabManager.selectedTab,
         let displayURL = tab.displayURL where displayURL.absoluteString.characters.count > 0 else {
             if let homePanelController = homePanelController {
-                return .HomePanels(homePanelState: homePanelController.homePanelState)
+                return homePanelController.state
             }
-            return .Loading
+            return nil
         }
-        return .Tab(tabState: tab.tabState)
+        return tab.state
     }
 
     private func openSettings() {
@@ -1165,59 +1165,60 @@ extension BrowserViewController: AppStateDelegate {
 
     func appDidUpdateState(appState: AppState) {
         if AppConstants.MOZ_MENU {
-            menuViewController?.appState = appState
+//            menuViewController?.appState = appState
         }
     }
 }
 
 extension BrowserViewController: MenuActionDelegate {
-    func performMenuAction(action: MenuAction, withAppState appState: AppState) {
-        if let menuAction = AppMenuAction(rawValue: action.action) {
-            switch menuAction {
-            case .OpenNewNormalTab:
-                if #available(iOS 9, *) {
-                    self.openURLInNewTab(nil, isPrivate: false)
-                } else {
-                    self.tabManager.addTabAndSelect(nil)
-                }
-            // this is a case that is only available in iOS9
-            case .OpenNewPrivateTab:
-                if #available(iOS 9, *) {
-                    self.openURLInNewTab(nil, isPrivate: true)
-                }
-            case .FindInPage:
-                self.updateFindInPageVisibility(visible: true)
-            case .ToggleBrowsingMode:
-                if #available(iOS 9, *) {
-                    guard let tab = tabManager.selectedTab else { break }
-                    tab.toggleDesktopSite()
-                }
-            case .ToggleBookmarkStatus:
-                switch appState {
-                case .Tab(let tabState):
-                    self.toggleBookmarkForTabState(tabState)
-                default: break
-                }
-            case .OpenSettings:
-                self.openSettings()
-            case .OpenTopSites:
-                openHomePanel(.TopSites, forAppState: appState)
-            case .OpenBookmarks:
-                openHomePanel(.Bookmarks, forAppState: appState)
-            case .OpenHistory:
-                openHomePanel(.History, forAppState: appState)
-            case .OpenReadingList:
-                openHomePanel(.ReadingList, forAppState: appState)
+    func performMenuAction(action: MenuAction, withState state: State) {
+        guard let menuAction = AppMenuAction(rawValue: action.action),
+        let appState = state as? AppState else { return }
+
+        switch menuAction {
+        case .OpenNewNormalTab:
+            if #available(iOS 9, *) {
+                self.openURLInNewTab(nil, isPrivate: false)
+            } else {
+                self.tabManager.addTabAndSelect(nil)
+            }
+        // this is a case that is only available in iOS9
+        case .OpenNewPrivateTab:
+            if #available(iOS 9, *) {
+                self.openURLInNewTab(nil, isPrivate: true)
+            }
+        case .FindInPage:
+            self.updateFindInPageVisibility(visible: true)
+        case .ToggleBrowsingMode:
+            if #available(iOS 9, *) {
+                guard let tab = tabManager.selectedTab else { break }
+                tab.toggleDesktopSite()
+            }
+        case .ToggleBookmarkStatus:
+            switch appState {
+            case let tabState as TabState:
+                self.toggleBookmarkForTabState(tabState)
             default: break
             }
+        case .OpenSettings:
+            self.openSettings()
+        case .OpenTopSites:
+            openHomePanel(.TopSites, forAppState: appState)
+        case .OpenBookmarks:
+            openHomePanel(.Bookmarks, forAppState: appState)
+        case .OpenHistory:
+            openHomePanel(.History, forAppState: appState)
+        case .OpenReadingList:
+            openHomePanel(.ReadingList, forAppState: appState)
+        default: break
         }
     }
 
     private func openHomePanel(panel: HomePanelType, forAppState appState: AppState) {
         switch appState {
-        case .Tab(_):
+        case _ as TabState:
             self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(panel)!, isPrivate: appState.isPrivate())
-        case .HomePanels(_):
+        case _ as HomePanelState:
             self.homePanelController?.selectedPanel = panel
         default: break
         }
@@ -1478,10 +1479,13 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     func tabToolbarDidPressMenu(tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // if there is not current app state, don't do anything. the button is essentially disabled
+        guard let appState = getCurrentAppState() else { return }
+        
         // check the trait collection
         // open as modal if portrait
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
-        let mvc = MenuViewController(withAppState: getCurrentAppState(), presentationStyle: presentationStyle)
+        let mvc = MenuViewController(withAppState: appState, presentationStyle: presentationStyle)
         mvc.delegate = self
         mvc.actionDelegate = self
         mvc.menuTransitionDelegate = MenuPresentationAnimator()
@@ -1523,7 +1527,7 @@ extension BrowserViewController: TabToolbarDelegate {
                 return
         }
 
-        toggleBookmarkForTabState(tab.tabState)
+        toggleBookmarkForTabState(tab.state as! TabState)
     }
 
     func tabToolbarDidLongPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -2781,7 +2785,7 @@ extension BrowserViewController: TabTrayDelegate {
 
     func tabTrayDidAddBookmark(tab: Tab) {
         guard let url = tab.url?.absoluteString where url.characters.count > 0 else { return }
-        self.addBookmark(tab.tabState)
+        self.addBookmark(tab.state as! TabState)
     }
 
 

@@ -31,7 +31,7 @@ class MenuViewController: UIViewController {
 
     var menuView: MenuView!
 
-    var appState: AppState {
+    var appState: State {
         didSet {
             menuConfig = menuConfig.menuForState(appState)
             self.reloadView()
@@ -40,9 +40,9 @@ class MenuViewController: UIViewController {
 
     private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
 
-    init(withAppState appState: AppState, presentationStyle: MenuViewPresentationStyle) {
+    init(withAppState appState: State, presentationStyle: MenuViewPresentationStyle) {
         self.appState = appState
-        menuConfig = AppMenuConfiguration(appState: appState)
+        menuConfig = AppMenuConfiguration(state: appState)
         self.presentationStyle = presentationStyle
 
         super.init(nibName: nil, bundle: nil)
@@ -156,7 +156,7 @@ class MenuViewController: UIViewController {
         // whereas this way things happen as the menu is dismissing, but the menu is already dismissed
         // to performing actions that do things like open other modal views can still occur and they feel snappy
         dispatch_async(dispatch_get_main_queue()) {
-            self.actionDelegate?.performMenuAction(action, withAppState: self.appState)
+            self.actionDelegate?.performMenuAction(action, withState: self.appState)
         }
         dismissMenu()
     }

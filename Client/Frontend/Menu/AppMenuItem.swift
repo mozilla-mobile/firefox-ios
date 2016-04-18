@@ -27,11 +27,12 @@ struct AppMenuItem: MenuItem {
         return UIImage(named: selectedIconName)
     }
 
-    func iconForState(appState: AppState) -> UIImage?  {
-        return appState.isPrivate() ? privateModeIcon : icon
+    func iconForState(state: State) -> UIImage?  {
+        guard let appState = state as? AppState else { return icon }
+        return appState.isPrivate ? privateModeIcon : icon
     }
 
-    func selectedIconForState(appState: AppState) -> UIImage? {
+    func selectedIconForState(state: State) -> UIImage? {
         return selectedIcon
     }
 
