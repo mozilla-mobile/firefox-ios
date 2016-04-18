@@ -654,7 +654,6 @@ class BrowserViewController: UIViewController {
             homePanelController!.delegate = self
             homePanelController!.appStateDelegate = self
             homePanelController!.url = tabManager.selectedTab?.displayURL
-            homePanelController!.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
             homePanelController!.view.alpha = 0
 
             addChildViewController(homePanelController!)
@@ -672,6 +671,7 @@ class BrowserViewController: UIViewController {
             }
         }
         homePanelController?.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
+        homePanelController?.isPrivateMode = tabTrayController?.privateMode ?? tabManager.selectedTab?.isPrivate ?? false
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
