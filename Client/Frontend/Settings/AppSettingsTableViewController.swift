@@ -43,6 +43,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         let prefs = profile.prefs
         var generalSettings = [
             SearchSetting(settings: self),
+            HomePageSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                 titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
