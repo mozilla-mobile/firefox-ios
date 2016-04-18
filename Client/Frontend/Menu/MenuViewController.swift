@@ -224,7 +224,8 @@ extension MenuViewController: MenuToolbarDataSource {
             return UIBarButtonItem(title: nil, style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
         }
         let item = menuToolbarItems[index]
-        let toolbarItemView = UIBarButtonItem(image: item.iconForState(appState), style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+        let buttonImageView = UIImageView(image: item.iconForState(appState))
+        let toolbarItemView = UIBarButtonItem(customView: buttonImageView)
         toolbarItemView.accessibilityLabel = item.title
         return toolbarItemView
     }
