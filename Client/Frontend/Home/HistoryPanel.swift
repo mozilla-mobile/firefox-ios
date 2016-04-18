@@ -208,7 +208,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         welcomeLabel.textAlignment = NSTextAlignment.Center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = HistoryPanelUX.WelcomeScreenItemTextColor
-        welcomeLabel.numberOfLines = 2
+        welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
         welcomeLabel.snp_makeConstraints { make in
