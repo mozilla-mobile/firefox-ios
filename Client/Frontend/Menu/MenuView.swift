@@ -104,7 +104,7 @@ class MenuView: UIView {
         }
     }
 
-    var menuFooterHeight: CGFloat = 40 {
+    var menuFooterHeight: CGFloat = 44 {
         didSet {
             self.setNeedsLayout()
         }
@@ -191,7 +191,6 @@ class MenuView: UIView {
         openMenuImage.accessibilityLabel = NSLocalizedString("Close Menu", tableName: "Menu", comment: "Accessibility Label attached to the button for closing the menu")
         openMenuImage.snp_makeConstraints { make in
             make.center.equalTo(menuFooterView)
-            make.height.equalTo(menuFooterView)
         }
     }
 

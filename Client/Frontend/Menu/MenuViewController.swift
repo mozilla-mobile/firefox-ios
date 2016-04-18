@@ -88,7 +88,8 @@ class MenuViewController: UIViewController {
             // add a shadow to the bottom of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
 
-            menuView.openMenuImage.image = menuConfig.menuIcon()
+            menuView.openMenuImage.image = menuConfig.menuIcon()?.imageWithRenderingMode(.AlwaysTemplate)
+            menuView.openMenuImage.tintColor = menuConfig.toolbarTintColor()
             menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:))))
 
             menuView.snp_makeConstraints { make in
