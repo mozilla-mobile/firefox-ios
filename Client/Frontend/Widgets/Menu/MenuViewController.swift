@@ -88,7 +88,8 @@ class MenuViewController: UIViewController {
             // add a shadow to the bottom of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
 
-            menuView.openMenuImage.image = menuConfig.menuIcon()
+            menuView.openMenuImage.image = menuConfig.menuIcon()?.imageWithRenderingMode(.AlwaysTemplate)
+            menuView.openMenuImage.tintColor = menuConfig.toolbarTintColor()
             menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:))))
 
             menuView.snp_makeConstraints { make in
@@ -218,15 +219,16 @@ extension MenuViewController: MenuToolbarDataSource {
         return menuToolbarItems.count
     }
 
-    func menuView(menuView: MenuView, buttonForItemAtIndex index: Int) -> UIBarButtonItem {
+    func menuView(menuView: MenuView, buttonForItemAtIndex index: Int) -> UIView {
         // this should never happen - if we don't have any toolbar items then we shouldn't get this far
         guard let menuToolbarItems = menuConfig.menuToolbarItems else {
-            return UIBarButtonItem(title: nil, style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+            return UIView()
         }
         let item = menuToolbarItems[index]
-        let toolbarItemView = UIBarButtonItem(image: item.iconForState(appState), style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
-        toolbarItemView.accessibilityLabel = item.title
-        return toolbarItemView
+        let buttonImageView = UIImageView(image: item.iconForState(appState)?.imageWithRenderingMode(.AlwaysTemplate))
+        buttonImageView.contentMode = .ScaleAspectFit
+        buttonImageView.accessibilityLabel = item.title
+        return buttonImageView
     }
 }
 

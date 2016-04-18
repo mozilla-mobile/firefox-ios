@@ -12,7 +12,7 @@ protocol MenuToolbarDataSource {
     func numberOfToolbarItemsInMenuView(menuView: MenuView) -> Int
 
     // the button that we should display at this point in the toolbar
-    func menuView(menuView: MenuView, buttonForItemAtIndex index: Int) -> UIBarButtonItem
+    func menuView(menuView: MenuView, buttonForItemAtIndex index: Int) -> UIView
 }
 
 // menu items

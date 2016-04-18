@@ -4,14 +4,6 @@
 
 import Foundation
 
-protocol MenuItem {
-    var title: String { get }
-    var action: MenuAction { get }
-    var animation: Animatable? { get }
-    func iconForState(appState: AppState) -> UIImage?
-    func selectedIconForState(appState: AppState) -> UIImage?
-}
-
 struct AppMenuItem: MenuItem {
     let title: String
     let action: MenuAction

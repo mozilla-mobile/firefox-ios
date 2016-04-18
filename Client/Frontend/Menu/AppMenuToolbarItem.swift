@@ -4,12 +4,6 @@
 
 import Foundation
 
-protocol MenuToolbarItem {
-    var title: String { get }
-    var action: MenuAction { get }
-    func iconForState(appState: AppState) -> UIImage?
-}
-
 struct AppMenuToolbarItem: MenuToolbarItem {
 
     private let iconName: String
