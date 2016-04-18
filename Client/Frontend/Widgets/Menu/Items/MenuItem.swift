@@ -8,6 +8,6 @@ protocol MenuItem {
     var title: String { get }
     var action: MenuAction { get }
     var animation: Animatable? { get }
-    func iconForState(state: State) -> UIImage?
-    func selectedIconForState(state: State) -> UIImage?
+    func iconForState(state: State?) -> UIImage?
+    func selectedIconForState(state: State?) -> UIImage?
 }

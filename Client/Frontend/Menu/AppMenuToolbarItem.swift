@@ -15,7 +15,7 @@ struct AppMenuToolbarItem: MenuToolbarItem {
         return UIImage(named: iconName)
     }
 
-    func iconForState(state: State) -> UIImage?  {
+    func iconForState(state: State?) -> UIImage?  {
         return icon
     }
 

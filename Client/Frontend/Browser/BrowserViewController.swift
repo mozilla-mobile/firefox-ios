@@ -1171,7 +1171,7 @@ extension BrowserViewController: AppStateDelegate {
 }
 
 extension BrowserViewController: MenuActionDelegate {
-    func performMenuAction(action: MenuAction, withState state: State) {
+    func performMenuAction(action: MenuAction, withState state: State?) {
         guard let menuAction = AppMenuAction(rawValue: action.action),
         let appState = state as? AppState else { return }
 

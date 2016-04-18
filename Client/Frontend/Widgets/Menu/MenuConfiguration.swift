@@ -9,13 +9,13 @@ protocol State {
 
 protocol MenuConfiguration {
 
-    func menuForState(state: State) -> MenuConfiguration
+    func menuForState(state: State?) -> MenuConfiguration
 
     var menuItems: [MenuItem] { get }
     var menuToolbarItems: [MenuToolbarItem]? { get }
     var numberOfItemsInRow: Int { get }
 
-    init(state: State)
+    init(state: State?)
     func toolbarColor() -> UIColor
     func toolbarTintColor() -> UIColor
     func menuBackgroundColor() -> UIColor
@@ -28,7 +28,7 @@ protocol MenuConfiguration {
 }
 
 protocol MenuActionDelegate: class {
-    func performMenuAction(action: MenuAction, withState state: State)
+    func performMenuAction(action: MenuAction, withState state: State?)
 }
 
 struct MenuAction {

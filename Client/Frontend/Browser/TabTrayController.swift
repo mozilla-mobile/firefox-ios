@@ -1100,7 +1100,7 @@ extension TabTrayController: MenuViewControllerDelegate {
 }
 
 extension TabTrayController: MenuActionDelegate {
-    func performMenuAction(action: MenuAction, withState state: State) {
+    func performMenuAction(action: MenuAction, withState state: State?) {
         guard let menuAction = AppMenuAction(rawValue: action.action) else { return }
         switch menuAction {
         case .OpenNewNormalTab:

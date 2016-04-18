@@ -26,7 +26,7 @@ struct AppMenuConfiguration: MenuConfiguration {
 
     private(set) var isPrivateMode: Bool = false
 
-    init(state: State) {
+    init(state: State?) {
         guard let appState = state as? AppState else { return }
         menuItems = menuItemsForAppState(appState)
         menuToolbarItems = menuToolbarItemsForAppState(appState)
@@ -34,7 +34,7 @@ struct AppMenuConfiguration: MenuConfiguration {
         isPrivateMode = appState.isPrivate
     }
 
-    func menuForState(state: State) -> MenuConfiguration {
+    func menuForState(state: State?) -> MenuConfiguration {
         return AppMenuConfiguration(state: state)
     }
 
@@ -75,7 +75,7 @@ struct AppMenuConfiguration: MenuConfiguration {
         return UIConstants.MenuSelectedItemTintColor
     }
 
-    private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
+    private func numberOfMenuItemsPerRowForAppState(appState: AppState?) -> Int {
         switch appState {
         case _ as TabTrayState:
             return 4
@@ -85,7 +85,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     }
 
     // the items should be added to the array according to desired display order
-    private func menuItemsForAppState(appState: State) -> [MenuItem] {
+    private func menuItemsForAppState(appState: State?) -> [MenuItem] {
         var menuItems = [MenuItem]()
         switch appState {
         case let tabState as TabState:
@@ -119,7 +119,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     }
 
     // the items should be added to the array according to desired display order
-    private func menuToolbarItemsForAppState(appState: AppState) -> [MenuToolbarItem]? {
+    private func menuToolbarItemsForAppState(appState: AppState?) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
         switch appState {
         case _ as TabState, _ as TabTrayState:

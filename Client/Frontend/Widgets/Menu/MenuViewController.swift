@@ -31,7 +31,7 @@ class MenuViewController: UIViewController {
 
     var menuView: MenuView!
 
-    var appState: State {
+    var appState: State? {
         didSet {
             menuConfig = menuConfig.menuForState(appState)
             self.reloadView()
@@ -40,7 +40,7 @@ class MenuViewController: UIViewController {
 
     private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
 
-    init(withAppState appState: State, presentationStyle: MenuViewPresentationStyle) {
+    init(withAppState appState: State?, presentationStyle: MenuViewPresentationStyle) {
         self.appState = appState
         menuConfig = AppMenuConfiguration(state: appState)
         self.presentationStyle = presentationStyle
