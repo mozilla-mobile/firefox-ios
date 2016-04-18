@@ -10,6 +10,7 @@ var MATCH_HIGHLIGHT_ACTIVE = "#f19750";
 var MATCH_HIGHLIGHT_INACTIVE = "#ffde49";
 var SCROLL_INTERVAL_INCREMENT = 5;
 var SCROLL_INTERVAL_DURATION = 400;
+var SCROLL_OFFSET = 60;
 
 var activeHighlightSpan = null;
 var lastSearch;
@@ -168,7 +169,7 @@ function updateActiveHighlight() {
 
   // Find the position of the element centered on the screen, then scroll to it.
   var rect = activeHighlightSpan.getBoundingClientRect();
-  var top = rect.top + scrollY - window.innerHeight / 2;
+  var top = SCROLL_OFFSET + rect.top + scrollY - window.innerHeight / 2;
   var left = rect.left + scrollX - window.innerWidth / 2;
   left = clamp(left, 0, document.body.scrollWidth);
   top = clamp(top, 0, document.body.scrollHeight);
