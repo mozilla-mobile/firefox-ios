@@ -487,7 +487,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
                 make.left.lessThanOrEqualTo(contentView.snp_left).offset(80).priorityMedium()
 
                 // Sets proper landscape layout for smaller phones: iPhone 4 & 5.
-                make.right.lessThanOrEqualTo(contentView.snp_centerX).offset(-10).priorityHigh()
+                make.right.lessThanOrEqualTo(contentView.snp_centerX).offset(5).priorityHigh()
             }
 
             signInButton.snp_remakeConstraints { make in
