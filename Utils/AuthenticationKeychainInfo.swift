@@ -115,6 +115,9 @@ public extension AuthenticationKeychainInfo {
     }
 
     func isLocked() -> Bool {
+        guard self.lockOutInterval != nil else {
+            return false
+        }
         if SystemUtils.systemUptime() < self.lockOutInterval {
             // Unlock and require passcode input
             resetLockoutState()
