@@ -259,7 +259,7 @@ class TabManager : NSObject {
 
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
-        
+
         let tab = Browser(configuration: configuration, isPrivate: isPrivate)
         configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie)
         return tab
@@ -303,20 +303,21 @@ class TabManager : NSObject {
         hideNetworkActivitySpinner()
     }
 
-    /// - Parameter notify: if set to true, will call the delegate after the tab 
+    /// - Parameter notify: if set to true, will call the delegate after the tab
     ///   is removed.
     private func removeTab(tab: Browser, flushToDisk: Bool, notify: Bool) {
         assert(NSThread.isMainThread())
         // If the removed tab was selected, find the new tab to select.
         if tab === selectedTab {
-            let index = getIndex(tab)
-            if index + 1 < count {
-                selectTab(tabs[index + 1])
-            } else if index - 1 >= 0 {
-                selectTab(tabs[index - 1])
-            } else {
-                assert(count == 1, "Removing last tab")
-                selectTab(nil)
+            if let index = getIndex(tab) {
+                if index + 1 < count {
+                    selectTab(tabs[index + 1])
+                } else if index - 1 >= 0 {
+                    selectTab(tabs[index - 1])
+                } else {
+                    assert(count == 1, "Removing last tab")
+                    selectTab(nil)
+                }
             }
         }
 
@@ -354,12 +355,12 @@ class TabManager : NSObject {
     }
 
     /// Removes all private tabs from the manager.
-    /// - Parameter notify: if set to true, the delegate is called when a tab is 
+    /// - Parameter notify: if set to true, the delegate is called when a tab is
     ///   removed.
     func removeAllPrivateTabsAndNotify(notify: Bool) {
         privateTabs.forEach({ removeTab($0, flushToDisk: true, notify: notify) })
     }
-    
+
     func removeAll() {
         let tabs = self.tabs
 
@@ -369,7 +370,7 @@ class TabManager : NSObject {
         storeChanges()
     }
 
-    func getIndex(tab: Browser) -> Int {
+    func getIndex(tab: Browser) -> Int? {
         assert(NSThread.isMainThread())
 
         for i in 0..<count {
@@ -377,9 +378,9 @@ class TabManager : NSObject {
                 return i
             }
         }
-        
+
         assertionFailure("Tab not in tabs list")
-        return -1
+        return nil
     }
 
     func getTabForURL(url: NSURL) -> Browser? {
