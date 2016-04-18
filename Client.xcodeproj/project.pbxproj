@@ -232,6 +232,7 @@
 		394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */; };
 		39A359E41BFCCE94006B9E87 /* SpotlightHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A359E31BFCCE94006B9E87 /* SpotlightHelper.swift */; };
 		39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */; };
+		39AC591A1CC574AB0042C2F5 /* HomePageSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39AC59191CC574AA0042C2F5 /* HomePageSettingsViewController.swift */; };
 		39D9E6851C89E9690071FADA /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FA11C495268006EEEC3 /* SnapKit.framework */; };
 		39E65D191CA455A900C63CE3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 391AEFD11C8F11ED00691F84 /* Images.xcassets */; };
 		39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */; };
@@ -1282,6 +1283,7 @@
 		394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSuggestedSites.swift; sourceTree = "<group>"; };
 		39A359E31BFCCE94006B9E87 /* SpotlightHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotlightHelper.swift; path = Helpers/SpotlightHelper.swift; sourceTree = "<group>"; };
 		39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SpotlightHelper.js; sourceTree = "<group>"; };
+		39AC59191CC574AA0042C2F5 /* HomePageSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageSettingsViewController.swift; sourceTree = "<group>"; };
 		39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducerTests.swift; sourceTree = "<group>"; };
 		39E65D351CA5CAF200C63CE3 /* AsyncReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducer.swift; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
@@ -2132,14 +2134,15 @@
 			isa = PBXGroup;
 			children = (
 				E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */,
+				E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */,
+				0B62EFD11AD63CD100ACB9CD /* Clearables.swift */,
+				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
+				39AC59191CC574AA0042C2F5 /* HomePageSettingsViewController.swift */,
+				2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */,
+				2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */,
+				74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */,
 				2F44FC711A9E840300FD20CC /* SettingsNavigationController.swift */,
 				2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */,
-				E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */,
-				2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */,
-				2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */,
-				0B62EFD11AD63CD100ACB9CD /* Clearables.swift */,
-				74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */,
-				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -4648,6 +4651,7 @@
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				7BC68D091CC153020043562A /* RoundedToolbar.swift in Sources */,
+				39AC591A1CC574AB0042C2F5 /* HomePageSettingsViewController.swift in Sources */,
 				7B59FC3E1C68E9B600F58EF5 /* SWCellScrollView.m in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
