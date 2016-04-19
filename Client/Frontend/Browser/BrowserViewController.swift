@@ -36,7 +36,7 @@ private struct BrowserViewControllerUX {
 class BrowserViewController: UIViewController {
     var homePanelController: HomePanelViewController?
     var webViewContainer: UIView!
-    var urlBar: URLBarView!
+    var urlBar: protocol<URLBarViewProtocol, BrowserToolbarProtocol, BrowserLocationViewDelegate>!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
     private var statusBarOverlay: UIView!
@@ -298,13 +298,24 @@ class BrowserViewController: UIViewController {
         view.addSubview(topTouchArea)
 
         log.debug("BVC setting up URL bar…")
+
         // Setup the URL bar, wrapped in a view to get transparency effect
-        urlBar = URLBarView()
-        urlBar.translatesAutoresizingMaskIntoConstraints = false
-        urlBar.delegate = self
-        urlBar.browserToolbarDelegate = self
-        header = BlurWrapper(view: urlBar)
-        view.addSubview(header)
+
+        if AppConstants.MOZ_URL_BAR_V2 {
+            let urlBarV2 = URLBarView_V2()
+            urlBarV2.delegate = self
+            urlBarV2.browserToolbarDelegate = self
+            header = BlurWrapper(view: urlBarV2.view)
+            view.addSubview(header)
+            self.urlBar = urlBarV2
+        } else {
+            let legacyURLBar = URLBarView()
+            legacyURLBar.delegate = self
+            legacyURLBar.browserToolbarDelegate = self
+            header = BlurWrapper(view: legacyURLBar)
+            view.addSubview(header)
+            self.urlBar = legacyURLBar
+        }
 
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
         pasteGoAction = AccessibleAction(name: NSLocalizedString("Paste & Go", comment: "Paste the URL into the location bar and visit"), handler: { () -> Bool in
@@ -354,7 +365,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        urlBar.snp_makeConstraints { make in
+        urlBar.view.snp_makeConstraints { make in
             make.edges.equalTo(self.header)
         }
 
@@ -616,12 +627,12 @@ class BrowserViewController: UIViewController {
             make.bottom.left.right.equalTo(self.footer)
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
-        urlBar.setNeedsUpdateConstraints()
+        urlBar.view.setNeedsUpdateConstraints()
 
         // Remake constraints even if we're already showing the home controller.
         // The home controller may change sizes if we tap the URL bar while on about:home.
         homePanelController?.view.snp_remakeConstraints { make in
-            make.top.equalTo(self.urlBar.snp_bottom)
+            make.top.equalTo(self.urlBar.view.snp_bottom)
             make.left.right.equalTo(self.view)
             if self.homePanelIsInline {
                 make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
@@ -732,7 +743,7 @@ class BrowserViewController: UIViewController {
         addChildViewController(searchController!)
         view.addSubview(searchController!.view)
         searchController!.view.snp_makeConstraints { make in
-            make.top.equalTo(self.urlBar.snp_bottom)
+            make.top.equalTo(self.urlBar.view.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
             return
         }
@@ -754,7 +765,7 @@ class BrowserViewController: UIViewController {
 
     private func finishEditingAndSubmit(url: NSURL, visitType: VisitType) {
         urlBar.currentURL = url
-        urlBar.leaveOverlayMode()
+        urlBar.leaveOverlayMode(didCancel: false)
 
         guard let tab = tabManager.selectedTab else {
             return
@@ -1153,15 +1164,15 @@ extension BrowserViewController {
 
 extension BrowserViewController: URLBarDelegate {
 
-    func urlBarDidPressReload(urlBar: URLBarView) {
+    func urlBarDidPressReload(urlBar: URLBarViewProtocol) {
         tabManager.selectedTab?.reload()
     }
 
-    func urlBarDidPressStop(urlBar: URLBarView) {
+    func urlBarDidPressStop(urlBar: URLBarViewProtocol) {
         tabManager.selectedTab?.stop()
     }
 
-    func urlBarDidPressTabs(urlBar: URLBarView) {
+    func urlBarDidPressTabs(urlBar: URLBarViewProtocol) {
         self.webViewContainerToolbar.hidden = true
         updateFindInPageVisibility(visible: false)
 
@@ -1175,7 +1186,7 @@ extension BrowserViewController: URLBarDelegate {
         self.tabTrayController = tabTrayController
     }
 
-    func urlBarDidPressReaderMode(urlBar: URLBarView) {
+    func urlBarDidPressReaderMode(urlBar: URLBarViewProtocol) {
         if let tab = tabManager.selectedTab {
             if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
                 switch readerMode.state {
@@ -1190,7 +1201,7 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDidLongPressReaderMode(urlBar: URLBarView) -> Bool {
+    func urlBarDidLongPressReaderMode(urlBar: URLBarViewProtocol) -> Bool {
         guard let tab = tabManager.selectedTab,
                url = tab.displayURL,
                result = profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name)
@@ -1210,7 +1221,7 @@ extension BrowserViewController: URLBarDelegate {
         return true
     }
 
-    func locationActionsForURLBar(urlBar: URLBarView) -> [AccessibleAction] {
+    func locationActionsForURLBar(urlBar: URLBarViewProtocol) -> [AccessibleAction] {
         if UIPasteboard.generalPasteboard().string != nil {
             return [pasteGoAction, pasteAction, copyAddressAction]
         } else {
@@ -1227,7 +1238,7 @@ extension BrowserViewController: URLBarDelegate {
         return profile.searchEngines.queryForSearchURL(searchURL) ?? url?.absoluteString
     }
 
-    func urlBarDidLongPressLocation(urlBar: URLBarView) {
+    func urlBarDidLongPressLocation(urlBar: URLBarViewProtocol) {
         let longPressAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
 
         for action in locationActionsForURLBar(urlBar) {
@@ -1240,8 +1251,8 @@ extension BrowserViewController: URLBarDelegate {
 
         let setupPopover = { [unowned self] in
             if let popoverPresentationController = longPressAlertController.popoverPresentationController {
-                popoverPresentationController.sourceView = urlBar
-                popoverPresentationController.sourceRect = urlBar.frame
+                popoverPresentationController.sourceView = urlBar.view
+                popoverPresentationController.sourceRect = urlBar.view.frame
                 popoverPresentationController.permittedArrowDirections = .Any
                 popoverPresentationController.delegate = self
             }
@@ -1257,7 +1268,7 @@ extension BrowserViewController: URLBarDelegate {
         self.presentViewController(longPressAlertController, animated: true, completion: nil)
     }
 
-    func urlBarDidPressScrollToTop(urlBar: URLBarView) {
+    func urlBarDidPressScrollToTop(urlBar: URLBarViewProtocol) {
         if let selectedTab = tabManager.selectedTab {
             // Only scroll to top if we are not showing the home view controller
             if homePanelController == nil {
@@ -1266,11 +1277,11 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarLocationAccessibilityActions(urlBar: URLBarView) -> [UIAccessibilityCustomAction]? {
+    func urlBarLocationAccessibilityActions(urlBar: URLBarViewProtocol) -> [UIAccessibilityCustomAction]? {
         return locationActionsForURLBar(urlBar).map { $0.accessibilityCustomAction }
     }
 
-    func urlBar(urlBar: URLBarView, didEnterText text: String) {
+    func urlBar(urlBar: URLBarViewProtocol, didEnterText text: String) {
         searchLoader.query = text
 
         if text.isEmpty {
@@ -1281,7 +1292,7 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBar(urlBar: URLBarView, didSubmitText text: String) {
+    func urlBar(urlBar: URLBarViewProtocol, didSubmitText text: String) {
         // If we can't make a valid URL, do a search query.
         // If we still don't have a valid URL, something is broken. Give up.
         guard let url = URIFixup.getURL(text) ??
@@ -1293,11 +1304,11 @@ extension BrowserViewController: URLBarDelegate {
         finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
 
-    func urlBarDidEnterOverlayMode(urlBar: URLBarView) {
+    func urlBarDidEnterOverlayMode(urlBar: URLBarViewProtocol) {
         showHomePanelController(inline: false)
     }
 
-    func urlBarDidLeaveOverlayMode(urlBar: URLBarView) {
+    func urlBarDidLeaveOverlayMode(urlBar: URLBarViewProtocol) {
         hideSearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url)
     }
@@ -1339,7 +1350,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         controller.addAction(UIAlertAction(title: toggleActionTitle, style: .Default, handler: { _ in tab.toggleDesktopSite() }))
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Action Sheet Cancel Button"), style: .Cancel, handler: nil))
-        controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
+        controller.popoverPresentationController?.sourceView = toolbar ?? urlBar.view
         controller.popoverPresentationController?.sourceRect = button.frame
         presentViewController(controller, animated: true, completion: nil)
     }

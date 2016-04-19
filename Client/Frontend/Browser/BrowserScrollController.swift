@@ -33,7 +33,7 @@ class BrowserScrollingController: NSObject {
 
     weak var header: UIView?
     weak var footer: UIView?
-    weak var urlBar: URLBarView?
+    var urlBar: URLBarViewProtocol?
     weak var snackBars: UIView?
 
     var footerBottomConstraint: Constraint?
@@ -66,7 +66,7 @@ class BrowserScrollingController: NSObject {
     private var contentSize: CGSize { return scrollView?.contentSize ?? CGSizeZero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var topScrollHeight: CGFloat { return header?.frame.height ?? 0 }
-    private var bottomScrollHeight: CGFloat { return urlBar?.frame.height ?? 0 }
+    private var bottomScrollHeight: CGFloat { return urlBar?.view.frame.height ?? 0 }
     private var snackBarsFrame: CGRect { return snackBars?.frame ?? CGRectZero }
 
     private var lastContentOffset: CGFloat = 0

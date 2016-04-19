@@ -90,4 +90,19 @@ public struct AppConstants {
             return true
         #endif
     }()
+
+    /// Use V2 URL bar
+    public static let MOZ_URL_BAR_V2: Bool = {
+        #if MOZ_CHANNEL_AURORA
+            return false
+        #elseif MOZ_CHANNEL_FENNEC
+            return false
+        #elseif MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #else
+            return true
+        #endif
+    }()
 }
