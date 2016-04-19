@@ -781,26 +781,8 @@ class BrowserViewController: UIViewController {
         guard let url = tabState.url else { return }
         let shareItem = ShareItem(url: url.absoluteString, title: tabState.title, favicon: tabState.favicon)
         profile.bookmarks.shareItem(shareItem)
-        if #available(iOS 9, *) {
-            var userData = [QuickActions.TabURLKey: shareItem.url]
-            if let title = shareItem.title {
-                userData[QuickActions.TabTitleKey] = title
-            }
-            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
-                withUserData: userData,
-                toApplication: UIApplication.sharedApplication())
-        }
         if let tab = tabManager.getTabForURL(url) {
             tab.isBookmarked = true
-        }
-
-        if !AppConstants.MOZ_MENU {
-            // Dispatch to the main thread to update the UI
-            dispatch_async(dispatch_get_main_queue()) { _ in
-                self.animateBookmarkStar()
-                self.toolbar?.updateBookmarkStatus(true)
-                self.urlBar.updateBookmarkStatus(true)
-            }
         }
     }
 
@@ -827,10 +809,6 @@ class BrowserViewController: UIViewController {
                 if res.isSuccess {
                     if let tab = self.tabManager.getTabForURL(url) {
                         tab.isBookmarked = false
-                    }
-                    if !AppConstants.MOZ_MENU {
-                        self.toolbar?.updateBookmarkStatus(false)
-                        self.urlBar.updateBookmarkStatus(false)
                     }
                 }
             }
@@ -1165,7 +1143,46 @@ extension BrowserViewController: AppStateDelegate {
 
     func appDidUpdateState(appState: AppState) {
         if AppConstants.MOZ_MENU {
-//            menuViewController?.appState = appState
+            menuViewController?.appState = appState
+        }
+
+        switch appState {
+        case let tabState as TabState:
+            // check to see if these changes are relevant to us
+            // and whether bookmark status has changed
+            updateBookmarkStatus(tabState)
+        default: break
+        }
+    }
+
+    func updateBookmarkStatus(tabState: TabState) {
+        if tabState.url == self.tabManager.selectedTab?.url
+            && toolbar?.bookmarkButton.selected != tabState.isBookmarked {
+            if !AppConstants.MOZ_MENU {
+                // Dispatch to the main thread to update the UI
+                dispatch_async(dispatch_get_main_queue()) { _ in
+                    if tabState.isBookmarked {
+                        self.animateBookmarkStar()
+                    }
+                    self.toolbar?.updateBookmarkStatus(tabState.isBookmarked)
+                    self.urlBar.updateBookmarkStatus(tabState.isBookmarked)
+                }
+            }
+            if #available(iOS 9, *) {
+                if let urlString = tabState.url?.absoluteString {
+                    var userData = [QuickActions.TabURLKey: urlString]
+                    if let title = tabState.title {
+                        userData[QuickActions.TabTitleKey] = title
+                    }
+                    if tabState.isBookmarked {
+                        QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+                                                                                            withUserData: userData,
+                                                                                            toApplication: UIApplication.sharedApplication())
+                    } else {
+                        QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(.OpenLastBookmark, withURL: userData[QuickActions.TabURLKey], fromApplication: UIApplication.sharedApplication())
+                    }
+                }
+            }
         }
     }
 }
