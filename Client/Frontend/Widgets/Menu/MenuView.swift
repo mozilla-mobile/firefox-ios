@@ -200,9 +200,19 @@ class MenuView: UIView {
         menuPagingView.setContentOffset(CGPointMake(xOffset,0) , animated: true)
     }
 
-    @objc private func toolbarButtonSelected(sender: UIBarButtonItem) {
-        guard let selectedButtonIndex = toolbarItems.indexOf(sender) else { return }
-        toolbarDelegate?.menuView(self, didSelectItemAtIndex: selectedButtonIndex)
+    @objc private func toolbarButtonSelected(sender: UIView) {
+        guard let selectedView = (toolbarItems.filter { item in
+            return item.customView != nil && item.customView! == sender
+        }).first,
+            let selectedItemIndex = toolbarItems.indexOf(selectedView) else {
+                return
+        }
+        toolbarDelegate?.menuView(self, didSelectItemAtIndex: selectedItemIndex)
+    }
+
+    @objc private func toolbarButtonTapped(gesture: UIGestureRecognizer) {
+        guard let view = gesture.view else { return }
+        toolbarButtonSelected(view)
     }
 
 
@@ -221,9 +231,17 @@ class MenuView: UIView {
         guard let toolbarDataSource = toolbarDataSource else { return }
         let numberOfToolbarItems = toolbarDataSource.numberOfToolbarItemsInMenuView(self)
         for index in 0..<numberOfToolbarItems {
-            let toolbarButton = toolbarDataSource.menuView(self, buttonForItemAtIndex: index)
-            toolbarButton.target = self
-            toolbarButton.action = #selector(self.toolbarButtonSelected(_:))
+            let toolbarItemView = toolbarDataSource.menuView(self, buttonForItemAtIndex: index)
+            if let buttonView = toolbarItemView as? UIButton {
+                buttonView.addTarget(self, action: #selector(self.toolbarButtonSelected(_:)), forControlEvents: .TouchUpInside)
+            } else {
+                toolbarItemView.userInteractionEnabled = true
+                toolbarItemView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.toolbarButtonTapped(_:))))
+            }
+            let toolbarButton = UIBarButtonItem(customView: toolbarItemView)
+            toolbarButton.accessibilityLabel = toolbarItemView.accessibilityLabel
+            toolbarButton.isAccessibilityElement = true
+            toolbarButton.accessibilityTraits = UIAccessibilityTraitButton
             toolbarItems.append(toolbarButton)
         }
     }

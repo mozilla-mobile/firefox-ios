@@ -219,16 +219,16 @@ extension MenuViewController: MenuToolbarDataSource {
         return menuToolbarItems.count
     }
 
-    func menuView(menuView: MenuView, buttonForItemAtIndex index: Int) -> UIBarButtonItem {
+    func menuView(menuView: MenuView, buttonForItemAtIndex index: Int) -> UIView {
         // this should never happen - if we don't have any toolbar items then we shouldn't get this far
         guard let menuToolbarItems = menuConfig.menuToolbarItems else {
-            return UIBarButtonItem(title: nil, style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+            return UIView()
         }
         let item = menuToolbarItems[index]
-        let buttonImageView = UIImageView(image: item.iconForState(appState))
-        let toolbarItemView = UIBarButtonItem(customView: buttonImageView)
-        toolbarItemView.accessibilityLabel = item.title
-        return toolbarItemView
+        let buttonImageView = UIImageView(image: item.iconForState(appState)?.imageWithRenderingMode(.AlwaysTemplate))
+        buttonImageView.contentMode = .ScaleAspectFit
+        buttonImageView.accessibilityLabel = item.title
+        return buttonImageView
     }
 }
 
