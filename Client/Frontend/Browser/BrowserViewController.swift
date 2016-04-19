@@ -1608,6 +1608,8 @@ extension BrowserViewController: TabDelegate {
         }
         let spotlightHelper = SpotlightHelper(tab: tab, openURL: openURL)
         tab.addHelper(spotlightHelper, name: SpotlightHelper.name())
+
+        tab.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())
     }
 
     func tab(tab: Tab, willDeleteWebView webView: WKWebView) {

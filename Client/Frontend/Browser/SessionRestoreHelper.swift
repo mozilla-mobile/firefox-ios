@@ -22,6 +22,8 @@ class SessionRestoreHelper: TabHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        guard AboutUtils.getAboutComponent(message.frameInfo.request.URL) == "sessionrestore" else { return }
+
         if let tab = tab, params = message.body as? [String: AnyObject] {
             if params["name"] as! String == "didRestoreSession" {
                 dispatch_async(dispatch_get_main_queue()) {
