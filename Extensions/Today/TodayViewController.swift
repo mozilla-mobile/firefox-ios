@@ -67,7 +67,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         
         button.setTitle(NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", value: "Go to copied link", tableName: "Today", comment: "Go to link on clipboard"), forState: .Normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), forControlEvents: .TouchUpInside)
+
+        // We need to set the background image/color for .Normal, so the whole button is tappable.
+        button.setBackgroundColor(UIColor.clearColor(), forState: .Normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .Highlighted)
+
         button.setImage(UIImage(named: "copy_link_icon"), forState: .Normal)
 
         button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
