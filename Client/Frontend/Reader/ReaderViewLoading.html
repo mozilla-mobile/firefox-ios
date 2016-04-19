@@ -70,7 +70,7 @@
       request.open("GET", "/reader-mode/page-exists" + document.location.search, true);
       request.onload = function() {
         if (request.status == 200) {
-          location.reload(true);
+          webkit.messageHandlers.localRequestHelper.postMessage({ type: "reload" });
         } else {
           triggerCheck();
         }
