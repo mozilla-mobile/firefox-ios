@@ -33,10 +33,7 @@ We use Carthage to manage projects that we depend on. __The build will currently
 brew update
 brew upgrade
 brew install carthage
-brew switch carthage 0.15
 ```
-
-If the `brew switch` does not work because Carthage 0.15 is not available, you will have to `brew uninstall carthage' and install the binary distribution manually from https://github.com/Carthage/Carthage/releases/tag/0.15
 
 You can now execute our `bootstrap.sh` script:
 
