@@ -236,6 +236,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         prompt.addSubview(promptLabel)
 
         let promptYesButton = InsetButton()
+        promptYesButton.accessibilityIdentifier = "SearchViewController.promptYesButton"
         promptYesButton.setTitle(PromptYes, forState: UIControlState.Normal)
         promptYesButton.setTitleColor(SearchViewControllerUX.PromptButtonColor, forState: UIControlState.Normal)
         promptYesButton.titleLabel?.font = SearchViewControllerUX.PromptYesFont
@@ -247,6 +248,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         prompt.addSubview(promptYesButton)
 
         let promptNoButton = InsetButton()
+        promptNoButton.accessibilityIdentifier = "SearchViewController.promptNoButton"
         promptNoButton.setTitle(PromptNo, forState: UIControlState.Normal)
         promptNoButton.setTitleColor(SearchViewControllerUX.PromptButtonColor, forState: UIControlState.Normal)
         promptNoButton.titleLabel?.font = SearchViewControllerUX.PromptNoFont

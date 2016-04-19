@@ -345,6 +345,7 @@ class TabTrayController: UIViewController {
 
         let flowLayout = TabTrayCollectionViewLayout()
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
+        collectionView.accessibilityIdentifier = "TabTrayController.collectionView"
 
         collectionView.dataSource = tabDataSource
         collectionView.delegate = tabLayoutDelegate
