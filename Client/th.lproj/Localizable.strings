@@ -1,0 +1,625 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "ชื่อผู้ใช้และรหัสผ่านกำลังถูกร้องขอโดย %@";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "ชื่อผู้ใช้และรหัสผ่านกำลังถูกร้องขอโดย %1$@ ไซต์ระบุว่า: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "เกี่ยวกับ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "เพิ่มแท็บ";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "เพิ่มไปยังรายการอ่าน";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "เพิ่มหน้าไปยังรายการอ่านแล้ว";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ที่อยู่และการค้นหา";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "อนุญาตแป้นพิมพ์จากบุคคลที่สาม";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ส่งเสมอ";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "ต้องการการยืนยันตัวตน";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "ย้อนกลับ";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ปิดกั้นหน้าต่างป็อปอัป";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "คั่นหน้า";
+
+/* Panel accessibility label */
+"Bookmarks" = "ที่คั่นหน้า";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "ที่คั่นหน้าที่คุณบันทึกไว้จะแสดงที่นี่";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ความสว่าง";
+
+/* Alert Call Button */
+"Call" = "โทร";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "ยกเลิก";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "เปลี่ยนสีชุดตกแต่ง";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "เปลี่ยนชนิดแบบอักษร";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "ล้างข้อมูลส่วนตัว";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ปิด";
+
+/* No comment provided by engineer. */
+"Closing tab" = "กำลังปิดแท็บ";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "คัดลอกที่อยู่";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "คัดลอกภาพ";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "คัดลอกลิงก์";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "ไม่สามารถเพิ่มหน้าไปยังรายการอ่าน บางทีหน้าอาจจะมีอยู่แล้ว?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "ไม่สามารถเพิ่มหน้าไปยังรายการอ่าน";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "ไม่สามารถโหลดหน้า";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "สร้างบัญชี";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "มืด";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "ดีบั๊ก: ไม่จำสถานะการยืนยันตัวตนของ Sync";
+
+/* Debug option */
+"Debug: require password" = "ดีบั๊ก: ต้องการรหัสผ่าน";
+
+/* Debug option */
+"Debug: require upgrade" = "ดีบั๊ก: ต้องการการปรับรุ่น";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "ลดขนาดตัวอักษร";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "เครื่องมือค้นหาปริยาย";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "ปิดใช้งานกล่องโต้ตอบเพิ่มเติมจากหน้านี้";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "ตั้งค่าการแสดงผล";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "คุณต้องการบันทึกรหัสผ่านสำหรับ %1$@ บน %2$@ หรือไม่?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "คุณต้องการบันทึกรหัสผ่านบน %@ หรือไม่?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "คุณต้องการปรับปรุงรหัสผ่านสำหรับ %1$@ บน %2$@ หรือไม่?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "คุณต้องการปรับปรุงรหัสผ่านบน %@ หรือไม่?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "ไม่ส่ง";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "เสร็จสิ้น";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "แตะสองครั้งแล้วค้างเพื่อเปิดประวัติ";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "ป้อนรหัสผ่านของคุณเพื่อเชื่อมต่อ";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "ขั้นสูง";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "คำเตือน: เราไม่สามารถยืนยันได้ว่าการเชื่อมต่อของคุณไปยังเว็บไซต์นี้ปลอดภัย";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "เจ้าของ %@ ได้กำหนดค่าเว็บไซต์ของพวกเขาไม่เหมาะสม เพื่อปกป้องข้อมูลของคุณจากการถูกขโมย Firefox จึงไม่ได้เชื่อมต่อไปยังเว็บไซต์นี้";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "การเชื่อมต่อของคุณไม่เป็นส่วนตัว";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "ย้อนกลับ";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "เยี่ยมชมไซต์ต่อไป";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Firefox จำเป็นต้องเปิดใหม่เพื่อให้การเปลี่ยนแปลงนี้มีผล";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox จะหยุดการผสานกับบัญชีของคุณ แต่จะไม่ลบข้อมูลการท่องเว็บใด ๆ ของคุณบนอุปกรณ์นี้";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox ต้องการเข้าถึงรูปภาพของคุณ";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "เดินหน้า";
+
+/* General settings section title */
+"General" = "ทั่วไป";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "รับแท็บที่เปิดอยู่ ที่คั่นหน้า และรหัสผ่านของคุณจากอุปกรณ์อื่น ๆ ของคุณ";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "ไป";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "ไปยัง URL ที่คัดลอก?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ช่วยเหลือ";
+
+/* Panel accessibility label */
+"History" = "ประวัติ";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "เพิ่มขนาดตัวอักษร";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "เที่ยวชมการเกริ่นนำแบบวนรอบ";
+
+/* History tableview section header */
+"Last month" = "เดือนที่แล้ว";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "ผสานล่าสุด: %@";
+
+/* History tableview section header */
+"Last week" = "สัปดาห์ที่แล้ว";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "สัญญาอนุญาต";
+
+/* Light theme setting in Reading View settings */
+"Light" = "สว่าง";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "โหลดหน้าต้นฉบับ";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "กำลังโหลดเนื้อหา…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "ออกจากระบบ";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "ออกจากระบบ?";
+
+/* Authentication prompt log in button */
+"Log in" = "เข้าสู่ระบบ";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "การเข้าสู่ระบบ";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ไม่บันทึก";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "บันทึกการเข้าสู่ระบบ %1$@ สำหรับ %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "บันทึกรหัสผ่านสำหรับ %@?";
+
+/* Prompt for updating a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "ปรับปรุงการเข้าสู่ระบบสำหรับ %1$@ บน %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "ปรับปรุงรหัสผ่านสำหรับ %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "บันทึกการเข้าสู่ระบบ";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "ปรับปรุง";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ดูเหมือนว่า Firefox จะเกิดข้อขัดข้องก่อนหน้านี้ คุณต้องการเรียกคืนแท็บของคุณหรือไม่?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "ทำเครื่องหมายเป็นอ่านแล้ว";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "ทำเครื่องหมายเป็นยังไม่ได้อ่าน";
+
+/* Error for a missing remote error number */
+"Missing error" = "ข้อผิดพลาดขาดหาย";
+
+/* Error for a missing remote error message */
+"Missing message" = "ข้อความขาดหาย";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "แถบเครื่องมือนำทาง";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "แท็บใหม่: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "มีรุ่นใหม่ที่ใช้งานได้";
+
+/* Restore Tabs Negative Action */
+"No" = "ไม่";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ไม่มีแท็บ";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "ไม่ใช่ตอนนี้";
+
+/* Button to not save the user's password */
+"Not now" = "ไม่ใช่ตอนนี้";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "ตกลง";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ตกลง";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "อุปส์! Firefox เกิดข้อขัดข้อง";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "เปิดในแท็บใหม่";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "เปิดการตั้งค่า";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "เปิดบทความในมุมมองผู้อ่านโดยแตะที่ไอคอนหนังสือเมื่อปรากฏบนแถบหัวข้อ";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "เปิดใน…";
+
+/* Opening an external URL */
+"Opening %@" = "กำลังเปิด %@";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "หน้าที่คุณเยี่ยมชมเมื่อเร็ว ๆ นี้จะแสดงที่นี่";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "ตัวเลือกแผง";
+
+/* Password textbox in Authentication prompt */
+"Password" = "รหัสผ่าน";
+
+/* Paste the URL into the location bar */
+"Paste" = "วาง";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "วางแล้วไป";
+
+/* Privacy section title */
+"Privacy" = "ความเป็นส่วนตัว";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "นโยบายความเป็นส่วนตัว";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "เครื่องมือค้นหาด่วน";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "มุมมองผู้อ่าน";
+
+/* Panel accessibility label */
+"Reading list" = "รายการอ่าน";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "โหลดใหม่";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "เอาออก";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "เอาออกจากรายการอ่าน";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "เอาหน้าออก";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "ขอไซต์สำหรับเดสก์ท็อป";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "ขอไซต์สำหรับมือถือ";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "ไม่มีเชิง";
+
+/* Context menu item for saving an image */
+"Save Image" = "บันทึกภาพ";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "บันทึกการเข้าสู่ระบบ";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "บันทึกหน้าไปยังรายการอ่านของคุณโดยการแตะไอคอนหนังสือที่มีเครื่องหมายบวกในตัวควบคุมมุมมองผู้อ่าน";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "ค้นหา";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ค้นหาหรือป้อนที่อยู่";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "ค้นหาสำหรับคำแนะนำ";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "การเชื่อมต่อปลอดภัย";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "ส่งรายงานข้อขัดข้อง";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "ส่งข้อคิดเห็น";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "ส่งรายงาน";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "ส่งรายงานข้อขัดข้องเพื่อให้ Mozilla สามารถแก้ไขปัญหา?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "ยกเลิก";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "ซีเปีย";
+
+/* Font type setting in the reading view settings */
+"Serif" = "มีเชิง";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "การตั้งค่า";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "ล้างข้อมูลส่วนตัว";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "ล้างข้อมูลส่วนตัว";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "ล้างข้อมูลส่วนตัว";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "แบ่งปัน";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "แบ่งปันลิงก์";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "ยกเลิก";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "แสดงคำแนะนำการค้นหา";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "แสดงแท็บ";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "แสดงการเที่ยวชม";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "แสดงคำแนะนำการค้นหา";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "เข้าสู่ระบบ Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "เข้าสู่ระบบ";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "เข้าสู่ระบบเพื่อรับแท็บ ที่คั่นหน้า และรหัสผ่านของคุณจากอุปกรณ์อื่น ๆ ของคุณ";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "หยุด";
+
+/* Support section title */
+"Support" = "การสนับสนุน";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ปัดไปทางขวาหรือซ้ายด้วยสามนิ้วเพื่อปิดแท็บ";
+
+/* Sync Firefox Account */
+"Sync Now" = "ผสานตอนนี้";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "ผสานแท็บ ที่คั่นหน้า รหัสผ่าน และอื่น ๆ ของคุณ";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "ผสานแท็บ รหัสผ่าน และอื่น ๆ ของคุณ";
+
+/* Panel accessibility label */
+"Synced tabs" = "แท็บที่ผสาน";
+
+/* Syncing Firefox Account */
+"Syncing…" = "กำลังผสาน…";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "แท็บ %1$@ จาก %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "แท็บ %1$@ ถึง %2$@ จาก %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ถาดแท็บ";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "หน้านี้ไม่สามารถแสดงผลในมุมมองผู้อ่าน";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "มี Firefox Aurora รุ่นใหม่ที่ใช้งานได้ แตะ ตกลง เพื่อไปที่หน้าดาวน์โหลด";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "เกิดปัญหาในการเข้าถึงแท็บจากอุปกรณ์อื่น ๆ ของคุณ ลองอีกครั้งในอีกสักครู่";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "เกิดข้อผิดพลาดในการแปลงหน้า";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "สิ่งนี้อนุญาตให้คุณสามารถบันทึกภาพไปยังม้วนฟิล์มของคุณ";
+
+/* Opening an external app */
+"This will open in another application" = "สิ่งนี้จะเปิดในแอปพลิเคชันอื่น";
+
+/* History tableview section header */
+"Today" = "วันนี้";
+
+/* Panel accessibility label */
+"Top sites" = "ไซต์เด่น";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "ยินดีต้อนรับสู่ไซต์เด่น";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "ปรับปรุง";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "ปรับรุ่น Firefox เพื่อเชื่อมต่อ";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "ใช้แท็บขนาดกะทัดรัด";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ชื่อผู้ใช้";
+
+/* Text message in the settings table view */
+"Verify your email address." = "ยืนยันที่อยู่อีเมลของคุณ";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "รุ่น %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "ดู";
+
+/* Accessibility label for the main web content view */
+"Web content" = "เนื้อหาเว็บ";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "ยินดีต้อนรับสู่ Sync";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "ยินดีต้อนรับสู่รายการอ่านของคุณ";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "เราเสียใจอย่างสุดซึ้ง";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "ใช่";
+
+/* History tableview section header */
+"Yesterday" = "เมื่อวานนี้";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "คุณไม่มีอุปกรณ์ใด ๆ ที่เชื่อมต่อกับบัญชี Firefox นี้ที่สามารถใช้งานการผสานได้";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "คุณไม่มีแท็บใด ๆ ที่เปิดอยู่ใน Firefox บนอุปกรณ์อื่น ๆ ของคุณ";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "สิทธิของคุณ";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "คอมพิวเตอร์";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "เมื่อกี้นี้";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "อุปกรณ์มือถือ";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "มากกว่าหนึ่งเดือนที่แล้ว";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "มากกว่าหนึ่งสัปดาห์ที่แล้ว";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "อ่านแล้ว";
+
+/* Relative date for date in past week. */
+"this week" = "สัปดาห์นี้";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "วันนี้เมื่อ %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ยังไม่ได้อ่าน";
+
+/* Relative date for yesterday. */
+"yesterday" = "เมื่อวานนี้";
+

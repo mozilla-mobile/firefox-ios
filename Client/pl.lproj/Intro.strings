@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Dzięki kartom przeglądaj wiele stron jednocześnie";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "Wybór";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Łącz się z Firefoksem, gdziekolwiek jesteś";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "Dostosowywanie";
+
+/* See http://mzl.la/1if9ODp */
+"Easily switch between open pages with tabs." = "Dzięki kartom łatwo przełączaj się między otwartymi stronami";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox w chmurach";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Wprowadzenie, strona %1$@ z %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "Organizacja";
+
+/* See http://mzl.la/1if9ODp */
+"Personalize your Firefox just the way you like in Settings." = "Dostosuj Firefoksa do własnych upodobań poprzez ustawienia";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your default search engine and more in Settings." = "Dostosuj domyślną wyszukiwarkę i inne rzeczy poprzez ustawienia";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "Udostępnianie";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Zaloguj się do Firefoksa";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Rozpocznij przeglądanie";
+
+/* See http://mzl.la/1if9ODp */
+"Sync your Devices." = "Synchronizacja";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Stuknij i przytrzymaj ikonę Firefoksa, aby przenieść ją na dolny pasek dla łatwego dostępu";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "Przycisk ustawień znajduje się w lewym górnym rogu widoku otwartych kart.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Przycisk wyświetlający liczbę otwartych kart i umożliwiający ich przełączanie znajduje się zaraz za paskiem adresu i wyszukiwania.";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "Użyj menu udostępniania, aby otwierać odnośniki z innych aplikacji w Firefoksie";
+
