@@ -610,6 +610,13 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.accessibilityLabel = cell.textLabel.text
         cell.removeButton.hidden = !editing
 
+        let removeButtonAccessibilityLabel =
+            String(format:
+                NSLocalizedString("TopSites.RemovePage.Button",
+                    value: "Remove page - %@",
+                    comment: "Button shown in editing mode to remove this site from the top sites panel."), domainURL)
+        cell.removeButton.accessibilityLabel = removeButtonAccessibilityLabel
+
         guard let icon = site.icon else {
             setDefaultThumbnailBackgroundForCell(cell)
             downloadFaviconsAndUpdateForSite(site)
@@ -634,11 +641,21 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func configureCell(cell: ThumbnailCell, forSuggestedSite site: SuggestedSite) {
-        cell.textLabel.text = site.title.isEmpty ? NSURL(string: site.url)?.normalizedHostAndPath() : site.title
+        let title = site.title.isEmpty ? NSURL(string: site.url)?.normalizedHostAndPath() : site.title
+        cell.textLabel.text = title
         cell.imageWrapper.backgroundColor = site.backgroundColor
         cell.imageView.contentMode = .ScaleAspectFit
         cell.imageView.layer.minificationFilter = kCAFilterTrilinear
         cell.accessibilityLabel = cell.textLabel.text
+
+        if let title = title {
+            let removeButtonAccessibilityLabel =
+                String(format:
+                    NSLocalizedString("TopSites.RemovePage.Button",
+                        value: "Remove page - %@",
+                        comment: "Button shown in editing mode to remove this site from the top sites panel."), title)
+            cell.removeButton.accessibilityLabel = removeButtonAccessibilityLabel
+        }
 
         guard let icon = site.wordmark.url.asURL,
             let host = icon.host else {
