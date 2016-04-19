@@ -27,7 +27,9 @@
           restoreIndex = urlList.length - 1;
       }
 
-      window.location = urlList[restoreIndex];
+      // Forward the URL to the local request helper so we can restore any local pages
+      // that were in the session.
+      webkit.messageHandlers.localRequestHelper.postMessage({ type: "load", url: urlList[restoreIndex] });
 
       // Fire the restore event so that future URL changes are reflected in the UI.
       webkit.messageHandlers.sessionRestoreHelper.postMessage({ name: "didRestoreSession" });

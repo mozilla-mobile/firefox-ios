@@ -1456,6 +1456,8 @@ extension BrowserViewController: BrowserDelegate {
         }
         let spotlightHelper = SpotlightHelper(browser: browser, openURL: openURL)
         browser.addHelper(spotlightHelper, name: SpotlightHelper.name())
+
+        browser.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {

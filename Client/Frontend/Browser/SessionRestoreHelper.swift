@@ -22,6 +22,8 @@ class SessionRestoreHelper: BrowserHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        guard AboutUtils.getAboutComponent(message.frameInfo.request.URL) == "sessionrestore" else { return }
+
         if let browser = browser, params = message.body as? [String: AnyObject] {
             if params["name"] as! String == "didRestoreSession" {
                 dispatch_async(dispatch_get_main_queue()) {
