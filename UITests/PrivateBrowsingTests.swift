@@ -37,9 +37,8 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Cancel")
 
         // Then try doing the same thing for a private tab
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Private Tab")
         tester().tapViewWithAccessibilityIdentifier("url")
 
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
@@ -65,15 +64,16 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Add two tabs and make sure we see the right tab count
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Tab")
+        tester().waitForAnimationsToFinish()
         var tabButton = tester().waitForViewWithAccessibilityLabel("Show Tabs") as! UIControl
         XCTAssertEqual(tabButton.accessibilityValue, "2", "Tab count shows 2 tabs")
 
         // Add a private tab and make sure we only see the private tab in the count, and not the normal tabs
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Private Tab")
+        tester().waitForAnimationsToFinish()
 
         tabButton = tester().waitForViewWithAccessibilityLabel("Show Tabs") as! UIControl
         XCTAssertEqual(tabButton.accessibilityValue, "1", "Private tab count should show 1 tab opened")
@@ -95,7 +95,8 @@ class PrivateBrowsingTests: KIFTestCase {
         XCTAssertTrue(emptyView.superview!.alpha == 1)
 
         // Do we hide it when we add a tab?
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Private Tab")
         tester().waitForViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Show Tabs")
 
@@ -120,6 +121,7 @@ class PrivateBrowsingTests: KIFTestCase {
     func testClosePrivateTabsClosesPrivateTabs() {
         // First, make sure that selecting the option to ON will close the tabs
         tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().setOn(true, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
         tester().tapViewWithAccessibilityLabel("Done")
@@ -127,7 +129,8 @@ class PrivateBrowsingTests: KIFTestCase {
 
         XCTAssertEqual(numberOfTabs(), 0)
 
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Private Tab")
         tester().waitForViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Show Tabs")
 
@@ -142,6 +145,7 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Private Mode")
 
         // Second, make sure selecting the option to OFF will not close the tabs
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().setOn(false, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
         tester().tapViewWithAccessibilityLabel("Done")
@@ -149,7 +153,8 @@ class PrivateBrowsingTests: KIFTestCase {
 
         XCTAssertEqual(numberOfTabs(), 0)
 
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Private Tab")
         tester().waitForViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Show Tabs")
 

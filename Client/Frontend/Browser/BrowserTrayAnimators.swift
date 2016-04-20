@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 
 class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
@@ -51,7 +52,7 @@ private extension TrayToBrowserAnimator {
 
         // Create a fake cell to use for the upscaling animation
         let startingFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView, atIndex: expandFromIndex)
-        let cell = createTransitionCellFromBrowser(bvc.tabManager.selectedTab, withFrame: startingFrame)
+        let cell = createTransitionCellFromTab(bvc.tabManager.selectedTab, withFrame: startingFrame)
         cell.backgroundHolder.layer.cornerRadius = 0
 
         container.insertSubview(bvc.view, aboveSubview: tabCollectionViewSnapshot)
@@ -86,9 +87,15 @@ private extension TrayToBrowserAnimator {
             tabCollectionViewSnapshot.alpha = 0
 
             // Push out the navigation bar buttons
-            let buttonOffset = tabTray.addTabButton.frame.width + TabTrayControllerUX.ToolbarButtonOffset
-            tabTray.addTabButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
-            tabTray.settingsButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -buttonOffset , 0)
+            let buttonOffset: CGFloat
+            if AppConstants.MOZ_MENU {
+                buttonOffset = tabTray.menuButton!.frame.width + TabTrayControllerUX.ToolbarButtonOffset
+                tabTray.menuButton!.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
+            } else {
+                buttonOffset = tabTray.addTabButton!.frame.width + TabTrayControllerUX.ToolbarButtonOffset
+                tabTray.addTabButton!.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
+                tabTray.settingsButton?.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -buttonOffset , 0)
+            }
             if #available(iOS 9, *) {
                 tabTray.togglePrivateMode.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
             }
@@ -140,7 +147,7 @@ private extension BrowserToTrayAnimator {
 
         // Build a tab cell that we will use to animate the scaling of the browser to the tab
         let expandedFrame = calculateExpandedCellFrameFromBVC(bvc)
-        let cell = createTransitionCellFromBrowser(bvc.tabManager.selectedTab, withFrame: expandedFrame)
+        let cell = createTransitionCellFromTab(bvc.tabManager.selectedTab, withFrame: expandedFrame)
         cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         cell.innerStroke.hidden = true
 
@@ -300,23 +307,23 @@ private func transformToolbarsToFrame(toolbars: [UIView?], toRect endRect: CGRec
     }
 }
 
-private func createTransitionCellFromBrowser(browser: Browser?, withFrame frame: CGRect) -> TabCell {
+private func createTransitionCellFromTab(tab: Tab?, withFrame frame: CGRect) -> TabCell {
     let cell = TabCell(frame: frame)
-    cell.background.image = browser?.screenshot
-    cell.titleText.text = browser?.displayTitle
+    cell.background.image = tab?.screenshot
+    cell.titleText.text = tab?.displayTitle
 
-    if let browser = browser where browser.isPrivate {
+    if let tab = tab where tab.isPrivate {
         cell.style = .Dark
     }
 
-    if let favIcon = browser?.displayFavicon {
+    if let favIcon = tab?.displayFavicon {
         cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
     } else {
         var defaultFavicon = UIImage(named: "defaultFavicon")
-        if browser?.isPrivate ?? false {
+        if tab?.isPrivate ?? false {
             defaultFavicon = defaultFavicon?.imageWithRenderingMode(.AlwaysTemplate)
             cell.favicon.image = defaultFavicon
-            cell.favicon.tintColor = (browser?.isPrivate ?? false) ? UIColor.whiteColor() : UIColor.darkGrayColor()
+            cell.favicon.tintColor = (tab?.isPrivate ?? false) ? UIColor.whiteColor() : UIColor.darkGrayColor()
         } else {
             cell.favicon.image = defaultFavicon
         }

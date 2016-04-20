@@ -30,15 +30,14 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     private func openClearPrivateDataDialog() {
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Clear Private Data")
     }
 
-    private func closeClearPrivateDataDialog(lastTabLabel lastTabLabel: String) {
+    private func closeClearPrivateDataDialog() {
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel(lastTabLabel)
     }
 
     private func acceptClearPrivateData() {
@@ -54,9 +53,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     private func clearPrivateData(clearables: Set<Clearable>) {
-        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
-        let lastTabLabel = webView.title!.isEmpty ? "home" : webView.title!
-
         openClearPrivateDataDialog()
 
         // Disable all items that we don't want to clear.
@@ -71,7 +67,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
         acceptClearPrivateData()
 
-        closeClearPrivateDataDialog(lastTabLabel: lastTabLabel)
+        closeClearPrivateDataDialog()
     }
 
     func visitSites(noOfSites noOfSites: Int) -> [(title: String, domain: String, url: String)] {
@@ -113,7 +109,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         }
 
 
-        closeClearPrivateDataDialog(lastTabLabel: "home")
+        closeClearPrivateDataDialog()
     }
 
     func testClearsTopSitesPanel() {

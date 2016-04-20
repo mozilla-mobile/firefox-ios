@@ -464,7 +464,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func addBookmark(notification: UILocalNotification) {
         if let alertURL = notification.userInfo?[TabSendURLKey] as? String,
             let title = notification.userInfo?[TabSendTitleKey] as? String {
-                browserViewController.addBookmark(alertURL, title: title)
+            let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: alertURL), title: title, favicon: nil)
+                browserViewController.addBookmark(tabState)
 
                 if #available(iOS 9, *) {
                     let userData = [QuickActions.TabURLKey: alertURL,
@@ -508,9 +509,9 @@ extension AppDelegate: UINavigationControllerDelegate {
 }
 
 extension AppDelegate: TabManagerStateDelegate {
-    func tabManagerWillStoreTabs(tabs: [Browser]) {
+    func tabManagerWillStoreTabs(tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.flatMap( Browser.toTab )
+        let storedTabs: [RemoteTab] = tabs.flatMap( Tab.toTab )
 
         // Don't insert into the DB immediately. We tend to contend with more important
         // work like querying for top sites.

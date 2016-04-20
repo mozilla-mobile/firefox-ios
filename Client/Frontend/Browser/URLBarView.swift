@@ -91,8 +91,8 @@ class URLBarView: UIView {
     }
 
     weak var delegate: URLBarDelegate?
-    weak var browserToolbarDelegate: BrowserToolbarDelegate?
-    var helper: BrowserToolbarHelper?
+    weak var tabToolbarDelegate: TabToolbarDelegate?
+    var helper: TabToolbarHelper?
     var isTransitioning: Bool = false {
         didSet {
             if isTransitioning {
@@ -115,8 +115,8 @@ class URLBarView: UIView {
     /// a panel, the first responder will be resigned, yet the overlay mode UI is still active.
     var inOverlayMode = false
 
-    lazy var locationView: BrowserLocationView = {
-        let locationView = BrowserLocationView()
+    lazy var locationView: TabLocationView = {
+        let locationView = TabLocationView()
         locationView.translatesAutoresizingMaskIntoConstraints = false
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
@@ -142,7 +142,7 @@ class URLBarView: UIView {
         tabsButton.titleLabel.text = "0"
         tabsButton.addTarget(self, action: #selector(URLBarView.SELdidClickAddTab), forControlEvents: UIControlEvents.TouchUpInside)
         tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
-        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the browser toolbar")
+        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
         return tabsButton
     }()
 
@@ -178,6 +178,8 @@ class URLBarView: UIView {
 
     lazy var shareButton: UIButton = { return UIButton() }()
 
+    lazy var menuButton: UIButton = { return UIButton() }()
+
     lazy var bookmarkButton: UIButton = { return UIButton() }()
 
     lazy var forwardButton: UIButton = { return UIButton() }()
@@ -187,7 +189,7 @@ class URLBarView: UIView {
     lazy var stopReloadButton: UIButton = { return UIButton() }()
 
     lazy var actionButtons: [UIButton] = {
-        return [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
+        return AppConstants.MOZ_MENU ? [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton] : [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
     }()
 
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
@@ -226,7 +228,11 @@ class URLBarView: UIView {
         addSubview(cancelButton)
 
         addSubview(shareButton)
-        addSubview(bookmarkButton)
+        if AppConstants.MOZ_MENU {
+            addSubview(menuButton)
+        } else {
+            addSubview(bookmarkButton)
+        }
         addSubview(forwardButton)
         addSubview(backButton)
         addSubview(stopReloadButton)
@@ -234,7 +240,7 @@ class URLBarView: UIView {
         locationContainer.addSubview(locationView)
         addSubview(locationContainer)
 
-        helper = BrowserToolbarHelper(toolbar: self)
+        helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
 
         // Make sure we hide any views that shouldn't be showing in non-overlay mode.
@@ -290,16 +296,30 @@ class URLBarView: UIView {
             make.size.equalTo(backButton)
         }
 
-        shareButton.snp_makeConstraints { make in
-            make.right.equalTo(self.bookmarkButton.snp_left)
-            make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
-        }
+        if AppConstants.MOZ_MENU {
+            shareButton.snp_makeConstraints { make in
+                make.right.equalTo(self.menuButton.snp_left)
+                make.centerY.equalTo(self)
+                make.size.equalTo(backButton)
+            }
 
-        bookmarkButton.snp_makeConstraints { make in
-            make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
-            make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
+            menuButton.snp_makeConstraints { make in
+                make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
+                make.centerY.equalTo(self)
+                make.size.equalTo(backButton)
+            }
+        } else {
+            shareButton.snp_makeConstraints { make in
+                make.right.equalTo(self.bookmarkButton.snp_left)
+                make.centerY.equalTo(self)
+                make.size.equalTo(backButton)
+            }
+
+            bookmarkButton.snp_makeConstraints { make in
+                make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
+                make.centerY.equalTo(self)
+                make.size.equalTo(backButton)
+            }
         }
     }
 
@@ -439,7 +459,7 @@ class URLBarView: UIView {
 
                 self.tabsButton.insideButton.layer.opacity = 1
                 self.tabsButton.insideButton.layer.transform = CATransform3DIdentity
-                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
+                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
 
                 if finished {
                     self.tabsButton.titleLabel.text = count.description
@@ -524,7 +544,11 @@ class URLBarView: UIView {
         self.cancelButton.hidden = false
         self.progressBar.hidden = false
         self.shareButton.hidden = !self.toolbarIsShowing
-        self.bookmarkButton.hidden = !self.toolbarIsShowing
+        if AppConstants.MOZ_MENU {
+            self.menuButton.hidden = !self.toolbarIsShowing
+        } else {
+            self.bookmarkButton.hidden = !self.toolbarIsShowing
+        }
         self.forwardButton.hidden = !self.toolbarIsShowing
         self.backButton.hidden = !self.toolbarIsShowing
         self.stopReloadButton.hidden = !self.toolbarIsShowing
@@ -534,7 +558,11 @@ class URLBarView: UIView {
         self.cancelButton.alpha = inOverlayMode ? 1 : 0
         self.progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         self.shareButton.alpha = inOverlayMode ? 0 : 1
-        self.bookmarkButton.alpha = inOverlayMode ? 0 : 1
+        if AppConstants.MOZ_MENU {
+            self.menuButton.alpha = inOverlayMode ? 0 : 1
+        } else {
+            self.bookmarkButton.alpha = inOverlayMode ? 0 : 1
+        }
         self.forwardButton.alpha = inOverlayMode ? 0 : 1
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
@@ -571,7 +599,11 @@ class URLBarView: UIView {
         self.cancelButton.hidden = !inOverlayMode
         self.progressBar.hidden = inOverlayMode
         self.shareButton.hidden = !self.toolbarIsShowing || inOverlayMode
-        self.bookmarkButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        if AppConstants.MOZ_MENU {
+            self.menuButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        } else {
+            self.bookmarkButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        }
         self.forwardButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.backButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.stopReloadButton.hidden = !self.toolbarIsShowing || inOverlayMode
@@ -609,7 +641,7 @@ class URLBarView: UIView {
     }
 }
 
-extension URLBarView: BrowserToolbarProtocol {
+extension URLBarView: TabToolbarProtocol {
     func updateBackStatus(canGoBack: Bool) {
         backButton.enabled = canGoBack
     }
@@ -634,7 +666,9 @@ extension URLBarView: BrowserToolbarProtocol {
     }
 
     func updatePageStatus(isWebPage isWebPage: Bool) {
-        bookmarkButton.enabled = isWebPage
+        if !AppConstants.MOZ_MENU {
+            bookmarkButton.enabled = isWebPage
+        }
         stopReloadButton.enabled = isWebPage
         shareButton.enabled = isWebPage
     }
@@ -646,7 +680,7 @@ extension URLBarView: BrowserToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-                    return [backButton, forwardButton, stopReloadButton, locationView, shareButton, bookmarkButton, tabsButton, progressBar]
+                    return AppConstants.MOZ_MENU ? [backButton, forwardButton, stopReloadButton, locationView, shareButton, menuButton, tabsButton, progressBar] : [backButton, forwardButton, stopReloadButton, locationView, shareButton, bookmarkButton, tabsButton, progressBar]
                 } else {
                     return [locationView, tabsButton, progressBar]
                 }
@@ -658,33 +692,33 @@ extension URLBarView: BrowserToolbarProtocol {
     }
 }
 
-extension URLBarView: BrowserLocationViewDelegate {
-    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView) -> Bool {
+extension URLBarView: TabLocationViewDelegate {
+    func tabLocationViewDidLongPressReaderMode(tabLocationView: TabLocationView) -> Bool {
         return delegate?.urlBarDidLongPressReaderMode(self) ?? false
     }
 
-    func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
+    func tabLocationViewDidTapLocation(tabLocationView: TabLocationView) {
         let locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
         enterOverlayMode(locationText, pasted: false)
     }
 
-    func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView) {
+    func tabLocationViewDidLongPressLocation(tabLocationView: TabLocationView) {
         delegate?.urlBarDidLongPressLocation(self)
     }
 
-    func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
+    func tabLocationViewDidTapReload(tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReload(self)
     }
     
-    func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView) {
+    func tabLocationViewDidTapStop(tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressStop(self)
     }
 
-    func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView) {
+    func tabLocationViewDidTapReaderMode(tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
     }
 
-    func browserLocationViewLocationAccessibilityActions(browserLocationView: BrowserLocationView) -> [UIAccessibilityCustomAction]? {
+    func tabLocationViewLocationAccessibilityActions(tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {
         return delegate?.urlBarLocationAccessibilityActions(self)
     }
 }

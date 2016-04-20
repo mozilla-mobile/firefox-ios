@@ -6,18 +6,18 @@ import Foundation
 import Shared
 import WebKit
 
-class PrintHelper: BrowserHelper {
-    private weak var browser: Browser?
+class PrintHelper: TabHelper {
+    private weak var tab: Tab?
 
     class func name() -> String {
         return "PrintHelper"
     }
 
-    required init(browser: Browser) {
-        self.browser = browser
+    required init(tab: Tab) {
+        self.tab = tab
         if let path = NSBundle.mainBundle().pathForResource("PrintHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
             let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
-            browser.webView!.configuration.userContentController.addUserScript(userScript)
+            tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
 
@@ -26,7 +26,7 @@ class PrintHelper: BrowserHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let browser = browser, webView = browser.webView {
+        if let tab = tab, webView = tab.webView {
             let printController = UIPrintInteractionController.sharedPrintController()
             printController.printFormatter = webView.viewPrintFormatter()
             printController.presentAnimated(true, completionHandler: nil)
