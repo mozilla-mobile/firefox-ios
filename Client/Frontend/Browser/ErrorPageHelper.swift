@@ -160,7 +160,7 @@ class ErrorPageHelper {
             ]
 
             let tryAgain = NSLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
-            var actions = "<button onclick='window.location.reload()'>\(tryAgain)</button>"
+            var actions = "<button onclick='webkit.messageHandlers.localRequestHelper.postMessage({ type: \"reload\" })'>\(tryAgain)</button>"
 
             if errDomain == kCFErrorDomainCFNetwork as String {
                 if let code = CFNetworkErrors(rawValue: Int32(errCode)) {
@@ -251,7 +251,7 @@ class ErrorPageHelper {
         }
 
         components.queryItems = queryItems
-        webView.loadRequest(NSURLRequest(URL: components.URL!))
+        webView.loadRequest(PrivilegedRequest(URL: components.URL!))
     }
 
     class func isErrorPageURL(url: NSURL) -> Bool {

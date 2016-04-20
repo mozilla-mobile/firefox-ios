@@ -369,6 +369,10 @@ class SimplePageServer {
             return GCDWebServerDataResponse(HTML: self.getPageData("loginForm"))
         }
 
+        webServer.addHandlerForMethod("GET", path: "/localhostLoad.html", requestClass: GCDWebServerRequest.self) { _ in
+            return GCDWebServerDataResponse(HTML: self.getPageData("localhostLoad"))
+        }
+
         webServer.addHandlerForMethod("GET", path: "/auth.html", requestClass: GCDWebServerRequest.self) { (request: GCDWebServerRequest!) in
             // "user:pass", Base64-encoded.
             let expectedAuth = "Basic dXNlcjpwYXNz"
