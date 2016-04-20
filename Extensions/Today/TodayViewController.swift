@@ -23,6 +23,7 @@ struct TodayUX {
 
     static let verticalWidgetMargin: CGFloat = 10
     static let horizontalWidgetMargin: CGFloat = 10
+    static let copyLinkImageHorizontalPadding: CGFloat = 22
 
     static let buttonContainerMultipleOfScreen = 0.6
     static let copiedLinkHeightOfButtonMultple = 0.5
@@ -70,10 +71,9 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.setTitle(NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", value: "Go to copied link", tableName: "Today", comment: "Go to link on clipboard"), forState: .Normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), forControlEvents: .TouchUpInside)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .Highlighted)
-
-        button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
         button.setImage(UIImage(named: "copy_link_icon"), forState: .Normal)
 
+        button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFontOfSize(TodayUX.linkTextSize)
 
         return button
@@ -125,7 +125,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         buttonContainer.snp_makeConstraints { make in
             make.width.equalTo(view.snp_width).multipliedBy(TodayUX.buttonContainerMultipleOfScreen)
             make.centerX.equalTo(view.snp_centerX)
-            make.top.equalTo(view.snp_top).offset(10)
+            make.top.equalTo(view.snp_top).offset(TodayUX.verticalWidgetMargin)
             make.height.equalTo(TodayUX.buttonContainerHeight).priorityLow()
         }
 
@@ -283,7 +283,8 @@ class ImageButtonWithLabel: UIView {
 
         label.snp_makeConstraints { make in
             make.centerX.equalTo(button.snp_centerX)
-            make.centerY.equalTo(button.snp_centerY).offset(39)
+            make.top.equalTo(button.snp_bottom).offset(TodayUX.verticalWidgetMargin / 2)
+            make.height.lessThanOrEqualTo(button.snp_height)
         }
     }
 
@@ -327,11 +328,11 @@ class ButtonWithSublabel: UIButton {
 
         imageView.snp_remakeConstraints { make in
             make.centerY.equalTo(titleLabel.snp_centerY)
-            make.left.equalTo(self.snp_left).offset(22)
+            make.left.equalTo(self.snp_left).offset(TodayUX.copyLinkImageHorizontalPadding)
         }
 
         titleLabel.snp_remakeConstraints { make in
-            make.top.equalTo(self.snp_top).offset(10)
+            make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin)
             make.left.equalTo(imageView.snp_right).offset(TodayUX.horizontalWidgetMargin).priorityLow()
         }
 
@@ -340,7 +341,7 @@ class ButtonWithSublabel: UIButton {
             make.left.equalTo(titleLabel.snp_left)
             make.top.equalTo(titleLabel.snp_bottom)
             make.leading.equalTo(imageView.snp_trailing).offset(TodayUX.horizontalWidgetMargin)
-            make.right.equalTo(self.snp_right).offset(-TodayUX.horizontalWidgetMargin)
+            make.right.lessThanOrEqualTo(self.snp_right).offset(-TodayUX.horizontalWidgetMargin)
         }
     }
 
