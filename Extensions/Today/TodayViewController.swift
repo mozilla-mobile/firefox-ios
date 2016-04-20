@@ -166,13 +166,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         return UIEdgeInsetsMake(0, 0, TodayUX.verticalWidgetMargin, 0)
     }
 
-    private func alignButton(leftButton: ImageButtonWithLabel, rightButton: ImageButtonWithLabel) {
-        rightButton.label.snp_makeConstraints { make in
-            make.centerY.equalTo(leftButton.label.snp_centerY)
-            make.left.equalTo(leftButton.label.snp_right).offset(44).priorityLow()
-        }
-    }
-
     func widgetPerformUpdateWithCompletionHandler(completionHandler: ((NCUpdateResult) -> Void)) {
         // Perform any setup necessary in order to update the view.
         dispatch_async(dispatch_get_main_queue()) {
@@ -182,16 +175,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             completionHandler(NCUpdateResult.NewData)
         }
         completionHandler(NCUpdateResult.NewData)
-    }
-
-    // MARK: Button and label creation
-
-    private func createButtonLabel(text: String, color: UIColor = UIColor.whiteColor()) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.textColor = color
-        label.font = UIFont.systemFontOfSize(14.0)
-        return label
     }
 
     // MARK: Button behaviour
