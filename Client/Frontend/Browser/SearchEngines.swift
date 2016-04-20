@@ -216,6 +216,10 @@ class SearchEngines {
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
         for engineName in engineNames {
+            // Ignore hidden engines in list.txt
+            if (engineName.endsWith(":hidden")) {
+                continue;
+            }
             // Search the current localized search plugins directory for the search engine.
             // If it doesn't exist, fall back to English.
             var fullPath = (searchDirectory as NSString).stringByAppendingPathComponent("\(engineName).xml")
