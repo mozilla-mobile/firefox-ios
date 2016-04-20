@@ -999,6 +999,8 @@ class BrowserViewController: UIViewController {
         if currentViewController != self,
             let _ = forTab {
             self.navigationController?.popViewControllerAnimated(true)
+        } else if urlBar.inOverlayMode {
+            urlBar.SELdidClickCancel()
         }
     }
 
