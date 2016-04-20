@@ -16,7 +16,8 @@ class LocalRequestHelper: BrowserHelper {
         let params = message.body as! [String: String]
 
         if params["type"] == "load",
-           let url = NSURL(string: params["url"]!) {
+           let urlString = params["url"],
+           let url = NSURL(string: urlString) {
             message.webView?.loadRequest(PrivilegedRequest(URL: url))
         } else if params["type"] == "reload" {
             message.webView?.reload()
