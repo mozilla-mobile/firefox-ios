@@ -34,13 +34,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     private lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .TouchUpInside)
+        imageButton.labelText = NSLocalizedString("TodayWidget.NewTabButtonLabel", value: "New Tab", tableName: "Today", comment: "New Tab button label")
 
         let button = imageButton.button
         button.setImage(UIImage(named: "new_tab_button_normal"), forState: .Normal)
         button.setImage(UIImage(named: "new_tab_button_highlight"), forState: .Highlighted)
 
         let label = imageButton.label
-        label.text = NSLocalizedString("TodayWidget.NewTabButtonLabel", value: "New Tab", tableName: "Today", comment: "New Tab button label")
         label.textColor = UIColor.whiteColor()
         label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
 
@@ -51,13 +51,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     private lazy var newPrivateTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .TouchUpInside)
+        imageButton.labelText = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", value: "New Private Tab", tableName: "Today", comment: "New Private Tab button label")
 
         let button = imageButton.button
         button.setImage(UIImage(named: "new_private_tab_button_normal"), forState: .Normal)
         button.setImage(UIImage(named: "new_private_tab_button_highlight"), forState: .Highlighted)
 
         let label = imageButton.label
-        label.text = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", value: "New Private Tab", tableName: "Today", comment: "New Private Tab button label")
         label.textColor = TodayUX.privateBrowsingColor
         label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
 
@@ -113,6 +113,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             make.right.equalTo(buttonContainer.snp_right)
         }
 
+        newTabButton.label.snp_makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(view)
+        }
+
+        newPrivateTabButton.label.snp_makeConstraints { make in
+            make.trailing.lessThanOrEqualTo(view)
+            make.left.greaterThanOrEqualTo(newTabButton.snp_right).priorityHigh()
+        }
+
         buttonContainer.snp_makeConstraints { make in
             make.width.equalTo(view.snp_width).multipliedBy(TodayUX.buttonContainerMultipleOfScreen)
             make.centerX.equalTo(view.snp_centerX)
@@ -133,6 +142,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             let multiple = !hasCopiedURL ? 1.0 : (1.0 + TodayUX.copiedLinkHeightOfButtonMultple)
             make.height.equalTo(self.buttonContainer.snp_height).multipliedBy(multiple)
         }
+    }
+
+    override func viewDidLayoutSubviews() {
+        let preferredWidth: CGFloat = view.frame.size.width / CGFloat(2 * buttonContainer.subviews.count + 1)
+        newPrivateTabButton.label.preferredMaxLayoutWidth = preferredWidth
+        newTabButton.label.preferredMaxLayoutWidth = preferredWidth
     }
 
     func updateCopiedLink() {
@@ -226,6 +241,16 @@ class ImageButtonWithLabel: UIView {
 
     lazy var label = UILabel()
 
+    var labelText: String? {
+        set {
+            label.text = newValue
+            label.sizeToFit()
+        }
+        get {
+            return label.text
+        }
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -250,6 +275,10 @@ class ImageButtonWithLabel: UIView {
             make.width.equalTo(button)
             make.height.equalTo(button)
         }
+
+        label.numberOfLines = 0
+        label.lineBreakMode = .ByWordWrapping
+        label.textAlignment = .Center
 
         label.snp_makeConstraints { make in
             make.centerX.equalTo(button.snp_centerX)
