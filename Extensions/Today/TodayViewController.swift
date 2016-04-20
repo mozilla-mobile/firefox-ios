@@ -148,7 +148,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func widgetMarginInsetsForProposedMarginInsets(defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, 0, TodayUX.verticalWidgetMargin, TodayUX.horizontalWidgetMargin)
+        return UIEdgeInsetsMake(0, 0, TodayUX.verticalWidgetMargin, 0)
     }
 
     private func alignButton(leftButton: ImageButtonWithLabel, rightButton: ImageButtonWithLabel) {
