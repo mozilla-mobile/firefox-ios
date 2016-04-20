@@ -1496,8 +1496,6 @@ extension BrowserViewController: TabToolbarDelegate {
             displayedPopoverController = mvc
             updateDisplayedPopoverProperties = setupPopover
         }
-//        let menuPresentationTransitionManager = MenuPresentationAnimator()
-//        mvc.transitioningDelegate = menuPresentationTransitionManager
         self.presentViewController(mvc, animated: true, completion: nil)
         menuViewController = mvc
     }
