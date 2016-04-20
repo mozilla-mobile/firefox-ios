@@ -15,7 +15,7 @@
         if (fresh)
           fresh = false;
         else
-          location.reload();
+          webkit.messageHandlers.localRequestHelper.postMessage({ type: "reload" });
       });
     </script>
   </head>
