@@ -302,12 +302,15 @@ class ButtonWithSublabel: UIButton {
 
         titleLabel.snp_remakeConstraints { make in
             make.top.equalTo(self.snp_top).offset(10)
-            make.left.equalTo(imageView.snp_right).offset(10).priorityLow()
+            make.left.equalTo(imageView.snp_right).offset(TodayUX.horizontalWidgetMargin).priorityLow()
         }
 
+        subtitleLabel.lineBreakMode = .ByTruncatingTail
         subtitleLabel.snp_makeConstraints { make in
             make.left.equalTo(titleLabel.snp_left)
             make.top.equalTo(titleLabel.snp_bottom)
+            make.leading.equalTo(imageView.snp_trailing).offset(TodayUX.horizontalWidgetMargin)
+            make.right.equalTo(self.snp_right).offset(-TodayUX.horizontalWidgetMargin)
         }
     }
 
