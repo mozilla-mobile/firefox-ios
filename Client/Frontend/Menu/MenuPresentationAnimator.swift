@@ -35,7 +35,7 @@ class MenuPresentationAnimator: NSObject, UIViewControllerAnimatedTransitioning 
 
 
     func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
-        return 0.2
+        return presenting ? 0.4 : 0.2
     }
 }
 
@@ -87,11 +87,18 @@ extension MenuPresentationAnimator {
             menuView.layoutSubviews()
         }
 
+        let vanishingPoint: CGPoint
+        if let sourceView = sourceView {
+            vanishingPoint = menuView.convertPoint(sourceView.center, fromView: sourceView.superview)
+        } else {
+            vanishingPoint = CGPoint(x: menuView.center.x, y: menuView.frame.size.height)
+        }
+        let minimisedFrame = CGRect(origin: vanishingPoint, size: CGSize.zero)
+
         let menuViewSnapshot: UIView
         if presenting {
             menuViewSnapshot = menuView.snapshotViewAfterScreenUpdates(true)
-            menuViewSnapshot.frame = menuView.frame
-            menuViewSnapshot.transform = CGAffineTransformMakeScale(0.0, 1.0)
+            menuViewSnapshot.frame = minimisedFrame
             menuViewSnapshot.alpha = 0
             menuView.backgroundColor = menuView.backgroundColor?.colorWithAlphaComponent(0.0)
             menuView.addSubview(menuViewSnapshot)
@@ -106,10 +113,6 @@ extension MenuPresentationAnimator {
         let offstageLeft = CGAffineTransformMakeTranslation(-offstageValue, 0)
         let offstageRight = CGAffineTransformMakeTranslation(offstageValue, 0)
 
-        if let sourceView = sourceView {
-            menuViewSnapshot.layer.anchorPoint = sourceView.layer.anchorPoint
-        }
-
         if presenting {
             menuView.alpha = 0
             menuController.menuView.hidden = true
@@ -123,7 +126,7 @@ extension MenuPresentationAnimator {
 
             if (self.presenting) {
                 menuViewSnapshot.alpha = 1
-                menuViewSnapshot.transform = CGAffineTransformIdentity
+                menuViewSnapshot.frame = menuView.frame
                 menuView.backgroundColor = menuView.backgroundColor?.colorWithAlphaComponent(0.4)
                 menuView.alpha = 1
                 // animate back and forward buttons off to the left
@@ -136,7 +139,7 @@ extension MenuPresentationAnimator {
                 viewsToAnimateLeft?.forEach { $0.transform = CGAffineTransformIdentity }
                 // animate reload and share buttons in from the right
                 viewsToAnimateRight?.forEach { $0.transform = CGAffineTransformIdentity }
-                menuViewSnapshot.transform = CGAffineTransformMakeScale(0.01, 1.0)
+                menuViewSnapshot.frame = minimisedFrame
                 menuViewSnapshot.alpha = 0
                 menuView.alpha = 0
             }
