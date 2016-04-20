@@ -13,11 +13,11 @@
 #
 
 if [ "$1" == "--force" ]; then
-    rm -rf Carthage
+    rm -rf Carthage/*
 fi
 
 if ! cmp -s Cartfile.resolved Carthage/Cartfile.resolved; then
-  rm -rf Carthage
+  rm -rf Carthage/*
 fi
 
 # Only enable this on the Xcode Server because it times out if it does not
