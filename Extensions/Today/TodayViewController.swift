@@ -181,6 +181,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             // and we need to call the completion handler in every branch.
             completionHandler(NCUpdateResult.NewData)
         }
+        completionHandler(NCUpdateResult.NewData)
     }
 
     // MARK: Button and label creation
