@@ -247,7 +247,7 @@ class ImageButtonWithLabel: UIView {
         }
 
         snp_makeConstraints { make in
-            make.width.equalTo(label)
+            make.width.equalTo(button)
             make.height.equalTo(button)
         }
 
