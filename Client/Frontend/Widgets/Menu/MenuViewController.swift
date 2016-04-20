@@ -44,8 +44,8 @@ class MenuViewController: UIViewController {
         self.appState = appState
         menuConfig = AppMenuConfiguration(appState: appState)
         self.presentationStyle = presentationStyle
-        super.init(nibName: nil, bundle: nil)
 
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {

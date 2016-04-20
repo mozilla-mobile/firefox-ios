@@ -9,9 +9,12 @@ class MenuPresentationAnimator: NSObject, UIViewControllerAnimatedTransitioning 
     var presenting: Bool = false
 
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        let screens : (from:UIViewController, to:UIViewController) = (transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!, transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!)
+        let screens = (from: transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!, to: transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!)
 
-        let menuViewController = !self.presenting ? screens.from as! MenuViewController : screens.to as! MenuViewController
+        guard let menuViewController = !self.presenting ? screens.from as? MenuViewController : screens.to as? MenuViewController else {
+            return
+        }
+
         var bottomViewController = !self.presenting ? screens.to as UIViewController : screens.from as UIViewController
 
         // don't do anything special if it's a popover presentation
@@ -66,8 +69,9 @@ extension MenuPresentationAnimator {
         self.animateWithMenu(menu, baseController: bvc, viewsToAnimateLeft: leftViews, viewsToAnimateRight: rightViews, sourceView: sourceView, withTransitionContext: transitionContext)
     }
 
+    // TODO: when the tab tray toolbar comes into existence then this should be completed
     private func animateWithMenu(menu: MenuViewController, tabTrayController ttc: TabTrayController, transitionContext: UIViewControllerContextTransitioning) {
-        
+        fatalError("animateWithMenu(menu: tabTrayController: transitionContext:) has not been implemented")
     }
 
     private func animateWithMenu(menuController: MenuViewController, baseController: UIViewController, viewsToAnimateLeft: [UIView]?, viewsToAnimateRight: [UIView]?, sourceView: UIView?, withTransitionContext transitionContext: UIViewControllerContextTransitioning) {
@@ -98,8 +102,9 @@ extension MenuPresentationAnimator {
             menuView.hidden = true
         }
 
-        let offstageLeft = CGAffineTransformMakeTranslation(-150, 0)
-        let offstageRight = CGAffineTransformMakeTranslation(150, 0)
+        let offstageValue = bottomView.bounds.size.width / 2
+        let offstageLeft = CGAffineTransformMakeTranslation(-offstageValue, 0)
+        let offstageRight = CGAffineTransformMakeTranslation(offstageValue, 0)
 
         if let sourceView = sourceView {
             menuViewSnapshot.layer.anchorPoint = sourceView.layer.anchorPoint
