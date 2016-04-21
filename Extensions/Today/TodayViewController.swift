@@ -132,10 +132,10 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         view.addSubview(openCopiedLinkButton)
 
         openCopiedLinkButton.snp_makeConstraints { make in
-            make.bottom.equalTo(view.snp_bottom)
+            make.top.equalTo(buttonContainer.snp_bottom).offset(TodayUX.verticalWidgetMargin)
             make.width.equalTo(view.snp_width)
             make.centerX.equalTo(view.snp_centerX)
-            make.height.equalTo(buttonContainer.snp_height).multipliedBy(TodayUX.copiedLinkHeightOfButtonMultple)
+            make.height.equalTo(TodayUX.copyLinkButtonHeight)
         }
 
         view.snp_makeConstraints { make in
@@ -267,7 +267,6 @@ class ImageButtonWithLabel: UIView {
         label.snp_makeConstraints { make in
             make.centerX.equalTo(button.snp_centerX)
             make.top.equalTo(button.snp_bottom).offset(TodayUX.verticalWidgetMargin / 2)
-            make.height.lessThanOrEqualTo(button.snp_height)
         }
     }
 
@@ -310,19 +309,19 @@ class ButtonWithSublabel: UIButton {
         self.addSubview(subtitleLabel)
 
         imageView.snp_remakeConstraints { make in
-            make.centerY.equalTo(titleLabel.snp_centerY)
+            make.centerY.equalTo(self.snp_centerY)
             make.left.equalTo(self.snp_left).offset(TodayUX.copyLinkImageHorizontalPadding)
         }
 
         titleLabel.snp_remakeConstraints { make in
-            make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin)
+            make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin / 2)
             make.left.equalTo(imageView.snp_right).offset(TodayUX.horizontalWidgetMargin).priorityLow()
         }
 
         subtitleLabel.lineBreakMode = .ByTruncatingTail
         subtitleLabel.snp_makeConstraints { make in
             make.left.equalTo(titleLabel.snp_left)
-            make.top.equalTo(titleLabel.snp_bottom)
+            make.top.equalTo(titleLabel.snp_bottom).offset(TodayUX.verticalWidgetMargin / 2)
             make.leading.equalTo(imageView.snp_trailing).offset(TodayUX.horizontalWidgetMargin)
             make.right.lessThanOrEqualTo(self.snp_right).offset(-TodayUX.horizontalWidgetMargin)
         }
