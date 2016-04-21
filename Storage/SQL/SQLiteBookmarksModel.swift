@@ -747,7 +747,15 @@ extension SQLiteBookmarks {
             "AND",
             "exists(SELECT 1 FROM \(TableBookmarksBufferStructure) WHERE parent IN (?, ?, ?, ?))",
             ].joinWithSeparator(" ")
-        return self.db.runQuery(sql, args: parents, factory: { ($0[0] as! Int) == 1 }) >>== { deferMaybe($0[0]!) }
+        return self.db.runQuery(sql, args: parents, factory: { $0[0] as! Int == 1 })
+            >>== { row in
+                guard row.status == .Success,
+                    let result = row[0] else {
+                        // if the query did not succeed, we should return false so that we can use local bookmarks
+                        return deferMaybe(false)
+                }
+                return deferMaybe(result)
+        }
     }
 }
 
