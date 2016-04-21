@@ -25,8 +25,8 @@ struct TodayUX {
     static let horizontalWidgetMargin: CGFloat = 10
     static let copyLinkImageHorizontalPadding: CGFloat = 22
 
-    static let buttonContainerMultipleOfScreen = 0.6
     static let copiedLinkHeightOfButtonMultple = 0.5
+    static let buttonContainerMultipleOfScreen = 0.4
 }
 
 @objc (TodayViewController)
@@ -103,14 +103,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         buttonContainer.addSubview(newTabButton)
         newTabButton.snp_makeConstraints { make in
             make.top.equalTo(buttonContainer)
-            make.left.equalTo(buttonContainer)
+            make.centerX.equalTo(buttonContainer.snp_left)
         }
 
         // New private tab button and label.
         buttonContainer.addSubview(newPrivateTabButton)
         newPrivateTabButton.snp_makeConstraints { make in
             make.centerY.equalTo(newTabButton.snp_centerY)
-            make.right.equalTo(buttonContainer.snp_right)
+            make.centerX.equalTo(buttonContainer.snp_right)
         }
 
         newTabButton.label.snp_makeConstraints { make in
