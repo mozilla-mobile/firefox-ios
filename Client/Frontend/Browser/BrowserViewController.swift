@@ -1208,7 +1208,7 @@ extension BrowserViewController: MenuActionDelegate {
     private func openHomePanel(panel: HomePanelType, forAppState appState: AppState) {
         switch appState {
         case .Tab(_):
-            self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(panel)!)
+            self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(panel)!, isPrivate: appState.isPrivate())
         case .HomePanels(_):
             self.homePanelController?.selectedPanel = panel
         default: break
