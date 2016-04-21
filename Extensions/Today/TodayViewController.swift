@@ -19,6 +19,7 @@ struct TodayUX {
     static let labelTextSize: CGFloat = 14.0
     static let imageButtonTextSize: CGFloat = 14.0
 
+    static let copyLinkButtonHeight: CGFloat = 44
 
     static let verticalWidgetMargin: CGFloat = 10
     static let horizontalWidgetMargin: CGFloat = 10
