@@ -18,7 +18,7 @@ class MenuView: UIView {
         openMenuImage.userInteractionEnabled = true
         openMenuImage.isAccessibilityElement = true
         openMenuImage.accessibilityTraits = UIAccessibilityTraitButton
-        openMenuImage.accessibilityLabel =  NSLocalizedString("Close Menu", tableName: "Menu", comment: "Accessibility label describing the button that closes the menu when open")
+        openMenuImage.accessibilityLabel =  NSLocalizedString("Menu.CloseMenu.AccessibilityLabel", value: "Close Menu", tableName: "Menu", comment: "Accessibility label describing the button that closes the menu when open")
         return openMenuImage
     }()
 
@@ -188,7 +188,6 @@ class MenuView: UIView {
         }
 
         menuFooterView.addSubview(openMenuImage)
-        openMenuImage.accessibilityLabel = NSLocalizedString("Close Menu", tableName: "Menu", comment: "Accessibility Label attached to the button for closing the menu")
         openMenuImage.snp_makeConstraints { make in
             make.center.equalTo(menuFooterView)
         }
