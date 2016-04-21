@@ -139,8 +139,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         }
 
         view.snp_makeConstraints { make in
-            let multiple = !hasCopiedURL ? 1.0 : (1.0 + TodayUX.copiedLinkHeightOfButtonMultple)
-            make.height.equalTo(self.buttonContainer.snp_height).multipliedBy(multiple)
+            if hasCopiedURL {
+                let extraHeight = TodayUX.copyLinkButtonHeight + 2 * TodayUX.verticalWidgetMargin
+                make.height.equalTo(buttonContainer.snp_height).offset(extraHeight)
+            } else {
+                make.height.equalTo(buttonContainer.snp_height)
+            }
         }
     }
 
