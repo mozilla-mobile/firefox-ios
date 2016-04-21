@@ -9,8 +9,6 @@ import SnapKit
 
 private let log = Logger.browserLogger
 
-
-
 struct TodayUX {
     static let privateBrowsingColor = UIColor(colorString: "CE6EFC")
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
