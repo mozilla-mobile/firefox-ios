@@ -145,7 +145,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     override func viewDidLayoutSubviews() {
-        let preferredWidth: CGFloat = view.frame.size.width / CGFloat(2 * buttonContainer.subviews.count + 1)
+        let preferredWidth: CGFloat = view.frame.size.width / CGFloat(buttonContainer.subviews.count + 1)
         newPrivateTabButton.label.preferredMaxLayoutWidth = preferredWidth
         newTabButton.label.preferredMaxLayoutWidth = preferredWidth
     }
