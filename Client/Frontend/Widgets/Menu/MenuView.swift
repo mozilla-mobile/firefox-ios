@@ -307,6 +307,9 @@ class MenuView: UIView {
             let menuHeight = itemPadding + (numberOfRows * (CGFloat(self.menuRowHeight) + itemPadding))
             make.height.equalTo(menuHeight)
         }
+
+        // if we have no toolbar items, we won't display a toolbar so we should round the corners of the menuContainerView
+        menuContainerView.layer.cornerRadius = toolbarItems.count == 0 ? toolbar.cornerRadius.width : 0
     }
 
     private func layoutFooter() {
