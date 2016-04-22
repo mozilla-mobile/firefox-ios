@@ -168,6 +168,7 @@ class BrowserViewController: UIViewController {
 
         if showToolbar {
             toolbar = TabToolbar()
+            toolbar?.applyTheme(getCurrentAppState().isPrivate() ? Theme.PrivateMode : Theme.NormalMode)
             toolbar?.tabToolbarDelegate = self
             footerBackground = BlurWrapper(view: toolbar!)
             footerBackground?.translatesAutoresizingMaskIntoConstraints = false
