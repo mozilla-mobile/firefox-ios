@@ -9,8 +9,6 @@ import SnapKit
 
 private let log = Logger.browserLogger
 
-
-
 struct TodayUX {
     static let privateBrowsingColor = UIColor(colorString: "CE6EFC")
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
@@ -19,13 +17,13 @@ struct TodayUX {
     static let labelTextSize: CGFloat = 14.0
     static let imageButtonTextSize: CGFloat = 14.0
 
-    static let buttonContainerHeight = 88
+    static let copyLinkButtonHeight: CGFloat = 44
 
     static let verticalWidgetMargin: CGFloat = 10
     static let horizontalWidgetMargin: CGFloat = 10
+    static let copyLinkImageHorizontalPadding: CGFloat = 22
 
-    static let buttonContainerMultipleOfScreen = 0.6
-    static let copiedLinkHeightOfButtonMultple = 0.5
+    static let buttonContainerMultipleOfScreen = 0.4
 }
 
 @objc (TodayViewController)
@@ -34,13 +32,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     private lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .TouchUpInside)
+        imageButton.labelText = NSLocalizedString("TodayWidget.NewTabButtonLabel", value: "New Tab", tableName: "Today", comment: "New Tab button label")
 
         let button = imageButton.button
         button.setImage(UIImage(named: "new_tab_button_normal"), forState: .Normal)
         button.setImage(UIImage(named: "new_tab_button_highlight"), forState: .Highlighted)
 
         let label = imageButton.label
-        label.text = NSLocalizedString("TodayWidget.NewTabButtonLabel", value: "New Tab", tableName: "Today", comment: "New Tab button label")
         label.textColor = UIColor.whiteColor()
         label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
 
@@ -51,13 +49,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     private lazy var newPrivateTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .TouchUpInside)
+        imageButton.labelText = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", value: "New Private Tab", tableName: "Today", comment: "New Private Tab button label")
 
         let button = imageButton.button
         button.setImage(UIImage(named: "new_private_tab_button_normal"), forState: .Normal)
         button.setImage(UIImage(named: "new_private_tab_button_highlight"), forState: .Highlighted)
 
         let label = imageButton.label
-        label.text = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", value: "New Private Tab", tableName: "Today", comment: "New Private Tab button label")
         label.textColor = TodayUX.privateBrowsingColor
         label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
 
@@ -70,10 +68,9 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.setTitle(NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", value: "Go to copied link", tableName: "Today", comment: "Go to link on clipboard"), forState: .Normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), forControlEvents: .TouchUpInside)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .Highlighted)
-
-        button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
         button.setImage(UIImage(named: "copy_link_icon"), forState: .Normal)
 
+        button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFontOfSize(TodayUX.linkTextSize)
 
         return button
@@ -103,36 +100,54 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         buttonContainer.addSubview(newTabButton)
         newTabButton.snp_makeConstraints { make in
             make.top.equalTo(buttonContainer)
-            make.left.equalTo(buttonContainer)
+            make.centerX.equalTo(buttonContainer.snp_left)
         }
 
         // New private tab button and label.
         buttonContainer.addSubview(newPrivateTabButton)
         newPrivateTabButton.snp_makeConstraints { make in
             make.centerY.equalTo(newTabButton.snp_centerY)
-            make.right.equalTo(buttonContainer.snp_right)
+            make.centerX.equalTo(buttonContainer.snp_right)
+        }
+
+        newTabButton.label.snp_makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(view)
+        }
+
+        newPrivateTabButton.label.snp_makeConstraints { make in
+            make.trailing.lessThanOrEqualTo(view)
+            make.left.greaterThanOrEqualTo(newTabButton.snp_right).priorityHigh()
         }
 
         buttonContainer.snp_makeConstraints { make in
             make.width.equalTo(view.snp_width).multipliedBy(TodayUX.buttonContainerMultipleOfScreen)
             make.centerX.equalTo(view.snp_centerX)
-            make.top.equalTo(view.snp_top).offset(10)
-            make.height.equalTo(TodayUX.buttonContainerHeight).priorityLow()
+            make.top.equalTo(view.snp_top).offset(TodayUX.verticalWidgetMargin)
+            make.bottom.equalTo(newPrivateTabButton.label.snp_bottom).priorityLow()
         }
 
         view.addSubview(openCopiedLinkButton)
 
         openCopiedLinkButton.snp_makeConstraints { make in
-            make.bottom.equalTo(view.snp_bottom)
+            make.top.equalTo(buttonContainer.snp_bottom).offset(TodayUX.verticalWidgetMargin)
             make.width.equalTo(view.snp_width)
             make.centerX.equalTo(view.snp_centerX)
-            make.height.equalTo(buttonContainer.snp_height).multipliedBy(TodayUX.copiedLinkHeightOfButtonMultple)
+            make.height.equalTo(TodayUX.copyLinkButtonHeight)
         }
 
         view.snp_makeConstraints { make in
-            let multiple = !hasCopiedURL ? 1.0 : (1.0 + TodayUX.copiedLinkHeightOfButtonMultple)
-            make.height.equalTo(self.buttonContainer.snp_height).multipliedBy(multiple)
+            var extraHeight = TodayUX.verticalWidgetMargin
+            if hasCopiedURL {
+                extraHeight += TodayUX.copyLinkButtonHeight + TodayUX.verticalWidgetMargin
+            }
+            make.height.equalTo(buttonContainer.snp_height).offset(extraHeight)
         }
+    }
+
+    override func viewDidLayoutSubviews() {
+        let preferredWidth: CGFloat = view.frame.size.width / CGFloat(buttonContainer.subviews.count + 1)
+        newPrivateTabButton.label.preferredMaxLayoutWidth = preferredWidth
+        newTabButton.label.preferredMaxLayoutWidth = preferredWidth
     }
 
     func updateCopiedLink() {
@@ -148,14 +163,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func widgetMarginInsetsForProposedMarginInsets(defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, 0, TodayUX.verticalWidgetMargin, TodayUX.horizontalWidgetMargin)
-    }
-
-    private func alignButton(leftButton: ImageButtonWithLabel, rightButton: ImageButtonWithLabel) {
-        rightButton.label.snp_makeConstraints { make in
-            make.centerY.equalTo(leftButton.label.snp_centerY)
-            make.left.equalTo(leftButton.label.snp_right).offset(44).priorityLow()
-        }
+        return UIEdgeInsetsMake(0, 0, TodayUX.verticalWidgetMargin, 0)
     }
 
     func widgetPerformUpdateWithCompletionHandler(completionHandler: ((NCUpdateResult) -> Void)) {
@@ -166,16 +174,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             // and we need to call the completion handler in every branch.
             completionHandler(NCUpdateResult.NewData)
         }
-    }
-
-    // MARK: Button and label creation
-
-    private func createButtonLabel(text: String, color: UIColor = UIColor.whiteColor()) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.textColor = color
-        label.font = UIFont.systemFontOfSize(14.0)
-        return label
+        completionHandler(NCUpdateResult.NewData)
     }
 
     // MARK: Button behaviour
@@ -226,6 +225,16 @@ class ImageButtonWithLabel: UIView {
 
     lazy var label = UILabel()
 
+    var labelText: String? {
+        set {
+            label.text = newValue
+            label.sizeToFit()
+        }
+        get {
+            return label.text
+        }
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -247,13 +256,17 @@ class ImageButtonWithLabel: UIView {
         }
 
         snp_makeConstraints { make in
-            make.width.equalTo(label)
+            make.width.equalTo(button)
             make.height.equalTo(button)
         }
 
+        label.numberOfLines = 0
+        label.lineBreakMode = .ByWordWrapping
+        label.textAlignment = .Center
+
         label.snp_makeConstraints { make in
             make.centerX.equalTo(button.snp_centerX)
-            make.centerY.equalTo(button.snp_centerY).offset(39)
+            make.top.equalTo(button.snp_bottom).offset(TodayUX.verticalWidgetMargin / 2)
         }
     }
 
@@ -296,18 +309,21 @@ class ButtonWithSublabel: UIButton {
         self.addSubview(subtitleLabel)
 
         imageView.snp_remakeConstraints { make in
-            make.centerY.equalTo(titleLabel.snp_centerY)
-            make.left.equalTo(self.snp_left).offset(22)
+            make.centerY.equalTo(self.snp_centerY)
+            make.left.equalTo(self.snp_left).offset(TodayUX.copyLinkImageHorizontalPadding)
         }
 
         titleLabel.snp_remakeConstraints { make in
-            make.top.equalTo(self.snp_top).offset(10)
-            make.left.equalTo(imageView.snp_right).offset(10).priorityLow()
+            make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin / 2)
+            make.left.equalTo(imageView.snp_right).offset(TodayUX.horizontalWidgetMargin).priorityLow()
         }
 
+        subtitleLabel.lineBreakMode = .ByTruncatingTail
         subtitleLabel.snp_makeConstraints { make in
             make.left.equalTo(titleLabel.snp_left)
-            make.top.equalTo(titleLabel.snp_bottom)
+            make.top.equalTo(titleLabel.snp_bottom).offset(TodayUX.verticalWidgetMargin / 2)
+            make.leading.equalTo(imageView.snp_trailing).offset(TodayUX.horizontalWidgetMargin)
+            make.right.lessThanOrEqualTo(self.snp_right).offset(-TodayUX.horizontalWidgetMargin)
         }
     }
 
