@@ -23,6 +23,12 @@ class MenuViewController: UIViewController {
     weak var delegate: MenuViewControllerDelegate?
     weak var actionDelegate: MenuActionDelegate?
 
+    var menuTransitionDelegate: UIViewControllerTransitioningDelegate? {
+        didSet {
+            self.transitioningDelegate = menuTransitionDelegate
+        }
+    }
+
     var menuView: MenuView!
 
     var appState: AppState {
@@ -38,6 +44,7 @@ class MenuViewController: UIViewController {
         self.appState = appState
         menuConfig = AppMenuConfiguration(appState: appState)
         self.presentationStyle = presentationStyle
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -47,6 +54,7 @@ class MenuViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = popoverBackgroundColor.colorWithAlphaComponent(0.0)
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:)))
         gesture.delegate = self
@@ -73,7 +81,6 @@ class MenuViewController: UIViewController {
 
         switch presentationStyle {
         case .Popover:
-            self.view.backgroundColor = UIColor.clearColor()
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the tp[ of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: -2)
@@ -81,7 +88,6 @@ class MenuViewController: UIViewController {
                 make.top.left.right.equalTo(view)
             }
         case .Modal:
-            self.view.backgroundColor = popoverBackgroundColor
             menuView.toolbar.cornerRadius = CGSizeMake(5.0,5.0)
             menuView.toolbar.cornersToRound = [.TopLeft, .TopRight]
             menuView.toolbar.clipsToBounds = false
@@ -133,6 +139,11 @@ class MenuViewController: UIViewController {
             self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
         }
         self.popoverPresentationController?.backgroundColor = self.popoverBackgroundColor
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        self.view.backgroundColor = popoverBackgroundColor
     }
 
     private func reloadView() {
