@@ -223,7 +223,6 @@ class TabCell: UICollectionViewCell {
     }
 }
 
-@available(iOS 9, *)
 struct PrivateModeStrings {
     static let toggleAccessibilityLabel = NSLocalizedString("Private Mode", tableName: "PrivateBrowsing", comment: "Accessibility label for toggling on/off private mode")
     static let toggleAccessibilityHint = NSLocalizedString("Turns private mode on or off", tableName: "PrivateBrowsing", comment: "Accessiblity hint for toggling on/off private mode")
@@ -1141,5 +1140,84 @@ extension TabTrayController: MenuActionDelegate {
             default: break
             }
         }
+    }
+}
+
+// MARK: - Toolbar
+class TrayToolbar: UIView {
+    private let toolbarButtonSize = CGSize(width: 44, height: 44)
+
+    lazy var addTabButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.templateImageNamed("add"), forState: .Normal)
+        button.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+        button.accessibilityIdentifier = "TabTrayController.addTabButton"
+        return button
+    }()
+
+    lazy var menuButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.templateImageNamed("bottomNav-menu-pbm"), forState: .Normal)
+        button.accessibilityLabel = Strings.MenuButtonAccessibilityLabel
+        button.accessibilityIdentifier = "TabTrayController.menuButton"
+        return button
+    }()
+
+    lazy var maskButton: ToggleButton = {
+        let button = ToggleButton()
+        button.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
+        button.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
+        return button
+    }()
+
+    private let sideOffset: CGFloat = 32
+
+    private override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .whiteColor()
+        addSubview(addTabButton)
+        addSubview(menuButton)
+
+        menuButton.snp_makeConstraints { make in
+            make.center.equalTo(self)
+            make.size.equalTo(toolbarButtonSize)
+        }
+
+        addTabButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self)
+            make.left.equalTo(self).offset(sideOffset)
+            make.size.equalTo(toolbarButtonSize)
+        }
+
+        if #available(iOS 9, *) {
+            addSubview(maskButton)
+            maskButton.snp_makeConstraints { make in
+                make.centerY.equalTo(self)
+                make.right.equalTo(self).offset(-sideOffset)
+                make.size.equalTo(toolbarButtonSize)
+            }
+        }
+
+        styleToolbar(isPrivate: false)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func styleToolbar(isPrivate isPrivate: Bool) {
+        addTabButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
+        menuButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
+        maskButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
+        backgroundColor = isPrivate ? .toolbarTintColor() : .whiteColor()
+        updateMaskButtonState(isPrivate: isPrivate)
+    }
+
+    private func updateMaskButtonState(isPrivate isPrivate: Bool) {
+        let maskImage = UIImage(named: "smallPrivateMask")?.imageWithRenderingMode(.AlwaysTemplate)
+        maskButton.imageView?.tintColor = isPrivate ? .whiteColor() : .toolbarTintColor()
+        maskButton.setImage(maskImage, forState: .Normal)
+        maskButton.selected = isPrivate
+        maskButton.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
     }
 }

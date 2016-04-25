@@ -111,7 +111,7 @@ public class TabToolbarHelper: NSObject {
         if AppConstants.MOZ_MENU {
             toolbar.menuButton.contentMode = UIViewContentMode.Center
             toolbar.menuButton.setImage(UIImage.templateImageNamed("bottomNav-menu"), forState: .Normal)
-            toolbar.menuButton.accessibilityLabel = NSLocalizedString("Menu", comment: "Accessibility Label for the tab toolbar Menu button")
+            toolbar.menuButton.accessibilityLabel = Strings.MenuButtonAccessibilityLabel
             toolbar.menuButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickMenu), forControlEvents: UIControlEvents.TouchUpInside)
         } else {
             toolbar.bookmarkButton.contentMode = UIViewContentMode.Center
