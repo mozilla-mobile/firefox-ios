@@ -1,5 +1,6 @@
 baidu
 bing
-google
+google:hidden
+google-nocodes
 taobao
 wikipedia-zh-CN
