@@ -146,7 +146,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug("Updating authentication keychain state to reflect system state")
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
-        
+
+        // Send a telemetry ping if the user hasn't disabled reporting.
+        // We still create and log the ping for non-release channels, but we don't submit it.
+        if profile.prefs.boolForKey("settings.sendUsageData") ?? true {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+                let ping = CorePing(profile: profile)
+                Telemetry.sendPing(ping)
+            }
+        }
+
         log.debug("Done with setting up the application.")
         return true
     }
