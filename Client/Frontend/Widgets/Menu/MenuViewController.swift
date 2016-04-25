@@ -70,7 +70,7 @@ class MenuViewController: UIViewController {
         menuView.toolbarDelegate = self
         menuView.toolbarDataSource = self
 
-        menuView.toolbar.backgroundColor = menuConfig.toolbarColor()
+        menuView.toolbarColor = menuConfig.toolbarColor()
         menuView.toolbar.tintColor = menuConfig.toolbarTintColor()
         menuView.toolbar.layer.shadowColor = menuConfig.shadowColor().CGColor
         menuView.toolbar.layer.shadowOpacity = 0.4
@@ -88,8 +88,8 @@ class MenuViewController: UIViewController {
                 make.top.left.right.equalTo(view)
             }
         case .Modal:
-            menuView.toolbar.cornerRadius = CGSizeMake(5.0,5.0)
-            menuView.toolbar.cornersToRound = [.TopLeft, .TopRight]
+            menuView.cornerRadius = CGSizeMake(5.0,5.0)
+            menuView.cornersToRound = [.TopLeft, .TopRight]
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the bottom of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)

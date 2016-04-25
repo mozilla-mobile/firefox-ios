@@ -25,20 +25,7 @@ class RoundedToolbar: UIToolbar {
      * view to do this
      */
     override func drawRect(rect: CGRect) {
-        // Drawing code
-        let maskPath = UIBezierPath(roundedRect: rect, byRoundingCorners: cornersToRound, cornerRadii: cornerRadius)
-
-        // Create the shape layer and set its path
-        let maskLayer = CAShapeLayer()
-        maskLayer.frame = rect
-        maskLayer.path = maskPath.CGPath
-
-        let roundedLayer = CALayer()
-        roundedLayer.backgroundColor = layerBackgroundColor?.CGColor ?? UIColor.whiteColor().CGColor
-        roundedLayer.frame = rect
-        roundedLayer.mask = maskLayer
-
-        layer.insertSublayer(roundedLayer, atIndex: 0)
+        addRoundedCorners(cornersToRound: cornersToRound, cornerRadius: cornerRadius, color: layerBackgroundColor ?? UIColor.whiteColor())
     }
 
 

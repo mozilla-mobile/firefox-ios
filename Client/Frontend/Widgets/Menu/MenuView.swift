@@ -60,10 +60,19 @@ class MenuView: UIView {
 
     private var presentationStyle: MenuViewPresentationStyle
 
+    var cornersToRound: UIRectCorner?
+    var cornerRadius: CGSize?
+
     var menuColor: UIColor = UIColor.clearColor() {
         didSet {
             menuContainerView.backgroundColor = menuColor
             menuFooterView.backgroundColor = menuColor
+        }
+    }
+
+    var toolbarColor: UIColor = UIColor.whiteColor() {
+        didSet {
+            toolbar.backgroundColor = toolbarColor
         }
     }
 
@@ -273,6 +282,19 @@ class MenuView: UIView {
         layoutToolbar()
         layoutMenu()
         layoutFooter()
+        roundCorners()
+    }
+
+    func roundCorners() {
+        guard let cornersToRound = cornersToRound,
+            cornerRadius = cornerRadius else { return }
+        // if we have no toolbar items, we won't display a toolbar so we should round the corners of the menuContainerView
+        if toolbarItems.count == 0 {
+            menuContainerView.addRoundedCorners(cornersToRound: cornersToRound, cornerRadius: cornerRadius, color: menuColor)
+        } else {
+            toolbar.cornerRadius = cornerRadius
+            toolbar.cornersToRound = cornersToRound
+        }
     }
 
     private func layoutToolbar() {
