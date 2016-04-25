@@ -248,45 +248,55 @@ class TabTrayController: UIViewController {
     weak var appStateDelegate: AppStateDelegate?
 
     var collectionView: UICollectionView!
-    var navBar: UIView!
-    var addTabButton: UIButton?
-    var settingsButton: UIButton?
-    var menuButton: UIButton?
-    var collectionViewTransitionSnapshot: UIView?
+    lazy var toolbar: TrayToolbar = {
+        let toolbar = TrayToolbar()
+        toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
+
+        if AppConstants.MOZ_MENU {
+            toolbar.menuButton.addTarget(self, action: #selector(TabTrayController.didTapMenu), forControlEvents: .TouchUpInside)
+        } else {
+            toolbar.settingsButton.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
+        }
+
+        if #available(iOS 9, *) {
+            toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), forControlEvents: .TouchUpInside)
+        }
+        return toolbar
+    }()
 
     var tabTrayState: TabTrayState {
         return TabTrayState(isPrivate: self.privateMode)
     }
 
+    var leftToolbarButtons: [UIButton] {
+        return [toolbar.addTabButton]
+    }
+
+    var rightToolbarButtons: [UIButton]? {
+        if #available(iOS 9, *) {
+            return [toolbar.maskButton]
+        } else {
+            return []
+        }
+    }
+
+    private var displayedMenu: UIViewController?
+
     private(set) internal var privateMode: Bool = false {
         didSet {
-            if #available(iOS 9, *) {
-                togglePrivateMode.selected = privateMode
-                togglePrivateMode.accessibilityValue = privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
-                tabDataSource.tabs = tabsToDisplay
-                collectionView?.reloadData()
-            }
             if oldValue != privateMode {
                 updateAppState()
             }
+
+            tabDataSource.tabs = tabsToDisplay
+            toolbar.styleToolbar(isPrivate: privateMode)
+            collectionView?.reloadData()
         }
     }
 
     private var tabsToDisplay: [Tab] {
         return self.privateMode ? tabManager.privateTabs : tabManager.normalTabs
     }
-
-    @available(iOS 9, *)
-    lazy var togglePrivateMode: ToggleButton = {
-        let button = ToggleButton()
-        button.setImage(UIImage(named: "smallPrivateMask"), forState: UIControlState.Normal)
-        button.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), forControlEvents: .TouchUpInside)
-        button.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
-        button.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
-        button.accessibilityValue = self.privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
-        button.accessibilityIdentifier = "TabTrayController.togglePrivateMode"
-        return button
-    }()
 
     @available(iOS 9, *)
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
@@ -341,64 +351,25 @@ class TabTrayController: UIViewController {
 
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
-        navBar = UIView()
-        navBar.backgroundColor = TabTrayControllerUX.BackgroundColor
-
-        let flowLayout = TabTrayCollectionViewLayout()
-        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
+        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: UICollectionViewFlowLayout())
 
         collectionView.dataSource = tabDataSource
         collectionView.delegate = tabLayoutDelegate
-
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
         collectionView.registerClass(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
         view.addSubview(collectionView)
-        view.addSubview(navBar)
-
-        if AppConstants.MOZ_MENU {
-            self.menuButton = UIButton()
-            menuButton?.setImage(UIImage(named: "bottomNav-menu-pbm"), forState: .Normal)
-            menuButton?.addTarget(self, action: #selector(TabTrayController.didTapMenu), forControlEvents: .TouchUpInside)
-            menuButton?.accessibilityLabel = NSLocalizedString("Menu", comment: "Accessibility label for opening the Menu button in the Tab Tray.")
-            menuButton?.accessibilityIdentifier = "TabTrayController.menuButton"
-            view.addSubview(menuButton!)
-        } else {
-            addTabButton = UIButton()
-            addTabButton?.setImage(UIImage(named: "add"), forState: .Normal)
-            addTabButton?.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
-            addTabButton?.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
-            addTabButton?.accessibilityIdentifier = "TabTrayController.addTabButton"
-            view.addSubview(addTabButton!)
-
-            settingsButton = UIButton()
-            settingsButton?.setImage(UIImage(named: "settings"), forState: .Normal)
-            settingsButton?.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
-            settingsButton?.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
-            settingsButton?.accessibilityIdentifier = "TabTrayController.settingsButton"
-            view.addSubview(settingsButton!)
-        }
-
-
+        view.addSubview(toolbar)
 
         makeConstraints()
 
         if #available(iOS 9, *) {
-            view.addSubview(togglePrivateMode)
-            togglePrivateMode.snp_makeConstraints { make in
-                if AppConstants.MOZ_MENU {
-                    make.right.equalTo(menuButton!.snp_left).offset(-10)
-                } else {
-                    make.right.equalTo(addTabButton!.snp_left).offset(-10)
-                }
-                make.size.equalTo(UIConstants.ToolbarHeight)
-                make.centerY.equalTo(self.navBar)
-            }
-
             view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
             emptyPrivateTabsView.alpha = privateMode && tabManager.privateTabs.count == 0 ? 1 : 0
             emptyPrivateTabsView.snp_makeConstraints { make in
-                make.edges.equalTo(self.view)
+                make.top.left.right.equalTo(self.collectionView)
+                make.bottom.equalTo(self.collectionView).offset(-UIConstants.ToolbarHeight)
             }
 
             if let tab = tabManager.selectedTab where tab.isPrivate {
@@ -421,10 +392,23 @@ class TabTrayController: UIViewController {
 
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
+
+        // If we're displaying the menu as a modal and not a popover, make sure to dismiss here instead of 
+        // viewWillTransitionToSize to allow the animation to 'unwind' itself using the MenuPresenationAnimator.
+        if displayedMenu?.modalPresentationStyle == .OverCurrentContext {
+            displayedMenu?.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        // If we're displaying the menu as a popover, hide it right away here instead of traitCollectionDidChange.
+        // Otherwise, the popover will briefly appear behind hiding again. Since we don't do any transforms during
+        // the popover animation, we don't need to 'unwind' the animation.
+        if displayedMenu?.modalPresentationStyle == .Popover {
+            displayedMenu?.dismissViewControllerAnimated(true, completion: nil)
+        }
+
         coordinator.animateAlongsideTransition({ _ in
             self.collectionView.collectionViewLayout.invalidateLayout()
         }, completion: nil)
@@ -435,32 +419,14 @@ class TabTrayController: UIViewController {
     }
 
     private func makeConstraints() {
-        navBar.snp_makeConstraints { make in
-            make.top.equalTo(snp_topLayoutGuideBottom)
-            make.height.equalTo(UIConstants.ToolbarHeight)
-            make.left.right.equalTo(self.view)
-        }
-
-        if AppConstants.MOZ_MENU {
-            menuButton!.snp_makeConstraints { make in
-                make.trailing.bottom.equalTo(self.navBar)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-            }
-        } else {
-            addTabButton!.snp_makeConstraints { make in
-                make.trailing.bottom.equalTo(self.navBar)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-            }
-
-            settingsButton!.snp_makeConstraints { make in
-                make.leading.bottom.equalTo(self.navBar)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-            }
-        }
-
         collectionView.snp_makeConstraints { make in
-            make.top.equalTo(navBar.snp_bottom)
-            make.left.right.bottom.equalTo(self.view)
+            make.left.bottom.right.equalTo(view)
+            make.top.equalTo(snp_topLayoutGuideBottom)
+        }
+
+        toolbar.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(view)
+            make.height.equalTo(UIConstants.ToolbarHeight)
         }
     }
 
@@ -496,19 +462,22 @@ class TabTrayController: UIViewController {
 
     @objc
     private func didTapMenu() {
-        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: .Popover)
+        let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
+        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: presentationStyle)
         mvc.delegate = self
         mvc.actionDelegate = self
-        mvc.modalPresentationStyle = .Popover
+        mvc.menuTransitionDelegate = MenuPresentationAnimator()
+        mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
         if let popoverPresentationController = mvc.popoverPresentationController {
-            popoverPresentationController.backgroundColor = UIColor.clearColor()
+            let menuButton = toolbar.menuButton
             popoverPresentationController.delegate = self
-            popoverPresentationController.sourceView = menuButton!
-            popoverPresentationController.sourceRect = CGRect(x: menuButton!.frame.width/2, y: menuButton!.frame.size.height * 0.75, width: 1, height: 1)
-            popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+            popoverPresentationController.sourceView = menuButton
+            popoverPresentationController.sourceRect = CGRect(x: menuButton.frame.width/2, y: 0, width: 0, height: 0)
+            popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Down
         }
 
+        displayedMenu = mvc
         self.presentViewController(mvc, animated: true, completion: nil)
     }
 
@@ -533,7 +502,7 @@ class TabTrayController: UIViewController {
             tabManager.removeAllPrivateTabsAndNotify(false)
         }
 
-        togglePrivateMode.setSelected(privateMode, animated: true)
+        toolbar.maskButton.setSelected(privateMode, animated: true)
         collectionView.layoutSubviews()
 
         let toView: UIView
@@ -905,23 +874,6 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     }
 }
 
-// There seems to be a bug with UIKit where when the UICollectionView changes its contentSize
-// from > frame.size to <= frame.size: the contentSet animation doesn't properly happen and 'jumps' to the
-// final state.
-// This workaround forces the contentSize to always be larger than the frame size so the animation happens more
-// smoothly. This also makes the tabs be able to 'bounce' when there are not enough to fill the screen, which I
-// think is fine, but if needed we can disable user scrolling in this case.
-private class TabTrayCollectionViewLayout: UICollectionViewFlowLayout {
-    private override func collectionViewContentSize() -> CGSize {
-        var calculatedSize = super.collectionViewContentSize()
-        let collectionViewHeight = collectionView?.bounds.size.height ?? 0
-        if calculatedSize.height < collectionViewHeight && collectionViewHeight > 0 {
-            calculatedSize.height = collectionViewHeight + 1
-        }
-        return calculatedSize
-    }
-}
-
 struct EmptyPrivateTabsViewUX {
     static let TitleColor = UIColor.whiteColor()
     static let TitleFont = UIFont.systemFontOfSize(22, weight: UIFontWeightMedium)
@@ -1147,6 +1099,14 @@ extension TabTrayController: MenuActionDelegate {
 class TrayToolbar: UIView {
     private let toolbarButtonSize = CGSize(width: 44, height: 44)
 
+    lazy var settingsButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.templateImageNamed("settings"), forState: .Normal)
+        button.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+        button.accessibilityIdentifier = "TabTrayController.settingsButton"
+        return button
+    }()
+
     lazy var addTabButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("add"), forState: .Normal)
@@ -1176,9 +1136,17 @@ class TrayToolbar: UIView {
         super.init(frame: frame)
         backgroundColor = .whiteColor()
         addSubview(addTabButton)
-        addSubview(menuButton)
 
-        menuButton.snp_makeConstraints { make in
+        var buttonToCenter: UIButton?
+        if AppConstants.MOZ_MENU {
+            addSubview(menuButton)
+            buttonToCenter = menuButton
+        } else {
+            addSubview(settingsButton)
+            buttonToCenter = settingsButton
+        }
+
+        buttonToCenter?.snp_makeConstraints { make in
             make.center.equalTo(self)
             make.size.equalTo(toolbarButtonSize)
         }
@@ -1207,7 +1175,11 @@ class TrayToolbar: UIView {
 
     private func styleToolbar(isPrivate isPrivate: Bool) {
         addTabButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
-        menuButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
+        if AppConstants.MOZ_MENU {
+            menuButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
+        } else {
+            settingsButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
+        }
         maskButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
         backgroundColor = isPrivate ? .toolbarTintColor() : .whiteColor()
         updateMaskButtonState(isPrivate: isPrivate)
