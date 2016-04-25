@@ -1,6 +1,7 @@
 be.wikipedia.org
 bing
-google
+google:hidden
+google-nocodes
 tut.by
 yahoo
 yandex.by

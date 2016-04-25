@@ -1,4 +1,6 @@
 amazondotcom
+bing
+duckduckgo
 google
-twitter
 wikipedia-ka
+yahoo
