@@ -138,7 +138,6 @@ class MenuViewController: UIViewController {
         if presentationStyle == .Popover {
             self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
         }
-        self.popoverPresentationController?.backgroundColor = self.popoverBackgroundColor
     }
 
     override func viewDidAppear(animated: Bool) {
