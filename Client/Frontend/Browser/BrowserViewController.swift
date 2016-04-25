@@ -873,12 +873,17 @@ class BrowserViewController: UIViewController {
                 runScriptsOnWebView(webView)
             }
         case KVOURL:
-            if let tab = tabManager.selectedTab where tab.webView?.URL == nil {
-                log.debug("URL is nil!")
-            }
+            guard let tab = tabManager[webView] else { break }
 
-            if let tab = tabManager.selectedTab where tab.webView === webView {
-                updateUIForReaderHomeStateForTab(tab)
+            // To prevent spoofing, only change the URL immediately if the new URL is on
+            // the same origin as the current URL. Otherwise, do nothing and wait for
+            // didCommitNavigation to confirm the page load.
+            if tab.url?.origin == webView.URL?.origin {
+                tab.url = webView.URL
+
+                if tab === tabManager.selectedTab {
+                    updateUIForReaderHomeStateForTab(tab)
+                }
             }
         case KVOCanGoBack:
             guard let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
@@ -1910,6 +1915,16 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 completionHandler(NSURLSessionAuthChallengeDisposition.RejectProtectionSpace, nil)
             }
+        }
+    }
+
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        guard let tab = tabManager[webView] else { return }
+
+        tab.url = webView.URL
+
+        if tabManager.selectedTab === tab {
+            updateUIForReaderHomeStateForTab(tab)
         }
     }
 
