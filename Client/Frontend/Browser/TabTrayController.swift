@@ -121,7 +121,7 @@ class TabCell: UICollectionViewCell {
         applyStyle(style)
 
         self.accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)"), target: self.animator, selector: Selector("SELcloseWithoutGesture"))
+            UIAccessibilityCustomAction(name: NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)"), target: self.animator, selector: #selector(SwipeAnimator.SELcloseWithoutGesture))
         ]
     }
 
