@@ -1,4 +1,5 @@
 bing
 duckduckgo
-google
+google-nocodes
+google:hidden
 wikipedia-zh-TW
