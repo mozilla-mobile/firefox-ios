@@ -45,7 +45,7 @@ class AppAuthenticator {
         }
     }
 
-    static func presentPasscodeAuthentication(presentingNavController: UINavigationController?, delegate: PasscodeEntryDelegate) {
+    static func presentPasscodeAuthentication(presentingNavController: UINavigationController?, delegate: PasscodeEntryDelegate?) {
         let passcodeVC = PasscodeEntryViewController()
         passcodeVC.delegate = delegate
         let navController = UINavigationController(rootViewController: passcodeVC)
