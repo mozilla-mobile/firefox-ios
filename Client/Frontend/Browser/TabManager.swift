@@ -747,6 +747,12 @@ extension TabManager : WKNavigationDelegate {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
     }
 
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
+        let tab = self[webView]
+        tab?.setNoImageMode(isNoImageMode, force: false)
+    }
+
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         hideNetworkActivitySpinner()
         // only store changes if this is not an error page

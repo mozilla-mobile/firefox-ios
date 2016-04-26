@@ -11,6 +11,8 @@ public struct PrefsKeys {
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
     public static let KeyHomePageButtonIsInMenu = "HomePageButtonIsInMenuPrefKey"
+    public static let KeyNoImageModeButtonIsInMenu = "NoImageModeButtonIsInMenuPrefKey"
+    public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyNewTab = "NewTabPrefKey"
 }
 

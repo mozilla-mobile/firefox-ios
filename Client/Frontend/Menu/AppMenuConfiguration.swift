@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 enum AppMenuAction: String {
     case OpenNewNormalTab = "OpenNewNormalTab"
@@ -19,6 +20,8 @@ enum AppMenuAction: String {
     case OpenBookmarks = "OpenBookmarks"
     case OpenHistory = "OpenHistory"
     case OpenReadingList = "OpenReadingList"
+    case ShowImageMode = "ShowImageMode"
+    case HideImageMode = "HideImageMode"
 }
 
 struct AppMenuConfiguration: MenuConfiguration {
@@ -108,6 +111,13 @@ struct AppMenuConfiguration: MenuConfiguration {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             }
             menuItems.append(tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem)
+            if NoImageModeHelper.isNoImageModeAvailable(appState) {
+                if NoImageModeHelper.isNoImageModeActivated(appState) {
+                    menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)
+                } else {
+                    menuItems.append(AppMenuConfiguration.HideImageModeMenuItem)
+                }
+            }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .HomePanels, .Loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
@@ -116,6 +126,13 @@ struct AppMenuConfiguration: MenuConfiguration {
             }
             if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
                 menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
+            }
+            if NoImageModeHelper.isNoImageModeAvailable(appState) {
+                if NoImageModeHelper.isNoImageModeActivated(appState) {
+                    menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)
+                } else {
+                    menuItems.append(AppMenuConfiguration.HideImageModeMenuItem)
+                }
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .TabTray:
@@ -178,6 +195,14 @@ extension AppMenuConfiguration {
     @available(iOS 9, *)
     private static var RequestMobileMenuItem: MenuItem {
         return AppMenuItem(title: ViewMobileSiteTitleString, action:  MenuAction(action: AppMenuAction.ToggleBrowsingMode.rawValue), icon: "menu-ViewMobile", privateModeIcon: "menu-ViewMobile-pbm")
+    }
+
+    private static var HideImageModeMenuItem: MenuItem {
+        return AppMenuItem(title: Strings.MenuNoImageModeTurnOnTitleString, action:  MenuAction(action: AppMenuAction.HideImageMode.rawValue), icon: "menu-NoImageMode", privateModeIcon: "menu-NoImageMode-pbm")
+    }
+
+    private static var ShowImageModeMenuItem: MenuItem {
+        return AppMenuItem(title: Strings.MenuNoImageModeTurnOffTitleString, action:  MenuAction(action: AppMenuAction.ShowImageMode.rawValue), icon: "menu-NoImageMode-Engaged", privateModeIcon: "menu-NoImageMode-Engaged")
     }
 
     private static var SettingsMenuItem: MenuItem {

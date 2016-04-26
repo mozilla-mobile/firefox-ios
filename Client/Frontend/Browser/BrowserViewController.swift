@@ -1299,6 +1299,10 @@ extension BrowserViewController: MenuActionDelegate {
                     self.toggleBookmarkForTabState(tabState)
                 default: break
                 }
+            case .ShowImageMode:
+                self.setNoImageMode(false)
+            case .HideImageMode:
+                self.setNoImageMode(true)
             case .OpenSettings:
                 self.openSettings()
             case .OpenTopSites:
@@ -1612,6 +1616,14 @@ extension BrowserViewController: TabToolbarDelegate {
         menuViewController = mvc
     }
 
+    private func setNoImageMode(enabled: Bool) {
+        self.profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+        for tab in self.tabManager.tabs {
+            tab.setNoImageMode(enabled, force: true)
+        }
+        self.tabManager.selectedTab?.reload()
+    }
+
     func toggleBookmarkForTabState(tabState: TabState) {
         if tabState.isBookmarked {
             self.removeBookmark(tabState)
@@ -1742,6 +1754,9 @@ extension BrowserViewController: TabDelegate {
         findInPageHelper.delegate = self
         tab.addHelper(findInPageHelper, name: FindInPageHelper.name())
 
+        let noImageModeHelper = NoImageModeHelper(tab: tab)
+        tab.addHelper(noImageModeHelper, name: NoImageModeHelper.name())
+        
         let printHelper = PrintHelper(tab: tab)
         tab.addHelper(printHelper, name: PrintHelper.name())
 
