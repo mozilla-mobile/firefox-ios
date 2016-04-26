@@ -462,22 +462,12 @@ class TabTrayController: UIViewController {
 
     @objc
     private func didTapMenu() {
-        let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
-        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: presentationStyle)
+        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: .Modal)
         mvc.delegate = self
         mvc.actionDelegate = self
         mvc.menuTransitionDelegate = MenuPresentationAnimator()
-        mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
-
-        if let popoverPresentationController = mvc.popoverPresentationController {
-            let menuButton = toolbar.menuButton
-            popoverPresentationController.delegate = self
-            popoverPresentationController.sourceView = menuButton
-            popoverPresentationController.sourceRect = CGRect(x: menuButton.frame.width/2, y: 0, width: 0, height: 0)
-            popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Down
-        }
-
-        displayedMenu = mvc
+        mvc.modalPresentationStyle = .OverCurrentContext
+        self.menuViewController = mvc
         self.presentViewController(mvc, animated: true, completion: nil)
     }
 
@@ -1118,7 +1108,7 @@ class TrayToolbar: UIView {
     lazy var menuButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("bottomNav-menu-pbm"), forState: .Normal)
-        button.accessibilityLabel = Strings.MenuButtonAccessibilityLabel
+        button.accessibilityLabel = AppMenuConfiguration.MenuButtonAccessibilityLabel
         button.accessibilityIdentifier = "TabTrayController.menuButton"
         return button
     }()
@@ -1181,13 +1171,13 @@ class TrayToolbar: UIView {
             settingsButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
         }
         maskButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
-        backgroundColor = isPrivate ? .toolbarTintColor() : .whiteColor()
+        backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : .whiteColor()
         updateMaskButtonState(isPrivate: isPrivate)
     }
 
     private func updateMaskButtonState(isPrivate isPrivate: Bool) {
         let maskImage = UIImage(named: "smallPrivateMask")?.imageWithRenderingMode(.AlwaysTemplate)
-        maskButton.imageView?.tintColor = isPrivate ? .whiteColor() : .toolbarTintColor()
+        maskButton.imageView?.tintColor = isPrivate ? .whiteColor() : UIConstants.PrivateModeToolbarTintColor
         maskButton.setImage(maskImage, forState: .Normal)
         maskButton.selected = isPrivate
         maskButton.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff

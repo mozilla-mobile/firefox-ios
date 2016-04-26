@@ -5,12 +5,6 @@
 import Foundation
 import Shared
 
-public extension UIColor {
-    class func toolbarTintColor() -> UIColor {
-        return UIColor(rgb: 0x4A4A4A)
-    }
-}
-
 public struct UIConstants {
     static let AboutHomePage = NSURL(string: "\(WebServer.sharedInstance.base)/about/home/")!
     static let DefaultHomePage = NSURL(string:"#panel=0", relativeToURL: AboutHomePage)!
@@ -22,6 +16,7 @@ public struct UIConstants {
     static let PrivateModeActionButtonTintColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.8)
     static let PrivateModeTextHighlightColor = UIColor(red: 120 / 255, green: 120 / 255, blue: 165 / 255, alpha: 1)
     static let PrivateModeReaderModeBackgroundColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
+    static let PrivateModeToolbarTintColor = UIColor(red: 74 / 255, green: 74 / 255, blue: 74 / 255, alpha: 1)
 
     static let ToolbarHeight: CGFloat = 44
     static let DefaultRowHeight: CGFloat = 58
