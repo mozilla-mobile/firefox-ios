@@ -1303,6 +1303,10 @@ extension BrowserViewController: MenuActionDelegate {
                 self.setNoImageMode(false)
             case .HideImageMode:
                 self.setNoImageMode(true)
+            case .ShowNightMode:
+                NightModeHelper.setNightMode(self.profile.prefs, tabManager: self.tabManager, enabled: false)
+            case .HideNightMode:
+                NightModeHelper.setNightMode(self.profile.prefs, tabManager: self.tabManager, enabled: true)
             case .OpenSettings:
                 self.openSettings()
             case .OpenTopSites:
@@ -1766,6 +1770,10 @@ extension BrowserViewController: TabDelegate {
         let openURL = {(url: NSURL) -> Void in
             self.switchToTabForURLOrOpen(url)
         }
+
+        let nightModeHelper = NightModeHelper(tab: tab)
+        tab.addHelper(nightModeHelper, name: NightModeHelper.name())
+
         let spotlightHelper = SpotlightHelper(tab: tab, openURL: openURL)
         tab.addHelper(spotlightHelper, name: SpotlightHelper.name())
 

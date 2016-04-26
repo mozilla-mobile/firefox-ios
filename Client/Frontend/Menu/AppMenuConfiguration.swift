@@ -22,6 +22,8 @@ enum AppMenuAction: String {
     case OpenReadingList = "OpenReadingList"
     case ShowImageMode = "ShowImageMode"
     case HideImageMode = "HideImageMode"
+    case ShowNightMode = "ShowNightMode"
+    case HideNightMode = "HideNightMode"
 }
 
 struct AppMenuConfiguration: MenuConfiguration {
@@ -118,6 +120,13 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.HideImageModeMenuItem)
                 }
             }
+            if NightModeAccessors.isNightModeAvailable(appState) {
+                if NightModeAccessors.isNightModeActivated(appState) {
+                    menuItems.append(AppMenuConfiguration.ShowNightModeItem)
+                } else {
+                    menuItems.append(AppMenuConfiguration.HideNightModeItem)
+                }
+            }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .HomePanels, .Loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
@@ -132,6 +141,13 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)
                 } else {
                     menuItems.append(AppMenuConfiguration.HideImageModeMenuItem)
+                }
+            }
+            if NightModeAccessors.isNightModeAvailable(appState) {
+                if NightModeAccessors.isNightModeActivated(appState) {
+                    menuItems.append(AppMenuConfiguration.ShowNightModeItem)
+                } else {
+                    menuItems.append(AppMenuConfiguration.HideNightModeItem)
                 }
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
@@ -203,6 +219,14 @@ extension AppMenuConfiguration {
 
     private static var ShowImageModeMenuItem: MenuItem {
         return AppMenuItem(title: Strings.MenuNoImageModeTurnOffTitleString, action:  MenuAction(action: AppMenuAction.ShowImageMode.rawValue), icon: "menu-NoImageMode-Engaged", privateModeIcon: "menu-NoImageMode-Engaged")
+   }
+ 
+    private static var HideNightModeItem : MenuItem {
+        return AppMenuItem(title: Strings.MenuNightModeTurnOnTitleString, action:  MenuAction(action: AppMenuAction.HideNightMode.rawValue), icon: "menu-NightMode", privateModeIcon: "menu-NightMode-pbm")
+    }
+
+    private static var ShowNightModeItem : MenuItem {
+        return AppMenuItem(title: Strings.MenuNightModeTurnOffTitleString, action:  MenuAction(action: AppMenuAction.ShowNightMode.rawValue), icon: "menu-NightMode-Engaged", privateModeIcon: "menu-NightMode-Engaged")
     }
 
     private static var SettingsMenuItem: MenuItem {
