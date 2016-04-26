@@ -194,7 +194,11 @@ extension MenuViewController: MenuItemDataSource {
     }
 
     func numberOfItemsPerRowInMenuView(menuView: MenuView) -> Int {
-        return menuConfig.numberOfItemsInRow
+        // return the minimum between the max number of items in the row and the actual number of items
+        // for the first page. This allows us to set the number of items per row to be the correct 
+        // value when the total number of items < max number of items in the row
+        // but retain the correct value when scrolling to later pages.
+        return min(menuConfig.numberOfItemsInRow, self.menuView(menuView, numberOfItemsForPage: 0))
     }
 
     func menuView(menuView: MenuView, numberOfItemsForPage page: Int) -> Int {
