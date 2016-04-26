@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "您确实要清除您的所有数据？这也将关闭所有已打开的标签页。";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "浏览历史";
+
+/* Settings item for clearing the cache */
+"Cache" = "缓存";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "取消";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "清除";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "全部清除";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "清除隐私数据";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookie";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "离线网站数据";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "已保存的登录信息";
+

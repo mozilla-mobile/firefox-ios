@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Naviguez sur plusieurs pages web à la fois grâce aux onglets.";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "Simplifiez";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Connectez Firefox partout où vous l’utilisez.";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "Personnalisez";
+
+/* See http://mzl.la/1if9ODp */
+"Easily switch between open pages with tabs." = "Naviguez facilement entre les pages ouvertes grâce aux onglets.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox et le cloud";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Écran de présentation %1$@ sur %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "Organisez";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Personnalisez Firefox à votre convenance depuis les paramètres.";
+
+/* See http://mzl.la/1if9ODp */
+"Personalize your default search engine and more in Settings." = "Personnalisez votre moteur de recherche par défaut, et bien plus, depuis les paramètres.";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "Partagez";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Se connecter via Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Commencer la navigation";
+
+/* See http://mzl.la/1if9ODp */
+"Sync your Devices." = "Synchronisez vos appareils";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Effectuez un appui long sur l’icône Firefox et déplacez-la dans votre dock pour y accéder facilement.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "Le bouton Paramètres se situe au début de la liste des onglets.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Le bouton Afficher les onglets se situe à côté du champ Adresse ou recherche et affiche le nombre d’onglets ouverts actuellement.";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "Utilisez le panneau de partage pour envoyer des liens sur Firefox depuis d’autres applications.";
+

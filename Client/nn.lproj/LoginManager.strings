@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Er du sikker?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Avbryt";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Tøm søk";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopier";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "Slett";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Vel ingen";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Opna søkjemodus";
+
+/* Hide password text selection menu item */
+"Hide" = "Gøym";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Sist endra %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Innloggingar";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Innloggingar vert fjerna permanent.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Innloggingar vert fjerna frå alle tilkopla einingar.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Fann ingen innloggingar";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Opna og fyll";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Vis";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Søk";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Søkjefelt";
+
+/* Title for selecting all logins */
+"Select All" = "Marker alt";
+
+/* Title for password row in Login Detail View */
+"password" = "passord";
+
+/* Title for username row in Login Detail View */
+"username" = "brukarnamn";
+
+/* Title for website row in Login Detail View */
+"website" = "nettstad";
+

@@ -1,0 +1,631 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Maa kanbari nda šennikufal ga hãandi ne %@ se.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Goykaw maa nda šennikufal goo ma hãandi %1$@ se. Nungoo nee: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Fahami";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Kanji tonton";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Tonton caw maašeedaa ga";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Moɲoo tonton caw maašeedaa ga";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Aderesu nda ceeciyan";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Kufalwalha taney noo fondo";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Sanba waati kul";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Tabatandiyan ga waažibi";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Banda";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Ceberi bata zanfuney gagay";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Doo-šilbay";
+
+/* Panel accessibility label */
+"Bookmarks" = "Doo-šilbawey";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Doo-šilbawey kaŋ war g'i gaabu ga fatta ne.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Gaayay";
+
+/* Alert Call Button */
+"Call" = "Ciya";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Naŋ";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Ga noone leeti barmay.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Ga šigira dumi barmay.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Sutura bayhayey tuusu";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Daabu";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Kanji daabuyan";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Aderesu berandi";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Biyoo berandi";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Doboo bere";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Mana hin ka moɲoo tonton caw maašeedaa ga. Adiši a goo no ka ben?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Mana hin ka moɲoo tonton caw maašeedaa ga";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Mana hin ka moɲoo zumandi.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Kontu tee";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Kubay";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Hanse: dirŋa Sync duɲe alhaali";
+
+/* Debug option */
+"Debug: require password" = "Hanse: šennikufal ga waažibi";
+
+/* Debug option */
+"Debug: require upgrade" = "Hanse: taagandiyan ga waažibi";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Hantum azzaati kaynandi";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Tilasu ceecijinay";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Moo willandi tontonantey kayandi";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Kayandiyaney cebe";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "War ga boona ka šennikufal gaabu %1$@ se %2$@ ga?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "War ga boona ka šennikufaloo gaabu %@ ga?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "War ga boona ka šennikufal taagandi %1$@ se %2$@ ga?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "War ga boona ka šennikufaloo taagandi %@ ga?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Ma ši a sanba";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "A ben";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Karkar nd'a gaabu ka taarikoo feeri";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "War šennikufaloo dam ka ciya.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Jinekoyante";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Yaamar: ir ši hin ka tabatandi kaŋ war ciyaroo nungoo woo ga ti saajante.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "A ga tee kaŋ woo mana hanse ka boori wala zanbakaw k'a tee. Bisa nda war ga allamaanaa bay.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ koyoo mana interneti nungoo hanse ka boori. Ka ganji war alhabar ma ši zayandi, Firefox mana yadda ka dobu nungoo woo ga.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "War ciyaroo ši sutura";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Yee banda";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Nungoo guna de";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "A ga hima Firefox ma feera taaga k'alhaaloo woo dii.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox ši war kontoo hangandi koyne, amm'a ši war ceeciyan taariki bayhaya kul tuusu jinaa woo ga.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox ga boona ka too war biyey do";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Jine";
+
+/* General settings section title */
+"General" = "Hayakul";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "War kanji feerantey, doo-šilbawey nda šennikufaley zaa jinay taney ga.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Koy";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Koy URL berantaa ga?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Faaba";
+
+/* Panel accessibility label */
+"History" = "Taariki";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Hantum azzaati tonton";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Carousel windiroo šintin";
+
+/* History tableview section header */
+"Last month" = "Handu koraa";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Hangandiyan koraa: %@";
+
+/* History tableview section header */
+"Last week" = "Jirbiyye koraa";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Duɲe kaddasey";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Gaayay";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Ašsil moɲoo zumandi";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Ga gundekuna zumandi…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Fatta";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Fatta wala?";
+
+/* Authentication prompt log in button */
+"Log in" = "Huru";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Huruyan tammaasawey";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Ma ši gaabu";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Huruyan tammaasa %1$@ gaabu %2$@ se?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Šennikufal gaabu %@ se?";
+
+/* Prompt for updating a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "Huruyan tammaasa taagandi %1$@ se %2$@ ga?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Šennikufal taagandi %@ se?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Huruyan tammaasa gaabu";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Taagandi";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "A hima kaŋ Firefox bay ka kaŋ. War ga boona ka kanjey yeeti?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Šilbay sand'a cawandi";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Šilbay sand'a mana cawandi";
+
+/* Error for a missing remote error number */
+"Missing error" = "Firka kumante";
+
+/* Error for a missing remote error message */
+"Missing message" = "Alhabar kumante";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Naaruyan goyjinay zuu";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Kanje taaga: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Dumi taaga ga bara";
+
+/* Restore Tabs Negative Action */
+"No" = "Kalaa";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Kanji kul šii";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Manti sohõ";
+
+/* Button to not save the user's password */
+"Not now" = "Manti sohõ";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "Ayyo";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Ayyo";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Aywa, Firefox kaŋ ya!";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Feeri kanji taaga ra";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Kayandiyaney feeri";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Citaabu biyoo kar nd'a bangay ka hantumey feeri Cawkaw gunaroo ra maa zuwoo ra.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Feeri ne…";
+
+/* Opening an external URL */
+"Opening %@" = "Goo ma %@ feeri";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "Moɲey kaŋ war kokor ka dii y'ey ga bangay ne.";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Fasaldoo suubakaw";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Šennikufal";
+
+/* Paste the URL into the location bar */
+"Paste" = "Dobu";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Dobu & Koy";
+
+/* Privacy section title */
+"Privacy" = "Sutura";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Sutura laada";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Ceecijinay cahãntey";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Cawkaw gunari";
+
+/* Panel accessibility label */
+"Reading list" = "Caw maašeede";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Dam taaga";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Kaa";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Kaa caw maašeedaa ra";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Moɲoo kaa";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Ordinater nungu hãa";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Kanbehaya nungu hãa";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Šigira šerrante";
+
+/* Context menu item for saving an image */
+"Save Image" = "Bii gaabu";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Huruyan maaɲey gaabu";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Citaabu nda bii karkar Cawkaw gunari dabarey ra ka moɲey gaabu war Cawyan maašeedaa ga.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Ceeci";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Ceeci wala aderesu dam";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Honnandiyan ceeciyaney";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Ciyari saajante";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "Kaŋyan bayrandey sanbandi";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "Zaabo sanba";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Bayrandi sanba";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Kaŋyan bayrandi sanba hala Mozilla ma hin ka layboo hanse?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Naŋ";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Bokkaaray";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Delbu šigira";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Kayandiyaney";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Sutura bayhayey tuusu";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Sutura bayhayey tuusu";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Sutura bayhayey tuusu";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Žemna";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Doboo žemna";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Naŋ";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Ceeciyan honnandiyaney cebe";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Kanjey cebe";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Windiyan cebe";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Ceeci honnandiyaney cebe";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Huru Firefox ra";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Huru";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Huru ka war kanjey, doo-šilbawey nda šennikufaley zaa war jinay taney ga.";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "Kayandi";
+
+/* Support section title */
+"Support" = "Faaba";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Kabiize hinza mooru ceraw wowa wal'iguma here ka kanjoo daabu.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Hangandi sohõ";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "War kanjey, doo-šilbawey, šennikufaley nda taney hangandi cere.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "War kanjey, doo-šilbawey nda taney hangandi cere.";
+
+/* Panel accessibility label */
+"Synced tabs" = "Kanji hangantey";
+
+/* Syncing Firefox Account */
+"Syncing…" = "Goo ma hangandi…";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Kanje %1$@ %2$@ se";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Kanje %1$@ %2$@ here %3$@ se";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Kanjey daaroo";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Moɲoo mana hin ka cebe Cawkaw gunaroo ra.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Firefox Aurora dumi taaga ga bara. Ayyo naagu ka koy zumandiyan moɲoo ga.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Šenday foo bangay kaŋ war na kanjey ceeci war jinay taney ga. Ceeci koyne nd'a too kayna.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Firka foo bangay moɲoo barmayyanoo ra";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Woo ga naŋ war ma biyoo gaabu war biizaahaya zuwoo ga.";
+
+/* Opening an external app */
+"This will open in another application" = "Woo ga porogaram tana foo feeri";
+
+/* History tableview section header */
+"Today" = "Hõ";
+
+/* Panel accessibility label */
+"Top sites" = "Nungu kaasey";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Nungey kaŋ war felle ka dii y'ey ga fatta ne.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Kubayni nungu kaasey do";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Taagandi";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Firefox taagandi ka ciya.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Goy nda kanje maryey";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Goykaw maa";
+
+/* Text message in the settings table view */
+"Verify your email address." = "War bataga aderesoo koroši.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Dumi %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Guna";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Interneti gundekuna";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Kubayni Sync do";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Kubayni war Cawyan maašeedaa do";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Aywaa, woo ga boro boŋoo haw.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "Ayyo";
+
+/* History tableview section header */
+"Yesterday" = "Bi";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "War goyjinay jerey kul ši hin ka ciya Firefox kontu barantaa woo ga k'i hangandi cere.";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "War ši nda kanji feerante kul Firefox ra war jinay taney ga.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "War alhakey";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ordinater";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "sohõda";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "kanbe jinay";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "a ga bisa handu foo";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "a ga bisa jirbiyye foo";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "caw";
+
+/* Relative date for date in past week. */
+"this week" = "jirbiyyaa woo";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "hõ %@ waate";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "mana cawandi";
+
+/* Relative date for yesterday. */
+"yesterday" = "bi";
+

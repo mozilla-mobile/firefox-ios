@@ -1,0 +1,15 @@
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "अझ जान्नुहोस्";
+
+/* Toggled OFF accessibility value */
+"Off" = "बन्द गर्नुहोस्";
+
+/* Toggled ON accessibility value */
+"On" = "खोल्नुहोस्";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "नयाँ निजि ट्याबमा खोल्नुहोस्";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "निजी ब्राउजिङ";
+

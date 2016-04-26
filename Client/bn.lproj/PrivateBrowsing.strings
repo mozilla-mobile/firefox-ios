@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "ব্যক্তিগত ট্যাবগুলি বন্ধ করুন";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox আপনার কোনো ইতিহাস বা কুকি স্মরণ করবে না, কিন্তু নতুন বুকমার্ক সংরক্ষণ করা হবে।";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "আরও জানুন";
+
+/* Toggled OFF accessibility value */
+"Off" = "বন্ধ";
+
+/* Toggled ON accessibility value */
+"On" = "চালু";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "নতুন ব্যক্তিগত ট্যাবে খুলুন";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "ব্যক্তিগত ব্রাউজিং";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "ব্যক্তিগত মোড";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "ব্যক্তিগত মোড সক্রিয় বা বন্ধ করুন";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "ব্যক্তিগত ব্রাউজিং বন্ধ করার সময়";
+

@@ -1,0 +1,16 @@
+/* The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android. */
+"Bookmarks Menu" = "Meniul „Semne de carte”";
+
+/* The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android. */
+"Bookmarks Toolbar" = "Bara pentru semne de carte";
+
+/* The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android. */
+"Mobile Bookmarks" = "Semne de carte mobile";
+
+/* The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android. */
+"Unsorted Bookmarks" = "Semne de carte nesortate";
+
+/* The default name for bookmark folders without titles.
+   The default name for bookmark nodes without titles. */
+"Untitled" = "Fără titlu";
+
