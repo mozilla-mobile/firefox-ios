@@ -8,7 +8,7 @@ default_platform :ios
 
 
 #move all the build tools to the right places
-clone_folder = "../../firefox-io-build-tools"
+clone_folder = "../../firefox-ios-build-tools"
 sh("rsync -a #{clone_folder}/scripts ../")
 sh("rsync -a #{clone_folder}/fastlane/Appfile Appfile")
 sh("rsync -a #{clone_folder}/fastlane/Snapfile Snapfile")
