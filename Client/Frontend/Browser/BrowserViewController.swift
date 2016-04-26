@@ -877,7 +877,7 @@ class BrowserViewController: UIViewController {
                 log.debug("URL is nil!")
             }
 
-            if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
+            if let tab = tabManager.selectedTab where tab.webView === webView {
                 updateUIForReaderHomeStateForTab(tab)
             }
         case KVOCanGoBack:
@@ -1439,10 +1439,6 @@ extension BrowserViewController: BrowserDelegate {
         let windowCloseHelper = WindowCloseHelper(browser: browser)
         windowCloseHelper.delegate = self
         browser.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
-
-        let sessionRestoreHelper = SessionRestoreHelper(browser: browser)
-        sessionRestoreHelper.delegate = self
-        browser.addHelper(sessionRestoreHelper, name: SessionRestoreHelper.name())
 
         let findInPageHelper = FindInPageHelper(browser: browser)
         findInPageHelper.delegate = self
@@ -2091,14 +2087,6 @@ extension BrowserViewController: WKUIDelegate {
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
-
-            // If the local web server isn't working for some reason (Firefox cellular data is
-            // disabled in settings, for example), we'll fail to load the session restore URL.
-            // We rely on loading that page to get the restore callback to reset the restoring
-            // flag, so if we fail to load that page, reset it here.
-            if AboutUtils.getAboutComponent(url) == "sessionrestore" {
-                tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
-            }
         }
     }
 
@@ -2601,16 +2589,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
             UIView.setAnimationCurve(state.animationCurve)
             self.findInPageContainer.layoutIfNeeded()
             self.snackBars.layoutIfNeeded()
-        }
-    }
-}
-
-extension BrowserViewController: SessionRestoreHelperDelegate {
-    func sessionRestoreHelper(helper: SessionRestoreHelper, didRestoreSessionForBrowser browser: Browser) {
-        browser.restoring = false
-
-        if let tab = tabManager.selectedTab where tab.webView === browser.webView {
-            updateUIForReaderHomeStateForTab(tab)
         }
     }
 }
