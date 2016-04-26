@@ -21,9 +21,9 @@ class LoginViewController: UIViewController {
             self.accountManager.login(loginView.username, password: loginView.password, { err in
                 switch err {
                 case .BadAuth:
-                    println("Invalid username and/or password")
+                    print("Invalid username and/or password")
                 default:
-                    println("Connection error")
+                    print("Connection error")
                 }
             })
         }
