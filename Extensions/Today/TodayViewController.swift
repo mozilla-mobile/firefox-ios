@@ -101,14 +101,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         view.addSubview(buttonSpacer)
 
         // New tab button and label.
-        buttonSpacer.addSubview(newTabButton)
+        view.addSubview(newTabButton)
         newTabButton.snp_makeConstraints { make in
             make.top.equalTo(buttonSpacer)
             make.centerX.equalTo(buttonSpacer.snp_left)
         }
 
         // New private tab button and label.
-        buttonSpacer.addSubview(newPrivateTabButton)
+        view.addSubview(newPrivateTabButton)
         newPrivateTabButton.snp_makeConstraints { make in
             make.centerY.equalTo(newTabButton.snp_centerY)
             make.centerX.equalTo(buttonSpacer.snp_right)
