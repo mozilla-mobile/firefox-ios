@@ -1,0 +1,42 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "നിങ്ങള്‍ക്കുറപ്പാണോ?";
+
+/* Copy password text selection menu item */
+"Copy" = "പകര്‍ത്തുക";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "കളയുക";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "തിരഞ്ഞെടുത്തവ വേണ്ടെന്ന് വയ്ക്കുക";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "തിരച്ചില്‍ മോഡില്‍ കടക്കുക";
+
+/* Hide password text selection menu item */
+"Hide" = "മറയ്ക്കുക";
+
+/* Title for Logins List View screen */
+"Logins" = "പ്രവേശനങ്ങള്‍";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "ബന്ധപെട്ടിട്ടുള്ള എല്ലാ ഡിവൈസുകളില്‍ നിന്നും പ്രവേശനങ്ങള്‍ നീക്കം ചെയ്യും.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "പ്രവേശനങ്ങള്‍ ഒന്നും കണ്ടില്ല";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "തെരയുക";
+
+/* Title for selecting all logins */
+"Select All" = "എല്ലാം തിരഞ്ഞെടുക്കുക";
+
+/* Title for password row in Login Detail View */
+"password" = "രഹസ്യവാക്ക്";
+
+/* Title for username row in Login Detail View */
+"username" = "ഉപയോക്തൃനാമം";
+
+/* Title for website row in Login Detail View */
+"website" = "വെബ്‌സൈറ്റ്";
+

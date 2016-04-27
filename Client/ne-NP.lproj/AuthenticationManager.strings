@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "१ घण्टा पछि";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "१ मिनेट पछि";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "५ मिनेट पछि";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "१० मिनेट पछि";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "१५ मिनेट पछि";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "पासकोड परिवर्तन गर्नुहोस्";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "पासकोड प्रविष्ट गर्नुहोस्";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "नयाँ पासकोड प्रविष्ट गर्नुहोस्";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "पासकोड प्रविष्ट गर्नुहोस्";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "पासकोड प्रविष्ट गर्नुहोस्";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "तुरून्तै";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "गलत पासकोड। फेरि प्रयास गर्नुहोस् (%d प्रयासहरू बाँकी)";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "गलत पासकोड। फेरि प्रयास गर्नुहोस्।";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "अधिकतम प्रयास पुग्यो। एक घण्टा पछि फेरि प्रयास गर्नुहोस्।";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "अधिकतम प्रयास पुग्यो। फेरी प्रयास गर्नु होला।";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "नयाँ पासकोड अवस्थित कोड भन्दा फरक हुनुपर्छ।";
+
+/* List section title for passcode settings */
+"Passcode" = "पासकोड";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "पासकोड मिलेन। पुन: प्रयास गर्नुहोस्।";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "पासकोड पुनः प्रविष्टि गर्नुहोस्";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "पासकोड आवश्यक";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "पासकोड सेट गर्नुहोस्";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "टच आईडी र पासकोड";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "पासकोड बन्द गर्नुहोस्";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "पासकोड खोल्नुहोस्";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "आफ्नो पासकोड बन्द गर्नुहोस्।";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "टच आईडी प्रयोग गर्नुहोस्";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "अब लग इन गर्न आफ्नो औँठाछाप प्रयोग गर्नुहोस्।";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "अब निजी ब्राउजिङ गर्न आफ्नो औँठाछाप प्रयोग गर्नुहोस्।";
+

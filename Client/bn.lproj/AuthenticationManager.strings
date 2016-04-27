@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 ঘণ্টা পর";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 মিনিট পরে";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 মিনিট পরে";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 মিনিট পরে";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 মিনিট পরে";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "পাসকোড পরিবর্তন করুন";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "পাসকোড প্রবেশ করুন";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "একটি নতুন পাসকোড প্রবেশ করুন";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "একটি পাসকোড প্রবেশ করুন";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "পাসকোড প্রবেশ করুন";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "অবিলম্বে";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "ভুল পাসকোড। আবার চেষ্টা করুন (অবশিষ্ট প্রচেষ্টা: %d)।";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "ভুল পাসকোড। আবার চেষ্টা করুন।";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "সর্বোচ্চ প্রচেষ্টা অতিক্রম করেছে। দয়া করে এক ঘন্টার মধ্যে আবার চেষ্টা করুন।";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "সর্বোচ্চ প্রচেষ্টা অতিক্রম করেছে। অনুগ্রহ করে একটু পরে আবার চেষ্টা করুন।";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "নতুন পাসকোড বিদ্যমান কোড চেয়ে ভিন্ন হতে হবে।";
+
+/* List section title for passcode settings */
+"Passcode" = "পাসকোড";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "পাসকোড মিলছে না। আবার চেষ্টা করুন।";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "পাসকোড পুনরায় প্রবেশ করুন";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "পাসকোড প্রয়োজনীয়";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "পাসকোড নির্ধারণ করুন";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "টাচ ID এবং পাসকোড";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "পাসকোড বন্ধ করুন";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "পাসকোড চালু করুন";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "আপনার পাসকোড বন্ধ করুন।";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "টাচ ID ব্যাবহার করুন";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "এখন লগ-ইন করতে আপনার অঙ্গুলাঙ্ক ব্যাবহার করুন।";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "এখন ব্যাক্তিগত ব্রাউজিং ব্যাবহার করতে আপনার আঙ্গুলের ছাপ ব্যবহার করুন।";
+
