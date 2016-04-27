@@ -245,28 +245,28 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
     private func requestDesktopSiteFromMenu(webViewElementAccessibilityLabel: String) {
         tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("View Desktop Site")
-        tester().tapViewWithAccessibilityLabel("View Desktop Site")
+        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
+        tester().tapViewWithAccessibilityLabel("Request Desktop Site")
         tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
     }
 
     private func requestMobileSiteFromMenu(webViewElementAccessibilityLabel: String) {
         tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("View Mobile Site")
-        tester().tapViewWithAccessibilityLabel("View Mobile Site")
+        tester().waitForViewWithAccessibilityLabel("Request Mobile Site")
+        tester().tapViewWithAccessibilityLabel("Request Mobile Site")
         tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
     }
 
 
     private func ensureMobileSiteFromMenu() {
         tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("View Desktop Site")
+        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
         tester().tapViewWithAccessibilityLabel("Close Menu")
     }
 
     private func ensureDesktopSiteFromMenu() {
         tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("View Mobile Site")
+        tester().waitForViewWithAccessibilityLabel("Request Mobile Site")
         tester().tapViewWithAccessibilityLabel("Close Menu")
     }
 
