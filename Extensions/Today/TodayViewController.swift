@@ -201,7 +201,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         if let urlString = UIPasteboard.generalPasteboard().string,
             _ = NSURL(string: urlString) {
             let encodedString =
-                urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+                urlString.escape()
             openContainingApp("firefox://?url=\(encodedString)")
         }
     }
