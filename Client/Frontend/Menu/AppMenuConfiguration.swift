@@ -62,6 +62,10 @@ struct AppMenuConfiguration: MenuConfiguration {
         return isPrivateMode ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
     }
 
+    func minMenuRowHeight() -> CGFloat {
+        return 65.0
+    }
+
     func shadowColor() -> UIColor {
         return isPrivateMode ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
     }

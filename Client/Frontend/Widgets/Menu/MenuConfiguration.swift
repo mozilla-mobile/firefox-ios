@@ -19,6 +19,7 @@ protocol MenuConfiguration {
     func menuTintColor() -> UIColor
     func menuFont() -> UIFont
     func menuIcon() -> UIImage?
+    func minMenuRowHeight() -> CGFloat
     func shadowColor() -> UIColor
     func selectedItemTintColor() -> UIColor
 }
