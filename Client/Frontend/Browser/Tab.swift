@@ -64,8 +64,7 @@ class Tab: NSObject {
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
     var sessionData: SessionData?
-    var lastRequest: NSURLRequest? = nil
-    var restoring: Bool = false
+    private var lastRequest: NSURLRequest? = nil
     var pendingScreenshot = false
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
@@ -174,28 +173,30 @@ class Tab: NSObject {
     }
 
     func restore(webView: WKWebView) {
-        // Pulls restored session data from a previous SavedTab to load into the Browser. If it's nil, a session restore
-        // has already been triggered via custom URL, so we use the last request to trigger it again; otherwise,
-        // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
-        // to trigger the session restore via custom handlers
         if let sessionData = self.sessionData {
-            restoring = true
+            // If the tab has session data, load the last selected URL.
+            // We don't try to restore full session history due to bug 1238006.
+            let updatedURLs = sessionData.urls.flatMap { WebServer.sharedInstance.updateLocalURL($0) }
 
-            var updatedURLs = [String]()
-            for url in sessionData.urls {
-                let updatedURL = WebServer.sharedInstance.updateLocalURL(url)!.absoluteString
-                updatedURLs.append(updatedURL)
-            }
-            let currentPage = sessionData.currentPage
+            // currentPage is a number from -N+1 to 0, where N is the number of URLs.
+            // In other words, currentPage represents the offset from the last page
+            // in session history to the page that was selected.
+            var selectedIndex = updatedURLs.count + sessionData.currentPage - 1
             self.sessionData = nil
-            var jsonDict = [String: AnyObject]()
-            jsonDict["history"] = updatedURLs
-            jsonDict["currentPage"] = currentPage
-            let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-            let restoreURL = NSURL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")
-            lastRequest = PrivilegedRequest(URL: restoreURL!)
-            webView.loadRequest(lastRequest!)
+
+            guard !updatedURLs.isEmpty else {
+                log.warning("Restore data has no tabs!")
+                return
+            }
+
+            if !(0..<updatedURLs.count ~= selectedIndex) {
+                assertionFailure("Restore index outside of page count")
+                selectedIndex = updatedURLs.count - 1
+            }
+
+            webView.loadRequest(PrivilegedRequest(URL: updatedURLs[selectedIndex]))
         } else if let request = lastRequest {
+            // We're unzombifying a tab opened in the background, so load the pending request.
             webView.loadRequest(request)
         } else {
             log.error("creating webview with no lastRequest and no session data: \(self.url)")
