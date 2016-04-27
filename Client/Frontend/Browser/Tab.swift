@@ -66,6 +66,7 @@ class Tab: NSObject {
     var sessionData: SessionData?
     private var lastRequest: NSURLRequest? = nil
     var pendingScreenshot = false
+    var url: NSURL?
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
@@ -268,14 +269,6 @@ class Tab: NSObject {
             }
         }
         return largest
-    }
-
-    var url: NSURL? {
-        guard let resolvedURL = webView?.URL ?? lastRequest?.URL else {
-            guard let sessionData = sessionData else { return nil }
-            return sessionData.urls.last
-        }
-        return resolvedURL
     }
 
     var displayURL: NSURL? {

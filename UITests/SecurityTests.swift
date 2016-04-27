@@ -62,6 +62,25 @@ class SecurityTests: KIFTestCase {
         XCTAssertFalse(tester().viewExistsWithLabel("Local page loaded"))
     }
 
+    /// Tap the URL spoof button, which opens a new window to a host with an invalid port.
+    /// Since the window has no origin before load, the page is able to modify the document,
+    /// so make sure we don't show the URL.
+    func testSpoofExploit() {
+        tester().tapWebViewElementWithAccessibilityLabel("URL spoof")
+
+        // Wait for the window to open.
+        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
+        tester().waitForAnimationsToFinish()
+
+        // Make sure the URL bar doesn't show the URL since it hasn't loaded.
+        XCTAssertFalse(tester().viewExistsWithLabel("http://1.2.3.4:1234/"))
+
+        // Since the newly opened tab doesn't have a URL/title we can't find its accessibility
+        // element to close it in teardown. Workaround: load another page first.
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(webRoot)\n")
+    }
+
     override func afterEach() {
         BrowserUtils.resetToAboutHome(tester())
     }
