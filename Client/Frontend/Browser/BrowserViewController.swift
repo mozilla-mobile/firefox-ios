@@ -973,7 +973,7 @@ class BrowserViewController: UIViewController {
     }
 
     func switchToTabForURLOrOpen(url: NSURL, isPrivate: Bool = false) {
-        popToTab()
+        popToBVC()
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
@@ -997,7 +997,7 @@ class BrowserViewController: UIViewController {
     }
 
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
-        popToTab()
+        popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate)
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
