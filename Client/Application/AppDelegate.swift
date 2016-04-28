@@ -248,7 +248,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let params: LaunchParams
 
-        if let url = url, newURL = NSURL(string: url.unescape()) {
+        if let url = url, newURL = NSURL(string: url) {
             params = LaunchParams(url: newURL, isPrivate: isPrivate)
         } else {
             params = LaunchParams(url: nil, isPrivate: isPrivate)
