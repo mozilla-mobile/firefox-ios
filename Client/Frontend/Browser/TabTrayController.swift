@@ -395,19 +395,11 @@ class TabTrayController: UIViewController {
 
         // If we're displaying the menu as a modal and not a popover, make sure to dismiss here instead of 
         // viewWillTransitionToSize to allow the animation to 'unwind' itself using the MenuPresenationAnimator.
-        if displayedMenu?.modalPresentationStyle == .OverCurrentContext {
-            displayedMenu?.dismissViewControllerAnimated(true, completion: nil)
-        }
+        displayedMenu?.dismissViewControllerAnimated(true, completion: nil)
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        // If we're displaying the menu as a popover, hide it right away here instead of traitCollectionDidChange.
-        // Otherwise, the popover will briefly appear behind hiding again. Since we don't do any transforms during
-        // the popover animation, we don't need to 'unwind' the animation.
-        if displayedMenu?.modalPresentationStyle == .Popover {
-            displayedMenu?.dismissViewControllerAnimated(true, completion: nil)
-        }
 
         coordinator.animateAlongsideTransition({ _ in
             self.collectionView.collectionViewLayout.invalidateLayout()
@@ -467,7 +459,15 @@ class TabTrayController: UIViewController {
         mvc.actionDelegate = self
         mvc.menuTransitionDelegate = MenuPresentationAnimator()
         mvc.modalPresentationStyle = .OverCurrentContext
-        self.menuViewController = mvc
+
+        // Fix the width of the menu when we are in landscape or iPad
+        if (traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Compact) ||
+            traitCollection.horizontalSizeClass == .Regular
+        {
+            mvc.fixedWidth = 320
+        }
+
+        self.displayedMenu = mvc
         self.presentViewController(mvc, animated: true, completion: nil)
     }
 
