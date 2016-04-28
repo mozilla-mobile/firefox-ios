@@ -24,20 +24,20 @@ class SearchInputViewRefTests: FXSnapshotTestCase {
     }
 
     func testDefaultTappedView() {
-        view.performSelector("SELtappedSearch")
+        view.performSelector(#selector(SearchInputView.tappedSearch))
         view.layoutIfNeeded()
         FBSnapshotVerifyView(view)
     }
 
     func testDefaultShortInputedText() {
-        view.performSelector("SELtappedSearch")
+        view.performSelector(#selector(SearchInputView.tappedSearch))
         view.layoutIfNeeded()
         view.inputField.text = "username"
         FBSnapshotVerifyView(view)
     }
 
     func testDefaultLongInputedText() {
-        view.performSelector("SELtappedSearch")
+        view.performSelector(#selector(SearchInputView.tappedSearch))
         view.layoutIfNeeded()
         view.inputField.text = longText
         view.inputField.becomeFirstResponder()
@@ -52,14 +52,15 @@ class SearchInputViewRefTests: FXSnapshotTestCase {
 
     func testStretchedTapped() {
         view.frame = stretchedFrame
-        view.performSelector("SELtappedSearch")
+        view.performSelector(#selector(SearchInputView.tappedSearch))
+        view.layoutIfNeeded()
         view.layoutIfNeeded()
         FBSnapshotVerifyView(view)
     }
 
     func testStretchedWithText() {
         view.frame = stretchedFrame
-        view.performSelector("SELtappedSearch")
+        view.performSelector(#selector(SearchInputView.tappedSearch))
         view.layoutIfNeeded()
         view.inputField.text = longText
         FBSnapshotVerifyView(view)
@@ -73,14 +74,14 @@ class SearchInputViewRefTests: FXSnapshotTestCase {
 
     func testCompressedTapped() {
         view.frame = compressedFrame
-        view.performSelector("SELtappedSearch")
+        view.performSelector(#selector(SearchInputView.tappedSearch))
         view.layoutIfNeeded()
         FBSnapshotVerifyView(view)
     }
 
     func testCompressedWithText() {
         view.frame = compressedFrame
-        view.performSelector("SELtappedSearch")
+        view.performSelector(#selector(SearchInputView.tappedSearch))
         view.layoutIfNeeded()
         view.inputField.text = longText
         FBSnapshotVerifyView(view)

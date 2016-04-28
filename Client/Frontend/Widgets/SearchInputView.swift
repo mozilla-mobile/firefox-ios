@@ -40,7 +40,7 @@ class SearchInputView: UIView {
         textField.delegate = self
         textField.textColor = SearchInputViewUX.inputColor
         textField.tintColor = SearchInputViewUX.inputColor
-        textField.addTarget(self, action: #selector(SearchInputView.SELinputTextDidChange(_:)), forControlEvents: .EditingChanged)
+        textField.addTarget(self, action: #selector(SearchInputView.inputTextDidChange(_:)), forControlEvents: .EditingChanged)
         textField.accessibilityLabel = NSLocalizedString("Search Input Field", tableName: "LoginManager", comment: "Accessibility label for the search input field in the Logins list")
         textField.autocorrectionType = .No
         textField.autocapitalizationType = .None
@@ -61,7 +61,7 @@ class SearchInputView: UIView {
 
     private lazy var closeButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(SearchInputView.SELtappedClose), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(SearchInputView.tappedClose), forControlEvents: .TouchUpInside)
         button.setImage(UIImage(named: "clear"), forState: .Normal)
         button.accessibilityLabel = NSLocalizedString("Clear Search", tableName: "LoginManager",
             comment: "Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode")
@@ -79,7 +79,7 @@ class SearchInputView: UIView {
     private lazy var overlay: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.whiteColor()
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SearchInputView.SELtappedSearch)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SearchInputView.tappedSearch)))
 
         view.isAccessibilityElement = true
         view.accessibilityLabel =  NSLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
@@ -174,20 +174,20 @@ class SearchInputView: UIView {
 // MARK: - Selectors
 extension SearchInputView {
 
-    @objc private func SELtappedSearch() {
+    func tappedSearch() {
         isEditing = true
         inputField.becomeFirstResponder()
         delegate?.searchInputViewBeganEditing(self)
     }
 
-    @objc private func SELtappedClose() {
+    func tappedClose() {
         isEditing = false
         delegate?.searchInputViewFinishedEditing(self)
         inputField.text = nil
         inputField.resignFirstResponder()
     }
 
-    @objc private func SELinputTextDidChange(textField: UITextField) {
+    func inputTextDidChange(textField: UITextField) {
         delegate?.searchInputView(self, didChangeTextTo: textField.text ?? "")
     }
 }
