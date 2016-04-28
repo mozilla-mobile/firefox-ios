@@ -79,9 +79,6 @@ class TopSitesTests: KIFTestCase {
         // Get the first cell (test10.com).
         let cell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
 
-        // Each thumbnail will have a remove button with the "Remove site" accessibility label, so
-        // we can't uniquely identify which remove button we want. Instead, just verify that "Remove site"
-        // labels are visible, and click the thumbnail at the top left (where the remove button is).
         let cellToDeleteLabel = cell.accessibilityLabel
         tester().longPressViewWithAccessibilityLabel(cellToDeleteLabel, duration: 1)
         tester().waitForViewWithAccessibilityLabel("Remove page - \(cellToDeleteLabel!)")
