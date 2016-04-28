@@ -94,7 +94,7 @@ class MenuView: UIView {
         }
     }
 
-    var menuRowHeight: Float = 65.0 {
+    var menuRowHeight: Float = 0 {
         didSet {
             self.setNeedsLayout()
         }
@@ -321,7 +321,9 @@ class MenuView: UIView {
     private func layoutMenu() {
         let numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0)
         menuPagingLayout.maxNumberOfItemsPerPageRow = Int(numberOfItemsInRow)
-        menuPagingLayout.menuRowHeight = CGFloat(menuRowHeight)
+
+        menuPagingLayout.menuRowHeight = CGFloat(menuItemDelegate?.heightForRowsInMenuView(self) ?? 0)
+        menuRowHeight = Float(menuPagingLayout.menuRowHeight)
 
         menuPagingView.snp_updateConstraints { make in
             let maxNumberOfItemsForPage = CGFloat(self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) ?? 0)
@@ -362,12 +364,6 @@ extension MenuView: UICollectionViewDataSource {
 }
 
 extension MenuView: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0)
-        let width = ((self.bounds.size.width - itemPadding) - ((numberOfItemsInRow+1) * menuPagingLayout.interitemSpacing)) / numberOfItemsInRow
-        return CGSizeMake(width, CGFloat(menuRowHeight))
-    }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         menuItemDelegate?.menuView(self, didSelectItemAtIndexPath: indexPath)
