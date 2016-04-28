@@ -1111,6 +1111,102 @@ class BrowserViewController: UIViewController {
         return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
     }
 
+    func reloadTab(){
+        if(homePanelController == nil){
+            tabManager.selectedTab?.reload()
+        }
+    }
+    
+    func goBack(){
+        if(tabManager.selectedTab?.canGoBack == true && homePanelController == nil){
+            tabManager.selectedTab?.goBack()
+        }
+    }
+    func goForward(){
+        if(tabManager.selectedTab?.canGoForward == true && homePanelController == nil){
+            tabManager.selectedTab?.goForward()
+        }
+    }
+    
+    func findOnPage(){
+        if(homePanelController == nil){
+            tab( (tabManager.selectedTab)!, didSelectFindInPageForSelection: "")
+        }
+    }
+    
+    func selectLocationBar(){
+        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+    }
+    
+    func newTab(){
+        openBlankNewTabAndFocus(isPrivate: false)
+    }
+    func newPrivateTab(){
+        openBlankNewTabAndFocus(isPrivate: true)
+    }
+    
+    func closeTab(){
+        if(tabManager.tabs.count > 1){
+            tabManager.removeTab(tabManager.selectedTab!);
+        }
+        else{
+            //need to close the last tab and show the favorites screen thing
+        }
+    }
+    
+    func nextTab(){
+        if(tabManager.selectedIndex < (tabManager.tabs.count - 1) ){
+            tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex+1])
+        }
+        else{
+            if(tabManager.tabs.count > 1){
+                tabManager.selectTab(tabManager.tabs[0]);
+            }
+        }
+    }
+    
+    func previousTab(){
+        if(tabManager.selectedIndex > 0){
+            tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex-1])
+        }
+        else{
+            if(tabManager.tabs.count > 1){
+                tabManager.selectTab(tabManager.tabs[tabManager.count-1])
+            }
+        }
+    }
+
+    override var keyCommands: [UIKeyCommand]? {
+        if #available(iOS 9.0, *) {
+            return [
+                UIKeyCommand(input: "r", modifierFlags: .Command, action: #selector(BrowserViewController.reloadTab), discoverabilityTitle: Strings.ReloadPageTitle),
+                UIKeyCommand(input: "[", modifierFlags: .Command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: Strings.BackTitle),
+                UIKeyCommand(input: "]", modifierFlags: .Command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: Strings.ForwardTitle),
+
+                UIKeyCommand(input: "f", modifierFlags: .Command, action: #selector(BrowserViewController.findOnPage), discoverabilityTitle: Strings.FindTitle),
+                UIKeyCommand(input: "l", modifierFlags: .Command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: Strings.SelectLocationBarTitle),
+                UIKeyCommand(input: "t", modifierFlags: .Command, action: #selector(BrowserViewController.newTab), discoverabilityTitle: Strings.NewTabTitle),
+                UIKeyCommand(input: "p", modifierFlags: [.Command, .Shift], action: #selector(BrowserViewController.newPrivateTab), discoverabilityTitle: Strings.NewPrivateTabTitle),
+                UIKeyCommand(input: "w", modifierFlags: .Command, action: #selector(BrowserViewController.closeTab), discoverabilityTitle: Strings.CloseTabTitle),
+                UIKeyCommand(input: "\t", modifierFlags: .Control, action: #selector(BrowserViewController.nextTab), discoverabilityTitle: Strings.ShowNextTabTitle),
+                UIKeyCommand(input: "\t", modifierFlags: [.Control, .Shift], action: #selector(BrowserViewController.previousTab), discoverabilityTitle: Strings.ShowPreviousTabTitle),
+            ]
+        } else {
+            // Fallback on earlier versions
+            return [
+                UIKeyCommand(input: "r", modifierFlags: .Command, action: #selector(BrowserViewController.reloadTab)),
+                UIKeyCommand(input: "[", modifierFlags: .Command, action: #selector(BrowserViewController.goBack)),
+                UIKeyCommand(input: "f", modifierFlags: .Command, action: #selector(BrowserViewController.findOnPage)),
+                UIKeyCommand(input: "l", modifierFlags: .Command, action: #selector(BrowserViewController.selectLocationBar)),
+                UIKeyCommand(input: "t", modifierFlags: .Command, action: #selector(BrowserViewController.newTab)),
+                UIKeyCommand(input: "p", modifierFlags: [.Command, .Shift], action: #selector(BrowserViewController.newPrivateTab)),
+                UIKeyCommand(input: "w", modifierFlags: .Command, action: #selector(BrowserViewController.closeTab)),
+                UIKeyCommand(input: "\t", modifierFlags: .Control, action: #selector(BrowserViewController.nextTab)),
+                UIKeyCommand(input: "\t", modifierFlags: [.Control, .Shift], action: #selector(BrowserViewController.previousTab))
+            ]
+        }
+    }
+    
     private func getCurrentAppState() -> AppState {
         guard let tab = tabManager.selectedTab,
         let displayURL = tab.displayURL where displayURL.absoluteString.characters.count > 0 else {
