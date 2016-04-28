@@ -119,12 +119,12 @@ class TopSitesTests: KIFTestCase {
     func testEmptyState() {
         // Delete all of the suggested tiles
         var collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
-        repeat {
+        while collection.visibleCells().count > 0 {
             let firstCell = collection.visibleCells().first!
             firstCell.longPressAtPoint(CGPointZero, duration: 3)
             tester().tapViewWithAccessibilityLabel("Remove page - \(firstCell.accessibilityLabel!)")
             tester().waitForAnimationsToFinish()
-        } while collection.visibleCells().count > 0
+        }
 
         // Close editing mode
         tester().tapViewWithAccessibilityLabel("Done")

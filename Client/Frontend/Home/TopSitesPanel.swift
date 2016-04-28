@@ -610,11 +610,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.accessibilityLabel = cell.textLabel.text
         cell.removeButton.hidden = !editing
 
-        let removeButtonAccessibilityLabel =
-            String(format:
-                NSLocalizedString("TopSites.RemovePage.Button",
-                    value: "Remove page - %@",
-                    comment: "Button shown in editing mode to remove this site from the top sites panel."), domainURL)
+        let removeButtonAccessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, domainURL)
         cell.removeButton.accessibilityLabel = removeButtonAccessibilityLabel
 
         guard let icon = site.icon else {
@@ -649,12 +645,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.accessibilityLabel = cell.textLabel.text
 
         if let title = title {
-            let removeButtonAccessibilityLabel =
-                String(format:
-                    NSLocalizedString("TopSites.RemovePage.Button",
-                        value: "Remove page - %@",
-                        comment: "Button shown in editing mode to remove this site from the top sites panel."), title)
-            cell.removeButton.accessibilityLabel = removeButtonAccessibilityLabel
+            cell.removeButton.accessibilityLabel =  String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, title)
         }
 
         guard let icon = site.wordmark.url.asURL,
