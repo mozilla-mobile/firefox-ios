@@ -439,48 +439,13 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        if activeCrashReporter?.previouslyCrashed ?? false {
-            log.debug("Previously crashed.")
-
-            // Reset previous crash state
-            activeCrashReporter?.resetPreviousCrashState()
-
-            let optedIntoCrashReporting = profile.prefs.boolForKey("crashreports.send.always")
-            if optedIntoCrashReporting == nil {
-                // Offer a chance to allow the user to opt into crash reporting
-                showCrashOptInAlert()
-            } else {
-                showRestoreTabsAlert()
-            }
-        } else {
-            log.debug("Restoring tabs.")
-            tabManager.restoreTabs()
-            log.debug("Done restoring tabs.")
-        }
+        log.debug("Restoring tabs.")
+        tabManager.restoreTabs()
+        log.debug("Done restoring tabs.")
 
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
         log.debug("BVC done.")
-    }
-
-    private func showCrashOptInAlert() {
-        let alert = UIAlertController.crashOptInAlert(
-            sendReportCallback: { _ in
-                // Turn on uploading but don't save opt-in flag to profile because this is a one time send.
-                configureActiveCrashReporter(true)
-                self.showRestoreTabsAlert()
-            },
-            alwaysSendCallback: { _ in
-                self.profile.prefs.setBool(true, forKey: "crashreports.send.always")
-                configureActiveCrashReporter(true)
-                self.showRestoreTabsAlert()
-            },
-            dontSendCallback: { _ in
-                // no-op: Do nothing if we don't want to send it
-                self.showRestoreTabsAlert()
-            }
-        )
-        self.presentViewController(alert, animated: true, completion: nil)
     }
 
     private func showRestoreTabsAlert() {
