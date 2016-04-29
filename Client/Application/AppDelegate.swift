@@ -117,8 +117,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootViewController.navigationBarHidden = true
         self.window!.rootViewController = rootViewController
 
-        log.debug("Configuring Crash Reporting...")
-        PLCrashReporter.sharedReporter().enableCrashReporter()
+        do {
+            log.debug("Configuring Crash Reporting...")
+            try PLCrashReporter.sharedReporter().enableCrashReporterAndReturnError()
+        } catch let error as NSError {
+            log.error("Failed to enable PLCrashReporter - \(error.description)")
+        }
 
         log.debug("Adding observers…")
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
