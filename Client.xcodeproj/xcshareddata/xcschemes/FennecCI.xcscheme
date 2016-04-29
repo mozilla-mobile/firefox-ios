@@ -206,6 +206,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "FSUtilsTests">
+               </Test>
+               <Test
                   Identifier = "FSUtilsTests/testListOpenFileDescriptors()">
                </Test>
             </SkippedTests>
