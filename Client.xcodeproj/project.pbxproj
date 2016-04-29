@@ -422,6 +422,8 @@
 		E444F7E51B4B1CB600FEB19B /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E0FF31A932BD500161DC3 /* ImageIO.framework */; };
 		E444F8271B4C1E8800FEB19B /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		E4483B5A1ADED63300B485A7 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		E457C85C1CD3B5F3007EC4E4 /* testcert1.pem in Resources */ = {isa = PBXBuildFile; fileRef = D37DE2C81CA356F900A5EC69 /* testcert1.pem */; };
+		E457C86A1CD3B5F7007EC4E4 /* testcert2.pem in Resources */ = {isa = PBXBuildFile; fileRef = D37DE2C91CA356F900A5EC69 /* testcert2.pem */; };
 		E46C51C31B41ADD800EB349F /* Try.m in Sources */ = {isa = PBXBuildFile; fileRef = E46C51C21B41ADD800EB349F /* Try.m */; };
 		E46C51C41B41ADD800EB349F /* Try.m in Sources */ = {isa = PBXBuildFile; fileRef = E46C51C21B41ADD800EB349F /* Try.m */; };
 		E47536ED1C85412C0022CC69 /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47536EC1C85412C0022CC69 /* PrintHelper.swift */; };
@@ -3840,7 +3842,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E457C85C1CD3B5F3007EC4E4 /* testcert1.pem in Resources */,
 				39E65D191CA455A900C63CE3 /* Images.xcassets in Resources */,
+				E457C86A1CD3B5F7007EC4E4 /* testcert2.pem in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
