@@ -54,7 +54,6 @@ def main():
 
         downloadLocale(locale, L10nScraper(locale))
 
-    copyOverrides()
     verifyEngines()
 
 def downloadLocale(locale, scraper):
@@ -95,22 +94,6 @@ def downloadLocale(locale, scraper):
 
         # Otherwise, just use the downloaded file as is.
         shutil.move(downloadedFile, path)
-
-def copyOverrides():
-    for locale in os.listdir("SearchOverrides"):
-        if not locale.startswith("."):
-            print("copying overrides for %s..." % locale)
-            localeSrc = os.path.join("SearchOverrides", locale)
-            localeDst = os.path.join("SearchPlugins", locale)
-            if not os.path.exists(localeDst):
-                os.makedirs(localeDst)
-
-            for file in os.listdir(localeSrc):
-                if localeSrc.startswith("."): continue
-                overrideSrc = os.path.join(localeSrc, file)
-                overrideDst = os.path.join(localeDst, file)
-                print("  overriding: %s..." % file)
-                shutil.copy(overrideSrc, overrideDst)
 
 def verifyEngines():
     print("verifying engines...")

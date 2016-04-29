@@ -1,0 +1,11 @@
+<SearchOverlay>
+  <replace target="//search:Param[@name='pc' and @value='MOZB']">
+    <Param name="pc" value="MOZW"/>
+  </replace>
+  <replace target="//search:Param[@name='form' and @value='MOZMBA']">
+    <Param name="form" value="MOZWSB"/>
+  </replace>
+  <replace target="//search:Url[@type='application/x-moz-tabletsearch']">
+    <!-- tablet search not supported -->
+  </replace>
+</SearchOverlay>
