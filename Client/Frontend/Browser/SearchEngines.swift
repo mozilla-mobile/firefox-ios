@@ -228,7 +228,7 @@ class SearchEngines {
             }
             assert(NSFileManager.defaultManager().fileExistsAtPath(fullPath), "\(fullPath) exists")
 
-            let engine = parser.parse(fullPath)
+            let engine = parser.parse(fullPath, id: engineName)
             assert(engine != nil, "Engine at \(fullPath) successfully parsed")
 
             engines.append(engine!)

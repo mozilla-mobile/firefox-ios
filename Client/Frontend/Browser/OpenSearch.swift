@@ -17,6 +17,8 @@ class OpenSearchEngine {
     let shortName: String
     let description: String?
     let image: UIImage?
+    let id: String
+
     private let searchTemplate: String
     private let suggestTemplate: String?
 
@@ -25,7 +27,8 @@ class OpenSearchEngine {
 
     private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
 
-    init(shortName: String, description: String?, image: UIImage?, searchTemplate: String, suggestTemplate: String?) {
+    init(id: String, shortName: String, description: String?, image: UIImage?, searchTemplate: String, suggestTemplate: String?) {
+        self.id = id
         self.shortName = shortName
         self.description = description
         self.image = image
@@ -130,7 +133,7 @@ class OpenSearchParser {
         self.pluginMode = pluginMode
     }
 
-    func parse(file: String) -> OpenSearchEngine? {
+    func parse(file: String, id: String) -> OpenSearchEngine? {
         let data = NSData(contentsOfFile: file)
 
         if data == nil {
@@ -262,6 +265,6 @@ class OpenSearchParser {
             print("Error: Invalid search image data")
         }
 
-        return OpenSearchEngine(shortName: shortName!, description: description, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate)
+        return OpenSearchEngine(id: id, shortName: shortName!, description: description, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate)
     }
 }
