@@ -25,5 +25,6 @@ test:
         -sdk iphonesimulator
         -project 'Client.xcodeproj'
         -scheme "FennecCI"
-        clean build test
+        clean build test | tee $CIRCLE_ARTIFACTS/xcode_raw.log
+    - xcpretty --color --report junit --output $CIRCLE_TEST_REPORTS/xcode/results.xml < $CIRCLE_ARTIFACTS/xcode_raw.log || exit 0
 
