@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "可用裝置:";
+
+/* Close button in top navigation bar */
+"Close" = "關閉";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "請開啟 Firefox，於設定中登入繼續。";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "傳送";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "傳送分頁";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "您尚未登入 Firefox 帳號。";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "您沒有其他連結到此 Firefox 帳號的裝置可進行同步。";
+

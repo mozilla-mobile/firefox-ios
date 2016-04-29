@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Feditse";
+
+/* Text selection menu item */
+"Find in Page" = "Batla mo Tsebeng";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "E e latelang mo tsebeng ya maduo";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "E e fetileng mo tsebeng ya maduo";
+

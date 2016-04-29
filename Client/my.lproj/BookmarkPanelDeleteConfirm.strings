@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "ထိုအရာနှင့်အတူ ၄င်းနှင့်သက်ဆိုင်သည့် အကြောင်းအရာများကိုပါ ပယ်ဖျက်ရန် သေချာပါသလား။";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "မဆောင်ရွက်တော့ပါ";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "ဖျက်ပါ";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "ဒီဖိုလ်ဒါသည် အလွတ် ဖြစ်မနေပါ။";
+

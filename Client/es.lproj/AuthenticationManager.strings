@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Después de 1 hora";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Después de 1 minuto";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Después de 5 minutos";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Después de 10 minutos";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Después de 15 minutos";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Cambiar código de acceso";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "Escribe el código de acceso";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "Escribe un nuevo código de acceso";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Escribe un código de acceso";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "Escribe el código de acceso";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Inmediatamente";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Código de acceso incorrecto. Inténtalo de nuevo (intentos restantes: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Código de acceso incorrecto. Inténtalo de nuevo.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Se alcanzó el número máximo de intentos. Prueba dentro de una hora.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Se alcanzó el número máximo de intentos. Prueba más tarde.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "El código de acceso nuevo debe ser diferente al anterior.";
+
+/* List section title for passcode settings */
+"Passcode" = "Código de acceso";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Los códigos de acceso no coinciden. Intenta de nuevo.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Vuelve a escribir el código de acceso";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Solicitar código de acceso";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Establecer un código de acceso";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID y código de acceso";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Desactivar código de acceso";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Activar código de acceso";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Desactiva tu código de acceso.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Uso de Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Usa tu huella dactilar para acceder ahora a los inicios de sesión.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Usa tu huella dactilar para acceder ahora a navegación privada.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Usa tu huella dactilar para desactivar Touch ID.";
+
+/* Touch ID prompt subtitle when accessing  the require passcode setting */
+"touchid.require.passcode.reason.label" = "Usa tu huella dactilar para acceder a la configuración del intervalo de petición de contraseña.";
+
