@@ -12,4 +12,7 @@
 #import "ThirdParty/SWTableViewCell/PodFiles/SWTableViewCell.h"
 #import "ThirdParty/RaptureXML/RXMLElement.h"
 
+
+#import "CrashReporter.h"
+
 #endif
