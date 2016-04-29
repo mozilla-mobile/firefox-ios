@@ -472,3 +472,26 @@ class PasscodeUtils {
         tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(3)]))
     }
 }
+
+class HomePageUtils {
+    static func navigateToHomePageSettings(tester: KIFUITestActor) {
+        tester.waitForAnimationsToFinish()
+        tester.tapViewWithAccessibilityLabel("Menu")
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityIdentifier("HomePageSetting")
+    }
+
+    static func homePageSetting(tester: KIFUITestActor) -> String? {
+        let view = tester.waitForViewWithAccessibilityIdentifier("HomePageSettingTextField")
+        guard let textField = view as? UITextField else {
+            XCTFail("View is not a textField: view is \(view)")
+            return nil
+        }
+        return textField.text
+    }
+
+    static func navigateFromHomePageSettings(tester: KIFUITestActor) {
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityLabel("Done")
+    }
+}
