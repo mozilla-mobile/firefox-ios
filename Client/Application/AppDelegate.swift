@@ -146,7 +146,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug("Updating authentication keychain state to reflect system state")
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
-        
+
+        sendCorePing()
+
         log.debug("Done with setting up the application.")
         return true
     }
@@ -239,7 +241,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let params: LaunchParams
 
-        if let url = url, newURL = NSURL(string: url.unescape()) {
+        if let url = url, newURL = NSURL(string: url) {
             params = LaunchParams(url: newURL, isPrivate: isPrivate)
         } else {
             params = LaunchParams(url: nil, isPrivate: isPrivate)
@@ -338,6 +340,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // is that this method is only invoked whenever the application is entering the foreground where as 
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
+
+        sendCorePing()
+    }
+
+    /// Send a telemetry ping if the user hasn't disabled reporting.
+    /// We still create and log the ping for non-release channels, but we don't submit it.
+    private func sendCorePing() {
+        if let profile = profile where (profile.prefs.boolForKey("settings.sendUsageData") ?? true) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+                let ping = CorePing(profile: profile)
+                Telemetry.sendPing(ping)
+            }
+        }
     }
 
     private func updateAuthenticationInfo() {
@@ -355,7 +370,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ErrorPageHelper.register(server, certStore: profile.certStore)
         AboutHomeHandler.register(server)
         AboutLicenseHandler.register(server)
-        SessionRestoreHandler.register(server)
+
         // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
         // catching and handling the error seemed to fix things, but we're not sure why.
         // Either way, not implicitly unwrapping a try is not a great way of doing things

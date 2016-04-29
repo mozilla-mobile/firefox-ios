@@ -140,9 +140,6 @@
                <Test
                   Identifier = "SessionRestoreTests/testTabRestore()">
                </Test>
-               <Test
-                  Identifier = "TopSitesTests/testChangingDyamicFontOnTopSites()">
-               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference

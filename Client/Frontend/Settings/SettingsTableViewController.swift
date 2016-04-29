@@ -15,7 +15,7 @@ private let Bug1204635_S3 = NSLocalizedString("Clear", tableName: "ClearPrivateD
 private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
-class Setting {
+class Setting: NSObject {
     private var _title: NSAttributedString?
 
     weak var delegate: SettingsDelegate?

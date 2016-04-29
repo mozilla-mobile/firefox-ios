@@ -168,6 +168,7 @@ class BrowserViewController: UIViewController {
 
         if showToolbar {
             toolbar = TabToolbar()
+            toolbar?.applyTheme(getCurrentAppState().isPrivate() ? Theme.PrivateMode : Theme.NormalMode)
             toolbar?.tabToolbarDelegate = self
             footerBackground = BlurWrapper(view: toolbar!)
             footerBackground?.translatesAutoresizingMaskIntoConstraints = false
@@ -880,12 +881,17 @@ class BrowserViewController: UIViewController {
                 runScriptsOnWebView(webView)
             }
         case KVOURL:
-            if let tab = tabManager.selectedTab where tab.webView?.URL == nil {
-                log.debug("URL is nil!")
-            }
+            guard let tab = tabManager[webView] else { break }
 
-            if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
-                updateUIForReaderHomeStateForTab(tab)
+            // To prevent spoofing, only change the URL immediately if the new URL is on
+            // the same origin as the current URL. Otherwise, do nothing and wait for
+            // didCommitNavigation to confirm the page load.
+            if tab.url?.origin == webView.URL?.origin {
+                tab.url = webView.URL
+
+                if tab === tabManager.selectedTab {
+                    updateUIForReaderHomeStateForTab(tab)
+                }
             }
         case KVOCanGoBack:
             guard let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
@@ -967,9 +973,8 @@ class BrowserViewController: UIViewController {
     }
 
     func switchToTabForURLOrOpen(url: NSURL, isPrivate: Bool = false) {
-        let tab = tabManager.getTabForURL(url)
-        popToTab(tab)
-        if let tab = tab {
+        popToBVC()
+        if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
             openURLInNewTab(url, isPrivate: isPrivate)
@@ -992,21 +997,19 @@ class BrowserViewController: UIViewController {
     }
 
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
-        popToTab()
+        popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate)
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
-    private func popToTab(forTab: Tab? = nil) {
+    private func popToBVC() {
         guard let currentViewController = navigationController?.topViewController else {
                 return
         }
         if let presentedViewController = currentViewController.presentedViewController {
             presentedViewController.dismissViewControllerAnimated(false, completion: nil)
         }
-        // if a tab already exists and the top VC is not the BVC then pop the top VC, otherwise don't.
-        if currentViewController != self,
-            let _ = forTab {
+        if currentViewController != self {
             self.navigationController?.popViewControllerAnimated(true)
         } else if urlBar.inOverlayMode {
             urlBar.SELdidClickCancel()
@@ -1595,10 +1598,6 @@ extension BrowserViewController: TabDelegate {
         windowCloseHelper.delegate = self
         tab.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
 
-        let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
-        sessionRestoreHelper.delegate = self
-        tab.addHelper(sessionRestoreHelper, name: SessionRestoreHelper.name())
-
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
         tab.addHelper(findInPageHelper, name: FindInPageHelper.name())
@@ -2078,6 +2077,16 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        guard let tab = tabManager[webView] else { return }
+
+        tab.url = webView.URL
+
+        if tabManager.selectedTab === tab {
+            updateUIForReaderHomeStateForTab(tab)
+        }
+    }
+
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         let tab: Tab! = tabManager[webView]
         tabManager.expireSnackbars()
@@ -2252,14 +2261,6 @@ extension BrowserViewController: WKUIDelegate {
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
-
-            // If the local web server isn't working for some reason (Firefox cellular data is
-            // disabled in settings, for example), we'll fail to load the session restore URL.
-            // We rely on loading that page to get the restore callback to reset the restoring
-            // flag, so if we fail to load that page, reset it here.
-            if AboutUtils.getAboutComponent(url) == "sessionrestore" {
-                tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
-            }
         }
     }
 
@@ -2764,16 +2765,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
             UIView.setAnimationCurve(state.animationCurve)
             self.findInPageContainer.layoutIfNeeded()
             self.snackBars.layoutIfNeeded()
-        }
-    }
-}
-
-extension BrowserViewController: SessionRestoreHelperDelegate {
-    func sessionRestoreHelper(helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
-        tab.restoring = false
-
-        if let tab = tabManager.selectedTab where tab.webView === tab.webView {
-            updateUIForReaderHomeStateForTab(tab)
         }
     }
 }

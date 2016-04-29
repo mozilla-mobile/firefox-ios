@@ -185,6 +185,30 @@ extension MenuViewController: MenuItemDelegate {
         }
         performMenuAction(menuItem.action, withAnimation: animation, onView: menuItemCell.menuImageView)
     }
+
+    func heightForRowsInMenuView(menuView: MenuView) -> CGFloat {
+        // loop through the labels for the menu items and calculate the largest
+        var largestLabel: CGFloat = 0
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: menuConfig.minMenuRowHeight(), height: 0))
+        label.font = menuConfig.menuFont()
+        for item in menuConfig.menuItems {
+            label.text = item.title
+            let labelHeight = getLabelHeight(label)
+            largestLabel = max(largestLabel, labelHeight + 13)
+        }
+        return max(menuConfig.minMenuRowHeight(), largestLabel)
+    }
+
+    func getLabelHeight(label: UILabel) -> CGFloat {
+
+        guard let labelText = label.text else {
+            return 0
+        }
+        let constraint = CGSizeMake(label.frame.width, CGFloat.max)
+        let context = NSStringDrawingContext()
+        let boundingBox = NSString(string: labelText).boundingRectWithSize(constraint, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: label.font], context: context).size
+        return ceil(boundingBox.height)
+    }
 }
 
 extension MenuViewController: MenuItemDataSource {
@@ -194,7 +218,11 @@ extension MenuViewController: MenuItemDataSource {
     }
 
     func numberOfItemsPerRowInMenuView(menuView: MenuView) -> Int {
-        return menuConfig.numberOfItemsInRow
+        // return the minimum between the max number of items in the row and the actual number of items
+        // for the first page. This allows us to set the number of items per row to be the correct 
+        // value when the total number of items < max number of items in the row
+        // but retain the correct value when scrolling to later pages.
+        return min(menuConfig.numberOfItemsInRow, self.menuView(menuView, numberOfItemsForPage: 0))
     }
 
     func menuView(menuView: MenuView, numberOfItemsForPage page: Int) -> Int {

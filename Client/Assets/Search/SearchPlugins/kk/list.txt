@@ -1,5 +1,6 @@
 bing
-google
+google:hidden
+google-nocodes
 twitter
 wikipedia-kk
 yahoo
