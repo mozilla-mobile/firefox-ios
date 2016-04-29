@@ -604,6 +604,8 @@
 		E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
 		E6B4C4031C68F58B001F97E8 /* BrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */; };
 		E6B6DCA21CD3D370009CF713 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6B6DC941CD3D35A009CF713 /* CrashReporter.framework */; };
+		E6B6DCA71CD3EC53009CF713 /* CrashSimulator.h in Headers */ = {isa = PBXBuildFile; fileRef = E6B6DCA51CD3EC53009CF713 /* CrashSimulator.h */; };
+		E6B6DCA81CD3EC53009CF713 /* CrashSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B6DCA61CD3EC53009CF713 /* CrashSimulator.m */; };
 		E6D749011C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */; };
 		E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */; };
 		E6E4A9631BF0FA85008162D5 /* NSFileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E4A9621BF0FA85008162D5 /* NSFileManagerExtensions.swift */; };
@@ -1623,6 +1625,8 @@
 		E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = JSPrompt.html; sourceTree = "<group>"; };
 		E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTests.swift; sourceTree = "<group>"; };
 		E6B6DC941CD3D35A009CF713 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
+		E6B6DCA51CD3EC53009CF713 /* CrashSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashSimulator.h; sourceTree = "<group>"; };
+		E6B6DCA61CD3EC53009CF713 /* CrashSimulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashSimulator.m; sourceTree = "<group>"; };
 		E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLProtectionSpaceExtensions.swift; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
 		E6E4A9621BF0FA85008162D5 /* NSFileManagerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFileManagerExtensions.swift; sourceTree = "<group>"; };
@@ -2636,6 +2640,8 @@
 				E65D89801C8778940006EA35 /* AuthenticationKeychainInfo.swift */,
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
 				0B5A92E31B1E6075004F47A2 /* Cancellable.swift */,
+				E6B6DCA51CD3EC53009CF713 /* CrashSimulator.h */,
+				E6B6DCA61CD3EC53009CF713 /* CrashSimulator.m */,
 				281B2C071ADF4F29002917DC /* DeferredUtils.swift */,
 				287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */,
 				7FB63CC81C08B27E0047F9A4 /* DynamicFontHelper.swift */,
@@ -3213,6 +3219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E695D8651C037E9F00D3FCCE /* FSUtils.h in Headers */,
+				E6B6DCA71CD3EC53009CF713 /* CrashSimulator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4264,6 +4271,7 @@
 				2FDE87511ABA3E9A005317B1 /* HashExtensions.swift in Sources */,
 				282731A21ABC9D2600AA1954 /* Prefs.swift in Sources */,
 				2F13E77F1AC0BFF200D75081 /* StringExtensions.swift in Sources */,
+				E6B6DCA81CD3EC53009CF713 /* CrashSimulator.m in Sources */,
 				2816EFDE1B33E00300522243 /* AppConstants.swift in Sources */,
 				D3A14C221CB3145E00253BC6 /* Strings.swift in Sources */,
 				2F0624D51AE58C7800FA022C /* KeychainCache.swift in Sources */,
