@@ -93,12 +93,13 @@ struct AppMenuConfiguration: MenuConfiguration {
             if #available(iOS 9, *) {
                 menuItems.append(tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem)
             }
-            menuItems.append(AppMenuConfiguration.SettingsMenuItem)
+            menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             if #available(iOS 9, *) {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             }
             menuItems.append(tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem)
+            menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .HomePanels, .Loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             if #available(iOS 9, *) {

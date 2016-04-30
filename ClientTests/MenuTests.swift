@@ -20,14 +20,14 @@ class MenuTests: XCTestCase {
     func testMenuConfigurationForBrowser() {
         var tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         var browserConfiguration = AppMenuConfiguration(appState: .Tab(tabState: tabState))
-        XCTAssertEqual(browserConfiguration.menuItems.count, 6)
+        XCTAssertEqual(browserConfiguration.menuItems.count, 7)
         XCTAssertEqual(browserConfiguration.menuItems[0].title, AppMenuConfiguration.FindInPageTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[1].title, AppMenuConfiguration.ViewDesktopSiteTitleString)
-        XCTAssertEqual(browserConfiguration.menuItems[2].title, AppMenuConfiguration.SettingsTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[2].title, AppMenuConfiguration.OpenHomePageTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[3].title, AppMenuConfiguration.NewTabTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[4].title, AppMenuConfiguration.NewPrivateTabTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[5].title, AppMenuConfiguration.AddBookmarkTitleString)
-
+        XCTAssertEqual(browserConfiguration.menuItems[6].title, AppMenuConfiguration.SettingsTitleString)
 
         XCTAssertNotNil(browserConfiguration.menuToolbarItems)
         XCTAssertEqual(browserConfiguration.menuToolbarItems!.count, 4)
@@ -39,13 +39,14 @@ class MenuTests: XCTestCase {
 
         tabState = TabState(isPrivate: true, desktopSite: true, isBookmarked: true, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         browserConfiguration = AppMenuConfiguration(appState: .Tab(tabState: tabState))
-        XCTAssertEqual(browserConfiguration.menuItems.count, 6)
+        XCTAssertEqual(browserConfiguration.menuItems.count, 7)
         XCTAssertEqual(browserConfiguration.menuItems[0].title, AppMenuConfiguration.FindInPageTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[1].title, AppMenuConfiguration.ViewMobileSiteTitleString)
-        XCTAssertEqual(browserConfiguration.menuItems[2].title, AppMenuConfiguration.SettingsTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[2].title, AppMenuConfiguration.OpenHomePageTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[3].title, AppMenuConfiguration.NewTabTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[4].title, AppMenuConfiguration.NewPrivateTabTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[5].title, AppMenuConfiguration.RemoveBookmarkTitleString)
+        XCTAssertEqual(browserConfiguration.menuItems[6].title, AppMenuConfiguration.SettingsTitleString)
 
 
         XCTAssertNotNil(browserConfiguration.menuToolbarItems)
