@@ -1182,6 +1182,9 @@ extension BrowserViewController: MenuActionDelegate {
                 openHomePanel(.History, forAppState: appState)
             case .OpenReadingList:
                 openHomePanel(.ReadingList, forAppState: appState)
+            case .OpenHomePage:
+                guard let tab = tabManager.selectedTab else { break }
+                HomePageHelper(prefs: profile.prefs).openHomePage(tab)
             default: break
             }
         }
