@@ -13,6 +13,7 @@ enum AppMenuAction: String {
     case OpenSettings = "OpenSettings"
     case CloseAllTabs = "CloseAllTabs"
     case OpenHomePage = "OpenHomePage"
+    case SetHomePage = "SetHomePage"
     case OpenTopSites = "OpenTopSites"
     case OpenBookmarks = "OpenBookmarks"
     case OpenHistory = "OpenHistory"
@@ -181,6 +182,10 @@ extension AppMenuConfiguration {
         return AppMenuItem(title: OpenHomePageTitleString, action: MenuAction(action: AppMenuAction.OpenHomePage.rawValue), icon: "menu-HomePage", privateModeIcon: "menu-HomePage")
     }
 
+    private static var SetHomePageMenuItem: MenuItem {
+        return AppMenuItem(title: SetHomePageTitleString, action: MenuAction(action: AppMenuAction.SetHomePage.rawValue), icon: "menu-HomePage", privateModeIcon: "menu-HomePage")
+    }
+
     private static var TopSitesMenuToolbarItem: MenuToolbarItem {
         return AppMenuToolbarItem(title: TopSitesTitleString, action:  MenuAction(action: AppMenuAction.OpenTopSites.rawValue), icon: "menu-panel-TopSites")
     }
@@ -207,6 +212,7 @@ extension AppMenuConfiguration {
     static let SettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", value: "Settings", tableName: "Menu", comment: "String describing the action of opening the settings menu from the menu")
     static let CloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", value: "Close All Tabs", tableName: "Menu", comment: "String describing the action of closing all tabs in the tab tray at once from the menu")
     static let OpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", value: "Home", tableName: "Menu", comment: "String describing the action of navigating to the homepage from the menu")
+    static let SetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", value: "Set Homepage", tableName: "Menu", comment: "String describing the action of setting the homepage if none is set. On the menu")
     static let TopSitesTitleString = NSLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", value: "Top Sites", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the Top Sites home panel from the menu")
     static let BookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", value: "Bookmarks", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the bookmarks home panel from the menu")
     static let HistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", value: "History", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the history home panel from the menu")
