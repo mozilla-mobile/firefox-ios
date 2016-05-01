@@ -70,6 +70,20 @@ class DisconnectSetting: WithAccountSetting {
                 self.settings.profile.removeAccount()
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()
+                let loginsController = UIAlertController(
+                    title: NSLocalizedString("Remove Logins?", comment: "Title of the 'Remove firefox logins' alert"),
+                    message: NSLocalizedString("Would you also like to remove all saved logins from firefox on this device?", comment: "Text of the 'remove firefox logins' alert"),
+                    preferredStyle: UIAlertControllerStyle.Alert)
+                loginsController.addAction(
+                    UIAlertAction(title: NSLocalizedString("Keep", comment: "Cancel button in the 'Remove firefox logins' alert"), style: .Cancel) { (action) in
+                        // Do nothing.
+                    })
+                loginsController.addAction(
+                    UIAlertAction(title: NSLocalizedString("Remove", comment: "Disconnect button in the 'Remove firefox logins' alert"), style: .Destructive) { (action) in
+                    self.profile.logins.removeAll()
+                })
+                navigationController?.presentViewController(loginsController, animated: true, completion: nil)
+
             })
         navigationController?.presentViewController(alertController, animated: true, completion: nil)
     }
