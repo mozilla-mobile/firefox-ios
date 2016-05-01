@@ -185,6 +185,30 @@ extension MenuViewController: MenuItemDelegate {
         }
         performMenuAction(menuItem.action, withAnimation: animation, onView: menuItemCell.menuImageView)
     }
+
+    func heightForRowsInMenuView(menuView: MenuView) -> CGFloat {
+        // loop through the labels for the menu items and calculate the largest
+        var largestLabel: CGFloat = 0
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: menuConfig.minMenuRowHeight(), height: 0))
+        label.font = menuConfig.menuFont()
+        for item in menuConfig.menuItems {
+            label.text = item.title
+            let labelHeight = getLabelHeight(label)
+            largestLabel = max(largestLabel, labelHeight + 13)
+        }
+        return max(menuConfig.minMenuRowHeight(), largestLabel)
+    }
+
+    func getLabelHeight(label: UILabel) -> CGFloat {
+
+        guard let labelText = label.text else {
+            return 0
+        }
+        let constraint = CGSizeMake(label.frame.width, CGFloat.max)
+        let context = NSStringDrawingContext()
+        let boundingBox = NSString(string: labelText).boundingRectWithSize(constraint, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: label.font], context: context).size
+        return ceil(boundingBox.height)
+    }
 }
 
 extension MenuViewController: MenuItemDataSource {

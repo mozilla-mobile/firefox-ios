@@ -23,7 +23,7 @@ struct TodayUX {
     static let horizontalWidgetMargin: CGFloat = 10
     static let copyLinkImageHorizontalPadding: CGFloat = 22
 
-    static let buttonContainerMultipleOfScreen = 0.4
+    static let buttonSpacerMultipleOfScreen = 0.4
 }
 
 @objc (TodayViewController)
@@ -80,7 +80,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         return button
     }()
 
-    private lazy var buttonContainer: UIView = UIView()
+    private lazy var buttonSpacer: UIView = UIView()
 
     private var copiedURL: NSURL? {
         if let string = UIPasteboard.generalPasteboard().string,
@@ -98,20 +98,20 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(buttonContainer)
+        view.addSubview(buttonSpacer)
 
         // New tab button and label.
-        buttonContainer.addSubview(newTabButton)
+        view.addSubview(newTabButton)
         newTabButton.snp_makeConstraints { make in
-            make.top.equalTo(buttonContainer)
-            make.centerX.equalTo(buttonContainer.snp_left)
+            make.top.equalTo(buttonSpacer)
+            make.centerX.equalTo(buttonSpacer.snp_left)
         }
 
         // New private tab button and label.
-        buttonContainer.addSubview(newPrivateTabButton)
+        view.addSubview(newPrivateTabButton)
         newPrivateTabButton.snp_makeConstraints { make in
             make.centerY.equalTo(newTabButton.snp_centerY)
-            make.centerX.equalTo(buttonContainer.snp_right)
+            make.centerX.equalTo(buttonSpacer.snp_right)
         }
 
         newTabButton.label.snp_makeConstraints { make in
@@ -120,11 +120,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         newPrivateTabButton.label.snp_makeConstraints { make in
             make.trailing.lessThanOrEqualTo(view)
-            make.left.greaterThanOrEqualTo(newTabButton.snp_right).priorityHigh()
+            make.left.greaterThanOrEqualTo(newTabButton.label.snp_right).priorityHigh()
         }
 
-        buttonContainer.snp_makeConstraints { make in
-            make.width.equalTo(view.snp_width).multipliedBy(TodayUX.buttonContainerMultipleOfScreen)
+        buttonSpacer.snp_makeConstraints { make in
+            make.width.equalTo(view.snp_width).multipliedBy(TodayUX.buttonSpacerMultipleOfScreen)
             make.centerX.equalTo(view.snp_centerX)
             make.top.equalTo(view.snp_top).offset(TodayUX.verticalWidgetMargin)
             make.bottom.equalTo(newPrivateTabButton.label.snp_bottom).priorityLow()
@@ -133,7 +133,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         view.addSubview(openCopiedLinkButton)
 
         openCopiedLinkButton.snp_makeConstraints { make in
-            make.top.equalTo(buttonContainer.snp_bottom).offset(TodayUX.verticalWidgetMargin)
+            make.top.equalTo(buttonSpacer.snp_bottom).offset(TodayUX.verticalWidgetMargin)
             make.width.equalTo(view.snp_width)
             make.centerX.equalTo(view.snp_centerX)
             make.height.equalTo(TodayUX.copyLinkButtonHeight)
@@ -144,12 +144,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             if hasCopiedURL {
                 extraHeight += TodayUX.copyLinkButtonHeight + TodayUX.verticalWidgetMargin
             }
-            make.height.equalTo(buttonContainer.snp_height).offset(extraHeight)
+            make.height.equalTo(buttonSpacer.snp_height).offset(extraHeight)
         }
     }
 
     override func viewDidLayoutSubviews() {
-        let preferredWidth: CGFloat = view.frame.size.width / CGFloat(buttonContainer.subviews.count + 1)
+        let preferredWidth: CGFloat = view.frame.size.width / CGFloat(buttonSpacer.subviews.count + 1)
         newPrivateTabButton.label.preferredMaxLayoutWidth = preferredWidth
         newTabButton.label.preferredMaxLayoutWidth = preferredWidth
     }
@@ -251,7 +251,6 @@ class ImageButtonWithLabel: UIView {
     func performLayout() {
         addSubview(button)
         addSubview(label)
-        userInteractionEnabled = true
 
         button.snp_makeConstraints { make in
             make.top.equalTo(self)
