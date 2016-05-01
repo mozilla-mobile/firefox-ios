@@ -34,6 +34,7 @@ pt-PT
 rm
 ro
 ru
+ses
 sk
 sl
 sv-SE
