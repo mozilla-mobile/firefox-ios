@@ -19,7 +19,7 @@ let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var rootViewController: UINavigationController!
+    var rootViewController: NotificationRootViewController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
@@ -111,10 +111,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         browserViewController.restorationClass = AppDelegate.self
         browserViewController.automaticallyAdjustsScrollViewInsets = false
 
-        rootViewController = UINavigationController(rootViewController: browserViewController)
-        rootViewController.automaticallyAdjustsScrollViewInsets = false
-        rootViewController.delegate = self
-        rootViewController.navigationBarHidden = true
+        let navigationController = UINavigationController(rootViewController: browserViewController)
+        navigationController.automaticallyAdjustsScrollViewInsets = false
+        navigationController.delegate = self
+        navigationController.navigationBarHidden = true
+        rootViewController = NotificationRootViewController(rootViewController: navigationController)
+
         self.window!.rootViewController = rootViewController
 
         do {
