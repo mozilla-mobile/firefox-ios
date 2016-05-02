@@ -6,14 +6,24 @@ import Foundation
 
 public struct Strings {}
 
+/// Return the main application bundle. Even if called from an extension. If for some reason we cannot find the
+/// application bundle, the current bundle is returned, which will then result in an English base language string.
+private func applicationBundle() -> NSBundle {
+    let bundle = NSBundle.mainBundle()
+    guard bundle.bundleURL.pathExtension == "appex", let applicationBundleURL = bundle.bundleURL.URLByDeletingLastPathComponent?.URLByDeletingLastPathComponent else {
+        return bundle
+    }
+    return NSBundle(URL: applicationBundleURL) ?? bundle
+}
+
 // SendTo extension.
 extension Strings {
-    public static let SendToCancelButton = NSLocalizedString("SendTo.Cancel.Button", value: "Cancel", comment: "Button title for cancelling SendTo screen")
+    public static let SendToCancelButton = NSLocalizedString("SendTo.Cancel.Button", value: "Cancel", bundle: applicationBundle(), comment: "Button title for cancelling SendTo screen")
 }
 
 // ShareTo extension.
 extension Strings {
-    public static let ShareToCancelButton = NSLocalizedString("ShareTo.Cancel.Button", value: "Cancel", comment: "Button title for cancelling Share screen")
+    public static let ShareToCancelButton = NSLocalizedString("ShareTo.Cancel.Button", value: "Cancel", bundle: applicationBundle(), comment: "Button title for cancelling Share screen")
 }
 
 // Top Sites.
