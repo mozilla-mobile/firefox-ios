@@ -67,7 +67,7 @@ class CorePing: TelemetryPing {
             "device": "Apple-" + model,
             "arch": "arm",
             "profileDate": profileDate,
-            "defaultSearch": profile.searchEngines.defaultEngine.shortName,
+            "defaultSearch": profile.searchEngines.defaultEngine.id
         ]
 
         payload = JSON(out)
