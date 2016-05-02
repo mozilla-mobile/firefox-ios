@@ -1,0 +1,17 @@
+//
+//  libPhoneNumberTest-Prefix.pch
+//  libPhoneNumber
+//
+//  Created by tabby on 2015. 2. 8..
+//  Copyright (c) 2015년 ohtalk.me. All rights reserved.
+//
+
+#ifndef libPhoneNumber_libPhoneNumberTest_Prefix_pch
+#define libPhoneNumber_libPhoneNumberTest_Prefix_pch
+
+#define LIB_PHONE_NUMBER_TEST 1
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+#endif

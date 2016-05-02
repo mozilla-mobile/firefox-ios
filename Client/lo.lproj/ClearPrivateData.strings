@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "ທ່ານຫມັ້ນໃຈແລ້ວບໍ່ວ່າທ່ານຕ້ອງການຈະເຄີຍຂໍ້ມູນທຸກຢ່າງຂອງທ່ານ? ເຊິງມັນຈະປິດທຸກແທັບທີ່ທ່ານເປີດຢູ່.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "ປະຫວັດການທ່ອງເວັບ";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "ຍົກເລີກ";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "ລົບລ້າງ";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "ລົບລ້າງທຸກສິ່ງທຸກຢ່າງ";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "ລົບລ້າງຂໍ້ມູນສ່ວນຕົວ";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ຂໍ້ມູນ Offline ຂອງເວັບໄຊຕ໌";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "ບັນທຶກການເຂົ້າສູ່ລະບົບໄວ້";
+

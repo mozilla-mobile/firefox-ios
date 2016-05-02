@@ -1,0 +1,9 @@
+/* Go to link on clipboard */
+"TodayWidget.GoToCopiedLinkLabel" = "Ouvrir le lien copié";
+
+/* New Private Tab button label */
+"TodayWidget.NewPrivateTabButtonLabel" = "Nouvel onglet privé";
+
+/* New Tab button label */
+"TodayWidget.NewTabButtonLabel" = "Nouvel onglet";
+

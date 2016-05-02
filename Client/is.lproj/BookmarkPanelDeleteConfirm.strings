@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "Ertu viss um að þú viljir eyða því og innihaldi þess?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "Hætta við";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "Eyða";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "Þessi mappa er ekki tóm.";
+
