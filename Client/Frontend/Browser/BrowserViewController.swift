@@ -250,6 +250,9 @@ class BrowserViewController: UIViewController {
         }, completion: { _ in
             self.webViewContainerBackdrop.alpha = 0
         })
+
+        // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
+        scrollController.showToolbars(animated: false)
     }
 
     deinit {
