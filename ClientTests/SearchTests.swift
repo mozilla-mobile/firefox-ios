@@ -13,7 +13,7 @@ class SearchTests: XCTestCase {
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
         let file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
-        let engine: OpenSearchEngine! = parser.parse(file!)
+        let engine: OpenSearchEngine! = parser.parse(file!, id: "google")
         XCTAssertEqual(engine.shortName, "Google")
         XCTAssertNil(engine.description)
 
@@ -55,7 +55,7 @@ class SearchTests: XCTestCase {
     func testSuggestClient() {
         let webServerBase = startMockSuggestServer()
 
-        let engine = OpenSearchEngine(shortName: "Mock engine", description: nil, image: nil, searchTemplate: "", suggestTemplate: "\(webServerBase)?q={searchTerms}")
+        let engine = OpenSearchEngine(id: "mock", shortName: "Mock engine", description: nil, image: nil, searchTemplate: "", suggestTemplate: "\(webServerBase)?q={searchTerms}")
         let client = SearchSuggestClient(searchEngine: engine, userAgent: "Fx-testSuggestClient")
 
 
@@ -95,7 +95,7 @@ class SearchTests: XCTestCase {
     func testExtractingOfSearchTermsFromURL() {
         let parser = OpenSearchParser(pluginMode: true)
         var file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
-        let googleEngine: OpenSearchEngine! = parser.parse(file!)
+        let googleEngine: OpenSearchEngine! = parser.parse(file!, id: "google")
 
         // create URL
         let searchTerm = "Foo Bar"
@@ -112,7 +112,7 @@ class SearchTests: XCTestCase {
 
         // check that it matches given a different configuration
         file = NSBundle.mainBundle().pathForResource("duckduckgo", ofType: "xml", inDirectory: "SearchPlugins/en")
-        let duckDuckGoEngine: OpenSearchEngine! = parser.parse(file!)
+        let duckDuckGoEngine: OpenSearchEngine! = parser.parse(file!, id: "duckduckgo")
         XCTAssertEqual(searchTerm, duckDuckGoEngine.queryForSearchURL(duckDuckGoSearchURL))
 
         // check it doesn't match search URLs for different configurations
