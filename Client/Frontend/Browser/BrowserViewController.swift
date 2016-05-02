@@ -520,7 +520,7 @@ class BrowserViewController: UIViewController {
         log.debug("BVC done.")
 
         if shouldShowWhatsNewTab() {
-            if let whatsNewURL = SupportUtils.URLForTopic("new-ios") {
+            if let whatsNewURL = SupportUtils.URLForTopic("new-ios-40") {
                 self.openURLInNewTab(whatsNewURL)
                 profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
             }
