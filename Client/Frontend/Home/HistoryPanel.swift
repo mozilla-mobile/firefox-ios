@@ -23,14 +23,83 @@ private typealias CategoryNumber = Int
 private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
 
 private struct HistoryPanelUX {
-    static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemTextColor = UIColor.grayColor()
-    static let WelcomeScreenItemWidth = 170
+    private static let WelcomeScreenItemTextColor = UIColor.grayColor()
+    private static let WelcomeScreenItemWidth = 170
+    private static let SyncedTabsCellChevronInset: CGFloat = 20
+    private static let SyncedTabsCellChevronSize: CGFloat = 20
+    private static let SyncedTabsCellImageSize: CGFloat = 32
+    private static let SyncedTabsCellHeight: CGFloat = 60
+    private static let SyncedTabsCellChevronLineWidth: CGFloat = 4.0
+    private static let SyncedTabsCellChevronColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
 }
 
-class HistoryPanel: SiteTableViewController, HomePanel {
+class HistoryPanel: UIViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
-    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
+    var profile: Profile!
+    private lazy var tableViewController: HistoryPanelSiteTableViewController = {
+        return HistoryPanelSiteTableViewController()
+    }()
+    private lazy var syncedTabsButton: SyncedTabsButton = {
+        let button = SyncedTabsButton()
+        button.addTarget(self, action: #selector(HistoryPanel.syncedTabsCellWasTapped), forControlEvents: .TouchUpInside)
+        return button
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        tableViewController.profile = self.profile
+        tableViewController.homePanelDelegate = homePanelDelegate
+        tableViewController.historyPanel = self
+
+        self.addChildViewController(tableViewController)
+        self.view.addSubview(tableViewController.view)
+        self.view.addSubview(syncedTabsButton)
+
+        syncedTabsButton.snp_makeConstraints { make in
+            make.top.left.right.equalTo(self.view)
+            make.height.equalTo(HistoryPanelUX.SyncedTabsCellHeight)
+            make.bottom.equalTo(tableViewController.view.snp_top)
+        }
+
+        tableViewController.view.snp_makeConstraints { make in
+            make.top.equalTo(syncedTabsButton.snp_bottom)
+            make.left.right.bottom.equalTo(self.view)
+        }
+
+        tableViewController.didMoveToParentViewController(self)
+    }
+
+    func updateNumberOfSyncedDevices() {
+        self.profile.getCachedClientsAndTabs().uponQueue(dispatch_get_main_queue()) { result in
+            guard let clientAndTabs = result.successValue?.filter({ $0.tabs.count > 0 }) where clientAndTabs.count > 0 else {
+                self.syncedTabsButton.descriptionLabel.hidden = true
+                self.syncedTabsButton.updateConstraints()
+                return
+            }
+
+            self.syncedTabsButton.descriptionLabel.text = String(clientAndTabs.count) + " " + Strings.SyncedTabsTableViewCellDescription
+            self.syncedTabsButton.descriptionLabel.hidden = false
+            self.syncedTabsButton.updateConstraints()
+        }
+    }
+
+    @objc private func syncedTabsCellWasTapped() {
+        let nextController = RemoteTabsPanel()
+        nextController.homePanelDelegate = self.homePanelDelegate
+        nextController.profile = self.profile
+        tableViewController.refreshControl?.endRefreshing()
+        self.navigationController?.pushViewController(nextController, animated: true)
+    }
+}
+
+class HistoryPanelSiteTableViewController: SiteTableViewController {
+    weak var homePanelDelegate: HomePanelDelegate?
+    weak var historyPanel: HistoryPanel?
+
+    var refreshControl: UIRefreshControl?
+
+    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
     private let QueryLimit = 100
     private let NumSections = 4
@@ -38,37 +107,16 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     private let Yesterday = getDate(dayOffset: -1)
     private let ThisWeek = getDate(dayOffset: -7)
 
-    // Category number (index) -> (UI section, row count, cursor offset).
-    private var categories: [CategorySpec] = [CategorySpec]()
-
-    // Reverse lookup from UI section to data category.
-    private var sectionLookup = [SectionNumber: CategoryNumber]()
-
-    var refreshControl: UIRefreshControl?
-
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryPanelSiteTableViewController.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryPanelSiteTableViewController.notificationReceived(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryPanelSiteTableViewController.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.accessibilityIdentifier = "History List"
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-
-        // Add a refresh control if the user is logged in and the control was not added before. If the user is not
-        // logged in, remove any existing control but only when it is not currently refreshing. Otherwise, wait for
-        // the refresh to finish before removing the control.
-        if profile.hasSyncableAccount() && self.refreshControl == nil {
-            addRefreshControl()
-        } else if self.refreshControl?.refreshing == false {
-            removeRefreshControl()
-        }
+        tableView.accessibilityIdentifier = "History List"
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -90,7 +138,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
-            emptyStateOverlayView = createEmptyStateOverview()
+            emptyStateOverlayView = createEmptyStateOverlayView()
             resyncHistory()
             break
         default:
@@ -100,9 +148,57 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    // Category number (index) -> (UI section, row count, cursor offset).
+    private var categories: [CategorySpec] = [CategorySpec]()
+
+    // Reverse lookup from UI section to data category.
+    private var sectionLookup = [SectionNumber: CategoryNumber]()
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Add a refresh control if the user is logged in and the control was not added before. If the user is not
+        // logged in, remove any existing control but only when it is not currently refreshing. Otherwise, wait for
+        // the refresh to finish before removing the control.
+        if profile.hasSyncableAccount() && refreshControl == nil {
+            addRefreshControl()
+        } else if refreshControl?.refreshing == false {
+            removeRefreshControl()
+        }
+
+        historyPanel?.updateNumberOfSyncedDevices()
+    }
+
+    /**
+     * fetch from the profile
+     **/
+    private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
+        return profile.history.getSitesByLastVisit(QueryLimit)
+    }
+
+    private func setData(data: Cursor<Site>) {
+        self.data = data
+        self.computeSectionOffsets()
+    }
+
+    /**
+     * sync history with the server and ensure that we update our view afterwards
+     **/
+    func resyncHistory() {
+        profile.syncManager.syncHistory().uponQueue(dispatch_get_main_queue()) { result in
+            if result.isSuccess {
+                self.reloadData()
+            } else {
+                self.endRefreshing()
+            }
+
+            self.historyPanel?.updateNumberOfSyncedDevices()
+        }
+    }
+
     func addRefreshControl() {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), forControlEvents: UIControlEvents.ValueChanged)
+        refresh.addTarget(self, action: #selector(HistoryPanelSiteTableViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = refresh
         self.tableView.addSubview(refresh)
     }
@@ -123,41 +219,17 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     /**
-    * sync history with the server and ensure that we update our view afterwards
-    **/
-    func resyncHistory() {
-        profile.syncManager.syncHistory().uponQueue(dispatch_get_main_queue()) { result in
-            if result.isSuccess {
-                self.reloadData()
-            } else {
-                self.endRefreshing()
-            }
-        }
-    }
-
-    /**
-    * called by the table view pull to refresh
-    **/
+     * called by the table view pull to refresh
+     **/
     @objc func refresh() {
         self.refreshControl?.beginRefreshing()
         resyncHistory()
+        historyPanel?.updateNumberOfSyncedDevices()
     }
 
     /**
-    * fetch from the profile
-    **/
-    private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
-        return profile.history.getSitesByLastVisit(QueryLimit)
-    }
-
-    private func setData(data: Cursor<Site>) {
-        self.data = data
-        self.computeSectionOffsets()
-    }
-
-    /**
-    * Update our view after a data refresh
-    **/
+     * Update our view after a data refresh
+     **/
     override func reloadData() {
         self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
             if let data = result.successValue {
@@ -165,7 +237,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 self.tableView.reloadData()
                 self.updateEmptyPanelState()
             }
-
             self.endRefreshing()
 
             // TODO: error handling.
@@ -186,25 +257,13 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    private func createEmptyStateOverview() -> UIView {
+    private func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
         overlayView.backgroundColor = UIColor.whiteColor()
 
-        let logoImageView = UIImageView(image: UIImage(named: "emptyHistory"))
-        overlayView.addSubview(logoImageView)
-        logoImageView.snp_makeConstraints { make in
-            make.centerX.equalTo(overlayView)
-
-            // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
-
-            // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
-        }
-
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = NSLocalizedString("Pages you have visited recently will show up here.", comment: "See http://bit.ly/1I7Do4b")
+        welcomeLabel.text = Strings.HistoryPanelEmptyStateTitle
         welcomeLabel.textAlignment = NSTextAlignment.Center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = HistoryPanelUX.WelcomeScreenItemTextColor
@@ -213,16 +272,20 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         welcomeLabel.snp_makeConstraints { make in
             make.centerX.equalTo(overlayView)
-            make.top.equalTo(logoImageView.snp_bottom).offset(HistoryPanelUX.WelcomeScreenPadding)
+            // Sets proper top constraint for iPhone 6 in portait and for iPad.
+            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+
+            // Sets proper top constraint for iPhone 4, 5 in portrait.
+            make.top.greaterThanOrEqualTo(overlayView).offset(50)
             make.width.equalTo(HistoryPanelUX.WelcomeScreenItemWidth)
         }
-
         return overlayView
     }
-    
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         let category = self.categories[indexPath.section]
+
         if let site = data[indexPath.row + category.offset] {
             if let cell = cell as? TwoLineTableViewCell {
                 cell.setLines(site.title, detailText: site.url)
@@ -242,7 +305,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         if let site = self.siteForIndexPath(indexPath),
            let url = NSURL(string: site.url) {
             let visitType = VisitType.Typed    // Means History, too.
-            homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType)
+            if let homePanelDelegate = homePanelDelegate,
+                   historyPanel = historyPanel {
+                homePanelDelegate.homePanel(historyPanel, didSelectURL: url, visitType: visitType)
+            }
             return
         }
         log.warning("No site or no URL when selecting row.")
@@ -428,5 +494,102 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             }
         })
         return [delete]
+    }
+}
+
+class SyncedTabsButton: UIButton {
+    private let ImageMargin: CGFloat = 12
+
+    lazy var title: UILabel = {
+        let label = UILabel()
+        label.textColor = TwoLineCellUX.TextColor
+        label.text = Strings.SyncedTabsTableViewCellTitle
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
+        return label
+    }()
+
+    lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallHistoryPanel
+        label.textColor = TwoLineCellUX.DetailTextColor
+        return label
+    }()
+
+    lazy var image: UIImageView = {
+        let image = UIImage(named: "panelIconSyncedTabs")!
+        return UIImageView(image: image)
+    }()
+
+    lazy var chevron: ChevronView = {
+        let chevron = ChevronView(direction: .Right)
+        chevron.tintColor = HistoryPanelUX.SyncedTabsCellChevronColor
+        chevron.lineWidth = 3.0
+        return chevron
+    }()
+
+    lazy var topBorder: UIView = self.createBorderView()
+    lazy var bottomBorder: UIView = self.createBorderView()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        userInteractionEnabled = true
+        backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+
+        addSubview(topBorder)
+        addSubview(bottomBorder)
+        addSubview(chevron)
+        addSubview(title)
+        addSubview(image)
+        addSubview(descriptionLabel)
+
+
+        image.snp_makeConstraints { make in
+            make.left.equalTo(self).offset(TwoLineCellUX.BorderViewMargin)
+            make.centerY.equalTo(self)
+            make.width.equalTo(HistoryPanelUX.SyncedTabsCellImageSize)
+        }
+
+        chevron.snp_makeConstraints { make in
+            make.right.equalTo(self).offset(-HistoryPanelUX.SyncedTabsCellChevronInset)
+            make.centerY.equalTo(self)
+            make.size.equalTo(HistoryPanelUX.SyncedTabsCellChevronSize)
+        }
+
+        topBorder.snp_makeConstraints { make in
+            make.left.right.equalTo(self)
+            make.top.equalTo(self).offset(-0.5)
+            make.height.equalTo(0.5)
+        }
+
+        bottomBorder.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(self)
+            make.height.equalTo(0.5)
+        }
+
+        descriptionLabel.snp_makeConstraints { make in
+            make.left.equalTo(image.snp_right).offset(TwoLineCellUX.BorderViewMargin)
+            make.centerY.equalTo(self).offset(10)
+        }
+
+        updateConstraints()
+    }
+
+    private func createBorderView() -> UIView {
+        let view = UIView()
+        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        return view
+    }
+
+    override func updateConstraints() {
+        super.updateConstraints()
+
+        title.snp_remakeConstraints { make in
+            make.left.equalTo(image.snp_right).offset(TwoLineCellUX.BorderViewMargin)
+            make.centerY.equalTo(self).offset(descriptionLabel.hidden ? 0 : -10)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
