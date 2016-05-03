@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Close Private Tabs";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox won't remember any of your history or cookies, but new bookmarks will be saved.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Learn More";
+
+/* Toggled OFF accessibility value */
+"Off" = "Off";
+
+/* Toggled ON accessibility value */
+"On" = "On";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Open In New Private Tab";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Private Browsing";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Private Mode";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Turns private mode on or off";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "When Leaving Private Browsing";
+

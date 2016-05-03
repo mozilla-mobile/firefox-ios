@@ -52,7 +52,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>9</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-books</string>
