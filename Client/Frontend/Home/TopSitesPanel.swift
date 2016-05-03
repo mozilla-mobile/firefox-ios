@@ -103,8 +103,6 @@ class TopSitesPanel: UIViewController {
         self.dataSource.collectionView = self.collection
         self.profile.history.setTopSitesCacheSize(Int32(maxFrecencyLimit))
         self.refreshTopSites(maxFrecencyLimit)
-
-        self.updateEmptyPanelState()
     }
 
     deinit {
@@ -191,8 +189,8 @@ class TopSitesPanel: UIViewController {
         if let data = result.successValue {
             self.dataSource.setHistorySites(data.asArray())
             self.dataSource.profile = self.profile
-            self.updateEmptyPanelState()
         }
+        self.updateEmptyPanelState()
     }
 
     private func updateAllRemoveButtonStates() {
