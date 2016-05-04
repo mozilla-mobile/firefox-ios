@@ -8,12 +8,6 @@ import SnapKit
 
 private let log = Logger.browserLogger
 
-struct HomePageConstants {
-    static let HomePageURLPrefKey = "homepage.url"
-    static let HomePageButtonIsInMenuPrefKey = "homepage.button.isInMenu"
-    static let DefaultHomePageURLPrefKey = "homepage.url.default"
-}
-
 class HomePageSettingsViewController: SettingsTableViewController {
 
     override func viewDidLoad() {
