@@ -1,0 +1,36 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Na 1 uur";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Na 1 minuut";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Na 5 minute";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Na 10 minute";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Na 15 minute";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Verander wagkode";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "Voer wagkode in";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "Voer wagkode in";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Onmiddellik";
+
+/* List section title for passcode settings */
+"Passcode" = "Wagkode";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Vereis wagkode";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Stel wagkode";
+

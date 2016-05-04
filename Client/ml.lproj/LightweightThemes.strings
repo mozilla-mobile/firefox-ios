@@ -1,0 +1,27 @@
+/* Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet. */
+"Allow Firefox to use my Photos" = "എന്‍റെ ചിത്രങ്ങള്‍ ഉപയോഗിക്കാന്‍ ഫയര്‍ഫോക്സിനു അനുവാദം നല്‍കുക";
+
+/* Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker */
+"Choose" = "തിരഞ്ഞെടുക്കുക";
+
+/* Pending feature; currently unused string! Sub header for photo options in theme chooser */
+"Photos" = "ചിത്രങ്ങള്‍";
+
+/* Pending feature; currently unused string! Button to show preview of selected theme */
+"Preview" = "തിരനോട്ടം";
+
+/* Pending feature; currently unused string! Accessibility label for theme preview button */
+"Preview Theme" = "തീം തിരനോട്ടം";
+
+/* Pending feature; currently unused string! Button to set selected theme as current theme */
+"Set" = "ഉറപ്പിക്കുക";
+
+/* Pending feature; currently unused string! Accessibility label for set theme button */
+"Set Theme" = "തീം ഉറപ്പിക്കുക";
+
+/* Pending feature; currently unused string! Settings row to enter theme settings */
+"Theme" = "തീം";
+
+/* Pending feature; currently unused string! sub header for theme options in theme chooser */
+"Themes" = "തീമുകള്‍";
+

@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Sutura kanjey daabu";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ši honga taariki wala aleewa kul, amm'a ga doo-šilbay taagey gaabu.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Bay ka tonton";
+
+/* Toggled OFF accessibility value */
+"Off" = "Wii";
+
+/* Toggled ON accessibility value */
+"On" = "Ga dii";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Feeri sutura kanje taaga ra";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Sutura ceeciyan";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Sutura alhaali";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Sutura alhaali tunandi wal'a wii";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Nda war ga sutura ceeciyan naŋ";
+

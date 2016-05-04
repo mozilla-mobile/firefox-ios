@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "၁ နာရီ နောက်ပိုင်း";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "၁ မိနစ် အကြာတွင်";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "၅ မိနစ် ကြာပြီးနောက်";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "၁၀ မိနစ် ကြာပြီးနောက်";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "၁၅ မိနစ်ပြီးနောက်";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "စကားဝှက် ပြောင်းရန်";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "စကားဝှက် ဖြည့်ပါ";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "စကားဝှက် အသစ် ဖြည့်ပါ";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "စကားဝှက် ဖြည့်ပါ";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "စကားဝှက် ဖြည့်ပါ";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "ချက်ခြင်း";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "စကားဝှက် မှားနေသည်။ ပြန်လည် ရေးထည့်ပါ (အမှန်ဖြည့်နိုင်ရန် %d ကြိမ်သာ ကျန်ပါသည်)";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "စကားဝှက် မှားနေသည်။ ထပ်မံ ဆောင်ရွက်ကြည့်ပါ။";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "အမှန်ဖြည့်ရန် အများဆုံး ကြိုးပမ်းနိုင်သည့်အရေအတွက်သို့ ရောက်ရှိနေသည်။ နောင် ၁ နာရီအကြာတွင် ထပ်မံ ဆောင်ရွက်ကြည့်ပါ။";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "အမှန်ဖြည့်ရန် အများဆုံးကြိုးပမ်းနိုင်သည့် အရေအတွက်သို့ ရောက်ရှိနေသည်။ နောင်တွင် ထပ်မံ ဆောင်ရွက်ကြည့်ပါ။";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "စကားဝှက်အသစ်သည် ရှိပြီးသားစကားဝှက်နှင့် မတူရပါ။";
+
+/* List section title for passcode settings */
+"Passcode" = "စကားဝှက်";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "စကားဝှက် မကိုက်ညီပါ။ ပြန်ကြိုးစားကြည့်ပါဦး။";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "စကားဝှက်ကို ထပ်မံ ရေးထည့်ပါ";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "စကားဝှက်ကို ရေးထည့်ရန် လိုအပ်သည်";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "စကားဝှက် သတ်မှတ်ရန်";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID နှင့် စကားဝှက်";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "စကားဝှက်အသုံးပြုခြင်းကို ပိတ်ရန်";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "စကားဝှက်အသုံးပြုခြင်းကို ဖွင့်ရန်";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "သင့်စကားဝှက်အသုံးပြုခြင်းကို ပိတ်ရန်";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Touch ID ကို အသုံးပြုရန်";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ယခု ဝင်ရောက်အသုံးပြုရန် သင့်လက်ဗွေပုံစံကို အသုံးပြုပါ။";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "ယခု သီးသန့်ရှာဖွေကြည့်ရှုခြင်းကို အသုံးပြုရန် သင့်လက်ဗွေပုံစံကို အသုံးပြုပါ။";
+

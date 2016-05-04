@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "您确定吗？";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "取消";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "清除搜索";
+
+/* Copy password text selection menu item */
+"Copy" = "复制";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "删除";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "全部取消";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "进入搜索模式";
+
+/* Hide password text selection menu item */
+"Hide" = "隐藏";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "修改时间 %@";
+
+/* Title for Logins List View screen */
+"Logins" = "登录信息";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "登录信息将被永久移除。";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "登录信息将被删除，从已连接的所有设备。";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "没有找到登录信息";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "打开并填写";
+
+/* Reveal password text selection menu item */
+"Reveal" = "显示";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "搜索";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "搜索的输入框";
+
+/* Title for selecting all logins */
+"Select All" = "全部选中";
+
+/* Title for password row in Login Detail View */
+"password" = "密码";
+
+/* Title for username row in Login Detail View */
+"username" = "用户名";
+
+/* Title for website row in Login Detail View */
+"website" = "网站";
+
