@@ -50,6 +50,14 @@ class HomePageHelper {
         tab.loadRequest(NSURLRequest(URL: url))
     }
 
+    func openHomePage(inTab tab: Tab, withNavigationController navigationController: UINavigationController?) {
+        if isHomePageAvailable {
+            openHomePage(tab)
+        } else {
+            setHomePage(toTab: tab, withNavigationController: navigationController)
+        }
+    }
+
     func setHomePage(toTab tab: Tab, withNavigationController navigationController: UINavigationController?) {
         let alertController = UIAlertController(
             title: Strings.SetHomePageDialogTitle,
