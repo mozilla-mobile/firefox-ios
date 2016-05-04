@@ -470,62 +470,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     }
 }
 
-private class HistoryBackButton : UIButton {
-    lazy var title: UILabel = {
-        let label = UILabel()
-        label.textColor = UIConstants.HighlightBlue
-        label.text = Strings.HistoryBackButtonTitle
-        return label
-    }()
-
-    lazy var chevron: ChevronView = {
-        let chevron = ChevronView(direction: .Left)
-        chevron.tintColor = UIConstants.HighlightBlue
-        chevron.lineWidth = RemoteTabsPanelUX.HistoryTableViewHeaderChevronLineWidth
-        return chevron
-    }()
-
-    lazy var topBorder: UIView = self.createBorderView()
-    lazy var bottomBorder: UIView = self.createBorderView()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        userInteractionEnabled = true
-
-        addSubview(topBorder)
-        addSubview(chevron)
-        addSubview(title)
-
-        chevron.snp_makeConstraints { make in
-            make.left.equalTo(self).offset(RemoteTabsPanelUX.HistoryTableViewHeaderChevronInset)
-            make.centerY.equalTo(self)
-            make.size.equalTo(RemoteTabsPanelUX.HistoryTableViewHeaderChevronSize)
-        }
-
-        title.snp_makeConstraints { make in
-            make.left.equalTo(chevron.snp_right).offset(RemoteTabsPanelUX.HistoryTableViewHeaderChevronInset)
-            make.right.greaterThanOrEqualTo(self).offset(-RemoteTabsPanelUX.HistoryTableViewHeaderChevronInset)
-            make.centerY.equalTo(self)
-        }
-
-        topBorder.snp_makeConstraints { make in
-            make.left.right.equalTo(self)
-            make.top.equalTo(self).offset(-0.5)
-            make.height.equalTo(0.5)
-        }
-    }
-
-    private func createBorderView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        return view
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 private class RemoteTabsTableViewController : UITableViewController {
     weak var remoteTabsPanel: RemoteTabsPanel?
     var profile: Profile!

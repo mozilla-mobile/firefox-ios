@@ -96,6 +96,10 @@ public class NSUserDefaultsPrefs: Prefs {
         return nsNumberForKey(defaultName)?.longLongValue
     }
 
+    public func objectForKey<T: AnyObject>(defaultName: String) -> T? {
+        return userDefaults.objectForKey(qualifyKey(defaultName)) as? T
+    }
+
     public func intForKey(defaultName: String) -> Int32? {
         return nsNumberForKey(defaultName)?.intValue
     }

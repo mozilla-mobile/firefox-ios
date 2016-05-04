@@ -28,6 +28,7 @@ public protocol Prefs {
     func setBool(value: Bool, forKey defaultName: String)
     func setObject(value: AnyObject?, forKey defaultName: String)
     func stringForKey(defaultName: String) -> String?
+    func objectForKey<T: AnyObject>(defaultName: String) -> T?
     func boolForKey(defaultName: String) -> Bool?
     func intForKey(defaultName: String) -> Int32?
     func timestampForKey(defaultName: String) -> Timestamp?
@@ -103,6 +104,10 @@ public class MockProfilePrefs : Prefs {
         return things[name(defaultName)] as? Bool
     }
 
+    public func objectForKey<T: AnyObject>(defaultName: String) -> T? {
+        return things[name(defaultName)] as? T
+    }
+    
     public func timestampForKey(defaultName: String) -> Timestamp? {
         return unsignedLongForKey(defaultName)
     }
