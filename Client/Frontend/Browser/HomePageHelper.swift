@@ -8,9 +8,11 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-public let HomePageURLPref = "HomePageURLPref"
-public let DefaultHomePageURLPref = "DefaultHomePageURLPref"
-private let hardcodedDefault = "https://mozilla.com"
+struct HomePageConstants {
+    static let HomePageURLPrefKey = "HomePageURLPref"
+    static let DefaultHomePageURLPrefKey = "DefaultHomePageURLPref"
+    static let HomePageButtonIsInMenuPrefKey = "HomePageButtonIsInMenuPrefKey"
+}
 
 class HomePageHelper {
 
@@ -18,14 +20,17 @@ class HomePageHelper {
 
     var currentURL: NSURL? {
         get {
-            let urlString = prefs.stringForKey(HomePageURLPref) ?? prefs.stringForKey(DefaultHomePageURLPref) ?? hardcodedDefault
+            let string = prefs.stringForKey(HomePageConstants.HomePageURLPrefKey) ?? prefs.stringForKey(HomePageConstants.DefaultHomePageURLPrefKey)
+            guard let urlString = string else {
+                return nil
+            }
             return NSURL(string: urlString)
         }
         set {
             if let url = newValue {
-                prefs.setString(url.absoluteString, forKey: HomePageURLPref)
+                prefs.setString(url.absoluteString, forKey: HomePageConstants.HomePageURLPrefKey)
             } else {
-                prefs.removeObjectForKey(HomePageURLPref)
+                prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
             }
         }
     }
