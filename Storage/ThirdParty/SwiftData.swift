@@ -663,10 +663,13 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return FilledSQLiteCursor<T>(statement: statement!, factory: factory)
     }
 
-    func writeCorruptionInfoForDBNamed(dbFilename: String, toLogger logger: XCGLogger) {
+    func writeCorruptionInfoForDBNamed(dbFilename: String, toLogger logger: RollingFileLogger) {
         dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             guard !SwiftData.corruptionLogsWritten.contains(dbFilename) else { return }
 
+            let logDate = NSDate()
+            logger.newLogWithDate(logDate)
+            
             logger.error("Corrupt DB detected! DB filename: \(dbFilename)")
 
             let dbFileSize = ("file://\(dbFilename)".asURL)?.allocatedFileSize() ?? 0

@@ -73,9 +73,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
         Logger.syncLogger.newLogWithDate(logDate)
 
-        log.debug("Creating corrupt DB logger…")
-        Logger.corruptLogger.newLogWithDate(logDate)
-
         log.debug("Creating Browser log file…")
         Logger.browserLogger.newLogWithDate(logDate)
 
