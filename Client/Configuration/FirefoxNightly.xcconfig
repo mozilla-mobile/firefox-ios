@@ -7,6 +7,8 @@ MOZ_APP_ID = fennecios@mozilla.org
 
 MOZ_BUNDLE_DISPLAY_NAME = Firefox α
 
+MOZ_APP_ICON = AppIcon_Nightly
+
 // The name of the product. Generally used as the prefix/name of all files associated with this build configuration.
 MOZ_PRODUCT_NAME = FirefoxNightly
 
