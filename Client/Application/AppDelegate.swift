@@ -109,10 +109,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
-        browserViewController.automaticallyAdjustsScrollViewInsets = false
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
-        navigationController.automaticallyAdjustsScrollViewInsets = false
         navigationController.delegate = self
         navigationController.navigationBarHidden = true
         rootViewController = NotificationRootViewController(rootViewController: navigationController)

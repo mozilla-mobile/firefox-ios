@@ -56,7 +56,7 @@ extension NotificationRootViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         showingNotification ? remakeConstraintsForVisibleNotification() : remakeConstraintsForHiddenNotification()
-        view.setNeedsUpdateConstraints()
+        view.setNeedsLayout()
     }
 
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -128,7 +128,8 @@ private extension NotificationRootViewController {
         }
 
         self.rootViewController.view.snp_remakeConstraints { make in
-            make.bottom.left.right.equalTo(self.view)
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.snp_bottomLayoutGuideTop)
             make.top.equalTo(self.notificationView.snp_bottom)
         }
     }
@@ -141,7 +142,8 @@ private extension NotificationRootViewController {
         }
 
         self.rootViewController.view.snp_remakeConstraints { make in
-            make.bottom.left.right.equalTo(self.view)
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.snp_bottomLayoutGuideTop)
             make.top.equalTo(self.snp_topLayoutGuideBottom)
         }
     }
@@ -202,8 +204,10 @@ private class NotificationStatusView: UIView {
     }
 
     func startAnimation() {
-        animationTimer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(NotificationStatusView.updateEllipsis), userInfo: nil, repeats: true)
-        NSRunLoop.mainRunLoop().addTimer(animationTimer!, forMode: NSRunLoopCommonModes)
+        if animationTimer == nil {
+            animationTimer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(NotificationStatusView.updateEllipsis), userInfo: nil, repeats: true)
+            NSRunLoop.mainRunLoop().addTimer(animationTimer!, forMode: NSRunLoopCommonModes)
+        }
     }
 
     func endAnimation() {

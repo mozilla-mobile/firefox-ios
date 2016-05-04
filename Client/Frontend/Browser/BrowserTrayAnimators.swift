@@ -23,17 +23,6 @@ private extension TrayToBrowserAnimator {
         guard let container = transitionContext.containerView() else { return }
         guard let selectedTab = bvc.tabManager.selectedTab else { return }
 
-        // Bug 1205464 - Top Sites tiles blow up or shrink after rotating
-        // Force the BVC's frame to match the tab trays since for some reason on iOS 9 the UILayoutContainer in
-        // the UINavigationController doesn't rotate the presenting view controller
-        let os = NSProcessInfo().operatingSystemVersion
-        switch (os.majorVersion, os.minorVersion, os.patchVersion) {
-        case (9, _, _):
-            bvc.view.frame = UIWindow().frame
-        default:
-            break
-        }
-
         let tabManager = bvc.tabManager
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let expandFromIndex = displayedTabs.indexOf(selectedTab) else { return }
