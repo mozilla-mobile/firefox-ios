@@ -28,6 +28,11 @@ extension Strings {
     public static let SettingsClearPrivateDataClearButton = NSLocalizedString("Settings.ClearPrivateData.Clear.Button", value: "Clear Private Data", comment: "Button in settings that clears private data for the selected items.")
     public static let SettingsClearPrivateDataSectionName = NSLocalizedString("Settings.ClearPrivateData.SectionName", value: "Clear Private Data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
     public static let SettingsClearPrivateDataTitle = NSLocalizedString("Settings.ClearPrivateData.Title", value: "Clear Private Data", comment: "Title displayed in header of the setting panel.")
+    
+    public static let SettingsRemoveSavedLoginsTitle = NSLocalizedString("Settings.RemoveSavedLogins.Title", value: "Remove Logins?", comment: "Title of the 'Remove logins' alert")
+    public static let SettingsRemoveSavedLoginsMessage = NSLocalizedString("Settings.RemoveSavedLogins.Message", value: "Would you also like to remove all saved logins?", comment: "Text of the 'remove logins' alert")
+    public static let SettingsRemoveSavedLoginsKeepButton = NSLocalizedString("Settings.RemoveSavedLogins.Keep.Button", value: "Keep", comment: "Cancel button in the 'Remove logins' alert")
+    public static let SettingsRemoveSavedLoginsRemoveButton = NSLocalizedString("Settings.RemoveSavedLogins.Remove.Button", value: "Remove", comment: "Disconnect button in the 'Remove logins' alert")
 }
 
 // Error pages.
