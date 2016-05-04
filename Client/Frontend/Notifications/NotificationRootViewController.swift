@@ -90,6 +90,7 @@ extension NotificationRootViewController {
         self.statusBarHidden = true
         self.notificationView.hidden = false
         self.notificationView.alpha = 0
+        self.notificationView.startAnimation()
         self.view.layoutIfNeeded()
         UIView.animateWithDuration(0.33) {
             self.remakeConstraintsForVisibleNotification()
@@ -103,6 +104,7 @@ extension NotificationRootViewController {
     func hideStatusNotification() {
         assert(NSThread.isMainThread(), "Hiding notifications must occur on the UI Thread.")
         self.statusBarHidden = false
+        self.notificationView.endAnimation()
         self.view.layoutIfNeeded()
         UIView.animateWithDuration(0.33, animations: {
             self.remakeConstraintsForHiddenNotification()
@@ -149,7 +151,7 @@ private extension NotificationRootViewController {
 private extension NotificationRootViewController {
     @objc func didStartSyncing() {
         showingNotification = true
-        notificationView.titleLabel.text = Strings.SyncingMessage
+        notificationView.titleLabel.text = Strings.SyncingMessageWithoutEllipsis
         dispatch_async(dispatch_get_main_queue()) {
             self.showStatusNotification()
         }
@@ -165,24 +167,51 @@ private extension NotificationRootViewController {
 
 // MARK: Notification Status View
 private class NotificationStatusView: UIView {
-    lazy var titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = self.setupStatusLabel()
+    private lazy var ellipsisLabel: UILabel = self.setupStatusLabel()
+    private var animationTimer: NSTimer?
+
+    private func setupStatusLabel() -> UILabel {
         let label = UILabel()
         label.textColor = .whiteColor()
         label.font = UIConstants.DefaultChromeSmallFontBold
         return label
-    }()
+    }
 
     init() {
         super.init(frame: CGRect.zero)
         backgroundColor = UIConstants.AppBackgroundColor
         addSubview(titleLabel)
+        addSubview(ellipsisLabel)
         titleLabel.snp_makeConstraints { make in
             make.center.equalTo(self)
             make.width.lessThanOrEqualTo(self.snp_width)
         }
+        ellipsisLabel.snp_makeConstraints { make in
+            make.centerY.equalTo(titleLabel)
+            make.left.equalTo(titleLabel.snp_right)
+        }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        endAnimation()
+    }
+
+    func startAnimation() {
+        animationTimer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(NotificationStatusView.updateEllipsis), userInfo: nil, repeats: true)
+        NSRunLoop.mainRunLoop().addTimer(animationTimer!, forMode: NSRunLoopCommonModes)
+    }
+
+    func endAnimation() {
+        animationTimer?.invalidate()
+    }
+
+    @objc private func updateEllipsis() {
+        let nextCount = ((ellipsisLabel.text?.characters.count ?? 0) + 1) % 4
+        ellipsisLabel.text = (0..<nextCount).reduce("") { return $0.0 + "." }
     }
 }

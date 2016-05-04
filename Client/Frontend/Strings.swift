@@ -71,5 +71,6 @@ extension Strings {
 
 // Syncing
 extension Strings {
-    public static let SyncingMessage = NSLocalizedString("Sync.Syncing.Label", value: "Syncing…", comment: "Message displayed when the user's account is syncing")
+    public static let SyncingMessageWithEllipsis = NSLocalizedString("Sync.SyncingEllipsis.Label", value: "Syncing…", comment: "Message displayed when the user's account is syncing with ellipsis at the end")
+    public static let SyncingMessageWithoutEllipsis = NSLocalizedString("Sync.Syncing.Label", value: "Syncing", comment: "Message displayed when the user's account is syncing with no ellipsis")
 }
