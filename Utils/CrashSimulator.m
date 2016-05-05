@@ -2,9 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef NativeRefTests_Bridging_Header_h
-#define NativeRefTests_Bridging_Header_h
+#import "CrashSimulator.h"
 
-#import <FBSnapshotTestCase/FBSnapshotTestCase.h>
+@implementation CrashSimulator
 
-#endif /* NativeRefTests_Bridging_Header_h */
++ (void)forceCrash
+{
+    @throw [[NSException alloc] initWithName:@"Simulated Crash" reason:@"This is a simulated crash." userInfo:nil];
+}
+
+@end

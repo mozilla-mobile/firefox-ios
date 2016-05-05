@@ -6,7 +6,6 @@ import Shared
 import Storage
 import AVFoundation
 import XCGLogger
-import Breakpad
 import MessageUI
 import WebImage
 import SwiftKeychainWrapper
@@ -118,9 +117,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootViewController.navigationBarHidden = true
         self.window!.rootViewController = rootViewController
 
-        log.debug("Configuring Breakpad…")
-        activeCrashReporter = BreakpadCrashReporter(breakpadInstance: BreakpadController.sharedInstance())
-        configureActiveCrashReporter(profile.prefs.boolForKey("crashreports.send.always"))
+        do {
+            log.debug("Configuring Crash Reporting...")
+            try PLCrashReporter.sharedReporter().enableCrashReporterAndReturnError()
+        } catch let error as NSError {
+            log.error("Failed to enable PLCrashReporter - \(error.description)")
+        }
 
         log.debug("Adding observers…")
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
@@ -548,43 +550,4 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 struct LaunchParams {
     let url: NSURL?
     let isPrivate: Bool?
-}
-
-var activeCrashReporter: CrashReporter?
-func configureActiveCrashReporter(optedIn: Bool?) {
-    if let reporter = activeCrashReporter {
-        configureCrashReporter(reporter, optedIn: optedIn)
-    }
-}
-
-public func configureCrashReporter(reporter: CrashReporter, optedIn: Bool?) {
-    let configureReporter: () -> () = {
-        let addUploadParameterForKey: String -> Void = { key in
-            if let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String {
-                reporter.addUploadParameter(value, forKey: key)
-            }
-        }
-
-        addUploadParameterForKey("AppID")
-        addUploadParameterForKey("BuildID")
-        addUploadParameterForKey("ReleaseChannel")
-        addUploadParameterForKey("Vendor")
-    }
-
-    if let optedIn = optedIn {
-        // User has explicitly opted-in for sending crash reports. If this is not true, then the user has
-        // explicitly opted-out of crash reporting so don't bother starting breakpad or stop if it was running
-        if optedIn {
-            reporter.start(true)
-            configureReporter()
-            reporter.setUploadingEnabled(true)
-        } else {
-            reporter.stop()
-        }
-    }
-    // We haven't asked the user for their crash reporting preference yet. Log crashes anyways but don't send them.
-    else {
-        reporter.start(true)
-        configureReporter()
-    }
 }
