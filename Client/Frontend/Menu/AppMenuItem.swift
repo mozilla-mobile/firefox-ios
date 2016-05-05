@@ -7,6 +7,7 @@ import Foundation
 struct AppMenuItem: MenuItem {
     let title: String
     let action: MenuAction
+    let secondaryAction: MenuAction?
     let animation: Animatable?
     private let iconName: String
     private let privateModeIconName: String
@@ -35,12 +36,13 @@ struct AppMenuItem: MenuItem {
         return selectedIcon
     }
 
-    init(title: String, action: MenuAction, icon: String, privateModeIcon: String, selectedIcon: String? = nil, animation: Animatable? = nil) {
+    init(title: String, action: MenuAction, secondaryAction: MenuAction? = nil, icon: String, privateModeIcon: String, selectedIcon: String? = nil, animation: Animatable? = nil) {
         self.title = title
         self.action = action
         self.iconName = icon
         self.privateModeIconName = privateModeIcon
         self.selectedIconName = selectedIcon
         self.animation = animation
+        self.secondaryAction = secondaryAction
     }
 }
