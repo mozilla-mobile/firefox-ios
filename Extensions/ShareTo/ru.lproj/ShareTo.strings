@@ -1,0 +1,9 @@
+/* Add button in the share dialog */
+"Add" = "Добавить";
+
+/* On/off toggle to select adding this url to your bookmarks */
+"Add to Bookmarks" = "Добавить в Закладки";
+
+/* On/off toggle to select adding this url to your reading list */
+"Add to Reading List" = "Добавить в Список для чтения";
+

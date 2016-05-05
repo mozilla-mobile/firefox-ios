@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "បិទ​ផ្ទាំង​ឯកជន";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox នឹង​មិន​ចងចាំ​ប្រវត្តិ ឬ​ខូគី​ណា​មួយ​ឡើយ ប៉ុន្តែ​​ចំណាំ​ថ្មី​នឹង​ត្រូវ​រក្សាទុក។";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "ស្វែងយល់​បន្ថែម";
+
+/* Toggled OFF accessibility value */
+"Off" = "បិទ";
+
+/* Toggled ON accessibility value */
+"On" = "បើក";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "បើក​នៅ​ក្នុង​ផ្ទាំង​ឯកជន​ថ្មី";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "ការ​រក​មើល​ជា​ឯកជន";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "របៀប​ជា​ឯកជន";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "បើក ឬ​បិទ​របៀប​ជា​ឯកជន";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "នៅ​ពេល​ចាកចេញ​​ពី​ការ​រក​មើល​​ឯកជន";
+
