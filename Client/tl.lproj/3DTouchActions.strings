@@ -1,0 +1,24 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "Idagdag sa mga Bookmark";
+
+/* Label for preview action on Tab Tray Tab to add current tab to Reading List */
+"Add to Reading List" = "Idagdag sa Reading List";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "Isara ang Tab";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "Kopyahin ang URL";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "Buksan ang Huling Bookmark";
+
+/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
+"Open Last Tab" = "Buksan ang Huling Tab";
+
+/* Accessibility Label for preview in Tab Tray of current tab */
+"Preview of %@" = "Preview ng %@";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "Ipadala sa Device";
+

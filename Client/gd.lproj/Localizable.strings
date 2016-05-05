@@ -1,0 +1,631 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Tha ainm-cleachdaiche is facal-faire ’gan iarraidh le %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Tha ainm-cleachdaiche is facal-faire ’gan iarraidh le %1$@. Tha an làrach ag ràdh: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Àà";
+
+/* About settings section title */
+"About" = "About";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Cuir taba ris";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Cuir ris an liosta-leughaidh";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Chaidh an duilleag a chur ris an liosta-leughaidh";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Address and Search";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Ceadaich meur-chlàran treas phàrtaidhean";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Cuir an-còmhnaidh";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Feum air dearbhadh";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Back";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Bac priob-uinneagan";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Comharra-lìn";
+
+/* Panel accessibility label */
+"Bookmarks" = "Bookmarks";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Nochdaidh na comharran-lìn a shàbhaileas tu an-seo.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Soilleireachd";
+
+/* Alert Call Button */
+"Call" = "Gairm";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Cancel";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Atharraichidh seo ùrlar nan dathan.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Atharraichidh seo seòrsa a’ chruth-chlò.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Falamhaich an dàta prìobhaideach";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Dùin";
+
+/* No comment provided by engineer. */
+"Closing tab" = "A’ dùnadh an taba";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Dèan lethbhreac dhen t-seòladh";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Dèan lethbhreac dhen dealbh";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Dèan lethbhreac dhen cheangal";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Cha b’ urrainn dhuinn an duilleag a chur ris an liosta-leughaidh. Saoil a bheil e air mu thràth?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Cha b’ urrainn dhuinn an duilleag a chur ris an liosta-leughaidh";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Cha b’ urrainn dhuinn an duilleag a luchdadh.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Cruthaich cunntas";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Dorcha";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Dì-bhugachadh: dìochuimhnich staid dearbhadh an t-sioncronachaidh";
+
+/* Debug option */
+"Debug: require password" = "Dì-bhugachadh: iarr facal-faire";
+
+/* Debug option */
+"Debug: require upgrade" = "Dì-bhugachadh: sparr àrdachadh";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Lùghdaich meud a’ chrutha-chlò";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Default Search Engine";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Cuir à comas còmhraidhean a bharrachd nan duilleagan";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Roghainnean taisbeanaidh";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "A bheil thu airson am facal-faire airson %1$@ air %2$@ a shàbhaladh?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "A bheil thu airson am facal-faire air %@ a shàbhaladh?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "A bheil thu airson am facal-faire airson %1$@ air %2$@ ùrachadh?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "A bheil thu airson am facal-faire air %@ ùrachadh?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Na cuir";
+
+/* Done button label for search settings table
+   Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Done";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Double tap and hold to open history";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Enter your password to connect.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Adhartach";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Rabhadh: chan urrainn dhuinn dearbhadh gu bheil an ceangal ris an làrach-lìn seo tèarainte.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Dh’fhaoidte gu bheil e air a dhroch-rèiteachadh no gu bheil cuideigin a’ toirt ionnsaigh air. Lean air d’ adhart ma tha thu leagte ris a leithid a chunnart.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Rinn an neach aig a bheil %@ droch-rèiteachadh air an làrach-lìn aca. Cha do rinn Firefox ceangal ris an làrach-lìn seo air eagal ’s gun rachadh dàta a ghoid ort.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Chan eil an ceangal agad prìobhaideach";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Air ais";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Tadhail air an làrach co-dhiù";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Feumaidh Firefox ath-fhosgladh gus an t-atharrachadh seo a chur an sàs.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Bu mhath le Firefox cothrom air na dealbhan agad";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Forward";
+
+/* General settings section title */
+"General" = "Coitcheann";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Faigh tabaichean fosgailte, comharran-lìn is faclan-faire o uidheaman eile agad.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Siuthad";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "A bheil thu airson a dhol gun URL a rinn thu lethbhreac dheth?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Cobhair";
+
+/* Panel accessibility label */
+"History" = "History";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Meudaich an cruth-clò";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Timcheallan an turais fhàilte";
+
+/* History tableview section header */
+"Last month" = "Last month";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "An sioncronachadh mu dheireadh: %@";
+
+/* History tableview section header */
+"Last week" = "Last week";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Ceadachasan";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Sorcha";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Luchdaich an duilleag thùsail";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "A’ luchdadh na susbaint…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Clàraich a-mach";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "A bheil thu airson clàradh a-mach?";
+
+/* Authentication prompt log in button */
+"Log in" = "Clàraich a-steach";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Clàraidhean a-steach";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Na sàbhail";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "A bheil thu airson an login %1$@ airson %2$@ a shàbhaladh?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Sàbhail am facal-faire airson %@?";
+
+/* Prompt for updating a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "Ùraich an login airson %1$@ air %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Ùraich am facal-faire airson %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Sàbhail an login";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Ùraich";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Tha coltas gun do thuislich Firefox roimhe. A bheil thu ag iarraidh nan tabaichean air ais?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Mark as Read";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Mark as Unread";
+
+/* Error for a missing remote error number */
+"Missing error" = "Mearachd a dhìth";
+
+/* Error for a missing remote error message */
+"Missing message" = "Teachdaireachd a dhìth";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Bàr-inneal na seòladaireachd";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Taba ùr: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Tha tionndadh ùr ri fhaighinn";
+
+/* Restore Tabs Negative Action */
+"No" = "Chan eil";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Gun tabaichean";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Chan ann an-dràsta";
+
+/* Button to not save the user's password */
+"Not now" = "Chan ann an-dràsta";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Ceart ma-thà";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ìoc! Thuislich Firefox";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Fosgail ann an taba ùr";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Fosgail na roghainnean";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Fosgail artaigilean san t-sealladh leughaidh le gnogag air ìomhaigheag an leabhair nuair a nochdas e ann am bàr an tiotail.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Fosgail an-seo…";
+
+/* Opening an external URL */
+"Opening %@" = "Opening %@";
+
+/* See http://bit.ly/1I7Do4b */
+"Pages you have visited recently will show up here." = "Nochdaidh duilleagan air an do thadhail thu o chionn goirid an-seo.";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Roghnaichear nam panail";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Facal-faire";
+
+/* Paste the URL into the location bar */
+"Paste" = "Cuir ann";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Cuir ann ⁊ rach ann";
+
+/* Privacy section title */
+"Privacy" = "Prìobhaideachd";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Am poileasaidh prìobhaideachd";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Quick-search Engines";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "An sealladh leughaidh";
+
+/* Panel accessibility label */
+"Reading list" = "Reading list";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Ath-luchdaich";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Remove";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Thoir air falbh on liosta-leughaidh";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Thoir an duilleag air falbh";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Iarr làrach nan desktop";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Iarr làrach nan innealan-làimhe";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "Sàbhail an dealbh";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Sàbhail clàraidhean a-steach";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Sàbhail duilleagan air an liosta leughaidh le gnogag air ìomhaigheag an leabhair ann an uidheaman-smachd an t-seallaidh leughaidh.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Search";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Search or enter address";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Lorgaidh seo am moladh";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Secure connection";
+
+/* Setting to enable the sending of crash reports */
+"Send Crash Reports" = "Cuir a-null aithisgean tuislidh";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "Cuir thugainn do bheachdan";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Cuir an aithisg";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "A bheil thu deònach aithisg a chur gu Mozilla mun tuisleadh ach an urrainn dhuinn a chàradh?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Sguir dheth";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Settings";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Falamhaich an dàta prìobhaideach";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Falamhaich an dàta prìobhaideach";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Falamhaich an dàta prìobhaideach";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Share";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Co-roinn an ceangal";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Sguir dheth";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Seall molaidhean-luirg";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Show Tabs";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Seall an turas";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Show search suggestions";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Clàraich a-steach gu Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Sign in";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Clàraich a-steach gus na tabaichean, comharra-lìn ’s faclan-faire agad fhaighinn o na h-uidheaman eile agad.";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "Sguir dheth";
+
+/* Support section title */
+"Support" = "Taic";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Grad-shlaighd gun taobh deas no clì le trì corragan gus an taba a dhùnadh.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Sioncronaich an-dràsta";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "Sioncronaich na tabaichean, comharran-lìn, faclan-faire is mòran a bharrachd.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "Sioncronaich na tabaichean, faclan-faire is mòran a bharrachd.";
+
+/* Panel accessibility label */
+"Synced tabs" = "Synced tabs";
+
+/* Syncing Firefox Account */
+"Syncing…" = "’Ga shioncronachadh…";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Taba %1$@ à %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Tabaichean %1$@ to %2$@ à %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Tabs Tray";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Cha b’ urrainn dhuinn an duilleag a thaisbeanadh ann an sealladh an leughadair.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Tha tionndadh ùr de Firefox Aurora ri fhaighinn. Thoir gnogag air “Ceart ma-thà” gus a dhol a dhuilleag nan luchdaidhean.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Bha duilgheadas againn a’ faighinn cothrom air na tabaichean agad air uidheaman eile. Feuch ris a-rithist ann an greiseag.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Thachair mearachd rè iompachadh na duilleige";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Bheir seo comas dhut an dealbh a shàbhaladh ann an albam a’ chamara agad.";
+
+/* Opening an external app */
+"This will open in another application" = "This will open in another application";
+
+/* History tableview section header */
+"Today" = "Today";
+
+/* Panel accessibility label */
+"Top sites" = "Top sites";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Nochdaidh na làraichean air an tadhail thu gu tric an-seo.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Fàilte gu brod nan làrach";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Ùraich";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Upgrade Firefox to connect.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Dùmhlaich na tabaichean";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Ainm-cleachdaiche";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Verify your email address.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Tionndadh %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Sealladh";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Web content";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Fàilte gun t-sioncronachadh";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Fàilte gun liosta-leughaidh agad";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "An-dà, tha seo a’ cur nàire oirnn.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Uicipeid";
+
+/* Button to save the user's password */
+"Yes" = "Tha";
+
+/* History tableview section header */
+"Yesterday" = "Yesterday";
+
+/* Error message in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Cha do cheangal thu uidheam sam bith eile ris a’ chunntas Firefox seo leis an urrainn dhuinn sioncronachadh.";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Chan eil taba sam bith fosgailte agad ann am Firefox air uidheaman eile.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Do chòraichean";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "coimpiutair";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "an-dràsta fhèin";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "uidheam mobile";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "barrachd air mìos air ais";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "barrachd air seachdain air ais";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "air a leughadh";
+
+/* Relative date for date in past week. */
+"this week" = "an t-seachdain-sa";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "an-diugh aig %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "gun leughadh";
+
+/* Relative date for yesterday. */
+"yesterday" = "an-dè";
+

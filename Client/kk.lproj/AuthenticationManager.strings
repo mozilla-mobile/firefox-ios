@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 сағаттан кейін";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 минуттан кейін";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 минуттан кейін";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 минуттан кейін";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 минуттан кейін";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Кілттік кодын ауыстыру";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "Кілттік кодты енгізіңіз";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "Жаңа кілттік кодты енгізіңіз";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Кілттік кодты енгізу";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "Кілттік кодты енгізіңіз";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Қазір";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Кілттік коды қате. Қайталап көріңіз (Қалған талаптар саны: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Кілттік коды қате. Қайталап көріңіз.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Талаптар саны максималды шамадан асып кетті. Бір сағаттан кейін қайталап көріңіз.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Талаптар саны максималды шамадан асып кетті. Кейінірек қайталап көріңіз.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Жаңа кілттік коды бар болып тұрған кодтан өзгеше болуы тиіс.";
+
+/* List section title for passcode settings */
+"Passcode" = "Кілттік коды";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Кілттік кодтар өзара сәйкес келмейді. Кейінірек қайталап көріңіз.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Кілттік кодты қайта енгізіңіз";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Кілттік кодын талап ету";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Кілттік кодты орнату";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID және кілттік коды";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Кілттік кодты сөндіру";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Кілттік кодты іске қосу";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Кілттік кодты сөндіріңіз.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Touch ID қолдану";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Логиндерге қатынау үшін саусақ баспасын қолданыңыз.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Жекелік шолуға қатынау үшін саусақ баспасын қолданыңыз.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Touch ID сөндіру үшін саусақ баспасын қолданыңыз.";
+
+/* Touch ID prompt subtitle when accessing  the require passcode setting */
+"touchid.require.passcode.reason.label" = "Кілттік кодты жаңарту уақытын баптау үшін саусақ баспасын қолданыңыз.";
+

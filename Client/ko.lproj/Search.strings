@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "%@ 검색";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "아니오";
+
+/* Label for search settings button. */
+"Search Settings" = "검색 설정";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "%@ 검색 추천";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "검색 추천을 켜시겠습니까?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "네";
+
