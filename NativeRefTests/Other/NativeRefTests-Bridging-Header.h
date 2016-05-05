@@ -5,7 +5,6 @@
 #ifndef NativeRefTests_Bridging_Header_h
 #define NativeRefTests_Bridging_Header_h
 
-#import "Client-Bridging-Header.h"
 #import <FBSnapshotTestCase/FBSnapshotTestCase.h>
 
 #endif /* NativeRefTests_Bridging_Header_h */
