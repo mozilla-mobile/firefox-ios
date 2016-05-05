@@ -14,7 +14,18 @@ import shutil
 import subprocess
 import urllib
 
-header = """\
+# Paths for en-US plugins included in the core Android repo.
+EN_PLUGINS_DIR_URL = "https://hg.mozilla.org/releases/mozilla-aurora/file/default/mobile/locales/en-US/searchplugins"
+EN_PLUGINS_FILE_URL = "https://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/locales/en-US/searchplugins/%s"
+EN_PREFS_URL = "https://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/locales/en-US/chrome/region.properties"
+
+# Paths for plugins in the l10n repos.
+L10N_LOCALE_LIST_URL = "https://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales"
+L10N_PLUGINS_DIR_URL = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/file/default/mobile/searchplugins"
+L10N_PLUGINS_FILE_URL = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/searchplugins/%%s"
+L10N_PREFS_URL = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/chrome/region.properties"
+
+MOZ_HEADER = """\
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
@@ -24,76 +35,65 @@ header = """\
 ns = { "search": "http://www.mozilla.org/2006/browser/search/" }
 
 def main():
-    downloadLocales()
-    copyOverrides()
-    verifyEngines()
-
-def downloadLocales():
+    # Remove and recreate the SearchPlugins directory.
     if os.path.exists("SearchPlugins"):
         shutil.rmtree("SearchPlugins")
     os.makedirs("SearchPlugins")
 
-    scraper = Scraper()
-    locales = scraper.getLocaleList()
-    supportedLocales = getSupportedLocales()
+    # Import en-US engines from the core repo.
+    downloadLocale("en", EnScraper())
 
+    # Import engines from the l10n repos.
+    response = requests.get(L10N_LOCALE_LIST_URL)
+    locales = response.text.strip().split("\n")
+    supportedLocales = getSupportedLocales()
     for locale in locales:
         if (locale not in supportedLocales):
             print("skipping unsupported locale: %s" % locale)
             continue
 
-        files = scraper.getFileList(locale)
-        if files == None:
-            print("no files for locale: %s" % locale)
-            continue
+        downloadLocale(locale, L10nScraper(locale))
 
-        print("  found search plugins")
+    verifyEngines()
 
-        directory = os.path.join("SearchPlugins", locale)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+def downloadLocale(locale, scraper):
+    print("scraping: %s..." % locale)
+    files = scraper.getFileList()
+    if files == None:
+        print("no files for locale: %s" % locale)
+        return
 
-        # Get the default search engine for this locale.
-        default = scraper.getDefault(locale)
-        if default == None:
-            continue
-        saveDefault(locale, default)
+    print("  found search plugins")
 
-        for file in files:
-            path = os.path.join(directory, file)
-            downloadedFile = scraper.getFile(locale, file)
-            name, extension = os.path.splitext(file)
+    directory = os.path.join("SearchPlugins", locale)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
-            # Apply iOS-specific overlays for this engine if they are defined.
-            if extension == ".xml":
-                engine = name.split("-")[0]
-                overlay = overlayForEngine(engine)
-                if overlay:
-                    plugin = etree.parse(downloadedFile)
-                    overlay.apply(plugin)
-                    contents = header + etree.tostring(plugin.getroot(), encoding="utf-8", pretty_print=True)
-                    with open(path, "w") as outfile:
-                        outfile.write(contents)
-                    continue
+    # Get the default search engine for this locale.
+    default = scraper.getDefault()
+    print("  default: %s" % default)
+    saveDefault(locale, default)
 
-            # Otherwise, just use the downloaded file as is.
-            shutil.move(downloadedFile, path)
+    for file in files:
+        path = os.path.join(directory, file)
+        print("  downloading: %s..." % file)
+        downloadedFile = scraper.getFile(file)
+        name, extension = os.path.splitext(file)
 
-def copyOverrides():
-    for locale in os.listdir("SearchOverrides"):
-        if not locale.startswith("."):
-            print("copying overrides for %s..." % locale)
-            localeSrc = os.path.join("SearchOverrides", locale)
-            localeDst = os.path.join("SearchPlugins", locale)
-            if not os.path.exists(localeDst):
-                os.makedirs(localeDst)
+        # Apply iOS-specific overlays for this engine if they are defined.
+        if extension == ".xml":
+            engine = name.split("-")[0]
+            overlay = overlayForEngine(engine)
+            if overlay:
+                plugin = etree.parse(downloadedFile)
+                overlay.apply(plugin)
+                contents = MOZ_HEADER + etree.tostring(plugin.getroot(), encoding="utf-8", pretty_print=True)
+                with open(path, "w") as outfile:
+                    outfile.write(contents)
+                continue
 
-            for file in os.listdir(localeSrc):
-                if localeSrc.startswith("."): continue
-                overrideSrc = os.path.join(localeSrc, file)
-                overrideDst = os.path.join(localeDst, file)
-                print("  overriding: %s..." % file)
-                shutil.copy(overrideSrc, overrideDst)
+        # Otherwise, just use the downloaded file as is.
+        shutil.move(downloadedFile, path)
 
 def verifyEngines():
     print("verifying engines...")
@@ -128,40 +128,52 @@ def saveDefault(locale, default):
 
 
 class Scraper:
-    def getLocaleList(self):
-        response = requests.get('https://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales')
-        return response.text.strip().split("\n")
+    def pluginsDirURL(self): pass
+    def pluginsFileURL(self): pass
+    def prefsURL(self): pass
+    def defaultPrefName(self): pass
 
-    def getFileList(self, locale):
-        print("scraping: %s..." % locale)
-        url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/file/default/mobile/searchplugins" % locale
-        response = requests.get(url)
+    def getFileList(self):
+        response = requests.get(self.pluginsDirURL)
         if not response.ok:
-            return
+            raise Exception("error: could not read plugins directory")
 
         tree = html.fromstring(response.content)
         return tree.xpath('//a[@class="list"]/text()')
 
-    def getFile(self, locale, file):
-        print("  downloading: %s..." % file)
-        url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/searchplugins/%s" % (locale, file)
-        result = urllib.urlretrieve(url)
+    def getFile(self, file):
+        result = urllib.urlretrieve(self.pluginsFileURL % file)
         return result[0]
 
-    def getDefault(self, locale):
-        url = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/chrome/region.properties" % locale
-        response = requests.get(url)
+    def getDefault(self):
+        response = requests.get(self.prefsURL)
         if not response.ok:
-            return
+            raise Exception("error: could not read prefs file")
 
         lines = response.text.strip().split("\n")
         for line in lines:
             values = line.strip().split("=")
-            if len(values) == 2 and values[0].strip() == "browser.search.defaultenginename":
+            if len(values) == 2 and values[0].strip() == self.defaultPrefName:
                 default = values[1].strip()
-                print("  default: %s" % default)
                 return default
 
+        raise Exception("error: no default pref found")
+
+
+class L10nScraper(Scraper):
+    def __init__(self, locale):
+        self.pluginsDirURL = L10N_PLUGINS_DIR_URL % locale
+        self.pluginsFileURL = L10N_PLUGINS_FILE_URL % locale
+        self.prefsURL = L10N_PREFS_URL % locale
+        self.defaultPrefName = "browser.search.defaultenginename"
+
+
+class EnScraper(Scraper):
+    def __init__(self):
+        self.pluginsDirURL = EN_PLUGINS_DIR_URL
+        self.pluginsFileURL = EN_PLUGINS_FILE_URL
+        self.prefsURL = EN_PREFS_URL
+        self.defaultPrefName = "browser.search.defaultenginename.US"
 
 class Overlay:
     def __init__(self, path):
