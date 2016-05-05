@@ -13,6 +13,6 @@
 #import "ThirdParty/RaptureXML/RXMLElement.h"
 
 
-#import "CrashReporter.h"
+#import <CrashReporter/CrashReporter.h>
 
 #endif
