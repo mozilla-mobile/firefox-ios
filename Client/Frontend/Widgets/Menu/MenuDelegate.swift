@@ -12,5 +12,7 @@ protocol MenuToolbarItemDelegate {
 protocol MenuItemDelegate {
     func menuView(menuView: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath)
 
+    func menuView(menuView: MenuView, didLongPressItemAtIndexPath indexPath: NSIndexPath)
+
     func heightForRowsInMenuView(menuView: MenuView) -> CGFloat
 }

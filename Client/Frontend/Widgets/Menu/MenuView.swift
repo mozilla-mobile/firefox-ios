@@ -131,6 +131,8 @@ class MenuView: UIView {
         super.init(frame: CGRectZero)
 
         self.addSubview(menuContainerView)
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(menuLongPressed))
+        menuPagingView.addGestureRecognizer(longPress)
 
         menuContainerView.addSubview(menuPagingView)
         menuContainerView.addSubview(pageControl)
@@ -223,6 +225,18 @@ class MenuView: UIView {
         toolbarButtonSelected(view)
     }
 
+    @objc private func menuLongPressed(recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .Began else {
+            return
+        }
+
+        let point = recognizer.locationInView(menuPagingView)
+        guard let indexPath = menuPagingView.indexPathForItemAtPoint(point) else {
+            return
+        }
+
+        menuItemDelegate?.menuView(self, didLongPressItemAtIndexPath: indexPath)
+    }
 
     // MARK : Menu Cell Management and Recycling
     func reloadData() {
