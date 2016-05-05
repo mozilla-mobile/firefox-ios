@@ -957,7 +957,7 @@ class BrowserViewController: UIViewController {
     func openURLInNewTab(url: NSURL?, isPrivate: Bool = false) {
         let request: NSURLRequest?
         if let url = url {
-            request = NSURLRequest(URL: url)
+            request = PrivilegedRequest(URL: url)
         } else {
             request = nil
         }
