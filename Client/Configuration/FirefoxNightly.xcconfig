@@ -2,38 +2,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Mozilla Application ID
-MOZ_APP_ID = fennecios@mozilla.org
-
 MOZ_BUNDLE_DISPLAY_NAME = Firefox α
-
-MOZ_APP_ICON = AppIcon_Nightly
-
-// The name of the product. Generally used as the prefix/name of all files associated with this build configuration.
-MOZ_PRODUCT_NAME = FirefoxNightly
 
 // Bundle Identifier
 MOZ_BUNDLE_ID = org.mozilla.ios.FirefoxNightly
 
-// Product Name
-MOZ_SOCORRO_PRODUCT_NAME = FirefoxNightlyiOS
-
-// Crash-stats upload URL
-MOZ_BREAKPAD_URL = crash-reports.mozilla.com/submit?id=$(MOZ_BUNDLE_ID)&version=$(MOZ_VERSION)&buildid=$(MOZ_BUILD_ID)
-
-// Frequency to poll for uploads for crashes in seconds
-MOZ_BREAKPAD_UPLOAD_FREQUENCY = 30
-
-// Uploading to crash-stats which is a socorro instance
-MOZ_BREAKPAD_SERVER_TYPE = socorro
-
-// Vendor property to send to crash-stats
-MOZ_VENDOR = Mozilla
-
-MOZ_RELEASE_CHANNEL = nightly
-
 // Flag to indicate if we want to include the debug settings bundle or not
-INCLUDE_SETTINGS_BUNDLE = NO
+INCLUDE_SETTINGS_BUNDLE = YES
 
 // Adjust SDK Variables
 ADJUST_ENVIRONMENT =
