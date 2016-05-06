@@ -40,40 +40,11 @@ public struct AppConstants {
 
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
-#if MOZ_CHANNEL_DEBUG
-    return true
-#else
-    return false
-#endif
-    }()
-
-
-    /// Enables/disables the Login manager UI by hiding the 'Logins' setting item.
-    public static let MOZ_LOGIN_MANAGER: Bool = {
-#if MOZ_CHANNEL_AURORA
-    return true
-#elseif MOZ_CHANNEL_RELEASE
-    return true
-#elseif MOZ_CHANNEL_BETA
-    return true
-#else
-    return true
-#endif
-    }()
-
-    /// Enables/disables the Touch ID/passcode functionality and settings screen
-    public static let MOZ_AUTHENTICATION_MANAGER: Bool = {
-#if MOZ_CHANNEL_AURORA
-    return false
-#elseif MOZ_CHANNEL_FENNEC
-    return false
-#elseif MOZ_CHANNEL_RELEASE
-    return false
-#elseif MOZ_CHANNEL_BETA
-    return true
-#else
-    return true
-#endif
+        #if MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return false
+        #endif
     }()
 
     /// Enables/disables the new Menu functionality
