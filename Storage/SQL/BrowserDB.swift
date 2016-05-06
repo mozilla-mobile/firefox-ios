@@ -56,7 +56,7 @@ public class BrowserDB {
         let file = ((try! files.getAndEnsureDirectory()) as NSString).stringByAppendingPathComponent(filename)
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
-        if AppConstants.BuildChannel == .Developer && secretKey != nil {
+        if AppConstants.BuildChannel == .Fennec && secretKey != nil {
             log.debug("Creating db: \(file) with secret = \(secretKey)")
         }
 

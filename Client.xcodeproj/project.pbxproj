@@ -5438,7 +5438,7 @@
 		E421F28C1A8D2BF300971276 /* FirefoxNightly */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(MOZ_APP_ICON)";
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5599,7 +5599,7 @@
 		E448FC9E1AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(MOZ_APP_ICON)";
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6278,7 +6278,7 @@
 		E682F5211C89E71000ECB6B2 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(MOZ_APP_ICON)";
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6739,7 +6739,7 @@
 		E6FCC42A1C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(MOZ_APP_ICON)";
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7147,7 +7147,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_DEBUG";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
@@ -7160,7 +7160,7 @@
 		F84B21DE1A090F8100AAB793 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(MOZ_APP_ICON)";
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
