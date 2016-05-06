@@ -23,7 +23,6 @@ public class Telemetry {
         switch AppConstants.BuildChannel {
         case .Fennec: fallthrough
         case .Aurora: fallthrough
-        case .Developer: channel = "default"
         case .Beta: channel = "beta"
         case .Release: channel = "release"
         }
