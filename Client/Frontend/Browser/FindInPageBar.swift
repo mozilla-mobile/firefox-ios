@@ -67,7 +67,7 @@ class FindInPageBar: UIView {
             searchText.inputAssistantItem.leadingBarButtonGroups = []
             searchText.inputAssistantItem.trailingBarButtonGroups = []
         }
-        //searchText.delegate = self
+        searchText.enablesReturnKeyAutomatically = true
         addSubview(searchText)
 
         matchCountView.textColor = FindInPageUX.MatchCountColor
