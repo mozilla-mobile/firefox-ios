@@ -77,11 +77,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
         switch appState {
         case .TabTray:
-            if #available(iOS 9, *) {
-                return 4
-            } else {
-                return 3
-            }
+            return 4
         default:
             return 3
         }

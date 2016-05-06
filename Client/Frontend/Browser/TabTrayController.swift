@@ -26,6 +26,8 @@ struct TabTrayControllerUX {
     static let NumberOfColumnsWide = 3
     static let CompactNumberOfColumnsThin = 2
 
+    static let MenuFixedWidth: CGFloat = 320
+
     // Moved from UIConstants temporarily until animation code is merged
     static var StatusBarHeight: CGFloat {
         if UIScreen.mainScreen().traitCollection.verticalSizeClass == .Compact {
@@ -280,8 +282,6 @@ class TabTrayController: UIViewController {
         }
     }
 
-    private var displayedMenu: UIViewController?
-
     private(set) internal var privateMode: Bool = false {
         didSet {
             if oldValue != privateMode {
@@ -392,10 +392,6 @@ class TabTrayController: UIViewController {
 
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
-
-        // If we're displaying the menu as a modal and not a popover, make sure to dismiss here instead of 
-        // viewWillTransitionToSize to allow the animation to 'unwind' itself using the MenuPresenationAnimator.
-        displayedMenu?.dismissViewControllerAnimated(true, completion: nil)
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -459,15 +455,7 @@ class TabTrayController: UIViewController {
         mvc.actionDelegate = self
         mvc.menuTransitionDelegate = MenuPresentationAnimator()
         mvc.modalPresentationStyle = .OverCurrentContext
-
-        // Fix the width of the menu when we are in landscape or iPad
-        if (traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Compact) ||
-            traitCollection.horizontalSizeClass == .Regular
-        {
-            mvc.fixedWidth = 320
-        }
-
-        self.displayedMenu = mvc
+        mvc.fixedWidth = TabTrayControllerUX.MenuFixedWidth
         self.presentViewController(mvc, animated: true, completion: nil)
     }
 
