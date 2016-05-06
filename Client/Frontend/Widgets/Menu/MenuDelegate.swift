@@ -7,6 +7,8 @@ import UIKit
 
 protocol MenuToolbarItemDelegate {
     func menuView(menuView: MenuView, didSelectItemAtIndex index: Int)
+
+    func menuView(menuView: MenuView, didLongPressItemAtIndex index: Int)
 }
 
 protocol MenuItemDelegate {

@@ -212,7 +212,7 @@ class MenuView: UIView {
 
     @objc private func toolbarButtonSelected(sender: UIView) {
         guard let selectedItemIndex = toolbarItems.indexOf({ $0.customView == sender }) else {
-                return
+            return
         }
         toolbarDelegate?.menuView(self, didSelectItemAtIndex: selectedItemIndex)
     }
@@ -220,6 +220,17 @@ class MenuView: UIView {
     @objc private func toolbarButtonTapped(gesture: UIGestureRecognizer) {
         guard let view = gesture.view else { return }
         toolbarButtonSelected(view)
+    }
+
+    @objc private func toolbarLongPressed(recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .Began else {
+            return
+        }
+        let view = recognizer.view
+        guard let index = toolbarItems.indexOf({ $0.customView == view }) else {
+            return
+        }
+        toolbarDelegate?.menuView(self, didLongPressItemAtIndex: index)
     }
 
     @objc private func menuLongPressed(recognizer: UILongPressGestureRecognizer) {
@@ -257,6 +268,9 @@ class MenuView: UIView {
                 toolbarItemView.userInteractionEnabled = true
                 toolbarItemView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.toolbarButtonTapped(_:))))
             }
+
+            toolbarItemView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(toolbarLongPressed)))
+
             let toolbarButton = UIBarButtonItem(customView: toolbarItemView)
             toolbarButton.accessibilityLabel = toolbarItemView.accessibilityLabel
             toolbarButton.isAccessibilityElement = true

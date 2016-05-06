@@ -303,6 +303,14 @@ extension MenuViewController: MenuToolbarItemDelegate {
         let menuToolbarItem = menuConfig.menuToolbarItems![index]
         return performMenuAction(menuToolbarItem.action)
     }
+
+    func menuView(menuView: MenuView, didLongPressItemAtIndex index: Int) {
+        let menuToolbarItem = menuConfig.menuToolbarItems![index]
+        guard let action = menuToolbarItem.secondaryAction else {
+            return
+        }
+        return performMenuAction(action)
+    }
 }
 
 extension MenuViewController: UIGestureRecognizerDelegate {
