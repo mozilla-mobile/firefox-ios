@@ -26,7 +26,7 @@ protocol TabDelegate {
     optional func tab(tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-struct TabState {
+struct TabState: AppState {
     var isPrivate: Bool = false
     var desktopSite: Bool = false
     var isBookmarked: Bool = false
@@ -51,10 +51,6 @@ class Tab: NSObject {
                 self.updateAppState()
             }
         }
-    }
-
-    var tabState: TabState {
-        return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url, title: displayTitle, favicon: displayFavicon)
     }
 
     var webView: WKWebView? = nil
@@ -134,7 +130,7 @@ class Tab: NSObject {
     }
 
     private func updateAppState() {
-        self.appStateDelegate?.appDidUpdateState(.Tab(tabState: self.tabState))
+        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     weak var navigationDelegate: WKNavigationDelegate? {
@@ -460,6 +456,22 @@ class Tab: NSObject {
 extension Tab: TabWebViewDelegate {
     private func tabWebView(tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
+    }
+}
+
+extension Tab: StateProvider {
+    var state: AppState {
+        get {
+            return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url, title: displayTitle, favicon: displayFavicon)
+        }
+
+        set {
+            _isPrivate = newValue.isPrivate
+            if let newState = newValue as? TabState {
+                desktopSite = newState.desktopSite
+                isBookmarked = newState.isBookmarked
+            }
+        }
     }
 }
 

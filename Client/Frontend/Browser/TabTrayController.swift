@@ -238,8 +238,9 @@ protocol TabTrayDelegate: class {
     func tabTrayRequestsPresentationOf(viewController viewController: UIViewController)
 }
 
-struct TabTrayState {
-    var isPrivate: Bool = false
+struct TabTrayState: AppState {
+    // add in here any state that is specific to tab tray
+    var isPrivate: Bool
 }
 
 class TabTrayController: UIViewController {
@@ -247,17 +248,12 @@ class TabTrayController: UIViewController {
     let profile: Profile
     weak var delegate: TabTrayDelegate?
     weak var appStateDelegate: AppStateDelegate?
-
     var collectionView: UICollectionView!
     var navBar: UIView!
     var addTabButton: UIButton?
     var settingsButton: UIButton?
     var menuButton: UIButton?
     var collectionViewTransitionSnapshot: UIView?
-
-    var tabTrayState: TabTrayState {
-        return TabTrayState(isPrivate: self.privateMode)
-    }
 
     private(set) internal var privateMode: Bool = false {
         didSet {
@@ -497,20 +493,20 @@ class TabTrayController: UIViewController {
 
     @objc
     private func didTapMenu() {
-        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: .Popover)
-        mvc.delegate = self
-        mvc.actionDelegate = self
-        mvc.modalPresentationStyle = .Popover
-
-        if let popoverPresentationController = mvc.popoverPresentationController {
-            popoverPresentationController.backgroundColor = UIColor.clearColor()
-            popoverPresentationController.delegate = self
-            popoverPresentationController.sourceView = menuButton!
-            popoverPresentationController.sourceRect = CGRect(x: menuButton!.frame.width/2, y: menuButton!.frame.size.height * 0.75, width: 1, height: 1)
-            popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
-        }
-
-        self.presentViewController(mvc, animated: true, completion: nil)
+//        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: .Popover)
+//        mvc.delegate = self
+//        mvc.actionDelegate = self
+//        mvc.modalPresentationStyle = .Popover
+//
+//        if let popoverPresentationController = mvc.popoverPresentationController {
+//            popoverPresentationController.backgroundColor = UIColor.clearColor()
+//            popoverPresentationController.delegate = self
+//            popoverPresentationController.sourceView = menuButton!
+//            popoverPresentationController.sourceRect = CGRect(x: menuButton!.frame.width/2, y: menuButton!.frame.size.height * 0.75, width: 1, height: 1)
+//            popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+//        }
+//
+//        self.presentViewController(mvc, animated: true, completion: nil)
     }
 
     @available(iOS 9, *)
@@ -607,7 +603,7 @@ class TabTrayController: UIViewController {
     }
 
     private func updateAppState() {
-        self.appStateDelegate?.appDidUpdateState(.TabTray(tabTrayState: self.tabTrayState))
+        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     private func closeTabsForCurrentTray() {
@@ -631,6 +627,18 @@ extension TabTrayController {
             self.collectionView.alpha = 1
         },
         completion: nil)
+    }
+}
+
+extension TabTrayController: StateProvider {
+    var state: AppState {
+        get {
+            return TabTrayState(isPrivate: privateMode)
+        }
+
+        set {
+            privateMode = newValue.isPrivate
+        }
     }
 }
 
@@ -1092,54 +1100,53 @@ extension TabTrayController: MenuViewControllerDelegate {
 }
 
 extension TabTrayController: MenuActionDelegate {
-    func performMenuAction(action: MenuAction, withAppState appState: AppState) {
-        if let menuAction = AppMenuAction(rawValue: action.action) {
-            switch menuAction {
-            case .OpenNewNormalTab:
+    func performMenuAction(action: MenuAction, withState state: State?) {
+        guard let menuAction = AppMenuAction(rawValue: action.action) else { return }
+        switch menuAction {
+        case .OpenNewNormalTab:
+            dispatch_async(dispatch_get_main_queue()) {
+                if #available(iOS 9, *) {
+                    if self.privateMode {
+                        self.SELdidTogglePrivateMode()
+                    }
+                }
+                self.openNewTab()
+            }
+        // this is a case that is only available in iOS9
+        case .OpenNewPrivateTab:
+            if #available(iOS 9, *) {
                 dispatch_async(dispatch_get_main_queue()) {
-                    if #available(iOS 9, *) {
-                        if self.privateMode {
-                            self.SELdidTogglePrivateMode()
-                        }
+                    if !self.privateMode {
+                        self.SELdidTogglePrivateMode()
                     }
                     self.openNewTab()
                 }
-            // this is a case that is only available in iOS9
-            case .OpenNewPrivateTab:
-                if #available(iOS 9, *) {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        if !self.privateMode {
-                            self.SELdidTogglePrivateMode()
-                        }
-                        self.openNewTab()
-                    }
-                }
-            case .OpenSettings:
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.SELdidClickSettingsItem()
-                }
-            case .CloseAllTabs:
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.closeTabsForCurrentTray()
-                }
-            case .OpenTopSites:
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.TopSites)!))
-                }
-            case .OpenBookmarks:
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!))
-                }
-            case .OpenHistory:
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.History)!))
-                }
-            case .OpenReadingList:
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.ReadingList)!))
-                }
-            default: break
             }
+        case .OpenSettings:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.SELdidClickSettingsItem()
+            }
+        case .CloseAllTabs:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.closeTabsForCurrentTray()
+            }
+        case .OpenTopSites:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.TopSites)!))
+            }
+        case .OpenBookmarks:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!))
+            }
+        case .OpenHistory:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.History)!))
+            }
+        case .OpenReadingList:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.openNewTab(NSURLRequest(URL: HomePanelViewController.urlForHomePanelOfType(.ReadingList)!))
+            }
+        default: break
         }
     }
 }

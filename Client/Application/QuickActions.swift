@@ -88,13 +88,20 @@ class QuickActions: NSObject {
         return true
     }
 
-    func removeDynamicApplicationShortcutItemOfType(type: ShortcutType, fromApplication application: UIApplication) {
+    func removeDynamicApplicationShortcutItemOfType(type: ShortcutType, withURL url: NSString? = nil, fromApplication application: UIApplication) {
         guard var dynamicShortcutItems = application.shortcutItems,
             let index = (dynamicShortcutItems.indexOf{ $0.type == type.type }) else { return }
+
+        if let itemURL = dynamicShortcutItems[index].userInfo?[QuickActions.TabURLKey] as? String {
+            if dynamicShortcutItems[index].type == ShortcutType.OpenLastBookmark.rawValue && itemURL != url {
+                return
+            }
+        }
 
         dynamicShortcutItems.removeAtIndex(index)
         application.shortcutItems = dynamicShortcutItems
     }
+
 
 
     // MARK: Handling Quick Actions

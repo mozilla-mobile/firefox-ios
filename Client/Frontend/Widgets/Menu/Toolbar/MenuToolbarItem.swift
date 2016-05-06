@@ -7,5 +7,5 @@ import Foundation
 protocol MenuToolbarItem {
     var title: String { get }
     var action: MenuAction { get }
-    func iconForState(appState: AppState) -> UIImage?
+    func iconForState(state: State?) -> UIImage?
 }
