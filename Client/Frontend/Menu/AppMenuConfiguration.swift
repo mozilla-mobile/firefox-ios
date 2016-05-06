@@ -178,11 +178,11 @@ extension AppMenuConfiguration {
     }
 
     private static var OpenHomePageMenuItem: MenuItem {
-        return AppMenuItem(title: OpenHomePageTitleString, action: MenuAction(action: AppMenuAction.OpenHomePage.rawValue), icon: "menu-HomePage", privateModeIcon: "menu-HomePage")
+        return AppMenuItem(title: OpenHomePageTitleString, action: MenuAction(action: AppMenuAction.OpenHomePage.rawValue), icon: "menu-Home", privateModeIcon: "menu-Home-pbm", selectedIcon: "menu-Home-Engaged")
     }
 
     private static var SetHomePageMenuItem: MenuItem {
-        return AppMenuItem(title: SetHomePageTitleString, action: MenuAction(action: AppMenuAction.SetHomePage.rawValue), icon: "menu-HomePage", privateModeIcon: "menu-HomePage")
+        return AppMenuItem(title: SetHomePageTitleString, action: MenuAction(action: AppMenuAction.SetHomePage.rawValue), icon: "menu-Home", privateModeIcon: "menu-Home-pbm", selectedIcon: "menu-Home-Engaged")
     }
 
     private static var TopSitesMenuToolbarItem: MenuToolbarItem {
