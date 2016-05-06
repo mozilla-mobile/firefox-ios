@@ -29,12 +29,31 @@ class MenuViewController: UIViewController {
         }
     }
 
-    var menuView: MenuView!
+    lazy var menuView: MenuView = MenuView(presentationStyle: self.presentationStyle)
 
     var appState: AppState {
         didSet {
             menuConfig = menuConfig.menuForState(appState)
             self.reloadView()
+        }
+    }
+
+    var fixedWidth: CGFloat? {
+        didSet {
+            defer {
+                menuView.setNeedsUpdateConstraints()
+            }
+
+            guard let fixedWidth = fixedWidth else {
+                self.setupDefaultModalMenuConstraints()
+                return
+            }
+
+            menuView.snp_remakeConstraints { make in
+                make.centerX.equalTo(view)
+                make.width.equalTo(fixedWidth)
+                make.bottom.equalTo(view)
+            }
         }
     }
 
@@ -62,7 +81,6 @@ class MenuViewController: UIViewController {
         self.view.addGestureRecognizer(gesture)
 
         // Do any additional setup after loading the view.
-        menuView = MenuView(presentationStyle: self.presentationStyle)
         self.view.addSubview(menuView)
 
         menuView.menuItemDataSource = self
@@ -97,14 +115,16 @@ class MenuViewController: UIViewController {
             menuView.openMenuImage.image = menuConfig.menuIcon()?.imageWithRenderingMode(.AlwaysTemplate)
             menuView.openMenuImage.tintColor = menuConfig.toolbarTintColor()
             menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:))))
-
-            menuView.snp_makeConstraints { make in
-                make.left.equalTo(view.snp_left).offset(24)
-                make.right.equalTo(view.snp_right).offset(-24)
-                make.bottom.equalTo(view.snp_bottom)
-            }
+            setupDefaultModalMenuConstraints()
         }
+    }
 
+    private func setupDefaultModalMenuConstraints() {
+        menuView.snp_remakeConstraints { make in
+            make.left.equalTo(view.snp_left).offset(24)
+            make.right.equalTo(view.snp_right).offset(-24)
+            make.bottom.equalTo(view.snp_bottom)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -138,7 +158,6 @@ class MenuViewController: UIViewController {
         if presentationStyle == .Popover {
             self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
         }
-        self.popoverPresentationController?.backgroundColor = self.popoverBackgroundColor
     }
 
     override func viewDidAppear(animated: Bool) {

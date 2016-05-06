@@ -205,4 +205,5 @@ extension AppMenuConfiguration {
     static let BookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", value: "Bookmarks", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the bookmarks home panel from the menu")
     static let HistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", value: "History", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the history home panel from the menu")
     static let ReadingListTitleString = NSLocalizedString("Menu.OpenReadingListAction.AccessibilityLabel", value: "Reading List", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the reading list home panel from the menu")
+    static let MenuButtonAccessibilityLabel = NSLocalizedString("Toolbar.Menu.AccessibilityLabel", value: "Menu", comment: "Accessibility Label for the toolbar Menu button")
 }

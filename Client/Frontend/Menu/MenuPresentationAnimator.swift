@@ -69,9 +69,8 @@ extension MenuPresentationAnimator {
         self.animateWithMenu(menu, baseController: bvc, viewsToAnimateLeft: leftViews, viewsToAnimateRight: rightViews, sourceView: sourceView, withTransitionContext: transitionContext)
     }
 
-    // TODO: when the tab tray toolbar comes into existence then this should be completed
     private func animateWithMenu(menu: MenuViewController, tabTrayController ttc: TabTrayController, transitionContext: UIViewControllerContextTransitioning) {
-        fatalError("animateWithMenu(menu: tabTrayController: transitionContext:) has not been implemented")
+        animateWithMenu(menu, baseController: ttc, viewsToAnimateLeft: ttc.leftToolbarButtons, viewsToAnimateRight: ttc.rightToolbarButtons, sourceView: ttc.toolbar.menuButton, withTransitionContext: transitionContext)
     }
 
     private func animateWithMenu(menuController: MenuViewController, baseController: UIViewController, viewsToAnimateLeft: [UIView]?, viewsToAnimateRight: [UIView]?, sourceView: UIView?, withTransitionContext transitionContext: UIViewControllerContextTransitioning) {
