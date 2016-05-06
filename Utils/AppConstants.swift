@@ -5,15 +5,15 @@
 import UIKit
 
 public enum AppBuildChannel {
-    case Developer
-    case Aurora
-    case Fennec
     case Release
     case Beta
+    case Nightly
+    case Fennec
+    case Aurora
+    case Unknown
 }
 
 public struct AppConstants {
-
     public static let IsRunningTest = NSClassFromString("XCTestCase") != nil
 
     // True if this process is executed as part of a Fastlane Snapshot test
@@ -21,19 +21,20 @@ public struct AppConstants {
 
     /// Build Channel.
     public static let BuildChannel: AppBuildChannel = {
-#if MOZ_CHANNEL_AURORA
-    return AppBuildChannel.Aurora
-#elseif MOZ_CHANNEL_FENNEC
-    return AppBuildChannel.Fennec
-#elseif MOZ_CHANNEL_RELEASE
-    return AppBuildChannel.Release
-#elseif MOZ_CHANNEL_BETA
-    return AppBuildChannel.Beta
-#else
-    return AppBuildChannel.Developer
-#endif
+        #if MOZ_CHANNEL_RELEASE
+            return AppBuildChannel.Release
+        #elseif MOZ_CHANNEL_BETA
+            return AppBuildChannel.Beta
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return AppBuildChannel.Nightly
+        #elseif MOZ_CHANNEL_FENNEC
+            return AppBuildChannel.Fennec
+        #elseif MOZ_CHANNEL_AURORA
+            return AppBuildChannel.Aurora
+        #else
+            return AppBuildChannel.Unknown
+        #endif
     }()
-
 
     /// Whether we just mirror (false) or actively merge and upload (true).
     public static let shouldMergeBookmarks = false
@@ -49,13 +50,15 @@ public struct AppConstants {
 
     /// Enables/disables the new Menu functionality
     public static let MOZ_MENU: Bool = {
-        #if MOZ_CHANNEL_AURORA
-            return false
-        #elseif MOZ_CHANNEL_FENNEC
-            return false
-        #elseif MOZ_CHANNEL_RELEASE
+        #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
