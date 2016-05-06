@@ -211,10 +211,7 @@ class MenuView: UIView {
     }
 
     @objc private func toolbarButtonSelected(sender: UIView) {
-        guard let selectedView = (toolbarItems.filter { item in
-            return item.customView != nil && item.customView! == sender
-        }).first,
-            let selectedItemIndex = toolbarItems.indexOf(selectedView) else {
+        guard let selectedItemIndex = toolbarItems.indexOf({ $0.customView == sender }) else {
                 return
         }
         toolbarDelegate?.menuView(self, didSelectItemAtIndex: selectedItemIndex)
