@@ -10,6 +10,7 @@ import SwiftKeychainWrapper
 /// Delegate available for PasscodeEntryViewController consumers to be notified of the validation of a passcode.
 @objc protocol PasscodeEntryDelegate: class {
     func passcodeValidationDidSucceed()
+    optional func userDidCancelValidation()
 }
 
 /// Presented to the to user when asking for their passcode to validate entry into a part of the app.
@@ -43,6 +44,11 @@ class PasscodeEntryViewController: BasePasscodeViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
+    }
+
+    override func dismiss() {
+        delegate?.userDidCancelValidation?()
+        super.dismiss()
     }
 }
 

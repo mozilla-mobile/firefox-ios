@@ -7,6 +7,7 @@ import UIKit
 import SnapKit
 import Storage
 import Shared
+import SwiftKeychainWrapper
 
 private struct LoginListUX {
     static let RowHeight: CGFloat = 58
@@ -28,7 +29,7 @@ private extension UITableView {
 
 private let LoginCellIdentifier = "LoginCell"
 
-class LoginListViewController: UIViewController {
+class LoginListViewController: SensitiveViewController {
 
     private lazy var loginSelectionController: ListSelectionController = {
         return ListSelectionController(tableView: self.tableView)

@@ -6,6 +6,8 @@ import Foundation
 import GCDWebServers
 import Storage
 import WebKit
+import SwiftKeychainWrapper
+import Shared
 
 let LabelAddressAndSearch = "Address and Search"
 
@@ -449,5 +451,24 @@ class DynamicFontUtils {
         let value = UIContentSizeCategoryMedium
         UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
         tester.waitForTimeInterval(0.3)
+    }
+}
+
+class PasscodeUtils {
+    static func resetPasscode() {
+        KeychainWrapper.setAuthenticationInfo(nil)
+    }
+
+    static func setPasscode(code: String, interval: PasscodeInterval) {
+        let info = AuthenticationKeychainInfo(passcode: code)
+        info.updateRequiredPasscodeInterval(interval)
+        KeychainWrapper.setAuthenticationInfo(info)
+    }
+
+    static func enterPasscode(tester: KIFUITestActor, digits: String) {
+        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex]))
+        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(1)]))
+        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(2)]))
+        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(3)]))
     }
 }

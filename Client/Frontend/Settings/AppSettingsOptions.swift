@@ -466,6 +466,7 @@ class LoginsSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
     weak var navigationController: UINavigationController?
+    weak var settings: AppSettingsTableViewController?
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
@@ -475,6 +476,7 @@ class LoginsSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
         self.navigationController = settings.navigationController
+        self.settings = settings as? AppSettingsTableViewController
 
         let loginsTitle = NSLocalizedString("Logins", comment: "Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.")
         super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
@@ -483,7 +485,7 @@ class LoginsSetting: Setting {
 
     override func onClick(_: UINavigationController?) {
         guard let authInfo = KeychainWrapper.authenticationInfo() else {
-            navigateToLoginsList()
+            settings?.navigateToLoginsList()
             return
         }
 
@@ -491,27 +493,14 @@ class LoginsSetting: Setting {
             AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
-                self.navigateToLoginsList()
+                self.settings?.navigateToLoginsList()
             },
+            cancel: nil,
             fallback: {
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self.settings)
             })
         } else {
-            self.navigateToLoginsList()
-        }
-    }
-
-    private func navigateToLoginsList() {
-        let viewController = LoginListViewController(profile: profile)
-        viewController.settingsDelegate = delegate
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
-extension LoginsSetting: PasscodeEntryDelegate {
-    @objc func passcodeValidationDidSucceed() {
-        navigationController?.dismissViewControllerAnimated(true) {
-            self.navigateToLoginsList()
+            settings?.navigateToLoginsList()
         }
     }
 }

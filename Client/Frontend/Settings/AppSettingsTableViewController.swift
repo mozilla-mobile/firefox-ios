@@ -167,3 +167,19 @@ class AppSettingsTableViewController: SettingsTableViewController {
         return super.tableView(tableView, viewForHeaderInSection: section)
     }
 }
+
+extension AppSettingsTableViewController {
+    func navigateToLoginsList() {
+        let viewController = LoginListViewController(profile: profile)
+        viewController.settingsDelegate = settingsDelegate
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+extension AppSettingsTableViewController: PasscodeEntryDelegate {
+    @objc func passcodeValidationDidSucceed() {
+        navigationController?.dismissViewControllerAnimated(true) {
+            self.navigateToLoginsList()
+        }
+    }
+}

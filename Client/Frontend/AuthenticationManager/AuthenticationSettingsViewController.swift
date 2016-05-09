@@ -93,6 +93,7 @@ class RequirePasscodeSetting: Setting {
             success: {
                 self.navigateToRequireInterval()
             },
+            cancel: nil,
             fallback: {
                 AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
             })
@@ -170,6 +171,7 @@ class TouchIDSetting: Setting {
                 authInfo,
                 touchIDReason: AuthenticationStrings.disableTouchReason,
                 success: self.touchIDSuccess,
+                cancel: nil,
                 fallback: self.touchIDFallback
             )
         } else {
