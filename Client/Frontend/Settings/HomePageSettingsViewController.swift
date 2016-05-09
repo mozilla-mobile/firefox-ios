@@ -41,12 +41,11 @@ class HomePageSettingsViewController: SettingsTableViewController {
 
         let currentTabURL = self.tabManager.selectedTab?.displayURL
         let clipboardURL = URLFromString(UIPasteboard.generalPasteboard().string)
-        let defaultURL = URLFromString(prefs.stringForKey(HomePageConstants.DefaultHomePageURLPrefKey))
 
         var basicSettings: [Setting] = [
             WebPageSetting(prefs: prefs,
                 prefKey: HomePageConstants.HomePageURLPrefKey,
-                placeholder: Strings.SettingsHomePagePlaceholder,
+                placeholder: helper.defaultURLString ?? Strings.SettingsHomePagePlaceholder,
                 accessibilityIdentifier: "HomePageSetting"),
             ButtonSetting(title: NSAttributedString(string: Strings.SettingsHomePageUseCurrentPage),
                 accessibilityIdentifier: "UseCurrentTab",
@@ -57,14 +56,6 @@ class HomePageSettingsViewController: SettingsTableViewController {
                 isEnabled: isHomePage(clipboardURL),
                 onClick: setHomePage(clipboardURL)),
             ]
-
-        if let _ = defaultURL {
-            basicSettings += [
-                ButtonSetting(title: NSAttributedString(string: Strings.SettingsHomePageUseDefault),
-                    accessibilityIdentifier: "UseDefault",
-                    onClick: setHomePage(defaultURL)),
-                ]
-        }
 
         basicSettings += [
             ButtonSetting(title: NSAttributedString(string: Strings.SettingsHomePageClear),
