@@ -91,7 +91,22 @@ class SyncNowSetting: WithAccountSetting {
     override var style: UITableViewCellStyle { return .Value1 }
 
     override var title: NSAttributedString? {
-        return profile.syncManager.isSyncing ? syncingTitle : syncNowTitle
+        if profile.syncManager.isSyncing {
+            return syncingTitle
+        }
+        
+        guard let syncStatus = profile.syncManager.syncState else {
+            return syncNowTitle
+        }
+
+        switch syncStatus {
+        case .Bad(let message):
+            return NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIColor.redColor(), NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+        case .Stale(let message):
+            return  NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIColor.yellowColor(), NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+        default:
+            return syncNowTitle
+        }
     }
 
     override var status: NSAttributedString? {

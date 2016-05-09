@@ -19,9 +19,27 @@ public let NotificationProfileDidStartSyncing = "NotificationProfileDidStartSync
 public let NotificationProfileDidFinishSyncing = "NotificationProfileDidFinishSyncing"
 public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
+public enum SyncState {
+    case InProgress
+    case Good
+    case Bad(message: String)
+    case Stale(message: String)
+}
+
+public func ==(a: SyncState, b: SyncState) -> Bool {
+    switch (a, b) {
+    case (.InProgress,   .InProgress): return true
+    case (.Good,   .Good): return true
+    case (.Bad(let a), .Bad(let b)) where a == b: return true
+    case (.Stale(let a), .Stale(let b)) where a == b: return true
+    default: return false
+    }
+}
+
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
+    var syncState: SyncState? { get }
 
     func hasSyncedHistory() -> Deferred<Maybe<Bool>>
     func hasSyncedLogins() -> Deferred<Maybe<Bool>>
@@ -588,10 +606,10 @@ public class BrowserProfile: Profile {
         private let syncLock = NSRecursiveLock()
 
         var isSyncing: Bool {
-            syncLock.lock()
-            defer { syncLock.unlock() }
-            return !(syncReducer?.isFilled ?? true)
+            return syncState != nil && syncState! == .InProgress
         }
+
+        var syncState: SyncState?
 
         // The dispatch queue for coordinating syncing and resetting the database.
         private let syncQueue = dispatch_queue_create("com.mozilla.firefox.sync", DISPATCH_QUEUE_SERIAL)
@@ -603,10 +621,37 @@ public class BrowserProfile: Profile {
         private var syncReducer: AsyncReducer<EngineResults, EngineTasks>?
 
         private func beginSyncing() {
+            syncState = .InProgress
             notifySyncing(NotificationProfileDidStartSyncing)
         }
 
         private func endSyncing() {
+            // loop through status's and fill sync state
+            if let syncResult = syncReducer?.terminal.value {
+                if syncResult.isSuccess,
+                    let results = syncResult.successValue {
+                    let errorResults: [SyncState]? = results.flatMap { identifier, status in
+                        switch status {
+                        case .Completed:
+                            return nil
+                        case .NotStarted(let reason):
+                            let message: String
+                            switch reason {
+                            case .Offline:
+                                message = Strings.FirefoxSyncOfflineTitle
+                            default:
+                                message = Strings.FirefoxSyncNotStartedTitle
+                            }
+                            return SyncState.Stale(message: message)
+                        case .Partial:
+                            return SyncState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent(identifier) ?? ""))
+                        }
+                    }
+                    syncState = (errorResults?.isEmpty ?? true) ? .Good : errorResults?.first!
+                } else {
+                    syncState = SyncState.Bad(message: Strings.FirefoxSyncFailedTitle)
+                }
+            }
             syncLock.lock()
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
@@ -783,7 +828,9 @@ public class BrowserProfile: Profile {
         }
 
         @objc func onFinishSyncing(notification: NSNotification) {
-            self.lastSyncFinishTime = NSDate.now()
+            if let syncState = syncState where syncState == .Good {
+                self.lastSyncFinishTime = NSDate.now()
+            }
         }
 
         var prefsForSync: Prefs {
