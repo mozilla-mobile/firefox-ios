@@ -408,8 +408,10 @@ class URLBarView: UIView {
 
     func updateTabCount(count: Int, animated: Bool = true) {
         let currentCount = self.tabsButton.titleLabel.text
+        let infinity = "\u{221E}"
+        let countToBe = (count < 100) ? count.description : infinity
         // only animate a tab count change if the tab count has actually changed
-        if currentCount != count.description {
+        if currentCount != countToBe {
             if let _ = self.clonedTabsButton {
                 self.clonedTabsButton?.layer.removeAllAnimations()
                 self.clonedTabsButton?.removeFromSuperview()
@@ -420,8 +422,8 @@ class URLBarView: UIView {
             let newTabsButton = self.tabsButton.clone() as! TabsButton
             self.clonedTabsButton = newTabsButton
             newTabsButton.addTarget(self, action: #selector(URLBarView.SELdidClickAddTab), forControlEvents: UIControlEvents.TouchUpInside)
-            newTabsButton.titleLabel.text = count.description
-            newTabsButton.accessibilityValue = count.description
+            newTabsButton.titleLabel.text = countToBe
+            newTabsButton.accessibilityValue = countToBe
             addSubview(newTabsButton)
             newTabsButton.snp_makeConstraints { make in
                 make.centerY.equalTo(self.locationContainer)
@@ -462,8 +464,8 @@ class URLBarView: UIView {
                 self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
 
                 if finished {
-                    self.tabsButton.titleLabel.text = count.description
-                    self.tabsButton.accessibilityValue = count.description
+                    self.tabsButton.titleLabel.text = countToBe
+                    self.tabsButton.accessibilityValue = countToBe
                 }
             }
 
