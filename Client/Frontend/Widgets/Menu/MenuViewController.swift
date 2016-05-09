@@ -189,7 +189,18 @@ class MenuViewController: UIViewController {
 }
 extension MenuViewController: MenuItemDelegate {
     func menuView(menu: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        return self.menuView(menu, didPerformActionAtIndexPath: indexPath, animatedIfPossible: true) { $0.action }
+    }
+
+    func menuView(menuView: MenuView, didLongPressItemAtIndexPath indexPath: NSIndexPath) {
+        return self.menuView(menuView, didPerformActionAtIndexPath: indexPath, animatedIfPossible: false) { $0.secondaryAction }
+    }
+
+    private func menuView(menu: MenuView, didPerformActionAtIndexPath indexPath: NSIndexPath, animatedIfPossible: Bool, withActionResolver actionFinder: MenuItem -> MenuAction?) {
         let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
+        guard let action = actionFinder(menuItem) else {
+            return
+        }
         let menuItemCell = self.menuView(menuView, menuItemCellForIndexPath: indexPath)
 
         if let icon = menuItem.selectedIconForState(appState) {
@@ -199,10 +210,10 @@ extension MenuViewController: MenuItemDelegate {
             menuItemCell.menuImageView.tintColor = menuConfig.selectedItemTintColor()
         }
 
-        guard let animation = menuItem.animation else {
-            return performMenuAction(menuItem.action)
+        guard let animation = menuItem.animation where animatedIfPossible else {
+            return performMenuAction(action)
         }
-        performMenuAction(menuItem.action, withAnimation: animation, onView: menuItemCell.menuImageView)
+        performMenuAction(action, withAnimation: animation, onView: menuItemCell.menuImageView)
     }
 
     func heightForRowsInMenuView(menuView: MenuView) -> CGFloat {
@@ -266,9 +277,6 @@ extension MenuViewController: MenuItemDataSource {
         }
         return cell
     }
-
-    @objc private func didReceiveLongPress(recognizer: UILongPressGestureRecognizer) {
-    }
 }
 
 extension MenuViewController: MenuToolbarDataSource {
@@ -294,6 +302,14 @@ extension MenuViewController: MenuToolbarItemDelegate {
     func menuView(menuView: MenuView, didSelectItemAtIndex index: Int) {
         let menuToolbarItem = menuConfig.menuToolbarItems![index]
         return performMenuAction(menuToolbarItem.action)
+    }
+
+    func menuView(menuView: MenuView, didLongPressItemAtIndex index: Int) {
+        let menuToolbarItem = menuConfig.menuToolbarItems![index]
+        guard let action = menuToolbarItem.secondaryAction else {
+            return
+        }
+        return performMenuAction(action)
     }
 }
 

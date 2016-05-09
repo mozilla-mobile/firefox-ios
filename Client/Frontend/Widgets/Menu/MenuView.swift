@@ -131,6 +131,8 @@ class MenuView: UIView {
         super.init(frame: CGRectZero)
 
         self.addSubview(menuContainerView)
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(menuLongPressed))
+        menuPagingView.addGestureRecognizer(longPress)
 
         menuContainerView.addSubview(menuPagingView)
         menuContainerView.addSubview(pageControl)
@@ -209,11 +211,8 @@ class MenuView: UIView {
     }
 
     @objc private func toolbarButtonSelected(sender: UIView) {
-        guard let selectedView = (toolbarItems.filter { item in
-            return item.customView != nil && item.customView! == sender
-        }).first,
-            let selectedItemIndex = toolbarItems.indexOf(selectedView) else {
-                return
+        guard let selectedItemIndex = toolbarItems.indexOf({ $0.customView == sender }) else {
+            return
         }
         toolbarDelegate?.menuView(self, didSelectItemAtIndex: selectedItemIndex)
     }
@@ -223,6 +222,29 @@ class MenuView: UIView {
         toolbarButtonSelected(view)
     }
 
+    @objc private func toolbarLongPressed(recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .Began else {
+            return
+        }
+        let view = recognizer.view
+        guard let index = toolbarItems.indexOf({ $0.customView == view }) else {
+            return
+        }
+        toolbarDelegate?.menuView(self, didLongPressItemAtIndex: index)
+    }
+
+    @objc private func menuLongPressed(recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .Began else {
+            return
+        }
+
+        let point = recognizer.locationInView(menuPagingView)
+        guard let indexPath = menuPagingView.indexPathForItemAtPoint(point) else {
+            return
+        }
+
+        menuItemDelegate?.menuView(self, didLongPressItemAtIndexPath: indexPath)
+    }
 
     // MARK : Menu Cell Management and Recycling
     func reloadData() {
@@ -246,6 +268,9 @@ class MenuView: UIView {
                 toolbarItemView.userInteractionEnabled = true
                 toolbarItemView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.toolbarButtonTapped(_:))))
             }
+
+            toolbarItemView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(toolbarLongPressed)))
+
             let toolbarButton = UIBarButtonItem(customView: toolbarItemView)
             toolbarButton.accessibilityLabel = toolbarItemView.accessibilityLabel
             toolbarButton.isAccessibilityElement = true

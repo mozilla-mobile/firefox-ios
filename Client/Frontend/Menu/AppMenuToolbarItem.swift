@@ -10,6 +10,7 @@ struct AppMenuToolbarItem: MenuToolbarItem {
 
     let title: String
     let action: MenuAction
+    let secondaryAction: MenuAction?
 
     private var icon: UIImage? {
         return UIImage(named: iconName)
@@ -19,9 +20,10 @@ struct AppMenuToolbarItem: MenuToolbarItem {
         return icon
     }
 
-    init(title: String, action: MenuAction, icon: String) {
+    init(title: String, action: MenuAction, secondaryAction: MenuAction? = nil, icon: String) {
         self.title = title
         self.action = action
+        self.secondaryAction = secondaryAction
         self.iconName = icon
     }
 }
