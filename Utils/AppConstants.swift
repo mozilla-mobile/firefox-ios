@@ -8,9 +8,8 @@ public enum AppBuildChannel {
     case Release
     case Beta
     case Nightly
-    case Fennec
+    case Developer
     case Aurora
-    case Unknown
 }
 
 public struct AppConstants {
@@ -28,11 +27,9 @@ public struct AppConstants {
         #elseif MOZ_CHANNEL_NIGHTLY
             return AppBuildChannel.Nightly
         #elseif MOZ_CHANNEL_FENNEC
-            return AppBuildChannel.Fennec
+            return AppBuildChannel.Developer
         #elseif MOZ_CHANNEL_AURORA
             return AppBuildChannel.Aurora
-        #else
-            return AppBuildChannel.Unknown
         #endif
     }()
 
