@@ -351,8 +351,12 @@ class MenuView: UIView {
         menuRowHeight = Float(menuPagingLayout.menuRowHeight)
 
         menuPagingView.snp_updateConstraints { make in
-            let maxNumberOfItemsForPage = CGFloat(self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) ?? 0)
-            let numberOfRows = ceil(CGFloat(maxNumberOfItemsForPage) / numberOfItemsInRow)
+            let numberOfRows: CGFloat
+            if let maxNumberOfItemsForPage = self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) {
+                numberOfRows = ceil(CGFloat(maxNumberOfItemsForPage) / numberOfItemsInRow)
+            } else {
+                numberOfRows = 0
+            }
             let menuHeight = itemPadding + (numberOfRows * (CGFloat(self.menuRowHeight) + itemPadding))
             make.height.equalTo(menuHeight)
         }

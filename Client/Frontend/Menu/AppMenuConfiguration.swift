@@ -98,7 +98,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             }
             menuItems.append(tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem)
-        case .HomePanels:
+        case .HomePanels, .Loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             if #available(iOS 9, *) {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
@@ -111,8 +111,6 @@ struct AppMenuConfiguration: MenuConfiguration {
             }
             menuItems.append(AppMenuConfiguration.CloseAllTabsMenuItem)
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
-        default:
-            menuItems = []
         }
         return menuItems
     }
