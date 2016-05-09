@@ -17,15 +17,11 @@ class HomePageSettingsViewController: SettingsTableViewController {
 
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
-
+        let helper = HomePageHelper(prefs: prefs)
         func setHomePage(url: NSURL?) -> (UINavigationController? -> ()) {
             weak var tableView: UITableView? = self.tableView
             return { nav in
-                if let url = url {
-                    prefs.setString(url.absoluteString, forKey: HomePageConstants.HomePageURLPrefKey)
-                } else {
-                    prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
-                }
+                helper.currentURL = url
                 tableView?.reloadData()
             }
         }
