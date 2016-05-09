@@ -127,6 +127,10 @@ class AuthenticationManagerTests: KIFTestCase {
         openAuthenticationManager()
         tester().tapViewWithAccessibilityLabel("Require Passcode, Immediately")
 
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        PasscodeUtils.enterPasscode(tester(), digits: "1337")
+        tester().waitForAnimationsToFinish()
+
         let tableView = tester().waitForViewWithAccessibilityIdentifier("AuthenticationManager.passcodeIntervalTableView") as! UITableView
         var immediatelyCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0))!
         var oneHourCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0))!
@@ -328,6 +332,7 @@ class AuthenticationManagerTests: KIFTestCase {
 
         // Navigate to logins and input our passcode
         tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Logins")
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")
@@ -337,7 +342,12 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Touch ID & Passcode")
 
         // Change the require interval of the passcode
-        tester().tapViewWithAccessibilityLabel("Require Passcode")
+        tester().tapViewWithAccessibilityLabel("Require Passcode, Immediately")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        PasscodeUtils.enterPasscode(tester(), digits: "1337")
+        tester().waitForAnimationsToFinish()
+
         tester().tapRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0), inTableViewWithAccessibilityIdentifier: "AuthenticationManager.passcodeIntervalTableView")
 
         // Go back to logins and make sure it asks us for the passcode again
@@ -347,6 +357,5 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")
         tester().tapViewWithAccessibilityLabel("Cancel")
         tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("home")
     }
 }
