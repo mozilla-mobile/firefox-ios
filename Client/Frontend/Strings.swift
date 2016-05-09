@@ -74,6 +74,26 @@ extension Strings {
     public static let SyncingMessageWithEllipsis = NSLocalizedString("Sync.SyncingEllipsis.Label", value: "Syncing…", comment: "Message displayed when the user's account is syncing with ellipsis at the end")
     public static let SyncingMessageWithoutEllipsis = NSLocalizedString("Sync.Syncing.Label", value: "Syncing", comment: "Message displayed when the user's account is syncing with no ellipsis")
     public static let FirstTimeSyncLongTime = NSLocalizedString("Sync.FirstTimeMessage.Label", value: "Your first sync may take a while", comment: "Message displayed when the user syncs for the first time")
+    public static let FirefoxSyncOfflineTitle = NSLocalizedString("SyncState.Offline.Title", value: "Firefox Sync is unavailable", comment: "Title sync status message when sync failed due to being offline")
+    public static let FirefoxSyncNotStartedTitle = NSLocalizedString("SyncState.NotStarted.Title", value: "Firefox Sync is experiencing issues", comment: "Title sync status message when sync failed to start.")
+    public static let FirefoxSyncPartialTitle = NSLocalizedString("SyncState.Partial.Title", value: "%s Sync is experiencing issues", comment: "Title sync status message when a components of a sync failed to complete, where %s represents the name of the component.")
+    public static let FirefoxSyncFailedTitle = NSLocalizedString("SyncState.Failed.Title", value: "Firefox Sync failed", comment: "Title sync status message when sync was unable to succeed")
+
+    public static func localizedStringForSyncComponent(componentName: String) -> String? {
+        switch componentName {
+        case "bookmarks":
+            return NSLocalizedString("SyncState.Bookmark.Title", value: "Bookmarks", comment: "The Bookmark sync component")
+        case "clients":
+            return NSLocalizedString("SyncState.Clients.Title", value: "Remote Clients", comment: "The Remote Clients sync component")
+        case "tabs":
+            return NSLocalizedString("SyncState.Tabs.Title", value: "Tabs", comment: "The Tabs sync component")
+        case "logins":
+            return NSLocalizedString("SyncState.Logins.Title", value: "Logins", comment: "The Logins sync component")
+        case "history":
+            return NSLocalizedString("SyncState.History.Title", value: "History", comment: "The History sync component")
+        default: return nil
+        }
+    }
 }
 
 //Hotkey Titles
@@ -107,4 +127,5 @@ extension Strings {
     public static let SetHomePageDialogMessage = NSLocalizedString("HomePage.Set.Dialog.Message", value: "You can change this at any time in Settings", comment: "Alert dialog body when the user opens the home page for the first time.")
     public static let SetHomePageDialogYes = NSLocalizedString("HomePage.Set.Dialog.OK", value: "Set Homepage", comment: "Button accepting changes setting the home page for the first time.")
     public static let SetHomePageDialogNo = NSLocalizedString("HomePage.Set.Dialog.Cancel", value: "Cancel", comment: "Button cancelling changes setting the home page for the first time.")
+
 }
