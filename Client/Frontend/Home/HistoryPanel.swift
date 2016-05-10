@@ -132,7 +132,9 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
-            resyncHistory()
+            if self.profile.hasSyncableAccount() {
+                resyncHistory()
+            }
             break
         case NotificationDynamicFontChanged:
             if emptyStateOverlayView.superview != nil {
