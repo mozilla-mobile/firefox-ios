@@ -238,6 +238,7 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
         urlBar.locationView.alpha = 0
+        presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
     }
 
     func SELappDidBecomeActiveNotification() {
@@ -246,6 +247,7 @@ class BrowserViewController: UIViewController {
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
             self.webViewContainer.alpha = 1
             self.urlBar.locationView.alpha = 1
+            self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
             self.view.backgroundColor = UIColor.clearColor()
         }, completion: { _ in
             self.webViewContainerBackdrop.alpha = 0
