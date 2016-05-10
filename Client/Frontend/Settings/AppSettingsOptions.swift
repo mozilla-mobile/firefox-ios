@@ -101,19 +101,17 @@ class SyncNowSetting: WithAccountSetting {
     override var style: UITableViewCellStyle { return .Value1 }
 
     override var title: NSAttributedString? {
-        if profile.syncManager.isSyncing {
-            return syncingTitle
-        }
-        
         guard let syncStatus = profile.syncManager.syncState else {
             return syncNowTitle
         }
 
         switch syncStatus {
         case .Bad(let message):
-            return NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIColor.redColor(), NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+            return NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowErrorTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .Stale(let message):
-            return  NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIColor.yellowColor(), NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+            return  NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowWarningTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+        case .InProgress:
+            return syncingTitle
         default:
             return syncNowTitle
         }
@@ -136,13 +134,52 @@ class SyncNowSetting: WithAccountSetting {
         return profile.hasSyncableAccount()
     }
 
+    private lazy var troubleshootButton: UIButton = {
+        let troubleshootButton = UIButton(type: UIButtonType.RoundedRect)
+        troubleshootButton.setTitle(Strings.FirefoxSyncTroubleshootTitle, forState: .Normal)
+        troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), forControlEvents: .TouchUpInside)
+        troubleshootButton.tintColor = UIConstants.TableViewRowActionAccessoryColor
+        troubleshootButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
+        troubleshootButton.sizeToFit()
+        return troubleshootButton
+    }()
+
+    // TODO: This needs to be changed to the actual URL when we have it
+    private let syncSUMOURL = NSURL(string: "https://support.mozilla.org")!
+
+    @objc private func troubleshoot() {
+        let viewController = SettingsContentViewController()
+        viewController.url = syncSUMOURL
+        settings.navigationController?.pushViewController(viewController, animated: true)
+    }
+
     override func onConfigureCell(cell: UITableViewCell) {
         cell.textLabel?.attributedText = title
-        cell.detailTextLabel?.attributedText = status
+        cell.textLabel?.numberOfLines = 0
+        cell.textLabel?.lineBreakMode = .ByWordWrapping
+        if let syncStatus = profile.syncManager.syncState {
+            switch syncStatus {
+            case .Bad(_):
+                // add the red warning symbol
+                // add a link to the MANA page
+                cell.detailTextLabel?.attributedText = nil
+                cell.accessoryView = troubleshootButton
+            case .Stale(_):
+                // add the amber warning symbol 
+                // add a link to the MANA page
+                cell.detailTextLabel?.attributedText = nil
+                cell.accessoryView = troubleshootButton
+            case .Good:
+                cell.detailTextLabel?.attributedText = status
+                fallthrough
+            default:
+                cell.accessoryView = nil
+            }
+        } else {
+            cell.accessoryView = nil
+        }
         cell.accessoryType = accessoryType
-        cell.accessoryView = nil
-        cell.userInteractionEnabled = !profile.syncManager.isSyncing && enabled
-        cell.selectionStyle = profile.syncManager.isSyncing ? .None : .Gray
+        cell.userInteractionEnabled = !profile.syncManager.isSyncing
     }
 
     override func onClick(navigationController: UINavigationController?) {
