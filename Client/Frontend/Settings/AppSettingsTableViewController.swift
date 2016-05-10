@@ -87,13 +87,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
         settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]
 
         var privacySettings = [Setting]()
-        if AppConstants.MOZ_LOGIN_MANAGER {
-            privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-        }
-
-        if AppConstants.MOZ_AUTHENTICATION_MANAGER {
-            privacySettings.append(TouchIDPasscodeSetting(settings: self))
-        }
+        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
+        privacySettings.append(TouchIDPasscodeSetting(settings: self))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self))
 

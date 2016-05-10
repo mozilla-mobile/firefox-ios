@@ -21,11 +21,10 @@ public class Telemetry {
 
         let channel: String
         switch AppConstants.BuildChannel {
-        case .Fennec: fallthrough
-        case .Aurora: fallthrough
-        case .Developer: channel = "default"
+        case .Nightly: channel = "nightly"
         case .Beta: channel = "beta"
         case .Release: channel = "release"
+        default: channel = "default"
         }
 
         let path = "/submit/telemetry/\(docID)/\(docType)/\(AppName)/\(appVersion)/\(channel)/\(buildID)"

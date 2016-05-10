@@ -6,22 +6,6 @@
 	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>AdjustEnvironment</key>
 	<string>$(ADJUST_ENVIRONMENT)</string>
-	<key>AppID</key>
-	<string>$(MOZ_APP_ID)</string>
-	<key>BreakpadProduct</key>
-	<string>$(MOZ_SOCORRO_PRODUCT_NAME)</string>
-	<key>BreakpadProductDisplay</key>
-	<string>$(MOZ_BUNDLE_DISPLAY_NAME)</string>
-	<key>BreakpadReportInterval</key>
-	<string>$(MOZ_BREAKPAD_UPLOAD_FREQUENCY)</string>
-	<key>BreakpadServerType</key>
-	<string>$(MOZ_BREAKPAD_SERVER_TYPE)</string>
-	<key>BreakpadURL</key>
-	<string>https://$(MOZ_BREAKPAD_URL)</string>
-	<key>BreakpadVersion</key>
-	<string>$(MOZ_VERSION)</string>
-	<key>BuildID</key>
-	<string>$(MOZ_BUILD_ID)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -37,7 +21,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>5.0.0</string>
+	<string>5.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -53,6 +37,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-books</string>
@@ -71,8 +57,6 @@
 	<array>
 		<string>org.mozilla.ios.firefox.browsing</string>
 	</array>
-	<key>ReleaseChannel</key>
-	<string>$(MOZ_RELEASE_CHANNEL)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>CharisSILB.ttf</string>
@@ -149,9 +133,5 @@
 			<string></string>
 		</dict>
 	</array>
-	<key>Vendor</key>
-	<string>$(MOZ_VENDOR)</string>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
 </dict>
 </plist>

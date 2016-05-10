@@ -12,13 +12,7 @@ if AppConstants.IsRunningTest || AppConstants.IsRunningFastlaneSnapshot {
     switch AppConstants.BuildChannel {
     case .Aurora:
         appDelegate = AuroraAppDelegate.self
-    case .Developer:
-        appDelegate = AppDelegate.self
-    case .Fennec:
-        appDelegate = AppDelegate.self
-    case .Release:
-        appDelegate = AppDelegate.self
-    case .Beta:
+    default:
         appDelegate = AppDelegate.self
     }
 }

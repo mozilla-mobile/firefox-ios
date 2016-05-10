@@ -87,7 +87,7 @@ class RequirePasscodeSetting: Setting {
             return
         }
 
-        if AppConstants.MOZ_AUTHENTICATION_MANAGER && authInfo.requiresValidation() {
+        if authInfo.requiresValidation() {
             AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
             touchIDReason: AuthenticationStrings.requirePasscodeTouchReason,
             success: {
