@@ -505,7 +505,13 @@ class TopSitesLayout: UICollectionViewLayout {
 
         // Set the top thumbnail frames.
         let row = floor(Double(indexPath.item / thumbnailCols))
-        let col = indexPath.item % thumbnailCols
+        let col: Int
+        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .RightToLeft {
+            // For RTL the rows are mirrored, item 0 starts at the right
+            col = thumbnailCols - (indexPath.item % thumbnailCols) - 1
+        } else {
+            col = indexPath.item % thumbnailCols
+        }
         let size = collectionView?.bounds.size ?? CGSizeZero
         let insets = ThumbnailCellUX.insetsForCollectionViewSize(size,
             traitCollection:  collectionView!.traitCollection)
