@@ -28,6 +28,7 @@ class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
 
         // Don't show the keyboard or allow typing if we're locked out. Also display the error.
         if authenticationInfo?.isLocked() ?? false {
+            displayLockoutError()
             panes.first?.codeInputView.userInteractionEnabled = false
         } else {
             panes.first?.codeInputView.becomeFirstResponder()
