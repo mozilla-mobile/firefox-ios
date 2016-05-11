@@ -59,8 +59,8 @@ public struct UIConstants {
     static let TableViewDisabledRowTextColor = UIColor.lightGrayColor()
     static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
     static let TableViewHeaderFooterHeight = CGFloat(44)
-    static let TableViewRowErrorTextColor = UIColor(red: 1.0, green: 0.22, blue: 0.26, alpha: 1.0)
-    static let TableViewRowWarningTextColor = UIColor(red: 0.96, green: 0.67, blue: 0.13, alpha: 1.0)
+    static let TableViewRowErrorTextColor = UIColor(red: 255/255, green: 0/255, blue: 26/255, alpha: 1.0)
+    static let TableViewRowWarningTextColor = UIColor(red: 245/255, green: 166/255, blue: 35/255, alpha: 1.0)
     static let TableViewRowActionAccessoryColor = UIColor(red: 0.29, green: 0.56, blue: 0.89, alpha: 1.0)
 
     // Firefox Orange
