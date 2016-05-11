@@ -117,7 +117,7 @@ class ReadingListTableViewCell: SWTableViewCell {
             make.width.equalTo(ReadingListTableViewCellUX.ReadIndicatorWidth)
             make.height.equalTo(ReadingListTableViewCellUX.ReadIndicatorHeight)
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.ReadIndicatorTopOffset)
-            make.left.equalTo(self.contentView).offset(ReadingListTableViewCellUX.ReadIndicatorLeftOffset)
+            make.leading.equalTo(self.contentView).offset(ReadingListTableViewCellUX.ReadIndicatorLeftOffset)
         }
 
         contentView.addSubview(titleLabel)
@@ -127,8 +127,8 @@ class ReadingListTableViewCell: SWTableViewCell {
         titleLabel.numberOfLines = 2
         titleLabel.snp_makeConstraints { (make) -> () in
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
-            make.left.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelLeftOffset)
-            make.right.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelRightOffset) // TODO Not clear from ux spec
+            make.leading.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelLeftOffset)
+            make.trailing.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelRightOffset) // TODO Not clear from ux spec
             make.bottom.lessThanOrEqualTo(hostnameLabel.snp_top).priorityHigh()
         }
 
@@ -136,7 +136,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         hostnameLabel.numberOfLines = 1
         hostnameLabel.snp_makeConstraints { (make) -> () in
             make.bottom.equalTo(self.contentView).offset(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)
-            make.left.right.equalTo(self.titleLabel)
+            make.leading.trailing.equalTo(self.titleLabel)
         }
 
         deleteButton.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
@@ -148,8 +148,6 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
         deleteAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.DeleteButtonTitleText, target: self, selector: #selector(ReadingListTableViewCell.deleteActionActivated))
 
-        rightUtilityButtons = [deleteButton]
-
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
         markAsReadButton.titleLabel?.textColor = ReadingListTableViewCellUX.MarkAsReadButtonTitleColor
         markAsReadButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
@@ -159,7 +157,13 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
         markAsReadAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.MarkAsReadButtonTitleText, target: self, selector: #selector(ReadingListTableViewCell.markAsReadActionActivated))
 
-        leftUtilityButtons = [markAsReadButton]
+        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .LeftToRight {
+            rightUtilityButtons = [deleteButton]
+            leftUtilityButtons = [markAsReadButton]
+        } else {
+            rightUtilityButtons = [markAsReadButton]
+            leftUtilityButtons = [deleteButton]
+        }
 
         accessibilityCustomActions = [deleteAction, markAsReadAction]
         setupDynamicFonts()
