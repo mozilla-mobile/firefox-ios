@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "تصفح أكثر من صفحة وِب في نفس الوقت مع الألسنة.";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "اختر";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "اربط فيرفكس أينما تستخدمه.";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "خصّص";
+
+/* See http://mzl.la/1if9ODp */
+"Easily switch between open pages with tabs." = "بدل بين الصفحات المفتوحة بسهولة مع الألسنة.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "فيرفكس و السحاب";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "الشريحة التعريفية %1$@ من %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "نظّم";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "خصص فيرفكس كما تحب من خلال الإعدادات.";
+
+/* See http://mzl.la/1if9ODp */
+"Personalize your default search engine and more in Settings." = "خصص محرك البحث المبدئي و غيره الكثير من خلال الإعدادات.";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "شارك";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "لِج إلى فيرفكس";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "ابدأ التصفح";
+
+/* See http://mzl.la/1if9ODp */
+"Sync your Devices." = "زامِن أجهزتك.";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "اضغط أيقونة فيرفكس ثم انقلها دون رفع الضغط إلى شريطك لسهولة الوصول إليها.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "زِرّ الإعدادات في بداية شريط الألسنة.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "زِرّ عرض الألسنة بجوار منطقة كتابة العنوان و البحث، و يعرض عدد الألسنة المفتوحة حاليًا.";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "استخدم ورقة المشاركة لإرسال الروابط من تطبيقات أُخرى إلى فيرفكس.";
+

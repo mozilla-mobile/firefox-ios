@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "プライベートタブを閉じる";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "履歴や Cookie は保存しません。ブックマークは保存できます。";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "詳しくはこちら";
+
+/* Toggled OFF accessibility value */
+"Off" = "オフ";
+
+/* Toggled ON accessibility value */
+"On" = "オン";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "新規プライベートタブで開く";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "プライベートブラウジング";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "プライベートブラウジングモード";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "プライベートブラウジングモードをオンまたはオフに切り替えます";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "プライベートブラウジングモードの終了時";
+
