@@ -33,8 +33,10 @@ class MenuViewController: UIViewController {
 
     var appState: AppState {
         didSet {
-            menuConfig = menuConfig.menuForState(appState)
-            self.reloadView()
+            if !self.isBeingDismissed() {
+                menuConfig = menuConfig.menuForState(appState)
+                self.reloadView()
+            }
         }
     }
 
