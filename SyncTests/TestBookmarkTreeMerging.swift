@@ -290,6 +290,114 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         XCTAssertEqual(Set(BookmarkRoots.Real), result.overrideCompletion.processedLocalChanges)
     }
 
+    func testMergingInconsistentBufferWithMissingValues() {
+        guard let bookmarks = self.getSyncableBookmarks("H") else {
+            XCTFail("Couldn't get bookmarks.")
+            return
+        }
+
+        // Setup a buffer with a folder that points to a bookmark but doesn't actually contain said bookmark.
+        let bufferDate = NSDate.now()
+        let changedBufferRecords = [
+            BookmarkMirrorItem.folder("folderA", modified: bufferDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "folderA", description: nil, children: ["bookmarkA"])
+        ]
+
+        bookmarks.applyRecords(changedBufferRecords).succeeded()
+
+        let uploader = MockUploader()
+        let storer = uploader.getStorer()
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        let result = applier.go().value
+        XCTAssertFalse(result.isSuccess)
+        XCTAssertTrue(result.isFailure)
+        XCTAssertEqual(result.failureValue!.description, BufferInconsistency.MissingValues.description)
+
+        // Buffer should remain in the busted state and not clear.
+        XCTAssertFalse(bookmarks.isEmpty().value.successValue!)
+    }
+
+    func testMergingInconsistentBufferWithMissingStructure() {
+        guard let bookmarks = self.getSyncableBookmarks("I") else {
+            XCTFail("Couldn't get bookmarks.")
+            return
+        }
+
+        // Set up the buffer with a bookmark and a folder but the bookmark is parentless to simulate missing structure.
+        let bufferDate = NSDate.now()
+        let changedBufferRecords = [
+            BookmarkMirrorItem.bookmark("bookmarkA", modified: bufferDate, hasDupe: false, parentID: "", parentName: "", title: "F", description: nil, URI: "http://example.com/f", tags: "", keyword: nil),
+            BookmarkMirrorItem.folder("folderB", modified: bufferDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "folderB", description: nil, children: [])
+        ]
+
+        bookmarks.applyRecords(changedBufferRecords).succeeded()
+
+        let uploader = MockUploader()
+        let storer = uploader.getStorer()
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        let result = applier.go().value
+        XCTAssertFalse(result.isSuccess)
+        XCTAssertTrue(result.isFailure)
+        XCTAssertEqual(result.failureValue!.description, BufferInconsistency.MissingStructure.description)
+
+        // Buffer should remain in the busted state and not clear.
+        XCTAssertFalse(bookmarks.isEmpty().value.successValue!)
+    }
+
+    func testMergingInconsistentBufferWithParentIDDisagreement() {
+        guard let bookmarks = self.getSyncableBookmarks("I") else {
+            XCTFail("Couldn't get bookmarks.")
+            return
+        }
+
+        // Set up the buffer with a bookmark that lives in two folders.
+        let bufferDate = NSDate.now()
+        let changedBufferRecords = [
+            BookmarkMirrorItem.bookmark("bookmarkA", modified: bufferDate, hasDupe: false, parentID: "folderB", parentName: "", title: "F", description: nil, URI: "http://example.com/f", tags: "", keyword: nil),
+            BookmarkMirrorItem.folder("folderA", modified: bufferDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "folderA", description: nil, children: ["bookmarkA"])
+        ]
+
+        bookmarks.applyRecords(changedBufferRecords).succeeded()
+
+        let uploader = MockUploader()
+        let storer = uploader.getStorer()
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        let result = applier.go().value
+        XCTAssertFalse(result.isSuccess)
+        XCTAssertTrue(result.isFailure)
+        XCTAssertEqual(result.failureValue!.description, BufferInconsistency.ParentIDDisagreement.description)
+
+        // Buffer should remain in the busted state and not clear.
+        XCTAssertFalse(bookmarks.isEmpty().value.successValue!)
+    }
+
+    func testMergingInconsistentBufferWithOverlappingStructure() {
+        guard let bookmarks = self.getSyncableBookmarks("I") else {
+            XCTFail("Couldn't get bookmarks.")
+            return
+        }
+
+        // Set up the buffer with a bookmark that lives in two folders.
+        let bufferDate = NSDate.now()
+        let changedBufferRecords = [
+            BookmarkMirrorItem.bookmark("bookmarkA", modified: bufferDate, hasDupe: false, parentID: "", parentName: "", title: "F", description: nil, URI: "http://example.com/f", tags: "", keyword: nil),
+            BookmarkMirrorItem.folder("folderA", modified: bufferDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "folderA", description: nil, children: ["bookmarkA"]),
+            BookmarkMirrorItem.folder("folderB", modified: bufferDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "folderB", description: nil, children: ["bookmarkA"])
+        ]
+
+        bookmarks.applyRecords(changedBufferRecords).succeeded()
+
+        let uploader = MockUploader()
+        let storer = uploader.getStorer()
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        let result = applier.go().value
+        XCTAssertFalse(result.isSuccess)
+        XCTAssertTrue(result.isFailure)
+        XCTAssertEqual(result.failureValue!.description, BufferInconsistency.OverlappingStructure.description)
+
+        // Buffer should remain in the busted state and not clear.
+        XCTAssertFalse(bookmarks.isEmpty().value.successValue!)
+    }
+
     func testMergingStorageLocalRootsEmptyServer() {
         guard let bookmarks = self.getSyncableBookmarks("B") else {
             XCTFail("Couldn't get bookmarks.")
