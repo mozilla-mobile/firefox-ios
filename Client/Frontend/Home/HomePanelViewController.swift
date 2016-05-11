@@ -51,8 +51,7 @@ enum HomePanelType: Int {
     case TopSites = 0
     case Bookmarks = 1
     case History = 2
-    case SyncedTabs = 3
-    case ReadingList = 4
+    case ReadingList = 3
 }
 
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
