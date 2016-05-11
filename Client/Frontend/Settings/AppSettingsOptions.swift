@@ -144,6 +144,18 @@ class SyncNowSetting: WithAccountSetting {
         return troubleshootButton
     }()
 
+    private lazy var warningIcon: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "AmberCaution"))
+        imageView.sizeToFit()
+        return imageView
+    }()
+
+    private lazy var errorIcon: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "RedCaution"))
+        imageView.sizeToFit()
+        return imageView
+    }()
+
     // TODO: This needs to be changed to the actual URL when we have it
     private let syncSUMOURL = NSURL(string: "https://support.mozilla.org")!
 
@@ -164,11 +176,13 @@ class SyncNowSetting: WithAccountSetting {
                 // add a link to the MANA page
                 cell.detailTextLabel?.attributedText = nil
                 cell.accessoryView = troubleshootButton
+                addIcon(errorIcon, toCell: cell)
             case .Stale(_):
                 // add the amber warning symbol 
                 // add a link to the MANA page
                 cell.detailTextLabel?.attributedText = nil
                 cell.accessoryView = troubleshootButton
+                addIcon(warningIcon, toCell: cell)
             case .Good:
                 cell.detailTextLabel?.attributedText = status
                 fallthrough
@@ -180,6 +194,20 @@ class SyncNowSetting: WithAccountSetting {
         }
         cell.accessoryType = accessoryType
         cell.userInteractionEnabled = !profile.syncManager.isSyncing
+    }
+
+    private func addIcon(image: UIImageView, toCell cell: UITableViewCell) {
+        cell.addSubview(image)
+
+        cell.textLabel?.snp_updateConstraints { make in
+            make.leading.equalTo(image.snp_trailing).offset(10)
+            make.centerY.equalTo(cell)
+        }
+
+        image.snp_makeConstraints { make in
+            make.leading.equalTo(cell).offset(17)
+            make.top.equalTo(cell.textLabel!)
+        }
     }
 
     override func onClick(navigationController: UINavigationController?) {
