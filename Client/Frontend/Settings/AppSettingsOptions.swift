@@ -197,16 +197,17 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     private func addIcon(image: UIImageView, toCell cell: UITableViewCell) {
-        cell.addSubview(image)
+        cell.contentView.addSubview(image)
 
         cell.textLabel?.snp_updateConstraints { make in
-            make.leading.equalTo(image.snp_trailing).offset(10)
-            make.centerY.equalTo(cell)
+            make.leading.equalTo(image.snp_trailing).offset(5)
+            make.trailing.lessThanOrEqualTo(cell.contentView)
+            make.centerY.equalTo(cell.contentView)
         }
 
         image.snp_makeConstraints { make in
-            make.leading.equalTo(cell).offset(17)
-            make.top.equalTo(cell.textLabel!)
+            make.leading.equalTo(cell.contentView).offset(17)
+            make.top.equalTo(cell.textLabel!).offset(2)
         }
     }
 
