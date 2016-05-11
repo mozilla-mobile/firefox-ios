@@ -366,12 +366,12 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
                 case (false, true):
                     // No outgoing changes. Unilaterally apply remote changes if they're consistent.
                     return self.buffer.validate().bind { result in
-                        result.isSuccess ? self.applyIncomingDirectlyToMirror() : deferMaybe(BookmarksMergeConsistencyError())
+                        result.isSuccess ? self.applyIncomingDirectlyToMirror() : deferMaybe(result.failureValue ?? BookmarksMergeConsistencyError())
                     }
                 default:
                     // Changes on both sides. Merge.
                     return self.buffer.validate().bind { result in
-                        result.isSuccess ? self.threeWayMerge() : deferMaybe(BookmarksMergeConsistencyError())
+                        result.isSuccess ? self.threeWayMerge() : deferMaybe(result.failureValue ?? BookmarksMergeConsistencyError())
                     }
                 }
             }
