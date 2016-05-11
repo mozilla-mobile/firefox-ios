@@ -114,6 +114,8 @@ private extension BrowserToTrayAnimator {
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let scrollToIndex = displayedTabs.indexOf(selectedTab) else { return }
 
+        tabTray.view.frame = transitionContext.finalFrameForViewController(tabTray)
+
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
         container.insertSubview(tabTray.view, belowSubview: bvc.view)
 
