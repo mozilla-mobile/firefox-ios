@@ -83,7 +83,7 @@ class SyncNowSetting: WithAccountSetting {
     }()
 
     private var syncNowTitle: NSAttributedString {
-        return NSMutableAttributedString(
+        return NSAttributedString(
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
                 NSForegroundColorAttributeName: self.enabled ? UIColor.blackColor() : UIColor.grayColor(),
@@ -92,7 +92,7 @@ class SyncNowSetting: WithAccountSetting {
         )
     }
 
-    private let syncingTitle = NSMutableAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFontWeightRegular)])
+    private let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFontWeightRegular)])
 
     override var accessoryType: UITableViewCellAccessoryType { return .None }
 
