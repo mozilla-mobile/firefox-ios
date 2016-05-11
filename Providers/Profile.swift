@@ -565,7 +565,7 @@ public class BrowserProfile: Profile {
         func applicationDidBecomeActive() {
             self.backgrounded = false
 
-            guard self.profile.hasAccount() else {
+            guard self.profile.hasSyncableAccount() else {
                 return
             }
 
@@ -791,6 +791,9 @@ public class BrowserProfile: Profile {
         }
 
         func onAddedAccount() -> Success {
+            // Only sync if we're green lit. This makes sure that we don't sync unverified accounts.
+            guard self.profile.hasSyncableAccount() else { return succeed() }
+
             self.beginTimedSyncs();
             return self.syncEverything()
         }

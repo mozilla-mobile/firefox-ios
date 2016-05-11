@@ -82,7 +82,15 @@ class SyncNowSetting: WithAccountSetting {
         return formatter
     }()
 
-    private let syncNowTitle = NSAttributedString(string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+    private var syncNowTitle: NSAttributedString {
+        return NSAttributedString(
+            string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
+            attributes: [
+                NSForegroundColorAttributeName: self.enabled ? UIColor.blackColor() : UIColor.grayColor(),
+                NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont
+            ]
+        )
+    }
 
     private let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFontWeightRegular)])
 
@@ -107,12 +115,17 @@ class SyncNowSetting: WithAccountSetting {
         return attributedString
     }
 
+    override var enabled: Bool {
+        return profile.hasSyncableAccount()
+    }
+
     override func onConfigureCell(cell: UITableViewCell) {
         cell.textLabel?.attributedText = title
         cell.detailTextLabel?.attributedText = status
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
-        cell.userInteractionEnabled = !profile.syncManager.isSyncing
+        cell.userInteractionEnabled = !profile.syncManager.isSyncing && enabled
+        cell.selectionStyle = profile.syncManager.isSyncing ? .None : .Gray
     }
 
     override func onClick(navigationController: UINavigationController?) {

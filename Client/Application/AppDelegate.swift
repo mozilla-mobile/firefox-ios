@@ -314,6 +314,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
+        // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
+        let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
+        tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
+        syncOnDidEnterBackground(application: application)
+    }
+
+    private func syncOnDidEnterBackground(application application: UIApplication) {
+        // Short circuit and don't sync if we don't have a syncable account.
+        guard self.profile?.hasSyncableAccount() ?? false else {
+            return
+        }
+
         self.profile?.syncManager.applicationDidEnterBackground()
 
         var taskId: UIBackgroundTaskIdentifier = 0
@@ -328,10 +340,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.profile?.shutdown()
             application.endBackgroundTask(taskId)
         }
-
-        // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
-        let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
-        tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
