@@ -426,15 +426,18 @@ extension TabManager {
         let isPrivate: Bool
         var sessionData: SessionData?
         var screenshotUUID: NSUUID?
+        var faviconURL: String?
 
         var jsonDictionary: [String: AnyObject] {
             let title: String = self.title ?? "null"
+            let faviconURL: String = self.faviconURL ?? "null"
             let uuid: String = String(self.screenshotUUID ?? "null")
 
             var json: [String: AnyObject] = [
                 "title": title,
                 "isPrivate": String(self.isPrivate),
                 "isSelected": String(self.isSelected),
+                "faviconURL": faviconURL,
                 "screenshotUUID": uuid
             ]
 
@@ -452,6 +455,7 @@ extension TabManager {
             self.isSelected = isSelected
             self.title = tab.displayTitle
             self.isPrivate = tab.isPrivate
+            self.faviconURL = tab.displayFavicon?.url
             super.init()
 
             if tab.sessionData == nil {
@@ -479,6 +483,7 @@ extension TabManager {
             self.isSelected = coder.decodeBoolForKey("isSelected")
             self.title = coder.decodeObjectForKey("title") as? String
             self.isPrivate = coder.decodeBoolForKey("isPrivate")
+            self.faviconURL = coder.decodeObjectForKey("faviconURL") as? String
         }
 
         func encodeWithCoder(coder: NSCoder) {
@@ -487,6 +492,7 @@ extension TabManager {
             coder.encodeBool(isSelected, forKey: "isSelected")
             coder.encodeObject(title, forKey: "title")
             coder.encodeBool(isPrivate, forKey: "isPrivate")
+            coder.encodeObject(faviconURL, forKey: "faviconURL")
         }
     }
 
@@ -574,6 +580,11 @@ extension TabManager {
             if let screenshotUUID = savedTab.screenshotUUID,
                let imageStore = self.imageStore {
                 tab.screenshotUUID = screenshotUUID
+                if savedTab.faviconURL != nil {
+                    let icon = Favicon(url: savedTab.faviconURL!, date: NSDate(), type: IconType.NoneFound)
+                    icon.width = 1
+                    tab.favicons.append(icon)
+                }
                 imageStore.get(screenshotUUID.UUIDString) >>== { screenshot in
                     if tab.screenshotUUID == screenshotUUID {
                         tab.setScreenshot(screenshot, revUUID: false)
