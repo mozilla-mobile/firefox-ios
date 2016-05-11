@@ -427,8 +427,21 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         }
         return cell
     }
-
-    func swipeableTableViewCell(cell: SWTableViewCell!, didTriggerLeftUtilityButtonWithIndex index: Int) {
+    
+    private func deleteItemAtCell(cell: SWTableViewCell) {
+        if let cell = cell as? ReadingListTableViewCell, indexPath = tableView.indexPathForCell(cell), record = records?[indexPath.row] {
+            if let result = profile.readingList?.deleteRecord(record) where result.isSuccess {
+                records?.removeAtIndex(indexPath.row)
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                // reshow empty state if no records left
+                if records?.count == 0 {
+                    view.addSubview(emptyStateOverlayView)
+                }
+            }
+        }
+    }
+    
+    private func toggleItemAtCell(cell: SWTableViewCell) {
         if let cell = cell as? ReadingListTableViewCell {
             cell.hideUtilityButtonsAnimated(true)
             if let indexPath = tableView.indexPathForCell(cell), record = records?[indexPath.row] {
@@ -443,16 +456,19 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         }
     }
 
+    func swipeableTableViewCell(cell: SWTableViewCell!, didTriggerLeftUtilityButtonWithIndex index: Int) {
+        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .LeftToRight {
+            toggleItemAtCell(cell)
+        } else {
+            deleteItemAtCell(cell)
+        }
+    }
+
     func swipeableTableViewCell(cell: SWTableViewCell!, didTriggerRightUtilityButtonWithIndex index: Int) {
-        if let cell = cell as? ReadingListTableViewCell, indexPath = tableView.indexPathForCell(cell), record = records?[indexPath.row] {
-            if let result = profile.readingList?.deleteRecord(record) where result.isSuccess {
-                records?.removeAtIndex(indexPath.row)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-                // reshow empty state if no records left
-                if records?.count == 0 {
-                    view.addSubview(emptyStateOverlayView)
-                }
-            }
+        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .LeftToRight {
+            deleteItemAtCell(cell)
+        } else {
+            toggleItemAtCell(cell)
         }
     }
 
