@@ -160,7 +160,7 @@ private extension NotificationRootViewController {
         showNotificationForSync = false
 
         showingNotification = true
-        notificationView.titleLabel.text = Strings.SyncingMessageWithoutEllipsis
+        notificationView.titleLabel.text = Strings.FirstTimeSyncLongTime
         dispatch_async(dispatch_get_main_queue()) {
             self.showStatusNotification()
         }
