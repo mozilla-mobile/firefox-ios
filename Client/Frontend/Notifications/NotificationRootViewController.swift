@@ -15,6 +15,7 @@ class NotificationRootViewController: UIViewController {
     private let notificationCenter = NSNotificationCenter.defaultCenter()
     private var statusBarHidden = false
     private var showingNotification = false
+    private var showNotificationForSync: Bool = false
 
     private lazy var notificationView: NotificationStatusView = {
         let view = NotificationStatusView()
@@ -28,6 +29,7 @@ class NotificationRootViewController: UIViewController {
 
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.didStartSyncing), name: NotificationProfileDidStartSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.didFinishSyncing), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.fxaAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -37,6 +39,7 @@ class NotificationRootViewController: UIViewController {
     deinit {
         notificationCenter.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
     }
 }
 
@@ -152,6 +155,10 @@ private extension NotificationRootViewController {
 // MARK: - Notification Selectors
 private extension NotificationRootViewController {
     @objc func didStartSyncing() {
+        guard showNotificationForSync else { return }
+
+        showNotificationForSync = false
+
         showingNotification = true
         notificationView.titleLabel.text = Strings.SyncingMessageWithoutEllipsis
         dispatch_async(dispatch_get_main_queue()) {
@@ -160,10 +167,17 @@ private extension NotificationRootViewController {
     }
 
     @objc func didFinishSyncing() {
+        guard showingNotification else { return }
+
         showingNotification = false
         dispatch_async(dispatch_get_main_queue()) {
             self.hideStatusNotification()
         }
+    }
+
+    @objc func fxaAccountDidChange() {
+        // Only show 'Syncing...' whenever the accounts have changed indicating a first time sync.
+        showNotificationForSync = true
     }
 }
 
