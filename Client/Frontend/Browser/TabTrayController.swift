@@ -450,7 +450,8 @@ class TabTrayController: UIViewController {
 
     @objc
     private func didTapMenu() {
-        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: .Modal)
+        let state = AppState(ui: .TabTray(tabTrayState: self.tabTrayState))
+        let mvc = MenuViewController(withAppState: state, presentationStyle: .Modal)
         mvc.delegate = self
         mvc.actionDelegate = self
         mvc.menuTransitionDelegate = MenuPresentationAnimator()
@@ -555,7 +556,8 @@ class TabTrayController: UIViewController {
     }
 
     private func updateAppState() {
-        self.appStateDelegate?.appDidUpdateState(.TabTray(tabTrayState: self.tabTrayState))
+        let state = AppState(ui: .TabTray(tabTrayState: self.tabTrayState))
+        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     private func closeTabsForCurrentTray() {

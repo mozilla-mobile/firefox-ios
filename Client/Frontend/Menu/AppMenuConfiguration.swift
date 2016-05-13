@@ -32,7 +32,7 @@ struct AppMenuConfiguration: MenuConfiguration {
         menuItems = menuItemsForAppState(appState)
         menuToolbarItems = menuToolbarItemsForAppState(appState)
         numberOfItemsInRow = numberOfMenuItemsPerRowForAppState(appState)
-        isPrivateMode = appState.isPrivate()
+        isPrivateMode = appState.ui.isPrivate()
     }
 
     func menuForState(appState: AppState) -> MenuConfiguration {
@@ -77,7 +77,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     }
 
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
-        switch appState {
+        switch appState.ui {
         case .TabTray:
             return 4
         default:
@@ -88,7 +88,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     // the items should be added to the array according to desired display order
     private func menuItemsForAppState(appState: AppState) -> [MenuItem] {
         var menuItems = [MenuItem]()
-        switch appState {
+        switch appState.ui {
         case .Tab(let tabState):
             menuItems.append(AppMenuConfiguration.FindInPageMenuItem)
             if #available(iOS 9, *) {
@@ -121,7 +121,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     // the items should be added to the array according to desired display order
     private func menuToolbarItemsForAppState(appState: AppState) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
-        switch appState {
+        switch appState.ui {
         case .Tab, .TabTray:
             menuToolbarItems = [AppMenuConfiguration.TopSitesMenuToolbarItem,
                                 AppMenuConfiguration.BookmarksMenuToolbarItem,
