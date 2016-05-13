@@ -450,7 +450,7 @@ class TabTrayController: UIViewController {
 
     @objc
     private func didTapMenu() {
-        let state = AppState(ui: .TabTray(tabTrayState: self.tabTrayState))
+        let state = mainStore.updateState(.TabTray(tabTrayState: self.tabTrayState))
         let mvc = MenuViewController(withAppState: state, presentationStyle: .Modal)
         mvc.delegate = self
         mvc.actionDelegate = self
@@ -554,7 +554,7 @@ class TabTrayController: UIViewController {
     }
 
     private func updateAppState() {
-        let state = AppState(ui: .TabTray(tabTrayState: self.tabTrayState))
+        let state = mainStore.updateState(.TabTray(tabTrayState: self.tabTrayState))
         self.appStateDelegate?.appDidUpdateState(state)
     }
 
