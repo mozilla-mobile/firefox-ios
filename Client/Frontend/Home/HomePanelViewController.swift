@@ -134,7 +134,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     private func updateAppState() {
-        let state = AppState(ui: .HomePanels(homePanelState: homePanelState))
+        let state = mainStore.updateState(.HomePanels(homePanelState: homePanelState))
         self.appStateDelegate?.appDidUpdateState(state)
     }
 

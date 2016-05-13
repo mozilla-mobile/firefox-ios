@@ -1113,7 +1113,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func getCurrentAppState() -> AppState {
-        return AppState(ui: getCurrentUIState())
+        return mainStore.updateState(getCurrentUIState())
     }
 
     private func getCurrentUIState() -> UIState {
