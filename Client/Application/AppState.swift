@@ -8,7 +8,11 @@ protocol AppStateDelegate: class {
     func appDidUpdateState(appState: AppState)
 }
 
-enum AppState {
+struct AppState {
+    let ui: UIState
+}
+
+enum UIState {
     case Tab(tabState: TabState)
     case HomePanels(homePanelState: HomePanelState)
     case TabTray(tabTrayState: TabTrayState)

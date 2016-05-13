@@ -134,7 +134,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     private func updateAppState() {
-        self.appStateDelegate?.appDidUpdateState(.HomePanels(homePanelState: homePanelState))
+        let state = AppState(ui: .HomePanels(homePanelState: homePanelState))
+        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     func SELhandleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
