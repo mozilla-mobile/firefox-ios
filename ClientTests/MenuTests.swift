@@ -17,9 +17,13 @@ class MenuTests: XCTestCase {
         super.tearDown()
     }
 
+    func appState(ui: UIState) -> AppState {
+        return AppState(ui: ui)
+    }
+
     func testMenuConfigurationForBrowser() {
         var tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
-        var browserConfiguration = AppMenuConfiguration(appState: .Tab(tabState: tabState))
+        var browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         XCTAssertEqual(browserConfiguration.menuItems.count, 7)
         XCTAssertEqual(browserConfiguration.menuItems[0].title, AppMenuConfiguration.FindInPageTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[1].title, AppMenuConfiguration.ViewDesktopSiteTitleString)
@@ -38,7 +42,7 @@ class MenuTests: XCTestCase {
 
 
         tabState = TabState(isPrivate: true, desktopSite: true, isBookmarked: true, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
-        browserConfiguration = AppMenuConfiguration(appState: .Tab(tabState: tabState))
+        browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         XCTAssertEqual(browserConfiguration.menuItems.count, 7)
         XCTAssertEqual(browserConfiguration.menuItems[0].title, AppMenuConfiguration.FindInPageTitleString)
         XCTAssertEqual(browserConfiguration.menuItems[1].title, AppMenuConfiguration.ViewMobileSiteTitleString)
@@ -59,7 +63,7 @@ class MenuTests: XCTestCase {
 
     func testMenuConfigurationForHomePanels() {
         let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
-        let homePanelConfiguration = AppMenuConfiguration(appState: .HomePanels(homePanelState: homePanelState))
+        let homePanelConfiguration = AppMenuConfiguration(appState: appState(.HomePanels(homePanelState: homePanelState)))
         XCTAssertEqual(homePanelConfiguration.menuItems.count, 3)
         XCTAssertEqual(homePanelConfiguration.menuItems[0].title, AppMenuConfiguration.NewTabTitleString)
         XCTAssertEqual(homePanelConfiguration.menuItems[1].title, AppMenuConfiguration.NewPrivateTabTitleString)
@@ -70,7 +74,7 @@ class MenuTests: XCTestCase {
 
     func testMenuConfigurationForTabTray() {
         let tabTrayState = TabTrayState(isPrivate: false)
-        let tabTrayConfiguration = AppMenuConfiguration(appState: .TabTray(tabTrayState: tabTrayState))
+        let tabTrayConfiguration = AppMenuConfiguration(appState: appState(.TabTray(tabTrayState: tabTrayState)))
         XCTAssertEqual(tabTrayConfiguration.menuItems.count, 4)
         XCTAssertEqual(tabTrayConfiguration.menuItems[0].title, AppMenuConfiguration.NewTabTitleString)
         XCTAssertEqual(tabTrayConfiguration.menuItems[1].title, AppMenuConfiguration.NewPrivateTabTitleString)
