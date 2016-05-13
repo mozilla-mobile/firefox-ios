@@ -8,7 +8,11 @@ protocol AppStateDelegate: class {
     func appDidUpdateState(appState: AppState)
 }
 
-enum AppState {
+struct AppState {
+    let ui: UIState
+}
+
+enum UIState {
     case Tab(tabState: TabState)
     case HomePanels(homePanelState: HomePanelState)
     case TabTray(tabTrayState: TabTrayState)
@@ -26,4 +30,21 @@ enum AppState {
             return false
         }
     }
+}
+
+class AppStateStore {
+    func updateState(state: UIState) -> AppState {
+        return AppState(ui: state)
+    }
+}
+
+// The mainStore should be a singleton.
+// It's on the global namespace because it's really just accessing the app delegate, 
+// not a shared static instance on the AppStateStore class.  
+var mainStore: AppStateStore {
+    guard let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate else {
+        // something bad happened here.
+        return AppStateStore()
+    }
+    return appDelegate.appStateStore
 }
