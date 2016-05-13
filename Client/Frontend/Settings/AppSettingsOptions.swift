@@ -101,7 +101,7 @@ class SyncNowSetting: WithAccountSetting {
     override var style: UITableViewCellStyle { return .Value1 }
 
     override var title: NSAttributedString? {
-        guard let syncStatus = profile.syncManager.syncState else {
+        guard let syncStatus = profile.syncManager.syncDisplayState else {
             return syncNowTitle
         }
 
@@ -169,7 +169,7 @@ class SyncNowSetting: WithAccountSetting {
         cell.textLabel?.attributedText = title
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.lineBreakMode = .ByWordWrapping
-        if let syncStatus = profile.syncManager.syncState {
+        if let syncStatus = profile.syncManager.syncDisplayState {
             switch syncStatus {
             case .Bad(_):
                 // add the red warning symbol

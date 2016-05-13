@@ -19,14 +19,14 @@ public let NotificationProfileDidStartSyncing = "NotificationProfileDidStartSync
 public let NotificationProfileDidFinishSyncing = "NotificationProfileDidFinishSyncing"
 public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
-public enum SyncState {
+public enum SyncDisplayState {
     case InProgress
     case Good
     case Bad(message: String)
     case Stale(message: String)
 }
 
-public func ==(a: SyncState, b: SyncState) -> Bool {
+public func ==(a: SyncDisplayState, b: SyncDisplayState) -> Bool {
     switch (a, b) {
     case (.InProgress,   .InProgress): return true
     case (.Good,   .Good): return true
@@ -39,7 +39,7 @@ public func ==(a: SyncState, b: SyncState) -> Bool {
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
-    var syncState: SyncState? { get }
+    var syncDisplayState: SyncDisplayState? { get }
 
     func hasSyncedHistory() -> Deferred<Maybe<Bool>>
     func hasSyncedLogins() -> Deferred<Maybe<Bool>>
@@ -624,10 +624,10 @@ public class BrowserProfile: Profile {
         var isSyncing: Bool {
             syncLock.lock()
             defer { syncLock.unlock() }
-            return syncState != nil && syncState! == .InProgress
+            return syncDisplayState != nil && syncDisplayState! == .InProgress
         }
 
-        var syncState: SyncState?
+        var syncDisplayState: SyncDisplayState?
 
         // The dispatch queue for coordinating syncing and resetting the database.
         private let syncQueue = dispatch_queue_create("com.mozilla.firefox.sync", DISPATCH_QUEUE_SERIAL)
@@ -822,37 +822,58 @@ public class BrowserProfile: Profile {
         }
 
         @objc func onStartSyncing(notification: NSNotification) {
-            syncState = .InProgress
+            syncDisplayState = .InProgress
         }
 
         @objc func onFinishSyncing(notification: NSNotification) {
-            if let syncResult = syncReducer?.terminal.value {
-                if syncResult.isSuccess,
-                    let results = syncResult.successValue {
-                    let errorResults: [SyncState]? = results.flatMap { identifier, status in
-                        switch status {
-                        case .Completed:
-                            return nil
-                        case .NotStarted(let reason):
-                            let message: String
-                            switch reason {
-                            case .Offline:
-                                message = Strings.FirefoxSyncOfflineTitle
-                            default:
-                                message = Strings.FirefoxSyncNotStartedTitle
-                            }
-                            return SyncState.Stale(message: message)
-                        case .Partial:
-                            return SyncState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent(identifier) ?? ""))
-                        }
-                    }
-                    syncState = (errorResults?.isEmpty ?? true) ? .Good : errorResults?.first!
-                } else {
-                    syncState = SyncState.Bad(message: Strings.FirefoxSyncFailedTitle)
-                }
-            }
-            if let syncState = syncState where syncState == .Good {
+            syncDisplayState = displayStateForEngineResults(syncReducer?.terminal.value)
+            if let syncState = syncDisplayState where syncState == .Good {
                 self.lastSyncFinishTime = NSDate.now()
+            }
+        }
+
+        private func displayStateForSyncResult(result: SyncResult) -> SyncDisplayState {
+            guard result.value.isSuccess,
+            let syncState = result.value.successValue else {
+                return SyncDisplayState.Bad(message: Strings.FirefoxSyncFailedTitle)
+            }
+
+            return displayStateForSyncState(syncState)
+        }
+
+        private func displayStateForEngineResults(result: Maybe<EngineResults>?) -> SyncDisplayState {
+            guard let result = result else {
+                return .Good
+            }
+            guard result.isSuccess,
+                let results = result.successValue else {
+                    return SyncDisplayState.Bad(message: Strings.FirefoxSyncFailedTitle)
+            }
+            let errorResults: [SyncDisplayState]? = results.flatMap { identifier, status in
+                let displayState = self.displayStateForSyncState(status, identifier: identifier)
+                return displayState == .Good ? nil : displayState
+            }
+            return (errorResults?.isEmpty ?? true) ? .Good : (errorResults?.first)!
+        }
+
+        private func displayStateForSyncState(syncStatus: SyncStatus, identifier: String? = nil) -> SyncDisplayState {
+            switch syncStatus {
+            case .Completed:
+                return SyncDisplayState.Good
+            case .NotStarted(let reason):
+                let message: String
+                switch reason {
+                case .Offline:
+                    message = Strings.FirefoxSyncOfflineTitle
+                default:
+                    message = Strings.FirefoxSyncNotStartedTitle
+                }
+                return SyncDisplayState.Stale(message: message)
+            case .Partial:
+                if let identifier = identifier {
+                    return SyncDisplayState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent(identifier) ?? ""))
+                }
+                return SyncDisplayState.Stale(message: Strings.FirefoxSyncNotStartedTitle)
             }
         }
 
@@ -966,31 +987,42 @@ public class BrowserProfile: Profile {
         private func syncClientsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing clients to storage.")
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
-            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
+            let result = clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
+            syncDisplayState = displayStateForSyncResult(result)
+            return result
         }
 
         private func syncTabsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             let storage = self.profile.remoteClientsAndTabs
             let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
-            return tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
+            let result = tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
+            syncDisplayState = displayStateForSyncResult(result)
+            return result
         }
 
         private func syncHistoryWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing history to storage.")
             let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
-            return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
+            let result = historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
+            syncDisplayState = displayStateForSyncResult(result)
+            return result
         }
 
         private func syncLoginsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing logins to storage.")
             let loginsSynchronizer = ready.synchronizer(LoginsSynchronizer.self, delegate: delegate, prefs: prefs)
-            return loginsSynchronizer.synchronizeLocalLogins(self.profile.logins, withServer: ready.client, info: ready.info)
+            let result = loginsSynchronizer.synchronizeLocalLogins(self.profile.logins, withServer: ready.client, info: ready.info)
+
+            syncDisplayState = displayStateForSyncResult(result)
+            return result
         }
 
         private func mirrorBookmarksWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Synchronizing server bookmarks to storage.")
             let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
-            return bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
+            let result = bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
+            syncDisplayState = displayStateForSyncResult(result)
+            return result
         }
 
         func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {
@@ -1022,7 +1054,9 @@ public class BrowserProfile: Profile {
         private func sync(label: EngineIdentifier, function: SyncFunction) -> SyncResult {
             return syncSeveral([(label, function)]) >>== { statuses in
                 let status = statuses.find { label == $0.0 }?.1
-                return deferMaybe(status ?? .NotStarted(.Unknown))
+                let result = deferMaybe(status ?? .NotStarted(.Unknown))
+                self.syncDisplayState = self.displayStateForSyncResult(result)
+                return result
             }
         }
 
@@ -1055,9 +1089,12 @@ public class BrowserProfile: Profile {
 
                     return self.syncWith(remaining) >>== { deferMaybe(statuses + $0) }
                 }
-                reducer.terminal >>> self.endSyncing
 
-                // The actual work of synchronizing doesn't start until we append 
+                reducer.terminal.uponQueue(dispatch_get_main_queue()) { _ in
+                    self.endSyncing()
+                }
+
+                // The actual work of synchronizing doesn't start until we append
                 // the synchronizers to the reducer below.
                 self.syncReducer = reducer
                 self.beginSyncing()
