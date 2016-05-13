@@ -959,8 +959,8 @@ class BrowserViewController: UIViewController {
     }
 
     func openURLInNewTab(url: NSURL?, isPrivate: Bool = false) {
-        if tabManager.selectedTab != nil {
-            screenshotHelper.takeScreenshot(tabManager.selectedTab!)
+        if let selectedTab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(selectedTab)
         }
         let request: NSURLRequest?
         if let url = url {
