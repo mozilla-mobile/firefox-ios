@@ -1,0 +1,6 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "താങ്കള്‍ തീര്‍ച്ചയായും അതും അതിന്‍റെ ഉള്ളടക്കവും ഒഴിവാക്കാന്‍ ആഗ്രഹിക്കുന്നുവോ?";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "ഈ ഫോള്‍ഡര്‍ ശൂന്യമല്ല.";
+

@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 saat sonra";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 dakika sonra";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 dakika sonra";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 dakika sonra";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 dakika sonra";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Parolayı değiştir";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "Parolayı girin";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "Yeni parolayı girin";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Bir parola girin";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "Parolayı girin";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Hemen";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Yanlış parola. Yeniden deneyin. (kalan deneme: %d)";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Yanlış parola. Yeniden deneyin.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Maksimum deneme sayısına ulaşıldı. Lütfen bir saat sonra yeniden deneyin.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Maksimum deneme sayısına ulaşıldı. Lütfen daha sonra yeniden deneyin.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Yeni parola mevcut paroladan farklı olmalıdır.";
+
+/* List section title for passcode settings */
+"Passcode" = "Parola";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Parolalar eşleşmedi. Yeniden deneyin.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Parolayı yeniden girin";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Parola iste";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Parolayı ayarlayın";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Touch ID ve parola";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Parolayı kapat";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Parolayı aç";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Parolanızı kapatın.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Touch ID kullan";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Hesaplara şimdi erişmek için parmak izinizi kullanın.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Gizli Gezinti'ye şimdi erişmek için parmak izinizi kullanın.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Touch ID'yi devre dışı bırakmak için parmak izinizi kullanın.";
+
+/* Touch ID prompt subtitle when accessing  the require passcode setting */
+"touchid.require.passcode.reason.label" = "Gerekli parola aralığı yapılandırmasına erişmek için parmak izinizi kullanın.";
+

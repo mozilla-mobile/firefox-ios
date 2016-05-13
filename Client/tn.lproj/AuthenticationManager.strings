@@ -1,0 +1,84 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Morago ga oura";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Morago ga motsotso";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Morago ga metsotso e le metlhano";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Morago ga metsotso e le lesome";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Morago ga metsotso e le lesome le botlhano";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "Fetola Khoututseno";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "Tsenya Khoututseno";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "Tsenya khoututseno e ntšha";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "Tsenya khoututseno";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "Tsenya khoututseno";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Go ne jaana";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Khoututseno ga e a siamang. Leka gape (diteko tse di setseng: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Khoututseno ga e a siama. Leka gape.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Selekanyo se segolo sa diteko se fitlheletswe. Tswêê-tswêê leka gape mo oureng.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Selekanyo se segolo sa diteko se fitlheletswe. Tswêê-tswêê leka gape moragonyana.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Khoututseno e ntšha ga e a tshwanela go tshwana le khoutu e dirisiwang ga jaana.";
+
+/* List section title for passcode settings */
+"Passcode" = "Khoututseno";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Khoututseno ga e tsamaelane. Leka gape.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "Tsenya Khoututseno gape";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "Khoututseno e a tlhokega";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "Rulaganya Khoututseno";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "Boitshupo-kamo le Khoututseno";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "Tobetsa go emisa go dira ga Khoututseno";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "Tobetsa go dirisa Khoututseno";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Tobetsa go emisa go dira ga Khoututseno ya gago.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Dirisa Boitshupo-kamo";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Dirisa kgatisomonwana wa gago go ka letlelesega go tsena tirong ga jaana.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Dirisa kgatisomonwana wa gago go ka letlelesega go Batla mo go Poraefete.";
+

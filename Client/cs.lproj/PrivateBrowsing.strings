@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Zavřít anonymní panely";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox si nebude pamatovat vaši historii ani ukládat cookies, ale vytvořené záložky budou uloženy.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Zjistit více";
+
+/* Toggled OFF accessibility value */
+"Off" = "Vypnuto";
+
+/* Toggled ON accessibility value */
+"On" = "Zapnuto";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Otevřít v anonymním panelu";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Anonymní prohlížení";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Anonymní režim";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Zapne nebo vypne anonymní režim";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Po opuštění anonymního prohlížení";
+

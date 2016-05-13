@@ -1,0 +1,9 @@
+/* Close button in top navigation bar */
+"Close" = "Sluit";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Stuur";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Stuur oortjie";
+

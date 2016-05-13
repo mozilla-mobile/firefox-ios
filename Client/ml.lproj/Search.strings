@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "%@ തിരയല്‍";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "വേണ്ട";
+
+/* Label for search settings button. */
+"Search Settings" = "തിരയൽ സജ്ജീകരണങ്ങൾ";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "%@ നിന്നുള്ള തിരച്ചില്‍ നിര്‍ദ്ദേശങ്ങള്‍";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "തിരയല്‍ നിര്‍ദ്ദേശങ്ങള്‍ വേണോ?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "അതെ";
+
