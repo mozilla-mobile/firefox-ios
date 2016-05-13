@@ -31,3 +31,20 @@ enum UIState {
         }
     }
 }
+
+class AppStateStore {
+    func updateState(state: UIState) -> AppState {
+        return AppState(ui: state)
+    }
+}
+
+// The mainStore should be a singleton.
+// It's on the global namespace because it's really just accessing the app delegate, 
+// not a shared static instance on the AppStateStore class.  
+var mainStore: AppStateStore {
+    guard let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate else {
+        // something bad happened here.
+        return AppStateStore()
+    }
+    return appDelegate.appStateStore
+}
