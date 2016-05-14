@@ -94,7 +94,11 @@ struct AppMenuConfiguration: MenuConfiguration {
             if #available(iOS 9, *) {
                 menuItems.append(tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem)
             }
-            menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
+            if HomePageAccessors.hasHomePage(appState) {
+                menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
+            } else {
+                menuItems.append(AppMenuConfiguration.SetHomePageMenuItem)
+            }
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             if #available(iOS 9, *) {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
