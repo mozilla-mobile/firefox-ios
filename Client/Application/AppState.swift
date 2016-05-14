@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 protocol AppStateDelegate: class {
     func appDidUpdateState(appState: AppState)
@@ -10,6 +11,7 @@ protocol AppStateDelegate: class {
 
 struct AppState {
     let ui: UIState
+    let prefs: Prefs
 }
 
 enum UIState {
@@ -33,8 +35,13 @@ enum UIState {
 }
 
 class AppStateStore {
+    let prefs: Prefs
+
+    init(prefs: Prefs) {
+        self.prefs = prefs
+    }
     func updateState(state: UIState) -> AppState {
-        return AppState(ui: state)
+        return AppState(ui: state, prefs: prefs)
     }
 }
 
@@ -44,4 +51,10 @@ class AppStateStore {
 var mainStore: AppStateStore {
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     return appDelegate.appStateStore
+}
+
+class Accessors {
+    static func getPrefs(state: AppState) -> Prefs {
+        return state.prefs
+    }
 }

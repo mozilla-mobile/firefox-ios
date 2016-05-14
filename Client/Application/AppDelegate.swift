@@ -79,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         log.debug("Getting profile…")
         let profile = getProfile(application)
-        appStateStore = AppStateStore()
+        appStateStore = AppStateStore(prefs: profile.prefs)
 
         if !DebugSettingsBundleOptions.disableLocalWebServer {
             log.debug("Starting web server…")
