@@ -20,11 +20,7 @@ class HomePageHelper {
 
     var currentURL: NSURL? {
         get {
-            let string = prefs.stringForKey(HomePageConstants.HomePageURLPrefKey) ?? defaultURLString
-            guard let urlString = string else {
-                return nil
-            }
-            return NSURL(string: urlString)
+            return HomePageAccessors.getHomePage(prefs)
         }
         set {
             if let url = newValue {
@@ -36,7 +32,7 @@ class HomePageHelper {
     }
 
     var defaultURLString: String? {
-        return prefs.stringForKey(HomePageConstants.DefaultHomePageURLPrefKey)
+        return HomePageAccessors.getDefaultHomePageString(prefs)
     }
 
     var isHomePageAvailable: Bool { return currentURL != nil }
