@@ -167,9 +167,7 @@ class BrowserViewController: UIViewController {
         toolbar = nil
 
         if showToolbar {
-            let state = getCurrentAppState()
             toolbar = TabToolbar()
-            toolbar?.applyTheme(state.ui.isPrivate() ? Theme.PrivateMode : Theme.NormalMode)
             toolbar?.tabToolbarDelegate = self
             footerBackground = BlurWrapper(view: toolbar!)
             footerBackground?.translatesAutoresizingMaskIntoConstraints = false
@@ -455,6 +453,8 @@ class BrowserViewController: UIViewController {
 
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
+        let state = getCurrentAppState()
+        toolbar?.appDidUpdateState(state)
         log.debug("BVC done.")
     }
 
