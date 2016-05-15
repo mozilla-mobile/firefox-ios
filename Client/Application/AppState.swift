@@ -54,6 +54,10 @@ var mainStore: AppStateStore {
 }
 
 class Accessors {
+    static func isPrivate(state: AppState) -> Bool {
+        return state.ui.isPrivate()
+    }
+
     static func getPrefs(state: AppState) -> Prefs {
         return state.prefs
     }
