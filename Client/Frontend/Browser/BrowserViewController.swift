@@ -1193,6 +1193,10 @@ extension BrowserViewController: MenuActionDelegate {
             case .OpenHomePage:
                 guard let tab = tabManager.selectedTab else { break }
                 HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, withNavigationController: navigationController)
+            case .SharePage:
+                guard let url = tabManager.selectedTab?.url else { break }
+                let sourceView = self.navigationToolbar.menuButton
+                presentActivityViewController(url, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
             default: break
             }
         }
