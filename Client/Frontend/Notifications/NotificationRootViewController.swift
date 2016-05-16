@@ -6,6 +6,8 @@ import Foundation
 import SnapKit
 import Shared
 
+let NotificationStatusNotificationTapped = "NotificationStatusNotificationTapped"
+
 // Notification duration in seconds
 enum NotificationDuration: NSTimeInterval {
     case Short = 4
@@ -26,6 +28,7 @@ class NotificationRootViewController: UIViewController {
 
     lazy var notificationView: NotificationStatusView = {
         let view = NotificationStatusView()
+        view.addTarget(self, action: #selector(NotificationRootViewController.didTapNotification))
         view.hidden = true
         return view
     }()
@@ -216,8 +219,11 @@ private extension NotificationRootViewController {
         syncTitle = Strings.SyncingMessageWithoutEllipsis
     }
 
+    @objc func didTapNotification() {
+        notificationCenter.postNotificationName(NotificationStatusNotificationTapped, object: nil)
+    }
 
-    @objc private func dismissDurationedNotification() {
+    @objc func dismissDurationedNotification() {
         dispatch_async(dispatch_get_main_queue()) {
             self.hideStatusNotification()
         }
@@ -237,8 +243,12 @@ class NotificationStatusView: UIView {
         return label
     }
 
+    private let tapGesture = UITapGestureRecognizer()
+
     init() {
         super.init(frame: CGRect.zero)
+        userInteractionEnabled = true
+        addGestureRecognizer(tapGesture)
         backgroundColor = UIConstants.AppBackgroundColor
         addSubview(titleLabel)
         addSubview(ellipsisLabel)
@@ -269,6 +279,10 @@ class NotificationStatusView: UIView {
 
     func endAnimation() {
         animationTimer?.invalidate()
+    }
+
+    func addTarget(target: AnyObject, action: Selector) {
+        tapGesture.addTarget(target, action: action)
     }
 
     @objc func updateEllipsis() {

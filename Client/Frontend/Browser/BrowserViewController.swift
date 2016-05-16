@@ -456,6 +456,11 @@ class BrowserViewController: UIViewController {
         let state = getCurrentAppState()
         self.appDidUpdateState(state)
         log.debug("BVC done.")
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(BrowserViewController.openSettings),
+                                                         name: NotificationStatusNotificationTapped,
+                                                         object: nil)
     }
 
     private func showRestoreTabsAlert() {
@@ -527,8 +532,12 @@ class BrowserViewController: UIViewController {
 
     override func viewWillDisappear(animated: Bool) {
         screenshotHelper.viewIsVisible = false
-
         super.viewWillDisappear(animated)
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationStatusNotificationTapped, object: nil)
     }
 
     func resetBrowserChrome() {
@@ -1226,7 +1235,9 @@ class BrowserViewController: UIViewController {
         return .Tab(tabState: tab.tabState)
     }
 
-    private func openSettings() {
+    @objc private func openSettings() {
+        assert(NSThread.isMainThread(), "Opening settings requires being invoked on the main thread")
+
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = profile
         settingsTableViewController.tabManager = tabManager
