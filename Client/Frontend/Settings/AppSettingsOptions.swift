@@ -76,6 +76,8 @@ class DisconnectSetting: WithAccountSetting {
 }
 
 class SyncNowSetting: WithAccountSetting {
+    static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
+
     private lazy var timestampFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -129,6 +131,7 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
+        NSNotificationCenter.defaultCenter().postNotificationName(SyncNowSetting.NotificationUserInitiatedSyncManually, object: nil)
         profile.syncManager.syncEverything()
     }
 }
