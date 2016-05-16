@@ -454,7 +454,7 @@ class BrowserViewController: UIViewController {
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
         let state = getCurrentAppState()
-        toolbar?.appDidUpdateState(state)
+        self.appDidUpdateState(state)
         log.debug("BVC done.")
     }
 
@@ -1245,6 +1245,8 @@ extension BrowserViewController: AppStateDelegate {
         if AppConstants.MOZ_MENU {
             menuViewController?.appState = appState
         }
+        toolbar?.appDidUpdateState(appState)
+        urlBar?.appDidUpdateState(appState)
     }
 }
 
@@ -1322,6 +1324,7 @@ extension BrowserViewController: SettingsDelegate {
 
 extension BrowserViewController: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(modalViewController: UIViewController, animated: Bool) {
+        self.appDidUpdateState(getCurrentAppState())
         self.dismissViewControllerAnimated(animated, completion: nil)
     }
 }
@@ -2175,6 +2178,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)
+            appDidUpdateState(getCurrentAppState())
         }
     }
 
