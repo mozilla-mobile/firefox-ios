@@ -4,6 +4,7 @@
 
 import XCTest
 @testable import Client
+import Shared
 
 class MenuTests: XCTestCase {
 
@@ -18,7 +19,9 @@ class MenuTests: XCTestCase {
     }
 
     func appState(ui: UIState) -> AppState {
-        return AppState(ui: ui)
+        let prefs = MockProfilePrefs()
+        prefs.setString("http://mozilla.com", forKey: HomePageConstants.HomePageURLPrefKey)
+        return AppState(ui: ui, prefs: prefs)
     }
 
     func testMenuConfigurationForBrowser() {
