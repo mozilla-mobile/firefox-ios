@@ -1527,6 +1527,11 @@ extension BrowserViewController: TabToolbarDelegate {
             presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
         }
     }
+
+    func tabToolbarDidPressHomePage(tabToolbar: TabToolbarProtocol, button: UIButton) {
+        guard let tab = tabManager.selectedTab else { return }
+        HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, withNavigationController: navigationController)
+    }
 }
 
 extension BrowserViewController: MenuViewControllerDelegate {
