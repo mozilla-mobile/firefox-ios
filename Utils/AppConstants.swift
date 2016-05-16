@@ -61,4 +61,21 @@ public struct AppConstants {
             return true
         #endif
     }()
+
+    ///  Enables/disables the notification bar that appears on the status bar area
+    public static let MOZ_STATUS_BAR_NOTIFICATION: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
 }
