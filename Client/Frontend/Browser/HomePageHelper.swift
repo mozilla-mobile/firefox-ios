@@ -11,7 +11,7 @@ private let log = Logger.browserLogger
 struct HomePageConstants {
     static let HomePageURLPrefKey = "HomePageURLPref"
     static let DefaultHomePageURLPrefKey = PrefsKeys.KeyDefaultHomePageURL
-    static let HomePageButtonIsInMenuPrefKey = "HomePageButtonIsInMenuPrefKey"
+    static let HomePageButtonIsInMenuPrefKey = PrefsKeys.KeyHomePageButtonIsInMenu
 }
 
 class HomePageHelper {

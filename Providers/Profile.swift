@@ -233,6 +233,7 @@ public class BrowserProfile: Profile {
 
         if isChinaEdition {
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
+            prefs.setBool(false, forKey: PrefsKeys.KeyHomePageButtonIsInMenu)
         } else {
             prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
         }
