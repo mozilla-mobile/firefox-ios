@@ -529,6 +529,7 @@ class TabTrayController: UIViewController {
     }
 
     private func openNewTab(request: NSURLRequest? = nil) {
+        toolbar.addTabButton.userInteractionEnabled = false
         if #available(iOS 9, *) {
             if privateMode {
                 emptyPrivateTabsView.hidden = true
@@ -547,6 +548,7 @@ class TabTrayController: UIViewController {
             self.tabManager.selectTab(tab)
         }, completion: { finished in
             if finished {
+                self.toolbar.addTabButton.userInteractionEnabled = true
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
