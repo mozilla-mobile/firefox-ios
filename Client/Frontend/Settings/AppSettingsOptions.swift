@@ -156,8 +156,7 @@ class SyncNowSetting: WithAccountSetting {
         return imageView
     }()
 
-    // TODO: This needs to be changed to the actual URL when we have it
-    private let syncSUMOURL = NSURL(string: "https://support.mozilla.org")!
+    private let syncSUMOURL = SupportUtils.URLForTopic("sync-status-ios")
 
     @objc private func troubleshoot() {
         let viewController = SettingsContentViewController()
