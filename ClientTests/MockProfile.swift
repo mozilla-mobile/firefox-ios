@@ -111,7 +111,7 @@ public class MockProfile: Profile {
         return CertStore()
     }()
 
-    lazy var bookmarks: protocol<BookmarksModelFactorySource, SyncableBookmarks, LocalItemSource, EditableBookmarks, MirrorItemSource, ShareToDestination> = {
+    lazy var bookmarks: protocol<BookmarksModelFactorySource, SyncableBookmarks, LocalItemSource, BufferedBookmarks, MirrorItemSource, ShareToDestination> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         let p = self.places

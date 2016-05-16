@@ -178,13 +178,9 @@ class MergeApplier {
             return deferMaybe(SyncStatus.Completed)
         }
 
-        return self.merger.merge().bind { result in
-            // Pass on any failures we get when trying to merge
-            if let fail = result.failureValue {
-                return deferMaybe(fail)
-            }
-            return self.applyResult(result.successValue!) >>> always(SyncStatus.Completed)
-        }
+        return self.merger.merge()
+          >>== self.applyResult
+           >>> always(SyncStatus.Completed)
     }
 }
 
@@ -365,14 +361,10 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
                     return self.applyLocalDirectlyToMirror()
                 case (false, true):
                     // No outgoing changes. Unilaterally apply remote changes if they're consistent.
-                    return self.buffer.validate().bind { result in
-                        result.isSuccess ? self.applyIncomingDirectlyToMirror() : deferMaybe(result.failureValue ?? BookmarksMergeConsistencyError())
-                    }
+                    return self.buffer.validate() >>> self.applyIncomingDirectlyToMirror
                 default:
                     // Changes on both sides. Merge.
-                    return self.buffer.validate().bind { result in
-                        result.isSuccess ? self.threeWayMerge() : deferMaybe(result.failureValue ?? BookmarksMergeConsistencyError())
-                    }
+                    return self.buffer.validate() >>> self.threeWayMerge
                 }
             }
         }

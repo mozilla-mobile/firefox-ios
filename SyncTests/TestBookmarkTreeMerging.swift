@@ -307,10 +307,11 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         let uploader = MockUploader()
         let storer = uploader.getStorer()
         let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
-        let result = applier.go().value
-        XCTAssertFalse(result.isSuccess)
-        XCTAssertTrue(result.isFailure)
-        XCTAssertEqual(result.failureValue!.description, BufferInconsistency.MissingValues.description)
+        XCTAssertEqual(bookmarks.bufferState().value.successValue!, BookmarkBufferState.UnmergedRemoteChanges)
+        let result = applier.go()
+        result.failed()
+        XCTAssertEqual(bookmarks.bufferState().value.successValue!, BookmarkBufferState.UnmergedRemoteChanges)
+        XCTAssertEqual(result.value.failureValue!.description, BufferInconsistency.MissingValues.description)
 
         // Buffer should remain in the busted state and not clear.
         XCTAssertFalse(bookmarks.isEmpty().value.successValue!)
@@ -334,10 +335,12 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         let uploader = MockUploader()
         let storer = uploader.getStorer()
         let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
-        let result = applier.go().value
-        XCTAssertFalse(result.isSuccess)
-        XCTAssertTrue(result.isFailure)
-        XCTAssertEqual(result.failureValue!.description, BufferInconsistency.MissingStructure.description)
+
+        XCTAssertEqual(bookmarks.bufferState().value.successValue!, BookmarkBufferState.UnmergedRemoteChanges)
+        let result = applier.go()
+        result.failed()
+        XCTAssertEqual(bookmarks.bufferState().value.successValue!, BookmarkBufferState.UnmergedRemoteChanges)
+        XCTAssertEqual(result.value.failureValue!.description, BufferInconsistency.MissingStructure.description)
 
         // Buffer should remain in the busted state and not clear.
         XCTAssertFalse(bookmarks.isEmpty().value.successValue!)
@@ -361,10 +364,11 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         let uploader = MockUploader()
         let storer = uploader.getStorer()
         let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
-        let result = applier.go().value
-        XCTAssertFalse(result.isSuccess)
-        XCTAssertTrue(result.isFailure)
-        XCTAssertEqual(result.failureValue!.description, BufferInconsistency.ParentIDDisagreement.description)
+        XCTAssertEqual(bookmarks.bufferState().value.successValue!, BookmarkBufferState.UnmergedRemoteChanges)
+        let result = applier.go()
+        result.failed()
+        XCTAssertEqual(bookmarks.bufferState().value.successValue!, BookmarkBufferState.UnmergedRemoteChanges)
+        XCTAssertEqual(result.value.failureValue!.description, BufferInconsistency.ParentIDDisagreement.description)
 
         // Buffer should remain in the busted state and not clear.
         XCTAssertFalse(bookmarks.isEmpty().value.successValue!)
@@ -389,10 +393,11 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         let uploader = MockUploader()
         let storer = uploader.getStorer()
         let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
-        let result = applier.go().value
-        XCTAssertFalse(result.isSuccess)
-        XCTAssertTrue(result.isFailure)
-        XCTAssertEqual(result.failureValue!.description, BufferInconsistency.OverlappingStructure.description)
+        XCTAssertEqual(bookmarks.bufferState().value.successValue!, BookmarkBufferState.UnmergedRemoteChanges)
+        let result = applier.go()
+        result.failed()
+        XCTAssertEqual(bookmarks.bufferState().value.successValue!, BookmarkBufferState.UnmergedRemoteChanges)
+        XCTAssertEqual(result.value.failureValue!.description, BufferInconsistency.OverlappingStructure.description)
 
         // Buffer should remain in the busted state and not clear.
         XCTAssertFalse(bookmarks.isEmpty().value.successValue!)

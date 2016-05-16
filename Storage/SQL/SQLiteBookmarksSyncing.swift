@@ -638,11 +638,9 @@ extension MergedSQLiteBookmarks: ShareToDestination {
     }
 }
 
-extension MergedSQLiteBookmarks: EditableBookmarks {
-    public func editState() -> Deferred<Maybe<BookmarksEditState>> {
-        return self.buffer.isEmpty() >>== { isEmpty in
-            isEmpty ? deferMaybe(.ReadWrite) : deferMaybe(.ReadOnly)
-        }
+extension MergedSQLiteBookmarks: BufferedBookmarks {
+    public func bufferState() -> Deferred<Maybe<BookmarkBufferState>> {
+        return chain(self.buffer.isEmpty()) { $0 ? .NoUnmergedRemoteChanges : .UnmergedRemoteChanges }
     }
 }
 

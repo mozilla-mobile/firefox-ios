@@ -22,13 +22,13 @@ public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalD
     func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, itemSources: ItemSources) -> Success
 }
 
-public enum BookmarksEditState {
-    case ReadWrite
-    case ReadOnly
+public enum BookmarkBufferState {
+    case NoUnmergedRemoteChanges
+    case UnmergedRemoteChanges
 }
 
-public protocol EditableBookmarks: class {
-    func editState() -> Deferred<Maybe<BookmarksEditState>>
+public protocol BufferedBookmarks: class {
+    func bufferState() -> Deferred<Maybe<BookmarkBufferState>>
 }
 
 public let NotificationBookmarkBufferValidated = "NotificationBookmarkBufferValidated"
