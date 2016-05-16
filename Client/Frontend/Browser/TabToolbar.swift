@@ -42,6 +42,7 @@ protocol TabToolbarDelegate: class {
     func tabToolbarDidPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressShare(tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressHomePage(tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
 @objc
@@ -113,7 +114,7 @@ public class TabToolbarHelper: NSObject {
         toolbar.homePageButton.setImage(UIImage.templateImageNamed("menu-Home"), forState: .Normal)
         toolbar.homePageButton.setImage(UIImage(named: "menu-Home-Engaged"), forState: .Highlighted)
         toolbar.homePageButton.accessibilityLabel = NSLocalizedString("Homepage", comment: "Accessibility Label for the tab toolbar Homepage button")
-        toolbar.homePageButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickShare), forControlEvents: UIControlEvents.TouchUpInside)
+        toolbar.homePageButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickHomePage), forControlEvents: UIControlEvents.TouchUpInside)
 
         if AppConstants.MOZ_MENU {
             toolbar.menuButton.contentMode = UIViewContentMode.Center
@@ -184,6 +185,10 @@ public class TabToolbarHelper: NSObject {
         if recognizer.state == UIGestureRecognizerState.Began && !loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.stopReloadButton)
         }
+    }
+
+    func SELdidClickHomePage() {
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressHomePage(toolbar, button: toolbar.homePageButton)
     }
 
     func updateReloadStatus(isLoading: Bool) {
