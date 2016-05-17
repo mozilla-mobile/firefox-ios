@@ -113,7 +113,7 @@ public class TabToolbarHelper: NSObject {
 
         toolbar.homePageButton.setImage(UIImage.templateImageNamed("menu-Home"), forState: .Normal)
         toolbar.homePageButton.setImage(UIImage(named: "menu-Home-Engaged"), forState: .Highlighted)
-        toolbar.homePageButton.accessibilityLabel = NSLocalizedString("Homepage", comment: "Accessibility Label for the tab toolbar Homepage button")
+        toolbar.homePageButton.accessibilityLabel = NSLocalizedString("Toolbar.OpenHomePage.AccessibilityLabel", value: "Homepage", comment: "Accessibility Label for the tab toolbar Homepage button")
         toolbar.homePageButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickHomePage), forControlEvents: UIControlEvents.TouchUpInside)
 
         if AppConstants.MOZ_MENU {
