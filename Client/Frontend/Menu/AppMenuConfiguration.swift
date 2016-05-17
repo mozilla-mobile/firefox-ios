@@ -194,7 +194,7 @@ extension AppMenuConfiguration {
     }
 
     private static var SharePageMenuItem: MenuItem {
-        return AppMenuItem(title: SharePageTitleString, action: MenuAction(action: AppMenuAction.SharePage.rawValue), icon: "bottomNav-send", privateModeIcon: "bottomNav-send", selectedIcon: "bottomNav-sendEngaged")
+        return AppMenuItem(title: SharePageTitleString, action: MenuAction(action: AppMenuAction.SharePage.rawValue), icon: "menu-Send", privateModeIcon: "menu-Send-pbm", selectedIcon: "menu-Send-Engaged")
     }
 
     private static var TopSitesMenuToolbarItem: MenuToolbarItem {
