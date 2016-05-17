@@ -308,7 +308,7 @@ class URLBarView: UIView {
 
             homePageButton.snp_makeConstraints { make in
                 make.center.equalTo(shareButton)
-                make.size.equalTo(backButton)
+                make.size.equalTo(shareButton)
             }
 
             menuButton.snp_makeConstraints { make in
