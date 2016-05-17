@@ -151,7 +151,14 @@ class MenuViewController: UIViewController {
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         if delegate?.shouldCloseMenu(self, forTraitCollection: self.traitCollection) ?? false {
-            self.dismissViewControllerAnimated(true, completion: nil)
+            // on rotation, any popovers are dismissed and then redisplayed once rotation is completed.
+            // however, as the first thing we do here is dismiss, that causes the menu to 'flash' before dismissal
+            // therefore set the source of the popoverPresentation offscreen so that we can't see it when it is redisplayedy.
+            // not the nicest solution but I can't find another wa
+            popoverPresentationController?.sourceRect = CGRectMake(-320, -320, 0, 0)
+            self.dismissViewControllerAnimated(false, completion: {
+                self.delegate?.menuViewControllerDidDismiss(self)
+            })
         }
     }
 
