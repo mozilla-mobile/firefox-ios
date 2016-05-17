@@ -78,6 +78,9 @@ class TabScrollingController: NSObject {
     }
 
     func showToolbars(animated animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
+        if toolbarState == .Visible {
+            return
+        }
         toolbarState = .Visible
         let durationRatio = abs(headerTopOffset / topScrollHeight)
         let actualDuration = NSTimeInterval(ToolbarBaseAnimationDuration * durationRatio)
@@ -91,6 +94,9 @@ class TabScrollingController: NSObject {
     }
 
     func hideToolbars(animated animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
+        if toolbarState == .Collapsed {
+            return
+        }
         toolbarState = .Collapsed
         let durationRatio = abs((topScrollHeight + headerTopOffset) / topScrollHeight)
         let actualDuration = NSTimeInterval(ToolbarBaseAnimationDuration * durationRatio)
