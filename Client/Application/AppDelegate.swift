@@ -19,7 +19,7 @@ let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var rootViewController: NotificationRootViewController!
+    var rootViewController: UIViewController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
@@ -110,7 +110,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
         navigationController.navigationBarHidden = true
-        rootViewController = NotificationRootViewController(rootViewController: navigationController)
+
+        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
+            rootViewController = NotificationRootViewController(rootViewController: navigationController)
+        } else {
+            rootViewController = navigationController
+        }
 
         self.window!.rootViewController = rootViewController
 
