@@ -39,7 +39,7 @@ class NotificationRootViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.didStartSyncing), name: NotificationProfileDidStartSyncing, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.didFinishSyncing), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.didFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.fxaAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.userDidInitiateSync), name: SyncNowSetting.NotificationUserInitiatedSyncManually, object: nil)
     }
@@ -148,7 +148,9 @@ extension NotificationRootViewController {
         }
 
         self.statusBarHidden = false
-        self.notificationView.endAnimation()
+        if let _ = self.notificationView.layer.animationKeys() {
+            self.notificationView.endAnimation()
+        }
         self.view.layoutIfNeeded()
 
         let animation = {
@@ -221,9 +223,35 @@ private extension NotificationRootViewController {
         }
     }
 
-    @objc func didFinishSyncing() {
+    @objc func didFinishSyncing(notification: NSNotification) {
         guard showingNotification else { return }
-        dispatch_async(dispatch_get_main_queue()) {
+        let syncMessage: NSAttributedString?
+        if let syncManager = notification.object as? SyncManager,
+            let syncDisplayState = syncManager.syncDisplayState {
+            switch syncDisplayState {
+            case .Bad(let message):
+                syncMessage = NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowErrorTextColor, NSFontAttributeName: notificationView.titleLabel.font])
+            case .Stale(let message):
+                syncMessage = NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowWarningTextColor, NSFontAttributeName: notificationView.titleLabel.font])
+            default: syncMessage = nil
+            }
+        } else {
+            syncMessage = nil
+        }
+
+        guard let displayMessage = syncMessage else {
+            showNotificationForSync = false
+            return dispatch_async(dispatch_get_main_queue()) {
+                self.hideStatusNotification()
+            }
+        }
+
+        notificationView.titleLabel.attributedText = displayMessage
+        notificationView.ellipsisLabel.hidden = true
+        self.notificationView.endAnimation()
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(4 * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, dispatch_get_main_queue()) {
+            self.showNotificationForSync = false
             self.hideStatusNotification()
         }
     }

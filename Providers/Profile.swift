@@ -647,12 +647,13 @@ public class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
+            syncDisplayState = displayStateForEngineResults(syncReducer?.terminal.value)
             notifySyncing(NotificationProfileDidFinishSyncing)
             syncReducer = nil
         }
 
         private func notifySyncing(notification: String) {
-            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: nil))
+            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: self))
         }
 
         init(profile: BrowserProfile) {
@@ -826,7 +827,6 @@ public class BrowserProfile: Profile {
         }
 
         @objc func onFinishSyncing(notification: NSNotification) {
-            syncDisplayState = displayStateForEngineResults(syncReducer?.terminal.value)
             if let syncState = syncDisplayState where syncState == .Good {
                 self.lastSyncFinishTime = NSDate.now()
             }
