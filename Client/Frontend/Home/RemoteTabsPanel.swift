@@ -601,7 +601,7 @@ private class RemoteTabsTableViewController : UITableViewController {
         tableView.tableFooterView = UIView(frame: CGRectZero)
 
         // Short circuit if the user is not logged in
-        if !profile.hasAccount() {
+        if !profile.hasSyncableAccount() {
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .NotLoggedIn)
             self.endRefreshing()
             return
