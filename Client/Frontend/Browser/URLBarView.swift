@@ -801,19 +801,7 @@ extension URLBarView: AppStateDelegate {
         let showShareButton = HomePageAccessors.isButtonInMenu(appState)
         homePageButton.hidden = showShareButton
         shareButton.hidden = !showShareButton
-
-        if !showShareButton {
-            var enabled: Bool
-            switch appState.ui {
-            case .Tab:
-                enabled = true
-            case .HomePanels, .Loading:
-                enabled = HomePageAccessors.hasHomePage(appState)
-            default:
-                enabled = false
-            }
-            homePageButton.enabled = enabled
-        }
+        homePageButton.enabled = HomePageAccessors.isButtonEnabled(appState)
     }
 }
 
