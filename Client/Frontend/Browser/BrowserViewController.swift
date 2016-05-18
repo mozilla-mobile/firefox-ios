@@ -1541,39 +1541,16 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     func tabToolbarDidLongPressBack(tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // See 1159373 - Disable long press back/forward for backforward list
-        let controller = BackForwardListViewController(profile: profile, backForwardList: (tabManager.selectedTab?.webView?.backForwardList)!)
-        controller.tabManager = tabManager
-        self.view.addSubview(controller)
-        controller.snp_makeConstraints { make in
-            make.top.equalTo(webViewContainerToolbar.snp_bottom)
-            make.left.right.bottom.equalTo(self.webViewContainer)
-            make.left.right.bottom.equalTo(self.webViewContainer)
-        }
-        
-        
-        /*
-        controller.modalPresentationStyle = UIModalPresentationStyle.Popover
-        
-        let setupPopover = { [unowned self] in
-            if let popoverPresentationController = controller.popoverPresentationController {
-                popoverPresentationController.backgroundColor = UIColor.whiteColor()
-                popoverPresentationController.delegate = self
-                popoverPresentationController.sourceView = button
-                popoverPresentationController.sourceRect = button.bounds
-                popoverPresentationController.permittedArrowDirections = [.Up, .Down]
-                print(button.bounds.origin.x)
+        if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
+            let backForwardView = BackForwardListView(profile: profile, backForwardList: backForwardList)
+            backForwardView.tabManager = tabManager
+            self.view.addSubview(backForwardView)
+            backForwardView.snp_makeConstraints { make in
+                make.top.equalTo(webViewContainerToolbar.snp_bottom)
+                make.left.right.bottom.equalTo(self.webViewContainer)
+                make.left.right.bottom.equalTo(self.webViewContainer)
             }
         }
-        
-        setupPopover()
-        
-        if controller.popoverPresentationController != nil {
-            displayedPopoverController = controller
-            updateDisplayedPopoverProperties = setupPopover
-        }
-        
-        self.presentViewController(controller, animated: true, completion: nil)*/
     }
 
     func tabToolbarDidPressReload(tabToolbar: TabToolbarProtocol, button: UIButton) {

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */; };
-		0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */; };
+		0AE491A61A41C88C0046C724 /* BackForwardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE491A51A41C88C0046C724 /* BackForwardListView.swift */; };
 		0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */; };
 		0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */; };
 		0B3E7DB81B27A7F600E2E84D /* AboutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */; };
@@ -1090,7 +1090,7 @@
 
 /* Begin PBXFileReference section */
 		03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelativeDatesTests.swift; sourceTree = "<group>"; };
-		0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
+		0AE491A51A41C88C0046C724 /* BackForwardListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListView.swift; sourceTree = "<group>"; };
 		0B1C05D51A798B1F004C78B0 /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
 		0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHomeHandler.swift; sourceTree = "<group>"; };
@@ -2634,7 +2634,7 @@
 			children = (
 				0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */,
 				D38F02D01C05127100175932 /* Authenticator.swift */,
-				0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */,
+				0AE491A51A41C88C0046C724 /* BackForwardListView.swift */,
 				C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */,
 				E653422C1C5944F90039DD9E /* BrowserPrompts.swift */,
 				E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */,
@@ -4662,7 +4662,7 @@
 				E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				7B72E8221CAEC78100FB1D1C /* AppState.swift in Sources */,
-				0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */,
+				0AE491A61A41C88C0046C724 /* BackForwardListView.swift in Sources */,
 				E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */,
 				0BF648111A9C54E900BA963C /* TopSitesPanel.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,

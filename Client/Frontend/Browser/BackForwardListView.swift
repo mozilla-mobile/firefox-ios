@@ -7,12 +7,16 @@ import WebKit
 import Storage
 import SnapKit
 
-class BackForwardListViewController: UIView, UITableViewDataSource, UITableViewDelegate {
+class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
     
     enum BackForwardType {
         case Forward
         case Current
         case Backward
+    }
+    
+    struct BackForwardViewUX {
+        static let RowHeight = 50
     }
     
     private var profile: Profile?
@@ -83,15 +87,14 @@ class BackForwardListViewController: UIView, UITableViewDataSource, UITableViewD
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let height = min(CGFloat(50*listData.count), self.frame.height/2)
+        let height = min(CGFloat(BackForwardViewUX.RowHeight*listData.count), self.frame.height/2)
         UIView.animateWithDuration(0.2, animations: {
             self.tableView.snp_updateConstraints { make in
                 make.height.equalTo(height)
             }
             self.backgroundColor = UIColor.init(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.2)
             self.layoutIfNeeded()
-            
-            })
+        })
     }
     
     // MARK: - Table view
@@ -108,7 +111,7 @@ class BackForwardListViewController: UIView, UITableViewDataSource, UITableViewD
                                             reuseIdentifier: "BackForwardListViewController")
         }
         let item = listData[indexPath.item].0
-        cell!.site = sites[item.URL.absoluteString]
+        cell?.site = sites[item.URL.absoluteString]
         
         
         cell?.currentTab = (listData[indexPath.item].1 == .Current)
@@ -126,7 +129,7 @@ class BackForwardListViewController: UIView, UITableViewDataSource, UITableViewD
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath  indexPath: NSIndexPath) -> CGFloat {
-        return 50;
+        return CGFloat(BackForwardViewUX.RowHeight);
     }
     
     override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
