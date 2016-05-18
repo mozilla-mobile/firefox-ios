@@ -4,62 +4,146 @@
 
 import UIKit
 import WebKit
+import Storage
+import SnapKit
 
-class BackForwardListViewController: UIViewController {
-    var listData: [WKBackForwardListItem]?
+class BackForwardListViewController: UIView, UITableViewDataSource, UITableViewDelegate {
+    
+    enum BackForwardType {
+        case Forward
+        case Current
+        case Backward
+    }
+    
+    private var profile: Profile?
+    private var sites = [String: Site]()
+    private var tableView: UITableView!
     var tabManager: TabManager!
+    
+    var listData = [(WKBackForwardListItem, BackForwardType)]()
+    
+    init(profile: Profile, backForwardList: WKBackForwardList) {
+        super.init(frame: CGRect.zero)
+        self.backgroundColor = UIColor.clearColor()
+        
+        self.profile = profile
+        
+        tableView = UITableView()
+        tableView.separatorStyle = .None
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.tableFooterView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 1))
+        tableView.alwaysBounceVertical = false
+        
+        tableView.backgroundColor = UIColor.init(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.4)
+        let blurEffect = UIBlurEffect(style: .ExtraLight)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        tableView.backgroundView = blurEffectView
 
-    override func viewDidLoad() {
-        let toolbar = UIToolbar()
-        view.addSubview(toolbar)
-
-        let doneItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done button label on back forward list screen"), style: .Done, target: self, action: #selector(BackForwardListViewController.SELdidClickDone))
-        let spacer = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        toolbar.items = [doneItem, spacer]
-
-        let listTableView = UITableView()
-        listTableView.dataSource = self
-        listTableView.delegate = self
-        view.addSubview(listTableView)
-
-        toolbar.snp_makeConstraints { make in
-            let topLayoutGuide = self.topLayoutGuide as! UIView
-            make.top.equalTo(topLayoutGuide.snp_bottom)
-            make.left.right.equalTo(self.view)
-            return
+        
+        let sql = profile.favicons as! SQLiteHistory
+        var urls: [String] = [String]()
+        
+        for page in backForwardList.forwardList.reverse() {
+            urls.append(page.URL.absoluteString)
+            listData.append((page, .Forward))
         }
-
-        listTableView.snp_makeConstraints { make in
-            make.top.equalTo(toolbar.snp_bottom)
-            make.left.right.bottom.equalTo(self.view)
+        if let currentPage = backForwardList.currentItem {
+            urls.append(currentPage.URL.absoluteString)
+            listData.append((currentPage, .Current))
+        }
+        for page in backForwardList.backList.reverse() {
+            urls.append(page.URL.absoluteString)
+            listData.append((page, .Backward))
+        }
+        
+        let deferred = sql.getSitesForURLs(urls)
+        
+        deferred.uponQueue(dispatch_get_main_queue()) { result in
+            if let cursor = result.successValue {
+                for cursorSite in cursor {
+                    if let site = cursorSite, let url = site?.url {
+                        self.sites[url] = site
+                    }
+                }
+                self.tableView.reloadData()
+            }
+        }
+        
+        addSubview(tableView)
+        tableView.snp_makeConstraints { make in
+            make.height.equalTo(0)
+            make.left.right.bottom.equalTo(self)
         }
     }
-
-    func SELdidClickDone() {
-        dismissViewControllerAnimated(true, completion: nil)
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-}
-
-// MARK: - UITableViewDataSource
-extension BackForwardListViewController: UITableViewDataSource {
-
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let height = min(CGFloat(50*listData.count), self.frame.height/2)
+        UIView.animateWithDuration(0.2, animations: {
+            self.tableView.snp_updateConstraints { make in
+                make.height.equalTo(height)
+            }
+            self.backgroundColor = UIColor.init(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.2)
+            self.layoutIfNeeded()
+            
+            })
+    }
+    
+    // MARK: - Table view
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listData?.count ?? 0
+        return listData.count
     }
-
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        let item = listData![indexPath.item]
-        cell.textLabel?.text = item.title ?? item.URL.absoluteString
-        return cell
+        var cell: BackForwardTableViewCell? = tableView.dequeueReusableCellWithIdentifier("BackForwardListViewController") as? BackForwardTableViewCell
+        if (cell == nil)
+        {
+            cell = BackForwardTableViewCell(style: UITableViewCellStyle.Default,
+                                            reuseIdentifier: "BackForwardListViewController")
+        }
+        let item = listData[indexPath.item].0
+        cell!.site = sites[item.URL.absoluteString]
+        
+        
+        cell?.currentTab = (listData[indexPath.item].1 == .Current)
+        cell?.connectingBackwards = (indexPath.item != listData.count-1)
+        cell?.connectingForwards = (indexPath.item != 0)
+        
+        cell?.setNeedsDisplay()
+        
+        return cell!
     }
-}
-
-// MARK: - UITableViewDelegate
-extension BackForwardListViewController: UITableViewDelegate {
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tabManager.selectedTab?.goToBackForwardListItem(listData![indexPath.item])
-        dismissViewControllerAnimated(true, completion: nil)
+        tabManager.selectedTab?.goToBackForwardListItem(listData[indexPath.item].0)
+        dismissWithAnimation()
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath  indexPath: NSIndexPath) -> CGFloat {
+        return 50;
+    }
+    
+    override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
+        if !CGRectContainsPoint(tableView.frame, point) {
+            dismissWithAnimation()
+        }
+        return super.pointInside(point, withEvent: event)
+    }
+    
+    func dismissWithAnimation() {
+        self.alpha = 1.0
+        UIView.animateWithDuration(0.2, delay: 0.1, options: [UIViewAnimationOptions.CurveEaseIn, UIViewAnimationOptions.AllowUserInteraction], animations: {
+            self.alpha = 0.1
+            }, completion: { finished in
+                if finished {
+                    self.removeFromSuperview()
+                }
+        })
     }
 }
