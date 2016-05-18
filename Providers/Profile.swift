@@ -642,12 +642,12 @@ public class BrowserProfile: Profile {
             notifySyncing(NotificationProfileDidStartSyncing)
         }
 
-        private func endSyncing() {
+        private func endSyncing(result: Maybe<EngineResults>?) {
             // loop through status's and fill sync state
             syncLock.lock()
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
-            syncDisplayState = displayStateForEngineResults(syncReducer?.terminal.value)
+            syncDisplayState = displayStateForEngineResults(result)
             notifySyncing(NotificationProfileDidFinishSyncing)
             syncReducer = nil
         }
@@ -832,15 +832,6 @@ public class BrowserProfile: Profile {
             }
         }
 
-        private func displayStateForSyncResult(result: SyncResult) -> SyncDisplayState {
-            guard result.value.isSuccess,
-            let syncState = result.value.successValue else {
-                return SyncDisplayState.Bad(message: Strings.FirefoxSyncFailedTitle)
-            }
-
-            return displayStateForSyncState(syncState)
-        }
-
         private func displayStateForEngineResults(result: Maybe<EngineResults>?) -> SyncDisplayState {
             guard let result = result else {
                 return .Good
@@ -853,7 +844,7 @@ public class BrowserProfile: Profile {
                 let displayState = self.displayStateForSyncState(status, identifier: identifier)
                 return displayState == .Good ? nil : displayState
             }
-            return (errorResults?.isEmpty ?? true) ? .Good : (errorResults?.first)!
+            return errorResults?.first ?? .Good
         }
 
         private func displayStateForSyncState(syncStatus: SyncStatus, identifier: String? = nil) -> SyncDisplayState {
@@ -988,7 +979,6 @@ public class BrowserProfile: Profile {
             log.debug("Syncing clients to storage.")
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
             let result = clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
-            syncDisplayState = displayStateForSyncResult(result)
             return result
         }
 
@@ -996,7 +986,6 @@ public class BrowserProfile: Profile {
             let storage = self.profile.remoteClientsAndTabs
             let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
             let result = tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
-            syncDisplayState = displayStateForSyncResult(result)
             return result
         }
 
@@ -1004,7 +993,6 @@ public class BrowserProfile: Profile {
             log.debug("Syncing history to storage.")
             let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
             let result = historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
-            syncDisplayState = displayStateForSyncResult(result)
             return result
         }
 
@@ -1013,7 +1001,6 @@ public class BrowserProfile: Profile {
             let loginsSynchronizer = ready.synchronizer(LoginsSynchronizer.self, delegate: delegate, prefs: prefs)
             let result = loginsSynchronizer.synchronizeLocalLogins(self.profile.logins, withServer: ready.client, info: ready.info)
 
-            syncDisplayState = displayStateForSyncResult(result)
             return result
         }
 
@@ -1021,7 +1008,6 @@ public class BrowserProfile: Profile {
             log.debug("Synchronizing server bookmarks to storage.")
             let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
             let result = bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
-            syncDisplayState = displayStateForSyncResult(result)
             return result
         }
 
@@ -1055,7 +1041,6 @@ public class BrowserProfile: Profile {
             return syncSeveral([(label, function)]) >>== { statuses in
                 let status = statuses.find { label == $0.0 }?.1
                 let result = deferMaybe(status ?? .NotStarted(.Unknown))
-                self.syncDisplayState = self.displayStateForSyncResult(result)
                 return result
             }
         }
@@ -1090,9 +1075,7 @@ public class BrowserProfile: Profile {
                     return self.syncWith(remaining) >>== { deferMaybe(statuses + $0) }
                 }
 
-                reducer.terminal.uponQueue(dispatch_get_main_queue()) { _ in
-                    self.endSyncing()
-                }
+                reducer.terminal.upon(self.endSyncing)
 
                 // The actual work of synchronizing doesn't start until we append
                 // the synchronizers to the reducer below.
