@@ -6,18 +6,30 @@ import Foundation
 import SnapKit
 import Shared
 
+let NotificationStatusNotificationTapped = "NotificationStatusNotificationTapped"
+
+// Notification duration in seconds
+enum NotificationDuration: NSTimeInterval {
+    case Short = 4
+}
+
 /// This view controller wraps around the main UINavigationController of our app that holds the Browser/Tab Tray.
 /// It allows us to display notifications/toasts in the top area of the screen while pushing away the status
 /// bar to indicate sync status globally.
 class NotificationRootViewController: UIViewController {
+    var showingNotification: Bool { return notificationTimer != nil }
+
     private var rootViewController: UIViewController
 
     private let notificationCenter = NSNotificationCenter.defaultCenter()
-    private var statusBarHidden = false
-    private var showingNotification = false
+    private(set) var statusBarHidden = false
+    private(set) var showNotificationForSync: Bool = false
+    private(set) var syncTitle: String?
+    private(set) var notificationTimer: NSTimer?
 
-    private lazy var notificationView: NotificationStatusView = {
+    lazy var notificationView: NotificationStatusView = {
         let view = NotificationStatusView()
+        view.addTarget(self, action: #selector(NotificationRootViewController.didTapNotification))
         view.hidden = true
         return view
     }()
@@ -28,6 +40,8 @@ class NotificationRootViewController: UIViewController {
 
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.didStartSyncing), name: NotificationProfileDidStartSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.didFinishSyncing), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.fxaAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.userDidInitiateSync), name: SyncNowSetting.NotificationUserInitiatedSyncManually, object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -37,6 +51,8 @@ class NotificationRootViewController: UIViewController {
     deinit {
         notificationCenter.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        notificationCenter.removeObserver(self, name: SyncNowSetting.NotificationUserInitiatedSyncManually, object: nil)
     }
 }
 
@@ -85,36 +101,75 @@ extension NotificationRootViewController {
 
 // MARK: - Notification API
 extension NotificationRootViewController {
-    func showStatusNotification() {
+    func showStatusNotification(animated animated: Bool = true, duration: NotificationDuration = .Short, withEllipsis: Bool = false) {
         assert(NSThread.isMainThread(), "Showing notifications must occur on the UI Thread.")
+
+        if let activeTimer = notificationTimer {
+            activeTimer.invalidate()
+            notificationTimer = nil
+        }
+
         self.statusBarHidden = true
         self.notificationView.hidden = false
         self.notificationView.alpha = 0
+        self.notificationView.showEllipsis = withEllipsis
         self.notificationView.startAnimation()
         self.view.layoutIfNeeded()
-        UIView.animateWithDuration(0.33) {
+
+        let animation = {
             self.remakeConstraintsForVisibleNotification()
             self.notificationView.alpha = 1
             self.setNeedsStatusBarAppearanceUpdate()
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
         }
+
+        animated ?
+            UIView.animateWithDuration(0.33, animations: animation) :
+            animation()
+
+        let timer = NSTimer.scheduledTimerWithTimeInterval(
+            duration.rawValue,
+            target: self,
+            selector: #selector(NotificationRootViewController.dismissDurationedNotification),
+            userInfo: nil,
+            repeats: false
+        )
+        NSRunLoop.mainRunLoop().addTimer(timer,forMode: NSRunLoopCommonModes)
+        notificationTimer = timer
     }
 
-    func hideStatusNotification() {
+    func hideStatusNotification(animated animated: Bool = true) {
         assert(NSThread.isMainThread(), "Hiding notifications must occur on the UI Thread.")
+
+        if let activeTimer = notificationTimer {
+            activeTimer.invalidate()
+            notificationTimer = nil
+        }
+
         self.statusBarHidden = false
         self.notificationView.endAnimation()
         self.view.layoutIfNeeded()
-        UIView.animateWithDuration(0.33, animations: {
+
+        let animation = {
             self.remakeConstraintsForHiddenNotification()
             self.notificationView.alpha = 0
             self.setNeedsStatusBarAppearanceUpdate()
             self.view.setNeedsUpdateConstraints()
             self.view.layoutIfNeeded()
-        }, completion: { _ in
+        }
+
+        let completion: Bool -> Void = { finished in
+            self.notificationView.showEllipsis = false
             self.notificationView.hidden = true
-        })
+        }
+
+        if animated {
+            UIView.animateWithDuration(0.33, animations: animation, completion: completion)
+        } else {
+            animation()
+            completion(true)
+        }
     }
 }
 
@@ -152,15 +207,47 @@ private extension NotificationRootViewController {
 // MARK: - Notification Selectors
 private extension NotificationRootViewController {
     @objc func didStartSyncing() {
-        showingNotification = true
-        notificationView.titleLabel.text = Strings.SyncingMessageWithoutEllipsis
+        guard showNotificationForSync else { return }
+        showNotificationForSync = false
+
         dispatch_async(dispatch_get_main_queue()) {
-            self.showStatusNotification()
+            self.notificationView.titleLabel.text = self.syncTitle ?? Strings.SyncingMessageWithoutEllipsis
+            if self.showingNotification {
+                self.hideStatusNotification(animated: false)
+                self.showStatusNotification(animated: false, withEllipsis: true)
+            } else {
+                self.showStatusNotification(withEllipsis: true)
+            }
         }
     }
 
     @objc func didFinishSyncing() {
-        showingNotification = false
+        guard showingNotification else { return }
+        dispatch_async(dispatch_get_main_queue()) {
+            self.hideStatusNotification()
+        }
+    }
+
+    @objc func fxaAccountDidChange(notification: NSNotification) {
+        guard let userInfo = notification.userInfo where (userInfo[NotificationUserInfoKeyHasSyncableAccount] as? Bool ?? false) else {
+            return
+        }
+
+        // Only show 'Syncing...' whenever the accounts have changed indicating a first time sync.
+        showNotificationForSync = true
+        syncTitle = Strings.FirstTimeSyncLongTime
+    }
+
+    @objc func userDidInitiateSync() {
+        showNotificationForSync = true
+        syncTitle = Strings.SyncingMessageWithoutEllipsis
+    }
+
+    @objc func didTapNotification() {
+        notificationCenter.postNotificationName(NotificationStatusNotificationTapped, object: nil)
+    }
+
+    @objc func dismissDurationedNotification() {
         dispatch_async(dispatch_get_main_queue()) {
             self.hideStatusNotification()
         }
@@ -168,9 +255,15 @@ private extension NotificationRootViewController {
 }
 
 // MARK: Notification Status View
-private class NotificationStatusView: UIView {
+class NotificationStatusView: UIView {
+    var showEllipsis: Bool = false {
+        didSet {
+            ellipsisLabel.hidden = !showEllipsis
+        }
+    }
+
     lazy var titleLabel: UILabel = self.setupStatusLabel()
-    private lazy var ellipsisLabel: UILabel = self.setupStatusLabel()
+    lazy var ellipsisLabel: UILabel = self.setupStatusLabel()
     private var animationTimer: NSTimer?
 
     private func setupStatusLabel() -> UILabel {
@@ -180,8 +273,12 @@ private class NotificationStatusView: UIView {
         return label
     }
 
+    private let tapGesture = UITapGestureRecognizer()
+
     init() {
         super.init(frame: CGRect.zero)
+        userInteractionEnabled = true
+        addGestureRecognizer(tapGesture)
         backgroundColor = UIConstants.AppBackgroundColor
         addSubview(titleLabel)
         addSubview(ellipsisLabel)
@@ -212,9 +309,14 @@ private class NotificationStatusView: UIView {
 
     func endAnimation() {
         animationTimer?.invalidate()
+        animationTimer = nil
     }
 
-    @objc private func updateEllipsis() {
+    func addTarget(target: AnyObject, action: Selector) {
+        tapGesture.addTarget(target, action: action)
+    }
+
+    @objc func updateEllipsis() {
         let nextCount = ((ellipsisLabel.text?.characters.count ?? 0) + 1) % 4
         ellipsisLabel.text = (0..<nextCount).reduce("") { return $0.0 + "." }
     }
