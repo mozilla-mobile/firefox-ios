@@ -11,22 +11,30 @@ import Storage
 
 class BackForwardTableViewCell: UITableViewCell {
     
-    let padding: CGFloat = 5
+    struct BackForwardViewCellUX {
+        static let bgColor = UIColor.init(colorLiteralRed: 0.7, green: 0.7, blue: 0.7, alpha: 1)
+        static let faviconWidth = 20
+        static let faviconPadding:CGFloat = 20
+        static let labelPadding = 20
+        static let borderSmall = 2
+        static let borderBold = 5
+        static let fontSize:CGFloat = 12.0
+    }
+    
     var faviconView: UIImageView!
     var label: UILabel!
     var bg: UIView!
     
-    private let bgColor = UIColor.init(colorLiteralRed: 0.7, green: 0.7, blue: 0.7, alpha: 1)
-    
     var connectingForwards = true
     var connectingBackwards = true
+    
     var currentTab = false  {
         didSet {
             if(currentTab) {
-                label.font = UIFont(name:"HelveticaNeue-Bold", size: 12.0)
+                label.font = UIFont(name:"HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
                 bg.snp_updateConstraints { make in
-                    make.height.equalTo(25)
-                    make.width.equalTo(25)
+                    make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
+                    make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
                 }
             }
         }
@@ -58,31 +66,31 @@ class BackForwardTableViewCell: UITableViewCell {
         label = UILabel(frame: CGRectZero)
         label.textColor = UIColor.blackColor()
         label.text = " "
-        label.font = label.font.fontWithSize(12)
+        label.font = label.font.fontWithSize(BackForwardViewCellUX.fontSize)
         contentView.addSubview(label)
         
         faviconView.snp_makeConstraints { make in
-            make.height.equalTo(20)
-            make.width.equalTo(20)
+            make.height.equalTo(BackForwardViewCellUX.faviconWidth)
+            make.width.equalTo(BackForwardViewCellUX.faviconWidth)
             make.centerY.equalTo(self)
-            make.left.equalTo(self.snp_left).offset(20)
+            make.left.equalTo(self.snp_left).offset(BackForwardViewCellUX.faviconPadding)
         }
         
         label.snp_makeConstraints { make in
             make.centerY.equalTo(self)
-            make.left.equalTo(faviconView.snp_right).offset(20)
-            make.right.equalTo(self.snp_right).offset(20)
+            make.left.equalTo(faviconView.snp_right).offset(BackForwardViewCellUX.labelPadding)
+            make.right.equalTo(self.snp_right).offset(BackForwardViewCellUX.labelPadding)
         }
         
         bg = UIView(frame: CGRect.zero)
-        bg.backgroundColor = bgColor
+        bg.backgroundColor = BackForwardViewCellUX.bgColor
         
         self.addSubview(bg)
         self.sendSubviewToBack(bg)
         
         bg.snp_makeConstraints { make in
-            make.height.equalTo(22)
-            make.width.equalTo(22)
+            make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
+            make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
             make.centerX.equalTo(faviconView)
             make.centerY.equalTo(faviconView)
         }
@@ -96,17 +104,19 @@ class BackForwardTableViewCell: UITableViewCell {
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext();
         
-        let startPoint = CGPointMake(rect.origin.x + 30, rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
-        let endPoint   = CGPointMake(rect.origin.x + 30, rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2) - 1)
+        let startPoint = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
+                                     rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
+        let endPoint   = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
+                                     rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
         
         CGContextSaveGState(context)
         CGContextSetLineCap(context, CGLineCap.Square)
-        CGContextSetStrokeColorWithColor(context, bgColor.CGColor);
-        CGContextSetLineWidth(context, 1.0); // Set the line width here
-        CGContextMoveToPoint(context, startPoint.x + 0.5, startPoint.y + 0.5);
-        CGContextAddLineToPoint(context, endPoint.x + 0.5, endPoint.y + 0.5);
-        CGContextStrokePath(context);
-        CGContextRestoreGState(context);
+        CGContextSetStrokeColorWithColor(context, BackForwardViewCellUX.bgColor.CGColor)
+        CGContextSetLineWidth(context, 1.0)
+        CGContextMoveToPoint(context, startPoint.x, startPoint.y)
+        CGContextAddLineToPoint(context, endPoint.x, endPoint.y)
+        CGContextStrokePath(context)
+        CGContextRestoreGState(context)
     }
     
     override func setHighlighted(highlighted: Bool, animated: Bool) {
@@ -123,11 +133,11 @@ class BackForwardTableViewCell: UITableViewCell {
         connectingForwards = true
         connectingBackwards = true
         currentTab = false
-        label.font = UIFont(name:"HelveticaNeue", size: 12.0)
+        label.font = UIFont(name:"HelveticaNeue", size: BackForwardViewCellUX.fontSize)
         
         bg.snp_updateConstraints { make in
-            make.height.equalTo(22)
-            make.width.equalTo(22)
+            make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
+            make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
         }
     }
 }
