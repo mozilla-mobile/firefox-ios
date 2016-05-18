@@ -231,9 +231,13 @@ public class BrowserProfile: Profile {
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
+        // on first run, check if this is the China edition, and set the default position of the homepage button
+        if let _ = prefs.boolForKey(PrefsKeys.KeyHomePageButtonIsInMenu) where isChinaEdition {
+            prefs.setBool(false, forKey: PrefsKeys.KeyHomePageButtonIsInMenu)
+        }
+
         if isChinaEdition {
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
-            prefs.setBool(false, forKey: PrefsKeys.KeyHomePageButtonIsInMenu)
         } else {
             prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
         }
