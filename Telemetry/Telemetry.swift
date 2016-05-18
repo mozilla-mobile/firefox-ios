@@ -4,6 +4,7 @@
 
 import Alamofire
 import Foundation
+import GCDWebServers
 import XCGLogger
 
 private let log = Logger.browserLogger
@@ -47,6 +48,7 @@ public class Telemetry {
 
         request.HTTPMethod = "POST"
         request.HTTPBody = body
+        request.addValue(GCDWebServerFormatRFC822(NSDate()), forHTTPHeaderField: "Date")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
