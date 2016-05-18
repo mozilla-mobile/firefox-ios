@@ -73,9 +73,6 @@ extension NotificationRootViewController {
         super.viewWillAppear(animated)
         showingNotification ? remakeConstraintsForVisibleNotification() : remakeConstraintsForHiddenNotification()
         view.setNeedsLayout()
-
-        // Test
-//        NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector: #selector(NotificationRootViewController.testSyncing), userInfo: nil, repeats: false)
     }
 
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -100,15 +97,6 @@ extension NotificationRootViewController {
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }
-
-//    func testSyncing() {
-//        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil, userInfo: [NotificationUserInfoKeyHasSyncableAccount: true])
-//        NSNotificationCenter.defaultCenter().postNotificationName(NotificationProfileDidStartSyncing, object: nil, userInfo: nil)
-//        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
-//        dispatch_after(delayTime, dispatch_get_main_queue()) {
-//            self.syncFailed()
-//        }
-//    }
 }
 
 // MARK: - Notification API
@@ -229,18 +217,6 @@ private extension NotificationRootViewController {
                 self.showStatusNotification(animated: false, withEllipsis: true)
             } else {
                 self.showStatusNotification(withEllipsis: true)
-            }
-        }
-    }
-
-    @objc func syncFailed() {
-        dispatch_async(dispatch_get_main_queue()) {
-            self.notificationView.titleLabel.text = "Sync failed!"
-            if self.showingNotification {
-                self.hideStatusNotification(animated: false)
-                self.showStatusNotification(animated: false)
-            } else {
-                self.showStatusNotification()
             }
         }
     }
