@@ -209,6 +209,8 @@ class URLBarView: UIView {
             locationView.url = newURL
         }
     }
+    
+    var countToBe: String?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -417,7 +419,7 @@ class URLBarView: UIView {
     func updateTabCount(count: Int, animated: Bool = true) {
         let currentCount = self.tabsButton.titleLabel.text
         let infinity = "\u{221E}"
-        let countToBe = (count < 100) ? count.description : infinity
+        countToBe = (count < 100) ? count.description : infinity
         // only animate a tab count change if the tab count has actually changed
         if currentCount != countToBe {
             if let _ = self.clonedTabsButton {
@@ -472,8 +474,8 @@ class URLBarView: UIView {
                 self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
 
                 if finished {
-                    self.tabsButton.titleLabel.text = countToBe
-                    self.tabsButton.accessibilityValue = countToBe
+                    self.tabsButton.titleLabel.text = self.countToBe
+                    self.tabsButton.accessibilityValue = self.countToBe
                 }
             }
 
