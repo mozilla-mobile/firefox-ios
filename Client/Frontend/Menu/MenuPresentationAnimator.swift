@@ -78,6 +78,7 @@ extension MenuPresentationAnimator {
         guard let container = transitionContext.containerView() else { return }
 
         let menuView = menuController.view
+        menuView.frame = container.bounds
         let bottomView = baseController.view
 
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
