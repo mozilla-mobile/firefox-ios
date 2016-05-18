@@ -78,7 +78,7 @@ class HistoryPanel: UIViewController, HomePanel {
                 return
             }
 
-            self.syncedTabsButton.descriptionLabel.text = String(clientAndTabs.count) + " " + Strings.SyncedTabsTableViewCellDescription
+            self.syncedTabsButton.descriptionLabel.text = String.localizedStringWithFormat(Strings.SyncedTabsTableViewCellDescription, clientAndTabs.count)
             self.syncedTabsButton.descriptionLabel.hidden = false
             self.syncedTabsButton.updateConstraints()
         }
