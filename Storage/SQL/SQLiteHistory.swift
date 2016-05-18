@@ -682,6 +682,15 @@ extension SQLiteHistory: Favicons {
         let args: Args = [url]
         return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
     }
+    
+    public func getSitesForURLs(urls: [String]) -> Deferred<Maybe<Cursor<Site?>>> {
+        let inExpression = urls.joinWithSeparator("\",\"")
+        let sql = "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, iconID, iconURL, iconDate, iconType, iconWidth FROM " +
+            "\(ViewWidestFaviconsForSites), \(TableHistory) WHERE " +
+            "\(TableHistory).id = siteID AND \(TableHistory).url IN (\"\(inExpression)\")"
+        let args: Args = []
+        return db.runQuery(sql, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
+    }
 
     public func clearAllFavicons() -> Success {
         var err: NSError? = nil
