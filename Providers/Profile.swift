@@ -230,6 +230,17 @@ public class BrowserProfile: Profile {
         // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+
+        // on first run, check if this is the China edition, and set the default position of the homepage button
+        if let _ = prefs.boolForKey(PrefsKeys.KeyHomePageButtonIsInMenu) where isChinaEdition {
+            prefs.setBool(false, forKey: PrefsKeys.KeyHomePageButtonIsInMenu)
+        }
+
+        if isChinaEdition {
+            prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
+        } else {
+            prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
+        }
     }
 
     // Extensions don't have a UIApplication.
@@ -444,9 +455,13 @@ public class BrowserProfile: Profile {
         return Singleton.instance
     }()
 
-    var accountConfiguration: FirefoxAccountConfiguration {
+    var isChinaEdition: Bool {
         let locale = NSLocale.currentLocale()
-        if self.prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN") {
+        return prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN")
+    }
+
+    var accountConfiguration: FirefoxAccountConfiguration {
+        if isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()

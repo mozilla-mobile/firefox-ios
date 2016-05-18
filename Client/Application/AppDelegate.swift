@@ -31,6 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var openInFirefoxParams: LaunchParams? = nil
 
+    var appStateStore: AppStateStore!
+
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Hold references to willFinishLaunching parameters for delayed app launch
         self.application = application
@@ -77,6 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         log.debug("Getting profile…")
         let profile = getProfile(application)
+        appStateStore = AppStateStore(prefs: profile.prefs)
 
         if !DebugSettingsBundleOptions.disableLocalWebServer {
             log.debug("Starting web server…")

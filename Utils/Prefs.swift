@@ -9,6 +9,12 @@ public struct PrefsKeys {
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
+    public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
+    public static let KeyHomePageButtonIsInMenu = "HomePageButtonIsInMenuPrefKey"
+}
+
+public struct PrefsDefaults {
+    public static let ChineseHomePageURL = "http://mobile.firefoxchina.cn/"
 }
 
 public protocol Prefs {

@@ -12,6 +12,9 @@ enum AppMenuAction: String {
     case ToggleBookmarkStatus = "ToggleBookmarkStatus"
     case OpenSettings = "OpenSettings"
     case CloseAllTabs = "CloseAllTabs"
+    case OpenHomePage = "OpenHomePage"
+    case SetHomePage = "SetHomePage"
+    case SharePage = "SharePage"
     case OpenTopSites = "OpenTopSites"
     case OpenBookmarks = "OpenBookmarks"
     case OpenHistory = "OpenHistory"
@@ -30,7 +33,7 @@ struct AppMenuConfiguration: MenuConfiguration {
         menuItems = menuItemsForAppState(appState)
         menuToolbarItems = menuToolbarItemsForAppState(appState)
         numberOfItemsInRow = numberOfMenuItemsPerRowForAppState(appState)
-        isPrivateMode = appState.isPrivate()
+        isPrivateMode = appState.ui.isPrivate()
     }
 
     func menuForState(appState: AppState) -> MenuConfiguration {
@@ -75,7 +78,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     }
 
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
-        switch appState {
+        switch appState.ui {
         case .TabTray:
             return 4
         default:
@@ -86,18 +89,26 @@ struct AppMenuConfiguration: MenuConfiguration {
     // the items should be added to the array according to desired display order
     private func menuItemsForAppState(appState: AppState) -> [MenuItem] {
         var menuItems = [MenuItem]()
-        switch appState {
+        switch appState.ui {
         case .Tab(let tabState):
             menuItems.append(AppMenuConfiguration.FindInPageMenuItem)
             if #available(iOS 9, *) {
                 menuItems.append(tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem)
             }
-            menuItems.append(AppMenuConfiguration.SettingsMenuItem)
+
+            if !HomePageAccessors.isButtonInMenu(appState) {
+                menuItems.append(AppMenuConfiguration.SharePageMenuItem)
+            } else if HomePageAccessors.hasHomePage(appState) {
+                menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
+            } else {
+                menuItems.append(AppMenuConfiguration.SetHomePageMenuItem)
+            }
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             if #available(iOS 9, *) {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             }
             menuItems.append(tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem)
+            menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .HomePanels, .Loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             if #available(iOS 9, *) {
@@ -118,7 +129,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     // the items should be added to the array according to desired display order
     private func menuToolbarItemsForAppState(appState: AppState) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
-        switch appState {
+        switch appState.ui {
         case .Tab, .TabTray:
             menuToolbarItems = [AppMenuConfiguration.TopSitesMenuToolbarItem,
                                 AppMenuConfiguration.BookmarksMenuToolbarItem,
@@ -174,6 +185,18 @@ extension AppMenuConfiguration {
         return AppMenuItem(title: CloseAllTabsTitleString, action:  MenuAction(action: AppMenuAction.CloseAllTabs.rawValue), icon: "menu-CloseTabs", privateModeIcon: "menu-CloseTabs-pbm")
     }
 
+    private static var OpenHomePageMenuItem: MenuItem {
+        return AppMenuItem(title: OpenHomePageTitleString, action: MenuAction(action: AppMenuAction.OpenHomePage.rawValue), icon: "menu-Home", privateModeIcon: "menu-Home-pbm", selectedIcon: "menu-Home-Engaged")
+    }
+
+    private static var SetHomePageMenuItem: MenuItem {
+        return AppMenuItem(title: SetHomePageTitleString, action: MenuAction(action: AppMenuAction.SetHomePage.rawValue), icon: "menu-Home", privateModeIcon: "menu-Home-pbm", selectedIcon: "menu-Home-Engaged")
+    }
+
+    private static var SharePageMenuItem: MenuItem {
+        return AppMenuItem(title: SharePageTitleString, action: MenuAction(action: AppMenuAction.SharePage.rawValue), icon: "menu-Send", privateModeIcon: "menu-Send-pbm", selectedIcon: "menu-Send-Engaged")
+    }
+
     private static var TopSitesMenuToolbarItem: MenuToolbarItem {
         return AppMenuToolbarItem(title: TopSitesTitleString, action:  MenuAction(action: AppMenuAction.OpenTopSites.rawValue), icon: "menu-panel-TopSites")
     }
@@ -199,6 +222,9 @@ extension AppMenuConfiguration {
     static let ViewMobileSiteTitleString = NSLocalizedString("Menu.ViewMobileSiteAction.Title", value: "Request Mobile Site", tableName: "Menu", comment: "String describing the action of request a website switch from a desktop view to a mobile optimized view from the menu. The site may not have a mobile version so the request may be denied.")
     static let SettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", value: "Settings", tableName: "Menu", comment: "String describing the action of opening the settings menu from the menu")
     static let CloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", value: "Close All Tabs", tableName: "Menu", comment: "String describing the action of closing all tabs in the tab tray at once from the menu")
+    static let OpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", value: "Home", tableName: "Menu", comment: "String describing the action of navigating to the homepage from the menu")
+    static let SetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", value: "Set Homepage", tableName: "Menu", comment: "String describing the action of setting the homepage if none is set. On the menu")
+    static let SharePageTitleString = NSLocalizedString("Menu.SendPageAction.Title", value: "Send", tableName: "Menu", comment: "String describing the action of invoking the share menu. On the menu")
     static let TopSitesTitleString = NSLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", value: "Top Sites", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the Top Sites home panel from the menu")
     static let BookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", value: "Bookmarks", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the bookmarks home panel from the menu")
     static let HistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", value: "History", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the history home panel from the menu")
