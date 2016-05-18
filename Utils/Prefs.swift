@@ -10,6 +10,7 @@ public struct PrefsKeys {
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
+    public static let KeyHomePageButtonIsInMenu = "HomePageButtonIsInMenuPrefKey"
 }
 
 public struct PrefsDefaults {

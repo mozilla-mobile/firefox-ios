@@ -14,6 +14,7 @@ enum AppMenuAction: String {
     case CloseAllTabs = "CloseAllTabs"
     case OpenHomePage = "OpenHomePage"
     case SetHomePage = "SetHomePage"
+    case SharePage = "SharePage"
     case OpenTopSites = "OpenTopSites"
     case OpenBookmarks = "OpenBookmarks"
     case OpenHistory = "OpenHistory"
@@ -94,7 +95,10 @@ struct AppMenuConfiguration: MenuConfiguration {
             if #available(iOS 9, *) {
                 menuItems.append(tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem)
             }
-            if HomePageAccessors.hasHomePage(appState) {
+
+            if !HomePageAccessors.isButtonInMenu(appState) {
+                menuItems.append(AppMenuConfiguration.SharePageMenuItem)
+            } else if HomePageAccessors.hasHomePage(appState) {
                 menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             } else {
                 menuItems.append(AppMenuConfiguration.SetHomePageMenuItem)
@@ -189,6 +193,10 @@ extension AppMenuConfiguration {
         return AppMenuItem(title: SetHomePageTitleString, action: MenuAction(action: AppMenuAction.SetHomePage.rawValue), icon: "menu-Home", privateModeIcon: "menu-Home-pbm", selectedIcon: "menu-Home-Engaged")
     }
 
+    private static var SharePageMenuItem: MenuItem {
+        return AppMenuItem(title: SharePageTitleString, action: MenuAction(action: AppMenuAction.SharePage.rawValue), icon: "menu-Send", privateModeIcon: "menu-Send-pbm", selectedIcon: "menu-Send-Engaged")
+    }
+
     private static var TopSitesMenuToolbarItem: MenuToolbarItem {
         return AppMenuToolbarItem(title: TopSitesTitleString, action:  MenuAction(action: AppMenuAction.OpenTopSites.rawValue), icon: "menu-panel-TopSites")
     }
@@ -216,6 +224,7 @@ extension AppMenuConfiguration {
     static let CloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", value: "Close All Tabs", tableName: "Menu", comment: "String describing the action of closing all tabs in the tab tray at once from the menu")
     static let OpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", value: "Home", tableName: "Menu", comment: "String describing the action of navigating to the homepage from the menu")
     static let SetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", value: "Set Homepage", tableName: "Menu", comment: "String describing the action of setting the homepage if none is set. On the menu")
+    static let SharePageTitleString = NSLocalizedString("Menu.SendPageAction.Title", value: "Send", tableName: "Menu", comment: "String describing the action of invoking the share menu. On the menu")
     static let TopSitesTitleString = NSLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", value: "Top Sites", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the Top Sites home panel from the menu")
     static let BookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", value: "Bookmarks", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the bookmarks home panel from the menu")
     static let HistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", value: "History", tableName: "Menu", comment: "AccessibilityLabel describing the action of opening the history home panel from the menu")

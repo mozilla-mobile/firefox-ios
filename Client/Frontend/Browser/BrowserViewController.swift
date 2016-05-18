@@ -167,9 +167,7 @@ class BrowserViewController: UIViewController {
         toolbar = nil
 
         if showToolbar {
-            let state = getCurrentAppState()
             toolbar = TabToolbar()
-            toolbar?.applyTheme(state.ui.isPrivate() ? Theme.PrivateMode : Theme.NormalMode)
             toolbar?.tabToolbarDelegate = self
             footerBackground = BlurWrapper(view: toolbar!)
             footerBackground?.translatesAutoresizingMaskIntoConstraints = false
@@ -455,6 +453,8 @@ class BrowserViewController: UIViewController {
 
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
+        let state = getCurrentAppState()
+        self.appDidUpdateState(state)
         log.debug("BVC done.")
     }
 
@@ -1146,6 +1146,8 @@ extension BrowserViewController: AppStateDelegate {
         if AppConstants.MOZ_MENU {
             menuViewController?.appState = appState
         }
+        toolbar?.appDidUpdateState(appState)
+        urlBar?.appDidUpdateState(appState)
     }
 }
 
@@ -1193,6 +1195,10 @@ extension BrowserViewController: MenuActionDelegate {
             case .OpenHomePage:
                 guard let tab = tabManager.selectedTab else { break }
                 HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, withNavigationController: navigationController)
+            case .SharePage:
+                guard let url = tabManager.selectedTab?.url else { break }
+                let sourceView = self.navigationToolbar.menuButton
+                presentActivityViewController(url, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
             default: break
             }
         }
@@ -1219,6 +1225,7 @@ extension BrowserViewController: SettingsDelegate {
 
 extension BrowserViewController: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(modalViewController: UIViewController, animated: Bool) {
+        self.appDidUpdateState(getCurrentAppState())
         self.dismissViewControllerAnimated(animated, completion: nil)
     }
 }
@@ -1519,6 +1526,11 @@ extension BrowserViewController: TabToolbarDelegate {
             let sourceView = self.navigationToolbar.shareButton
             presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
         }
+    }
+
+    func tabToolbarDidPressHomePage(tabToolbar: TabToolbarProtocol, button: UIButton) {
+        guard let tab = tabManager.selectedTab else { return }
+        HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, withNavigationController: navigationController)
     }
 }
 
@@ -2072,6 +2084,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)
+            appDidUpdateState(getCurrentAppState())
         }
     }
 

@@ -19,6 +19,7 @@ protocol TabToolbarProtocol {
     var forwardButton: UIButton { get }
     var backButton: UIButton { get }
     var stopReloadButton: UIButton { get }
+    var homePageButton: UIButton { get }
     var actionButtons: [UIButton] { get }
 
     func updateBackStatus(canGoBack: Bool)
@@ -41,6 +42,7 @@ protocol TabToolbarDelegate: class {
     func tabToolbarDidPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressBookmark(tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressShare(tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressHomePage(tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
 @objc
@@ -107,6 +109,12 @@ public class TabToolbarHelper: NSObject {
         toolbar.shareButton.setImage(UIImage(named: "bottomNav-sendEngaged"), forState: .Highlighted)
         toolbar.shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the tab toolbar Share button")
         toolbar.shareButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickShare), forControlEvents: UIControlEvents.TouchUpInside)
+
+
+        toolbar.homePageButton.setImage(UIImage.templateImageNamed("menu-Home"), forState: .Normal)
+        toolbar.homePageButton.setImage(UIImage(named: "menu-Home-Engaged"), forState: .Highlighted)
+        toolbar.homePageButton.accessibilityLabel = NSLocalizedString("Toolbar.OpenHomePage.AccessibilityLabel", value: "Homepage", comment: "Accessibility Label for the tab toolbar Homepage button")
+        toolbar.homePageButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickHomePage), forControlEvents: UIControlEvents.TouchUpInside)
 
         if AppConstants.MOZ_MENU {
             toolbar.menuButton.contentMode = UIViewContentMode.Center
@@ -179,11 +187,14 @@ public class TabToolbarHelper: NSObject {
         }
     }
 
+    func SELdidClickHomePage() {
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressHomePage(toolbar, button: toolbar.homePageButton)
+    }
+
     func updateReloadStatus(isLoading: Bool) {
         loading = isLoading
     }
 }
-
 
 class TabToolbar: Toolbar, TabToolbarProtocol {
     weak var tabToolbarDelegate: TabToolbarDelegate?
@@ -194,6 +205,7 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
     let forwardButton: UIButton
     let backButton: UIButton
     let stopReloadButton: UIButton
+    let homePageButton: UIButton
     let actionButtons: [UIButton]
 
     var helper: TabToolbarHelper?
@@ -226,8 +238,10 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
         bookmarkButton.accessibilityIdentifier = "TabToolbar.bookmarkButton"
         menuButton = UIButton()
         menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+        homePageButton = UIButton()
+        menuButton.accessibilityIdentifier = "TabToolbar.homePageButton"
         if AppConstants.MOZ_MENU {
-            actionButtons = [backButton, forwardButton, menuButton, stopReloadButton, shareButton]
+            actionButtons = [backButton, forwardButton, menuButton, stopReloadButton, shareButton, homePageButton]
         } else {
             actionButtons = [backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton]
         }
@@ -237,7 +251,7 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
         self.helper = TabToolbarHelper(toolbar: self)
 
         if AppConstants.MOZ_MENU {
-            addButtons(backButton, forwardButton, menuButton, stopReloadButton, shareButton)
+            addButtons(backButton, forwardButton, menuButton, stopReloadButton, shareButton, homePageButton)
         } else {
             addButtons(backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton)
         }
@@ -307,5 +321,22 @@ extension TabToolbar: Themeable {
             return
         }
         actionButtonTintColor = theme.buttonTintColor!
+    }
+}
+
+extension TabToolbar: AppStateDelegate {
+    func appDidUpdateState(state: AppState) {
+        let isPrivate = Accessors.isPrivate(state)
+        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+
+        let showHomepage = !HomePageAccessors.isButtonInMenu(state)
+        homePageButton.removeFromSuperview()
+        shareButton.removeFromSuperview()
+
+        if showHomepage {
+            addButtons(homePageButton)
+        } else {
+            addButtons(shareButton)
+        }
     }
 }
