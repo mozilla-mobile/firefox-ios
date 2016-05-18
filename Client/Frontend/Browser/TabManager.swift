@@ -574,17 +574,18 @@ extension TabManager {
             } else {
                 tab = self.addTab(flushToDisk: false, zombie: true)
             }
+            
+            if let faviconURL = savedTab.faviconURL {
+                let icon = Favicon(url: faviconURL, date: NSDate(), type: IconType.NoneFound)
+                icon.width = 1
+                tab.favicons.append(icon)
+            }
 
             // Set the UUID for the tab, asynchronously fetch the UIImage, then store
             // the screenshot in the tab as long as long as a newer one hasn't been taken.
             if let screenshotUUID = savedTab.screenshotUUID,
                let imageStore = self.imageStore {
                 tab.screenshotUUID = screenshotUUID
-                if savedTab.faviconURL != nil {
-                    let icon = Favicon(url: savedTab.faviconURL!, date: NSDate(), type: IconType.NoneFound)
-                    icon.width = 1
-                    tab.favicons.append(icon)
-                }
                 imageStore.get(screenshotUUID.UUIDString) >>== { screenshot in
                     if tab.screenshotUUID == screenshotUUID {
                         tab.setScreenshot(screenshot, revUUID: false)
