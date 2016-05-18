@@ -519,7 +519,8 @@ public class BrowserProfile: Profile {
         registerForNotifications()
         
         // tell any observers that our account has changed
-        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
+        let userInfo = [NotificationUserInfoKeyHasSyncableAccount: hasSyncableAccount()]
+        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
 
         self.syncManager.onAddedAccount()
     }

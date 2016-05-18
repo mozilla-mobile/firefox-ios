@@ -208,7 +208,11 @@ private extension NotificationRootViewController {
         }
     }
 
-    @objc func fxaAccountDidChange() {
+    @objc func fxaAccountDidChange(notification: NSNotification) {
+        guard let userInfo = notification.userInfo where (userInfo[NotificationUserInfoKeyHasSyncableAccount] as? Bool ?? false) else {
+            return
+        }
+
         // Only show 'Syncing...' whenever the accounts have changed indicating a first time sync.
         showNotificationForSync = true
         syncTitle = Strings.FirstTimeSyncLongTime
