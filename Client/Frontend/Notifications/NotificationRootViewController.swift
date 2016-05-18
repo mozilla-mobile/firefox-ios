@@ -226,12 +226,13 @@ private extension NotificationRootViewController {
     @objc func didFinishSyncing(notification: NSNotification) {
         guard showingNotification else { return }
         let syncMessage: NSAttributedString?
-        if let syncManager = notification.object as? SyncManager,
-            let syncDisplayState = syncManager.syncDisplayState {
-            switch syncDisplayState {
-            case .Bad(let message):
+        if let syncDisplayState = notification.object as? [String: String],
+        let state = syncDisplayState["state"],
+        let message = syncDisplayState["message"] {
+            switch state {
+            case "Error":
                 syncMessage = NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowErrorTextColor, NSFontAttributeName: notificationView.titleLabel.font])
-            case .Stale(let message):
+            case "Warning":
                 syncMessage = NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowWarningTextColor, NSFontAttributeName: notificationView.titleLabel.font])
             default: syncMessage = nil
             }

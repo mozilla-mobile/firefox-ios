@@ -24,6 +24,20 @@ public enum SyncDisplayState {
     case Good
     case Bad(message: String)
     case Stale(message: String)
+
+    func asObject() -> [String: String]? {
+        switch self {
+        case .Bad(let message):
+            return ["state": "Error",
+                    "message": message]
+        case .Stale(let message):
+            return ["state": "Warning",
+                    "message": message]
+        default:
+            break
+        }
+        return nil
+    }
 }
 
 public func ==(a: SyncDisplayState, b: SyncDisplayState) -> Bool {
@@ -647,13 +661,13 @@ public class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
-            syncDisplayState = displayStateForEngineResults(result)
+            syncDisplayState = SyncDisplayState.Stale(message: Strings.FirefoxSyncNotStartedTitle) //displayStateForEngineResults(result)
             notifySyncing(NotificationProfileDidFinishSyncing)
             syncReducer = nil
         }
 
         private func notifySyncing(notification: String) {
-            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: self))
+            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: syncDisplayState?.asObject()))
         }
 
         init(profile: BrowserProfile) {
