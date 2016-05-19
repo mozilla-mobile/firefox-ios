@@ -114,6 +114,9 @@ struct AppMenuConfiguration: MenuConfiguration {
             if #available(iOS 9, *) {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             }
+            if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
+                menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
+            }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .TabTray:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
