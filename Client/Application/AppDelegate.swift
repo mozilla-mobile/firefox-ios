@@ -63,7 +63,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KeyboardHelper.defaultHelper.startObserving()
 
         log.debug("Starting dynamic font helper…")
-        // Start the keyboard helper to monitor and cache keyboard state.
         DynamicFontHelper.defaultHelper.startObserving()
 
         log.debug("Setting custom menu items…")
