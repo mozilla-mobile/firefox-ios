@@ -22,15 +22,18 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
     private var profile: Profile?
     private var sites = [String: Site]()
     private var tableView: UITableView!
+    private var isPrivate: Bool!
+    private var dismissing = false
     var tabManager: TabManager!
     
-    var listData = [(WKBackForwardListItem, BackForwardType)]()
+    var listData = [(item:WKBackForwardListItem, type:BackForwardType)]()
     
-    init(profile: Profile, backForwardList: WKBackForwardList) {
+    init(profile: Profile, backForwardList: WKBackForwardList, isPrivate: Bool) {
         super.init(frame: CGRect.zero)
         self.backgroundColor = UIColor.clearColor()
         
         self.profile = profile
+        self.isPrivate = isPrivate
         
         tableView = UITableView()
         tableView.separatorStyle = .None
@@ -39,25 +42,35 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
         tableView.tableFooterView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 1))
         tableView.alwaysBounceVertical = false
         
-        tableView.backgroundColor = UIColor.init(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.4)
-        let blurEffect = UIBlurEffect(style: .ExtraLight)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        tableView.backgroundView = blurEffectView
-
+        if isPrivate {
+            tableView.backgroundColor = UIColor.init(colorLiteralRed: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
+            let blurEffect = UIBlurEffect(style: .Dark)
+            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            tableView.backgroundView = blurEffectView
+        }
+        else {
+            tableView.backgroundColor = UIColor.init(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.4)
+            let blurEffect = UIBlurEffect(style: .ExtraLight)
+            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            tableView.backgroundView = blurEffectView
+        }
         
         let sql = profile.favicons as! SQLiteHistory
         var urls: [String] = [String]()
         
         for page in backForwardList.forwardList.reverse() {
-            urls.append(page.URL.absoluteString)
+            urls.append(page.initialURL.absoluteString)
             listData.append((page, .Forward))
         }
+        
+        var currentRow = 0
         if let currentPage = backForwardList.currentItem {
-            urls.append(currentPage.URL.absoluteString)
+            currentRow = listData.count
+            urls.append(currentPage.initialURL.absoluteString)
             listData.append((currentPage, .Current))
         }
         for page in backForwardList.backList.reverse() {
-            urls.append(page.URL.absoluteString)
+            urls.append(page.initialURL.absoluteString)
             listData.append((page, .Backward))
         }
         
@@ -79,6 +92,13 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
             make.height.equalTo(0)
             make.left.right.bottom.equalTo(self)
         }
+        
+        if currentRow > 1 {
+            self.tableView.reloadData()
+            let moveToIndexPath = NSIndexPath(forRow: currentRow-2, inSection: 0)
+            self.tableView.reloadRowsAtIndexPaths([moveToIndexPath], withRowAnimation: .None)
+            self.tableView.scrollToRowAtIndexPath(moveToIndexPath, atScrollPosition: UITableViewScrollPosition.Middle, animated: false)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -87,6 +107,11 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        if dismissing {
+            return
+        }
+        
         let height = min(CGFloat(BackForwardViewUX.RowHeight*listData.count), self.frame.height/2)
         UIView.animateWithDuration(0.2, animations: {
             self.tableView.snp_updateConstraints { make in
@@ -108,13 +133,19 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
         if (cell == nil)
         {
             cell = BackForwardTableViewCell(style: UITableViewCellStyle.Default,
-                                            reuseIdentifier: "BackForwardListViewController")
+                                            reuseIdentifier: "BackForwardListViewController", isPrivate: isPrivate)
         }
-        let item = listData[indexPath.item].0
-        cell?.site = sites[item.URL.absoluteString]
+        let item = listData[indexPath.item].item
+        
+        if let site = sites[item.initialURL.absoluteString] {
+            cell?.site = site
+        }
+        else {
+            cell?.site = Site(url: item.initialURL.absoluteString, title: item.title ?? "")
+        }
         
         
-        cell?.currentTab = (listData[indexPath.item].1 == .Current)
+        cell?.currentTab = (listData[indexPath.item].type == .Current)
         cell?.connectingBackwards = (indexPath.item != listData.count-1)
         cell?.connectingForwards = (indexPath.item != 0)
         
@@ -124,7 +155,7 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tabManager.selectedTab?.goToBackForwardListItem(listData[indexPath.item].0)
+        tabManager.selectedTab?.goToBackForwardListItem(listData[indexPath.item].item)
         dismissWithAnimation()
     }
     
@@ -140,9 +171,20 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     func dismissWithAnimation() {
+        if dismissing {
+            return
+        }
+        
+        dismissing = true
         self.alpha = 1.0
-        UIView.animateWithDuration(0.2, delay: 0.1, options: [UIViewAnimationOptions.CurveEaseIn, UIViewAnimationOptions.AllowUserInteraction], animations: {
+        
+        UIView.animateWithDuration(0.2, delay: 0, options: [UIViewAnimationOptions.CurveEaseIn, UIViewAnimationOptions.AllowUserInteraction], animations: {
+            self.tableView.snp_updateConstraints { make in
+                make.height.equalTo(0)
+            }
             self.alpha = 0.1
+            self.layoutIfNeeded()
+            
             }, completion: { finished in
                 if finished {
                     self.removeFromSuperview()

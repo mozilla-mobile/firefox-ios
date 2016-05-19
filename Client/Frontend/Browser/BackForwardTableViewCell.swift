@@ -50,7 +50,7 @@ class BackForwardTableViewCell: UITableViewCell {
         }
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    init(style: UITableViewCellStyle, reuseIdentifier: String?, isPrivate: Bool) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = UIColor.clearColor()
         selectionStyle = .None
@@ -64,7 +64,13 @@ class BackForwardTableViewCell: UITableViewCell {
         contentView.addSubview(faviconView)
         
         label = UILabel(frame: CGRectZero)
-        label.textColor = UIColor.blackColor()
+        if isPrivate {
+            label.textColor = UIColor.whiteColor()
+        }
+        else {
+            label.textColor = UIColor.blackColor()
+        }
+        
         label.text = " "
         label.font = label.font.fontWithSize(BackForwardViewCellUX.fontSize)
         contentView.addSubview(label)

@@ -1541,16 +1541,7 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     func tabToolbarDidLongPressBack(tabToolbar: TabToolbarProtocol, button: UIButton) {
-        if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
-            let backForwardView = BackForwardListView(profile: profile, backForwardList: backForwardList)
-            backForwardView.tabManager = tabManager
-            self.view.addSubview(backForwardView)
-            backForwardView.snp_makeConstraints { make in
-                make.top.equalTo(webViewContainerToolbar.snp_bottom)
-                make.left.right.bottom.equalTo(self.webViewContainer)
-                make.left.right.bottom.equalTo(self.webViewContainer)
-            }
-        }
+        showBackForwardList()
     }
 
     func tabToolbarDidPressReload(tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1590,11 +1581,7 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     func tabToolbarDidLongPressForward(tabToolbar: TabToolbarProtocol, button: UIButton) {
-// See 1159373 - Disable long press back/forward for backforward list
-//        let controller = BackForwardListViewController()
-//        controller.listData = tabManager.selectedTab?.forwardList
-//        controller.tabManager = tabManager
-//        presentViewController(controller, animated: true, completion: nil)
+        showBackForwardList()
     }
 
     func tabToolbarDidPressMenu(tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1652,6 +1639,19 @@ extension BrowserViewController: TabToolbarDelegate {
     func tabToolbarDidPressHomePage(tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard let tab = tabManager.selectedTab else { return }
         HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, withNavigationController: navigationController)
+    }
+    
+    func showBackForwardList() {
+        if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
+            let backForwardView = BackForwardListView(profile: profile, backForwardList: backForwardList, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            backForwardView.tabManager = tabManager
+            self.view.addSubview(backForwardView)
+            backForwardView.snp_makeConstraints { make in
+                make.top.equalTo(webViewContainerToolbar.snp_bottom)
+                make.left.right.bottom.equalTo(self.webViewContainer)
+                make.left.right.bottom.equalTo(self.webViewContainer)
+            }
+        }
     }
 }
 
