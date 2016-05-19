@@ -470,7 +470,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     }
 }
 
-private class HistoryBackButton : UIButton {
+private class HistoryBackButton: UIButton {
     lazy var title: UILabel = {
         let label = UILabel()
         label.textColor = UIConstants.HighlightBlue
@@ -526,7 +526,7 @@ private class HistoryBackButton : UIButton {
     }
 }
 
-private class RemoteTabsTableViewController : UITableViewController {
+private class RemoteTabsTableViewController: UITableViewController {
     weak var remoteTabsPanel: RemoteTabsPanel?
     var profile: Profile!
     var tableViewDelegate: RemoteTabsPanelDataSource? {

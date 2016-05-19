@@ -218,7 +218,7 @@ class SearchEngines {
         for engineName in engineNames {
             // Ignore hidden engines in list.txt
             if (engineName.endsWith(":hidden")) {
-                continue;
+                continue
             }
             // Search the current localized search plugins directory for the search engine.
             // If it doesn't exist, fall back to English.

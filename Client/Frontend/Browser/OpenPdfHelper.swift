@@ -20,7 +20,7 @@ struct OpenInViewUX {
     static let OpenInString = NSLocalizedString("Open in…", comment: "String indicating that the file can be opened in another application on the device")
 }
 
-enum FileType : String {
+enum FileType: String {
     case PDF = "pdf"
 }
 
@@ -85,7 +85,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
             log.error("failed to create proper URL")
             return
         }
-        if docController == nil{
+        if docController == nil {
             // if we already have a URL but no document controller, just create the document controller
             if let url = openInURL {
                 createDocumentControllerForURL(url)

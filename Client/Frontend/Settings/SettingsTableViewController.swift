@@ -89,7 +89,7 @@ class Setting: NSObject {
 }
 
 // A setting in the sections panel. Contains a sublist of Settings
-class SettingSection : Setting {
+class SettingSection: Setting {
     private let children: [Setting]
 
     init(title: NSAttributedString? = nil, children: [Setting]) {

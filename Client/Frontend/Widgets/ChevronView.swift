@@ -52,7 +52,7 @@ class ChevronView: UIView {
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
 
-        let strokeLength = (rect.size.height / 2) - Padding;
+        let strokeLength = (rect.size.height / 2) - Padding
 
         let path: UIBezierPath
 
@@ -73,7 +73,7 @@ class ChevronView: UIView {
         path.lineCapStyle = lineCapStyle
         path.lineJoinStyle = lineJoinStyle
         path.lineWidth = lineWidth
-        path.stroke();
+        path.stroke()
     }
 
     private func drawUpChevronAt(origin origin: CGPoint, strokeLength: CGFloat) -> UIBezierPath {

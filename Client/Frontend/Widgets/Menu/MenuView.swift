@@ -363,7 +363,7 @@ class MenuView: UIView {
     }
 
     private func layoutFooter() {
-        menuFooterView.snp_updateConstraints{ make in
+        menuFooterView.snp_updateConstraints { make in
             make.height.equalTo(menuFooterHeight)
         }
     }
