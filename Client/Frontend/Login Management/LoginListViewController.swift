@@ -469,6 +469,14 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
             )
         }
 
+        // Small helper method for using the precomputed base domain to determine the title/section of the
+        // given login.
+        func titleForLogin(login: Login) -> Character {
+            // Fallback to hostname if we can't extract a base domain.
+            let titleString = domainLookup[login.guid]?.baseDomain?.uppercaseString ?? login.hostname
+            return titleString.characters.first ?? Character("")
+        }
+
         // Rules for sorting login URLS:
         // 1. Compare base domains
         // 2. If bases are equal, compare hosts
@@ -493,19 +501,20 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
             }
         }
 
-        // Temporarily insert titles into a Set to get duplicate removal for 'free'.
         var titleSet = Set<Character>()
-        allLogins.forEach { login in
-            // Fallback to hostname if we can't extract a base domain.
-            let sortBy = login.hostname.asURL?.baseDomain()?.uppercaseString ?? login.hostname
-            let sectionTitle = sortBy.characters.first ?? Character("")
-            titleSet.insert(sectionTitle)
 
-            var logins = sections[sectionTitle] ?? []
-            logins.append(login)
-            logins.sortInPlace(sortByDomain)
-            sections[sectionTitle] = logins
-        }
+        // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
+        allLogins.forEach { titleSet.insert(titleForLogin($0)) }
+
+        // 2. Setup an empty list for each title found.
+        titleSet.forEach { sections[$0] = [Login]() }
+
+        // 3. Go through our logins and put them in the right section.
+        allLogins.forEach { sections[titleForLogin($0)]?.append($0) }
+
+        // 4. Go through each section and sort.
+        sections.forEach { sections[$0] = $1.sort(sortByDomain) }
+
         titles = Array(titleSet).sort()
     }
 
