@@ -334,6 +334,7 @@ extension TabToolbar: AppStateDelegate {
         shareButton.removeFromSuperview()
 
         if showHomepage {
+            homePageButton.enabled = HomePageAccessors.isButtonEnabled(state)
             addButtons(homePageButton)
         } else {
             addButtons(shareButton)

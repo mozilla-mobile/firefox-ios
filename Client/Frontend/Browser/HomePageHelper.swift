@@ -88,6 +88,17 @@ class HomePageAccessors {
     static func isButtonInMenu(state: AppState) -> Bool {
         return isButtonInMenu(getPrefs(state))
     }
+
+    static func isButtonEnabled(state: AppState) -> Bool {
+        switch state.ui {
+        case .Tab:
+            return true
+        case .HomePanels, .Loading:
+            return hasHomePage(state)
+        default:
+            return false
+        }
+    }
 }
 
 private extension HomePageAccessors {
