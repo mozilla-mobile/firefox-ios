@@ -894,7 +894,7 @@ class BrowserViewController: UIViewController {
     private func runScriptsOnWebView(webView: WKWebView) {
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler:nil)
     }
-    
+
     private func updateUIForReaderHomeStateForTab(tab: Tab) {
         updateURLBarDisplayURL(tab)
         scrollController.showToolbars(animated: false)
@@ -1129,7 +1129,7 @@ class BrowserViewController: UIViewController {
             tabManager.selectedTab?.reload()
         }
     }
-    
+
     func goBack() {
         if(tabManager.selectedTab?.canGoBack == true && homePanelController == nil) {
             tabManager.selectedTab?.goBack()
@@ -1140,24 +1140,24 @@ class BrowserViewController: UIViewController {
             tabManager.selectedTab?.goForward()
         }
     }
-    
+
     func findOnPage() {
         if(homePanelController == nil) {
             tab( (tabManager.selectedTab)!, didSelectFindInPageForSelection: "")
         }
     }
-    
+
     func selectLocationBar() {
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
-    
+
     func newTab() {
         openBlankNewTabAndFocus(isPrivate: false)
     }
     func newPrivateTab() {
         openBlankNewTabAndFocus(isPrivate: true)
     }
-    
+
     func closeTab() {
         if(tabManager.tabs.count > 1) {
             tabManager.removeTab(tabManager.selectedTab!)
@@ -1165,7 +1165,7 @@ class BrowserViewController: UIViewController {
             //need to close the last tab and show the favorites screen thing
         }
     }
-    
+
     func nextTab() {
         if(tabManager.selectedIndex < (tabManager.tabs.count - 1) ) {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex+1])
@@ -1175,7 +1175,7 @@ class BrowserViewController: UIViewController {
             }
         }
     }
-    
+
     func previousTab() {
         if(tabManager.selectedIndex > 0) {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex-1])
@@ -1216,7 +1216,7 @@ class BrowserViewController: UIViewController {
             ]
         }
     }
-    
+
     private func getCurrentAppState() -> AppState {
         return mainStore.updateState(getCurrentUIState())
     }

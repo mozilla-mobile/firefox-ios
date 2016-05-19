@@ -281,7 +281,7 @@ extension LoginDetailViewController: UITableViewDelegate {
 
 // MARK: - KeyboardHelperDelegate
 extension LoginDetailViewController: KeyboardHelperDelegate {
-    
+
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
@@ -360,9 +360,9 @@ extension LoginDetailViewController {
             return
         }
 
-        // The description label constraints are such that it extends full width of the cell instead of only 
+        // The description label constraints are such that it extends full width of the cell instead of only
         // the size of its text. The reason is because when the description is used as a password, the dots
-        // are slightly larger characters than the font size which causes the password text to be truncated 
+        // are slightly larger characters than the font size which causes the password text to be truncated
         // even though the revealed text fits. Since the label is actually full width, the menu controller will
         // display in its center by default which looks weird with small passwords. To prevent this,
         // the actual size of the text is used to determine where to correctly place the menu.

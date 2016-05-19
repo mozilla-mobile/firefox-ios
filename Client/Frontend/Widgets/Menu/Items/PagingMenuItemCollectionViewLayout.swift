@@ -32,7 +32,7 @@ class PagingMenuItemCollectionViewLayout: UICollectionViewLayout {
             let collectionViewDataSource = collectionView.dataSource else {
                 return
         }
-        
+
         layoutCellAttributes.removeAll()
 
         let cellSize = cellSizeForCollectionView(collectionView)

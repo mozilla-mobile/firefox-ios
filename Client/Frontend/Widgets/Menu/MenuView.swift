@@ -81,7 +81,7 @@ class MenuView: UIView {
             menuColor = backgroundColor
         }
     }
-    
+
     override var tintColor: UIColor! {
         didSet {
             menuPagingView.tintColor = tintColor

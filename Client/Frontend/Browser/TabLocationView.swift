@@ -270,13 +270,13 @@ private class ReaderModeButton: UIButton {
         setImage(UIImage(named: "reader.png"), forState: UIControlState.Normal)
         setImage(UIImage(named: "reader_active.png"), forState: UIControlState.Selected)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     var _readerModeState: ReaderModeState = ReaderModeState.Unavailable
-    
+
     var readerModeState: ReaderModeState {
         get {
             return _readerModeState

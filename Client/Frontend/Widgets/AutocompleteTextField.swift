@@ -27,7 +27,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private var canAutocomplete = true
 
     // This variable is a solution to get the right behavior for refocusing
-    // the AutocompleteTextField. The initial transition into Overlay Mode 
+    // the AutocompleteTextField. The initial transition into Overlay Mode
     // doesn't involve the user interacting with AutocompleteTextField.
     // Thus, we update shouldApplyCompletion in touchesBegin() to reflect whether
     // the highlight is active and then the text field is updated accordingly
@@ -207,8 +207,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // Immediately reuse the previous suggestion if it's still valid.
             setAutocompleteSuggestion(previousSuggestion)
         } else {
-            // Updates entered text while completion is not active. If it is 
-            // active, enteredText will already be updated from 
+            // Updates entered text while completion is not active. If it is
+            // active, enteredText will already be updated from
             // removeCompletionIfRequiredForEnteredString.
             enteredText = text ?? ""
         }

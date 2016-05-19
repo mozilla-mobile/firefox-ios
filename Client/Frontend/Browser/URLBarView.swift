@@ -717,7 +717,7 @@ extension URLBarView: TabLocationViewDelegate {
     func tabLocationViewDidTapReload(tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReload(self)
     }
-    
+
     func tabLocationViewDidTapStop(tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressStop(self)
     }
@@ -775,7 +775,7 @@ extension URLBarView {
 }
 
 extension URLBarView: Themeable {
-    
+
     func applyTheme(themeName: String) {
         locationView.applyTheme(themeName)
         locationTextField?.applyTheme(themeName)
@@ -979,7 +979,7 @@ class ToolbarTextField: AutocompleteTextField {
         CGContextFillRect(UIGraphicsGetCurrentContext(), rect)
         let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
+
         return tintedImage
     }
 }

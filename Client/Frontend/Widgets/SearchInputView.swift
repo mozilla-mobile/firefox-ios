@@ -160,7 +160,7 @@ class SearchInputView: UIView {
         }
     }
 
-    // didSet callbacks don't trigger when a property is being set in the init() call 
+    // didSet callbacks don't trigger when a property is being set in the init() call
     // but calling a method that does works fine.
     private func setEditing(editing: Bool) {
         isEditing = editing

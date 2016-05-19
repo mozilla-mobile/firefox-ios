@@ -365,7 +365,7 @@ class TabManager: NSObject {
         }
         storeChanges()
     }
-    
+
     func removeAll() {
         removeTabs(self.tabs)
     }

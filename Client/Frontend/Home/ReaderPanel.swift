@@ -427,7 +427,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         }
         return cell
     }
-    
+
     private func deleteItemAtCell(cell: SWTableViewCell) {
         if let cell = cell as? ReadingListTableViewCell, indexPath = tableView.indexPathForCell(cell), record = records?[indexPath.row] {
             if let result = profile.readingList?.deleteRecord(record) where result.isSuccess {
@@ -440,7 +440,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
             }
         }
     }
-    
+
     private func toggleItemAtCell(cell: SWTableViewCell) {
         if let cell = cell as? ReadingListTableViewCell {
             cell.hideUtilityButtonsAnimated(true)

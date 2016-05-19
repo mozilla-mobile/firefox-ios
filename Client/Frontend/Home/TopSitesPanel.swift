@@ -290,7 +290,7 @@ class TopSitesPanel: UIViewController {
 
     /**
     Calculates an approximation of the number of tiles we want to display for the given orientation. This
-    method uses the screen's size as it's basis for the calculation instead of the collectionView's since the 
+    method uses the screen's size as it's basis for the calculation instead of the collectionView's since the
     collectionView's bounds is determined until the next layout pass.
 
     - parameter orientation: Orientation to calculate number of tiles for

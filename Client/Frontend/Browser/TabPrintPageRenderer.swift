@@ -69,5 +69,5 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         }
         text.drawAtPoint(CGPoint(x: x, y: y), withAttributes: textAttributes)
     }
-    
+
 }

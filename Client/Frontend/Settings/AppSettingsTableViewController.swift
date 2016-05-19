@@ -123,7 +123,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
             ])]
-            
+
             if (profile.hasAccount()) {
                 settings += [
                     SettingSection(title: nil, children: [
@@ -159,7 +159,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             }
             return headerView
         }
-        
+
         return super.tableView(tableView, viewForHeaderInSection: section)
     }
 }

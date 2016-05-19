@@ -147,7 +147,7 @@ private extension BrowserToTrayAnimator {
         bvc.urlBar.isTransitioning = true
 
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
-        // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens. 
+        // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens.
         // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
         dispatch_async(dispatch_get_main_queue()) {
             tabTray.collectionView.hidden = true

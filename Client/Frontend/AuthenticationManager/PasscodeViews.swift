@@ -183,23 +183,23 @@ class PasscodePane: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
     }
-    
+
     func keyboardWillShow(sender: NSNotification) {
         guard let keyboardFrame = sender.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue else {
             return
         }
-        
+
         UIView.animateWithDuration(0.1, animations: {
             self.containerCenterConstraint?.updateOffset(-keyboardFrame.height/2)
             self.layoutIfNeeded()
         })
     }
-    
+
     func keyboardWillHide(sender: NSNotification) {
         UIView.animateWithDuration(0.1, animations: {
             self.containerCenterConstraint?.updateOffset(0)

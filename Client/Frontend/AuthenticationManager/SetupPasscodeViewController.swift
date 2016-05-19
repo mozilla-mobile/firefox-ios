@@ -20,11 +20,11 @@ class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputVi
             PasscodePane(title: AuthenticationStrings.reenterPasscode),
         ]
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         panes.forEach { $0.codeInputView.delegate = self }

@@ -36,8 +36,8 @@ protocol JSAlertInfo {
 
     /**
      * A word about this mutating keyword here. These prompts should be calling their completion handlers when
-     * the prompt is actually dismissed - not when the user selects an option. Ideally this would be handled 
-     * inside the JSPromptAlertController subclass in the viewDidDisappear callback but UIAlertController 
+     * the prompt is actually dismissed - not when the user selects an option. Ideally this would be handled
+     * inside the JSPromptAlertController subclass in the viewDidDisappear callback but UIAlertController
      * was built to not be subclassed. Instead, when allocate the JSPromptAlertController we pass along a
      * reference to the alertInfo structure and manipulate the required state from the action handlers.
      */

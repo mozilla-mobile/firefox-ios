@@ -50,7 +50,7 @@ struct TabsButtonUX {
 
 class TabsButton: UIControl {
     private var theme: Theme = TabsButtonUX.Themes[Theme.NormalMode]!
-    
+
     override var highlighted: Bool {
         didSet {
             if highlighted {

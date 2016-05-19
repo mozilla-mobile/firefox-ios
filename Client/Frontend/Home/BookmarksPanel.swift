@@ -127,7 +127,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             make.top.equalTo(logoImageView.snp_bottom).offset(BookmarksPanelUX.WelcomeScreenPadding)
             make.width.equalTo(BookmarksPanelUX.WelcomeScreenItemWidth)
         }
-        
+
         return overlayView
     }
 

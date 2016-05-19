@@ -61,7 +61,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
             log.error("failed to delete file at \(url): \(error)")
         }
     }
-    
+
     static func canOpen(url: NSURL) -> Bool {
         guard let pathExtension = url.pathExtension else { return false }
         return pathExtension == FileType.PDF.rawValue && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-books:")!)
