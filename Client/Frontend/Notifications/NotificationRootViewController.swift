@@ -240,14 +240,14 @@ private extension NotificationRootViewController {
 
     @objc func didFinishSyncing(notification: NSNotification) {
         defer {
-            if showingNotification {
+            if let syncMessage = notificationView.titleLabel.attributedText {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.showStatusNotification(animated: !self.showingNotification, duration: .Short, withEllipsis: false)
+                }
+            } else if showingNotification {
                 showNotificationForSync = false
                 dispatch_async(dispatch_get_main_queue()) {
                     self.hideStatusNotification()
-                }
-            } else if let syncMessage = notificationView.titleLabel.attributedText {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.showStatusNotification(animated: true, duration: .Short, withEllipsis: false)
                 }
             }
         }

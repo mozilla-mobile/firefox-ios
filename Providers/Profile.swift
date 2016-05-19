@@ -991,37 +991,31 @@ public class BrowserProfile: Profile {
         private func syncClientsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing clients to storage.")
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
-            let result = clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
-            return result
+            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
         }
 
         private func syncTabsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             let storage = self.profile.remoteClientsAndTabs
             let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
-            let result = tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
-            return result
+            return tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
         }
 
         private func syncHistoryWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing history to storage.")
             let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
-            let result = historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
-            return result
+            return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
         private func syncLoginsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing logins to storage.")
             let loginsSynchronizer = ready.synchronizer(LoginsSynchronizer.self, delegate: delegate, prefs: prefs)
-            let result = loginsSynchronizer.synchronizeLocalLogins(self.profile.logins, withServer: ready.client, info: ready.info)
-
-            return result
+            return loginsSynchronizer.synchronizeLocalLogins(self.profile.logins, withServer: ready.client, info: ready.info)
         }
 
         private func mirrorBookmarksWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Synchronizing server bookmarks to storage.")
             let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
-            let result = bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
-            return result
+            return bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
         func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {
@@ -1053,8 +1047,7 @@ public class BrowserProfile: Profile {
         private func sync(label: EngineIdentifier, function: SyncFunction) -> SyncResult {
             return syncSeveral([(label, function)]) >>== { statuses in
                 let status = statuses.find { label == $0.0 }?.1
-                let result = deferMaybe(status ?? .NotStarted(.Unknown))
-                return result
+                return deferMaybe(status ?? .NotStarted(.Unknown))
             }
         }
 
