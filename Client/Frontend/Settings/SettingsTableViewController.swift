@@ -37,7 +37,7 @@ class Setting: NSObject {
 
     var accessoryType: UITableViewCellAccessoryType { return .None }
 
-    var textAlignment: NSTextAlignment { return .Left }
+    var textAlignment: NSTextAlignment { return .Natural }
     
     private(set) var enabled: Bool = true
 
