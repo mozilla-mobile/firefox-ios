@@ -108,7 +108,7 @@ class MenuViewController: UIViewController {
                 make.top.left.right.equalTo(view)
             }
         case .Modal:
-            menuView.cornerRadius = CGSizeMake(5.0,5.0)
+            menuView.cornerRadius = CGSizeMake(5.0, 5.0)
             menuView.cornersToRound = [.TopLeft, .TopRight]
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the bottom of the toolbar

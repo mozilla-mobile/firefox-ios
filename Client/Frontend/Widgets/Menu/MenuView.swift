@@ -207,7 +207,7 @@ class MenuView: UIView {
     @objc func pageControlDidPage(sender: AnyObject) {
         let pageSize = menuPagingView.bounds.size
         let xOffset = pageSize.width * CGFloat(pageControl.currentPage)
-        menuPagingView.setContentOffset(CGPointMake(xOffset,0) , animated: true)
+        menuPagingView.setContentOffset(CGPointMake(xOffset, 0), animated: true)
     }
 
     @objc private func toolbarButtonSelected(sender: UIView) {

@@ -873,7 +873,7 @@ private class CurveView: UIView {
               controlPoint1: CGPoint(x: from.0 + width * W_M1, y: from.1),
               controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M1))
 
-        path.addCurveToPoint(CGPoint(x: from.0 + width,        y: from.1 + height),
+        path.addCurveToPoint(CGPoint(x: from.0 + width, y: from.1 + height),
               controlPoint1: CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M3),
               controlPoint2: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M4))
     }
