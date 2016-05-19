@@ -24,9 +24,9 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         super.viewDidAppear(animated)
         
         ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
-            if error == nil && item != nil {
+            if let item = item where error == nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.presentShareDialog(item!)
+                    self.presentShareDialog(item)
                 }
             } else {
                 self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);

@@ -18,6 +18,14 @@ public struct ShareItem {
         self.title = title
         self.favicon = favicon
     }
+
+    // We currently only support sharing HTTP and HTTP URLs
+    public func isShareable() -> Bool {
+        if let url = NSURL(string: url) where url.isWebPage() {
+            return true
+        }
+        return false
+    }
 }
 
 public protocol ShareToDestination {
