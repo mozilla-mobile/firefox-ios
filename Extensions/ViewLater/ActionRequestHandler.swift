@@ -15,9 +15,9 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
             if error == nil && item != nil {
                 let profile = BrowserProfile(localName: "profile", app: nil)
                 profile.queue.addToQueue(item!)
-                context.completeRequestReturningItems([], completionHandler: nil);
+                context.completeRequestReturningItems([], completionHandler: nil)
             } else {
-                context.completeRequestReturningItems([], completionHandler: nil);
+                context.completeRequestReturningItems([], completionHandler: nil)
             }
         })
     }

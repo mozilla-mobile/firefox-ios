@@ -20,7 +20,7 @@ class ReadingListBatchRecordResponse: ReadingListResponse {
                     let recordResponse = ReadingListRecordResponse(response: r, json: body) else {
                         return nil
                 }
-                
+
                 self.responses.append(recordResponse)
             }
         } else {

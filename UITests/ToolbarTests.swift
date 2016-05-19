@@ -71,7 +71,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         let reload = tester().waitForViewWithAccessibilityLabel("Reload") as! UIButton
         let share = tester().waitForViewWithAccessibilityLabel("Share") as! UIButton
         let menu = tester().waitForViewWithAccessibilityLabel("Menu") as! UIButton
-        
+
         XCTAssertFalse(back.enabled, "Back button should be disabled")
         XCTAssertFalse(forward.enabled, "Forward button should be disabled")
         XCTAssertFalse(reload.enabled, "Reload button should be disabled")

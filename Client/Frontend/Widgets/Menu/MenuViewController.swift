@@ -108,7 +108,7 @@ class MenuViewController: UIViewController {
                 make.top.left.right.equalTo(view)
             }
         case .Modal:
-            menuView.cornerRadius = CGSizeMake(5.0,5.0)
+            menuView.cornerRadius = CGSizeMake(5.0, 5.0)
             menuView.cornersToRound = [.TopLeft, .TopRight]
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the bottom of the toolbar
@@ -258,7 +258,7 @@ extension MenuViewController: MenuItemDataSource {
 
     func numberOfItemsPerRowInMenuView(menuView: MenuView) -> Int {
         // return the minimum between the max number of items in the row and the actual number of items
-        // for the first page. This allows us to set the number of items per row to be the correct 
+        // for the first page. This allows us to set the number of items per row to be the correct
         // value when the total number of items < max number of items in the row
         // but retain the correct value when scrolling to later pages.
         return min(menuConfig.numberOfItemsInRow, self.menuView(menuView, numberOfItemsForPage: 0))

@@ -8,7 +8,7 @@ import Storage
 import WebImage
 
 
-class FaviconManager : TabHelper {
+class FaviconManager: TabHelper {
     let profile: Profile!
     weak var tab: Tab?
 

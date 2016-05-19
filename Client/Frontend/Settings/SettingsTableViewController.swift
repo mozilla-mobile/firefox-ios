@@ -38,7 +38,7 @@ class Setting: NSObject {
     var accessoryType: UITableViewCellAccessoryType { return .None }
 
     var textAlignment: NSTextAlignment { return .Left }
-    
+
     private(set) var enabled: Bool = true
 
     // Called when the cell is setup. Call if you need the default behaviour.
@@ -89,7 +89,7 @@ class Setting: NSObject {
 }
 
 // A setting in the sections panel. Contains a sublist of Settings
-class SettingSection : Setting {
+class SettingSection: Setting {
     private let children: [Setting]
 
     init(title: NSAttributedString? = nil, children: [Setting]) {
@@ -406,11 +406,11 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.tableFooterView = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
-        
+
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         tableView.estimatedRowHeight = 44

@@ -234,7 +234,7 @@ public class BrowserDB {
                 }
                 return success
             }) {
-                success = false;
+                success = false
             }
         }
 

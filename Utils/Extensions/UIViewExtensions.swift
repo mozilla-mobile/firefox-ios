@@ -46,7 +46,7 @@ extension UIView {
         return screenshot(size, offset: offset, quality: quality)
     }
 
-    /* 
+    /*
      * Performs a deep copy of the view. Does not copy constraints.
      */
     func clone() -> UIView {

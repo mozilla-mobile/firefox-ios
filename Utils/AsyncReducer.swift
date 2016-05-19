@@ -60,7 +60,7 @@ public class AsyncReducer<T, U> {
         self.initialValueDeferred = initialValue
     }
 
-    // This is always protected by a lock, so we don't need to 
+    // This is always protected by a lock, so we don't need to
     // take another one.
     private func ensureStarted() {
         if self.isStarted {

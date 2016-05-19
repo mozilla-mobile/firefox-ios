@@ -196,7 +196,7 @@ public class BrowserProfile: Profile {
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
-        
+
         if clear {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(self.files.rootPath as String)
@@ -517,7 +517,7 @@ public class BrowserProfile: Profile {
 
         // register for notifications for the account
         registerForNotifications()
-        
+
         // tell any observers that our account has changed
         let userInfo = [NotificationUserInfoKeyHasSyncableAccount: hasSyncableAccount()]
         NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
@@ -750,7 +750,7 @@ public class BrowserProfile: Profile {
             self.doInBackgroundAfter(millis: 300) {
                 self.syncLock.lock()
                 defer { self.syncLock.unlock() }
-                // If we're syncing already, then wait for sync to end, 
+                // If we're syncing already, then wait for sync to end,
                 // then reset the database on the same serial queue.
                 if let reducer = self.syncReducer where !reducer.isFilled {
                     reducer.terminal.upon { _ in
@@ -810,7 +810,7 @@ public class BrowserProfile: Profile {
             // Only sync if we're green lit. This makes sure that we don't sync unverified accounts.
             guard self.profile.hasSyncableAccount() else { return succeed() }
 
-            self.beginTimedSyncs();
+            self.beginTimedSyncs()
             return self.syncEverything()
         }
 
@@ -981,7 +981,7 @@ public class BrowserProfile: Profile {
 
         /**
          * Runs each of the provided synchronization functions with the same inputs.
-         * Returns an array of IDs and SyncStatuses at least length as the input. 
+         * Returns an array of IDs and SyncStatuses at least length as the input.
          * The statuses returned will be a superset of the ones that are requested here.
          * While a sync is ongoing, each engine from successive calls to this method will only be called once.
          */
@@ -1003,7 +1003,7 @@ public class BrowserProfile: Profile {
                 }
                 reducer.terminal >>> self.endSyncing
 
-                // The actual work of synchronizing doesn't start until we append 
+                // The actual work of synchronizing doesn't start until we append
                 // the synchronizers to the reducer below.
                 self.syncReducer = reducer
                 self.beginSyncing()
@@ -1044,7 +1044,7 @@ public class BrowserProfile: Profile {
                 }
                 return accumulate(thunks)
             }
-            
+
             return readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
                 function(delegate, self.prefsForSync, ready)
             }

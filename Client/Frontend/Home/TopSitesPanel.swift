@@ -290,7 +290,7 @@ class TopSitesPanel: UIViewController {
 
     /**
     Calculates an approximation of the number of tiles we want to display for the given orientation. This
-    method uses the screen's size as it's basis for the calculation instead of the collectionView's since the 
+    method uses the screen's size as it's basis for the calculation instead of the collectionView's since the
     collectionView's bounds is determined until the next layout pass.
 
     - parameter orientation: Orientation to calculate number of tiles for
@@ -407,11 +407,11 @@ class TopSitesLayout: UICollectionViewLayout {
         } else {
             // Portrait iPad
             if size.height > size.width {
-                return 4;
+                return 4
             }
             // Landscape iPad
             else {
-                return 5;
+                return 5
             }
         }
     }
@@ -473,7 +473,7 @@ class TopSitesLayout: UICollectionViewLayout {
         return CGSize(width: width, height: topSectionHeight + bottomSectionHeight)
     }
 
-    private var layoutAttributes:[UICollectionViewLayoutAttributes]?
+    private var layoutAttributes: [UICollectionViewLayoutAttributes]?
 
     override func prepareLayout() {
         var layoutAttributes = [UICollectionViewLayoutAttributes]()

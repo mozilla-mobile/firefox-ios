@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    private func startApplication(application: UIApplication,  withLaunchOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    private func startApplication(application: UIApplication, withLaunchOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         log.debug("Setting UA…")
         // Set the Firefox UA for browsing.
         setUserAgent()
@@ -141,7 +141,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let localNotification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
             viewURLInNewTab(localNotification)
         }
-        
+
         adjustIntegration = AdjustIntegration(profile: profile)
 
         // We need to check if the app is a clean install to use for
@@ -191,16 +191,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.profile = p
         return p
     }
-    
+
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
         log.debug("Did finish launching.")
-        
+
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
-        
+
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
 
@@ -255,7 +255,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         if application.applicationState == .Active {
-            // If we are active then we can ask the BVC to open the new tab right away. 
+            // If we are active then we can ask the BVC to open the new tab right away.
             // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
             launchFromURL(params)
         } else {
@@ -352,7 +352,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(application: UIApplication) {
         // The reason we need to call this method here instead of `applicationDidBecomeActive`
-        // is that this method is only invoked whenever the application is entering the foreground where as 
+        // is that this method is only invoked whenever the application is entering the foreground where as
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
 

@@ -284,7 +284,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        // Need to add this method so that tapping the pageControl will also change the card texts. 
+        // Need to add this method so that tapping the pageControl will also change the card texts.
         // scrollViewDidEndDecelerating waits until the end of the animation to calculate what card it's on.
         scrollViewDidEndDecelerating(scrollView)
     }
@@ -425,11 +425,11 @@ private class IntroOverlayScrollView: UIScrollView {
 
 extension UIColor {
     var components:(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
-        var r:CGFloat = 0
-        var g:CGFloat = 0
-        var b:CGFloat = 0
-        var a:CGFloat = 0
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
         getRed(&r, green: &g, blue: &b, alpha: &a)
-        return (r,g,b,a)
+        return (r, g, b, a)
     }
 }

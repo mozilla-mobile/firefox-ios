@@ -75,7 +75,7 @@ class RollingFileLoggerTests: XCTestCase {
         let prefix = "test"
 
         // Create 5 log files with spread out over 5 hours and reorder paths so oldest is first
-        let logFilePaths = [0,1,2,3,4].map { self.createNewLogFileWithSize(200, withDate: NSDate().dateByAddingTimeInterval(60 * 60 * $0)) }
+        let logFilePaths = [0, 1,2, 3,4].map { self.createNewLogFileWithSize(200, withDate: NSDate().dateByAddingTimeInterval(60 * 60 * $0)) }
             .sort { $0 < $1 }
 
         let directorySize = try! manager.getAllocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix)

@@ -13,7 +13,7 @@ public class KeysPayload: CleartextPayloadJSON {
         return !isError &&
                self["default"].isArray
     }
-    
+
     private func keyBundleFromPair(input: JSON) -> KeyBundle? {
         if let pair: [JSON] = input.asArray {
             if let encKey = pair[0].asString {
@@ -38,20 +38,20 @@ public class KeysPayload: CleartextPayloadJSON {
 
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
         if !(obj is KeysPayload) {
-            return false;
+            return false
         }
-        
+
         if !super.equalPayloads(obj) {
-            return false;
+            return false
         }
-        
+
         let p = obj as! KeysPayload
         if p.defaultKeys != self.defaultKeys {
             return false
         }
 
         // TODO: check collections.
-        
+
         return true
     }
 }

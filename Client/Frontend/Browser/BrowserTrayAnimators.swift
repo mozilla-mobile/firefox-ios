@@ -65,8 +65,7 @@ private extension TrayToBrowserAnimator {
             delay: 0, usingSpringWithDamping: 1,
             initialSpringVelocity: 0,
             options: UIViewAnimationOptions.CurveEaseInOut,
-            animations:
-        {
+            animations: {
             // Scale up the cell and reset the transforms for the header/footers
             cell.frame = finalFrame
             container.layoutIfNeeded()
@@ -148,7 +147,7 @@ private extension BrowserToTrayAnimator {
         bvc.urlBar.isTransitioning = true
 
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
-        // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens. 
+        // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens.
         // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
         dispatch_async(dispatch_get_main_queue()) {
             tabTray.collectionView.hidden = true
@@ -160,8 +159,7 @@ private extension BrowserToTrayAnimator {
                 delay: 0, usingSpringWithDamping: 1,
                 initialSpringVelocity: 0,
                 options: UIViewAnimationOptions.CurveEaseInOut,
-                animations:
-            {
+                animations: {
                 cell.frame = finalFrame
                 cell.title.transform = CGAffineTransformIdentity
                 cell.layoutIfNeeded()

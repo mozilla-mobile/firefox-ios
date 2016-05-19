@@ -43,7 +43,7 @@ class NotificationRootViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.fxaAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.userDidInitiateSync), name: SyncNowSetting.NotificationUserInitiatedSyncManually, object: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -135,7 +135,7 @@ extension NotificationRootViewController {
             userInfo: nil,
             repeats: false
         )
-        NSRunLoop.mainRunLoop().addTimer(timer,forMode: NSRunLoopCommonModes)
+        NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
         notificationTimer = timer
     }
 

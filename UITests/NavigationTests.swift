@@ -221,7 +221,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Cancel")
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Request Desktop Site")
     }
-    
+
     private func ensureDesktopSite() {
         tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
         tester().waitForViewWithAccessibilityLabel("Request Mobile Site")

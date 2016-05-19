@@ -83,7 +83,7 @@ extension KIFUITestActor {
                 }
                 return false
             }
-            
+
             return (element == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
         }
 

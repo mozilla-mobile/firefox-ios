@@ -72,7 +72,7 @@ class HomePageHelper {
 }
 
 /// Accessors for homepage details from the app state.
-/// These are pure functions, so it's quite ok to have them 
+/// These are pure functions, so it's quite ok to have them
 /// as static.
 class HomePageAccessors {
     private static let getPrefs = Accessors.getPrefs

@@ -324,7 +324,7 @@ class ExportBrowserDataSetting: HiddenSetting {
 }
 
 // Show the current version of Firefox
-class VersionSetting : Setting {
+class VersionSetting: Setting {
     let settings: SettingsTableViewController
 
     init(settings: SettingsTableViewController) {

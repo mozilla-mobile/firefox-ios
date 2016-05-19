@@ -24,7 +24,7 @@ protocol TabManagerStateDelegate: class {
 
 // We can't use a WeakList here because this is a protocol.
 class WeakTabManagerDelegate {
-    weak var value : TabManagerDelegate?
+    weak var value: TabManagerDelegate?
 
     init (value: TabManagerDelegate) {
         self.value = value
@@ -36,7 +36,7 @@ class WeakTabManagerDelegate {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class TabManager : NSObject {
+class TabManager: NSObject {
     private var delegates = [WeakTabManagerDelegate]()
     weak var stateDelegate: TabManagerStateDelegate?
 
@@ -365,7 +365,7 @@ class TabManager : NSObject {
         }
         storeChanges()
     }
-    
+
     func removeAll() {
         removeTabs(self.tabs)
     }
@@ -526,8 +526,7 @@ extension TabManager {
                 savedTabs.append(savedTab)
 
                 if let screenshot = tab.screenshot,
-                   let screenshotUUID = tab.screenshotUUID
-                {
+                   let screenshotUUID = tab.screenshotUUID {
                     savedUUIDs.insert(screenshotUUID.UUIDString)
                     imageStore?.put(screenshotUUID.UUIDString, image: screenshot)
                 }
@@ -695,7 +694,7 @@ extension TabManager {
 }
 
 // WKNavigationDelegates must implement NSObjectProtocol
-class TabManagerNavDelegate : NSObject, WKNavigationDelegate {
+class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     private var delegates = WeakList<WKNavigationDelegate>()
 
     func insert(delegate: WKNavigationDelegate) {

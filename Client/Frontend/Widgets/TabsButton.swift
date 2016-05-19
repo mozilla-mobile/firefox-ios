@@ -50,7 +50,7 @@ struct TabsButtonUX {
 
 class TabsButton: UIControl {
     private var theme: Theme = TabsButtonUX.Themes[Theme.NormalMode]!
-    
+
     override var highlighted: Bool {
         didSet {
             if highlighted {
@@ -195,7 +195,7 @@ extension TabsButton {
         set { labelBackground.backgroundColor = newValue }
     }
 
-    dynamic var insets : UIEdgeInsets {
+    dynamic var insets: UIEdgeInsets {
         get { return buttonInsets }
         set {
             buttonInsets = newValue

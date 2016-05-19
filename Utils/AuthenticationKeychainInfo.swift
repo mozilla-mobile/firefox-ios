@@ -100,7 +100,7 @@ public extension AuthenticationKeychainInfo {
     }
 
     func recordValidation() {
-        // Save the timestamp to remember the last time we successfully 
+        // Save the timestamp to remember the last time we successfully
         // validated and clear out the failed attempts counter.
         self.lastPasscodeValidationInterval = SystemUtils.systemUptime()
         resetLockoutState()

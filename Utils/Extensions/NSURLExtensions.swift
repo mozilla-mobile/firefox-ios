@@ -143,7 +143,7 @@ extension NSURL {
 
         return "\(scheme)://\(hostPort)"
     }
-    
+
     public func normalizedHostAndPath() -> String? {
         if let normalizedHost = self.normalizedHost() {
             return normalizedHost + (self.path ?? "/")
@@ -210,7 +210,7 @@ extension NSURL {
     }
 
     /**
-    Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/. 
+    Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/.
     For example for the url www.bbc.co.uk, based on the entries in the TLD list, the public suffix would return co.uk.
 
     :returns: The public suffix for within the given hostname.
@@ -268,7 +268,7 @@ private extension NSURL {
         *
         *  On the next run through the loop, we set the new domain to check as the part after the next dot,
         *  update the next dot reference to be the string after the new next dot, and check the TLD entries again.
-        *  If we reach the end of the host (nextDot = nil) and we haven't found anything, then we've hit the 
+        *  If we reach the end of the host (nextDot = nil) and we haven't found anything, then we've hit the
         *  top domain level so we use it by default.
         */
 
@@ -285,13 +285,13 @@ private extension NSURL {
             if let entry = etldEntries?[currentDomain] {
                 if entry.isWild && (previousDomain != nil) {
                     suffix = previousDomain
-                    break;
+                    break
                 } else if entry.isNormal || (nextDot == nil) {
                     suffix = currentDomain
-                    break;
+                    break
                 } else if entry.isException {
                     suffix = nextDot
-                    break;
+                    break
                 }
             }
 

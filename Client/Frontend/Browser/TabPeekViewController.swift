@@ -107,7 +107,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         imageView.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-        
+
         screenShot = imageView
         screenShot?.accessibilityLabel = previewAccessibilityLabel
     }

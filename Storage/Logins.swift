@@ -222,7 +222,7 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
                login.formSubmitURL != self.formSubmitURL ||
                login.httpRealm != self.httpRealm
     }
-    
+
     /* Used for testing purposes since formSubmitURL should be given back to use from the Logins.js script */
     public class func createWithHostname(hostname: String, username: String, password: String, formSubmitURL: String?) -> LoginData {
         let loginData = Login(hostname: hostname, username: username, password: password) as LoginData

@@ -277,7 +277,7 @@ extension SQLiteHistory: BrowserHistory {
         if prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false {
             return deferMaybe(false)
         }
-        
+
         return refreshTopSitesCache() >>> always(true)
     }
 
@@ -294,7 +294,7 @@ extension SQLiteHistory: BrowserHistory {
         return updateTopSitesCacheWithLimit(cacheSize)
     }
 
-    private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
+    private func updateTopSitesCacheWithLimit(limit: Int) -> Success {
         let (whereData, groupBy) = self.topSiteClauses()
         let (query, args) = self.filteredSitesByFrecencyQueryWithHistoryLimit(limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
 
@@ -572,7 +572,7 @@ extension SQLiteHistory: BrowserHistory {
         "((localVisitDate > \(sixMonthsAgo)) OR (remoteVisitDate > \(sixMonthsAgo)))" +    // Exclude really old items.
         ") ORDER BY frecency DESC" +
         " LIMIT 1000"                                 // Don't even look at a huge set. This avoids work.
-        
+
         // Next: merge by domain and sum frecency, ordering by that sum and reducing to a (typically much lower) limit.
         // TODO: make is_bookmarked here accurate by joining against ViewAllBookmarks.
         // TODO: ensure that the same URL doesn't appear twice in the list, either from duplicate
@@ -1023,7 +1023,7 @@ extension SQLiteHistory: SyncableHistory {
                 c.close()
 
                 // Now collect the return value.
-                return deferMaybe(ids.map { return (places[$0]!, visits[$0]!) } )
+                return deferMaybe(ids.map { return (places[$0]!, visits[$0]!) })
         }
     }
 

@@ -12,7 +12,7 @@ private let DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUE
 
 /**
     This class is written to mimick an NSOperation, but also provide Deferred capabilities as well.
-    
+
     Usage:
     let deferred = DeferredDBOperation({ (db, err) -> Int
       // ... Do something long running

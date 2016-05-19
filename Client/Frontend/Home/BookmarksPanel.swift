@@ -127,7 +127,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             make.top.equalTo(logoImageView.snp_bottom).offset(BookmarksPanelUX.WelcomeScreenPadding)
             make.width.equalTo(BookmarksPanelUX.WelcomeScreenItemWidth)
         }
-        
+
         return overlayView
     }
 
@@ -429,7 +429,7 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     }
 }
 
-private class BookmarkFolderTableViewHeader : UITableViewHeaderFooterView {
+private class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
     var delegate: BookmarkFolderTableViewHeaderDelegate?
 
     lazy var titleLabel: UILabel = {

@@ -11,7 +11,7 @@ public struct ExtensionUtils {
     /// We can always extract a URL and sometimes a title. The favicon is currently just a placeholder, but future code can possibly interact with a web page to find a proper icon.
     public static func extractSharedItemFromExtensionContext(extensionContext: NSExtensionContext?, completionHandler: (ShareItem?, NSError!) -> Void) {
         if extensionContext != nil {
-            if let inputItems : [NSExtensionItem] = extensionContext!.inputItems as? [NSExtensionItem] {
+            if let inputItems: [NSExtensionItem] = extensionContext!.inputItems as? [NSExtensionItem] {
                 for inputItem in inputItems {
                     if let attachments = inputItem.attachments as? [NSItemProvider] {
                         for attachment in attachments {

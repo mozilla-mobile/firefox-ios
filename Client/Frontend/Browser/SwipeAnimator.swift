@@ -30,7 +30,7 @@ class SwipeAnimator: NSObject {
     weak var delegate: SwipeAnimatorDelegate?
     weak var container: UIView!
     weak var animatingView: UIView!
-    
+
     private var prevOffset: CGPoint!
     private let params: SwipeAnimationParameters
 

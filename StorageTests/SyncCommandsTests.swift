@@ -12,7 +12,7 @@ func byValue(a: SyncCommand, b: SyncCommand) -> Bool {
     return a.value < b.value
 }
 
-func byClient(a: RemoteClient, b: RemoteClient) -> Bool{
+func byClient(a: RemoteClient, b: RemoteClient) -> Bool {
     return a.guid! < b.guid!
 }
 
@@ -61,13 +61,13 @@ class SyncCommandsTests: XCTestCase {
         clientsAndTabs.clear()
     }
 
-    func testCreateSyncCommandFromShareItem(){
+    func testCreateSyncCommandFromShareItem() {
         let action = "testcommand"
         let shareItem = shareItems[0]
         let syncCommand = SyncCommand.fromShareItem(shareItem, withAction: action)
         XCTAssertNil(syncCommand.commandID)
         XCTAssertNotNil(syncCommand.value)
-        let jsonObj:[String: AnyObject] = [
+        let jsonObj: [String: AnyObject] = [
             "command": action,
             "args": [shareItem.url, "", shareItem.title ?? ""]
         ]
@@ -231,7 +231,7 @@ class SyncCommandsTests: XCTestCase {
                 b.fulfill()
             })
         }
-        
+
         self.waitForExpectationsWithTimeout(5, handler: nil)
     }
 }
