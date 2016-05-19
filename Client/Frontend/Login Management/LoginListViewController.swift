@@ -8,6 +8,7 @@ import SnapKit
 import Storage
 import Shared
 import SwiftKeychainWrapper
+import Deferred
 
 private struct LoginListUX {
     static let RowHeight: CGFloat = 58
@@ -177,18 +178,20 @@ class LoginListViewController: SensitiveViewController {
     }
 
     private func reloadTableWithResult(result: Maybe<Cursor<Login>>) -> Success {
-        loadingStateView.hidden = true
-        loginDataSource.allLogins = result.successValue?.asArray() ?? []
-        tableView.reloadData()
-        activeLoginQuery = nil
+        let logins = result.successValue?.asArray() ?? []
+        return loginDataSource.setData(logins).bindQueue(dispatch_get_main_queue()) { _ in
+            self.loadingStateView.hidden = true
+            self.tableView.reloadData()
+            self.activeLoginQuery = nil
 
-        if loginDataSource.count > 0 {
-            navigationItem.rightBarButtonItem?.enabled = true
-        } else {
-            navigationItem.rightBarButtonItem?.enabled = false
+            if self.loginDataSource.count > 0 {
+                self.navigationItem.rightBarButtonItem?.enabled = true
+            } else {
+                self.navigationItem.rightBarButtonItem?.enabled = false
+            }
+
+            return succeed()
         }
-
-        return succeed()
     }
 }
 
@@ -392,11 +395,7 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         return allLogins.count
     }
 
-    private var allLogins: [Login] = [] {
-        didSet {
-            computeLoginSections()
-        }
-    }
+    private var allLogins: [Login] = []
 
     private let emptyStateView = NoLoginsView()
 
@@ -450,24 +449,23 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         return String(titles[section])
     }
 
-    private func computeLoginSections() {
-        titles.removeAll()
-        sections.removeAll()
+    func setData(logins: [Login]) -> Success {
+        return computeSectionsFromLogins(logins) >>== { (titles, sections) in
+            self.titles = titles
+            self.sections = sections
+            self.allLogins = logins
+            return succeed()
+        }
+    }
 
-        guard allLogins.count > 0 else {
-            return
+    private func computeSectionsFromLogins(logins: [Login]) -> Deferred<Maybe<([Character], [Character: [Login]])>> {
+        guard logins.count > 0 else {
+            return deferMaybe( ([Character](), [Character: [Login]]()) )
         }
 
-        // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
-        // baseDomain() is a costly call because of the ETLD lookup tables.
         var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
-        allLogins.forEach { login in
-            domainLookup[login.guid] = (
-                login.hostname.asURL?.baseDomain(),
-                login.hostname.asURL?.host,
-                login.hostname
-            )
-        }
+        var sections = [Character: [Login]]()
+        var titleSet = Set<Character>()
 
         // Small helper method for using the precomputed base domain to determine the title/section of the
         // given login.
@@ -501,21 +499,31 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
             }
         }
 
-        var titleSet = Set<Character>()
+        return deferDispatchAsync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+            // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
+            // baseDomain() is a costly call because of the ETLD lookup tables.
+            logins.forEach { login in
+                domainLookup[login.guid] = (
+                    login.hostname.asURL?.baseDomain(),
+                    login.hostname.asURL?.host,
+                    login.hostname
+                )
+            }
 
-        // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
-        allLogins.forEach { titleSet.insert(titleForLogin($0)) }
+            // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
+            logins.forEach { titleSet.insert(titleForLogin($0)) }
 
-        // 2. Setup an empty list for each title found.
-        titleSet.forEach { sections[$0] = [Login]() }
+            // 2. Setup an empty list for each title found.
+            titleSet.forEach { sections[$0] = [Login]() }
 
-        // 3. Go through our logins and put them in the right section.
-        allLogins.forEach { sections[titleForLogin($0)]?.append($0) }
+            // 3. Go through our logins and put them in the right section.
+            logins.forEach { sections[titleForLogin($0)]?.append($0) }
 
-        // 4. Go through each section and sort.
-        sections.forEach { sections[$0] = $1.sort(sortByDomain) }
+            // 4. Go through each section and sort.
+            sections.forEach { sections[$0] = $1.sort(sortByDomain) }
 
-        titles = Array(titleSet).sort()
+            return deferMaybe( (Array(titleSet).sort(), sections) )
+        }
     }
 
     subscript(index: Int) -> Login {
