@@ -39,7 +39,7 @@ class ClientPickerViewController: UITableViewController {
     var selectedClients = NSMutableSet()
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to provide Share To functionality
-    // And in this case we need to be able to store the item we are sharing as we may not have access to the 
+    // And in this case we need to be able to store the item we are sharing as we may not have access to the
     // url later. Currently used only when sharing an item from the Tab Tray from a Preview Action.
     var shareItem: ShareItem?
 
@@ -200,7 +200,7 @@ class ClientPickerTableViewHeaderCell: UITableViewCell {
         nameLabel.text = NSLocalizedString("Available devices:", tableName: "SendTo", comment: "Header for the list of devices table")
         nameLabel.textColor = ClientPickerViewControllerUX.TableHeaderTextColor
 
-        nameLabel.snp_makeConstraints{ (make) -> Void in
+        nameLabel.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(ClientPickerViewControllerUX.TableHeaderTextPaddingLeft)
             make.centerY.equalTo(self)
             make.right.equalTo(self)
@@ -252,7 +252,7 @@ class ClientPickerTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        nameLabel.snp_makeConstraints{ (make) -> Void in
+        nameLabel.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(ClientPickerViewControllerUX.DeviceRowTextPaddingLeft)
             make.centerY.equalTo(self.snp_centerY)
             make.right.equalTo(self.snp_right).offset(-ClientPickerViewControllerUX.DeviceRowTextPaddingRight)
@@ -276,7 +276,7 @@ class ClientPickerNoClientsTableViewCell: UITableViewCell {
         // Move the separator off screen
         separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
     }
-    
+
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

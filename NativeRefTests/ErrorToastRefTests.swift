@@ -23,5 +23,5 @@ class ErrorToastRefTests: FXSnapshotTestCase {
         toast.frame = CGRect(origin: CGPointZero, size: toast.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize))
         toast.layoutIfNeeded()
         FBSnapshotVerifyView(toast!)
-    }   
+    }
 }

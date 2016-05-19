@@ -96,9 +96,9 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
         tester().waitForViewWithAccessibilityLabel("Add to Reading List")
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("Reading list")
-        
+
         // TODO: Check for rows in this table
-        
+
         tester().tapViewWithAccessibilityLabel("Cancel")
         tester().waitForViewWithAccessibilityLabel("Add to Reading List")
     }

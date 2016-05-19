@@ -522,7 +522,7 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         }
 
         if !super.equalPayloads(p) {
-            return false;
+            return false
         }
 
         if self.deleted {

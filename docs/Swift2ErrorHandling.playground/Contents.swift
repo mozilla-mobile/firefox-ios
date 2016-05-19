@@ -132,7 +132,7 @@ enum EqualError: ErrorType {
     case NoRightHandValue
 }
 
-func equalInts(a a: Int?, b: Int?) throws -> Bool{
+func equalInts(a a: Int?, b: Int?) throws -> Bool {
     defer {
         print("closing file handle")
         print("closing network connection")
@@ -239,7 +239,7 @@ do {
     print(error)
 }
 
-//: But othertimes you don't actually care what the error is, you just want to do something based on whether or not it succeeds. 
+//: But othertimes you don't actually care what the error is, you just want to do something based on whether or not it succeeds.
 //: Or your throwing function _may_ return something but won't if it fails. These are cases for try?
 func cleanDivision(val: Int, by: Int) throws -> Int? {
     if val % by == 0 {
@@ -256,7 +256,7 @@ func optionalTryExample() {
     if let result2 = try? cleanDivision(7, by: 3) {
         print("7 was cleanly divisibly by 3 \(result2)")
     } else {
-        print("7 was not cleanly divisibly by 3");
+        print("7 was not cleanly divisibly by 3")
     }
 }
 

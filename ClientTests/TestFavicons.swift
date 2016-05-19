@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 import Storage
 
-class TestFavicons : ProfileTest {
+class TestFavicons: ProfileTest {
 
     private func innerAddIcon(favicons: Favicons, url: String, callback: (success: Bool) -> Void) {
         // Add an entry

@@ -41,7 +41,7 @@ public extension String {
         let raw: NSString = self
         let str = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
             raw,
-            "[].",":/?&=;+!@#$()',*",
+            "[].", ":/?&=;+!@#$()',*",
             CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding))
         return str as String
     }

@@ -46,7 +46,7 @@ extension NSDate {
             fromDate: self,
             toDate: now,
             options: [])
-        
+
         if components.year > 0 {
             return String(format: NSDateFormatter.localizedStringFromDate(self, dateStyle: NSDateFormatterStyle.ShortStyle, timeStyle: NSDateFormatterStyle.ShortStyle))
         }

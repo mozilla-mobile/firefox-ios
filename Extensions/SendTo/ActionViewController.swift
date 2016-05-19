@@ -11,11 +11,10 @@ import SnapKit
 /// InstructionsVC or the ClientPicker VC.
 
 @objc(ActionViewController)
-class ActionViewController: UIViewController, ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate
-{
+class ActionViewController: UIViewController, ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
     private lazy var profile: Profile = { return BrowserProfile(localName: "profile", app: nil) }()
     private var sharedItem: ShareItem?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,7 +33,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
                     let navigationController = UINavigationController(rootViewController: clientPickerViewController)
                     self.presentViewController(navigationController, animated: false, completion: nil)
                 } else {
-                    self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
+                    self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
                 }
             })
         }
@@ -52,7 +51,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
         }
         finish()
     }
-    
+
     func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) {
         finish()
     }

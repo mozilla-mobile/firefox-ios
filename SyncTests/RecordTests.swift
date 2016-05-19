@@ -29,11 +29,11 @@ class RecordTests: XCTestCase {
     func testEnvelopeJSON() {
         let e = EnvelopeJSON(JSON.parse("{}"))
         XCTAssertFalse(e.isValid())
-        
+
         let ee = EnvelopeJSON("{\"id\": \"foo\"}")
         XCTAssertFalse(ee.isValid())
         XCTAssertEqual(ee.id, "foo")
-        
+
         let eee = EnvelopeJSON(JSON.parse("{\"id\": \"foo\", \"collection\": \"bar\", \"payload\": \"baz\"}"))
         XCTAssertTrue(eee.isValid())
         XCTAssertEqual(eee.id, "foo")
@@ -80,7 +80,7 @@ class RecordTests: XCTestCase {
     func testEncryptedClientRecord() {
         let b64E = "0A7mU5SZ/tu7ZqwXW1og4qHVHN+zgEi4Xwfwjw+vEJw="
         let b64H = "11GN34O9QWXkjR06g8t0gWE1sGgQeWL0qxxWwl8Dmxs="
-        
+
         let expectedGUID = "0-P9fabp9vJD"
         let expectedSortIndex = 131
         let expectedLastModified: Timestamp = 1326254123650
@@ -236,7 +236,7 @@ class RecordTests: XCTestCase {
     }
 
     func testMobileBookmarksFolder() {
-        let children = ["M87np9Vfh_2s","-JxRyqNte-ue","6lIQzUtbjE8O","eOg3jPSslzXl","1WJIi9EjQErp","z5uRo45Rvfbd","EK3lcNd0sUFN","gFD3GTljgu12","eRZGsbN1ew9-","widfEdgGn9de","l7eTOR4Uf6xq","vPbxG-gpN4Rb","4dwJ8CototFe","zK-kw9Ii6ScW","eDmDU-gtEFW6","lKjqWQaL_syt","ETVDvWgGT31Q","3Z_bMIHPSZQ8","Fqu4_bJOk7fT","Uo_5K1QrA67j","gDTXNg4m1AJZ","zpds8P-9xews","87zjNtVGPtEp","ZJru8Sn3qhW7","txVnzBBBOgLP","JTnRqFaj_oNa","soaMlfmM4kjR","g8AcVBjo6IRf","uPUDaiG4q637","rfq2bUud_w4d","XBGxsiuUG2UD","-VQRnJlyAvMs","6wu7TScKdTU7","ZeFji2hLVpLj","HpCn_TVizMWX","IPR5HZwRdlwi","00JFOGuWnhWB","P1jb3qKt32Vg","D6MQJ43V1Ir5","qWSoXFteRfsq","o2avfYqEdomL","xRS0U0YnjK9G","VgOgzE_xfP4w","SwP3rMJGvoO3","Hf2jEgI_-PWa","AyhmBi7Cv598","-PaMuzTJXxVk","JMhYrg8SlY5K","SQeySEjzyplL","GTAwd2UkEQEe","x3RsZj5Ilebr","sRZWZqPi74FP","amHR50TpygA6","XSk782ceVNN6","ipiMyYQzeypI","ph2k3Nqfhau4","m5JKC3hAEQ0H","yTVerkmQbNxk","7taA6FbbbUbH","PZvpbSRuJLPs","C8atoa25U94F","KOfNJk_ISLc6","Bt74lBG9tJq6","BuHoY2rUhuKA","XTmoWKnwfIPl","ZATwa3oTD1m0","e8TczN5It6Am","6kCUYs8hQtKg","jDD8s5aiKoex","QmpmcrYwLU29","nCRcekynuJ08","resttaI4J9tu","EKSX3HV55VU3","2-yCz0EIsVls","sSeeGw3VbBY-","qfpCrU34w9y0","RKDgzPWecD6m","5SgXEKu_dICW","R143WAeB5E5r","8Ns4-NiKG62r","4AHuZDvop5XX","YCP1OsO1goFF","CYYaU1mQ_N6t","UGkzEOMK8cuU","1RzZOarkzQBa","qSW2Z3cZSI9c","ooPlKEAfQsnn","jIUScoKLiXQt","bjNTKugzRRL1","hR24ZVnHUZcs","3j2IDAZgUyYi","xnWcy-sQDJRu","UCcgJqGk3bTV","WSSRWeptH9tq","4ugv47OGD2E2","XboCZgUx-x3x","HrmWqiqsuLrm","OjdxvRJ3Jb6j"]
+        let children = ["M87np9Vfh_2s", "-JxRyqNte-ue", "6lIQzUtbjE8O", "eOg3jPSslzXl", "1WJIi9EjQErp", "z5uRo45Rvfbd", "EK3lcNd0sUFN", "gFD3GTljgu12", "eRZGsbN1ew9-", "widfEdgGn9de", "l7eTOR4Uf6xq", "vPbxG-gpN4Rb", "4dwJ8CototFe", "zK-kw9Ii6ScW", "eDmDU-gtEFW6", "lKjqWQaL_syt", "ETVDvWgGT31Q", "3Z_bMIHPSZQ8", "Fqu4_bJOk7fT", "Uo_5K1QrA67j", "gDTXNg4m1AJZ", "zpds8P-9xews", "87zjNtVGPtEp", "ZJru8Sn3qhW7", "txVnzBBBOgLP", "JTnRqFaj_oNa", "soaMlfmM4kjR", "g8AcVBjo6IRf", "uPUDaiG4q637", "rfq2bUud_w4d", "XBGxsiuUG2UD", "-VQRnJlyAvMs", "6wu7TScKdTU7", "ZeFji2hLVpLj", "HpCn_TVizMWX", "IPR5HZwRdlwi", "00JFOGuWnhWB", "P1jb3qKt32Vg", "D6MQJ43V1Ir5", "qWSoXFteRfsq", "o2avfYqEdomL", "xRS0U0YnjK9G", "VgOgzE_xfP4w", "SwP3rMJGvoO3", "Hf2jEgI_-PWa", "AyhmBi7Cv598", "-PaMuzTJXxVk", "JMhYrg8SlY5K", "SQeySEjzyplL", "GTAwd2UkEQEe", "x3RsZj5Ilebr", "sRZWZqPi74FP", "amHR50TpygA6", "XSk782ceVNN6", "ipiMyYQzeypI", "ph2k3Nqfhau4", "m5JKC3hAEQ0H", "yTVerkmQbNxk", "7taA6FbbbUbH", "PZvpbSRuJLPs", "C8atoa25U94F", "KOfNJk_ISLc6", "Bt74lBG9tJq6", "BuHoY2rUhuKA", "XTmoWKnwfIPl", "ZATwa3oTD1m0", "e8TczN5It6Am", "6kCUYs8hQtKg", "jDD8s5aiKoex", "QmpmcrYwLU29", "nCRcekynuJ08", "resttaI4J9tu", "EKSX3HV55VU3", "2-yCz0EIsVls", "sSeeGw3VbBY-", "qfpCrU34w9y0", "RKDgzPWecD6m", "5SgXEKu_dICW", "R143WAeB5E5r", "8Ns4-NiKG62r", "4AHuZDvop5XX", "YCP1OsO1goFF", "CYYaU1mQ_N6t", "UGkzEOMK8cuU", "1RzZOarkzQBa", "qSW2Z3cZSI9c", "ooPlKEAfQsnn", "jIUScoKLiXQt", "bjNTKugzRRL1", "hR24ZVnHUZcs", "3j2IDAZgUyYi", "xnWcy-sQDJRu", "UCcgJqGk3bTV", "WSSRWeptH9tq", "4ugv47OGD2E2", "XboCZgUx-x3x", "HrmWqiqsuLrm", "OjdxvRJ3Jb6j"]
         let json = JSON([
             "id": "UjAHxFOGEqU8",
             "type": "folder",

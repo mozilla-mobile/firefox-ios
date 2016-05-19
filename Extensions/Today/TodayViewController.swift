@@ -64,7 +64,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     private lazy var openCopiedLinkButton: ButtonWithSublabel = {
         let button = ButtonWithSublabel()
-        
+
         button.setTitle(NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", value: "Go to copied link", tableName: "Today", comment: "Go to link on clipboard"), forState: .Normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), forControlEvents: .TouchUpInside)
 

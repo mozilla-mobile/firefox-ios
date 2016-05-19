@@ -16,7 +16,7 @@ public class DeviceInfo {
         let mirror = Mirror(reflecting: machine)
         var identifier = ""
 
-        // Parses the string for the model name via NSUTF8StringEncoding, refer to 
+        // Parses the string for the model name via NSUTF8StringEncoding, refer to
         // http://stackoverflow.com/questions/26028918/ios-how-to-determine-iphone-model-in-swift
         for child in mirror.children.enumerate() {
             if let value = child.1.value as? Int8 where value != 0 {

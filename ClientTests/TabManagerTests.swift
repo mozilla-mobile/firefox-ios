@@ -79,5 +79,5 @@ class TabManagerTests: XCTestCase {
             XCTAssertEqual(remoteTabs?.count, 3)
         }
     }
-    
+
 }
