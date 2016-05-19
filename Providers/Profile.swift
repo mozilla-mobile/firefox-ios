@@ -661,7 +661,7 @@ public class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
-            syncDisplayState = SyncDisplayState.Stale(message: Strings.FirefoxSyncNotStartedTitle) //displayStateForEngineResults(result)
+            syncDisplayState = displayStateForEngineResults(result)
             notifySyncing(NotificationProfileDidFinishSyncing)
             syncReducer = nil
         }
@@ -850,8 +850,7 @@ public class BrowserProfile: Profile {
             guard let result = result else {
                 return .Good
             }
-            guard result.isSuccess,
-                let results = result.successValue else {
+            guard let results = result.successValue else {
                     return SyncDisplayState.Bad(message: Strings.FirefoxSyncFailedTitle)
             }
             let errorResults: [SyncDisplayState]? = results.flatMap { identifier, status in

@@ -223,38 +223,38 @@ private extension NotificationRootViewController {
         }
     }
 
-    @objc func didFinishSyncing(notification: NSNotification) {
-        guard showingNotification else { return }
-        let syncMessage: NSAttributedString?
-        if let syncDisplayState = notification.object as? [String: String],
+    private func syncMessageForNotification(notificationObject: AnyObject?) -> NSAttributedString? {
+        guard let syncDisplayState = notificationObject as? [String: String],
         let state = syncDisplayState["state"],
-        let message = syncDisplayState["message"] {
-            switch state {
-            case "Error":
-                syncMessage = NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowErrorTextColor, NSFontAttributeName: notificationView.titleLabel.font])
-            case "Warning":
-                syncMessage = NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowWarningTextColor, NSFontAttributeName: notificationView.titleLabel.font])
-            default: syncMessage = nil
-            }
-        } else {
-            syncMessage = nil
+            let message = syncDisplayState["message"] else {
+                return nil
         }
+        switch state {
+        case "Error":
+            return NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowErrorTextColor, NSFontAttributeName: notificationView.titleLabel.font])
+        case "Warning":
+            return NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowWarningTextColor, NSFontAttributeName: notificationView.titleLabel.font])
+        default: return nil
+        }
+    }
 
-        guard let displayMessage = syncMessage else {
-            showNotificationForSync = false
-            return dispatch_async(dispatch_get_main_queue()) {
-                self.hideStatusNotification()
+    @objc func didFinishSyncing(notification: NSNotification) {
+        defer {
+            if showingNotification {
+                showNotificationForSync = false
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.hideStatusNotification()
+                }
+            } else if let syncMessage = notificationView.titleLabel.attributedText {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.showStatusNotification(animated: true, duration: .Short, withEllipsis: false)
+                }
             }
         }
-
-        notificationView.titleLabel.attributedText = displayMessage
-        notificationView.ellipsisLabel.hidden = true
-        self.notificationView.endAnimation()
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(4 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
-            self.showNotificationForSync = false
-            self.hideStatusNotification()
+        guard let syncMessage = syncMessageForNotification(notification.object) else {
+            return
         }
+        notificationView.titleLabel.attributedText = syncMessage
     }
 
     @objc func fxaAccountDidChange(notification: NSNotification) {
