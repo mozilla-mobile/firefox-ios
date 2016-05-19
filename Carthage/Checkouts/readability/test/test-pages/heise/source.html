@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head>
+    <title>1Password für Mac generiert Einmal-Passwörter | Mac &amp; i</title>
+    
+
+    
+
+
+
+<meta charset="utf-8" />
+<meta content="Heise Medien" name="publisher" />
+<meta content="width=1175" name="viewport" />
+<link id="mobil_variante" href="//m.heise.de/meldung/1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html" media="only screen and (max-width: 640px)" rel="alternate" />
+
+    <link href="/mac-and-i/meldung/HBO-Zugriff-per-Apple-Geraet-verfuegbar-2596982.html" title="Vorige Meldung" rel="prev" />    <link href="/mac-and-i/meldung/GPS-Streckenerfasser-Speed-PRO-aktuell-kostenlos-2597093.html" title="Naechste Meldung" rel="next" /><link href="/mac-and-i/" title="Startseite" type="text/html" rel="home" />
+<link href="/mac-and-i/impressum.html" title="Copyright" rel="copyright" />    <meta content="2015-04-08T12:46:00" name="date" />
+    <meta content="1Password, Mac OS X, Passwort, Passwortmanager, Sicherheit, TOTP" name="keywords" />
+            <meta content="News" name="topic" />
+        <meta content="Das in der iOS-Version bereits enthaltene TOTP-Feature ist nun auch für OS X 10.10 verfügbar. Zudem gibt es neue Zusatzfelder in der Datenbank und weitere Verbesserungen." name="description" />
+        <meta content="1Password für Mac generiert Einmal-Passwörter" name="fulltitle" />
+        <meta content="1Password für Mac generiert Einmal-Passwörter" name="DC.title" />
+        <meta content="Das in der iOS-Version bereits enthaltene TOTP-Feature ist nun auch für OS X 10.10 verfügbar. Zudem gibt es neue Zusatzfelder in der Datenbank und weitere Verbesserungen." name="DC.description" />
+        <meta scheme="DCTERMS.URI" content="http://heise.de/-2596987" name="DC.identifier" />
+        <meta content="" name="kill_switch" />    <!--googleoff: all-->
+    <meta content="1Password für Mac generiert Einmal-Passwörter" property="og:title" />
+    <meta content="website" property="og:type" />
+    <meta content="de_DE" property="og:locale" />
+    <meta content="http://www.heise.de/mac-and-i/meldung/1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html" property="og:url" />
+    <meta content="Mac &amp; i" property="og:site_name" />
+            <meta content="http://www.heise.de/imgs/18/1/4/6/2/3/5/1/Barcode-Scanner-With-Border-f0c62350bd8d9d96.jpeg" property="og:image" />
+    <meta content="Das in der iOS-Version bereits enthaltene TOTP-Feature ist nun auch für OS X 10.10 verfügbar. Zudem gibt es neue Zusatzfelder in der Datenbank und weitere Verbesserungen." property="og:description" />
+
+    <!--googleon: all--><!--googleoff: all-->
+<meta content="InterRed V15.4.1, http://www.interred.de/, InterRed GmbH" name="generator" />
+<!--googleon: all-->
+
+    
+
+
+
+
+
+
+
+<script src="//cdn.optimizely.com/js/2310910166.js"></script>
+
+
+    
+<script src="/js/jquery/jquery-1.7.1.min.js" type="text/javascript"></script>
+    
+
+    
+<script src="/js/plugins/jquery-ui-1.8.18_cycle.custom.min.js" type="text/javascript"></script>
+    
+
+
+
+<script src="/js/plugins/jquery.equalheights.min.js" type="text/javascript"></script>
+
+
+<script src="/support/lib/teaser_linking.js" type="text/javascript"></script>
+
+<script src="/js/ho/link_inline_images.min.js" type="text/javascript"></script>
+
+
+
+<script src="//script.ioam.de/iam.js" type="text/javascript"></script>
+
+
+<script src="//ad.yieldlab.net/yp/66424,66430,66442,66444,66446?ts=20150409195044" type="text/javascript"></script>
+
+
+
+
+
+
+    
+<link type="text/css" rel="stylesheet" href="/stil/standard2008.css?383ad47c92d5add95b5f" />
+<link media="print" type="text/css" rel="stylesheet" href="/stil/drucken.css?fead9096de1c0d0ca94e" />
+
+<link type="text/css" rel="stylesheet" href="/stil/heise.css?65bb0f586a7f0285f4fc" />
+
+
+    <!--googleoff: all-->
+    <link rel="shortcut icon" href="/favicon_mac-and-i.ico" />
+    <link href="mailto:redaktion%40mac%2Dand%2Di.de" title="Kontakt" rel="author" />
+    <link href="http://www.heise.de/mac-and-i/suche/" title="Suche" rel="search" />
+    <link type="application/atom+xml" href="http://www.heise.de/mac-and-i/news-atom.xml" title="Aktuelle News von Mac &amp; i" rel="alternate" />
+    <link type="application/rss+xml" href="http://www.heise.de/mac-and-i/news.rdf" title="Aktuelle News von Mac &amp; i (für ältere RSS-Reader)" rel="alternate" />
+    <link href="/mac-and-i/icons/apple-touch-icon-57x57-precomposed.png" rel="apple-touch-icon-precomposed" />
+    <link href="/mac-and-i/icons/apple-touch-icon-114x114-precomposed.png" sizes="114x114" rel="apple-touch-icon-precomposed" />
+    <link href="/mac-and-i/icons/apple-touch-icon-72x72-precomposed.png" sizes="72x72" rel="apple-touch-icon-precomposed" />
+    <meta content="Magazin rund um Apple" name="application-name" />
+    <meta content="Mac &amp; i" name="msapplication-tooltip" />
+    <meta content="/mac-and-i/" name="msapplication-starturl" />
+    <meta content="#666666" name="msapplication-TileColor" />
+    <meta content="/mac-and-i/icons/windows_tiny.png" name="msapplication-square70x70logo" />
+    <meta content="/mac-and-i/icons/windows_square.png" name="msapplication-square150x150logo" />
+    <meta content="/mac-and-i/icons/windows_wide.png" name="msapplication-wide310x150logo" />
+    <meta content="/mac-and-i/icons/windows_large.png" name="msapplication-square310x310logo" />
+    <meta content="frequency=30;polling-uri=http://notifications.buildmypinnedsite.com/?feed=http://www.heise.de/mac-and-i/news-atom.xml&amp;id=1;polling-uri2=http://notifications.buildmypinnedsite.com/?feed=http://www.heise.de/mac-and-i/news-atom.xml&amp;id=2;polling-uri3=http://notifications.buildmypinnedsite.com/?feed=http://www.heise.de/mac-and-i/news-atom.xml&amp;id=3;polling-uri4=http://notifications.buildmypinnedsite.com/?feed=http://www.heise.de/mac-and-i/news-atom.xml&amp;id=4;polling-uri5=http://notifications.buildmypinnedsite.com/?feed=http://www.heise.de/mac-and-i/news-atom.xml&amp;id=5; cycle=1" name="msapplication-notification" />
+    <meta content="Mac &amp; i" name="DC.creator" />
+    <link type="text/css" rel="stylesheet" href="/stil/mac-and-i/mac2012.css?29c941bf0f8196521a1c" />
+    <link rel="publisher" href="https://plus.google.com/117217265406849882611" />
+    <script src="/support/lib/jquery/jquery.clearfield.js?ce79f657201b214e3560" type="text/javascript"></script>
+    
+
+
+
+<style type="text/css"></style></head>
+
+<body class="apple">
+
+
+
+
+
+
+
+    
+        <div class="heisetopnavi heisetopnavi_relaunch">
+    <div class="heisetopnavi_header">
+        <header role="banner">
+            <div class="heisetopnavi_login">
+                <script src="/js/ho/login.min.js" type="text/javascript"></script>
+                <div id="navi_login">
+                    <p><span class="heise_foren">Heise-Foren:</span> <a href="https://www.heise.de/login?forward=http%3A%2F%2Fwww.heise.de%2Fmac-and-i%2Fmeldung%2F1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html">Einloggen</a> | <a href="https://www.heise.de/register?forward=http%3A%2F%2Fwww.heise.de%2Fmac-and-i%2Fmeldung%2F1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html">Registrieren</a></p>
+                </div>
+            </div>
+            <nav role="navigation">
+                <div class="heisetopnavi_hover_legacy">
+                    <a title="heise online" class="heisetopnavi_logo" href="/index.html/from/navi_oben_ho">
+                        <img width="200" height="44" id="heisetopnavi_ho_logo_top_img" alt="heise online" src="//www.heise.de/icons/ho/heise_online_logo_top.gif" />
+                    </a>
+                    <a aria-haspopup="true" class="heisetopnavi_button" href="#heisetopnavi_sub_container">Menü auf-/zuklappen</a>
+                    <div id="heisetopnavi_sub_container">
+                        <ul id="heisetopnavi_sub">
+                            <li>
+                                <ul>
+                                    <li class="heisetopnavi_ho"><a name="dachzeile.ho.ho" title="heise online – IT-News" href="/index.html/from/navi_oben_ho">News</a></li>
+                                    <li class="heisetopnavi_ct"><a name="dachzeile.ho.ct" title="c't – Magazin für Computertechnik" href="/ct/from/navi_oben_ct">c't</a></li>
+                                    <li class="heisetopnavi_ix"><a name="dachzeile.ho.ix" title="iX – Magazin für professionelle Informationstechnik" href="/ix/from/navi_oben_ix">iX</a></li>
+                                    <li class="heisetopnavi_tr"><a name="dachzeile.ho.tr" title="Technology Review – Das M.I.T.-Magazin für Innovation" href="/tr/from/navi_oben_tr">Technology Review</a></li>
+                                    <li class="heisetopnavi_mac"><a name="dachzeile.ho.mac-and-i" title="Mac &amp; i – Nachrichten, Tests, Tipps und Meinungen rund um Apple" href="/mac-and-i/from/navi_oben_mac">Mac &amp; i</a></li>
+                                    <li class="heisetopnavi_tp"><a name="dachzeile.ho.tp" title="Telepolis" href="/tp/from/navi_oben_tp">Telepolis</a></li>
+                                    <li class="heisetopnavi_hh"><a name="dachzeile.ho.make" title="Make – Kreativ mit Technik" href="/make/from/navi_oben_hh">Make</a></li>
+                                    <li class="heisetopnavi_df"><a name="dachzeile.ho.digitale-fotografie" title="Digitale Fotografie" href="/foto/special/from/navi_oben_df">Digitale Fotografie</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li class="heisetopnavi_aut"><a name="dachzeile.ho.autos" title="heise Autos – News, Tests, Technik, Service rund ums Auto" href="/autos/from/navi_oben_aut">heise Autos</a></li>
+                                    <li class="heisetopnavi_dev"><a name="dachzeile.ho.developer" title="heise Developer – Informationen für Entwickler" href="/developer/from/navi_oben_dev">heise Developer</a></li>
+                                    <li class="heisetopnavi_foto"><a name="dachzeile.ho.foto" title="heise Foto – Das Online-Magazin rund ums digitale Bild" href="/foto/from/navi_oben_foto">heise Foto</a></li>
+                                    <li class="heisetopnavi_net"><a name="dachzeile.ho.netze" title="heise Netze – Alles über Netzwerk-Technik" href="/netze/from/navi_oben_net">heise Netze</a></li>
+                                    <li class="heisetopnavi_op"><a name="dachzeile.ho.open" title="heise open – Open Source im Unternehmen" href="/open/from/navi_oben_op">heise Open Source</a></li>
+                                    <li class="heisetopnavi_sec"><a name="dachzeile.ho.security" title="heise Security – News, Dienste und Foren zum Thema Computer-Sicherheit" href="/security/from/navi_oben_sec">heise Security</a></li>
+                                    <li class="heisetopnavi_video"><a name="dachzeile.ho.video" title="heise Video – Clips zu Nachrichten und Artikeln" href="/video/from/navi_oben_video">heise Video</a></li>
+                                    <li class="heisetopnavi_tech"><a name="dachzeile.ho.techstage" title="TechStage – News, Tests &amp; Praxis zu Smartphones und Tablets mit Android, iOS, Windows Phone &amp; Co." href="/redirect-to/techstage/from/navi_oben_techstage">TechStage</a></li>
+                                </ul>
+                            </li>
+                            <li class="heisetopnavi_third">
+                                <ul>
+                                    <li class="heisetopnavi_swv"><a name="dachzeile.ho.download" title="Software-Verzeichnis – Software zum Download fuer Windows, Mac, Linux, iPhone, Symbian, Android" href="/download/from/navi_oben_swv">Download</a></li>
+                                    <li class="heisetopnavi_pvg"><a name="dachzeile.ho.preisvergleich" title="Preisvergleich – Günstige Preise, Meinungen und Bewertungen zu vielen Produkten" href="/preisvergleich/from/navi_oben_pvg">Preisvergleich</a></li>
+                                    <li class="heisetopnavi_job"><a name="dachzeile.ho.jobs" title="heise jobs – Jobbörse für qualifizierte Fach- und Führungskräfte aus der IT-Branche" href="/jobs/from/navi_oben_job">Stellenmarkt</a></li>
+                                    <li class="heisetopnavi_eve"><a name="dachzeile.ho.events" title="heise Events – Konferenzen, Seminare, Workshops" href="/events/from/navi_oben_eve">Veranstaltungen</a></li>
+                                    <li class="heisetopnavi_itm"><a name="dachzeile.ho.itmarkt" title="IT-Markt – Branchenverzeichnis der IT-Fachhändler" href="/itmarkt/from/navi_oben_itm">IT-Markt</a></li>
+                                    <li class="heisetopnavi_whi"><a name="dachzeile.ho.whitepapers" title="heise Whitepapers – Kostenloser Download aktueller Praxisbeispiele, Firmeninfos, Case Studies und Webcasts zu neuen Produkten, Strategien und Lösungen namhafter IT-Hersteller" href="/whitepapers/from/navi_oben_whi">Whitepapers</a></li>
+                                    <li class="heisetopnavi_webcasts"><a name="dachzeile.ho.webcasts" title="heise Webcasts – Kompakte Firmeninformationen zu komplexen IT-Sachverhalten" href="/redirect-to/webcasts/from/navi_oben_webcasts">Webcasts</a></li>
+                                    <li class="heisetopnavi_tarifr"><a name="dachzeile.ho.tarifrechner" title="Tarifrechner – DSL, Mobiles Internet, Handy, Telefon, Strom, Gas" href="/redirect-to/tarifrechner/from/navi_oben_tarifr">Tarifrechner</a></li>
+                                </ul>
+                            </li>
+                            <li class="heisetopnavi_fourth">
+                                <ul>
+                                    <li class="heisetopnavi_shop"><a name="dachzeile.ho.shop" title="heise shop – IT Fachzeitschriften, Bücher, CD/DVD/Blu-ray" href="/redirect-to/shop/from/navi_oben_shop">heise shop</a></li>
+                                    <li class="heisetopnavi_kio"><a name="dachzeile.ho.artikel-archiv" title="Artikel-Archiv – c't, iX, Technology Review, Digitale Fotografie, Mac &amp; i, Sonderhefte" href="/artikel-archiv/from/navi_oben_kio">Artikel-Archiv</a></li>
+                                    <li class="heisetopnavi_abo"><a name="dachzeile.ho.abo" title="Abo – c't, iX, Technology Review, Digitale Fotografie, Mac &amp; i" href="/redirect-to/abo/from/navi_oben_abo">Zeitschriften-Abo</a></li>
+                                    <li class="heisetopnavi_hmg"><a name="dachzeile.ho.hmg" title="Arbeiten bei heise – Aktuelle Stellenangebote der Heise Gruppe" href="/redirect-to/hmg/from/navi_oben_hmg">Arbeiten bei heise</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            
+
+            
+                
+                    
+                    
+            
+
+            <form role="search" id="heisetopnavi_search" action="/mac-and-i/suche/" method="get" accept-charset="utf-8">
+                <fieldset>
+                    <input type="text" placeholder="in Mac &amp; i suchen" name="q" value="" class="search_text" /><input type="image" name="search_submit" class="search_submit" alt="Los" src="//www.heise.de/icons/ho/heise_online_lupe.gif" />
+                    <input type="hidden" name="rm" value="search" class="search_hidden" />
+                </fieldset>
+            </form>
+        </header>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+if (typeof jQuery !== "undefined") {
+    jQuery(document).ready(function($) {
+        // Support Touch-Devices
+        if ('ontouchstart' in document) {
+            $('.heisetopnavi_relaunch').removeClass('no-touch');
+        }
+        $('.heisetopnavi_button').bind('touchstart', function(e) {
+            e.preventDefault();
+            if ($(e.target).is('a.heisetopnavi_button')) {
+                $(this).toggleClass('active');
+                $('.heisetopnavi header &gt; nav').toggleClass('hover');
+            }
+        });
+
+        $('.heisetopnavi_relaunch .heisetopnavi_button').click(function(e) {
+            e.preventDefault();
+        });
+
+        // Support Keyboard
+        $('.heisetopnavi_relaunch .heisetopnavi_button').keyup(function(e) {
+            if (e.which == 13 &amp;&amp; $(e.target).is('a.heisetopnavi_button')) {
+                $('.heisetopnavi_relaunch .heisetopnavi_button').toggleClass('active');
+                $('.heisetopnavi_relaunch header &gt; nav').toggleClass('hover');
+            }
+        });
+
+        /*
+         * Open/Close Menu with JavaScript for more Usability
+         */
+
+        $('.heisetopnavi_relaunch').removeClass('no-touch');
+
+        // Logo + Icon
+        $('.heisetopnavi_relaunch .heisetopnavi_hover_legacy').mouseenter(function() {
+            var timeout_id = window.setTimeout(function() {
+                $('.heisetopnavi_relaunch .heisetopnavi_button').addClass('active');
+                $('.heisetopnavi_relaunch nav').addClass('hover');
+                $('body').addClass('refreshDOM');
+                $('body').removeClass('refreshDOM');
+            }, 300);
+            $(this).data('timeout_id', timeout_id);
+        });
+        $('.heisetopnavi_relaunch .heisetopnavi_hover_legacy').mouseleave(function() {
+            var timeout_id = $(this).data('timeout_id');
+            window.clearTimeout(timeout_id);
+            timeout_id = window.setTimeout(function() {
+                $('.heisetopnavi_relaunch .heisetopnavi_button').removeClass('active');
+                $('.heisetopnavi_relaunch nav').removeClass('hover');
+                $('body').addClass('refreshDOM');
+                $('body').removeClass('refreshDOM');
+            }, 0);
+            $(this).data('timeout_id', timeout_id);
+        });
+    });
+
+    if (typeof heiseLogin != "undefined") {
+        heiseLogin.login_fill_navigation({});
+    }
+}
+</script>
+
+    
+
+
+<div id="container">
+    <div id="container_content">
+        <div id="logo_bereich">
+            <a title="Mac &amp; i" href="/mac-and-i/"><img id="logo" alt="heise Mac &amp; i" src="//3.f.ix.de/mac-and-i/icons/heise_mac-and-i_logo.gif" /></a>
+        </div>
+        <ul class="navigation_news">
+            <li><a href="/mac-and-i/news/7_tage_news/">7-Tage-News</a></li>
+            <li><a href="/mac-and-i/news/archiv/">News-Archiv</a></li>
+            <li><a href="http://live.mac-and-i.de/#AllEvents">Liveticker</a></li>
+            <li><a href="/mac-and-i/news/foren/">News-Foren</a></li>
+            <li><a href="/mac-and-i/artikel/foren/">Artikel-Foren</a></li>
+            <li><a href="/newsletter/manage/mac-and-i">Newsletter</a></li>
+            <li><a href="/mac-and-i/kontakt/">Kontakt</a></li>
+            <li><a title="News RSS-Feed (Atom)" href="/mac-and-i/news-atom.xml">RSS</a></li>
+        </ul>
+        <ul id="navi_main">
+                    <li id="first" class="aktiv"><a href="/mac-and-i/news/">News</a></li>
+                    <li><a href="/mac-and-i/artikel/">Artikel</a></li>
+                    <li><a href="/mac-and-i/forum/">Forum</a></li>
+                    <li><a href="/mac-and-i/produkte/">Produkte</a></li>
+                    <li><a href="/mac-and-i/heft/">Heft</a></li>
+                    <li><a href="/mac-and-i/heftarchiv/">Archiv</a></li>
+                    <li id="last"><a href="http://shop.heise.de/mac-and-i-abo/">Abo</a></li>
+        </ul>
+        <ul class="meta_navi">
+            <li><a rel="external" title="Mac &amp; i Twitter" href="http://twitter.com/#%21/mac_and_i"><img alt="Mac &amp; i Twitter" src="//1.f.ix.de/icons/ho/navi_icon_twitter_big.png" /></a></li>
+            <li><a rel="external" title="Mac &amp; i Facebook" href="http://www.facebook.com/ct.Mac.and.i"><img alt="Mac &amp; i Facebook" src="//3.f.ix.de/icons/ho/navi_icon_facebook_big.png" /></a></li>
+            <li><a target="_blank" title="Mac &amp; i Google+" rel="publisher" href="https://plus.google.com/+Mac-and-iDe"><img alt="Mac &amp; i Google+" src="//3.f.ix.de/icons/ho/navi_icon_google_big.png" /></a></li>
+            <li><a target="_blank" title="Mac &amp; i YouTube" rel="publisher" href="https://www.youtube.com/macandiVideo"><img alt="Mac &amp; i YouTube" src="//3.f.ix.de/icons/ho/navi_icon_youtube_black_big.png" /></a></li>
+            <li>
+                <dl class="apps">
+                    <dt><img alt="Mac &amp; i Apps" src="//2.f.ix.de/mac-and-i/icons/navi_icon_apps.png" /></dt>
+                    <dd><a rel="external" title="Mac &amp; i für das iPhone" href="http://itunes.apple.com/de/app/mac-i/id424199222?mt=8"><img alt="Mac &amp; i für das iPhone" src="//2.f.ix.de/icons/ho/navi_icon_mobi_mac.png" /></a></dd>
+                    <dd><a rel="external" title="Mac &amp; i für das iPad" href="http://itunes.apple.com/de/app/mac-i/id424199222?mt=8"><img alt="Mac &amp; i für das iPad" src="//2.f.ix.de/icons/ho/navi_icon_ipad.png" /></a></dd>
+                </dl>
+            </li>
+        </ul>
+            
+	<div id="breadcrumb">
+	
+		<a title="Mac &amp; i" href="/mac-and-i/">Mac &amp; i</a>
+		<span class="bread_gt">&gt;</span>
+	
+		<a title="News" href="/mac-and-i/news/">News</a>
+		<span class="bread_gt">&gt;</span>
+	
+		<a title="2015" href="/mac-and-i/news/archiv/?jahr=2015">2015</a>
+		<span class="bread_gt">&gt;</span>
+	
+		<a title="KW 15" href="/mac-and-i/news/archiv/?jahr=2015;woche=15">KW 15</a>
+		<span class="bread_gt">&gt;</span>
+	
+		<span class="titel">1Password für Mac generiert Einmal-Passwörter</span>
+		
+	
+	</div>
+
+
+        <div id="mitte">
+                <div id="mitte_links">
+            
+
+<div id="mitte_news">
+        <p class="news_navi">                <a href="/mac-and-i/meldung/HBO-Zugriff-per-Apple-Geraet-verfuegbar-2596982.html"><span class="rsaquo">«</span> Vorige</a>            |                <a href="/mac-and-i/meldung/GPS-Streckenerfasser-Speed-PRO-aktuell-kostenlos-2597093.html">Nächste <span class="rsaquo">»</span></a>        </p>    <article>
+        <p class="news_datum">08.04.2015 12:46</p>
+        <!--googleon: all-->
+        <!-- RSPEAK_START -->
+        <h1> 1Password für Mac generiert Einmal-Passwörter</h1>
+        <div class="meldung_wrapper">
+            
+    <!-- RSPEAK_STOP -->
+    <figure class="aufmacherbild">
+            <img src="//3.f.ix.de/scale/geometry/600/q75/imgs/18/1/4/6/2/3/5/1/Barcode-Scanner-With-Border-fc08c913da5cea5d.jpeg" />
+        
+            <figcaption>
+                
+                <p class="caption">1Password scannt auch QR-Codes.</p>
+                
+                
+                <p class="source">(Bild: Hersteller)</p>
+                
+            </figcaption>
+        
+    </figure>
+    <!-- RSPEAK_START -->
+
+
+            <p class="meldung_anrisstext"><strong>Das in der iOS-Version bereits enthaltene TOTP-Feature ist nun auch für OS X 10.10 verfügbar. Zudem gibt es neue Zusatzfelder in der Datenbank und weitere Verbesserungen.</strong></p>
+            <p><a rel="external" target="_blank" href="https://itunes.apple.com/de/app/1password-password-manager/id443987910">AgileBits hat Version 5.3 seines bekannten Passwortmanagers 1Password für OS X freigegeben.</a> Mit dem Update wird eine praktische Funktion nachgereicht, die <a href="/mac-and-i/meldung/Passwortmanager-1Password-mit-groesseren-Updates-fuer-OS-X-und-iOS-2529204.html">die iOS-Version der Anwendung bereits seit längerem beherrscht</a>: Das direkte Erstellen von Einmal-Passwörtern. Unterstützt wird dabei der <a rel="external" target="_blank" href="https://blog.agilebits.com/2015/01/26/totp-for-1password-users/">TOTP-Standard</a> (Time-Based One-Time Passwords), den unter anderem Firmen wie Evernote, Dropbox oder Google einsetzen, um ihre Zugänge besser abzusichern. Neben Account und regulärem Passwort wird dabei dann ein Zusatzcode verlangt, der nur kurze Zeit gilt.</p>
+<p>Zur TOTP-Nutzung muss zunächst ein Startwert an 1Password übergeben werden. Das geht unter anderem per QR-Code, den die App über ein neues Scanfenster selbst einlesen kann – etwa aus dem Webbrowser. Eine Einführung in die Technik gibt <a rel="external" target="_blank" href="http://1pw.ca/TOTPvideoMac">ein kurzes Video</a>. Die TOTP-Unterstützung in 1Password erlaubt es, auf ein zusätzliches Gerät (z.B. ein iPhone) neben dem Mac zu verzichten, das den Code liefert – was allerdings auch die Sicherheit verringert, weil es keinen "echten" zweiten Faktor mehr gibt.</p>
+<p>Update 5.3 des Passwortmanagers liefert auch noch weitere Verbesserungen. So gibt es die Möglichkeit, FaceTime-Audio- oder Skype-Anrufe aus 1Password zu starten, die Zahl der Zusatzfelder in der Datenbank wurde erweitert und der Umgang mit unterschiedlichen Zeitzonen klappt besser. Die Engine zur Passworteingabe im Browser soll beschleunigt worden sein.</p>
+<p>1Password kostet aktuell knapp 50 Euro im Mac App Store und setzt in seiner aktuellen Version mindestens OS X 10.10 voraus.<!-- AUTHOR-DATA-MARKER-BEGIN -->
+
+
+<!-- RSPEAK_STOP -->
+<span class="ISI_IGNORE">(<a title="Ben Schwan" href="mailto:bsc@heise.de">bsc</a>)</span>
+<br class="clear" />
+<!-- RSPEAK_START -->
+<!-- AUTHOR-DATA-MARKER-END -->
+</p>
+
+        </div>
+
+    <!-- RSPEAK_STOP -->
+    <!--googleoff: all-->
+
+        <footer class="article-footer">            <p class="news_navi">                    <a href="/mac-and-i/meldung/HBO-Zugriff-per-Apple-Geraet-verfuegbar-2596982.html"><span class="rsaquo">«</span> Vorige</a>                |                    <a href="/mac-and-i/meldung/GPS-Streckenerfasser-Speed-PRO-aktuell-kostenlos-2597093.html">Nächste <span class="rsaquo">»</span></a>            </p>
+            <div class="link_forum_beitrag news">
+                
+                    
+                
+                <p>
+                    <a href="http://www.heise.de/forum/Mac-i/News-Kommentare/1Password-fuer-Mac-generiert-Einmal-Passwoerter/forum-65645/comment/">
+                        <b>
+                            
+                                Kommentare lesen
+                            
+                             
+                                (1 Beitrag)
+                            
+                        </b>
+                    </a>
+                </p>
+            </div>    
+        
+                    <p class="themen_foren">
+                
+                    Forum zum Thema: 
+                
+                <a title="Zum Themenforum Software für Mac OS X" href="http://www.heise.de/forum/Mac-i/Themen-Hilfe/Software-fuer-Mac-OS-X/forum-12/comment/">
+                    
+                        Software für Mac OS X
+                    
+                </a>
+            </p>
+        <div data-services="[&quot;facebook&quot;,&quot;twitter&quot;,&quot;googleplus&quot;,&quot;mail&quot;,&quot;info&quot;]" class="shariff clear" data-backend-url="/shariff-backend/"><ul class="theme-color orientation-horizontal"><li class="shariff-button facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.heise.de%2Fmac-and-i%2Fmeldung%2F1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html" rel="popup" title="Bei Facebook teilen"><span class="fa fa-facebook"></span><span class="share_text">teilen</span><span class="share_count">17</span></a></li><li class="shariff-button twitter"><a href="https://twitter.com/intent/tweet?text=1Password%20f%C3%BCr%20Mac%20generiert%20Einmal-Passw%C3%B6rter%20-%20Mac%20%26%20i&amp;url=http%3A%2F%2Fwww.heise.de%2Fmac-and-i%2Fmeldung%2F1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html" rel="popup" title="Bei Twitter teilen"><span class="fa fa-twitter"></span><span class="share_text">tweet</span><span class="share_count">0</span></a></li><li class="shariff-button googleplus"><a href="https://plus.google.com/share?url=http%3A%2F%2Fwww.heise.de%2Fmac-and-i%2Fmeldung%2F1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html" rel="popup" title="Bei Google+ teilen"><span class="fa fa-google-plus"></span><span class="share_text">+1</span><span class="share_count">2</span></a></li><li class="shariff-button mail"><a href="http://www.heise.de/mac-and-i/meldung/1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html?view=mail" target="_blank" title="Per E-Mail versenden"><span class="fa fa-envelope"></span><span class="share_text">mail</span></a></li><li class="shariff-button info"><a href="http://ct.de/-2467514" target="_blank" title="weitere Informationen"><span class="fa fa-info"></span><span class="share_text">Info</span></a></li></ul></div>
+            <p class="permalink">Permalink: <a href="http://heise.de/-2596987">http://heise.de/-2596987</a></p>
+
+        <p class="printversion">
+            <a rel="nofollow" href="/mac-and-i/meldung/1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html?view=print">Version zum Drucken</a>
+        </p>
+
+        
+
+
+
+<div class="related_items">
+	<h4>Auch auf heise online:</h4>
+	<ul>
+	
+	    <li><a title="1Password verbessert iOS-8-Erweiterung" href="http://www.heise.de/mac-and-i/meldung/1Password-verbessert-iOS-8-Erweiterung-2587926.html/from/related">1Password verbessert iOS-8-Erweiterung</a></li>
+	
+	    <li><a title="Parallels-Mac-Bundle mit 1Password und Waltr" href="http://www.heise.de/mac-and-i/meldung/Parallels-Mac-Bundle-mit-1Password-und-Waltr-2572511.html/from/related">Parallels-Mac-Bundle mit 1Password und Waltr</a></li>
+	
+	    <li><a title="1Password 5 für Yosemite angepasst" href="http://www.heise.de/mac-and-i/meldung/1Password-5-fuer-Yosemite-angepasst-2428275.html/from/related">1Password 5 für Yosemite angepasst</a></li>
+	
+	    <li><a title="1Password für iOS bringt iTunes-Synchronisation zurück – teilweise" href="http://www.heise.de/mac-and-i/meldung/1Password-fuer-iOS-bringt-iTunes-Synchronisation-zurueck-teilweise-2213740.html/from/related">1Password für iOS bringt iTunes-Synchronisation zurück – teilweise</a></li>
+	
+	    <li><a title="1Password mit Heartbleed-Warnfunktion" href="http://www.heise.de/mac-and-i/meldung/1Password-mit-Heartbleed-Warnfunktion-2183120.html/from/related">1Password mit Heartbleed-Warnfunktion</a></li>
+	
+	    <li><a title="1Password mit Updates für OS X und iOS" href="http://www.heise.de/mac-and-i/meldung/1Password-mit-Updates-fuer-OS-X-und-iOS-2143961.html/from/related">1Password mit Updates für OS X und iOS</a></li>
+	
+	</ul>
+</div>
+
+
+        
+<p class="themenseiten">
+    <span class="themen_label">Mehr zum Thema</span>
+    
+        <a title="Themenseite Mac OS X" href="/thema/Mac-OS-X">Mac OS X</a>
+    
+        <a title="Themenseite Passwort" href="/thema/Passwort">Passwort</a>
+    
+</p>
+
+
+        
+
+
+        </footer>
+    </article>
+
+</div>
+
+            <div class="adbottom"><!--googleoff: index-->
+<!-- RSPEAK_STOP -->
+<a class="hinweis_anzeige" target="_blank" href="http://www.heise.de/mediadaten/online/">Anzeige</a><br /><script type="text/javascript">
+&lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+var yp_res; if (typeof yl !== "undefined" &amp;&amp; yl.YpResult !== "undefined") { yp_res = yl.YpResult.get(''); }
+document.write('&lt;script src="http://ad-emea.doubleclick.net/N6514/adj/mac/mac-inhalt;sz=500x500;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=1;_YL_;ord=_ORD_?" type="text/javascript"&gt;&lt;\/script&gt;'.replace('_ORD_', dfp_ord).replace(';_YL_', typeof yp_res !== "undefined" &amp;&amp; yp_res.pricerange ? ';pricerange=' + yp_res.pricerange : ''));
+if (typeof jQuery != 'undefined') {
+    jQuery( function() {
+        jQuery('.adbottom div[id^=google_ads_div_]').parent().prepend('&lt;span style="font-family: Arial, Helvetica, sans-serif; color: Black; font-size:7pt; font-weight: normal; text-align: left;"&gt;Anzeige&lt;/span&gt;&lt;br/&gt;');
+    });
+}
+
+//--&gt;&lt;!]]&gt;
+</script><script type="text/javascript" src="http://ad-emea.doubleclick.net/N6514/adj/mac/mac-inhalt;sz=500x500;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=1;ord=1875073260?"></script>
+<noscript>&lt;div&gt;&lt;a href="http://ad-emea.doubleclick.net/N6514/jump/mac/mac-inhalt;sz=500x500;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=1;_YL_;ord=7840756744?" target="_blank"&gt;&lt;img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/mac/mac-inhalt;sz=500x500;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=1;_YL_;ord=7840756744?" /&gt;&lt;/a&gt;&lt;/div&gt;</noscript>
+
+<!-- RSPEAK_START -->
+<!--googleon: index--><!--googleoff: all--></div>
+                </div>
+                <div id="mitte_rechts">
+                        <!--googleoff: index-->
+<!-- RSPEAK_STOP -->
+<div class="bcadv ISI_IGNORE bcadv_oben"><a class="hinweis_anzeige" target="_blank" href="http://www.heise.de/mediadaten/online/">Anzeige</a><br /><script type="text/javascript">
+&lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+var yp_res; if (typeof yl !== "undefined" &amp;&amp; yl.YpResult !== "undefined") { yp_res = yl.YpResult.get('66442'); }
+document.write('&lt;script src="http://ad-emea.doubleclick.net/N6514/adj/mac/mac-inhalt;sz=300x250,336x280;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=2;_YL_;ord=_ORD_?" type="text/javascript"&gt;&lt;\/script&gt;'.replace('_ORD_', dfp_ord).replace(';_YL_', typeof yp_res !== "undefined" &amp;&amp; yp_res.pricerange ? ';pricerange=' + yp_res.pricerange : ''));
+//--&gt;&lt;!]]&gt;
+</script><script type="text/javascript" src="http://ad-emea.doubleclick.net/N6514/adj/mac/mac-inhalt;sz=300x250,336x280;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=2;ord=1875073260?"></script>
+<noscript>&lt;div&gt;&lt;a href="http://ad-emea.doubleclick.net/N6514/jump/mac/mac-inhalt;sz=300x250,336x280;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=2;_YL_;ord=7840756744?" target="_blank"&gt;&lt;img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/mac/mac-inhalt;sz=300x250,336x280;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=2;_YL_;ord=7840756744?" /&gt;&lt;/a&gt;&lt;/div&gt;</noscript>
+</div>
+<!-- RSPEAK_START -->
+<!--googleon: index--><!-- RSPEAK_STOP -->
+                        <!--googleoff: all-->
+                    
+    
+    <div class="magazinteaser">
+        <a href="/mac-and-i/heft/">
+            <img width="127" height="180" alt="" src="//1.f.ix.de/mac-and-i/imgs/65/1/3/7/0/9/3/7/mac-2015-02-92ccee0374aa9def.jpeg" />
+            <h3>Heft 2/2015</h3>
+            <p>Billig kontra Apple • Zaubern mit Skripten • HomeKit • Datenrettung • iPad automatisieren • Standort freigeben • Verräterische Daten • Kameras fernsteuern •  MacBooks • Bluetooth-Kopfhörer • iPhone-6-Hüllen • Ableton-Live-Apps • Kommt das Apple-Auto?</p>
+        </a>
+        <ul>
+            <li class="first"><a href="/mac-and-i/heft/">Aktuelles Heft</a></li>
+            <li><a target="_blank" href="http://shop.heise.de/mac-and-i-abo/">Abonnieren</a></li>
+            <li><a href="/mac-and-i/heftarchiv/">Heftarchiv</a></li>
+        </ul>
+    </div>
+
+
+
+                    
+    
+    <form id="webcode" method="get" action="/bin/softlink">
+        <div class="ident">Webcode:</div> <div class="url">www.mac-and-i.de/</div>
+        <fieldset>
+           <input type="text" id="webcode_input" class="textfield" required="required" placeholder="mi1101003" size="9" name="ctid" />
+           <input type="submit" class="submit" value="enter" />
+           <input type="hidden" name="objekt" value="mi" />
+        </fieldset>
+    </form>
+
+
+
+                    
+
+<div class="teaser_frei">
+        <div class="anriss_mit_bild_links">            <h3><a href="http://shop.heise.de/ct-mac-special-2014?pid=5001002207">c't special Mac</a></h3>            <a href="http://shop.heise.de/ct-mac-special-2014?pid=5001002207"><img alt="" src="//1.f.ix.de/mac-and-i/imgs/65/1/3/8/3/2/3/7/Titel-97485b58f23ceb92.png" /></a>            <p><a href="http://shop.heise.de/ct-mac-special-2014?pid=5001002207"><a href="http://shop.heise.de/ct-mac-special-2014?pid=5001002207">
+                Mac: Der bessere PC • Kaufberatung: Alle Macs im Vergleich • Umsteigen von Windows • 150 Seiten Praxistipps zu OS X und Anwendungen • Mac schneller machen • Erste Hilfe, wenns klemmt • Terminal <a href="http://shop.heise.de/ct-mac-special-2014?pid=5001002207"><a href="http://shop.heise.de/ct-mac-special-2014?pid=5001002207"><span class="mehr_schnipsel">Mehr…</span></a></a>
+            </a></a></p>    </div>
+</div>
+
+
+
+                    
+    
+    <script type="text/javascript">
+        $(document).ready( function() {
+            $('div#meistgelesen_tabbox').tabs();
+        });
+    </script>
+    <div id="meistgelesen_tabbox" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul id="meistgelesen_tabs" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#meistgelesen_tabs-1">Meistgelesen</a></li>
+            <li class="ui-state-default ui-corner-top"><a href="#meistgelesen_tabs-2">Meistkommentiert</a></li>
+        </ul>
+        <div id="meistgelesen_tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+            <ul>
+                <li><a href="/mac-and-i/artikel/Pro-Contra-Hat-Apple-den-Bogen-ueberspannt-2580439.html">Pro &amp; Contra: Hat Apple den Bogen überspannt?</a></li>
+                <li><a href="/meldung/Fotos-und-mehr-Apple-stellt-OS-X-10-10-3-zum-Download-bereit-2597165.html">"Fotos" und mehr: Apple stellt OS X 10.10.3 zum Download bereit</a></li>
+                <li><a href="/meldung/iOS-8-3-verfuegbar-2597556.html">iOS 8.3 verfügbar</a></li>
+                <li><a href="/meldung/Apple-Watch-Erste-Testberichte-fallen-ordentlich-aus-2597244.html">Apple Watch: Erste Testberichte fallen ordentlich aus</a></li>
+                <li><a href="/meldung/LG-kuendigt-8K-iMac-an-und-wieder-ab-2596469.html">LG kündigt 8K-iMac an – und wieder ab</a></li>
+            </ul>
+        </div>
+        <div id="meistgelesen_tabs-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+            <ul>
+                
+  
+    <li>
+      <a href="/mac-and-i/meldung/Quadratischer-Monitor-fuer-das-Buero-Eizos-FlexScan-EV2730Q-2460773.html">
+	Quadratischer Monitor für das Büro: Eizos FlexScan EV2730Q
+      </a>
+    </li>
+  
+    <li>
+      <a href="/mac-and-i/meldung/Umfangreiches-Firmware-Update-fuer-Amazon-Fire-TV-und-Fire-TV-Stick-2584775.html">
+	Umfangreiches Firmware-Update für Amazon Fire TV und Fire TV Stick
+      </a>
+    </li>
+  
+    <li>
+      <a href="/mac-and-i/meldung/Jay-Z-verbuendet-sich-mit-anderen-Musikern-fuer-Streaming-Dienst-Tidal-2591043.html">
+	Jay Z verbündet sich mit anderen Musikern für Streaming-Dienst Tidal
+      </a>
+    </li>
+  
+    <li>
+      <a href="/mac-and-i/meldung/Apple-Browser-Update-fuer-drei-Safari-Versionen-behebt-Sicherheitsluecken-2578006.html">
+	Apple-Browser: Update für drei Safari-Versionen behebt Sicherheitslücken
+      </a>
+    </li>
+  
+    <li>
+      <a href="/mac-and-i/meldung/Safari-Alte-Sicherheitsluecke-speichert-URLs-auch-im-Private-Browsing-Modus-2575426.html">
+	Safari: Alte Sicherheitslücke speichert URLs auch im Private-Browsing-Modus
+      </a>
+    </li>
+  
+
+
+            </ul>
+        </div>
+    </div>
+
+
+                    
+        <p class="us_ad">
+            <span><a target="_blank" href="/mediadaten/heise-online/">Anzeige</a></span><br />
+            <a target="_blank" href="http://pubads.g.doubleclick.net/gampad/clk?id=31532750&amp;iu=/6514/www.heise.de/clicktracking/usAd"><img width="336" height="200" alt="" src="//2.f.ix.de/mac-and-i/imgs/65/1/4/5/5/6/0/2/alto_heise_hp_tour_mpu__20150324-e4f5620ffc9f3323.jpg" /></a>
+            <script type="text/javascript">
+            &lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+                (function (){
+                    var AVW = '&lt;' + 'img id="avw_pixel_intern" src="/avw-bin/ivw/CP/barfoo/ho/2585134/0.gif?d=_ORD_" width="1" height="1" alt=""&gt;'.replace('_ORD_', Math.floor(Math.random()*1000000000)+1000000000);
+                    document.write(AVW);
+                })();
+            //--&gt;&lt;!]]&gt;
+            </script><img width="1" height="1" alt="" src="/avw-bin/ivw/CP/barfoo/ho/2585134/0.gif?d=1029284408" id="avw_pixel_intern" />
+            <noscript>&lt;img id="avw_pixel_intern" src="/avw-bin/ivw/CP/barfoo/ho/2585134/0.gif" width="1" height="1" alt=""&gt;</noscript>
+        </p>
+
+                    
+    <div class="teaser_adliste">
+        <p><a target="_blank" href="/mediadaten/heise-online/">Anzeige</a></p>
+        <ul class="microsites">
+            <li><a target="_blank" rel="nofollow" href="http://pubads.g.doubleclick.net/gampad/clk?id=30995390&amp;iu=/6514/www.heise.de/clicktracking/textlink">Datenberge in Informationen verwandeln</a></li>
+            <li><a target="_blank" rel="nofollow" href="http://pubads.g.doubleclick.net/gampad/clk?id=31000430&amp;iu=/6514/www.heise.de/clicktracking/textlink">IT Angriffe proaktiv erkennen und abwehren</a></li>
+            <li><a target="_blank" rel="nofollow" href="http://pubads.g.doubleclick.net/gampad/clk?id=30944270&amp;iu=/6514/www.heise.de/clicktracking/textlink">Webcast Next Gen Enduser Protection</a></li>
+            <li><a target="_blank" rel="nofollow" href="http://pubads.g.doubleclick.net/gampad/clk?id=29918270&amp;iu=/6514/www.heise.de/clicktracking/textlink">Nerd-Shirts für Informatiker</a></li>
+            <li><a target="_blank" rel="nofollow" href="http://pubads.g.doubleclick.net/gampad/clk?id=31718150&amp;iu=/6514/www.heise.de/clicktracking/textlink">Der 3. IT-Jobtag bei Heise am 16. April</a></li>
+            <li><a target="_blank" rel="nofollow" href="http://pubads.g.doubleclick.net/gampad/clk?id=31588190&amp;iu=/6514/www.heise.de/clicktracking/textlink">Risiko Logfiles: Protokollieren Sie rechtssicher!</a></li>
+            <li><a target="_blank" rel="nofollow" href="http://pubads.g.doubleclick.net/gampad/clk?id=31533230&amp;iu=/6514/www.heise.de/clicktracking/textlink">Skype for Business macht Unternehmen produktiver</a></li>
+            <li><a target="_blank" rel="nofollow" href="http://pubads.g.doubleclick.net/gampad/clk?id=31069190&amp;iu=/6514/www.heise.de/clicktracking/textlink">kostenfreies IT-Event im Fußballstadion</a></li>
+            <li><a target="_blank" rel="nofollow" href="http://pubads.g.doubleclick.net/gampad/clk?id=31048910&amp;iu=/6514/www.heise.de/clicktracking/textlink">Ratgeber: Desktop-Virtualisierung kurz und knapp</a></li>
+        </ul>
+    </div>
+
+                    <!--googleoff: all-->
+                    
+    
+    <div class="newsteaser">            <h4><a href="/mac-and-i/news/">News</a></h4>                            <div class="anriss_mit_bild_links">
+                    <h3><a title="Apple stopft Sicherheitslücken in iOS und mehreren OS-X-Versionen" href="/mac-and-i/meldung/Apple-stopft-Sicherheitsluecken-in-iOS-und-mehreren-OS-X-Versionen-2597723.html">Apple stopft Sicherheitslücken in iOS und mehreren OS-X-Versionen</a></h3>
+                    
+                        <a href="/mac-and-i/meldung/Apple-stopft-Sicherheitsluecken-in-iOS-und-mehreren-OS-X-Versionen-2597723.html"><img alt="OS X Yosemite" src="//1.f.ix.de/scale/geometry/160x90/q75/imgs/18/1/4/6/2/8/0/3/urn-newsml-dpa-com-20090101-141017-99-01179_large_4_3-c0577d3c5419b335.jpeg" /></a>
+                    
+                        <p><a href="/mac-and-i/meldung/Apple-stopft-Sicherheitsluecken-in-iOS-und-mehreren-OS-X-Versionen-2597723.html">Apple hat mit den Betriebssystem-Updates vom Mittwoch ein Bündel an Security-Fixes mitgeliefert. Sicherheitsaktualisierungen gibt es auch für OS X 10.8, 10.9 und Apple TV. <a href="/mac-and-i/meldung/Apple-stopft-Sicherheitsluecken-in-iOS-und-mehreren-OS-X-Versionen-2597723.html"><span class="mehr_schnipsel">Mehr…</span></a></a></p>                </div>            
+                                    <div class="anriss_mit_bild_links">
+                    <h3><a title="Ex-HP-Chefin kritisiert Tim Cooks Kritik an Gesetz zur Religionsfreiheit" href="/mac-and-i/meldung/Ex-HP-Chefin-kritisiert-Tim-Cooks-Kritik-an-Gesetz-zur-Religionsfreiheit-2597091.html">Ex-HP-Chefin kritisiert Tim Cooks Kritik an Gesetz zur Religionsfreiheit</a></h3>
+                    
+                        <a href="/mac-and-i/meldung/Ex-HP-Chefin-kritisiert-Tim-Cooks-Kritik-an-Gesetz-zur-Religionsfreiheit-2597091.html"><img alt="Ehemalige HP-Chefin kritisiert Tim Cooks Kritik an Gesetz zur Religionsfreiheit" src="//3.f.ix.de/scale/geometry/160x90/q75/imgs/18/1/4/6/2/4/2/4/1024px-Carly_Fiorina_by_Gage_Skidmore-e15691fffb93dd28.jpeg" /></a>
+                    
+                        <p><a href="/mac-and-i/meldung/Ex-HP-Chefin-kritisiert-Tim-Cooks-Kritik-an-Gesetz-zur-Religionsfreiheit-2597091.html">Der Apple-Chef hatte sich gegen die Gesetzgebung eines US-Bundesstaates ausgesprochen, der die Diskriminierung von Schwulen und Lesben unter bestimmten Umständen erlauben soll. Carly Fiorina hält dies für "heuchlerisch". <a href="/mac-and-i/meldung/Ex-HP-Chefin-kritisiert-Tim-Cooks-Kritik-an-Gesetz-zur-Religionsfreiheit-2597091.html"><span class="mehr_schnipsel">Mehr…</span></a></a></p>                </div>            
+                                    <div class="anriss_mit_bild_links">
+                    <h3><a title="Apple Watch: Bestellungen können offenbar dauern" href="/mac-and-i/meldung/Apple-Watch-Bestellungen-koennen-offenbar-dauern-2597741.html">Apple Watch: Bestellungen können offenbar dauern</a></h3>
+                    
+                        <a href="/mac-and-i/meldung/Apple-Watch-Bestellungen-koennen-offenbar-dauern-2597741.html"><img alt="Apple Watch: Bestellungen können offenbar dauern" src="//2.f.ix.de/scale/geometry/160x90/q75/imgs/18/1/4/6/2/8/1/7/apple_watch_liefer1-ecb875926df4a41b.jpeg" /></a>
+                    
+                        <p><a href="/mac-and-i/meldung/Apple-Watch-Bestellungen-koennen-offenbar-dauern-2597741.html">Im deutschen und im britischen Apple Online Store sind kurzzeitig Liefertermine für die Computeruhr aufgetaucht. Manche Modelle brauchen demnach bis zu sechs Wochen. <a href="/mac-and-i/meldung/Apple-Watch-Bestellungen-koennen-offenbar-dauern-2597741.html"><span class="mehr_schnipsel">Mehr…</span></a></a></p>                </div>            
+                                    <div class="anriss_mit_bild_links">
+                    <h3><a title="Apple aktualisiert Xcode, OS X Server und Apple Configurator" href="/mac-and-i/meldung/Apple-aktualisiert-Xcode-OS-X-Server-und-Apple-Configurator-2597739.html">Apple aktualisiert Xcode, OS X Server und Apple Configurator</a></h3>
+                    
+                        <a href="/mac-and-i/meldung/Apple-aktualisiert-Xcode-OS-X-Server-und-Apple-Configurator-2597739.html"><img alt="Apple aktualisiert Xcode, OS X Server und Apple Configurator" src="//3.f.ix.de/scale/geometry/160x90/q75/imgs/18/1/4/6/2/8/1/5/screen800x500-ed2bb768f9ab35c2.jpeg" /></a>
+                    
+                        <p><a href="/mac-and-i/meldung/Apple-aktualisiert-Xcode-OS-X-Server-und-Apple-Configurator-2597739.html">Neben iOS 8.3 und OS X 10.10.3 hat der Hersteller auch drei weitere hauseigene Anwendungen auf den neuesten Stand gebracht. Xcode 6.3 bringt unter anderem Support für die neue Force-Touch-Technik und ein neues Swift. <a href="/mac-and-i/meldung/Apple-aktualisiert-Xcode-OS-X-Server-und-Apple-Configurator-2597739.html"><span class="mehr_schnipsel">Mehr…</span></a></a></p>                </div>            
+        
+    </div>
+
+
+
+                    
+
+<div class="teaser_frei">
+        <div class="anriss_mit_bild_links">            <h3><a href="/meldung/Quiz-Wie-gut-kennen-Sie-Apple-2504501.html">Quiz: Wie gut kennen Sie Apple?</a></h3>            <a href="/meldung/Quiz-Wie-gut-kennen-Sie-Apple-2504501.html"><img alt="Quiz: Wie gut kennen Sie Apple?" src="//3.f.ix.de/mac-and-i/imgs/65/1/4/1/5/1/2/2/Quiz-Frage-5b1e2e989f5a3cc9.png" /></a>            <p><a href="/meldung/Quiz-Wie-gut-kennen-Sie-Apple-2504501.html"><a href="/meldung/Quiz-Wie-gut-kennen-Sie-Apple-2504501.html">
+                12 Fragen rund um das Unternehmen und seine Produkte – einige davon dürften nur Fortgeschrittene knacken können.  <a href="/meldung/Quiz-Wie-gut-kennen-Sie-Apple-2504501.html"><a href="/meldung/Quiz-Wie-gut-kennen-Sie-Apple-2504501.html"><span class="mehr_schnipsel">Mehr…</span></a></a>
+            </a></a></p>    </div>
+</div>
+
+
+
+                    
+    
+    <div class="artikelteaser">            <h4><a href="/mac-and-i/artikel/">Artikel </a></h4>                            <div class="anriss_mit_bild_links">
+                    <h3><a title="Pro &amp; Contra: Hat Apple den Bogen überspannt?" href="/mac-and-i/artikel/Pro-Contra-Hat-Apple-den-Bogen-ueberspannt-2580439.html">Pro &amp; Contra: Hat Apple den Bogen überspannt?</a></h3>
+                    
+                        <a href="/mac-and-i/artikel/Pro-Contra-Hat-Apple-den-Bogen-ueberspannt-2580439.html"><img alt="" src="//3.f.ix.de/scale/geometry/160x90/q75/mac-and-i/imgs/65/1/4/5/2/5/6/5/Screen_Shot-4a5e2819f374a051.jpeg" /></a>
+                                            <p><a href="/mac-and-i/artikel/Pro-Contra-Hat-Apple-den-Bogen-ueberspannt-2580439.html">Beim neuen MacBook 12" gibt es außer der Kopfhörerbuchse nur eine Schnittstelle: USB Typ C. Darüber scheiden sich wieder mal die Geister. <a href="/mac-and-i/artikel/Pro-Contra-Hat-Apple-den-Bogen-ueberspannt-2580439.html"><span class="mehr_schnipsel">Mehr…</span></a></a></p>                </div>                                        <div class="anriss_mit_bild_links">
+                    <h3><a title="Praxistipp: Größere SSD im MacBook Air 2011" href="/mac-and-i/artikel/Praxistipp-Groessere-SSD-im-MacBook-Air-2011-2560061.html">Praxistipp: Größere SSD im MacBook Air 2011</a></h3>
+                    
+                        <a href="/mac-and-i/artikel/Praxistipp-Groessere-SSD-im-MacBook-Air-2011-2560061.html"><img alt="" src="//1.f.ix.de/scale/geometry/160x90/q75/mac-and-i/imgs/65/1/4/4/0/1/2/3/MacBook-mit-SSD-breit-d974d1a97ebb442b.png" /></a>
+                                            <p><a href="/mac-and-i/artikel/Praxistipp-Groessere-SSD-im-MacBook-Air-2011-2560061.html">Wenn das MacBook an seine Grenzen stößt, brauchen Sie nicht unbedingt ein neues: Ersatz-SSDs gibt es ab 170 Euro, der Umbau ist auch für Laien zu schaffen und in wenigen Minuten erledigt. <a href="/mac-and-i/artikel/Praxistipp-Groessere-SSD-im-MacBook-Air-2011-2560061.html"><span class="mehr_schnipsel">Mehr…</span></a></a></p>                </div>                                        <div class="anriss_mit_bild_links">
+                    <h3><a title="Pro &amp; Contra: Ist Apple zu streng?" href="/mac-and-i/artikel/Pro-Contra-Ist-Apple-zu-streng-2530140.html">Pro &amp; Contra: Ist Apple zu streng?</a></h3>
+                    
+                        <a href="/mac-and-i/artikel/Pro-Contra-Ist-Apple-zu-streng-2530140.html"><img width="71" height="100" title="" alt="" src="//2.f.ix.de/mac-and-i/imgs/65/1/4/2/2/6/3/4/Voransicht-8552184f61c1fab3.jpeg" /></a>
+                                            <p><a href="/mac-and-i/artikel/Pro-Contra-Ist-Apple-zu-streng-2530140.html">Das Prüferteam im iOS-App-Store lehnt immer häufiger ganze Apps ab oder verlangt eine Beschneidung der Funktionen. Ist das richtig so? <a href="/mac-and-i/artikel/Pro-Contra-Ist-Apple-zu-streng-2530140.html"><span class="mehr_schnipsel">Mehr…</span></a></a></p>                </div>                                        <div class="anriss_mit_bild_links">
+                    <h3><a title="Die besseren Mac minis" href="/mac-and-i/artikel/Die-besseren-Mac-minis-2445333.html">Die besseren Mac minis</a></h3>
+                    
+                        <a href="/mac-and-i/artikel/Die-besseren-Mac-minis-2445333.html"><img alt="" src="//3.f.ix.de/scale/geometry/160x90/q75/mac-and-i/imgs/65/1/3/7/4/7/9/6/MacMiniDiagonal-ddc35b43efc0f9d5-f08e367febe26a99.jpeg" /></a>
+                                            <p><a href="/mac-and-i/artikel/Die-besseren-Mac-minis-2445333.html">Nachdem wir den günstigsten Mac mini mit 1,4 GHz bereits in Mac &amp; i Heft 6/2014 vorstellen konnten, reichen wir nun – wie versprochen – einen Test der beiden  besseren Konfigurationen nach. <a href="/mac-and-i/artikel/Die-besseren-Mac-minis-2445333.html"><span class="mehr_schnipsel">Mehr…</span></a></a></p>                </div>                </div>
+
+
+
+                    
+    
+
+
+
+                    
+
+<div class="teaser_frei">
+        <div class="anriss_mit_bild_links">            <h3><a href="/meldung/In-eigener-Sache-Mac-i-im-Digitalabo-2137456.html">In eigener Sache: Mac &amp; i im Digitalabo</a></h3>            <a href="/meldung/In-eigener-Sache-Mac-i-im-Digitalabo-2137456.html"><img alt="In eigener Sache: Mac &amp;amp; i im Digitalabo" src="//2.f.ix.de/mac-and-i/imgs/65/1/1/8/9/2/5/6/14_auf_iPad_Air-32d65b8788224ed5.png" /></a>            <p><a href="/meldung/In-eigener-Sache-Mac-i-im-Digitalabo-2137456.html"><a href="/meldung/In-eigener-Sache-Mac-i-im-Digitalabo-2137456.html">
+                Heise Medien bietet Lesern, die kein gedrucktes Heft mehr wollen, nun auch ein vergünstigtes Digitalabo von Mac &amp; i für das iPad an. <a href="/meldung/In-eigener-Sache-Mac-i-im-Digitalabo-2137456.html"><a href="/meldung/In-eigener-Sache-Mac-i-im-Digitalabo-2137456.html"><span class="mehr_schnipsel">Mehr…</span></a></a>
+            </a></a></p>    </div>
+</div>
+
+
+
+                    
+    
+
+
+
+                </div>
+        </div>
+    </div>
+    <div id="bannerzone">
+        <div class="leaderboard"><script type="text/javascript">
+&lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+var yp_res; if (typeof yl !== "undefined" &amp;&amp; yl.YpResult !== "undefined") { yp_res = yl.YpResult.get('66444'); }
+var rb = false; document.write('&lt;script src="http://ad-emea.doubleclick.net/N6514/adj/mac/mac-inhalt;sz=728x90,468x60;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=3;_YL_;ord=_ORD_?" type="text/javascript"&gt;&lt;\/script&gt;'.replace('_ORD_', dfp_ord).replace(';_YL_', typeof yp_res !== "undefined" &amp;&amp; yp_res.pricerange ? ';pricerange=' + yp_res.pricerange : ''));
+//--&gt;&lt;!]]&gt;
+</script><script type="text/javascript" src="http://ad-emea.doubleclick.net/N6514/adj/mac/mac-inhalt;sz=728x90,468x60;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=3;ord=1875073260?"></script>
+<noscript>&lt;div&gt;&lt;a href="http://ad-emea.doubleclick.net/N6514/jump/mac/mac-inhalt;sz=728x90,468x60;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=3;_YL_;ord=7840756744?" target="_blank"&gt;&lt;img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/mac/mac-inhalt;sz=728x90,468x60;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=3;_YL_;ord=7840756744?" /&gt;&lt;/a&gt;&lt;/div&gt;</noscript>
+</div>
+        <div class="heiseadvert"></div>
+        <div class="skyscraper"><script type="text/javascript">
+&lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+var yp_res; if (typeof yl !== "undefined" &amp;&amp; yl.YpResult !== "undefined") { yp_res = yl.YpResult.get('66424'); }
+if (typeof rb != "undefined" &amp;&amp; rb != true) document.write('&lt;script src="http://ad-emea.doubleclick.net/N6514/adj/mac/mac-inhalt;sz=120x600,120x800,160x600,160x800;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=4;_YL_;ord=_ORD_?" type="text/javascript"&gt;&lt;\/script&gt;'.replace('_ORD_', dfp_ord).replace(';_YL_', typeof yp_res !== "undefined" &amp;&amp; yp_res.pricerange ? ';pricerange=' + yp_res.pricerange : ''));
+//--&gt;&lt;!]]&gt;
+</script><script type="text/javascript" src="http://ad-emea.doubleclick.net/N6514/adj/mac/mac-inhalt;sz=120x600,120x800,160x600,160x800;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=4;ord=1875073260?"></script>
+<noscript>&lt;div&gt;&lt;a href="http://ad-emea.doubleclick.net/N6514/jump/mac/mac-inhalt;sz=120x600,120x800,160x600,160x800;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=4;_YL_;ord=7840756744?" target="_blank"&gt;&lt;img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/mac/mac-inhalt;sz=120x600,120x800,160x600,160x800;kw=1Password,Mac%20OS%20X,Passwort,Passwortmanager,Sicherheit,TOTP;tile=4;_YL_;ord=7840756744?" /&gt;&lt;/a&gt;&lt;/div&gt;</noscript>
+</div>
+    </div>
+</div>
+
+
+
+
+<div style="display: inline;"><img width="1" height="1" alt="" src="/ivw-bin/ivw/CP/mac-and-i/meldung/1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html?url=%2Fmac-and-i%2Fmeldung%2F1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html" id="ivw_pixel_intern" /></div>
+    
+    
+
+    
+    <script type="text/javascript">
+    var iam_data = {
+        "st":"heise",
+        "cp":"mac",
+        "sv":"in",
+        "co":"%2Fmac-and-i%2Fmeldung%2F1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html"
+    }
+    iom.c(iam_data);
+    </script><script src="http://de.ioam.de/tx.io?st=heise&amp;cp=mac&amp;sv=in&amp;co=%252Fmac-and-i%252Fmeldung%252F1Password-fuer-Mac-generiert-Einmal-Passwoerter-2596987.html&amp;pt=CP&amp;rf=&amp;r2=&amp;ur=www.heise.de&amp;xy=1440x900x24&amp;lo=GB%2FBirmingham&amp;cb=0002&amp;vr=307&amp;id=q4s141&amp;lt=1428601857876&amp;ev=&amp;cs=bt2w10&amp;mo=1"></script>
+
+
+
+
+<!-- Webtrekk 3.2.2, (c) www.webtrekk.com -->
+    <script src="/js/ho/webtrekk-v3-bundle-heise-2013-01-21.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    &lt;!--
+    var pageConfig = {
+        linkTrack : "standard", // Activate Link Tracking    [link or standard]
+        heatmap : "0",          // Activate Heatmap Tracking [1 = on | 0 = off]
+        form : "0",             // Activate Form Tracking    [1 = on | 0 = off]
+        trackId : "288689636920174",
+        pixelSampling : "",
+        contentId: "www.heise.de.mac-and-i.meldung.1password-fuer-mac-generiert-einmal-passwoerter-2596987"
+    };
+    var wt = new webtrekkV3(pageConfig);
+    wt.contentGroup = {};
+    wt.contentGroup['1']  = "www.heise.de";
+    wt.contentGroup['2']  = "mac-and-i";
+    wt.contentGroup['3']  = "meldung";
+    wt.contentGroup['4']  = "1password-fuer-mac-generiert-einmal-passwoerter-2596987";
+    
+    
+    
+    
+    wt.contentGroup['9']  = "1password-fuer-mac-generiert-einmal-passwoerter-2596987";
+    wt.contentGroup['10'] = "meldung";
+
+    wt.customParameter = {};
+    
+    wt.customParameter['2']  = "1password;mac os x;passwort;passwortmanager;sicherheit;totp";
+    
+    
+    
+    wt.customParameter['6']  = "1password;mac os x;passwort;passwortmanager;sicherheit;totp";
+    
+    wt.customParameter['8']  = "2015-04-08T12:46:00";
+    wt.customParameter['9']  = "mac-and-i";
+    wt.customParameter['10'] = "mac-and-i";
+
+    
+    
+
+    
+    
+
+    wt.heatmapRefpoint = 'container_content';
+    wt.sendinfo();
+
+    //--&gt;
+    </script>
+    <noscript>&lt;div&gt;&lt;img src="//prophet.heise.de/288689636920174/wt.pl?p=322,www.heise.de.mac-and-i.meldung.1password-fuer-mac-generiert-einmal-passwoerter-2596987&amp;cg1=www.heise.de&amp;cg10=meldung&amp;cg2=mac-and-i&amp;cg3=meldung&amp;cg4=1password-fuer-mac-generiert-einmal-passwoerter-2596987&amp;cg9=1password-fuer-mac-generiert-einmal-passwoerter-2596987&amp;cp10=mac-and-i&amp;cp2=1password%3Bmac%20os%20x%3Bpasswort%3Bpasswortmanager%3Bsicherheit%3Btotp&amp;cp6=1password%3Bmac%20os%20x%3Bpasswort%3Bpasswortmanager%3Bsicherheit%3Btotp&amp;cp8=2015-04-08T12%3A46%3A00&amp;cp9=mac-and-i" height="1" width="1" alt="" /&gt;&lt;/div&gt;</noscript>
+
+
+<!-- /Webtrekk -->
+
+
+
+    
+    <script type="text/javascript">
+        &lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+        // VGWORT-CROP-MARKER
+        var vgwort_token='c9016af5c9984399bf413fa66e5ba786';
+                document.write('&lt;div style="display: inline;"&gt;&lt;img src="http://heise.met.vgwort.de/na/' +  vgwort_token);
+        document.write('" width="1" height="1" alt="" /&gt;&lt;' + '/div&gt;');
+        //--&gt;&lt;!]]&gt;
+    </script><div style="display: inline;"><img width="1" height="1" alt="" src="http://heise.met.vgwort.de/na/c9016af5c9984399bf413fa66e5ba786" /></div>
+
+
+
+
+
+
+
+
+
+
+
+
+	<ul id="navi_bottom">
+
+	
+		<li class="left"><a href="/Privacy-Policy-der-Heise-Medien-GmbH-Co-KG-4860.html">Datenschutzhinweis</a> </li>
+	
+
+	
+		<li class="left"><a href="/mac-and-i/impressum.html">Impressum</a></li>
+	
+
+	
+		<li class="left"><a href="/mac-and-i/kontakt/">Kontakt</a> </li>
+	
+
+	
+		<li class="left"><a rel="external" target="_blank" href="/mediadaten/mac_and_i/">Mediadaten</a> </li>
+	
+
+	
+		<li class="left"><a href="http://m.heise.de/mac-and-i/">News mobil</a></li>
+	
+
+
+<li class="bid_anzeige">
+1462351
+</li>
+
+
+    
+        <li class="right"><a style="margin-right: 0;" rel="external" href="http://www.interred.de/">Content Management</a> by <b style="margin-right: 0.5em;">Inter<span class="tx_red">Red</span></b></li>
+    
+
+	
+		
+		<li class="right"><a href="http://www.heise-medien.de/">Copyright © 2015 Heise Medien</a></li>
+		
+	
+
+	
+		
+	
+</ul>
+
+<script src="/js/heise.min.js"></script><section class="heise-modal newsletter_2014_modal"><div class="wrapper-transparent"></div><div class="stage"><button data-role="close">×</button></div></section>
+
+
+
+
+
+
+
+
+</body></html>
+<!-- Created with InterRed V15.4-x.x.x.x.1, http://www.interred.de/, by InterRed GmbH -->
+<!-- BID: 1462351, iBID: 1462432, CID: 2596987, iCID: 2597101 -->
+<!-- Link: $(LB1462351:Linktext)$ $(LC2596987:Linktext)$ -->
+<!-- Generiert: 2015-04-08 12:48:46 -->

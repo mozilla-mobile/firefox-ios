@@ -1,0 +1,18 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "ยกเลิก";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "ล้าง";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "ประวัติจะถูกเอาออกจากอุปกรณ์ที่เชื่อมต่อทั้งหมดของคุณ สิ่งนี้ไม่สามารถเลิกทำ";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "ตกลง";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "เอาประวัติออกจากบัญชี Firefox ของคุณ?";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "การกระทำนี้จะล้างข้อมูลส่วนตัวทั้งหมดของคุณ รวมถึงประวัติจากอุปกรณ์ที่ผสานของคุณ";
+

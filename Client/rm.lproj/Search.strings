@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "Tschertga %@";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "Na";
+
+/* Label for search settings button. */
+"Search Settings" = "Preferenzas da tschertgar";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "Propostas da tschertga da %@";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "Activar las propostas da tschertga?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "Gea";
+
