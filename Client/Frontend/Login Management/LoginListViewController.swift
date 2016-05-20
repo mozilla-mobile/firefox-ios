@@ -61,7 +61,7 @@ class LoginListViewController: SensitiveViewController {
         button.setTitle(self.selectAllTitle, forState: .Normal)
         button.setTitleColor(LoginListUX.selectionButtonTextColor, forState: .Normal)
         button.backgroundColor = LoginListUX.selectionButtonBackground
-        button.addTarget(self, action: #selector(LoginListViewController.SELdidTapSelectionButton), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(LoginListViewController.tappedSelectionButton), forControlEvents: .TouchUpInside)
         return button
     }()
 
@@ -85,11 +85,11 @@ class LoginListViewController: SensitiveViewController {
         super.viewDidLoad()
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(LoginListViewController.SELreloadLogins), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginListViewController.loadLogins(_:)), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditting))
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen")
 
@@ -156,7 +156,7 @@ class LoginListViewController: SensitiveViewController {
         // Show delete bar button item if we have selected any items
         if loginSelectionController.selectedCount > 0 {
             if (navigationItem.rightBarButtonItem == nil) {
-                navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .Plain, target: self, action: #selector(LoginListViewController.SELdelete))
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .Plain, target: self, action: #selector(LoginListViewController.tappedDelete))
                 navigationItem.rightBarButtonItem?.tintColor = UIColor.redColor()
             }
         } else {
@@ -172,14 +172,6 @@ class LoginListViewController: SensitiveViewController {
         }
     }
 
-    private func loadLogins(query: String? = nil) {
-        loadingStateView.hidden = false
-
-        // Fill in an in-flight query and re-query
-        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
-        activeLoginQuery = queryLogins(query ?? "")
-        activeLoginQuery! >>== self.loginDataSource.setLogins
-    }
 
     // Wrap the SQLiteLogins method to allow us to cancel it from our end.
     private func queryLogins(query: String) -> Deferred<Maybe<[Login]>> {
@@ -193,21 +185,25 @@ class LoginListViewController: SensitiveViewController {
 }
 
 // MARK: - Selectors
-extension LoginListViewController {
+private extension LoginListViewController {
+    @objc func loadLogins(query: String? = nil) {
+        loadingStateView.hidden = false
 
-    func SELreloadLogins() {
-        loadLogins()
+        // Fill in an in-flight query and re-query
+        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+        activeLoginQuery = queryLogins(query ?? "")
+        activeLoginQuery! >>== self.loginDataSource.setLogins
     }
 
-    func SELedit() {
+    @objc func beginEditting() {
         navigationItem.rightBarButtonItem = nil
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(LoginListViewController.SELcancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(LoginListViewController.cancelSelection))
         selectionButtonHeightConstraint?.updateOffset(UIConstants.ToolbarHeight)
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
     }
 
-    func SELcancel() {
+    @objc func cancelSelection() {
         // Update selection and select all button
         loginSelectionController.deselectAll()
         toggleSelectionTitle()
@@ -216,10 +212,10 @@ extension LoginListViewController {
 
         tableView.setEditing(false, animated: true)
         navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditting))
     }
 
-    func SELdelete() {
+    @objc func tappedDelete() {
         profile.logins.hasSyncedLogins().uponQueue(dispatch_get_main_queue()) { yes in
             let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
@@ -228,7 +224,7 @@ extension LoginListViewController {
                 }
 
                 self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
-                    self.SELcancel()
+                    self.cancelSelection()
                     self.loadLogins()
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
@@ -237,7 +233,7 @@ extension LoginListViewController {
         }
     }
 
-    func SELdidTapSelectionButton() {
+    @objc func tappedSelectionButton() {
         // If we haven't selected everything yet, select all
         if loginSelectionController.selectedCount < loginDataSource.count {
             // Find all unselected indexPaths
@@ -342,7 +338,7 @@ extension LoginListViewController: SearchInputViewDelegate {
 
     @objc func searchInputViewBeganEditing(searchView: SearchInputView) {
         // Trigger a cancel for editing
-        SELcancel()
+        cancelSelection()
 
         // Hide the edit button while we're searching
         navigationItem.rightBarButtonItem = nil
@@ -351,7 +347,7 @@ extension LoginListViewController: SearchInputViewDelegate {
 
     @objc func searchInputViewFinishedEditing(searchView: SearchInputView) {
         // Show the edit after we're done with the search
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditting))
         loadLogins()
     }
 }
