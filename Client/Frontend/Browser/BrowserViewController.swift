@@ -934,12 +934,12 @@ class BrowserViewController: UIViewController {
         }
 
         profile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { [unowned tab] result in
+            $0.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { [weak tab] result in
                 guard let bookmarked = result.successValue else {
                     log.error("Error getting bookmark status: \(result.failureValue).")
                     return
                 }
-                tab.isBookmarked = bookmarked
+                tab?.isBookmarked = bookmarked
                 if !AppConstants.MOZ_MENU {
                     self.navigationToolbar.updateBookmarkStatus(bookmarked)
                 }
@@ -1949,7 +1949,7 @@ extension BrowserViewController: TabManagerDelegate {
                 if AboutUtils.isAboutURL(webView.URL) {
                     // Indeed, because we don't show the toolbar at all, don't even blank the star.
                 } else {
-                    profile.bookmarks.modelFactory >>== { [unowned tab] in
+                    profile.bookmarks.modelFactory >>== { [weak tab] in
                         $0.isBookmarked(url)
                             .uponQueue(dispatch_get_main_queue()) {
                             guard let isBookmarked = $0.successValue else {
@@ -1957,7 +1957,9 @@ extension BrowserViewController: TabManagerDelegate {
                                 return
                             }
 
-                            tab.isBookmarked = isBookmarked
+                            tab?.isBookmarked = isBookmarked
+
+                                
                             if !AppConstants.MOZ_MENU {
                                 self.toolbar?.updateBookmarkStatus(isBookmarked)
                                 self.urlBar.updateBookmarkStatus(isBookmarked)
