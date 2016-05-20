@@ -175,6 +175,7 @@ class BrowserViewController: UIViewController {
             // Need to reset the proper blur style
             if let selectedTab = tabManager.selectedTab where selectedTab.isPrivate {
                 footerBackground!.blurStyle = .Dark
+                toolbar?.applyTheme(Theme.PrivateMode)
             }
             footer.addSubview(footerBackground!)
         }
