@@ -25,7 +25,6 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
     private var isPrivate: Bool!
     private var dismissing = false
     var tabManager: TabManager!
-    
     var listData = [(item:WKBackForwardListItem, type:BackForwardType)]()
     
     init(profile: Profile, backForwardList: WKBackForwardList, isPrivate: Bool) {
@@ -59,20 +58,22 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
         var urls: [String] = [String]()
         
         for page in backForwardList.forwardList.reverse() {
-            urls.append(page.initialURL.absoluteString)
+            urls.append(page.URL.absoluteString)
             listData.append((page, .Forward))
         }
         
         var currentRow = 0
         if let currentPage = backForwardList.currentItem {
             currentRow = listData.count
-            urls.append(currentPage.initialURL.absoluteString)
+            urls.append(currentPage.URL.absoluteString)
             listData.append((currentPage, .Current))
         }
         for page in backForwardList.backList.reverse() {
-            urls.append(page.initialURL.absoluteString)
+            urls.append(page.URL.absoluteString)
             listData.append((page, .Backward))
         }
+        
+        listData = listData.filter { !(($0.item.title ?? "").isEmpty)}
         
         let deferred = sql.getSitesForURLs(urls)
         
@@ -137,7 +138,7 @@ class BackForwardListView: UIView, UITableViewDataSource, UITableViewDelegate {
         }
         let item = listData[indexPath.item].item
         
-        if let site = sites[item.initialURL.absoluteString] {
+        if let site = sites[item.URL.absoluteString] {
             cell?.site = site
         }
         else {
