@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 import Storage
 
 private let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
@@ -24,9 +25,16 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         super.viewDidAppear(animated)
         
         ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
-            if error == nil && item != nil {
+            if let item = item where error == nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.presentShareDialog(item!)
+                    guard item.isShareable else {
+                        let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .Alert)
+                        alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .Default) { _ in self.finish() })
+                        self.presentViewController(alert, animated: true, completion: nil)
+                        return
+                    }
+
+                    self.presentShareDialog(item)
                 }
             } else {
                 self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
@@ -41,8 +49,12 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
             self.shareDialogController.view.alpha = 0.0
         }, completion: { (Bool) -> Void in
             self.dismissShareDialog()
-            self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
+            self.finish()
         })
+    }
+
+    func finish() {
+        self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
     }
 
     func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) {

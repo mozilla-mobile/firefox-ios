@@ -19,6 +19,9 @@ private func applicationBundle() -> NSBundle {
 // SendTo extension.
 extension Strings {
     public static let SendToCancelButton = NSLocalizedString("SendTo.Cancel.Button", value: "Cancel", bundle: applicationBundle(), comment: "Button title for cancelling SendTo screen")
+    public static let SendToErrorOKButton = NSLocalizedString("SendTo.Error.OK.Button", value: "OK", bundle: applicationBundle(), comment: "OK button to dismiss the error prompt.")
+    public static let SendToErrorTitle = NSLocalizedString("SendTo.Error.Title", value: "The link you are trying to share cannot be shared.", bundle: applicationBundle(), comment: "Title of error prompt displayed when an invalid URL is shared.")
+    public static let SendToErrorMessage = NSLocalizedString("SendTo.Error.Message", value: "Only HTTP and HTTPS links can be shared.", bundle: applicationBundle(), comment: "Message in error prompt explaining why the URL is invalid.")
 }
 
 // ShareTo extension.
