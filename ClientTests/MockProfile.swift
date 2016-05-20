@@ -15,6 +15,7 @@ import Deferred
 public class MockSyncManager: SyncManager {
     public var isSyncing = false
     public var lastSyncFinishTime: Timestamp? = nil
+    public var syncDisplayState: SyncDisplayState?
 
     public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
         return deferMaybe(true)
