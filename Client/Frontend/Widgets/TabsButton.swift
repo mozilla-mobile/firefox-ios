@@ -145,6 +145,7 @@ class TabsButton: UIControl {
         button.borderView.strokeWidth = borderView.strokeWidth
         button.borderView.color = borderView.color
         button.borderView.cornerRadius = borderView.cornerRadius
+        button.theme = theme
         return button
     }
 }
