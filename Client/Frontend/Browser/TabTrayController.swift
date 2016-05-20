@@ -366,7 +366,6 @@ class TabTrayController: UIViewController {
 
         if #available(iOS 9, *) {
             view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
-            emptyPrivateTabsView.alpha = privateMode && tabManager.privateTabs.count == 0 ? 1 : 0
             emptyPrivateTabsView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(self.collectionView)
                 make.bottom.equalTo(self.collectionView).offset(-UIConstants.ToolbarHeight)
@@ -380,6 +379,8 @@ class TabTrayController: UIViewController {
             if traitCollection.forceTouchCapability == .Available {
                 registerForPreviewingWithDelegate(self, sourceView: view)
             }
+
+            emptyPrivateTabsView.hidden = !privateTabsAreEmpty()
         }
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabTrayController.SELappWillResignActiveNotification), name: UIApplicationWillResignActiveNotification, object: nil)
@@ -498,8 +499,10 @@ class TabTrayController: UIViewController {
 
         let toView: UIView
         if privateTabsAreEmpty() {
+            emptyPrivateTabsView.hidden = false
             toView = emptyPrivateTabsView
         } else {
+            emptyPrivateTabsView.hidden = true
             let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(true)
             newSnapshot.frame = collectionView.frame
             view.insertSubview(newSnapshot, aboveSubview: fromView)
@@ -543,11 +546,6 @@ class TabTrayController: UIViewController {
 
     private func openNewTab(request: NSURLRequest? = nil) {
         toolbar.addTabButton.userInteractionEnabled = false
-        if #available(iOS 9, *) {
-            if privateMode {
-                emptyPrivateTabsView.hidden = true
-            }
-        }
 
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
@@ -620,6 +618,11 @@ extension TabTrayController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {
         // Get the index of the added tab from it's set (private or normal)
         guard let index = tabsToDisplay.indexOf(tab) else { return }
+        if #available(iOS 9, *) {
+            if !privateTabsAreEmpty() {
+                emptyPrivateTabsView.hidden = true
+            }
+        }
 
         tabDataSource.addTab(tab)
         self.collectionView?.performBatchUpdates({ _ in
@@ -657,7 +660,7 @@ extension TabTrayController: TabManagerDelegate {
 
             if #available(iOS 9, *) {
                 if privateTabsAreEmpty() {
-                    emptyPrivateTabsView.alpha = 1
+                    emptyPrivateTabsView.hidden = false
                 }
             }
         }
