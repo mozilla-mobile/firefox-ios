@@ -1580,8 +1580,10 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     func tabToolbarDidPressMenu(tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // ensure that any keyboards or spinners are dismissed before presenting the menu
+        UIApplication.sharedApplication().sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, forEvent:nil)
         // check the trait collection
-        // open as modal if portrait
+        // open as modal if portrait\
         let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular) ? .Modal : .Popover
         let mvc = MenuViewController(withAppState: getCurrentAppState(), presentationStyle: presentationStyle)
         mvc.delegate = self
