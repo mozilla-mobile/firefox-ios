@@ -76,6 +76,7 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = popoverBackgroundColor.colorWithAlphaComponent(0.0)
+        popoverPresentationController?.backgroundColor = menuConfig.menuBackgroundColor()
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:)))
         gesture.delegate = self
