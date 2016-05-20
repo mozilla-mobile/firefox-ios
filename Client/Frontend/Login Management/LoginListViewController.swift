@@ -36,15 +36,17 @@ class LoginListViewController: SensitiveViewController {
         return ListSelectionController(tableView: self.tableView)
     }()
 
-    private lazy var loginDataSource: LoginCursorDataSource = {
-        return LoginCursorDataSource()
+    private lazy var loginDataSource: LoginDataSource = {
+        let dataSource = LoginDataSource()
+        dataSource.dataObserver = self
+        return dataSource
     }()
 
     private let profile: Profile
 
     private let searchView = SearchInputView()
 
-    private var activeLoginQuery: Success?
+    private var activeLoginQuery: Deferred<Maybe<[Login]>>?
 
     private let loadingStateView = LoadingLoginsView()
 
@@ -163,35 +165,30 @@ class LoginListViewController: SensitiveViewController {
     }
 
     private func toggleSelectionTitle() {
-        if loginSelectionController.selectedCount == loginDataSource.allLogins.count {
+        if loginSelectionController.selectedCount == loginDataSource.count {
             selectionButton.setTitle(deselectAllTitle, forState: .Normal)
         } else {
             selectionButton.setTitle(selectAllTitle, forState: .Normal)
         }
     }
 
-    private func loadLogins(query: String? = nil) -> Success {
+    private func loadLogins(query: String? = nil) {
         loadingStateView.hidden = false
-        let query = profile.logins.searchLoginsWithQuery(query).bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
-        activeLoginQuery = query
-        return query
+
+        // Fill in an in-flight query and re-query
+        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+        activeLoginQuery = queryLogins(query ?? "")
+        activeLoginQuery! >>== self.loginDataSource.setLogins
     }
 
-    private func reloadTableWithResult(result: Maybe<Cursor<Login>>) -> Success {
-        let logins = result.successValue?.asArray() ?? []
-        return loginDataSource.setData(logins).bindQueue(dispatch_get_main_queue()) { _ in
-            self.loadingStateView.hidden = true
-            self.tableView.reloadData()
-            self.activeLoginQuery = nil
-
-            if self.loginDataSource.count > 0 {
-                self.navigationItem.rightBarButtonItem?.enabled = true
-            } else {
-                self.navigationItem.rightBarButtonItem?.enabled = false
-            }
-
-            return succeed()
+    // Wrap the SQLiteLogins method to allow us to cancel it from our end.
+    private func queryLogins(query: String) -> Deferred<Maybe<[Login]>> {
+        let deferred = Deferred<Maybe<[Login]>>()
+        profile.logins.searchLoginsWithQuery(query) >>== { logins in
+            deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
+            succeed()
         }
+        return deferred
     }
 }
 
@@ -263,6 +260,21 @@ extension LoginListViewController {
 
         toggleSelectionTitle()
         toggleDeleteBarButton()
+    }
+}
+
+// MARK: - LoginDataSourceObserver
+extension LoginListViewController: LoginDataSourceObserver {
+    func loginSectionsDidUpdate() {
+        self.loadingStateView.hidden = true
+        self.tableView.reloadData()
+        self.activeLoginQuery = nil
+
+        if self.loginDataSource.count > 0 {
+            self.navigationItem.rightBarButtonItem?.enabled = true
+        } else {
+            self.navigationItem.rightBarButtonItem?.enabled = false
+        }
     }
 }
 
@@ -388,18 +400,25 @@ private class ListSelectionController: NSObject {
     }
 }
 
+protocol LoginDataSourceObserver: class {
+    func loginSectionsDidUpdate()
+}
+
 /// Data source for handling LoginData objects from a Cursor
-private class LoginCursorDataSource: NSObject, UITableViewDataSource {
+class LoginDataSource: NSObject, UITableViewDataSource {
 
-    var count: Int {
-        return allLogins.count
-    }
+    var count: Int = 0
 
-    private var allLogins: [Login] = []
+    weak var dataObserver: LoginDataSourceObserver?
 
     private let emptyStateView = NoLoginsView()
 
-    private var sections = [Character: [Login]]()
+    private var sections = [Character: [Login]]() {
+        didSet {
+            assert(NSThread.isMainThread(), "Must be assigned to from the main thread or else data will be out of sync with reloadData.")
+            self.dataObserver?.loginSectionsDidUpdate()
+        }
+    }
 
     private var titles = [Character]()
 
@@ -449,12 +468,20 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         return String(titles[section])
     }
 
-    func setData(logins: [Login]) -> Success {
-        return computeSectionsFromLogins(logins) >>== { (titles, sections) in
+    func setLogins(logins: [Login]) {
+        // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
+        //     prevent race conditions between data/UI indexing.
+        return computeSectionsFromLogins(logins).uponQueue(dispatch_get_main_queue()) { result in
+            guard let (titles, sections) = result.successValue else {
+                self.count = 0
+                self.titles = []
+                self.sections = [:]
+                return
+            }
+
+            self.count = logins.count
             self.titles = titles
             self.sections = sections
-            self.allLogins = logins
-            return succeed()
         }
     }
 
@@ -523,12 +550,6 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
             sections.forEach { sections[$0] = $1.sort(sortByDomain) }
 
             return deferMaybe( (Array(titleSet).sort(), sections) )
-        }
-    }
-
-    subscript(index: Int) -> Login {
-        get {
-            return allLogins[index]
         }
     }
 }
