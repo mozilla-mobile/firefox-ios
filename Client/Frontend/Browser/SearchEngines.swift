@@ -4,11 +4,13 @@
 
 import Foundation
 import Shared
+import Storage
 
 private let OrderedEngineNames = "search.orderedEngineNames"
 private let DisabledEngineNames = "search.disabledEngineNames"
 private let ShowSearchSuggestionsOptIn = "search.suggestions.showOptIn"
 private let ShowSearchSuggestions = "search.suggestions.show"
+private let customSearchEnginesFileName = "customEngines.plist"
 
 /**
  * Manage a set of Open Search engines.
@@ -30,11 +32,12 @@ private let ShowSearchSuggestions = "search.suggestions.show"
  */
 class SearchEngines {
     let prefs: Prefs
-    init(prefs: Prefs) {
+    init(prefs: Prefs, files: FileAccessor) {
         self.prefs = prefs
         // By default, show search suggestions opt-in and don't show search suggestions automatically.
         self.shouldShowSearchSuggestionsOptIn = prefs.boolForKey(ShowSearchSuggestionsOptIn) ?? true
         self.shouldShowSearchSuggestions = prefs.boolForKey(ShowSearchSuggestions) ?? false
+        self.fileAccessor = files
         self.disabledEngineNames = getDisabledEngineNames()
         self.orderedEngines = getOrderedEngines()
 
@@ -45,6 +48,8 @@ class SearchEngines {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
+    var fileAccessor: FileAccessor
+
     var defaultEngine: OpenSearchEngine {
         get {
             return self.orderedEngines[0]
@@ -54,7 +59,7 @@ class SearchEngines {
             // The default engine is always enabled.
             self.enableEngine(defaultEngine)
             // The default engine is always first in the list.
-            var orderedEngines = self.orderedEngines.filter({ engine in engine.shortName != defaultEngine.shortName })
+            var orderedEngines = self.orderedEngines.filter { engine in engine.shortName != defaultEngine.shortName }
             orderedEngines.insert(defaultEngine, atIndex: 0)
             self.orderedEngines = orderedEngines
         }
@@ -79,14 +84,13 @@ class SearchEngines {
 
     var orderedEngines: [OpenSearchEngine]! {
         didSet {
-            self.prefs.setObject(self.orderedEngines.map({ (engine) in engine.shortName }), forKey: OrderedEngineNames)
+            self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: OrderedEngineNames)
         }
     }
 
     var quickSearchEngines: [OpenSearchEngine]! {
         get {
-            return self.orderedEngines.filter({ (engine) in
-                !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
+            return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
         }
     }
 
@@ -118,13 +122,36 @@ class SearchEngines {
         disabledEngineNames[engine.shortName] = true
     }
 
+    func reloadEngines() {
+        self.orderedEngines = getOrderedEngines()
+    }
+
+    func deleteEngine(engine: OpenSearchEngine) {
+        if !engine.isCustomEngine || isEngineDefault(engine) {
+            //Can't delete a preinstalled engine or an engine that is currently the default
+            return
+        }
+        var engines = getCustomEngines()
+        engines = engines.filter { $0.engineId != engine.engineId }
+        let saved = saveCustomEngines(engines)
+        if saved {
+            self.orderedEngines = getOrderedEngines()
+        }
+    }
+
+    func addSearchEngine(engine: OpenSearchEngine) {
+        var engines = getCustomEngines()
+        engines.append(engine)
+        //ensures that the new engine is added to the top of quick search
+        self.orderedEngines.insert(engine, atIndex: 1)
+        saveCustomEngines(engines)
+    }
 
     func queryForSearchURL(url: NSURL?) -> String? {
         for engine in orderedEngines {
             guard let searchTerm = engine.queryForSearchURL(url) else { continue }
             return searchTerm
         }
-
         return nil
     }
 
@@ -138,6 +165,19 @@ class SearchEngines {
         } else {
             return [String: Bool]()
         }
+    }
+
+    private func customEngineFilePath() -> String {
+        let dbURL = (try! (self.fileAccessor.getAndEnsureDirectory() as NSString)).stringByAppendingPathComponent(customSearchEnginesFileName)
+        return dbURL
+    }
+
+    private func getCustomEngines() -> [OpenSearchEngine] {
+        return NSKeyedUnarchiver.unarchiveObjectWithFile(self.customEngineFilePath()) as? [OpenSearchEngine] ?? []
+    }
+
+    private func saveCustomEngines(engines:[OpenSearchEngine]) -> Bool {
+        return NSKeyedArchiver.archiveRootObject(engines, toFile: self.customEngineFilePath())
     }
 
     /// Return all possible paths for a language identifier in the order of most specific to least specific.
@@ -228,7 +268,7 @@ class SearchEngines {
             }
             assert(NSFileManager.defaultManager().fileExistsAtPath(fullPath), "\(fullPath) exists")
 
-            let engine = parser.parse(fullPath, id: engineName)
+            let engine = parser.parse(fullPath, engineId: engineName)
             assert(engine != nil, "Engine at \(fullPath) successfully parsed")
 
             engines.append(engine!)
@@ -237,12 +277,13 @@ class SearchEngines {
         let defaultEngineFile = (searchDirectory as NSString).stringByAppendingPathComponent("default.txt")
         let defaultEngineName = try? String(contentsOfFile: defaultEngineFile, encoding: NSUTF8StringEncoding).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
 
-        return engines.sort({ e, _ in e.shortName == defaultEngineName })
+        return engines.sort { e, _ in e.shortName == defaultEngineName }
     }
 
     // Get all known search engines, possibly as ordered by the user.
     private func getOrderedEngines() -> [OpenSearchEngine] {
-        let unorderedEngines = SearchEngines.getUnorderedEngines()
+        let unorderedEngines = getCustomEngines() + SearchEngines.getUnorderedEngines()
+
         if let orderedEngineNames = prefs.stringArrayForKey(OrderedEngineNames) {
             // We have a persisted order of engines, so try to use that order.
             // We may have found engines that weren't persisted in the ordered list
