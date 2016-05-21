@@ -10,6 +10,7 @@ public struct UIConstants {
     static let DefaultHomePage = NSURL(string:"#panel=0", relativeToURL: AboutHomePage)!
 
     static let AppBackgroundColor = UIColor.blackColor()
+    static let SystemBlueColor = UIColor(red: 0 / 255, green: 122 / 255, blue: 255 / 255, alpha: 1)
     static let PrivateModePurple = UIColor(red: 207 / 255, green: 104 / 255, blue: 255 / 255, alpha: 1)
     static let PrivateModeLocationBackgroundColor = UIColor(red: 31 / 255, green: 31 / 255, blue: 31 / 255, alpha: 1)
     static let PrivateModeLocationBorderColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.15)

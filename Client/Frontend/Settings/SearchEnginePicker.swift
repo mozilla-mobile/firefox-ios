@@ -4,10 +4,6 @@
 
 import UIKit
 
-protocol SearchEnginePickerDelegate {
-    func searchEnginePicker(searchEnginePicker: SearchEnginePicker, didSelectSearchEngine engine: OpenSearchEngine?) -> Void
-}
-
 class SearchEnginePicker: UITableViewController {
     var delegate: SearchEnginePickerDelegate?
     var engines: [OpenSearchEngine]!
