@@ -74,4 +74,21 @@ extension UIView {
         layer.insertSublayer(roundedLayer, atIndex: 0)
         backgroundColor = UIColor.clearColor()
     }
+
+    /**
+     This allows us to find the view in a current view hierarchy that is currently the first responder
+     */
+    static func findSubViewWithFirstResponder(view: UIView) -> UIView? {
+        let subviews = view.subviews
+        if subviews.count == 0 {
+            return nil
+        }
+        for subview: UIView in subviews {
+            if subview.isFirstResponder() {
+                return subview
+            }
+            return findSubViewWithFirstResponder(subview)
+        }
+        return nil
+    }
 }
