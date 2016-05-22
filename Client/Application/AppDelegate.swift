@@ -361,11 +361,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// Send a telemetry ping if the user hasn't disabled reporting.
     /// We still create and log the ping for non-release channels, but we don't submit it.
     private func sendCorePing() {
-        if let profile = profile where (profile.prefs.boolForKey("settings.sendUsageData") ?? true) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-                let ping = CorePing(profile: profile)
-                Telemetry.sendPing(ping)
+        guard let profile = profile where (profile.prefs.boolForKey("settings.sendUsageData") ?? true) else {
+            log.debug("Usage sending is disabled. Not creating core telemetry ping.")
+            return
+        }
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+            // The core ping resets data counts when the ping is built, meaning we'll lose
+            // the data if the ping doesn't go through. To minimize loss, we only send the
+            // core ping if we have an active connection. Until we implement a fault-handling
+            // telemetry layer that can resend pings, this is the best we can do.
+            guard DeviceInfo.hasConnectivity() else {
+                log.debug("No connectivity. Not creating core telemetry ping.")
+                return
             }
+
+            let ping = CorePing(profile: profile)
+            Telemetry.sendPing(ping)
         }
     }
 
