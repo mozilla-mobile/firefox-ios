@@ -402,6 +402,7 @@
 		D38B2D8D1A8D98DA0040E6B5 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		D38F02D11C05127100175932 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38F02D01C05127100175932 /* Authenticator.swift */; };
 		D38F03701C06387900175932 /* AuthenticationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38F036F1C06387900175932 /* AuthenticationTests.swift */; };
+		D3921DBE1CEFD33600679798 /* ClientTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3921DBD1CEFD33600679798 /* ClientTelemetry.swift */; };
 		D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
 		D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3972BF11C22412B00035B87 /* ShareExtensionHelper.swift */; };
 		D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3972BF21C22412B00035B87 /* TitleActivityItemProvider.swift */; };
@@ -1435,6 +1436,7 @@
 		D38A1EDF1CB458EC0080C842 /* CertError.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CertError.html; sourceTree = "<group>"; };
 		D38F02D01C05127100175932 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		D38F036F1C06387900175932 /* AuthenticationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTests.swift; sourceTree = "<group>"; };
+		D3921DBD1CEFD33600679798 /* ClientTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientTelemetry.swift; sourceTree = "<group>"; };
 		D3968F241A38FE8500CEFD3B /* TabManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
 		D3972BF11C22412B00035B87 /* ShareExtensionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareExtensionHelper.swift; sourceTree = "<group>"; };
 		D3972BF21C22412B00035B87 /* TitleActivityItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleActivityItemProvider.swift; sourceTree = "<group>"; };
@@ -2056,6 +2058,7 @@
 				D35F55871CC5A3E400DC0D22 /* CorePing.swift */,
 				D35F55891CC5A4E000DC0D22 /* Telemetry.swift */,
 				28BFA7241C8E5C3F0017C2BD /* TelemetryPing.swift */,
+				D3921DBD1CEFD33600679798 /* ClientTelemetry.swift */,
 			);
 			name = Telemetry;
 			sourceTree = "<group>";
@@ -4671,6 +4674,7 @@
 				7BC68CCB1CC152B70043562A /* MenuDataSource.swift in Sources */,
 				E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */,
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
+				D3921DBE1CEFD33600679798 /* ClientTelemetry.swift in Sources */,
 				E664B45A1CD7ECDB0045A6A4 /* NotificationRootViewController.swift in Sources */,
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
 				39DD030D1CD53E1900BC09B3 /* HomePageHelper.swift in Sources */,

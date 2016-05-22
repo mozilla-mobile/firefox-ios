@@ -12,7 +12,7 @@ private let PrefKeyClientID = "PrefKeyClientID"
 private let PrefKeyModel = "PrefKeyModel"
 
 // See https://gecko.readthedocs.org/en/latest/toolkit/components/telemetry/telemetry/core-ping.html
-private let PingVersion = 5
+private let PingVersion = 6
 
 class CorePing: TelemetryPing {
     let payload: JSON
@@ -64,7 +64,7 @@ class CorePing: TelemetryPing {
 
         let timezoneOffset = NSTimeZone.localTimeZone().secondsFromGMT / 60
 
-        let out: [String: AnyObject] = [
+        var out: [String: AnyObject] = [
             "v": PingVersion,
             "clientId": clientID,
             "seq": Int(pingCount),
@@ -78,6 +78,11 @@ class CorePing: TelemetryPing {
             "created": date,
             "tz": timezoneOffset,
         ]
+
+        if let searches = SearchTelemetry.getData(profile.prefs) {
+            out["searches"] = searches
+            SearchTelemetry.resetCount(profile.prefs)
+        }
 
         payload = JSON(out)
     }

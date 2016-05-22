@@ -80,6 +80,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let profile = getProfile(application)
         appStateStore = AppStateStore(prefs: profile.prefs)
 
+        log.debug("Initializing telemetry…")
+        Telemetry.initWithPrefs(profile.prefs)
+
         if !DebugSettingsBundleOptions.disableLocalWebServer {
             log.debug("Starting web server…")
             // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.

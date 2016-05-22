@@ -1513,11 +1513,14 @@ extension BrowserViewController: URLBarDelegate {
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
         // If we can't make a valid URL, do a search query.
         // If we still don't have a valid URL, something is broken. Give up.
+        let engine = profile.searchEngines.defaultEngine
         guard let url = URIFixup.getURL(text) ??
-                        profile.searchEngines.defaultEngine.searchURLForQuery(text) else {
+                        engine.searchURLForQuery(text) else {
             log.error("Error handling URL entry: \"\(text)\".")
             return
         }
+
+        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
 
         finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
