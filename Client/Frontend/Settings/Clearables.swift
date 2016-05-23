@@ -40,12 +40,15 @@ class HistoryClearable: Clearable {
     }
 
     func clear() -> Success {
-        return profile.history.clearHistory().bind { success in
-            SDImageCache.sharedImageCache().clearDisk()
-            SDImageCache.sharedImageCache().clearMemory()
-            NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil)
-            log.debug("HistoryClearable succeeded: \(success).")
-            return Deferred(value: success)
+        let history = profile.history
+        return profile.syncManager.runOnSyncQueue {
+            history.clearHistory().bind { success in
+                SDImageCache.sharedImageCache().clearDisk()
+                SDImageCache.sharedImageCache().clearMemory()
+                NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil)
+                log.debug("HistoryClearable succeeded: \(success).")
+                return Deferred(value: success)
+            }
         }
     }
 }

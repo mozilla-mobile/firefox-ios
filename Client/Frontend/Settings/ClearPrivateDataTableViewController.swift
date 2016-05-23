@@ -110,26 +110,20 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
         func clearPrivateData(action: UIAlertAction) {
             let toggles = self.toggles
-            self.clearables
-                .enumerate()
-                .flatMap { (i, pair) in
-                    guard toggles[i] else {
-                        return nil
-                    }
-                    log.debug("Clearing \(pair.clearable).")
-                    return pair.clearable.clear()
+            self.clearables.enumerate().flatMap { (i, pair) in
+                return toggles[i] ? pair.clearable : nil
+                }
+                .map { clearable in
+                    log.debug("Clearing \(clearable).")
+                    return clearable.clear()
                 }
                 .allSucceed()
-                .upon { result in
+                .uponQueue(dispatch_get_main_queue()) { result in
                     assert(result.isSuccess, "Private data cleared successfully")
-
                     self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
-
-                    dispatch_async(dispatch_get_main_queue()) {
-                        // Disable the Clear Private Data button after it's clicked.
-                        self.clearButtonEnabled = false
-                        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                    }
+                    // Disable the Clear Private Data button after it's clicked.
+                    self.clearButtonEnabled = false
+                    self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
             }
         }
 
