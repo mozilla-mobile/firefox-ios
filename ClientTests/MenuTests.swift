@@ -67,10 +67,11 @@ class MenuTests: XCTestCase {
     func testMenuConfigurationForHomePanels() {
         let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
         let homePanelConfiguration = AppMenuConfiguration(appState: appState(.HomePanels(homePanelState: homePanelState)))
-        XCTAssertEqual(homePanelConfiguration.menuItems.count, 3)
+        XCTAssertEqual(homePanelConfiguration.menuItems.count, 4)
         XCTAssertEqual(homePanelConfiguration.menuItems[0].title, AppMenuConfiguration.NewTabTitleString)
         XCTAssertEqual(homePanelConfiguration.menuItems[1].title, AppMenuConfiguration.NewPrivateTabTitleString)
-        XCTAssertEqual(homePanelConfiguration.menuItems[2].title, AppMenuConfiguration.SettingsTitleString)
+        XCTAssertEqual(homePanelConfiguration.menuItems[2].title, AppMenuConfiguration.OpenHomePageTitleString)
+        XCTAssertEqual(homePanelConfiguration.menuItems[3].title, AppMenuConfiguration.SettingsTitleString)
 
         XCTAssertNil(homePanelConfiguration.menuToolbarItems)
     }
