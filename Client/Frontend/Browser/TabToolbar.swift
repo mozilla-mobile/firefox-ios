@@ -339,5 +339,6 @@ extension TabToolbar: AppStateDelegate {
         } else {
             addButtons(shareButton)
         }
+        updateConstraints()
     }
 }
