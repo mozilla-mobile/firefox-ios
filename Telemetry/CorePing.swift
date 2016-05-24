@@ -56,6 +56,7 @@ class CorePing: TelemetryPing {
         }
 
         let locale = NSBundle.mainBundle().preferredLocalizations.first!.stringByReplacingOccurrencesOfString("_", withString: "-")
+        let defaultEngine = profile.searchEngines.defaultEngine
 
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -73,9 +74,9 @@ class CorePing: TelemetryPing {
             "device": "Apple-" + model,
             "arch": "arm",
             "profileDate": profileDate,
-            "defaultSearch": profile.searchEngines.defaultEngine.id,
+            "defaultSearch": defaultEngine.engineID ?? JSON.null,
             "created": date,
-            "tz": timezoneOffset
+            "tz": timezoneOffset,
         ]
 
         payload = JSON(out)

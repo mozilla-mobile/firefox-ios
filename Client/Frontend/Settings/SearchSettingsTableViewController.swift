@@ -3,9 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import WebImage
+import Shared
+
+protocol SearchEnginePickerDelegate: class {
+    func searchEnginePicker(searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?) -> Void
+}
 
 class SearchSettingsTableViewController: UITableViewController {
     private let SectionDefault = 0
+    private let SectionSearchAdd = 2
     private let ItemDefaultEngine = 0
     private let ItemDefaultSuggestions = 1
     private let NumberOfItemsInSectionDefault = 2
@@ -13,6 +20,8 @@ class SearchSettingsTableViewController: UITableViewController {
     private let NumberOfSections = 2
     private let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
     private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
+
+    private var showDeletion = false
 
     var model: SearchEngines!
 
@@ -30,8 +39,17 @@ class SearchSettingsTableViewController: UITableViewController {
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is SettingsNavigationController) {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done button label for search settings table"), style: .Done, target: self, action: #selector(SearchSettingsTableViewController.SELDismiss))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchDoneButton, style: .Done, target: self, action: #selector(SearchSettingsTableViewController.dismiss))
         }
+
+        // Only show the Edit button if custom search engines are in the list.
+        // Otherwise, there is nothing to delete.
+        let customEngines = model.orderedEngines.filter({$0.isCustomEngine})
+        if (customEngines.count != 0) {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .Plain, target: self,
+                                                                     action: #selector(SearchSettingsTableViewController.editEngines))
+        }
+
 
         let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 44))
         footer.showBottomBorder = false
@@ -54,14 +72,13 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
-                cell.imageView?.image = engine.image?.createScaled(IconSize)
-
+                cell.imageView?.image = engine.image.createScaled(IconSize)
             case ItemDefaultSuggestions:
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
                 cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
                 let toggle = UISwitch()
                 toggle.onTintColor = UIConstants.ControlTintColor
-                toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.SELdidToggleSearchSuggestions(_:)), forControlEvents: UIControlEvents.ValueChanged)
+                toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.didToggleSearchSuggestions(_:)), forControlEvents: UIControlEvents.ValueChanged)
                 toggle.on = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
                 cell.selectionStyle = .None
@@ -82,14 +99,14 @@ class SearchSettingsTableViewController: UITableViewController {
             toggle.onTintColor = UIConstants.ControlTintColor
             // This is an easy way to get from the toggle control to the corresponding index.
             toggle.tag = index
-            toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.SELdidToggleEngine(_:)), forControlEvents: UIControlEvents.ValueChanged)
+            toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.didToggleEngine(_:)), forControlEvents: UIControlEvents.ValueChanged)
             toggle.on = model.isEngineEnabled(engine)
 
             cell.editingAccessoryView = toggle
-
             cell.textLabel?.text = engine.shortName
-            cell.imageView?.image = engine.image?.createScaled(IconSize)
-
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell.textLabel?.minimumScaleFactor = 0.5
+            cell.imageView?.image = engine.image.createScaled(IconSize)
             cell.selectionStyle = .None
         }
 
@@ -106,6 +123,8 @@ class SearchSettingsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionDefault {
             return NumberOfItemsInSectionDefault
+        } else if section == SectionSearchAdd {
+            return 1
         } else {
             // The first engine -- the default engine -- is not shown in the quick search engine list.
             return model.orderedEngines.count - 1
@@ -127,7 +146,13 @@ class SearchSettingsTableViewController: UITableViewController {
 
     // Don't show delete button on the left.
     override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        return UITableViewCellEditingStyle.None
+        if (indexPath.section == SectionDefault || indexPath.section == SectionSearchAdd) {
+            return UITableViewCellEditingStyle.None
+        }
+
+        let index = indexPath.item + 1
+        let engine = model.orderedEngines[index]
+        return (self.showDeletion && engine.isCustomEngine) ? .Delete : .None
     }
 
     // Don't reserve space for the delete button on the left.
@@ -164,7 +189,7 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if indexPath.section == SectionDefault {
+        if indexPath.section == SectionDefault || indexPath.section == SectionSearchAdd {
             return false
         } else {
             return true
@@ -187,6 +212,10 @@ class SearchSettingsTableViewController: UITableViewController {
             return sourceIndexPath
         }
 
+        if sourceIndexPath.section == SectionSearchAdd || proposedDestinationIndexPath.section == SectionSearchAdd {
+            return sourceIndexPath
+        }
+
         if (sourceIndexPath.section != proposedDestinationIndexPath.section) {
             var row = 0
             if (sourceIndexPath.section < proposedDestinationIndexPath.section) {
@@ -194,11 +223,19 @@ class SearchSettingsTableViewController: UITableViewController {
             }
             return NSIndexPath(forRow: row, inSection: sourceIndexPath.section)
         }
-
         return proposedDestinationIndexPath
     }
 
-    func SELdidToggleEngine(toggle: UISwitch) {
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == .Delete) {
+            let index = indexPath.item + 1
+            let engine = model.orderedEngines[index]
+            model.deleteCustomEngine(engine)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
+        }
+    }
+
+    func didToggleEngine(toggle: UISwitch) {
         let engine = model.orderedEngines[toggle.tag] // The tag is 1-based.
         if toggle.on {
             model.enableEngine(engine)
@@ -207,23 +244,30 @@ class SearchSettingsTableViewController: UITableViewController {
         }
     }
 
-    func SELdidToggleSearchSuggestions(toggle: UISwitch) {
+    func didToggleSearchSuggestions(toggle: UISwitch) {
         // Setting the value in settings dismisses any opt-in.
         model.shouldShowSearchSuggestionsOptIn = false
         model.shouldShowSearchSuggestions = toggle.on
     }
 
-    func SELcancel() {
+    func cancel() {
         navigationController?.popViewControllerAnimated(true)
     }
 
-    func SELDismiss() {
+    func dismiss() {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    func editEngines() {
+        self.showDeletion = !self.showDeletion
+        let title = self.showDeletion ? Strings.SettingsSearchDoneButton : Strings.SettingsSearchEditButton
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .Plain, target: self, action: #selector(SearchSettingsTableViewController.editEngines))
+        self.tableView.reloadData()
     }
 }
 
 extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
-    func searchEnginePicker(searchEnginePicker: SearchEnginePicker, didSelectSearchEngine searchEngine: OpenSearchEngine?) {
+    func searchEnginePicker(searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine searchEngine: OpenSearchEngine?) {
         if let engine = searchEngine {
             model.defaultEngine = engine
             self.tableView.reloadData()

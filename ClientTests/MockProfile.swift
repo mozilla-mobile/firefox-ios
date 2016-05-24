@@ -120,7 +120,7 @@ public class MockProfile: Profile {
     }()
 
     lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs)
+        return SearchEngines(prefs: self.prefs, files: self.files)
     }()
 
     lazy var prefs: Prefs = {
