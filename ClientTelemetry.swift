@@ -6,6 +6,8 @@ import Foundation
 import Shared
 
 private let PrefKeySearches = "Telemetry.Searches"
+private let PrefKeyUsageTime = "Telemetry.UsageTime"
+private let PrefKeyUsageCount = "Telemetry.UsageCount"
 
 class SearchTelemetry {
     // For data consistency, the strings used here are identical to the ones reported in Android.
@@ -42,5 +44,43 @@ private class SearchTelemetryEvent: TelemetryEvent {
         var searches = SearchTelemetry.getData(prefs) ?? [:]
         searches[engineWithSource] = (searches[engineWithSource] ?? 0) + 1
         prefs.setObject(searches, forKey: PrefKeySearches)
+    }
+}
+
+
+class UsageTelemetry {
+    private init() {}
+
+    class func makeEvent(usageInterval: Int) -> TelemetryEvent {
+        return UsageTelemetryEvent(usageInterval: usageInterval)
+    }
+
+    class func getCount(prefs: Prefs) -> Int {
+        return Int(prefs.intForKey(PrefKeyUsageCount) ?? 0)
+    }
+
+    class func getTime(prefs: Prefs) -> Int {
+        return Int(prefs.intForKey(PrefKeyUsageTime) ?? 0)
+    }
+
+    class func reset(prefs: Prefs) {
+        prefs.setInt(0, forKey: PrefKeyUsageCount)
+        prefs.setInt(0, forKey: PrefKeyUsageTime)
+    }
+}
+
+private class UsageTelemetryEvent: TelemetryEvent {
+    private let usageInterval: Int
+
+    init(usageInterval: Int) {
+        self.usageInterval = usageInterval
+    }
+
+    func record(prefs: Prefs) {
+        let count = Int32(UsageTelemetry.getCount(prefs) + 1)
+        prefs.setInt(count, forKey: PrefKeyUsageCount)
+
+        let time = Int32(UsageTelemetry.getTime(prefs) + usageInterval)
+        prefs.setInt(time, forKey: PrefKeyUsageTime)
     }
 }

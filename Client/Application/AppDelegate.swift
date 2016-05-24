@@ -15,6 +15,7 @@ private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
+private let InitialPingSentKey = "initialPingSent"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -23,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
+    var foregroundStartTime = 0
 
     weak var application: UIApplication?
     var launchOptions: [NSObject: AnyObject]?
@@ -156,7 +158,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
 
-        sendCorePing()
+        resetForegroundStartTime()
+        if !(profile.prefs.boolForKey(InitialPingSentKey) ?? false) {
+            // Try to send an initial core ping when the user first opens the app so that they're
+            // "on the map". This lets us know they exist if they try the app once, crash, then uninstall.
+            // sendCorePing() only sends the ping if the user is offline, so if the first ping doesn't
+            // go through *and* the user crashes then uninstalls on the first run, then we're outta luck.
+            profile.prefs.setBool(true, forKey: InitialPingSentKey)
+            sendCorePing()
+        }
 
         log.debug("Done with setting up the application.")
         return true
@@ -328,6 +338,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
         tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
         syncOnDidEnterBackground(application: application)
+
+        let elapsed = Int(NSDate().timeIntervalSince1970) - foregroundStartTime
+        Telemetry.recordEvent(UsageTelemetry.makeEvent(elapsed))
+        sendCorePing()
     }
 
     private func syncOnDidEnterBackground(application application: UIApplication) {
@@ -358,7 +372,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
 
-        sendCorePing()
+        resetForegroundStartTime()
+    }
+
+    private func resetForegroundStartTime() {
+        foregroundStartTime = Int(NSDate().timeIntervalSince1970)
     }
 
     /// Send a telemetry ping if the user hasn't disabled reporting.
