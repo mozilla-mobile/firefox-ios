@@ -15,8 +15,8 @@ class OpenSearchEngine: NSObject, NSCoding {
     static let PreferredIconSize = 30
 
     let shortName: String
-    let engineId: String
-    let image: UIImage?
+    let engineID: String?
+    let image: UIImage
     let isCustomEngine: Bool
     let searchTemplate: String
     private let suggestTemplate: String?
@@ -26,31 +26,38 @@ class OpenSearchEngine: NSObject, NSCoding {
 
     private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
 
-    init(engineId: String, shortName: String, image: UIImage?, searchTemplate: String, suggestTemplate: String?, isCustomEngine: Bool) {
+    init(engineID: String?, shortName: String, image: UIImage, searchTemplate: String, suggestTemplate: String?, isCustomEngine: Bool) {
         self.shortName = shortName
         self.image = image
         self.searchTemplate = searchTemplate
         self.suggestTemplate = suggestTemplate
         self.isCustomEngine = isCustomEngine
-        //custom engines need more unique IDs to avoid conflicts
-        self.engineId = isCustomEngine ? "\(engineId)-\(NSDate().timeIntervalSince1970)" : engineId
+        self.engineID = engineID
     }
 
-    @objc required init(coder aDecoder: NSCoder) {
-        searchTemplate = aDecoder.decodeObjectForKey("searchTemplate") as? String ?? ""
-        shortName = aDecoder.decodeObjectForKey("shortName") as? String ?? ""
-        isCustomEngine = aDecoder.decodeObjectForKey("isCustomEngine") as? Bool ?? false
-        image = aDecoder.decodeObjectForKey("image") as? UIImage ?? nil
-        engineId = aDecoder.decodeObjectForKey("engineId") as? String ?? ""
-        suggestTemplate = nil
+    required init?(coder aDecoder: NSCoder) {
+        guard let searchTemplate = aDecoder.decodeObjectForKey("searchTemplate") as? String,
+              let shortName = aDecoder.decodeObjectForKey("shortName") as? String,
+              let isCustomEngine = aDecoder.decodeObjectForKey("isCustomEngine") as? Bool,
+              let image = aDecoder.decodeObjectForKey("image") as? UIImage else {
+                assertionFailure()
+                return nil
+        }
+
+        self.searchTemplate = searchTemplate
+        self.shortName = shortName
+        self.isCustomEngine = isCustomEngine
+        self.image = image
+        self.engineID = aDecoder.decodeObjectForKey("engineID") as? String
+        self.suggestTemplate = nil
     }
 
-    @objc func encodeWithCoder(aCoder: NSCoder) {
+    func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(searchTemplate, forKey: "searchTemplate")
         aCoder.encodeObject(shortName, forKey: "shortName")
         aCoder.encodeObject(isCustomEngine, forKey: "isCustomEngine")
         aCoder.encodeObject(image, forKey: "image")
-        aCoder.encodeObject(engineId, forKey: "engineId")
+        aCoder.encodeObject(engineID, forKey: "engineID")
     }
 
     /**
@@ -150,7 +157,7 @@ class OpenSearchParser {
         self.pluginMode = pluginMode
     }
 
-    func parse(file: String, engineId: String) -> OpenSearchEngine? {
+    func parse(file: String, engineID: String) -> OpenSearchEngine? {
         let data = NSData(contentsOfFile: file)
 
         if data == nil {
@@ -264,7 +271,7 @@ class OpenSearchParser {
             }
         }
 
-        var uiImage: UIImage?
+        let uiImage: UIImage
 
         if let imageElement = largestImageElement,
                imageURL = NSURL(string: imageElement.text!),
@@ -273,8 +280,9 @@ class OpenSearchParser {
             uiImage = image
         } else {
             print("Error: Invalid search image data")
+            return nil
         }
 
-        return OpenSearchEngine(engineId: engineId, shortName: shortName!, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate, isCustomEngine: false)
+        return OpenSearchEngine(engineID: engineID, shortName: shortName!, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate, isCustomEngine: false)
     }
 }

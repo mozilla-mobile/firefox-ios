@@ -9,7 +9,7 @@ struct SimpleToastUX {
     static let ToastHeight = CGFloat(50)
     static let ToastAnimationDuration = 0.5
     static let ToastDefaultColor = UIColor(red: 76.0 / 255, green: 158.0 / 255, blue: 255.0 / 255, alpha: 1)
-    static let ToastFont = UIFont.systemFontOfSize(14)
+    static let ToastFont = UIFont.systemFontOfSize(15)
     static let ToastDismissAfter = 2.0
 }
 
@@ -17,9 +17,10 @@ struct SimpleToast {
 
      func showAlertWithText(text: String) {
         guard let window = UIApplication.sharedApplication().windows.first,
-        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(window) else {
+              let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(window) else {
             return
         }
+
         let toast = self.createView()
         toast.text = text
         window.addSubview(toast)
@@ -65,8 +66,7 @@ struct SimpleToast {
                 dispatch_after(dispatchTime, dispatch_get_main_queue(), {
                     self.dismiss(toast)
                 })
-        })
+            }
+        )
     }
-
-
 }

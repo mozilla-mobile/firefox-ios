@@ -4,10 +4,10 @@
 
 import UIKit
 import WebImage
+import Shared
 
-protocol SearchEnginePickerDelegate {
+protocol SearchEnginePickerDelegate: class {
     func searchEnginePicker(searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?) -> Void
-    func searchEnginePicker(searchEnginePicker: SearchEnginePicker?, didAddSearchEngine searchEngine: OpenSearchEngine?) -> Void
 }
 
 class SearchSettingsTableViewController: UITableViewController {
@@ -39,14 +39,14 @@ class SearchSettingsTableViewController: UITableViewController {
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is SettingsNavigationController) {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done button label for search settings table"), style: .Done, target: self, action: #selector(SearchSettingsTableViewController.dismiss))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchDoneButton, style: .Done, target: self, action: #selector(SearchSettingsTableViewController.dismiss))
         }
 
-        //only show the edit button if custom search engines are in the list
-        //otherwise there is nothing to delete
+        // Only show the Edit button if custom search engines are in the list.
+        // Otherwise, there is nothing to delete.
         let customEngines = model.orderedEngines.filter({$0.isCustomEngine})
         if (customEngines.count != 0) {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .Plain, target: self,
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .Plain, target: self,
                                                                      action: #selector(SearchSettingsTableViewController.editEngines))
         }
 
@@ -72,7 +72,7 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
-                cell.imageView?.image = engine.image?.createScaled(IconSize)
+                cell.imageView?.image = engine.image.createScaled(IconSize)
             case ItemDefaultSuggestions:
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
                 cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
@@ -106,7 +106,7 @@ class SearchSettingsTableViewController: UITableViewController {
             cell.textLabel?.text = engine.shortName
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             cell.textLabel?.minimumScaleFactor = 0.5
-            cell.imageView?.image = engine.image?.createScaled(IconSize)
+            cell.imageView?.image = engine.image.createScaled(IconSize)
             cell.selectionStyle = .None
         }
 
@@ -149,9 +149,10 @@ class SearchSettingsTableViewController: UITableViewController {
         if (indexPath.section == SectionDefault || indexPath.section == SectionSearchAdd) {
             return UITableViewCellEditingStyle.None
         }
+
         let index = indexPath.item + 1
         let engine = model.orderedEngines[index]
-        return (self.showDeletion && engine.isCustomEngine) ? UITableViewCellEditingStyle.Delete : UITableViewCellEditingStyle.None
+        return (self.showDeletion && engine.isCustomEngine) ? .Delete : .None
     }
 
     // Don't reserve space for the delete button on the left.
@@ -229,7 +230,7 @@ class SearchSettingsTableViewController: UITableViewController {
         if (editingStyle == .Delete) {
             let index = indexPath.item + 1
             let engine = model.orderedEngines[index]
-            model.deleteEngine(engine)
+            model.deleteCustomEngine(engine)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
         }
     }
@@ -259,9 +260,8 @@ class SearchSettingsTableViewController: UITableViewController {
 
     func editEngines() {
         self.showDeletion = !self.showDeletion
-        let title = self.showDeletion ? "Done" : "Edit"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .Plain, target: self,
-                                                                 action: #selector(SearchSettingsTableViewController.editEngines))
+        let title = self.showDeletion ? Strings.SettingsSearchDoneButton : Strings.SettingsSearchEditButton
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .Plain, target: self, action: #selector(SearchSettingsTableViewController.editEngines))
         self.tableView.reloadData()
     }
 }
@@ -273,13 +273,5 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             self.tableView.reloadData()
         }
         navigationController?.popViewControllerAnimated(true)
-    }
-    func searchEnginePicker(searchEnginePicker: SearchEnginePicker?, didAddSearchEngine searchEngine: OpenSearchEngine?) {
-        if searchEngine != nil {
-            self.model.reloadEngines()
-            self.tableView.reloadData()
-            //we are at the bottom. Jump to the top so the user can see their new search added engine
-            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: .Top, animated: false)
-        }
     }
 }

@@ -2894,6 +2894,7 @@ extension BrowserViewController {
          https://github.com/JaviSoto/iOS9-Runtime-Headers/blob/master/Frameworks/WebKit.framework/WKContentView.h
         */
         guard let webContentView = UIView.findSubViewWithFirstResponder(webView) else {
+            assertionFailure("Could not find first responder")
             return
         }
 
@@ -2952,28 +2953,30 @@ extension BrowserViewController {
         guard let template = params["url"] where template != "",
             let iconString = params["icon"],
             let iconURL = NSURL(string: iconString),
-            let url = NSURL(string: template.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!) else {
+            let url = NSURL(string: template.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!),
+            let shortName = url.domainURL().host else {
                 let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                 self.presentViewController(alert, animated: true, completion: nil)
                 return
         }
 
-        let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { [weak self] (alert: UIAlertAction) in
-            let shortName = url.domainURL()
-            self?.customSearchEngineButton.tintColor = UIColor.grayColor()
-            self?.customSearchEngineButton.userInteractionEnabled = false
-            SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil, completed: { [weak self] (img, err, cacheType, success, url) in
-                guard img != nil && shortName.host != nil else {
+        let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
+            self.customSearchEngineButton.tintColor = UIColor.grayColor()
+            self.customSearchEngineButton.userInteractionEnabled = false
+
+            SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
+                guard image != nil else {
                     let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
-                    self?.presentViewController(alert, animated: true, completion: nil)
+                    self.presentViewController(alert, animated: true, completion: nil)
                     return
                 }
-                self?.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineId: shortName.host!, shortName: shortName.host!, image: img, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true))
+
+                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true))
                 let Toast = SimpleToast()
                 Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
-
-            })
+            }
         }
+
         self.presentViewController(alert, animated: true, completion: {})
     }
 }
