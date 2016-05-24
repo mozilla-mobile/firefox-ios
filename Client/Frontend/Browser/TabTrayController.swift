@@ -571,7 +571,7 @@ class TabTrayController: UIViewController {
     }
 
     private func closeTabsForCurrentTray() {
-        tabManager.removeTabs(tabsToDisplay)
+        tabManager.removeTabsWithUndoToast(tabsToDisplay)
         self.collectionView.reloadData()
     }
 }
@@ -671,6 +671,9 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
+    }
+    
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager) {
     }
 }
 

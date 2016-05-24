@@ -2064,6 +2064,32 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
     }
+    
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager) {
+        let undo = UndoToast()
+        undo.userInteractionEnabled = true
+        let superview = self.navigationController?.view
+        superview?.userInteractionEnabled = true
+        superview!.addSubview(undo)
+        undo.snp_makeConstraints { make in
+            make.centerX.equalTo(superview!)
+            make.bottom.equalTo(superview!.snp_bottom).offset(-UIConstants.ToolbarHeight-UIConstants.DefaultPadding)
+        }
+        let recognizer = UITapGestureRecognizer(target: self, action:#selector(BrowserViewController.undoRemoveTabs(_:)))
+        undo.addGestureRecognizer(recognizer)
+        UIView.animateWithDuration(0.2, delay: 4, options: [.CurveEaseIn, .AllowUserInteraction], animations: {
+            undo.alpha = 0.1
+        }) { _ in
+            undo.removeFromSuperview()
+            tabManager.eraseUndoCache()
+        }
+    }
+    
+    func undoRemoveTabs(gestureRecognizer: UIGestureRecognizer) {
+        gestureRecognizer.view?.removeFromSuperview()
+        tabManager.undoCloseTabs()
+        updateTabCountUsingTabManager(tabManager)
+    }
 
     private func updateTabCountUsingTabManager(tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {

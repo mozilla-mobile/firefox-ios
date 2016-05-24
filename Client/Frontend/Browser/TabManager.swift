@@ -16,6 +16,7 @@ protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab)
     func tabManagerDidRestoreTabs(tabManager: TabManager)
     func tabManagerDidAddTabs(tabManager: TabManager)
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager)
 }
 
 protocol TabManagerStateDelegate: class {
@@ -358,6 +359,45 @@ class TabManager : NSObject {
     func removeAllPrivateTabsAndNotify(notify: Bool) {
         privateTabs.forEach({ removeTab($0, flushToDisk: true, notify: notify) })
     }
+    
+    var tempTabs:[Tab]?
+    func removeTabsWithUndoToast(tabs: [Tab]) {
+        tempTabs = tabs
+        var _tabs = tabs
+        print(selectedIndex)
+        if let selectedTab = selectedTab {
+            if let selectedIndex = _tabs.indexOf(selectedTab) {
+                let removed = _tabs.removeAtIndex(selectedIndex)
+                removeTabs(_tabs)
+                removeTab(removed)
+            }
+            else {
+                removeTabs(_tabs)
+            }
+        }
+        for tab in tabs {
+            tab.hideContent()
+        }
+        for delegate in delegates {
+            delegate.get()?.tabManagerDidRemoveAllTabs(self)
+        }
+    }
+    
+    func undoCloseTabs() {
+        let _tabs = tabs
+        restoreTabs(tempTabs!)
+        for tab in tempTabs! {
+            tab.showContent(true)
+        }
+        removeTabs(_tabs)
+        tempTabs?.removeAll()
+        selectTab(tabs.first)
+        tabs.first?.createWebview()
+    }
+    
+    func eraseUndoCache() {
+        tempTabs?.removeAll()
+    }
 
     func removeTabs(tabs: [Tab]) {
         for tab in tabs {
@@ -645,6 +685,18 @@ extension TabManager {
             selectTab(tab)
         }
 
+        isRestoring = false
+    }
+    
+    func restoreTabs(savedTabs: [Tab]) {
+        isRestoring = true
+        for tab in savedTabs {
+            tabs.append(tab)
+            tab.navigationDelegate = self.navDelegate
+            for delegate in delegates {
+                delegate.get()?.tabManager(self, didAddTab: tab)
+            }
+        }
         isRestoring = false
     }
 }
