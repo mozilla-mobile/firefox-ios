@@ -36,7 +36,6 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
         menuTitleLabel.snp_makeConstraints { make in
             make.top.equalTo(menuImageView.snp_bottom).offset(padding)
             make.centerX.equalTo(self)
-            make.bottom.greaterThanOrEqualTo(self).offset(-padding)
             make.left.lessThanOrEqualTo(self).offset(2 * padding)
             make.right.lessThanOrEqualTo(self).offset(-(2 * padding))
         }
