@@ -1643,10 +1643,11 @@ extension BrowserViewController: TabToolbarDelegate {
     
     func showBackForwardList() {
         if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
-            let backForwardView = BackForwardListView(profile: profile, backForwardList: backForwardList, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-            backForwardView.tabManager = tabManager
-            self.view.addSubview(backForwardView)
-            backForwardView.snp_makeConstraints { make in
+            let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            backForwardViewController.tabManager = tabManager
+            addChildViewController(backForwardViewController)
+            self.view.addSubview(backForwardViewController.view)
+            backForwardViewController.view.snp_makeConstraints { make in
                 make.top.equalTo(webViewContainerToolbar.snp_bottom)
                 make.left.right.bottom.equalTo(self.webViewContainer)
                 make.left.right.bottom.equalTo(self.webViewContainer)

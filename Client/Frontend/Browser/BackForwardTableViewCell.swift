@@ -1,10 +1,6 @@
-//
-//  BackForwardTableViewCell.swift
-//  Client
-//
-//  Created by Tyler Lacroix on 5/17/16.
-//  Copyright © 2016 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 import Storage
@@ -12,7 +8,7 @@ import Storage
 class BackForwardTableViewCell: UITableViewCell {
     
     struct BackForwardViewCellUX {
-        static let bgColor = UIColor.init(colorLiteralRed: 0.7, green: 0.7, blue: 0.7, alpha: 1)
+        static let bgColor = UIColor(colorLiteralRed: 0.7, green: 0.7, blue: 0.7, alpha: 1)
         static let faviconWidth = 20
         static let faviconPadding:CGFloat = 20
         static let labelPadding = 20
@@ -21,16 +17,16 @@ class BackForwardTableViewCell: UITableViewCell {
         static let fontSize:CGFloat = 12.0
     }
     
-    var faviconView: UIImageView!
-    var label: UILabel!
-    var bg: UIView!
+    lazy var faviconView = UIImageView(image: FaviconFetcher.defaultFavicon)
+    lazy var label = UILabel(frame: CGRectZero)
+    lazy var bg = UIView(frame: CGRect.zero)
     
     var connectingForwards = true
     var connectingBackwards = true
     
-    var currentTab = false  {
+    var isCurrentTab = false  {
         didSet {
-            if(currentTab) {
+            if(isCurrentTab) {
                 label.font = UIFont(name:"HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
                 bg.snp_updateConstraints { make in
                     make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
@@ -50,26 +46,26 @@ class BackForwardTableViewCell: UITableViewCell {
         }
     }
     
-    init(style: UITableViewCellStyle, reuseIdentifier: String?, isPrivate: Bool) {
+    var isPrivate = false  {
+        didSet {
+            label.textColor = isPrivate ? UIColor.whiteColor() : UIColor.blackColor()
+        }
+    }
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = UIColor.clearColor()
         selectionStyle = .None
+        
+        bg.backgroundColor = BackForwardViewCellUX.bgColor
+        contentView.addSubview(bg)
         
         let selectedView = UIView()
         selectedView.backgroundColor = UIColor.redColor()
         selectedBackgroundView =  selectedView;
         
-        faviconView = UIImageView(image: FaviconFetcher.defaultFavicon)
         faviconView.backgroundColor = UIColor.whiteColor()
         contentView.addSubview(faviconView)
-        
-        label = UILabel(frame: CGRectZero)
-        if isPrivate {
-            label.textColor = UIColor.whiteColor()
-        }
-        else {
-            label.textColor = UIColor.blackColor()
-        }
         
         label.text = " "
         label.font = label.font.fontWithSize(BackForwardViewCellUX.fontSize)
@@ -88,12 +84,6 @@ class BackForwardTableViewCell: UITableViewCell {
             make.right.equalTo(self.snp_right).offset(BackForwardViewCellUX.labelPadding)
         }
         
-        bg = UIView(frame: CGRect.zero)
-        bg.backgroundColor = BackForwardViewCellUX.bgColor
-        
-        self.addSubview(bg)
-        self.sendSubviewToBack(bg)
-        
         bg.snp_makeConstraints { make in
             make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
             make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
@@ -108,6 +98,7 @@ class BackForwardTableViewCell: UITableViewCell {
     }
     
     override func drawRect(rect: CGRect) {
+        super.drawRect(rect)
         let context = UIGraphicsGetCurrentContext();
         
         let startPoint = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
@@ -127,7 +118,7 @@ class BackForwardTableViewCell: UITableViewCell {
     
     override func setHighlighted(highlighted: Bool, animated: Bool) {
         if (highlighted) {
-            self.backgroundColor = UIColor.init(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.1)
+            self.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.1)
         }
         else {
             self.backgroundColor = UIColor.clearColor()
@@ -138,7 +129,7 @@ class BackForwardTableViewCell: UITableViewCell {
         super.prepareForReuse()
         connectingForwards = true
         connectingBackwards = true
-        currentTab = false
+        isCurrentTab = false
         label.font = UIFont(name:"HelveticaNeue", size: BackForwardViewCellUX.fontSize)
         
         bg.snp_updateConstraints { make in
