@@ -89,7 +89,7 @@ class LoginListViewController: SensitiveViewController {
 
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditting))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditing))
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen")
 
@@ -195,7 +195,7 @@ private extension LoginListViewController {
         activeLoginQuery! >>== self.loginDataSource.setLogins
     }
 
-    @objc func beginEditting() {
+    @objc func beginEditing() {
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(LoginListViewController.cancelSelection))
         selectionButtonHeightConstraint?.updateOffset(UIConstants.ToolbarHeight)
@@ -212,7 +212,7 @@ private extension LoginListViewController {
 
         tableView.setEditing(false, animated: true)
         navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditting))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditing))
     }
 
     @objc func tappedDelete() {
@@ -265,12 +265,7 @@ extension LoginListViewController: LoginDataSourceObserver {
         self.loadingStateView.hidden = true
         self.tableView.reloadData()
         self.activeLoginQuery = nil
-
-        if self.loginDataSource.count > 0 {
-            self.navigationItem.rightBarButtonItem?.enabled = true
-        } else {
-            self.navigationItem.rightBarButtonItem?.enabled = false
-        }
+        self.navigationItem.rightBarButtonItem?.enabled = self.loginDataSource.count > 0
     }
 }
 
@@ -347,7 +342,7 @@ extension LoginListViewController: SearchInputViewDelegate {
 
     @objc func searchInputViewFinishedEditing(searchView: SearchInputView) {
         // Show the edit after we're done with the search
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditting))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditing))
         loadLogins()
     }
 }
