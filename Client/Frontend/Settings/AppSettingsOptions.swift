@@ -67,9 +67,29 @@ class DisconnectSetting: WithAccountSetting {
             })
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert"), style: .Destructive) { (action) in
+                let hadSyncedLogins:Bool = self.settings.profile.logins.hasSyncedLogins().value.successValue!
+
                 self.settings.profile.removeAccount()
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()
+                
+                
+                if(hadSyncedLogins && self.settings.profile.logins.getAllLogins().value.successValue!.count > 0){
+                    let loginsController = UIAlertController(
+                        title: Strings.SettingsRemoveSavedLoginsTitle,
+                        message: Strings.SettingsRemoveSavedLoginsMessage,
+                        preferredStyle: UIAlertControllerStyle.Alert)
+                    loginsController.addAction(
+                        UIAlertAction(title: Strings.SettingsRemoveSavedLoginsKeepButton, style: .Cancel) { (action) in
+                            // Do nothing.
+                        })
+                    loginsController.addAction(
+                        UIAlertAction(title: Strings.SettingsRemoveSavedLoginsRemoveButton, style: .Destructive) { (action) in
+                        self.profile.logins.removeAll()
+                    })
+                    navigationController?.presentViewController(loginsController, animated: true, completion: nil)
+                }
+
             })
         navigationController?.presentViewController(alertController, animated: true, completion: nil)
     }
