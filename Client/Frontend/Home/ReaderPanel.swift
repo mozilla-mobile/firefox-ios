@@ -365,7 +365,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         readerModeLabel.numberOfLines = 0
         readerModeLabel.snp_makeConstraints { make in
             make.top.equalTo(welcomeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-            make.left.equalTo(welcomeLabel.snp_left)
+            make.leading.equalTo(welcomeLabel.snp_leading)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
         }
 
@@ -373,7 +373,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         containerView.addSubview(readerModeImageView)
         readerModeImageView.snp_makeConstraints { make in
             make.centerY.equalTo(readerModeLabel)
-            make.right.equalTo(welcomeLabel.snp_right)
+            make.trailing.equalTo(welcomeLabel.snp_trailing)
         }
 
         let readingListLabel = UILabel()
@@ -384,7 +384,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         readingListLabel.numberOfLines = 0
         readingListLabel.snp_makeConstraints { make in
             make.top.equalTo(readerModeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-            make.left.equalTo(welcomeLabel.snp_left)
+            make.leading.equalTo(welcomeLabel.snp_leading)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
             make.bottom.equalTo(overlayView).offset(-20) // making AutoLayout compute the overlayView's contentSize
         }
@@ -393,7 +393,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         containerView.addSubview(readingListImageView)
         readingListImageView.snp_makeConstraints { make in
             make.centerY.equalTo(readingListLabel)
-            make.right.equalTo(welcomeLabel.snp_right)
+            make.trailing.equalTo(welcomeLabel.snp_trailing)
         }
 
         containerView.snp_makeConstraints { make in
