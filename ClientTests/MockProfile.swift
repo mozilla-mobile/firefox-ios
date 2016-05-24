@@ -50,6 +50,10 @@ public class MockSyncManager: SyncManager {
     public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
         return deferMaybe(true)
     }
+
+    public func runOnSyncQueue<T>(thunk: () -> Deferred<Maybe<T>>) -> Deferred<Maybe<T>> {
+        return thunk()
+    }
 }
 
 public class MockTabQueue: TabQueue {

@@ -41,6 +41,8 @@ public protocol SyncManager {
     func onNewProfile()
     func onRemovedAccount(account: FirefoxAccount?) -> Success
     func onAddedAccount() -> Success
+
+    func runOnSyncQueue<T>(thunk: () -> Deferred<Maybe<T>>) -> Deferred<Maybe<T>>
 }
 
 typealias EngineIdentifier = String
@@ -1121,6 +1123,14 @@ public class BrowserProfile: Profile {
                 NSDate.now() < stopBy &&
                 self.profile.hasSyncableAccount()
             }
+        }
+
+        func runOnSyncQueue<T>(thunk: () -> Deferred<Maybe<T>>) -> Deferred<Maybe<T>> {
+            // Use the syncLock is a little over cautious, but our critical section is 
+            // still critical.
+            syncLock.lock()
+            defer { syncLock.unlock() }
+            return deferDispatchAsync(syncQueue, f: thunk)
         }
     }
 }
