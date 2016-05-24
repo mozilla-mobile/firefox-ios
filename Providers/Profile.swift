@@ -837,10 +837,14 @@ public class BrowserProfile: Profile {
         }
 
         @objc func onStartSyncing(notification: NSNotification) {
+            syncLock.lock()
+            defer { syncLock.unlock() }
             syncDisplayState = .InProgress
         }
 
         @objc func onFinishSyncing(notification: NSNotification) {
+            syncLock.lock()
+            defer { syncLock.unlock() }
             if let syncState = syncDisplayState where syncState == .Good {
                 self.lastSyncFinishTime = NSDate.now()
             }
