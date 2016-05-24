@@ -384,15 +384,22 @@ class TabManager : NSObject {
     }
     
     func undoCloseTabs() {
-        let _tabs = tabs
+        guard tempTabs?.count ?? 0 > 0 else {
+            return
+        }
+        
+        let _tabs = normalTabs
         restoreTabs(tempTabs!)
         for tab in tempTabs! {
             tab.showContent(true)
         }
-        removeTabs(_tabs)
+        if !tempTabs![0].isPrivate ?? true {
+            removeTabs(_tabs)
+        }
+        selectTab(tempTabs?.first)
         tempTabs?.removeAll()
-        selectTab(tabs.first)
         tabs.first?.createWebview()
+        
     }
     
     func eraseUndoCache() {
