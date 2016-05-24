@@ -10,19 +10,17 @@ import UIKit
 
 
 private struct ToastUX {
-    static let backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.8)
-    static let titleColor = UIColor.whiteColor()
-    static let messageColor = UIColor.whiteColor()
+    static let backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
+    static let backgroundBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
+    static let backgroundBorderWidth: CGFloat = 1
+    static let messageColor = UIColor.blackColor()
     static let maxWidthPercentage: CGFloat = 0.8
     static let maxHeightPercentage: CGFloat = 0.8
     static let horizontalPadding: CGFloat = 14.0
     static let verticalPadding: CGFloat = 14.0
-    static let cornerRadius: CGFloat = 10.0;
-    static let titleFont = UIFont.boldSystemFontOfSize(16.0)
+    static let cornerRadius: CGFloat = 5.0;
     static let messageFont = UIFont.systemFontOfSize(16.0)
-    static let titleAlignment = NSTextAlignment.Left
     static let messageAlignment = NSTextAlignment.Left
-    static let titleNumberOfLines = 0;
     static let messageNumberOfLines = 0;
     static let activitySize = CGSize(width: 100.0, height: 100.0)
     static let fadeDuration: NSTimeInterval = 0.2
@@ -39,10 +37,12 @@ class UndoToast: UIView {
         wrapperView.backgroundColor = ToastUX.backgroundColor
         wrapperView.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin, .FlexibleTopMargin, .FlexibleBottomMargin]
         wrapperView.layer.cornerRadius = ToastUX.cornerRadius
+        wrapperView.layer.borderColor = ToastUX.backgroundBorderColor.CGColor
+        wrapperView.layer.borderWidth = ToastUX.backgroundBorderWidth
         
         messageLabel = UILabel()
-        messageLabel!.userInteractionEnabled = false
-        messageLabel?.text = "Tabs closed. |  Undo"
+        messageLabel?.userInteractionEnabled = false
+        messageLabel?.text = "Tabs closed." + " |  " + "Undo"
         messageLabel?.numberOfLines = ToastUX.messageNumberOfLines
         messageLabel?.font = ToastUX.messageFont
         messageLabel?.textAlignment = ToastUX.messageAlignment
