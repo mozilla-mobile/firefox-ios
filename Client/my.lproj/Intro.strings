@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "ဝတ်ဆိုဒ်စာမျက်နှာများအား တစ်ချိန်တည်းတွင် တပ်ဗ်များသုံးပြီး ကြည့်မည်";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "ရွေးပါ";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "မီးမြေခွေးအား သင်သုံးစွဲသည့်နေရာတိုင်းတွင် ချိတ်ဆက်ထားမည်";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "ပြုပြင်မည်";
+
+/* See http://mzl.la/1if9ODp */
+"Easily switch between open pages with tabs." = "ဖွင့်ထားသည့် စာမျက်နှာများကို တပ်ဗ်များအသုံးပြုပြီး လွယ်ကူစွာ ပြောင်းလဲကြည့်ရှုနိုင်သည်။";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "မီးမြေခွေး နှင့် ကလောက်";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "မိတ်ဆက် %1$@ ရှိ %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "ဖွဲ့စည်းပါ";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "သင့်မီးမြေခွေးအား စိတ်ကြိုက် အပြင်အဆင်တွင် ပြုပြင်ပါ";
+
+/* See http://mzl.la/1if9ODp */
+"Personalize your default search engine and more in Settings." = "သင့်မူသေရှာဖွေရေးအင်ဂျင်နှင့် အခြားအပြင်အဆင်များကို စိတ်ကြိုက်သတ်မှတ်ပါ။";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "မျှဝေရန်";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "မီးမြေခွေးအကောင့်သို့ ဝင်ရောက်ပါ";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "စတင် သုံးစွဲမည်";
+
+/* See http://mzl.la/1if9ODp */
+"Sync your Devices." = "သင့်ကိရိယာများကို တပြေးညီထပ်တူ ဖြစ်စေပါ။";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "လွယ်ကူစွာ အသုံးပြုနိုင်ရန် မီးမြေခွေးပုံငယ်ကို ထိပါ၊ ထို့နောက် dock ပေါ်သို့ ဖိပြီး ရွှေ့ပါ။";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "အပြင်အဆင် ခလုပ် သည် တပ်ဗ်များအစတွင်ရှိသည်";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "တဗ်ပြ ခလုပ်သည် ရှာဖွေခြင်း နှင့် လိပ်စာရိုက်ထည့်ဘား ဘေးတွင်ရှိပြီး လက်တလောဖွင့်ထားသော တပ်ဗ်အရေအတွက်ကို ပြသည်။";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "အခြားအက်ပ်များမှ မီးမြေခွေးသို့ လင့်ခ်များ ပေးပို့ရန် မျှဝေခြင်းဆိုင်ရာ ခလုတ်ချပ်ပြားကို အသုံးပြုပါ။";
+
