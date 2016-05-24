@@ -8,6 +8,7 @@ import SnapKit
 import Storage
 import Shared
 import SwiftKeychainWrapper
+import Deferred
 
 private struct LoginListUX {
     static let RowHeight: CGFloat = 58
@@ -35,15 +36,17 @@ class LoginListViewController: SensitiveViewController {
         return ListSelectionController(tableView: self.tableView)
     }()
 
-    private lazy var loginDataSource: LoginCursorDataSource = {
-        return LoginCursorDataSource()
+    private lazy var loginDataSource: LoginDataSource = {
+        let dataSource = LoginDataSource()
+        dataSource.dataObserver = self
+        return dataSource
     }()
 
     private let profile: Profile
 
     private let searchView = SearchInputView()
 
-    private var activeLoginQuery: Success?
+    private var activeLoginQuery: Deferred<Maybe<[Login]>>?
 
     private let loadingStateView = LoadingLoginsView()
 
@@ -58,7 +61,7 @@ class LoginListViewController: SensitiveViewController {
         button.setTitle(self.selectAllTitle, forState: .Normal)
         button.setTitleColor(LoginListUX.selectionButtonTextColor, forState: .Normal)
         button.backgroundColor = LoginListUX.selectionButtonBackground
-        button.addTarget(self, action: #selector(LoginListViewController.SELdidTapSelectionButton), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(LoginListViewController.tappedSelectionButton), forControlEvents: .TouchUpInside)
         return button
     }()
 
@@ -82,11 +85,11 @@ class LoginListViewController: SensitiveViewController {
         super.viewDidLoad()
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(LoginListViewController.SELreloadLogins), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginListViewController.loadLogins(_:)), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditing))
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen")
 
@@ -153,7 +156,7 @@ class LoginListViewController: SensitiveViewController {
         // Show delete bar button item if we have selected any items
         if loginSelectionController.selectedCount > 0 {
             if (navigationItem.rightBarButtonItem == nil) {
-                navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .Plain, target: self, action: #selector(LoginListViewController.SELdelete))
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .Plain, target: self, action: #selector(LoginListViewController.tappedDelete))
                 navigationItem.rightBarButtonItem?.tintColor = UIColor.redColor()
             }
         } else {
@@ -162,52 +165,45 @@ class LoginListViewController: SensitiveViewController {
     }
 
     private func toggleSelectionTitle() {
-        if loginSelectionController.selectedCount == loginDataSource.allLogins.count {
+        if loginSelectionController.selectedCount == loginDataSource.count {
             selectionButton.setTitle(deselectAllTitle, forState: .Normal)
         } else {
             selectionButton.setTitle(selectAllTitle, forState: .Normal)
         }
     }
 
-    private func loadLogins(query: String? = nil) -> Success {
-        loadingStateView.hidden = false
-        let query = profile.logins.searchLoginsWithQuery(query).bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
-        activeLoginQuery = query
-        return query
-    }
 
-    private func reloadTableWithResult(result: Maybe<Cursor<Login>>) -> Success {
-        loadingStateView.hidden = true
-        loginDataSource.allLogins = result.successValue?.asArray() ?? []
-        tableView.reloadData()
-        activeLoginQuery = nil
-
-        if loginDataSource.count > 0 {
-            navigationItem.rightBarButtonItem?.enabled = true
-        } else {
-            navigationItem.rightBarButtonItem?.enabled = false
+    // Wrap the SQLiteLogins method to allow us to cancel it from our end.
+    private func queryLogins(query: String) -> Deferred<Maybe<[Login]>> {
+        let deferred = Deferred<Maybe<[Login]>>()
+        profile.logins.searchLoginsWithQuery(query) >>== { logins in
+            deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
+            succeed()
         }
-
-        return succeed()
+        return deferred
     }
 }
 
 // MARK: - Selectors
-extension LoginListViewController {
+private extension LoginListViewController {
+    @objc func loadLogins(query: String? = nil) {
+        loadingStateView.hidden = false
 
-    func SELreloadLogins() {
-        loadLogins()
+        // Fill in an in-flight query and re-query
+        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+        activeLoginQuery = queryLogins(query ?? "")
+        activeLoginQuery! >>== self.loginDataSource.setLogins
     }
 
-    func SELedit() {
+    @objc func beginEditing() {
         navigationItem.rightBarButtonItem = nil
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(LoginListViewController.SELcancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(LoginListViewController.cancelSelection))
         selectionButtonHeightConstraint?.updateOffset(UIConstants.ToolbarHeight)
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
     }
 
-    func SELcancel() {
+    @objc func cancelSelection() {
         // Update selection and select all button
         loginSelectionController.deselectAll()
         toggleSelectionTitle()
@@ -216,10 +212,10 @@ extension LoginListViewController {
 
         tableView.setEditing(false, animated: true)
         navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditing))
     }
 
-    func SELdelete() {
+    @objc func tappedDelete() {
         profile.logins.hasSyncedLogins().uponQueue(dispatch_get_main_queue()) { yes in
             let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
@@ -228,7 +224,7 @@ extension LoginListViewController {
                 }
 
                 self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
-                    self.SELcancel()
+                    self.cancelSelection()
                     self.loadLogins()
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
@@ -237,7 +233,7 @@ extension LoginListViewController {
         }
     }
 
-    func SELdidTapSelectionButton() {
+    @objc func tappedSelectionButton() {
         // If we haven't selected everything yet, select all
         if loginSelectionController.selectedCount < loginDataSource.count {
             // Find all unselected indexPaths
@@ -260,6 +256,16 @@ extension LoginListViewController {
 
         toggleSelectionTitle()
         toggleDeleteBarButton()
+    }
+}
+
+// MARK: - LoginDataSourceObserver
+extension LoginListViewController: LoginDataSourceObserver {
+    func loginSectionsDidUpdate() {
+        self.loadingStateView.hidden = true
+        self.tableView.reloadData()
+        self.activeLoginQuery = nil
+        self.navigationItem.rightBarButtonItem?.enabled = self.loginDataSource.count > 0
     }
 }
 
@@ -327,7 +333,7 @@ extension LoginListViewController: SearchInputViewDelegate {
 
     @objc func searchInputViewBeganEditing(searchView: SearchInputView) {
         // Trigger a cancel for editing
-        SELcancel()
+        cancelSelection()
 
         // Hide the edit button while we're searching
         navigationItem.rightBarButtonItem = nil
@@ -336,7 +342,7 @@ extension LoginListViewController: SearchInputViewDelegate {
 
     @objc func searchInputViewFinishedEditing(searchView: SearchInputView) {
         // Show the edit after we're done with the search
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditing))
         loadLogins()
     }
 }
@@ -385,22 +391,25 @@ private class ListSelectionController: NSObject {
     }
 }
 
+protocol LoginDataSourceObserver: class {
+    func loginSectionsDidUpdate()
+}
+
 /// Data source for handling LoginData objects from a Cursor
-private class LoginCursorDataSource: NSObject, UITableViewDataSource {
+class LoginDataSource: NSObject, UITableViewDataSource {
 
-    var count: Int {
-        return allLogins.count
-    }
+    var count: Int = 0
 
-    private var allLogins: [Login] = [] {
-        didSet {
-            computeLoginSections()
-        }
-    }
+    weak var dataObserver: LoginDataSourceObserver?
 
     private let emptyStateView = NoLoginsView()
 
-    private var sections = [Character: [Login]]()
+    private var sections = [Character: [Login]]() {
+        didSet {
+            assert(NSThread.isMainThread(), "Must be assigned to from the main thread or else data will be out of sync with reloadData.")
+            self.dataObserver?.loginSectionsDidUpdate()
+        }
+    }
 
     private var titles = [Character]()
 
@@ -450,23 +459,38 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         return String(titles[section])
     }
 
-    private func computeLoginSections() {
-        titles.removeAll()
-        sections.removeAll()
+    func setLogins(logins: [Login]) {
+        // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
+        //     prevent race conditions between data/UI indexing.
+        return computeSectionsFromLogins(logins).uponQueue(dispatch_get_main_queue()) { result in
+            guard let (titles, sections) = result.successValue else {
+                self.count = 0
+                self.titles = []
+                self.sections = [:]
+                return
+            }
 
-        guard allLogins.count > 0 else {
-            return
+            self.count = logins.count
+            self.titles = titles
+            self.sections = sections
+        }
+    }
+
+    private func computeSectionsFromLogins(logins: [Login]) -> Deferred<Maybe<([Character], [Character: [Login]])>> {
+        guard logins.count > 0 else {
+            return deferMaybe( ([Character](), [Character: [Login]]()) )
         }
 
-        // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
-        // baseDomain() is a costly call because of the ETLD lookup tables.
         var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
-        allLogins.forEach { login in
-            domainLookup[login.guid] = (
-                login.hostname.asURL?.baseDomain(),
-                login.hostname.asURL?.host,
-                login.hostname
-            )
+        var sections = [Character: [Login]]()
+        var titleSet = Set<Character>()
+
+        // Small helper method for using the precomputed base domain to determine the title/section of the
+        // given login.
+        func titleForLogin(login: Login) -> Character {
+            // Fallback to hostname if we can't extract a base domain.
+            let titleString = domainLookup[login.guid]?.baseDomain?.uppercaseString ?? login.hostname
+            return titleString.characters.first ?? Character("")
         }
 
         // Rules for sorting login URLS:
@@ -493,25 +517,30 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
             }
         }
 
-        // Temporarily insert titles into a Set to get duplicate removal for 'free'.
-        var titleSet = Set<Character>()
-        allLogins.forEach { login in
-            // Fallback to hostname if we can't extract a base domain.
-            let sortBy = login.hostname.asURL?.baseDomain()?.uppercaseString ?? login.hostname
-            let sectionTitle = sortBy.characters.first ?? Character("")
-            titleSet.insert(sectionTitle)
+        return deferDispatchAsync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+            // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
+            // baseDomain() is a costly call because of the ETLD lookup tables.
+            logins.forEach { login in
+                domainLookup[login.guid] = (
+                    login.hostname.asURL?.baseDomain(),
+                    login.hostname.asURL?.host,
+                    login.hostname
+                )
+            }
 
-            var logins = sections[sectionTitle] ?? []
-            logins.append(login)
-            logins.sortInPlace(sortByDomain)
-            sections[sectionTitle] = logins
-        }
-        titles = Array(titleSet).sort()
-    }
+            // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
+            logins.forEach { titleSet.insert(titleForLogin($0)) }
 
-    subscript(index: Int) -> Login {
-        get {
-            return allLogins[index]
+            // 2. Setup an empty list for each title found.
+            titleSet.forEach { sections[$0] = [Login]() }
+
+            // 3. Go through our logins and put them in the right section.
+            logins.forEach { sections[titleForLogin($0)]?.append($0) }
+
+            // 4. Go through each section and sort.
+            sections.forEach { sections[$0] = $1.sort(sortByDomain) }
+
+            return deferMaybe( (Array(titleSet).sort(), sections) )
         }
     }
 }
