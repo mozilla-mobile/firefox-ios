@@ -229,13 +229,9 @@ class StringSetting: Setting, UITextFieldDelegate {
         textField.placeholder = placeholder
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange), forControlEvents: .EditingChanged)
-
-        cell.accessibilityTraits = UIAccessibilityTraitLink
+        cell.userInteractionEnabled = true
+        cell.accessibilityTraits = UIAccessibilityTraitNone
         cell.contentView.addSubview(textField)
-
-        let container = UIView()
-        container.addSubview(textField)
-        cell.contentView.addSubview(container)
 
         cell.contentView.snp_makeConstraints { make in
             make.height.equalTo(44)
