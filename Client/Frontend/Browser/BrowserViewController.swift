@@ -393,6 +393,7 @@ class BrowserViewController: UIViewController {
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.topLayoutGuide.length)
         }
+        self.appDidUpdateState(getCurrentAppState())
         log.debug("BVC done.")
     }
 
@@ -453,8 +454,6 @@ class BrowserViewController: UIViewController {
 
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
-        let state = getCurrentAppState()
-        self.appDidUpdateState(state)
         log.debug("BVC done.")
 
         NSNotificationCenter.defaultCenter().addObserver(self,
