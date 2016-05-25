@@ -282,19 +282,19 @@ extension SQLiteBookmarks {
         }
     }
 
-    private func bufferHasUnmergedChanges() -> Deferred<Maybe<Bool>> {
+    private func isBufferEmpty() -> Deferred<Maybe<Bool>> {
         return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksBuffer)")
     }
 
-    private func mirrorHasContents() -> Deferred<Maybe<Bool>> {
+    private func isMirrorEmpty() -> Deferred<Maybe<Bool>> {
         return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksMirror)")
     }
 
-    private func isEditableForDirection(direction: Direction) -> Deferred<Maybe<Bool>> {
-        return accumulate([bufferHasUnmergedChanges, mirrorHasContents]) >>== { checks in
-            let hasUnmergedChanges = checks[0]
-            let hasSyncedBefore = checks[1]
-            return deferMaybe(!hasUnmergedChanges && direction == .Local ? true : !hasSyncedBefore)
+    func isEditableForDirection(direction: Direction) -> Deferred<Maybe<Bool>> {
+        return accumulate([isBufferEmpty, isMirrorEmpty]) >>== { checks in
+            let bufferEmpty = checks[0]
+            let mirrorEmpty = checks[1]
+            return deferMaybe(bufferEmpty && direction == .Local ? true : mirrorEmpty)
         }
     }
 

@@ -21,15 +21,17 @@ public class SQLiteBookmarks: BookmarksModelFactorySource {
     }
 
     public var modelFactory: Deferred<Maybe<BookmarksModelFactory>> {
-        struct Singleton {
-            static var token: dispatch_once_t = 0
-            static var instance: Deferred<Maybe<BookmarksModelFactory>>!
-        }
+//        struct Singleton {
+//            static var token: dispatch_once_t = 0
+//            static var instance: Deferred<Maybe<BookmarksModelFactory>>!
+//        }
+//
+//        // We never need to fetch the factory more than once.
+//        dispatch_once(&Singleton.token) {
+//            Singleton.instance = deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local))
+//        }
+//        return Singleton.instance
 
-        // We never need to fetch the factory more than once.
-        dispatch_once(&Singleton.token) {
-            Singleton.instance = deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local))
-        }
-        return Singleton.instance
+        return deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local))
     }
 }
