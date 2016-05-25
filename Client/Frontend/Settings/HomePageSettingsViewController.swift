@@ -98,6 +98,13 @@ class WebPageSetting: StringSetting {
         textField.autocorrectionType = .No
     }
 
+    override func prepareValidValue(userInput value: String?) -> String? {
+        guard let value = value else {
+            return nil
+        }
+        return URIFixup.getURL(value)?.absoluteString
+    }
+
     static func isURL(string: String?) -> Bool {
         guard let string = string else {
             return false
