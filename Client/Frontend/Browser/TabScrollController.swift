@@ -79,6 +79,7 @@ class TabScrollingController: NSObject {
 
     func showToolbars(animated animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
         if toolbarState == .Visible {
+            completion?(finished: true)
             return
         }
         toolbarState = .Visible
@@ -95,6 +96,7 @@ class TabScrollingController: NSObject {
 
     func hideToolbars(animated animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
         if toolbarState == .Collapsed {
+            completion?(finished: true)
             return
         }
         toolbarState = .Collapsed
