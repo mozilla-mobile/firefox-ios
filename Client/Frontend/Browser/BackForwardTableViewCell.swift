@@ -60,10 +60,6 @@ class BackForwardTableViewCell: UITableViewCell {
         bg.backgroundColor = BackForwardViewCellUX.bgColor
         contentView.addSubview(bg)
         
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.redColor()
-        selectedBackgroundView =  selectedView;
-        
         faviconView.backgroundColor = UIColor.whiteColor()
         contentView.addSubview(faviconView)
         
