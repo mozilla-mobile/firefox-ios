@@ -2332,7 +2332,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
-        var messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
+        let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
         if canDisplayJSAlertForWebView(webView) {
             presentViewController(messageAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
@@ -2345,7 +2345,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
-        var confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
+        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
         if canDisplayJSAlertForWebView(webView) {
             presentViewController(confirmAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
@@ -2356,7 +2356,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String?) -> Void) {
-        var textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
+        let textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
         if canDisplayJSAlertForWebView(webView) {
             presentViewController(textInputAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
