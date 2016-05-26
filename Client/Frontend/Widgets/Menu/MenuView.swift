@@ -344,6 +344,7 @@ class MenuView: UIView {
 
 
     private func layoutMenu() {
+        menuContainerView.backgroundColor = menuColor
         let numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0)
         menuPagingLayout.maxNumberOfItemsPerPageRow = Int(numberOfItemsInRow)
 
