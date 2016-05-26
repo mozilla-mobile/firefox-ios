@@ -188,7 +188,7 @@ public class FirefoxAccount {
 
         // Alright, we haven't an advance() in progress.  Schedule a new deferred to chain from.
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
-        let stateMachine = FxALoginStateMachine(client: client)
+        let stateMachine = FxALoginStateMachine(client: client, account: self)
         let now = NSDate.now()
         let deferred: Deferred<FxAState> = stateMachine.advanceFromState(stateCache.value!, now: now).map { newState in
             self.stateCache.value = newState
