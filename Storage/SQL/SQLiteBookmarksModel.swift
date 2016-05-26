@@ -252,13 +252,21 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
 }
 
 extension SQLiteBookmarks {
+    private static var isEditableQuery: String {
+        return
+            "SELECT exists( " +
+            "   SELECT exists(SELECT 1 FROM \(TableBookmarksBuffer)) AS hasBuffer, exists(SELECT 1 FROM \(TableBookmarksMirror)) AS hasMirror " +
+            "   WHERE hasBuffer == 0 OR (hasBuffer == 1 AND hasMirror == 0) " +
+            ")"
+    }
+
     private func getRecordsWithGUIDs(guids: [GUID], direction: Direction, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
 
-        var args: Args = guids.map { $0 as AnyObject }
+        let args: Args = guids.map { $0 as AnyObject }
         let varlist = BrowserDB.varlist(args.count)
 
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, ? AS isEditable " +
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(SQLiteBookmarks.isEditableQuery)) AS isEditable " +
         "FROM \(direction.valueView) WHERE guid IN \(varlist) AND NOT is_deleted"
 
         let withIcon = [
@@ -276,26 +284,7 @@ extension SQLiteBookmarks {
             ].joinWithSeparator(" ")
 
         let sql = includeIcon ? withIcon : values + " ORDER BY title ASC"
-        return isEditableForDirection(direction) >>== { editable in
-            args.insert((editable ? 1 : 0) as AnyObject, atIndex: 0)
-            return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)
-        }
-    }
-
-    private func isBufferEmpty() -> Deferred<Maybe<Bool>> {
-        return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksBuffer)")
-    }
-
-    private func isMirrorEmpty() -> Deferred<Maybe<Bool>> {
-        return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksMirror)")
-    }
-
-    func isEditableForDirection(direction: Direction) -> Deferred<Maybe<Bool>> {
-        return accumulate([isBufferEmpty, isMirrorEmpty]) >>== { checks in
-            let bufferEmpty = checks[0]
-            let mirrorEmpty = checks[1]
-            return deferMaybe(bufferEmpty && direction == .Local ? true : mirrorEmpty)
-        }
+        return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)
     }
 
     /**
@@ -316,7 +305,7 @@ extension SQLiteBookmarks {
         "WHERE parent = ?"
 
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, ? AS isEditable " +
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(SQLiteBookmarks.isEditableQuery)) AS isEditable " +
         "FROM \(valueView)"
 
         // We exclude queries and dynamic containers, because we can't
@@ -325,7 +314,7 @@ extension SQLiteBookmarks {
         let typeDynamic = BookmarkNodeType.DynamicContainer.rawValue
         let typeFilter = " vals.type NOT IN (\(typeQuery), \(typeDynamic))"
 
-        var args: Args
+        let args: Args
         let exclusion: String
         if let excludingGUIDs = excludingGUIDs {
             args = ([parentGUID] + excludingGUIDs).map { $0 as AnyObject }
@@ -362,10 +351,7 @@ extension SQLiteBookmarks {
         "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
 
         let sql = (includeIcon ? withIcon : fleshed) + " ORDER BY idx ASC"
-        return isEditableForDirection(direction) >>== { editable in
-            args.append((editable ? 1 : 0) as AnyObject)
-            return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)
-        }
+        return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)
     }
 
     // This is only used from tests.

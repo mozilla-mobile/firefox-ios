@@ -638,12 +638,6 @@ extension MergedSQLiteBookmarks: ShareToDestination {
     }
 }
 
-extension MergedSQLiteBookmarks: BufferedBookmarks {
-    public func bufferState() -> Deferred<Maybe<BookmarkBufferState>> {
-        return chain(self.buffer.isEmpty()) { $0 ? .NoUnmergedRemoteChanges : .UnmergedRemoteChanges }
-    }
-}
-
 // Not actually implementing SyncableBookmarks, just a utility for MergedSQLiteBookmarks to do so.
 extension SQLiteBookmarks {
     public func isUnchanged() -> Deferred<Maybe<Bool>> {

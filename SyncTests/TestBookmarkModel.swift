@@ -57,7 +57,7 @@ class TestBookmarkModel: FailFastTestCase {
         let bookmarkURL = "http://AAA.com".asURL!
         bookmarks.local.insertBookmark(bookmarkURL, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MenuFolderGUID, withTitle: "").succeeded()
 
-        XCTAssertTrue(bookmarks.isMirrorEmpty())
+        XCTAssertTrue(bookmarks.isMirrorEmpty().value.successValue!)
         XCTAssertTrue(bookmarks.buffer.isEmpty().value.successValue!)
 
         let menuFolder = bookmarks.menuFolder()
@@ -82,7 +82,7 @@ class TestBookmarkModel: FailFastTestCase {
         ]).succeeded()
 
         XCTAssertFalse(bookmarks.buffer.isEmpty().value.successValue!)
-        XCTAssertTrue(bookmarks.isMirrorEmpty())
+        XCTAssertTrue(bookmarks.isMirrorEmpty().value.successValue!)
 
         // Check to see if we're editable
         let menuFolder = bookmarks.menuFolder()
@@ -109,7 +109,7 @@ class TestBookmarkModel: FailFastTestCase {
         bookmarks.local.insertBookmark(bookmarkURL, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MenuFolderGUID, withTitle: "").succeeded()
 
         XCTAssertTrue(bookmarks.buffer.isEmpty().value.successValue!)
-        XCTAssertFalse(bookmarks.isMirrorEmpty())
+        XCTAssertFalse(bookmarks.isMirrorEmpty().value.successValue!)
 
         // Check to see if we're editable
         let menuFolder = bookmarks.menuFolder()
@@ -141,7 +141,7 @@ class TestBookmarkModel: FailFastTestCase {
         ]).succeeded()
 
         XCTAssertFalse(bookmarks.buffer.isEmpty().value.successValue!)
-        XCTAssertFalse(bookmarks.isMirrorEmpty())
+        XCTAssertFalse(bookmarks.isMirrorEmpty().value.successValue!)
 
         // Check to see that we can't edit these bookmarks
         let menuFolder = bookmarks.menuFolder()
@@ -152,8 +152,8 @@ class TestBookmarkModel: FailFastTestCase {
 }
 
 private extension MergedSQLiteBookmarks {
-    func isMirrorEmpty() -> Bool {
-        return self.local.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksMirror)").value.successValue!
+    func isMirrorEmpty() -> Deferred<Maybe<Bool>> {
+        return self.local.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksMirror)")
     }
 
     func wipeLocal() {
