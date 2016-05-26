@@ -219,7 +219,7 @@ public class EngagedAfterVerifiedState: ReadyForKeys {
 
 // Not an externally facing state!
 public class TokenAndKeys: FxAState {
-    let sessionToken: NSData
+    public let sessionToken: NSData
     public let kA: NSData
     public let kB: NSData
 
