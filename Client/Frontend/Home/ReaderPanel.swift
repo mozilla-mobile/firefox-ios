@@ -19,7 +19,6 @@ private struct ReadingListTableViewCellUX {
 
     static let ReadIndicatorWidth: CGFloat =  12  // image width
     static let ReadIndicatorHeight: CGFloat = 12 // image height
-    static let ReadIndicatorTopOffset: CGFloat = 36.75 // half of the cell - half of the height of the asset
     static let ReadIndicatorLeftOffset: CGFloat = 18
     static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest
 
@@ -116,7 +115,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         readStatusImageView.snp_makeConstraints { (make) -> () in
             make.width.equalTo(ReadingListTableViewCellUX.ReadIndicatorWidth)
             make.height.equalTo(ReadingListTableViewCellUX.ReadIndicatorHeight)
-            make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.ReadIndicatorTopOffset)
+            make.centerY.equalTo(self.contentView)
             make.leading.equalTo(self.contentView).offset(ReadingListTableViewCellUX.ReadIndicatorLeftOffset)
         }
 
