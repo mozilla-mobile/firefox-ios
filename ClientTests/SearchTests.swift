@@ -13,7 +13,7 @@ class SearchTests: XCTestCase {
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
         let file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
-        let engine: OpenSearchEngine! = parser.parse(file!, engineId: "google")
+        let engine: OpenSearchEngine! = parser.parse(file!, engineID: "google")
         XCTAssertEqual(engine.shortName, "Google")
 
         // Test regular search queries.
@@ -53,7 +53,7 @@ class SearchTests: XCTestCase {
 
     func testSuggestClient() {
         let webServerBase = startMockSuggestServer()
-        let engine = OpenSearchEngine(engineId: "mock", shortName: "Mock engine", image: nil, searchTemplate: "", suggestTemplate: "\(webServerBase)?q={searchTerms}",
+        let engine = OpenSearchEngine(engineID: "mock", shortName: "Mock engine", image: UIImage(), searchTemplate: "", suggestTemplate: "\(webServerBase)?q={searchTerms}",
                                       isCustomEngine: false)
         let client = SearchSuggestClient(searchEngine: engine, userAgent: "Fx-testSuggestClient")
 
@@ -94,7 +94,7 @@ class SearchTests: XCTestCase {
     func testExtractingOfSearchTermsFromURL() {
         let parser = OpenSearchParser(pluginMode: true)
         var file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
-        let googleEngine: OpenSearchEngine! = parser.parse(file!, engineId: "google")
+        let googleEngine: OpenSearchEngine! = parser.parse(file!, engineID: "google")
 
         // create URL
         let searchTerm = "Foo Bar"
@@ -111,7 +111,7 @@ class SearchTests: XCTestCase {
 
         // check that it matches given a different configuration
         file = NSBundle.mainBundle().pathForResource("duckduckgo", ofType: "xml", inDirectory: "SearchPlugins/en")
-        let duckDuckGoEngine: OpenSearchEngine! = parser.parse(file!, engineId: "duckduckgo")
+        let duckDuckGoEngine: OpenSearchEngine! = parser.parse(file!, engineID: "duckduckgo")
         XCTAssertEqual(searchTerm, duckDuckGoEngine.queryForSearchURL(duckDuckGoSearchURL))
 
         // check it doesn't match search URLs for different configurations
