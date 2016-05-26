@@ -58,6 +58,27 @@ public struct FxAStatusResponse {
     }
 }
 
+public struct FxADevicesResponse {
+    struct FxADevice {
+        let id: String
+        let isCurrentDevice: Bool
+        let name: String
+        let type: String
+
+        init(id: String, name: String, type: String, isCurrentDevice: Bool) {
+            self.id = id
+            self.name = name
+            self.type = type
+            self.isCurrentDevice = isCurrentDevice
+        }
+    }
+    let devices: [FxADevice]
+
+    init(devices: [FxADevice]) {
+        self.devices = devices
+    }
+}
+
 public struct FxADeviceRegistrationResponse {
     let id: String
     let name: String
@@ -243,6 +264,27 @@ public class FxAClient10 {
         }
 
         return FxAStatusResponse(exists: exists, locked: locked)
+    }
+
+    private class func devicesResponseFromJSON(json: JSON) -> FxADevicesResponse? {
+        if json.isError {
+            return nil
+        }
+
+        guard let jsonDevices = json.asArray else {
+            return nil
+        }
+
+        let devices = jsonDevices.flatMap { (jsonDevice) -> FxADevicesResponse.FxADevice? in
+            guard let id = jsonDevice["id"].asString,
+                let name = jsonDevice["name"].asString,
+                let type = jsonDevice["type"].asString,
+                let isCurrentDevice = jsonDevice["isCurrentDevice"].asBool else {
+                    return nil
+            }
+            return FxADevicesResponse.FxADevice(id: id, name: name, type: type, isCurrentDevice: isCurrentDevice)
+        }
+        return FxADevicesResponse(devices: devices)
     }
 
     private class func deviceRegistrationResponseFromJSON(json: JSON) -> FxADeviceRegistrationResponse? {
@@ -436,6 +478,51 @@ public class FxAClient10 {
                     }
 
                     if let response = FxAClient10.statusResponseFromJSON(json) {
+                        deferred.fill(Maybe(success: response))
+                        return
+                    }
+                }
+
+                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+        }
+        return deferred
+    }
+
+    public func devices(sessionToken: NSData) -> Deferred<Maybe<FxADevicesResponse>> {
+        let deferred = Deferred<Maybe<FxADevicesResponse>>()
+
+        let salt: NSData = NSData()
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")!
+        let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
+        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
+        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
+        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
+
+        let URL = self.URL.URLByAppendingPathComponent("/account/devices")
+        let mutableURLRequest = NSMutableURLRequest(URL: URL)
+        mutableURLRequest.HTTPMethod = Method.GET.rawValue
+
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
+        mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
+
+        alamofire.request(mutableURLRequest)
+            .validate(contentType: ["application/json"])
+            .responseJSON { (request, response, result) in
+                if let error = result.error as? NSError {
+                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
+                    return
+                }
+
+                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    let json = JSON(data)
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                        return
+                    }
+
+                    if let response = FxAClient10.devicesResponseFromJSON(json) {
                         deferred.fill(Maybe(success: response))
                         return
                     }
