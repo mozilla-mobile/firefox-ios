@@ -48,6 +48,16 @@ public struct FxASignResponse {
     }
 }
 
+public struct FxAStatusResponse {
+    let exists: Bool
+    let locked: Bool
+
+    init(exists: Bool, locked: Bool) {
+        self.exists = exists
+        self.locked = locked
+    }
+}
+
 public struct FxADeviceRegistrationResponse {
     let id: String
     let name: String
@@ -222,6 +232,19 @@ public class FxAClient10 {
         return nil
     }
 
+    private class func statusResponseFromJSON(json: JSON) -> FxAStatusResponse? {
+        if json.isError {
+            return nil
+        }
+
+        guard let exists = json["exists"].asBool,
+            let locked = json["locked"].asBool else {
+                return nil
+        }
+
+        return FxAStatusResponse(exists: exists, locked: locked)
+    }
+
     private class func deviceRegistrationResponseFromJSON(json: JSON) -> FxADeviceRegistrationResponse? {
         if json.isError {
             return nil
@@ -386,6 +409,43 @@ public class FxAClient10 {
         return deferred
     }
 
+    public func status(uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
+        let deferred = Deferred<Maybe<FxAStatusResponse>>()
+
+        let baseURL = self.URL.URLByAppendingPathComponent("/account/devices")
+        let queryParams = "?uid=" + uid
+        let URL = NSURL(string: queryParams, relativeToURL: baseURL)
+        let mutableURLRequest = NSMutableURLRequest(URL: URL!)
+        mutableURLRequest.HTTPMethod = Method.GET.rawValue
+
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        alamofire.request(mutableURLRequest)
+            .validate(contentType: ["application/json"])
+            .responseJSON { (request, response, result) in
+                if let error = result.error as? NSError {
+                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
+                    return
+                }
+
+                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    let json = JSON(data)
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                        return
+                    }
+
+                    if let response = FxAClient10.statusResponseFromJSON(json) {
+                        deferred.fill(Maybe(success: response))
+                        return
+                    }
+                }
+
+                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+        }
+        return deferred
+    }
+
     public func registerOrUpdateDevice(sessionToken: NSData, id: String?, name: String, type: String?) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
         let deferred = Deferred<Maybe<FxADeviceRegistrationResponse>>()
         let parameters: [String:AnyObject]
@@ -434,7 +494,7 @@ public class FxAClient10 {
                         return
                     }
 
-                    if let response = FxAClient10.deviceRegistrationResponseFromJSON(<#T##json: JSON##JSON#>) {
+                    if let response = FxAClient10.deviceRegistrationResponseFromJSON(json) {
                         deferred.fill(Maybe(success: response))
                         return
                     }
