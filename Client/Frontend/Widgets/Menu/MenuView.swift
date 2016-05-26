@@ -85,6 +85,8 @@ class MenuView: UIView {
     override var tintColor: UIColor! {
         didSet {
             menuPagingView.tintColor = tintColor
+            pageControl.currentPageIndicatorTintColor = tintColor
+            pageControl.pageIndicatorTintColor = tintColor.colorWithAlphaComponent(0.25)
         }
     }
 
