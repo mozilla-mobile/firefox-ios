@@ -878,7 +878,7 @@ struct EmptyPrivateTabsViewUX {
     static let DescriptionFont = UIFont.systemFontOfSize(17)
     static let LearnMoreFont = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
     static let TextMargin: CGFloat = 18
-    static let LearnMoreMargin: CGFloat = 30
+    static let LearnMoreMargin: CGFloat = 20
     static let MaxDescriptionWidth: CGFloat = 250
 }
 
@@ -931,7 +931,8 @@ private class EmptyPrivateTabsView: UIView {
         addSubview(learnMoreButton)
 
         titleLabel.snp_makeConstraints { make in
-            make.center.equalTo(self)
+            make.centerX.equalTo(self)
+            make.centerY.equalTo(self).offset(-EmptyPrivateTabsViewUX.LearnMoreMargin)
         }
 
         iconImageView.snp_makeConstraints { make in
