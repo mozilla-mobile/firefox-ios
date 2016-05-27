@@ -528,12 +528,10 @@ class SettingsTableViewController: UITableViewController {
     }
 
     private func calculateStatusCellHeightForSetting(setting: Setting) -> CGFloat {
-        let topBottomMargin: CGFloat = 10
+        dummyToggleCell.layoutSubviews()
 
-        let tableWidth = tableView.frame.width
-        let accessoryWidth = dummyToggleCell.accessoryView!.frame.width
-        let insetsWidth = 2 * tableView.separatorInset.left
-        let width = tableWidth - accessoryWidth - insetsWidth
+        let topBottomMargin: CGFloat = 10
+        let width = dummyToggleCell.contentView.frame.width - 2 * dummyToggleCell.separatorInset.left
 
         return
             heightForLabel(dummyToggleCell.textLabel!, width: width, text: setting.title?.string) +
