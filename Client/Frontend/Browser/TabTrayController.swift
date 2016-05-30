@@ -368,7 +368,7 @@ class TabTrayController: UIViewController {
             view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
             emptyPrivateTabsView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(self.collectionView)
-                make.bottom.equalTo(self.collectionView).offset(-UIConstants.ToolbarHeight)
+                make.bottom.equalTo(self.toolbar.snp_top)
             }
 
             if let tab = tabManager.selectedTab where tab.isPrivate {
@@ -880,6 +880,7 @@ struct EmptyPrivateTabsViewUX {
     static let TextMargin: CGFloat = 18
     static let LearnMoreMargin: CGFloat = 30
     static let MaxDescriptionWidth: CGFloat = 250
+    static let MinBottomMargin: CGFloat = 10
 }
 
 // View we display when there are no private tabs created
@@ -945,7 +946,8 @@ private class EmptyPrivateTabsView: UIView {
         }
 
         learnMoreButton.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(descriptionLabel.snp_bottom).offset(EmptyPrivateTabsViewUX.LearnMoreMargin)
+            make.top.equalTo(descriptionLabel.snp_bottom).offset(EmptyPrivateTabsViewUX.LearnMoreMargin).priorityLow()
+            make.bottom.lessThanOrEqualTo(self).offset(-EmptyPrivateTabsViewUX.MinBottomMargin).priorityHigh()
             make.centerX.equalTo(self)
         }
     }
