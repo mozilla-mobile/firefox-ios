@@ -24,11 +24,33 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     private let BackForwardListCellIdentifier = "BackForwardListViewController"
     private var profile: Profile
     private lazy var sites = [String: Site]()
-    private lazy var tableView = UITableView()
     private var isPrivate: Bool
     private var dismissing = false
+    private var currentRow = 0
+    lazy var tableView = UITableView()
+    
+    lazy var shadow: UIView = {
+        let shadow = UIView()
+        shadow.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.2)
+        return shadow
+    }()
+    
     var tabManager: TabManager!
+    var bvc: BrowserViewController!
     var listData = [(item:WKBackForwardListItem, type:BackForwardType)]()
+    
+    var tableHeight: CGFloat
+    {
+        get {
+            return min(CGFloat(BackForwardViewUX.RowHeight*listData.count), self.view.frame.height/2)
+        }
+    }
+    
+    var backForwardTransitionDelegate: UIViewControllerTransitioningDelegate? {
+        didSet {
+            self.transitioningDelegate = backForwardTransitionDelegate
+        }
+    }
     
     init(profile: Profile, backForwardList: WKBackForwardList, isPrivate: Bool) {
         self.profile = profile
@@ -61,7 +83,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             listData.append((page, .Forward))
         }
         
-        var currentRow = 0
         if let currentPage = backForwardList.currentItem {
             currentRow = listData.count
             urls.append(currentPage.URL.absoluteString)
@@ -72,7 +93,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             listData.append((page, .Backward))
         }
         
-        listData = listData.filter { !(($0.item.title ?? "").isEmpty)}
+        listData = listData.filter { !(($0.item.title ?? "").isEmpty && $0.item.URL.baseDomain()?.contains("localhost") ?? false)}
         
         sql.getSitesForURLs(urls).uponQueue(dispatch_get_main_queue()) { result in
             if let cursor = result.successValue {
@@ -84,32 +105,51 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
                 self.tableView.reloadData()
             }
         }
-        
-        if currentRow > 1 {
-            scrollTableViewToIndex(currentRow)
-        }
     }
     
     func scrollTableViewToIndex(index: Int) {
+        guard index > 1 else {
+            return
+        }
         let moveToIndexPath = NSIndexPath(forRow: index-2, inSection: 0)
         self.tableView.reloadRowsAtIndexPaths([moveToIndexPath], withRowAnimation: .None)
         self.tableView.scrollToRowAtIndexPath(moveToIndexPath, atScrollPosition: UITableViewScrollPosition.Middle, animated: false)
     }
     
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        self.resizeHeight()
+    override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+        tableView.snp_updateConstraints { make in
+            make.bottom.equalTo(self.view).offset(bvc.shouldShowFooterForTraitCollection(newCollection) ? -UIConstants.ToolbarHeight : 0)
+        }
+    }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        tableView.snp_updateConstraints { make in
+            make.height.equalTo(min(CGFloat(BackForwardViewUX.RowHeight*listData.count), size.height/2))
+        }
+        if let superView = view.superview {
+            view.snp_updateConstraints { make in
+                make.edges.equalTo(superView)
+            }
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(shadow)
         view.addSubview(tableView)
         tableView.snp_makeConstraints { make in
             make.height.equalTo(0)
-            make.left.right.bottom.equalTo(self.view)
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height)
         }
-        self.view.layoutIfNeeded()
-        self.resizeHeight()
-        
+        shadow.snp_makeConstraints { make in
+            make.top.left.right.equalTo(self.view)
+            make.bottom.equalTo(tableView.snp_top)
+        }
+        view.layoutIfNeeded()
+        scrollTableViewToIndex(currentRow)
         setupDismissTap()
     }
     
@@ -117,29 +157,18 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         let tap = UITapGestureRecognizer(target: self, action: #selector(BackForwardListViewController.handleTap))
         tap.cancelsTouchesInView = false
         tap.delegate = self
-        parentViewController?.view.addGestureRecognizer(tap)
+        view.addGestureRecognizer(tap)
     }
     
     func handleTap() {
-        dismissWithAnimation()
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-        if touch.view?.isDescendantOfView(view) ?? true {
+        if touch.view?.isDescendantOfView(tableView) ?? true {
             return false
         }
         return true
-    }
-    
-    func resizeHeight() {
-        let height = min(CGFloat(BackForwardViewUX.RowHeight*listData.count), self.view.frame.height/2)
-        UIView.animateWithDuration(0.2, animations: {
-            self.tableView.snp_updateConstraints { make in
-                make.height.equalTo(height)
-            }
-            self.view.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.2)
-            self.view.layoutIfNeeded()
-        })
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -168,38 +197,17 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         cell.connectingForwards = (indexPath.item != 0)
         cell.isPrivate = isPrivate
         
+        cell.setNeedsDisplay()
+        
         return cell
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tabManager.selectedTab?.goToBackForwardListItem(listData[indexPath.item].item)
-        dismissWithAnimation()
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath  indexPath: NSIndexPath) -> CGFloat {
         return CGFloat(BackForwardViewUX.RowHeight);
-    }
-    
-    func dismissWithAnimation() {
-        if dismissing {
-            return
-        }
-        
-        dismissing = true
-        self.view.alpha = 1.0
-        
-        UIView.animateWithDuration(0.2, delay: 0, options: [UIViewAnimationOptions.CurveEaseIn, UIViewAnimationOptions.AllowUserInteraction], animations: {
-            self.tableView.snp_updateConstraints { make in
-                make.height.equalTo(0)
-            }
-            self.view.alpha = 0.1
-            self.view.layoutIfNeeded()
-            
-            }, completion: { finished in
-                if finished {
-                    self.view.removeFromSuperview()
-                    self.removeFromParentViewController()
-                }
-        })
     }
 }

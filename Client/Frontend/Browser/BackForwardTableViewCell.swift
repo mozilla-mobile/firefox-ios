@@ -17,9 +17,24 @@ class BackForwardTableViewCell: UITableViewCell {
         static let fontSize:CGFloat = 12.0
     }
     
-    lazy var faviconView = UIImageView(image: FaviconFetcher.defaultFavicon)
-    lazy var label = UILabel(frame: CGRectZero)
-    lazy var bg = UIView(frame: CGRect.zero)
+    lazy var faviconView: UIImageView = {
+        let faviconView = UIImageView(image: FaviconFetcher.defaultFavicon)
+        faviconView.backgroundColor = UIColor.whiteColor()
+        return faviconView
+    }()
+    
+    lazy var label: UILabel = {
+        let label = UILabel()
+        label.text = " "
+        label.font = label.font.fontWithSize(BackForwardViewCellUX.fontSize)
+        return label
+    }()
+    
+    lazy var bg: UIView = {
+        let bg = UIView(frame: CGRect.zero)
+        bg.backgroundColor = BackForwardViewCellUX.bgColor
+        return bg
+    }()
     
     var connectingForwards = true
     var connectingBackwards = true
@@ -57,14 +72,8 @@ class BackForwardTableViewCell: UITableViewCell {
         backgroundColor = UIColor.clearColor()
         selectionStyle = .None
         
-        bg.backgroundColor = BackForwardViewCellUX.bgColor
         contentView.addSubview(bg)
-        
-        faviconView.backgroundColor = UIColor.whiteColor()
         contentView.addSubview(faviconView)
-        
-        label.text = " "
-        label.font = label.font.fontWithSize(BackForwardViewCellUX.fontSize)
         contentView.addSubview(label)
         
         faviconView.snp_makeConstraints { make in
@@ -86,7 +95,6 @@ class BackForwardTableViewCell: UITableViewCell {
             make.centerX.equalTo(faviconView)
             make.centerY.equalTo(faviconView)
         }
-        
     }
     
     required init(coder aDecoder: NSCoder) {
