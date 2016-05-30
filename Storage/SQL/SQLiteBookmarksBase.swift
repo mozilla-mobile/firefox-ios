@@ -15,21 +15,11 @@ public class SQLiteBookmarks: BookmarksModelFactorySource {
     static let defaultFolderTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
     static let defaultItemTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark nodes without titles.")
 
+    public lazy var modelFactory: Deferred<Maybe<BookmarksModelFactory>> =
+        deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local))
+
     public init(db: BrowserDB) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
-    }
-
-    public var modelFactory: Deferred<Maybe<BookmarksModelFactory>> {
-        struct Singleton {
-            static var token: dispatch_once_t = 0
-            static var instance: Deferred<Maybe<BookmarksModelFactory>>!
-        }
-
-        // We never need to fetch the factory more than once.
-        dispatch_once(&Singleton.token) {
-            Singleton.instance = deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local))
-        }
-        return Singleton.instance
     }
 }

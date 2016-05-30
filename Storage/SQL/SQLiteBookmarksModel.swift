@@ -251,20 +251,22 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     }
 }
 
+private let isEditableQuery =
+    "SELECT exists( " +
+    "   SELECT exists(SELECT 1 FROM \(TableBookmarksBuffer)) AS hasBuffer, exists(SELECT 1 FROM \(TableBookmarksMirror)) AS hasMirror " +
+    "   WHERE hasBuffer == 0 OR (hasBuffer == 1 AND hasMirror == 0) " +
+    ")"
+
 extension SQLiteBookmarks {
+
     private func getRecordsWithGUIDs(guids: [GUID], direction: Direction, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
 
-        let isEditable = (direction == .Local) ? 1 : 0
         let args: Args = guids.map { $0 as AnyObject }
         let varlist = BrowserDB.varlist(args.count)
 
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, \(isEditable) AS isEditable " +
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableQuery)) AS isEditable " +
         "FROM \(direction.valueView) WHERE guid IN \(varlist) AND NOT is_deleted"
-
-        if !includeIcon {
-            return self.db.runQuery(values + " ORDER BY title ASC", args: args, factory: BookmarkFactory.factory)
-        }
 
         let withIcon = [
             "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type,",
@@ -280,7 +282,8 @@ extension SQLiteBookmarks {
             "ORDER BY title ASC",
             ].joinWithSeparator(" ")
 
-        return self.db.runQuery(withIcon, args: args, factory: BookmarkFactory.factory)
+        let sql = (includeIcon ? withIcon : values) + " ORDER BY title ASC"
+        return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)
     }
 
     /**
@@ -300,9 +303,8 @@ extension SQLiteBookmarks {
         "SELECT parent, child AS guid, idx FROM \(structureView) " +
         "WHERE parent = ?"
 
-        let isEditable = (direction == .Local) ? 1 : 0
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, \(isEditable) AS isEditable " +
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableQuery)) AS isEditable " +
         "FROM \(valueView)"
 
         // We exclude queries and dynamic containers, because we can't
