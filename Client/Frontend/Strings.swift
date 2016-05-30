@@ -153,16 +153,16 @@ extension Strings {
 
 // Bookmark Management
 extension Strings {
-    public static let BookmarksTitle = NSLocalizedString("Bookmarks.Title", value: "Title", comment: "The label for the title of a Bookmarks")
-    public static let BookmarksURL = NSLocalizedString("Bookmarks.URL", value: "URL", comment: "The label for the URL of a Bookmarks")
-    public static let BookmarksFolder = NSLocalizedString("Bookmarks.Folder", value: "Folder", comment: "The label to show the location of the folder where the bookmark is")
+    public static let BookmarksTitle = NSLocalizedString("Bookmarks.Title", value: "Title", comment: "The label for the title of a bookmark")
+    public static let BookmarksURL = NSLocalizedString("Bookmarks.URL", value: "URL", comment: "The label for the URL of a bookmark")
+    public static let BookmarksFolder = NSLocalizedString("Bookmarks.Folder", value: "Folder", comment: "The label to show the location of the folder where the bookmark is located")
     public static let BookmarksNewFolder = NSLocalizedString("Bookmarks.NewFolder", value: "New Folder", comment: "The button to create a new folder")
-    public static let BookmarksFolderName = NSLocalizedString("Bookmarks.Title", value: "Folder Name", comment: "The label for the title of the new folder")
+    public static let BookmarksFolderName = NSLocalizedString("Bookmarks.FolderName", value: "Folder Name", comment: "The label for the title of the new folder")
     public static let BookmarksFolderLocation = NSLocalizedString("Bookmarks.FolderLocation", value: "Location", comment: "The label for the location of the new folder")
 }
 
 // Tabs Delete All Undo Toast
 extension Strings {
-    public static let TabsDeleteAllUndoTitle = NSLocalizedString("Tabs.DeleteAllUndoTitle", value: "Tabs closed.", comment: "The label indicating that all the tabs were closed.")
-    public static let TabsDeleteAllUndoAction = NSLocalizedString("Tabs.DeleteAllUndoAction", value: "Undo", comment: "The button to undo the delete all tabs.")
+    public static let TabsDeleteAllUndoTitle = NSLocalizedString("Tabs.DeleteAllUndoTitle", value: "Tabs closed.", comment: "The label indicating that all the tabs were closed")
+    public static let TabsDeleteAllUndoAction = NSLocalizedString("Tabs.DeleteAllUndoAction", value: "Undo", comment: "The button to undo the delete all tabs")
 }
