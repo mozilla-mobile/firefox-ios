@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "Khansela";
+
+/* The button that clears private data. */
+"OK" = "Ee";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "Kgato e e tla phimola tshedimosetso ya gago e poraefete yotlhe. Ga e ka ke ya dirololwa.";
+

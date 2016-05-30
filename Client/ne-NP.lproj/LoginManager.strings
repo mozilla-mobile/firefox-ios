@@ -1,0 +1,30 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "के तपाईँ निश्चित हुनुहुन्छ?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "रद्द गर्नुहोस्";
+
+/* Copy password text selection menu item */
+"Copy" = "प्रतिलिपि बनाउनुहोस्";
+
+/* Button in login detail screen that deletes the current login */
+"Delete" = "मेट्नुहोस्";
+
+/* Hide password text selection menu item */
+"Hide" = "लुकाउनुहोस्";
+
+/* Title for Logins List View screen */
+"Logins" = "लग-इनहरू";
+
+/* Title for selecting all logins */
+"Select All" = "सबै चयन गर्नुहोस्";
+
+/* Title for password row in Login Detail View */
+"password" = "पासवर्ड";
+
+/* Title for username row in Login Detail View */
+"username" = "प्रयोगकर्ता नाम";
+
+/* Title for website row in Login Detail View */
+"website" = "वेबसाइट";
+

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html lang="en-us" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html lang="en-us" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html lang="en-us" class="no-js ie8 lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html lang="en-us" class="no-js ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en-us">
+<!--<![endif]-->
+
+<head>
+    <title>Just-released Minecraft exploit makes it easy to crash game servers | Ars Technica</title>
+    <script type="text/javascript">
+        ars = {
+            "ASSETS": "http:\/\/cdn.arstechnica.net\/wp-content\/themes\/arstechnica\/assets",
+            "HOME_URL": "http:\/\/arstechnica.com",
+            "LOGIN_URL": "https:\/\/arstechnica.com\/services\/login-desktop.html?v=1",
+            "CIVIS": "\/civis",
+            "THEME": "light",
+            "VIEW": "grid",
+            "MOBILE": false,
+            "PREMIER": false,
+            "LOGGED": false,
+            "ENV": "production",
+            "AD": {
+                "kw": ["security", "int"],
+                "zone": "int",
+                "queue": []
+            },
+            "TOTAL": 68014,
+            "UNREAD": 0,
+            "RECENT": [659465, 659425, 659391, 659203, 659339, 659209, 659151, 659207, 659257, 659153, 657603, 659157, 659089, 659105, 658987, 658981, 658367, 658019, 658841, 658609, 658117, 658553, 658455, 657769, 658395],
+            "LOGINS": true,
+            "CROSS": false,
+            "GEOALERTS": true,
+            "PARSELY": "arstechnica.com",
+            "COMMENTS": false,
+            "HOMEPAGE": false,
+            "COUNTRY": "us",
+            "READY": [],
+            "SHOW_ADS": true,
+            "IMG_PROXY": "https:\/\/cdn.arstechnica.net\/i\/",
+            "CATEGORY": "security"
+        };
+    </script>
+    <!--[if lte IE 8]><script type="text/javascript" src="http://cdn.arstechnica.net/wp-content/themes/arstechnica/assets/js/modernizr/modernizr.js"></script><![endif]-->
+    <link rel="stylesheet" type="text/css" media="all" href="http://cdn.arstechnica.net/wp-content/themes/arstechnica/assets/css/ars.min.55e632421d8225142fe8df15cdfe2a20.css"/>
+    <link rel="alternate" type="application/rss+xml" href="http://feeds.arstechnica.com/arstechnica/index/"/>
+    <link rel="shortcut icon" href="https://cdn.arstechnica.net/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="https://cdn.arstechnica.net/favicon.ico"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="http://cdn.arstechnica.net/wp-content/themes/arstechnica/assets/images/ars-ios-icon.png"/>
+    <link rel="icon" sizes="192x192" href="http://cdn.arstechnica.net/wp-content/themes/arstechnica/assets/images/material-ars.png"/>
+    <meta name="application-name" content="Ars Technica"/>
+    <meta name="msapplication-starturl" content="http://arstechnica.com/"/>
+    <meta name="msapplication-tooltip" content="Ars Technica: Serving the technologist for 1.2 decades"/>
+    <meta name="msapplication-task" content="name=News;action-uri=http://arstechnica.com/;icon-uri=https://cdn.arstechnica.net/favicon.ico"/>
+    <meta name="msapplication-task" content="name=Features;action-uri=http://arstechnica.com/features/;icon-uri=https://cdn.arstechnica.net/ie-jump-menu/jump-features.ico"/>
+    <meta name="msapplication-task" content="name=OpenForum;action-uri=http://arstechnica.com/civis/;icon-uri=https://cdn.arstechnica.net/ie-jump-menu/jump-forum.ico"/>
+    <meta name="msapplication-task" content="name=Subscribe;action-uri=http://arstechnica.com/subscriptions/;icon-uri=https://cdn.arstechnica.net/ie-jump-menu/jump-subscribe.ico"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="advertising" content="ask"/>
+    <meta property="fb:admins" content="592156917"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="theme-color" content="#000000"/>
+    <meta name="viewport" content="width=1020"/>
+    <!-- cache hit 459:single/meta:b3538aec37c1a165d2b4b62bd58e56e3 -->
+    <meta name="parsely-page" content="{&quot;title&quot;:&quot;Just-released Minecraft exploit makes it easy to crash game servers&quot;,&quot;link&quot;:&quot;http:\/\/arstechnica.com\/security\/2015\/04\/16\/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers\/&quot;,&quot;type&quot;:&quot;post&quot;,&quot;author&quot;:&quot;Dan Goodin&quot;,&quot;post_id&quot;:648287,&quot;pub_date&quot;:&quot;2015-04-16T20:02:01Z&quot;,&quot;section&quot;:&quot;Risk Assessment&quot;,&quot;tags&quot;:[&quot;denial-of-service-attack&quot;,&quot;exploits&quot;,&quot;minecraft&quot;,&quot;vulnerabilities&quot;,&quot;type: report&quot;],&quot;image_url&quot;:&quot;http:\/\/cdn.arstechnica.net\/wp-content\/uploads\/2015\/04\/server-crash-150x150.jpg&quot;}"/>
+    <meta name="parsely-metadata" content="{&quot;type&quot;:&quot;report&quot;,&quot;title&quot;:&quot;Just-released Minecraft exploit makes it easy to crash game servers&quot;,&quot;post_id&quot;:648287,&quot;lower_deck&quot;:&quot;Two-year-old bug exposes thousands of servers to crippling attack.&quot;,&quot;image_url&quot;:&quot;http:\/\/cdn.arstechnica.net\/wp-content\/uploads\/2015\/04\/server-crash-150x150.jpg&quot;,&quot;listing_image_url&quot;:&quot;http:\/\/cdn.arstechnica.net\/wp-content\/uploads\/2015\/04\/server-crash-300x150.jpg&quot;}"/>
+    <link rel="canonical" href="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/"/>
+    <link rel="shorturl" href="http://ars.to/1CSWnf5"/>
+    <meta name="description" content="Two-year-old bug exposes thousands of servers to crippling attack."/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:url" content="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/"/>
+    <meta name="twitter:title" content="Just-released Minecraft exploit makes it easy to crash game servers"/>
+    <meta name="twitter:description" content="Two-year-old bug exposes thousands of servers to crippling attack."/>
+    <meta name="twitter:site" content="@arstechnica"/>
+    <meta name="twitter:domain" content="arstechnica.com"/>
+    <meta property="og:site_name" content="Ars Technica"/>
+    <meta name="twitter:image:src" content="http://cdn.arstechnica.net/wp-content/uploads/2015/04/server-crash-640x426.jpg"/>
+    <meta name="twitter:image:width" content="640"/>
+    <meta name="twitter:image:height" content="426"/>
+    <meta name="twitter:creator" content="@dangoodin001"/>
+    <meta property="og:url" content="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/"/>
+    <meta property="og:title" content="Just-released Minecraft exploit makes it easy to crash game servers"/>
+    <meta property="og:image" content="http://cdn.arstechnica.net/wp-content/uploads/2015/04/server-crash-640x426.jpg"/>
+    <meta property="og:description" content="Two-year-old bug exposes thousands of servers to crippling attack."/>
+    <meta property="og:type" content="article"/>
+    <!-- cache hit 459:single/header:b3538aec37c1a165d2b4b62bd58e56e3 -->
+    <script type="text/javascript" src="http://cdn.arstechnica.net/wp-content/themes/arstechnica/assets/js/omniture/mbox.js"></script>
+</head>
+
+<body class="single single-post postid-648287 single-format-standard grid-view light blog-us">
+    <div id="container">
+        <header id="masthead">
+            <aside id="ad-top">
+                <div id="topBanner728x90_frame"></div>
+                <script type="text/javascript">
+                    ars.AD.queue.push(['topBanner', {
+                        sz: '728x90',
+                        kws: [],
+                        collapse: true
+                    }]);
+                </script>
+            </aside>
+            <h1><a href="http://arstechnica.com"><em>Ars</em>Technica</a></h1>
+            <div id="profile">
+                <!-- cache hit 459:header/site-toggle:f8ff57a97275618649c08b2cce8f06a6 -->
+                <ul class="site-toggle">
+                    <li class="site-1 selected"><a href="http://arstechnica.com/?return">Ars Technica</a></li>
+                    <li class="site-3"><a href="http://arstechnica.co.uk">Ars Technica UK</a></li>
+                </ul> <a href="/civis/ucp.php?mode=register" rel="nofollow">Register</a> <a id="login" href="http://arstechnica.com/civis/ucp.php?mode=login&amp;return_to=http%3A%2F%2Farstechnica.com%2Fsecurity%2F2015%2F04%2F16%2Fjust-released-minecraft-exploit-makes-it-easy-to-crash-game-servers%2F" rel="nofollow">Log in</a> </div>
+            <nav id="primary">
+                <ul>
+                    <li id="home-icon"> <a href="/"><span>Home</span></a> </li>
+                    <li class="has-children"> <a href="#">Main Menu</a>
+                        <div id="main-menu" class="dropdown">
+                            <div id="sections">
+                                <ul class="cat-list">
+                                    <li class="top-row even">
+                                        <a class="cat-link" href="/information-technology"> <span class="cat-name">Information Technology</span> <span class="subheading cat-desc">Technology Lab</span> </a>
+                                    </li>
+                                    <li class="top-row odd">
+                                        <a class="cat-link" href="/gadgets"> <span class="cat-name">Product News &amp; Reviews</span> <span class="subheading cat-desc">Gear &amp; Gadgets</span> </a>
+                                    </li>
+                                    <li class="even">
+                                        <a class="cat-link" href="/business"> <span class="cat-name">Business of Technology</span> <span class="subheading cat-desc">Ministry of Innovation</span> </a>
+                                    </li>
+                                    <li class="odd">
+                                        <a class="cat-link" href="/security"> <span class="cat-name">Security &amp; Hacktivism</span> <span class="subheading cat-desc">Risk Assessment</span> </a>
+                                    </li>
+                                    <li class="even">
+                                        <a class="cat-link" href="/tech-policy"> <span class="cat-name">Civilization &amp; Discontents</span> <span class="subheading cat-desc">Law &amp; Disorder</span> </a>
+                                    </li>
+                                    <li class="odd">
+                                        <a class="cat-link" href="/apple"> <span class="cat-name">The Apple Ecosystem</span> <span class="subheading cat-desc">Infinite Loop</span> </a>
+                                    </li>
+                                    <li class="even">
+                                        <a class="cat-link" href="/gaming"> <span class="cat-name">Gaming &amp; Entertainment</span> <span class="subheading cat-desc">Opposable Thumbs</span> </a>
+                                    </li>
+                                    <li class="odd">
+                                        <a class="cat-link" href="/science"> <span class="cat-name">Science &amp; Exploration</span> <span class="subheading cat-desc">The Scientific Method</span> </a>
+                                    </li>
+                                    <li class="even">
+                                        <a class="cat-link" href="/cars"> <span class="cat-name">All Things Automotive</span> <span class="subheading cat-desc">Cars Technica</span> </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <aside class="drop-extras">
+                                <style type="text/css">
+                                    #layout-swap {
+                                        margin-top: -6px;
+                                        color: #808f95
+                                    }
+                                </style>
+                                <aside id="layout-swap"> <span class="subheading">Layout:</span>
+                                    <ul>
+                                        <li class="grid active"> <a href="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/?view=grid"><span>Grid View</span></a> </li>
+                                        <li class="article"> <a href="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/?view=archive"><span>Article View</span></a> </li>
+                                    </ul>
+                                </aside>
+                                <h2 class="subheading notched">Site Theme</h2>
+                                <ul id="theme-switch">
+                                    <li class="light active"> <a href="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/?theme=light"><span class="subheading">Dark on light</span></a> </li>
+                                    <li class="dark "> <a href="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/?theme=dark"><span class="subheading">Light on dark</span></a> </li>
+                                </ul>
+                                <div id="explore-ars">
+                                    <h2 class="subheading notched">Explore Ars</h2>
+                                    <ul>
+                                        <!--         <li><a href="/reviews/">Reviews</a></li> -->
+                                        <li><a href="/video/">Video</a></li>
+                                        <li><a href="/staff/">Staff Blogs</a></li>
+                                        <li><a href="/features/">Feature Archive</a></li>
+                                        <li><a href="/staff-directory/">Staff Directory</a></li>
+                                        <li><a href="/contact-us/">Contact Us</a></li>
+                                    </ul>
+                                </div>
+                                <div id="featured-disciplines">
+                                    <h2 class="subheading notched">Featured Disciplines</h2>
+                                    <ul>
+                                        <li><a href="/discipline/photography/">Photography</a></li>
+                                        <li><a href="/discipline/productivity/">Productivity</a></li>
+                                        <li><a href="/discipline/cloud-2/">Cloud</a></li>
+                                        <!-- <li><a href="/discipline/gadgets-3/">Gadgets</a></li> -->
+                                        <li><a href="/discipline/tablets-2/">Tablets</a></li>
+                                    </ul>
+                                </div>
+                            </aside>
+                        </div>
+                    </li>
+                    <li class="has-children" id="my-stories"> <a href="#">My Stories: <span class="unread-count">0</span></a>
+                        <div class="dropdown">
+                            <nav class="my-stories-nav first">
+                                <h2 class="subheading notched">New Since Last Visit <span class="unread-count"></span></h2>
+                                <ol class="new-stories with-numbers"></ol>
+                                <footer><a class="subheading" href="#" id="more-unread-stories">See more news stories</a></footer>
+                            </nav>
+                            <nav class="my-stories-nav middle">
+                                <h2 class="subheading notched">We Recommend</h2>
+                                <ol class="recommendations"></ol>
+                            </nav>
+                            <nav class="my-stories-nav">
+                                <h2 class="subheading notched">My Discussions</h2>
+                                <p class="discussions disabled">Log in to track your discussions.</p>
+                            </nav>
+                        </div>
+                    </li>
+                    <li class="no-children"><a href="http://arstechnica.com/civis/">Forums</a></li>
+                    <li class="no-children subscribe"> <a href="/subscriptions/">Subscribe</a> </li>
+                    <li class="no-children"><a href="/jobs/">Jobs</a></li>
+                    <li class="no-children"><a href="/feature-series/chasing-brilliance/">Ars Consortium</a></li>
+                    <li id="search-container" class="right inactive">
+                        <a id="search-switch" href="/search/"></a>
+                        <form action="/search/" method="GET" id="search_form">
+                            <input type="hidden" name="ie" value="UTF-8"/>
+                            <input type="text" name="q" id="hdr_search_input" value=""/>
+                            <input type="submit" value=""/> </form>
+                        <style type="text/css">
+                            table.gstl_50.gssb_c {
+                                top: 30px !important;
+                                left: 0 !important;
+                                width: 100% !important;
+                            }
+                        </style>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <section id="content" class="clearfix">
+            <!-- cache hit 459:home/toppost:f3fda06d4fb35e8aa360e369ff702613 -->
+            <h1 id="archive-head" class="subheading thick-divide-bottom">
+	<a href="http://arstechnica.com/security/">	<span class="archive-name">Risk Assessment</span>
+		<span class="divider"> / </span>
+	<span class="archive-desc">Security &amp; Hacktivism</span>
+		</a></h1>
+            <script type="text/javascript">
+                ars.ARTICLE = {
+                    "url": "http:\/\/arstechnica.com\/security\/2015\/04\/16\/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers\/",
+                    "short_url": "http:\/\/ars.to\/1CSWnf5",
+                    "title": "Just-released Minecraft exploit makes it easy to crash game servers",
+                    "author": 329388,
+                    "id": 648287,
+                    "topic": 1280621,
+                    "pages": 1,
+                    "current_page": 1,
+                    "superscroll": false,
+                    "promoted": [],
+                    "single_page": false,
+                    "comments": 75,
+                    "fullwidth": false
+                };
+            </script>
+            <article itemscope="" itemtype="http://schema.org/NewsArticle" class="standalone">
+                <header>
+                    <h1 class="heading" itemprop="headline">Just-released <i>Minecraft</i> exploit makes it easy to crash game servers</h1>
+                    <h2 class="standalone-deck" itemprop="description">Two-year-old bug exposes thousands of servers to crippling attack.</h2>
+                    <div class="post-meta">
+                        <p class="byline" itemprop="author creator" itemscope="" itemtype="http://schema.org/Person"> by <a itemprop="url" href="http://arstechnica.com/author/dan-goodin/" rel="author"><span itemprop="name">Dan Goodin</span></a> - <span class="date" data-time="1429214521">Apr 16, 2015 8:02 pm UTC</span> </p>
+                        <div class="corner-info">
+                            <ul class="share-buttons">
+                                <li class="share-facebook">
+                                    <a href="https://www.facebook.com/sharer.php?u=http%3A%2F%2Farstechnica.com%2Fsecurity%2F2015%2F04%2F16%2Fjust-released-minecraft-exploit-makes-it-easy-to-crash-game-servers%2F" target="_blank" data-dialog="400:368"> <span class="share-text">Share</span> </a>
+                                </li>
+                                <li class="share-twitter">
+                                    <a href="https://twitter.com/share?text=Just-released+Minecraft+exploit+makes+it+easy+to+crash+game+servers&amp;url=http%3A%2F%2Fars.to%2F1CSWnf5" target="_blank" data-dialog="364:250"> <span class="share-text">Tweet</span> </a>
+                                </li>
+                                <li class="share-google">
+                                    <a href="https://plus.google.com/share?url=http%3A%2F%2Farstechnica.com%2Fsecurity%2F2015%2F04%2F16%2Fjust-released-minecraft-exploit-makes-it-easy-to-crash-game-servers%2F" target="_blank" data-dialog="485:600"> <span class="share-text">Google</span> </a>
+                                </li>
+                                <li class="share-reddit">
+                                    <a href="https://www.reddit.com/submit?url=http%3A%2F%2Farstechnica.com%2Fsecurity%2F2015%2F04%2F16%2Fjust-released-minecraft-exploit-makes-it-easy-to-crash-game-servers%2F&amp;title=Just-released+Minecraft+exploit+makes+it+easy+to+crash+game+servers" target="_blank"> <span class="share-text">Reddit</span> </a>
+                                </li>
+                            </ul> <a title="51 posters participating" class="comment-count" href="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/?comments=1"><span>75</span></a> </div>
+                    </div>
+                </header>
+                <section id="article-guts">
+                    <div itemprop="articleBody" class="article-content clearfix">
+                        <figure class="intro-image image center full-width" style="width:640px"> <img src="http://cdn.arstechnica.net/wp-content/uploads/2015/04/server-crash-640x426.jpg" width="640" height="331"/>
+                            <figcaption class="caption">
+                                <div class="caption-credit"> <a rel="nofollow" href="https://en.wikipedia.org/wiki/Kernel_panic#/media/File:Kernel-panic.jpg">Kevin</a> </div>
+                            </figcaption>
+                        </figure>
+                        <!-- cache hit 459:single/related:1ad28a5dc0a24868be6b031b5fdecb2e -->
+                        <!-- empty -->
+                        <p>A flaw in the wildly popular online game <em>Minecraft</em> makes it easy for just about anyone to crash the server hosting the game, according to a computer programmer who has released proof-of-concept code that exploits the vulnerability.</p>
+                        <p>"I thought a lot before writing this post," Pakistan-based developer Ammar Askar wrote in a <a href="http://blog.ammaraskar.com/minecraft-vulnerability-advisory">blog post published Thursday</a>, 21 months, he said, after privately reporting the bug to <em>Minecraft</em> developer Mojang. "On the one hand I don't want to expose thousands of servers to a major vulnerability, yet on the other hand Mojang has failed to act on it."</p>
+                        <p>The bug resides in the <a href="https://github.com/ammaraskar/pyCraft">networking internals of the <em>Minecraft </em>protocol</a>. It allows the contents of inventory slots to be exchanged, so that, among other things, items in players' hotbars are displayed automatically after logging in. <em>Minecraft</em> items can also store arbitrary metadata in a file format known as <a href="http://wiki.vg/NBT">Named Binary Tag (NBT)</a>, which allows complex data structures to be kept in hierarchical nests. Askar has released <a href="https://github.com/ammaraskar/pyCraft/tree/nbt_exploit">proof-of-concept attack code</a> he said exploits the vulnerability to crash any server hosting the game. Here's how it works.</p>
+                        <blockquote>
+                            <p>The vulnerability stems from the fact that the client is allowed to send the server information about certain slots. This, coupled with the NBT format’s nesting allows us to <em>craft</em> a packet that is incredibly complex for the server to deserialize but trivial for us to generate.</p>
+                            <p>In my case, I chose to create lists within lists, down to five levels. This is a json representation of what it looks like.</p>
+                            <div class="highlight"> <pre><code class="language-javascript" data-lang="javascript"><span class="nx">rekt</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+            <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="p">]</span>
+                        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="p">]</span>
+                        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="p">]</span>
+                        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="p">]</span>
+                        <span class="p">...</span>
+                    <span class="p">]</span>
+                    <span class="p">...</span>
+                <span class="p">]</span>
+                <span class="p">...</span>
+            <span class="p">]</span>
+            <span class="p">...</span>
+        <span class="p">]</span>
+        <span class="p">...</span>
+    <span class="p">]</span>
+    <span class="p">...</span>
+<span class="p">}</span></code></pre> </div>
+                            <p>The root of the object, <code>rekt</code>, contains 300 lists. Each list has a list with 10 sublists, and each of those sublists has 10 of their own, up until 5 levels of recursion. That’s a total of <code>10^5 * 300 = 30,000,000</code> lists.</p>
+                            <p>And this isn’t even the theoretical maximum for this attack. Just the nbt data for this payload is 26.6 megabytes. But luckily Minecraft implements a way to compress large packets, lucky us! zlib shrinks down our evil data to a mere 39 kilobytes.</p>
+                            <p>Note: in previous versions of Minecraft, there was no protocol wide compression for big packets. Previously, NBT was sent compressed with gzip and prefixed with a signed short of its length, which reduced our maximum payload size to <code>2^15 - 1</code>. Now that the length is a varint capable of storing integers up to <code>2^28</code>, our potential for attack has increased significantly.</p>
+                            <p>When the server will decompress our data, it’ll have 27 megs in a buffer somewhere in memory, but that isn’t the bit that’ll kill it. When it attempts to parse it into NBT, it’ll create java representations of the objects meaning suddenly, the sever is having to create several million java objects including ArrayLists. This runs the server out of memory and causes tremendous CPU load.</p>
+                            <p>This vulnerability exists on almost all previous and current Minecraft versions as of 1.8.3, the packets used as attack vectors are the <a href="http://wiki.vg/Protocol#Player_Block_Placement">0x08: Block Placement Packet</a> and <a href="http://wiki.vg/Protocol#Creative_Inventory_Action">0x10: Creative Inventory Action</a>.</p>
+                            <p>The fix for this vulnerability isn’t exactly that hard, the client should never really send a data structure as complex as NBT of arbitrary size and if it must, some form of recursion and size limits should be implemented.</p>
+                            <p>These were the fixes that I recommended to Mojang 2 years ago.</p>
+                        </blockquote>
+                        <p>Ars is asking Mojang for comment and will update this post if company officials respond.</p>
+                    </div>
+                    <div class="article-expander">
+                        <p><a href="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/">Expand full story</a></p>
+                    </div>
+                </section>
+                <div id="article-footer-wrap">
+                    <section id="comments-area">
+                        <a name="comments-bar"></a>
+                        <div class="comments-bar"> <a class="subheading comments-read-link" href="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/?comments=1"><span class="text">Reader comments</span> <span class="comment-count"><span proptype="">75</span></span></a> </div>
+                        <div id="comments-container"></div>
+                        <div id="comments-posting-container" class="thick-divide-bottom">
+                            <p id="reply">You must <a href="/civis/ucp.php?mode=login" class="vote_login">login or create an account</a> to comment.</p>
+                        </div>
+                    </section>
+                    <aside class="thin-divide-bottom">
+                        <ul class="share-buttons">
+                            <li class="share-facebook">
+                                <a href="https://www.facebook.com/sharer.php?u=http%3A%2F%2Farstechnica.com%2Fsecurity%2F2015%2F04%2F16%2Fjust-released-minecraft-exploit-makes-it-easy-to-crash-game-servers%2F" target="_blank" data-dialog="400:368"> <span class="share-text">Share</span>
+                                    <div class="share-count-container">
+                                        <div class="share-count">-</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="share-twitter">
+                                <a href="https://twitter.com/share?text=Just-released+Minecraft+exploit+makes+it+easy+to+crash+game+servers&amp;url=http%3A%2F%2Fars.to%2F1CSWnf5" target="_blank" data-dialog="364:250"> <span class="share-text">Tweet</span>
+                                    <div class="share-count-container">
+                                        <div class="share-count">-</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="share-google">
+                                <a href="https://plus.google.com/share?url=http%3A%2F%2Farstechnica.com%2Fsecurity%2F2015%2F04%2F16%2Fjust-released-minecraft-exploit-makes-it-easy-to-crash-game-servers%2F" target="_blank" data-dialog="485:600"> <span class="share-text">Google</span>
+                                    <div class="share-count-container">
+                                        <div class="share-count">-</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="share-reddit">
+                                <a href="https://www.reddit.com/submit?url=http%3A%2F%2Farstechnica.com%2Fsecurity%2F2015%2F04%2F16%2Fjust-released-minecraft-exploit-makes-it-easy-to-crash-game-servers%2F&amp;title=Just-released+Minecraft+exploit+makes+it+easy+to+crash+game+servers" target="_blank"> <span class="share-text">Reddit</span>
+                                    <div class="share-count-container">
+                                        <div class="share-count">-</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </aside>
+                    <!-- cache hit 459:single/author:ec67ae7d8397f22698e2822e36453902 -->
+                    <section class="article-author clearfix-redux">
+                        <a href="/author/dan-goodin"><img width="47" height="47" src="http://cdn.arstechnica.net/wp-content/uploads/authors/Dan-Goodin-sq.jpg"/></a>
+                        <p><a href="/author/dan-goodin" class="author-name">Dan Goodin</a> / Dan is the Security Editor at Ars Technica, which he joined in 2012 after working for The Register, the Associated Press, Bloomberg News, and other publications.</p>
+                    </section>
+                    <table class="post-links thick-divide-top thin-divide-bottom clearfix-redux" cellspacing="0" cellpadding="0" border="0" width="100%">
+                        <tbody>
+                            <tr>
+                                <td width="50%" class="subheading older"> <a href="http://arstechnica.com/tech-policy/2015/04/16/dozens-of-us-government-online-whistleblower-sites-not-secured-by-https/" rel="prev"><span class="arrow">←</span> Older Story</a> </td>
+                                <td class="subheading newer"> <a href="http://arstechnica.com/gaming/2015/04/16/hidden-files-suggest-street-fighters-ryu-may-come-to-smash-bros/" rel="next">Newer Story <span class="arrow">→</span></a> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <footer id="article-footer">
+                        <div id="instream300x255_frame"></div>
+                        <script type="text/javascript">
+                            ars.AD.queue.push(['instream', {
+                                sz: '300x255',
+                                kws: ["blogvertorial", "inStream"],
+                                collapse: true
+                            }]);
+                        </script>
+                        <h2 class="subheading notched">You May Also Like</h2>
+                        <ul id="recommendations" class="clearfix-redux">
+                            <!-- cache miss 459:single/sponsored-recs:885d56085f538f75cf5e9bcb302f399f -->
+                        </ul>
+                    </footer>
+                </div>
+            </article>
+            <section id="article-sidebar" class="column-1 right">
+                <!-- cache hit 459:column/article-bottom:b3538aec37c1a165d2b4b62bd58e56e3 -->
+                <aside class="side-ad thick-divide-bottom">
+                    <div id="xrailTop300x250_frame"></div>
+                    <script type="text/javascript">
+                        ars.AD.queue.push(['xrailTop', {
+                            sz: '300x250',
+                            kws: ["top"],
+                            collapse: true
+                        }]);
+                    </script>
+                </aside>
+                <h2 id="recent-featured-title" class="subheading notched">Latest Feature Story</h2>
+                <ul class="column">
+                    <li class="post" id="post-658367">
+                        <article class="in-column" data-post-id="658367">
+                            <a href="http://arstechnica.com/apple/2015/05/03/review-the-absolutely-optional-apple-watch-and-watch-os-1-0/" class="headline-image"> <img src="http://cdn.arstechnica.net/wp-content/uploads/2015/05/DSC00588-300x100.jpg" width="300" height="100"/>
+                                <h2 class="page-count subheading">Feature Story (7 pages)</h2>
+                                <h1 class="heading">Review: The absolutely optional Apple Watch and Watch OS 1.0</h1> </a>
+                            <p class="excerpt">A pragmatist's guide to a nice but not quite necessary gadget.</p>
+                        </article>
+                    </li>
+                    <aside class="thick-divide-top">
+                        <h2 class="subheading notched">Watch Ars Video</h2>
+                        <article class="in-column">
+                            <div class="column-video" data-player="2196096102001" data-video="4202322531001" data-key="AQ~~,AAAAlDCBGhk~,VcmqiTAuekrwPweJ20LLt7jwm8LxmhCE"> <img src="https://cdn.arstechnica.net/i/http://brightcove.vo.llnwd.net/v1/unsecured/media/636468927001/201504/641/636468927001_4202397654001_LG-G4.jpg?pubId=636468927001" width="300" height="169"/>
+                                <div class="column-video-overlay"></div>
+                            </div> <a href="http://arstechnica.com/gadgets/2015/04/28/hands-on-with-the-leather-backed-lg-g4/"><h1 class="heading videohead">Hands-on with the New LG G4</h1></a>
+                            <p class="excerpt">LG goes with a wild rear design and a Snapdragon 808.</p>
+                        </article>
+                    </aside>
+                    <li id="in-the-know">
+                        <h2 class="subheading notched">Stay in the know with</h2>
+                        <ul class="social clearfix">
+                            <li class="fb">
+                                <a href="https://www.facebook.com/arstechnica"></a>
+                            </li>
+                            <li class="twit">
+                                <a href="https://twitter.com/arstechnica"></a>
+                            </li>
+                            <li class="gplus">
+                                <a href="https://plus.google.com/+ArsTechnica/posts"></a>
+                            </li>
+                            <li class="email">
+                                <a href="http://arstechnica.us1.list-manage.com/subscribe?u=af7f013bad7e785d15aab736f&amp;id=0adf3ee3d9"></a>
+                            </li>
+                            <li class="rss">
+                                <a href="/rss-feeds/"></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <h2 class="subheading notched">Latest News</h2>
+                    <ol class="rail latest-stories">
+                        <li>
+                            <a href="http://arstechnica.com/information-technology/2015/05/04/microsoft-bangs-the-cybersecurity-drum-with-advanced-threat-analytics/">
+                                <h2>Protecting networks from your own employees</h2>
+                                <h1 class="heading">Microsoft bangs the cybersecurity drum with Advanced Threat Analytics</h1> </a>
+                        </li>
+                        <li>
+                            <a href="http://arstechnica.com/information-technology/2015/05/04/windows-update-for-business-brings-windows-updates-to-your-business/">
+                                <h2>WUB WUB WUB WUB</h2>
+                                <h1 class="heading">Windows Update for Business brings Windows updates to your business</h1> </a>
+                        </li>
+                        <li>
+                            <a href="http://arstechnica.com/security/2015/05/04/super-secretive-malware-wipes-hard-drive-to-prevent-analysis/">
+                                <h2>INITIATE SELF-DESTRUCT SEQUENCE</h2>
+                                <h1 class="heading">Super secretive malware wipes hard drive to prevent analysis</h1> </a>
+                        </li>
+                        <li>
+                            <a href="http://arstechnica.com/gaming/2015/05/04/failed-christian-shoe-promoter-makes-anti-gay-first-person-shooter/"> <img src="http://cdn.arstechnica.net/wp-content/uploads/2015/05/Screen-Shot-2015-05-04-at-2.45.22-PM-150x150.png" width="50" height="50"/>
+                                <h1 class="heading">Failed Christian shoe promoter makes anti-gay first-person shooter</h1> </a>
+                        </li>
+                        <li>
+                            <a href="http://arstechnica.com/information-technology/2015/05/04/prime-minister-of-singapore-shares-his-c-code-for-sudoku-solver/">
+                                <h2>#include stdio.h</h2>
+                                <h1 class="heading">Prime Minister of Singapore shares his C++ code for Sudoku solver</h1> </a>
+                        </li>
+                        <li>
+                            <a href="http://arstechnica.com/tech-policy/2015/05/04/9th-circuit-judges-rip-into-prenda-law-copyright-trolling-scheme/"> <img src="http://cdn.arstechnica.net/wp-content/uploads/2015/05/Screen-Shot-2015-05-04-at-11.09.05-AM-150x150.png" width="50" height="50"/>
+                                <h1 class="heading">9th Circuit judges rip into Prenda law copyright trolling scheme</h1> </a>
+                        </li>
+                        <div style="display:none">
+                            <div id="polar195x130_frame"></div>
+                            <script type="text/javascript">
+                                ars.AD.queue.push(['polar', {
+                                    sz: '195x130',
+                                    kws: [],
+                                    collapse: true
+                                }]);
+                            </script>
+                        </div>
+                    </ol>
+                    <li>
+                        <aside class="side-ad">
+                            <div id="xrailBottom300x250_frame"></div>
+                            <script type="text/javascript">
+                                ars.AD.queue.push(['xrailBottom', {
+                                    sz: '300x250',
+                                    kws: ["bottom"],
+                                    collapse: true
+                                }]);
+                            </script>
+                        </aside>
+                    </li>
+                    <li class="thick-divide-top thick-divide-bottom">
+                        <aside class="side-ad">
+                            <script type="text/javascript" language="JavaScript">
+                                // <![CDATA[
+                                google_ad_client = 'ca-conde_arstechnica';
+                                google_ad_channel = 'ars_technica_standard_a';
+                                google_language = 'en';
+                                google_ad_width = '300';
+                                google_ad_height = '250';
+                                google_ad_type = 'text';
+                                google_encoding = 'utf8';
+                                google_safe = 'high';
+                                google_adtest = 'off';
+                                google_ad_format = '';
+                                google_ad_section = 'default';
+                                // ]]>
+                            </script>
+                            <script type="text/javascript" src="//pagead2.googlesyndication.com/pagead/show_ads.js" language="JavaScript"></script>
+                        </aside>
+                    </li>
+                </ul>
+            </section>
+        </section>
+        <footer id="page-footer">
+            <nav id="footer-nav" class="clearfix">
+                <div class="nav-section">
+                    <h2 class="subheading">Site Links</h2>
+                    <ul>
+                        <li><a href="/about-us/">About Us</a></li>
+                        <li><a href="/advertise-with-us/">Advertise with us</a></li>
+                        <li><a href="/contact-us/">Contact Us</a></li>
+                        <li><a href="/reprints/">Reprints</a></li>
+                    </ul>
+                    <h2 class="subheading">Subscriptions</h2>
+                    <ul>
+                        <li><a href="/subscriptions/">Subscribe to Ars</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h2 class="subheading">More Reading</h2>
+                    <ul>
+                        <li><a href="/rss-feeds/">RSS Feeds</a></li>
+                        <li><a href="/newsletters/">Newsletters</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h2 class="subheading">Conde Nast Sites</h2>
+                    <ul class="conde-nast-sites">
+                        <li><a href="http://www.reddit.com/">Reddit</a></li>
+                        <li><a href="http://www.wired.com/">Wired</a></li>
+                        <li><a href="http://www.vanityfair.com/">Vanity Fair</a></li>
+                        <li><a href="http://www.style.com/">Style</a></li>
+                        <li><a href="http://www.details.com/">Details</a></li>
+                    </ul>
+                    <form method="get" action="#">
+                        <select id="mag_list" name="mag_list" onchange="(this.options[this.selectedIndex].value) ? (window.location = this.options[this.selectedIndex].value) : null">
+                            <option value="" selected="selected">Visit our sister sites</option>
+                            <option value="">- - - - - - - - - - - - - -</option>
+                            <option value="http://www.gq.com">GQ</option>
+                            <option value="http://www.concierge.com">Concierge</option>
+                            <option value="http://www.epicurious.com">Epicurious</option>
+                            <option value="http://men.style.com">Men.Style.com</option>
+                            <option value="http://www.style.com">Style.com</option>
+                            <option value="http://www.wired.com">Wired.com</option>
+                            <option value="http://www.lipstick.com">Lipstick.com</option>
+                            <option value="http://www.nutritiondata.com">NutritionData</option>
+                            <option value="http://www.allure.com">Allure</option>
+                            <option value="http://www.architecturaldigest.com">Architectural Digest</option>
+                            <option value="http://www.bonappetit.com">Bon Appétit</option>
+                            <option value="http://www.brides.com">Brides</option>
+                            <option value="http://www.portfolio.com">Condé Nast Portfolio</option>
+                            <option value="http://www.glamour.com">Glamour</option>
+                            <option value="http://www.golfdigest.com">Golf Digest</option>
+                            <option value="http://www.golfworld.com">Golf World</option>
+                            <option value="http://www.luckymag.com">Lucky</option>
+                            <option value="http://www.self.com">Self</option>
+                            <option value="http://www.teenvogue.com">Teen Vogue</option>
+                            <option value="http://www.newyorker.com">The New Yorker</option>
+                            <option value="http://www.vanityfair.com">Vanity Fair</option>
+                            <option value="http://www.wmagazine.com">W</option>
+                        </select>
+                    </form>
+                    <form method="get" action="#">
+                        <select size="1" id="sub_list" name="sub_list" onchange="(this.options[this.selectedIndex].value) ? (window.location = this.options[this.selectedIndex].value) : null">
+                            <option value="" selected="selected">Subscribe to a magazine</option>
+                            <option value="http://www.magazinestoresubscriptions.com?source=univdropdown">View All Titles</option>
+                            <option value="">- - - - - - - - - - - - - -</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_Allure?source=SITEFOOTER">Allure</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_ArchitecturalDigest">Architectural Digest</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_BonAppetite?source=SITEFOOTER">Bon Appétit</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_Brides?source=SITEFOOTER">Brides</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_CondeNastPortfolio?source=SITEFOOTER">Condé Nast Portfolio</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_CondeNastTraveler?source=SITEFOOTER">Condé Nast Traveler</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_Details?source=SITEFOOTER">Details</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_ElegantBride?source=SITEFOOTER">Elegant Bride</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_Glamour?source=SITEFOOTER">Glamour</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_GolfDigest?source=SITEFOOTER">Golf Digest</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_GolfWorld?source=SITEFOOTER">Golf World</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_GQ?source=SITEFOOTER">GQ</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_Lucky?source=SITEFOOTER">Lucky</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_ModernBride?source=SITEFOOTER">Modern Bride</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_Self?source=SITEFOOTER">Self</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_TeenVogue?source=SITEFOOTER">Teen Vogue</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_NewYorker?source=SITEFOOTER">The New Yorker</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_VanityFair?source=SITEFOOTER">Vanity Fair</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_Vogue?source=SITEFOOTER">Vogue</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_W?source=SITEFOOTER">W</option>
+                            <option value="https://www.magazinestoresubscriptions.com/webapp/wcs/stores/servlet/Subscriptions_Wired?source=SITEFOOTER">Wired</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="nav-section" id="mobile-site">
+                    <h2 class="subheading"><a href="http://arstechnica.com/security/2015/04/16/just-released-minecraft-exploit-makes-it-easy-to-crash-game-servers/?view=mobile">View Mobile Site</a></h2> </div>
+            </nav>
+            <p style="text-align:center;margin-top:30px;margin-bottom:0">
+                <a href="http://condenast.com"><img src="http://cdn.arstechnica.net/wp-content/themes/arstechnica/assets/images/condenast-logo.png" width="131" height="19"/></a>
+            </p>
+            <div id="copyright-terms"> © 2015 Condé Nast. All rights reserved
+              <br/> Use of this Site constitutes acceptance of our <a href="http://www.condenast.com/privacy-policy" target="_blank">User Agreement</a> (effective 1/2/14) and <a href="http://www.condenast.com/privacy-policy#privacypolicy" target="_blank">Privacy Policy</a> (effective 1/2/14), and <a href="/amendment-to-conde-nast-user-agreement-privacy-policy/">Ars Technica Addendum (effective 5/17/2012)</a>
+              <br/> <a href="http://www.condenast.com/privacy-policy#privacypolicy-california" target="_blank">Your California Privacy Rights</a>
+              <br/> The material on this site may not be reproduced, distributed, transmitted, cached or otherwise used, except with the prior written permission of Condé Nast.
+              <br/>
+              <br/> <a href="http://www.condenast.com/privacy-policy#privacypolicy-optout" target="_blank">Ad Choices</a><img width="10" height="10" border="0" src="http://cdn.arstechnica.net/wp-content/themes/arstechnica/assets/images/ad_choices_arrow.png"/> </div>
+        </footer>
+    </div>
+    <script type="text/javascript" src="//www.google.com/jsapi?autoload={'modules':[{'name':'search','version':'1','packages':[],'language':'en'}]}"></script>
+    <script type="text/javascript" src="http://cdn.arstechnica.net/wp-content/themes/arstechnica/assets/js/ars.min.4963c9cfd2e7a5799f3b8c40325988b4.js"></script>
+    <!-- what the christ -->
+    <script type="text/javascript" src="//www.googletagservices.com/tag/js/gpt.js"></script>
+    <script type="text/javascript" src="http://cdn.arstechnica.net/ads/js/cn.dart.bun.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            if ("CN" in window) {
+                if (ars.MOBILE && "UAParser" in window) {
+                    var ua = new UAParser();
+                    if (ua.getOS().name == "Android" && ua.getBrowser().name == "Chrome") {
+                        return;
+                    }
+                }
+                CN.site.init({
+                    code: "ars",
+                    title: "Ars",
+                    name: ars.MOBILE ? "ars.mobile" : "ars",
+                    env: ars.ENV === "production" ? "PROD" : "DEV",
+                    debug: ars.ENV !== "production"
+                });
+                CN.dart.init({
+                    site: CN.site.name + '.dart',
+                    zone: ars.AD.zone,
+                    kws: ars.AD.kw,
+                    gptCallback: function(e) {
+                        ars.sda.ad_loaded(e);
+                    }
+                });
+                CN.dart.getCommon()["domDelay"]["defaultVal"] = 100;
+                for (var i = 0; i < ars.AD.queue.length; i++) {
+                    var ad = ars.AD.queue[i],
+                        id = ad[0],
+                        args = ad[1];
+                    if ($('#' + id + args.sz + "_frame").length) CN.dart.call(id, args);
+                }
+                ars.AD.queue = [];
+            }
+        })();
+    </script>
+    <script type="text/javascript">
+        CN.ad.polar.article = function(Handlebars, depth0, helpers, partials, data) {
+            this.compilerInfo = [4, '>= 1.0.0'];
+            helpers = this.merge(helpers, Handlebars.helpers);
+            data = data || {};
+            var buffer = "",
+                stack1, stack2, functionType = "function",
+                escapeExpression = this.escapeExpression,
+                self = this;
+
+            function program1(depth0, data) {
+                var buffer = "",
+                    stack1;
+                buffer += "\n      <span style=\"width:50px; height:50px; overflow:hidden; display:inline-block; float:left; margin:2px 10px 5px 0\">\n        <img src=\"" + escapeExpression(((stack1 = ((stack1 = depth0.image), stack1 == null || stack1 === false ? stack1 : stack1.href)), typeof stack1 === functionType ? stack1.apply(depth0) : stack1)) + "\" style=\"float:none; margin:0; height:50px; width:auto;\" />\n      </span>\n    ";
+                return buffer;
+            }
+            buffer += "<li>\n  <a href=\"";
+            if (stack1 = helpers.link) {
+                stack1 = stack1.call(depth0, {
+                    hash: {},
+                    data: data
+                });
+            } else {
+                stack1 = depth0.link;
+                stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1;
+            }
+            buffer += escapeExpression(stack1) + "\">\n    <h2 style=\"color:#00A3D3;\">Sponsored by: <span style=\"text-transform:none;\">" + escapeExpression(((stack1 = ((stack1 = depth0.sponsor), stack1 == null || stack1 === false ? stack1 : stack1.name)), typeof stack1 === functionType ? stack1.apply(depth0) : stack1)) + "</span></h2>\n    ";
+            stack2 = helpers['if'].call(depth0, ((stack1 = depth0.image), stack1 == null || stack1 === false ? stack1 : stack1.href), {
+                hash: {},
+                inverse: self.noop,
+                fn: self.program(1, program1, data),
+                data: data
+            });
+            if (stack2 || stack2 === 0) {
+                buffer += stack2;
+            }
+            buffer += "\n    <h1 class=\"heading\">";
+            if (stack2 = helpers.title) {
+                stack2 = stack2.call(depth0, {
+                    hash: {},
+                    data: data
+                });
+            } else {
+                stack2 = depth0.title;
+                stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2;
+            }
+            buffer += escapeExpression(stack2) + "</h1>\n  </a>\n</li>";
+            return buffer;
+        };
+    </script>
+    <!-- cache hit 459:single/javascript-footer:1ad28a5dc0a24868be6b031b5fdecb2e -->
+    <noscript>
+        <a href="http://www.omniture.com" title="Web Analytics"><img src="http://condenast.112.2o7.net/b/ss/condenet-dev/1/H.15.1--NS/0" height="1" width="1" border="0" alt="" /></a>
+    </noscript>
+    <!-- Google Analytics start -->
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(
+            ['_setAccount', 'UA-31997-1'], ['_setCustomVar', 1, 'view', "grid"], ['_setCustomVar', 2, 'theme', "light"], ['_setCustomVar', 3, 'logged_in', "false"], ['_setCustomVar', 4, 'show_comments', "false"], ['_setCustomVar', 5, 'is_premier', "false"], ['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+    <!-- Google Analytics end -->
+    <!-- Parse.ly start -->
+    <script type="text/javascript">
+        (function(d) {
+            var site = "arstechnica.com",
+                b = d.body,
+                e = d.createElement("div");
+            e.innerHTML = '<span id="parsely-cfg" data-parsely-site="' + site + '"></span>';
+            e.id = "parsely-root";
+            e.style.display = "none";
+            b.appendChild(e);
+        })(document);
+        (function(s, p, d) {
+            var h = d.location.protocol,
+                i = p + "-" + s,
+                e = d.getElementById(i),
+                r = d.getElementById(p + "-root"),
+                u = h === "https:" ? "d1z2jf7jlzjs58.cloudfront.net" : "static." + p + ".com";
+            if (e) return;
+            e = d.createElement(s);
+            e.id = i;
+            e.async = true;
+            e.src = h + "//" + u + "/p.js";
+            r.appendChild(e);
+        })("script", "parsely", document);
+    </script>
+    <!-- Parse.ly end -->
+</body>
+
+</html>
