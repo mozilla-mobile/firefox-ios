@@ -46,16 +46,21 @@ extension BackForwardListAnimator: UIViewControllerTransitioningDelegate {
 
 extension BackForwardListAnimator {
     private func animateWithBackForward(backForward: BackForwardListViewController, browserViewController bvc: BrowserViewController, transitionContext: UIViewControllerContextTransitioning) {
-        let containerView = transitionContext.containerView();
+        guard let containerView = transitionContext.containerView() else {
+            return
+        }
         
-        if(presenting == true) {
-            backForward.view.frame = bvc.parentViewController!.view.frame
+        if presenting {
+            backForward.view.frame = bvc.view.frame
             backForward.view.alpha = 0;
+            containerView.addSubview(backForward.view)
+            backForward.view.snp_updateConstraints { make in
+                make.edges.equalTo(containerView)
+            }
             backForward.view.layoutIfNeeded()
             
             UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: [], animations: { () -> Void in
                 backForward.view.alpha = 1;
-                containerView!.addSubview(backForward.view)
                 backForward.tableView.snp_updateConstraints { make in
                     make.height.equalTo(backForward.tableHeight)
                 }
