@@ -91,7 +91,7 @@ class WebPageSetting: StringSetting {
                    defaultValue: defaultValue,
                    placeholder: placeholder,
                    accessibilityIdentifier: accessibilityIdentifier,
-                   settingIsValid: WebPageSetting.isURL,
+                   settingIsValid: WebPageSetting.isURLOrEmpty,
                    settingDidChange: settingDidChange)
         textField.keyboardType = .URL
         textField.autocapitalizationType = .None
@@ -105,9 +105,9 @@ class WebPageSetting: StringSetting {
         return URIFixup.getURL(value)?.absoluteString
     }
 
-    static func isURL(string: String?) -> Bool {
-        guard let string = string else {
-            return false
+    static func isURLOrEmpty(string: String?) -> Bool {
+        guard let string = string where !string.isEmpty else {
+            return true
         }
         return NSURL(string: string)?.isWebPage() ?? false
     }
