@@ -85,6 +85,7 @@ class TabManager : NSObject {
 
     private let prefs: Prefs
     var selectedIndex: Int { return _selectedIndex }
+    var tempTabs:[Tab]?
 
     var normalTabs: [Tab] {
         assert(NSThread.isMainThread())
@@ -360,11 +361,11 @@ class TabManager : NSObject {
         privateTabs.forEach({ removeTab($0, flushToDisk: true, notify: notify) })
     }
     
-    var tempTabs:[Tab]?
     func removeTabsWithUndoToast(tabs: [Tab]) {
         tempTabs = tabs
         var _tabs = tabs
-        print(selectedIndex)
+        
+        // Remove the current tab last to prevent switching tabs while removing tabs
         if let selectedTab = selectedTab {
             if let selectedIndex = _tabs.indexOf(selectedTab) {
                 let removed = _tabs.removeAtIndex(selectedIndex)
@@ -399,7 +400,6 @@ class TabManager : NSObject {
         selectTab(tempTabs?.first)
         tempTabs?.removeAll()
         tabs.first?.createWebview()
-        
     }
     
     func eraseUndoCache() {
