@@ -252,7 +252,17 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     private func isValid(value: String?) -> Bool {
-        return settingIsValid?(value) ?? true
+        guard let test = settingIsValid else {
+            return true
+        }
+        return test(prepareValidValue(userInput: value))
+    }
+
+    /// This gives subclasses an opportunity to treat the user input string
+    /// before it is saved or tested.
+    /// Default implementation does nothing.
+    func prepareValidValue(userInput value: String?) -> String? {
+        return value
     }
 
     @objc func textFieldDidChange(textField: UITextField) {
@@ -269,7 +279,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         if !isValid(text) {
             return
         }
-        if let text = text {
+        if let text = prepareValidValue(userInput: text) {
             prefs.setString(text, forKey: prefKey)
         } else {
             prefs.removeObjectForKey(prefKey)
