@@ -144,7 +144,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             if hasCopiedURL {
                 extraHeight += TodayUX.copyLinkButtonHeight + TodayUX.verticalWidgetMargin
             }
-            make.height.equalTo(buttonSpacer.snp_height).offset(extraHeight)
+            make.height.equalTo(buttonSpacer.snp_height).offset(extraHeight).priorityHigh()
         }
     }
 
@@ -159,6 +159,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.openCopiedLinkButton.hidden = false
             self.openCopiedLinkButton.subtitleLabel.hidden = SystemUtils.isDeviceLocked()
             self.openCopiedLinkButton.subtitleLabel.text = url.absoluteString
+            self.openCopiedLinkButton.remakeConstraints()
         } else {
             self.openCopiedLinkButton.hidden = true
         }
@@ -312,11 +313,6 @@ class ButtonWithSublabel: UIButton {
         subtitleLabel.textColor = UIColor.whiteColor()
         self.addSubview(subtitleLabel)
 
-        titleLabel.snp_remakeConstraints { make in
-            make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin / 2)
-            make.left.equalTo(self.snp_left).offset(TodayUX.defaultWidgetTextMargin).priorityHigh()
-        }
-
         imageView.snp_remakeConstraints { make in
             make.centerY.equalTo(self.snp_centerY)
             make.right.equalTo(titleLabel.snp_left).offset(-TodayUX.horizontalWidgetMargin)
@@ -327,6 +323,15 @@ class ButtonWithSublabel: UIButton {
             make.left.equalTo(titleLabel.snp_left)
             make.top.equalTo(titleLabel.snp_bottom).offset(TodayUX.verticalWidgetMargin / 2)
             make.right.lessThanOrEqualTo(self.snp_right).offset(-TodayUX.horizontalWidgetMargin)
+        }
+
+        remakeConstraints()
+    }
+
+    func remakeConstraints() {
+        self.label.snp_remakeConstraints { make in
+            make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin / 2)
+            make.left.equalTo(self.snp_left).offset(TodayUX.defaultWidgetTextMargin).priorityHigh()
         }
     }
 
