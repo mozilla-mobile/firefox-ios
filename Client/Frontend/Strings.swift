@@ -166,3 +166,8 @@ extension Strings {
     public static let TabsDeleteAllUndoTitle = NSLocalizedString("Tabs.DeleteAllUndo.Title", value: "%d tab(s) closed", comment: "The label indicating that all the tabs were closed")
     public static let TabsDeleteAllUndoAction = NSLocalizedString("Tabs.DeleteAllUndo.Button", value: "Undo", comment: "The button to undo the delete all tabs")
 }
+
+// errors
+extension Strings {
+    public static let UnableToDownloadError = NSLocalizedString("Downloads.Error.Message", value: "Downloads aren't supported in Firefox yet.", comment: "The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle.")
+}
