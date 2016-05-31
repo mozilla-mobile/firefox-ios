@@ -80,13 +80,13 @@ class BackForwardTableViewCell: UITableViewCell {
             make.height.equalTo(BackForwardViewCellUX.faviconWidth)
             make.width.equalTo(BackForwardViewCellUX.faviconWidth)
             make.centerY.equalTo(self)
-            make.left.equalTo(self.snp_left).offset(BackForwardViewCellUX.faviconPadding)
+            make.leading.equalTo(self.snp_leading).offset(BackForwardViewCellUX.faviconPadding)
         }
         
         label.snp_makeConstraints { make in
             make.centerY.equalTo(self)
-            make.left.equalTo(faviconView.snp_right).offset(BackForwardViewCellUX.labelPadding)
-            make.right.equalTo(self.snp_right).offset(BackForwardViewCellUX.labelPadding)
+            make.leading.equalTo(faviconView.snp_trailing).offset(BackForwardViewCellUX.labelPadding)
+            make.trailing.equalTo(self.snp_trailing).offset(-BackForwardViewCellUX.labelPadding)
         }
         
         bg.snp_makeConstraints { make in
@@ -105,10 +105,16 @@ class BackForwardTableViewCell: UITableViewCell {
         super.drawRect(rect)
         let context = UIGraphicsGetCurrentContext();
         
-        let startPoint = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
+        var startPoint = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
                                      rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
-        let endPoint   = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
+        var endPoint   = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
                                      rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
+        
+        // flip the x component if RTL
+        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .RightToLeft {
+            startPoint.x = rect.origin.x - startPoint.x + rect.size.width
+            endPoint.x = rect.origin.x - endPoint.x + rect.size.width
+        }
         
         CGContextSaveGState(context)
         CGContextSetLineCap(context, CGLineCap.Square)

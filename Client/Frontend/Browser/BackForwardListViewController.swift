@@ -27,7 +27,21 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     private var isPrivate: Bool
     private var dismissing = false
     private var currentRow = 0
-    lazy var tableView = UITableView()
+    
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .None
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.alwaysBounceVertical = false
+        tableView.registerClass(BackForwardTableViewCell.self, forCellReuseIdentifier: self.BackForwardListCellIdentifier)
+        tableView.backgroundColor = self.isPrivate ? BackForwardViewUX.BackgroundColorPrivate:BackForwardViewUX.BackgroundColor
+        let blurEffect = UIBlurEffect(style: self.isPrivate ? .Dark : .ExtraLight)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        tableView.backgroundView = blurEffectView
+        
+        return tableView
+    }()
     
     lazy var shadow: UIView = {
         let shadow = UIView()
@@ -36,12 +50,13 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }()
     
     var tabManager: TabManager!
-    var bvc: BrowserViewController!
+    weak var bvc: BrowserViewController!
     var listData = [(item:WKBackForwardListItem, type:BackForwardType)]()
     
     var tableHeight: CGFloat
     {
         get {
+            assert(NSThread.isMainThread(), "tableHeight interacts with UIKit components - cannot call from background thread.")
             return min(CGFloat(BackForwardViewUX.RowHeight*listData.count), self.view.frame.height/2)
         }
     }
@@ -57,21 +72,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         self.isPrivate = isPrivate
         super.init(nibName: nil, bundle: nil)
         
-        setupTableView()
         loadSites(backForwardList)
-    }
-    
-    func setupTableView() {
-        tableView.separatorStyle = .None
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.alwaysBounceVertical = false
-        tableView.registerClass(BackForwardTableViewCell.self, forCellReuseIdentifier: BackForwardListCellIdentifier)
-        
-        tableView.backgroundColor = isPrivate ? BackForwardViewUX.BackgroundColorPrivate:BackForwardViewUX.BackgroundColor
-        let blurEffect = UIBlurEffect(style: isPrivate ? .Dark : .ExtraLight)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        tableView.backgroundView = blurEffectView
     }
     
     func loadSites(backForwardList: WKBackForwardList) {
@@ -127,11 +128,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         tableView.snp_updateConstraints { make in
             make.height.equalTo(min(CGFloat(BackForwardViewUX.RowHeight*listData.count), size.height/2))
-        }
-        if let superView = view.superview {
-            view.snp_updateConstraints { make in
-                make.edges.equalTo(superView)
-            }
         }
     }
     
