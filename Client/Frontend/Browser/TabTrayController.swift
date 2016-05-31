@@ -1036,7 +1036,7 @@ extension TabTrayController: UIAdaptivePresentationControllerDelegate, UIPopover
 extension TabTrayController: MenuViewControllerDelegate {
     func menuViewControllerDidDismiss(menuViewController: MenuViewController) { }
 
-    func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool {
+    func shouldCloseMenu(menuViewController: MenuViewController, forRotationToNewSize size: CGSize, forTraitCollection traitCollection: UITraitCollection) -> Bool {
         return false
     }
 }
