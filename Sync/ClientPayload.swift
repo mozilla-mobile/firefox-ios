@@ -30,6 +30,10 @@ public class ClientPayload: CleartextPayloadJSON {
     var clientType: String {
         return self["type"].asString!
     }
+
+    var fxaDeviceId: String {
+        return self["fxaDeviceId"].asString!
+    }
     
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
         if !(obj is ClientPayload) {
@@ -47,6 +51,10 @@ public class ClientPayload: CleartextPayloadJSON {
         
         if p.clientType != self.clientType {
             return false
+        }
+
+        if p.fxaDeviceId != self.fxaDeviceId {
+            return false;
         }
 
         return true

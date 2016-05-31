@@ -131,6 +131,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
             "appPackage": NSBundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
+            //"fxaDeviceId", // TODO
             "formfactor": formfactor])
 
         let payload = ClientPayload(json)
