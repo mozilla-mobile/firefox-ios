@@ -83,22 +83,22 @@ extension Strings {
 
     public static let FirstTimeSyncLongTime = NSLocalizedString("Sync.FirstTimeMessage.Label", value: "Your first sync may take a while", comment: "Message displayed when the user syncs for the first time")
 
-    public static let FirefoxSyncOfflineTitle = NSLocalizedString("SyncState.Offline.Title", value: "Sync is offline", comment: "Title sync status message when sync failed due to being offline")
-    public static let FirefoxSyncNotStartedTitle = NSLocalizedString("SyncState.NotStarted.Title", value: "Sync is unavailable", comment: "Title sync status message when sync failed to start.")
-    public static let FirefoxSyncPartialTitle = NSLocalizedString("SyncState.Partial.Title", value: "%@ Sync is experiencing issues", comment: "Title sync status message when a components of a sync failed to complete, where %@ represents the name of the component.")
-    public static let FirefoxSyncFailedTitle = NSLocalizedString("SyncState.Failed.Title", value: "Sync failed", comment: "Title sync status message when sync was unable to succeed")
-    public static let FirefoxSyncTroubleshootTitle = NSLocalizedString("Settings.TroubleShootSync.Title", value: "Troubleshoot", comment: "Title of link to help page to find out how to solve sync issues")
+    public static let FirefoxSyncOfflineTitle = NSLocalizedString("SyncState.Offline.Title", value: "Sync is offline", comment: "Title Sync status message when Sync failed due to being offline")
+    public static let FirefoxSyncNotStartedTitle = NSLocalizedString("SyncState.NotStarted.Title", value: "Sync is unavailable", comment: "Title Sync status message when Sync failed to start.")
+    public static let FirefoxSyncPartialTitle = NSLocalizedString("SyncState.Partial.Title", value: "Sync is experiencing issues syncing %@", comment: "Title Sync status message when a component of Sync failed to complete, where %@ represents the name of the component.")
+    public static let FirefoxSyncFailedTitle = NSLocalizedString("SyncState.Failed.Title", value: "Sync has failed to complete", comment: "Title Sync status message when Sync was unable to succeed")
+    public static let FirefoxSyncTroubleshootTitle = NSLocalizedString("Settings.TroubleShootSync.Title", value: "Troubleshoot", comment: "Title of link to help page to find out how to solve Sync issues")
 
     public static func localizedStringForSyncComponent(componentName: String) -> String? {
         switch componentName {
         case "bookmarks":
-            return NSLocalizedString("SyncState.Bookmark.Title", value: "Bookmark", comment: "The Bookmark sync component")
+            return NSLocalizedString("SyncState.Bookmark.Title", value: "Bookmarks", comment: "The Bookmark sync component")
         case "clients":
-            return NSLocalizedString("SyncState.Clients.Title", value: "Remote Client", comment: "The Remote Clients sync component")
+            return NSLocalizedString("SyncState.Clients.Title", value: "Remote Clients", comment: "The Remote Clients sync component")
         case "tabs":
-            return NSLocalizedString("SyncState.Tabs.Title", value: "Tab", comment: "The Tabs sync component")
+            return NSLocalizedString("SyncState.Tabs.Title", value: "Tabs", comment: "The Tabs sync component")
         case "logins":
-            return NSLocalizedString("SyncState.Logins.Title", value: "Login", comment: "The Logins sync component")
+            return NSLocalizedString("SyncState.Logins.Title", value: "Logins", comment: "The Logins sync component")
         case "history":
             return NSLocalizedString("SyncState.History.Title", value: "History", comment: "The History sync component")
         default: return nil
