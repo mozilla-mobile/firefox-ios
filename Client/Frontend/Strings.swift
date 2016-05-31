@@ -163,6 +163,6 @@ extension Strings {
 
 // Tabs Delete All Undo Toast
 extension Strings {
-    public static let TabsDeleteAllUndoTitle = NSLocalizedString("Tabs.DeleteAllUndoTitle", value: "Tabs closed.", comment: "The label indicating that all the tabs were closed")
+    public static let TabsDeleteAllUndoTitle = NSLocalizedString("Tabs.DeleteAllUndoTitle", value: "%d tabs closed", comment: "The label indicating that all the tabs were closed")
     public static let TabsDeleteAllUndoAction = NSLocalizedString("Tabs.DeleteAllUndoAction", value: "Undo", comment: "The button to undo the delete all tabs")
 }
