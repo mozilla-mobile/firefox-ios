@@ -1604,23 +1604,14 @@ extension BrowserViewController: TabToolbarDelegate {
         mvc.menuTransitionDelegate = MenuPresentationAnimator()
         mvc.modalPresentationStyle = presentationStyle == .Modal ? .OverCurrentContext : .Popover
 
-
-        let setupPopover = { [unowned self] in
-            if let popoverPresentationController = mvc.popoverPresentationController {
-                popoverPresentationController.backgroundColor = UIColor.clearColor()
-                popoverPresentationController.delegate = self
-                popoverPresentationController.sourceView = button
-                popoverPresentationController.sourceRect = CGRect(x: button.frame.width/2, y: button.frame.size.height * 0.75, width: 1, height: 1)
-                popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
-            }
+        if let popoverPresentationController = mvc.popoverPresentationController {
+            popoverPresentationController.backgroundColor = UIColor.clearColor()
+            popoverPresentationController.delegate = self
+            popoverPresentationController.sourceView = button
+            popoverPresentationController.sourceRect = CGRect(x: button.frame.width/2, y: button.frame.size.height * 0.75, width: 1, height: 1)
+            popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
         }
 
-        setupPopover()
-
-        if mvc.popoverPresentationController != nil {
-            displayedPopoverController = mvc
-            updateDisplayedPopoverProperties = setupPopover
-        }
         self.presentViewController(mvc, animated: true, completion: nil)
         menuViewController = mvc
     }
@@ -1666,9 +1657,23 @@ extension BrowserViewController: MenuViewControllerDelegate {
         updateDisplayedPopoverProperties = nil
     }
 
-    func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool {
-        return UI_USER_INTERFACE_IDIOM() == .Phone &&
-            (traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular)
+    func shouldCloseMenu(menuViewController: MenuViewController, forRotationToNewSize size: CGSize, forTraitCollection traitCollection: UITraitCollection) -> Bool {
+        // if we're presenting in popover but we haven't got a preferred content size yet, don't dismiss, otherwise we might dismiss before we've presented
+        if (traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Compact) && menuViewController.preferredContentSize == CGSize.zero {
+            return false
+        }
+        
+        func orientationForSize(size: CGSize) -> UIInterfaceOrientation {
+            return size.height < size.width ? .LandscapeLeft : .Portrait
+        }
+
+        let currentOrientation = orientationForSize(self.view.bounds.size)
+        let newOrientation = orientationForSize(size)
+        let isiPhone = UI_USER_INTERFACE_IDIOM() == .Phone
+
+        // we only want to dismiss when rotating on iPhone
+        // if we're rotating from landscape to portrait then we are rotating from popover to modal
+        return isiPhone && currentOrientation != newOrientation
     }
 }
 

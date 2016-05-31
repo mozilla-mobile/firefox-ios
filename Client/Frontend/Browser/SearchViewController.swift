@@ -423,6 +423,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
         coordinator.animateAlongsideTransition({ _ in
             self.tableView.reloadData()
