@@ -798,10 +798,15 @@ extension URLBarView: Themeable {
 
 extension URLBarView: AppStateDelegate {
     func appDidUpdateState(appState: AppState) {
-        let showShareButton = HomePageAccessors.isButtonInMenu(appState)
-        homePageButton.hidden = showShareButton
-        shareButton.hidden = !showShareButton
-        homePageButton.enabled = HomePageAccessors.isButtonEnabled(appState)
+        if toolbarIsShowing {
+            let showShareButton = HomePageAccessors.isButtonInMenu(appState)
+            homePageButton.hidden = showShareButton
+            shareButton.hidden = !showShareButton
+            homePageButton.enabled = HomePageAccessors.isButtonEnabled(appState)
+        } else {
+            homePageButton.hidden = true
+            shareButton.hidden = true
+        }
     }
 }
 
