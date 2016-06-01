@@ -16,7 +16,7 @@ protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab)
     func tabManagerDidRestoreTabs(tabManager: TabManager)
     func tabManagerDidAddTabs(tabManager: TabManager)
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager)
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?)
 }
 
 protocol TabManagerStateDelegate: class {
@@ -363,42 +363,54 @@ class TabManager : NSObject {
     
     func removeTabsWithUndoToast(tabs: [Tab]) {
         tempTabs = tabs
-        var _tabs = tabs
+        var tabsCopy = tabs
         
         // Remove the current tab last to prevent switching tabs while removing tabs
         if let selectedTab = selectedTab {
-            if let selectedIndex = _tabs.indexOf(selectedTab) {
-                let removed = _tabs.removeAtIndex(selectedIndex)
-                removeTabs(_tabs)
+            if let selectedIndex = tabsCopy.indexOf(selectedTab) {
+                let removed = tabsCopy.removeAtIndex(selectedIndex)
+                removeTabs(tabsCopy)
                 removeTab(removed)
             }
             else {
-                removeTabs(_tabs)
+                removeTabs(tabsCopy)
             }
         }
         for tab in tabs {
             tab.hideContent()
         }
+        var toast: ButtonToast?
+        if let numberOfTabs = tempTabs?.count where numberOfTabs > 0  {
+            toast = ButtonToast(labelText: String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, completion: { buttonPressed in
+                if (buttonPressed) {
+                    self.undoCloseTabs()
+                    for delegate in self.delegates {
+                        delegate.get()?.tabManagerDidAddTabs(self)
+                    }
+                }
+                self.eraseUndoCache()
+            })
+        }
         for delegate in delegates {
-            delegate.get()?.tabManagerDidRemoveAllTabs(self)
+            delegate.get()?.tabManagerDidRemoveAllTabs(self, toast: toast)
         }
     }
     
     func undoCloseTabs() {
-        guard tempTabs?.count ?? 0 > 0 else {
+        guard let tempTabs = self.tempTabs where tempTabs.count ?? 0 > 0 else {
             return
         }
         
-        let _tabs = normalTabs
-        restoreTabs(tempTabs!)
-        for tab in tempTabs! {
+        let tabsCopy = normalTabs
+        restoreTabs(tempTabs)
+        for tab in tempTabs {
             tab.showContent(true)
         }
-        if !tempTabs![0].isPrivate ?? true {
-            removeTabs(_tabs)
+        if !tempTabs[0].isPrivate ?? true {
+            removeTabs(tabsCopy)
         }
-        selectTab(tempTabs?.first)
-        tempTabs?.removeAll()
+        selectTab(tempTabs.first)
+        self.tempTabs?.removeAll()
         tabs.first?.createWebview()
     }
     
