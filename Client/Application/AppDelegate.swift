@@ -243,9 +243,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) else {
             return false
         }
-        if components.scheme != "firefox" && components.scheme != "firefox-x-callback" {
+
+        guard let urlTypes = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleURLTypes") as? [AnyObject],
+                urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
+            // Something very strange has happened; org.mozilla.Client should be the zeroeth URL type.
+            log.error("Custom URL schemes not available for validating")
             return false
         }
+
+        guard let scheme = components.scheme where urlSchemes.contains(scheme) else {
+            log.warning("Cannot handle \(components.scheme) URL scheme")
+            return false
+        }
+
         var url: String?
         var isPrivate: Bool = false
         for item in (components.queryItems ?? []) as [NSURLQueryItem] {

@@ -95,6 +95,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         return copiedURL != nil
     }
 
+    private var scheme: String {
+        guard let string = NSBundle.mainBundle().objectForInfoDictionaryKey("MozInternalURLScheme") as? String else {
+            // Something went wrong/weird, but we should fallback to the public one.
+            return "firefox"
+        }
+        return string
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -186,14 +194,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     // MARK: Button behaviour
 
     @objc func onPressNewTab(view: UIView) {
-        openContainingApp("firefox://")
+        openContainingApp()
     }
 
     @objc func onPressNewPrivateTab(view: UIView) {
-        openContainingApp("firefox://?private=true")
+        openContainingApp("?private=true")
     }
 
-    private func openContainingApp(urlString: String) {
+    private func openContainingApp(urlSuffix: String = "") {
+        let urlString = "\(scheme)://\(urlSuffix)"
         self.extensionContext?.openURL(NSURL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }
@@ -204,7 +213,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             _ = NSURL(string: urlString) {
             let encodedString =
                 urlString.escape()
-            openContainingApp("firefox://?url=\(encodedString)")
+            openContainingApp("?url=\(encodedString)")
         }
     }
 }

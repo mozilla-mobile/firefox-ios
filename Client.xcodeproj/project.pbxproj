@@ -5496,6 +5496,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = "firefox-nightly";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -5657,6 +5658,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = "firefox-internal";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -6337,6 +6339,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = "fennec-aurora";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -6799,6 +6802,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = "firefox-beta";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7221,6 +7225,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = fennec;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
