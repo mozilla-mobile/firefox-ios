@@ -2065,19 +2065,22 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
     
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager) {
-        let numberOfTabs = tabManager.tempTabs?.count ?? 0
-        guard numberOfTabs > 0 else {
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
+        guard !tabTrayController.privateMode else {
             return
         }
-        let Toast = ButtonToast()
-        Toast.showAlertWithText(String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, offset: shouldShowFooterForTraitCollection(traitCollection) ? UIConstants.ToolbarHeight : 0, completion: { buttonPressed in
-            if (buttonPressed) {
-                tabManager.undoCloseTabs()
-                self.updateTabCountUsingTabManager(tabManager)
+        
+        if let undoToast = toast {
+            let time = dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(ButtonToastUX.ToastDelay * Double(NSEC_PER_SEC)))
+            dispatch_after(time, dispatch_get_main_queue()) {
+                self.view.addSubview(undoToast)
+                undoToast.snp_makeConstraints { make in
+                    make.left.right.equalTo(self.view)
+                    make.bottom.equalTo(self.webViewContainer)
+                }
+                undoToast.showToast()
             }
-            tabManager.eraseUndoCache()
-        })
+        }
     }
 
     private func updateTabCountUsingTabManager(tabManager: TabManager, animated: Bool = true) {

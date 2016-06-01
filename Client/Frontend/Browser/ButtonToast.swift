@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SnapKit
 
 struct ButtonToastUX {
     static let ToastDismissAfter = 4.0
@@ -14,31 +15,40 @@ struct ButtonToastUX {
     static let ToastButtonBorderWidth:CGFloat = 1
 }
 
-class ButtonToast {
+class ButtonToast: UIView {
     
     private var dismissed = false
-    private var completionHandler: (Bool) -> Void = {_ in }
+    private var completionHandler: ((Bool) -> Void)?
     private lazy var toast: UIView = {
         let toast = UIView()
         toast.backgroundColor = SimpleToastUX.ToastDefaultColor
         return toast
     }()
+    private var animationConstraint: Constraint?
+    private lazy var gestureRecognizer: UITapGestureRecognizer = {
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.handleTap(_:)))
+        gestureRecognizer.cancelsTouchesInView = false
+        return gestureRecognizer
+    }()
     
-    func showAlertWithText(labelText: String, buttonText:String, offset:CGFloat, completion: (buttonPressed: Bool) -> Void) {
-        guard let window = UIApplication.sharedApplication().windows.first else {
-            return
-        }
-        
+    init(labelText: String, buttonText:String, completion:(buttonPressed: Bool) -> Void) {
+        super.init(frame: CGRect.zero)
         completionHandler = completion
         
-        let toast = self.createView(labelText, buttonText: buttonText)
-        window.addSubview(toast)
-        toast.snp_makeConstraints { (make) in
-            make.width.equalTo(window.snp_width)
-            make.height.equalTo(SimpleToastUX.ToastHeight)
-            make.bottom.equalTo(window.snp_bottom).offset(-offset)
+        self.clipsToBounds = true
+        self.addSubview(createView(labelText, buttonText: buttonText))
+        
+        toast.snp_makeConstraints { make in
+            make.left.right.height.equalTo(self)
+            animationConstraint = make.top.equalTo(self).offset(SimpleToastUX.ToastHeight).constraint
         }
-        animate(toast)
+        self.snp_makeConstraints { make in
+            make.height.equalTo(SimpleToastUX.ToastHeight)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func createView(labelText: String, buttonText: String) -> UIView {
@@ -46,6 +56,8 @@ class ButtonToast {
         label.textColor = UIColor.whiteColor()
         label.font = SimpleToastUX.ToastFont
         label.text = labelText
+        label.lineBreakMode = .ByWordWrapping
+        label.numberOfLines = 0
         toast.addSubview(label)
         
         let button = UIButton()
@@ -63,6 +75,7 @@ class ButtonToast {
         label.snp_makeConstraints { (make) in
             make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
             make.centerY.equalTo(toast)
+            make.trailing.equalTo(button.snp_leading)
         }
         
         button.snp_makeConstraints { (make) in
@@ -74,46 +87,58 @@ class ButtonToast {
         return toast
     }
     
-    private func dismiss(toast: UIView, buttonPressed: Bool) {
+    private func dismiss(buttonPressed: Bool) {
         guard dismissed == false else {
             return
         }
         dismissed = true
+        superview?.removeGestureRecognizer(gestureRecognizer)
         
-        toast.transform = CGAffineTransformIdentity
         UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration,
                                    animations: {
-                                    toast.transform = CGAffineTransformMakeScale(1.0, 0.001)
-                                    toast.frame.origin.y = toast.frame.origin.y + SimpleToastUX.ToastHeight/2
+                                    self.animationConstraint?.updateOffset(SimpleToastUX.ToastHeight)
+                                    self.layoutIfNeeded()
             },
                                    completion: { finished in
-                                    toast.removeFromSuperview()
+                                    self.removeFromSuperview()
                                     if(!buttonPressed) {
-                                        self.completionHandler(false)
+                                        self.completionHandler?(false)
                                     }
             }
         )
     }
     
-    private func animate(toast: UIView) {
-        toast.transform = CGAffineTransformMakeScale(1.0, 0.001)
-        toast.frame.origin.y = toast.frame.origin.y + SimpleToastUX.ToastHeight/2
-        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration, delay: ButtonToastUX.ToastDelay, options: [],
+    func showToast() {
+        layoutIfNeeded()
+        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration,
                                    animations: {
-                                    toast.transform = CGAffineTransformIdentity
-                                    toast.frame.origin.y = toast.frame.origin.y - SimpleToastUX.ToastHeight/2
+                                    self.animationConstraint?.updateOffset(0)
+                                    self.layoutIfNeeded()
             },
                                    completion: { finished in
                                     let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(SimpleToastUX.ToastDismissAfter * Double(NSEC_PER_SEC)))
                                     dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-                                        self.dismiss(toast, buttonPressed: false)
+                                        self.dismiss(false)
                                     })
             }
         )
     }
     
     @objc func buttonPressed(gestureRecognizer: UIGestureRecognizer) {
-        self.completionHandler(true)
-        self.dismiss(toast, buttonPressed: true)
+        self.completionHandler?(true)
+        self.dismiss(true)
+    }
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        guard let superview = self.superview else {
+            return
+        }
+        superview.addGestureRecognizer(gestureRecognizer)
+    }
+    
+    func handleTap(gestureRecognizer: UIGestureRecognizer) {
+        dismiss(false)
     }
 }
