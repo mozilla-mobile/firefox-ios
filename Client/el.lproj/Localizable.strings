@@ -1,0 +1,231 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Ο ιστότοπος %@ απαιτεί όνομα χρήστη και συνθηματικό.";
+
+/* About settings section title */
+"About" = "Σχετικά";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Προσθήκη καρτέλας";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Προσθήκη στη λίστα ανάγνωσης";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Αποστολή πάντα";
+
+/* Authentication prompt title */
+"Authentication required" = "Απαιτείται πιστοποίηση";
+
+/* Accessibility Label for the tab toolbar Back button */
+"Back" = "Πίσω";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Μπλοκάρισμα αναδυόμενων παραθύρων";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Σελιδοδείκτης";
+
+/* Panel accessibility label */
+"Bookmarks" = "Σελιδοδείκτες";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Φωτεινότητα";
+
+/* Alert Call Button */
+"Call" = "Κλήση";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Ακυρο";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Αλλάζει το χρώμα θέματος.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Αλλάζει τον τύπο της γραμματοσειράς.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Διαγραφή ιδιωτικών δεδομένων";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Κλείσιμο";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Κλείσιμο καρτέλας";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Αντιγραφή διεύθυνσης";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Αντιγραφή εικόνας";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Αντιγραφή συνδέσμου";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Δημιουργία λογαριασμού";
+
+/* Debug option */
+"Debug: require password" = "Εντοπισμός σφαλμάτων: απαιτείται κωδικός πρόσβασης";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Προεπιλεγμένη μηχανή αναζήτησης";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Ρυθμίσεις εμφάνισης";
+
+/* Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Ολοκληρώθηκε";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Εισάγετε τον κωδικό σας για να συνδεθείτε.";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Εμπρός";
+
+/* General settings section title */
+"General" = "Γενικά";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Μετάβαση";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Βοήθεια";
+
+/* Panel accessibility label */
+"History" = "Ιστορικό";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Αύξηση μεγέθους κειμένου";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Τελευταίος συγχρονισμός %@";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Άδειες χρήσης";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Αποσύνδεση";
+
+/* Authentication prompt log in button */
+"Log in" = "Σύνδεση";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Σήμανση ως αναγνωσμένο";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Σήμανση ως μη αναγνωσμένο";
+
+/* Prompt title for application update */
+"New version available" = "Νέα έκδοση διαθέσιμη";
+
+/* Restore Tabs Negative Action */
+"No" = "Όχι";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Καμία καρτέλα";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Όχι τώρα";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Άνοιγμα σε νέα καρτέλα";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Άνοιγμα ρυθμίσεων";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Κωδικός";
+
+/* Paste the URL into the location bar */
+"Paste" = "Επικόλληση";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Επικόλληση & Μετάβαση";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Ανανέωση";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Αφαίρεση σελίδας";
+
+/* Context menu item for saving an image */
+"Save Image" = "Αποθήκευση εικόνας";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Αναζήτηση";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Ρυθμίσεις";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Εμφάνιση καρτελών";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Σύνδεση";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Διακοπή";
+
+/* Support section title */
+"Support" = "Υποστήριξη";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Σύρετε αριστερά ή δεξιά χρησιμοποιώντας τρία δάχτυλα για να κλείσετε την καρτέλα.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Συγχρονισμός Τώρα";
+
+/* History tableview section header */
+"Today" = "Σήμερα";
+
+/* Panel accessibility label */
+"Top sites" = "Δημοφιλείς σελίδες";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Αναβάθμιση του Firefox για να συνδεθείτε.";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Όνομα Χρήστη";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Επιβεβαίωσε την διεύθυνση email.";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Περιεχόμενο ιστού";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Καλώς ορίσατε στην Λίστα Ανάγνωσης";
+
+/* History tableview section header */
+"Yesterday" = "Χθες";
+
+/* Your Rights settings section title */
+"Your Rights" = "Τα δικαιώματά σας";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "μόλις τώρα";
+

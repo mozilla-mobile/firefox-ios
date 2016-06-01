@@ -1,0 +1,606 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Hinihingi ang username at password ng %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Hinihingi ang username at password ng %1$@. Ang sabi ng site: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Tungkol";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Magdagdag ng Tab";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Idagdag sa Reading List";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Karagdagang pahina sa Reading List";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Address and Search";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Pahintulutan ang mga Third-Party Keyboard";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Laging Ipadala";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Kinakailangan ang Pagpapatunay";
+
+/* Accessibility Label for the tab toolbar Back button */
+"Back" = "Bumalik";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Harangan ang mga Pop-up";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Bookmark";
+
+/* Panel accessibility label */
+"Bookmarks" = "Mga Bookmark";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Narito ang mga Bookmark na iyong ini-save.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Tinkad";
+
+/* Alert Call Button */
+"Call" = "Mga Tawag";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Ikansela";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Papalit ng color theme.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Papalit ng font type.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Burahin ang Private Data.";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Isara";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Isinasara ang tab";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Kopyahin ang Address";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Kopyahin ang Image";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Kopyahin ang Link";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Hindi maidagdag ang pahina sa Reading List. Baka nandoon na?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Hindi maidagdag ang pahina sa Reading List.";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Hindi maiload ang pahina.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Gumawa ng account.";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Madilim";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Debug: kalimutan ang Sync auth state";
+
+/* Debug option */
+"Debug: require password" = "Debug: kailangan ng password";
+
+/* Debug option */
+"Debug: require upgrade" = "Debug: kailangan ng upgrade";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Palilitin ang text";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Default Search Engine";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Huwag paganahin ang karagdagang page dialogs";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Ipakita ang Settings";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Gusto mo bang tandaan ang password para sa %1$@ sa %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Gusto mo bang tandaan ang password sa %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Gusto mo bang i-update and password para sa %1$@ sa %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Gusto mo bang i-update ang password sa %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Huwag Ipadala";
+
+/* Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Tapos";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Pindotin ng dalawang beses at hawakan upang buksan ang history";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Ilagay ang iyong password para makakonek.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Advanced";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Babala: hindi namin makumpirma na ang koneksyon mo sa website na ito ay secured.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Maaari ito ay isang maling pag-configure o pakikialam ng isang nang-aatake. Magpatuloy kung tatanggapin mo ang mga potensyal na panganib.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Ang may-ari ng %@ ay maling nai-configure ang kanilang website. Upang maprotektahan and iyong impormasyon at hindi manakaw, Hindi kumonekta ang Firefox sa website.";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Bumalik";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Bisitahin pa rin ang site";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Kailangang buksan muli ang Firefox para mangyari ang iyong binago.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Titigil mag-sync ang Firefox sa iyong account, pero hindi nito buburahin ang browsing data nitong device.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Nais magamit ng Firefox ang iyong Photos";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Sulong";
+
+/* General settings section title */
+"General" = "Pangkalahatan";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Kunin ang mga bukas na tab, bookmark, at password mula sa iba pang mga device.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Go";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Pumunta sa kinopyang URL?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Help";
+
+/* Panel accessibility label */
+"History" = "History";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Palakihin ang text size";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Intro Tour Carousel";
+
+/* History tableview section header */
+"Last month" = "Nakaraang buwan";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Huling na-sync: %@";
+
+/* History tableview section header */
+"Last week" = "Nakaraang linggo";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Mga Lisensya";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Ilaw";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "I-load ang original page";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Niloload ang nilalaman...";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Mag-logout";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Mag-logout?";
+
+/* Authentication prompt log in button */
+"Log in" = "Mag-login";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Mga Login";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Huwag I-save";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "I-save and login %1$@ para sa %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "I-save and password para sa %@?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "I-update ang password para sa %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "I-save ang Login";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "I-update";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Mukhang bumagsak ang Firefox. Gusto mo bang ibalik ang iyong mga tab?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Markahan bilang Nabasa";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Markahan bilang Hindi pa nabasa";
+
+/* Error for a missing remote error number */
+"Missing error" = "Nawawalang error";
+
+/* Error for a missing remote error message */
+"Missing message" = "Nawawalang mensahe";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigation Toolbar";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Bagong tab: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "May bagong bersyon";
+
+/* Restore Tabs Negative Action */
+"No" = "Hindi";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Walang mga tab";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Mamaya";
+
+/* Button to not save the user's password */
+"Not now" = "Hindi ngayon";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Okay";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Oops! Bumagsak ang Firefox";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Buksan sa Bagong Tab";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Buksan ang Settings";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Buksan ang basahin sa Reader View gamit ang book icon paglabas nito sa title bar.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Buksan gamit ang...";
+
+/* Opening an external URL */
+"Opening %@" = "Binubuksan %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Tagapili ng Panel";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Password";
+
+/* Paste the URL into the location bar */
+"Paste" = "Paste";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Paste at Go";
+
+/* Privacy section title */
+"Privacy" = "Privacy";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Patakaran sa Privacy";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Mabilisang search Engines";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Reader View";
+
+/* Panel accessibility label */
+"Reading list" = "Reading list";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Subukan muli";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Alisin";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Alisin mula sa Reading List";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Alisin ang pahina";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Hilingin ang Desktop Site";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Hilingin ang Mobile Site";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "I-save ang Image";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Tandaan ang Logins";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Tandaan ang mga pahina sa iyong Reading list gamit ang book plus icon sa Reader View controls.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Hanapin";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Hanapin o ilagay ang address.";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Mga hanap para sa suhuwestiyon";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Ligtas na koneksyon";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "Ipadala ang Feedback";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Ipadala ang Report";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Magpadala ng crash report sa Mozilla upang ayusin ang problema?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Ikansela";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Settings";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Burahin ang Private Data.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Burahin ang Private Data.";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Burahin ang Private Data.";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "Ibahagi";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Ibahagi ang Link";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Ikansela";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Ipakita ang Search Suggestions";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Ipakita ang mga tab";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Ipakita ang Tour";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Ipakita ang mga suhestyon";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Sign in sa Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Sign in";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Mag sign-in upang kunin ang mga tab, bookmark, at password mula sa iba pang mga device.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Tumigil";
+
+/* Support section title */
+"Support" = "Support";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Gamitin ang tatlong daliri at i-swipe sa kaliwa o kanan para maisara ang tab.";
+
+/* Sync Firefox Account */
+"Sync Now" = "I-sync ngayon";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "I-Sync ang iyong mga tab, bookmark, password, atbp.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "I-Sync ang iyong mga tab, bookmark, password atbp.";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Tab %1$@ ng %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Mga Tab %1$@ hanggang %2$@ ng %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Tray ng mga Tab";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Ang pahinang ito ay hindi maipakita sa Reader View.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "May bagong bersyon ng Firefox Aurora. Pindutin ang OK para mai-download.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Hindi ma-access ang mga tab mula sa iyong ibang device. Subukan muli mamaya.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "May error sa pagsalin ng pahina.";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Maaring i-save sa Camera Roll ang mga litrato.";
+
+/* Opening an external app */
+"This will open in another application" = "Bubuksan nito ang bagong aplikasyon.";
+
+/* History tableview section header */
+"Today" = "Ngayon";
+
+/* Panel accessibility label */
+"Top sites" = "Pangunahing mga site.";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Dito makikita ang laga mong binibisitang sites.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Ito ang Top Sites";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Update";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "I-upgrade ang Firefox para maka-konek.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Gamitin ang Compact Tabs";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Username";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Patunayan ang iyong email address.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Bersyon %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Tingnan";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Nilalaman ng web";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Eto ang iyong Reading List";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Pasensya na.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "Oo";
+
+/* History tableview section header */
+"Yesterday" = "Kahapon";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Walang ibang bukas na mga tab sa Firefox sa ibang device.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Ang iyong mga Karapatan";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "computer";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ngayon lang";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "Mobile Device";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "mahigit isang buwan na";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "mahigit isang linggo na";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "Nabasa";
+
+/* Relative date for date in past week. */
+"this week" = "ngayong linggo";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ngayong %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "Hindi pa nabasa";
+
+/* Relative date for yesterday. */
+"yesterday" = "kahapon";
+

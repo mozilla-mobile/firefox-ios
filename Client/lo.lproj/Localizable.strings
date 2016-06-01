@@ -1,0 +1,606 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "ຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານແມ່ນຈະຖືກຮ້ອງຂໍໂດຍ %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "ຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານແມ່ນຈະຖືກຮ້ອງຂໍໂດຍ %1$@. ເວັບໄຊຕ໌ດັ່ງກ່າວຕອບສະຫນອງ: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "ກ່ຽວກັບ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ເພີ່ມແທັບ";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "ເພີ່ມຫນ້າເວັບນີ້ເຂົ້າໄປໃນລາຍການອ່ານແລ້ວ";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ທີ່ຢູ່ ແລະ ການຄົ້ນຫາ";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "ອະນຸຍາດແປ້ນພິມທີ່ພັດທະນາຈາກນັກພັດທະນາທີ່ສາມ";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ສົ່ງຕະຫລອດເວລາ";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "ຕ້ອງການການພິສູດຕົວຕົນ";
+
+/* Accessibility Label for the tab toolbar Back button */
+"Back" = "ກັບຄືນ";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ບັອກຫນ້າຕ່າງ Pop-up";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "ບຸກມາກ";
+
+/* Panel accessibility label */
+"Bookmarks" = "ບຸກມາກ";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "ບຸກມາກທີ່ທ່ານບັນທຶກໄວ້ຈະສະແດງຂື້ນຢູ່ທີ່ນີ້.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ຄວາມສະຫວ່າງ";
+
+/* Alert Call Button */
+"Call" = "ໂທ";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "ຍົກເລີກ";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "ປ່ຽນຊຸດຮູບແບບສີ.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ປ່ຽນປະເພດຕົວອັກສອນ.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "ລົບລ້າງຂໍ້ມູນສ່ວນຕົວ";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ປິດ";
+
+/* No comment provided by engineer. */
+"Closing tab" = "ກຳລັງປິດແທັບ";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ສຳເນົາທີ່ຢູ່";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "ສຳເນົາຮູບພາບ";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "ສຳເນົາທີ່ຢູ່ລີ້ງ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "ບໍ່ສາມາດເພີ່ມຫນ້າເວັບເຂົ້າໄປໃນລາຍການອ່ານ. ບາງເທື່ອມັນອາດຈະມີຫນ້າເວັບນີ້ຢູ່ແລ້ວ?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "ບໍ່ສາມາດເພີ່ມຫນ້າເວັບເຂົ້າໄປໃນລາຍການອ່ານ";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "ບໍ່ສາມາດໂຫລດຫນ້າເວັບນີ້ໄດ້.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ສ້າງບັນຊີ";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "ດຳ";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Debug: ລືມ Sync ສະຖານະ Auth";
+
+/* Debug option */
+"Debug: require password" = "Debug: ຕ້ອງການລະຫັດຜ່ານ";
+
+/* Debug option */
+"Debug: require upgrade" = "Debug: ຕ້ອງການການອັບເກຣດ";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "ລຸດຂະໜາດຕົວຫນັງສື";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "ຄ່າພື້ນຖານການຄົ້ນຫາ";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "ປິດການໃຊ້ງານຫນ້າເວັບການສົນທະນາ";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "ການຕັ້ງຄ່າການສະແດງຜົນ";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "ທ່ານຕ້ອງການບັນທຶກລະຫັດຜ່ານສຳລັບ %1$@ ໄວ້ໃນ %2$@ ຫລືບໍ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "ທ່ານຕ້ອງການບັນທຶກລະຫັດຜ່ານສຳລັບໄວ້ໃນ %@ ຫລືບໍ?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "ທ່ານຕ້ອງການອັບເດດລະຫັດຜ່ານສຳລັບ %1$@ ໃນ %2$@ ຫລືບໍ?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "ທ່ານຕ້ອງການອັບເດດລະຫັດຜ່ານສຳລັບໃນ %@ ຫລືບໍ?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "ບໍ່ສົ່ງ";
+
+/* Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "ສຳເລັດ";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "ແຕະສອງຄັ້ງ ແລະ ຄ້າງໄວ້ເພື່ອເປີດປະຫວັດການໃຊ້ງານ";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "ປ້ອນລະຫັດຜ່ານຂອງທ່ານໃສ່ເພືອເຊື່ອມຕໍ່.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "ຂັ້ນສູງ";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "ຄຳເຕືອນ: ພວກເຮົາບໍ່ສາມາດຍືນຍັນໄດ້ວ່າການເຊື່ອມຕໍ່ຂອງທ່ານໄປຫາເວັບໄຊຕ໌ນີ້ມີຄວາມປອດໄພບໍ່.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "ມັນອາດຈະເກີດມາຈາກການຕັ້ງຄ່າຜິດພາດ ຫລື ເປັນການດັດແປງໂດຍນັກເຈາະຂໍ້ມູນ. ດຳເນີນການຕໍ່ໄປຖ້າຫາກວ່າທ່ານຍອມຮັບຄວາມສ່ຽງທີ່ອາດເກີດຂື້ນນີ້ໄດ້.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "ເຈົ້າຂອງ %@ ໄດ້ຕັ້ງຄ່າເວັບໄຊຕ໌ຂອງພວກເຂົາບໍ່ເຫມາະສົມ. ເພື່ອເປັນການປົກປ້ອງຂໍ້ມູນຂອງທ່ານຈາກການຖືກໂຈລະກຳ, Firefox ຈຶ່ງໄດ້ຕັດການເຊື່ອມຕໍ່ໄປຫາເວັບໄຊຕ໌ນີ້.";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "ຍ້ອນກັບ";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "ເຂົ້າໄປເບິງເວັບໄຊຕ໌ຕໍ່ໄປ";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Firefox ຈຳເປັນຕ້ອງໄດ້ມີການປິດ ແລ້ວເປີດນຳໃຊ້ໃຫມ່ເພື່ອເຮັດໃຫ້ການປ່ຽນແປງນີ້ມີຜົນ.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox ຈະຢຸດການ Sync ກັບບັນຊີຂອງທ່ານ, ແຕວ່າຈະບໍ່ລຶບປະຫວັດການຄົ້ນຫາຂອງທ່ານໃນອຸປະກອນນີ້.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox ຕ້ອງການເຂົ້າເຖິງຮູບພາບຂອງທ່ານ";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "ໄປຂ້າງຫນ້າ";
+
+/* General settings section title */
+"General" = "ທົ່ວໄປ";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "ນຳເອົາແທັບທີ່ທ່ານເປີດ, ບຸກມາກ ແລະ ລະຫັດຜ່ານຂອງທ່ານຈາກອຸປະກອນອື່ນເຂົ້າມາ.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "ໄປ";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "ເຂົ້າໄປສຳນເນົາ URL ບໍ່?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ວິທີໃຊ້";
+
+/* Panel accessibility label */
+"History" = "ປະຫວັດການໃຊ້ງານ";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "ເພີ່ມຂະໜາດຕົວຫນັງສື";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "ແນະນຳ Tour Carousel";
+
+/* History tableview section header */
+"Last month" = "ເດືອນທີ່ຜ່ານມາ";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Synced ຄັ້ງຫລ່າສຸດ: %@";
+
+/* History tableview section header */
+"Last week" = "ອາທິດທີ່ຜ່ານມາ";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "ໃບອະນຸຍາດ";
+
+/* Light theme setting in Reading View settings */
+"Light" = "ແສງ";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "ໂຫລດຫນ້າເວັບດັ້ງເດີມ";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "ກຳລັງໂຫລດເນື້ອຫາ…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "ອອກຈາກລະບົບ";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "ຕ້ອງການອອກຈາກລະບົບບໍ?";
+
+/* Authentication prompt log in button */
+"Log in" = "ລັອກອິນ";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "ການເຂົ້າສູ່ລະບົບ";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ບໍ່ບັນທຶກ";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "ບັນທຶກການເຂົ້າສູ່ລະບົບ %1$@ for %2$@ ຫລືບໍ່?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "ບັນທຶກລະຫັດຜ່ານສຳລັບ %@ ຫລືບໍ່?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "ອັບເດດລະຫັດຜ່ານສຳລັບ %@ ຫລືບໍ່?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "ບັກທຶກການເຂົ້າສູ່ລະບົບ";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "ອັບເດດ";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ເບິງຄ້າຍຄືວ່າ Firefox ເກີດມີຂໍ້ຜິດພາດກ່ອນຫນ້ານີ້. ທ່ານຕ້ອງການກູ້ຄືນແທັບຂອງທ່ານຫລືບໍ?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "ໝາຍໄວ້ວ່າໄດ້ອ່ານແລ້ວ";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "ໝາຍໄວ້ວ່າຫຍັງບໍ່ທັນໄດ້ອ່ານເທື່ອ";
+
+/* Error for a missing remote error number */
+"Missing error" = "ບໍ່ພົບຂໍ້ຜິດພາດ";
+
+/* Error for a missing remote error message */
+"Missing message" = "ບໍ່ພົບຂໍ້ຄວາມ";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigation Toolbar";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "ແທັບໃຫມ່: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "ມີຫລຸ້ນໃຫມ່ອອກມາແລ້ວ";
+
+/* Restore Tabs Negative Action */
+"No" = "ບໍ່ຕ້ອງການ";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ບໍ່ມີແທັບ";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* Button to not save the user's password */
+"Not now" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "ຕົກລົງ";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ຕົກລົງ";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Oops! Firefox ມີຂໍ້ຜິດພາດ";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "ເປີດໃນແທັບໃຫມ່";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "ເປີດການຕັ້ງຄ່າ";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ເປີດຫົວຂໍ້ນີ້ໃນ Reader View ໂດຍການເຕະໄອຄອນປື້ມເມື່ອມັນປະກົດຂື້ນໃນ Title bar.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "ເປີດໃນ…";
+
+/* Opening an external URL */
+"Opening %@" = "ກຳລັງເປີດ %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Panel Chooser";
+
+/* Password textbox in Authentication prompt */
+"Password" = "ລະຫັດຜ່ານ";
+
+/* Paste the URL into the location bar */
+"Paste" = "ວາງ";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "ວາງ & ໄປ";
+
+/* Privacy section title */
+"Privacy" = "ຄວາມເປັນສ່ວນຕົວ";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Quick-search Engines";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Reader View";
+
+/* Panel accessibility label */
+"Reading list" = "ລາຍການການອ່ານ";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "ໂຫລດຄືນໃຫມ່";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "ລືບ";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "ລືບອອກຈາກລາຍການອ່ານ";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "ລືບຫນ້ານີ້";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Request Desktop Site";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Request Mobile Site";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "ບັນທຶກຮູບພາບ";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "ບັກທຶກການເຂົ້າສູ່ລະບົບ";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ບັນທຶກຫນ້າເວັບເຂົ້າໄປໄວ້ໃນລາຍການອ່ານໂດຍການເຕະໄອຄອນປື້ມໃນບ່ອນຄວບຄຸ່ມ Reader View.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "ຄົ້ນຫາ";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ປ້ອນທີ່ຢູ່ຂອງເວັບໄຊຕ໌ ຫລື ສີ່ງທີ່ທ່ານຕ້ອງການຄົ້ນຫາໃສ່ນີ້";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "ຄົ້ນຫາສໍາລັບຄໍາແນະນໍາ";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "ການເຊື່ອມຕໍ່ທີປອດໄພ";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "ສົ່ງຄຳຄິດເຫັນຂອງທ່ານ";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "ສົ່ງລາຍງານ";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "ຕ້ອງການສົ່ງລາຍງານຂໍ້ຜິດພາດນີ້ໄປເພື່ອເຮັດໃຫ້ Mozilla ສາມາດແກ້ໄຂບັນຫານີ້ໄດ້ບໍ?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "ຍົກເລີກ";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "ການຕັ້ງຄ່າ";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "ລົບລ້າງຂໍ້ມູນສ່ວນຕົວ";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "ລົບລ້າງຂໍ້ມູນສ່ວນຕົວ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "ລົບລ້າງຂໍ້ມູນສ່ວນຕົວ";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "ແບ່ງປັນ";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "ແບ່ງປັນລີ້ງ";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "ຍົກເລີກ";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "ສະແດງຜົນການແນະນຳການຄົ້ນຫາ";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ສະແດງແທັບ";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "ສະແດງວິທີນຳໃຊ້ທົ່ວໄປ";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "ສະແດງຜົນການແນະນຳການຄົ້ນຫາ";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "ເຂົ້າສູ່ລະບົບ Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "ເຂົ້າສູ່ລະບົບ";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "ເຂົ້າສູ່ລະບົບເພື່ອຮັບເອົາແທັບຂອງທ່ານ, ບຸກມາກ ແລະ ລະຫັດຜ່ານຂອງທ່ານຈາກອຸປະກອນອື່ນໆຂອງທ່ານ.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "ຢຸດ";
+
+/* Support section title */
+"Support" = "ສະຫນັບສະຫນູນ";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ປັດໄປທາງເບື້ອງຂວາ ຫລື ຊ້າຍດ້ວຍນີ້ວມືສາມນີ້ວເພື່ອປິດແທັບ.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Sync ດຽວນີ້";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "Sync ແທັບ, ບຸກມາກ, ລະຫັດຜ່ານ ແລະ ອື່ນຂອງທ່ານ.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "Sync ແທັບ, ລະຫັດຜ່ານ ແລະ ອື່ນຂອງທ່ານ.";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "ແທັບ %1$@ of %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "ແທັບ %1$@ to %2$@ of %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ແທັບ Tray";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "ຫນ້າເວັບນີ້ບໍ່ສາມາດສະແດງຢູ່ໃນ Reader View.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Firefox Aurora ມີລຸ້ນໃຫມ່ອອກມາໃຫ້ດາວໂຫລດແລ້ວ. ແຕະປຸ່ມ \"ຕົກລົງ\" ເພື່ອໄປຫນ້າດາວໂຫລດ.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "ມີບັນຫາເຮັດໃຫ້ບໍ່ສາມາດເຂົ້າເຖິງແທັບຈາກອຸປະກອນອື່ນໆຂອງທ່ານ. ກະລຸນາລອງໃຫມ່ອີກຄັ້ງໃນອີກ 2-3 ນາທີຂ້າງຫນ້າ.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "ເກີດມີຂໍ້ຜິດພາດໃນການ Convert ຫນ້າເວັບ";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "ນີ້ອະນຸຍາດໃຫ້ທ່ານບັນທຶກຮູບພາບໄປໄວ້ໃນທີ່ເກັບຮູບພາບຂອງທ່ານ.";
+
+/* Opening an external app */
+"This will open in another application" = "ນີ້ຈະເປີດໃນໂປຣແກຼມອື່ນ";
+
+/* History tableview section header */
+"Today" = "ມື້ນີ້";
+
+/* Panel accessibility label */
+"Top sites" = "ເວັບໄຊຕ໌ຍອດນິຍົມ";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "ເວັບໄຊຕ໌ທີ່ທ່ານມັກເຂົ້າໄປເບິງຕະລອດຈະສະແດງຂື້ນຢູ່ນີ້.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "ຍິນດີຕ້ອນຮັບສູ່ເວັບໄຊຕ໌ຍອດນິຍົມ";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "ອັບເດດ";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "ອັບເກຣດ Firefox ເພື່ອເຊື່ອຕໍ່.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "ໃຊ້ Compact Tabs";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ຊື່ຜູ້ໃຊ້";
+
+/* Text message in the settings table view */
+"Verify your email address." = "ຢືນຢັນທີ່ຢູ່ອີເມຣຂອງທ່ານ.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "ລຸ້ນທີ່ %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "ມູມມອງ";
+
+/* Accessibility label for the main web content view */
+"Web content" = "ເນື້ອຫາໃນເວັບ";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "ຍິນດີຕ້ອນຮັບສູ່ລາຍການອ່ານຂອງທ່ານ";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "ເກີດມີຂໍ້ຜິດພາດ.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "ຕົກລົງ";
+
+/* History tableview section header */
+"Yesterday" = "ມື້ວານ";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "ທ່ານບໍ່ມີແທັບໃດທີ່ເປີດໃນ Firefox ໃນອຸປະກອນອື່ນໆຂອງທ່ານ.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "ສິດທິຂອງທ່ານ";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ຄອມພິວເຕີ";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ມື້ກີ້ນີ້";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "ອຸປະກອນໂທລະສັບ";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "ຫລາຍກ່ວາ 1 ເດືອນຜ່ານມາ";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "ຫລາຍກ່ວາ 1 ອາທິດຜ່ານມາ";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "ອ່ານ";
+
+/* Relative date for date in past week. */
+"this week" = "ອາທິດນີ້";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ມື້ນີ້ທີ່ %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ຍັງບໍ່ທັນອ່ານ";
+
+/* Relative date for yesterday. */
+"yesterday" = "ມື້ວານ";
+

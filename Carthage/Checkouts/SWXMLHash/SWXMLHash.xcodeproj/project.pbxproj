@@ -1,0 +1,1090 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CD291F1C1BF635B3009A1FA6 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD291F1A1BF635B3009A1FA6 /* Nimble.framework */; };
+		CD291F1D1BF635B3009A1FA6 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD291F1B1BF635B3009A1FA6 /* Quick.framework */; };
+		CD291F201BF63613009A1FA6 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CD291F1A1BF635B3009A1FA6 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CD291F211BF63613009A1FA6 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CD291F1B1BF635B3009A1FA6 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CD291F221BF6365A009A1FA6 /* test.xml in Resources */ = {isa = PBXBuildFile; fileRef = CD4B5F3919E2C42D005C1F33 /* test.xml */; };
+		CD4B5F3A19E2C42D005C1F33 /* test.xml in Resources */ = {isa = PBXBuildFile; fileRef = CD4B5F3919E2C42D005C1F33 /* test.xml */; };
+		CD6083F5196CA106000B4F8D /* SWXMLHash.h in Headers */ = {isa = PBXBuildFile; fileRef = CD6083F4196CA106000B4F8D /* SWXMLHash.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CD6083FB196CA106000B4F8D /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD6083EF196CA106000B4F8D /* SWXMLHash.framework */; };
+		CD608402196CA106000B4F8D /* SWXMLHashSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD608401196CA106000B4F8D /* SWXMLHashSpecs.swift */; };
+		CD60840C196CA11D000B4F8D /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD60840B196CA11D000B4F8D /* SWXMLHash.swift */; };
+		CD7934C31A7581DF00867857 /* SWXMLHashSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD608401196CA106000B4F8D /* SWXMLHashSpecs.swift */; };
+		CD7934C41A7581E600867857 /* test.xml in Resources */ = {isa = PBXBuildFile; fileRef = CD4B5F3919E2C42D005C1F33 /* test.xml */; };
+		CD7934C51A7581F200867857 /* SWXMLHash.h in Headers */ = {isa = PBXBuildFile; fileRef = CD6083F4196CA106000B4F8D /* SWXMLHash.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CD7934C61A7581F500867857 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD60840B196CA11D000B4F8D /* SWXMLHash.swift */; };
+		CD9D05371A757D8B003CCB21 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD9D052C1A757D8B003CCB21 /* SWXMLHash.framework */; };
+		CDC7F33F1B0ACCE4006BF6E7 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDC7F33D1B0ACCE4006BF6E7 /* Nimble.framework */; };
+		CDC7F3401B0ACCE4006BF6E7 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDC7F33E1B0ACCE4006BF6E7 /* Quick.framework */; };
+		CDC7F3431B0ACCF4006BF6E7 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDC7F3411B0ACCF4006BF6E7 /* Nimble.framework */; };
+		CDC7F3441B0ACCF4006BF6E7 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDC7F3421B0ACCF4006BF6E7 /* Quick.framework */; };
+		CDDEC7561BF6311B00AB138B /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDDEC74C1BF6311A00AB138B /* SWXMLHash.framework */; };
+		CDDEC7701BF632D200AB138B /* SWXMLHash.h in Headers */ = {isa = PBXBuildFile; fileRef = CD6083F4196CA106000B4F8D /* SWXMLHash.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CDDEC7711BF632DD00AB138B /* SWXMLHash.h in Headers */ = {isa = PBXBuildFile; fileRef = CD6083F4196CA106000B4F8D /* SWXMLHash.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CDDEC7721BF632F300AB138B /* SWXMLHashSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD608401196CA106000B4F8D /* SWXMLHashSpecs.swift */; };
+		CDEA72731C00B0D900C10B28 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD60840B196CA11D000B4F8D /* SWXMLHash.swift */; };
+		CDEA72741C00B0E300C10B28 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD60840B196CA11D000B4F8D /* SWXMLHash.swift */; };
+		CDEB51801B0ACDCD00966541 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CDC7F3411B0ACCF4006BF6E7 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CDEB51811B0ACDCD00966541 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CDC7F3421B0ACCF4006BF6E7 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CDEB51831B0ACDDD00966541 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CDC7F33D1B0ACCE4006BF6E7 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CDEB51841B0ACDDD00966541 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CDC7F33E1B0ACCE4006BF6E7 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CD6083FC196CA106000B4F8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CD6083E6196CA106000B4F8D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CD6083EE196CA106000B4F8D;
+			remoteInfo = SWXMLHash;
+		};
+		CD9D05381A757D8B003CCB21 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CD6083E6196CA106000B4F8D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CD9D052B1A757D8B003CCB21;
+			remoteInfo = SWXMLHashOSX;
+		};
+		CDDEC7571BF6311B00AB138B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CD6083E6196CA106000B4F8D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CDDEC74B1BF6311A00AB138B;
+			remoteInfo = SWXMLHash;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CD291F1F1BF63602009A1FA6 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CD291F201BF63613009A1FA6 /* Nimble.framework in CopyFiles */,
+				CD291F211BF63613009A1FA6 /* Quick.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDEB517F1B0ACDBA00966541 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CDEB51801B0ACDCD00966541 /* Nimble.framework in CopyFiles */,
+				CDEB51811B0ACDCD00966541 /* Quick.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDEB51821B0ACDD400966541 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CDEB51831B0ACDDD00966541 /* Nimble.framework in CopyFiles */,
+				CDEB51841B0ACDDD00966541 /* Quick.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		CD291F1A1BF635B3009A1FA6 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = ../Carthage/Build/tvOS/Nimble.framework; sourceTree = "<group>"; };
+		CD291F1B1BF635B3009A1FA6 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = ../Carthage/Build/tvOS/Quick.framework; sourceTree = "<group>"; };
+		CD4B5F3919E2C42D005C1F33 /* test.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = test.xml; path = Tests/test.xml; sourceTree = SOURCE_ROOT; };
+		CD6083EF196CA106000B4F8D /* SWXMLHash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SWXMLHash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD6083F3196CA106000B4F8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CD6083F4196CA106000B4F8D /* SWXMLHash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWXMLHash.h; sourceTree = "<group>"; };
+		CD6083FA196CA106000B4F8D /* SWXMLHash iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SWXMLHash iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD608400196CA106000B4F8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CD608401196CA106000B4F8D /* SWXMLHashSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWXMLHashSpecs.swift; sourceTree = "<group>"; };
+		CD60840B196CA11D000B4F8D /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
+		CD9D052C1A757D8B003CCB21 /* SWXMLHash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SWXMLHash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD9D05361A757D8B003CCB21 /* SWXMLHash OSX Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SWXMLHash OSX Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDC7F33D1B0ACCE4006BF6E7 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = SOURCE_ROOT; };
+		CDC7F33E1B0ACCE4006BF6E7 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/Mac/Quick.framework; sourceTree = SOURCE_ROOT; };
+		CDC7F3411B0ACCF4006BF6E7 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = SOURCE_ROOT; };
+		CDC7F3421B0ACCF4006BF6E7 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = SOURCE_ROOT; };
+		CDD367381A2584A400807984 /* SWXMLHashPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SWXMLHashPlayground.playground; sourceTree = "<group>"; };
+		CDDEC74C1BF6311A00AB138B /* SWXMLHash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SWXMLHash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDDEC7551BF6311B00AB138B /* SWXMLHash tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SWXMLHash tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDDEC7681BF6316C00AB138B /* SWXMLHash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SWXMLHash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CD6083EB196CA106000B4F8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD6083F7196CA106000B4F8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD6083FB196CA106000B4F8D /* SWXMLHash.framework in Frameworks */,
+				CDC7F3431B0ACCF4006BF6E7 /* Nimble.framework in Frameworks */,
+				CDC7F3441B0ACCF4006BF6E7 /* Quick.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD9D05281A757D8B003CCB21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD9D05331A757D8B003CCB21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD9D05371A757D8B003CCB21 /* SWXMLHash.framework in Frameworks */,
+				CDC7F33F1B0ACCE4006BF6E7 /* Nimble.framework in Frameworks */,
+				CDC7F3401B0ACCE4006BF6E7 /* Quick.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7481BF6311A00AB138B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7521BF6311B00AB138B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD291F1C1BF635B3009A1FA6 /* Nimble.framework in Frameworks */,
+				CD291F1D1BF635B3009A1FA6 /* Quick.framework in Frameworks */,
+				CDDEC7561BF6311B00AB138B /* SWXMLHash.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7641BF6316C00AB138B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CD291F1E1BF635BE009A1FA6 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				CD291F1A1BF635B3009A1FA6 /* Nimble.framework */,
+				CD291F1B1BF635B3009A1FA6 /* Quick.framework */,
+			);
+			name = tvOS;
+			sourceTree = "<group>";
+		};
+		CD6083E5196CA106000B4F8D = {
+			isa = PBXGroup;
+			children = (
+				CDD367381A2584A400807984 /* SWXMLHashPlayground.playground */,
+				CD6083F1196CA106000B4F8D /* Source */,
+				CD6083FE196CA106000B4F8D /* Tests */,
+				CD6083F0196CA106000B4F8D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CD6083F0196CA106000B4F8D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CD6083EF196CA106000B4F8D /* SWXMLHash.framework */,
+				CD6083FA196CA106000B4F8D /* SWXMLHash iOS Tests.xctest */,
+				CD9D052C1A757D8B003CCB21 /* SWXMLHash.framework */,
+				CD9D05361A757D8B003CCB21 /* SWXMLHash OSX Tests.xctest */,
+				CDDEC74C1BF6311A00AB138B /* SWXMLHash.framework */,
+				CDDEC7551BF6311B00AB138B /* SWXMLHash tvOS Tests.xctest */,
+				CDDEC7681BF6316C00AB138B /* SWXMLHash.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CD6083F1196CA106000B4F8D /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				CD6083F4196CA106000B4F8D /* SWXMLHash.h */,
+				CD6083F2196CA106000B4F8D /* Supporting Files */,
+				CD60840B196CA11D000B4F8D /* SWXMLHash.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		CD6083F2196CA106000B4F8D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CD6083F3196CA106000B4F8D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CD6083FE196CA106000B4F8D /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				CD291F1E1BF635BE009A1FA6 /* tvOS */,
+				CDC7F33B1B0ACC90006BF6E7 /* iOS */,
+				CDC7F33C1B0ACC98006BF6E7 /* OSX */,
+				CD6083FF196CA106000B4F8D /* Supporting Files */,
+				CD608401196CA106000B4F8D /* SWXMLHashSpecs.swift */,
+				CD4B5F3919E2C42D005C1F33 /* test.xml */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		CD6083FF196CA106000B4F8D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CD608400196CA106000B4F8D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CDC7F33B1B0ACC90006BF6E7 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				CDC7F3411B0ACCF4006BF6E7 /* Nimble.framework */,
+				CDC7F3421B0ACCF4006BF6E7 /* Quick.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		CDC7F33C1B0ACC98006BF6E7 /* OSX */ = {
+			isa = PBXGroup;
+			children = (
+				CDC7F33D1B0ACCE4006BF6E7 /* Nimble.framework */,
+				CDC7F33E1B0ACCE4006BF6E7 /* Quick.framework */,
+			);
+			name = OSX;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		CD6083EC196CA106000B4F8D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD6083F5196CA106000B4F8D /* SWXMLHash.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD9D05291A757D8B003CCB21 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD7934C51A7581F200867857 /* SWXMLHash.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7491BF6311A00AB138B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDDEC7701BF632D200AB138B /* SWXMLHash.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7651BF6316C00AB138B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDDEC7711BF632DD00AB138B /* SWXMLHash.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		CD6083EE196CA106000B4F8D /* SWXMLHash iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD608405196CA106000B4F8D /* Build configuration list for PBXNativeTarget "SWXMLHash iOS" */;
+			buildPhases = (
+				CD6083EA196CA106000B4F8D /* Sources */,
+				CD6083EB196CA106000B4F8D /* Frameworks */,
+				CD6083EC196CA106000B4F8D /* Headers */,
+				CD6083ED196CA106000B4F8D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SWXMLHash iOS";
+			productName = SWXMLHash;
+			productReference = CD6083EF196CA106000B4F8D /* SWXMLHash.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		CD6083F9196CA106000B4F8D /* SWXMLHash iOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD608408196CA106000B4F8D /* Build configuration list for PBXNativeTarget "SWXMLHash iOS Tests" */;
+			buildPhases = (
+				CD6083F6196CA106000B4F8D /* Sources */,
+				CD6083F7196CA106000B4F8D /* Frameworks */,
+				CD6083F8196CA106000B4F8D /* Resources */,
+				CDEB517F1B0ACDBA00966541 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CD6083FD196CA106000B4F8D /* PBXTargetDependency */,
+			);
+			name = "SWXMLHash iOS Tests";
+			productName = SWXMLHashTests;
+			productReference = CD6083FA196CA106000B4F8D /* SWXMLHash iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CD9D052B1A757D8B003CCB21 /* SWXMLHash OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD9D053F1A757D8B003CCB21 /* Build configuration list for PBXNativeTarget "SWXMLHash OSX" */;
+			buildPhases = (
+				CD9D05271A757D8B003CCB21 /* Sources */,
+				CD9D05281A757D8B003CCB21 /* Frameworks */,
+				CD9D05291A757D8B003CCB21 /* Headers */,
+				CD9D052A1A757D8B003CCB21 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SWXMLHash OSX";
+			productName = SWXMLHashOSX;
+			productReference = CD9D052C1A757D8B003CCB21 /* SWXMLHash.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		CD9D05351A757D8B003CCB21 /* SWXMLHash OSX Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD9D05421A757D8B003CCB21 /* Build configuration list for PBXNativeTarget "SWXMLHash OSX Tests" */;
+			buildPhases = (
+				CD9D05321A757D8B003CCB21 /* Sources */,
+				CD9D05331A757D8B003CCB21 /* Frameworks */,
+				CD9D05341A757D8B003CCB21 /* Resources */,
+				CDEB51821B0ACDD400966541 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CD9D05391A757D8B003CCB21 /* PBXTargetDependency */,
+			);
+			name = "SWXMLHash OSX Tests";
+			productName = SWXMLHashOSXTests;
+			productReference = CD9D05361A757D8B003CCB21 /* SWXMLHash OSX Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CDDEC74B1BF6311A00AB138B /* SWXMLHash tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDDEC75D1BF6311B00AB138B /* Build configuration list for PBXNativeTarget "SWXMLHash tvOS" */;
+			buildPhases = (
+				CDDEC7471BF6311A00AB138B /* Sources */,
+				CDDEC7481BF6311A00AB138B /* Frameworks */,
+				CDDEC7491BF6311A00AB138B /* Headers */,
+				CDDEC74A1BF6311A00AB138B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SWXMLHash tvOS";
+			productName = SWXMLHash;
+			productReference = CDDEC74C1BF6311A00AB138B /* SWXMLHash.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		CDDEC7541BF6311B00AB138B /* SWXMLHash tvOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDDEC7601BF6311B00AB138B /* Build configuration list for PBXNativeTarget "SWXMLHash tvOS Tests" */;
+			buildPhases = (
+				CDDEC7511BF6311B00AB138B /* Sources */,
+				CDDEC7521BF6311B00AB138B /* Frameworks */,
+				CDDEC7531BF6311B00AB138B /* Resources */,
+				CD291F1F1BF63602009A1FA6 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CDDEC7581BF6311B00AB138B /* PBXTargetDependency */,
+			);
+			name = "SWXMLHash tvOS Tests";
+			productName = SWXMLHashTests;
+			productReference = CDDEC7551BF6311B00AB138B /* SWXMLHash tvOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CDDEC7671BF6316C00AB138B /* SWXMLHash watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDDEC76D1BF6316C00AB138B /* Build configuration list for PBXNativeTarget "SWXMLHash watchOS" */;
+			buildPhases = (
+				CDDEC7631BF6316C00AB138B /* Sources */,
+				CDDEC7641BF6316C00AB138B /* Frameworks */,
+				CDDEC7651BF6316C00AB138B /* Headers */,
+				CDDEC7661BF6316C00AB138B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SWXMLHash watchOS";
+			productName = SWXMLHash;
+			productReference = CDDEC7681BF6316C00AB138B /* SWXMLHash.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CD6083E6196CA106000B4F8D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					CD6083EE196CA106000B4F8D = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					CD6083F9196CA106000B4F8D = {
+						CreatedOnToolsVersion = 6.0;
+						TestTargetID = CD6083EE196CA106000B4F8D;
+					};
+					CD9D052B1A757D8B003CCB21 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					CD9D05351A757D8B003CCB21 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					CDDEC74B1BF6311A00AB138B = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+					CDDEC7541BF6311B00AB138B = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+					CDDEC7671BF6316C00AB138B = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+				};
+			};
+			buildConfigurationList = CD6083E9196CA106000B4F8D /* Build configuration list for PBXProject "SWXMLHash" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CD6083E5196CA106000B4F8D;
+			productRefGroup = CD6083F0196CA106000B4F8D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CD6083EE196CA106000B4F8D /* SWXMLHash iOS */,
+				CD6083F9196CA106000B4F8D /* SWXMLHash iOS Tests */,
+				CD9D052B1A757D8B003CCB21 /* SWXMLHash OSX */,
+				CD9D05351A757D8B003CCB21 /* SWXMLHash OSX Tests */,
+				CDDEC74B1BF6311A00AB138B /* SWXMLHash tvOS */,
+				CDDEC7541BF6311B00AB138B /* SWXMLHash tvOS Tests */,
+				CDDEC7671BF6316C00AB138B /* SWXMLHash watchOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CD6083ED196CA106000B4F8D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD6083F8196CA106000B4F8D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD4B5F3A19E2C42D005C1F33 /* test.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD9D052A1A757D8B003CCB21 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD9D05341A757D8B003CCB21 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD7934C41A7581E600867857 /* test.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC74A1BF6311A00AB138B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7531BF6311B00AB138B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD291F221BF6365A009A1FA6 /* test.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7661BF6316C00AB138B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CD6083EA196CA106000B4F8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD60840C196CA11D000B4F8D /* SWXMLHash.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD6083F6196CA106000B4F8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD608402196CA106000B4F8D /* SWXMLHashSpecs.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD9D05271A757D8B003CCB21 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD7934C61A7581F500867857 /* SWXMLHash.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD9D05321A757D8B003CCB21 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD7934C31A7581DF00867857 /* SWXMLHashSpecs.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7471BF6311A00AB138B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDEA72731C00B0D900C10B28 /* SWXMLHash.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7511BF6311B00AB138B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDDEC7721BF632F300AB138B /* SWXMLHashSpecs.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDDEC7631BF6316C00AB138B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDEA72741C00B0E300C10B28 /* SWXMLHash.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CD6083FD196CA106000B4F8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CD6083EE196CA106000B4F8D /* SWXMLHash iOS */;
+			targetProxy = CD6083FC196CA106000B4F8D /* PBXContainerItemProxy */;
+		};
+		CD9D05391A757D8B003CCB21 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CD9D052B1A757D8B003CCB21 /* SWXMLHash OSX */;
+			targetProxy = CD9D05381A757D8B003CCB21 /* PBXContainerItemProxy */;
+		};
+		CDDEC7581BF6311B00AB138B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CDDEC74B1BF6311A00AB138B /* SWXMLHash tvOS */;
+			targetProxy = CDDEC7571BF6311B00AB138B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CD608403196CA106000B4F8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		CD608404196CA106000B4F8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		CD608406196CA106000B4F8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				BITCODE_GENERATION_MODE = marker;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = SWXMLHash;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CD608407196CA106000B4F8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				BITCODE_GENERATION_MODE = bitcode;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = SWXMLHash;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		CD608409196CA106000B4F8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CD60840A196CA106000B4F8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		CD9D05401A757D8B003CCB21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BITCODE_GENERATION_MODE = marker;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_MODULE_NAME = SWXMLHash;
+				PRODUCT_NAME = SWXMLHash;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		CD9D05411A757D8B003CCB21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BITCODE_GENERATION_MODE = bitcode;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_MODULE_NAME = SWXMLHash;
+				PRODUCT_NAME = SWXMLHash;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		CD9D05431A757D8B003CCB21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		CD9D05441A757D8B003CCB21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		CDDEC75E1BF6311B00AB138B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = drmohundro.SWXMLHash;
+				PRODUCT_NAME = SWXMLHash;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		CDDEC75F1BF6311B00AB138B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = drmohundro.SWXMLHash;
+				PRODUCT_NAME = SWXMLHash;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
+		CDDEC7611BF6311B00AB138B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.SWXMLHash-tvOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		CDDEC7621BF6311B00AB138B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "drmohundro.SWXMLHash-tvOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
+		CDDEC76E1BF6316C00AB138B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = drmohundro.SWXMLHash;
+				PRODUCT_NAME = SWXMLHash;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		CDDEC76F1BF6316C00AB138B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = drmohundro.SWXMLHash;
+				PRODUCT_NAME = SWXMLHash;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CD6083E9196CA106000B4F8D /* Build configuration list for PBXProject "SWXMLHash" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD608403196CA106000B4F8D /* Debug */,
+				CD608404196CA106000B4F8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD608405196CA106000B4F8D /* Build configuration list for PBXNativeTarget "SWXMLHash iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD608406196CA106000B4F8D /* Debug */,
+				CD608407196CA106000B4F8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD608408196CA106000B4F8D /* Build configuration list for PBXNativeTarget "SWXMLHash iOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD608409196CA106000B4F8D /* Debug */,
+				CD60840A196CA106000B4F8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD9D053F1A757D8B003CCB21 /* Build configuration list for PBXNativeTarget "SWXMLHash OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD9D05401A757D8B003CCB21 /* Debug */,
+				CD9D05411A757D8B003CCB21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD9D05421A757D8B003CCB21 /* Build configuration list for PBXNativeTarget "SWXMLHash OSX Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD9D05431A757D8B003CCB21 /* Debug */,
+				CD9D05441A757D8B003CCB21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CDDEC75D1BF6311B00AB138B /* Build configuration list for PBXNativeTarget "SWXMLHash tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDDEC75E1BF6311B00AB138B /* Debug */,
+				CDDEC75F1BF6311B00AB138B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CDDEC7601BF6311B00AB138B /* Build configuration list for PBXNativeTarget "SWXMLHash tvOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDDEC7611BF6311B00AB138B /* Debug */,
+				CDDEC7621BF6311B00AB138B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CDDEC76D1BF6316C00AB138B /* Build configuration list for PBXNativeTarget "SWXMLHash watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDDEC76E1BF6316C00AB138B /* Debug */,
+				CDDEC76F1BF6316C00AB138B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CD6083E6196CA106000B4F8D /* Project object */;
+}
