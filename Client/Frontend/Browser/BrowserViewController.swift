@@ -1007,7 +1007,7 @@ class BrowserViewController: UIViewController {
                 return
         }
         if let presentedViewController = currentViewController.presentedViewController {
-            presentedViewController.dismissViewControllerAnimated(false, completion: nil)
+            presentedViewController.dismissViewControllerAnimated(true, completion: nil)
         }
         if currentViewController != self {
             self.navigationController?.popViewControllerAnimated(true)
