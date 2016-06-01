@@ -291,7 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return thirdPartyKeyboardSettingBool
         }
 
-        return true
+        return false
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
