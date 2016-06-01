@@ -630,6 +630,11 @@ public class BrowserProfile: Profile {
             // Sync now if it's been more than our threshold.
             let now = NSDate.now()
             let then = self.lastSyncFinishTime ?? 0
+            guard now >= then else {
+                log.debug("Time was modified since last sync.")
+                self.syncEverythingSoon()
+                return
+            }
             let since = now - then
             log.debug("\(since)msec since last sync.")
             if since > SyncConstants.SyncOnForegroundMinimumDelayMillis {
