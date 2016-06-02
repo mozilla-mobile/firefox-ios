@@ -713,7 +713,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
         if let indexPath = collectionView.indexPathForCell(tabCell) {
             let tab = tabsToDisplay[indexPath.item]
             tabManager.removeTab(tab)
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: ""))
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
         }
     }
 }
@@ -1168,7 +1168,7 @@ class TrayToolbar: UIView {
 
         styleToolbar(isPrivate: false)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
