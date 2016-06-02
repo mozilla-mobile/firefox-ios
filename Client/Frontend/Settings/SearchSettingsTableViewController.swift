@@ -23,6 +23,13 @@ class SearchSettingsTableViewController: UITableViewController {
 
     private var showDeletion = false
 
+    private var isEditable: Bool {
+        // If the default engine is a custom one, make sure we have more than one since we can't edit the default. 
+        // Otherwise, enable editing if we have at least one custom engine.
+        let customEngineCount = model.orderedEngines.filter({$0.isCustomEngine}).count
+        return model.defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
+    }
+
     var model: SearchEngines!
 
     override func viewDidLoad() {
@@ -42,21 +49,27 @@ class SearchSettingsTableViewController: UITableViewController {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchDoneButton, style: .Done, target: self, action: #selector(SearchSettingsTableViewController.dismiss))
         }
 
-        // Only show the Edit button if custom search engines are in the list.
-        // Otherwise, there is nothing to delete.
-        let customEngines = model.orderedEngines.filter({$0.isCustomEngine})
-        if (customEngines.count != 0) {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .Plain, target: self,
-                                                                     action: #selector(SearchSettingsTableViewController.editEngines))
-        }
-
-
         let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 44))
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
 
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .Plain, target: self,
+                                                                 action: #selector(SearchSettingsTableViewController.beginEditing))
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        // Only show the Edit button if custom search engines are in the list.
+        // Otherwise, there is nothing to delete.
+        navigationItem.rightBarButtonItem?.enabled = isEditable
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        setEditing(false, animated: false)
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -232,9 +245,28 @@ class SearchSettingsTableViewController: UITableViewController {
             let engine = model.orderedEngines[index]
             model.deleteCustomEngine(engine)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
+
+            // End editing if we are no longer edit since we've deleted all editable cells.
+            if !isEditable {
+                finishEditing()
+            }
         }
     }
 
+    override func setEditing(editing: Bool, animated: Bool) {
+        showDeletion = editing
+        UIView.performWithoutAnimation {
+            self.navigationItem.rightBarButtonItem?.title = editing ? Strings.SettingsSearchDoneButton : Strings.SettingsSearchEditButton
+        }
+        navigationItem.rightBarButtonItem?.enabled = isEditable
+        navigationItem.rightBarButtonItem?.action = editing ?
+            #selector(SearchSettingsTableViewController.finishEditing) : #selector(SearchSettingsTableViewController.beginEditing)
+        tableView.reloadData()
+    }
+}
+
+// MARK: - Selectors
+extension SearchSettingsTableViewController {
     func didToggleEngine(toggle: UISwitch) {
         let engine = model.orderedEngines[toggle.tag] // The tag is 1-based.
         if toggle.on {
@@ -258,11 +290,12 @@ class SearchSettingsTableViewController: UITableViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
-    func editEngines() {
-        self.showDeletion = !self.showDeletion
-        let title = self.showDeletion ? Strings.SettingsSearchDoneButton : Strings.SettingsSearchEditButton
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .Plain, target: self, action: #selector(SearchSettingsTableViewController.editEngines))
-        self.tableView.reloadData()
+    func beginEditing() {
+        setEditing(true, animated: false)
+    }
+
+    func finishEditing() {
+        setEditing(false, animated: false)
     }
 }
 
