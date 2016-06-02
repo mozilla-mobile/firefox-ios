@@ -647,12 +647,9 @@ extension TabTrayController: TabManagerDelegate {
             self.collectionView.performBatchUpdates({
                 self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
             }, completion: { finished in
-                if finished {
-                    if #available(iOS 9, *) {
-                        if self.privateTabsAreEmpty() {
-                            self.emptyPrivateTabsView.hidden = false
-                        }
-                    }
+                if #available(iOS 9, *) {
+                    guard finished && self.privateTabsAreEmpty() else { return }
+                    self.emptyPrivateTabsView.hidden = false
                 }
             })
 
