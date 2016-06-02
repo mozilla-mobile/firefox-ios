@@ -644,7 +644,14 @@ extension TabTrayController: TabManagerDelegate {
         // check this before removing the item from the collection
         let removedIndex = tabDataSource.removeTab(tab)
         if removedIndex > -1 {
-            self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
+            self.collectionView.performBatchUpdates({
+                self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
+            }, completion: { finished in
+                if #available(iOS 9, *) {
+                    guard finished && self.privateTabsAreEmpty() else { return }
+                    self.emptyPrivateTabsView.hidden = false
+                }
+            })
 
             // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
             // animation has finished which causes cells that animate from above to suddenly 'appear'. This
@@ -656,12 +663,6 @@ extension TabTrayController: TabManagerDelegate {
                     offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
                 }
                 self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
-            }
-
-            if #available(iOS 9, *) {
-                if privateTabsAreEmpty() {
-                    emptyPrivateTabsView.hidden = false
-                }
             }
         }
     }
