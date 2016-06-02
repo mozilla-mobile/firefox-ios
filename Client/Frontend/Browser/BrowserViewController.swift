@@ -2683,6 +2683,11 @@ extension BrowserViewController: IntroViewControllerDelegate {
             }
             presentViewController(introViewController, animated: true) {
                 self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
+                // On first run (and forced) open up the homepage in the background.
+                let state = self.getCurrentAppState()
+                if let homePageURL = HomePageAccessors.getHomePage(state), tab = self.tabManager.selectedTab where DeviceInfo.hasConnectivity() {
+                    tab.loadRequest(NSURLRequest(URL: homePageURL))
+                }
             }
 
             return true
