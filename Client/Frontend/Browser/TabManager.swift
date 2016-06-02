@@ -362,6 +362,10 @@ class TabManager : NSObject {
     }
     
     func removeTabsWithUndoToast(tabs: [Tab]) {
+        guard AppConstants.MOZ_UNDO_DELETE_TABS_TOAST else {
+            removeTabs(tabs)
+            return
+        }
         tempTabs = tabs
         var tabsCopy = tabs
         
