@@ -50,7 +50,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }()
     
     var tabManager: TabManager!
-    weak var bvc: BrowserViewController!
+    weak var bvc: BrowserViewController?
     var listData = [(item:WKBackForwardListItem, type:BackForwardType)]()
     
     var tableHeight: CGFloat
@@ -119,6 +119,9 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+        guard let bvc = self.bvc else {
+            return
+        }
         tableView.snp_updateConstraints { make in
             make.bottom.equalTo(self.view).offset(bvc.shouldShowFooterForTraitCollection(newCollection) ? -UIConstants.ToolbarHeight : 0)
         }
@@ -133,6 +136,9 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let bvc = self.bvc else {
+            return
+        }
         view.addSubview(shadow)
         view.addSubview(tableView)
         tableView.snp_makeConstraints { make in
