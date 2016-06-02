@@ -94,32 +94,30 @@ class ButtonToast: UIView {
         dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
         
-        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration,
-                                   animations: {
-                                    self.animationConstraint?.updateOffset(SimpleToastUX.ToastHeight)
-                                    self.layoutIfNeeded()
+        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration, animations: {
+                self.animationConstraint?.updateOffset(SimpleToastUX.ToastHeight)
+                self.layoutIfNeeded()
             },
-                                   completion: { finished in
-                                    self.removeFromSuperview()
-                                    if(!buttonPressed) {
-                                        self.completionHandler?(false)
-                                    }
+            completion: { finished in
+                self.removeFromSuperview()
+                if(!buttonPressed) {
+                    self.completionHandler?(false)
+                }
             }
         )
     }
     
     func showToast() {
         layoutIfNeeded()
-        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration,
-                                   animations: {
-                                    self.animationConstraint?.updateOffset(0)
-                                    self.layoutIfNeeded()
+        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration, animations: {
+                self.animationConstraint?.updateOffset(0)
+                self.layoutIfNeeded()
             },
-                                   completion: { finished in
-                                    let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(SimpleToastUX.ToastDismissAfter * Double(NSEC_PER_SEC)))
-                                    dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-                                        self.dismiss(false)
-                                    })
+            completion: { finished in
+                let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(SimpleToastUX.ToastDismissAfter * Double(NSEC_PER_SEC)))
+                dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+                    self.dismiss(false)
+                })
             }
         )
     }
@@ -131,11 +129,7 @@ class ButtonToast: UIView {
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        
-        guard let superview = self.superview else {
-            return
-        }
-        superview.addGestureRecognizer(gestureRecognizer)
+        superview?.addGestureRecognizer(gestureRecognizer)
     }
     
     func handleTap(gestureRecognizer: UIGestureRecognizer) {
