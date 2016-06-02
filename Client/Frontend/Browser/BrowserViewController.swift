@@ -1642,6 +1642,9 @@ extension BrowserViewController: TabToolbarDelegate {
     }
     
     func showBackForwardList() {
+        guard AppConstants.MOZ_BACK_FORWARD_LIST else {
+            return
+        }
         if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
             let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             backForwardViewController.tabManager = tabManager
