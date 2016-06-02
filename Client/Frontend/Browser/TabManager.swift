@@ -85,7 +85,7 @@ class TabManager : NSObject {
 
     private let prefs: Prefs
     var selectedIndex: Int { return _selectedIndex }
-    var tempTabs:[Tab]?
+    var tempTabs: [Tab]?
 
     var normalTabs: [Tab] {
         assert(NSThread.isMainThread())
