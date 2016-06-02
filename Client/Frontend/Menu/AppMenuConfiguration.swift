@@ -107,7 +107,9 @@ struct AppMenuConfiguration: MenuConfiguration {
             if #available(iOS 9, *) {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             }
-            menuItems.append(tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem)
+            if let validUrl = tabState.url where !ErrorPageHelper.isErrorPageURL(validUrl) {
+                menuItems.append(tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem)
+            }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .HomePanels, .Loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
