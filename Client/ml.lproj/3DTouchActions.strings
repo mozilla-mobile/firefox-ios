@@ -1,0 +1,24 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "അടയാളപ്പെടുത്തുക";
+
+/* Label for preview action on Tab Tray Tab to add current tab to Reading List */
+"Add to Reading List" = "വായിക്കാന്‍ വെയ്ക്കുക";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "ടാബ് അടയ്ക്കുക";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "URL പകര്‍ത്തുക";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "ഇപ്പൊ അടയാളപ്പെടുത്തിയത് തുറക്കുക";
+
+/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
+"Open Last Tab" = "അവസാനത്തെ ടാബ് തുറക്കുക";
+
+/* Accessibility Label for preview in Tab Tray of current tab */
+"Preview of %@" = "%@ എത്തിനോട്ടം";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "മറ്റോരുപകരണത്തിലേക്കയയ്ക്കുക";
+

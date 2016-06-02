@@ -1,0 +1,78 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 ಗಂಟೆಯ ನಂತರ";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 ನಿಮಿಷದ ನಂತರ";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 ನಿಮಿಷದ ನಂತರ";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 ನಿಮಿಷಗಳ ನಂತರ";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 ನಿಮಿಷಗಳ ನಂತರ";
+
+/* Title for screen when changing your passcode */
+"Change Passcode" = "ಗುಪ್ತಪದ ಬದಲಿಸು‍";
+
+/* Screen title for entering a passcode */
+"Enter Passcode" = "ಗುಪ್ತಸಂಕೇತ ನಮೂದಿಸು";
+
+/* Title for screen when updating your existin passcode */
+"Enter a new passcode" = "ಹೊಸ ಗುಪ್ತಸಂಕೇತ ನಮೂದಿಸು";
+
+/* Title above input for entering a passcode */
+"Enter a passcode" = "ಗುಪ್ತಸಂಕೇತ ನಮೂದಿಸು";
+
+/* Title above input for entering passcode while removing/changing */
+"Enter passcode" = "ಗುಪ್ತಸಂಕೇತ ನಮೂದಿಸು";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "ತಕ್ಷಣ";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "ತಪ್ಪಾದ ಗುಪ್ತಪದ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ (ಉಳಿದಿರುವ ಪ್ರಯತ್ನಗಳು: ‍%d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "ತಪ್ಪಾದ ಗುಪ್ತಪದ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "ಗರಿಷ್ಟ ಪ್ರಯತ್ನಗಳನ್ನು ತಲುಪಿದ್ದೀರಿ. ಒಂದು ಗಂಟೆಯ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "‍ಗರಿಷ್ಟ ಪ್ರಯತ್ನಗಳನ್ನು ತಲುಪಿದ್ದೀರಿ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "ಹೊಸ ಗುಪ್ತಪದ ಹಳೆಯದಕ್ಕಿಂತ ಭಿನ್ನವಾಗಿರಬೇಕು.";
+
+/* List section title for passcode settings */
+"Passcode" = "ಗುಪ್ತಸಂಕೇತ";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "ಗುಪ್ತಸಂಕೇತ ಹೊಂದಿಕೆಯಾಗುತ್ತಿಲ್ಲ. ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ.";
+
+/* Title for re-entering a passcode */
+"Re-enter passcode" = "ಮತ್ತೆ ಗುಪ್ತಸಂಕೇತ ನಮೂದಿಸಿ";
+
+/* Title for setting to require a passcode */
+"Require Passcode" = "ಗುಪ್ತಸಂಕೇತದ ಅಗತ್ಯವಿದೆ";
+
+/* Screen title for Set Passcode */
+"Set Passcode" = "ಗುಪ್ತಸಂಕೇತ ಹೊಂದಿಸು";
+
+/* Title for Touch ID/Passcode settings option */
+"Touch ID & Passcode" = "‍ಟಚ್ ಐಡಿ & ಗುಪ್ತಪದ";
+
+/* Title for setting to turn off passcode */
+"Turn Passcode Off" = "‍ಗುಪ್ತಪದ ಆಫ್ ಮಾಡು";
+
+/* Title for setting to turn on passcode */
+"Turn Passcode On" = "‍ಗುಪ್ತಪದ ಆನ್ ಮಾಡು";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "‍ನಿಮ್ಮ ಗುಪ್ತಪದ ಆಫ್ ಮಾಡಿ";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "ಟಚ್ ಐಡಿ ಬಳಸಿ";
+

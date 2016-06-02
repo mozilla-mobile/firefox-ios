@@ -1,0 +1,504 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "ব্যবহারকারীর নাম ও পাসওয়ার্ড %@ দ্বারা অনুরোধ করা হচ্ছে।";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "ব্যবহারকারীর নাম ও পাসওয়ার্ড %1$@ দ্বারা অনুরোধ করা হচ্ছে। সাইটের বলেছে: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "সম্পর্কে";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ট্যাব যোগ করুন";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "পঠন তালিকায় সংযুক্ত";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "রিডিং লিস্টে পেজটি যুক্ত হয়েছে।";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ঠিকানা এবং অনুসন্ধান";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "সর্বদা পাঠানো হবে";
+
+/* Authentication prompt title */
+"Authentication required" = "অনুমোদন প্রয়োজন";
+
+/* Accessibility Label for the tab toolbar Back button */
+"Back" = "পূর্বে";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "পপ-আপ উইন্ডো প্রতিরোধ করুন";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "বুকমার্ক্স";
+
+/* Panel accessibility label */
+"Bookmarks" = "বুকমার্কসমূহ";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "উজ্জ্বলতা";
+
+/* Alert Call Button */
+"Call" = "ফোন করুন";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "বাতিল";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "কালার থীম বদল করুন";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ফন্টের টাইপ বদল করুন।";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "ব্যাক্তিগত তথ্য পরিষ্কার করুন";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "বন্ধ করুন";
+
+/* No comment provided by engineer. */
+"Closing tab" = "ট্যাব বন্ধ হচ্ছে";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ঠিকানা কপি করুন";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "ছবি কপি করুন";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "লিংক কপি করুন";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "রিডিং তালিকা যোগ্ করা যাচ্ছে। সম্ভবতঃ এটি ইতিমধ্যেই আছে?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "পেজটি রিডিং তালিকায় যোগ্ করা যায়নি";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "পেজ লোড করা যাচ্ছে না";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "একটি অ্যাকাউন্ট তৈরি করুন";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "অন্ধকার";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "ডিবাগ: সিঙ্ক প্রমাণীকরণ অবস্থা ভুলবেন";
+
+/* Debug option */
+"Debug: require password" = "ডিবাগ: প্রয়োজনীয় পাসওয়ার্ড";
+
+/* Debug option */
+"Debug: require upgrade" = "ডিবাগ: প্রয়োজনীয় আপগ্রেড";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "টেক্সট সাইজ কমান";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "ডিফল্ট অনুসন্ধান ইঞ্জিন";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "অতিরিক্ত পেজের বার্তা নিষ্ক্রিয় করুন";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "সেটিংস প্রদর্শন করুন";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "প্রেরন করবেন না";
+
+/* Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "সম্পন্ন";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "পূর্ববর্তী তথ্য খুলতে ডাবল ট্যাপ করে ধরে রাখুন";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "সংযোগ করার জন্য আপনার পাসওয়ার্ড দিন।";
+
+/* Tile title for Facebook */
+"Facebook" = "ফেইসবুক";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox আপনার অ্যাকাউন্টের সাথে সিঙ্ক করা বন্ধ করবে, কিন্তু এই ডিভাইসে আপনার ব্রাউজ করা কোন তথ্য মুছে ফেলা হবে না।";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox আপনার ছবিগুলির মধ্যে প্রবেশাধিকার চায়";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "পরবর্তী";
+
+/* General settings section title */
+"General" = "সাধারণ";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "আপনার অন্য ডিভাইস থেকে খুলে রাখা ট্যাব, বুকমার্ক, এবং পাসওয়ার্ড পান।";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "চলুন";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "কপি করা লিঙ্কে চলুন?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "সাহায্য";
+
+/* Panel accessibility label */
+"History" = "ইতিহাস";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "টেক্সট সাইজ বাড়ান";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "ট্যুর ক্যারোজেলে ভূমিকা";
+
+/* History tableview section header */
+"Last month" = "গত মাস";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "শেষ সিঙ্ক হয়েছে: %@";
+
+/* History tableview section header */
+"Last week" = "গত সপ্তাহ";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "অনুজ্ঞাপত্রগুলি";
+
+/* Light theme setting in Reading View settings */
+"Light" = "আলো";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "আসল পেজ লোড করুন";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "কন্টেন্ট লোড হচ্ছে...";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "লগ আউট";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "লগ আউট?";
+
+/* Authentication prompt log in button */
+"Log in" = "লগ ইন";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "মনে হচ্ছে Firefox আগে ক্র্যাশ করেছে। আপনি কী আপনার ট্যাবগুলি পুনরুদ্ধার করতে চান?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "পড়া হয়েছে হিসাবে চিহ্নিত করুন";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "পড়া হয়নি হিসাবে চিহ্নিত করা হবে";
+
+/* Error for a missing remote error number */
+"Missing error" = "অনুপস্থিত ত্রুটি";
+
+/* Error for a missing remote error message */
+"Missing message" = "অনুপস্থিত বার্তা";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "ন্যাভিগেশান টুলবার";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "নতুন ট্যাব: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "নতুন সংস্করণ উপলব্ধ";
+
+/* Restore Tabs Negative Action */
+"No" = "না";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "কোন ট্যাব নেই";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "এখন নয়";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "ঠিক আছে";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ঠিক আছে";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "ওহহ! Firefox ক্রাশ করেছে";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "নতুন ট্যাবে খুলুন";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "সেটিংস্‌ খুলুন";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "টাইটেলবারে বইয়ের আইকনটি এলে সেটিতে ট্যাপ করে রিডার ভিউতে আর্টিকেলগুলি দেখুন।";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "খুলুন…";
+
+/* Opening an external URL */
+"Opening %@" = "খুলছে %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "প্যানেল নির্বাচক";
+
+/* Password textbox in Authentication prompt */
+"Password" = "পাসওয়ার্ড";
+
+/* Paste the URL into the location bar */
+"Paste" = "পেস্ট";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "পেস্ট করুন এবং যান";
+
+/* Privacy section title */
+"Privacy" = "গোপনীয়তা";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "গোপনীয়তা সংক্রান্ত নীতি";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "দ্রুত-সন্ধান ইঞ্জিন";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "রিডার ভিউ";
+
+/* Panel accessibility label */
+"Reading list" = "পঠন তালিকা";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "পুনরায় লোড";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "অপসারণ করুন";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "পঠন তালিকা থেকে মুছে ফেলুন";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "পাতা সরান";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "ডেস্কটপ সাইটের জন্য অনুরোধ করুন";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "মোবাইল সাইটের জন্য অনুরোধ করুন";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "ছবি সংরক্ষণ করুন";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "লগইন সংরক্ষিত করুন";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "রিডার ভিউয়ের নিয়ন্ত্রণগুলিতে বই যোগের আইকনটি ট্যাপ করে আপনার পাঠ্য তালিকাতে পেজগুলি সেভ করুন।";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "অনুসন্ধান";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "অনুসন্ধান করুন অথবা ঠিকানা প্রবেশ করুন";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "পরামর্শের জন্য সন্ধান করুন";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "সুরক্ষিত সংযোগ";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "প্রতিক্রিয়া পাঠান";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "প্রতিবেদন পাঠান";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "ক্রাশ সম্পর্কে একটি রিপোর্ট Mozilla-কে পাঠান যাতে এই সমস্যাটি ঠিক করতে পারে?";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "বাদামী রং";
+
+/* Font type setting in the reading view settings */
+"Serif" = "সেরিফ";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "বৈশিষ্ট্য";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "শেয়ার করুন";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "অনুসন্ধান প্রস্তাবনা দেখান";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ট্যাব প্রদর্শন";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "সফর প্রদর্শন করুন";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "অনুসন্ধান পরামর্শ দেখান";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "সাইন ইন";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "বন্ধ করুন";
+
+/* Support section title */
+"Support" = "সহায়তা";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ট্যাবটি বন্ধ করার জন্য ডানদিকে অথবা বাঁদিকে তিনটি আঙ্গুল দিয়ে সোয়্যাপ করুন।";
+
+/* Sync Firefox Account */
+"Sync Now" = "অবিলম্বে সিঙ্ক করুন";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "আপনার ট্যাব, বুকমার্ক, পাসওয়ার্ড এবং বিশদ জিনিসপত্র সুসংগত করুন।";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "আপনার ট্যাব, পাসওয়ার্ড এবং আরোকিছু সিঙ্ক করুন";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "ট্যাব %2$@ এর %1$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "ট্যাব %3$@-এর %1$@ থেকে %2$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ট্যাবগুলির ট্রে";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "পেজটি রিডার ভিউতে দেখানো যাচ্ছে না।";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Firefox অররার নতুন সংস্করণ উপলব্ধ আছে। ডাউনলোড পাতা যেতে ট্যাপ করুন।";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "আপনার অন্য ডিভাইস থেকে আপনার ট্যাবগুলির প্রবেশাধিকার পেতে একটি সমস্যা দেখা দিয়েছিল। কিছুক্ষণ পরে পনরায় চেষ্টা করুন।";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "পাতা রূপান্তর করার সময় একটি ত্রুটি ছিল";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "এটি ছবিটিকে আপনার ক্যামেরা রোলের মধ্যে সেভ করতে অনুমতি দেয়।";
+
+/* Opening an external app */
+"This will open in another application" = "এটা আরেকটি অ্যাপ্লিকেশনে খুলবে";
+
+/* History tableview section header */
+"Today" = "আজ";
+
+/* Panel accessibility label */
+"Top sites" = "শীর্ষ সাইটগুলি";
+
+/* Tile title for Twitter */
+"Twitter" = "টুইটার";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "সংযোগ স্থাপন করতে ফায়ারফক্স আপগ্রেড করুন।";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "সংক্ষিপ্ত ট্যাব ব্যাবহার করুন";
+
+/* Username textbox in Authentication prompt */
+"Username" = "উজারনেম";
+
+/* Text message in the settings table view */
+"Verify your email address." = "আপনার ইমেল যাচাই করুন।";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "সংস্করণ %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "দেখুন";
+
+/* Accessibility label for the main web content view */
+"Web content" = "ওয়েব সম্পর্কিত বিষয়বস্তু";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "পাঠ্য তালিকায় আপনাকে স্বাগত";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "যাইহোক, এটি লজ্জাজনক।";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "উইকিপিডিয়া";
+
+/* History tableview section header */
+"Yesterday" = "গতকাল";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Firefox-এ আপনার কোনও ট্যাব আপনার অন্যান্য ডিভাইসে খোলা নেই।";
+
+/* Tile title for YouTube */
+"YouTube" = "ইউটিউব";
+
+/* Your Rights settings section title */
+"Your Rights" = "আপনার অধিকার";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "কম্পিউটার";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "এখুনি";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "মোবাইল ডিভাইস";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "এক মাসেরও অধিক সময় আগে";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "এক সপ্তাহেরও অধিক সময় আগে";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "পড়া হয়েছে";
+
+/* Relative date for date in past week. */
+"this week" = "এই সপ্তাহে";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "আজ %@ তে";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "পড়া হয়নি";
+
+/* Relative date for yesterday. */
+"yesterday" = "গতকাল";
+

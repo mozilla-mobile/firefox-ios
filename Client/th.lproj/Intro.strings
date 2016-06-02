@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "เรียกดูหลายหน้าเว็บพร้อมกันในเวลาเดียวด้วยแท็บ";
+
+/* See http://mzl.la/1if9ODp */
+"Choose" = "เลือก";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "เชื่อมต่อ Firefox ในทุกที่ที่คุณใช้งาน";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "ปรับแต่ง";
+
+/* See http://mzl.la/1if9ODp */
+"Easily switch between open pages with tabs." = "สลับระหว่างหน้าที่เปิดอยู่อย่างง่ายดายด้วยแท็บ";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox และกลุ่มเมฆ";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "ภาพนิ่งเกริ่นนำ %1$@ จาก %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "จัดระเบียบ";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "ปรับแต่ง Firefox ของคุณให้เป็นส่วนบุคคลในแบบที่คุณชอบในการตั้งค่า";
+
+/* See http://mzl.la/1if9ODp */
+"Personalize your default search engine and more in Settings." = "ปรับแต่งเครื่องมือค้นหาปริยายและอื่น ๆ ของคุณให้เป็นส่วนบุคคลในการตั้งค่า";
+
+/* See http://mzl.la/1if9ODp */
+"Share" = "แบ่งปัน";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "เข้าสู่ระบบ Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "เริ่มการท่องเว็บ";
+
+/* See http://mzl.la/1if9ODp */
+"Sync your Devices." = "ซิงค์อุปกรณ์ของคุณ";
+
+/* See http://mzl.la/1if9ODp */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "แตะค้างแล้วลากไอคอน Firefox ลงใน Dock ของคุณเพื่อความง่ายในการเข้าถึง";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "ปุ่มการตั้งค่าอยู่ที่ส่วนบนของถาดแท็บ";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "ปุ่มแสดงแท็บอยู่ถัดจากช่องกรอกที่อยู่และข้อความค้นหา และแสดงจำนวนแท็บที่เปิดอยู่ในปัจจุบัน";
+
+/* See http://mzl.la/1if9ODp */
+"Use the share sheet to send links from other apps to Firefox." = "ใช้แผ่นแบ่งปันเพื่อส่งลิงก์จากแอปอื่น ๆ มายัง Firefox";
+

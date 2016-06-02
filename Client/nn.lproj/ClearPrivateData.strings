@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Er du sikker på at du vil fjerna alle data? Dette vil òg lata att alle opne faner.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Nettlesarhistorikk";
+
+/* Settings item for clearing the cache */
+"Cache" = "Snøgglager";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Avbryt";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Tøm";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Tøm alt";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Slett private data";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Infokapslar";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Fråkopla nettsidedata";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Lagra innloggingar";
+

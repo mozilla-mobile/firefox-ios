@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Priveeljepblêden slute";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox sil gjin skiednis of cookies ûnthâlde, mar nije blêdwizers sille bewarre wurde.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Mear ynfo";
+
+/* Toggled OFF accessibility value */
+"Off" = "Ut";
+
+/* Toggled ON accessibility value */
+"On" = "Ut";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Iepenje yn nij priveeljepblêd";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Priveenavigaasje";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Priveemoadus";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Set priveemoadus oan of út";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "By ferlitten fan priveenavigaasje";
+

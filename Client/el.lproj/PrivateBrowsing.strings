@@ -1,0 +1,12 @@
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Μάθετε Περισσότερα";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Άνοιγμα σε Νέα Καρτέλα Ιδιωτικής Περιήγησης";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Ιδιωτική περιήγηση";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Λειτουργία Ιδιωτικής Περιήγησης";
+

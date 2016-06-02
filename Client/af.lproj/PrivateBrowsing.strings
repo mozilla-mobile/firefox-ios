@@ -1,0 +1,9 @@
+/* Toggled OFF accessibility value */
+"Off" = "Af";
+
+/* Toggled ON accessibility value */
+"On" = "Aan";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Private-blaai";
+

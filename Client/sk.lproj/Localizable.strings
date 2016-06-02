@@ -1,0 +1,606 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ vyžaduje zadanie používateľského mena a hesla.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ vyžaduje zadanie používateľského mena a hesla. Stránka hovorí: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Čo je";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Pridať kartu";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Pridať do Zoznamu na prečítanie";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Stránka bola pridaná zo Zoznamu na prečítanie";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adresa a vyhľadávanie";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Povoliť klávesnice tretích strán";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Vždy odoslať";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Vyžadované overenie";
+
+/* Accessibility Label for the tab toolbar Back button */
+"Back" = "Naspäť";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blokovať vyskakovacie okná";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Pridať medzi záložky";
+
+/* Panel accessibility label */
+"Bookmarks" = "Záložky";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Tu sa zobrazujú uložené záložky.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Jas";
+
+/* Alert Call Button */
+"Call" = "Hovor";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Zrušiť";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Zmení farebnú tému";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Zmení typ písma";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Vymazať súkromné údaje";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Zavrieť";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Karta sa zatvára";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Kopírovať adresu";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Kopírovať obrázok";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Kopírovať odkaz";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Stránku nebolo možné pridať do Zoznamu na prečítanie. Nenachádza sa už v ňom?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Stránku nebolo možné pridať do Zoznamu na prečítanie.";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Stránku nebolo možné načítať.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Vytvoriť účet";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Tmavá";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Ladenie: zahodiť overenie pre Sync";
+
+/* Debug option */
+"Debug: require password" = "Ladenie: vyžiadať heslo";
+
+/* Debug option */
+"Debug: require upgrade" = "Ladenie: vyžiadať aktualizáciu";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Zmeniť veľkosť textu";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Predvolený vyhľadávací modul";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Zakázať ďalšie dialógové okná na tejto stránke";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Nastavenie zobrazenia";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Chcete uložiť heslo pre %1$@ na %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Chcete uložiť heslo pre %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Chcete aktualizovať heslo pre %1$@ na %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Chcete aktualizovať heslo pre %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Neodosielať";
+
+/* Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Hotovo";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Históriu otvoríte dvojitým ťuknutím a podržaním";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Na pripojenie zadajte svoje heslo";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Rozšírené";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Varovanie: nemôžeme potvrdiť, že spojenie s touto stránkou je zabezpečené.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Stránka môže byť chybne nakonfigurovaná alebo zneužitá útočníkom. Pokračovanie na stránku predstavuje potencionálne riziko.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Vlastník servera %@ nakonfiguroval svoju stránku nesprávne. Kvôli ochrane vašich údajov pred odcudzením, bolo pripojenie k tejto webovej stránke prerušené.";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Prejsť naspäť";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Napriek tomu navštíviť stránku";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Pre uplatnenie zmien treba Firefox znovu spustiť.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox sa už viac nebude synchronizovať s vašim účtom, ale neodstráni z toho zariadenia žiadne z údajov prehliadania.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox by chcel pristupovať k vašim Fotografiám.";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Dopredu";
+
+/* General settings section title */
+"General" = "Všeobecné";
+
+/* A re-worded offer about Sync that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Získajte svoje otvorené karty, záložky a heslá zo svojich ďalších zariadení.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Prejsť";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Prejsť na skopírovanú adresu URL?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Pomocník";
+
+/* Panel accessibility label */
+"History" = "História";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Zväčšiť veľkosť textu";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Úvodná prehliadka";
+
+/* History tableview section header */
+"Last month" = "Posledný mesiac";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Posledná synchronizácia: %@";
+
+/* History tableview section header */
+"Last week" = "Posledný týždeň";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licencie";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Svetlá";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Načítať pôvodnú stránku";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Obsah sa načítava…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Odhlásiť sa";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Odhlásiť sa?";
+
+/* Authentication prompt log in button */
+"Log in" = "Prihlásiť sa";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Prihlásenia";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Neuložiť";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Chcete uložiť prihlásenie ako %1$@ pre %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Chcete uložiť heslo pre %@?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Chcete aktualizovať heslo pre %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Uložiť prihlásenie";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Aktualizovať";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Zdá sa, že Firefox naposledy zlyhal. Chcete obnoviť svoje karty?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Označiť ako prečítané";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Označiť ako neprečítané";
+
+/* Error for a missing remote error number */
+"Missing error" = "Chýba číslo chyby";
+
+/* Error for a missing remote error message */
+"Missing message" = "Chýba chybová správa";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Panel Navigácia";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Nová karta: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Je dostupná nová verzia";
+
+/* Restore Tabs Negative Action */
+"No" = "Nie";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Žiadne karty";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Teraz nie";
+
+/* Button to not save the user's password */
+"Not now" = "Teraz nie";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "OK";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ups! Firefox zlyhal";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Otvoriť na novej karte";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Nastavenia";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Ťuknutím na ikonu knihy, keď sa objaví v paneli s titulkom, otvoríte stránku v zobrazení Čítačka.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Otvoriť pomocou...";
+
+/* Opening an external URL */
+"Opening %@" = "Otvára sa %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Voľba panela";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Heslo";
+
+/* Paste the URL into the location bar */
+"Paste" = "Prilepiť";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Prilepiť a prejsť";
+
+/* Privacy section title */
+"Privacy" = "Súkromie";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Zásady ochrany súkromia";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Moduly pre rýchle vyhľadávanie";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Zobrazenie Čítačka";
+
+/* Panel accessibility label */
+"Reading list" = "Zoznam na prečítanie";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Znova načítať";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Odstrániť";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Odstrániť zo Zoznamu na prečítanie";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Odstrániť stránku";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Odstrániť plnú verziu stránky";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Odstrániť mobilnú stránku";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Bezpätkové";
+
+/* Context menu item for saving an image */
+"Save Image" = "Uložiť obrázok";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Uložené prihlásenia";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Ťuknutím na ikonu knihy so znakom plus v ovládačoch zobrazenia Čítačka pridáte stránku do Zoznamu na prečítanie.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Vyhľadávanie";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Zadajte vyhľadávanie alebo adresu";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Hľadania pre zvolený návrh";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Bezpečné pripojenie";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "Odoslať názor";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Odoslať hlásenie";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Odoslať hlásenie o zlyhaní, takže Mozilla môže opraviť problém?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Zrušiť";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sépia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Pätkové";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Nastavenia";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Vymazať súkromné údaje";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Vymazať súkromné údaje";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Vymazanie súkromných údajov";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "Zdieľať";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Zdieľať odkaz";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Zrušiť";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Zobrazovať návrhy vyhľadávania";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Zobraziť karty";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Zobraziť prehliadku";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Zobrazovať návrhy vyhľadávania";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Prihlásiť sa do Firefoxu";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Prihlásiť sa";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Prihláste sa a získajte svoje karty, záložky a heslá z vašich iných zariadení.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Zastaviť";
+
+/* Support section title */
+"Support" = "Podpora";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Kartu zavriete potiahnutím doľava alebo doprava pomocou troch prstov.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Synchronizovať";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "Synchronizujte svoje karty, záložky, heslá a ďalšie.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "Synchronizujte svoje karty, heslá a ďalšie.";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Karta %1$@ z %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Karty %1$@ až %2$@ z %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Panel kariet";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Stránka nemohla byť načítaná v zobrazení Čítačka.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Je dostupná nová verzia prehliadača Firefox Aurora. Ťuknutím na OK prejdete na stránku, kde si ju môžete prevziať.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Počas prístupu ku kartám vo vašich ďalších zariadeniach sa vyskytla chyba. Skúste to znova o chvíľu.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Pri konverzii stránky sa vyskytla chyba";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Toto vám umožní uložiť obrázok v albume Fotoaparát.";
+
+/* Opening an external app */
+"This will open in another application" = "Toto bude otvorené v ďalšej aplikácii";
+
+/* History tableview section header */
+"Today" = "Dnes";
+
+/* Panel accessibility label */
+"Top sites" = "Top stránky";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Tu sa zobrazia vaše najnavštevovanejšie stránky.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Vitajte na top stránkach";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Aktualizovať";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Aby ste sa mohli pripojiť, aktualizujte Firefox.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Používať kompaktné karty";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Používateľské meno";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Overte svoju e-mailovú adresu.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Verzia %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Zobraziť";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Webový obsah";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Vitajte v svojom Zozname na prečítanie";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Tak toto je nepríjemné.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipédia";
+
+/* Button to save the user's password */
+"Yes" = "Áno";
+
+/* History tableview section header */
+"Yesterday" = "Včera";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Vo Firefoxe na svojich ďalších zariadeniach nemáte otvorené žiadne karty.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Vaše práva";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "počítač";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "teraz";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobilné zariadenie";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "pred viac ako mesiacom";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "pred viac ako týždňom";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "prečítané";
+
+/* Relative date for date in past week. */
+"this week" = "tento týždeň";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "dnes o %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "neprečítané";
+
+/* Relative date for yesterday. */
+"yesterday" = "včera";
+

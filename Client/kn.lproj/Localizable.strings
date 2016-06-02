@@ -1,0 +1,452 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ ಇಂದ ಒಂದು ಬಳಕೆದಾರ ಪದ ಹಾಗು ಗುಪ್ತಪದಕ್ಕಾಗಿ ಮನವಿ ಸಲ್ಲಿಸಲಾಗಿದೆ. ತಾಣವು ಹೀಗೆ ಹೇಳುತ್ತದೆ: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "ಬಗ್ಗೆ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ಟ್ಯಾಬ್ ಸೇರಿಸು";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "ಓದುಗ ಪಟ್ಟಿಗೆ ಸೇರಿಸು";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "ಪುಟವನ್ನ್ನು ಓದುವ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "‍ವಿಳಾಸ ಮತ್ತು ಹುಡುಕು";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ಯಾವಾಗಲೂ ಕಳಿಸು";
+
+/* Tile title for Amazon */
+"Amazon" = "‍ಅಮೇಜಾನ್";
+
+/* Authentication prompt title */
+"Authentication required" = "ದೃಢೀಕರಣದ ಅಗತ್ಯವಿದೆ";
+
+/* Accessibility Label for the tab toolbar Back button */
+"Back" = "ಹಿಂದೆ";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ಪಾಪ್-ಅಪ್ ಕಿಟಕಿಗಳನ್ನು ತಡೆ ಹಿಡಿ";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "ಪುಟ ಗುರುತು";
+
+/* Panel accessibility label */
+"Bookmarks" = "ಪುಟಗುರುತುಗಳು";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "ನೀವು ಉಳಿಸುವ ಬುಕ್‌ಮಾರ್ಕ್‌ಗಳು ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ಪ್ರಕಾಶಮಾನ";
+
+/* Alert Call Button */
+"Call" = "ಕರೆ";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "ರದ್ದು";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "ಬಣ್ಣದ ಥೀಮ್‍ ಬದಲಾಯಿಸುತ್ತದೆ.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "‍ಅಕ್ಷರ ಶೈಲಿ ಬದಲಾಯಿಸು.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "ಖಾಸಗಿ ದತ್ತಾಂಶವನ್ನು ಖಾಲಿಮಾಡು";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ಮುಚ್ಚು";
+
+/* No comment provided by engineer. */
+"Closing tab" = "ಟ್ಯಾಬ್ ಮುಚ್ಚಲಾಗುತ್ತಿದೆ";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು‍";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "ಚಿತ್ರವನ್ನು ನಕಲಿಸು";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "ಕೊಂಡಿ ನಕಲಿಸು‍";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "ಪುಟವನ್ನು ಲೋಡ್ ಮಾಡಲಾಗಿಲ್ಲ.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ಖಾತೆಯೊಂದನ್ನು ರಚಿಸಿ";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "ಗಾಢ";
+
+/* Debug option */
+"Debug: require password" = "ಡೀಬಗ್: ಗುಪ್ತಪದಗಳ ಅಗತ್ಯವಿದೆ";
+
+/* Debug option */
+"Debug: require upgrade" = "‍ಡೀಬಗ್: ಪರಿಷ್ಕರಣೆ ಅಗತ್ಯವಿದೆ";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಕುಗ್ಗಿಸು";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "ಪೂರ್ವನಿಯೋಜಿತ ಹುಡುಕು ಎಂಜಿನ್";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "ಪ್ರದರ್ಶಕದ ಹೊಂದಾಣಿಕೆಗಳು";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "ನೀವು %1$@ ಗಾಗಿ %2$@ ನಲ್ಲಿ ಗುಪ್ತಪದವನ್ನು ಉಳಿಸಲು ಬಯಸುವಿರಾ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "%@ ನಲ್ಲಿ ಗುಪ್ತಪದವನ್ನು ಉಳಿಸಲು ನೀವು ಬಯಸುವಿರಾ?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "ನೀವು %1$@ ಗಾಗಿ %2$@ ನಲ್ಲಿ ಗುಪ್ತಪದವನ್ನು ಪರಿಷ್ಕರಿಸಲು ಬಯಸುವಿರಾ?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "%@ ನಲ್ಲಿ ಗುಪ್ತಪದವನ್ನು ಪರಿಷ್ಕರಿಸಲು ನೀವು ಬಯಸುವಿರಾ?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "ಕಳುಹಿಸಬೇಡ";
+
+/* Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "ಆಯಿತು";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "ಸುಧಾರಿತ";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "ಹಿಂದೆ ಹೋಗು";
+
+/* Tile title for Facebook */
+"Facebook" = "ಫೇಸ್‌ಬುಕ್‌";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox ನಿಮ್ಮ ಖಾತೆಯೊಂದಿಗೆ ಸಿಂಕ್ ಮಾಡುವುದನ್ನು ನಿಲ್ಲಿಸುವುದು, ಆದರೆ ಈ ಸಾಧನದಿಂದ ನಿಮ್ಮ ಯಾವುದೇ ಜಾಲಾಟದ ಡೇಟಾವನ್ನು ಅಳಿಸುವುದಿಲ್ಲ.";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "ಮುಂದೆ";
+
+/* General settings section title */
+"General" = "ಸಾಮಾನ್ಯ";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "ಹೋಗು";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ಸಹಾಯ";
+
+/* Panel accessibility label */
+"History" = "ಇತಿಹಾಸ";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಹೆಚ್ಚಿಸು";
+
+/* History tableview section header */
+"Last month" = "ಹಿಂದಿನ ತಿಂಗಳು";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "ಕಡೆಯ ಬಾರಿ ಸಿಂಕ್ ಮಾಡಿದ್ದು: %@";
+
+/* History tableview section header */
+"Last week" = "ಹಿಂದಿನ ವಾರ";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "ಪರವಾನಗಿಗಳು";
+
+/* Light theme setting in Reading View settings */
+"Light" = "ಬೆಳಕು";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "ನಿರ್ಗಮಿಸು";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "ನಿರ್ಗಮಿಸ ಬೇಕೆ?";
+
+/* Authentication prompt log in button */
+"Log in" = "ಪ್ರವೇಶಿಸು";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "ಲಾಗಿನ್‌ಗಳು";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ಉಳಿಸಬೇಡ";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@ ಗಾಗಿ ಗುಪ್ತಪದವನ್ನು ಉಳಿಸಬೇಕೆ?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "ಲಾಗಿನ್‌ ಉಳಿಸು";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "ಅಪ್‌ಡೇಟ್‌";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "ಓದಿದೆ ಎಂದು ಗುರುತಿಸಿ";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "ಓದಿಲ್ಲ ಎಂದು ಗುರುತಿಸಿ";
+
+/* Error for a missing remote error number */
+"Missing error" = "ಕಾಣೆಯಾಗಿರುವ ದೋಷ";
+
+/* Error for a missing remote error message */
+"Missing message" = "ಕಾಣೆಯಾಗಿರುವ ಸಂದೇಶ";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "ನ್ಯಾವಿಗೇಶನ್ ಉಪಕರಣಪಟ್ಟಿ‍";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "ಹೊಸ ಟ್ಯಾಬ್: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "ಹೊಸ ಆವೃತ್ತಿ ಲಭ್ಯವಿದೆ";
+
+/* Restore Tabs Negative Action */
+"No" = "ಇಲ್ಲ";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ಟ್ಯಾಬ್‌ಗಳಿಲ್ಲ";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "‌ಈಗಲ್ಲ";
+
+/* Button to not save the user's password */
+"Not now" = "ಈಗಲ್ಲ";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK‍";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ಸರಿ";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "‍ಓಹ್ ಓ! ‍Firefox ಕುಸಿತಗೊಂಡಿದೆ";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ತೆರೆ";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "ಸಿದ್ಧತೆಗಳನ್ನು ತೆರೆ";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "ಇದರಲ್ಲಿ ತೆರೆ…";
+
+/* Opening an external URL */
+"Opening %@" = "ತೆರೆಯಲಾಗುತ್ತಿದೆ %@";
+
+/* Password textbox in Authentication prompt */
+"Password" = "ಗುಪ್ತಪದಗಳು";
+
+/* Paste the URL into the location bar */
+"Paste" = "ಅಂಟಿಸು";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "ಅಂಟಿಸು & ಮುಂದುವರೆ";
+
+/* Privacy section title */
+"Privacy" = "ಗೌಪ್ಯತೆ";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "ಗೌಪ್ಯತಾ ನಿಯಮ";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "ಓದುಗ ನೋಟ";
+
+/* Panel accessibility label */
+"Reading list" = "ಓದಬೇಕಿರುವ ಪಟ್ಟಿ";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "ಪುನಃ ಲೋಡ್ ಮಾಡು";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "ತೆಗೆ";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "ಓದುಗ ಪಟ್ಟಿಯಿಂದ ತೆಗೆ";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "ಪುಟವನ್ನು ತೆಗೆದುಹಾಕು";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "ಡೆಸ್ಕ್‌ಟಾಪ್ ತಾಣವನ್ನು ಕೇಳಿ";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "ಸಾನ್ಸ್‍-ಸೆರಿಫ್";
+
+/* Context menu item for saving an image */
+"Save Image" = "ಚಿತ್ರ ಉಳಿಸಿ";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "ಲಾಗಿನ್‌ಗಳನ್ನು ಉಳಿಸು";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "ಹುಡುಕು";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ಹುಡುಕಿ ಅಥವ ವಿಳಾಸ ನಮೂದಿಸಿ";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "ಸುರಕ್ಷಿತ ಸಂಪರ್ಕ";
+
+/* Show an input.mozilla.org page where people can submit feedback */
+"Send Feedback" = "ಅಭಿಪ್ರಾಯವನ್ನು ಕಳುಹಿಸಿ";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "ವರದಿ ಕಳುಹಿಸು";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "ರದ್ದು ಮಾಡು";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "ಸೆಪಿಯಾ";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "ಸಿದ್ಧತೆಗಳು";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "ಖಾಸಗಿ ದತ್ತಾಂಶವನ್ನು ಖಾಲಿಮಾಡು";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "ಖಾಸಗಿ ದತ್ತಾಂಶವನ್ನು ಖಾಲಿಮಾಡು";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "ಖಾಸಗಿ ದತ್ತಾಂಶವನ್ನು ಖಾಲಿಮಾಡು";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "ಹಂಚು";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "ಕೊಂಡಿ ಹಂಚು";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "ರದ್ದು ಮಾಡು";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "ಹುಡುಕಲು ಸಲಹೆಗಳನ್ನು ತೋರಿಸು";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ಟ್ಯಾಬ್‌ಗಳನ್ನು ತೋರಿಸು";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "ಹುಡುಕಲು ಸಲಹೆಗಳನ್ನು ತೋರಿಸು";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Firefoxಗೆ ಸೈನ್ ಇನ್ ಆಗಿ";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "ಪ್ರವೇಶಿಸು‍";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "ನಿಲ್ಲಿಸು";
+
+/* Support section title */
+"Support" = "ಬೆಂಬಲ";
+
+/* Sync Firefox Account */
+"Sync Now" = "ಈಗಲೆ ಸಿಂಕ್ ಮಾಡು";
+
+/* Sync tabs, bookmarks, passwords empty state instructions. */
+"Sync your tabs, bookmarks, passwords and more." = "ನಿಮ್ಮ ಟ್ಯಾಬ್ ಗಳು, ಪುಟಗುರುತುಗಳು, ಪ್ರವೇಶಪದಗಳು & ಇನ್ನಷ್ಟನ್ನು ಸಿಂಕ್ ಮಾಡಿ.";
+
+/* Sync tabs and passwords empty state instructions. */
+"Sync your tabs, passwords and more." = "ನಿಮ್ಮ ಟ್ಯಾಬ್ ಗಳು, ಪ್ರವೇಶಪದಗಳು ಮತ್ತು ಇನ್ನಷ್ಟನ್ನು ಸಿಂಕ್ ಮಾಡಿ.";
+
+/* History tableview section header */
+"Today" = "ಇಂದು";
+
+/* Tile title for Twitter */
+"Twitter" = "ಜಿಟ್ಟರ್";
+
+/* Button to update the user's password */
+"Update" = "ಅಪ್‌ಡೇಟ್‌";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ಬಳಕೆದಾರನ ಹೆಸರು";
+
+/* Text message in the settings table view */
+"Verify your email address." = "ಇ ಮೇಲ್ ವಿಳಾಸವನ್ನು ಧೃಡೀಕರಿಸಿ.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "ಆವೃತ್ತಿ %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "ನೋಟ";
+
+/* Accessibility label for the main web content view */
+"Web content" = "ಜಾಲ ವಿಷಯ";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "ನಿಮ್ಮ ಓದುಪಟ್ಟಿಗೆ ಸ್ವಾಗತ";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "ನಿಜ, ಇದು ಕಿರಿಕಿರಿಯುಂಟುಮಾಡುತ್ತದೆ.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "ವಿಕಿಪೀಡಿಯ";
+
+/* Button to save the user's password */
+"Yes" = "ಹೌದು";
+
+/* History tableview section header */
+"Yesterday" = "ನಿನ್ನೆ";
+
+/* Tile title for YouTube */
+"YouTube" = "ಯೂಟ್ಯೂಬ್";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ಗಣಕ";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ಈಗಷ್ಟೆ";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "ಓದು";
+
+/* Relative date for date in past week. */
+"this week" = "ಈ ವಾರ";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ಇಂದು %@ ನಲ್ಲಿ";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ಓದದೆ ಇರುವ";
+
+/* Relative date for yesterday. */
+"yesterday" = "ನಿನ್ನೆ";
+
