@@ -10,6 +10,7 @@ default_platform :ios
 import_build_tools(
   url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
   clone_folder: "../build-tools",
+  branch: 'sleroux/AuroraCleanup'
 )
 
 #move all the build tools to the right places
