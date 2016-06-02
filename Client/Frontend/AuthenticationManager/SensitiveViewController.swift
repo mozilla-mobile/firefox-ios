@@ -13,7 +13,7 @@ class SensitiveViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: UIApplicationWillEnterForegroundNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.blurContents), name: UIApplicationWillResignActiveNotification, object: nil)
     }
 
@@ -25,6 +25,7 @@ class SensitiveViewController: UIViewController {
     }
 
     func checkIfUserRequiresValidation() {
+        presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
         guard let authInfo = KeychainWrapper.authenticationInfo() where authInfo.requiresValidation() else {
             removeBackgroundedBlur()
             return
