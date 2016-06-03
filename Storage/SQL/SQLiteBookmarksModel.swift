@@ -170,6 +170,15 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
         log.debug("removeByGUID: \(guid)")
         return self.bookmarks.removeGUIDs([guid])
     }
+    
+    public func updateByGUID(bookmark: BookmarkItem) -> Success {
+        if self.direction == Direction.Buffer {
+            return deferMaybe(DatabaseError(description: "Refusing to remove GUID from buffer in model."))
+        }
+        
+        log.debug("updateByGUID: \(bookmark.guid)")
+        return self.bookmarks.updateBookmarkByGUID(bookmark)
+    }
 
     func hasDesktopBookmarks() -> Deferred<Maybe<Bool>> {
         // This is very lazy, but it has the nice property of keeping Desktop Bookmarks visible
@@ -535,6 +544,26 @@ extension SQLiteBookmarks {
             (deleteStructure, args),
         ])
     }
+    
+    public func updateBookmarkByGUID(new: BookmarkItem) -> Success {
+        let args: Args = [
+            NSDate.nowNumber(),
+            new.url,
+            new.title,
+            SyncStatus.Changed.rawValue,
+            new.guid
+            ]
+        
+        let update =
+            "UPDATE \(TableBookmarksLocal) SET" +
+                " local_modified = ?" +
+                ", bmkUri = ?" +
+                ", title = ?" +
+                ", sync_status = ?" +
+                " WHERE guid = ?"
+        
+        return self.db.run([(update,args)])
+    }
 }
 
 class SQLiteBookmarkFolder: BookmarkFolder {
@@ -825,6 +854,10 @@ public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
 
     public func removeByURL(url: String) -> Success {
         return self.localFactory.removeByURL(url)
+    }
+    
+    public func updateByGUID(bookmark: BookmarkItem) -> Success {
+        return self.localFactory.updateByGUID(bookmark)
     }
 }
 

@@ -136,6 +136,7 @@ public protocol BookmarksModelFactory {
     func isBookmarked(url: String) -> Deferred<Maybe<Bool>>
     func removeByGUID(guid: GUID) -> Success
     func removeByURL(url: String) -> Success
+    func updateByGUID(bookmark: BookmarkItem) -> Success
 }
 
 /*
@@ -338,6 +339,10 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     }
 
     public func removeByURL(url: String) -> Success {
+        return deferMaybe(DatabaseError(description: "Not implemented"))
+    }
+    
+    public func updateByGUID(bookmark: BookmarkItem) -> Success {
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 

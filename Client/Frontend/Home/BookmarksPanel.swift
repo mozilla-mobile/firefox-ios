@@ -32,9 +32,19 @@ struct BookmarksPanelUX {
     private static let WelcomeScreenItemTextColor = UIColor.grayColor()
     private static let WelcomeScreenItemWidth = 170
     private static let SeparatorRowHeight: CGFloat = 0.5
+    private static let SlideDeleteBackgroundColor = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 1.0)
+    private static let SlideMoveBackgroundColor = UIColor(red: 74/255, green: 144/255, blue: 226/255, alpha: 1.0)
+    private static let SlideEditBackgroundColor = UIColor(red: 255/255, green: 149/255, blue: 0/255, alpha: 1.0)
+    private static let SlideButtonWidth: CGFloat = 60
 }
 
-class BookmarksPanel: SiteTableViewController, HomePanel {
+enum SlideButtons: Int {
+    case Delete = 0
+    //case Move
+    case Edit
+}
+
+class BookmarksPanel: SiteTableViewController, HomePanel, SWTableViewCellDelegate {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
     var parentFolders = [BookmarkFolder]()
@@ -44,6 +54,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
     private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorIdentifier"
     private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
+    private let BookmarkCellIdentifier = "BookmarkCellIdentifier"
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -52,6 +63,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.tableView.registerClass(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.registerClass(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
         self.tableView.registerClass(BookmarkFolderTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BookmarkFolderHeaderViewIdentifier)
+        self.tableView.registerClass(BookmarkTableViewCell.self, forCellReuseIdentifier: BookmarkCellIdentifier)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -144,6 +156,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             self.emptyStateOverlayView.removeFromSuperview()
         }
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        reloadData()
+    }
 
     private func onModelFetched(result: Maybe<BookmarksModel>) {
         guard let model = result.successValue else {
@@ -166,6 +182,26 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             self.updateEmptyPanelState()
         }
     }
+    
+    private func slideButtons() -> [AnyObject] {
+        let leftUtilityButtons : NSMutableArray = NSMutableArray()
+        
+        let deleteButton: UIButton = UIButton(type: .Custom)
+        deleteButton.backgroundColor = BookmarksPanelUX.SlideDeleteBackgroundColor
+        deleteButton.setImage(UIImage(named: "removeBookmark"), forState: .Normal)
+        deleteButton.tintColor = UIColor.whiteColor()
+        leftUtilityButtons.addObject(deleteButton)
+        
+        let editButton: UIButton = UIButton(type: .Custom)
+        editButton.backgroundColor = BookmarksPanelUX.SlideEditBackgroundColor
+        // Will add when edit icon is available
+        //editButton.setImage(UIImage(named: "editBookmark"), forState: .Normal)
+        editButton.setTitle("Edit", forState: .Normal)
+        editButton.tintColor = UIColor.whiteColor()
+        leftUtilityButtons.addObject(editButton)
+        
+        return leftUtilityButtons as [AnyObject]
+    }
 
     private func onModelFailure(e: Any) {
         log.error("Error: failed to get data: \(e)")
@@ -183,7 +219,16 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         guard let source = source, bookmark = source.current[indexPath.row] else { return super.tableView(tableView, cellForRowAtIndexPath: indexPath) }
         switch (bookmark) {
         case let item as BookmarkItem:
-            let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCellWithIdentifier(BookmarkCellIdentifier, forIndexPath: indexPath) as! BookmarkTableViewCell
+            
+            if source.current.itemIsEditableAtIndex(indexPath.row) ?? false {
+                cell.setRightUtilityButtons(slideButtons(), withButtonWidth: BookmarksPanelUX.SlideButtonWidth)
+            }
+            else {
+                cell.setRightUtilityButtons([], withButtonWidth: BookmarksPanelUX.SlideButtonWidth)
+            }
+            
+            cell.delegate = self
             if item.title.isEmpty {
                 cell.textLabel?.text = item.url
             } else {
@@ -315,19 +360,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        guard let source = source else {
-            return .None
-        }
-
-        if source.current[indexPath.row] is BookmarkSeparator {
-            // Because the deletion block is too big.
-            return .None
-        }
-
-        if source.current.itemIsEditableAtIndex(indexPath.row) ?? false {
-            return .Delete
-        }
-
         return .None
     }
 
@@ -382,15 +414,98 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         return [delete]
     }
+    
+    
+    func swipeableTableViewCell(cell: SWTableViewCell!, didTriggerRightUtilityButtonWithIndex index: Int) {
+        guard let indexPath = tableView.indexPathForCell(cell),
+              let source = self.source,
+              let bookmark = source.current[indexPath.row] else {
+            return
+        }
+        switch SlideButtons(rawValue: index) ?? .Delete {
+        case .Delete:
+            log.debug("Removing rows \(indexPath).")
+            
+            // Block to do this -- this is UI code.
+            guard let factory = source.modelFactory.value.successValue else {
+                log.error("Couldn't get model factory. This is unexpected.")
+                self.onModelFailure(DatabaseError(description: "Unable to get factory."))
+                return
+            }
+            
+            if let err = factory.removeByGUID(bookmark.guid).value.failureValue {
+                log.debug("Failed to remove \(bookmark.guid).")
+                self.onModelFailure(err)
+                return
+            }
+            
+            guard let reloaded = source.reloadData().value.successValue else {
+                log.debug("Failed to reload model.")
+                return
+            }
+            
+            self.tableView.beginUpdates()
+            self.source = reloaded
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+            self.tableView.endUpdates()
+            self.updateEmptyPanelState()
+            
+            NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added": false])
+        
+        /* TODO
+        case .Move:
+            // TODO  */
+        case .Edit:
+            let nextController = BookmarksEditPanel()
+            nextController.bookmark = bookmark as? BookmarkItem
+            nextController.bookmarkFolder = bookmarkFolder
+            nextController.parentFolders = parentFolders + [source.current]
+            nextController.homePanelDelegate = self.homePanelDelegate
+            nextController.profile = self.profile
+            nextController.source = source
+            self.navigationController?.pushViewController(nextController, animated: true)
+        }
+    }
 }
 
-private protocol BookmarkFolderTableViewHeaderDelegate {
+protocol BookmarkFolderTableViewHeaderDelegate {
     func didSelectHeader()
 }
 
 extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
-    private func didSelectHeader() {
+    func didSelectHeader() {
         self.navigationController?.popViewControllerAnimated(true)
+    }
+}
+
+class BookmarkTableViewCell: SWTableViewCell {
+    let borderView = UIView()
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+        contentView.addSubview(borderView)
+        separatorInset = UIEdgeInsetsMake(0, TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin, 0, 0)
+        
+        borderView.frame = CGRectMake(TwoLineCellUX.BorderViewMargin, TwoLineCellUX.BorderViewMargin, TwoLineCellUX.BorderFrameSize, TwoLineCellUX.BorderFrameSize)
+        borderView.layer.borderWidth = 0.5
+        borderView.layer.borderColor = UIColor.grayColor().CGColor
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let height = frame.height
+        let textLeft = TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin
+        let textLabelHeight = textLabel!.intrinsicContentSize().height
+        let contentHeight = textLabelHeight
+        
+        imageView!.frame = CGRectMake(TwoLineCellUX.BorderViewMargin, (height - TwoLineCellUX.ImageSize) / 2, TwoLineCellUX.ImageSize, TwoLineCellUX.ImageSize)
+        textLabel!.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
+                                     frame.width - textLeft - TwoLineCellUX.BorderViewMargin, textLabelHeight)
+        imageView!.center = borderView.center
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -429,7 +544,7 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     }
 }
 
-private class BookmarkFolderTableViewHeader : UITableViewHeaderFooterView {
+class BookmarkFolderTableViewHeader : UITableViewHeaderFooterView {
     var delegate: BookmarkFolderTableViewHeaderDelegate?
 
     lazy var titleLabel: UILabel = {
