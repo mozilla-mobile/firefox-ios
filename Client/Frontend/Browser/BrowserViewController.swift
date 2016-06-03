@@ -2911,7 +2911,10 @@ extension BrowserViewController {
          https://github.com/JaviSoto/iOS9-Runtime-Headers/blob/master/Frameworks/WebKit.framework/WKContentView.h
         */
         guard let webContentView = UIView.findSubViewWithFirstResponder(webView) else {
-            assertionFailure("Could not find first responder")
+            /*
+             In some cases the URL bar can trigger the keyboard notification. In that case the webview isnt the first responder
+             and a search button should not be added.
+             */
             return
         }
 
