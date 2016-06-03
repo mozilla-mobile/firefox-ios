@@ -157,7 +157,7 @@ class URLBarView: UIView {
     private lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
         cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        let cancelTitle = NSLocalizedString("Cancel", comment: "Button label to cancel entering a URL or search query")
+        let cancelTitle = NSLocalizedString("Cancel", comment: "Label for Cancel button")
         cancelButton.setTitle(cancelTitle, forState: UIControlState.Normal)
         cancelButton.titleLabel?.font = UIConstants.DefaultChromeFont
         cancelButton.addTarget(self, action: #selector(URLBarView.SELdidClickCancel), forControlEvents: UIControlEvents.TouchUpInside)
