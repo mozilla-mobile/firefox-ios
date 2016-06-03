@@ -628,6 +628,7 @@ extension SQLiteHistory: BrowserHistory {
                 "1 AS is_bookmarked",
                 "FROM", ViewAwesomebarBookmarksWithIcons,
                 whereClause,                  // The columns match, so we can reuse this.
+                "GROUP BY url",
                 "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
             ].joinWithSeparator(" ")
 
@@ -649,6 +650,7 @@ extension SQLiteHistory: BrowserHistory {
             "1 AS is_bookmarked",
             "FROM", ViewAwesomebarBookmarks,
             whereClause,                  // The columns match, so we can reuse this.
+            "GROUP BY url",
             "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
         ].joinWithSeparator(" ")
 
