@@ -632,7 +632,7 @@ extension SQLiteHistory: BrowserHistory {
             ].joinWithSeparator(" ")
 
             let sql =
-            "SELECT * FROM (SELECT * FROM (\(historyWithIconsSQL)) UNION ALL SELECT * FROM (\(bookmarksWithIconsSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
+            "SELECT * FROM (SELECT * FROM (\(historyWithIconsSQL)) UNION SELECT * FROM (\(bookmarksWithIconsSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
             return (sql, args)
         }
 
@@ -652,8 +652,7 @@ extension SQLiteHistory: BrowserHistory {
             "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
         ].joinWithSeparator(" ")
 
-
-        let allSQL = "SELECT * FROM (SELECT * FROM (\(historySQL)) UNION ALL SELECT * FROM (\(bookmarksSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
+        let allSQL = "SELECT * FROM (SELECT * FROM (\(historySQL)) UNION SELECT * FROM (\(bookmarksSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
         return (allSQL, args)
     }
 }
