@@ -170,7 +170,7 @@ extension UIAlertController {
             comment: "Prompt option for cancelling out of deletion")
         let deleteActionTitle = NSLocalizedString("Delete",
             tableName: "LoginManager",
-            comment: "Label for the button used to delete an existing login.")
+            comment: "Label for the button used to delete the current login.")
 
         let deleteAlert: UIAlertController
         if hasSyncedLogins {

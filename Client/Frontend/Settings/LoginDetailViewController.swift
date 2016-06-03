@@ -154,7 +154,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .UsernameItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
             loginCell.style = .NoIconAndBothLabels
-            loginCell.highlightedLabelTitle = NSLocalizedString("username", tableName: "LoginManager", comment: "Title for username row in Login Detail View")
+            loginCell.highlightedLabelTitle = NSLocalizedString("username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
             loginCell.descriptionLabel.text = login.username
             loginCell.descriptionLabel.keyboardType = .EmailAddress
             loginCell.descriptionLabel.returnKeyType = .Next
@@ -165,7 +165,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .PasswordItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
             loginCell.style = .NoIconAndBothLabels
-            loginCell.highlightedLabelTitle = NSLocalizedString("password", tableName: "LoginManager", comment: "Title for password row in Login Detail View")
+            loginCell.highlightedLabelTitle = NSLocalizedString("password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
             loginCell.descriptionLabel.text = login.password
             loginCell.descriptionLabel.returnKeyType = .Default
             loginCell.displayDescriptionAsPassword = true
@@ -176,14 +176,14 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .WebsiteItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
             loginCell.style = .NoIconAndBothLabels
-            loginCell.highlightedLabelTitle = NSLocalizedString("website", tableName: "LoginManager", comment: "Title for website row in Login Detail View")
+            loginCell.highlightedLabelTitle = NSLocalizedString("website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
             loginCell.descriptionLabel.text = login.hostname
             return loginCell
 
         case .LastModifiedSeparator:
             let footer = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SeparatorIdentifier) as! SettingsTableSectionHeaderFooterView
             footer.titleAlignment = .Top
-            let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
+            let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the current login was last modified with the timestamp as the parameter.")
             let formattedLabel = String(format: lastModified, NSDate.fromMicrosecondTimestamp(login.timePasswordChanged).toRelativeTimeString())
             footer.titleLabel.text = formattedLabel
             let cell = wrapFooter(footer, withCellFromTableView: tableView, atIndexPath: indexPath)
@@ -191,7 +191,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .DeleteItem:
             let deleteCell = tableView.dequeueReusableCellWithIdentifier(DefaultCellIdentifier, forIndexPath: indexPath)
-            deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Button in login detail screen that deletes the current login")
+            deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
             deleteCell.textLabel?.textAlignment = NSTextAlignment.Center
             deleteCell.textLabel?.textColor = UIConstants.DestructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraitButton
@@ -281,7 +281,7 @@ extension LoginDetailViewController: UITableViewDelegate {
 
 // MARK: - KeyboardHelperDelegate
 extension LoginDetailViewController: KeyboardHelperDelegate {
-    
+
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
@@ -360,9 +360,9 @@ extension LoginDetailViewController {
             return
         }
 
-        // The description label constraints are such that it extends full width of the cell instead of only 
+        // The description label constraints are such that it extends full width of the cell instead of only
         // the size of its text. The reason is because when the description is used as a password, the dots
-        // are slightly larger characters than the font size which causes the password text to be truncated 
+        // are slightly larger characters than the font size which causes the password text to be truncated
         // even though the revealed text fits. Since the label is actually full width, the menu controller will
         // display in its center by default which looks weird with small passwords. To prevent this,
         // the actual size of the text is used to determine where to correctly place the menu.
