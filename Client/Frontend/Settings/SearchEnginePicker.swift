@@ -13,7 +13,7 @@ class SearchEnginePicker: UITableViewController {
         super.viewDidLoad()
 
         navigationItem.title = NSLocalizedString("Default Search Engine", comment: "Title for default search engine picker.")
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Cancel title from search engine picker"), style: .Plain, target: self, action: #selector(SearchEnginePicker.cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .Plain, target: self, action: #selector(SearchEnginePicker.cancel))
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

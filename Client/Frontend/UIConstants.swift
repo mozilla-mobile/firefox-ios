@@ -74,5 +74,5 @@ public struct UIConstants {
     static let ScreenshotQuality: Float = 0.3
 
     static let OKString = NSLocalizedString("OK", comment: "OK button")
-    static let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
+    static let CancelString = NSLocalizedString("Cancel", comment: "Label for Cancel button")
 }
