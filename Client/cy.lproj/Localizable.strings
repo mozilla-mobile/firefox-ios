@@ -1,0 +1,822 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Mae cais gan %@ am enw defnyddiwr a chyfrinair.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Mae cais gan %1$@ am enw defnyddiwr a chyfrinair. Mae'r wefan yn dweud: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Ynghylch";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Ychwanegu Tab";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Ychwanegu i'r Rhestr Ddarllen";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Ychwanegwyd tudalen i'r Rhestr Ddarllen";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Cyfeiriad a Chwilio";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Caniatáu Bysellfyrddau Trydydd Parti";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Anfon bob Tro";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Mae angen dilysu";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Nôl";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Rhwystro Llamlenni";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Nod Tudalen";
+
+/* Panel accessibility label */
+"Bookmarks" = "Nodau Tudalen";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Bydd y nodau tudalen rydych yn eu cadw'n ymddangos yma.";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Ffolder";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Lleoliad";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Enw Ffolder";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Ffolder Newydd";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Teitl";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Disgleirdeb";
+
+/* Alert Call Button */
+"Call" = "Galw";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Diddymu";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Newid lliw'r thema.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Newid y math o ffont.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Clirio'r Data Preifat";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Cau";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Cau'r tab";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Copïo'r Cyfeiriad";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Copio'r Ddelwedd";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Copio'r Ddolen";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Methu ychwanegu'r dudalen i'r Rhestr Ddarllen. Efallai ei fod yna eisoes.";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Methu ychwanegu'r dudalen i'r rhestr Ddarllen";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Methu llwytho'r dudalen";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Creu cyfrif";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Tywyll";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Dadfygio: anghofio cyflwr auth Sync";
+
+/* Debug option */
+"Debug: require password" = "Dadfygio: angen cyfrinair";
+
+/* Debug option */
+"Debug: require upgrade" = "Dadfygio: angen diweddariad";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Lleihau maint testun";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Peiriant Chwilio Rhagosodedig";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Analluogi deialogau tudalennau ychwanegol";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Gosodiadau'r Dangosydd";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Hoffech chi gadw cyfrinair %1$@ ar %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Hoffech chi gadw'r cyfrinair ar %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Hoffech chi ddiweddaru cyfrinair %1$@ ar %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Hoffech chi ddiweddaru'r cyfrinair ar %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Peidio Anfon";
+
+/* Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Gorffen";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "Tap dwbl a dal i agor hanes";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Nid yw llwythi'n cael eu cynnal gan Firefox eto.";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Rhowch eich cyfrinair i gysylltu.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Uwch";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Rhybudd: nid ydym yn gallu cadarnhau fod eich cysylltiad a'r wefan hon yn ddiogel.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Gall fod yn un ai cam ffurfweddu neu ymyrraeth gan ymosodwr. Parhewch os ydych yn derbyn y risg posib.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Mae perchennog %@ wedi cam ffurfweddu eu gwefan. I rwystro eich manylion rhag cael eu dwyn, nid yw Firefox wedi cysylltu â'r wefan hon.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Dim Ymddiriedaeth i'r Cysylltiad";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Ewch Nôl";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Mynd i'r wefan beth bynnag";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Mae Facebook angen ailagor er mwyn i'r newid hwn ddigwydd.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Bydd Firefox yn peidio cydweddu eich cyfrif ond ni fydd yn dileu eich data pori ar y ddyfais hon.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Hoffai Firefox gael mynediad at eich Lluniau";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Ymlaen";
+
+/* General settings section title */
+"General" = "Cyffredinol";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Cael mynediad at eich tabiau agored, nodau tudalen a chyfrineiriau o'ch dyfeisiau eraill.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Mynd";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Mynd i URL copïwyd?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Cymorth";
+
+/* Panel accessibility label */
+"History" = "Hanes";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Bydd gwefannau rydych wedi ymweld â nhw'n ddiweddar yn ymddangos yma.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Mae eich tabiau o ddyfeisiau eraill yn ymddangos yma.";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "Mewngofnodwch i weld tabiau agored ar eich dyfeisiau eraill.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Hanes";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Caewyd yn ddiweddar";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ddyfais wedi eu cysylltu";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Dyfeisiau cydweddwyd";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Diddymu";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Mae modd newid hwn ar unrhyw adeg yn y Gosodiadau";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Gosod Tudalen Cartref";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Hoffech chi ddefnyddio'r dudalen gwe yma fel eich tudalen cartref?";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Nôl";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Cau Tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Chwilio";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Ymlaen";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Tab Preifat Newydd";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Tab Newydd";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Ail Lwytho Tudalen";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Dewis Bar Lleoliad";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Dangos y Tab Nesaf";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Dangos y Tab Blaenorol";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Cynyddu maint y testun";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Carwsél y Cyflwyniad";
+
+/* History tableview section header */
+"Last month" = "Mis diwethaf";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Cydweddiad diwethaf: %@";
+
+/* History tableview section header */
+"Last week" = "Wythnos diwethaf";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Trwyddedau";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Golau";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Llwytho'r dudalen wreiddiol";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Llwytho cynnwys…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Allgofnodi";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Allgofnodi?";
+
+/* Authentication prompt log in button */
+"Log in" = "Mewngofnodi";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Mewngofnodion";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Peidio Cadw";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Cadw mewngofnodiad %1$@ ar gyfer %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Cadw cyfrinair %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "Diweddaru mewngofnodiad %1$@ ar %2$@?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Diweddaru cyfrinair %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Cadw Mewngofnodiad";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Diweddaru";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Bosib fod Firefox wedi chwalu y tro diwethaf. Hoffech chi adfer eich tabiau?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Marcio fel wedi ei Darllen";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Marcio fel Heb ei Darllen";
+
+/* Error for a missing remote error number */
+"Missing error" = "Gwall coll";
+
+/* Error for a missing remote error message */
+"Missing message" = "Neges goll";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Bar Offer Symud";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Tab newydd: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Mae fersiwn newydd ar gael";
+
+/* Restore Tabs Negative Action */
+"No" = "Na";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Dim tabiau";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Nid Nawr";
+
+/* Button to not save the user's password */
+"Not now" = "Nid nawr";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "Iawn";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Iawn";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Wps! Mae Firefox wedi chwalu";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Agor mewn Tab Newydd";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Agor y Gosodiadau";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Agorwch erthyglau yn y Golwg Darllen drwy dapio ar yr eicon llyfr pan mae'n ymddangos yn y bar teitl.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Agor yn…";
+
+/* Opening an external URL */
+"Opening %@" = "Wrthi'n agor %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Dewis Panel";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Cyfrinair";
+
+/* Paste the URL into the location bar */
+"Paste" = "Gludo";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Gludo a Mynd";
+
+/* Privacy section title */
+"Privacy" = "Preifatrwydd";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Polisi Preifatrwydd";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Peiriannau Chwilio Cyflym";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Golwg Darllen";
+
+/* Panel accessibility label */
+"Reading list" = "Rhestr ddarllen";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Caewyd yn Ddiweddar";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Ail-lwytho";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Tynnu";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Tynnu o'r Rhestr Ddarllen";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Tynnu tudalen";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Gofyn am Wefan Bwrdd Gwaith";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Gofyn am Wefan Symudol";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "Cadw'r Ddelwedd";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Cadw Mewngofnodion";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Cadwch dudalennau i'ch Golwg Darllen drwy dapio ar yr eicon llyfr plws yn rheolyddion Golwg Darllen";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Chwilio";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Chwilio neu gyfeiriad gwe";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Bydd y peiriant chwilio newydd yn ymddangos yn y bar chwilio cyflym.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Ychwanegwyd peiriant Chwilio!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Ychwanegu Darparwr Chwilio?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Diddymu";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Nid oedd modd ychwanegu peiriant chwilio.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Methwyd";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "Iawn";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Chwiliadau am yr awgrym";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Cysylltiad diogel";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Anfon Adborth";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Anfon Adroddiad";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Anfon adroddiad chwalu fel bod modd i Mozilla drwsio'r anhawster?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Diddymu";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Dim ond dolenni HTTP a HTTPS y mae modd eu rhannu.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "Iawn";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Nid oes modd rhannu'r ddolen rydych y ceisio ei rhannu.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Gosodiadau";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Clirio Data Preifat";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Clirio Data Preifat";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Clirio Data Preifat";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Clirio";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Tudalen Cartref";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Gosodiadau Tudalen Cartref";
+
+/* Toggle setting to show home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "Fel arall eu dangos yn y bar offer";
+
+/* Toggle setting to show home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "Dangos eicon Tudalen Cartref yn y Ddewislen";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Rhowch dudalen gwe";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Y Dudalen Cartref Cyfredol";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Defnyddiwch Ddolen wedi ei Gopïo";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Defnyddio'r Dudalen Bresennol";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Defnyddio'r Rhagosodedig";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Gorffen";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Golygu";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Datrys Problemau";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "Rhannu";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Rhannu Dolen";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Diddymu";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Dangos Awgrymiadau Chwilio";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Dangos Tabiau";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Dangos y Cyflwyniad";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Dangos awgrymiadau chwilio";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Mewngofnodi i Facebook";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Mewngofnodi";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Mewngofnodi i estyn eich tabiau, nodau tudalen a chyfrineiriau o'ch dyfeisiau eraill.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Atal";
+
+/* Support section title */
+"Support" = "Cefnogaeth";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Llusgwch i'r dde neu'r chwith gyda tri bys i gau'r tab.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Cydweddu Nawr";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Cydweddwch eich tabiau, nodau tudalen, cyfrineiriau a mwy.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Cydweddwch eich tabiau, cyfrineiriau a mwy.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Gall eich cydweddiad cyntaf gymryd peth amser";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Cydweddu";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Cydweddu…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Nodau Tudalen";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Cleientiaid Pell";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Mae cydweddu wedi methu";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Hanes";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Mewngofnodion";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Nid yw cydweddu ar gael";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Mae cydweddu all-lein";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Mae Sync yn profi anawsterau wrth gydweddu %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Tabiau";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Tab %1$@ o %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Tabiau %1$@ i %2$@ o %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Drôr Tabiau";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Dadwneud";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d tab ar gau";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Nid oedd modd dangos y dudalen yn y Golwg Darllen.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Mae yna fersiwn newydd o Firefox Aurora ar gael. Tapiwch iawn i fyd i'r dudalen llwytho i lawr.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Bu anhawster cael mynediad at dabiau o'ch dyfeisiau eraill. Ceisiwch eto ymhen ychydig.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Bu gwall wrth drosi'r dudalen";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Mae hyn yn caniatáu i chi gadw'r ddelwedd i'ch Camera Roll.";
+
+/* Opening an external app */
+"This will open in another application" = "Bydd hwn yn agor mewn rhaglen arall";
+
+/* History tableview section header */
+"Today" = "Heddiw";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Dewislen";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "Tudalen Cartref";
+
+/* Panel accessibility label */
+"Top sites" = "Hoff wefannau";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Bydd y gwefannau rydych wedi ymweld â nhw amlaf yn ymddangos yn fan hyn.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Croeso i'ch Hoff Wefannau";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Tynnu tudalen - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Diweddaru";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Diweddarwch Firefox i gysylltu.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Defnyddio Tabiau Cryno";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Enw defnyddiwr";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Dilyswch eich cyfeiriad e-bost.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Fersiwn %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Golwg";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Cynnwys gwe";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Croeso i'ch Rhestr Ddarllen";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Wel, mae hyn yn boen.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wicipedia";
+
+/* Button to save the user's password */
+"Yes" = "Iawn";
+
+/* History tableview section header */
+"Yesterday" = "Ddoe";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Nid oes gennych unrhyw dabiau ar agor yn Firefox ar eich dyfeisiau eraill.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Eich Hawliau";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "cyfrifiadur";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "newydd ddigwydd";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "dyfais symudol";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "mwy na mis yn ôl";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "mwy nag wythnos yn ôl";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "darllen";
+
+/* Relative date for date in past week. */
+"this week" = "yr wythnos hon";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "heddiw am %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "heb ei ddarllen";
+
+/* Relative date for yesterday. */
+"yesterday" = "ddoe";
+

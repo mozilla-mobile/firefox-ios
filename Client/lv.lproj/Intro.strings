@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Pārlūkojiet vairākas mājas lapas vienlaicīgi izmantojot cilnes.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Izvēlieties";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Pieslēdzieties Firefox, visur kur to lietojat.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Pielāgot";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Vienkārši parejat starp atvērtām mājaslapām izmantojot cilnes.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox un mākonis";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Ievada slaids %1$@ no %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Sakārtot";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Pielāgojiet Firefox savām vēlmēm Iestatījumos.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Pielāgojiet savu meklētāju un vairāk iestatījumos.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Dalīties";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Ieiet Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Sākt pārlūkošanu";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Sinhronizēt ierīces.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Spiediet, velciet un pārvietojiet Firefox ikonu savā dokā vienkāršākai pieejai.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Iestatījumu poga ir cilņu joslas sākumā";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Rādīt cilnes poga atrodas blakus adresei un meklēšanas laukam un attēlo atvērto cilņu skaitu";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Izmantojiet dalīšanas loksni lai sūtītu saites no citām lapām uz Firefox.";
+

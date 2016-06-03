@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "پس از ۱ ساعت";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "پس از ۱ دقیقه";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "پس از ۵ دقیقه";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "پس از ۱۰ دقیقه";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "پس از ۱۵ دقیقه";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "تغییر گذرواژه";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "وارکردن کدعبور";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "وارد کردن کد عبور جدید";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "وارد کردن گذرواژه";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "وارد کردن کد عبور";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "فوری";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "کدعبور اشتباه. مجددا تلاش کنید (تلاش باقی ماند: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "کدعبور اشتباه‌. مجددا تلاش کنید.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "تمامی تلاش ها را انجام دادید. لطفا ۱ ساعت دیگر امتحان کنید.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "تمامی تلاش ها را انجام داده اید. لطفا بعدا مجددا تلاش کنید.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "می‌بایستی کد عبور جدید از کد فعلی متفاوت باشد.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "گذرواژه";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "کدعبور یکسان نمی‌باشد. مجددا تلاش کنید.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "وارد‌کردن مجدد گذرواژه";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "گذرواژه لازم است";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "تنظیم گذرواژه";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "تشخیص دهنده لمسی یا گذرواژه";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "خاموش کردن گذرواژه";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "روشن کردن گذرواژه";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "خاموش کردن گذرواژه خود.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "استفاده از اعتبار لمسی";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "استفاده از اثرانگشت برای دسترسی به ورود.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "استفاده از اثرانگشت برای دسترسی به مرورشخصی.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "از اثر انگشت خود برای غیرفعال ‌سازی شناسانگر لمسی استفاده کنید.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "از اثر انگشت خود برای دسترسی به پیکربندی وقفه زمانی درخواست رمزعبور استفاده کنید.";
+

@@ -1,0 +1,64 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Sur oc'h?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Nullañ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Goullonderiñ ar glask";
+
+/* Copy password text selection menu item */
+"Copy" = "Eilañ";
+
+/* Button in login detail screen that deletes the current login
+   Label for the button used to delete an existing login. */
+"Delete" = "Dilemel";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Diziuzañ pep tra";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Mont er mod klask";
+
+/* Hide password text selection menu item */
+"Hide" = "Kuzhat";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Kemm diwezhañ %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Titouroù kennaskañ";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Dilamet e vo an titouroù kennaskañ da vat.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Dilamet e vo an titouroù kennaskañ eus an holl trevnadoù kennasket.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "N'eo bet kavet titour kennaskañ ebet";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Digeriñ & Leuniañ";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Dizoloiñ";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Klask";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Maeziad klask";
+
+/* Title for selecting all logins */
+"Select All" = "Diuzañ pep tra";
+
+/* Title for password row in Login Detail View */
+"password" = "ger-tremen";
+
+/* Title for username row in Login Detail View */
+"username" = "anv arveriad";
+
+/* Title for website row in Login Detail View */
+"website" = "lec'hienn";
+
