@@ -62,13 +62,25 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
         guard let passData = NSData(contentsOfURL: url) else { return }
         var error: NSError? = nil
         let pass = PKPass(data: passData, error: &error)
+        if let _ = error {
+            // display an error
+            let alertController = UIAlertController(
+                title: Strings.UnableToAddPassErrorTitle,
+                message: Strings.UnableToAddPassErrorMessage,
+                preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(
+                UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .Cancel) { (action) in
+                    // Do nothing.
+                })
+            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+            return
+        }
         let passLibrary = PKPassLibrary()
         if passLibrary.containsPass(pass) {
             UIApplication.sharedApplication().openURL(pass.passURL)
         } else {
             let addController = PKAddPassesViewController(pass: pass)
             UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(addController, animated: true, completion: nil)
-            return
         }
 
     }
