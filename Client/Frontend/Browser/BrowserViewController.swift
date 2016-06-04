@@ -904,7 +904,7 @@ class BrowserViewController: UIViewController {
     private func runScriptsOnWebView(webView: WKWebView) {
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler:nil)
     }
-    
+
     private func updateUIForReaderHomeStateForTab(tab: Tab) {
         updateURLBarDisplayURL(tab)
         scrollController.showToolbars(animated: false)
@@ -1139,7 +1139,7 @@ class BrowserViewController: UIViewController {
             tabManager.selectedTab?.reload()
         }
     }
-    
+
     func goBack(){
         if(tabManager.selectedTab?.canGoBack == true && homePanelController == nil){
             tabManager.selectedTab?.goBack()
@@ -1150,24 +1150,24 @@ class BrowserViewController: UIViewController {
             tabManager.selectedTab?.goForward()
         }
     }
-    
+
     func findOnPage(){
         if(homePanelController == nil){
             tab( (tabManager.selectedTab)!, didSelectFindInPageForSelection: "")
         }
     }
-    
+
     func selectLocationBar(){
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
-    
+
     func newTab(){
         openBlankNewTabAndFocus(isPrivate: false)
     }
     func newPrivateTab(){
         openBlankNewTabAndFocus(isPrivate: true)
     }
-    
+
     func closeTab(){
         if(tabManager.tabs.count > 1){
             tabManager.removeTab(tabManager.selectedTab!);
@@ -1176,7 +1176,7 @@ class BrowserViewController: UIViewController {
             //need to close the last tab and show the favorites screen thing
         }
     }
-    
+
     func nextTab(){
         if(tabManager.selectedIndex < (tabManager.tabs.count - 1) ){
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex+1])
@@ -1187,7 +1187,7 @@ class BrowserViewController: UIViewController {
             }
         }
     }
-    
+
     func previousTab(){
         if(tabManager.selectedIndex > 0){
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex-1])
@@ -1229,7 +1229,7 @@ class BrowserViewController: UIViewController {
             ]
         }
     }
-    
+
     private func getCurrentAppState() -> AppState {
         return mainStore.updateState(getCurrentUIState())
     }
@@ -1463,7 +1463,7 @@ extension BrowserViewController: URLBarDelegate {
             longPressAlertController.addAction(action.alertAction(style: .Default))
         }
 
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel alert view"), style: .Cancel, handler: { (alert: UIAlertAction) -> Void in
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .Cancel, handler: { (alert: UIAlertAction) -> Void in
         })
         longPressAlertController.addAction(cancelAction)
 
@@ -1570,7 +1570,7 @@ extension BrowserViewController: TabToolbarDelegate {
 
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         controller.addAction(UIAlertAction(title: toggleActionTitle, style: .Default, handler: { _ in tab.toggleDesktopSite() }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Action Sheet Cancel Button"), style: .Cancel, handler: nil))
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: .Cancel, handler: nil))
         controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
         controller.popoverPresentationController?.sourceRect = button.frame
         presentViewController(controller, animated: true, completion: nil)
@@ -1662,7 +1662,7 @@ extension BrowserViewController: MenuViewControllerDelegate {
         if (traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Compact) && menuViewController.preferredContentSize == CGSize.zero {
             return false
         }
-        
+
         func orientationForSize(size: CGSize) -> UIInterfaceOrientation {
             return size.height < size.width ? .LandscapeLeft : .Portrait
         }
@@ -1982,7 +1982,7 @@ extension BrowserViewController: TabManagerDelegate {
 
                             tab?.isBookmarked = isBookmarked
 
-                                
+
                             if !AppConstants.MOZ_MENU {
                                 self.toolbar?.updateBookmarkStatus(isBookmarked)
                                 self.urlBar.updateBookmarkStatus(isBookmarked)
@@ -2143,7 +2143,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 let formatter = PhoneNumberFormatter()
                 let formattedPhoneNumber = formatter.formatPhoneNumber(phoneNumber)
                 let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: UIAlertActionStyle.Cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
                     UIApplication.sharedApplication().openURL(url)
                 }))
