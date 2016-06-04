@@ -5,13 +5,13 @@
 import Foundation
 import UIKit
 
-protocol MenuToolbarItemDelegate {
+protocol MenuToolbarItemDelegate: class {
     func menuView(menuView: MenuView, didSelectItemAtIndex index: Int)
 
     func menuView(menuView: MenuView, didLongPressItemAtIndex index: Int)
 }
 
-protocol MenuItemDelegate {
+protocol MenuItemDelegate: class {
     func menuView(menuView: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath)
 
     func menuView(menuView: MenuView, didLongPressItemAtIndexPath indexPath: NSIndexPath)
