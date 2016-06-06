@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import PassKit
 import WebKit
 import SnapKit
 
@@ -22,6 +23,7 @@ struct OpenInViewUX {
 
 enum FileType : String {
     case PDF = "pdf"
+    case PASS = "pkpass"
 }
 
 protocol OpenInHelper {
@@ -34,9 +36,53 @@ struct OpenInHelperFactory {
     static func helperForURL(url: NSURL) -> OpenInHelper? {
         if OpenPdfInHelper.canOpen(url) {
             return OpenPdfInHelper(url: url)
+        } else if OpenPassBookHelper.canOpen(url) {
+            return OpenPassBookHelper(url: url)
         }
 
         return nil
+    }
+}
+
+class OpenPassBookHelper: NSObject, OpenInHelper {
+    private var url: NSURL
+    lazy var openInView: OpenInView = OpenInView()
+
+    init(url: NSURL) {
+        self.url = url
+        super.init()
+    }
+
+    static func canOpen(url: NSURL) -> Bool {
+        guard let pathExtension = url.pathExtension else { return false }
+        return pathExtension == FileType.PASS.rawValue && PKAddPassesViewController.canAddPasses()
+    }
+
+    func open() {
+        guard let passData = NSData(contentsOfURL: url) else { return }
+        var error: NSError? = nil
+        let pass = PKPass(data: passData, error: &error)
+        if let _ = error {
+            // display an error
+            let alertController = UIAlertController(
+                title: Strings.UnableToAddPassErrorTitle,
+                message: Strings.UnableToAddPassErrorMessage,
+                preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(
+                UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .Cancel) { (action) in
+                    // Do nothing.
+                })
+            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+            return
+        }
+        let passLibrary = PKPassLibrary()
+        if passLibrary.containsPass(pass) {
+            UIApplication.sharedApplication().openURL(pass.passURL)
+        } else {
+            let addController = PKAddPassesViewController(pass: pass)
+            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(addController, animated: true, completion: nil)
+        }
+
     }
 }
 
