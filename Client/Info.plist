@@ -32,6 +32,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>firefox</string>
+				<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 			</array>
 		</dict>
 	</array>

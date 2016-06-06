@@ -29,5 +29,7 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>TodayViewController</string>
 	</dict>
+	<key>MozInternalURLScheme</key>
+	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 </dict>
 </plist>
