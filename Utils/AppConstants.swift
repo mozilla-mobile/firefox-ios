@@ -50,7 +50,7 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return false
+            return true
         #elseif MOZ_CHANNEL_NIGHTLY
             return true
         #elseif MOZ_CHANNEL_FENNEC
