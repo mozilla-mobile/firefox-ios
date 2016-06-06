@@ -205,7 +205,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
 }
 
 private class TwoLineCellHelper {
-    var container: UIView!
+    weak var container: UIView!
     var textLabel: UILabel!
     var detailTextLabel: UILabel!
     var imageView: UIImageView!
