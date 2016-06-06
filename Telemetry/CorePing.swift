@@ -12,12 +12,15 @@ private let PrefKeyClientID = "PrefKeyClientID"
 private let PrefKeyModel = "PrefKeyModel"
 
 // See https://gecko.readthedocs.org/en/latest/toolkit/components/telemetry/telemetry/core-ping.html
-private let PingVersion = 3
+private let PingVersion = 7
 
 class CorePing: TelemetryPing {
     let payload: JSON
+    let prefs: Prefs
 
     init(profile: Profile) {
+        self.prefs = profile.prefs
+
         let version = NSProcessInfo.processInfo().operatingSystemVersion
         let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
 
@@ -56,8 +59,19 @@ class CorePing: TelemetryPing {
         }
 
         let locale = NSBundle.mainBundle().preferredLocalizations.first!.stringByReplacingOccurrencesOfString("_", withString: "-")
+        let defaultEngine = profile.searchEngines.defaultEngine
 
-        let out: [String: AnyObject] = [
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let date = formatter.stringFromDate(NSDate())
+
+        let timezoneOffset = NSTimeZone.localTimeZone().secondsFromGMT / 60
+
+        let usageCount = UsageTelemetry.getCount(prefs)
+        let usageTime = UsageTelemetry.getTime(prefs)
+        UsageTelemetry.reset(prefs)
+
+        var out: [String: AnyObject] = [
             "v": PingVersion,
             "clientId": clientID,
             "seq": Int(pingCount),
@@ -67,8 +81,17 @@ class CorePing: TelemetryPing {
             "device": "Apple-" + model,
             "arch": "arm",
             "profileDate": profileDate,
-            "defaultSearch": profile.searchEngines.defaultEngine.id
+            "defaultSearch": defaultEngine.engineID ?? JSON.null,
+            "created": date,
+            "tz": timezoneOffset,
+            "sessions": usageCount,
+            "durations": usageTime,
         ]
+
+        if let searches = SearchTelemetry.getData(profile.prefs) {
+            out["searches"] = searches
+            SearchTelemetry.resetCount(profile.prefs)
+        }
 
         payload = JSON(out)
     }

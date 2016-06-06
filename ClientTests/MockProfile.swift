@@ -15,6 +15,7 @@ import Deferred
 public class MockSyncManager: SyncManager {
     public var isSyncing = false
     public var lastSyncFinishTime: Timestamp? = nil
+    public var syncDisplayState: SyncDisplayState?
 
     public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
         return deferMaybe(true)
@@ -119,7 +120,7 @@ public class MockProfile: Profile {
     }()
 
     lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs)
+        return SearchEngines(prefs: self.prefs, files: self.files)
     }()
 
     lazy var prefs: Prefs = {
@@ -132,6 +133,10 @@ public class MockProfile: Profile {
 
     lazy var readingList: ReadingListService? = {
         return ReadingListService(profileStoragePath: self.files.rootPath as String)
+    }()
+
+    lazy var recentlyClosedTabs: ClosedTabsStore = {
+        return ClosedTabsStore(prefs: self.prefs)
     }()
 
     internal lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {

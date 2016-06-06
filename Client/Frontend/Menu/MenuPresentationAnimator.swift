@@ -58,7 +58,7 @@ extension MenuPresentationAnimator {
         let sourceView: UIView?
         if let toolbar = bvc.toolbar {
             leftViews = [toolbar.backButton, toolbar.forwardButton]
-            rightViews = [toolbar.stopReloadButton, toolbar.shareButton]
+            rightViews = [toolbar.stopReloadButton, toolbar.shareButton, toolbar.homePageButton]
             sourceView = toolbar.menuButton
         } else {
             sourceView = nil
@@ -78,6 +78,7 @@ extension MenuPresentationAnimator {
         guard let container = transitionContext.containerView() else { return }
 
         let menuView = menuController.view
+        menuView.frame = container.bounds
         let bottomView = baseController.view
 
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right

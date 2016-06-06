@@ -134,7 +134,8 @@ class Tab: NSObject {
     }
 
     private func updateAppState() {
-        self.appStateDelegate?.appDidUpdateState(.Tab(tabState: self.tabState))
+        let state = mainStore.updateState(.Tab(tabState: self.tabState))
+        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     weak var navigationDelegate: WKNavigationDelegate? {

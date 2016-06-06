@@ -376,10 +376,20 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     func SELdidSelectEngine(sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
-        if let index = searchEngineScrollViewContent.subviews.indexOf(sender),
-           let url = quickSearchEngines[index - 1].searchURLForQuery(searchQuery) {
-            searchDelegate?.searchViewController(self, didSelectURL: url)
+        guard let index = searchEngineScrollViewContent.subviews.indexOf(sender) else {
+            assertionFailure()
+            return
         }
+
+        let engine = quickSearchEngines[index - 1]
+
+        guard let url = engine.searchURLForQuery(searchQuery) else {
+            assertionFailure()
+            return
+        }
+
+        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .QuickSearch))
+        searchDelegate?.searchViewController(self, didSelectURL: url)
     }
 
     func SELdidClickSearchButton() {
@@ -413,6 +423,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
         coordinator.animateAlongsideTransition({ _ in
             self.tableView.reloadData()
@@ -545,11 +556,15 @@ extension SearchViewController {
 
 extension SearchViewController: SuggestionCellDelegate {
     private func suggestionCell(suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String) {
+        // Assume that only the default search engine can provide search suggestions.
+        let engine = searchEngines.defaultEngine
+
         var url = URIFixup.getURL(suggestion)
         if url == nil {
-            // Assume that only the default search engine can provide search suggestions.
-            url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+            url = engine.searchURLForQuery(suggestion)
         }
+
+        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .Suggestion))
 
         if let url = url {
             searchDelegate?.searchViewController(self, didSelectURL: url)

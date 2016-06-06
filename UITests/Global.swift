@@ -8,6 +8,7 @@ import Storage
 import WebKit
 import SwiftKeychainWrapper
 import Shared
+@testable import Client
 
 let LabelAddressAndSearch = "Address and Search"
 
@@ -406,6 +407,7 @@ class SimplePageServer {
 class SearchUtils {
     static func navigateToSearchSettings(tester: KIFUITestActor, engine: String = "Yahoo") {
         tester.tapViewWithAccessibilityLabel("Menu")
+        tester.waitForAnimationsToFinish()
         tester.tapViewWithAccessibilityLabel("Settings")
         tester.waitForViewWithAccessibilityLabel("Settings")
         tester.tapViewWithAccessibilityLabel("Search, \(engine)")
@@ -430,6 +432,48 @@ class SearchUtils {
     static func getDefaultSearchEngineName(tester: KIFUITestActor) -> String {
         let view = tester.waitForCellWithAccessibilityLabel("Default Search Engine")
         return view.accessibilityValue!
+    }
+
+    static func getDefaultEngine() -> OpenSearchEngine! {
+        guard let userProfile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile else {
+            XCTFail("Unable to get a reference to the user's profile")
+            return nil
+        }
+        return userProfile.searchEngines.defaultEngine
+    }
+
+    static func youTubeSearchEngine() -> OpenSearchEngine {
+        return mockSearchEngine("YouTube", template: "https://m.youtube.com/#/results?q={searchTerms}&sm=", icon: "youtube")!
+    }
+
+    static func mockSearchEngine(name: String, template: String, icon: String) -> OpenSearchEngine? {
+        guard let imagePath = NSBundle(forClass: self).pathForResource(icon, ofType: "ico"),
+              let imageData = NSData(contentsOfFile: imagePath),
+              let image = UIImage(data: imageData) else
+        {
+            XCTFail("Unable to load search engine image named \(icon).ico")
+            return nil
+        }
+
+        return OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
+    }
+
+    static func addCustomSearchEngine(engine: OpenSearchEngine) {
+        guard let userProfile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile else {
+            XCTFail("Unable to get a reference to the user's profile")
+            return
+        }
+
+        userProfile.searchEngines.addSearchEngine(engine)
+    }
+
+    static func removeCustomSearchEngine(engine: OpenSearchEngine) {
+        guard let userProfile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile else {
+            XCTFail("Unable to get a reference to the user's profile")
+            return
+        }
+
+        userProfile.searchEngines.deleteCustomEngine(engine)
     }
 }
 
@@ -470,5 +514,28 @@ class PasscodeUtils {
         tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(1)]))
         tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(2)]))
         tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(3)]))
+    }
+}
+
+class HomePageUtils {
+    static func navigateToHomePageSettings(tester: KIFUITestActor) {
+        tester.waitForAnimationsToFinish()
+        tester.tapViewWithAccessibilityLabel("Menu")
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityIdentifier("HomePageSetting")
+    }
+
+    static func homePageSetting(tester: KIFUITestActor) -> String? {
+        let view = tester.waitForViewWithAccessibilityIdentifier("HomePageSettingTextField")
+        guard let textField = view as? UITextField else {
+            XCTFail("View is not a textField: view is \(view)")
+            return nil
+        }
+        return textField.text
+    }
+
+    static func navigateFromHomePageSettings(tester: KIFUITestActor) {
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityLabel("Done")
     }
 }

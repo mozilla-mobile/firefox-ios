@@ -15,14 +15,16 @@ private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
+private let InitialPingSentKey = "initialPingSent"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var rootViewController: NotificationRootViewController!
+    var rootViewController: UIViewController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
+    var foregroundStartTime = 0
 
     weak var application: UIApplication?
     var launchOptions: [NSObject: AnyObject]?
@@ -30,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
     var openInFirefoxParams: LaunchParams? = nil
+
+    var appStateStore: AppStateStore!
 
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Hold references to willFinishLaunching parameters for delayed app launch
@@ -61,7 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KeyboardHelper.defaultHelper.startObserving()
 
         log.debug("Starting dynamic font helper…")
-        // Start the keyboard helper to monitor and cache keyboard state.
         DynamicFontHelper.defaultHelper.startObserving()
 
         log.debug("Setting custom menu items…")
@@ -77,6 +80,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         log.debug("Getting profile…")
         let profile = getProfile(application)
+        appStateStore = AppStateStore(prefs: profile.prefs)
+
+        log.debug("Initializing telemetry…")
+        Telemetry.initWithPrefs(profile.prefs)
 
         if !DebugSettingsBundleOptions.disableLocalWebServer {
             log.debug("Starting web server…")
@@ -110,7 +117,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
         navigationController.navigationBarHidden = true
-        rootViewController = NotificationRootViewController(rootViewController: navigationController)
+
+        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
+            rootViewController = NotificationRootViewController(rootViewController: navigationController)
+        } else {
+            rootViewController = navigationController
+        }
 
         self.window!.rootViewController = rootViewController
 
@@ -146,7 +158,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
 
-        sendCorePing()
+        resetForegroundStartTime()
+        if !(profile.prefs.boolForKey(InitialPingSentKey) ?? false) {
+            // Try to send an initial core ping when the user first opens the app so that they're
+            // "on the map". This lets us know they exist if they try the app once, crash, then uninstall.
+            // sendCorePing() only sends the ping if the user is offline, so if the first ping doesn't
+            // go through *and* the user crashes then uninstalls on the first run, then we're outta luck.
+            profile.prefs.setBool(true, forKey: InitialPingSentKey)
+            sendCorePing()
+        }
 
         log.debug("Done with setting up the application.")
         return true
@@ -271,7 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return thirdPartyKeyboardSettingBool
         }
 
-        return true
+        return false
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
@@ -318,6 +338,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
         tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
         syncOnDidEnterBackground(application: application)
+
+        let elapsed = Int(NSDate().timeIntervalSince1970) - foregroundStartTime
+        Telemetry.recordEvent(UsageTelemetry.makeEvent(elapsed))
+        sendCorePing()
     }
 
     private func syncOnDidEnterBackground(application application: UIApplication) {
@@ -348,17 +372,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
 
-        sendCorePing()
+        resetForegroundStartTime()
+    }
+
+    private func resetForegroundStartTime() {
+        foregroundStartTime = Int(NSDate().timeIntervalSince1970)
     }
 
     /// Send a telemetry ping if the user hasn't disabled reporting.
     /// We still create and log the ping for non-release channels, but we don't submit it.
     private func sendCorePing() {
-        if let profile = profile where (profile.prefs.boolForKey("settings.sendUsageData") ?? true) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-                let ping = CorePing(profile: profile)
-                Telemetry.sendPing(ping)
+        guard let profile = profile where (profile.prefs.boolForKey("settings.sendUsageData") ?? true) else {
+            log.debug("Usage sending is disabled. Not creating core telemetry ping.")
+            return
+        }
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+            // The core ping resets data counts when the ping is built, meaning we'll lose
+            // the data if the ping doesn't go through. To minimize loss, we only send the
+            // core ping if we have an active connection. Until we implement a fault-handling
+            // telemetry layer that can resend pings, this is the best we can do.
+            guard DeviceInfo.hasConnectivity() else {
+                log.debug("No connectivity. Not creating core telemetry ping.")
+                return
             }
+
+            let ping = CorePing(profile: profile)
+            Telemetry.sendPing(ping)
         }
     }
 

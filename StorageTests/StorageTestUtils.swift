@@ -15,6 +15,7 @@ import XCTest
 
 protocol Succeedable {
     var isSuccess: Bool { get }
+    var isFailure: Bool { get }
 }
 
 extension Maybe: Succeedable {
@@ -23,6 +24,10 @@ extension Maybe: Succeedable {
 extension Deferred where T: Succeedable {
     func succeeded() {
         XCTAssertTrue(self.value.isSuccess)
+    }
+
+    func failed() {
+        XCTAssertTrue(self.value.isFailure)
     }
 }
 

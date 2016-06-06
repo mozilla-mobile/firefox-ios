@@ -22,40 +22,40 @@ extension PasscodeInterval {
 // Strings used in multiple areas within the Authentication Manager
 struct AuthenticationStrings {
     static let passcode =
-        NSLocalizedString("Passcode", tableName: "AuthenticationManager", comment: "List section title for passcode settings")
+        NSLocalizedString("Passcode", tableName: "AuthenticationManager", comment: "Label for the Passcode item in Settings")
 
     static let touchIDPasscodeSetting =
-        NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Title for Touch ID/Passcode settings option")
+        NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Label for the Touch ID/Passcode item in Settings")
 
     static let requirePasscode =
-        NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Title for setting to require a passcode")
+        NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately'")
 
     static let enterAPasscode =
-        NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Title above input for entering a passcode")
+        NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when entering a new passcode")
 
     static let enterPasscodeTitle =
-        NSLocalizedString("Enter Passcode", tableName: "AuthenticationManager", comment: "Screen title for entering a passcode")
+        NSLocalizedString("Enter Passcode", tableName: "AuthenticationManager", comment: "Title of the dialog used to request the passcode")
 
     static let enterPasscode =
-        NSLocalizedString("Enter passcode", tableName: "AuthenticationManager", comment: "Title above input for entering passcode while removing/changing")
+        NSLocalizedString("Enter passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when changing the existing passcode")
 
     static let reenterPasscode =
-        NSLocalizedString("Re-enter passcode", tableName: "AuthenticationManager", comment: "Title for re-entering a passcode")
+        NSLocalizedString("Re-enter passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when confirming a passcode")
 
     static let setPasscode =
-        NSLocalizedString("Set Passcode", tableName: "AuthenticationManager", comment: "Screen title for Set Passcode")
+        NSLocalizedString("Set Passcode", tableName: "AuthenticationManager", comment: "Title of the dialog used to set a passcode")
 
     static let turnOffPasscode =
-        NSLocalizedString("Turn Passcode Off", tableName: "AuthenticationManager", comment: "Title for setting to turn off passcode")
+        NSLocalizedString("Turn Passcode Off", tableName: "AuthenticationManager", comment: "Label used as a setting item to turn off passcode")
 
     static let turnOnPasscode =
-        NSLocalizedString("Turn Passcode On", tableName: "AuthenticationManager", comment: "Title for setting to turn on passcode")
+        NSLocalizedString("Turn Passcode On", tableName: "AuthenticationManager", comment: "Label used as a setting item to turn on passcode")
 
     static let changePasscode =
-        NSLocalizedString("Change Passcode", tableName: "AuthenticationManager", comment: "Title for screen when changing your passcode")
+        NSLocalizedString("Change Passcode", tableName: "AuthenticationManager", comment: "Label used as a setting item and title of the following screen to change the current passcode")
 
     static let enterNewPasscode =
-        NSLocalizedString("Enter a new passcode", tableName: "AuthenticationManager", comment: "Title for screen when updating your existin passcode")
+        NSLocalizedString("Enter a new passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when changing the existing passcode")
 
     static let immediately =
         NSLocalizedString("Immediately", tableName: "AuthenticationManager", comment: "'Immediately' interval item for selecting when to require passcode")
@@ -82,7 +82,7 @@ struct AuthenticationStrings {
         NSLocalizedString("touchid.require.passcode.reason.label",
                           value: "Use your fingerprint to access configuring your required passcode interval.",
                           tableName: "AuthenticationManager",
-                          comment: "Touch ID prompt subtitle when accessing  the require passcode setting")
+                          comment: "Touch ID prompt subtitle when accessing the require passcode setting")
 
     static let disableTouchReason =
         NSLocalizedString("touchid.disable.reason.label",

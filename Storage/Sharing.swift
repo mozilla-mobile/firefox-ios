@@ -18,6 +18,11 @@ public struct ShareItem {
         self.title = title
         self.favicon = favicon
     }
+
+    // We only support sharing HTTP and HTTPS URLs.
+    public var isShareable: Bool {
+        return NSURL(string: url)?.isWebPage() ?? false
+    }
 }
 
 public protocol ShareToDestination {

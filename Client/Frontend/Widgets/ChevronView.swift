@@ -40,7 +40,15 @@ class ChevronView: UIView {
 
     init(direction: ChevronDirection) {
         super.init(frame: CGRectZero)
+
         self.direction = direction
+        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .RightToLeft {
+            if direction == .Left {
+                self.direction = .Right
+            } else if direction == .Right {
+                self.direction = .Left
+            }
+        }
         self.backgroundColor = UIColor.clearColor()
         self.contentMode = UIViewContentMode.Redraw
     }

@@ -5,7 +5,7 @@
 import UIKit
 import WebKit
 
-class BackForwardListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class BackForwardListViewController: UIViewController {
     var listData: [WKBackForwardListItem]?
     var tabManager: TabManager!
 
@@ -38,8 +38,10 @@ class BackForwardListViewController: UIViewController, UITableViewDelegate, UITa
     func SELdidClickDone() {
         dismissViewControllerAnimated(true, completion: nil)
     }
+}
 
-    // MARK: - Table view
+// MARK: - UITableViewDataSource
+extension BackForwardListViewController: UITableViewDataSource {
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return listData?.count ?? 0
@@ -51,6 +53,10 @@ class BackForwardListViewController: UIViewController, UITableViewDelegate, UITa
         cell.textLabel?.text = item.title ?? item.URL.absoluteString
         return cell
     }
+}
+
+// MARK: - UITableViewDelegate
+extension BackForwardListViewController: UITableViewDelegate {
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tabManager.selectedTab?.goToBackForwardListItem(listData![indexPath.item])

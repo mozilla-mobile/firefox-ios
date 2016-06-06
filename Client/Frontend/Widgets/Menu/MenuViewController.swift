@@ -8,7 +8,7 @@ private let maxNumberOfItemsPerPage = 6
 
 protocol MenuViewControllerDelegate: class {
     func menuViewControllerDidDismiss(menuViewController: MenuViewController)
-    func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool
+    func shouldCloseMenu(menuViewController: MenuViewController, forRotationToNewSize size: CGSize, forTraitCollection traitCollection: UITraitCollection) -> Bool
 }
 
 enum MenuViewPresentationStyle {
@@ -76,6 +76,7 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = popoverBackgroundColor.colorWithAlphaComponent(0.0)
+        popoverPresentationController?.backgroundColor = menuConfig.menuBackgroundColor()
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:)))
         gesture.delegate = self
@@ -150,8 +151,10 @@ class MenuViewController: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        if delegate?.shouldCloseMenu(self, forTraitCollection: self.traitCollection) ?? false {
-            self.dismissViewControllerAnimated(true, completion: nil)
+        if delegate?.shouldCloseMenu(self, forRotationToNewSize: size, forTraitCollection: self.traitCollection) ?? false {
+            self.dismissViewControllerAnimated(false, completion: {
+                self.delegate?.menuViewControllerDidDismiss(self)
+            })
         }
     }
 

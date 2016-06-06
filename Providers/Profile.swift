@@ -19,9 +19,41 @@ public let NotificationProfileDidStartSyncing = "NotificationProfileDidStartSync
 public let NotificationProfileDidFinishSyncing = "NotificationProfileDidFinishSyncing"
 public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
+public enum SyncDisplayState {
+    case InProgress
+    case Good
+    case Bad(message: String)
+    case Stale(message: String)
+
+    func asObject() -> [String: String]? {
+        switch self {
+        case .Bad(let message):
+            return ["state": "Error",
+                    "message": message]
+        case .Stale(let message):
+            return ["state": "Warning",
+                    "message": message]
+        default:
+            break
+        }
+        return nil
+    }
+}
+
+public func ==(a: SyncDisplayState, b: SyncDisplayState) -> Bool {
+    switch (a, b) {
+    case (.InProgress,   .InProgress): return true
+    case (.Good,   .Good): return true
+    case (.Bad(let a), .Bad(let b)) where a == b: return true
+    case (.Stale(let a), .Stale(let b)) where a == b: return true
+    default: return false
+    }
+}
+
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
+    var syncDisplayState: SyncDisplayState? { get }
 
     func hasSyncedHistory() -> Deferred<Maybe<Bool>>
     func hasSyncedLogins() -> Deferred<Maybe<Bool>>
@@ -145,6 +177,7 @@ protocol Profile: class {
     var readingList: ReadingListService? { get }
     var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
     var certStore: CertStore { get }
+    var recentlyClosedTabs: ClosedTabsStore { get }
 
     func shutdown()
 
@@ -230,6 +263,20 @@ public class BrowserProfile: Profile {
         // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+
+
+        if isChinaEdition {
+            // On first run, set the Home button to be in the toolbar.
+            if prefs.boolForKey(PrefsKeys.KeyHomePageButtonIsInMenu) == nil {
+                prefs.setBool(false, forKey: PrefsKeys.KeyHomePageButtonIsInMenu)
+            }
+            // Set the default homepage.
+            prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
+        } else {
+            // Remove the default homepage. This does not change the user's preference,
+            // just the behaviour when there is no homepage.
+            prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
+        }
     }
 
     // Extensions don't have a UIApplication.
@@ -345,7 +392,7 @@ public class BrowserProfile: Profile {
     }()
 
     lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs)
+        return SearchEngines(prefs: self.prefs, files: self.files)
     }()
 
     func makePrefs() -> Prefs {
@@ -370,6 +417,10 @@ public class BrowserProfile: Profile {
 
     lazy var certStore: CertStore = {
         return CertStore()
+    }()
+
+    lazy var recentlyClosedTabs: ClosedTabsStore = {
+        return ClosedTabsStore(prefs: self.prefs)
     }()
 
     private func getSyncDelegate() -> SyncDelegate {
@@ -444,9 +495,13 @@ public class BrowserProfile: Profile {
         return Singleton.instance
     }()
 
-    var accountConfiguration: FirefoxAccountConfiguration {
+    var isChinaEdition: Bool {
         let locale = NSLocale.currentLocale()
-        if self.prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN") {
+        return prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN")
+    }
+
+    var accountConfiguration: FirefoxAccountConfiguration {
+        if isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()
@@ -504,7 +559,8 @@ public class BrowserProfile: Profile {
         registerForNotifications()
         
         // tell any observers that our account has changed
-        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
+        let userInfo = [NotificationUserInfoKeyHasSyncableAccount: hasSyncableAccount()]
+        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
 
         self.syncManager.onAddedAccount()
     }
@@ -574,6 +630,11 @@ public class BrowserProfile: Profile {
             // Sync now if it's been more than our threshold.
             let now = NSDate.now()
             let then = self.lastSyncFinishTime ?? 0
+            guard now >= then else {
+                log.debug("Time was modified since last sync.")
+                self.syncEverythingSoon()
+                return
+            }
             let since = now - then
             log.debug("\(since)msec since last sync.")
             if since > SyncConstants.SyncOnForegroundMinimumDelayMillis {
@@ -590,8 +651,10 @@ public class BrowserProfile: Profile {
         var isSyncing: Bool {
             syncLock.lock()
             defer { syncLock.unlock() }
-            return !(syncReducer?.isFilled ?? true)
+            return syncDisplayState != nil && syncDisplayState! == .InProgress
         }
+
+        var syncDisplayState: SyncDisplayState?
 
         // The dispatch queue for coordinating syncing and resetting the database.
         private let syncQueue = dispatch_queue_create("com.mozilla.firefox.sync", DISPATCH_QUEUE_SERIAL)
@@ -606,16 +669,18 @@ public class BrowserProfile: Profile {
             notifySyncing(NotificationProfileDidStartSyncing)
         }
 
-        private func endSyncing() {
+        private func endSyncing(result: Maybe<EngineResults>?) {
+            // loop through status's and fill sync state
             syncLock.lock()
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
+            syncDisplayState = displayStateForEngineResults(result)
             notifySyncing(NotificationProfileDidFinishSyncing)
             syncReducer = nil
         }
 
         private func notifySyncing(notification: String) {
-            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: nil))
+            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: syncDisplayState?.asObject()))
         }
 
         init(profile: BrowserProfile) {
@@ -627,6 +692,7 @@ public class BrowserProfile: Profile {
             let center = NSNotificationCenter.defaultCenter()
             center.addObserver(self, selector: #selector(BrowserSyncManager.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
             center.addObserver(self, selector: #selector(BrowserSyncManager.onLoginDidChange(_:)), name: NotificationDataLoginDidChange, object: nil)
+            center.addObserver(self, selector: #selector(BrowserSyncManager.onStartSyncing(_:)), name: NotificationProfileDidStartSyncing, object: nil)
             center.addObserver(self, selector: #selector(BrowserSyncManager.onFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
             center.addObserver(self, selector: #selector(BrowserSyncManager.onBookmarkBufferValidated(_:)), name: NotificationBookmarkBufferValidated, object: nil)
         }
@@ -687,6 +753,7 @@ public class BrowserProfile: Profile {
             let center = NSNotificationCenter.defaultCenter()
             center.removeObserver(self, name: NotificationDatabaseWasRecreated, object: nil)
             center.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
+            center.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
             center.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
             center.removeObserver(self, name: NotificationBookmarkBufferValidated, object: nil)
         }
@@ -782,8 +849,53 @@ public class BrowserProfile: Profile {
             }
         }
 
+        @objc func onStartSyncing(notification: NSNotification) {
+            syncLock.lock()
+            defer { syncLock.unlock() }
+            syncDisplayState = .InProgress
+        }
+
         @objc func onFinishSyncing(notification: NSNotification) {
-            self.lastSyncFinishTime = NSDate.now()
+            syncLock.lock()
+            defer { syncLock.unlock() }
+            if let syncState = syncDisplayState where syncState == .Good {
+                self.lastSyncFinishTime = NSDate.now()
+            }
+        }
+
+        private func displayStateForEngineResults(result: Maybe<EngineResults>?) -> SyncDisplayState {
+            guard let result = result else {
+                return .Good
+            }
+            guard let results = result.successValue else {
+                    return SyncDisplayState.Bad(message: Strings.FirefoxSyncFailedTitle)
+            }
+            let errorResults: [SyncDisplayState]? = results.flatMap { identifier, status in
+                let displayState = self.displayStateForSyncState(status, identifier: identifier)
+                return displayState == .Good ? nil : displayState
+            }
+            return errorResults?.first ?? .Good
+        }
+
+        private func displayStateForSyncState(syncStatus: SyncStatus, identifier: String? = nil) -> SyncDisplayState {
+            switch syncStatus {
+            case .Completed:
+                return SyncDisplayState.Good
+            case .NotStarted(let reason):
+                let message: String
+                switch reason {
+                case .Offline:
+                    message = Strings.FirefoxSyncOfflineTitle
+                default:
+                    message = Strings.FirefoxSyncNotStartedTitle
+                }
+                return SyncDisplayState.Stale(message: message)
+            case .Partial:
+                if let identifier = identifier {
+                    return SyncDisplayState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent(identifier) ?? ""))
+                }
+                return SyncDisplayState.Stale(message: Strings.FirefoxSyncNotStartedTitle)
+            }
         }
 
         var prefsForSync: Prefs {
@@ -985,9 +1097,10 @@ public class BrowserProfile: Profile {
 
                     return self.syncWith(remaining) >>== { deferMaybe(statuses + $0) }
                 }
-                reducer.terminal >>> self.endSyncing
 
-                // The actual work of synchronizing doesn't start until we append 
+                reducer.terminal.upon(self.endSyncing)
+
+                // The actual work of synchronizing doesn't start until we append
                 // the synchronizers to the reducer below.
                 self.syncReducer = reducer
                 self.beginSyncing()

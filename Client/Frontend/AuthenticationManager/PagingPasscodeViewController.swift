@@ -35,6 +35,8 @@ class PagingPasscodeViewController: BasePasscodeViewController {
             pane.frame = CGRect(origin: CGPoint(x: CGFloat(index) * pager.frame.width, y: 0), size: pager.frame.size)
         }
         pager.contentSize = CGSize(width: CGFloat(panes.count) * pager.frame.width, height: pager.frame.height)
+        scrollToPaneAtIndex(currentPaneIndex)
+        panes[currentPaneIndex].codeInputView.becomeFirstResponder()
     }
 
     override func viewWillDisappear(animated: Bool) {

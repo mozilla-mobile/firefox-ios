@@ -10,6 +10,7 @@ public struct UIConstants {
     static let DefaultHomePage = NSURL(string:"#panel=0", relativeToURL: AboutHomePage)!
 
     static let AppBackgroundColor = UIColor.blackColor()
+    static let SystemBlueColor = UIColor(red: 0 / 255, green: 122 / 255, blue: 255 / 255, alpha: 1)
     static let PrivateModePurple = UIColor(red: 207 / 255, green: 104 / 255, blue: 255 / 255, alpha: 1)
     static let PrivateModeLocationBackgroundColor = UIColor(red: 31 / 255, green: 31 / 255, blue: 31 / 255, alpha: 1)
     static let PrivateModeLocationBorderColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.15)
@@ -59,6 +60,9 @@ public struct UIConstants {
     static let TableViewDisabledRowTextColor = UIColor.lightGrayColor()
     static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
     static let TableViewHeaderFooterHeight = CGFloat(44)
+    static let TableViewRowErrorTextColor = UIColor(red: 255/255, green: 0/255, blue: 26/255, alpha: 1.0)
+    static let TableViewRowWarningTextColor = UIColor(red: 245/255, green: 166/255, blue: 35/255, alpha: 1.0)
+    static let TableViewRowActionAccessoryColor = UIColor(red: 0.29, green: 0.56, blue: 0.89, alpha: 1.0)
 
     // Firefox Orange
     static let ControlTintColor = UIColor(red: 240.0 / 255, green: 105.0 / 255, blue: 31.0 / 255, alpha: 1)
@@ -70,5 +74,5 @@ public struct UIConstants {
     static let ScreenshotQuality: Float = 0.3
 
     static let OKString = NSLocalizedString("OK", comment: "OK button")
-    static let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
+    static let CancelString = NSLocalizedString("Cancel", comment: "Label for Cancel button")
 }

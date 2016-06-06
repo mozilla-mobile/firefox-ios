@@ -366,10 +366,9 @@ class TabTrayController: UIViewController {
 
         if #available(iOS 9, *) {
             view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
-            emptyPrivateTabsView.alpha = privateMode && tabManager.privateTabs.count == 0 ? 1 : 0
             emptyPrivateTabsView.snp_makeConstraints { make in
                 make.top.left.right.equalTo(self.collectionView)
-                make.bottom.equalTo(self.collectionView).offset(-UIConstants.ToolbarHeight)
+                make.bottom.equalTo(self.toolbar.snp_top)
             }
 
             if let tab = tabManager.selectedTab where tab.isPrivate {
@@ -380,11 +379,23 @@ class TabTrayController: UIViewController {
             if traitCollection.forceTouchCapability == .Available {
                 registerForPreviewingWithDelegate(self, sourceView: view)
             }
+
+            emptyPrivateTabsView.hidden = !privateTabsAreEmpty()
         }
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabTrayController.SELappWillResignActiveNotification), name: UIApplicationWillResignActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabTrayController.SELappDidBecomeActiveNotification), name: UIApplicationDidBecomeActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabTrayController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabTrayController.SELdidClickSettingsItem), name: NotificationStatusNotificationTapped, object: nil)
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationStatusNotificationTapped, object: nil)
     }
 
     override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
@@ -424,6 +435,8 @@ class TabTrayController: UIViewController {
     }
 
     func SELdidClickSettingsItem() {
+        assert(NSThread.isMainThread(), "Opening settings requires being invoked on the main thread")
+
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = profile
         settingsTableViewController.tabManager = tabManager
@@ -450,7 +463,8 @@ class TabTrayController: UIViewController {
 
     @objc
     private func didTapMenu() {
-        let mvc = MenuViewController(withAppState: .TabTray(tabTrayState: self.tabTrayState), presentationStyle: .Modal)
+        let state = mainStore.updateState(.TabTray(tabTrayState: self.tabTrayState))
+        let mvc = MenuViewController(withAppState: state, presentationStyle: .Modal)
         mvc.delegate = self
         mvc.actionDelegate = self
         mvc.menuTransitionDelegate = MenuPresentationAnimator()
@@ -485,8 +499,10 @@ class TabTrayController: UIViewController {
 
         let toView: UIView
         if privateTabsAreEmpty() {
+            emptyPrivateTabsView.hidden = false
             toView = emptyPrivateTabsView
         } else {
+            emptyPrivateTabsView.hidden = true
             let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(true)
             newSnapshot.frame = collectionView.frame
             view.insertSubview(newSnapshot, aboveSubview: fromView)
@@ -529,11 +545,7 @@ class TabTrayController: UIViewController {
     }
 
     private func openNewTab(request: NSURLRequest? = nil) {
-        if #available(iOS 9, *) {
-            if privateMode {
-                emptyPrivateTabsView.hidden = true
-            }
-        }
+        toolbar.addTabButton.userInteractionEnabled = false
 
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
@@ -547,13 +559,15 @@ class TabTrayController: UIViewController {
             self.tabManager.selectTab(tab)
         }, completion: { finished in
             if finished {
+                self.toolbar.addTabButton.userInteractionEnabled = true
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
     }
 
     private func updateAppState() {
-        self.appStateDelegate?.appDidUpdateState(.TabTray(tabTrayState: self.tabTrayState))
+        let state = mainStore.updateState(.TabTray(tabTrayState: self.tabTrayState))
+        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     private func closeTabsForCurrentTray() {
@@ -604,6 +618,11 @@ extension TabTrayController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {
         // Get the index of the added tab from it's set (private or normal)
         guard let index = tabsToDisplay.indexOf(tab) else { return }
+        if #available(iOS 9, *) {
+            if !privateTabsAreEmpty() {
+                emptyPrivateTabsView.hidden = true
+            }
+        }
 
         tabDataSource.addTab(tab)
         self.collectionView?.performBatchUpdates({ _ in
@@ -625,7 +644,14 @@ extension TabTrayController: TabManagerDelegate {
         // check this before removing the item from the collection
         let removedIndex = tabDataSource.removeTab(tab)
         if removedIndex > -1 {
-            self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
+            self.collectionView.performBatchUpdates({
+                self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
+            }, completion: { finished in
+                if #available(iOS 9, *) {
+                    guard finished && self.privateTabsAreEmpty() else { return }
+                    self.emptyPrivateTabsView.hidden = false
+                }
+            })
 
             // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
             // animation has finished which causes cells that animate from above to suddenly 'appear'. This
@@ -637,12 +663,6 @@ extension TabTrayController: TabManagerDelegate {
                     offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
                 }
                 self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
-            }
-
-            if #available(iOS 9, *) {
-                if privateTabsAreEmpty() {
-                    emptyPrivateTabsView.alpha = 1
-                }
             }
         }
     }
@@ -693,7 +713,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
         if let indexPath = collectionView.indexPathForCell(tabCell) {
             let tab = tabsToDisplay[indexPath.item]
             tabManager.removeTab(tab)
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: ""))
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
         }
     }
 }
@@ -861,6 +881,7 @@ struct EmptyPrivateTabsViewUX {
     static let TextMargin: CGFloat = 18
     static let LearnMoreMargin: CGFloat = 30
     static let MaxDescriptionWidth: CGFloat = 250
+    static let MinBottomMargin: CGFloat = 10
 }
 
 // View we display when there are no private tabs created
@@ -926,7 +947,8 @@ private class EmptyPrivateTabsView: UIView {
         }
 
         learnMoreButton.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(descriptionLabel.snp_bottom).offset(EmptyPrivateTabsViewUX.LearnMoreMargin)
+            make.top.equalTo(descriptionLabel.snp_bottom).offset(EmptyPrivateTabsViewUX.LearnMoreMargin).priorityLow()
+            make.bottom.lessThanOrEqualTo(self).offset(-EmptyPrivateTabsViewUX.MinBottomMargin).priorityHigh()
             make.centerX.equalTo(self)
         }
     }
@@ -1015,7 +1037,7 @@ extension TabTrayController: UIAdaptivePresentationControllerDelegate, UIPopover
 extension TabTrayController: MenuViewControllerDelegate {
     func menuViewControllerDidDismiss(menuViewController: MenuViewController) { }
 
-    func shouldCloseMenu(menuViewController: MenuViewController, forTraitCollection traitCollection: UITraitCollection) -> Bool {
+    func shouldCloseMenu(menuViewController: MenuViewController, forRotationToNewSize size: CGSize, forTraitCollection traitCollection: UITraitCollection) -> Bool {
         return false
     }
 }
@@ -1146,7 +1168,7 @@ class TrayToolbar: UIView {
 
         styleToolbar(isPrivate: false)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -4,13 +4,34 @@
 
 import Alamofire
 import Foundation
+import GCDWebServers
 import XCGLogger
 
 private let log = Logger.browserLogger
 private let ServerURL = "https://incoming.telemetry.mozilla.org".asURL!
 private let AppName = "Fennec"
 
+public protocol TelemetryEvent {
+    func record(prefs: Prefs)
+}
+
 public class Telemetry {
+    private static var prefs: Prefs?
+
+    public class func initWithPrefs(prefs: Prefs) {
+        assert(self.prefs == nil, "Prefs already initialized")
+        self.prefs = prefs
+    }
+
+    public class func recordEvent(event: TelemetryEvent) {
+        guard let prefs = prefs else {
+            assertionFailure("Prefs not initialized")
+            return
+        }
+
+        event.record(prefs)
+    }
+
     public class func sendPing(ping: TelemetryPing) {
         let payload = ping.payload.toString()
 
@@ -47,6 +68,7 @@ public class Telemetry {
 
         request.HTTPMethod = "POST"
         request.HTTPBody = body
+        request.addValue(GCDWebServerFormatRFC822(NSDate()), forHTTPHeaderField: "Date")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in

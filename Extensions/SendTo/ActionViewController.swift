@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 import Storage
 import SnapKit
 
@@ -15,29 +16,34 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
 {
     private lazy var profile: Profile = { return BrowserProfile(localName: "profile", app: nil) }()
     private var sharedItem: ShareItem?
-    
+
     override func viewDidLoad() {
+        view.backgroundColor = UIColor.whiteColor()
+
         super.viewDidLoad()
 
-        if !profile.hasAccount() {
+        guard profile.hasAccount() else {
             let instructionsViewController = InstructionsViewController()
             instructionsViewController.delegate = self
             let navigationController = UINavigationController(rootViewController: instructionsViewController)
             presentViewController(navigationController, animated: false, completion: nil)
-        } else {
-            ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
-                if error == nil && item != nil {
-                    self.sharedItem = item
-                    let clientPickerViewController = ClientPickerViewController()
-                    clientPickerViewController.clientPickerDelegate = self
-                    clientPickerViewController.profile = self.profile
-                    let navigationController = UINavigationController(rootViewController: clientPickerViewController)
-                    self.presentViewController(navigationController, animated: false, completion: nil)
-                } else {
-                    self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
-                }
-            })
+            return
         }
+
+        ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
+            guard let item = item where error == nil && item.isShareable else {
+                let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .Default) { _ in self.finish() })
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+
+            let clientPickerViewController = ClientPickerViewController()
+            clientPickerViewController.clientPickerDelegate = self
+            clientPickerViewController.profile = self.profile
+            let navigationController = UINavigationController(rootViewController: clientPickerViewController)
+            self.presentViewController(navigationController, animated: false, completion: nil)
+        })
     }
 
     func finish() {

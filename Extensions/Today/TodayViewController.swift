@@ -21,7 +21,7 @@ struct TodayUX {
 
     static let verticalWidgetMargin: CGFloat = 10
     static let horizontalWidgetMargin: CGFloat = 10
-    static let copyLinkImageHorizontalPadding: CGFloat = 22
+    static var defaultWidgetTextMargin: CGFloat = 22
 
     static let buttonSpacerMultipleOfScreen = 0.4
 }
@@ -139,12 +139,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             make.height.equalTo(TodayUX.copyLinkButtonHeight)
         }
 
-        view.snp_makeConstraints { make in
+        view.snp_remakeConstraints { make in
             var extraHeight = TodayUX.verticalWidgetMargin
             if hasCopiedURL {
                 extraHeight += TodayUX.copyLinkButtonHeight + TodayUX.verticalWidgetMargin
             }
-            make.height.equalTo(buttonSpacer.snp_height).offset(extraHeight)
+            make.height.equalTo(buttonSpacer.snp_height).offset(extraHeight).priorityHigh()
         }
     }
 
@@ -159,6 +159,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.openCopiedLinkButton.hidden = false
             self.openCopiedLinkButton.subtitleLabel.hidden = SystemUtils.isDeviceLocked()
             self.openCopiedLinkButton.subtitleLabel.text = url.absoluteString
+            self.openCopiedLinkButton.remakeConstraints()
         } else {
             self.openCopiedLinkButton.hidden = true
         }
@@ -167,6 +168,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func widgetMarginInsetsForProposedMarginInsets(defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
+        TodayUX.defaultWidgetTextMargin = defaultMarginInsets.left
         return UIEdgeInsetsMake(0, 0, TodayUX.verticalWidgetMargin, 0)
     }
 
@@ -313,20 +315,23 @@ class ButtonWithSublabel: UIButton {
 
         imageView.snp_remakeConstraints { make in
             make.centerY.equalTo(self.snp_centerY)
-            make.left.equalTo(self.snp_left).offset(TodayUX.copyLinkImageHorizontalPadding)
-        }
-
-        titleLabel.snp_remakeConstraints { make in
-            make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin / 2)
-            make.left.equalTo(imageView.snp_right).offset(TodayUX.horizontalWidgetMargin).priorityLow()
+            make.right.equalTo(titleLabel.snp_left).offset(-TodayUX.horizontalWidgetMargin)
         }
 
         subtitleLabel.lineBreakMode = .ByTruncatingTail
         subtitleLabel.snp_makeConstraints { make in
             make.left.equalTo(titleLabel.snp_left)
             make.top.equalTo(titleLabel.snp_bottom).offset(TodayUX.verticalWidgetMargin / 2)
-            make.leading.equalTo(imageView.snp_trailing).offset(TodayUX.horizontalWidgetMargin)
             make.right.lessThanOrEqualTo(self.snp_right).offset(-TodayUX.horizontalWidgetMargin)
+        }
+
+        remakeConstraints()
+    }
+
+    func remakeConstraints() {
+        self.label.snp_remakeConstraints { make in
+            make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin / 2)
+            make.left.equalTo(self.snp_left).offset(TodayUX.defaultWidgetTextMargin).priorityHigh()
         }
     }
 

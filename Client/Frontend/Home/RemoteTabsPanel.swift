@@ -29,11 +29,11 @@ private struct RemoteTabsPanelUX {
     static let EmptyStateSignInButtonWidth = 200
 
     // Backup and active strings added in Bug 1205294.
-    static let EmptyStateInstructionsSyncTabsPasswordsBookmarksString = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "Sync tabs, bookmarks, passwords empty state instructions.")
+    static let EmptyStateInstructionsSyncTabsPasswordsBookmarksString = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in.")
 
-    static let EmptyStateInstructionsSyncTabsPasswordsString = NSLocalizedString("Sync your tabs, passwords and more.", comment: "Sync tabs and passwords empty state instructions.")
+    static let EmptyStateInstructionsSyncTabsPasswordsString = NSLocalizedString("Sync your tabs, passwords and more.", comment: "Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in.")
 
-    static let EmptyStateInstructionsGetTabsBookmarksPasswordsString = NSLocalizedString("Get your open tabs, bookmarks, and passwords from your other devices.", comment: "A re-worded offer about Sync that emphasizes one-way data transfer, not syncing.")
+    static let EmptyStateInstructionsGetTabsBookmarksPasswordsString = NSLocalizedString("Get your open tabs, bookmarks, and passwords from your other devices.", comment: "A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing.")
 
     static let HistoryTableViewHeaderChevronInset: CGFloat = 10
     static let HistoryTableViewHeaderChevronSize: CGFloat = 20
@@ -470,62 +470,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     }
 }
 
-private class HistoryBackButton : UIButton {
-    lazy var title: UILabel = {
-        let label = UILabel()
-        label.textColor = UIConstants.HighlightBlue
-        label.text = Strings.HistoryBackButtonTitle
-        return label
-    }()
-
-    lazy var chevron: ChevronView = {
-        let chevron = ChevronView(direction: .Left)
-        chevron.tintColor = UIConstants.HighlightBlue
-        chevron.lineWidth = RemoteTabsPanelUX.HistoryTableViewHeaderChevronLineWidth
-        return chevron
-    }()
-
-    lazy var topBorder: UIView = self.createBorderView()
-    lazy var bottomBorder: UIView = self.createBorderView()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        userInteractionEnabled = true
-
-        addSubview(topBorder)
-        addSubview(chevron)
-        addSubview(title)
-
-        chevron.snp_makeConstraints { make in
-            make.left.equalTo(self).offset(RemoteTabsPanelUX.HistoryTableViewHeaderChevronInset)
-            make.centerY.equalTo(self)
-            make.size.equalTo(RemoteTabsPanelUX.HistoryTableViewHeaderChevronSize)
-        }
-
-        title.snp_makeConstraints { make in
-            make.left.equalTo(chevron.snp_right).offset(RemoteTabsPanelUX.HistoryTableViewHeaderChevronInset)
-            make.right.greaterThanOrEqualTo(self).offset(-RemoteTabsPanelUX.HistoryTableViewHeaderChevronInset)
-            make.centerY.equalTo(self)
-        }
-
-        topBorder.snp_makeConstraints { make in
-            make.left.right.equalTo(self)
-            make.top.equalTo(self).offset(-0.5)
-            make.height.equalTo(0.5)
-        }
-    }
-
-    private func createBorderView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        return view
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 private class RemoteTabsTableViewController : UITableViewController {
     weak var remoteTabsPanel: RemoteTabsPanel?
     var profile: Profile!
@@ -601,7 +545,7 @@ private class RemoteTabsTableViewController : UITableViewController {
         tableView.tableFooterView = UIView(frame: CGRectZero)
 
         // Short circuit if the user is not logged in
-        if !profile.hasAccount() {
+        if !profile.hasSyncableAccount() {
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .NotLoggedIn)
             self.endRefreshing()
             return

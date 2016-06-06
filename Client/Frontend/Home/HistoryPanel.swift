@@ -39,6 +39,13 @@ class HistoryPanel: UIViewController, HomePanel {
     private lazy var tableViewController: HistoryPanelSiteTableViewController = {
         return HistoryPanelSiteTableViewController()
     }()
+
+    private lazy var recentlyClosedTabsButton: RecentlyClosedTabsButton = {
+        let button = RecentlyClosedTabsButton()
+        button.addTarget(self, action: #selector(HistoryPanel.recentlyClosedTabsCellWasTapped), forControlEvents: .TouchUpInside)
+        return button
+    }()
+
     private lazy var syncedTabsButton: SyncedTabsButton = {
         let button = SyncedTabsButton()
         button.addTarget(self, action: #selector(HistoryPanel.syncedTabsCellWasTapped), forControlEvents: .TouchUpInside)
@@ -55,19 +62,33 @@ class HistoryPanel: UIViewController, HomePanel {
         self.addChildViewController(tableViewController)
         self.view.addSubview(tableViewController.view)
         self.view.addSubview(syncedTabsButton)
+        self.view.addSubview(recentlyClosedTabsButton)
+
+        recentlyClosedTabsButton.snp_makeConstraints { make in
+            make.top.leading.trailing.equalTo(self.view)
+            make.height.equalTo(HistoryPanelUX.SyncedTabsCellHeight)
+            make.bottom.equalTo(syncedTabsButton.snp_top)
+        }
 
         syncedTabsButton.snp_makeConstraints { make in
-            make.top.left.right.equalTo(self.view)
+            make.leading.trailing.equalTo(self.view)
+            make.top.equalTo(recentlyClosedTabsButton.snp_bottom)
             make.height.equalTo(HistoryPanelUX.SyncedTabsCellHeight)
             make.bottom.equalTo(tableViewController.view.snp_top)
         }
 
         tableViewController.view.snp_makeConstraints { make in
             make.top.equalTo(syncedTabsButton.snp_bottom)
-            make.left.right.bottom.equalTo(self.view)
+            make.leading.trailing.bottom.equalTo(self.view)
         }
 
         tableViewController.didMoveToParentViewController(self)
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        recentlyClosedTabsButton.enabled = profile.recentlyClosedTabs.tabs.count > 0
     }
 
     func updateNumberOfSyncedDevices() {
@@ -78,7 +99,7 @@ class HistoryPanel: UIViewController, HomePanel {
                 return
             }
 
-            self.syncedTabsButton.descriptionLabel.text = String(clientAndTabs.count) + " " + Strings.SyncedTabsTableViewCellDescription
+            self.syncedTabsButton.descriptionLabel.text = String.localizedStringWithFormat(Strings.SyncedTabsTableViewCellDescription, clientAndTabs.count)
             self.syncedTabsButton.descriptionLabel.hidden = false
             self.syncedTabsButton.updateConstraints()
         }
@@ -86,6 +107,14 @@ class HistoryPanel: UIViewController, HomePanel {
 
     @objc private func syncedTabsCellWasTapped() {
         let nextController = RemoteTabsPanel()
+        nextController.homePanelDelegate = self.homePanelDelegate
+        nextController.profile = self.profile
+        tableViewController.refreshControl?.endRefreshing()
+        self.navigationController?.pushViewController(nextController, animated: true)
+    }
+
+    @objc private func recentlyClosedTabsCellWasTapped() {
+        let nextController = RecentlyClosedTabsPanel()
         nextController.homePanelDelegate = self.homePanelDelegate
         nextController.profile = self.profile
         tableViewController.refreshControl?.endRefreshing()
@@ -546,30 +575,30 @@ class SyncedTabsButton: UIButton {
 
 
         image.snp_makeConstraints { make in
-            make.left.equalTo(self).offset(TwoLineCellUX.BorderViewMargin)
+            make.leading.equalTo(self).offset(TwoLineCellUX.BorderViewMargin)
             make.centerY.equalTo(self)
             make.width.equalTo(HistoryPanelUX.SyncedTabsCellImageSize)
         }
 
         chevron.snp_makeConstraints { make in
-            make.right.equalTo(self).offset(-HistoryPanelUX.SyncedTabsCellChevronInset)
+            make.trailing.equalTo(self).offset(-HistoryPanelUX.SyncedTabsCellChevronInset)
             make.centerY.equalTo(self)
             make.size.equalTo(HistoryPanelUX.SyncedTabsCellChevronSize)
         }
 
         topBorder.snp_makeConstraints { make in
-            make.left.right.equalTo(self)
+            make.leading.trailing.equalTo(self)
             make.top.equalTo(self).offset(-0.5)
             make.height.equalTo(0.5)
         }
 
         bottomBorder.snp_makeConstraints { make in
-            make.left.right.bottom.equalTo(self)
+            make.leading.trailing.bottom.equalTo(self)
             make.height.equalTo(0.5)
         }
 
         descriptionLabel.snp_makeConstraints { make in
-            make.left.equalTo(image.snp_right).offset(TwoLineCellUX.BorderViewMargin)
+            make.leading.equalTo(image.snp_trailing).offset(TwoLineCellUX.BorderViewMargin)
             make.centerY.equalTo(self).offset(10)
         }
 
@@ -586,9 +615,106 @@ class SyncedTabsButton: UIButton {
         super.updateConstraints()
 
         title.snp_remakeConstraints { make in
-            make.left.equalTo(image.snp_right).offset(TwoLineCellUX.BorderViewMargin)
+            make.leading.equalTo(image.snp_trailing).offset(TwoLineCellUX.BorderViewMargin)
             make.centerY.equalTo(self).offset(descriptionLabel.hidden ? 0 : -10)
         }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class RecentlyClosedTabsButton: UIButton {
+    private let ImageMargin: CGFloat = 12
+
+    override var enabled: Bool {
+        didSet {
+            super.enabled = enabled
+            self.alpha = enabled ? 1.0 : 0.5
+        }
+    }
+
+    lazy var title: UILabel = {
+        let label = UILabel()
+        label.textColor = TwoLineCellUX.TextColor
+        label.text = Strings.RecentlyClosedTabsButtonTitle
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
+        return label
+    }()
+
+    lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallHistoryPanel
+        label.textColor = TwoLineCellUX.DetailTextColor
+        return label
+    }()
+
+    lazy var image: UIImageView = {
+        let image = UIImage(named: "panelIconHistory")!
+        return UIImageView(image: image)
+    }()
+
+    lazy var chevron: ChevronView = {
+        let chevron = ChevronView(direction: .Right)
+        chevron.tintColor = HistoryPanelUX.SyncedTabsCellChevronColor
+        chevron.lineWidth = 3.0
+        return chevron
+    }()
+
+    lazy var topBorder: UIView = self.createBorderView()
+    lazy var bottomBorder: UIView = self.createBorderView()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        userInteractionEnabled = true
+        backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+
+        addSubview(topBorder)
+        addSubview(bottomBorder)
+        addSubview(chevron)
+        addSubview(title)
+        addSubview(image)
+        addSubview(descriptionLabel)
+
+        title.snp_makeConstraints { make in
+            make.leading.equalTo(image.snp_trailing).offset(TwoLineCellUX.BorderViewMargin * 1.25)
+            make.centerY.equalTo(self)
+        }
+
+        image.snp_makeConstraints { make in
+            make.leading.equalTo(self).offset(TwoLineCellUX.BorderViewMargin * 1.3)
+            make.centerY.equalTo(self)
+            make.size.equalTo(24)
+        }
+
+        chevron.snp_makeConstraints { make in
+            make.trailing.equalTo(self).offset(-HistoryPanelUX.SyncedTabsCellChevronInset)
+            make.centerY.equalTo(self)
+            make.size.equalTo(HistoryPanelUX.SyncedTabsCellChevronSize)
+        }
+
+        topBorder.snp_makeConstraints { make in
+            make.leading.trailing.equalTo(self)
+            make.top.equalTo(self).offset(-0.5)
+            make.height.equalTo(0.5)
+        }
+
+        bottomBorder.snp_makeConstraints { make in
+            make.leading.trailing.bottom.equalTo(self)
+            make.height.equalTo(0.5)
+        }
+
+        descriptionLabel.snp_makeConstraints { make in
+            make.leading.equalTo(image.snp_trailing).offset(TwoLineCellUX.BorderViewMargin)
+            make.centerY.equalTo(self).offset(10)
+        }
+    }
+
+    private func createBorderView() -> UIView {
+        let view = UIView()
+        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        return view
     }
 
     required init?(coder aDecoder: NSCoder) {

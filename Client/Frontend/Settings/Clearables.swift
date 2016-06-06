@@ -43,6 +43,7 @@ class HistoryClearable: Clearable {
         return profile.history.clearHistory().bind { success in
             SDImageCache.sharedImageCache().clearDisk()
             SDImageCache.sharedImageCache().clearMemory()
+            self.profile.recentlyClosedTabs.clearTabs()
             NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
             return Deferred(value: success)

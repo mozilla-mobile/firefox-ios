@@ -157,7 +157,7 @@ class URLBarView: UIView {
     private lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
         cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        let cancelTitle = NSLocalizedString("Cancel", comment: "Button label to cancel entering a URL or search query")
+        let cancelTitle = NSLocalizedString("Cancel", comment: "Label for Cancel button")
         cancelButton.setTitle(cancelTitle, forState: UIControlState.Normal)
         cancelButton.titleLabel?.font = UIConstants.DefaultChromeFont
         cancelButton.addTarget(self, action: #selector(URLBarView.SELdidClickCancel), forControlEvents: UIControlEvents.TouchUpInside)
@@ -188,8 +188,10 @@ class URLBarView: UIView {
 
     lazy var stopReloadButton: UIButton = { return UIButton() }()
 
+    lazy var homePageButton: UIButton = { return UIButton() }()
+
     lazy var actionButtons: [UIButton] = {
-        return AppConstants.MOZ_MENU ? [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton] : [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
+        return AppConstants.MOZ_MENU ? [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton, self.homePageButton] : [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
     }()
 
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
@@ -230,6 +232,7 @@ class URLBarView: UIView {
         addSubview(shareButton)
         if AppConstants.MOZ_MENU {
             addSubview(menuButton)
+            addSubview(homePageButton)
         } else {
             addSubview(bookmarkButton)
         }
@@ -301,6 +304,11 @@ class URLBarView: UIView {
                 make.right.equalTo(self.menuButton.snp_left)
                 make.centerY.equalTo(self)
                 make.size.equalTo(backButton)
+            }
+
+            homePageButton.snp_makeConstraints { make in
+                make.center.equalTo(shareButton)
+                make.size.equalTo(shareButton)
             }
 
             menuButton.snp_makeConstraints { make in
@@ -545,7 +553,6 @@ class URLBarView: UIView {
         self.bringSubviewToFront(self.locationContainer)
         self.cancelButton.hidden = false
         self.progressBar.hidden = false
-        self.shareButton.hidden = !self.toolbarIsShowing
         if AppConstants.MOZ_MENU {
             self.menuButton.hidden = !self.toolbarIsShowing
         } else {
@@ -600,7 +607,6 @@ class URLBarView: UIView {
     func updateViewsForOverlayModeAndToolbarChanges() {
         self.cancelButton.hidden = !inOverlayMode
         self.progressBar.hidden = inOverlayMode
-        self.shareButton.hidden = !self.toolbarIsShowing || inOverlayMode
         if AppConstants.MOZ_MENU {
             self.menuButton.hidden = !self.toolbarIsShowing || inOverlayMode
         } else {
@@ -787,6 +793,20 @@ extension URLBarView: Themeable {
         actionButtonTintColor = theme.buttonTintColor
 
         tabsButton.applyTheme(themeName)
+    }
+}
+
+extension URLBarView: AppStateDelegate {
+    func appDidUpdateState(appState: AppState) {
+        if toolbarIsShowing {
+            let showShareButton = HomePageAccessors.isButtonInMenu(appState)
+            homePageButton.hidden = showShareButton
+            shareButton.hidden = !showShareButton
+            homePageButton.enabled = HomePageAccessors.isButtonEnabled(appState)
+        } else {
+            homePageButton.hidden = true
+            shareButton.hidden = true
+        }
     }
 }
 

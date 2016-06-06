@@ -85,6 +85,8 @@ class MenuView: UIView {
     override var tintColor: UIColor! {
         didSet {
             menuPagingView.tintColor = tintColor
+            pageControl.currentPageIndicatorTintColor = tintColor
+            pageControl.pageIndicatorTintColor = tintColor.colorWithAlphaComponent(0.25)
         }
     }
 
@@ -344,6 +346,7 @@ class MenuView: UIView {
 
 
     private func layoutMenu() {
+        menuContainerView.backgroundColor = menuColor
         let numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0)
         menuPagingLayout.maxNumberOfItemsPerPageRow = Int(numberOfItemsInRow)
 
