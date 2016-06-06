@@ -1,0 +1,1112 @@
+<div id="readability-page-1" class="page"> <span class="pre noprint docinfo top">[<a href="http://fakehost/test/../html/" title="Document search and retrieval page">Docs</a>] [<a href="https://tools.ietf.org/id/draft-dejong-remotestorage-04.txt" title="Plaintext version of this document">txt</a>|<a href="http://fakehost/pdf/draft-dejong-remotestorage-04.txt" title="PDF version of this document">pdf</a>] [<a href="https://datatracker.ietf.org/doc/draft-dejong-remotestorage" title="IESG Datatracker information for this document">Tracker</a>] [<a href="mailto:draft-dejong-remotestorage@tools.ietf.org?subject=draft-dejong-remotestorage%20" title="Send email to the document authors">Email</a>] [<a href="http://fakehost/rfcdiff?difftype=--hwdiff&amp;url2=draft-dejong-remotestorage-04.txt" title="Inline diff (wdiff)">Diff1</a>] [<a href="http://fakehost/rfcdiff?url2=draft-dejong-remotestorage-04.txt" title="Side-by-side diff">Diff2</a>] [<a href="http://fakehost/idnits?url=https://tools.ietf.org/id/draft-dejong-remotestorage-04.txt" title="Run an idnits check of this document">Nits</a>]               </span>
+    <br/> <span class="pre noprint docinfo">                                                                        </span>
+    <br/> <span class="pre noprint docinfo">Versions: <a href="http://fakehost/test/draft-dejong-remotestorage-00">00</a> <a href="http://fakehost/test/draft-dejong-remotestorage-01">01</a> <a href="http://fakehost/test/draft-dejong-remotestorage-02">02</a> <a href="http://fakehost/test/draft-dejong-remotestorage-03">03</a> <a href="http://fakehost/test/draft-dejong-remotestorage-04">04</a>                                                </span>
+    <br/> <span class="pre noprint docinfo">                                                                        </span>
+    <br/> <pre>INTERNET DRAFT                                      Michiel B. de Jong
+Document: <a href="http://fakehost/test/draft-dejong-remotestorage-04">draft-dejong-remotestorage-04</a>                   IndieHosters
+                                                             F. Kooman
+Intended Status: Proposed Standard                       (independent)
+Expires: 18 June 2015                                 15 December 2014
+
+
+                            <span class="h1">remoteStorage</span>
+
+Abstract
+
+    This draft describes a protocol by which client-side applications,
+    running inside a web browser, can communicate with a data storage
+    server that is hosted on a different domain name. This way, the
+    provider of a web application need not also play the role of data
+    storage provider. The protocol supports storing, retrieving, and
+    removing individual documents, as well as listing the contents of an
+    individual folder, and access control is based on bearer tokens.
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of <a href="http://fakehost/test/bcp78">BCP 78</a> and <a href="http://fakehost/test/bcp79">BCP 79</a>.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at <a href="http://datatracker.ietf.org/drafts/current/">http://datatracker.ietf.org/drafts/current/</a>.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 15 December 2014.
+
+Copyright Notice
+
+   Copyright (c) 2014 IETF Trust and the persons identified as the
+   document authors. All rights reserved.
+
+   This document is subject to <a href="http://fakehost/test/bcp78">BCP 78</a> and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (<a href="http://trustee.ietf.org/license-info">http://trustee.ietf.org/license-info</a>) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in <a href="#section-4">Section 4</a>.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+<span class="grey">de Jong                                                         [Page 1]</span>
+</pre><pre class="newpage"><a name="page-2" id="page-2" href="#page-2" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+Table of Contents
+
+   <a href="#section-1">1</a>. Introduction...................................................<a href="#page-2">2</a>
+   <a href="#section-2">2</a>. Terminology....................................................<a href="#page-3">3</a>
+   <a href="#section-3">3</a>. Storage model..................................................<a href="#page-3">3</a>
+   <a href="#section-4">4</a>. Requests.......................................................<a href="#page-4">4</a>
+   <a href="#section-5">5</a>. Response codes.................................................<a href="#page-7">7</a>
+   <a href="#section-6">6</a>. Versioning.....................................................<a href="#page-7">7</a>
+   <a href="#section-7">7</a>. CORS headers...................................................<a href="#page-8">8</a>
+   <a href="#section-8">8</a>. Session description............................................<a href="#page-8">8</a>
+   <a href="#section-9">9</a>. Bearer tokens and access control...............................<a href="#page-9">9</a>
+  <a href="#section-10">10</a>. Application-first bearer token issuance.......................<a href="#page-10">10</a>
+  <a href="#section-11">11</a>. Storage-first bearer token issuance...........................<a href="#page-11">11</a>
+  <a href="#section-12">12</a>. Example wire transcripts......................................<a href="#page-12">12</a>
+     <a href="#section-12.1">12.1</a>. WebFinger................................................<a href="#page-12">12</a>
+     <a href="#section-12.2">12.2</a>. OAuth dialog form........................................<a href="#page-13">13</a>
+     <a href="#section-12.3">12.3</a>. OAuth dialog form submission.............................<a href="#page-14">14</a>
+     <a href="#section-12.4">12.4</a>. OPTIONS preflight........................................<a href="#page-15">15</a>
+     <a href="#section-12.5">12.5</a>. Initial PUT..............................................<a href="#page-15">15</a>
+     <a href="#section-12.6">12.6</a>. Subsequent PUT...........................................<a href="#page-16">16</a>
+     <a href="#section-12.7">12.7</a>. GET......................................................<a href="#page-16">16</a>
+     <a href="#section-12.8">12.8</a>. DELETE...................................................<a href="#page-17">17</a>
+  <a href="#section-13">13</a>. Distributed versioning........................................<a href="#page-17">17</a>
+  <a href="#section-14">14</a>. Security Considerations.......................................<a href="#page-19">19</a>
+  <a href="#section-15">15</a>. IANA Considerations...........................................<a href="#page-20">20</a>
+  <a href="#section-16">16</a>. Acknowledgments...............................................<a href="#page-20">20</a>
+  <a href="#section-17">17</a>. References....................................................<a href="#page-21">21</a>
+     <a href="#section-17.1">17.1</a>. Normative References.....................................<a href="#page-21">21</a>
+     <a href="#section-17.2">17.2</a>. Informative References...................................<a href="#page-21">21</a>
+  <a href="#section-18">18</a>. Authors' addresses............................................<a href="#page-22">22</a>
+
+
+<span class="h2"><a class="selflink" name="section-1" href="#section-1">1</a>.  Introduction</span>
+
+    Many services for data storage are available over the internet. This
+    specification describes a vendor-independent interface for such
+    services. It is based on https, CORS and bearer tokens. The
+    metaphor for addressing data on the storage is that of folders
+    containing documents and subfolders. The actions the interface
+    exposes are:
+
+       *  GET a folder: retrieve the names and current versions of the
+          documents and subfolders currently contained by the folder
+
+
+<span class="grey">de Jong                                                         [Page 2]</span>
+</pre><pre class="newpage"><a name="page-3" id="page-3" href="#page-3" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+       *  GET a document: retrieve its content type, current version,
+          and contents
+
+       *  PUT a document: store a new version, its content type, and
+          contents, conditional on the current version
+
+       *  DELETE a document: remove it from the storage, conditional on
+          the current version
+
+       *  HEAD a folder or document: like GET, but omitting the response
+          body
+
+    The exact details of these four actions are described in this
+    specification.
+
+<span class="h2"><a class="selflink" name="section-2" href="#section-2">2</a>. Terminology</span>
+
+    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+    document are to be interpreted as described in <a href="http://fakehost/test/rfc2119">RFC 2119</a> [<a href="#ref-WORDS">WORDS</a>].
+
+    "SHOULD" and "SHOULD NOT" are appropriate when valid exceptions to a
+    general requirement are known to exist or appear to exist, and it is
+    infeasible or impractical to enumerate all of them.  However, they
+    should not be interpreted as permitting implementors to fail to
+    implement the general requirement when such failure would result in
+    interoperability failure.
+
+<span class="h2"><a class="selflink" name="section-3" href="#section-3">3</a>. Storage model</span>
+
+    The server stores data in nodes that form a tree structure.
+    Internal nodes are called 'folders' and leaf nodes are called
+    'documents'. For a folder, the server stores references to nodes
+    contained in the folder, and it should be able to produce a list of
+    them, with for each contained item:
+
+       * item name
+       * item type (folder or document)
+       * current version
+       * content type
+       * content length
+
+    For a document, the server stores, and should be able to produce:
+
+
+<span class="grey">de Jong                                                         [Page 3]</span>
+</pre><pre class="newpage"><a name="page-4" id="page-4" href="#page-4" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+
+       * current version
+       * content type
+       * content length
+       * content
+
+<span class="h2"><a class="selflink" name="section-4" href="#section-4">4</a>. Requests</span>
+
+    Client-to-server requests SHOULD be made over https [<a href="#ref-HTTPS">HTTPS</a>], and
+    servers MUST comply with HTTP/1.1 [<a href="#ref-HTTP">HTTP</a>]. Specifically, they
+    MUST support chunked transfer coding on PUT requests. Servers MAY
+    also offer an optional switch from https to SPDY [<a href="#ref-SPDY">SPDY</a>].
+
+    A request is considered successful if the HTTP response code is in
+    the 2xx range (e.g. 200 OK, 201 Created), and unsuccessful if an
+    error occurred or a condition was not met (response code e.g. 404
+    Not Found, 304 Not Modified).
+
+    The root folder of the storage tree is represented by the following
+    URL:
+
+        URI_ENCODE( &lt;storage_root&gt; '/' )
+
+    Subsequently, if &lt;parent_folder&gt; is the URL of a folder, then the
+    URL of an item contained in it is:
+
+        URI_ENCODE( &lt;parent_folder&gt; &lt;document_name&gt; )
+
+    for a document, or:
+
+        URI_ENCODE( &lt;parent_folder&gt; &lt;folder_name&gt; '/' )
+
+    for a folder. Item names MAY contain all characters except '/' and
+    the null character, and MUST NOT have zero length.
+
+    A document description is a map containing one string-valued 'ETag'
+    field, one string-valued 'Content-Type' and one integer-valued
+    'Content-Length' field. They represent the document's current
+    version, its content type, and its content length respectively. Note
+    that content length is measured in octets (bytes), not in
+    characters.
+
+    A folder description is a map containing a string-valued 'ETag'
+
+
+<span class="grey">de Jong                                                         [Page 4]</span>
+</pre><pre class="newpage"><a name="page-5" id="page-5" href="#page-5" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+    field, representing the folder's current version.
+
+    A successful GET request to a folder MUST be responded to with a
+    JSON-LD [<a href="#ref-JSON-LD">JSON-LD</a>] document (content type 'application/ld+json'),
+    containing as its 'items' field a map in which contained documents
+    appear as entries &lt;item_name&gt; to a document description, and
+    contained non-empty folders appear as entries &lt;item_name&gt; '/' to a
+    folder description. It MUST also contain an '@context' field with
+    the value 'http://remotestorage.io/spec/folder-description'. For
+    instance:
+
+       {
+         "@context": "<a href="http://remotestorage.io/spec/folder-description">http://remotestorage.io/spec/folder-description</a>",
+         "items": {
+           "abc": {
+             "ETag": "DEADBEEFDEADBEEFDEADBEEF",
+             "Content-Type": "image/jpeg",
+             "Content-Length": 82352
+           },
+           "def/": {
+             "ETag": "1337ABCD1337ABCD1337ABCD"
+           }
+         }
+       }
+
+    All folders are treated as existing, and therefore GET requests to
+    untouched folders SHOULD be responded to with a folder description
+    with no items (the items field set to '{}'). However, an empty
+    folder MUST NOT be listed as an item in its parent folder.
+
+    Also, since folders exist automatically, PUT and DELETE requests
+    only need to be made to documents, and never to folders. A document
+    PUT will make all ancestor folders along its path become non-empty;
+    deleting the last document from a subtree will make that whole
+    subtree become empty. Folders will therefore show up in their parent
+    folder descriptions if and only if their subtree contains at least
+    one document.
+
+    A successful GET request to a document SHOULD be responded to with
+    the full document contents in the body, the document's content type
+    in a 'Content-Type' header, its content length in octets (not in
+    characters) in a 'Content-Length' header, and the document's current
+    version as a strong ETag in an 'ETag' header.
+
+
+<span class="grey">de Jong                                                         [Page 5]</span>
+</pre><pre class="newpage"><a name="page-6" id="page-6" href="#page-6" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+
+    Note that the use of strong ETags prohibits changing the response
+    body based on request headers; in particular, the server will not be
+    able to serve the same document uncompressed to some clients and
+    gzipped when requested by the client, since the two bodies would not
+    be identical byte-for-byte.
+
+    Servers MAY support Content-Range headers [<a href="#ref-RANGE">RANGE</a>] on GET requests,
+    but whether or not they do SHOULD be announced through the &lt;ranges&gt;
+    variable mentioned below in <a href="#section-10">section 10</a>.
+
+    A successful PUT request to a document MUST result in:
+
+       * the request body being stored as the document's new content,
+       * parent and further ancestor folders being silently created as
+         necessary, with the document (name and version) being added to
+         its parent folder, and each folder added to its subsequent
+         parent,
+       * the value of its Content-Type header being stored as the
+         document's new content type,
+       * its version being updated, as well as that of its parent folder
+         and further ancestor folders, using a strong validator [HTTP,
+         <a href="#section-7.2">section 7.2</a>].
+
+    The response MUST contain a strong ETag header, with the document's
+    new version (for instance a hash of its contents) as its value.
+
+    A successful DELETE request to a document MUST result in:
+
+       * the deletion of that document from the storage, and from its
+         parent folder,
+       * silent deletion of the parent folder if it is left empty by
+         this, and so on for further ancestor folders,
+       * the version of its parent folder being updated, as well as that
+         of further ancestor folders.
+
+    A successful OPTIONS request SHOULD be responded to as described in
+    the CORS section below.
+
+    A successful HEAD request SHOULD be responded to like to the
+    equivalent GET request, but omitting the response body.
+
+
+
+
+<span class="grey">de Jong                                                         [Page 6]</span>
+</pre><pre class="newpage"><a name="page-7" id="page-7" href="#page-7" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+<span class="h2"><a class="selflink" name="section-5" href="#section-5">5</a>. Response codes</span>
+
+    Response codes SHOULD be given as defined by [HTTP, <a href="#section-6">section 6</a>] and
+    [BEARER, <a href="#section-3.1">section 3.1</a>]. The following is a non-normative checklist
+    of status codes that are likely to occur in practice:
+
+       * 500 if an internal server error occurs,
+       * 429 if the client makes too frequent requests or is suspected
+             of malicious activity,
+       * 414 if the request URI is too long,
+       * 416 if Range requests are supported by the server and the Range
+             request can not be satisfied,
+       * 401 for all requests that don't have a bearer token with
+             sufficient permissions,
+       * 404 for all DELETE and GET requests to documents that do not
+             exist on the storage,
+       * 304 for a conditional GET request whose pre-condition
+             fails (see "Versioning" below),
+       * 409 for a PUT request where any folder name in the path
+             clashes with an existing document's name at the same
+             level, or where the document name coincides with an
+             existing folder's name at the same level.
+       * 412 for a conditional PUT or DELETE request whose pre-condition
+             fails (see "Versioning" below),
+       * 507 in case the account is over its storage quota,
+       * 4xx for all malformed requests (e.g. foreign characters in the
+             path), as well as for all PUT and DELETE requests to
+             folders,
+       * 2xx for all successful requests.
+
+    Clients SHOULD also handle the case where a response takes too long
+    to arrive, or where no response is received at all.
+
+<span class="h2"><a class="selflink" name="section-6" href="#section-6">6</a>. Versioning</span>
+
+    All successful requests MUST return an 'ETag' header [<a href="#ref-HTTP">HTTP</a>] with, in
+    the case of GET, the current version, in the case of PUT, the new
+    version, and in case of DELETE, the version that was deleted. All
+    successful GET requests MUST return an 'Expires: 0' header. PUT and
+    DELETE requests MAY have an 'If-Match' request header [<a href="#ref-COND">COND</a>], and
+    MUST fail with a 412 response code if that doesn't match the
+    document's current version.
+
+
+
+<span class="grey">de Jong                                                         [Page 7]</span>
+</pre><pre class="newpage"><a name="page-8" id="page-8" href="#page-8" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+    GET requests MAY have a comma-separated list of revisions in an
+    'If-None-Match' header [<a href="#ref-COND">COND</a>], and SHOULD be responded to with a 304
+    response if that list includes the document or folder's current
+    version. A PUT request MAY have an 'If-None-Match: *' header [<a href="#ref-COND">COND</a>],
+    in which case it MUST fail with a 412 response code if the document
+    already exists.
+
+    In all 'ETag', 'If-Match' and 'If-None-Match' headers, revision
+    strings should appear inside double quotes (").
+
+    A provider MAY offer version rollback functionality to its users,
+    but this specification does not define the user interface for that.
+
+<span class="h2"><a class="selflink" name="section-7" href="#section-7">7</a>. CORS headers</span>
+
+    All responses MUST carry CORS headers [<a href="#ref-CORS">CORS</a>]. The server MUST also
+    reply to OPTIONS requests as per CORS. For GET requests, a wildcard
+    origin MAY be returned, but for PUT and DELETE requests, the
+    response MUST echo back the Origin header sent by the client.
+
+<span class="h2"><a class="selflink" name="section-8" href="#section-8">8</a>. Session description</span>
+
+    The information that a client needs to receive in order to be able
+    to connect to a server SHOULD reach the client as described in the
+    'bearer token issuance' sections below. It consists of:
+
+       * &lt;storage_root&gt;, consisting of 'https://' followed by a server
+         host, and optionally a server port and a path prefix as per
+         [<a href="#ref-IRI">IRI</a>]. Examples:
+         * 'https://example.com' (host only)
+         * 'https://example.com:8080' (host and port)
+         * 'https://example.com/path/to/storage' (host, port and
+           path prefix; note there is no trailing slash)
+       * &lt;access_token&gt; as per [<a href="#ref-OAUTH">OAUTH</a>]. The token SHOULD be hard to
+         guess and SHOULD NOT be reused from one client to another. It
+         can however be reused in subsequent interactions with the same
+         client, as long as that client is still trusted. Example:
+         * 'ofb24f1ac3973e70j6vts19qr9v2eei'
+       * &lt;storage_api&gt;, always '<a href="http://fakehost/test/draft-dejong-remotestorage-04">draft-dejong-remotestorage-04</a>' for this
+         alternative version of the specification.
+
+    The client can make its requests using https with CORS and bearer
+    tokens, to the URL that is the concatenation of &lt;storage_root&gt; with
+
+
+<span class="grey">de Jong                                                         [Page 8]</span>
+</pre><pre class="newpage"><a name="page-9" id="page-9" href="#page-9" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+    '/' plus one or more &lt;folder&gt; '/' strings indicating a path in the
+    folder tree, followed by zero or one &lt;document&gt; strings, indicating
+    a document. For example, if &lt;storage_root&gt; is
+    "https://storage.example.com/bob", then to retrieve the folder
+    contents of the /public/documents/ folder, or to retrieve a
+    'draft.txt' document from that folder, the client would make
+    requests to, respectively:
+
+    * https://storage.example.com/bob/public/documents/
+    * https://storage.example.com/bob/public/documents/draft.txt
+
+<span class="h2"><a class="selflink" name="section-9" href="#section-9">9</a>. Bearer tokens and access control</span>
+
+    A bearer token represents one or more access scopes. These access
+    scopes are represented as strings of the form &lt;module&gt; &lt;level&gt;,
+    where the &lt;module&gt; string SHOULD be lower-case alphanumerical, other
+    than the reserved word 'public', and &lt;level&gt; can be ':r' or ':rw'.
+    The access the bearer token gives is the sum of its access scopes,
+    with each access scope representing the following permissions:
+
+    '*:rw') any request,
+
+    '*:r') any GET or HEAD request,
+
+    &lt;module&gt; ':rw') any requests to paths that start with
+                    '/' &lt;module&gt; '/' or '/public/' &lt;module&gt; '/',
+
+    &lt;module&gt; ':r') any GET or HEAD requests to paths that start with
+                   '/' &lt;module&gt; '/' or '/public/' &lt;module&gt; '/',
+
+    As a special exceptions, GET requests to a document (but not a
+    folder) whose path starts with '/public/' are always allowed. They,
+    as well as OPTIONS requests, can be made without a bearer token.
+    Unless [<a href="#ref-KERBEROS">KERBEROS</a>] is used (see <a href="#section-10">section 10</a> below), all other requests
+    SHOULD present a bearer token with sufficient access scope, using a
+    header of the following form (no double quotes here):
+
+       Authorization: Bearer &lt;access_token&gt;
+
+    In addition, providing the access token via a HTTP query parameter
+    for GET requests MAY be supported by the server, although its use
+    is not recommended, due to its security deficiencies; see [BEARER,
+    <a href="#section-2.3">section 2.3</a>].
+
+
+<span class="grey">de Jong                                                         [Page 9]</span>
+</pre><pre class="newpage"><a name="page-10" id="page-10" href="#page-10" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+
+<span class="h2"><a class="selflink" name="section-10" href="#section-10">10</a>. Application-first bearer token issuance</span>
+
+    To make a remoteStorage server available as 'the remoteStorage of
+    &lt;account&gt; at &lt;host&gt;', exactly one link of the following format
+    SHOULD be added to the WebFinger record [<a href="#ref-WEBFINGER">WEBFINGER</a>] of &lt;account&gt; at
+    &lt;host&gt;:
+
+    {
+      "href": &lt;storage_root&gt;,
+      "rel": "remotestorage",
+      "properties": {
+        "<a href="http://remotestorage.io/spec/version">http://remotestorage.io/spec/version</a>": &lt;storage_api&gt;,
+        "<a href="http://tools.ietf.org/html/rfc6749#section-4.2">http://tools.ietf.org/html/rfc6749#section-4.2</a>": &lt;auth-dialog&gt;,
+        ... : ... ,
+      }
+    }
+
+    Here &lt;storage_root&gt; and &lt;storage_api&gt; are as per "Session
+    description" above, and &lt;auth-dialog&gt; SHOULD be either null or a
+    URL where an OAuth 2.0 implicit-grant flow dialog [<a href="#ref-OAUTH">OAUTH</a>] is
+    presented.
+
+    If &lt;auth-dialog&gt; is a URL, the user can supply their credentials
+    for accessing the account (how, is out of scope), and allow or
+    reject a request by the connecting application to obtain a bearer
+    token for a certain list of access scopes. Note that an account
+    will often belong to just one human user, but may also belong to a
+    group of multiple users (the remoteStorage of &lt;group&gt; at &lt;host&gt;).
+
+    If &lt;auth-dialog&gt; is null, the client will not have a way to obtain
+    an access token, and SHOULD send all requests without Authorization
+    header, and rely on Kerberos [<a href="#ref-KERBEROS">KERBEROS</a>] instead for requests that
+    would normally be sent with a bearer token, but servers SHOULD NOT
+    impose any such access barriers for resources that would normally
+    not require an access token.
+
+    The '...' ellipses indicate that more properties may be present.
+    Non-breaking examples that have been proposed so far, include a
+    "<a href="http://tools.ietf.org/html/rfc6750#section-2.3">http://tools.ietf.org/html/rfc6750#section-2.3</a>" property, set to
+    the string value "true" if the server supports passing the bearer
+    token in the URI query parameter as per section 2.3 of [<a href="#ref-BEARER">BEARER</a>],
+    instead of in the request header.
+
+
+<span class="grey">de Jong                                                        [Page 10]</span>
+</pre><pre class="newpage"><a name="page-11" id="page-11" href="#page-11" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+
+    Another example is "<a href="http://tools.ietf.org/html/rfc7233">http://tools.ietf.org/html/rfc7233</a>" with a
+    string value of "GET" if Content-Range headers are supported for
+    GET requests as per [<a href="#ref-RANGE">RANGE</a>], "PUT" if they are supported for PUT
+    requests, and "GET,PUT" if supported for both.
+
+    Both these proposals are non-breaking extensions, since the client
+    will have a way to work around it if these features are not present
+    (e.g. retrieve the protected resource asynchronously in the first
+    case, or request the entire resource in the second case).
+
+    A "<a href="http://remotestorage.io/spec/web-authoring">http://remotestorage.io/spec/web-authoring</a>" property has been
+    proposed with a string value of the fully qualified domain name to
+    which web authoring content is published if the server supports web
+    authoring as per [<a href="#ref-AUTHORING">AUTHORING</a>]. Note that this extension is a breaking
+    extension in the sense that it divides users into "haves", whose
+    remoteStorage accounts allow them to author web content, and
+    "have-nots", whose remoteStorage account does not support this
+    functionality.
+
+    The server MAY expire bearer tokens, and MAY require the user to
+    register applications as OAuth clients before first use; if no
+    client registration is required, then the server MAY ignore the
+    client_id parameter in favor of relying on the redirect_uri
+    parameter for client identification.
+
+<span class="h2"><a class="selflink" name="section-11" href="#section-11">11</a>. Storage-first bearer token issuance</span>
+
+    The provider MAY also present a dashboard to the user, where they
+    have some way to add open web app manifests [<a href="#ref-MANIFEST">MANIFEST</a>]. Adding a
+    manifest to the dashboard is considered equivalent to clicking
+    'accept' in the dialog of the application-first flow. Removing one
+    is considered equivalent to revoking its access token.
+
+    As an equivalent to OAuth's 'scope' parameter, a 'datastores-access'
+    field SHOULD be present in the root of such an application manifest
+    document, with entries &lt;module&gt; -&gt; '{"access": "readonly"}' for
+    &lt;level&gt; 'r' or '{"access": "readwrite"}' for &lt;level&gt; 'rw', as
+    prescribed in [<a href="#ref-DATASTORE">DATASTORE</a>].
+
+    When the user gestures they want to use a certain application whose
+    manifest is present on the dashboard, the dashboard SHOULD redirect
+    to the application or open it in a new window. To mimic coming back
+
+
+<span class="grey">de Jong                                                        [Page 11]</span>
+</pre><pre class="newpage"><a name="page-12" id="page-12" href="#page-12" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+    from the OAuth dialog, it MAY add 'access_token' and 'scope'
+    fields to the URL fragment.
+
+    Regardless of whether 'access_token' and 'scope' are specified, it
+    SHOULD add a 'remotestorage' field to the URL fragment, with a
+    value of the form &lt;account&gt; '@' &lt;host&gt;. When the application detects
+    this parameter, it SHOULD resolve the WebFinger record for &lt;account&gt;
+    at &lt;host&gt; and extract the &lt;storage_root&gt; and &lt;storage_api&gt;
+    information.
+
+    If no access_token was given, then the application SHOULD also
+    extract the &lt;auth_endpoint&gt; information from WebFinger, and continue
+    as per application-first bearer token issuance.
+
+    Note that whereas a remoteStorage server SHOULD offer support for
+    the application-first flow with WebFinger and OAuth, it MAY choose
+    not to support the storage-first flow, provided that users will
+    easily remember their &lt;account&gt; '@' &lt;host&gt; WebFinger address at that
+    provider. Applications SHOULD, however, support both flows, which
+    means checking the URL for a 'remotestorage' parameter, but giving
+    the user a way to specify the WebFinger address if there is none.
+
+    If a server provides an application manifest dashboard, then it
+    SHOULD merge the list of applications there with the list of
+    issued access tokens as specified by OAuth into one list. Also,
+    the interface for revoking an access token as specified by OAuth
+    SHOULD coincide with removing an application from the dashboard.
+
+    Servers MAY also provide a way to create access tokens directly from
+    their user interface. Such functionality would be aimed mainly at
+    developers, to manually copy and paste a token into a script or
+    debug tool, thus bypassing the need for an OAuth dance. Clients
+    SHOULD NOT rely on this in production.
+
+<span class="h2"><a class="selflink" name="section-12" href="#section-12">12</a>. Example wire transcripts</span>
+
+    The following examples are not normative ("\" indicates a line was
+    wrapped).
+
+<span class="h3"><a class="selflink" name="section-12.1" href="#section-12.1">12.1</a>. WebFinger</span>
+
+    In application-first, an in-browser application might issue the
+    following request, using XMLHttpRequest and CORS:
+
+
+<span class="grey">de Jong                                                        [Page 12]</span>
+</pre><pre class="newpage"><a name="page-13" id="page-13" href="#page-13" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+
+         GET /.well-known/webfinger?resource=acct:michiel@michielbdejon\
+g.com HTTP/1.1
+         Host: michielbdejong.com
+
+    and the server's response might look like this:
+
+         HTTP/1.1 200 OK
+         Access-Control-Allow-Origin: *
+         Access-Control-Allow-Methods: GET
+         Access-Control-Allow-Headers: If-Match, If-None-Match
+         Access-Control-Expose-Headers: ETag, Content-Length
+         Content-Type: application/jrd+json
+
+         {
+           "links":[{
+             "href": "<a href="https://michielbdejong.com:7678/inbox">https://michielbdejong.com:7678/inbox</a>",
+             "rel": "post-me-anything"
+           }, {
+             "href": "<a href="https://michielbdejong.com/me.jpg">https://michielbdejong.com/me.jpg</a>",
+             "rel": "avatar"
+           }, {
+             "href": "<a href="https://3pp.io:4439/storage/michiel">https://3pp.io:4439/storage/michiel</a>",
+             "rel": "remotestorage",
+             "properties": {
+               "<a href="http://remotestorage.io/spec/version">http://remotestorage.io/spec/version</a>": "<a href="http://fakehost/test/draft-dejong-re">draft-dejong-re</a>\
+motestorage-04",
+               "<a href="http://tools.ietf.org/html/rfc6749#section-4.2">http://tools.ietf.org/html/rfc6749#section-4.2</a>": "https\
+://3pp.io:4439/oauth/michiel",
+               "<a href="http://tools.ietf.org/html/rfc6750#section-2.3">http://tools.ietf.org/html/rfc6750#section-2.3</a>": false,
+               "<a href="http://tools.ietf.org/html/rfc7233">http://tools.ietf.org/html/rfc7233</a>": false,
+               "<a href="http://remotestorage.io/spec/web-authoring">http://remotestorage.io/spec/web-authoring</a>": false
+             }
+           }]
+         }
+
+<span class="h3"><a class="selflink" name="section-12.2" href="#section-12.2">12.2</a>. OAuth dialog form</span>
+
+    Once the in-browser application has discovered the server's OAuth
+    end-point, it will typically redirect the user to this URL, in
+    order to obtain a bearer token. Say the application is hosted on
+    <a href="https://drinks-unhosted.5apps.com/">https://drinks-unhosted.5apps.com/</a> and wants read-write access to
+    the account's "myfavoritedrinks" scope:
+
+
+<span class="grey">de Jong                                                        [Page 13]</span>
+</pre><pre class="newpage"><a name="page-14" id="page-14" href="#page-14" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+
+        GET /oauth/michiel?redirect_uri=https%3A%2F%2Fdrinks-unhosted.5\
+apps.com%2F&amp;scope=myfavoritedrinks%3Arw&amp;client_id=https%3A%2F%2Fdrinks-\
+unhosted.5apps.com&amp;response_type=token HTTP/1.1
+        Host: 3pp.io
+
+    The server's response might look like this (truncated for brevity):
+
+        HTTP/1.1 200 OK
+
+        &lt;!DOCTYPE html&gt;
+        &lt;html lang="en"&gt;
+          &lt;head&gt;
+            &lt;title&gt;Allow access?&lt;/title&gt;
+        ...
+
+<span class="h3"><a class="selflink" name="section-12.3" href="#section-12.3">12.3</a>. OAuth dialog form submission</span>
+
+    When the user submits the form, the request would look something
+    like this:
+
+        POST /oauth HTTP/1.1
+        Host: 3pp.io:4439
+        Origin: <a href="https://3pp.io:4439">https://3pp.io:4439</a>
+        Content-Type: application/x-www-form-urlencoded
+        Referer: <a href="https://3pp">https://3pp</a>.io:4439/oauth/michiel?redirect_uri=https%3\
+A%2F%2Fdrinks-unhosted.5apps.com%2F&amp;scope=myfavoritedrinks%3Arw&amp;client_\
+id=https%3A%2F%2Fdrinks-unhosted.5apps.com&amp;response_type=token
+
+        client_id=https%3A%2F%2Fdrinks-unhosted.5apps.com&amp;redirect_uri=\
+https%3A%2F%2Fdrinks-unhosted.5apps.com%2F&amp;response_type=token&amp;scope=my\
+favoritedrinks%3Arw&amp;state=&amp;username=michiel&amp;password=something&amp;allow=Al\
+low
+
+    To which the server could respond with a 302 redirect, back to the
+    origin of the requesting application:
+
+        HTTP/1.1 302 Found
+        Location:https://drinks-unhosted.5apps.com/#access_token=j2YnGt\
+XjzzzHNjkd1CJxoQubA1o%3D&amp;token_type=bearer&amp;state=
+
+<span class="h3"><a class="selflink" name="section-12.4" href="#section-12.4">12.4</a>. OPTIONS preflight</span>
+
+
+
+<span class="grey">de Jong                                                        [Page 14]</span>
+</pre><pre class="newpage"><a name="page-15" id="page-15" href="#page-15" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+    When an in-browser application makes a cross-origin request which
+    may affect the server-state, the browser will make a preflight
+    request first, with the OPTIONS verb, for instance:
+
+        OPTIONS /storage/michiel/myfavoritedrinks/ HTTP/1.1
+        Host: 3pp.io:4439
+        Access-Control-Request-Method: GET
+        Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        Access-Control-Request-Headers: Authorization
+        Referer: <a href="https://drinks-unhosted.5apps.com/">https://drinks-unhosted.5apps.com/</a>
+
+    To which the server can for instance respond:
+
+        HTTP/1.1 200 OK
+        Access-Control-Allow-Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        Access-Control-Allow-Methods: GET, PUT, DELETE
+        Access-Control-Allow-Headers: Authorization, Content-Length, Co\
+ntent-Type, Origin, X-Requested-With, If-Match, If-None-Match
+
+<span class="h3"><a class="selflink" name="section-12.5" href="#section-12.5">12.5</a>. Initial PUT</span>
+
+    An initial PUT may contain an 'If-None-Match: *' header, like this:
+
+        PUT /storage/michiel/myfavoritedrinks/test HTTP/1.1
+        Host: 3pp.io:4439
+        Content-Length: 91
+        Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        Authorization: Bearer j2YnGtXjzzzHNjkd1CJxoQubA1o=
+        Content-Type: application/json; charset=UTF-8
+        Referer: <a href="https://drinks-unhosted.5apps.com/?">https://drinks-unhosted.5apps.com/?</a>
+        If-None-Match: *
+
+        {"name":"test","@context":"<a href="http://remotestorage">http://remotestorage</a>.io/spec/modules\
+/myfavoritedrinks/drink"}
+
+    And the server may respond with either a 201 Created or a 200 OK
+    status:
+
+        HTTP/1.1 201 Created
+        Access-Control-Allow-Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        ETag: "1382694045000"
+
+<span class="h3"><a class="selflink" name="section-12.6" href="#section-12.6">12.6</a>. Subsequent PUT</span>
+
+
+<span class="grey">de Jong                                                        [Page 15]</span>
+</pre><pre class="newpage"><a name="page-16" id="page-16" href="#page-16" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+
+    A subsequent PUT may contain an 'If-Match' header referring to the
+    ETag previously returned, like this:
+
+        PUT /storage/michiel/myfavoritedrinks/test HTTP/1.1
+        Host: 3pp.io:4439
+        Content-Length: 91
+        Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        Authorization: Bearer j2YnGtXjzzzHNjkd1CJxoQubA1o=
+        Content-Type: application/json; charset=UTF-8
+        Referer: <a href="https://drinks-unhosted.5apps.com/?">https://drinks-unhosted.5apps.com/?</a>
+        If-Match: "1382694045000"
+
+        {"name":"test", "updated":true, "@context":"http://remotestorag\
+e.io/spec/modules/myfavoritedrinks/drink"}
+
+    And the server may respond with a 412 Conflict or a 200 OK status:
+
+        HTTP/1.1 200 OK
+        Access-Control-Allow-Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        ETag: "1382694048000"
+
+<span class="h3"><a class="selflink" name="section-12.7" href="#section-12.7">12.7</a>. GET</span>
+
+    A GET request would also include the bearer token, and optionally
+    an If-None-Match header:
+
+        GET /storage/michiel/myfavoritedrinks/test HTTP/1.1
+        Host: 3pp.io:4439
+        Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        Authorization: Bearer j2YnGtXjzzzHNjkd1CJxoQubA1o=
+        Referer: <a href="https://drinks-unhosted.5apps.com/?">https://drinks-unhosted.5apps.com/?</a>
+        If-None-Match: "1382694045000", "1382694048000"
+
+    And the server may respond with a 304 Not Modified status:
+
+        HTTP/1.1 304 Not Modified
+        Access-Control-Allow-Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        ETag: "1382694048000"
+
+    Or a 200 OK status, plus a response body:
+
+        HTTP/1.1 200 OK
+
+
+<span class="grey">de Jong                                                        [Page 16]</span>
+</pre><pre class="newpage"><a name="page-17" id="page-17" href="#page-17" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+        Access-Control-Allow-Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        Content-Type: application/json; charset=UTF-8
+        Content-Length: 106
+        ETag: "1382694048000"
+        Expires: 0
+
+        {"name":"test", "updated":true, "@context":"http://remotestora\
+ge.io/spec/modules/myfavoritedrinks/drink"}
+
+    If the GET URL would have been "/storage/michiel/myfavoritedrinks/",
+    a 200 OK response would have a folder description as the response
+    body:
+
+        HTTP/1.1 200 OK
+        Access-Control-Allow-Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        Content-Type: application/ld+json
+        Content-Length: 171
+        ETag: "1382694048000"
+        Expires: 0
+
+        {"@context":"<a href="http://remotestorage.io/spec/folder-version">http://remotestorage.io/spec/folder-version</a>","ite\
+ms":{"test":{"ETag":"1382694048000","Content-Type":"application/json; \
+charset=UTF-8","Content-Length":106}}}
+
+    If the GET URL would have been a non-existing document like
+    "/storage/michiel/myfavoritedrinks/x", the response would have a 404
+    Not Found status, and no ETag header:
+
+        HTTP/1.1 404 Not Found
+        Access-Control-Allow-Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+
+<span class="h3"><a class="selflink" name="section-12.8" href="#section-12.8">12.8</a>. DELETE</span>
+
+    A DELETE request may look like this:
+
+        DELETE /storage/michiel/myfavoritedrinks/test HTTP/1.1
+        Host: 3pp.io:4439
+        Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        Authorization: Bearer j2YnGtXjzzzHNjkd1CJxoQubA1o=
+        Content-Type: application/json; charset=UTF-8
+        Referer: <a href="https://drinks-unhosted.5apps.com/?">https://drinks-unhosted.5apps.com/?</a>
+        If-Match: "1382694045000"
+
+
+
+<span class="grey">de Jong                                                        [Page 17]</span>
+</pre><pre class="newpage"><a name="page-18" id="page-18" href="#page-18" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+    And the server may respond with a 412 Conflict or a 200 OK status:
+
+        HTTP/1.1 412 Conflict
+        Access-Control-Allow-Origin: <a href="https://drinks-unhosted.5apps.com">https://drinks-unhosted.5apps.com</a>
+        ETag: "1382694048000"
+
+<span class="h2"><a class="selflink" name="section-13" href="#section-13">13</a>. Distributed versioning</span>
+
+    This section is non-normative, and is intended to explain some of
+    the design choices concerning ETags and folder listings. At the
+    same time it will hopefully help readers who intend to develop an
+    application that uses remoteStorage as its per-user data storage.
+    When multiple clients have read/write access to the same document,
+    versioning conflicts may occur. For instance, client A may make
+    a PUT request that changes the document from version 1 to version
+    2, after which client B may make a PUT request attempting to change
+    the same document from version 1 to version 3.
+
+    In this case, client B can add an 'If-Match: "1"' header, which
+    would trigger a 412 Conflict response code, since the current
+    version ("2") does not match the version required as a condition by
+    the header If-Match header ("1").
+
+    Client B is now aware of the conflict, and may consult the user,
+    saying the update to version 3 failed. The user may then choose,
+    through the user interface of client B, whether version 2 or
+    version 3 should be kept, or maybe the document should be reverted
+    on the server to version 1, or a merged version 4 is needed. Client
+    B may then make a request that puts the document to the version the
+    user wishes; this time setting an 'If-Match: "2"' header instead.
+
+    Both client A and client B would periodically poll the root
+    folder of each scope they have access to, to see if the version
+    of the root folder changed. If it did, then one of the versions
+    listed in there will necessarily have changed, and the client can
+    make a GET request to that child folder or document, to obtain
+    its latest version.
+
+    Because an update in a document will result in a version change of
+    its containing folder, and that change will propagate all the way
+    to the root folder, it is not necessary to poll each document for
+    changes individually.
+
+
+
+<span class="grey">de Jong                                                        [Page 18]</span>
+</pre><pre class="newpage"><a name="page-19" id="page-19" href="#page-19" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+    As an example, the root folder may contain 10 directories,
+    each of which contain 10 directories, which each contain 10
+    documents, so their paths would be for instance '/0/0/1', '/0/0/2',
+    etcetera. Then one GET request to the root folder '/' will be
+    enough to know if any of these 1000 documents has changed.
+
+    Say document '/7/9/2' has changed; then the GET request to '/' will
+    come back with a different ETag, and entry '7/' will have a
+    different value in its JSON content. The client could then request
+    '/7/', '/7/9/', and '/7/9/2' to narrow down the one document that
+    caused the root folder's ETag to change.
+
+    Note that the remoteStorage server does not get involved in the
+    conflict resolution. It keeps the canonical current version at all
+    times, and allows clients to make conditional GET and PUT requests,
+    but it is up to whichever client discovers a given version
+    conflict, to resolve it.
+
+<span class="h2"><a class="selflink" name="section-14" href="#section-14">14</a>. Security Considerations</span>
+
+    To prevent man-in-the-middle attacks, the use of https instead of
+    http is important for both the interface itself and all end-points
+    involved in WebFinger, OAuth, and (if present) the storage-first
+    application launch dashboard.
+
+    A malicious party could link to an application, but specifying a
+    remoteStorage account address that it controls, thus tricking the
+    user into using a trusted application to send sensitive data to the
+    wrong remoteStorage server. To mitigate this, applications SHOULD
+    clearly display to which remoteStorage server they are sending the
+    user's data.
+
+    Applications could request scopes that the user did not intend to
+    give access to. The user SHOULD always be prompted to carefully
+    review which scopes an application is requesting.
+
+    An application may upload malicious html pages and then trick the
+    user into visiting them, or upload malicious client-side scripts,
+    that take advantage of being hosted on the user's domain name. The
+    origin on which the remoteStorage server has its interface SHOULD
+    therefore NOT be used for anything else, and the user SHOULD be
+    warned not to visit any web pages on that origin. In particular, the
+    OAuth dialog and launch dashboard or token revokation interface
+
+
+<span class="grey">de Jong                                                        [Page 19]</span>
+</pre><pre class="newpage"><a name="page-20" id="page-20" href="#page-20" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+    SHOULD be on a different origin than the remoteStorage interface.
+
+    Where the use of bearer tokens is impractical, a user may choose to
+    store documents on hard-to-guess URLs whose path after
+    &lt;storage_root&gt; starts with '/public/', while sharing this URL only
+    with the intended audience. That way, only parties who know the
+    document's hard-to-guess URL, can access it. The server SHOULD
+    therefore make an effort to detect and stop brute-force attacks that
+    attempt to guess the location of such documents.
+
+    The server SHOULD also detect and stop denial-of-service attacks
+    that aim to overwhelm its interface with too much traffic.
+
+<span class="h2"><a class="selflink" name="section-15" href="#section-15">15</a>. IANA Considerations</span>
+
+    This document registers the 'remotestorage' link relation, as well
+    as the following WebFinger properties:
+      * "<a href="http://remotestorage.io/spec/version">http://remotestorage.io/spec/version</a>"
+      * "<a href="http://tools.ietf.org/html/rfc6749#section-4.2">http://tools.ietf.org/html/rfc6749#section-4.2</a>"
+      * "<a href="http://tools.ietf.org/html/rfc6750#section-2.3">http://tools.ietf.org/html/rfc6750#section-2.3</a>"
+      * "<a href="http://tools.ietf.org/html/rfc7233">http://tools.ietf.org/html/rfc7233</a>"
+      * "<a href="http://remotestorage.io/spec/web-authoring">http://remotestorage.io/spec/web-authoring</a>"
+
+<span class="h2"><a class="selflink" name="section-16" href="#section-16">16</a>. Acknowledgements</span>
+
+    The authors would like to thank everybody who contributed to the
+    development of this protocol, including Kenny Bentley, Javier Diaz,
+    Daniel Groeber, Bjarni Runar, Jan Wildeboer, Charles Schultz, Peter
+    Svensson, Valer Mischenko, Michiel Leenaars, Jan-Christoph
+    Borchardt, Garret Alfert, Sebastian Kippe, Max Wiehle, Melvin
+    Carvalho, Martin Stadler, Geoffroy Couprie, Niklas Cathor, Marco
+    Stahl, James Coglan, Ken Eucker, Daniel Brolund, elf Pavlik, Nick
+    Jennings, Markus Sabadello, Steven te Brinke, Matthias Treydte,
+    Rick van Rein, Mark Nottingham, Julian Reschke, and Markus
+    Lanthaler, among many others.
+
+<span class="h2"><a class="selflink" name="section-17" href="#section-17">17</a>. References</span>
+
+<span class="h3"><a class="selflink" name="section-17.1" href="#section-17.1">17.1</a>. Normative References</span>
+
+    [<a name="ref-WORDS" id="ref-WORDS">WORDS</a>]
+        Bradner, S., "Key words for use in RFCs to Indicate Requirement
+        Levels", <a href="http://fakehost/test/bcp14">BCP 14</a>, <a href="http://fakehost/test/rfc2119">RFC 2119</a>, March 1997.
+
+
+<span class="grey">de Jong                                                        [Page 20]</span>
+</pre><pre class="newpage"><a name="page-21" id="page-21" href="#page-21" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+
+    [<a name="ref-IRI" id="ref-IRI">IRI</a>]
+        Duerst, M., "Internationalized Resource Identifiers (IRIs)",
+        <a href="http://fakehost/test/rfc3987">RFC 3987</a>, January 2005.
+
+    [<a name="ref-WEBFINGER" id="ref-WEBFINGER">WEBFINGER</a>]
+        Jones, P., Salguerio, G., Jones, M, and Smarr, J.,
+        "WebFinger", <a href="http://fakehost/test/rfc7033">RFC7033</a>, September 2013.
+
+    [<a name="ref-OAUTH" id="ref-OAUTH">OAUTH</a>]
+        "<a href="#section-4.2">Section 4.2</a>: Implicit Grant", in: Hardt, D. (ed), "The OAuth
+        2.0 Authorization Framework", <a href="http://fakehost/test/rfc6749">RFC6749</a>, October 2012.
+
+<span class="h3"><a class="selflink" name="section-17.2" href="#section-17.2">17.2</a>. Informative References</span>
+
+    [<a name="ref-HTTPS" id="ref-HTTPS">HTTPS</a>]
+        Rescorla, E., "HTTP Over TLS", <a href="http://fakehost/test/rfc2818">RFC2818</a>, May 2000.
+
+    [<a name="ref-HTTP" id="ref-HTTP">HTTP</a>]
+        Fielding et al., "Hypertext Transfer Protocol (HTTP/1.1):
+        Semantics and Content", <a href="http://fakehost/test/rfc7231">RFC7231</a>, June 2014.
+
+    [<a name="ref-COND" id="ref-COND">COND</a>]
+        Fielding et al., "Hypertext Transfer Protocol (HTTP/1.1):
+        Conditional Requests", <a href="http://fakehost/test/rfc7232">RFC7232</a>, June 2014.
+
+    [<a name="ref-RANGE" id="ref-RANGE">RANGE</a>]
+        Fielding et al., "Hypertext Transfer Protocol (HTTP/1.1):
+        Conditional Requests", <a href="http://fakehost/test/rfc7233">RFC7233</a>, June 2014.
+
+    [<a name="ref-SPDY" id="ref-SPDY">SPDY</a>]
+        Mark Belshe, Roberto Peon, "SPDY Protocol - Draft 3.1", <a href="http://www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft3-1">http://</a>
+        <a href="http://www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft3-1">www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft3-1</a>,
+        September 2013.
+
+    [<a name="ref-JSON-LD" id="ref-JSON-LD">JSON-LD</a>]
+        M. Sporny, G. Kellogg, M. Lanthaler, "JSON-LD 1.0", W3C
+        Proposed Recommendation,
+        <a href="http://www.w3.org/TR/2014/REC-json-ld-20140116/">http://www.w3.org/TR/2014/REC-json-ld-20140116/</a>, January 2014.
+
+    [<a name="ref-CORS" id="ref-CORS">CORS</a>]
+        van Kesteren, Anne (ed), "Cross-Origin Resource Sharing --
+        W3C Candidate Recommendation 29 January 2013",
+
+
+<span class="grey">de Jong                                                        [Page 21]</span>
+</pre><pre class="newpage"><a name="page-22" id="page-22" href="#page-22" class="invisible"> </a>
+<span class="grey">Internet-Draft              remoteStorage                  December 2014</span>
+
+
+        <a href="http://www.w3.org/TR/cors/">http://www.w3.org/TR/cors/</a>, January 2013.
+
+    [<a name="ref-MANIFEST" id="ref-MANIFEST">MANIFEST</a>]
+        Mozilla Developer Network (ed), "App manifest -- Revision
+        330541", <a href="https://developer.mozilla.org/en-">https://developer.mozilla.org/en-</a>
+        US/Apps/Build/Manifest$revision/566677, April 2014.
+
+    [<a name="ref-DATASTORE" id="ref-DATASTORE">DATASTORE</a>]
+        "WebAPI/DataStore", MozillaWiki, retrieved May 2014.
+        <a href="https://wiki.mozilla.org/WebAPI/DataStore#Manifest">https://wiki.mozilla.org/WebAPI/DataStore#Manifest</a>
+
+    [<a name="ref-KERBEROS" id="ref-KERBEROS">KERBEROS</a>]
+        C. Neuman et al., "The Kerberos Network Authentication Service
+        (V5)", <a href="http://fakehost/test/rfc4120">RFC4120</a>, July 2005.
+
+    [<a name="ref-BEARER" id="ref-BEARER">BEARER</a>]
+        M. Jones, D. Hardt, "The OAuth 2.0 Authorization Framework:
+        Bearer Token Usage", <a href="http://fakehost/test/rfc6750">RFC6750</a>, October 2012.
+
+    []
+        "Using remoteStorage for web authoring", reSite wiki, retrieved
+        September 2014. <a href="https://github.com/michielbdejong/resite/wiki">https://github.com/michielbdejong/resite/wiki</a>
+        /Using-remoteStorage-for-web-authoring
+
+<span class="h2"><a class="selflink" name="section-18" href="#section-18">18</a>. Authors' addresses</span>
+
+    Michiel B. de Jong
+    IndieHosters
+
+    Email: michiel@michielbdejong.com
+
+
+    F. Kooman
+    (independent)
+
+    Email: fkooman@tuxed.net
+
+
+
+
+
+
+
+
+
+de Jong                                                        [Page 22]
+
+</pre>
+    <br/> <span class="noprint"><small><small>Html markup produced by rfcmarkup 1.111, available from
+<a href="https://tools.ietf.org/tools/rfcmarkup/">https://tools.ietf.org/tools/rfcmarkup/</a>
+</small></small></span> </div>

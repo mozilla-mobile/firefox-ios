@@ -1,0 +1,64 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Ви впевнені?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Скасувати";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Стерти пошук";
+
+/* Copy password text selection menu item */
+"Copy" = "Копіювати";
+
+/* Button in login detail screen that deletes the current login
+   Label for the button used to delete an existing login. */
+"Delete" = "Видалити";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Зняти все";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Режим пошуку";
+
+/* Hide password text selection menu item */
+"Hide" = "Приховати";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Востаннє змінено %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Логіни";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Логіни будуть остаточно видалені.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Логіни будуть видалені з усіх під'єднаних пристроїв.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Логінів не знайдено";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Відкрити й заповнити";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Показати";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Пошук";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Поле введення пошуку";
+
+/* Title for selecting all logins */
+"Select All" = "Вибрати все";
+
+/* Title for password row in Login Detail View */
+"password" = "пароль";
+
+/* Title for username row in Login Detail View */
+"username" = "ім’я користувача";
+
+/* Title for website row in Login Detail View */
+"website" = "веб-сайт";
+

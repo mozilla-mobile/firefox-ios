@@ -1,0 +1,40 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Is u seker?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Kanselleer";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Wis soektog";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopieer";
+
+/* Button in login detail screen that deletes the current login
+   Label for the button used to delete an existing login. */
+"Delete" = "Verwyder";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Ontkies almal";
+
+/* Hide password text selection menu item */
+"Hide" = "Versteek";
+
+/* Title for Logins List View screen */
+"Logins" = "Aanmeldings";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Soek";
+
+/* Title for selecting all logins */
+"Select All" = "Kies almal";
+
+/* Title for password row in Login Detail View */
+"password" = "wagwoord";
+
+/* Title for username row in Login Detail View */
+"username" = "gebruikernaam";
+
+/* Title for website row in Login Detail View */
+"website" = "webwerf";
+
