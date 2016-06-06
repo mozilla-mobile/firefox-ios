@@ -267,6 +267,8 @@ class BrowserViewController: UIViewController {
 
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
         scrollController.showToolbars(animated: false)
+		
+		SELdetectClipboardURL()
     }
 
     deinit {
@@ -1257,6 +1259,13 @@ class BrowserViewController: UIViewController {
         controller.popoverDelegate = self
         controller.modalPresentationStyle = UIModalPresentationStyle.FormSheet
         self.presentViewController(controller, animated: true, completion: nil)
+    }
+	
+	private func checkClipboardForURL() {
+		if let clipboardURL = UIPasteboard.generalPasteboard().string?.asURL where profile.prefs.boolForKey("goToCopiedURL") == true {
+			log.debug("There is a URL on the clipboard")
+			print(clipboardURL)
+		}
     }
 }
 
