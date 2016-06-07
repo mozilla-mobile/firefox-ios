@@ -1971,8 +1971,6 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            addOpenInViewIfNeccessary(webView.URL)
-
             if let url = webView.URL?.absoluteString {
                 // Don't bother fetching bookmark state for about/sessionrestore and about/home.
                 if AboutUtils.isAboutURL(webView.URL) {
@@ -2283,17 +2281,14 @@ extension BrowserViewController: WKNavigationDelegate {
             screenshotHelper.takeDelayedScreenshot(tab)
         }
 
-        addOpenInViewIfNeccessary(webView.URL)
-
         // Remember whether or not a desktop site was requested
         if #available(iOS 9.0, *) {
             tab.desktopSite = webView.customUserAgent?.isEmpty == false
         }
     }
 
-    private func addOpenInViewIfNeccessary(url: NSURL?) {
-        guard let url = url, let openInHelper = OpenInHelperFactory.helperForURL(url) else { return }
-        let view = openInHelper.openInView
+    private func addViewForOpenInHelper(openInHelper: OpenInHelper) {
+        guard let view = openInHelper.openInView else { return }
         webViewContainerToolbar.addSubview(view)
         webViewContainerToolbar.snp_updateConstraints { make in
             make.height.equalTo(OpenInViewUX.ViewHeight)
@@ -2440,12 +2435,16 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
+        let helperForURL = OpenInHelperFactory.helperForResponse(navigationResponse.response as! NSHTTPURLResponse)
         if navigationResponse.canShowMIMEType {
+            if let openInHelper = helperForURL {
+                addViewForOpenInHelper(openInHelper)
+            }
             decisionHandler(WKNavigationResponsePolicy.Allow)
             return
         }
 
-        guard let openInHelper = OpenInHelperFactory.helperForURL(navigationResponse.response.URL!) else {
+        guard let openInHelper = helperForURL else {
             let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: "Downloads.Error.Message"])
             ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.URL!, inWebView: webView)
             return decisionHandler(WKNavigationResponsePolicy.Allow)
