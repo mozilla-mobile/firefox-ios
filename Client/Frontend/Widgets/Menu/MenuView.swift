@@ -31,10 +31,10 @@ class MenuView: UIView {
         return pageControl
     }()
 
-    var toolbarDelegate: MenuToolbarItemDelegate?
-    var toolbarDataSource: MenuToolbarDataSource?
-    var menuItemDelegate: MenuItemDelegate?
-    var menuItemDataSource: MenuItemDataSource?
+    weak var toolbarDelegate: MenuToolbarItemDelegate?
+    weak var toolbarDataSource: MenuToolbarDataSource?
+    weak var menuItemDelegate: MenuItemDelegate?
+    weak var menuItemDataSource: MenuItemDataSource?
 
     private let pagingCellReuseIdentifier = "PagingCellReuseIdentifier"
 

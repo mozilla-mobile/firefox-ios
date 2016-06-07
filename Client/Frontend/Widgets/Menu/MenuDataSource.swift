@@ -7,7 +7,7 @@ import UIKit
 
 
 // toolbar
-protocol MenuToolbarDataSource {
+protocol MenuToolbarDataSource: class {
     // how many items we will be displaying in our toolbar
     func numberOfToolbarItemsInMenuView(menuView: MenuView) -> Int
 
@@ -16,7 +16,7 @@ protocol MenuToolbarDataSource {
 }
 
 // menu items
-protocol MenuItemDataSource {
+protocol MenuItemDataSource: class {
     // how many pages we should provide in our menu
     func numberOfPagesInMenuView(menuView: MenuView) -> Int
 
