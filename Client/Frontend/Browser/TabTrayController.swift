@@ -571,7 +571,7 @@ class TabTrayController: UIViewController {
     }
 
     private func closeTabsForCurrentTray() {
-        tabManager.removeTabs(tabsToDisplay)
+        tabManager.removeTabsWithUndoToast(tabsToDisplay)
         self.collectionView.reloadData()
     }
 }
@@ -671,6 +671,20 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
+    }
+    
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
+        guard privateMode else {
+            return
+        }
+        if let undoToast = toast {
+            view.addSubview(undoToast)
+            undoToast.snp_makeConstraints { make in
+                make.left.right.equalTo(view)
+                make.bottom.equalTo(toolbar.snp_top)
+            }
+            undoToast.showToast()
+        }
     }
 }
 

@@ -2064,6 +2064,24 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
     }
+    
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
+        guard !tabTrayController.privateMode else {
+            return
+        }
+        
+        if let undoToast = toast {
+            let time = dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(ButtonToastUX.ToastDelay * Double(NSEC_PER_SEC)))
+            dispatch_after(time, dispatch_get_main_queue()) {
+                self.view.addSubview(undoToast)
+                undoToast.snp_makeConstraints { make in
+                    make.left.right.equalTo(self.view)
+                    make.bottom.equalTo(self.webViewContainer)
+                }
+                undoToast.showToast()
+            }
+        }
+    }
 
     private func updateTabCountUsingTabManager(tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {

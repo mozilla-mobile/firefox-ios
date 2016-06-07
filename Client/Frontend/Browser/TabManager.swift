@@ -16,6 +16,7 @@ protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab)
     func tabManagerDidRestoreTabs(tabManager: TabManager)
     func tabManagerDidAddTabs(tabManager: TabManager)
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?)
 }
 
 protocol TabManagerStateDelegate: class {
@@ -84,6 +85,7 @@ class TabManager : NSObject {
 
     private let prefs: Prefs
     var selectedIndex: Int { return _selectedIndex }
+    var tempTabs: [Tab]?
 
     var normalTabs: [Tab] {
         assert(NSThread.isMainThread())
@@ -357,6 +359,67 @@ class TabManager : NSObject {
     ///   removed.
     func removeAllPrivateTabsAndNotify(notify: Bool) {
         privateTabs.forEach({ removeTab($0, flushToDisk: true, notify: notify) })
+    }
+    
+    func removeTabsWithUndoToast(tabs: [Tab]) {
+        guard AppConstants.MOZ_UNDO_DELETE_TABS_TOAST else {
+            removeTabs(tabs)
+            return
+        }
+        tempTabs = tabs
+        var tabsCopy = tabs
+        
+        // Remove the current tab last to prevent switching tabs while removing tabs
+        if let selectedTab = selectedTab {
+            if let selectedIndex = tabsCopy.indexOf(selectedTab) {
+                let removed = tabsCopy.removeAtIndex(selectedIndex)
+                removeTabs(tabsCopy)
+                removeTab(removed)
+            }
+            else {
+                removeTabs(tabsCopy)
+            }
+        }
+        for tab in tabs {
+            tab.hideContent()
+        }
+        var toast: ButtonToast?
+        if let numberOfTabs = tempTabs?.count where numberOfTabs > 0  {
+            toast = ButtonToast(labelText: String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, completion: { buttonPressed in
+                if (buttonPressed) {
+                    self.undoCloseTabs()
+                    for delegate in self.delegates {
+                        delegate.get()?.tabManagerDidAddTabs(self)
+                    }
+                }
+                self.eraseUndoCache()
+            })
+        }
+        for delegate in delegates {
+            delegate.get()?.tabManagerDidRemoveAllTabs(self, toast: toast)
+        }
+    }
+    
+    func undoCloseTabs() {
+        guard let tempTabs = self.tempTabs where tempTabs.count ?? 0 > 0 else {
+            return
+        }
+        
+        let tabsCopy = normalTabs
+        restoreTabs(tempTabs)
+        for tab in tempTabs {
+            tab.showContent(true)
+        }
+        if !tempTabs[0].isPrivate ?? true {
+            removeTabs(tabsCopy)
+        }
+        selectTab(tempTabs.first)
+        self.tempTabs?.removeAll()
+        tabs.first?.createWebview()
+    }
+    
+    func eraseUndoCache() {
+        tempTabs?.removeAll()
     }
 
     func removeTabs(tabs: [Tab]) {
@@ -645,6 +708,18 @@ extension TabManager {
             selectTab(tab)
         }
 
+        isRestoring = false
+    }
+    
+    func restoreTabs(savedTabs: [Tab]) {
+        isRestoring = true
+        for tab in savedTabs {
+            tabs.append(tab)
+            tab.navigationDelegate = self.navDelegate
+            for delegate in delegates {
+                delegate.get()?.tabManager(self, didAddTab: tab)
+            }
+        }
         isRestoring = false
     }
 }
