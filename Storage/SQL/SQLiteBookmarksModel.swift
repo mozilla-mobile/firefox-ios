@@ -251,11 +251,14 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     }
 }
 
-private let isEditableQuery =
-    "SELECT exists( " +
-    "   SELECT exists(SELECT 1 FROM \(TableBookmarksBuffer)) AS hasBuffer, exists(SELECT 1 FROM \(TableBookmarksMirror)) AS hasMirror " +
-    "   WHERE hasBuffer == 0 OR (hasBuffer == 1 AND hasMirror == 0) " +
-    ")"
+
+private func isEditableQuery(direction: Direction) -> String {
+    let isLocal = direction == .Local ? "1" : "0"
+    return "SELECT exists( " +
+           "   SELECT exists(SELECT 1 FROM \(TableBookmarksBuffer)) AS hasBuffer, exists(SELECT 1 FROM \(TableBookmarksMirror)) AS hasMirror " +
+           "   WHERE hasBuffer == 0 OR (hasBuffer == 1 AND hasMirror == 0 AND \(isLocal)) " +
+           ")"
+}
 
 extension SQLiteBookmarks {
 
@@ -263,9 +266,8 @@ extension SQLiteBookmarks {
 
         let args: Args = guids.map { $0 as AnyObject }
         let varlist = BrowserDB.varlist(args.count)
-
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableQuery)) AS isEditable " +
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableQuery(direction))) AS isEditable " +
         "FROM \(direction.valueView) WHERE guid IN \(varlist) AND NOT is_deleted"
 
         let withIcon = [
@@ -304,7 +306,7 @@ extension SQLiteBookmarks {
         "WHERE parent = ?"
 
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableQuery)) AS isEditable " +
+        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableQuery(direction))) AS isEditable " +
         "FROM \(valueView)"
 
         // We exclude queries and dynamic containers, because we can't
