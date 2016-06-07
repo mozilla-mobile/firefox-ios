@@ -1541,11 +1541,7 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     func tabToolbarDidLongPressBack(tabToolbar: TabToolbarProtocol, button: UIButton) {
-// See 1159373 - Disable long press back/forward for backforward list
-//        let controller = BackForwardListViewController()
-//        controller.listData = tabManager.selectedTab?.backList
-//        controller.tabManager = tabManager
-//        presentViewController(controller, animated: true, completion: nil)
+        showBackForwardList()
     }
 
     func tabToolbarDidPressReload(tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1585,11 +1581,7 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     func tabToolbarDidLongPressForward(tabToolbar: TabToolbarProtocol, button: UIButton) {
-// See 1159373 - Disable long press back/forward for backforward list
-//        let controller = BackForwardListViewController()
-//        controller.listData = tabManager.selectedTab?.forwardList
-//        controller.tabManager = tabManager
-//        presentViewController(controller, animated: true, completion: nil)
+        showBackForwardList()
     }
 
     func tabToolbarDidPressMenu(tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1647,6 +1639,20 @@ extension BrowserViewController: TabToolbarDelegate {
     func tabToolbarDidPressHomePage(tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard let tab = tabManager.selectedTab else { return }
         HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, withNavigationController: navigationController)
+    }
+    
+    func showBackForwardList() {
+        guard AppConstants.MOZ_BACK_FORWARD_LIST else {
+            return
+        }
+        if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
+            let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            backForwardViewController.tabManager = tabManager
+            backForwardViewController.bvc = self
+            backForwardViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+            backForwardViewController.backForwardTransitionDelegate = BackForwardListAnimator()
+            self.presentViewController(backForwardViewController, animated: true, completion: nil)
+        }
     }
 }
 
