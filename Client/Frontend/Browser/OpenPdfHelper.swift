@@ -26,36 +26,77 @@ enum FileType : String {
     case PASS = "pkpass"
 }
 
+enum MimeType: String {
+    case PDF = "application/pdf"
+    case PASS = "application/vnd.apple.pkpass"
+}
+
 protocol OpenInHelper {
-    var openInView: OpenInView { get }
-    static func canOpen(url: NSURL) -> Bool
+    init(url: NSURL)
+    init?(response: NSHTTPURLResponse)
+    var openInView: OpenInView? { get }
+    var mimeType: MimeType { get }
+    var fileType: FileType { get }
+    var documentDirectory: NSURL { get }
+
+    static func canOpenType(type: String) -> Bool
     func open()
 }
 
 struct OpenInHelperFactory {
-    static func helperForURL(url: NSURL) -> OpenInHelper? {
-        if OpenPdfInHelper.canOpen(url) {
+
+    static func helperForURL(url: NSURL, mimeType: String? = nil) -> OpenInHelper? {
+        guard let type = mimeType ?? url.pathExtension else {
+            return nil
+        }
+        if OpenPdfInHelper.canOpenType(type) {
             return OpenPdfInHelper(url: url)
-        } else if OpenPassBookHelper.canOpen(url) {
+        } else if OpenPassBookHelper.canOpenType(type) {
             return OpenPassBookHelper(url: url)
         }
 
         return nil
     }
+
+    static func helperForResponse(response: NSHTTPURLResponse) -> OpenInHelper? {
+        guard let type = response.MIMEType ?? response.URL?.pathExtension else {
+            return nil
+        }
+        if OpenPdfInHelper.canOpenType(type) {
+            return OpenPdfInHelper(response: response)
+        } else if OpenPassBookHelper.canOpenType(type) {
+            return OpenPassBookHelper(response: response)
+        }
+        return nil
+    }
 }
 
 class OpenPassBookHelper: NSObject, OpenInHelper {
-    private var url: NSURL
-    lazy var openInView: OpenInView = OpenInView()
+    lazy var openInView: OpenInView? = nil
 
-    init(url: NSURL) {
+    var mimeType: MimeType = .PASS
+    var fileType: FileType = .PASS
+
+    lazy var documentDirectory: NSURL = {
+        return NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent(self.fileType.rawValue)
+    }()
+
+    private var filepath: NSURL?
+    private var url: NSURL
+
+    required init(url: NSURL) {
         self.url = url
         super.init()
     }
 
-    static func canOpen(url: NSURL) -> Bool {
-        guard let pathExtension = url.pathExtension else { return false }
-        return pathExtension == FileType.PASS.rawValue && PKAddPassesViewController.canAddPasses()
+    required init?(response: NSHTTPURLResponse) {
+        guard let responseUrl = response.URL else { return nil }
+        url = responseUrl
+        super.init()
+    }
+
+    static func canOpenType(type: String) -> Bool {
+        return (type == FileType.PASS.rawValue || type == MimeType.PASS.rawValue) && PKAddPassesViewController.canAddPasses()
     }
 
     func open() {
@@ -91,11 +132,37 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     private var docController: UIDocumentInteractionController? = nil
     private var openInURL: NSURL?
 
-    lazy var openInView: OpenInView = getOpenInView(self)()
+    lazy var openInView: OpenInView? = getOpenInView(self)()
 
-    init(url: NSURL) {
+    var mimeType: MimeType = .PDF
+    var fileType: FileType = .PDF
+
+    lazy var documentDirectory: NSURL = {
+        return NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent(self.fileType.rawValue)
+    }()
+
+    private var filepath: NSURL?
+
+    required init(url: NSURL) {
         self.url = url
         super.init()
+        setFilePath(url.lastPathComponent ?? "file.pdf")
+    }
+
+    required init?(response: NSHTTPURLResponse) {
+        guard let responseURL = response.URL else { return nil }
+        url = responseURL
+        super.init()
+        setFilePath(response.suggestedFilename ?? url.lastPathComponent ?? "file.pdf")
+    }
+
+    private func setFilePath(suggestedFilename: String) {
+        var filename = suggestedFilename
+        let pathExtension = filename.asURL?.pathExtension
+        if pathExtension == nil {
+            filename.appendContentsOf(".\(fileType.rawValue)")
+        }
+        filepath = documentDirectory.URLByAppendingPathComponent(filename)
     }
 
     deinit {
@@ -107,10 +174,9 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
             log.error("failed to delete file at \(url): \(error)")
         }
     }
-    
-    static func canOpen(url: NSURL) -> Bool {
-        guard let pathExtension = url.pathExtension else { return false }
-        return pathExtension == FileType.PDF.rawValue && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-books:")!)
+
+    static func canOpenType(type: String) -> Bool {
+        return (type == FileType.PDF.rawValue || type == MimeType.PDF.rawValue) && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-books:")!)
     }
 
     func getOpenInView() -> OpenInView {
@@ -127,7 +193,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     }
 
     func createLocalCopyOfPDF() {
-        guard let lastPathComponent = url.lastPathComponent else {
+        guard let filePath = filepath else {
             log.error("failed to create proper URL")
             return
         }
@@ -138,11 +204,9 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
                 return
             }
             let contentsOfFile = NSData(contentsOfURL: url)
-            let dirPath = NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent("pdfs")
-            let filePath = dirPath.URLByAppendingPathComponent(lastPathComponent)
             let fileManager = NSFileManager.defaultManager()
             do {
-                try fileManager.createDirectoryAtPath(dirPath.absoluteString, withIntermediateDirectories: true, attributes: nil)
+                try fileManager.createDirectoryAtPath(documentDirectory.absoluteString, withIntermediateDirectories: true, attributes: nil)
                 if fileManager.createFileAtPath(filePath.absoluteString, contents: contentsOfFile, attributes: nil) {
                     let openInURL = NSURL(fileURLWithPath: filePath.absoluteString)
                     createDocumentControllerForURL(openInURL)
@@ -150,14 +214,14 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
                     log.error("Unable to create local version of PDF file at \(filePath)")
                 }
             } catch {
-                log.error("Error on creating directory at \(dirPath)")
+                log.error("Error on creating directory at \(documentDirectory)")
             }
         }
     }
 
     func open() {
         createLocalCopyOfPDF()
-        guard let _parentView = self.openInView.superview, docController = self.docController else { log.error("view doesn't have a superview so can't open anything"); return }
+        guard let _parentView = self.openInView!.superview, docController = self.docController else { log.error("view doesn't have a superview so can't open anything"); return }
         // iBooks should be installed by default on all devices we care about, so regardless of whether or not there are other pdf-capable
         // apps on this device, if we can open in iBooks we can open this PDF
         // simulators do not have iBooks so the open in view will not work on the simulator
