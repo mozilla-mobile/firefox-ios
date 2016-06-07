@@ -15,7 +15,7 @@ private var DebugSettingsClickCount: Int = 0
 
 // For great debugging!
 class HiddenSetting: Setting {
-    let settings: SettingsTableViewController
+    unowned let settings: SettingsTableViewController
 
     init(settings: SettingsTableViewController) {
         self.settings = settings
@@ -405,7 +405,7 @@ class ExportBrowserDataSetting: HiddenSetting {
 
 // Show the current version of Firefox
 class VersionSetting : Setting {
-    let settings: SettingsTableViewController
+    unowned let settings: SettingsTableViewController
 
     init(settings: SettingsTableViewController) {
         self.settings = settings
