@@ -282,7 +282,15 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         let swipeCoordinate = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
         scrollView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
     }
-
+    
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        // Need to add this method so that when forcibly dragging, instead of letting deceleration happen, should also calculate what card it's on.
+        // This especially affects sliding to the last or first slides.
+        if !decelerate {
+            scrollViewDidEndDecelerating(scrollView)
+        }
+    }
+    
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
         // Need to add this method so that tapping the pageControl will also change the card texts.
         // scrollViewDidEndDecelerating waits until the end of the animation to calculate what card it's on.
