@@ -101,7 +101,7 @@ class HomePageAccessors {
     }
 }
 
-private extension HomePageAccessors {
+extension HomePageAccessors {
     static func isButtonInMenu(prefs: Prefs) -> Bool {
         return prefs.boolForKey(HomePageConstants.HomePageButtonIsInMenuPrefKey) ?? true
     }
