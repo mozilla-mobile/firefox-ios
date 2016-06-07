@@ -549,16 +549,24 @@ extension SQLiteHistory: BrowserHistory {
         }
 
         // Innermost: grab history items and basic visit/domain metadata.
-        let ungroupedSQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain" +
+        var ungroupedSQL =
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS title, \(TableHistory).guid AS guid, domain_id, domain" +
         ", COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate" +
         ", COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate" +
         ", COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount" +
         ", COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount" +
         " FROM \(TableHistory) " +
         "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
-        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
-        whereClause + " GROUP BY historyID"
+        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id "
+
+        if includeBookmarks && AppConstants.MOZ_AWESOMEBAR_DUPES {
+            ungroupedSQL.appendContentsOf("LEFT JOIN \(ViewAllBookmarks) on \(ViewAllBookmarks).url = \(TableHistory).url ")
+        }
+        ungroupedSQL.appendContentsOf(whereClause.stringByReplacingOccurrencesOfString("url", withString: "\(TableHistory).url").stringByReplacingOccurrencesOfString("title", withString: "\(TableHistory).title"))
+        if includeBookmarks && AppConstants.MOZ_AWESOMEBAR_DUPES {
+            ungroupedSQL.appendContentsOf(" AND \(ViewAllBookmarks).url IS NULL")
+        }
+        ungroupedSQL.appendContentsOf(" GROUP BY historyID")
 
         // Next: limit to only those that have been visited at all within the last six months.
         // (Don't do that in the innermost: we want to get the full count, even if some visits are older.)
@@ -620,11 +628,12 @@ extension SQLiteHistory: BrowserHistory {
                 "1 AS is_bookmarked",
                 "FROM", ViewAwesomebarBookmarksWithIcons,
                 whereClause,                  // The columns match, so we can reuse this.
+                AppConstants.MOZ_AWESOMEBAR_DUPES ? "GROUP BY url" : "",
                 "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
             ].joinWithSeparator(" ")
 
             let sql =
-            "SELECT * FROM (SELECT * FROM (\(historyWithIconsSQL)) UNION ALL SELECT * FROM (\(bookmarksWithIconsSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
+            "SELECT * FROM (SELECT * FROM (\(historyWithIconsSQL)) UNION SELECT * FROM (\(bookmarksWithIconsSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
             return (sql, args)
         }
 
@@ -641,11 +650,11 @@ extension SQLiteHistory: BrowserHistory {
             "1 AS is_bookmarked",
             "FROM", ViewAwesomebarBookmarks,
             whereClause,                  // The columns match, so we can reuse this.
+            "GROUP BY url",
             "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
         ].joinWithSeparator(" ")
 
-
-        let allSQL = "SELECT * FROM (SELECT * FROM (\(historySQL)) UNION ALL SELECT * FROM (\(bookmarksSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
+        let allSQL = "SELECT * FROM (SELECT * FROM (\(historySQL)) UNION SELECT * FROM (\(bookmarksSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
         return (allSQL, args)
     }
 }
