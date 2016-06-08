@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Ви дійсно хочете стерти всі свої дані? Це також спричинить закриття всіх відкритих вкладок.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Історія перегляду";
+
+/* Settings item for clearing the cache */
+"Cache" = "Кеш";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Скасувати";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Стерти";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Стерти все";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Стерти приватні дані";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Куки";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Дані автономних веб-сайтів";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Збережені логіни";
+

@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Tüm verilerinizi temizlemek istediğinizden emin misiniz? Tüm açık sekmeler kapatılacaktır.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Gezinti geçmişi";
+
+/* Settings item for clearing the cache */
+"Cache" = "Önbellek";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "İptal";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Temizle";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Her şeyi temizle";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Özel verileri temizle";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Çerezler";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Çevrimdışı web sitesi verileri";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Kayıtlı hesaplar";
+

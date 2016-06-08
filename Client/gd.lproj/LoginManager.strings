@@ -1,0 +1,64 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "A bheil thu cinnteach?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Sguir dheth";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Falamhaich an lorg";
+
+/* Copy password text selection menu item */
+"Copy" = "Dèan lethbhreac";
+
+/* Button in login detail screen that deletes the current login
+   Label for the button used to delete an existing login. */
+"Delete" = "Sguab às";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Dì-thagh na h-uile";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Fosgail am modh luirg";
+
+/* Hide password text selection menu item */
+"Hide" = "Falaich";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Atharrachadh mu dheireadh %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Clàraidhean a-steach";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Thèid na logins a thoirt air falbh gu buan.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Thèid na logins a thoirt air falbh o gach uidheam co‑cheangailte.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Cha deach login a lorg";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Fosgail ⁊ lìon";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Nochd";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Lorg";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Raon an luirg";
+
+/* Title for selecting all logins */
+"Select All" = "Tagh na h-uile";
+
+/* Title for password row in Login Detail View */
+"password" = "facal-faire";
+
+/* Title for username row in Login Detail View */
+"username" = "ainm-cleachdaiche";
+
+/* Title for website row in Login Detail View */
+"website" = "làrach-lìn";
+

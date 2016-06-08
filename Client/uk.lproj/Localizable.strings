@@ -1,0 +1,822 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ запитує ім'я користувача і пароль.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ запитує ім'я користувача і пароль. Повідомлення сайту: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Про";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Додати вкладку";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Додати до списку читання";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Сторінку додано до списку читання";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Адреса і пошук";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Дозв. сторонні клавіатури";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Завжди надсилати";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Потрібна ідентифікація";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Назад";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Блокувати виринаючі вікна";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Закладка";
+
+/* Panel accessibility label */
+"Bookmarks" = "Закладки";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Тут з’являтимуться ваші збережені закладки.";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Тека";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Розташування";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Ім’я теки";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Нова тека";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Заголовок";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Яскравість";
+
+/* Alert Call Button */
+"Call" = "Виклик";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Скасувати";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Змінює тему кольору.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Змінює тип шрифту.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Стерти особисті дані";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Закрити";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Закриття вкладки";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Копіювати адресу";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Копіювати зображення";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Копіювати посилання";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Не вдалося додати сторінку до списку читання. Можливо вона вже там?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Не вдалося додати сторінку до списку читання";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Не вдалося завантажити сторінку.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Створити обліковий запис";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Темна";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Зневадження: забути стан авторизації синхронізації";
+
+/* Debug option */
+"Debug: require password" = "Зневадження: вимагати пароль";
+
+/* Debug option */
+"Debug: require upgrade" = "Зневадження: вимагати оновлення";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Зменшити розмір тексту";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Типовий засіб пошуку";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Вимкнути додаткові діалоги сторінки";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Параметри відображення";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Ви хочете зберегти пароль для %1$@ на %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Ви хочете зберегти пароль на %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Ви хочете оновити пароль для %1$@ на %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Ви хочете оновити пароль на %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Не надсилати";
+
+/* Done button label on back forward list screen
+   Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Готово";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "Подвійний дотик і затримка для відкриття історії";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Firefox ще не підтримує завантажень.";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Введіть свій пароль, щоб з'єднатися.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Додатково";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Попередження: ми не можемо підтвердити, що ваше з'єднання з цим веб-сайтом захищене.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Це може бути через неправильну конфігурацію або атаку зловмисника. Продовжуйте, якщо ви усвідомлюєте потенційний ризик.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Власник %@ налаштував свій веб-сайт неналежним чином. Для захисту вашої інформації від викрадання, Firefox не з'єднався з цим веб-сайтом.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Це недовірене з’єднання";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Назад";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Все одно відвідати сайт";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Для застосування потрібно перезапустити Firefox.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox припинить синхронізацію з вашим обліковим записом, але не вилучить жодних даних перегляду на цьому пристрої.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox бажає отримати доступ до ваших фотографій";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Вперед";
+
+/* General settings section title */
+"General" = "Загальні";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Отримайте відкриті вкладки, закладки та паролі зі своїх інших пристроїв.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Перейти";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Перейти до скопійованого URL?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Довідка";
+
+/* Panel accessibility label */
+"History" = "Історія";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Ваші недавно відвідані сторінки з'являтимуться тут.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Ваші вкладки з інших пристроїв з’являються тут.";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "Увійдіть, щоб переглядати список вкладок з інших пристроїв.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Синхронізація Firefox";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Історія";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Недавно закриті";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d пристрій(оїв) під'єднано";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Синхронізовані пристрої";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Скасувати";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Ви можете пізніше змінити це в налаштуваннях";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Встановити початкову сторінку";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Хочете використовувати цю веб-сторінку як початкову?";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Назад";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Закрити вкладку";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Знайти";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Вперед";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Нова приватна вкладка";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Нова вкладка";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Перезавантажити сторінку";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Виберіть панель адреси";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Показати наступну вкладку";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Показати попередню вкладку";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Збільшити розмір шрифту";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Початковий огляд";
+
+/* History tableview section header */
+"Last month" = "Останній місяць";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Синхронізовано: %@";
+
+/* History tableview section header */
+"Last week" = "Останній тиждень";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Ліцензії";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Світла";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Завантажити оригінальну сторінку";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Завантаження вмісту…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Вийти";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Вийти?";
+
+/* Authentication prompt log in button */
+"Log in" = "Увійти";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Логіни";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Не зберігати";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Зберегти логін %1$@ для %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Зберегти пароль для %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "Оновити логін %1$@ для %2$@?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Оновити пароль для %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Зберегти логін";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Оновити";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Схоже, минулого разу Firefox впав. Бажаєте відновити свої вкладки?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Позначити, як прочитане";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Позначити, як непрочитане";
+
+/* Error for a missing remote error number */
+"Missing error" = "Відсутня помилка";
+
+/* Error for a missing remote error message */
+"Missing message" = "Відсутнє повідомлення";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Панель навігації";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Нова вкладка: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Доступна нова версія";
+
+/* Restore Tabs Negative Action */
+"No" = "Ні";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Немає вкладок";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Не зараз";
+
+/* Button to not save the user's password */
+"Not now" = "Не зараз";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Згода";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ой! Firefox впав";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Відкрити у новій вкладці";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Відкрити параметри";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Відкривайте статті в режимі читача, торкнувшись піктограми книги, коли вона з'являється в панелі заголовка.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Відкрити в…";
+
+/* Opening an external URL */
+"Opening %@" = "Відкриваю %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Вибір панелей";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Пароль";
+
+/* Paste the URL into the location bar */
+"Paste" = "Вставити";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Вставити і перейти";
+
+/* Privacy section title */
+"Privacy" = "Приватність";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Політика приватності";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Швидкі засоби пошуку";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Режим читача";
+
+/* Panel accessibility label */
+"Reading list" = "Список читання";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Нещодавно закриті";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Перезавантажити";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Вилучити";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Прибрати зі списку читання";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Вилучити сторінку";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Повна версія сайту";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Мобільна версія сайту";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Без зарубок";
+
+/* Context menu item for saving an image */
+"Save Image" = "Зберегти зображення";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Зберігати логіни";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Зберігайте статті до свого списку читання, торкнувшись піктограми книги з плюсом в керуванні режиму читача.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Пошук";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Введіть запит чи адресу";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Новий засіб пошуку з'явиться в панелі швидкого пошуку.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Засіб пошуку додано!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Додати засіб пошуку?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Скасувати";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Не вдалося додати засіб пошуку.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Невдача";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Пошук пропозиції";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Безпечне з'єднання";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Надіслати відгук";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Надіслати звіт";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Надіслати звіт про падіння, щоб Mozilla змогла виправити проблему?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Скасувати";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Можна ділитися лише посиланнями HTTP та HTTPS.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Неможливо поділитися цим посиланням.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Сепія";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Із зарубками";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Параметри";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Стерти приватні дані";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Стерти приватні дані";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Стерти приватні дані";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Очистити";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Початкова сторінка";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Налаштування початкової сторінки";
+
+/* Toggle setting to show home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "Інакше, показувати в панелі";
+
+/* Toggle setting to show home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "Показувати піктограму початкової сторінки в меню";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Введіть веб-сторінку";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Поточна початкова сторінка";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Використати скопійоване посилання";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Використати поточну сторінку";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Типово";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Готово";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Змінити";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Діагностика";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "Поділитися";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Поділитись посиланням";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Скасувати";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Пошукові пропозиції";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Показати вкладки";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Показати знайомство";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Пошукові пропозиції";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Увійти в Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Увійти";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Увійдіть, щоб отримати доступ до вкладок, закладок і паролів з інших пристроїв.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Стоп";
+
+/* Support section title */
+"Support" = "Підтримка";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Проведіть трьома пальцями вправо чи вліво для закриття вкладки.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Синхронізувати";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Синхронізуйте свої вкладки, закладки, паролі та інше.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Синхронізуйте свої вкладки, паролі та інше.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Перша синхронізація може зайняти деякий час";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Синхронізація";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Синхронізація…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Закладки";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Віддалені клієнти";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Синхронізація не вдалася";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Історія";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Логіни";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Синхронізація недоступна";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Синхронізація недоступна";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Трапляються проблеми при синхронізації %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Вкладки";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Вкладка %1$@ із %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Вкладки від %1$@ до %2$@ із %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Лоток вкладок";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Повернути";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d вкладку(ок) закрито";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Сторінка не може бути показана в режимі читача.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Доступна нова версія Firefox Aurora. Натисніть OK для переходу на сторінку завантаження.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Сталася помилка при отриманні доступу до вкладок з ваших інших пристроїв. Спробуйте знову пізніше.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "При конвертуванні сторінки сталася помилка";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Це дозволяє вам зберігати зображення до своєї фотоплівки.";
+
+/* Opening an external app */
+"This will open in another application" = "Це буде відкрито в іншій програмі";
+
+/* History tableview section header */
+"Today" = "Сьогодні";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Меню";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "Початкова сторінка";
+
+/* Panel accessibility label */
+"Top sites" = "Популярні сайти";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Тут з’являтимуться ваші найчастіше відвідувані сайти.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Вітаємо в популярних сайтах";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Видалити сторінку - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Оновити";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Оновіть Firefox, щоб з'єднатись.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Показувати стислі вкладки";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Ім'я користувача";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Підтвердіть свою адресу ел. пошти.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Версія %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Переглянути";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Веб-вміст";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Вітаємо у вашому списку читання";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Ой, оце так халепа.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "Так";
+
+/* History tableview section header */
+"Yesterday" = "Вчора";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "У вас немає вкладок, відкритих в Firefox на інших пристроях.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Ваші права";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "комп'ютер";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "щойно";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "мобільний пристрій";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "більш ніж місяць тому";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "більш ніж тиждень тому";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "прочитане";
+
+/* Relative date for date in past week. */
+"this week" = "цього тижня";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "сьогодні %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "непрочитане";
+
+/* Relative date for yesterday. */
+"yesterday" = "вчора";
+

@@ -1,0 +1,85 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Leinatiriso le khunololamoraba dikopiwa ke %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Leinatiriso le Khunololamoraba dikopiwa ke %1$@. Saete e bolela gore: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Ka ga";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Tsenya Thebe";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Tsenya mo Lenaane Puiso";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Tsebe e tsentswe mo Lenaane Puiso";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Aterese le Patlo";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Letlelela Dikhiiboto tse Dingwe";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Romela ka gale";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Netefatso e a lopiwa";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Morago";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Thibela Tlhagelelo ya Windows";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Letshwaotsebe";
+
+/* Panel accessibility label */
+"Bookmarks" = "Matshwaotsebe";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Matshwaotsebe a o a bolokang a tla bontshiwa fa.";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Phatsimo";
+
+/* Alert Call Button */
+"Call" = "Letsa";
+
+/* Action Sheet Cancel Button
+   Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert
+   Cancel title from search engine picker */
+"Cancel" = "Khansela";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "E fetola lemorago la mebala.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "E fetola Mofutatlhaka.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Phimola Tshedimosetso e Poraefete";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Tswala";
+

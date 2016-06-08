@@ -1,0 +1,64 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Sćo wěsty?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Pśetergnuś";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Pytańsku historiju wuprozniś";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopěrowaś";
+
+/* Button in login detail screen that deletes the current login
+   Label for the button used to delete an existing login. */
+"Delete" = "Lašowaś";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Wšykne wótwóliś";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Do pytańskego modusa stupiś";
+
+/* Hide password text selection menu item */
+"Hide" = "Schowaś";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Slědna změna: %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Pśizjawjenja";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Pśizjawjenja wótpóraju se na pśecej.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Pśizjawjenja wótpóraju se ze wšych zwězanych rědow.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Žedne pśizjawjenja namakane";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Wócyniś a wupołniś";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Pokazaś";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Pytaś";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Pytańske pólo";
+
+/* Title for selecting all logins */
+"Select All" = "Wšykne wubraś";
+
+/* Title for password row in Login Detail View */
+"password" = "gronidło";
+
+/* Title for username row in Login Detail View */
+"username" = "wužywarske mě";
+
+/* Title for website row in Login Detail View */
+"website" = "websedło";
+

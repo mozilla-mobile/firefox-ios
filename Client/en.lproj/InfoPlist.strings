@@ -1,7 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Websites you visit may request your location.";
 
-NSLocationWhenInUseUsageDescription = "Websites you visit may request your location.";
-ShortcutItemTitleNewTab = "New Tab";
-ShortcutItemTitleNewPrivateTab = "New Private Tab";
+"ShortcutItemTitleNewPrivateTab" = "New Private Tab";
+
+"ShortcutItemTitleNewTab" = "New Tab";
+

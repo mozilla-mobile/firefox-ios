@@ -1,0 +1,64 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Ste si istý?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Zrušiť";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Vymazať hľadanie";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopírovať";
+
+/* Button in login detail screen that deletes the current login
+   Label for the button used to delete an existing login. */
+"Delete" = "Odstrániť";
+
+/* Title for deselecting all selected logins */
+"Deselect All" = "Zrušiť výber všetkého";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Prejsť na režim vyhľadávania";
+
+/* Hide password text selection menu item */
+"Hide" = "Skryť";
+
+/* Footer label describing when the login was last modified with the timestamp as the parameter */
+"Last modified %@" = "Naposledy upravené %@";
+
+/* Title for Logins List View screen */
+"Logins" = "Prihlásenia";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Prihlasovacie údaje sa natrvalo odstránia.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Prihlasovacie údaje sa odstránia zo všetkých pripojených zariadení.";
+
+/* Title displayed when no logins are found after searching */
+"No logins found" = "Nenašli sa žiadne prihlásenia";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Otvoriť a vyplniť";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Odkryť";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Hľadať";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Vstupné pole vyhľadávania";
+
+/* Title for selecting all logins */
+"Select All" = "Vybrať všetko";
+
+/* Title for password row in Login Detail View */
+"password" = "heslo";
+
+/* Title for username row in Login Detail View */
+"username" = "používateľské meno";
+
+/* Title for website row in Login Detail View */
+"website" = "webová stránka";
+

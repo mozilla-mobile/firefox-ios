@@ -1,0 +1,9 @@
+/* Go to link on clipboard */
+"TodayWidget.GoToCopiedLinkLabel" = "转至已复制链接";
+
+/* New Private Tab button label */
+"TodayWidget.NewPrivateTabButtonLabel" = "新建隐私标签页";
+
+/* New Tab button label */
+"TodayWidget.NewTabButtonLabel" = "新建标签页";
+
