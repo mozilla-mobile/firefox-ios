@@ -2435,7 +2435,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
-        let helperForURL = OpenInHelperFactory.helperForResponse(navigationResponse.response as! NSHTTPURLResponse)
+        let helperForURL = OpenInHelperFactory.helperForResponse(navigationResponse.response)
         if navigationResponse.canShowMIMEType {
             if let openInHelper = helperForURL {
                 addViewForOpenInHelper(openInHelper)
