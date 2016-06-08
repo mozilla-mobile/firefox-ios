@@ -51,7 +51,7 @@ struct OpenInHelperFactory {
 }
 
 class ShareFileHelper: NSObject, OpenInHelper {
-    lazy var openInView: OpenInView? = nil
+    let openInView: OpenInView? = nil
 
     private var url: NSURL
     var pathExtension: String?
@@ -83,7 +83,7 @@ class ShareFileHelper: NSObject, OpenInHelper {
 }
 
 class OpenPassBookHelper: NSObject, OpenInHelper {
-    lazy var openInView: OpenInView? = nil
+    let openInView: OpenInView? = nil
 
     private var url: NSURL
 
