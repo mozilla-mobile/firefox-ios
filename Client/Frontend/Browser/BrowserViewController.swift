@@ -2445,7 +2445,7 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         guard let openInHelper = helperForURL else {
-            let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: "Downloads.Error.Message"])
+            let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
             ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.URL!, inWebView: webView)
             return decisionHandler(WKNavigationResponsePolicy.Allow)
         }
