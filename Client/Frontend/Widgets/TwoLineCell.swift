@@ -205,7 +205,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
 }
 
 private class TwoLineCellHelper {
-    var container: UIView!
+    weak var container: UIView?
     var textLabel: UILabel!
     var detailTextLabel: UILabel!
     var imageView: UIImageView!
@@ -222,7 +222,7 @@ private class TwoLineCellHelper {
         if let headerView = self.container as? UITableViewHeaderFooterView {
             headerView.contentView.backgroundColor = UIColor.clearColor()
         } else {
-            self.container.backgroundColor = UIColor.clearColor()
+            self.container?.backgroundColor = UIColor.clearColor()
         }
 
         textLabel.textColor = TwoLineCellUX.TextColor
@@ -238,6 +238,9 @@ private class TwoLineCellHelper {
     }
 
     func layoutSubviews() {
+        guard let container = self.container else{
+            return
+        }
         let height = container.frame.height
         let textLeft = hasBorderView ? TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin : TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin
         let textLabelHeight = textLabel.intrinsicContentSize().height
@@ -292,7 +295,7 @@ private class TwoLineCellHelper {
             return $0
         })
 
-        container.isAccessibilityElement = true
-        container.setValue(NSAttributedString(attributedString: label), forKey: "accessibilityLabel")
+        container?.isAccessibilityElement = true
+        container?.setValue(NSAttributedString(attributedString: label), forKey: "accessibilityLabel")
     }
 }
