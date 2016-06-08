@@ -10,6 +10,7 @@ struct TopTabsUX {
 
 protocol TopTabsDelegate: class {
     func topTabsPressTabs()
+    func topTabsPressNewTab()
 }
 
 class TopTabsViewController: UIViewController {
@@ -25,6 +26,16 @@ class TopTabsViewController: UIViewController {
         return tabsButton
     }()
     
+    private lazy var newTab: UIButton = {
+        let newTab = UIButton()
+        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabClicked), forControlEvents: UIControlEvents.TouchUpInside)
+        newTab.setImage(UIImage.templateImageNamed("menu-NewTab-pbm"), forState: .Normal)
+        newTab.tintColor = UIColor(white: 0.9, alpha: 1)
+        newTab.setImage(UIImage(named: "menu-NewTab-pbm"), forState: .Highlighted)
+        newTab.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility label for the New Tab button in the tab toolbar.")
+        return newTab
+    }()
+    
     init(tabManager: TabManager) {
         self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
@@ -37,9 +48,15 @@ class TopTabsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tabsButton)
-        tabsButton.snp_makeConstraints { make in
+        view.addSubview(newTab)
+        newTab.snp_makeConstraints { make in
             make.centerY.equalTo(view)
             make.trailing.equalTo(view)
+            make.size.equalTo(UIConstants.ToolbarHeight)
+        }
+        tabsButton.snp_makeConstraints { make in
+            make.centerY.equalTo(view)
+            make.trailing.equalTo(newTab.snp_leading)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
         view.backgroundColor = UIColor.blackColor() // Temporary color
@@ -51,6 +68,10 @@ class TopTabsViewController: UIViewController {
     
     func tabsClicked() {
         delegate.topTabsPressTabs()
+    }
+    
+    func newTabClicked() {
+        delegate.topTabsPressNewTab()
     }
 }
 

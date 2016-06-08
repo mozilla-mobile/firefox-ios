@@ -3263,4 +3263,9 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsPressTabs() {
         self.urlBarDidPressTabs(urlBar)
     }
+    
+    func topTabsPressNewTab() {
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        openBlankNewTabAndFocus(isPrivate: isPrivate)
+    }
 }
