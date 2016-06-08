@@ -101,9 +101,17 @@ class ShareFileHelper: NSObject, OpenInHelper {
     }
 
     func open() {
-        let objectsToShare = [url]
-        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-        UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(activityVC, animated: true, completion: nil)
+        let alertController = UIAlertController(
+            title: Strings.OpenInDownloadHelperAlertTitle,
+            message: Strings.OpenInDownloadHelperAlertMessage,
+            preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction( UIAlertAction(title: Strings.OpenInDownloadHelperAlertCancel, style: .Cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .Default){ (action) in
+            let objectsToShare = [self.url]
+            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(activityVC, animated: true, completion: nil)
+        })
+        UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
 }
 
