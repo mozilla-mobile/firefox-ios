@@ -24,20 +24,23 @@ struct OpenInViewUX {
 enum FileType : String {
     case PDF = "pdf"
     case PASS = "pkpass"
+    case HTML = "html"
+    case TXT = "txt"
+    case DEFAULT = "default"
 }
 
 enum MimeType: String {
     case PDF = "application/pdf"
     case PASS = "application/vnd.apple.pkpass"
+    case HTML = "text/html"
+    case TEXT = "text/plain"
+    case DEFAULT = "default"
 }
 
 protocol OpenInHelper {
     init(url: NSURL)
-    init?(response: NSHTTPURLResponse)
+    init?(response: NSURLResponse)
     var openInView: OpenInView? { get }
-    var mimeType: MimeType { get }
-    var fileType: FileType { get }
-    var documentDirectory: NSURL { get }
 
     static func canOpenType(type: String) -> Bool
     func open()
@@ -53,12 +56,14 @@ struct OpenInHelperFactory {
             return OpenPdfInHelper(url: url)
         } else if OpenPassBookHelper.canOpenType(type) {
             return OpenPassBookHelper(url: url)
+        } else if ShareFileHelper.canOpenType(type) {
+            return ShareFileHelper(url: url)
         }
 
         return nil
     }
 
-    static func helperForResponse(response: NSHTTPURLResponse) -> OpenInHelper? {
+    static func helperForResponse(response: NSURLResponse) -> OpenInHelper? {
         guard let type = response.MIMEType ?? response.URL?.pathExtension else {
             return nil
         }
@@ -66,22 +71,45 @@ struct OpenInHelperFactory {
             return OpenPdfInHelper(response: response)
         } else if OpenPassBookHelper.canOpenType(type) {
             return OpenPassBookHelper(response: response)
+        } else if ShareFileHelper.canOpenType(type) {
+            return ShareFileHelper(response: response)
         }
         return nil
+    }
+}
+
+class ShareFileHelper: NSObject, OpenInHelper {
+    lazy var openInView: OpenInView? = nil
+
+    private var url: NSURL
+    var pathExtension: String?
+
+    required init(url: NSURL) {
+        self.url = url
+        super.init()
+    }
+
+    required init?(response: NSURLResponse) {
+        guard let fileURL = response.URL else { return nil }
+        url = fileURL
+        super.init()
+    }
+
+
+    static func canOpenType(type: String) -> Bool {
+        return !(type == FileType.PDF.rawValue || type == MimeType.PDF.rawValue) && !(type == FileType.PASS.rawValue || type == MimeType.PASS.rawValue)
+    }
+
+    func open() {
+        let objectsToShare = [url]
+        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+        UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(activityVC, animated: true, completion: nil)
     }
 }
 
 class OpenPassBookHelper: NSObject, OpenInHelper {
     lazy var openInView: OpenInView? = nil
 
-    var mimeType: MimeType = .PASS
-    var fileType: FileType = .PASS
-
-    lazy var documentDirectory: NSURL = {
-        return NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent(self.fileType.rawValue)
-    }()
-
-    private var filepath: NSURL?
     private var url: NSURL
 
     required init(url: NSURL) {
@@ -89,7 +117,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
         super.init()
     }
 
-    required init?(response: NSHTTPURLResponse) {
+    required init?(response: NSURLResponse) {
         guard let responseUrl = response.URL else { return nil }
         url = responseUrl
         super.init()
@@ -134,11 +162,8 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
 
     lazy var openInView: OpenInView? = getOpenInView(self)()
 
-    var mimeType: MimeType = .PDF
-    var fileType: FileType = .PDF
-
     lazy var documentDirectory: NSURL = {
-        return NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent(self.fileType.rawValue)
+        return NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent(FileType.PDF.rawValue)
     }()
 
     private var filepath: NSURL?
@@ -149,7 +174,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
         setFilePath(url.lastPathComponent ?? "file.pdf")
     }
 
-    required init?(response: NSHTTPURLResponse) {
+    required init?(response: NSURLResponse) {
         guard let responseURL = response.URL else { return nil }
         url = responseURL
         super.init()
@@ -160,7 +185,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
         var filename = suggestedFilename
         let pathExtension = filename.asURL?.pathExtension
         if pathExtension == nil {
-            filename.appendContentsOf(".\(fileType.rawValue)")
+            filename.appendContentsOf(".\(FileType.PDF.rawValue)")
         }
         filepath = documentDirectory.URLByAppendingPathComponent(filename)
     }
