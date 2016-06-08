@@ -3213,6 +3213,7 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
     func findInPage(findInPage: FindInPageBar, didTextChange text: String) {
         find(text, function: "find")
     }
+    
 
     func findInPage(findInPage: FindInPageBar, didFindNextWithText text: String) {
         findInPageBar?.endEditing(true)
