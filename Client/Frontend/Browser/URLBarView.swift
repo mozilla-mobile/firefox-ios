@@ -106,6 +106,7 @@ class URLBarView: UIView {
     private var currentTheme: String = Theme.NormalMode
 
     var toolbarIsShowing = false
+    var topTabsIsShowing = false
 
     private var locationTextField: ToolbarTextField?
 
@@ -403,6 +404,17 @@ class URLBarView: UIView {
         // the constraints to be calculated too early and there are constraint errors
         if !toolbarIsShowing {
             updateConstraintsIfNeeded()
+        }
+        updateViewsForOverlayModeAndToolbarChanges()
+    }
+    
+    func setShowTopTabs(topTabsIsShowing: Bool) {
+        self.topTabsIsShowing = topTabsIsShowing
+        if(topTabsIsShowing) {
+            curveShape.hidden = true
+        }
+        else {
+            curveShape.hidden = false
         }
         updateViewsForOverlayModeAndToolbarChanges()
     }
