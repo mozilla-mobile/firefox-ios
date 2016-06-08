@@ -203,6 +203,7 @@ class BrowserViewController: UIViewController {
         if showTopTabs {
             if topTabsViewController == nil {
                 let topTabsViewController = TopTabsViewController(tabManager: tabManager)
+                topTabsViewController.delegate = self
                 addChildViewController(topTabsViewController)
                 topTabsViewController.view.frame = topTabsContainer.frame
                 topTabsContainer.addSubview(topTabsViewController.view)
@@ -2129,6 +2130,7 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             urlBar.updateTabCount(max(count, 1), animated: animated)
+            topTabsViewController?.updateTabCount(max(count, 1), animated: animated)
         }
     }
 }
@@ -3149,6 +3151,7 @@ extension BrowserViewController: Themeable {
         urlBar.applyTheme(themeName)
         toolbar?.applyTheme(themeName)
         readerModeBar?.applyTheme(themeName)
+        topTabsViewController?.applyTheme(themeName)
 
         switch(themeName) {
         case Theme.NormalMode:
@@ -3253,5 +3256,11 @@ private extension WKNavigationAction {
     /// Allow local requests only if the request is privileged.
     private var isAllowed: Bool {
         return !(request.URL?.isLocal ?? false) || request.isPrivileged
+    }
+}
+
+extension BrowserViewController: TopTabsDelegate {
+    func topTabsPressTabs() {
+        self.urlBarDidPressTabs(urlBar)
     }
 }

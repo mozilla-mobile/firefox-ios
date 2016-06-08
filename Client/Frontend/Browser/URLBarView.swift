@@ -199,9 +199,6 @@ class URLBarView: UIView {
         return AppConstants.MOZ_MENU ? [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton, self.homePageButton] : [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
     }()
 
-    // Used to temporarily store the cloned button so we can respond to layout changes during animation
-    private weak var clonedTabsButton: TabsButton?
-
     private var rightBarConstraint: Constraint?
     private let defaultRightOffset: CGFloat = URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer
 
@@ -352,6 +349,12 @@ class URLBarView: UIView {
                     // If we are showing a toolbar, show the text field next to the forward button
                     make.leading.equalTo(self.stopReloadButton.snp_trailing)
                     make.trailing.equalTo(self.shareButton.snp_leading)
+                    
+                    if (topTabsIsShowing) {
+                        menuButton.snp_updateConstraints { make in
+                            make.right.equalTo(self)
+                        }
+                    }
                 } else {
                     // Otherwise, left align the location view
                     make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
@@ -420,74 +423,7 @@ class URLBarView: UIView {
     }
 
     func updateTabCount(count: Int, animated: Bool = true) {
-        let currentCount = self.tabsButton.titleLabel.text
-        let infinity = "\u{221E}"
-        let countToBe = (count < 100) ? count.description : infinity
-        // only animate a tab count change if the tab count has actually changed
-        if currentCount != countToBe {
-            if let _ = self.clonedTabsButton {
-                self.clonedTabsButton?.layer.removeAllAnimations()
-                self.clonedTabsButton?.removeFromSuperview()
-                self.tabsButton.layer.removeAllAnimations()
-            }
-
-            // make a 'clone' of the tabs button
-            let newTabsButton = self.tabsButton.clone() as! TabsButton
-            self.clonedTabsButton = newTabsButton
-            newTabsButton.addTarget(self, action: #selector(URLBarView.SELdidClickAddTab), forControlEvents: UIControlEvents.TouchUpInside)
-            newTabsButton.titleLabel.text = countToBe
-            newTabsButton.accessibilityValue = countToBe
-            addSubview(newTabsButton)
-            newTabsButton.snp_makeConstraints { make in
-                make.centerY.equalTo(self.locationContainer)
-                make.trailing.equalTo(self)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-            }
-
-            newTabsButton.frame = tabsButton.frame
-
-            // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
-            // a rotation around a non-origin point
-            let frame = tabsButton.insideButton.frame
-            let halfTitleHeight = CGRectGetHeight(frame) / 2
-
-            var newFlipTransform = CATransform3DIdentity
-            newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
-            newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
-            newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
-            newTabsButton.insideButton.layer.transform = newFlipTransform
-
-            var oldFlipTransform = CATransform3DIdentity
-            oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
-            oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
-            oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(M_PI_2), 1.0, 0.0, 0.0)
-
-            let animate = {
-                newTabsButton.insideButton.layer.transform = CATransform3DIdentity
-                self.tabsButton.insideButton.layer.transform = oldFlipTransform
-                self.tabsButton.insideButton.layer.opacity = 0
-            }
-
-            let completion: (Bool) -> Void = { finished in
-                // remove the clone and setup the actual tab button
-                newTabsButton.removeFromSuperview()
-
-                self.tabsButton.insideButton.layer.opacity = 1
-                self.tabsButton.insideButton.layer.transform = CATransform3DIdentity
-                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
-
-                if finished {
-                    self.tabsButton.titleLabel.text = countToBe
-                    self.tabsButton.accessibilityValue = countToBe
-                }
-            }
-
-            if animated {
-                UIView.animateWithDuration(1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: animate, completion: completion)
-            } else {
-                completion(true)
-        }
-        }
+        self.tabsButton.updateTabCount(count, animated: animated)
     }
 
     func updateProgressBar(progress: Float) {
@@ -588,7 +524,6 @@ class URLBarView: UIView {
             self.cancelButton.transform = CGAffineTransformIdentity
             let tabsButtonTransform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset, 0)
             self.tabsButton.transform = tabsButtonTransform
-            self.clonedTabsButton?.transform = tabsButtonTransform
             self.rightBarConstraint?.updateOffset(URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer + tabsButton.frame.width)
 
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
@@ -598,7 +533,6 @@ class URLBarView: UIView {
             }
         } else {
             self.tabsButton.transform = CGAffineTransformIdentity
-            self.clonedTabsButton?.transform = CGAffineTransformIdentity
             self.cancelButton.transform = CGAffineTransformMakeTranslation(self.cancelButton.frame.width, 0)
             self.rightBarConstraint?.updateOffset(defaultRightOffset)
 
@@ -620,6 +554,7 @@ class URLBarView: UIView {
         self.forwardButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.backButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.stopReloadButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        self.tabsButton.hidden = self.topTabsIsShowing
     }
 
     func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
