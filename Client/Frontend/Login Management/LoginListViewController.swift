@@ -85,7 +85,7 @@ class LoginListViewController: SensitiveViewController {
         super.viewDidLoad()
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(LoginListViewController.loadLogins(_:)), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginListViewController.remoteLoginsDidChange), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
@@ -186,7 +186,11 @@ class LoginListViewController: SensitiveViewController {
 
 // MARK: - Selectors
 private extension LoginListViewController {
-    @objc func loadLogins(query: String? = nil) {
+    @objc func remoteLoginsDidChange() {
+        loadLogins()
+    }
+
+    func loadLogins(query: String? = nil) {
         loadingStateView.hidden = false
 
         // Fill in an in-flight query and re-query
