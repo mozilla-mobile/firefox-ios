@@ -55,5 +55,22 @@ enum NewTabPage: String {
         }
     }
 
+    var url: NSURL? {
+        switch self {
+        case .BlankPage:
+            return nil
+        case .HomePage:
+            return nil
+        case .TopSites:
+            return NSURL(string:"#panel=0", relativeToURL: UIConstants.AboutHomePage)
+        case .Bookmarks:
+            return NSURL(string:"#panel=1", relativeToURL: UIConstants.AboutHomePage)
+        case .History:
+            return NSURL(string:"#panel=2", relativeToURL: UIConstants.AboutHomePage)
+        case .ReadingList:
+            return NSURL(string:"#panel=3", relativeToURL: UIConstants.AboutHomePage)
+        }
+    }
+
     static let allValues = [BlankPage, TopSites, Bookmarks, History, ReadingList, HomePage]
 }

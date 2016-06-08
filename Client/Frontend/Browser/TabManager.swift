@@ -290,8 +290,28 @@ class TabManager : NSObject {
             tab.createWebview()
         }
         tab.navigationDelegate = self.navDelegate
-        tab.loadRequest(request ?? defaultNewTabRequest)
 
+        if let request = request {
+            tab.loadRequest(request)
+        } else {
+            let newTabChoice = NewTabAccessors.getNewTabPage(prefs)
+            switch newTabChoice {
+            case .HomePage:
+                // We definitely have a homepage if we've got here 
+                // (so we can safely dereference it).
+                let url = HomePageAccessors.getHomePage(prefs)!
+                tab.loadRequest(NSURLRequest(URL: url))
+            case .BlankPage:
+                // Do nothing: we're already seeing a blank page.
+                break
+            default:
+                // The common case, where the NewTabPage enum defines
+                // one of the about:home pages.
+                if let url = newTabChoice.url {
+                    tab.loadRequest(PrivilegedRequest(URL: url))
+                }
+            }
+        }
         if flushToDisk {
         	storeChanges()
         }
