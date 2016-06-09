@@ -28,3 +28,19 @@ public func makeAdHocBookmarkMergePing(bundle: NSBundle, clientID: String, attem
 
     return JSON(out)
 }
+
+public func makeAdHocSyncStatusPing(bundle: NSBundle, clientID: String, statusObject: [String: String]?, engineResults: [String: String]?, resultsFailure: MaybeErrorType?, clientCount: Int) -> JSON {
+    let out: [String: AnyObject] = [
+        "v": 1,
+        "appV": AppInfo.appVersion,
+        "build": bundle.objectForInfoDictionaryKey("BuildID") as? String ?? "unknown",
+        "id": clientID,
+        "date": NSDate().descriptionWithLocale(nil),
+        "clientCount": clientCount,
+        "statusObject": statusObject ?? JSON.null,
+        "engineResults": engineResults ?? JSON.null,
+        "resultsFailure": resultsFailure?.description ?? JSON.null
+    ]
+
+    return JSON(out)
+}

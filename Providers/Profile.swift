@@ -675,8 +675,74 @@ public class BrowserProfile: Profile {
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
             syncDisplayState = displayStateForEngineResults(result)
+            reportEndSyncingStatus(syncDisplayState, engineResults: result)
             notifySyncing(NotificationProfileDidFinishSyncing)
             syncReducer = nil
+        }
+
+        private func reportEndSyncingStatus(displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {
+            // We don't send this ad hoc telemetry on the release channel.
+            guard AppConstants.BuildChannel != AppBuildChannel.Release else {
+                return
+            }
+
+            guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
+                log.debug("Profile isn't sending usage data. Not sending sync status event.")
+                return
+            }
+
+            guard let displayState = displayState else {
+                log.debug("Sync display state not set!. Not sending sync status event.")
+                return
+            }
+
+            self.doInBackgroundAfter(millis: 300) {
+                self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
+                    // We would love to include the version and OS etc. of each remote client,
+                    // but we don't store that information. For now, just do a count.
+                    let clientCount = clients.count
+
+                    let id = DeviceInfo.clientIdentifier(self.prefs)
+
+                    var engineResultsDict: [String: String]? = nil
+                    if let results = engineResults?.successValue {
+                        engineResultsDict = [:]
+                        results.forEach { (engineIdentifier, syncStatus) in
+                            engineResultsDict![engineIdentifier] = syncStatus.description
+                        }
+                    }
+
+                    let engineResultsFailure = engineResults?.failureValue
+
+                    let ping = makeAdHocSyncStatusPing(
+                        NSBundle.mainBundle(),
+                        clientID: id,
+                        statusObject: displayState.asObject(),
+                        engineResults: engineResultsDict,
+                        resultsFailure: engineResultsFailure,
+                        clientCount: clientCount
+                    )
+
+                    let payload = ping.toString()
+
+                    log.debug("Payload is: \(payload)")
+                    guard let body = payload.dataUsingEncoding(NSUTF8StringEncoding) else {
+                        log.debug("Invalid JSON!")
+                        return
+                    }
+
+                    let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/syncstatus".asURL!
+                    let request = NSMutableURLRequest(URL: url)
+                    request.HTTPMethod = "POST"
+                    request.HTTPBody = body
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                    Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
+                        log.debug("Sync Status upload response: \(response?.statusCode ?? -1).")
+                    }
+                }
+            }
+
         }
 
         private func notifySyncing(notification: String) {
