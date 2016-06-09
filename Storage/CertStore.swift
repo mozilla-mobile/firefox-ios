@@ -13,19 +13,19 @@ public class CertStore {
 
     public init() {}
 
-    public func addCertificate(cert: SecCertificateRef) {
+    public func addCertificate(cert: SecCertificateRef, forOrigin origin: String) {
         let data: NSData = SecCertificateCopyData(cert)
-        let key = keyForData(data)
+        let key = keyForData(data, origin: origin)
         keys.insert(key)
     }
 
-    public func containsCertificate(cert: SecCertificateRef) -> Bool {
+    public func containsCertificate(cert: SecCertificateRef, forOrigin origin: String) -> Bool {
         let data: NSData = SecCertificateCopyData(cert)
-        let key = keyForData(data)
+        let key = keyForData(data, origin: origin)
         return keys.contains(key)
     }
 
-    private func keyForData(data: NSData) -> String {
-        return data.sha256.hexEncodedString
+    private func keyForData(data: NSData, origin: String) -> String {
+        return "\(origin)/\(data.sha256.hexEncodedString)"
     }
 }
