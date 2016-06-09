@@ -29,24 +29,14 @@ enum MimeType: String {
 protocol OpenInHelper {
     init?(response: NSURLResponse)
     var openInView: OpenInView? { get }
-
-    static func canOpenMIMEType(mimeType: String) -> Bool
     func open()
 }
 
-struct OpenInHelperFactory {
+struct OpenIn {
+    static let helpers: [OpenInHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, ShareFileHelper.self]
+    
     static func helperForResponse(response: NSURLResponse) -> OpenInHelper? {
-        guard let mimeType = response.MIMEType else {
-            return nil
-        }
-        if OpenPdfInHelper.canOpenMIMEType(mimeType) {
-            return OpenPdfInHelper(response: response)
-        } else if OpenPassBookHelper.canOpenMIMEType(mimeType) {
-            return OpenPassBookHelper(response: response)
-        } else if ShareFileHelper.canOpenMIMEType(mimeType) {
-            return ShareFileHelper(response: response)
-        }
-        return nil
+        return helpers.flatMap { $0.init(response: response) }.first
     }
 }
 
@@ -57,14 +47,10 @@ class ShareFileHelper: NSObject, OpenInHelper {
     var pathExtension: String?
 
     required init?(response: NSURLResponse) {
-        guard let fileURL = response.URL else { return nil }
-        url = fileURL
+        guard let MIMEType = response.MIMEType where !(MIMEType == MimeType.PASS.rawValue || MIMEType == MimeType.PDF.rawValue),
+            let responseURL = response.URL else { return nil }
+        url = responseURL
         super.init()
-    }
-
-
-    static func canOpenMIMEType(mimeType: String) -> Bool {
-        return !(mimeType == MimeType.PASS.rawValue || mimeType == MimeType.PDF.rawValue)
     }
 
     func open() {
@@ -88,13 +74,10 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
     private var url: NSURL
 
     required init?(response: NSURLResponse) {
-        guard let responseUrl = response.URL else { return nil }
-        url = responseUrl
+        guard let MIMEType = response.MIMEType where MIMEType == MimeType.PASS.rawValue && PKAddPassesViewController.canAddPasses(),
+            let responseURL = response.URL else { return nil }
+        url = responseURL
         super.init()
-    }
-
-    static func canOpenMIMEType(mimeType: String) -> Bool {
-        return mimeType == MimeType.PASS.rawValue && PKAddPassesViewController.canAddPasses()
     }
 
     func open() {
@@ -139,7 +122,8 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     private var filepath: NSURL?
 
     required init?(response: NSURLResponse) {
-        guard let responseURL = response.URL else { return nil }
+        guard let MIMEType = response.MIMEType where MIMEType == MimeType.PDF.rawValue && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-books:")!),
+            let responseURL = response.URL else { return nil }
         url = responseURL
         super.init()
         setFilePath(response.suggestedFilename ?? url.lastPathComponent ?? "file.pdf")
@@ -162,10 +146,6 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
         } catch {
             log.error("failed to delete file at \(url): \(error)")
         }
-    }
-
-    static func canOpenMIMEType(mimeType: String) -> Bool {
-        return mimeType == MimeType.PDF.rawValue && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-books:")!)
     }
 
     func getOpenInView() -> OpenInView {
