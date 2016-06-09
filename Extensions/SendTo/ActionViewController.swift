@@ -38,6 +38,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
                 return
             }
 
+            self.sharedItem = item
             let clientPickerViewController = ClientPickerViewController()
             clientPickerViewController.clientPickerDelegate = self
             clientPickerViewController.profile = self.profile
