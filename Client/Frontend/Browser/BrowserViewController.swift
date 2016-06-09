@@ -161,9 +161,9 @@ class BrowserViewController: UIViewController {
                previousTraitCollection.horizontalSizeClass != .Regular
     }
 
-    func shouldShowTopTabsForTraitCollection(previousTraitCollection: UITraitCollection) -> Bool {
-        return previousTraitCollection.verticalSizeClass == .Regular &&
-            previousTraitCollection.horizontalSizeClass == .Regular
+    func shouldShowTopTabsForTraitCollection(newTraitCollection: UITraitCollection) -> Bool {
+        return newTraitCollection.verticalSizeClass == .Regular &&
+            newTraitCollection.horizontalSizeClass == .Regular
     }
 
     func toggleSnackBarVisibility(show show: Bool) {
@@ -179,7 +179,7 @@ class BrowserViewController: UIViewController {
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
         urlBar.setShowToolbar(!showToolbar)
-        urlBar.setShowTopTabs(showTopTabs)
+        urlBar.topTabsIsShowing = showTopTabs
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         footerBackground?.removeFromSuperview()
@@ -201,17 +201,17 @@ class BrowserViewController: UIViewController {
         }
         
         if showTopTabs {
-            if topTabsContainer.subviews.count == 0 {
+            if topTabsViewController.parentViewController == nil {
                 addChildViewController(topTabsViewController)
                 topTabsViewController.view.frame = topTabsContainer.frame
                 topTabsContainer.addSubview(topTabsViewController.view)
                 topTabsViewController.view.snp_makeConstraints { make in
                     make.edges.equalTo(topTabsContainer)
-                    make.height.equalTo(40)
+                    make.height.equalTo(TopTabsUX.TopTabsViewHeight)
                 }
             }
             topTabsContainer.snp_updateConstraints { make in
-                make.height.equalTo(40)
+                make.height.equalTo(TopTabsUX.TopTabsViewHeight)
             }
         }
         else {
@@ -410,12 +410,12 @@ class BrowserViewController: UIViewController {
 
     private func setupConstraints() {
         topTabsContainer.snp_makeConstraints { make in
-            make.left.right.equalTo(self.header)
+            make.leading.trailing.equalTo(self.header)
             make.top.equalTo(urlBarTopTabsContainer)
         }
         
         urlBar.snp_makeConstraints { make in
-            make.left.right.bottom.equalTo(urlBarTopTabsContainer)
+            make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
             make.height.equalTo(UIConstants.ToolbarHeight)
             make.top.equalTo(topTabsContainer.snp_bottom)
         }

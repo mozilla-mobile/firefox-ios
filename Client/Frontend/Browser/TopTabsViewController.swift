@@ -4,6 +4,10 @@
 
 import Foundation
 
+struct TopTabsUX {
+    static let TopTabsViewHeight: CGFloat = 40
+}
+
 class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     
