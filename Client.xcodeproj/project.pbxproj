@@ -226,6 +226,9 @@
 		3905274F1C874D35007E0BB7 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3905274E1C874D35007E0BB7 /* TodayViewController.swift */; };
 		390527561C874D35007E0BB7 /* Today.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3905274A1C874D35007E0BB7 /* Today.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		39098DC41CAD5ACB00AE87F3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 391AEFD11C8F11ED00691F84 /* Images.xcassets */; };
+		392ED6B71D06E85E009D9B62 /* NewTabChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED6B61D06E85E009D9B62 /* NewTabChoiceViewController.swift */; };
+		392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */; };
+		392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */; };
 		39409A3F1C90E68300DAE683 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		39409A841C90EF2000DAE683 /* Today.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 39409A831C90EF2000DAE683 /* Today.entitlements */; };
 		394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */; };
@@ -1297,6 +1300,9 @@
 		3905274E1C874D35007E0BB7 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
 		390527531C874D35007E0BB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		391AEFD11C8F11ED00691F84 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		392ED6B61D06E85E009D9B62 /* NewTabChoiceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTabChoiceViewController.swift; sourceTree = "<group>"; };
+		392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTabAccessors.swift; path = Accessors/NewTabAccessors.swift; sourceTree = "<group>"; };
+		392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomePageAccessors.swift; path = Accessors/HomePageAccessors.swift; sourceTree = "<group>"; };
 		39409A831C90EF2000DAE683 /* Today.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Today.entitlements; sourceTree = "<group>"; };
 		394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSuggestedSites.swift; sourceTree = "<group>"; };
 		39A359E31BFCCE94006B9E87 /* SpotlightHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotlightHelper.swift; path = Helpers/SpotlightHelper.swift; sourceTree = "<group>"; };
@@ -2357,6 +2363,15 @@
 			path = Today;
 			sourceTree = "<group>";
 		};
+		392ED7D51D0AEEEE009D9B62 /* Accessors */ = {
+			isa = PBXGroup;
+			children = (
+				392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */,
+				392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */,
+			);
+			name = Accessors;
+			sourceTree = "<group>";
+		};
 		39A359BD1BFCCE7B006B9E87 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2657,6 +2672,7 @@
 				39DD030C1CD53E1900BC09B3 /* HomePageHelper.swift */,
 				D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */,
 				0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */,
+				392ED6B61D06E85E009D9B62 /* NewTabChoiceViewController.swift */,
 				7BA8D1C61BA037F500C8AE9E /* OpenPdfHelper.swift */,
 				D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */,
 				E47536EC1C85412C0022CC69 /* PrintHelper.swift */,
@@ -3161,6 +3177,7 @@
 			children = (
 				D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
+				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				7BEDD28C1CB7CB12004B51F3 /* Animators */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
 				D3A994941A368691008AD1AC /* Browser */,
@@ -4677,6 +4694,7 @@
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
 				E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */,
 				E47536ED1C85412C0022CC69 /* PrintHelper.swift in Sources */,
+				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenPdfHelper.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
@@ -4726,6 +4744,7 @@
 				2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
 				E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
+				392ED6B71D06E85E009D9B62 /* NewTabChoiceViewController.swift in Sources */,
 				E4B3348C1BC01D8F004E2BFF /* AdjustIntegration.swift in Sources */,
 				7FB63CC91C08B27E0047F9A4 /* DynamicFontHelper.swift in Sources */,
 				7BC68D241CC153630043562A /* AppMenuToolbarItem.swift in Sources */,
@@ -4740,6 +4759,7 @@
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				7B59FC471C68E9B600F58EF5 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
+				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				D39949F51C22461A00E2A03C /* RequestDesktopSiteActivity.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
