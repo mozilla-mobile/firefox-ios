@@ -56,10 +56,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         // Handle messages from the content server (via our user script).
         let contentController = WKUserContentController()
         contentController.addUserScript(userScript)
-        contentController.addScriptMessageHandler(
-            self,
-            name: "accountsCommandHandler"
-        )
+        contentController.addScriptMessageHandler(LeakAvoider(delegate:self), name: "accountsCommandHandler")
 
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
@@ -160,5 +157,23 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     override func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
         // Ignore for now.
+    }
+}
+
+/*
+LeakAvoider prevents leaks with WKUserContentController
+http://stackoverflow.com/questions/26383031/wkwebview-causes-my-view-controller-to-leak
+*/
+
+class LeakAvoider : NSObject, WKScriptMessageHandler {
+    weak var delegate: WKScriptMessageHandler?
+
+    init(delegate: WKScriptMessageHandler) {
+        self.delegate = delegate
+        super.init()
+    }
+
+    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        self.delegate?.userContentController(userContentController, didReceiveScriptMessage: message)
     }
 }
