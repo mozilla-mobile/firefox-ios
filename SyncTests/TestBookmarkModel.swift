@@ -132,7 +132,7 @@ class TestBookmarkModel: FailFastTestCase {
             BookmarkMirrorItem.bookmark("EEE", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "EEE", description: nil, URI: "http://EEE.com", tags: "", keyword: nil)
         ], atDate: mirrorDate)
 
-        bookmarks.local.insertBookmark("http://AAA.com".asURL!, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MenuFolderGUID, withTitle: "Bookmarks Menu").succeeded()
+        bookmarks.local.insertBookmark("http://AAA.com".asURL!, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Bookmarks Menu").succeeded()
 
         // Add some unmerged bookmarks into the menu folder in the buffer.
         bookmarks.applyRecords([
@@ -145,9 +145,30 @@ class TestBookmarkModel: FailFastTestCase {
 
         // Check to see that we can't edit these bookmarks
         let menuFolder = bookmarks.menuFolder()
-        XCTAssertEqual(menuFolder.current.count, 2)
+        XCTAssertEqual(menuFolder.current.count, 1)
         XCTAssertFalse(menuFolder.current[0]!.isEditable)
-        XCTAssertFalse(menuFolder.current[1]!.isEditable)
+
+    }
+
+    func testLocalBookmarksEditableWhileHavingUnmergedChangesAndEmptyMirror() {
+        guard let bookmarks = self.getSyncableBookmarks("D") else {
+            XCTFail("Couldn't get bookmarks.")
+            return
+        }
+
+        bookmarks.local.insertBookmark("http://AAA.com".asURL!, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Bookmarks Menu").succeeded()
+
+        // Add some unmerged bookmarks into the menu folder in the buffer.
+        let mirrorDate = NSDate.now() - 100000
+        bookmarks.applyRecords([
+            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE", "FFF"]),
+            BookmarkMirrorItem.bookmark("FFF", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "FFF", description: nil, URI: "http://FFF.com", tags: "", keyword: nil)
+        ]).succeeded()
+
+        // Local bookmark should be editable
+        let mobileFolder = bookmarks.mobileFolder()
+        XCTAssertEqual(mobileFolder.current.count, 2)
+        XCTAssertTrue(mobileFolder.current[1]!.isEditable)
     }
 }
 
@@ -179,5 +200,9 @@ private extension MergedSQLiteBookmarks {
 
     func menuFolder() -> BookmarksModel {
         return modelFactory.value.successValue!.modelForFolder(BookmarkRoots.MenuFolderGUID).value.successValue!
+    }
+
+    func mobileFolder() -> BookmarksModel {
+        return modelFactory.value.successValue!.modelForFolder(BookmarkRoots.MobileFolderGUID).value.successValue!
     }
 }
