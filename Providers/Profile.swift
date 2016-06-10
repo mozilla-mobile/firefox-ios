@@ -22,12 +22,15 @@ public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 public enum SyncDisplayState {
     case InProgress
     case Good
-    case Bad(message: String)
+    case Bad(message: String?)
     case Stale(message: String)
 
     func asObject() -> [String: String]? {
         switch self {
-        case .Bad(let message):
+        case .Bad(let msg):
+            guard let message = msg else {
+                return ["state": "Error"]
+            }
             return ["state": "Error",
                     "message": message]
         case .Stale(let message):
@@ -935,7 +938,7 @@ public class BrowserProfile: Profile {
             }
             guard let results = result.successValue else {
                 guard let _ = result.failureValue as? BookmarksMergeError else {
-                    return SyncDisplayState.Bad(message: Strings.FirefoxSyncFailedTitle)
+                    return SyncDisplayState.Bad(message: nil)
                 }
                 return SyncDisplayState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
             }
