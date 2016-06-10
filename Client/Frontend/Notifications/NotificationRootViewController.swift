@@ -252,6 +252,8 @@ private extension NotificationRootViewController {
             }
         }
         guard let syncMessage = syncMessageForNotification(notification.object) else {
+            notificationView.titleLabel.text = nil
+            notificationView.titleLabel.attributedText = nil
             return
         }
         notificationView.titleLabel.attributedText = syncMessage
