@@ -180,7 +180,17 @@ extension Strings {
 // errors
 extension Strings {
     public static let UnableToDownloadError = NSLocalizedString("Downloads.Error.Message", value: "Downloads aren't supported in Firefox yet.", comment: "The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle.")
-    public static let UnableToAddPassErrorTitle = NSLocalizedString("AddPass.Error.Title", value: "Failed to Add Pass", comment: "Title of the 'Add Pass Failed' alert")
-    public static let UnableToAddPassErrorMessage = NSLocalizedString("AddPass.Error.Message", value: "An error occured while adding the pass to Passbook. Please try again later.", comment: "Text of the 'Add Pass Failed' alert")
-    public static let UnableToAddPassErrorDismiss = NSLocalizedString("AddPass.Error.Dismiss", value: "OK", comment: "Button to dismiss the 'Add Pass Failed' alert")
+    public static let UnableToAddPassErrorTitle = NSLocalizedString("AddPass.Error.Title", value: "Failed to Add Pass", comment: "Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Passbook.")
+    public static let UnableToAddPassErrorMessage = NSLocalizedString("AddPass.Error.Message", value: "An error occured while adding the pass to Passbook. Please try again later.", comment: "Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Passbook.")
+    public static let UnableToAddPassErrorDismiss = NSLocalizedString("AddPass.Error.Dismiss", value: "OK", comment: "Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Passbook.")
+}
+
+// open in
+
+extension Strings {
+    public static let OpenInDownloadHelperAlertTitle = NSLocalizedString("Downloads.Alert.Title", value: "Firefox Downloads", comment: "The title of the alert box asking the user if they want to use another app to open a file.")
+    public static let OpenInDownloadHelperAlertMessage = NSLocalizedString("Downloads.Alert.Message", value: "Firefox is unable to download or display this file. Would you like to open it in another app?", comment: "The message of the alert box asking the user if they want to use another app to open a file.")
+    public static let OpenInDownloadHelperAlertConfirm = NSLocalizedString("Downloads.Alert.Confirm", value: "Yes", comment: "The label of the button the user will press to be presented with a list of other apps to open a file in")
+    public static let OpenInDownloadHelperAlertCancel = NSLocalizedString("Downloads.Alert.Cancel", value: "No", comment: "The label of the button the user will press to reject the option to open a file in another application")
+
 }
