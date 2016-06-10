@@ -1,0 +1,51 @@
+/* String describing the action of adding the current site as a bookmark from the menu */
+"Menu.AddBookmarkAction.Title" = "Dodaj zakładkę";
+
+/* String describing the action of closing all tabs in the tab tray at once from the menu */
+"Menu.CloseAllTabsAction.Title" = "Zamknij wszystkie karty";
+
+/* Accessibility label describing the button that closes the menu when open */
+"Menu.CloseMenu.AccessibilityLabel" = "Zamknij menu";
+
+/* String describing the action of opening the toolbar that allows users to search for items within a webpage from the menu */
+"Menu.FindInPageAction.Title" = "Wyszukaj na stronie";
+
+/* String describing the action of creating a new private tab from the menu */
+"Menu.NewPrivateTabAction.Title" = "Nowa karta prywatna";
+
+/* String describing the action of creating a new tab from the menu */
+"Menu.NewTabAction.Title" = "Nowa karta";
+
+/* String describing the action of opening the bookmarks home panel from the menu */
+"Menu.OpenBookmarksAction.AccessibilityLabel" = "Zakładki";
+
+/* String describing the action of opening the history home panel from the menu */
+"Menu.OpenHistoryAction.AccessibilityLabel" = "Historia";
+
+/* String describing the action of navigating to the homepage from the menu */
+"Menu.OpenHomePageAction.Title" = "Przejdź do strony startowej";
+
+/* AccessibilityLabel describing the action of opening the reading list home panel from the menu */
+"Menu.OpenReadingListAction.AccessibilityLabel" = "Czytelnia";
+
+/* String describing the action of opening the settings menu from the menu */
+"Menu.OpenSettingsAction.Title" = "Ustawienia";
+
+/* AccessibilityLabel describing the action of opening the Top Sites home panel from the menu */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Popularne";
+
+/* String describing the action of remove the current site as a bookmark from the menu */
+"Menu.RemoveBookmarkAction.Title" = "Usuń zakładkę";
+
+/* String describing the action of invoking the share menu. On the menu */
+"Menu.SendPageAction.Title" = "Wyślij";
+
+/* String describing the action of setting the homepage if none is set. On the menu */
+"Menu.SetHomePageAction.Title" = "Ustaw stronę startową";
+
+/* String describing the action of requesting a website switch from a mobile optimized view to a desktop view from the menu. The site may not have a desktop version so the request may be denied. */
+"Menu.ViewDekstopSiteAction.Title" = "Zażądaj wersji na komputery";
+
+/* String describing the action of request a website switch from a desktop view to a mobile optimized view from the menu. The site may not have a mobile version so the request may be denied. */
+"Menu.ViewMobileSiteAction.Title" = "Zażądaj wersji na urządzenia przenośne";
+

@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Dún Cluaisíní Príobháideacha";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Ní choinneoidh Firefox do stair bhrabhsála ná fianáin, ach sábhálfar leabharmharcanna nua.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Tuilleadh Eolais";
+
+/* Toggled OFF accessibility value */
+"Off" = "Múchta";
+
+/* Toggled ON accessibility value */
+"On" = "Lasta";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Oscail i gCluaisín Príobháideach Nua";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Brabhsáil Phríobháideach";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Mód Príobháideach";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Tosaigh nó múch an mód príobháideach";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Agus Brabhsáil Phríobháideach á Scor";
+

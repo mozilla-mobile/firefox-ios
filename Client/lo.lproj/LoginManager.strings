@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "ທ່ານແນ່ໃຈແລ້ວບໍ່?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "ຍົກເລີກ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "ລົບລ້າງການຄົ້ນຫາ";
+
+/* Copy password text selection menu item */
+"Copy" = "ສຳເນົາ";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "ລຶບ";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "ບໍ່ເລືອກທັງຫມົດ";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "ເຂົ້າສູ່ໂຫມດການຄົ້ນຫາ";
+
+/* Hide password text selection menu item */
+"Hide" = "ເຊື່ອງ";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "ການປ່ຽນແປງຫລ້າສຸດ %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "ການເຂົ້າສູ່ລະບົບ";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "ການເຂົ້າສູ່ລະບົບຈະຖືກລຶບອອກຢ່າງຖາວອນ.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "ການເຂົ້າສູ່ລະບົບຈະຖືກລຶບອອກຈາກອຸປະກອນທີ່ເຊື່ອມຕໍ່ທັງຫມົດ.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "ບໍ່ພົບການເຂົ້າສູ່ລະບົບ";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "ເປີດ & ຕື່ມໃສ່";
+
+/* Reveal password text selection menu item */
+"Reveal" = "ເປີດເຜີຍ";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ຄົ້ນຫາ";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "ບ່ອນປ້ອນຄຳທີ່ຕ້ອງການຄົ້ນຫາ";
+
+/* Label for the button used to select all logins. */
+"Select All" = "ເລືອ​ກທັງໝົດ";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "ລະຫັດຜ່ານ";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "ຊື່ຜູ້ໃຊ້";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "ເວັບໄຊຕ໌";
+

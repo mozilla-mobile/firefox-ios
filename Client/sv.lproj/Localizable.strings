@@ -1,0 +1,814 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Ett användarnamn och lösenord begärs av %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Ett användarnamn och lösenord begärs av %1$@. Sidan säger: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Om";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Lägg till flik";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Lägg till i läslistan";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Sidan tillagd till läslistan";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adress och sökfunktion";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Tillåt tredjeparts tangentbord";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Skicka alltid";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Autentisering krävs";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Bakåt";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blockera popup-fönster";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Bokmärke";
+
+/* Panel accessibility label */
+"Bookmarks" = "Bokmärken";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Bokmärken som du sparat kommer att visas här.";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Mapp";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Plats";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Mappnamn";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Ny mapp";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Titel";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Ljusstyrka";
+
+/* Alert Call Button */
+"Call" = "Ring";
+
+/* Label for Cancel button */
+"Cancel" = "Avbryt";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Ändrar färgtema.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Ändrar teckentyp.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Rensa ut privat data";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Stäng";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Stänger fliken";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Kopiera adress";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Kopiera bild";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Kopiera länk";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Kunde inte lägga till sidan till läslistan. Den kanske redan finns där?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Kunde inte lägga till sidan till läslistan";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Kunde inte ladda sidan.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Skapa ett konto";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Mörk";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Felsökning: glöm Sync auth-tillstånd";
+
+/* Debug option */
+"Debug: require password" = "Felsökning: kräver lösenord";
+
+/* Debug option */
+"Debug: require upgrade" = "Felsökning: kräver uppgradering";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Minska textstorleken";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Standardsökmotor";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Inaktivera ytterligare dialogsidor";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Bildskärmsinställningar";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Vill du spara lösenordet för %1$@ på %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Vill du spara lösenord på %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Vill du uppdatera lösenordet för %1$@ på %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Vill du uppdatera lösenordet på %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Skicka inte";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Klar";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "Dubbeltryck och håll kvar med fingret för att öppna historik";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Nedladdningar stöds inte i Firefox ännu.";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Ange lösenord för att ansluta.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Avancerat";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Varning: vi kan inte bekräfta att din anslutning till denna webbplats är säker.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Det kan vara en felaktig konfiguration eller manipulering av en angripare. Fortsätt om du accepterar risken.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Ägaren av %@ har konfigurerat sin webbplats felaktigt. För att skydda din information från att bli stulen har Firefox inte anslutit till denna webbplats.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Den här anslutningen är inte tillförlitlig";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Gå bakåt";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Besök sidan ändå";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Firefox behöver startas om för att denna ändring ska träda i kraft.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox kommer sluta att synka med ditt konto, men kommer inte att radera din webbinformation på den här enheten.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox vill komma åt dina Foton";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Framåt";
+
+/* General settings section title */
+"General" = "Allmänt";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Få dina öppna flikar, bokmärken och lösenord från dina andra enheter.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Gå till";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Gå till kopierad URL?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Hjälp";
+
+/* Panel accessibility label */
+"History" = "Historik";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Webbplatser du har besökt nyligen kommer att visas här.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Dina flikar från andra enheter visas här.";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "Logga in för att se öppna flikar på dina andra enheter.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Historik";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Nyligen stängda";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d enhet(er) anslutna";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Synkade enheter";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Avbryt";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Du kan ändra detta när som helst i Inställningar";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Ange startsida";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Vill du använda denna webbsida som din startsida?";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Bakåt";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Stäng flik";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Sök";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Framåt";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Ny privat flik";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Ny flik";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Ladda om sida";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Välj adressfältet";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Visa nästa flik";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Visa föregående flik";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Öka textstorleken";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Introduktionsrundtur";
+
+/* History tableview section header */
+"Last month" = "Förra månaden";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Senaste synkronisering: %@";
+
+/* History tableview section header */
+"Last week" = "Förra veckan";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licenser";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Ljust";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Ladda original sidan";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Laddar innehåll…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Logga ut";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Logga ut?";
+
+/* Authentication prompt log in button */
+"Log in" = "Logga in";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Inloggningar";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Spara inte";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Spara inloggning %1$@ för %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Spara lösenord för %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "Uppdatera inloggning för %1$@ på %2$@?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Uppdatera lösenord för %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Spara Inloggning";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Uppdatera";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Verkar som Firefox kraschade tidigare. Vill du återställa dina flikar?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Markera som läst";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Markera som oläst";
+
+/* Error for a missing remote error number */
+"Missing error" = "Felmeddelandet saknas";
+
+/* Error for a missing remote error message */
+"Missing message" = "Meddelande saknas";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigeringsfältet";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Ny flik: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Ny version finns tillgänglig";
+
+/* Restore Tabs Negative Action */
+"No" = "Nej";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Inga flikar";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Inte nu";
+
+/* Button to not save the user's password */
+"Not now" = "Inte nu";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Okej";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Hoppsan! Firefox kraschade";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Öppna i ny flik";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Öppna Inställningar";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Öppna artiklar i läsvyn genom att trycka på bokikonen när den visas i namnfältet.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Öppna med…";
+
+/* Opening an external URL */
+"Opening %@" = "Öppnar %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Panelväljare";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Lösenord";
+
+/* Paste the URL into the location bar */
+"Paste" = "Klistra in";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Klistra in och hämta";
+
+/* Privacy section title */
+"Privacy" = "Integritet";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Integritetspolicy";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Snabbsökmotorer";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Läsvy";
+
+/* Panel accessibility label */
+"Reading list" = "Läslista";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Nyligen stängda";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Ladda om";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Ta bort";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Ta bort från läslistan";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Ta bort sida";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Begär datorwebbplats";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Begär mobilsida";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "Spara bild";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Spara inloggningar";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Spara sidor till läslistan genom att trycka på boken med plusikon i kontrollerna för läsvyn.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Sök";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Sök eller ange adress";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Den nya sökmotorn kommer att visas i snabbsökningsfältet.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Sökmotor tillagd!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Lägg till söktjänst?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Avbryt";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Söktjänsten kunde inte läggas till.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Misslyckades";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Söker efter förslag";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Säker anslutning";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Skicka synpunkter";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Skicka rapport";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Skicka en kraschrapport så Mozilla kan fixa problemet?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Avbryt";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Endast HTTP och HTTPS länkar kan delas.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Länken du försöker att dela kan inte delas.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Inställningar";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Rensa privat data";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Rensa privat data";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Rensa privat data";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Rensa";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Startsida";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Inställningar av startsida";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "Annars visas i verktygsfältet";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "Visa ikon för startsida i meny";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Ange en webbsida";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Aktuell startsida";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Använd kopierad länk";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Använd aktuell sida";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Använd standard";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Klar";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Redigera";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Felsök";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "Dela";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Dela länk";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Avbryt";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Visa sökförslag";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Visa flikar";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Visa Rundtur";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Visa sökförslag";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Logga in till Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Logga in";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Logga in för att få dina flikar, bokmärken och lösenord från dina andra enheter.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Stoppa";
+
+/* Support section title */
+"Support" = "Support";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Dra höger eller vänster med tre fingrar för att stänga fliken.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Synkronisera nu";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Synkronisera dina flikar, bokmärken, lösenord och mycket mer.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Synkronisera dina flikar, bokmärken, lösenord och mer.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Din första synkronisering kan ta en stund";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Synkroniserar";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Synkroniserar…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Bokmärken";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Fjärrklienter";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Synkroniseringen har misslyckats";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Historik";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Inloggningar";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync är inte tillgänglig";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync är nedkopplad";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sync upplever problem med att synkronisera %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Flikar";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Flik %1$@ av %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Flikar %1$@ till %2$@ av %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Flikrad";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Ångra";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d flik(ar) stängda";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Denna sida kunde inte visas i Läsvyn.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Det finns en ny version av Firefox Aurora. Tryck på OK för att gå till nerladdningssidan.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Det fanns ett problem att komma åt flikar från dina andra enheter. Försök igen om en stund.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Ett fel uppstod då sidan skulle konverteras";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Detta gör att du kan spara bilden på din Kamerarulle.";
+
+/* Opening an external app */
+"This will open in another application" = "Detta kommer öppnas i en annan app";
+
+/* History tableview section header */
+"Today" = "Idag";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Meny";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "Startsida";
+
+/* Panel accessibility label */
+"Top sites" = "Populära webbsidor";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Dina mest besökta webbplatser kommer att visas här.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Välkommen";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Ta bort sida - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Uppdatera";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Uppgradera Firefox för att kunna ansluta.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Använd kompakta flikar";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Användarnamn";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Verifiera din e-postadress.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Version %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Visa";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Webbinnehåll";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Välkommen till Läslistan";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Visst, detta är pinsamt.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "Ja";
+
+/* History tableview section header */
+"Yesterday" = "Igår";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Du har inga flikar öppna i Firefox på dina andra enheter.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Dina rättigheter";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "dator";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "just nu";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobil enhet";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "mer än en månad sedan";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "mer än en vecka sedan";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "läs";
+
+/* Relative date for date in past week. */
+"this week" = "denna vecka";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "idag kl %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "oläst";
+
+/* Relative date for yesterday. */
+"yesterday" = "igår";
+

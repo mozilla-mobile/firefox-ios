@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Tem a certeza?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Cancelar";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Limpar pesquisa";
+
+/* Copy password text selection menu item */
+"Copy" = "Copiar";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Eliminar";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Desmarcar tudo";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Entrar no modo de pesquisa";
+
+/* Hide password text selection menu item */
+"Hide" = "Ocultar";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "Última modificação %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "Credenciais";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "As credenciais serão removidas para sempre.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "As credenciais serão removidas de todos os dispositivos ligados.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Não foram encontradas credenciais";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Abrir e preencher";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Revelar";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Pesquisar";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Pesquisar no campo de inserção";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Selecionar tudo";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "palavra-passe";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "nome de utilizador";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "website";
+

@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "Pencarian %@";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "Tidak";
+
+/* Label for search settings button. */
+"Search Settings" = "Setelan Pencarian";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "Saran pencarian dari %@";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "Aktifkan saran pencarian?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "Ya";
+
