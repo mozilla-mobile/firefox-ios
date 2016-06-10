@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-///
+/// Accessors to find what a new tab should do when created without a URL.
 struct NewTabAccessors {
     static let PrefKey = "NewTabPrefKey"
     static let Default = NewTabPage.TopSites
@@ -23,4 +23,37 @@ struct NewTabAccessors {
         }
         return option
     }
+
+    static func getNewTabPage(state: AppState) -> NewTabPage {
+        return getNewTabPage(Accessors.getPrefs(state))
+    }
+}
+
+/// Enum to encode what should happen when the user opens a new tab without a URL.
+enum NewTabPage: String {
+    case BlankPage = "Blank"
+    case HomePage = "HomePage"
+    case TopSites = "TopSites"
+    case Bookmarks = "Bookmarks"
+    case History = "History"
+    case ReadingList = "ReadingList"
+
+    var settingTitle: String {
+        switch self {
+        case .BlankPage:
+            return Strings.SettingsNewTabBlankPage
+        case .HomePage:
+            return Strings.SettingsNewTabHomePage
+        case .TopSites:
+            return Strings.SettingsNewTabTopSites
+        case .Bookmarks:
+            return Strings.SettingsNewTabBookmarks
+        case .History:
+            return Strings.SettingsNewTabHistory
+        case .ReadingList:
+            return Strings.SettingsNewTabReadingList
+        }
+    }
+
+    static let allValues = [BlankPage, TopSites, Bookmarks, History, ReadingList, HomePage]
 }

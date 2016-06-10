@@ -5,35 +5,6 @@
 import Foundation
 import Shared
 
-enum NewTabPage: String {
-    case BlankPage = "Blank"
-    case HomePage = "HomePage"
-    case TopSites = "TopSites"
-    case Bookmarks = "Bookmarks"
-    case History = "History"
-    case ReadingList = "ReadingList"
-
-    var settingTitle: String {
-        switch self {
-        case .BlankPage:
-            return Strings.SettingsNewTabBlankPage
-        case .HomePage:
-            return Strings.SettingsNewTabHomePage
-        case .TopSites:
-            return Strings.SettingsNewTabTopSites
-        case .Bookmarks:
-            return Strings.SettingsNewTabBookmarks
-        case .History:
-            return Strings.SettingsNewTabHistory
-        case .ReadingList:
-            return Strings.SettingsNewTabReadingList
-        }
-    }
-
-    static let allValues = [BlankPage, TopSites, Bookmarks, History, ReadingList, HomePage]
-}
-
-
 /// Screen presented to the user when selecting the page that is displayed when the user goes to a new tab.
 class NewTabChoiceViewController: UITableViewController {
 
