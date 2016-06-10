@@ -107,6 +107,7 @@ class SyncNowSetting: WithAccountSetting {
 
         switch syncStatus {
         case .Bad(let message):
+            guard let message = message else { return syncNowTitle }
             return NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowErrorTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .Stale(let message):
             return  NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowWarningTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
@@ -170,12 +171,17 @@ class SyncNowSetting: WithAccountSetting {
         cell.textLabel?.lineBreakMode = .ByWordWrapping
         if let syncStatus = profile.syncManager.syncDisplayState {
             switch syncStatus {
-            case .Bad(_):
-                // add the red warning symbol
-                // add a link to the MANA page
-                cell.detailTextLabel?.attributedText = nil
-                cell.accessoryView = troubleshootButton
-                addIcon(errorIcon, toCell: cell)
+            case .Bad(let message):
+                if let _ = message {
+                    // add the red warning symbol
+                    // add a link to the MANA page
+                    cell.detailTextLabel?.attributedText = nil
+                    cell.accessoryView = troubleshootButton
+                    addIcon(errorIcon, toCell: cell)
+                } else {
+                    cell.detailTextLabel?.attributedText = status
+                    cell.accessoryView = nil
+                }
             case .Stale(_):
                 // add the amber warning symbol
                 // add a link to the MANA page
