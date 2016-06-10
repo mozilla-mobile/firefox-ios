@@ -239,22 +239,24 @@ private extension NotificationRootViewController {
     }
 
     @objc func didFinishSyncing(notification: NSNotification) {
-        // Always exit earlier if we didn't get a message to display for finishing a sync. This means it was .Good.
+        defer {
+            if let syncMessage = notificationView.titleLabel.attributedText {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.showStatusNotification(animated: !self.showingNotification, duration: .Short, withEllipsis: false)
+                }
+            } else if showingNotification {
+                showNotificationForSync = false
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.hideStatusNotification()
+                }
+            }
+        }
         guard let syncMessage = syncMessageForNotification(notification.object) else {
+            notificationView.titleLabel.text = nil
+            notificationView.titleLabel.attributedText = nil
             return
         }
-
         notificationView.titleLabel.attributedText = syncMessage
-        if showingNotification {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.hideStatusNotification(animated: false)
-                self.showStatusNotification(animated: false, duration: .Short, withEllipsis: false)
-            }
-        } else {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.showStatusNotification(duration: .Short, withEllipsis: false)
-            }
-        }
     }
 
     @objc func fxaAccountDidChange(notification: NSNotification) {
