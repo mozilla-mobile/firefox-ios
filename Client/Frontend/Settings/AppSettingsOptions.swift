@@ -725,3 +725,23 @@ class HomePageSetting: Setting {
     }
 
 }
+
+class NewTabPageSetting: Setting {
+    let profile: Profile
+
+    override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "NewTabPage.Setting" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+
+        super.init(title: NSAttributedString(string: Strings.SettingsNewTabSectionName, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        let viewController = NewTabChoiceViewController(prefs: profile.prefs)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+}
