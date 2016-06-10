@@ -27,6 +27,8 @@ class NotificationRootViewController: UIViewController {
     private(set) var syncTitle: String?
     private(set) var notificationTimer: NSTimer?
 
+    private var lastSyncState: [String: String]?
+
     lazy var notificationView: NotificationStatusView = {
         let view = NotificationStatusView()
         view.addTarget(self, action: #selector(NotificationRootViewController.didTapNotification))
@@ -224,9 +226,12 @@ private extension NotificationRootViewController {
     }
 
     private func syncMessageForNotification(notificationObject: AnyObject?) -> NSAttributedString? {
+        defer {
+            lastSyncState = notificationObject as? [String: String]
+        }
         guard let syncDisplayState = notificationObject as? [String: String],
         let state = syncDisplayState["state"],
-            let message = syncDisplayState["message"] else {
+            let message = syncDisplayState["message"] where state != lastSyncState?["state"] || message != lastSyncState?["message"] else {
                 return nil
         }
         switch state {
