@@ -59,7 +59,6 @@ class TabManager : NSObject {
 
     private(set) var tabs = [Tab]()
     private var _selectedIndex = -1
-    private let defaultNewTabRequest: NSURLRequest
     private let navDelegate: TabManagerNavDelegate
     private(set) var isRestoring = false
 
@@ -102,11 +101,10 @@ class TabManager : NSObject {
         }
     }
 
-    init(defaultNewTabRequest: NSURLRequest, prefs: Prefs, imageStore: DiskImageStore?) {
+    init(prefs: Prefs, imageStore: DiskImageStore?) {
         assert(NSThread.isMainThread())
 
         self.prefs = prefs
-        self.defaultNewTabRequest = defaultNewTabRequest
         self.navDelegate = TabManagerNavDelegate()
         self.imageStore = imageStore
         super.init()
