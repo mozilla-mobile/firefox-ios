@@ -99,11 +99,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.error("Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
         }
 
-        let defaultRequest = PrivilegedRequest(URL: UIConstants.DefaultHomePage)
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
         log.debug("Configuring tabManager…")
-        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs, imageStore: imageStore)
+        self.tabManager = TabManager(prefs: profile.prefs, imageStore: imageStore)
         self.tabManager.stateDelegate = self
 
         // Add restoration class, the factory that will return the ViewController we

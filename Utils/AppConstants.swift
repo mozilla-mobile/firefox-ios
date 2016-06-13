@@ -139,11 +139,11 @@ public struct AppConstants {
         #elseif MOZ_CHANNEL_BETA
             return false
         #elseif MOZ_CHANNEL_NIGHTLY
-            return false
+            return true
         #elseif MOZ_CHANNEL_FENNEC
             return true
         #elseif MOZ_CHANNEL_AURORA
-            return false
+            return true
         #else
             return true
         #endif

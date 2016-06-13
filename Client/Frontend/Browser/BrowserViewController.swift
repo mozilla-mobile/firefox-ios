@@ -1327,7 +1327,7 @@ extension BrowserViewController: MenuActionDelegate {
     private func openHomePanel(panel: HomePanelType, forAppState appState: AppState) {
         switch appState.ui {
         case .Tab(_):
-            self.openURLInNewTab(HomePanelViewController.urlForHomePanelOfType(panel)!, isPrivate: appState.ui.isPrivate())
+            self.openURLInNewTab(panel.localhostURL, isPrivate: appState.ui.isPrivate())
         case .HomePanels(_):
             self.homePanelController?.selectedPanel = panel
         default: break
@@ -1526,7 +1526,11 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(urlBar: URLBarView) {
-        showHomePanelController(inline: false)
+        if [.HomePage, .BlankPage].contains(NewTabAccessors.getNewTabPage(profile.prefs)) {
+            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+        } else {
+            showHomePanelController(inline: false)
+        }
     }
 
     func urlBarDidLeaveOverlayMode(urlBar: URLBarView) {
