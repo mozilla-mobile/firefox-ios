@@ -1089,19 +1089,19 @@ extension TabTrayController: MenuActionDelegate {
                 }
             case .OpenTopSites:
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.openNewTab(PrivilegedRequest(URL: HomePanelViewController.urlForHomePanelOfType(.TopSites)!))
+                    self.openNewTab(PrivilegedRequest(URL: HomePanelType.TopSites.localhostURL))
                 }
             case .OpenBookmarks:
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.openNewTab(PrivilegedRequest(URL: HomePanelViewController.urlForHomePanelOfType(.Bookmarks)!))
+                    self.openNewTab(PrivilegedRequest(URL: HomePanelType.Bookmarks.localhostURL))
                 }
             case .OpenHistory:
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.openNewTab(PrivilegedRequest(URL: HomePanelViewController.urlForHomePanelOfType(.History)!))
+                    self.openNewTab(PrivilegedRequest(URL: HomePanelType.History.localhostURL))
                 }
             case .OpenReadingList:
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.openNewTab(PrivilegedRequest(URL: HomePanelViewController.urlForHomePanelOfType(.ReadingList)!))
+                    self.openNewTab(PrivilegedRequest(URL: HomePanelType.ReadingList.localhostURL))
                 }
             default: break
             }

@@ -55,21 +55,26 @@ enum NewTabPage: String {
         }
     }
 
-    var url: NSURL? {
+    var homePanelType: HomePanelType? {
         switch self {
-        case .BlankPage:
-            return nil
-        case .HomePage:
-            return nil
         case .TopSites:
-            return NSURL(string:"#panel=0", relativeToURL: UIConstants.AboutHomePage)
+            return HomePanelType.TopSites
         case .Bookmarks:
-            return NSURL(string:"#panel=1", relativeToURL: UIConstants.AboutHomePage)
+            return HomePanelType.Bookmarks
         case .History:
-            return NSURL(string:"#panel=2", relativeToURL: UIConstants.AboutHomePage)
+            return HomePanelType.History
         case .ReadingList:
-            return NSURL(string:"#panel=3", relativeToURL: UIConstants.AboutHomePage)
+            return HomePanelType.ReadingList
+        default:
+            return nil
         }
+    }
+
+    var url: NSURL? {
+        guard let homePanel = self.homePanelType else {
+            return nil
+        }
+        return homePanel.localhostURL
     }
 
     static let allValues = [BlankPage, TopSites, Bookmarks, History, ReadingList, HomePage]
