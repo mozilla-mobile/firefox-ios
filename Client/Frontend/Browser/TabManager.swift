@@ -59,7 +59,6 @@ class TabManager : NSObject {
 
     private(set) var tabs = [Tab]()
     private var _selectedIndex = -1
-    private let defaultNewTabRequest: NSURLRequest
     private let navDelegate: TabManagerNavDelegate
     private(set) var isRestoring = false
 
@@ -102,11 +101,10 @@ class TabManager : NSObject {
         }
     }
 
-    init(defaultNewTabRequest: NSURLRequest, prefs: Prefs, imageStore: DiskImageStore?) {
+    init(prefs: Prefs, imageStore: DiskImageStore?) {
         assert(NSThread.isMainThread())
 
         self.prefs = prefs
-        self.defaultNewTabRequest = defaultNewTabRequest
         self.navDelegate = TabManagerNavDelegate()
         self.imageStore = imageStore
         super.init()
@@ -290,8 +288,28 @@ class TabManager : NSObject {
             tab.createWebview()
         }
         tab.navigationDelegate = self.navDelegate
-        tab.loadRequest(request ?? defaultNewTabRequest)
 
+        if let request = request {
+            tab.loadRequest(request)
+        } else {
+            let newTabChoice = NewTabAccessors.getNewTabPage(prefs)
+            switch newTabChoice {
+            case .HomePage:
+                // We definitely have a homepage if we've got here 
+                // (so we can safely dereference it).
+                let url = HomePageAccessors.getHomePage(prefs)!
+                tab.loadRequest(NSURLRequest(URL: url))
+            case .BlankPage:
+                // Do nothing: we're already seeing a blank page.
+                break
+            default:
+                // The common case, where the NewTabPage enum defines
+                // one of the about:home pages.
+                if let url = newTabChoice.url {
+                    tab.loadRequest(PrivilegedRequest(URL: url))
+                }
+            }
+        }
         if flushToDisk {
         	storeChanges()
         }

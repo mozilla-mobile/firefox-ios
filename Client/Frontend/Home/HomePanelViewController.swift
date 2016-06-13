@@ -52,6 +52,10 @@ enum HomePanelType: Int {
     case Bookmarks = 1
     case History = 2
     case ReadingList = 3
+
+    var localhostURL: NSURL {
+        return NSURL(string:"#panel=\(self.rawValue)", relativeToURL: UIConstants.AboutHomePage)!
+    }
 }
 
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
@@ -320,9 +324,5 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 self.finishEditingButton = nil
             }
         })
-    }
-
-    static func urlForHomePanelOfType(type: HomePanelType) -> NSURL? {
-        return NSURL(string:"#panel=\(type.rawValue)", relativeToURL: UIConstants.AboutHomePage)
     }
 }

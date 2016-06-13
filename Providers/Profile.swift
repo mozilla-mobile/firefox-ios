@@ -275,6 +275,10 @@ public class BrowserProfile: Profile {
             }
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
+
+            if prefs.stringForKey("NewTabPrefKey") == nil {
+                prefs.setString("HomePage", forKey: "NewTabPrefKey")
+            }
         } else {
             // Remove the default homepage. This does not change the user's preference,
             // just the behaviour when there is no homepage.
