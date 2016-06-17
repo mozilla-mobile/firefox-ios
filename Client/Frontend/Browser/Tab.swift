@@ -456,6 +456,12 @@ class Tab: NSObject {
 
         updateAppState()
     }
+
+    func setNoImageMode(enabled: Bool = false, force: Bool) {
+        if enabled || force {
+            webView?.evaluateJavaScript("__firefox__.setNoImageMode(\(enabled))", completionHandler: nil)
+        }
+    }
 }
 
 extension Tab: TabWebViewDelegate {
