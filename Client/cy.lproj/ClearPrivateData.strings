@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Ydych chi'n siŵr eich bod eisiau clirio'ch holl ddata? Bydd hyn hefyd yn cau pob tag agored.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Hanes Pori";
+
+/* Settings item for clearing the cache */
+"Cache" = "Storfa";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Diddymu";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Clirio";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Clirio'r Cyfan";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Clirio Data Preifat";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cwcis";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Data Gwefan All-lein";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Mewngofnodion wedi eu Cadw";
+

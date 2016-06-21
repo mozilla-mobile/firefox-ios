@@ -1,0 +1,389 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		849D62691BA71BFE005825E0 /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 849D62681BA71BF0005825E0 /* OnePasswordExtension.framework */; };
+		849D626A1BA71BFE005825E0 /* OnePasswordExtension.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 849D62681BA71BF0005825E0 /* OnePasswordExtension.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C0525F8F1B0583E5003613F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0525F8E1B0583E5003613F5 /* AppDelegate.swift */; };
+		C0525F911B0583F6003613F5 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0525F901B0583F6003613F5 /* WebViewController.swift */; };
+		C0525F941B058428003613F5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0525F931B058428003613F5 /* Images.xcassets */; };
+		C0525F971B058431003613F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0525F951B058431003613F5 /* Main.storyboard */; };
+		C0525FA31B05866A003613F5 /* welcome.html in Resources */ = {isa = PBXBuildFile; fileRef = C0525FA21B05866A003613F5 /* welcome.html */; };
+		C0525FBB1B059825003613F5 /* 1Password.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0525FBA1B059825003613F5 /* 1Password.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		849D62671BA71BF0005825E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 849D62631BA71BF0005825E0 /* OnePasswordExtension.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9C3F4D8C1A59ACDC004B3ECE;
+			remoteInfo = OnePasswordExtension;
+		};
+		849D626B1BA71BFE005825E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 849D62631BA71BF0005825E0 /* OnePasswordExtension.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 9C3F4D8B1A59ACDC004B3ECE;
+			remoteInfo = OnePasswordExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		849D626D1BA71BFE005825E0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				849D626A1BA71BFE005825E0 /* OnePasswordExtension.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		849D62631BA71BF0005825E0 /* OnePasswordExtension.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OnePasswordExtension.xcodeproj; path = "/Volumes/AgileBits/git/onepassword-app-extension/Demos/../OnePasswordExtension.xcodeproj"; sourceTree = "<absolute>"; };
+		C0525F671B05831F003613F5 /* WebView Demo for iOS Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WebView Demo for iOS Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0525F8E1B0583E5003613F5 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "WebView Demo for iOS Swift/AppDelegate.swift"; sourceTree = SOURCE_ROOT; };
+		C0525F901B0583F6003613F5 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebViewController.swift; path = "WebView Demo for iOS Swift/WebViewController.swift"; sourceTree = SOURCE_ROOT; };
+		C0525F931B058428003613F5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "WebView Demo for iOS Swift/Images.xcassets"; sourceTree = SOURCE_ROOT; };
+		C0525F961B058431003613F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "WebView Demo for iOS Swift/Base.lproj/Main.storyboard"; sourceTree = SOURCE_ROOT; };
+		C0525FA21B05866A003613F5 /* welcome.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = welcome.html; path = "WebView Demo for iOS Swift/welcome.html"; sourceTree = SOURCE_ROOT; };
+		C0525FBA1B059825003613F5 /* 1Password.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = 1Password.xcassets; path = ../../1Password.xcassets; sourceTree = SOURCE_ROOT; };
+		C0525FC21B059DC5003613F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "WebView Demo for iOS Swift/Info.plist"; sourceTree = SOURCE_ROOT; };
+		C0525FC61B059E40003613F5 /* WebView Demo for iOS Swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "WebView Demo for iOS Swift-Bridging-Header.h"; path = "WebView Demo for iOS Swift/WebView Demo for iOS Swift-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C0525F641B05831F003613F5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				849D62691BA71BFE005825E0 /* OnePasswordExtension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		849D62641BA71BF0005825E0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				849D62681BA71BF0005825E0 /* OnePasswordExtension.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		849D626E1BA71C05005825E0 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				849D62631BA71BF0005825E0 /* OnePasswordExtension.xcodeproj */,
+			);
+			name = External;
+			sourceTree = "<group>";
+		};
+		C0525F5E1B05831F003613F5 = {
+			isa = PBXGroup;
+			children = (
+				C0525F691B05831F003613F5 /* WebView Demo for iOS Swift */,
+				849D626E1BA71C05005825E0 /* External */,
+				C0525F681B05831F003613F5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C0525F681B05831F003613F5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C0525F671B05831F003613F5 /* WebView Demo for iOS Swift.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C0525F691B05831F003613F5 /* WebView Demo for iOS Swift */ = {
+			isa = PBXGroup;
+			children = (
+				C0525F8E1B0583E5003613F5 /* AppDelegate.swift */,
+				C0525F901B0583F6003613F5 /* WebViewController.swift */,
+				C0525FA21B05866A003613F5 /* welcome.html */,
+				C0525F931B058428003613F5 /* Images.xcassets */,
+				C0525FBA1B059825003613F5 /* 1Password.xcassets */,
+				C0525F951B058431003613F5 /* Main.storyboard */,
+				C0525F6A1B05831F003613F5 /* Supporting Files */,
+			);
+			name = "WebView Demo for iOS Swift";
+			path = "ACME Browser Swift";
+			sourceTree = "<group>";
+		};
+		C0525F6A1B05831F003613F5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C0525FC21B059DC5003613F5 /* Info.plist */,
+				C0525FC61B059E40003613F5 /* WebView Demo for iOS Swift-Bridging-Header.h */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C0525F661B05831F003613F5 /* ACME Browser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0525F881B05831F003613F5 /* Build configuration list for PBXNativeTarget "ACME Browser" */;
+			buildPhases = (
+				C0525F631B05831F003613F5 /* Sources */,
+				C0525F641B05831F003613F5 /* Frameworks */,
+				C0525F651B05831F003613F5 /* Resources */,
+				849D626D1BA71BFE005825E0 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				849D626C1BA71BFE005825E0 /* PBXTargetDependency */,
+			);
+			name = "ACME Browser";
+			productName = "ACME Browser Swift";
+			productReference = C0525F671B05831F003613F5 /* WebView Demo for iOS Swift.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C0525F5F1B05831F003613F5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = "AgileBits Inc.";
+				TargetAttributes = {
+					C0525F661B05831F003613F5 = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+				};
+			};
+			buildConfigurationList = C0525F621B05831F003613F5 /* Build configuration list for PBXProject "WebView Demo for iOS Swift" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C0525F5E1B05831F003613F5;
+			productRefGroup = C0525F681B05831F003613F5 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 849D62641BA71BF0005825E0 /* Products */;
+					ProjectRef = 849D62631BA71BF0005825E0 /* OnePasswordExtension.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				C0525F661B05831F003613F5 /* ACME Browser */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		849D62681BA71BF0005825E0 /* OnePasswordExtension.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = OnePasswordExtension.framework;
+			remoteRef = 849D62671BA71BF0005825E0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C0525F651B05831F003613F5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0525F941B058428003613F5 /* Images.xcassets in Resources */,
+				C0525F971B058431003613F5 /* Main.storyboard in Resources */,
+				C0525FBB1B059825003613F5 /* 1Password.xcassets in Resources */,
+				C0525FA31B05866A003613F5 /* welcome.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C0525F631B05831F003613F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0525F8F1B0583E5003613F5 /* AppDelegate.swift in Sources */,
+				C0525F911B0583F6003613F5 /* WebViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		849D626C1BA71BFE005825E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OnePasswordExtension;
+			targetProxy = 849D626B1BA71BFE005825E0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C0525F951B058431003613F5 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C0525F961B058431003613F5 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C0525F861B05831F003613F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "WebView Demo for iOS Swift/WebView Demo for iOS Swift-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C0525F871B05831F003613F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "WebView Demo for iOS Swift/WebView Demo for iOS Swift-Bridging-Header.h";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C0525F891B05831F003613F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "acme-browser-corp";
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/WebView Demo for iOS Swift/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.agilebits.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "WebView Demo for iOS Swift";
+				SWIFT_OBJC_BRIDGING_HEADER = "WebView Demo for iOS Swift/WebView Demo for iOS Swift-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C0525F8A1B05831F003613F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "acme-browser-corp";
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/WebView Demo for iOS Swift/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.agilebits.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "WebView Demo for iOS Swift";
+				SWIFT_OBJC_BRIDGING_HEADER = "WebView Demo for iOS Swift/WebView Demo for iOS Swift-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C0525F621B05831F003613F5 /* Build configuration list for PBXProject "WebView Demo for iOS Swift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0525F861B05831F003613F5 /* Debug */,
+				C0525F871B05831F003613F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C0525F881B05831F003613F5 /* Build configuration list for PBXNativeTarget "ACME Browser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0525F891B05831F003613F5 /* Debug */,
+				C0525F8A1B05831F003613F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C0525F5F1B05831F003613F5 /* Project object */;
+}

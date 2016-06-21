@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Na 1 uur";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Na 1 minuut";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Na 5 minuten";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Na 10 minuten";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Na 15 minuten";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Toegangscode wijzigen";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Voer toegangscode in";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Voer een nieuwe toegangscode in";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Voer een toegangscode in";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Voer toegangscode in";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Onmiddellijk";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Onjuiste toegangscode. Probeer het opnieuw (Resterende pogingen: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Onjuiste toegangscode. Probeer het opnieuw.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Maximale aantal pogingen bereikt. Probeer het over een uur opnieuw.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Maximale aantal pogingen bereikt. Probeer het later opnieuw.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Nieuwe toegangscode moet anders zijn dan bestaande code.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Toegangscode";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Toegangscodes kwamen niet overeen. Probeer het opnieuw.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Voer toegangscode nogmaals in";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Toegangscode vereisen";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Toegangscode instellen";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID & toegangscode";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Toegangscode uitzetten";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Toegangscode aanzetten";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Zet uw toegangscode uit.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Touch ID gebruiken";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Gebruik uw vingerafdruk voor toegang tot Aanmeldingen.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Gebruik uw vingerafdruk voor toegang tot Privénavigatie.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Gebruik uw vingerafdruk om Touch ID uit te schakelen.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Gebruik uw vingerafdruk voor toegang tot configuratie van het interval voor vereiste toegangscode.";
+

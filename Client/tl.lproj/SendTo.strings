@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Bukas na mga device:";
+
+/* Close button in top navigation bar */
+"Close" = "Isara";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Buksan ang Firefox, pumunta sa Settings at mag-sign in para tumuloy.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Ipadala";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Ipadala ang Tab";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Hindi ka naka-sign in sa iyong Firefox Account.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Walang ibang kasangkapan na konektado sa Firefox Account na maaring i-sync.";
+

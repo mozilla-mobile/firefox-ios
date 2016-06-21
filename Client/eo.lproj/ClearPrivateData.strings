@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Ĉu vi certe volas viŝi ĉiujn viajn datumojn? Tiu ago ankaŭ fermos ĉiujn malfermitajn foliojn.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Historio de retumo";
+
+/* Settings item for clearing the cache */
+"Cache" = "Staplo";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Nuligi";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Viŝi";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Viŝi ĉion";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Viŝi privatajn datumojn";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Kuketojn";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Malkonektitaj datumoj de retejoj ";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Konservitaj akreditiloj";
+

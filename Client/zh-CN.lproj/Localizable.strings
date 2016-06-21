@@ -1,0 +1,880 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ 请求您输入用户名和密码。";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ 请求您输入用户名和密码。此网站说：%2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "字";
+
+/* About settings section title */
+"About" = "关于";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "添加标签页";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "添加到阅读列表";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "确定";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "添加密码到 Wallet 时出错。请稍后重试。";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "添加密码失败";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "页面已添加到阅读列表";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "网址与搜索";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "允许第三方键盘";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "总是发送";
+
+/* Tile title for Amazon */
+"Amazon" = "亚马逊";
+
+/* Authentication prompt title */
+"Authentication required" = "需要验证身份";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "后退";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "阻止弹出窗口";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "书签";
+
+/* Panel accessibility label */
+"Bookmarks" = "书签";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "您保存的书签将显示在这里。";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "文件夹";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "位置";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "文件夹名称";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "新建文件夹";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "标题";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "亮度";
+
+/* Alert Call Button */
+"Call" = "呼叫";
+
+/* Label for Cancel button */
+"Cancel" = "取消";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "更改色彩主题。";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "更改字体。";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "清除个人数据";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "关闭";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "关闭标签页";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "复制地址";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "复制图像";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "复制链接";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "未能将页面添加到阅读列表。也许它已经存在？";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "未能将页面添加到阅读列表";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "未能载入页面。";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "创建一个账号";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "暗色";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "调试：忘记 Sync 的验证状态";
+
+/* Debug option */
+"Debug: require password" = "调试：需要密码";
+
+/* Debug option */
+"Debug: require upgrade" = "调试：需要升级";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "缩小文字大小";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "默认搜索引擎";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "禁用更多页面对话框";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "显示设置";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "是否保存 %2$@ 上 %1$@ 的密码？";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "是否保存 %@ 上的密码？";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "是否更新 %2$@ 上 %1$@ 的密码？";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "是否更新 %@ 上的密码？";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "不发送";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "完成";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "双击并按住以打开浏览历史";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "否";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "是";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "Firefox 无法下载或显示此文件。您要用其他应用打开它吗？";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "Firefox 下载";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Firefox 尚不支持下载。";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "请输入您的密码以连接。";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "高级";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "警告：我们无法确认您至此网站的连接是否安全。";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "这可能是错误配置，也可能是已被攻击者篡改。继续访问需要承担潜在的风险。";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ 的管理员未正确配置网站。为避免您的信息被窃，Firefox 没有建立与该网站的连接。";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "此连接不受信任";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "返回";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "继续访问该网站";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "需要重新打开 Firefox 才能使此更改生效。";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox 将停止与您账号间的同步，但不会删除此设备上的任何浏览数据。";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox 想访问您的“照片”";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "前进";
+
+/* General settings section title */
+"General" = "常规";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "在您的其他设备上找到您打开的标签页以及书签和密码。";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "转到";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "转到复制的网址？";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "帮助";
+
+/* Panel accessibility label */
+"History" = "历史";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "您最近访问的网站将在此处显示。";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "您在其他设备上的标签页将在此处显示。";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "登录以查看您的其他设备上打开的标签页。";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox 同步";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "历史记录";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "最近关闭";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "已连接 %d 台设备";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "已同步设备";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "取消";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "您随时可以在设置中更改此项";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "设为首页";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "您要使用此网页作为您的首页吗？";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "后退";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "关闭标签页";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "查找";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "前进";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "新建隐私标签页";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "新建标签页";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "重新载入页面";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "选择地址栏";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "显示下一个标签页";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "显示上一个标签页";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "增加文字大小";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "进入导览界面";
+
+/* History tableview section header */
+"Last month" = "上个月";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "最近同步：%@";
+
+/* History tableview section header */
+"Last week" = "上周";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "许可协议";
+
+/* Light theme setting in Reading View settings */
+"Light" = "亮色";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "载入原页面";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "正在载入内容…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "退出账号";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "退出账号？";
+
+/* Authentication prompt log in button */
+"Log in" = "登录";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "登录信息";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "不保存";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "保存 %2$@ 上 %1$@ 的信息？";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "保存 %@ 上的密码？";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "更新 %2$@ 上 %1$@ 的登录信息？";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "更新 %@ 上的密码？";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "保存登录信息";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "更新";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "看起来 Firefox 此前崩溃了。您想恢复您的标签页吗？";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "标记为已读";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "标记为未读";
+
+/* Label for the button, displayed in the menu, used to toggle night mode on or off */
+"Menu.NightModeAction.Title" = "夜间模式";
+
+/* Label for the button, displayed in the menu, used to turn night mode off */
+"Menu.NightModeTurnOffAction.Title" = "关闭夜间模式";
+
+/* Label for the button, displayed in the menu, used to turn night mode on */
+"Menu.NightModeTurnOnAction.Title" = "夜间模式";
+
+/* Label for the button, displayed in the menu, used to toggle no image mode on or off */
+"Menu.NoImageModeAction.Title" = "无图模式";
+
+/* Label for the button, displayed in the menu, used to turn no image mode off */
+"Menu.NoImageModeTurnOffAction.Title" = "显示图片";
+
+/* Label for the button, displayed in the menu, used to turn no image mode on */
+"Menu.NoImageModeTurnOnAction.Title" = "隐藏图片";
+
+/* Error for a missing remote error number */
+"Missing error" = "缺少错误代码";
+
+/* Error for a missing remote error message */
+"Missing message" = "缺少错误信息";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "导航工具栏";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "新标签页：%1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "有新版本可用";
+
+/* Restore Tabs Negative Action */
+"No" = "不用";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "没有标签页";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "暂时不要";
+
+/* Button to not save the user's password */
+"Not now" = "暂时不要";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "确定";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "好的";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "啊哦！Firefox 崩溃了";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "在新标签页中打开";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "打开设置";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "在书本图标出现在标题栏时，轻按它可在阅读模式下打开文章。";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "打开在…";
+
+/* Opening an external URL */
+"Opening %@" = "打开 %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "面板选择器";
+
+/* Password textbox in Authentication prompt */
+"Password" = "密码";
+
+/* Paste the URL into the location bar */
+"Paste" = "粘帖";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "粘帖并转到";
+
+/* Privacy section title */
+"Privacy" = "隐私";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "隐私政策";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "快速搜索引擎";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "阅读模式";
+
+/* Panel accessibility label */
+"Reading list" = "阅读列表";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "最近关闭";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "重新载入";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "移除";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "从阅读列表移除";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "移除页面";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "请求桌面版网站";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "请求移动版网站";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "无衬线";
+
+/* Context menu item for saving an image */
+"Save Image" = "保存图像";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "保存登录信息";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "轻按阅读模式中的书本图标，可将页面保存到您的阅读列表。";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "搜索";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "搜索或输入网址";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "新的搜索引擎将在快速搜索栏中显示。";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "搜索引擎已添加！";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "添加搜索提供者？";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "取消";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "未能添加搜索提供者。";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "设备";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "确定";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "搜索建议";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "安全连接";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "发送反馈";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "发送报告";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "发送一则崩溃报告给 Mozilla，以便我们修复此问题？";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "取消";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "只能分享 HTTP 和 HTTPS 链接。";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "确定";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "您尝试分享的链接不能分享。";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "怀旧";
+
+/* Font type setting in the reading view settings */
+"Serif" = "衬线";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "设置";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "清除隐私数据";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "清除隐私数据";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "清除隐私数据";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "清除";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "首页";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "首页设置";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "否则会显示在工具栏中";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "在菜单中显示首页图标";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "请指定网页";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "当前首页";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "使用已复制链接";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "使用当前页面";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "使用默认设置";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "在打开新标签页时：";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "显示空白页";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "显示您的书签";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "显示您的历史记录";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "显示您的首页";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "显示您的阅读列表";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "显示您的常用网站";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "新标签页";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "新标签页设置";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "完成";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "编辑";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "故障排除";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "分享";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "分享链接";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "取消";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "显示搜索建议";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "显示标签页";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "显示导览";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "显示搜索建议";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "登录 Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "登录";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "登录以获取您在其他设备上的标签页、书签和密码。";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "停止";
+
+/* Support section title */
+"Support" = "技术支持";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "三指向左或向右滑动关闭标签页。";
+
+/* Sync Firefox Account */
+"Sync Now" = "立即同步";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "同步您的标签页、书签、密码等等。";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "同步您的标签页、密码等信息。";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "您的首次同步可能会花些时间";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "正在同步";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "正在同步…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "书签";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "远程客户端";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "同步失败";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "历史记录";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "登录信息";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "同步不可用";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "同步已离线";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "同步在处理 %@ 时遇到问题";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "标签页";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "第 %1$@ 个标签页，共 %2$@ 个";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "第 %1$@ 至第 %2$@ 个标签页，共 %3$@ 个";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "标签页托盘";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "撤销";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d 个标签页已关闭";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "此页面无法在阅读模式下显示。";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "检测到有新版本的 Firefox Aurora 可用。轻按“确定”前往下载页面。";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "获取来自您其他设备的标签页时出现问题。请几分钟后再试。";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "转换页面时发生错误";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "这将允许您保存图像到您的“相机胶卷”。";
+
+/* Opening an external app */
+"This will open in another application" = "这将在另一个应用程序中打开";
+
+/* History tableview section header */
+"Today" = "今天";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "菜单";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "首页";
+
+/* Panel accessibility label */
+"Top sites" = "常用网站";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "您最常访问的网站将在这里显示。";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "欢迎访问常用网站";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "移除页面 - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "更新";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "升级 Firefox 以连接。";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "使用紧凑标签页";
+
+/* Username textbox in Authentication prompt */
+"Username" = "用户名";
+
+/* Text message in the settings table view */
+"Verify your email address." = "验证您的电子邮件地址。";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "版本 %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "查看";
+
+/* Accessibility label for the main web content view */
+"Web content" = "网页内容";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "欢迎使用您的“阅读列表”";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "哎呀，出了点意外。";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "维基百科";
+
+/* Button to save the user's password */
+"Yes" = "是";
+
+/* History tableview section header */
+"Yesterday" = "昨天";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "您没有在其他设备的 Firefox 上已经打开的标签页。";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "您的权利";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "计算机";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "刚刚";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "移动设备";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "超过一个月前";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "超过一周前";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "已读";
+
+/* Relative date for date in past week. */
+"this week" = "本周";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "今天 %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "未读";
+
+/* Relative date for yesterday. */
+"yesterday" = "昨天";
+

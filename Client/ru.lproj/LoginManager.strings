@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Вы уверены?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Отмена";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Очистить поиск";
+
+/* Copy password text selection menu item */
+"Copy" = "Копировать";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Удалить";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Снять выделение со всех";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Войти в режим поиска";
+
+/* Hide password text selection menu item */
+"Hide" = "Скрыть";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "Последнее изменение %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "Логины";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Логины будут безвозвратно удалены.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Логины будут удалены со всех подключённых устройств.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Логины не найдены";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Открыть и Заполнить";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Показать";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Поиск";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Поле ввода поиска";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Выделить все";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "пароль";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "имя пользователя";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "веб-сайт";
+

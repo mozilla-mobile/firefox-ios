@@ -1,0 +1,28 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "සැරිසර අතීතය";
+
+/* Settings item for clearing the cache */
+"Cache" = "කැච්";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "අවලංගු කරන්න";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "හිස් කරන්න";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "සියල්ල හිස් කරන්න";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "පුද්ගලික දත්ත මකන්න";
+
+/* Settings item for clearing cookies */
+"Cookies" = "කුකී";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "නොබැඳි වෙබ් අඩවි දත්ත";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "සුරැකි පිවිසුම්";
+

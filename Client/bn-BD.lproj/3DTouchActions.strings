@@ -1,0 +1,24 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "বুকমার্কে যুক্ত করুন";
+
+/* Label for preview action on Tab Tray Tab to add current tab to Reading List */
+"Add to Reading List" = "পঠন তালিকায় যোগ করুন";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "ট্যাব বন্ধ করুন";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "URL অনুলিপি করুন";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "সর্বশেষ বুকমার্কটি খুলুন";
+
+/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
+"Open Last Tab" = "সর্বশেষ ট্যাবটি খুলুন";
+
+/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
+"Preview of %@" = "%@ এর প্রাকদর্শন";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "ডিভাইসে প্রেরণ করুন";
+
