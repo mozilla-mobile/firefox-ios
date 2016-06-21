@@ -535,43 +535,49 @@ public class SQLiteLogins: BrowserLogins {
         if guids.isEmpty {
             return succeed()
         }
-
-        let nowMillis = NSDate.now()
-        let inClause = BrowserDB.varlist(guids.count)
-
-        // Immediately delete anything that's marked as new -- i.e., it's never reached
-        // the server.
-        let delete =
-        "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause) AND sync_status = \(SyncStatus.New.rawValue)"
-
-        // Otherwise, mark it as changed.
-        let update =
-        "UPDATE \(TableLoginsLocal) SET " +
-        " local_modified = \(nowMillis)" +
-        ", sync_status = \(SyncStatus.Changed.rawValue)" +
-        ", is_deleted = 1" +
-        ", password = ''" +
-        ", hostname = ''" +
-        ", username = ''" +
-        " WHERE guid IN \(inClause)"
-
-       let markMirrorAsOverridden =
-        "UPDATE \(TableLoginsMirror) SET " +
-            "is_overridden = 1 " +
-            "WHERE guid IN \(inClause)"
-
-        let insert =
-        "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
-            "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
-        "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
-
-        let args: Args = guids.map { $0 as AnyObject }
-        return self.db.run([
-            (delete, args),
-            (update, args),
-            (markMirrorAsOverridden, args),
-            (insert, args)
-        ]) >>> effect(self.notifyLoginDidChange)
+        
+        var results: [Success] = []
+        
+        Set(guids).withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+            let nowMillis = NSDate.now()
+            let inClause = BrowserDB.varlist(guids.count)
+            
+            // Immediately delete anything that's marked as new -- i.e., it's never reached
+            // the server.
+            let delete =
+                "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause) AND sync_status = \(SyncStatus.New.rawValue)"
+            
+            // Otherwise, mark it as changed.
+            let update =
+                "UPDATE \(TableLoginsLocal) SET " +
+                    " local_modified = \(nowMillis)" +
+                    ", sync_status = \(SyncStatus.Changed.rawValue)" +
+                    ", is_deleted = 1" +
+                    ", password = ''" +
+                    ", hostname = ''" +
+                    ", username = ''" +
+                    " WHERE guid IN \(inClause)"
+            
+            let markMirrorAsOverridden =
+                "UPDATE \(TableLoginsMirror) SET " +
+                    "is_overridden = 1 " +
+                    "WHERE guid IN \(inClause)"
+            
+            let insert =
+                "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
+                    "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
+                    "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
+            
+            let args: Args = guids.map { $0 as AnyObject }
+            results += [self.db.run([
+                (delete, args),
+                (update, args),
+                (markMirrorAsOverridden, args),
+                (insert, args)
+                ]) >>> effect(self.notifyLoginDidChange)]
+        }
+        
+        return results.allSucceed()
     }
 
     public func removeAll() -> Success {
