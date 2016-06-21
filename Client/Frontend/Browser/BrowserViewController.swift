@@ -84,6 +84,7 @@ class BrowserViewController: UIViewController {
     var footerBackdrop: UIView!
     private var footerBackground: BlurWrapper?
     private var topTouchArea: UIButton!
+    let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
 
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
@@ -101,6 +102,9 @@ class BrowserViewController: UIViewController {
     var navigationToolbar: TabToolbarProtocol {
         return toolbar ?? urlBar
     }
+    
+    var topTabsViewController: TopTabsViewController?
+    let topTabsContainer = UIView(frame: CGRect.zero)
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -157,6 +161,10 @@ class BrowserViewController: UIViewController {
                previousTraitCollection.horizontalSizeClass != .Regular
     }
 
+    func shouldShowTopTabsForTraitCollection(newTraitCollection: UITraitCollection) -> Bool {
+        return newTraitCollection.verticalSizeClass == .Regular &&
+            newTraitCollection.horizontalSizeClass == .Regular
+    }
 
     func toggleSnackBarVisibility(show show: Bool) {
         if show {
@@ -168,8 +176,10 @@ class BrowserViewController: UIViewController {
 
     private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
+        let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
         urlBar.setShowToolbar(!showToolbar)
+        urlBar.topTabsIsShowing = showTopTabs
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         footerBackground?.removeFromSuperview()
@@ -188,6 +198,30 @@ class BrowserViewController: UIViewController {
                 toolbar?.applyTheme(Theme.PrivateMode)
             }
             footer.addSubview(footerBackground!)
+        }
+        
+        if showTopTabs {
+            if topTabsViewController == nil {
+                let topTabsViewController = TopTabsViewController(tabManager: tabManager)
+                addChildViewController(topTabsViewController)
+                topTabsViewController.view.frame = topTabsContainer.frame
+                topTabsContainer.addSubview(topTabsViewController.view)
+                topTabsViewController.view.snp_makeConstraints { make in
+                    make.edges.equalTo(topTabsContainer)
+                    make.height.equalTo(TopTabsUX.TopTabsViewHeight)
+                }
+                self.topTabsViewController = topTabsViewController
+            }
+            topTabsContainer.snp_updateConstraints { make in
+                make.height.equalTo(TopTabsUX.TopTabsViewHeight)
+            }
+        }
+        else {
+            topTabsContainer.snp_updateConstraints { make in
+                make.height.equalTo(0)
+            }
+            topTabsViewController?.view.removeFromSuperview()
+            topTabsViewController?.removeFromParentViewController()
         }
 
         view.setNeedsUpdateConstraints()
@@ -322,7 +356,9 @@ class BrowserViewController: UIViewController {
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
-        header = BlurWrapper(view: urlBar)
+        header = BlurWrapper(view: urlBarTopTabsContainer)
+        urlBarTopTabsContainer.addSubview(urlBar)
+        urlBarTopTabsContainer.addSubview(topTabsContainer)
         view.addSubview(header)
 
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
@@ -373,13 +409,19 @@ class BrowserViewController: UIViewController {
     }
 
     private func setupConstraints() {
+        topTabsContainer.snp_makeConstraints { make in
+            make.leading.trailing.equalTo(self.header)
+            make.top.equalTo(urlBarTopTabsContainer)
+        }
+        
         urlBar.snp_makeConstraints { make in
-            make.edges.equalTo(self.header)
+            make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
+            make.height.equalTo(UIConstants.ToolbarHeight)
+            make.top.equalTo(topTabsContainer.snp_bottom)
         }
 
         header.snp_makeConstraints { make in
             scrollController.headerTopConstraint = make.top.equalTo(snp_topLayoutGuideBottom).constraint
-            make.height.equalTo(UIConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
         }
 

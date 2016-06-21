@@ -106,6 +106,11 @@ class URLBarView: UIView {
     private var currentTheme: String = Theme.NormalMode
 
     var toolbarIsShowing = false
+    var topTabsIsShowing = false {
+        didSet {
+            curveShape.hidden = topTabsIsShowing
+        }
+    }
 
     private var locationTextField: ToolbarTextField?
 
