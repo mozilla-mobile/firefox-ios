@@ -191,7 +191,11 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             cell.site = site
         }
         else {
-            cell.site = Site(url: item.initialURL.absoluteString, title: item.title ?? "")
+            var title = item.title ?? ""
+            if title.isEmpty {
+                title = item.initialURL.absoluteString
+            }
+            cell.site = Site(url: item.initialURL.absoluteString, title: title)
         }
         
         cell.isCurrentTab = (listData[indexPath.item].type == .Current)
