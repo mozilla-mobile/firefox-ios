@@ -1696,12 +1696,7 @@ extension BrowserViewController: WindowCloseHelperDelegate {
 extension BrowserViewController: TabDelegate {
 
     func tab(tab: Tab, didCreateWebView webView: WKWebView) {
-        webViewContainer.insertSubview(webView, atIndex: 0)
-        webView.snp_makeConstraints { make in
-            make.top.equalTo(webViewContainerToolbar.snp_bottom)
-            make.left.right.bottom.equalTo(self.webViewContainer)
-        }
-
+        webView.frame = webViewContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared
         // in willDeleteWebView below!
         webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .New, context: nil)
@@ -1944,20 +1939,10 @@ extension BrowserViewController: TabManagerDelegate {
             wv.accessibilityLabel = nil
             wv.accessibilityElementsHidden = true
             wv.accessibilityIdentifier = nil
-            // due to screwy handling within iOS, the scrollToTop handling does not work if there are
-            // more than one scroll view in the view hierarchy
-            // we therefore have to hide all the scrollViews that we are no actually interesting in interacting with
-            // to ensure that scrollsToTop actually works
-            wv.scrollView.hidden = true
+            wv.removeFromSuperview()
         }
 
         if let tab = selected, webView = tab.webView {
-            // if we have previously hidden this scrollview in order to make scrollsToTop work then
-            // we should ensure that it is not hidden now that it is our foreground scrollView
-            if webView.scrollView.hidden {
-                webView.scrollView.hidden = false
-            }
-
             updateURLBarDisplayURL(tab)
 
             if tab.isPrivate {
@@ -1971,6 +1956,10 @@ extension BrowserViewController: TabManagerDelegate {
 
             scrollController.tab = selected
             webViewContainer.addSubview(webView)
+            webView.snp_makeConstraints { make in
+                make.top.equalTo(webViewContainerToolbar.snp_bottom)
+                make.left.right.bottom.equalTo(self.webViewContainer)
+            }
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
@@ -2282,7 +2271,18 @@ extension BrowserViewController: WKNavigationDelegate {
             // forward/backward. Strange, but LayoutChanged fixes that.
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
         } else {
-            screenshotHelper.takeDelayedScreenshot(tab)
+            // To Screenshot a tab that is hidden we must add the webView,
+            // then wait enough time for the webview to render.
+            if let webView =  tab.webView {
+                view.insertSubview(webView, atIndex: 0)
+                let time = dispatch_time(DISPATCH_TIME_NOW, Int64(500 * NSEC_PER_MSEC))
+                dispatch_after(time, dispatch_get_main_queue()) {
+                    self.screenshotHelper.takeScreenshot(tab)
+                    if webView.superview == self.view {
+                        webView.removeFromSuperview()
+                    }
+                }
+            }
         }
 
         // Remember whether or not a desktop site was requested
