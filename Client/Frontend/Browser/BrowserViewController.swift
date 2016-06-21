@@ -103,7 +103,7 @@ class BrowserViewController: UIViewController {
         return toolbar ?? urlBar
     }
     
-    var topTabsViewController: TopTabsViewController!
+    var topTabsViewController: TopTabsViewController?
     let topTabsContainer = UIView(frame: CGRect.zero)
 
     init(profile: Profile, tabManager: TabManager) {
@@ -201,7 +201,8 @@ class BrowserViewController: UIViewController {
         }
         
         if showTopTabs {
-            if topTabsViewController.parentViewController == nil {
+            if topTabsViewController == nil {
+                let topTabsViewController = TopTabsViewController(tabManager: tabManager)
                 addChildViewController(topTabsViewController)
                 topTabsViewController.view.frame = topTabsContainer.frame
                 topTabsContainer.addSubview(topTabsViewController.view)
@@ -209,6 +210,7 @@ class BrowserViewController: UIViewController {
                     make.edges.equalTo(topTabsContainer)
                     make.height.equalTo(TopTabsUX.TopTabsViewHeight)
                 }
+                self.topTabsViewController = topTabsViewController
             }
             topTabsContainer.snp_updateConstraints { make in
                 make.height.equalTo(TopTabsUX.TopTabsViewHeight)
@@ -218,8 +220,8 @@ class BrowserViewController: UIViewController {
             topTabsContainer.snp_updateConstraints { make in
                 make.height.equalTo(0)
             }
-            topTabsViewController.view.removeFromSuperview()
-            topTabsViewController.removeFromParentViewController()
+            topTabsViewController?.view.removeFromSuperview()
+            topTabsViewController?.removeFromParentViewController()
         }
 
         view.setNeedsUpdateConstraints()
@@ -397,8 +399,6 @@ class BrowserViewController: UIViewController {
         scrollController.header = header
         scrollController.footer = footer
         scrollController.snackBars = snackBars
-        
-        topTabsViewController = TopTabsViewController(tabManager: tabManager)
 
         log.debug("BVC updating toolbar state…")
         self.updateToolbarStateForTraitCollection(self.traitCollection)
