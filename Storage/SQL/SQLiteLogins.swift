@@ -536,10 +536,10 @@ public class SQLiteLogins: BrowserLogins {
             return succeed()
         }
         
-        var results: [Success] = []
+        var statements: [(sql: String, args: Args?)] = []
+        let nowMillis = NSDate.now()
         
         Set(guids).withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-            let nowMillis = NSDate.now()
             let inClause = BrowserDB.varlist(guids.count)
             
             // Immediately delete anything that's marked as new -- i.e., it's never reached
@@ -569,15 +569,11 @@ public class SQLiteLogins: BrowserLogins {
                     "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
             
             let args: Args = guids.map { $0 as AnyObject }
-            results += [self.db.run([
-                (delete, args),
-                (update, args),
-                (markMirrorAsOverridden, args),
-                (insert, args)
-                ]) >>> effect(self.notifyLoginDidChange)]
+            
+            statements += [delete, update, markMirrorAsOverridden, insert].map { (sql: $0, args: args as Args?) }
         }
         
-        return results.allSucceed()
+        return self.db.run(statements) >>> effect(self.notifyLoginDidChange)
     }
 
     public func removeAll() -> Success {
