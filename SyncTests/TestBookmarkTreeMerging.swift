@@ -898,6 +898,75 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         // New record still has its icon ID in the local DB.
         bookmarks.local.db.assertQueryReturns("SELECT faviconID FROM \(TableBookmarksMirror) WHERE bmkUri = 'http://example.org/'", int: 11)
     }
+
+    func testRemoteValueOnlyChange() {
+        guard let bookmarks = self.getSyncableBookmarks("F") else {
+            XCTFail("Couldn't get bookmarks.")
+            return
+        }
+
+        // Insert one folder and one child.
+        let now = NSDate.now()
+        let records = [
+            BookmarkMirrorItem.folder(BookmarkRoots.UnfiledFolderGUID, modified: now, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Unsorted Bookmarks", description: "", children: ["folderAAAAAA"]),
+            BookmarkMirrorItem.folder("folderAAAAAA", modified: now, hasDupe: false, parentID: BookmarkRoots.UnfiledFolderGUID, parentName: "Unsorted Bookmarks", title: "Folder A", description: "", children: ["bookmarkBBBB"]),
+            BookmarkMirrorItem.bookmark("bookmarkBBBB", modified: now, hasDupe: false, parentID: "folderAAAAAA", parentName: "Folder A", title: "Initial Title", description: "No desc.", URI: "http://example.org/foo", tags: "", keyword: nil),
+        ]
+
+        bookmarks.buffer.validate().succeeded()                // It's valid! Empty.
+        bookmarks.buffer.applyRecords(records).succeeded()
+        bookmarks.buffer.validate().succeeded()                // It's valid! Rooted in mobile_______.
+
+        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", int: 3)
+        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBufferStructure)", int: 2)
+
+        let uploader = MockUploader()
+        let storer = uploader.getStorer()
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        applier.go().succeeded()
+
+        guard let _ = bookmarks.treeForMirror().value.successValue else {
+            XCTFail("Couldn't get mirror!")
+            return
+        }
+
+        // After merge, the buffer and local are empty.
+        let edgesAfter = bookmarks.treesForEdges().value.successValue!
+
+        XCTAssertTrue(edgesAfter.local.isEmpty)
+        XCTAssertTrue(edgesAfter.buffer.isEmpty)
+
+        // Check the title.
+        let folder = bookmarks.modelFactory.value.successValue!
+                              .modelForFolder("folderAAAAAA").value.successValue!.current[0]!
+        XCTAssertEqual(folder.title, "Initial Title")
+
+        // Now process an incoming change.
+        let changed = [
+            BookmarkMirrorItem.bookmark("bookmarkBBBB", modified: now, hasDupe: false, parentID: "folderAAAAAA", parentName: "Folder A", title: "New Title", description: "No desc.", URI: "http://example.org/foo", tags: "", keyword: nil),
+        ]
+
+        bookmarks.buffer.validate().succeeded()                // It's valid! Empty.
+        bookmarks.buffer.applyRecords(changed).succeeded()
+        bookmarks.buffer.validate().succeeded()                // It's valid! One record.
+
+        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", int: 1)
+        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBufferStructure)", int: 0)
+
+        let uu = MockUploader()
+        let ss = uu.getStorer()
+        let changeApplier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: ss, greenLight: { true })
+        changeApplier.go().succeeded()
+
+        // The title changed.
+        let updatedFolder = bookmarks.modelFactory.value.successValue!
+                                     .modelForFolder("folderAAAAAA").value.successValue!.current[0]!
+        XCTAssertEqual(updatedFolder.title, "New Title")
+
+        // The buffer is empty.
+        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", int: 0)
+        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBufferStructure)", int: 0)
+    }
 }
 
 class TestMergedTree: FailFastTestCase {
