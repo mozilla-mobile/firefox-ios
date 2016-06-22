@@ -538,9 +538,9 @@ public class SQLiteLogins: BrowserLogins {
         
         var statements: [(sql: String, args: Args?)] = []
         let nowMillis = NSDate.now()
-        
-        Set(guids).withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-            let inClause = BrowserDB.varlist(guids.count)
+        let chunks = chunk(guids, by: BrowserDB.MaxVariableNumber)
+        for chunk in chunks {
+            let inClause = BrowserDB.varlist(chunk.count)
             
             // Immediately delete anything that's marked as new -- i.e., it's never reached
             // the server.
@@ -568,7 +568,7 @@ public class SQLiteLogins: BrowserLogins {
                     "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
                     "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
             
-            let args: Args = guids.map { $0 as AnyObject }
+            let args: Args = chunk.map { $0 as AnyObject }
             
             statements += [delete, update, markMirrorAsOverridden, insert].map { (sql: $0, args: args as Args?) }
         }
