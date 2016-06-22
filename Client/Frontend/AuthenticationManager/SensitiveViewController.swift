@@ -20,7 +20,7 @@ class SensitiveViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
+        notificationCenter.removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
         notificationCenter.removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
     }
 
