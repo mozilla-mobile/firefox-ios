@@ -2,6 +2,7 @@ amazon-de
 bing
 duckduckgo
 google
+qwant
 twitter
 wikipedia-de
 yahoo-de
