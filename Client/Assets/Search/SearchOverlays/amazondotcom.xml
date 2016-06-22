@@ -1,5 +1,0 @@
-<SearchOverlay>
-  <append parent="//search:SearchPlugin">
-    <Url type="application/x-suggestions+json" method="GET" template="https://completion.amazon.com/search/complete?q={searchTerms}&amp;search-alias=aps&amp;mkt=1"/>
-  </append>
-</SearchOverlay>
