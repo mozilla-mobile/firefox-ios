@@ -320,10 +320,9 @@ class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
     // This is exposed for testing.
     func getMerger() -> Deferred<Maybe<ThreeWayTreeMerger>> {
         return self.storage.treesForEdges() >>== { (local, remote) in
-            if local.isEmpty && remote.isEmpty {
-                // We should never have been called!
-                return deferMaybe(BookmarksMergeError())
-            }
+            // At this point *might* have two empty trees. This should only be the case if
+            // there are value-only changes (e.g., a renamed bookmark).
+            // We don't fail in that case, but we could optimize here.
 
             // Find the mirror tree so we can compare.
             return self.storage.treeForMirror() >>== { mirror in
