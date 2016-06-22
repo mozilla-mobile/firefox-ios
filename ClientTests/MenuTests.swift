@@ -158,6 +158,93 @@ class MenuTests: XCTestCase {
         XCTAssertNil(viewDesktopSiteItems)
     }
 
+    // Homepage and Set homepage items.
+    func testHomePageMenuConfiguration() {
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let appState = self.appState(.Tab(tabState: tabState))
+        appState.prefs.setString("http://mozilla.com", forKey: HomePageConstants.HomePageURLPrefKey)
+        let browserConfiguration = AppMenuConfiguration(appState: appState)
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        XCTAssertNotNil(homePageMenuItem)
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        XCTAssertNil(setHomePageMenuItem)
+    }
+
+    func testSetHomePageMenuConfiguration() {
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let appState = self.appState(.Tab(tabState: tabState))
+        appState.prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
+
+        let browserConfiguration = AppMenuConfiguration(appState: appState)
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        XCTAssertNil(homePageMenuItem)
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        XCTAssertNotNil(setHomePageMenuItem)
+    }
+
+    func testHomePageNotInMenuConfiguration() {
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let appState = self.appState(.Tab(tabState: tabState))
+        appState.prefs.setBool(false, forKey: HomePageConstants.HomePageButtonIsInMenuPrefKey)
+        
+        let browserConfiguration = AppMenuConfiguration(appState: appState)
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        XCTAssertNil(homePageMenuItem)
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        XCTAssertNil(setHomePageMenuItem)
+        let sendMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SharePageTitleString }
+        XCTAssertNotNil(sendMenuItem)
+    }
+
+    func testHomePageInHomePanelsMenuConfiguration() {
+        let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
+        let appState = self.appState(.HomePanels(homePanelState: homePanelState))
+        appState.prefs.setString("http://mozilla.com", forKey: HomePageConstants.HomePageURLPrefKey)
+
+        let browserConfiguration = AppMenuConfiguration(appState: appState)
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        XCTAssertNotNil(homePageMenuItem)
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        XCTAssertNil(setHomePageMenuItem)
+    }
+
+    func testNoSetHomePageInHomePanelsMenuConfiguration() {
+        let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
+        let appState = self.appState(.HomePanels(homePanelState: homePanelState))
+        appState.prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
+
+        let browserConfiguration = AppMenuConfiguration(appState: appState)
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        XCTAssertNil(homePageMenuItem)
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        XCTAssertNil(setHomePageMenuItem)
+    }
+
+    // Show and Hide Image items
+    func testHideImagesMenuConfiguration() {
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let appState = self.appState(.Tab(tabState: tabState))
+        appState.prefs.setBool(false, forKey: NoImageModePrefsKey.NoImageModeStatus)
+
+        let browserConfiguration = AppMenuConfiguration(appState: appState)
+        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOnTitleString }
+        XCTAssertNotNil(hideImageMenuItem)
+        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOffTitleString }
+        XCTAssertNil(showImageMenuItem)
+    }
+
+    func testShowImagesMenuConfiguration() {
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let appState = self.appState(.Tab(tabState: tabState))
+        appState.prefs.setBool(true, forKey: NoImageModePrefsKey.NoImageModeStatus)
+
+        let browserConfiguration = AppMenuConfiguration(appState: appState)
+        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOnTitleString }
+        XCTAssertNil(hideImageMenuItem)
+        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOffTitleString }
+        XCTAssertNotNil(showImageMenuItem)
+    }
+
     // settings item
     func testSettingsItemPresentInMenuConfigurationInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
