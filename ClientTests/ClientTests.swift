@@ -52,4 +52,32 @@ class ClientTests: XCTestCase {
 
         XCTAssertTrue(compare(UserAgent.desktopUserAgent()), "Desktop user agent computes correctly.")
     }
+
+    /// Our local server should only accept whitelisted hosts (localhost and 127.0.0.1).
+    /// All other localhost equivalents should return 403.
+    func testDisallowLocalhostAliases() {
+        // Allowed local hosts. The first two are equivalent since iOS forwards an 
+        // empty host to localhost.
+        [ "localhost",
+          "",
+          "127.0.0.1",
+        ].forEach { XCTAssert(hostIsValid($0)) }
+
+        // Disallowed local hosts. WKWebView will direct them to our server, but the server
+        // should reject them.
+        [ "[::1]",
+          "2130706433",
+          "0",
+          "127.00.00.01",
+          "017700000001",
+          "0x7f.0x0.0x0.0x1",
+        ].forEach { XCTAssertFalse(hostIsValid($0)) }
+    }
+
+    private func hostIsValid(host: String) -> Bool {
+        let request = NSURLRequest(URL: NSURL(string: "http://\(host):6571/about/license")!)
+        var response: NSURLResponse?
+        try! NSURLConnection.sendSynchronousRequest(request, returningResponse: &response)
+        return (response as! NSHTTPURLResponse).statusCode == 200
+    }
 }
