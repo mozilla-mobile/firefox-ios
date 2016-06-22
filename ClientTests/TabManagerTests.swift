@@ -13,8 +13,17 @@ import XCTest
 
 
 public class TabManagerMockProfile: MockProfile {
+    var numberOfTabsStored = 0
     override func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
+        numberOfTabsStored = tabs.count
+        return deferMaybe(tabs.count)
+    }
+}
+
+public class MockTabManagerStateDelegate: TabManagerStateDelegate {
+    var numberOfTabsStored = 0
+    func tabManagerWillStoreTabs(tabs: [Tab]) {
+        numberOfTabsStored = tabs.count
     }
 }
 
@@ -28,56 +37,74 @@ class TabManagerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testTabManagerStoresChangesInDB() {
+    func testTabManagerStateDelegateImplStoresChangesInDB() {
         let profile = TabManagerMockProfile()
+        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+        XCTAssertNotNil(appDelegate)
+        appDelegate?.profile = profile
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
-
-        profile.remoteClientsAndTabs.wipeTabs()
-
-        // Make sure we start with no remote tabs.
-        var remoteTabs: [RemoteTab]?
-        waitForCondition {
-            remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
-            return remoteTabs?.count == 0
-        }
-        XCTAssertEqual(remoteTabs?.count, 0)
 
         // test that non-private tabs are saved to the db
         // add some non-private tabs to the tab manager
         for _ in 0..<3 {
             let tab = Tab(configuration: configuration)
-            manager.configureTab(tab, request: NSURLRequest(URL: NSURL(string: "http://yahoo.com")!), flushToDisk: false, zombie: false)
+            tab.url = NSURL(string: "http://yahoo.com")!
+            manager.configureTab(tab, request: NSURLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
+        }
+
+        appDelegate?.tabManagerWillStoreTabs(manager.normalTabs)
+
+        waitForCondition {
+            let storedTabs = profile.numberOfTabsStored
+            return storedTabs == 3
+        }
+
+        XCTAssertEqual(profile.numberOfTabsStored, 3, "Expected state delegate to have been called with 3 tabs, but called with \(profile.numberOfTabsStored)")
+    }
+
+    func testTabManagerCallsTabManagerStateDelegateOnStoreChangesWithNormalTabs() {
+        let profile = TabManagerMockProfile()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        let stateDelegate = MockTabManagerStateDelegate()
+        manager.stateDelegate = stateDelegate
+        let configuration = WKWebViewConfiguration()
+        configuration.processPool = WKProcessPool()
+
+        // test that non-private tabs are saved to the db
+        // add some non-private tabs to the tab manager
+        for _ in 0..<3 {
+            let tab = Tab(configuration: configuration)
+            tab.url = NSURL(string: "http://yahoo.com")!
+            manager.configureTab(tab, request: NSURLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
         }
 
         manager.storeChanges()
 
-        // now test that the database contains 3 tabs
-        waitForCondition {
-            remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
-            return remoteTabs?.count == 3
+        XCTAssertEqual(stateDelegate.numberOfTabsStored, 3, "Expected state delegate to have been called with 3 tabs, but called with \(stateDelegate.numberOfTabsStored)")
+    }
+
+    @available(iOS 9, *)
+    func testTabManagerDoesNotCallTabManagerStateDelegateOnStoreChangesWithPrivateTabs() {
+        let profile = TabManagerMockProfile()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        let stateDelegate = MockTabManagerStateDelegate()
+        manager.stateDelegate = stateDelegate
+        let configuration = WKWebViewConfiguration()
+        configuration.processPool = WKProcessPool()
+
+        // test that non-private tabs are saved to the db
+        // add some non-private tabs to the tab manager
+        for _ in 0..<3 {
+            let tab = Tab(configuration: configuration, isPrivate: true)
+            tab.url = NSURL(string: "http://yahoo.com")!
+            manager.configureTab(tab, request: NSURLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
         }
-        XCTAssertEqual(remoteTabs?.count, 3)
 
-        // test that private tabs are not saved to the DB
-        // private tabs are only available in iOS9 so don't execute this part of the test if we're testing against < iOS9
-        if #available(iOS 9, *) {
-            // create some private tabs
-            for _ in 0..<3 {
-                let tab = Tab(configuration: configuration, isPrivate: true)
-                manager.configureTab(tab, request: NSURLRequest(URL: NSURL(string: "http://yahoo.com")!), flushToDisk: false, zombie: false)
-            }
+        manager.storeChanges()
 
-            manager.storeChanges()
-
-            // We can't use waitForCondition here since we're testing a non-change.
-            wait(ProfileRemoteTabsSyncDelay * 2)
-
-            // now test that the database still contains only 3 tabs
-            remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
-            XCTAssertEqual(remoteTabs?.count, 3)
-        }
+        XCTAssertEqual(stateDelegate.numberOfTabsStored, 0, "Expected state delegate to have been called with 3 tabs, but called with \(stateDelegate.numberOfTabsStored)")
     }
     
 }
