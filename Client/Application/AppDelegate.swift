@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
     var rootViewController: UIViewController!
-    weak var profile: BrowserProfile?
+    weak var profile: Profile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
     var foregroundStartTime = 0
