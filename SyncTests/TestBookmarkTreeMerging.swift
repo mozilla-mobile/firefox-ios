@@ -748,11 +748,6 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         } else {
             XCTFail("Mobile isn't a folder.")
         }
-
-
-        // If we try to merge again, we'll get a merge error because both sides are empty.
-        let getSecondMerger = storageMerger.getMerger().value
-        XCTAssertTrue(getSecondMerger.isFailure)
     }
 
     /**
