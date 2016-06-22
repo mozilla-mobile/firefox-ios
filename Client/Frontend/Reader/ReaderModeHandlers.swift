@@ -29,7 +29,7 @@ struct ReaderModeHandlers {
         // Register the handler that accepts /reader-mode/page?url=http://www.example.com requests.
         webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
             if let url = request.query["url"] as? String {
-                if let url = NSURL(string: url) {
+                if let url = NSURL(string: url) where url.isWebPage() {
                     do {
                         let readabilityResult = try readerModeCache.get(url)
                         // We have this page in our cache, so we can display it. Just grab the correct style from the
