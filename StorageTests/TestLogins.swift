@@ -87,6 +87,21 @@ class TestSQLiteLogins: XCTestCase {
         let result = logins.getAllLogins().value.successValue!
         XCTAssertEqual(result.count, 2)
     }
+    
+    func testRemoveManyLogins() {
+        log.debug("Remove a large number of logins at once")
+        var guids: [GUID] = []
+        for i in 0..<2000 {
+            let login = Login.createWithHostname("mozilla.org", username: "Fire", password: "fox", formSubmitURL: formSubmitURL)
+            if i <= 1000 {
+                guids += [login.guid]
+            }
+            addLogin(login).value
+        }
+        logins.removeLoginsWithGUIDs(guids).value
+        let result = logins.getAllLogins().value.successValue!
+        XCTAssertEqual(result.count, 999)
+    }
 
     func testUpdateLogin() {
         let expectation = self.expectationWithDescription("Update login")
