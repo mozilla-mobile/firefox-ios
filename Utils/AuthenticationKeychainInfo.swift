@@ -137,7 +137,7 @@ public extension AuthenticationKeychainInfo {
             return false
         }
 
-        // Need to make sure we've validated in the past. If not, its a definite yes.
+        // Need to make sure we've validated in the past. If not, it's a definite yes.
         guard let lastValidationInterval = lastPasscodeValidationInterval,
                   requireInterval = requiredPasscodeInterval
         else {

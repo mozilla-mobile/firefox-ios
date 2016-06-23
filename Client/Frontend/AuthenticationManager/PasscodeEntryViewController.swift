@@ -16,6 +16,8 @@ import SwiftKeychainWrapper
 /// Presented to the to user when asking for their passcode to validate entry into a part of the app.
 class PasscodeEntryViewController: BasePasscodeViewController {
     weak var delegate: PasscodeEntryDelegate?
+    var success: (() -> Void)?
+    var cancel: (() -> Void)?
     private let passcodePane = PasscodePane()
 
     override func viewDidLoad() {
@@ -48,6 +50,7 @@ class PasscodeEntryViewController: BasePasscodeViewController {
 
     override func dismiss() {
         delegate?.userDidCancelValidation?()
+        cancel?()
         super.dismiss()
     }
 }
@@ -58,6 +61,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
             authenticationInfo?.recordValidation()
             KeychainWrapper.setAuthenticationInfo(authenticationInfo)
             delegate?.passcodeValidationDidSucceed()
+            success?()
         } else {
             passcodePane.shakePasscode()
             failIncorrectPasscode(inputView: inputView)

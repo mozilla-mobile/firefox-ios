@@ -77,6 +77,9 @@ struct AuthenticationStrings {
 
     static let loginsTouchReason =
         NSLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
+    
+    static let privateModeReason =
+        NSLocalizedString("Use your fingerprint to start browsing privately.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when entering private mode")
 
     static let requirePasscodeTouchReason =
         NSLocalizedString("touchid.require.passcode.reason.label",

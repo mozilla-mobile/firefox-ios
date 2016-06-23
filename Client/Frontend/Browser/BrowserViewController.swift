@@ -15,6 +15,8 @@ import Account
 import ReadingList
 import MobileCoreServices
 import WebImage
+import SwiftKeychainWrapper
+import Deferred
 
 private let log = Logger.browserLogger
 
@@ -669,7 +671,7 @@ class BrowserViewController: UIViewController {
             }
         }
         homePanelController?.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
-        homePanelController?.isPrivateMode = tabTrayController?.privateMode ?? tabManager.selectedTab?.isPrivate ?? false
+        homePanelController?.isPrivateMode = self.isInPrivateMode
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
@@ -957,16 +959,33 @@ class BrowserViewController: UIViewController {
         }
     }
     // Mark: Opening New Tabs
+    
+    var isInPrivateMode: Bool {
+        return tabTrayController?.privateMode ?? tabManager.selectedTab?.isPrivate ?? false
+    }
 
     @available(iOS 9, *)
-    func switchToPrivacyMode(isPrivate isPrivate: Bool ){
-        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
-
-        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-        if tabTrayController.privateMode != isPrivate {
-            tabTrayController.changePrivacyMode(isPrivate)
+    func switchToPrivacyMode(isPrivate isPrivate: Bool) -> Success {
+        
+        let success = Success()
+        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
+        tabTrayController.changePrivacyMode(isInPrivateMode)
+        
+        tabTrayController.authorisePrivateMode(self.navigationController).uponQueue(dispatch_get_main_queue()) { result in
+            if let _ = result.successValue {
+                self.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+                
+                if tabTrayController.privateMode != isPrivate {
+                    tabTrayController.changePrivacyMode(isPrivate)
+                }
+                self.tabTrayController = tabTrayController
+            }
+            success.fill(result)
         }
-        self.tabTrayController = tabTrayController
+        
+        return success
+        
+        // 6. Update Touch ID settings menu UI
     }
 
     func switchToTabForURLOrOpen(url: NSURL, isPrivate: Bool = false) {
@@ -989,8 +1008,11 @@ class BrowserViewController: UIViewController {
             request = nil
         }
         if #available(iOS 9, *) {
-            switchToPrivacyMode(isPrivate: isPrivate)
-            tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+            switchToPrivacyMode(isPrivate: isPrivate).uponQueue(dispatch_get_main_queue()) { result in
+                if let _ = result.successValue {
+                    self.tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+                }
+            }
         } else {
             tabManager.addTabAndSelect(request)
         }
@@ -2836,9 +2858,15 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             if #available(iOS 9, *) {
                 let openNewPrivateTabTitle = NSLocalizedString("Open In New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
                 let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
-                    self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url), isPrivate: true)
-                    })
+                    let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
+                    tabTrayController.changePrivacyMode(self.isInPrivateMode)
+                    tabTrayController.authorisePrivateMode(self.navigationController).uponQueue(dispatch_get_main_queue()) { result in
+                        if let _ = result.successValue {
+                            self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
+                                self.tabManager.addTab(NSURLRequest(URL: url), isPrivate: true)
+                            })
+                        }
+                    }
                 }
                 actionSheetController.addAction(openNewPrivateTabAction)
             }

@@ -8,6 +8,8 @@ import SnapKit
 import Storage
 import ReadingList
 import Shared
+import SwiftKeychainWrapper
+import Deferred
 
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
@@ -261,7 +263,7 @@ class TabTrayController: UIViewController {
         }
 
         if #available(iOS 9, *) {
-            toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), forControlEvents: .TouchUpInside)
+            toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTapMask), forControlEvents: .TouchUpInside)
         }
         return toolbar
     }()
@@ -472,60 +474,104 @@ class TabTrayController: UIViewController {
         mvc.fixedWidth = TabTrayControllerUX.MenuFixedWidth
         self.presentViewController(mvc, animated: true, completion: nil)
     }
+    
+    func authorisePrivateMode(navigationController: UINavigationController? = nil) -> Success {
+        if privateMode {
+            return succeed()
+        }
+        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+            return succeed()
+        }
+        let success = Success()
+        if authInfo.requiresValidation() {
+            let presentingNavController = navigationController ?? self.navigationController
+            let cancelAction = { success.fill(Maybe(failure: AuthorisationError(description: "User cancelled authorisation action."))) }
+            AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
+            touchIDReason: AuthenticationStrings.privateModeReason,
+            success: {
+                success.fill(Maybe(success: ()))
+            },
+            cancel: cancelAction,
+            fallback: {
+                AppAuthenticator.presentPasscodeAuthentication(presentingNavController,
+                success: {
+                    presentingNavController?.dismissViewControllerAnimated(true) {
+                        success.fill(Maybe(success: ()))
+                    }
+                },
+                cancel: cancelAction)
+            })
+        } else {
+            return succeed()
+        }
+        return success
+    }
+    
+    @available(iOS 9, *)
+    func SELdidTapMask() {
+        attemptToTogglePrivateMode()
+    }
 
     @available(iOS 9, *)
-    func SELdidTogglePrivateMode() {
-        let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
-
-        let fromView: UIView
-        if privateTabsAreEmpty() {
-            fromView = emptyPrivateTabsView
-        } else {
-            let snapshot = collectionView.snapshotViewAfterScreenUpdates(false)
-            snapshot.frame = collectionView.frame
-            view.insertSubview(snapshot, aboveSubview: collectionView)
-            fromView = snapshot
-        }
-
-        privateMode = !privateMode
-        // If we are exiting private mode and we have the close private tabs option selected, make sure
-        // we clear out all of the private tabs
-        if !privateMode && profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
-            tabManager.removeAllPrivateTabsAndNotify(false)
-        }
-
-        toolbar.maskButton.setSelected(privateMode, animated: true)
-        collectionView.layoutSubviews()
-
-        let toView: UIView
-        if privateTabsAreEmpty() {
-            emptyPrivateTabsView.hidden = false
-            toView = emptyPrivateTabsView
-        } else {
-            emptyPrivateTabsView.hidden = true
-            let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(true)
-            newSnapshot.frame = collectionView.frame
-            view.insertSubview(newSnapshot, aboveSubview: fromView)
-            collectionView.alpha = 0
-            toView = newSnapshot
-        }
-        toView.alpha = 0
-        toView.transform = scaleDownTransform
-
-        UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
-            fromView.transform = scaleDownTransform
-            fromView.alpha = 0
-            toView.transform = CGAffineTransformIdentity
-            toView.alpha = 1
-        }) { finished in
-            if fromView != self.emptyPrivateTabsView {
-                fromView.removeFromSuperview()
+    func attemptToTogglePrivateMode() -> Success {
+        let success = Success()
+        authorisePrivateMode().uponQueue(dispatch_get_main_queue()) { result in
+            if let _ = result.successValue {
+                let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
+                
+                let fromView: UIView
+                if self.privateTabsAreEmpty() {
+                    fromView = self.emptyPrivateTabsView
+                } else {
+                    let snapshot = self.collectionView.snapshotViewAfterScreenUpdates(false)
+                    snapshot.frame = self.collectionView.frame
+                    self.view.insertSubview(snapshot, aboveSubview: self.collectionView)
+                    fromView = snapshot
+                }
+                
+                self.privateMode = !self.privateMode
+                // If we are exiting private mode and we have the close private tabs option selected, make sure
+                // we clear out all of the private tabs
+                if !self.privateMode && self.profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
+                    self.tabManager.removeAllPrivateTabsAndNotify(false)
+                }
+                
+                self.toolbar.maskButton.setSelected(self.privateMode, animated: true)
+                self.collectionView.layoutSubviews()
+                
+                let toView: UIView
+                if self.privateTabsAreEmpty() {
+                    self.emptyPrivateTabsView.hidden = false
+                    toView = self.emptyPrivateTabsView
+                } else {
+                    self.emptyPrivateTabsView.hidden = true
+                    let newSnapshot = self.collectionView.snapshotViewAfterScreenUpdates(true)
+                    newSnapshot.frame = self.collectionView.frame
+                    self.view.insertSubview(newSnapshot, aboveSubview: fromView)
+                    self.collectionView.alpha = 0
+                    toView = newSnapshot
+                }
+                toView.alpha = 0
+                toView.transform = scaleDownTransform
+                
+                UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
+                    fromView.transform = scaleDownTransform
+                    fromView.alpha = 0
+                    toView.transform = CGAffineTransformIdentity
+                    toView.alpha = 1
+                }) { finished in
+                    if fromView != self.emptyPrivateTabsView {
+                        fromView.removeFromSuperview()
+                    }
+                    if toView != self.emptyPrivateTabsView {
+                        toView.removeFromSuperview()
+                    }
+                    self.collectionView.alpha = 1
+                }
             }
-            if toView != self.emptyPrivateTabsView {
-                toView.removeFromSuperview()
-            }
-            self.collectionView.alpha = 1
+            success.fill(result)
         }
+        return success
     }
 
     @available(iOS 9, *)
@@ -540,7 +586,7 @@ class TabTrayController: UIViewController {
                 privateMode = isPrivate
                 return
             }
-            SELdidTogglePrivateMode()
+            attemptToTogglePrivateMode()
         }
     }
 
@@ -1064,7 +1110,7 @@ extension TabTrayController: MenuActionDelegate {
                 dispatch_async(dispatch_get_main_queue()) {
                     if #available(iOS 9, *) {
                         if self.privateMode {
-                            self.SELdidTogglePrivateMode()
+                            self.attemptToTogglePrivateMode()
                         }
                     }
                     self.openNewTab()
@@ -1074,9 +1120,14 @@ extension TabTrayController: MenuActionDelegate {
                 if #available(iOS 9, *) {
                     dispatch_async(dispatch_get_main_queue()) {
                         if !self.privateMode {
-                            self.SELdidTogglePrivateMode()
+                            self.attemptToTogglePrivateMode().uponQueue(dispatch_get_main_queue()) { result in
+                                if let _ = result.successValue {
+                                    self.openNewTab()
+                                }
+                            }
+                        } else {
+                            self.openNewTab()
                         }
-                        self.openNewTab()
                     }
                 }
             case .OpenSettings:
@@ -1205,5 +1256,12 @@ class TrayToolbar: UIView {
         maskButton.setImage(maskImage, forState: .Normal)
         maskButton.selected = isPrivate
         maskButton.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+    }
+}
+
+public class AuthorisationError: MaybeErrorType {
+    public let description: String
+    public init(description: String) {
+        self.description = description
     }
 }
