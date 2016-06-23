@@ -763,6 +763,9 @@ public enum BufferInconsistency {
     public static let all: [BufferInconsistency] = [.MissingValues, .MissingStructure, .OverlappingStructure, .ParentIDDisagreement]
 }
 
+public class BookmarksDatabaseError: DatabaseError {}
+
+
 extension SQLiteBookmarkBufferStorage {
     public func validate() -> Success {
         let notificationCenter = NSNotificationCenter.defaultCenter()
@@ -774,7 +777,7 @@ extension SQLiteBookmarkBufferStorage {
                 guard yes else {
                     let message = inc.description
                     log.warning(message)
-                    return deferMaybe(DatabaseError(description: message))
+                    return deferMaybe(BookmarksDatabaseError(description: message))
                 }
                 return succeed()
             }
