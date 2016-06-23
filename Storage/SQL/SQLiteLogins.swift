@@ -530,50 +530,50 @@ public class SQLiteLogins: BrowserLogins {
     public func removeLoginByGUID(guid: GUID) -> Success {
         return removeLoginsWithGUIDs([guid])
     }
+    
+    private func getDeletionStatementsForGUIDs(guids: [GUID], nowMillis: Timestamp) -> [(sql: String, args: Args?)] {
+        let inClause = BrowserDB.varlist(guids.count)
+
+        // Immediately delete anything that's marked as new -- i.e., it's never reached
+        // the server.
+        let delete =
+        "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause) AND sync_status = \(SyncStatus.New.rawValue)"
+
+        // Otherwise, mark it as changed.
+        let update =
+        "UPDATE \(TableLoginsLocal) SET " +
+        " local_modified = \(nowMillis)" +
+        ", sync_status = \(SyncStatus.Changed.rawValue)" +
+        ", is_deleted = 1" +
+        ", password = ''" +
+        ", hostname = ''" +
+        ", username = ''" +
+        " WHERE guid IN \(inClause)"
+
+        let markMirrorAsOverridden =
+        "UPDATE \(TableLoginsMirror) SET " +
+            "is_overridden = 1 " +
+            "WHERE guid IN \(inClause)"
+
+        let insert =
+        "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
+            "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
+        "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
+
+        let args: Args = guids.map { $0 as AnyObject }
+        return [
+            (delete, args),
+            (update, args),
+            (markMirrorAsOverridden, args),
+            (insert, args)
+        ]
+    }
 
     public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
-        if guids.isEmpty {
-            return succeed()
-        }
-        
-        var statements: [(sql: String, args: Args?)] = []
-        let nowMillis = NSDate.now()
-        let chunks = chunk(guids, by: BrowserDB.MaxVariableNumber)
-        for chunk in chunks {
-            let inClause = BrowserDB.varlist(chunk.count)
-            
-            // Immediately delete anything that's marked as new -- i.e., it's never reached
-            // the server.
-            let delete =
-                "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause) AND sync_status = \(SyncStatus.New.rawValue)"
-            
-            // Otherwise, mark it as changed.
-            let update =
-                "UPDATE \(TableLoginsLocal) SET " +
-                    " local_modified = \(nowMillis)" +
-                    ", sync_status = \(SyncStatus.Changed.rawValue)" +
-                    ", is_deleted = 1" +
-                    ", password = ''" +
-                    ", hostname = ''" +
-                    ", username = ''" +
-                    " WHERE guid IN \(inClause)"
-            
-            let markMirrorAsOverridden =
-                "UPDATE \(TableLoginsMirror) SET " +
-                    "is_overridden = 1 " +
-                    "WHERE guid IN \(inClause)"
-            
-            let insert =
-                "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
-                    "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
-                    "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
-            
-            let args: Args = chunk.map { $0 as AnyObject }
-            
-            statements += [delete, update, markMirrorAsOverridden, insert].map { (sql: $0, args: args as Args?) }
-        }
-        
-        return self.db.run(statements) >>> effect(self.notifyLoginDidChange)
+        let timestamp = NSDate.now()
+        return db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap {
+            self.getDeletionStatementsForGUIDs(Array($0), nowMillis: timestamp)
+        }) >>> effect(self.notifyLoginDidChange)
     }
 
     public func removeAll() -> Success {
