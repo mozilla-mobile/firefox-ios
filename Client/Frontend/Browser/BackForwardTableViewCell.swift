@@ -54,8 +54,12 @@ class BackForwardTableViewCell: UITableViewCell {
     var site: Site? {
         didSet {
             if let s = site {
-                faviconView.setIcon(s.icon, withPlaceholder: FaviconFetcher.defaultFavicon)
-                label.text = s.title
+                faviconView.setIcon(s.icon, withPlaceholder: FaviconFetcher.getDefaultFavicon(s.tileURL))
+                var title = s.title
+                if title.isEmpty {
+                    title = s.url
+                }
+                label.text = title
                 setNeedsLayout()
             }
         }
