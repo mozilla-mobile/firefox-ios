@@ -115,7 +115,13 @@ class TopSitesPanel: UIViewController {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
-            refreshTopSites(maxFrecencyLimit)
+            // Only reload top sites if there the cache is dirty since the finish syncing 
+            // notification is fired everytime the user re-enters the app from the background.
+            self.profile.history.areTopSitesDirtyWithLimit(self.maxFrecencyLimit) >>== { dirty in
+                if dirty {
+                    self.refreshTopSites(self.maxFrecencyLimit)
+                }
+            }
             break
         default:
             // no need to do anything at all

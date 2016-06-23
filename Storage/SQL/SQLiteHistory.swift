@@ -119,6 +119,8 @@ public class SQLiteHistory {
     }
 }
 
+private let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frecencies DESC LIMIT (?)"
+
 extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(site: Site) -> Success {
         if let host = site.url.asURL?.normalizedHost() {
@@ -264,9 +266,7 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frecencies DESC LIMIT (?)"
-        let factory = SQLiteHistory.iconHistoryColumnFactory
-        return self.db.runQuery(topSitesQuery, args: [limit], factory: factory)
+        return self.db.runQuery(topSitesQuery, args: [limit], factory: SQLiteHistory.iconHistoryColumnFactory)
     }
 
     public func setTopSitesNeedsInvalidation() {
@@ -292,6 +292,43 @@ extension SQLiteHistory: BrowserHistory {
     public func refreshTopSitesCache() -> Success {
         let cacheSize = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0)
         return updateTopSitesCacheWithLimit(cacheSize)
+    }
+
+    public func areTopSitesDirtyWithLimit(limit: Int) -> Deferred<Maybe<Bool>> {
+        let (whereData, groupBy) = self.topSiteClauses()
+        let (query, args) = self.filteredSitesByFrecencyQueryWithHistoryLimit(limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
+        let cacheArgs: Args = [limit]
+
+        return accumulate([
+            { self.db.runQuery(query, args: args, factory: SQLiteHistory.iconHistoryColumnFactory) },
+            { self.db.runQuery(topSitesQuery, args: cacheArgs, factory: SQLiteHistory.iconHistoryColumnFactory) }
+        ]).bind { results in
+            guard let results = results.successValue else {
+                // Something weird happened - default to dirty.
+                return deferMaybe(true)
+            }
+
+            let frecencyResults = results[0]
+            let cacheResults = results[1]
+
+            // Counts don't match? Exit early and say we're dirty.
+            if frecencyResults.count != cacheResults.count {
+                return deferMaybe(true)
+            }
+
+            var isDirty = false
+            // Check step-wise that the ordering and entries are the same
+            (0..<frecencyResults.count).forEach { index in
+                guard let frecencyID = frecencyResults[index]?.id,
+                      let cacheID = cacheResults[index]?.id where frecencyID == cacheID else {
+                    // It only takes one difference to make everything dirty
+                    isDirty = true
+                    return
+                }
+            }
+
+            return deferMaybe(isDirty)
+        }
     }
 
     private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
