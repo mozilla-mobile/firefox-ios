@@ -294,7 +294,7 @@ extension SQLiteHistory: BrowserHistory {
         return updateTopSitesCacheWithLimit(cacheSize)
     }
 
-    public func areTopSitesDirtyWithLimit(limit: Int) -> Deferred<Maybe<Bool>> {
+    public func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>> {
         let (whereData, groupBy) = self.topSiteClauses()
         let (query, args) = self.filteredSitesByFrecencyQueryWithHistoryLimit(limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
         let cacheArgs: Args = [limit]
