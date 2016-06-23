@@ -31,7 +31,7 @@ class AppAuthenticator {
 
                 dispatch_async(dispatch_get_main_queue()) {
                     switch code {
-                    case .UserFallback:
+                    case .UserFallback, .TouchIDNotEnrolled, .TouchIDNotAvailable, .TouchIDLockout:
                         fallback?()
                     case .UserCancel:
                         cancel?()
