@@ -110,7 +110,6 @@ public class TabToolbarHelper: NSObject {
         toolbar.shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the tab toolbar Share button")
         toolbar.shareButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickShare), forControlEvents: UIControlEvents.TouchUpInside)
 
-
         toolbar.homePageButton.setImage(UIImage.templateImageNamed("menu-Home"), forState: .Normal)
         toolbar.homePageButton.setImage(UIImage(named: "menu-Home-Engaged"), forState: .Highlighted)
         toolbar.homePageButton.accessibilityLabel = NSLocalizedString("Toolbar.OpenHomePage.AccessibilityLabel", value: "Homepage", comment: "Accessibility Label for the tab toolbar Homepage button")
@@ -121,6 +120,7 @@ public class TabToolbarHelper: NSObject {
             toolbar.menuButton.setImage(UIImage.templateImageNamed("bottomNav-menu"), forState: .Normal)
             toolbar.menuButton.accessibilityLabel = AppMenuConfiguration.MenuButtonAccessibilityLabel
             toolbar.menuButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickMenu), forControlEvents: UIControlEvents.TouchUpInside)
+            toolbar.menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
         } else {
             toolbar.bookmarkButton.contentMode = UIViewContentMode.Center
             toolbar.bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
