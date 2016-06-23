@@ -35,7 +35,7 @@ class NoImageModeHelper: TabHelper {
     }
 
     static func isNoImageModeAvailable(state: AppState) -> Bool {
-        return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeButtonIsInMenu) ?? true
+        return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeButtonIsInMenu) ?? AppConstants.MOZ_NO_IMAGE_MODE
     }
 
     static func isNoImageModeActivated(state: AppState) -> Bool {
