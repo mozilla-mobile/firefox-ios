@@ -75,7 +75,7 @@ class NightModeAccessors {
     }
 
     static func isNightModeAvailable(state: AppState) -> Bool {
-        return state.prefs.boolForKey(NightModePrefsKey.NightModeButtonIsInMenu) ?? true
+        return state.prefs.boolForKey(NightModePrefsKey.NightModeButtonIsInMenu) ?? AppConstants.MOZ_NIGHT_MODE
     }
 
     static func isNightModeActivated(state: AppState) -> Bool {
