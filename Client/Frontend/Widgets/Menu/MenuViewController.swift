@@ -100,6 +100,8 @@ class MenuViewController: UIViewController {
         menuView.menuColor = menuConfig.menuBackgroundColor()
         menuView.tintColor = menuConfig.menuTintColor()
 
+        menuView.accessibilityIdentifier = "MenuViewController.menuView"
+
         switch presentationStyle {
         case .Popover:
             menuView.toolbar.clipsToBounds = false
