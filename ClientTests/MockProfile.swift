@@ -15,6 +15,7 @@ import Deferred
 public class MockSyncManager: SyncManager {
     public var isSyncing = false
     public var lastSyncFinishTime: Timestamp? = nil
+    public var syncDisplayState: SyncDisplayState?
 
     public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
         return deferMaybe(true)
@@ -106,16 +107,20 @@ public class MockProfile: Profile {
         return MockSyncManager()
     }()
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> = {
+    lazy var certStore: CertStore = {
+        return CertStore()
+    }()
+
+    lazy var bookmarks: protocol<BookmarksModelFactorySource, SyncableBookmarks, LocalItemSource, MirrorItemSource, ShareToDestination> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         let p = self.places
 
-        return SQLiteBookmarks(db: self.db)
+        return MergedSQLiteBookmarks(db: self.db)
     }()
 
     lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs)
+        return SearchEngines(prefs: self.prefs, files: self.files)
     }()
 
     lazy var prefs: Prefs = {
@@ -128,6 +133,10 @@ public class MockProfile: Profile {
 
     lazy var readingList: ReadingListService? = {
         return ReadingListService(profileStoragePath: self.files.rootPath as String)
+    }()
+
+    lazy var recentlyClosedTabs: ClosedTabsStore = {
+        return ClosedTabsStore(prefs: self.prefs)
     }()
 
     internal lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {

@@ -134,6 +134,15 @@ extension NSURL {
         }
         return nil
     }
+
+    public var origin: String? {
+        guard isWebPage(),
+              let hostPort = self.hostPort else {
+            return nil
+        }
+
+        return "\(scheme)://\(hostPort)"
+    }
     
     public func normalizedHostAndPath() -> String? {
         if let normalizedHost = self.normalizedHost() {
@@ -164,16 +173,14 @@ extension NSURL {
     :returns: The base domain string for the given host name.
     */
     public func baseDomain() -> String? {
-        if let host = self.host {
-            // If this is just a hostname and not a FQDN, use the entire hostname.
-            if !host.contains(".") {
-                return host
-            }
+        guard !isIPv6, let host = host else { return nil }
 
-            return publicSuffixFromHost(host, withAdditionalParts: 1)
-        } else {
-            return nil
+        // If this is just a hostname and not a FQDN, use the entire hostname.
+        if !host.contains(".") {
+            return host
         }
+
+        return publicSuffixFromHost(host, withAdditionalParts: 1)
     }
 
     /**
@@ -185,19 +192,28 @@ extension NSURL {
      */
     public func domainURL() -> NSURL {
         if let normalized = self.normalizedHost() {
-            return NSURL(scheme: self.scheme, host: normalized, path: "/") ?? self
+            // Use NSURLComponents instead of NSURL since the former correctly preserves
+            // brackets for IPv6 hosts, whereas the latter escapes them.
+            let components = NSURLComponents()
+            components.scheme = self.scheme
+            components.host = normalized
+            components.path = "/"
+            return components.URL ?? self
         }
         return self
     }
 
     public func normalizedHost() -> String? {
-        if var host = self.host {
-            if let range = host.rangeOfString("^(www|mobile|m)\\.", options: .RegularExpressionSearch) {
-                host.replaceRange(range, with: "")
-            }
-            return host
+        // Use components.host instead of self.host since the former correctly preserves
+        // brackets for IPv6 hosts, whereas the latter strips them.
+        guard let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false),
+              var host = components.host else { return nil }
+
+        if let range = host.rangeOfString("^(www|mobile|m)\\.", options: .RegularExpressionSearch) {
+            host.replaceRange(range, with: "")
         }
-        return nil
+
+        return host
     }
 
     /**
@@ -222,6 +238,14 @@ extension NSURL {
         }
 
         return false
+    }
+
+    public var isLocal: Bool {
+        return host?.lowercaseString == "localhost" || host == "127.0.0.1" || host == "::1"
+    }
+
+    public var isIPv6: Bool {
+        return host?.containsString(":") ?? false
     }
 }
 

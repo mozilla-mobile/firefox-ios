@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import Shared
+import SwiftKeychainWrapper
 
 private enum InfoItem: Int {
     case TitleItem = 0
@@ -25,7 +26,7 @@ private struct LoginDetailUX {
     static let SeparatorHeight: CGFloat = 44
 }
 
-class LoginDetailViewController: UIViewController {
+class LoginDetailViewController: SensitiveViewController {
 
     private let profile: Profile
 
@@ -52,6 +53,9 @@ class LoginDetailViewController: UIViewController {
     // Used to temporarily store a reference to the cell the user is showing the menu controller for
     private var menuControllerCell: LoginTableViewCell? = nil
 
+    private weak var usernameField: UITextField?
+    private weak var passwordField: UITextField?
+
     weak var settingsDelegate: SettingsDelegate?
 
     init(profile: Profile, login: Login) {
@@ -59,8 +63,8 @@ class LoginDetailViewController: UIViewController {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillHideMenuController", name: UIMenuControllerWillHideMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDetailViewController.SELwillShowMenuController), name: UIMenuControllerWillShowMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDetailViewController.SELwillHideMenuController), name: UIMenuControllerWillHideMenuNotification, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -70,7 +74,7 @@ class LoginDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginDetailViewController.SELedit))
 
         tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
@@ -150,34 +154,36 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .UsernameItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
             loginCell.style = .NoIconAndBothLabels
-            loginCell.highlightedLabel.text = NSLocalizedString("username", tableName: "LoginManager", comment: "Title for username row in Login Detail View")
+            loginCell.highlightedLabelTitle = NSLocalizedString("username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
             loginCell.descriptionLabel.text = login.username
             loginCell.descriptionLabel.keyboardType = .EmailAddress
             loginCell.descriptionLabel.returnKeyType = .Next
             loginCell.editingDescription = editingInfo
+            usernameField = loginCell.descriptionLabel
             return loginCell
 
         case .PasswordItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
             loginCell.style = .NoIconAndBothLabels
-            loginCell.highlightedLabel.text = NSLocalizedString("password", tableName: "LoginManager", comment: "Title for password row in Login Detail View")
+            loginCell.highlightedLabelTitle = NSLocalizedString("password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
             loginCell.descriptionLabel.text = login.password
             loginCell.descriptionLabel.returnKeyType = .Default
             loginCell.displayDescriptionAsPassword = true
             loginCell.editingDescription = editingInfo
+            passwordField = loginCell.descriptionLabel
             return loginCell
 
         case .WebsiteItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
             loginCell.style = .NoIconAndBothLabels
-            loginCell.highlightedLabel.text = NSLocalizedString("website", tableName: "LoginManager", comment: "Title for website row in Login Detail View")
+            loginCell.highlightedLabelTitle = NSLocalizedString("website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
             loginCell.descriptionLabel.text = login.hostname
             return loginCell
 
         case .LastModifiedSeparator:
             let footer = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SeparatorIdentifier) as! SettingsTableSectionHeaderFooterView
             footer.titleAlignment = .Top
-            let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the login was last modified with the timestamp as the parameter")
+            let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the current login was last modified with the timestamp as the parameter.")
             let formattedLabel = String(format: lastModified, NSDate.fromMicrosecondTimestamp(login.timePasswordChanged).toRelativeTimeString())
             footer.titleLabel.text = formattedLabel
             let cell = wrapFooter(footer, withCellFromTableView: tableView, atIndexPath: indexPath)
@@ -185,7 +191,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .DeleteItem:
             let deleteCell = tableView.dequeueReusableCellWithIdentifier(DefaultCellIdentifier, forIndexPath: indexPath)
-            deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Button in login detail screen that deletes the current login")
+            deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
             deleteCell.textLabel?.textAlignment = NSTextAlignment.Center
             deleteCell.textLabel?.textColor = UIConstants.DestructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraitButton
@@ -197,7 +203,6 @@ extension LoginDetailViewController: UITableViewDataSource {
         let loginCell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
         loginCell.selectionStyle = .None
         loginCell.delegate = self
-        loginCell.descriptionLabel.delegate = self
         return loginCell
     }
 
@@ -276,7 +281,7 @@ extension LoginDetailViewController: UITableViewDelegate {
 
 // MARK: - KeyboardHelperDelegate
 extension LoginDetailViewController: KeyboardHelperDelegate {
-    
+
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
@@ -287,46 +292,6 @@ extension LoginDetailViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         tableView.contentInset.bottom = 0
-    }
-}
-
-// MARK: - UITextFieldDelegate
-extension LoginDetailViewController: UITextFieldDelegate {
-
-    private func cellForItem(item: InfoItem) -> LoginTableViewCell? {
-        return tableView.cellForRowAtIndexPath(item.indexPath) as? LoginTableViewCell
-    }
-
-    private func textFieldForItem(item: InfoItem) -> UITextField? {
-        guard let loginCell = cellForItem(item) else {
-            return nil
-        }
-
-        return loginCell.descriptionLabel
-    }
-
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        let usernameField = textFieldForItem(.UsernameItem)
-        let passwordField = textFieldForItem(.PasswordItem)
-
-        if textField == usernameField {
-            passwordField?.becomeFirstResponder()
-        }
-
-        return false
-    }
-
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        if let passwordField = textFieldForItem(.PasswordItem) where passwordField == textField {
-            cellForItem(.PasswordItem)?.displayDescriptionAsPassword = false
-        }
-        return true
-    }
-
-    func textFieldDidEndEditing(textField: UITextField) {
-        if let passwordField = textFieldForItem(.PasswordItem) where passwordField == textField {
-            cellForItem(.PasswordItem)?.displayDescriptionAsPassword = true
-        }
     }
 }
 
@@ -360,21 +325,16 @@ extension LoginDetailViewController {
         let cell = tableView.cellForRowAtIndexPath(InfoItem.UsernameItem.indexPath) as! LoginTableViewCell
         cell.descriptionLabel.becomeFirstResponder()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "SELdoneEditing")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(LoginDetailViewController.SELdoneEditing))
     }
 
     func SELdoneEditing() {
-        let usernameField = textFieldForItem(.UsernameItem)
-        let passwordField = textFieldForItem(.PasswordItem)
-
-        // Force resign responder from all input fields
-        [usernameField, passwordField].forEach { $0?.resignFirstResponder() }
-
         editingInfo = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "SELedit")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginDetailViewController.SELedit))
 
         // We only care to update if we changed something
-        guard let username = usernameField?.text, password = passwordField?.text
+        guard let username = usernameField?.text,
+                  password = passwordField?.text
             where username != login.username || password != login.password else {
             return
         }
@@ -400,14 +360,14 @@ extension LoginDetailViewController {
             return
         }
 
-        // The description label constraints are such that it extends full width of the cell instead of only 
+        // The description label constraints are such that it extends full width of the cell instead of only
         // the size of its text. The reason is because when the description is used as a password, the dots
-        // are slightly larger characters than the font size which causes the password text to be truncated 
+        // are slightly larger characters than the font size which causes the password text to be truncated
         // even though the revealed text fits. Since the label is actually full width, the menu controller will
         // display in its center by default which looks weird with small passwords. To prevent this,
         // the actual size of the text is used to determine where to correctly place the menu.
 
-        var descriptionFrame = cell.descriptionLabel.frame
+        var descriptionFrame = passwordField?.frame ?? CGRectZero
         descriptionFrame.size = textSize
 
         menuController.arrowDirection = .Up
@@ -419,12 +379,16 @@ extension LoginDetailViewController {
         menuControllerCell = nil
 
         // Re-add observer
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELwillShowMenuController", name: UIMenuControllerWillShowMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDetailViewController.SELwillShowMenuController), name: UIMenuControllerWillShowMenuNotification, object: nil)
     }
 }
 
 // MARK: - Cell Delegate
 extension LoginDetailViewController: LoginTableViewCellDelegate {
+
+    private func cellForItem(item: InfoItem) -> LoginTableViewCell? {
+        return tableView.cellForRowAtIndexPath(item.indexPath) as? LoginTableViewCell
+    }
 
     func didSelectOpenAndFillForCell(cell: LoginTableViewCell) {
         guard let url = (self.login.formSubmitURL?.asURL ?? self.login.hostname.asURL) else {
@@ -434,5 +398,16 @@ extension LoginDetailViewController: LoginTableViewCellDelegate {
         navigationController?.dismissViewControllerAnimated(true, completion: {
             self.settingsDelegate?.settingsOpenURLInNewTab(url)
         })
+    }
+
+    func shouldReturnAfterEditingDescription(cell: LoginTableViewCell) -> Bool {
+        let usernameCell = cellForItem(.UsernameItem)
+        let passwordCell = cellForItem(.PasswordItem)
+
+        if cell == usernameCell {
+            passwordCell?.descriptionLabel.becomeFirstResponder()
+        }
+
+        return false
     }
 }

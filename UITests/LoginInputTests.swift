@@ -34,8 +34,8 @@ class LoginInputTests: KIFTestCase {
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText("password", intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
-        tester().waitForViewWithAccessibilityLabel("Do you want to save the password for \(username) on \(webRoot)?")
-        tester().tapViewWithAccessibilityLabel("Not now")
+        tester().waitForViewWithAccessibilityLabel("Save login \(username) for \(webRoot)?")
+        tester().tapViewWithAccessibilityIdentifier("SaveLoginPrompt.dontSaveButton")
     }
 
     func testLoginFormDisplaysUpdateSnackbarIfPreviouslySaved() {
@@ -48,14 +48,14 @@ class LoginInputTests: KIFTestCase {
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password1, intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
-        tester().waitForViewWithAccessibilityLabel("Do you want to save the password for \(username) on \(webRoot)?")
-        tester().tapViewWithAccessibilityLabel("Yes")
+        tester().waitForViewWithAccessibilityLabel("Save login \(username) for \(webRoot)?")
+        tester().tapViewWithAccessibilityIdentifier("SaveLoginPrompt.saveLoginButton")
 
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password2, intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
-        tester().waitForViewWithAccessibilityLabel("Do you want to update the password for \(username) on \(webRoot)?")
-        tester().tapViewWithAccessibilityLabel("Update")
+        tester().waitForViewWithAccessibilityLabel("Update login \(username) for \(webRoot)?")
+        tester().tapViewWithAccessibilityIdentifier("UpdateLoginPrompt.updateButton")
     }
 
     func testLoginFormDoesntOfferSaveWhenEmptyPassword() {
@@ -69,7 +69,7 @@ class LoginInputTests: KIFTestCase {
 
         // Wait a bit then verify that we haven't shown the prompt
         tester().waitForTimeInterval(2)
-        XCTAssertFalse(tester().viewExistsWithLabel("Do you want to save the password for \(username) on \(webRoot)?"))
+        XCTAssertFalse(tester().viewExistsWithLabel("Save login \(username) for \(webRoot)?"))
     }
 
     func testLoginFormDoesntOfferUpdateWhenEmptyPassword() {
@@ -82,8 +82,8 @@ class LoginInputTests: KIFTestCase {
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password1, intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
-        tester().waitForViewWithAccessibilityLabel("Do you want to save the password for \(username) on \(webRoot)?")
-        tester().tapViewWithAccessibilityLabel("Yes")
+        tester().waitForViewWithAccessibilityLabel("Save login \(username) for \(webRoot)?")
+        tester().tapViewWithAccessibilityIdentifier("SaveLoginPrompt.saveLoginButton")
 
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password2, intoWebViewInputWithName: "password")
@@ -91,6 +91,6 @@ class LoginInputTests: KIFTestCase {
 
         // Wait a bit then verify that we haven't shown the prompt
         tester().waitForTimeInterval(2)
-        XCTAssertFalse(tester().viewExistsWithLabel("Do you want to update the password for \(username) on \(webRoot)?"))
+        XCTAssertFalse(tester().viewExistsWithLabel("Save login \(username) for \(webRoot)?"))
     }
 }

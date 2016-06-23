@@ -1,24 +1,40 @@
-osx_image: beta-xcode6.3
 language: objective-c
-env:
-  - LC_CTYPE=en_US.UTF-8 LANG=en_US.UTF-8
-before_install:
-  - gem install xcpretty -N
-script:
-  - set -o pipefail
-  - brew update
-  - brew install carthage
-  - ./checkout.sh
-  - rm -rf build
-  - xcodebuild -project Client.xcodeproj -scheme "Firefox" -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6" ONLY_ACTIVE_ARCH=NO -derivedDataPath build clean test | xcpretty -c
 
-notifications:
-  email: false
-  irc:
-    channels:
-      - "irc.mozilla.org#firefoxios"
-    on_success: change
-    on_failure: always
+osx_image: xcode7.2
+
+cache:
+  directories:
+    - Carthage
+
+before_install: 
+  - brew update
+  - brew upgrade xctool
+  - brew upgrade carthage
+  - carthage bootstrap --platform ios --no-use-binaries
+
+script: xctool build -scheme Fennec -sdk iphonesimulator9.2 -arch "i386" ONLY_ACTIVE_ARCH=NO VALID_ARCHS="i386 x86_64"
+
+#osx_image: beta-xcode6.3
+#language: objective-c
+#env:
+#  - LC_CTYPE=en_US.UTF-8 LANG=en_US.UTF-8
+#before_install:
+#  - gem install xcpretty -N
+#script:
+#  - set -o pipefail
+#  - brew update
+#  - brew install carthage
+#  - ./checkout.sh
+#  - rm -rf build
+#  - xcodebuild -project Client.xcodeproj -scheme "Firefox" -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6" ONLY_ACTIVE_ARCH=NO -derivedDataPath build clean test | xcpretty -c
+#
+#notifications:
+#  email: false
+#  irc:
+#    channels:
+#      - "irc.mozilla.org#firefoxios"
+#    on_success: change
+#    on_failure: always
 
 # This stopped working
 #  - xctool -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO

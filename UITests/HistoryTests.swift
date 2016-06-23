@@ -55,7 +55,7 @@ class HistoryTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
-    func testChangingDyamicFontOnHistory() {
+    func testChangingDynamicFontOnHistory() {
         _ = addHistoryItems(2)
 
         tester().tapViewWithAccessibilityIdentifier("url")

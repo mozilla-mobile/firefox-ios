@@ -17,7 +17,7 @@ class SettingsTests: KIFTestCase {
     }
 
     func testHelpOpensSUMOInTab() {
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Help")
         tester().waitForAnimationsToFinish()

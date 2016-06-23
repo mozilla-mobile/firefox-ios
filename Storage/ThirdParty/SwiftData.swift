@@ -605,6 +605,7 @@ public class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         } catch let error1 as NSError {
             error = error1
             statement = nil
+            log.error("SQL error: \(error1.localizedDescription) for SQL \(sqlStr).")
         }
 
         // Close, not reset -- this isn't going to be reused.
@@ -797,7 +798,7 @@ class SDRow: SequenceType {
     // Allow iterating through the row. This is currently broken.
     func generate() -> AnyGenerator<Any> {
         let nextIndex = 0
-        return anyGenerator() {
+        return AnyGenerator() {
             // This crashes the compiler. Yay!
             if (nextIndex < self.columnNames.count) {
                 return nil // self.getValue(nextIndex)
@@ -957,7 +958,7 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T> {
                 break
             }
 
-            count++
+            count += 1
 
             let row = SDRow(statement: statement, columns: columns)
             let result = factory(row)
@@ -1022,7 +1023,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
         var count = 0
         self.sqlStatus = sqlite3_step(statement.pointer)
         while self.sqlStatus != SQLITE_DONE {
-            count++
+            count += 1
             self.sqlStatus = sqlite3_step(statement.pointer)
         }
 
@@ -1037,7 +1038,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
         // This untangles all of the columns and values for this row when its created
         let columnCount = sqlite3_column_count(self.statement.pointer)
         var columns = [String]()
-        for var i: Int32 = 0; i < columnCount; ++i {
+        for i: Int32 in 0 ..< columnCount {
             let columnName = String.fromCString(sqlite3_column_name(self.statement.pointer, i))!
             columns.append(columnName)
         }

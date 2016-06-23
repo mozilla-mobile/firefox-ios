@@ -32,7 +32,7 @@ class DynamicFontHelper: NSObject {
      * Starts monitoring the ContentSizeCategory chantes
      */
     func startObserving() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELcontentSizeCategoryDidChange:", name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(DynamicFontHelper.SELcontentSizeCategoryDidChange(_:)), name: UIContentSizeCategoryDidChangeNotification, object: nil)
     }
 
     deinit {
@@ -57,6 +57,12 @@ class DynamicFontHelper: NSObject {
     }
     var DeviceFontSmallLight: UIFont {
         return UIFont.systemFontOfSize(deviceFontSize - 1, weight: UIFontWeightLight)
+    }
+    var DeviceFontSmallHistoryPanel: UIFont {
+        return UIFont.systemFontOfSize(deviceFontSize - 3, weight: UIFontWeightLight)
+    }
+    var DeviceFontHistoryPanel: UIFont {
+        return UIFont.systemFontOfSize(deviceFontSize)
     }
     var DeviceFontSmallBold: UIFont {
         return UIFont.systemFontOfSize(deviceFontSize - 1, weight: UIFontWeightBold)

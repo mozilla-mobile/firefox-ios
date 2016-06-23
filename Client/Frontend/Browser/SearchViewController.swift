@@ -63,8 +63,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private let searchEngineScrollView = ButtonScrollView()
     private let searchEngineScrollViewContent = UIView()
 
-    private lazy var defaultIcon: UIImage = {
-        return UIImage(named: "defaultFavicon")!
+    private lazy var bookmarkedBadge: UIImage = {
+        return UIImage(named: "bookmarked_passive")!
     }()
 
     // Cell for the suggestion flow layout. Since heightForHeaderInSection is called *before*
@@ -72,7 +72,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private let suggestionCell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
 
     private var suggestionPrompt: UIView?
-
     static var userAgent: String?
 
     init(isPrivate: Bool) {
@@ -128,7 +127,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         suggestionCell.delegate = self
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELDynamicFontChanged:", name: NotificationDynamicFontChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SearchViewController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
     }
 
     deinit {
@@ -244,7 +243,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         // If the prompt message doesn't fit, this prevents it from pushing the buttons
         // off the row and makes it wrap instead.
         promptYesButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-        promptYesButton.addTarget(self, action: "SELdidClickOptInYes", forControlEvents: UIControlEvents.TouchUpInside)
+        promptYesButton.addTarget(self, action: #selector(SearchViewController.SELdidClickOptInYes), forControlEvents: UIControlEvents.TouchUpInside)
         prompt.addSubview(promptYesButton)
 
         let promptNoButton = InsetButton()
@@ -255,7 +254,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         // If the prompt message doesn't fit, this prevents it from pushing the buttons
         // off the row and makes it wrap instead.
         promptNoButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-        promptNoButton.addTarget(self, action: "SELdidClickOptInNo", forControlEvents: UIControlEvents.TouchUpInside)
+        promptNoButton.addTarget(self, action: #selector(SearchViewController.SELdidClickOptInNo), forControlEvents: UIControlEvents.TouchUpInside)
         prompt.addSubview(promptNoButton)
 
         // otherwise the label (i.e. question) is visited by VoiceOver *after* yes and no buttons
@@ -326,7 +325,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchButton.setImage(UIImage(named: "quickSearch"), forState: UIControlState.Normal)
         searchButton.imageView?.contentMode = UIViewContentMode.Center
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-        searchButton.addTarget(self, action: "SELdidClickSearchButton", forControlEvents: UIControlEvents.TouchUpInside)
+        searchButton.addTarget(self, action: #selector(SearchViewController.SELdidClickSearchButton), forControlEvents: UIControlEvents.TouchUpInside)
         searchButton.accessibilityLabel = String(format: NSLocalizedString("Search Settings", tableName: "Search", comment: "Label for search settings button."))
 
         searchButton.imageView?.snp_makeConstraints { make in
@@ -351,7 +350,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             engineButton.setImage(engine.image, forState: UIControlState.Normal)
             engineButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-            engineButton.addTarget(self, action: "SELdidSelectEngine:", forControlEvents: UIControlEvents.TouchUpInside)
+            engineButton.addTarget(self, action: #selector(SearchViewController.SELdidSelectEngine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
 
             engineButton.imageView?.snp_makeConstraints { make in
@@ -377,10 +376,20 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     func SELdidSelectEngine(sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
-        if let index = searchEngineScrollViewContent.subviews.indexOf(sender),
-           let url = quickSearchEngines[index - 1].searchURLForQuery(searchQuery) {
-            searchDelegate?.searchViewController(self, didSelectURL: url)
+        guard let index = searchEngineScrollViewContent.subviews.indexOf(sender) else {
+            assertionFailure()
+            return
         }
+
+        let engine = quickSearchEngines[index - 1]
+
+        guard let url = engine.searchURLForQuery(searchQuery) else {
+            assertionFailure()
+            return
+        }
+
+        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .QuickSearch))
+        searchDelegate?.searchViewController(self, didSelectURL: url)
     }
 
     func SELdidClickSearchButton() {
@@ -414,6 +423,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
         coordinator.animateAlongsideTransition({ _ in
             self.tableView.reloadData()
@@ -520,8 +530,10 @@ extension SearchViewController {
             let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
             if let site = data[indexPath.row] {
                 if let cell = cell as? TwoLineTableViewCell {
+                    let isBookmark = site.bookmarked ?? false
                     cell.setLines(site.title, detailText: site.url)
-                    cell.imageView?.setIcon(site.icon, withPlaceholder: self.defaultIcon)
+                    cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
+                    cell.imageView?.setIcon(site.icon, withPlaceholder: FaviconFetcher.getDefaultFavicon(site.tileURL))
                 }
             }
             return cell
@@ -544,11 +556,15 @@ extension SearchViewController {
 
 extension SearchViewController: SuggestionCellDelegate {
     private func suggestionCell(suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String) {
-        var url = URIFixup().getURL(suggestion)
+        // Assume that only the default search engine can provide search suggestions.
+        let engine = searchEngines.defaultEngine
+
+        var url = URIFixup.getURL(suggestion)
         if url == nil {
-            // Assume that only the default search engine can provide search suggestions.
-            url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+            url = engine.searchURLForQuery(suggestion)
         }
+
+        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .Suggestion))
 
         if let url = url {
             searchDelegate?.searchViewController(self, didSelectURL: url)
@@ -616,7 +632,7 @@ private class SuggestionCell: UITableViewCell {
             for suggestion in suggestions {
                 let button = SuggestionButton()
                 button.setTitle(suggestion, forState: UIControlState.Normal)
-                button.addTarget(self, action: "SELdidSelectSuggestion:", forControlEvents: UIControlEvents.TouchUpInside)
+                button.addTarget(self, action: #selector(SuggestionCell.SELdidSelectSuggestion(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 
                 // If this is the first image, add the search icon.
                 if container.subviews.isEmpty {
@@ -671,7 +687,7 @@ private class SuggestionCell: UITableViewCell {
                 // Only move to the next row if there's already a suggestion on this row.
                 // Otherwise, the suggestion is too big to fit and will be resized below.
                 if currentLeft > textLeft {
-                    currentRow++
+                    currentRow += 1
                     if currentRow >= SearchViewControllerUX.SuggestionCellMaxRows {
                         // Don't draw this button if it doesn't fit on the row.
                         button.frame = CGRectZero

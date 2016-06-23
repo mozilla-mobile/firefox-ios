@@ -63,7 +63,8 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                 return Deferred(value: result)
             }
 
-            if ++failures > maxFailures {
+            failures += 1
+            if failures > maxFailures {
                 return Deferred(value: result)
             }
 
@@ -121,7 +122,10 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     }
 
     private func uploadModifiedPlaces(places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
-        return self.uploadRecords(places.map(makeHistoryRecord), by: 50, lastTimestamp: lastTimestamp, storageClient: storageClient, onUpload: { storage.markAsSynchronized($0, modified: $1) })
+        return self.uploadRecords(places.map(makeHistoryRecord), by: 50, lastTimestamp: lastTimestamp, storageClient: storageClient) {
+            // We don't do anything with failed.
+            storage.markAsSynchronized($0.success, modified: $0.modified)
+        }
     }
 
     private func uploadDeletedPlaces(guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
@@ -129,7 +133,9 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         let records = guids.map(makeDeletedHistoryRecord)
 
         // Deletions are smaller, so upload 100 at a time.
-        return self.uploadRecords(records, by: 100, lastTimestamp: lastTimestamp, storageClient: storageClient, onUpload: { storage.markAsDeleted($0) >>> always($1) })
+        return self.uploadRecords(records, by: 100, lastTimestamp: lastTimestamp, storageClient: storageClient) {
+            storage.markAsDeleted($0.success) >>> always($0.modified)
+        }
     }
 
     private func uploadOutgoingFromStorage(storage: SyncableHistory, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> Success {

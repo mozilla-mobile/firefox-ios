@@ -37,7 +37,8 @@ class AuroraAppDelegate: AppDelegate {
         unregisterFeedbackNotification()
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    override func applicationWillResignActive(application: UIApplication) {
+        super.applicationWillResignActive(application)
         unregisterFeedbackNotification()
     }
 

@@ -1,0 +1,17 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Google</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,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</Image>
+<Url type="application/x-suggestions+json" method="GET" template="https://www.google.com/complete/search?client=firefox&amp;q={searchTerms}"/>
+<Url type="text/html" method="GET" template="https://www.google.com/search">
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="ie" value="utf-8"/>
+  <Param name="oe" value="utf-8"/>
+  <Param name="client" value="firefox-b"/>
+</Url>
+<SearchForm>https://www.google.com</SearchForm>
+</SearchPlugin>

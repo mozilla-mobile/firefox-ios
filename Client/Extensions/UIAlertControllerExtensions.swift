@@ -113,7 +113,7 @@ extension UIAlertController {
 
     /**
      Builds the Alert view that asks if the users wants to also delete history stored on their other devices.
-     
+
      - parameter okayCallback: Okay option handler.
 
      - returns: UIAlertController for asking the user to restore tabs after a crash
@@ -144,7 +144,7 @@ extension UIAlertController {
     }
 
     /**
-     Creates an alert view to warn the user that their logins will either be completely deleted in the 
+     Creates an alert view to warn the user that their logins will either be completely deleted in the
      case of local-only logins or deleted across synced devices in synced account logins.
 
      - parameter deleteCallback: Block to run when delete is tapped.
@@ -170,7 +170,7 @@ extension UIAlertController {
             comment: "Prompt option for cancelling out of deletion")
         let deleteActionTitle = NSLocalizedString("Delete",
             tableName: "LoginManager",
-            comment: "Button in login detail screen that deletes the current login")
+            comment: "Label for the button used to delete the current login.")
 
         let deleteAlert: UIAlertController
         if hasSyncedLogins {

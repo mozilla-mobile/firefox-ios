@@ -21,7 +21,7 @@ public class SuggestedSite: Site {
         self.backgroundColor = UIColor(colorString: data.bgColor)
         self.trackingId = data.trackingId
         self.wordmark = Favicon(url: data.imageUrl, date: NSDate(), type: .Icon)
-        super.init(url: data.url, title: data.title)
+        super.init(url: data.url, title: data.title, bookmarked: nil)
         self.icon = Favicon(url: data.faviconUrl, date: NSDate(), type: .Icon)
     }
 }

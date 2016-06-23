@@ -6,30 +6,36 @@ import Shared
 import Storage
 import AVFoundation
 import XCGLogger
-import Breakpad
 import MessageUI
 import WebImage
-
+import SwiftKeychainWrapper
+import LocalAuthentication
 
 private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
+private let InitialPingSentKey = "initialPingSent"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var rootViewController: UINavigationController!
+    var rootViewController: UIViewController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
+    var foregroundStartTime = 0
 
     weak var application: UIApplication?
     var launchOptions: [NSObject: AnyObject]?
 
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
-    var openInFirefoxURL: NSURL? = nil
+    var openInFirefoxParams: LaunchParams? = nil
+
+    var appStateStore: AppStateStore!
+
+    var systemBrightness: CGFloat = UIScreen.mainScreen().brightness
 
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Hold references to willFinishLaunching parameters for delayed app launch
@@ -61,7 +67,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KeyboardHelper.defaultHelper.startObserving()
 
         log.debug("Starting dynamic font helper…")
-        // Start the keyboard helper to monitor and cache keyboard state.
         DynamicFontHelper.defaultHelper.startObserving()
 
         log.debug("Setting custom menu items…")
@@ -72,14 +77,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
         Logger.syncLogger.newLogWithDate(logDate)
 
-        log.debug("Creating corrupt DB logger…")
-        Logger.corruptLogger.newLogWithDate(logDate)
-
         log.debug("Creating Browser log file…")
         Logger.browserLogger.newLogWithDate(logDate)
 
         log.debug("Getting profile…")
         let profile = getProfile(application)
+        appStateStore = AppStateStore(prefs: profile.prefs)
+
+        log.debug("Initializing telemetry…")
+        Telemetry.initWithPrefs(profile.prefs)
 
         if !DebugSettingsBundleOptions.disableLocalWebServer {
             log.debug("Starting web server…")
@@ -95,11 +101,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.error("Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
         }
 
-        let defaultRequest = NSURLRequest(URL: UIConstants.DefaultHomePage)
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
         log.debug("Configuring tabManager…")
-        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs, imageStore: imageStore)
+        self.tabManager = TabManager(prefs: profile.prefs, imageStore: imageStore)
         self.tabManager.stateDelegate = self
 
         // Add restoration class, the factory that will return the ViewController we
@@ -109,17 +114,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
-        browserViewController.automaticallyAdjustsScrollViewInsets = false
 
-        rootViewController = UINavigationController(rootViewController: browserViewController)
-        rootViewController.automaticallyAdjustsScrollViewInsets = false
-        rootViewController.delegate = self
-        rootViewController.navigationBarHidden = true
+        let navigationController = UINavigationController(rootViewController: browserViewController)
+        navigationController.delegate = self
+        navigationController.navigationBarHidden = true
+
+        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
+            rootViewController = NotificationRootViewController(rootViewController: navigationController)
+        } else {
+            rootViewController = navigationController
+        }
+
         self.window!.rootViewController = rootViewController
 
-        log.debug("Configuring Breakpad…")
-        activeCrashReporter = BreakpadCrashReporter(breakpadInstance: BreakpadController.sharedInstance())
-        configureActiveCrashReporter(profile.prefs.boolForKey("crashreports.send.always"))
+        do {
+            log.debug("Configuring Crash Reporting...")
+            try PLCrashReporter.sharedReporter().enableCrashReporterAndReturnError()
+        } catch let error as NSError {
+            log.error("Failed to enable PLCrashReporter - \(error.description)")
+        }
 
         log.debug("Adding observers…")
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
@@ -141,6 +154,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             getProfile(application).prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
         }
+
+        log.debug("Updating authentication keychain state to reflect system state")
+        self.updateAuthenticationInfo()
+        SystemUtils.onFirstRun()
+
+        resetForegroundStartTime()
+        if !(profile.prefs.boolForKey(InitialPingSentKey) ?? false) {
+            // Try to send an initial core ping when the user first opens the app so that they're
+            // "on the map". This lets us know they exist if they try the app once, crash, then uninstall.
+            // sendCorePing() only sends the ping if the user is offline, so if the first ping doesn't
+            // go through *and* the user crashes then uninstalls on the first run, then we're outta luck.
+            profile.prefs.setBool(true, forKey: InitialPingSentKey)
+            sendCorePing()
+        }
+
         log.debug("Done with setting up the application.")
         return true
     }
@@ -172,12 +200,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let profile = self.profile {
             return profile
         }
-        let clearProfile = NSProcessInfo.processInfo().environment["MOZ_WIPE_PROFILE"] != nil
-        let p = BrowserProfile(localName: "profile", app: application, clear: clearProfile)
+        let p = BrowserProfile(localName: "profile", app: application)
         self.profile = p
         return p
     }
-    
+
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
@@ -214,34 +241,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-        if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) {
-            if components.scheme != "firefox" && components.scheme != "firefox-x-callback" {
-                return false
-            }
-            var url: String?
-            for item in (components.queryItems ?? []) as [NSURLQueryItem] {
-                switch item.name {
-                case "url":
-                    url = item.value
-                default: ()
-                }
-            }
+        guard let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) else {
+            return false
+        }
 
-            if let url = url, newURL = NSURL(string: url.unescape()) {
-                // If we are active then we can ask the BVC to open the new tab right away. Else we remember the
-                // URL and we open it in applicationDidBecomeActive.
-                if application.applicationState == .Active {
-                    if #available(iOS 9, *) {
-                        self.browserViewController.switchToPrivacyMode(isPrivate: false)
-                    }
-                    self.browserViewController.openURLInNewTab(newURL)
-                } else {
-                    openInFirefoxURL = newURL
-                }
-                return true
+        guard let urlTypes = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleURLTypes") as? [AnyObject],
+                urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
+            // Something very strange has happened; org.mozilla.Client should be the zeroeth URL type.
+            log.error("Custom URL schemes not available for validating")
+            return false
+        }
+
+        guard let scheme = components.scheme where urlSchemes.contains(scheme) else {
+            log.warning("Cannot handle \(components.scheme) URL scheme")
+            return false
+        }
+
+        var url: String?
+        var isPrivate: Bool = false
+        for item in (components.queryItems ?? []) as [NSURLQueryItem] {
+            switch item.name {
+            case "url":
+                url = item.value
+            case "private":
+                isPrivate = NSString(string: item.value ?? "false").boolValue
+            default: ()
             }
         }
-        return false
+
+        let params: LaunchParams
+
+        if let url = url, newURL = NSURL(string: url) {
+            params = LaunchParams(url: newURL, isPrivate: isPrivate)
+        } else {
+            params = LaunchParams(url: nil, isPrivate: isPrivate)
+        }
+
+        if application.applicationState == .Active {
+            // If we are active then we can ask the BVC to open the new tab right away. 
+            // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
+            launchFromURL(params)
+        } else {
+            openInFirefoxParams = params
+        }
+
+        return true
+    }
+
+    func launchFromURL(params: LaunchParams) {
+        let isPrivate = params.isPrivate ?? false
+        if let newURL = params.url {
+            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
+        } else {
+            self.browserViewController.openBlankNewTabAndFocus(isPrivate: isPrivate)
+        }
     }
 
     func application(application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: String) -> Bool {
@@ -249,7 +302,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return thirdPartyKeyboardSettingBool
         }
 
-        return true
+        return false
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
@@ -259,6 +312,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
 
+        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: true)
         self.profile?.syncManager.applicationDidBecomeActive()
 
         // We could load these here, but then we have to futz with the tab counter
@@ -281,45 +335,105 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(ShortcutType.OpenLastTab, fromApplication: application)
         }
 
-        // If we have a URL waiting to open, switch to non-private mode and open the URL.
-        if let url = openInFirefoxURL {
-            openInFirefoxURL = nil
-            // This needs to be scheduled so that the BVC is ready.
+        // Check if we have a URL from an external app or extension waiting to launch,
+        // then launch it on the main thread.
+        if let params = openInFirefoxParams {
+            openInFirefoxParams = nil
             dispatch_async(dispatch_get_main_queue()) {
-                if #available(iOS 9, *) {
-                    self.browserViewController.switchToPrivacyMode(isPrivate: false)
-                }
-                self.browserViewController.switchToTabForURLOrOpen(url)
+                self.launchFromURL(params)
             }
         }
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
+        // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
+        let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
+        tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
+        syncOnDidEnterBackground(application: application)
+
+        let elapsed = Int(NSDate().timeIntervalSince1970) - foregroundStartTime
+        Telemetry.recordEvent(UsageTelemetry.makeEvent(elapsed))
+        sendCorePing()
+    }
+
+    private func syncOnDidEnterBackground(application application: UIApplication) {
+        // Short circuit and don't sync if we don't have a syncable account.
+        guard self.profile?.hasSyncableAccount() ?? false else {
+            return
+        }
+
         self.profile?.syncManager.applicationDidEnterBackground()
 
         var taskId: UIBackgroundTaskIdentifier = 0
         taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
             log.warning("Running out of background time, but we have a profile shutdown pending.")
-            application.endBackgroundTask(taskId)
-        }
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
             self.profile?.shutdown()
             application.endBackgroundTask(taskId)
         }
 
-        // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
-        let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
-        tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
+        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+        self.profile?.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
+            self.profile?.shutdown()
+            application.endBackgroundTask(taskId)
+        }
+    }
+
+    func applicationWillResignActive(application: UIApplication) {
+        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: false)
+    }
+
+    func applicationWillEnterForeground(application: UIApplication) {
+        // The reason we need to call this method here instead of `applicationDidBecomeActive`
+        // is that this method is only invoked whenever the application is entering the foreground where as 
+        // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
+        self.updateAuthenticationInfo()
+
+        resetForegroundStartTime()
+    }
+
+    private func resetForegroundStartTime() {
+        foregroundStartTime = Int(NSDate().timeIntervalSince1970)
+    }
+
+    /// Send a telemetry ping if the user hasn't disabled reporting.
+    /// We still create and log the ping for non-release channels, but we don't submit it.
+    private func sendCorePing() {
+        guard let profile = profile where (profile.prefs.boolForKey("settings.sendUsageData") ?? true) else {
+            log.debug("Usage sending is disabled. Not creating core telemetry ping.")
+            return
+        }
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+            // The core ping resets data counts when the ping is built, meaning we'll lose
+            // the data if the ping doesn't go through. To minimize loss, we only send the
+            // core ping if we have an active connection. Until we implement a fault-handling
+            // telemetry layer that can resend pings, this is the best we can do.
+            guard DeviceInfo.hasConnectivity() else {
+                log.debug("No connectivity. Not creating core telemetry ping.")
+                return
+            }
+
+            let ping = CorePing(profile: profile)
+            Telemetry.sendPing(ping)
+        }
+    }
+
+    private func updateAuthenticationInfo() {
+        if let authInfo = KeychainWrapper.authenticationInfo() {
+            if !LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
+                authInfo.useTouchID = false
+                KeychainWrapper.setAuthenticationInfo(authInfo)
+            }
+        }
     }
 
     private func setUpWebServer(profile: Profile) {
         let server = WebServer.sharedInstance
         ReaderModeHandlers.register(server, profile: profile)
-        ErrorPageHelper.register(server)
+        ErrorPageHelper.register(server, certStore: profile.certStore)
         AboutHomeHandler.register(server)
         AboutLicenseHandler.register(server)
-        SessionRestoreHandler.register(server)
+
         // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
         // catching and handling the error seemed to fix things, but we're not sure why.
         // Either way, not implicitly unwrapping a try is not a great way of doing things
@@ -428,7 +542,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func addBookmark(notification: UILocalNotification) {
         if let alertURL = notification.userInfo?[TabSendURLKey] as? String,
             let title = notification.userInfo?[TabSendTitleKey] as? String {
-                browserViewController.addBookmark(alertURL, title: title)
+            let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: alertURL), title: title, favicon: nil)
+                browserViewController.addBookmark(tabState)
 
                 if #available(iOS 9, *) {
                     let userData = [QuickActions.TabURLKey: alertURL,
@@ -472,9 +587,9 @@ extension AppDelegate: UINavigationControllerDelegate {
 }
 
 extension AppDelegate: TabManagerStateDelegate {
-    func tabManagerWillStoreTabs(tabs: [Browser]) {
+    func tabManagerWillStoreTabs(tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.flatMap( Browser.toTab )
+        let storedTabs: [RemoteTab] = tabs.flatMap( Tab.toTab )
 
         // Don't insert into the DB immediately. We tend to contend with more important
         // work like querying for top sites.
@@ -493,41 +608,7 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 
-var activeCrashReporter: CrashReporter?
-func configureActiveCrashReporter(optedIn: Bool?) {
-    if let reporter = activeCrashReporter {
-        configureCrashReporter(reporter, optedIn: optedIn)
-    }
-}
-
-public func configureCrashReporter(reporter: CrashReporter, optedIn: Bool?) {
-    let configureReporter: () -> () = {
-        let addUploadParameterForKey: String -> Void = { key in
-            if let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String {
-                reporter.addUploadParameter(value, forKey: key)
-            }
-        }
-
-        addUploadParameterForKey("AppID")
-        addUploadParameterForKey("BuildID")
-        addUploadParameterForKey("ReleaseChannel")
-        addUploadParameterForKey("Vendor")
-    }
-
-    if let optedIn = optedIn {
-        // User has explicitly opted-in for sending crash reports. If this is not true, then the user has
-        // explicitly opted-out of crash reporting so don't bother starting breakpad or stop if it was running
-        if optedIn {
-            reporter.start(true)
-            configureReporter()
-            reporter.setUploadingEnabled(true)
-        } else {
-            reporter.stop()
-        }
-    }
-    // We haven't asked the user for their crash reporting preference yet. Log crashes anyways but don't send them.
-    else {
-        reporter.start(true)
-        configureReporter()
-    }
+struct LaunchParams {
+    let url: NSURL?
+    let isPrivate: Bool?
 }

@@ -1,4 +1,0 @@
-google
-yandex-tr
-twitter
-wikipedia-tr

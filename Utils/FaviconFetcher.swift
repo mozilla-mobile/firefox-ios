@@ -27,18 +27,24 @@ class FaviconFetcherErrorType: MaybeErrorType {
 public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     public static var userAgent: String = ""
     static let ExpirationTime = NSTimeInterval(60*60*24*7) // Only check for icons once a week
+    private static var characterToFaviconCache = [String : UIImage]()
+    static var defaultFavicon: UIImage = {
+        return UIImage(named: "defaultFavicon")!
+    }()
 
     class func getForURL(url: NSURL, profile: Profile) -> Deferred<Maybe<[Favicon]>> {
         let f = FaviconFetcher()
         return f.loadFavicons(url, profile: profile)
     }
 
-    private func loadFavicons(url: NSURL, profile: Profile, var oldIcons: [Favicon] = [Favicon]()) -> Deferred<Maybe<[Favicon]>> {
+    private func loadFavicons(url: NSURL, profile: Profile, oldIcons: [Favicon] = [Favicon]()) -> Deferred<Maybe<[Favicon]>> {
         if isIgnoredURL(url) {
             return deferMaybe(FaviconFetcherErrorType(description: "Not fetching ignored URL to find favicons."))
         }
 
         let deferred = Deferred<Maybe<[Favicon]>>()
+        
+        var oldIcons: [Favicon] = oldIcons
 
         dispatch_async(queue) { _ in
             self.parseHTMLForFavicons(url).bind({ (result: Maybe<[Favicon]>) -> Deferred<[Maybe<Favicon>]> in
@@ -195,6 +201,33 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         }
 
         return deferred
+    }
+
+    // Returns the default favicon for a site based on the first letter of the site's domain
+    class func getDefaultFavicon(url: NSURL) -> UIImage {
+        guard let character = url.baseDomain()?.characters.first else {
+            return defaultFavicon
+        }
+
+        let faviconLetter = String(character).uppercaseString
+
+        if let cachedFavicon = characterToFaviconCache[faviconLetter] {
+            return cachedFavicon
+        }
+
+        var faviconImage = UIImage()
+        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize))
+        faviconLabel.text = faviconLetter
+        faviconLabel.textAlignment = .Center
+        faviconLabel.font = UIFont.systemFontOfSize(18, weight: UIFontWeightMedium)
+        faviconLabel.textColor = UIColor.grayColor()
+        UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
+        faviconLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        faviconImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        characterToFaviconCache[faviconLetter] = faviconImage
+        return faviconImage
     }
 }
 

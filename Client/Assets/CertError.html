@@ -1,0 +1,49 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>%error_title%</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="CertError.css" type="text/css" media="all" />
+
+    <script type="application/javascript">
+      // If the user swipes back and forth to this tab, we want to make sure we make an attempt to reload the original page.
+      var fresh = true;
+      window.addEventListener('popstate', function () {
+        if (fresh)
+          fresh = false;
+        else
+          webkit.messageHandlers.localRequestHelper.postMessage({ type: "reload" });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="errorPageContainer">
+      <h1 id="errorTitleText">%error_title%</h1>
+      <p id="actions">%actions%</p>
+      <p>%long_description%</p>
+      <button id="advancedButton">%advanced_button%</button>
+
+      <div id="advancedContent">
+        <p id="certErrorCode">%cert_error%</p>
+        <p>%warning_advanced1%</p>
+        <p>%warning_advanced2%</p>
+        <div>%warning_actions%</div>
+      </div>
+    </div>
+
+    <div id="decoration"></div>
+
+    <script>
+      var advancedContent = document.getElementById("advancedContent");
+      advancedContent.style.display = "none";
+      document.getElementById("advancedButton").onclick = function () {
+        this.style.display = "none";
+        advancedContent.style.display = "block";
+      };
+    </script>
+  </body>
+</html>

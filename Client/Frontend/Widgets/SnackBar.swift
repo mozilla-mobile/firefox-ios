@@ -29,7 +29,7 @@ class SnackButton : UIButton {
         return UIImage.createWithColor(size, color: UIConstants.HighlightColor)
     }()
 
-    init(title: String, callback: (bar: SnackBar) -> Void) {
+    init(title: String, accessibilityIdentifier: String, callback: (bar: SnackBar) -> Void) {
         self.callback = callback
 
         super.init(frame: CGRectZero)
@@ -39,7 +39,9 @@ class SnackButton : UIButton {
         setBackgroundImage(highlightImg, forState: .Highlighted)
         setTitleColor(UIConstants.HighlightText, forState: .Highlighted)
 
-        addTarget(self, action: "onClick", forControlEvents: .TouchUpInside)
+        addTarget(self, action: #selector(SnackButton.onClick), forControlEvents: .TouchUpInside)
+
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
 
     override init(frame: CGRect) {
@@ -172,7 +174,7 @@ class SnackBar: UIView {
      * Override this class or use a class like CountdownSnackbar if you want things expire
      * - returns: true if the snackbar should be kept alive
      */
-    func shouldPersist(browser: Browser) -> Bool {
+    func shouldPersist(tab: Tab) -> Bool {
         return true
     }
 
@@ -280,7 +282,7 @@ class TimerSnackBar: SnackBar {
     }
 
     override func show() {
-        self.timer = NSTimer(timeInterval: timeout, target: self, selector: "SELTimerDone", userInfo: nil, repeats: false)
+        self.timer = NSTimer(timeInterval: timeout, target: self, selector: #selector(TimerSnackBar.SELTimerDone), userInfo: nil, repeats: false)
         NSRunLoop.currentRunLoop().addTimer(self.timer!, forMode: NSDefaultRunLoopMode)
         super.show()
     }
@@ -290,11 +292,11 @@ class TimerSnackBar: SnackBar {
         self.timer = nil
     }
 
-    override func shouldPersist(browser: Browser) -> Bool {
+    override func shouldPersist(tab: Tab) -> Bool {
         if !showing {
             return timer != nil
         }
 
-        return super.shouldPersist(browser)
+        return super.shouldPersist(tab)
     }
 }

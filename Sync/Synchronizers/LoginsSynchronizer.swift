@@ -92,6 +92,11 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             let guid = rec.id
             let payload = rec.payload
 
+            guard payload.isValid() else {
+                log.warning("Login record \(guid) is invalid. Skipping.")
+                return succeed()
+            }
+
             // We apply deletions immediately. That might not be exactly what we want -- perhaps you changed
             // a password locally after deleting it remotely -- but it's expedient.
             if payload.deleted {
@@ -103,7 +108,9 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
     }
 
     private func uploadModifiedLogins(logins: [Login], lastTimestamp: Timestamp, fromStorage storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> DeferredTimestamp {
-        return self.uploadRecords(logins.map(makeLoginRecord), by: 50, lastTimestamp: lastTimestamp, storageClient: storageClient, onUpload: { storage.markAsSynchronized($0, modified: $1) })
+        return self.uploadRecords(logins.map(makeLoginRecord), by: 50, lastTimestamp: lastTimestamp, storageClient: storageClient) {
+            storage.markAsSynchronized($0.success, modified: $0.modified)
+        }
     }
 
     private func uploadDeletedLogins(guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> DeferredTimestamp {
@@ -111,7 +118,9 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         let records = guids.map(makeDeletedLoginRecord)
 
         // Deletions are smaller, so upload 100 at a time.
-        return self.uploadRecords(records, by: 100, lastTimestamp: lastTimestamp, storageClient: storageClient, onUpload: { storage.markAsDeleted($0) >>> always($1) })
+        return self.uploadRecords(records, by: 100, lastTimestamp: lastTimestamp, storageClient: storageClient) {
+            storage.markAsDeleted($0.success) >>> always($0.modified)
+        }
     }
 
     // Find any records for which a local overlay exists. If we want to be really precise,

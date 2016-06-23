@@ -170,7 +170,7 @@ public class SQLiteLogins: BrowserLogins {
 
         let protectionSpace = NSURLProtectionSpace(host: host,
             port: port,
-            `protocol`: scheme,
+            protocol: scheme,
             realm: row["httpRealm"] as? String,
             authenticationMethod: nil)
 
@@ -335,12 +335,12 @@ public class SQLiteLogins: BrowserLogins {
                 return "%\(query)%" as String?
             }
 
-            searchClauses.append(" username LIKE ? ")
+            searchClauses.append("username LIKE ? ")
             searchClauses.append(" password LIKE ? ")
-            searchClauses.append(" hostname LIKE ? ")
+            searchClauses.append(" hostname LIKE ?")
         }
 
-        let whereSearchClause = searchClauses.count > 0 ? "AND" + searchClauses.joinWithSeparator("OR") : ""
+        let whereSearchClause = searchClauses.count > 0 ? "AND (" + searchClauses.joinWithSeparator("OR") + ") " : ""
         let sql =
         "SELECT \(projection) FROM " +
             "\(TableLoginsLocal) WHERE is_deleted = 0 " + whereSearchClause +

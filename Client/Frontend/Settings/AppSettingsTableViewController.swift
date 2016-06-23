@@ -18,7 +18,10 @@ class AppSettingsTableViewController: SettingsTableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
             style: UIBarButtonItemStyle.Done,
-            target: navigationController, action: "SELdone")
+            target: navigationController, action: Selector("SELdone"))
+        navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
+
+        tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -38,8 +41,12 @@ class AppSettingsTableViewController: SettingsTableViewController {
         }
 
         let prefs = profile.prefs
-        var generalSettings = [
-            SearchSetting(settings: self),
+        var generalSettings: [Setting] = [SearchSetting(settings: self)]
+        if AppConstants.MOZ_NEW_TAB_CHOICES {
+            generalSettings += [NewTabPageSetting(settings: self)]
+        }
+        generalSettings += [
+            HomePageSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                 titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
@@ -84,13 +91,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
         settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]
 
         var privacySettings = [Setting]()
-        if AppConstants.MOZ_LOGIN_MANAGER {
-            privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-        }
-
-        if AppConstants.MOZ_AUTHENTICATION_MANAGER {
-            privacySettings.append(TouchIDPasscodeSetting(settings: self))
-        }
+        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
+        privacySettings.append(TouchIDPasscodeSetting(settings: self))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self))
 
@@ -105,9 +107,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
         }
 
         privacySettings += [
-            BoolSetting(prefs: prefs, prefKey: "crashreports.send.always", defaultValue: false,
-                titleText: NSLocalizedString("Send Crash Reports", comment: "Setting to enable the sending of crash reports"),
-                settingDidChange: { configureActiveCrashReporter($0) }),
             PrivacyPolicySetting()
         ]
 
@@ -139,18 +138,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
         return settings
     }
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        // Make account/sign-in and close private tabs rows taller, as per design specs.
-        let section = settings[indexPath.section]
-        if let setting = section[indexPath.row] as? BoolSetting where setting.prefKey == "settings.closePrivateTabs" || setting.prefKey == AllowThirdPartyKeyboardsKey {
-            return 64
-        } else if section[indexPath.row] is ConnectSetting {
-            return 64
-        }
-
-        return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
-    }
-
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if !profile.hasAccount() {
             let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
@@ -177,5 +164,21 @@ class AppSettingsTableViewController: SettingsTableViewController {
         }
         
         return super.tableView(tableView, viewForHeaderInSection: section)
+    }
+}
+
+extension AppSettingsTableViewController {
+    func navigateToLoginsList() {
+        let viewController = LoginListViewController(profile: profile)
+        viewController.settingsDelegate = settingsDelegate
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+extension AppSettingsTableViewController: PasscodeEntryDelegate {
+    @objc func passcodeValidationDidSucceed() {
+        navigationController?.dismissViewControllerAnimated(true) {
+            self.navigateToLoginsList()
+        }
     }
 }

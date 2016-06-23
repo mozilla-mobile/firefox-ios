@@ -69,8 +69,8 @@ public class Visit: Hashable {
 
     public class func fromJSON(json: JSON) -> Visit? {
         if let type = json["type"].asInt,
-            typeEnum = VisitType(rawValue: type),
-            date = json["date"].asInt64 {
+               typeEnum = VisitType(rawValue: type),
+               date = json["date"].asInt64 where date >= 0 {
                 return Visit(date: MicrosecondTimestamp(date), type: typeEnum)
         }
         return nil

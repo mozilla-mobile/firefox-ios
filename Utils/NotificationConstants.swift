@@ -14,3 +14,6 @@ public let NotificationOnLocationChange = "OnLocationChange"
 
 // Fired when the login synchronizer has finished applying remote changes
 public let NotificationDataRemoteLoginChangesWereApplied = "NotificationDataRemoteLoginChangesWereApplied"
+
+// MARK: Notification UserInfo Keys
+public let NotificationUserInfoKeyHasSyncableAccount = "NotificationUserInfoKeyHasSyncableAccount"

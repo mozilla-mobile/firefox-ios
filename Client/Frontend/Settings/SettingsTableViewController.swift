@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Account
-import Base32
 import Shared
 import UIKit
 import XCGLogger
@@ -15,23 +14,8 @@ private let Bug1204635_S2 = NSLocalizedString("Are you sure you want to clear al
 private let Bug1204635_S3 = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
 private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
 
-// A base TableViewCell, to help minimize initialization and allow recycling.
-class SettingsTableViewCell: UITableViewCell {
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        indentationWidth = 0
-        layoutMargins = UIEdgeInsetsZero
-        // So that the seperator line goes all the way to the left edge.
-        separatorInset = UIEdgeInsetsZero
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
-class Setting {
+class Setting: NSObject {
     private var _title: NSAttributedString?
 
     weak var delegate: SettingsDelegate?
@@ -41,7 +25,7 @@ class Setting {
 
     // The title shown on the pref.
     var title: NSAttributedString? { return _title }
-    var accessibilityIdentifier: String? { return nil }
+    private(set) var accessibilityIdentifier: String?
 
     // An optional second line of text shown on the pref.
     var status: NSAttributedString? { return nil }
@@ -53,7 +37,7 @@ class Setting {
 
     var accessoryType: UITableViewCellAccessoryType { return .None }
 
-    var textAlignment: NSTextAlignment { return .Left }
+    var textAlignment: NSTextAlignment { return .Natural }
     
     private(set) var enabled: Bool = true
 
@@ -63,12 +47,25 @@ class Setting {
         cell.detailTextLabel?.numberOfLines = 0
         cell.textLabel?.attributedText = title
         cell.textLabel?.textAlignment = textAlignment
+        cell.textLabel?.numberOfLines = 0
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
         cell.selectionStyle = enabled ? .Default : .None
         cell.accessibilityIdentifier = accessibilityIdentifier
-        cell.accessibilityLabel = title?.string
+        if let title = title?.string {
+            if let detailText = cell.detailTextLabel?.text {
+                cell.accessibilityLabel = "\(title), \(detailText)"
+            } else if let status = status?.string {
+                cell.accessibilityLabel = "\(title), \(status)"
+            } else {
+                cell.accessibilityLabel = title
+            }
+        }
         cell.accessibilityTraits = UIAccessibilityTraitButton
+        cell.indentationWidth = 0
+        cell.layoutMargins = UIEdgeInsetsZero
+        // So that the separator line goes all the way to the left edge.
+        cell.separatorInset = UIEdgeInsetsZero
     }
 
     // Called when the pref is tapped.
@@ -104,7 +101,7 @@ class SettingSection : Setting {
         var count = 0
         for setting in children {
             if !setting.hidden {
-                count++
+                count += 1
             }
         }
         return count
@@ -117,10 +114,27 @@ class SettingSection : Setting {
                 if i == val {
                     return setting
                 }
-                i++
+                i += 1
             }
         }
         return nil
+    }
+}
+
+private class PaddedSwitch: UIView {
+    private static let Padding: CGFloat = 8
+
+    init(switchView: UISwitch) {
+        super.init(frame: CGRectZero)
+
+        addSubview(switchView)
+
+        frame.size = CGSizeMake(switchView.frame.width + PaddedSwitch.Padding, switchView.frame.height)
+        switchView.frame.origin = CGPointMake(PaddedSwitch.Padding, 0)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -128,8 +142,6 @@ class SettingSection : Setting {
 // Takes and optional settingsDidChange callback and status text.
 class BoolSetting: Setting {
     let prefKey: String
-    // Padding to wrap the statusText earlier to avoid problematic localization
-    private let statusTextPadding = -130
 
     private let prefs: Prefs
     private let defaultValue: Bool
@@ -159,23 +171,158 @@ class BoolSetting: Setting {
 
     override func onConfigureCell(cell: UITableViewCell) {
         super.onConfigureCell(cell)
+
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? defaultValue
-        cell.accessoryView = control
-        if let titleLabel = cell.textLabel {
-            cell.detailTextLabel?.snp_makeConstraints { make in
-                make.left.equalTo(titleLabel)
-                make.right.equalTo(cell).offset(statusTextPadding)
-                make.top.equalTo(titleLabel.snp_bottom)
+        if let title = title {
+            if let status = status {
+                control.accessibilityLabel = "\(title.string), \(status.string)"
+            } else {
+                control.accessibilityLabel = title.string
             }
+            cell.accessibilityLabel = nil
         }
+        cell.accessoryView = PaddedSwitch(switchView: control)
+        cell.selectionStyle = .None
     }
 
     @objc func switchValueChanged(control: UISwitch) {
         prefs.setBool(control.on, forKey: prefKey)
         settingDidChange?(control.on)
+    }
+}
+
+/// A helper class for a setting backed by a UITextField.
+/// This takes an optional settingIsValid and settingDidChange callback
+/// If settingIsValid returns false, the Setting will not change and the text remains red.
+class StringSetting: Setting, UITextFieldDelegate {
+
+    let prefKey: String
+
+    private let prefs: Prefs
+    private let defaultValue: String?
+    private let placeholder: String
+    private let settingDidChange: (String? -> Void)?
+    private let settingIsValid: (String? -> Bool)?
+
+    let textField = UITextField()
+
+    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingIsValid isValueValid: (String? -> Bool)? = nil, settingDidChange: (String? -> Void)? = nil) {
+        self.prefs = prefs
+        self.prefKey = prefKey
+        self.defaultValue = defaultValue
+        self.settingDidChange = settingDidChange
+        self.settingIsValid = isValueValid
+        self.placeholder = placeholder
+
+        super.init()
+        self.accessibilityIdentifier = accessibilityIdentifier
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        if let id = accessibilityIdentifier {
+            textField.accessibilityIdentifier = id + "TextField"
+        }
+        textField.placeholder = placeholder
+        textField.delegate = self
+        textField.addTarget(self, action: #selector(textFieldDidChange), forControlEvents: .EditingChanged)
+        cell.userInteractionEnabled = true
+        cell.accessibilityTraits = UIAccessibilityTraitNone
+        cell.contentView.addSubview(textField)
+
+        cell.contentView.snp_makeConstraints { make in
+            make.height.equalTo(44)
+            make.width.equalTo(cell.snp_width)
+        }
+
+        textField.snp_makeConstraints { make in
+            make.height.equalTo(cell.contentView)
+            make.width.equalTo(cell.contentView).offset(-2 * SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+            make.leading.equalTo(cell.contentView).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+        }
+        textField.text = prefs.stringForKey(prefKey) ?? defaultValue
+        textFieldDidChange(textField)
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        textField.becomeFirstResponder()
+    }
+
+    private func isValid(value: String?) -> Bool {
+        guard let test = settingIsValid else {
+            return true
+        }
+        return test(prepareValidValue(userInput: value))
+    }
+
+    /// This gives subclasses an opportunity to treat the user input string
+    /// before it is saved or tested.
+    /// Default implementation does nothing.
+    func prepareValidValue(userInput value: String?) -> String? {
+        return value
+    }
+
+    @objc func textFieldDidChange(textField: UITextField) {
+        let color = isValid(textField.text) ? UIConstants.TableViewRowTextColor : UIConstants.DestructiveRed
+        textField.textColor = color
+    }
+
+    @objc func textFieldShouldReturn(textField: UITextField) -> Bool {
+        return isValid(textField.text)
+    }
+
+    @objc func textFieldDidEndEditing(textField: UITextField) {
+        let text = textField.text
+        if !isValid(text) {
+            return
+        }
+        if let text = prepareValidValue(userInput: text) {
+            prefs.setString(text, forKey: prefKey)
+        } else {
+            prefs.removeObjectForKey(prefKey)
+        }
+        // Call settingDidChange with text or nil.
+        settingDidChange?(text)
+    }
+}
+
+/// A helper class for a setting backed by a UITextField.
+/// This takes an optional isEnabled and mandatory onClick callback
+/// isEnabled is called on each tableview.reloadData. If it returns
+/// false then the 'button' appears disabled.
+class ButtonSetting: Setting {
+    let onButtonClick: (UINavigationController?) -> ()
+    let destructive: Bool
+    let isEnabled: (() -> Bool)?
+
+    init(title: NSAttributedString?, destructive: Bool = false, accessibilityIdentifier: String, isEnabled: (() -> Bool)? = nil, onClick: UINavigationController? -> ()) {
+        self.onButtonClick = onClick
+        self.destructive = destructive
+        self.isEnabled = isEnabled
+        super.init(title: title)
+        self.accessibilityIdentifier = accessibilityIdentifier
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+
+        if isEnabled?() ?? true {
+            cell.textLabel?.textColor = destructive ? UIConstants.DestructiveRed : UIConstants.HighlightBlue
+        } else {
+            cell.textLabel?.textColor = UIConstants.TableViewDisabledRowTextColor
+        }
+        cell.textLabel?.textAlignment = NSTextAlignment.Center
+        cell.accessibilityTraits = UIAccessibilityTraitButton
+        cell.selectionStyle = .None
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        if isEnabled?() ?? true {
+            onButtonClick(navigationController)
+        }
     }
 }
 
@@ -256,15 +403,24 @@ class SettingsTableViewController: UITableViewController {
     var profile: Profile!
     var tabManager: TabManager!
 
+    /// Used to calculate cell heights.
+    private lazy var dummyToggleCell: UITableViewCell = {
+        let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "dummyCell")
+        cell.accessoryView = UISwitch()
+        return cell
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.tableFooterView = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
         
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.estimatedRowHeight = 44
+        tableView.estimatedSectionHeaderHeight = 44
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -272,9 +428,9 @@ class SettingsTableViewController: UITableViewController {
 
         settings = generateSettings()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELsyncDidChangeState", name: NotificationProfileDidStartSyncing, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELsyncDidChangeState", name: NotificationProfileDidFinishSyncing, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELfirefoxAccountDidChange", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SettingsTableViewController.SELfirefoxAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
 
         tableView.reloadData()
     }
@@ -327,7 +483,7 @@ class SettingsTableViewController: UITableViewController {
                 // Work around http://stackoverflow.com/a/9999821 and http://stackoverflow.com/a/25901083 by using a new cell.
                 // I could not make any setNeedsLayout solution work in the case where we disconnect and then connect a new account.
                 // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
-                cell = SettingsTableViewCell(style: setting.style, reuseIdentifier: nil)
+                cell = UITableViewCell(style: setting.style, reuseIdentifier: nil)
             } else {
                 cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath)
             }
@@ -363,16 +519,15 @@ class SettingsTableViewController: UITableViewController {
         return headerView
     }
 
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // empty headers should be 13px high, but headers with text should be 44
-        var height: CGFloat = 13
-        let section = settings[section]
-        if let sectionTitle = section.title {
-            if sectionTitle.length > 0 {
-                height = 44
-            }
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let section = settings[indexPath.section]
+        // Workaround for calculating the height of default UITableViewCell cells with a subtitle under
+        // the title text label.
+        if let setting = section[indexPath.row] where setting is BoolSetting && setting.status != nil {
+            return calculateStatusCellHeightForSetting(setting)
         }
-        return height
+
+        return UITableViewAutomaticDimension
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -381,12 +536,35 @@ class SettingsTableViewController: UITableViewController {
             setting.onClick(navigationController)
         }
     }
+
+    private func calculateStatusCellHeightForSetting(setting: Setting) -> CGFloat {
+        dummyToggleCell.layoutSubviews()
+
+        let topBottomMargin: CGFloat = 10
+        let width = dummyToggleCell.contentView.frame.width - 2 * dummyToggleCell.separatorInset.left
+
+        return
+            heightForLabel(dummyToggleCell.textLabel!, width: width, text: setting.title?.string) +
+            heightForLabel(dummyToggleCell.detailTextLabel!, width: width, text: setting.status?.string) +
+            2 * topBottomMargin
+    }
+
+    private func heightForLabel(label: UILabel, width: CGFloat, text: String?) -> CGFloat {
+        guard let text = text else { return 0 }
+
+        let size = CGSize(width: width, height: CGFloat.max)
+        let attrs = [NSFontAttributeName: label.font]
+        let boundingRect = NSString(string: text).boundingRectWithSize(size,
+            options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attrs, context: nil)
+        return boundingRect.height
+    }
 }
 
 class SettingsTableFooterView: UIView {
     var logo: UIImageView = {
         var image =  UIImageView(image: UIImage(named: "settingsFlatfox"))
         image.contentMode = UIViewContentMode.Center
+        image.accessibilityIdentifier = "SettingsTableFooterView.logo"
         return image
     }()
 
@@ -417,6 +595,7 @@ class SettingsTableFooterView: UIView {
 struct SettingsTableSectionHeaderFooterViewUX {
     static let titleHorizontalPadding: CGFloat = 15
     static let titleVerticalPadding: CGFloat = 6
+    static let titleVerticalLongPadding: CGFloat = 20
 }
 
 class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
@@ -428,22 +607,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     var titleAlignment: TitleAlignment = .Bottom {
         didSet {
-            if oldValue != titleAlignment {
-                switch titleAlignment {
-                case .Top:
-                    titleLabel.snp_remakeConstraints { make in
-                        make.left.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-                        make.right.lessThanOrEqualTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-                        make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                    }
-                case .Bottom:
-                    titleLabel.snp_remakeConstraints { make in
-                        make.left.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-                        make.right.lessThanOrEqualTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-                        make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                    }
-                }
-            }
+            remakeTitleAlignmentConstraints()
         }
     }
 
@@ -463,6 +627,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         var headerLabel = UILabel()
         headerLabel.textColor = UIConstants.TableViewHeaderTextColor
         headerLabel.font = UIFont.systemFontOfSize(12.0, weight: UIFontWeightRegular)
+        headerLabel.numberOfLines = 0
         return headerLabel
     }()
 
@@ -484,7 +649,6 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         addSubview(titleLabel)
         addSubview(topBorder)
         addSubview(bottomBorder)
-        clipsToBounds = true
 
         setupInitialConstraints()
     }
@@ -494,13 +658,6 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
     }
 
     func setupInitialConstraints() {
-        // Initially set title to the bottom
-        titleLabel.snp_makeConstraints { make in
-            make.left.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-            make.right.lessThanOrEqualTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-            make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-        }
-
         bottomBorder.snp_makeConstraints { make in
             make.bottom.left.right.equalTo(self)
             make.height.equalTo(0.5)
@@ -510,6 +667,8 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
             make.top.left.right.equalTo(self)
             make.height.equalTo(0.5)
         }
+
+        remakeTitleAlignmentConstraints()
     }
 
     override func prepareForReuse() {
@@ -518,5 +677,22 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         showBottomBorder = true
         titleLabel.text = nil
         titleAlignment = .Bottom
+    }
+
+    private func remakeTitleAlignmentConstraints() {
+        switch titleAlignment {
+        case .Top:
+            titleLabel.snp_remakeConstraints { make in
+                make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
+                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
+            }
+        case .Bottom:
+            titleLabel.snp_remakeConstraints { make in
+                make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
+                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
+            }
+        }
     }
 }

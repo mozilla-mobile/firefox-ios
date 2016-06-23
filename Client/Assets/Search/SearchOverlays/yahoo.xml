@@ -1,0 +1,14 @@
+<SearchOverlay>
+  <append parent="//search:Url[@type='text/html']">
+    <Param name="type" value="ios"/>
+  </append>
+  <replace target="//search:Url[@type='application/x-moz-tabletsearch']">
+    <!-- tablet search not supported -->
+  </replace>
+  <replace target="//search:Url[@type='text/html' and @rel='mobile']">
+    <!-- phone search activity not supported -->
+  </replace>
+  <replace target="//search:Url[@type='application/x-moz-tabletsearch' and @rel='mobile']">
+    <!-- tablet search activity not supported -->
+  </replace>
+</SearchOverlay>

@@ -1,0 +1,76 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    background-color: white;
+    padding: 0 65px;
+    color: #333;
+    font-size: 13px;
+    font-family: "Helvetica Neue Medium" sans-serif;
+}
+
+h1 {
+    color: #333;
+    font-size: 16px;
+    font-family: "Helvetica Neue Medium" sans-serif;
+    font-weight: 300;
+    margin-bottom: 25px;
+}
+
+/* Add a set of stripes at the top of pages */
+#decoration {
+    background-image: repeating-linear-gradient(-65deg, #ed2,      #ed2 10px,
+                                                        #fe3 10px, #fe3 20px,
+                                                                   #ed2 20px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 32px;
+    width: 100%;
+}
+
+a {
+    color: rgb(76, 158, 255);
+    text-decoration: none;
+}
+
+button {
+    width: 100%;
+    border: none;
+    padding: 1rem;
+    font-family: "Helvetica Neue Medium" sans-serif;
+    background-color: rgb(76, 158, 255);
+    color: white;
+    font-size: 16px;
+    font-weight: 300;
+    border-radius: 5px;
+}
+
+#errorPageContainer {
+    max-width: 300px;
+    margin: 0 auto;
+    -webkit-transform: translateY(70px);
+    padding-bottom: 10px;
+}
+
+#certErrorCode {
+    color: #999;
+}
+
+#advancedButton {
+    background-color: white;
+    color: #777;
+    border: 1px solid #aaa;
+}
+
+#advancedContent {
+    margin-bottom: 20px;
+}

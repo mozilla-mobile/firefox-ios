@@ -6,15 +6,18 @@ import Foundation
 import GCDWebServers
 import Storage
 import WebKit
+import SwiftKeychainWrapper
+import Shared
+@testable import Client
 
 let LabelAddressAndSearch = "Address and Search"
 
 extension XCTestCase {
-    func tester(file: String = __FILE__, _ line: Int = __LINE__) -> KIFUITestActor {
+    func tester(file: String = #file, _ line: Int = #line) -> KIFUITestActor {
         return KIFUITestActor(inFile: file, atLine: line, delegate: self)
     }
 
-    func system(file: String = __FILE__, _ line: Int = __LINE__) -> KIFSystemTestActor {
+    func system(file: String = #file, _ line: Int = #line) -> KIFSystemTestActor {
         return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
     }
 }
@@ -276,8 +279,11 @@ class BrowserUtils {
         for _ in 0 ..< historyTable.numberOfSections {
             for _ in 0 ..< historyTable.numberOfRowsInSection(0) {
                 clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
-                if numberOfTests > -1 && ++index == numberOfTests {
-                    return
+                if numberOfTests > -1 {
+                    index += 1
+                    if index == numberOfTests {
+                        return
+                    }
                 }
             }
         }
@@ -366,6 +372,10 @@ class SimplePageServer {
             return GCDWebServerDataResponse(HTML: self.getPageData("loginForm"))
         }
 
+        webServer.addHandlerForMethod("GET", path: "/localhostLoad.html", requestClass: GCDWebServerRequest.self) { _ in
+            return GCDWebServerDataResponse(HTML: self.getPageData("localhostLoad"))
+        }
+
         webServer.addHandlerForMethod("GET", path: "/auth.html", requestClass: GCDWebServerRequest.self) { (request: GCDWebServerRequest!) in
             // "user:pass", Base64-encoded.
             let expectedAuth = "Basic dXNlcjpwYXNz"
@@ -396,8 +406,8 @@ class SimplePageServer {
 
 class SearchUtils {
     static func navigateToSearchSettings(tester: KIFUITestActor, engine: String = "Yahoo") {
-        tester.tapViewWithAccessibilityLabel("Show Tabs")
-        tester.waitForViewWithAccessibilityLabel("Tabs Tray")
+        tester.tapViewWithAccessibilityLabel("Menu")
+        tester.waitForAnimationsToFinish()
         tester.tapViewWithAccessibilityLabel("Settings")
         tester.waitForViewWithAccessibilityLabel("Settings")
         tester.tapViewWithAccessibilityLabel("Search, \(engine)")
@@ -407,7 +417,6 @@ class SearchUtils {
     static func navigateFromSearchSettings(tester: KIFUITestActor) {
         tester.tapViewWithAccessibilityLabel("Settings")
         tester.tapViewWithAccessibilityLabel("Done")
-        tester.tapViewWithAccessibilityLabel("home")
     }
 
     // Given that we're at the Search Settings sheet, select the named search engine as the default.
@@ -423,6 +432,48 @@ class SearchUtils {
     static func getDefaultSearchEngineName(tester: KIFUITestActor) -> String {
         let view = tester.waitForCellWithAccessibilityLabel("Default Search Engine")
         return view.accessibilityValue!
+    }
+
+    static func getDefaultEngine() -> OpenSearchEngine! {
+        guard let userProfile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile else {
+            XCTFail("Unable to get a reference to the user's profile")
+            return nil
+        }
+        return userProfile.searchEngines.defaultEngine
+    }
+
+    static func youTubeSearchEngine() -> OpenSearchEngine {
+        return mockSearchEngine("YouTube", template: "https://m.youtube.com/#/results?q={searchTerms}&sm=", icon: "youtube")!
+    }
+
+    static func mockSearchEngine(name: String, template: String, icon: String) -> OpenSearchEngine? {
+        guard let imagePath = NSBundle(forClass: self).pathForResource(icon, ofType: "ico"),
+              let imageData = NSData(contentsOfFile: imagePath),
+              let image = UIImage(data: imageData) else
+        {
+            XCTFail("Unable to load search engine image named \(icon).ico")
+            return nil
+        }
+
+        return OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
+    }
+
+    static func addCustomSearchEngine(engine: OpenSearchEngine) {
+        guard let userProfile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile else {
+            XCTFail("Unable to get a reference to the user's profile")
+            return
+        }
+
+        userProfile.searchEngines.addSearchEngine(engine)
+    }
+
+    static func removeCustomSearchEngine(engine: OpenSearchEngine) {
+        guard let userProfile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile else {
+            XCTFail("Unable to get a reference to the user's profile")
+            return
+        }
+
+        userProfile.searchEngines.deleteCustomEngine(engine)
     }
 }
 
@@ -444,5 +495,47 @@ class DynamicFontUtils {
         let value = UIContentSizeCategoryMedium
         UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
         tester.waitForTimeInterval(0.3)
+    }
+}
+
+class PasscodeUtils {
+    static func resetPasscode() {
+        KeychainWrapper.setAuthenticationInfo(nil)
+    }
+
+    static func setPasscode(code: String, interval: PasscodeInterval) {
+        let info = AuthenticationKeychainInfo(passcode: code)
+        info.updateRequiredPasscodeInterval(interval)
+        KeychainWrapper.setAuthenticationInfo(info)
+    }
+
+    static func enterPasscode(tester: KIFUITestActor, digits: String) {
+        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex]))
+        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(1)]))
+        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(2)]))
+        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(3)]))
+    }
+}
+
+class HomePageUtils {
+    static func navigateToHomePageSettings(tester: KIFUITestActor) {
+        tester.waitForAnimationsToFinish()
+        tester.tapViewWithAccessibilityLabel("Menu")
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityIdentifier("HomePageSetting")
+    }
+
+    static func homePageSetting(tester: KIFUITestActor) -> String? {
+        let view = tester.waitForViewWithAccessibilityIdentifier("HomePageSettingTextField")
+        guard let textField = view as? UITextField else {
+            XCTFail("View is not a textField: view is \(view)")
+            return nil
+        }
+        return textField.text
+    }
+
+    static func navigateFromHomePageSettings(tester: KIFUITestActor) {
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityLabel("Done")
     }
 }

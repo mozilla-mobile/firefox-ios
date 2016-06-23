@@ -9,6 +9,18 @@ public struct PrefsKeys {
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
+    public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
+    public static let KeyHomePageButtonIsInMenu = "HomePageButtonIsInMenuPrefKey"
+    public static let KeyNoImageModeButtonIsInMenu = "NoImageModeButtonIsInMenuPrefKey"
+    public static let KeyNoImageModeStatus = "NoImageModeStatus"
+    public static let KeyNewTab = "NewTabPrefKey"
+    public static let KeyNightModeButtonIsInMenu = "NightModeButtonIsInMenuPrefKey"
+    public static let KeyNightModeStatus = "NightModeStatus"
+}
+
+public struct PrefsDefaults {
+    public static let ChineseHomePageURL = "http://mobile.firefoxchina.cn/"
+    public static let ChineseNewTabDefault = "HomePage"
 }
 
 public protocol Prefs {
@@ -22,6 +34,7 @@ public protocol Prefs {
     func setBool(value: Bool, forKey defaultName: String)
     func setObject(value: AnyObject?, forKey defaultName: String)
     func stringForKey(defaultName: String) -> String?
+    func objectForKey<T: AnyObject>(defaultName: String) -> T?
     func boolForKey(defaultName: String) -> Bool?
     func intForKey(defaultName: String) -> Int32?
     func timestampForKey(defaultName: String) -> Timestamp?
@@ -97,6 +110,10 @@ public class MockProfilePrefs : Prefs {
         return things[name(defaultName)] as? Bool
     }
 
+    public func objectForKey<T: AnyObject>(defaultName: String) -> T? {
+        return things[name(defaultName)] as? T
+    }
+    
     public func timestampForKey(defaultName: String) -> Timestamp? {
         return unsignedLongForKey(defaultName)
     }

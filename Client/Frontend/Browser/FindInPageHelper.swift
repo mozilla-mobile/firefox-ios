@@ -11,20 +11,20 @@ protocol FindInPageHelperDelegate: class {
     func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int)
 }
 
-class FindInPageHelper: BrowserHelper {
+class FindInPageHelper: TabHelper {
     weak var delegate: FindInPageHelperDelegate?
-    private weak var browser: Browser?
+    private weak var tab: Tab?
 
     class func name() -> String {
         return "FindInPage"
     }
 
-    required init(browser: Browser) {
-        self.browser = browser
+    required init(tab: Tab) {
+        self.tab = tab
 
         if let path = NSBundle.mainBundle().pathForResource("FindInPage", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
             let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-            browser.webView!.configuration.userContentController.addUserScript(userScript)
+            tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
 

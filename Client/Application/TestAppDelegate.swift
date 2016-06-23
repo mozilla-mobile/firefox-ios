@@ -19,8 +19,11 @@ class TestAppDelegate: AppDelegate {
         // Don't show the What's New page.
         profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
 
-        // Skip the first run UI.
-        profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
+        // Skip the first run UI except when we are running Fastlane Snapshot tests
+        if !AppConstants.IsRunningFastlaneSnapshot {
+            profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
+        }
+
         self.profile = profile
         return profile
     }

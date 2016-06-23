@@ -115,7 +115,7 @@ class TestSQLiteLogins: XCTestCase {
         XCTAssertEqual(result.failureValue?.description, "Can't add a login with an empty hostname.")
 
         let credential = NSURLCredential(user: "username", password: "password", persistence: .ForSession)
-        let protectionSpace = NSURLProtectionSpace(host: "https://website.com", port: 443, `protocol`: "https", realm: "Basic Auth", authenticationMethod: "Basic Auth")
+        let protectionSpace = NSURLProtectionSpace(host: "https://website.com", port: 443, protocol: "https", realm: "Basic Auth", authenticationMethod: "Basic Auth")
         let bothFormSubmitURLAndRealm = Login.createWithCredential(credential, protectionSpace: protectionSpace)
         bothFormSubmitURLAndRealm.formSubmitURL = "http://submit.me"
         result =  logins.addLogin(bothFormSubmitURLAndRealm).value
@@ -148,7 +148,7 @@ class TestSQLiteLogins: XCTestCase {
         XCTAssertEqual(result.failureValue?.description, "Can't add a login with an empty hostname.")
 
         let credential = NSURLCredential(user: "username", password: "password", persistence: .ForSession)
-        let protectionSpace = NSURLProtectionSpace(host: "https://website.com", port: 443, `protocol`: "https", realm: "Basic Auth", authenticationMethod: "Basic Auth")
+        let protectionSpace = NSURLProtectionSpace(host: "https://website.com", port: 443, protocol: "https", realm: "Basic Auth", authenticationMethod: "Basic Auth")
         let bothFormSubmitURLAndRealm = Login.createWithCredential(credential, protectionSpace: protectionSpace)
         bothFormSubmitURLAndRealm.formSubmitURL = "http://submit.me"
         bothFormSubmitURLAndRealm.guid = self.login.guid
@@ -378,7 +378,6 @@ class TestSQLiteLoginsPerf: XCTestCase {
     }
 
     func addLogin(login: LoginData) -> Success {
-        log.debug("Add \(login)")
         return logins.addLogin(login)
     }
 

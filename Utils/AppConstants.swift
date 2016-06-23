@@ -5,57 +5,147 @@
 import UIKit
 
 public enum AppBuildChannel {
+    case Release
+    case Beta
+    case Nightly
     case Developer
     case Aurora
-    case Release
 }
 
 public struct AppConstants {
-
     public static let IsRunningTest = NSClassFromString("XCTestCase") != nil
 
+    // True if this process is executed as part of a Fastlane Snapshot test
+    public static let IsRunningFastlaneSnapshot = NSProcessInfo.processInfo().arguments.contains("FASTLANE_SNAPSHOT")
 
     /// Build Channel.
     public static let BuildChannel: AppBuildChannel = {
-#if MOZ_CHANNEL_AURORA
-    return AppBuildChannel.Aurora
-#elseif MOZ_CHANNEL_RELEASE
-    return AppBuildChannel.Release
-#else
-    return AppBuildChannel.Developer
-#endif
+        #if MOZ_CHANNEL_RELEASE
+            return AppBuildChannel.Release
+        #elseif MOZ_CHANNEL_BETA
+            return AppBuildChannel.Beta
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return AppBuildChannel.Nightly
+        #elseif MOZ_CHANNEL_FENNEC
+            return AppBuildChannel.Developer
+        #elseif MOZ_CHANNEL_AURORA
+            return AppBuildChannel.Aurora
+        #endif
     }()
 
+    /// Whether we just mirror (false) or actively merge and upload (true).
+    public static let shouldMergeBookmarks = true
 
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
-#if MOZ_CHANNEL_DEBUG
-    return true
-#else
-    return false
-#endif
+        #if MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return false
+        #endif
+    }()
+
+    /// Enables/disables the new Menu functionality
+    public static let MOZ_MENU: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    ///  Enables/disables the notification bar that appears on the status bar area
+    public static let MOZ_STATUS_BAR_NOTIFICATION: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
     }()
 
 
-    /// Enables/disables the Login manager UI by hiding the 'Logins' setting item.
-    public static let MOZ_LOGIN_MANAGER: Bool = {
-#if MOZ_CHANNEL_AURORA
-    return true
-#elseif MOZ_CHANNEL_RELEASE
-    return true
-#else
-    return true
-#endif
+
+    /// Enables/disables the de-duplication of awesomebar seach results functionality
+    public static let MOZ_AWESOMEBAR_DUPES: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return true
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
     }()
 
-    /// Enables/disables the Touch ID/passcode functionality and settings screen
-    public static let MOZ_AUTHENTICATION_MANAGER: Bool = {
-#if MOZ_CHANNEL_AURORA
-    return false
-#elseif MOZ_CHANNEL_RELEASE
-    return false
-#else
-    return true
-#endif
+    ///  Enables/disables the back/forward list from long pressing the back/forward button
+    public static let MOZ_BACK_FORWARD_LIST: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return true
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    ///  Enables/disables the undo toast for the delete all tabs
+    public static let MOZ_UNDO_DELETE_TABS_TOAST: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return true
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    /// Enables/disables the choice of new tab behavior.
+    public static let MOZ_NEW_TAB_CHOICES: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return true
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
     }()
 }

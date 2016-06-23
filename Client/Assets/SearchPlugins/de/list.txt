@@ -1,7 +1,0 @@
-amazon-de
-bing
-duckduckgo
-google
-twitter
-wikipedia-de
-yahoo-de

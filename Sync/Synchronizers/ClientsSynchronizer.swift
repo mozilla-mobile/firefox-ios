@@ -194,7 +194,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
         log.debug("Fetching current client record for client \(clientGUID).")
         let fetch = storageClient.get(clientGUID)
         return fetch.bind() { result in
-            if let response = result.successValue {
+            if let response = result.successValue where response.value.payload.isValid() {
                 let record = response.value
                 if var clientRecord = record.payload.asDictionary {
                     clientRecord["commands"] = JSON(record.payload.commands + commands.map { JSON.parse($0.value) })
@@ -269,6 +269,11 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
         var ours: Record<ClientPayload>? = nil
 
         for (rec) in records {
+            guard rec.payload.isValid() else {
+                log.warning("Client record \(rec.id) is invalid. Skipping.")
+                continue
+            }
+
             if rec.id == ourGUID {
                 if rec.modified == self.clientRecordLastUpload {
                     log.debug("Skipping our own unmodified record.")

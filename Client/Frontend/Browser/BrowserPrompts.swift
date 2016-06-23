@@ -20,7 +20,6 @@ class JSPromptAlertController: UIAlertController {
 
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        alertInfo?.alertWillDismiss()
         delegate?.promptAlertControllerDidDismiss(self)
     }
 }
@@ -33,16 +32,7 @@ class JSPromptAlertController: UIAlertController {
  *  of the provided completionHandler to let us generate the UIAlertController when needed.
  */
 protocol JSAlertInfo {
-
-    /**
-     * A word about this mutating keyword here. These prompts should be calling their completion handlers when
-     * the prompt is actually dismissed - not when the user selects an option. Ideally this would be handled 
-     * inside the JSPromptAlertController subclass in the viewDidDisappear callback but UIAlertController 
-     * was built to not be subclassed. Instead, when allocate the JSPromptAlertController we pass along a
-     * reference to the alertInfo structure and manipulate the required state from the action handlers.
-     */
-    mutating func alertController() -> JSPromptAlertController
-    func alertWillDismiss()
+    func alertController() -> JSPromptAlertController
     func cancel()
 }
 
@@ -51,17 +41,15 @@ struct MessageAlert: JSAlertInfo {
     let frame: WKFrameInfo
     let completionHandler: () -> Void
 
-    mutating func alertController() -> JSPromptAlertController {
+    func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
             preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default, handler: nil))
+        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default) { _ in
+            self.completionHandler()
+        })
         alertController.alertInfo = self
         return alertController
-    }
-
-    func alertWillDismiss() {
-        completionHandler()
     }
 
     func cancel() {
@@ -74,27 +62,23 @@ struct ConfirmPanelAlert: JSAlertInfo {
     let frame: WKFrameInfo
     let completionHandler: (Bool) -> Void
 
-    var didConfirm: Bool = false
-
     init(message: String, frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
         self.message = message
         self.frame = frame
         self.completionHandler = completionHandler
     }
 
-    mutating func alertController() -> JSPromptAlertController {
+    func alertController() -> JSPromptAlertController {
         // Show JavaScript confirm dialogs.
         let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default, handler: { _ in
-            self.didConfirm = true
-        }))
-        alertController.addAction(UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.Cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default) { _ in
+            self.completionHandler(true)
+        })
+        alertController.addAction(UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.Cancel) { _ in
+            self.cancel()
+        })
         alertController.alertInfo = self
         return alertController
-    }
-
-    func alertWillDismiss() {
-        completionHandler(didConfirm)
     }
 
     func cancel() {
@@ -117,20 +101,21 @@ struct TextInputAlert: JSAlertInfo {
         self.defaultText = defaultText
     }
 
-    mutating func alertController() -> JSPromptAlertController {
+    func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        var input: UITextField!
         alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField) in
-            self.input = textField
-            self.input.text = self.defaultText
+            input = textField
+            input.text = self.defaultText
         })
-        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default, handler: nil))
-        alertController.addAction(UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.Cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default) { _ in
+            self.completionHandler(input.text)
+        })
+        alertController.addAction(UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.Cancel) { _ in
+            self.cancel()
+        })
         alertController.alertInfo = self
         return alertController
-    }
-
-    func alertWillDismiss() {
-        completionHandler(input.text)
     }
 
     func cancel() {

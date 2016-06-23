@@ -6,11 +6,11 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch
 -----------
 
-This branch is for mainline development that will eventually ship as v3.0.
+This branch is for mainline development that will eventually ship as v5.0.
 
-See the __v2.x__ branch if you're doing stabilization work for v2.0.
+See the __v5.x__ branch if you're doing stabilization work for v5.0. If you are interested in fixing a bug on the __v5.x__ stabilization branch, take a look at the list of open bugs that are marked as [tracking 5.0](https://wiki.mozilla.org/Mobile/Triage/iOS#iOS_Tracking_5.0.2B).
 
-This branch works with Xcode 7.2.1, and supports iOS 8.3 and 9.x.
+This branch works with Xcode 7.3.1, and supports iOS 8.2 and 9.x. Although you can only run and debug from Xcode on a 9.2.1 device.
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -21,7 +21,9 @@ We encourage you to participate in this open source project. We love Pull Reques
 
 * IRC:            [#mobile](https://wiki.mozilla.org/IRC) for general discussion and [#mobistatus](https://wiki.mozilla.org/IRC) for team status updates.
 * Mailing list:   [mobile-firefox-dev@mozilla.org](https://mail.mozilla.org/listinfo/mobile-firefox-dev).
-* Bugs:           [File a new bug](https://bugzilla.mozilla.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2F&bug_ignored=0&op_sys=iOS%20&product=Firefox%20for%20iOS&rep_platform=All) • [Existing bugs](https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox%20for%20iOS)
+* Bugs:           [File a new bug](https://bugzilla.mozilla.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2F&bug_ignored=0&op_sys=iOS%20&product=Firefox%20for%20iOS&rep_platform=All) • [Existing bugs](https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox%20for%20iOS) 
+
+Want to contribute but don't know where to start? Here is a list of [Good First Bugs.](http://www.joshmatthews.net/bugsahoy/?mobileios=1&simple=1)
 
 This is a work in progress on some early ideas.  Don't get too attached to this code. Tomorrow everything will be different.
 
@@ -33,10 +35,16 @@ https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScroll
 Building the code
 -----------------
 
-> __As of February 10, 2016, this project requires Xcode 7.2.1.__
+> __As of March 28, 2016, this project requires Xcode 7.3.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage). - __We REQUIRE 0.11 at this point__
+1. Install Carthage
+
+  ```shell
+  brew update
+  brew install carthage
+  ```
+
 1. Clone the repository:
 
   ```shell
@@ -47,11 +55,11 @@ Building the code
 
   ```shell
   cd firefox-ios
-  sh ./checkout.sh
+  sh ./bootstrap.sh
   ```
 
 1. Open `Client.xcodeproj` in Xcode.
-1. Build the `Client` scheme in Xcode.
+1. Build the `Fennec` scheme in Xcode.
 
 It is possible to use [App Code](https://www.jetbrains.com/objc/download/) instead of Xcode, but you will still require the Xcode developer tools.
 

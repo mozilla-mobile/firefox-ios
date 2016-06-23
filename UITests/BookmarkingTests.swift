@@ -12,6 +12,28 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         webRoot = SimplePageServer.start()
     }
 
+    private func bookmark() {
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("Add Bookmark")
+    }
+
+    private func unbookmark() {
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("Remove Bookmark")
+    }
+
+    private func checkBookmarked() {
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().waitForViewWithAccessibilityLabel("Remove Bookmark")
+        tester().tapViewWithAccessibilityLabel("Close Menu")
+    }
+
+    private func checkUnbookmarked() {
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().waitForViewWithAccessibilityLabel("Add Bookmark")
+        tester().tapViewWithAccessibilityLabel("Close Menu")
+    }
+
     /**
      * Tests basic page navigation with the URL bar.
      */
@@ -23,13 +45,12 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Bookmark it using the bookmark button
-        tester().tapViewWithAccessibilityLabel("Bookmark")
-        let bookmarkButton = tester().waitForViewWithAccessibilityLabel("Bookmark") as! UIButton
-        XCTAssertTrue(bookmarkButton.selected, "Bookmark button is marked selected")
+        bookmark()
+        checkBookmarked()
 
         // Load a different page in a new tab
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Tab")
 
         tester().tapViewWithAccessibilityIdentifier("url")
         let url2 = "\(webRoot)/numberedPage.html?page=2"
@@ -37,36 +58,33 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
 
         // Check that the bookmark button is no longer selected
-        XCTAssertFalse(bookmarkButton.selected, "Bookmark button is not marked selected")
+        checkUnbookmarked()
 
         // Now switch back to the original tab
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Page 1")
-        XCTAssertTrue(bookmarkButton.selected, "Bookmark button is marked selected")
+        checkBookmarked()
 
         // Check that it appears in the bookmarks home panel
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("Bookmarks")
+        tester().waitForViewWithAccessibilityLabel("Page 1")
 
         // Tap to open it
         tester().tapViewWithAccessibilityLabel("Page 1")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Unbookmark it using the bookmark button
-        tester().tapViewWithAccessibilityLabel("Bookmark")
-        XCTAssertFalse(bookmarkButton.selected, "Bookmark button is not selected")
+        unbookmark()
+        checkUnbookmarked()
 
         // Check that it no longer appears in the bookmarks home panel
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("Bookmarks")
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Page 1")
-
-        // The "default" bookmarks (suggested sites) should now show here.
-        tester().waitForViewWithAccessibilityLabel("The Mozilla Project")
-        tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
-    func testChangingDyamicFontOnBookmarks() {
+    func testChangingDynamicFontOnBookmarks() {
         DynamicFontUtils.restoreDynamicFontSize(tester())
 
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -94,9 +112,8 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel("This page has no title")
 
         // Bookmark it using the bookmark button
-        tester().tapViewWithAccessibilityLabel("Bookmark")
-        let bookmarkButton = tester().waitForViewWithAccessibilityLabel("Bookmark") as! UIButton
-        XCTAssertTrue(bookmarkButton.selected, "Bookmark button is marked selected")
+        bookmark()
+        checkBookmarked()
 
         // Check that its row in the bookmarks panel has a url instead of a title
         tester().tapViewWithAccessibilityIdentifier("url")

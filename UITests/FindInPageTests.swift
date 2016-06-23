@@ -82,7 +82,13 @@ class FindInPageTests: KIFTestCase {
         // Make the selection menu appear. To keep things simple, the page has absolutely
         // positioned text at the top-left corner.
         webView.longPressAtPoint(CGPointZero, duration: FindInPageTests.LongPressDuration)
-        webView.tapAtPoint(CGPointZero)
+
+        // For some reason, we sometimes have to tap the selection
+        // to make the selection menu appear.
+        if !tester().viewExistsWithLabel("Find in Page") {
+            webView.tapAtPoint(CGPointZero)
+        }
+
         tester().tapViewWithAccessibilityLabel("Find in Page")
         tester().waitForViewWithAccessibilityValue("nullam")
     }
@@ -93,5 +99,18 @@ class FindInPageTests: KIFTestCase {
 
     private func clickFindPrevious() {
         tester().tapViewWithAccessibilityLabel("Previous in-page result")
+    }
+
+    func testOpenFindInPageFromMenu() {
+        let testURL = "\(webRoot)/findPage.html"
+
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(testURL)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("nullam")
+
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("Find In Page")
+        XCTAssertTrue(tester().viewExistsWithLabel("Done"))
+        tester().tapViewWithAccessibilityLabel("Done")
     }
 }

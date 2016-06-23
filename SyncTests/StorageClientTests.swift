@@ -8,8 +8,29 @@ import Shared
 
 import XCTest
 
-class StorageClientTests: XCTestCase {
+// Always return a gigantic encoded payload.
+func massivify(record: Record<CleartextPayloadJSON>) -> JSON? {
+    return JSON([
+        "id": record.id,
+        "foo": String(count: Sync15StorageClient.maxRecordSizeBytes + 1, repeatedValue: "X" as Character)
+    ])
+}
 
+private class MockBackoffStorage: BackoffStorage {
+    var serverBackoffUntilLocalTimestamp: Timestamp? { get { return 0 } set(value) {} }
+
+    func clearServerBackoff() {
+    }
+
+    func isInBackoff(now: Timestamp) -> Timestamp? {
+        return nil
+    }
+
+    init() {
+    }
+}
+
+class StorageClientTests: XCTestCase {
     func testPartialJSON() {
         let body = "0"
         let o: AnyObject? = try! NSJSONSerialization.JSONObjectWithData(body.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments)
@@ -22,15 +43,15 @@ class StorageClientTests: XCTestCase {
             "\"modified\": 1233702554.25," +
             "\"success\": [\"GXS58IDC_12\", \"GXS58IDC_13\", \"GXS58IDC_15\"," +
             "\"GXS58IDC_16\", \"GXS58IDC_18\", \"GXS58IDC_19\"]," +
-            "\"failed\": {\"GXS58IDC_11\": [\"invalid ttl\"]," +
-            "\"GXS58IDC_14\": [\"invalid sortindex\"]}" +
+            "\"failed\": {\"GXS58IDC_11\": \"invalid ttl\"," +
+            "\"GXS58IDC_14\": \"invalid sortindex\"}" +
         "}"
 
         let p = POSTResult.fromJSON(JSON.parse(r))
         XCTAssertTrue(p != nil)
         XCTAssertEqual(p!.modified, 1233702554250)
         XCTAssertEqual(p!.success[0], "GXS58IDC_12")
-        XCTAssertEqual(p!.failed["GXS58IDC_14"]![0], "invalid sortindex")
+        XCTAssertEqual(p!.failed["GXS58IDC_14"]!, "invalid sortindex")
 
         XCTAssertTrue(nil == POSTResult.fromJSON(JSON.parse("{\"foo\": 5}")))
     }
@@ -79,5 +100,24 @@ class StorageClientTests: XCTestCase {
         }
 
         doTesting(x)
+    }
+
+    func testOverSizeRecords() {
+        let delegate = MockSyncDelegate()
+
+        // We can use these useless values because we're directly injecting decrypted
+        // payloads; no need for real keys etc.
+        let prefs = MockProfilePrefs()
+        let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+
+        let synchronizer = IndependentRecordSynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs, collection: "foo")
+        let jA = "{\"id\":\"aaaaaa\",\"histUri\":\"http://foo.com/\",\"title\": \"ñ\",\"visits\":[{\"date\":1222222222222222,\"type\":1}]}"
+        let rA = Record<CleartextPayloadJSON>(id: "aaaaaa", payload: CleartextPayloadJSON(JSON.parse(jA)), modified: 10000, sortindex: 123, ttl: 1000000)
+
+        let storageClient = Sync15StorageClient(serverURI: "http://example.com/".asURL!, authorizer: identity, workQueue: dispatch_get_main_queue(), resultQueue: dispatch_get_main_queue(), backoff: MockBackoffStorage())
+        let collectionClient = storageClient.clientForCollection("foo", encrypter: RecordEncrypter<CleartextPayloadJSON>(serializer: massivify, factory: { CleartextPayloadJSON($0) }))
+        let result = synchronizer.uploadRecordsInChunks([rA], lastTimestamp: NSDate.now(), storageClient: collectionClient, onUpload: { _ in deferMaybe(NSDate.now()) })
+
+        XCTAssertTrue(result.value.failureValue is RecordTooLargeError)
     }
 }

@@ -8,26 +8,26 @@ import Shared
 
 import XCTest
 
-func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
+func compareScratchpads(tuple: (lhs: Scratchpad, rhs: Scratchpad)) {
     // This one is set in the constructor!
-    XCTAssertEqual(lhs.syncKeyBundle, rhs.syncKeyBundle)
+    XCTAssertEqual(tuple.lhs.syncKeyBundle, tuple.rhs.syncKeyBundle)
 
-    XCTAssertEqual(lhs.clientName, rhs.clientName)
-    XCTAssertEqual(lhs.clientGUID, rhs.clientGUID)
-    if let lkeys = lhs.keys {
-        if let rkeys = rhs.keys {
+    XCTAssertEqual(tuple.lhs.clientName, tuple.rhs.clientName)
+    XCTAssertEqual(tuple.lhs.clientGUID, tuple.rhs.clientGUID)
+    if let lkeys = tuple.lhs.keys {
+        if let rkeys = tuple.rhs.keys {
             XCTAssertEqual(lkeys.timestamp, rkeys.timestamp)
             XCTAssertEqual(lkeys.value, rkeys.value)
         } else {
-            XCTAssertTrue(rhs.keys != nil)
+            XCTAssertTrue(tuple.rhs.keys != nil)
         }
     } else {
-        XCTAssertTrue(rhs.keys == nil)
+        XCTAssertTrue(tuple.rhs.keys == nil)
     }
 
-    XCTAssertTrue(lhs.global == rhs.global)
-    XCTAssertEqual(lhs.localCommands, rhs.localCommands)
-    XCTAssertEqual(lhs.engineConfiguration, rhs.engineConfiguration)
+    XCTAssertTrue(tuple.lhs.global == tuple.rhs.global)
+    XCTAssertEqual(tuple.lhs.localCommands, tuple.rhs.localCommands)
+    XCTAssertEqual(tuple.lhs.engineConfiguration, tuple.rhs.engineConfiguration)
 }
 
 func roundtrip(s: Scratchpad) -> (Scratchpad, rhs: Scratchpad) {

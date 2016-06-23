@@ -2,15 +2,15 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include "BaseConfig.xcconfig"
-
 MOZ_BUNDLE_DISPLAY_NAME = Firefox
 
-MOZ_PRODUCT_NAME = Firefox
+// Bundle Identifier
+MOZ_BUNDLE_ID = org.mozilla.ios.Firefox
 
-MOZ_RELEASE_CHANNEL = release
+// Flag to indicate if we want to include the debug settings bundle or not
+INCLUDE_SETTINGS_BUNDLE = NO
 
+// Adjust SDK Variables
 ADJUST_ENVIRONMENT =
-ADJUST_APP_TOKEN =
 
-INCLUDE_SETTINGS_BUNDLE = YES
+ADJUST_APP_TOKEN =

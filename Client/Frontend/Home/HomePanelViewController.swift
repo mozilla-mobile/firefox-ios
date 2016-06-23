@@ -38,7 +38,24 @@ protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
+    func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
+}
+
+struct HomePanelState {
+    var isPrivate: Bool = false
+    var selectedIndex: Int = 0
+}
+
+enum HomePanelType: Int {
+    case TopSites = 0
+    case Bookmarks = 1
+    case History = 2
+    case ReadingList = 3
+
+    var localhostURL: NSURL {
+        return NSURL(string:"#panel=\(self.rawValue)", relativeToURL: UIConstants.AboutHomePage)!
+    }
 }
 
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
@@ -47,6 +64,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     var panels: [HomePanelDescriptor]!
     var url: NSURL?
     weak var delegate: HomePanelViewControllerDelegate?
+    weak var appStateDelegate: AppStateDelegate?
 
     private var buttonContainerView: UIView!
     private var buttonContainerBottomBorderView: UIView!
@@ -55,6 +73,18 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     private var finishEditingButton: UIButton?
     private var editingPanel: HomePanel?
+
+    var isPrivateMode: Bool = false {
+        didSet {
+            if oldValue != isPrivateMode {
+                self.updateAppState()
+            }
+        }
+    }
+
+    var homePanelState: HomePanelState {
+        return HomePanelState(isPrivate: isPrivateMode, selectedIndex: selectedPanel?.rawValue ?? 0)
+    }
 
     override func viewDidLoad() {
         view.backgroundColor = HomePanelViewControllerUX.BackgroundColor
@@ -102,23 +132,28 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         updateButtons()
 
         // Gesture recognizer to dismiss the keyboard in the URLBarView when the buttonContainerView is tapped
-        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELhandleDismissKeyboardGestureRecognizer:")
+        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HomePanelViewController.SELhandleDismissKeyboardGestureRecognizer(_:)))
         dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
+    }
+
+    private func updateAppState() {
+        let state = mainStore.updateState(.HomePanels(homePanelState: homePanelState))
+        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     func SELhandleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
         view.window?.rootViewController?.view.endEditing(true)
     }
 
-    var selectedButtonIndex: Int? = nil {
+    var selectedPanel: HomePanelType? = nil {
         didSet {
-            if oldValue == selectedButtonIndex {
+            if oldValue == selectedPanel {
                 // Prevent flicker, allocations, and disk access: avoid duplicate view controllers.
                 return
             }
 
-            if let index = oldValue {
+            if let index = oldValue?.rawValue {
                 if index < buttons.count {
                     let currentButton = buttons[index]
                     currentButton.selected = false
@@ -127,7 +162,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
             hideCurrentPanel()
 
-            if let index = selectedButtonIndex {
+            if let index = selectedPanel?.rawValue {
                 if index < buttons.count {
                     let newButton = buttons[index]
                     newButton.selected = true
@@ -137,7 +172,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                     let panel = self.panels[index].makeViewController(profile: profile)
                     let accessibilityLabel = self.panels[index].accessibilityLabel
                     if let panelController = panel as? UINavigationController,
-                     let rootPanel = panelController.viewControllers.first {
+                        let rootPanel = panelController.viewControllers.first {
                         setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
                         self.showPanel(panelController)
                     } else {
@@ -146,6 +181,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                     }
                 }
             }
+            self.updateAppState()
         }
     }
 
@@ -180,7 +216,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func SELtappedButton(sender: UIButton!) {
         for (index, button) in buttons.enumerate() {
             if (button == sender) {
-                selectedButtonIndex = index
+                selectedPanel = HomePanelType(rawValue: index)
                 delegate?.homePanelViewController(self, didSelectPanel: index)
                 break
             }
@@ -204,7 +240,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         for panel in panels {
             let button = UIButton()
             buttonContainerView.addSubview(button)
-            button.addTarget(self, action: "SELtappedButton:", forControlEvents: UIControlEvents.TouchUpInside)
+            button.addTarget(self, action: #selector(HomePanelViewController.SELtappedButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             if let image = UIImage(named: "panelIcon\(panel.imageName)") {
                 button.setImage(image, forState: UIControlState.Normal)
             }
@@ -212,6 +248,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 button.setImage(image, forState: UIControlState.Selected)
             }
             button.accessibilityLabel = panel.accessibilityLabel
+            button.accessibilityIdentifier = panel.accessibilityIdentifier
             buttons.append(button)
 
             button.snp_remakeConstraints { make in
@@ -223,6 +260,22 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
             prev = button
         }
+    }
+
+    func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType) {
+        // If we can't get a real URL out of what should be a URL, we let the user's
+        // default search engine give it a shot.
+        // Typically we'll be in this state if the user has tapped a bookmarked search template
+        // (e.g., "http://foo.com/bar/?query=%s"), and this will get them the same behavior as if
+        // they'd copied and pasted into the URL bar.
+        // See BrowserViewController.urlBar:didSubmitText:.
+        guard let url = URIFixup.getURL(url) ??
+                        profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
+            Logger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
+            return
+        }
+
+        return self.homePanel(homePanel, didSelectURL: url, visitType: visitType)
     }
 
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType) {
@@ -250,7 +303,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         if editing {
             let button = UIButton(type: UIButtonType.System)
             button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), forState: UIControlState.Normal)
-            button.addTarget(self, action: "endEditing:", forControlEvents: UIControlEvents.TouchUpInside)
+            button.addTarget(self, action: #selector(HomePanelViewController.endEditing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             button.transform = translateDown
             button.titleLabel?.textAlignment = .Right
             self.buttonContainerView.addSubview(button)

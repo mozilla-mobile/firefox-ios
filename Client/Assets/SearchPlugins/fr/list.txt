@@ -1,7 +1,0 @@
-bing
-duckduckgo
-eBay-france
-google
-twitter
-wikipedia-fr
-yahoo-france

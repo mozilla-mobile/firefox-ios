@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Alamofire
 import Foundation
 import Account
 import ReadingList
@@ -18,9 +19,44 @@ public let NotificationProfileDidStartSyncing = "NotificationProfileDidStartSync
 public let NotificationProfileDidFinishSyncing = "NotificationProfileDidFinishSyncing"
 public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
+public enum SyncDisplayState {
+    case InProgress
+    case Good
+    case Bad(message: String?)
+    case Stale(message: String)
+
+    func asObject() -> [String: String]? {
+        switch self {
+        case .Bad(let msg):
+            guard let message = msg else {
+                return ["state": "Error"]
+            }
+            return ["state": "Error",
+                    "message": message]
+        case .Stale(let message):
+            return ["state": "Warning",
+                    "message": message]
+        default:
+            break
+        }
+        return nil
+    }
+}
+
+public func ==(a: SyncDisplayState, b: SyncDisplayState) -> Bool {
+    switch (a, b) {
+    case (.InProgress,   .InProgress): return true
+    case (.Good,   .Good): return true
+    case (.Bad(let a), .Bad(let b)) where a == b: return true
+    case (.Stale(let a), .Stale(let b)) where a == b: return true
+    default: return false
+    }
+}
+
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
+    var syncDisplayState: SyncDisplayState? { get }
 
     func hasSyncedHistory() -> Deferred<Maybe<Bool>>
     func hasSyncedLogins() -> Deferred<Maybe<Bool>>
@@ -44,6 +80,7 @@ public protocol SyncManager {
 
 typealias EngineIdentifier = String
 typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
+private typealias EngineStatus = (EngineIdentifier, SyncStatus)
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -132,7 +169,7 @@ class BrowserProfileSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: class {
-    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> { get }
+    var bookmarks: protocol<BookmarksModelFactorySource, ShareToDestination, SyncableBookmarks, LocalItemSource, MirrorItemSource> { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
@@ -142,6 +179,8 @@ protocol Profile: class {
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
     var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
+    var certStore: CertStore { get }
+    var recentlyClosedTabs: ClosedTabsStore { get }
 
     func shutdown()
 
@@ -203,9 +242,9 @@ public class BrowserProfile: Profile {
         }
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: NotificationOnLocationChange, object: nil)
-        notificationCenter.addObserver(self, selector: Selector("onProfileDidFinishSyncing:"), name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.addObserver(self, selector: Selector("onPrivateDataClearedHistory:"), name: NotificationPrivateDataClearedHistory, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onLocationChange(_:)), name: NotificationOnLocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onProfileDidFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPrivateDataClearedHistory(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
 
 
         if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
@@ -219,6 +258,7 @@ public class BrowserProfile: Profile {
             log.info("New profile. Removing old account metadata.")
             self.removeAccountMetadata()
             self.syncManager.onNewProfile()
+            self.removeExistingAuthenticationInfo()
             prefs.clearAll()
         }
 
@@ -226,6 +266,24 @@ public class BrowserProfile: Profile {
         // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+
+
+        if isChinaEdition {
+            // On first run, set the Home button to be in the toolbar.
+            if prefs.boolForKey(PrefsKeys.KeyHomePageButtonIsInMenu) == nil {
+                prefs.setBool(false, forKey: PrefsKeys.KeyHomePageButtonIsInMenu)
+            }
+            // Set the default homepage.
+            prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
+
+            if prefs.stringForKey(PrefsKeys.KeyNewTab) == nil {
+                prefs.setString(PrefsDefaults.ChineseNewTabDefault, forKey: PrefsKeys.KeyNewTab)
+            }
+        } else {
+            // Remove the default homepage. This does not change the user's preference,
+            // just the behaviour when there is no homepage.
+            prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
+        }
     }
 
     // Extensions don't have a UIApplication.
@@ -327,7 +385,7 @@ public class BrowserProfile: Profile {
         return self.places
     }
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage, AccountRemovalDelegate> = {
+    lazy var bookmarks: protocol<BookmarksModelFactorySource, ShareToDestination, SyncableBookmarks, LocalItemSource, MirrorItemSource> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         withExtendedLifetime(self.places) {
@@ -335,13 +393,13 @@ public class BrowserProfile: Profile {
         }
     }()
 
-    lazy var mirrorBookmarks: BookmarkMirrorStorage = {
+    lazy var mirrorBookmarks: protocol<BookmarkBufferStorage, BufferItemSource> = {
         // Yeah, this is lazy. Sorry.
         return self.bookmarks as! MergedSQLiteBookmarks
     }()
 
     lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs)
+        return SearchEngines(prefs: self.prefs, files: self.files)
     }()
 
     func makePrefs() -> Prefs {
@@ -362,6 +420,14 @@ public class BrowserProfile: Profile {
 
     lazy var syncManager: SyncManager = {
         return BrowserSyncManager(profile: self)
+    }()
+
+    lazy var certStore: CertStore = {
+        return CertStore()
+    }()
+
+    lazy var recentlyClosedTabs: ClosedTabsStore = {
+        return ClosedTabsStore(prefs: self.prefs)
     }()
 
     private func getSyncDelegate() -> SyncDelegate {
@@ -436,9 +502,13 @@ public class BrowserProfile: Profile {
         return Singleton.instance
     }()
 
-    var accountConfiguration: FirefoxAccountConfiguration {
+    var isChinaEdition: Bool {
         let locale = NSLocale.currentLocale()
-        if self.prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN") {
+        return prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN")
+    }
+
+    var accountConfiguration: FirefoxAccountConfiguration {
+        if isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()
@@ -468,6 +538,10 @@ public class BrowserProfile: Profile {
         KeychainWrapper.removeObjectForKey(self.name + ".account")
     }
 
+    func removeExistingAuthenticationInfo() {
+        KeychainWrapper.setAuthenticationInfo(nil)
+    }
+
     func removeAccount() {
         let old = self.account
         removeAccountMetadata()
@@ -492,7 +566,8 @@ public class BrowserProfile: Profile {
         registerForNotifications()
         
         // tell any observers that our account has changed
-        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
+        let userInfo = [NotificationUserInfoKeyHasSyncableAccount: hasSyncableAccount()]
+        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
 
         self.syncManager.onAddedAccount()
     }
@@ -553,7 +628,7 @@ public class BrowserProfile: Profile {
         func applicationDidBecomeActive() {
             self.backgrounded = false
 
-            guard self.profile.hasAccount() else {
+            guard self.profile.hasSyncableAccount() else {
                 return
             }
 
@@ -562,6 +637,11 @@ public class BrowserProfile: Profile {
             // Sync now if it's been more than our threshold.
             let now = NSDate.now()
             let then = self.lastSyncFinishTime ?? 0
+            guard now >= then else {
+                log.debug("Time was modified since last sync.")
+                self.syncEverythingSoon()
+                return
+            }
             let since = now - then
             log.debug("\(since)msec since last sync.")
             if since > SyncConstants.SyncOnForegroundMinimumDelayMillis {
@@ -570,28 +650,110 @@ public class BrowserProfile: Profile {
         }
 
         /**
-         * Locking is managed by withSyncInputs. Make sure you take and release these
+         * Locking is managed by syncSeveral. Make sure you take and release these
          * whenever you do anything Sync-ey.
          */
-        var syncLock = OSSpinLock() {
-            didSet {
-                let notification = syncLock == 0 ? NotificationProfileDidFinishSyncing : NotificationProfileDidStartSyncing
-                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: nil))
-            }
-        }
+        private let syncLock = NSRecursiveLock()
 
-        // According to the OSAtomic header documentation, the convention for an unlocked lock is a zero value
-        // and a locked lock is a non-zero value
         var isSyncing: Bool {
-            return syncLock != 0
+            syncLock.lock()
+            defer { syncLock.unlock() }
+            return syncDisplayState != nil && syncDisplayState! == .InProgress
         }
 
-        private func beginSyncing() -> Bool {
-            return OSSpinLockTry(&syncLock)
+        var syncDisplayState: SyncDisplayState?
+
+        // The dispatch queue for coordinating syncing and resetting the database.
+        private let syncQueue = dispatch_queue_create("com.mozilla.firefox.sync", DISPATCH_QUEUE_SERIAL)
+
+        private typealias EngineResults = [(EngineIdentifier, SyncStatus)]
+        private typealias EngineTasks = [(EngineIdentifier, SyncFunction)]
+
+        // Used as a task queue for syncing.
+        private var syncReducer: AsyncReducer<EngineResults, EngineTasks>?
+
+        private func beginSyncing() {
+            notifySyncing(NotificationProfileDidStartSyncing)
         }
 
-        private func endSyncing() {
-            OSSpinLockUnlock(&syncLock)
+        private func endSyncing(result: Maybe<EngineResults>?) {
+            // loop through status's and fill sync state
+            syncLock.lock()
+            defer { syncLock.unlock() }
+            log.info("Ending all queued syncs.")
+            syncDisplayState = displayStateForEngineResults(result)
+            reportEndSyncingStatus(syncDisplayState, engineResults: result)
+            notifySyncing(NotificationProfileDidFinishSyncing)
+            syncReducer = nil
+        }
+
+        private func reportEndSyncingStatus(displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {
+            // We don't send this ad hoc telemetry on the release channel.
+            guard AppConstants.BuildChannel != AppBuildChannel.Release else {
+                return
+            }
+
+            guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
+                log.debug("Profile isn't sending usage data. Not sending sync status event.")
+                return
+            }
+
+            guard let displayState = displayState else {
+                log.debug("Sync display state not set!. Not sending sync status event.")
+                return
+            }
+
+            self.doInBackgroundAfter(millis: 300) {
+                self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
+                    // We would love to include the version and OS etc. of each remote client,
+                    // but we don't store that information. For now, just do a count.
+                    let clientCount = clients.count
+
+                    let id = DeviceInfo.clientIdentifier(self.prefs)
+
+                    var engineResultsDict: [String: String]? = nil
+                    if let results = engineResults?.successValue {
+                        engineResultsDict = [:]
+                        results.forEach { (engineIdentifier, syncStatus) in
+                            engineResultsDict![engineIdentifier] = syncStatus.description
+                        }
+                    }
+
+                    let engineResultsFailure = engineResults?.failureValue
+
+                    let ping = makeAdHocSyncStatusPing(
+                        NSBundle.mainBundle(),
+                        clientID: id,
+                        statusObject: displayState.asObject(),
+                        engineResults: engineResultsDict,
+                        resultsFailure: engineResultsFailure,
+                        clientCount: clientCount
+                    )
+
+                    let payload = ping.toString()
+
+                    log.debug("Payload is: \(payload)")
+                    guard let body = payload.dataUsingEncoding(NSUTF8StringEncoding) else {
+                        log.debug("Invalid JSON!")
+                        return
+                    }
+
+                    let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/syncstatus".asURL!
+                    let request = NSMutableURLRequest(URL: url)
+                    request.HTTPMethod = "POST"
+                    request.HTTPBody = body
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                    Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
+                        log.debug("Sync Status upload response: \(response?.statusCode ?? -1).")
+                    }
+                }
+            }
+
+        }
+
+        private func notifySyncing(notification: String) {
+            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: syncDisplayState?.asObject()))
         }
 
         init(profile: BrowserProfile) {
@@ -601,9 +763,62 @@ public class BrowserProfile: Profile {
             super.init()
 
             let center = NSNotificationCenter.defaultCenter()
-            center.addObserver(self, selector: "onDatabaseWasRecreated:", name: NotificationDatabaseWasRecreated, object: nil)
-            center.addObserver(self, selector: "onLoginDidChange:", name: NotificationDataLoginDidChange, object: nil)
-            center.addObserver(self, selector: "onFinishSyncing:", name: NotificationProfileDidFinishSyncing, object: nil)
+            center.addObserver(self, selector: #selector(BrowserSyncManager.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
+            center.addObserver(self, selector: #selector(BrowserSyncManager.onLoginDidChange(_:)), name: NotificationDataLoginDidChange, object: nil)
+            center.addObserver(self, selector: #selector(BrowserSyncManager.onStartSyncing(_:)), name: NotificationProfileDidStartSyncing, object: nil)
+            center.addObserver(self, selector: #selector(BrowserSyncManager.onFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
+            center.addObserver(self, selector: #selector(BrowserSyncManager.onBookmarkBufferValidated(_:)), name: NotificationBookmarkBufferValidated, object: nil)
+        }
+
+        func onBookmarkBufferValidated(notification: NSNotification) {
+            // We don't send this ad hoc telemetry on the release channel.
+            guard AppConstants.BuildChannel != AppBuildChannel.Release else {
+                return
+            }
+
+            guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
+                log.debug("Profile isn't sending usage data. Not sending bookmark event.")
+                return
+            }
+
+            guard let validations = (notification.object as? Box<[String: Bool]>)?.value else {
+                log.warning("Notification didn't have validations.")
+                return
+            }
+
+            let attempt: Int32 = self.prefs.intForKey("bookmarkvalidationattempt") ?? 1
+            self.prefs.setInt(attempt + 1, forKey: "bookmarkvalidationattempt")
+
+            // Capture the buffer count ASAP, not in the delayed op, because the merge could wipe it!
+            let bufferRows = (self.profile.bookmarks as? MergedSQLiteBookmarks)?.synchronousBufferCount()
+
+            self.doInBackgroundAfter(millis: 300) {
+                self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
+                    // We would love to include the version and OS etc. of each remote client,
+                    // but we don't store that information. For now, just do a count.
+                    let clientCount = clients.count
+
+                    let id = DeviceInfo.clientIdentifier(self.prefs)
+                    let ping = makeAdHocBookmarkMergePing(NSBundle.mainBundle(), clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations, clientCount: clientCount)
+                    let payload = ping.toString()
+
+                    log.debug("Payload is: \(payload)")
+                    guard let body = payload.dataUsingEncoding(NSUTF8StringEncoding) else {
+                        log.debug("Invalid JSON!")
+                        return
+                    }
+
+                    let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation".asURL!
+                    let request = NSMutableURLRequest(URL: url)
+                    request.HTTPMethod = "POST"
+                    request.HTTPBody = body
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                    Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
+                        log.debug("Bookmark validation upload response: \(response?.statusCode ?? -1).")
+                    }
+                }
+            }
         }
 
         deinit {
@@ -611,7 +826,9 @@ public class BrowserProfile: Profile {
             let center = NSNotificationCenter.defaultCenter()
             center.removeObserver(self, name: NotificationDatabaseWasRecreated, object: nil)
             center.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
+            center.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
             center.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+            center.removeObserver(self, name: NotificationBookmarkBufferValidated, object: nil)
         }
 
         private func handleRecreationOfDatabaseNamed(name: String?) -> Success {
@@ -646,12 +863,27 @@ public class BrowserProfile: Profile {
 
             // We run this in the background after a few hundred milliseconds;
             // it doesn't really matter when it runs, so long as it doesn't
-            // happen in the middle of a sync. We take the lock to prevent that.
+            // happen in the middle of a sync.
+
+            let resetDatabase = {
+                return self.handleRecreationOfDatabaseNamed(name) >>== {
+                    log.debug("Reset of \(name) done")
+                }
+            }
+
             self.doInBackgroundAfter(millis: 300) {
-                OSSpinLockLock(&self.syncLock)
-                self.handleRecreationOfDatabaseNamed(name).upon { res in
-                    log.debug("Reset of \(name) done: \(res.isSuccess)")
-                    OSSpinLockUnlock(&self.syncLock)
+                self.syncLock.lock()
+                defer { self.syncLock.unlock() }
+                // If we're syncing already, then wait for sync to end, 
+                // then reset the database on the same serial queue.
+                if let reducer = self.syncReducer where !reducer.isFilled {
+                    reducer.terminal.upon { _ in
+                        dispatch_async(self.syncQueue, resetDatabase)
+                    }
+                } else {
+                    // Otherwise, reset the database on the sync queue now
+                    // Sync can't start while this is still going on.
+                    dispatch_async(self.syncQueue, resetDatabase)
                 }
             }
         }
@@ -690,8 +922,56 @@ public class BrowserProfile: Profile {
             }
         }
 
+        @objc func onStartSyncing(notification: NSNotification) {
+            syncLock.lock()
+            defer { syncLock.unlock() }
+            syncDisplayState = .InProgress
+        }
+
         @objc func onFinishSyncing(notification: NSNotification) {
-            self.lastSyncFinishTime = NSDate.now()
+            syncLock.lock()
+            defer { syncLock.unlock() }
+            if let syncState = syncDisplayState where syncState == .Good {
+                self.lastSyncFinishTime = NSDate.now()
+            }
+        }
+
+        private func displayStateForEngineResults(result: Maybe<EngineResults>?) -> SyncDisplayState {
+            guard let result = result else {
+                return .Good
+            }
+            guard let results = result.successValue else {
+                guard let _ = result.failureValue as? BookmarksMergeError else {
+                    return SyncDisplayState.Bad(message: nil)
+                }
+                return SyncDisplayState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
+            }
+            let errorResults: [SyncDisplayState]? = results.flatMap { identifier, status in
+                let displayState = self.displayStateForSyncState(status, identifier: identifier)
+                return displayState == .Good ? nil : displayState
+            }
+            return errorResults?.first ?? .Good
+        }
+
+        private func displayStateForSyncState(syncStatus: SyncStatus, identifier: String? = nil) -> SyncDisplayState {
+            switch syncStatus {
+            case .Completed:
+                return SyncDisplayState.Good
+            case .NotStarted(let reason):
+                let message: String
+                switch reason {
+                case .Offline:
+                    message = Strings.FirefoxSyncOfflineTitle
+                default:
+                    message = Strings.FirefoxSyncNotStartedTitle
+                }
+                return SyncDisplayState.Stale(message: message)
+            case .Partial:
+                if let identifier = identifier {
+                    return SyncDisplayState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent(identifier) ?? ""))
+                }
+                return SyncDisplayState.Stale(message: Strings.FirefoxSyncNotStartedTitle)
+            }
         }
 
         var prefsForSync: Prefs {
@@ -699,6 +979,9 @@ public class BrowserProfile: Profile {
         }
 
         func onAddedAccount() -> Success {
+            // Only sync if we're green lit. This makes sure that we don't sync unverified accounts.
+            guard self.profile.hasSyncableAccount() else { return succeed() }
+
             self.beginTimedSyncs();
             return self.syncEverything()
         }
@@ -710,7 +993,7 @@ public class BrowserProfile: Profile {
         func locallyResetCollection(collection: String) -> Success {
             switch collection {
             case "bookmarks":
-                return MirroringBookmarksSynchronizer.resetSynchronizerWithStorage(self.profile.bookmarks, basePrefs: self.prefsForSync, collection: "bookmarks")
+                return BufferingBookmarksSynchronizer.resetSynchronizerWithStorage(self.profile.bookmarks, basePrefs: self.prefsForSync, collection: "bookmarks")
 
             case "clients":
                 fallthrough
@@ -781,7 +1064,7 @@ public class BrowserProfile: Profile {
             }
 
             let interval = FifteenMinutes
-            let selector = Selector("syncOnTimer")
+            let selector = #selector(BrowserSyncManager.syncOnTimer)
             log.debug("Starting sync timer.")
             self.syncTimer = repeatingTimerAtInterval(interval, selector: selector)
         }
@@ -823,9 +1106,9 @@ public class BrowserProfile: Profile {
         }
 
         private func mirrorBookmarksWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
-            log.debug("Mirroring server bookmarks to storage.")
-            let bookmarksMirrorer = ready.synchronizer(MirroringBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
-            return bookmarksMirrorer.mirrorBookmarksToStorage(self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
+            log.debug("Synchronizing server bookmarks to storage.")
+            let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
+            return bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
         func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {
@@ -852,64 +1135,92 @@ public class BrowserProfile: Profile {
         }
 
         /**
-         * Returns nil if there's no account.
+         * Runs the single provided synchronization function and returns its status.
          */
-        private func withSyncInputs<T>(label: EngineIdentifier? = nil, function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<T>>) -> Deferred<Maybe<T>>? {
-            if let account = profile.account {
-                if !beginSyncing() {
-                    log.info("Not syncing \(label); already syncing something.")
-                    return deferMaybe(AlreadySyncingError())
-                }
-
-                if let label = label {
-                    log.info("Syncing \(label).")
-                }
-
-                let authState = account.syncAuthState
-
-                let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
-                let delegate = profile.getSyncDelegate()
-
-                let go = readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
-                    function(delegate, self.prefsForSync, ready)
-                }
-
-                // Always unlock when we're done.
-                go.upon({ res in self.endSyncing() })
-
-                return go
+        private func sync(label: EngineIdentifier, function: SyncFunction) -> SyncResult {
+            return syncSeveral([(label, function)]) >>== { statuses in
+                let status = statuses.find { label == $0.0 }?.1
+                return deferMaybe(status ?? .NotStarted(.Unknown))
             }
-
-            log.warning("No account; can't sync.")
-            return nil
         }
 
         /**
-         * Runs the single provided synchronization function and returns its status.
+         * Convenience method for syncSeveral([(EngineIdentifier, SyncFunction)])
          */
-        private func sync(label: EngineIdentifier, function: (SyncDelegate, Prefs, Ready) -> SyncResult) -> SyncResult {
-            return self.withSyncInputs(label, function: function) ??
-                   deferMaybe(.NotStarted(.NoAccount))
+        private func syncSeveral(synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+            return syncSeveral(synchronizers)
         }
 
         /**
          * Runs each of the provided synchronization functions with the same inputs.
-         * Returns an array of IDs and SyncStatuses the same length as the input.
+         * Returns an array of IDs and SyncStatuses at least length as the input. 
+         * The statuses returned will be a superset of the ones that are requested here.
+         * While a sync is ongoing, each engine from successive calls to this method will only be called once.
          */
-        private func syncSeveral(synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
-            typealias Pair = (EngineIdentifier, SyncStatus)
-            let combined: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[Pair]>> = { delegate, syncPrefs, ready in
+        private func syncSeveral(synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+            syncLock.lock()
+            defer { syncLock.unlock() }
+
+            if (!isSyncing) {
+                // A sync isn't already going on, so start another one.
+                let reducer = AsyncReducer<EngineResults, EngineTasks>(initialValue: [], queue: syncQueue) { (statuses, synchronizers)  in
+                    let done = Set(statuses.map { $0.0 })
+                    let remaining = synchronizers.filter { !done.contains($0.0) }
+                    if remaining.isEmpty {
+                        log.info("Nothing left to sync")
+                        return deferMaybe(statuses)
+                    }
+
+                    return self.syncWith(remaining) >>== { deferMaybe(statuses + $0) }
+                }
+
+                reducer.terminal.upon(self.endSyncing)
+
+                // The actual work of synchronizing doesn't start until we append
+                // the synchronizers to the reducer below.
+                self.syncReducer = reducer
+                self.beginSyncing()
+            }
+
+            do {
+                return try syncReducer!.append(synchronizers)
+            } catch let error {
+                log.error("Synchronizers appended after sync was finished. This is a bug. \(error)")
+                let statuses = synchronizers.map {
+                    ($0.0, SyncStatus.NotStarted(.Unknown))
+                }
+                return deferMaybe(statuses)
+            }
+        }
+
+        // This SHOULD NOT be called directly: use syncSeveral instead.
+        private func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+            guard let account = self.profile.account else {
+                log.info("No account to sync with.")
+                let statuses = synchronizers.map {
+                    ($0.0, SyncStatus.NotStarted(.NoAccount))
+                }
+                return deferMaybe(statuses)
+            }
+
+            log.info("Syncing \(synchronizers.map { $0.0 })")
+            let authState = account.syncAuthState
+            let delegate = self.profile.getSyncDelegate()
+            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
+
+            let function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = { delegate, syncPrefs, ready in
                 let thunks = synchronizers.map { (i, f) in
-                    return { () -> Deferred<Maybe<Pair>> in
+                    return { () -> Deferred<Maybe<EngineStatus>> in
                         log.debug("Syncing \(i)…")
                         return f(delegate, syncPrefs, ready) >>== { deferMaybe((i, $0)) }
                     }
                 }
                 return accumulate(thunks)
             }
-
-            return self.withSyncInputs(nil, function: combined) ??
-                   deferMaybe(synchronizers.map { ($0.0, .NotStarted(.NoAccount)) })
+            
+            return readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
+                function(delegate, self.prefsForSync, ready)
+            }
         }
 
         func syncEverything() -> Success {
@@ -951,8 +1262,8 @@ public class BrowserProfile: Profile {
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate)
             ) >>== { statuses in
-                let tabsStatus = statuses[1].1
-                return deferMaybe(tabsStatus)
+                let status = statuses.find { "tabs" == $0.0 }
+                return deferMaybe(status!.1)
             }
         }
 
@@ -980,16 +1291,9 @@ public class BrowserProfile: Profile {
             let stopBy = start + OneMinuteInMilliseconds
             log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
             return {
-                !self.backgrounded &&
                 NSDate.now() < stopBy &&
                 self.profile.hasSyncableAccount()
             }
         }
-    }
-}
-
-class AlreadySyncingError: MaybeErrorType {
-    var description: String {
-        return "Already syncing."
     }
 }

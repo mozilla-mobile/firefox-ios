@@ -11,6 +11,7 @@ class LoginManagerTests: KIFTestCase {
     private var webRoot: String!
 
     override func setUp() {
+        PasscodeUtils.resetPasscode()
         webRoot = SimplePageServer.start()
         generateLogins()
     }
@@ -18,10 +19,12 @@ class LoginManagerTests: KIFTestCase {
     override func tearDown() {
         super.tearDown()
         clearLogins()
+        PasscodeUtils.resetPasscode()
     }
 
     private func openLoginManager() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Logins")
     }
@@ -224,6 +227,7 @@ class LoginManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Private Mode")
 
+        tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Logins")
 
@@ -661,6 +665,95 @@ class LoginManagerTests: KIFTestCase {
         // Check that edit button has been disabled
         tester().waitForViewWithAccessibilityLabel("Edit", traits: UIAccessibilityTraitNotEnabled)
 
+        closeLoginManager()
+    }
+
+    func testLoginsListPromptsForPasscodeOnReentryFromBackground() {
+        PasscodeUtils.setPasscode("1337", interval: .Immediately)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        PasscodeUtils.enterPasscode(tester(), digits: "1337")
+
+        tester().waitForViewWithAccessibilityLabel("Logins")
+        tester().deactivateAppForDuration(3)
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        PasscodeUtils.enterPasscode(tester(), digits: "1337")
+        tester().waitForViewWithAccessibilityLabel("Logins")
+
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testLoginsListPromptsForPasscodeOnReentryFromBackgroundWithDelay() {
+        PasscodeUtils.setPasscode("1337", interval: .FiveMinutes)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        PasscodeUtils.enterPasscode(tester(), digits: "1337")
+
+        tester().waitForViewWithAccessibilityLabel("Logins")
+        tester().deactivateAppForDuration(3)
+        tester().waitForViewWithAccessibilityLabel("Logins")
+
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testLoginsDetailsPromptsForPasscodeOnReentryFromBackground() {
+        PasscodeUtils.setPasscode("1337", interval: .Immediately)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        PasscodeUtils.enterPasscode(tester(), digits: "1337")
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().deactivateAppForDuration(3)
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        PasscodeUtils.enterPasscode(tester(), digits: "1337")
+        tester().waitForViewWithAccessibilityLabel("a0@email.com")
+
+        tester().tapViewWithAccessibilityLabel("Back")
+        closeLoginManager()
+    }
+
+    func testLoginsDetailsPromptsForPasscodeOnReentryFromBackgroundWithDelay() {
+        PasscodeUtils.setPasscode("1337", interval: .FiveMinutes)
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Logins")
+
+        tester().waitForViewWithAccessibilityLabel("Enter Passcode")
+        PasscodeUtils.enterPasscode(tester(), digits: "1337")
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+
+        tester().deactivateAppForDuration(3)
+
+        tester().waitForViewWithAccessibilityLabel("a0@email.com")
+
+        tester().tapViewWithAccessibilityLabel("Back")
         closeLoginManager()
     }
 }

@@ -84,4 +84,14 @@ public extension String {
         return NSURL(string: self) ??
                NSURL(string: self.stringWithAdditionalEscaping)
     }
+
+    /// Returns a new string made by removing the leading String characters contained
+    /// in a given character set.
+    public func stringByTrimmingLeadingCharactersInSet(set: NSCharacterSet) -> String {
+        var trimmed = self
+        while trimmed.rangeOfCharacterFromSet(set)?.startIndex == trimmed.startIndex {
+            trimmed.removeAtIndex(trimmed.startIndex)
+        }
+        return trimmed
+    }
 }

@@ -69,10 +69,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     private func commonInit() {
         super.delegate = self
-        super.addTarget(self, action: "SELtextDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        super.addTarget(self, action: #selector(AutocompleteTextField.SELtextDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         notifyTextChanged = debounce(0.1, action: {
             if self.editing {
-                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText)
+                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText.stringByTrimmingLeadingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()))
             }
         })
     }
@@ -90,6 +90,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
 
         selectedTextRange = textRangeFromPosition(beginningOfDocument, toPosition: beginningOfDocument)
+    }
+
+    private func normalizeString(string: String) -> String {
+        return string.lowercaseString.stringByTrimmingLeadingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
 
     /// Commits the completion by setting the text and removing the highlight.
@@ -141,8 +145,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     private func removeCompletionIfRequiredForEnteredString(string: String) {
         // If user-entered text does not start with previous suggestion then remove the completion.
+
         let actualEnteredString = enteredText + string
-        if !previousSuggestion.startsWith(actualEnteredString) {
+        // Detecting the keyboard type, and remove hightlight in "zh-Hans" and "ja-JP"
+        if !previousSuggestion.startsWith(normalizeString(actualEnteredString)) ||
+            UIApplication.sharedApplication().textInputMode?.primaryLanguage == "zh-Hans" ||
+            UIApplication.sharedApplication().textInputMode?.primaryLanguage == "ja-JP" {
             removeCompletion()
         }
         enteredText = actualEnteredString
@@ -156,9 +164,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // Check that the length of the entered text is shorter than the length of the suggestion.
             // This ensures that completionActive is true only if there are remaining characters to
             // suggest (which will suppress the caret).
-            if suggestion.startsWith(enteredText) && (enteredText).characters.count < suggestion.characters.count {
-                let endingString = suggestion.substringFromIndex(suggestion.startIndex.advancedBy(enteredText.characters.count))
-                let completedAndMarkedString = NSMutableAttributedString(string: suggestion)
+            if suggestion.startsWith(normalizeString(enteredText)) && normalizeString(enteredText).characters.count < suggestion.characters.count {
+                let endingString = suggestion.substringFromIndex(suggestion.startIndex.advancedBy(normalizeString(enteredText).characters.count))
+                let completedAndMarkedString = NSMutableAttributedString(string: enteredText + endingString)
                 completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSMakeRange(enteredText.characters.count, endingString.characters.count))
                 attributedText = completedAndMarkedString
                 completionActive = true
