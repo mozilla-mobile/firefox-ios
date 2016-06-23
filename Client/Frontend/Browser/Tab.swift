@@ -462,6 +462,10 @@ class Tab: NSObject {
             webView?.evaluateJavaScript("__firefox__.setNoImageMode(\(enabled))", completionHandler: nil)
         }
     }
+
+    func setNightMode(enabled: Bool) {
+        webView?.evaluateJavaScript("__firefox__.setNightMode(\(enabled))", completionHandler: nil)
+    }
 }
 
 extension Tab: TabWebViewDelegate {
