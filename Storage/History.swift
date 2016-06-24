@@ -35,6 +35,7 @@ public protocol BrowserHistory {
     func setTopSitesCacheSize(size: Int32)
     func clearTopSitesCache() -> Success
     func refreshTopSitesCache() -> Success
+    func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>>
 }
 
 /**
