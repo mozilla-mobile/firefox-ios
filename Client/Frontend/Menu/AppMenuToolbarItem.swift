@@ -9,6 +9,7 @@ struct AppMenuToolbarItem: MenuToolbarItem {
     private let iconName: String
 
     let title: String
+    let accessibilityIdentifier: String
     let action: MenuAction
     let secondaryAction: MenuAction?
 
@@ -20,8 +21,9 @@ struct AppMenuToolbarItem: MenuToolbarItem {
         return icon
     }
 
-    init(title: String, action: MenuAction, secondaryAction: MenuAction? = nil, icon: String) {
+    init(title: String, accessibilityIdentifier: String, action: MenuAction, secondaryAction: MenuAction? = nil, icon: String) {
         self.title = title
+        self.accessibilityIdentifier = accessibilityIdentifier
         self.action = action
         self.secondaryAction = secondaryAction
         self.iconName = icon

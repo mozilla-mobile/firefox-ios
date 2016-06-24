@@ -277,6 +277,7 @@ class MenuView: UIView {
             toolbarButton.accessibilityLabel = toolbarItemView.accessibilityLabel
             toolbarButton.isAccessibilityElement = true
             toolbarButton.accessibilityTraits = UIAccessibilityTraitButton
+            toolbarButton.accessibilityIdentifier = toolbarItemView.accessibilityIdentifier
             toolbarItems.append(toolbarButton)
         }
     }
