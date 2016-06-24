@@ -56,6 +56,7 @@ class BrowserViewController: UIViewController {
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "AddSearch")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
         searchButton.addTarget(self, action: #selector(BrowserViewController.addCustomSearchEngineForFocusedElement), forControlEvents: .TouchUpInside)
+        searchButton.accessibilityIdentifier = "BrowserViewController.customSearchEngineButton"
         return searchButton
     }()
 
