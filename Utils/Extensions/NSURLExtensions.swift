@@ -241,7 +241,12 @@ extension NSURL {
     }
 
     public var isLocal: Bool {
-        return host?.lowercaseString == "localhost" || host == "127.0.0.1" || host == "::1"
+        // iOS forwards hostless URLs (e.g., http://:6571) to localhost.
+        guard let host = host where !host.isEmpty else {
+            return true
+        }
+
+        return host.lowercaseString == "localhost" || host == "127.0.0.1"
     }
 
     public var isIPv6: Bool {
