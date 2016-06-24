@@ -8,8 +8,10 @@ import SwiftKeychainWrapper
 import LocalAuthentication
 
 class AppAuthenticator {
-    static func presentAuthenticationUsingInfo(authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {
-        if authenticationInfo.useTouchID {
+    static func presentAuthenticationUsingInfo(authenticationInfo: AuthenticationKeychainInfo, touchIDPurpose: TouchIDSetting.TouchIDPurpose?, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {
+        if touchIDPurpose == nil
+        || touchIDPurpose! == .PrivateBrowsing && authenticationInfo.useTouchIDForPrivateBrowsing
+        || touchIDPurpose! == .Logins && authenticationInfo.useTouchIDForLogins {
             let localAuthContext = LAContext()
             localAuthContext.localizedFallbackTitle = AuthenticationStrings.enterPasscode
             localAuthContext.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: touchIDReason) { didSucceed, error in

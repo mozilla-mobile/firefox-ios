@@ -593,6 +593,7 @@ class LoginsSetting: Setting {
 
         if authInfo.requiresValidation() {
             AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
+            touchIDPurpose: .Logins,
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.settings?.navigateToLoginsList()

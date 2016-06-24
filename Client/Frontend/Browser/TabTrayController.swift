@@ -487,20 +487,22 @@ class TabTrayController: UIViewController {
             let presentingNavController = navigationController ?? self.navigationController
             let cancelAction = { success.fill(Maybe(failure: AuthorisationError(description: "User cancelled authorisation action."))) }
             AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
-            touchIDReason: AuthenticationStrings.privateModeReason,
-            success: {
-                success.fill(Maybe(success: ()))
-            },
-            cancel: cancelAction,
-            fallback: {
-                AppAuthenticator.presentPasscodeAuthentication(presentingNavController,
+                touchIDPurpose: .PrivateBrowsing,
+                touchIDReason: AuthenticationStrings.privateModeReason,
                 success: {
-                    presentingNavController?.dismissViewControllerAnimated(true) {
-                        success.fill(Maybe(success: ()))
-                    }
+                    success.fill(Maybe(success: ()))
                 },
-                cancel: cancelAction)
-            })
+                cancel: cancelAction,
+                fallback: {
+                    AppAuthenticator.presentPasscodeAuthentication(presentingNavController,
+                    success: {
+                        presentingNavController?.dismissViewControllerAnimated(true) {
+                            success.fill(Maybe(success: ()))
+                        }
+                    },
+                    cancel: cancelAction)
+                }
+            )
         } else {
             return succeed()
         }

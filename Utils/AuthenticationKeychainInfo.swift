@@ -41,7 +41,8 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
     private(set) public var requiredPasscodeInterval: PasscodeInterval?
     private(set) public var lockOutInterval: NSTimeInterval?
     private(set) public var failedAttempts: Int
-    public var useTouchID: Bool
+    public var useTouchIDForPrivateBrowsing: Bool
+    public var useTouchIDForLogins: Bool
 
     // Timeout period before user can retry entering passcodes
     public var lockTimeInterval: NSTimeInterval = 15 * 60
@@ -50,7 +51,8 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         self.passcode = passcode
         self.requiredPasscodeInterval = .Immediately
         self.failedAttempts = 0
-        self.useTouchID = false
+        self.useTouchIDForPrivateBrowsing = false
+        self.useTouchIDForLogins = false
     }
 
     public func encodeWithCoder(aCoder: NSCoder) {
@@ -67,7 +69,8 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         aCoder.encodeObject(passcode, forKey: "passcode")
         aCoder.encodeObject(requiredPasscodeInterval?.rawValue, forKey: "requiredPasscodeInterval")
         aCoder.encodeInteger(failedAttempts, forKey: "failedAttempts")
-        aCoder.encodeBool(useTouchID, forKey: "useTouchID")
+        aCoder.encodeBool(useTouchIDForPrivateBrowsing, forKey: "useTouchIDForPrivateBrowsing")
+        aCoder.encodeBool(useTouchIDForLogins, forKey: "useTouchIDForLogins")
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -75,7 +78,8 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         self.lockOutInterval = (aDecoder.decodeObjectForKey("lockOutInterval") as? NSNumber)?.doubleValue
         self.passcode = aDecoder.decodeObjectForKey("passcode") as? String
         self.failedAttempts = aDecoder.decodeIntegerForKey("failedAttempts")
-        self.useTouchID = aDecoder.decodeBoolForKey("useTouchID")
+        self.useTouchIDForPrivateBrowsing = aDecoder.decodeBoolForKey("useTouchIDForPrivateBrowsing")
+        self.useTouchIDForLogins = aDecoder.decodeBoolForKey("useTouchIDForLogins")
         if let interval = aDecoder.decodeObjectForKey("requiredPasscodeInterval") as? NSNumber {
             self.requiredPasscodeInterval = PasscodeInterval(rawValue: interval.integerValue)
         }

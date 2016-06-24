@@ -984,8 +984,6 @@ class BrowserViewController: UIViewController {
         }
         
         return success
-        
-        // 6. Update Touch ID settings menu UI
     }
 
     func switchToTabForURLOrOpen(url: NSURL, isPrivate: Bool = false) {

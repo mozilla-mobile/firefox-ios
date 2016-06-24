@@ -23,6 +23,9 @@ extension PasscodeInterval {
 struct AuthenticationStrings {
     static let passcode =
         NSLocalizedString("Passcode", tableName: "AuthenticationManager", comment: "Label for the Passcode item in Settings")
+    
+    static let touchID =
+        NSLocalizedString("Use Touch ID to access:", tableName: "AuthenticationManager", comment: "Label for the Touch ID-related items in Settings")
 
     static let touchIDPasscodeSetting =
         NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Label for the Touch ID/Passcode item in Settings")
