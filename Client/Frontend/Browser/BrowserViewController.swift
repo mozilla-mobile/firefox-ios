@@ -212,10 +212,12 @@ class BrowserViewController: UIViewController {
                     make.height.equalTo(TopTabsUX.TopTabsViewHeight)
                 }
                 self.topTabsViewController = topTabsViewController
+                tabManager.addNavigationDelegate(topTabsViewController)
             }
             topTabsContainer.snp_updateConstraints { make in
                 make.height.equalTo(TopTabsUX.TopTabsViewHeight)
             }
+            header.disableBlur = true
         }
         else {
             topTabsContainer.snp_updateConstraints { make in
@@ -223,6 +225,7 @@ class BrowserViewController: UIViewController {
             }
             topTabsViewController?.view.removeFromSuperview()
             topTabsViewController?.removeFromParentViewController()
+            header.disableBlur = false
         }
 
         view.setNeedsUpdateConstraints()
@@ -3177,17 +3180,38 @@ class BlurWrapper: UIView {
             effectView.snp_remakeConstraints { make in
                 make.edges.equalTo(self)
             }
+            effectView.hidden = disableBlur
+            switch blurStyle {
+            case .ExtraLight, .Light:
+                background.backgroundColor = TopTabsUX.TopTabsBackgroundNormalColor
+            case .Dark:
+                background.backgroundColor = TopTabsUX.TopTabsBackgroundPrivateColor
+            }
         }
     }
+    
+    var disableBlur = false {
+        didSet {
+            effectView.hidden = disableBlur
+            background.hidden = !disableBlur
+        }
+    }
+    
 
     private var effectView: UIVisualEffectView
     private var wrappedView: UIView
+    private lazy var background: UIView = {
+        let background = UIView()
+        background.hidden = true
+        return background
+    }()
 
     init(view: UIView) {
         wrappedView = view
         effectView = UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
         super.init(frame: CGRectZero)
 
+        addSubview(background)
         addSubview(effectView)
         addSubview(wrappedView)
 
@@ -3196,6 +3220,10 @@ class BlurWrapper: UIView {
         }
 
         wrappedView.snp_makeConstraints { make in
+            make.edges.equalTo(self)
+        }
+        
+        background.snp_makeConstraints { make in
             make.edges.equalTo(self)
         }
     }
@@ -3268,5 +3296,26 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsPressNewTab() {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         openBlankNewTabAndFocus(isPrivate: isPrivate)
+    }
+    
+    func topTabsPressPrivateTab() {
+        guard let selectedTab = tabManager.selectedTab else {
+            return
+        }
+        if selectedTab.isPrivate {
+            tabManager.selectTab(tabManager.normalTabs.last)
+        }
+        else {
+            if let privateTab = tabManager.privateTabs.last {
+                tabManager.selectTab(privateTab)
+            }
+            else {
+                openBlankNewTabAndFocus(isPrivate: true)
+            }
+        }
+    }
+    
+    func topTabsDidChangeTab() {
+        urlBar.leaveOverlayMode()
     }
 }

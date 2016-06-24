@@ -322,11 +322,16 @@ class TabManager : NSObject {
         }
 
         let prevCount = count
+        var removeIndex = -1
         for i in 0..<count {
             if tabs[i] === tab {
+                removeIndex = i
                 tabs.removeAtIndex(i)
                 break
             }
+        }
+        if _selectedIndex > removeIndex && _selectedIndex > 0 {
+            _selectedIndex -= 1
         }
         assert(count == prevCount - 1, "Tab removed")
 

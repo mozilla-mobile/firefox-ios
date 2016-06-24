@@ -9,6 +9,8 @@ import WebImage
 
 
 class FaviconManager : TabHelper {
+    static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
+    
     let profile: Profile!
     weak var tab: Tab?
 
@@ -80,6 +82,7 @@ class FaviconManager : TabHelper {
                         })
                     }
                 }
+            NSNotificationCenter.defaultCenter().postNotificationName(FaviconManager.FaviconDidLoad, object: nil)
         }
     }
 
