@@ -21,7 +21,7 @@ for d in firefox-ios-l10n/?? firefox-ios-l10n/??? firefox-ios-l10n/??-??; do
         mkdir "l10n-screenshots/$lang"
         $SNAPSHOT --project Client.xcodeproj --scheme L10nSnapshotTests \
             --derived_data_path l10n-screenshots-dd \
-            --erase_simulator --number_of_retries 3 \
+            --erase_simulator --localize_simulator \
             --devices "iPhone 4s" --languages "$lang" \
             --output_directory "l10n-screenshots/$lang" > "l10n-screenshots/$lang/snapshot.log" 2>&1
     fi
