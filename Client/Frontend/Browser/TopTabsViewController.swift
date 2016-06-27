@@ -22,9 +22,9 @@ struct TopTabsUX {
 }
 
 protocol TopTabsDelegate: class {
-    func topTabsPressTabs()
-    func topTabsPressNewTab()
-    func topTabsPressPrivateTab()
+    func topTabsDidPressTabs()
+    func topTabsDidPressNewTab()
+    func topTabsDidPressPrivateTab()
     func topTabsDidChangeTab()
 }
 
@@ -34,7 +34,7 @@ protocol TopTabCellDelegate: class {
 
 class TopTabsViewController: UIViewController {
     let tabManager: TabManager
-    weak var delegate: TopTabsDelegate!
+    weak var delegate: TopTabsDelegate?
     var isPrivate = false
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: TopTabsViewLayout())
@@ -50,7 +50,7 @@ class TopTabsViewController: UIViewController {
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton()
         tabsButton.titleLabel.text = "0"
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsClicked), forControlEvents: UIControlEvents.TouchUpInside)
+        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTapped), forControlEvents: UIControlEvents.TouchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsView.tabsButton"
         tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
         return tabsButton
@@ -58,7 +58,7 @@ class TopTabsViewController: UIViewController {
     
     private lazy var newTab: UIButton = {
         let newTab = UIButton()
-        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabClicked), forControlEvents: UIControlEvents.TouchUpInside)
+        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), forControlEvents: UIControlEvents.TouchUpInside)
         newTab.setImage(UIImage.templateImageNamed("menu-NewTab-pbm"), forState: .Normal)
         newTab.tintColor = UIColor(white: 0.9, alpha: 1)
         newTab.setImage(UIImage(named: "menu-NewTab-pbm"), forState: .Highlighted)
@@ -68,7 +68,7 @@ class TopTabsViewController: UIViewController {
     
     private lazy var privateTab: UIButton = {
         let privateTab = UIButton()
-        privateTab.addTarget(self, action: #selector(TopTabsViewController.privateTabClicked), forControlEvents: UIControlEvents.TouchUpInside)
+        privateTab.addTarget(self, action: #selector(TopTabsViewController.privateTabTapped), forControlEvents: UIControlEvents.TouchUpInside)
         privateTab.setImage(UIImage.templateImageNamed("menu-NewPrivateTab-pbm"), forState: .Normal)
         privateTab.tintColor = UIColor(white: 0.9, alpha: 1)
         privateTab.setImage(UIImage(named: "menu-NewPrivateTab-pbm"), forState: .Highlighted)
@@ -101,6 +101,7 @@ class TopTabsViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
     }
@@ -151,17 +152,17 @@ class TopTabsViewController: UIViewController {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
     
-    func tabsClicked() {
-        delegate.topTabsPressTabs()
+    func tabsTapped() {
+        delegate?.topTabsDidPressTabs()
     }
     
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         collectionView.reloadData()
         self.scrollToCurrentTab(false)
-        super.viewDidAppear(animated)
     }
     
-    func newTabClicked() {
+    func newTabTapped() {
         if let currentTab = tabManager.selectedTab, let index = tabsToDisplay.indexOf(currentTab),
             let cell  = collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) as? TopTabCell {
             cell.selectedTab = false
@@ -169,7 +170,7 @@ class TopTabsViewController: UIViewController {
                 cell.seperatorLine = true
             }
         }
-        delegate.topTabsPressNewTab()
+        delegate?.topTabsDidPressNewTab()
         collectionView.performBatchUpdates({ _ in
             let count = self.collectionView.numberOfItemsInSection(0)
             self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: count, inSection: 0)])
@@ -180,14 +181,14 @@ class TopTabsViewController: UIViewController {
         })
     }
     
-    func privateTabClicked() {
-        delegate.topTabsPressPrivateTab()
+    func privateTabTapped() {
+        delegate?.topTabsDidPressPrivateTab()
         self.collectionView.reloadData()
         scrollToCurrentTab(false)
     }
     
     func closeTab() {
-        delegate.topTabsPressTabs()
+        delegate?.topTabsDidPressTabs()
     }
     
     func reloadFavicons() {
@@ -195,10 +196,7 @@ class TopTabsViewController: UIViewController {
     }
     
     func scrollToCurrentTab(animated: Bool = true) {
-        guard let currentTab = tabManager.selectedTab, let index = tabsToDisplay.indexOf(currentTab) else {
-            return
-        }
-        guard !collectionView.frame.isEmpty else {
+        guard let currentTab = tabManager.selectedTab, let index = tabsToDisplay.indexOf(currentTab) where !collectionView.frame.isEmpty else {
             return
         }
         if let frame = collectionView.layoutAttributesForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0))?.frame {
@@ -208,26 +206,60 @@ class TopTabsViewController: UIViewController {
         }
     }
     
+    enum TopTabsCurveDirection {
+        case Right
+        case Left
+        case Both
+    }
+    
+    static func TopTabsCurve(width: CGFloat, height: CGFloat, direction: TopTabsCurveDirection) -> UIBezierPath {
+        let x1: CGFloat = 32.84
+        let x2: CGFloat = 5.1
+        let x3: CGFloat = 19.76
+        let x4: CGFloat = 58.27
+        let x5: CGFloat = -12.15
+        
+        //// Bezier Drawing
+        let bezierPath = UIBezierPath()
+        bezierPath.moveToPoint(CGPoint(x: width, y: height))
+        switch direction {
+        case .Right:
+            bezierPath.addCurveToPoint(CGPoint(x: width-x1, y: 0), controlPoint1: CGPoint(x: width-x3, y: height), controlPoint2: CGPoint(x: width-x2, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: 0, y: 0), controlPoint1: CGPoint(x: 0, y: 0), controlPoint2: CGPoint(x: 0, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: 0, y: height), controlPoint2: CGPoint(x: 0, y: height))
+            bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
+        case .Left:
+            bezierPath.addCurveToPoint(CGPoint(x: width, y: 0), controlPoint1: CGPoint(x: width, y: 0), controlPoint2: CGPoint(x: width, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: x1, y: 0), controlPoint1: CGPoint(x: width-x4, y: 0), controlPoint2: CGPoint(x: x4, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: x2, y: 0), controlPoint2: CGPoint(x: x3, y: height))
+            bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: width, y: height), controlPoint2: CGPoint(x: width, y: height))
+        case .Both:
+            bezierPath.addCurveToPoint(CGPoint(x: width-x1, y: 0), controlPoint1: CGPoint(x: width-x3, y: height), controlPoint2: CGPoint(x: width-x2, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: x1, y: 0), controlPoint1: CGPoint(x: width-x4, y: 0), controlPoint2: CGPoint(x: x4, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: x2, y: 0), controlPoint2: CGPoint(x: x3, y: height))
+            bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
+        }
+        bezierPath.closePath()
+        bezierPath.miterLimit = 4;
+        return bezierPath
+    }
 }
 
 extension TopTabsViewController: Themeable {
     func applyTheme(themeName: String) {
         tabsButton.applyTheme(themeName)
-        if themeName == Theme.PrivateMode {
-            isPrivate = true
-        }
-        else if themeName == Theme.NormalMode {
-            isPrivate = false
-        }
+        isPrivate = (themeName == Theme.PrivateMode)
     }
 }
 
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(cell: TopTabCell) {
-        let indexPath = collectionView.indexPathForCell(cell)!
+        guard let indexPath = collectionView.indexPathForCell(cell) else {
+            return
+        }
         let tab = tabsToDisplay[indexPath.item]
         if tab == tabManager.selectedTab {
-            delegate.topTabsDidChangeTab()
+            delegate?.topTabsDidChangeTab()
         }
         if tabsToDisplay.count == 1 {
             tabManager.removeTab(tab)
@@ -258,15 +290,19 @@ extension TopTabsViewController: UICollectionViewDataSource {
         tabCell.titleText.text = tab.displayTitle
         
         if tab.displayTitle.isEmpty {
-            if (tab.url?.baseDomain()?.contains("localhost") ?? false || tab.url == nil) {
+            if (tab.url?.baseDomain()?.contains("localhost") ?? true) {
                 tabCell.titleText.text = Strings.TopTabsNewTabTitle
             }
             else {
                 tabCell.titleText.text = tab.displayURL?.absoluteString
             }
+            tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
         }
-        
-        tabCell.selectedTab = tab == tabManager.selectedTab
+        else {
+            tabCell.accessibilityLabel = tab.displayTitle
+        }
+
+        tabCell.selectedTab = (tab == tabManager.selectedTab)
         
         if index > 0 && index < tabsToDisplay.count && tabsToDisplay[index] != tabManager.selectedTab && tabsToDisplay[index-1] != tabManager.selectedTab {
             tabCell.seperatorLine = true
@@ -275,14 +311,9 @@ extension TopTabsViewController: UICollectionViewDataSource {
             tabCell.seperatorLine = false
         }
         
-        if !tab.displayTitle.isEmpty {
-            tabCell.accessibilityLabel = tab.displayTitle
-        } else {
-            tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
-        }
-        
-        if let favIcon = tab.displayFavicon {
-            tabCell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
+        if let favIcon = tab.displayFavicon,
+           let url = NSURL(string: favIcon.url) {
+            tabCell.favicon.sd_setImageWithURL(url)
         } else {
             var defaultFavicon = UIImage(named: "defaultFavicon")
             if tab.isPrivate {
@@ -308,7 +339,7 @@ extension TopTabsViewController: TabSelectionDelegate {
         tabManager.selectTab(tab)
         collectionView.reloadData()
         collectionView.setNeedsDisplay()
-        delegate.topTabsDidChangeTab()
+        delegate?.topTabsDidChangeTab()
         scrollToCurrentTab()
     }
 }
@@ -350,9 +381,30 @@ class TopTabCell: UICollectionViewCell {
         }
     }
     
-    let titleText: UILabel
-    let favicon: UIImageView = UIImageView()
-    let closeButton: UIButton
+    let titleText: UILabel = {
+        let titleText = UILabel()
+        titleText.textAlignment = NSTextAlignment.Left
+        titleText.userInteractionEnabled = false
+        titleText.numberOfLines = 1
+        titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
+        return titleText
+    }()
+    
+    let favicon: UIImageView = {
+        let favicon = UIImageView()
+        favicon.layer.cornerRadius = 2.0
+        favicon.layer.masksToBounds = true
+        return favicon
+    }()
+    
+    let closeButton: UIButton = {
+        let closeButton = UIButton()
+        closeButton.setImage(UIImage(named: "topTabs-closeTabs"), forState: UIControlState.Normal)
+        closeButton.tintColor = UIColor.lightGrayColor()
+        closeButton.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
+        return closeButton
+    }()
+    
     let bezierView: BezierView = {
         let bezierView = BezierView()
         bezierView.fillColor = TopTabsUX.TopTabsBackgroundNormalColor
@@ -362,23 +414,10 @@ class TopTabCell: UICollectionViewCell {
     weak var delegate: TopTabCellDelegate?
     
     override init(frame: CGRect) {
-        self.favicon.layer.cornerRadius = 2.0
-        self.favicon.layer.masksToBounds = true
-        
-        self.titleText = UILabel()
-        self.titleText.textAlignment = NSTextAlignment.Left
-        self.titleText.userInteractionEnabled = false
-        self.titleText.numberOfLines = 1
-        self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
-        
-        self.closeButton = UIButton()
-        self.closeButton.setImage(UIImage(named: "topTabs-closeTabs"), forState: UIControlState.Normal)
-        self.closeButton.tintColor = UIColor.lightGrayColor()
-        self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
-        
         super.init(frame: frame)
         
-        self.closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), forControlEvents: UIControlEvents.TouchUpInside)
+        closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), forControlEvents: UIControlEvents.TouchUpInside)
+        
         contentView.addSubview(self.bezierView)
         contentView.addSubview(self.closeButton)
         contentView.addSubview(self.titleText)
@@ -431,6 +470,7 @@ class TopTabCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
     }
     
@@ -472,24 +512,7 @@ class BezierView: UIView {
         guard let fillColor = self.fillColor else {
             return
         }
-        
-        let width = frame.width
-        let height = frame.height
-        let x1: CGFloat = 32.84
-        let x2: CGFloat = 5.1
-        let x3: CGFloat = 19.76
-        let x4: CGFloat = 58.27
-        let x5: CGFloat = -12.15
-        
-        //// Bezier Drawing
-        let bezierPath = UIBezierPath()
-        bezierPath.moveToPoint(CGPoint(x: width, y: height))
-        bezierPath.addCurveToPoint(CGPoint(x: width-x1, y: 0), controlPoint1: CGPoint(x: width-x3, y: height), controlPoint2: CGPoint(x: width-x2, y: 0))
-        bezierPath.addCurveToPoint(CGPoint(x: x1, y: 0), controlPoint1: CGPoint(x: width-x4, y: 0), controlPoint2: CGPoint(x: x4, y: 0))
-        bezierPath.addCurveToPoint(CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: x2, y: 0), controlPoint2: CGPoint(x: x3, y: height))
-        bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
-        bezierPath.closePath()
-        bezierPath.miterLimit = 4;
+        let bezierPath = TopTabsViewController.TopTabsCurve(frame.width, height: frame.height, direction: .Both)
         
         fillColor.setFill()
         bezierPath.fill()
@@ -500,18 +523,10 @@ extension TopTabsViewController : WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         collectionView.reloadData()
     }
-    
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        collectionView.reloadData()
-    }
 }
 
 private class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     weak var tabSelectionDelegate: TabSelectionDelegate?
-    
-    override init() {
-        super.init()
-    }
     
     @objc func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 1
@@ -569,10 +584,6 @@ private class TopTabsViewLayout: UICollectionViewFlowLayout {
         
         return attributes
     }
-    
-    override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
-        return super.layoutAttributesForDecorationViewOfKind(elementKind, atIndexPath: indexPath)
-    }
 }
 
 private class TopTabFader: UIView {
@@ -606,8 +617,8 @@ private class TopTabFader: UIView {
 
 class TopTabsBackgroundDecorationView : UICollectionReusableView {
     static let Identifier = "TopTabsBackgroundDecorationViewIdentifier"
-    private lazy var right = SingleCurveView(right: true)
-    private lazy var left = SingleCurveView(right: false)
+    private lazy var rightCurve = SingleCurveView(right: true)
+    private lazy var leftCurve = SingleCurveView(right: false)
     
     lazy var centerBackground: UIView = {
         let centerBackground = UIView()
@@ -618,25 +629,27 @@ class TopTabsBackgroundDecorationView : UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addSubview(right)
-        self.addSubview(left)
+        self.contentMode = .Redraw
+        
+        self.addSubview(rightCurve)
+        self.addSubview(leftCurve)
         self.addSubview(centerBackground)
         
-        right.snp_makeConstraints { make in
+        rightCurve.snp_makeConstraints { make in
             make.right.equalTo(self)
             make.top.equalTo(self)
             make.bottom.equalTo(self)
             make.width.equalTo(SingleCurveView.CurveWidth)
         }
-        left.snp_makeConstraints { make in
+        leftCurve.snp_makeConstraints { make in
             make.left.equalTo(self)
             make.top.equalTo(self)
             make.bottom.equalTo(self)
             make.width.equalTo(SingleCurveView.CurveWidth)
         }
         centerBackground.snp_makeConstraints { make in
-            make.left.equalTo(left.snp_right)
-            make.right.equalTo(right.snp_left)
+            make.left.equalTo(leftCurve.snp_right)
+            make.right.equalTo(rightCurve.snp_left)
             make.top.equalTo(self)
             make.bottom.equalTo(self)
         }
@@ -644,25 +657,6 @@ class TopTabsBackgroundDecorationView : UICollectionReusableView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setNeedsDisplay()
-    }
-    
-    override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.applyLayoutAttributes(layoutAttributes)
-        self.setNeedsDisplay()
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        setNeedsDisplay()
-    }
-    
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
     }
     
     private class SingleCurveView: UIView {
@@ -682,32 +676,7 @@ class TopTabsBackgroundDecorationView : UICollectionReusableView {
             
             let fillColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
             
-            let width = frame.width
-            let height = frame.height
-            let x1: CGFloat = 32.84
-            let x2: CGFloat = 5.1
-            let x3: CGFloat = 19.76
-            let x4: CGFloat = 58.27
-            let x5: CGFloat = -12.15
-            
-            //// Bezier Drawing
-            let bezierPath = UIBezierPath()
-            bezierPath.moveToPoint(CGPoint(x: width, y: height))
-            if right {
-                bezierPath.addCurveToPoint(CGPoint(x: width-x1, y: 0), controlPoint1: CGPoint(x: width-x3, y: height), controlPoint2: CGPoint(x: width-x2, y: 0))
-                bezierPath.addCurveToPoint(CGPoint(x: 0, y: 0), controlPoint1: CGPoint(x: 0, y: 0), controlPoint2: CGPoint(x: 0, y: 0))
-                bezierPath.addCurveToPoint(CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: 0, y: height), controlPoint2: CGPoint(x: 0, y: height))
-                bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
-            }
-            else {
-                bezierPath.addCurveToPoint(CGPoint(x: width, y: 0), controlPoint1: CGPoint(x: width, y: 0), controlPoint2: CGPoint(x: width, y: 0))
-                bezierPath.addCurveToPoint(CGPoint(x: x1, y: 0), controlPoint1: CGPoint(x: width-x4, y: 0), controlPoint2: CGPoint(x: x4, y: 0))
-                bezierPath.addCurveToPoint(CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: x2, y: 0), controlPoint2: CGPoint(x: x3, y: height))
-                bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: width, y: height), controlPoint2: CGPoint(x: width, y: height))
-            }
-            
-            bezierPath.closePath()
-            bezierPath.miterLimit = 4;
+            let bezierPath = TopTabsViewController.TopTabsCurve(frame.width, height: frame.height, direction: right ? .Right : .Left)
             
             fillColor.setFill()
             bezierPath.fill()

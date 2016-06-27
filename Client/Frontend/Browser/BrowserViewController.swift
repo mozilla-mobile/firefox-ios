@@ -3242,7 +3242,6 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
     func findInPage(findInPage: FindInPageBar, didTextChange text: String) {
         find(text, function: "find")
     }
-    
 
     func findInPage(findInPage: FindInPageBar, didFindNextWithText text: String) {
         findInPageBar?.endEditing(true)
@@ -3290,16 +3289,16 @@ private extension WKNavigationAction {
 }
 
 extension BrowserViewController: TopTabsDelegate {
-    func topTabsPressTabs() {
+    func topTabsDidPressTabs() {
         self.urlBarDidPressTabs(urlBar)
     }
     
-    func topTabsPressNewTab() {
+    func topTabsDidPressNewTab() {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         openBlankNewTabAndFocus(isPrivate: isPrivate)
     }
     
-    func topTabsPressPrivateTab() {
+    func topTabsDidPressPrivateTab() {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }
