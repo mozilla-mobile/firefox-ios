@@ -13,7 +13,6 @@ import Sync
 
 class FaviconManager : TabHelper {
     static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
-    private let queue = dispatch_queue_create("FaviconManager", DISPATCH_QUEUE_CONCURRENT)
     
     let profile: Profile!
     weak var tab: Tab?
@@ -45,40 +44,33 @@ class FaviconManager : TabHelper {
     }
     
     private func loadFavicons(tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<Maybe<[Favicon]>> {
-        var oldIcons: [Favicon] = favicons
         let deferred = Deferred<Maybe<[Favicon]>>()
-        dispatch_async(queue) { _ in
-            var deferreds = [Deferred<Maybe<Favicon>>]()
-            deferreds = favicons.map { self.getFavicon(tab, icon: $0, profile: profile) }
-            all(deferreds).bind({ (results: [Maybe<Favicon>]) -> Deferred<Maybe<[Favicon]>> in
-                for result in results {
-                    if let icon = result.successValue {
-                        oldIcons.append(icon)
-                    }
+        var deferreds: [() -> Deferred<Maybe<Favicon>>]
+        deferreds = favicons.map { favicon in
+            return { () -> Deferred<Maybe<Favicon>> in
+                if let url = NSURL(string: favicon.url) {
+                    return self.getFavicon(tab, iconUrl: url, icon: favicon, profile: profile)
                 }
-                
-                oldIcons = oldIcons.sort {
-                    return $0.width > $1.width
+                else {
+                    return deferMaybe(FaviconError())
                 }
-                
-                return deferMaybe(oldIcons)
-            }).upon({ (result: Maybe<[Favicon]>) in
-                deferred.fill(result)
-                return
-            })
+            }
+        }
+        
+        accumulate(deferreds) >>== { favicons in
+                deferred.fill(Maybe(success: favicons))
         }
         
         return deferred
     }
     
-    func getFavicon(tab: Tab, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
+    func getFavicon(tab: Tab, iconUrl: NSURL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let manager = SDWebImageManager.sharedManager()
         let options = tab.isPrivate ?
             [SDWebImageOptions.LowPriority, SDWebImageOptions.CacheMemoryOnly] : [SDWebImageOptions.LowPriority]
         
-        if let iconUrl = NSURL(string: icon.url),
-            let currentURL = tab.url,
+        if let currentURL = tab.url,
             let url = tab.url?.absoluteString {
             let site = Site(url: url, title: "")
             manager.downloadImageWithURL(iconUrl,
@@ -97,17 +89,19 @@ class FaviconManager : TabHelper {
                                                 return
                                             }
                                             
+                                            tab.favicons.append(fav)
                                             if !tab.isPrivate {
-                                                self.profile.favicons.addFavicon(fav, forSite: site)
+                                                self.profile.favicons.addFavicon(fav, forSite: site).upon { _ in
+                                                    deferred.fill(Maybe(success: fav))
+                                                }
                                                 if tab.favicons.isEmpty {
                                                     self.makeFaviconAvailable(tab, atURL: currentURL, favicon: fav, withImage: img)
                                                 }
                                             }
-                                            tab.favicons.append(fav)
-                                            deferred.fill(Maybe(success: fav))
+                                            else {
+                                                deferred.fill(Maybe(success: fav))
+                                            }
             })
-        } else {
-            return deferMaybe(FaviconFetcherErrorType(description: "Invalid URL \(icon.url)"))
         }
         
         return deferred
