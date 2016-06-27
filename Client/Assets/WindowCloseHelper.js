@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 (function () {
- 
     if (!window.__firefox__) {
         window.__firefox__ = {};
     }
@@ -35,8 +34,22 @@
         // then (the read-only) window.close() will fail to execute when the
         // opened window is cross-domain. Thus, we return a proxy object with an
         // overwritten .close() method to invoke our special handle function.
-        var opened = _open.apply(this, arguments);
-        var proxy = {};
+        opened = _open.apply(this, arguments);
+        // If we can overwrite properties, then cross-origin restrictions don't apply,
+        // so we can simply return the original window
+        var urlHost;
+        try {
+            urlHost = new URL(strUrl).host.split(".").slice(-2).join(".");
+        } catch (error) {
+            urlHost = null
+        }
+        var crossOrigin = window.location.host.split(".").slice(-2).join(".") !== urlHost;
+        if (!crossOrigin) {
+            console.log("local");
+            return opened;
+        }
+        console.log("external", urlHost, window.location.host);
+        proxy = {};
         for (var property in opened) {
             if (typeof opened[property] === "function") {
                 proxy[property] = opened[property].bind(opened);
