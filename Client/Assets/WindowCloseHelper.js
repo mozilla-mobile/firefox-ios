@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 (function () {
+ 
     if (!window.__firefox__) {
         window.__firefox__ = {};
     }
@@ -12,6 +13,7 @@
     window.__firefox__.messages.close = "FIREFOX_MESSAGE_CLOSE";
  
     var _close = window.close;
+ 
     window.close = function () {
         webkit.messageHandlers.windowCloseHelper.postMessage(null);
         _close();
@@ -24,7 +26,7 @@
     window.addEventListener("message", function (event) {
         if (event.data === window.__firefox__.messages.close) {
             window.close();
-            event.stopPropogation();
+            event.stopPropagation();
         }
     }, true);
     var _open = window.open;
