@@ -6,7 +6,7 @@ import XCTest
 import Deferred
 @testable import Shared
 
-private let timeoutPeriod: NSTimeInterval = 600
+private let timeoutPeriod: TimeInterval = 600
 
 class AsyncReducerTests: XCTestCase {
     override func setUp() {
@@ -20,22 +20,22 @@ class AsyncReducerTests: XCTestCase {
     }
 
     func testSimpleBehaviour() {
-        let expectation = expectationWithDescription(#function)
+        let expectation = self.expectation(withDescription: #function)
         happyCase(expectation, combine: simpleAdder)
     }
 
     func testWaitingFillerBehaviour() {
-        let expectation = expectationWithDescription(#function)
+        let expectation = self.expectation(withDescription: #function)
         happyCase(expectation, combine: waitingFillingAdder)
     }
 
     func testWaitingFillerAppendingBehaviour() {
-        let expectation = expectationWithDescription(#function)
+        let expectation = self.expectation(withDescription: #function)
         appendingCase(expectation, combine: waitingFillingAdder)
     }
 
     func testFailingCombine() {
-        let expectation = expectationWithDescription(#function)
+        let expectation = self.expectation(withDescription: #function)
         let combine = { (a: Int, b: Int) -> Deferred<Maybe<Int>> in
             if a >= 6 {
                 return deferMaybe(TestError())
@@ -49,11 +49,11 @@ class AsyncReducerTests: XCTestCase {
         }
 
         self.append(reducer, items: 1, 2, 3, 4, 5)
-        waitForExpectationsWithTimeout(timeoutPeriod, handler: nil)
+        waitForExpectations(withTimeout: timeoutPeriod, handler: nil)
     }
 
     func testFailingAppend() {
-        let expectation = expectationWithDescription(#function)
+        let expectation = self.expectation(withDescription: #function)
 
         let reducer = AsyncReducer(initialValue: 0, combine: simpleAdder)
         reducer.terminal.upon { res in
@@ -73,14 +73,14 @@ class AsyncReducerTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectationsWithTimeout(timeoutPeriod, handler: nil)
+        waitForExpectations(withTimeout: timeoutPeriod, handler: nil)
     }
 
     func testAccumulation() {
         var addDuring: [String] = ["bar", "baz"]
         var reducer: AsyncReducer<[String: Bool], String>!
 
-        func combine(t: [String: Bool], u: String) -> Deferred<Maybe<[String: Bool]>> {
+        func combine(_ t: [String: Bool], u: String) -> Deferred<Maybe<[String: Bool]>> {
             var out = t
             out[u] = true
 
@@ -104,7 +104,7 @@ class AsyncReducerTests: XCTestCase {
 }
 
 extension AsyncReducerTests {
-    func happyCase(expectation: XCTestExpectation, combine: (Int, Int) -> Deferred<Maybe<Int>>) {
+    func happyCase(_ expectation: XCTestExpectation, combine: (Int, Int) -> Deferred<Maybe<Int>>) {
         let reducer = AsyncReducer(initialValue: 0, combine: combine)
         reducer.terminal.upon { res in
             XCTAssert(res.isSuccess)
@@ -113,10 +113,10 @@ extension AsyncReducerTests {
         }
 
         self.append(reducer, items: 1, 2, 3, 4, 5)
-        waitForExpectationsWithTimeout(timeoutPeriod, handler: nil)
+        waitForExpectations(withTimeout: timeoutPeriod, handler: nil)
     }
 
-    func appendingCase(expectation: XCTestExpectation, combine: (Int, Int) -> Deferred<Maybe<Int>>) {
+    func appendingCase(_ expectation: XCTestExpectation, combine: (Int, Int) -> Deferred<Maybe<Int>>) {
         let reducer = AsyncReducer(initialValue: 0, combine: combine)
         reducer.terminal.upon { res in
             XCTAssert(res.isSuccess)
@@ -129,10 +129,10 @@ extension AsyncReducerTests {
         delay(0.1) {
             self.append(reducer, items: 3, 4, 5)
         }
-        waitForExpectationsWithTimeout(timeoutPeriod, handler: nil)
+        waitForExpectations(withTimeout: timeoutPeriod, handler: nil)
     }
 
-    func append(reducer: AsyncReducer<Int, Int>, items: Int...) {
+    func append(_ reducer: AsyncReducer<Int, Int>, items: Int...) {
         do {
             try reducer.append(items)
         } catch let error {
@@ -145,23 +145,19 @@ class TestError: MaybeErrorType {
     var description = "Error"
 }
 
-private let serialQueue = dispatch_queue_create("com.mozilla.test.serial", DISPATCH_QUEUE_SERIAL)
-private let concurrentQueue = dispatch_queue_create("com.mozilla.test.concurrent", DISPATCH_QUEUE_CONCURRENT)
+private let serialQueue = DispatchQueue(label: "com.mozilla.test.serial", attributes: DispatchQueueAttributes.serial)
+private let concurrentQueue = DispatchQueue(label: "com.mozilla.test.concurrent", attributes: DispatchQueueAttributes.concurrent)
 
-func delay(delay:Double, closure:()->()) {
-    dispatch_after(
-        dispatch_time(
-            DISPATCH_TIME_NOW,
-            Int64(delay * Double(NSEC_PER_SEC))
-        ),
-        concurrentQueue, closure)
+func delay(_ delay:Double, closure:()->()) {
+    concurrentQueue.after(
+        when: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), block: closure)
 }
 
-private func simpleAdder(a: Int, b: Int) -> Deferred<Maybe<Int>> {
+private func simpleAdder(_ a: Int, b: Int) -> Deferred<Maybe<Int>> {
     return deferMaybe(a + b)
 }
 
-private func waitingFillingAdder(a: Int, b: Int) -> Deferred<Maybe<Int>> {
+private func waitingFillingAdder(_ a: Int, b: Int) -> Deferred<Maybe<Int>> {
     let deferred = Deferred<Maybe<Int>>()
     delay(0.1) {
         deferred.fill(Maybe(success: a + b))
