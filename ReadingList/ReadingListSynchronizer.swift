@@ -5,14 +5,14 @@
 import Foundation
 
 enum ReadingListSynchronizerResult {
-    case Success
-    case Failure
-    case Error(NSError)
+    case success
+    case failure
+    case error(NSError)
 }
 
 enum ReadingListSyncType {
-    case UploadOnly
-    case Full
+    case uploadOnly
+    case full
 }
 
 class ReadingListSynchronizer {
@@ -24,15 +24,15 @@ class ReadingListSynchronizer {
         self.client = client
     }
 
-    func synchronize(type type: ReadingListSyncType, completion: (ReadingListSynchronizerResult) -> Void) {
+    func synchronize(type: ReadingListSyncType, completion: (ReadingListSynchronizerResult) -> Void) {
         // TODO Check if we are already syncing - Keep state somewhere
         // TODO If this is a first time sync then we want to remember the account and server in storage, so that:
         // TODO Check if the client is configured to use a different account or server
         switch type {
-        case .UploadOnly:
+        case .uploadOnly:
             let synchronizer = ReadingListUploadOnlySynchronizer(storage: storage, client: client)
             synchronizer.synchronizeWithCompletion(completion)
-        case .Full:
+        case .full:
             let synchronizer = ReadingListFullSynchronizer(storage: storage, client: client)
             synchronizer.synchronizeWithCompletion(completion)
         }
@@ -51,7 +51,7 @@ private class ReadingListUploadOnlySynchronizer {
         self.client = client
     }
 
-    func synchronizeWithCompletion(completion: (ReadingListSynchronizerResult) -> Void) {
+    func synchronizeWithCompletion(_ completion: (ReadingListSynchronizerResult) -> Void) {
     }
 }
 
@@ -64,6 +64,6 @@ private class ReadingListFullSynchronizer {
         self.client = client
     }
 
-    func synchronizeWithCompletion(completion: (ReadingListSynchronizerResult) -> Void) {
+    func synchronizeWithCompletion(_ completion: (ReadingListSynchronizerResult) -> Void) {
     }
 }
