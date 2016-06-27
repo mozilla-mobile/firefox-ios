@@ -58,4 +58,12 @@ class StringExtensionsTests: XCTestCase {
         XCTAssertEqual("foo456", "123foo456".stringByTrimmingLeadingCharactersInSet(NSCharacterSet.decimalDigitCharacterSet()))
         XCTAssertEqual("", "123456".stringByTrimmingLeadingCharactersInSet(NSCharacterSet.decimalDigitCharacterSet()))
     }
+
+    func testStringSplitWithNewline() {
+        XCTAssertEqual("", "".stringSplitWithNewline())
+        XCTAssertEqual("foo", "foo".stringSplitWithNewline())
+        XCTAssertEqual("aaa\n bbb", "aaa bbb".stringSplitWithNewline())
+        XCTAssertEqual("Mark as\n Read", "Mark as Read".stringSplitWithNewline())
+    }
+
 }
