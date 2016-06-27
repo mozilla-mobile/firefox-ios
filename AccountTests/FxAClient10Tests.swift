@@ -47,7 +47,7 @@ class FxAClient10Tests: LiveAccountTest {
 
     func testLoginSuccess() {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(withDescription: "")
 
             let client = FxAClient10()
             let result = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
@@ -63,12 +63,12 @@ class FxAClient10Tests: LiveAccountTest {
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testLoginFailure() {
         withVerifiedAccount { emailUTF8, _ in
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(withDescription: "")
 
             let badPassword = FxAClient10.quickStretchPW(emailUTF8, password: "BAD PASSWORD".utf8EncodedData!)
 
@@ -93,12 +93,12 @@ class FxAClient10Tests: LiveAccountTest {
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testKeysSuccess() {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(withDescription: "")
 
             let client = FxAClient10()
             let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
@@ -120,12 +120,12 @@ class FxAClient10Tests: LiveAccountTest {
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testSignSuccess() {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(withDescription: "")
 
             let client = FxAClient10()
             let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
@@ -149,6 +149,6 @@ class FxAClient10Tests: LiveAccountTest {
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(withTimeout: 10, handler: nil)
     }
 }

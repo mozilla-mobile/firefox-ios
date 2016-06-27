@@ -23,8 +23,8 @@ class TokenServerClientTests: LiveAccountTest {
     }
 
     func testAudienceForEndpoint() {
-        func audienceFor(endpoint: String) -> String {
-            return TokenServerClient.getAudienceForURL(NSURL(string: endpoint)!)
+        func audienceFor(_ endpoint: String) -> String {
+            return TokenServerClient.getAudienceForURL(URL(string: endpoint)!)
         }
 
         // Sub-domains and path components.
@@ -71,13 +71,13 @@ class TokenServerClientTests: LiveAccountTest {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+        self.waitForExpectations(withTimeout: 100, handler: nil)
     }
 
     func testTokenFailure() {
         withVerifiedAccount { _, _ in
             // Account details aren't used, but we want to skip when we're not running live tests.
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(withDescription: "")
 
             let assertion = "BAD ASSERTION"
 
@@ -103,6 +103,6 @@ class TokenServerClientTests: LiveAccountTest {
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(withTimeout: 10, handler: nil)
     }
 }
