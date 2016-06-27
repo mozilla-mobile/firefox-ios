@@ -2366,12 +2366,11 @@ extension BrowserViewController: WKUIDelegate {
         screenshotHelper.takeScreenshot(currentTab)
 
         // If the page uses window.open() or target="_blank", open the page in a new tab.
-        // TODO: This doesn't work for window.open() without user action (bug 1124942).
         let newTab: Tab
         if #available(iOS 9, *) {
-            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, isPrivate: currentTab.isPrivate)
+            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterCurrentTab: true, isPrivate: currentTab.isPrivate)
         } else {
-            newTab = tabManager.addTab(navigationAction.request, configuration: configuration)
+            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterCurrentTab: true)
         }
         tabManager.selectTab(newTab)
 
@@ -2835,7 +2834,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let newTabTitle = NSLocalizedString("Open In New Tab", comment: "Context menu item for opening a link in a new tab")
                 let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url))
+                        self.tabManager.addTab(NSURLRequest(URL: url), afterCurrentTab: true)
                     })
                 }
                 actionSheetController.addAction(openNewTabAction)
@@ -2845,7 +2844,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let openNewPrivateTabTitle = NSLocalizedString("Open In New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
                 let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url), isPrivate: true)
+                        self.tabManager.addTab(NSURLRequest(URL: url), afterCurrentTab: true, isPrivate: true)
                     })
                 }
                 actionSheetController.addAction(openNewPrivateTabAction)
