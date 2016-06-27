@@ -3761,6 +3761,7 @@
 					};
 					2FA435FA1ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
+						LastSwiftMigration = 0800;
 					};
 					2FA436041ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
@@ -3775,6 +3776,7 @@
 					};
 					390527491C874D35007E0BB7 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					7BEB64401C7345600092C02E = {
 						TestTargetID = F84B21BD1A090F8100AAB793;
@@ -5262,6 +5264,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Fennec;
 		};
@@ -5296,6 +5299,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxNightly;
 		};
@@ -5415,6 +5419,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Fennec;
 		};
@@ -5430,6 +5435,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Firefox;
 		};
@@ -5445,6 +5451,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
 		};
@@ -5460,6 +5467,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxNightly;
 		};
@@ -5475,6 +5483,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)Widget";
 				PRODUCT_NAME = Today;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FennecAurora;
 		};
@@ -5926,6 +5935,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Firefox;
 		};
@@ -6587,6 +6597,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = FennecAurora;
 		};
@@ -7117,6 +7128,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
 		};
