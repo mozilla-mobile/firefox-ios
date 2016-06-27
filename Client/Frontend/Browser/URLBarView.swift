@@ -419,11 +419,11 @@ class URLBarView: UIView {
         let infinity = "\u{221E}"
         let countToBe = (count < 100) ? count.description : infinity
         // only animate a tab count change if the tab count has actually changed
-        if currentCount != countToBe {
+        if currentCount != count.description {
             if let _ = self.clonedTabsButton {
                 self.clonedTabsButton?.layer.removeAllAnimations()
                 self.clonedTabsButton?.removeFromSuperview()
-                self.tabsButton.layer.removeAllAnimations()
+                self.tabsButton.insideButton.layer.removeAllAnimations()
             }
 
             // make a 'clone' of the tabs button
@@ -440,6 +440,7 @@ class URLBarView: UIView {
             }
 
             newTabsButton.frame = tabsButton.frame
+            newTabsButton.insets = tabsButton.insets
 
             // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
             // a rotation around a non-origin point
@@ -464,17 +465,17 @@ class URLBarView: UIView {
             }
 
             let completion: (Bool) -> Void = { finished in
-                // remove the clone and setup the actual tab button
-                newTabsButton.removeFromSuperview()
-
-                self.tabsButton.insideButton.layer.opacity = 1
-                self.tabsButton.insideButton.layer.transform = CATransform3DIdentity
-                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
-
                 if finished {
-                    self.tabsButton.titleLabel.text = countToBe
-                    self.tabsButton.accessibilityValue = countToBe
+                    // remove the clone and setup the actual tab button
+                    newTabsButton.removeFromSuperview()
+                    
+                    self.tabsButton.insideButton.layer.opacity = 1
+                    
+                    self.tabsButton.insideButton.layer.transform = CATransform3DIdentity
+                    self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
                 }
+                self.tabsButton.titleLabel.text = countToBe
+                self.tabsButton.accessibilityValue = countToBe
             }
 
             if animated {

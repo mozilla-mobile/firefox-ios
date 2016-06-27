@@ -2055,7 +2055,9 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {
         // If we are restoring tabs then we update the count once at the end
         if !tabManager.isRestoring {
-            updateTabCountUsingTabManager(tabManager)
+            if (tabManager.selectedTab?.isPrivate ?? tab.isPrivate) == tab.isPrivate {
+                updateTabCountUsingTabManager(tabManager)
+            }
         }
         tab.tabDelegate = self
         tab.appStateDelegate = self
