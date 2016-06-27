@@ -178,8 +178,8 @@ class BrowserViewController: UIViewController {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
-        urlBar.setShowToolbar(!showToolbar)
         urlBar.topTabsIsShowing = showTopTabs
+        urlBar.setShowToolbar(!showToolbar)
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         footerBackground?.removeFromSuperview()
@@ -225,6 +225,7 @@ class BrowserViewController: UIViewController {
             }
             topTabsViewController?.view.removeFromSuperview()
             topTabsViewController?.removeFromParentViewController()
+            topTabsViewController = nil
             header.disableBlur = false
         }
 

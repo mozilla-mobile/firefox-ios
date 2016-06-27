@@ -344,17 +344,25 @@ class URLBarView: UIView {
                 make.centerY.equalTo(self)
             }
         } else {
+            if (topTabsIsShowing) {
+                tabsButton.snp_remakeConstraints { make in
+                    make.centerY.equalTo(self.locationContainer)
+                    make.leading.equalTo(self.snp_trailing)
+                    make.size.equalTo(UIConstants.ToolbarHeight)
+                }
+            }
+            else {
+                tabsButton.snp_remakeConstraints { make in
+                    make.centerY.equalTo(self.locationContainer)
+                    make.trailing.equalTo(self)
+                    make.size.equalTo(UIConstants.ToolbarHeight)
+                }
+            }
             self.locationContainer.snp_remakeConstraints { make in
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
                     make.leading.equalTo(self.stopReloadButton.snp_trailing)
                     make.trailing.equalTo(self.shareButton.snp_leading)
-                    
-                    if (topTabsIsShowing) {
-                        menuButton.snp_updateConstraints { make in
-                            make.right.equalTo(self)
-                        }
-                    }
                 } else {
                     // Otherwise, left align the location view
                     make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)

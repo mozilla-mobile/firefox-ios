@@ -72,7 +72,7 @@ class TopTabsViewController: UIViewController {
         privateTab.setImage(UIImage.templateImageNamed("menu-NewPrivateTab-pbm"), forState: .Normal)
         privateTab.tintColor = UIColor(white: 0.9, alpha: 1)
         privateTab.setImage(UIImage(named: "menu-NewPrivateTab-pbm"), forState: .Highlighted)
-        privateTab.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility label for the Private Tab button in the tab toolbar.")
+        privateTab.accessibilityLabel = NSLocalizedString("Private Tab", comment: "Accessibility label for the Private Tab button in the tab toolbar.")
         return privateTab
     }()
     
@@ -143,6 +143,8 @@ class TopTabsViewController: UIViewController {
         }
         
         view.backgroundColor = UIColor.blackColor()
+        updateTabCount(tabsToDisplay.count)
+        tabsButton.applyTheme(Theme.NormalMode)
     }
     
     func updateTabCount(count: Int, animated: Bool = true) {
