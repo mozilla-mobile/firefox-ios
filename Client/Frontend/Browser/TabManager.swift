@@ -278,10 +278,15 @@ class TabManager : NSObject {
             delegate.get()?.tabManager(self, didCreateTab: tab)
         }
 
-        if !afterCurrentTab || selectedTab?.isPrivate != tab.isPrivate {
+        if !afterCurrentTab || selectedTab == nil || selectedTab?.isPrivate != tab.isPrivate {
             tabs.append(tab)
-        } else {
-            tabs.insert(tab, atIndex: _selectedIndex + 1)
+        } else if let selectedTab = selectedTab {
+            var insertIndex = _selectedIndex + 1
+            while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(selectedTab) {
+                insertIndex += 1
+            }
+            tab.parent = selectedTab
+            tabs.insert(tab, atIndex: insertIndex)
         }
 
         for delegate in delegates {
