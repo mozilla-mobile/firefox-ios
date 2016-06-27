@@ -7,7 +7,7 @@ import Foundation
 class FXSnapshotTestCase: FBSnapshotTestCase {
     override func setUp() {
         super.setUp()
-        if let shouldRecord = NSProcessInfo.processInfo().environment["RECORD_SNAPSHOTS"] where shouldRecord == "YES" {
+        if let shouldRecord = ProcessInfo.processInfo().environment["RECORD_SNAPSHOTS"] where shouldRecord == "YES" {
             recordMode = true
         }
     }
