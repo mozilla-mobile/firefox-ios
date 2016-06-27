@@ -4,12 +4,16 @@
 
 import Foundation
 import WebKit
+import Shared
 import Storage
 import WebImage
+import Deferred
+import Sync
 
 
 class FaviconManager : TabHelper {
     static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
+    private let queue = dispatch_queue_create("FaviconManager", DISPATCH_QUEUE_CONCURRENT)
     
     let profile: Profile!
     weak var tab: Tab?
@@ -33,14 +37,86 @@ class FaviconManager : TabHelper {
     func scriptMessageHandlerName() -> String? {
         return "faviconsMessageHandler"
     }
-
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    
+    internal class FaviconError: MaybeErrorType {
+        internal var description: String {
+            return "No Image Loaded"
+        }
+    }
+    
+    private func loadFavicons(tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<Maybe<[Favicon]>> {
+        var oldIcons: [Favicon] = favicons
+        let deferred = Deferred<Maybe<[Favicon]>>()
+        dispatch_async(queue) { _ in
+            var deferreds = [Deferred<Maybe<Favicon>>]()
+            deferreds = favicons.map { self.getFavicon(tab, icon: $0, profile: profile) }
+            all(deferreds).bind({ (results: [Maybe<Favicon>]) -> Deferred<Maybe<[Favicon]>> in
+                for result in results {
+                    if let icon = result.successValue {
+                        oldIcons.append(icon)
+                    }
+                }
+                
+                oldIcons = oldIcons.sort {
+                    return $0.width > $1.width
+                }
+                
+                return deferMaybe(oldIcons)
+            }).upon({ (result: Maybe<[Favicon]>) in
+                deferred.fill(result)
+                return
+            })
+        }
+        
+        return deferred
+    }
+    
+    func getFavicon(tab: Tab, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
+        let deferred = Deferred<Maybe<Favicon>>()
         let manager = SDWebImageManager.sharedManager()
-        self.tab?.favicons.removeAll(keepCapacity: false)
-        if let tab = self.tab,
+        let options = tab.isPrivate ?
+            [SDWebImageOptions.LowPriority, SDWebImageOptions.CacheMemoryOnly] : [SDWebImageOptions.LowPriority]
+        
+        if let iconUrl = NSURL(string: icon.url),
             let currentURL = tab.url,
             let url = tab.url?.absoluteString {
-                let site = Site(url: url, title: "")
+            let site = Site(url: url, title: "")
+            manager.downloadImageWithURL(iconUrl,
+                                         options: SDWebImageOptions(options),
+                                         progress: nil,
+                                         completed: { (img, err, cacheType, success, url) -> Void in
+                                            let fav = Favicon(url: url.absoluteString,
+                                                date: NSDate(),
+                                                type: icon.type)
+                                            
+                                            if let img = img {
+                                                fav.width = Int(img.size.width)
+                                                fav.height = Int(img.size.height)
+                                            } else {
+                                                deferred.fill(Maybe(failure: FaviconError()))
+                                                return
+                                            }
+                                            
+                                            if !tab.isPrivate {
+                                                self.profile.favicons.addFavicon(fav, forSite: site)
+                                                if tab.favicons.isEmpty {
+                                                    self.makeFaviconAvailable(tab, atURL: currentURL, favicon: fav, withImage: img)
+                                                }
+                                            }
+                                            tab.favicons.append(fav)
+                                            deferred.fill(Maybe(success: fav))
+            })
+        } else {
+            return deferMaybe(FaviconFetcherErrorType(description: "Invalid URL \(icon.url)"))
+        }
+        
+        return deferred
+    }
+
+    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        self.tab?.favicons.removeAll(keepCapacity: false)
+        if let tab = self.tab,
+        let currentURL = tab.url {
                 var favicons = [Favicon]()
                 if let icons = message.body as? [String: Int] {
                     for icon in icons {
@@ -50,39 +126,15 @@ class FaviconManager : TabHelper {
                         }
                     }
                 }
-
-                let options = tab.isPrivate ?
-                    [SDWebImageOptions.LowPriority, SDWebImageOptions.CacheMemoryOnly] : [SDWebImageOptions.LowPriority]
-
-                for icon in favicons {
-                    if let iconUrl = NSURL(string: icon.url) {
-                        manager.downloadImageWithURL(iconUrl, options: SDWebImageOptions(options), progress: nil, completed: { (img, err, cacheType, success, url) -> Void in
-                            let fav = Favicon(url: url.absoluteString,
-                                date: NSDate(),
-                                type: icon.type)
-
-                            if let img = img {
-                                fav.width = Int(img.size.width)
-                                fav.height = Int(img.size.height)
-                            } else {
-                                if favicons.count == 1 && favicons[0].type == .Guess {
-                                    // No favicon is indicated in the HTML
-                                    self.noFaviconAvailable(tab, atURL: currentURL)
-                                }
-                                return
-                            }
-
-                            if !tab.isPrivate {
-                                self.profile.favicons.addFavicon(fav, forSite: site)
-                                if tab.favicons.isEmpty {
-                                    self.makeFaviconAvailable(tab, atURL: currentURL, favicon: fav, withImage: img)
-                                }
-                            }
-                            tab.favicons.append(fav)
-                        })
+            loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(dispatch_get_main_queue()) { result in
+                if let result = result.successValue {
+                    if result.count == 1 && favicons[0].type == .Guess {
+                        // No favicon is indicated in the HTML
+                        self.noFaviconAvailable(tab, atURL: currentURL)
                     }
                 }
-            NSNotificationCenter.defaultCenter().postNotificationName(FaviconManager.FaviconDidLoad, object: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName(FaviconManager.FaviconDidLoad, object: nil)
+            }
         }
     }
 
