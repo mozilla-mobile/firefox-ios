@@ -205,26 +205,26 @@ class TabManager : NSObject {
     }
 
     @available(iOS 9, *)
-    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Tab {
-        return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
+    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
+        return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
     @available(iOS 9, *)
-    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Tab {
-        let tab = addTab(request, configuration: configuration, isPrivate: isPrivate)
+    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
+        let tab = addTab(request, configuration: configuration, afterTab: afterTab, isPrivate: isPrivate)
         selectTab(tab)
         return tab
     }
 
-    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Tab {
-        let tab = addTab(request, configuration: configuration)
+    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
+        let tab = addTab(request, configuration: configuration, afterTab: afterTab)
         selectTab(tab)
         return tab
     }
 
     // This method is duplicated to hide the flushToDisk option from consumers.
-    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Tab {
-        return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false)
+    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
+        return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false)
     }
 
     func addTabsForURLs(urls: [NSURL], zombie: Bool) {
@@ -252,33 +252,42 @@ class TabManager : NSObject {
     }
 
     @available(iOS 9, *)
-    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Tab {
+    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Tab {
         assert(NSThread.isMainThread())
 
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
 
         let tab = Tab(configuration: configuration, isPrivate: isPrivate)
-        configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie)
+        configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
 
-    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, flushToDisk: Bool, zombie: Bool) -> Tab {
+    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool) -> Tab {
         assert(NSThread.isMainThread())
 
         let tab = Tab(configuration: configuration ?? self.configuration)
-        configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie)
+        configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
 
-    func configureTab(tab: Tab, request: NSURLRequest?, flushToDisk: Bool, zombie: Bool) {
+    func configureTab(tab: Tab, request: NSURLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool) {
         assert(NSThread.isMainThread())
 
         for delegate in delegates {
             delegate.get()?.tabManager(self, didCreateTab: tab)
         }
 
-        tabs.append(tab)
+        if parent == nil || parent?.isPrivate != tab.isPrivate {
+            tabs.append(tab)
+        } else if let parent = parent, var insertIndex = tabs.indexOf(parent) {
+            insertIndex += 1
+            while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) {
+                insertIndex += 1
+            }
+            tab.parent = parent
+            tabs.insert(tab, atIndex: insertIndex)
+        }
 
         for delegate in delegates {
             delegate.get()?.tabManager(self, didAddTab: tab)
