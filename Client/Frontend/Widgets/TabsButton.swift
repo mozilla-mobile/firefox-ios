@@ -64,6 +64,12 @@ class TabsButton: UIControl {
             }
         }
     }
+    
+    override var transform: CGAffineTransform {
+        didSet {
+            clonedTabsButton?.transform = transform
+        }
+    }
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -97,6 +103,9 @@ class TabsButton: UIControl {
     }()
 
     private var buttonInsets: UIEdgeInsets = TabsButtonUX.TitleInsets
+    
+    // Used to temporarily store the cloned button so we can respond to layout changes during animation
+    private weak var clonedTabsButton: TabsButton?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -145,7 +154,82 @@ class TabsButton: UIControl {
         button.borderView.strokeWidth = borderView.strokeWidth
         button.borderView.color = borderView.color
         button.borderView.cornerRadius = borderView.cornerRadius
+        
         return button
+    }
+    
+    func updateTabCount(count: Int, animated: Bool = true) {
+        let currentCount = self.titleLabel.text
+        let infinity = "\u{221E}"
+        let countToBe = (count < 100) ? count.description : infinity
+        // only animate a tab count change if the tab count has actually changed
+        if currentCount != countToBe {
+            if let _ = self.clonedTabsButton {
+                self.clonedTabsButton?.layer.removeAllAnimations()
+                self.clonedTabsButton?.removeFromSuperview()
+                layer.removeAllAnimations()
+            }
+            
+            // make a 'clone' of the tabs button
+            let newTabsButton = clone() as! TabsButton
+            self.clonedTabsButton = newTabsButton
+            newTabsButton.addTarget(self, action: #selector(TabsButton.cloneDidClickTabs), forControlEvents: UIControlEvents.TouchUpInside)
+            newTabsButton.titleLabel.text = countToBe
+            newTabsButton.accessibilityValue = countToBe
+            superview?.addSubview(newTabsButton)
+            newTabsButton.snp_makeConstraints { make in
+                make.centerY.equalTo(self)
+                make.trailing.equalTo(self)
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            }
+            
+            newTabsButton.frame = self.frame
+            
+            // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
+            // a rotation around a non-origin point
+            let frame = self.insideButton.frame
+            let halfTitleHeight = CGRectGetHeight(frame) / 2
+            
+            var newFlipTransform = CATransform3DIdentity
+            newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
+            newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
+            newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
+            newTabsButton.insideButton.layer.transform = newFlipTransform
+            
+            var oldFlipTransform = CATransform3DIdentity
+            oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
+            oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
+            oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(M_PI_2), 1.0, 0.0, 0.0)
+            
+            let animate = {
+                newTabsButton.insideButton.layer.transform = CATransform3DIdentity
+                self.insideButton.layer.transform = oldFlipTransform
+                self.insideButton.layer.opacity = 0
+            }
+            
+            let completion: (Bool) -> Void = { finished in
+                // remove the clone and setup the actual tab button
+                newTabsButton.removeFromSuperview()
+                
+                self.insideButton.layer.opacity = 1
+                self.insideButton.layer.transform = CATransform3DIdentity
+                self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
+                
+                if finished {
+                    self.titleLabel.text = countToBe
+                    self.accessibilityValue = countToBe
+                }
+            }
+            
+            if animated {
+                UIView.animateWithDuration(1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: animate, completion: completion)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    func cloneDidClickTabs() {
+        sendActionsForControlEvents(UIControlEvents.TouchUpInside)
     }
 }
 
