@@ -51,8 +51,8 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         self.passcode = passcode
         self.requiredPasscodeInterval = .Immediately
         self.failedAttempts = 0
-        self.useAuthenticationForPrivateBrowsing = false
-        self.useAuthenticationForLogins = false
+        self.useAuthenticationForPrivateBrowsing = true
+        self.useAuthenticationForLogins = true
     }
 
     public func encodeWithCoder(aCoder: NSCoder) {
