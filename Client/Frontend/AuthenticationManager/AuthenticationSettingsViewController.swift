@@ -268,6 +268,14 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
             navigationItem.title = AuthenticationStrings.passcode
         }
     }
+    
+    private var authenticationSectionTitle: NSAttributedString {
+        if LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
+            return NSAttributedString(string: AuthenticationStrings.authenticateFeaturesWithTouchIDPasscode)
+        } else {
+            return NSAttributedString(string: AuthenticationStrings.authenticateFeaturesWithPasscode)
+        }
+    }
 
     private func passcodeEnabledSettings() -> [SettingSection] {
         var settings = [SettingSection]()
@@ -279,7 +287,6 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         ])
 
         let requirePasscodeSectionChildren: [Setting] = [RequirePasscodeSetting(settings: self)]
-        let authenticationSectionTitle = NSAttributedString(string: LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) ? AuthenticationStrings.authenticateFeaturesWithTouchIDPasscode : AuthenticationStrings.authenticateFeaturesWithPasscode)
         let authenticationSection = SettingSection(title: authenticationSectionTitle, children: [
             AuthenticationSetting(
                 title: NSAttributedString.tableRowTitle(
@@ -348,7 +355,6 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
             RequirePasscodeSetting(settings: self, delegate: nil, enabled: false),
         ])
         
-        let authenticationSectionTitle = NSAttributedString(string: LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) ? AuthenticationStrings.authenticateFeaturesWithTouchIDPasscode : AuthenticationStrings.authenticateFeaturesWithPasscode)
         let authenticationSection = SettingSection(title: authenticationSectionTitle, children: [
             AuthenticationSetting(
                 title: NSAttributedString.tableRowTitle(
