@@ -84,6 +84,7 @@ class BrowserViewController: UIViewController {
     var footerBackdrop: UIView!
     private var footerBackground: BlurWrapper?
     private var topTouchArea: UIButton!
+    let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
 
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
@@ -101,6 +102,9 @@ class BrowserViewController: UIViewController {
     var navigationToolbar: TabToolbarProtocol {
         return toolbar ?? urlBar
     }
+    
+    var topTabsViewController: TopTabsViewController?
+    let topTabsContainer = UIView(frame: CGRect.zero)
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -157,6 +161,13 @@ class BrowserViewController: UIViewController {
                previousTraitCollection.horizontalSizeClass != .Regular
     }
 
+    func shouldShowTopTabsForTraitCollection(newTraitCollection: UITraitCollection) -> Bool {
+        guard AppConstants.MOZ_TOP_TABS else {
+            return false
+        }
+        return newTraitCollection.verticalSizeClass == .Regular &&
+            newTraitCollection.horizontalSizeClass == .Regular
+    }
 
     func toggleSnackBarVisibility(show show: Bool) {
         if show {
@@ -168,7 +179,9 @@ class BrowserViewController: UIViewController {
 
     private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
+        let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
+        urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
@@ -188,6 +201,35 @@ class BrowserViewController: UIViewController {
                 toolbar?.applyTheme(Theme.PrivateMode)
             }
             footer.addSubview(footerBackground!)
+        }
+        
+        if showTopTabs {
+            if topTabsViewController == nil {
+                let topTabsViewController = TopTabsViewController(tabManager: tabManager)
+                topTabsViewController.delegate = self
+                addChildViewController(topTabsViewController)
+                topTabsViewController.view.frame = topTabsContainer.frame
+                topTabsContainer.addSubview(topTabsViewController.view)
+                topTabsViewController.view.snp_makeConstraints { make in
+                    make.edges.equalTo(topTabsContainer)
+                    make.height.equalTo(TopTabsUX.TopTabsViewHeight)
+                }
+                self.topTabsViewController = topTabsViewController
+                tabManager.addNavigationDelegate(topTabsViewController)
+            }
+            topTabsContainer.snp_updateConstraints { make in
+                make.height.equalTo(TopTabsUX.TopTabsViewHeight)
+            }
+            header.disableBlur = true
+        }
+        else {
+            topTabsContainer.snp_updateConstraints { make in
+                make.height.equalTo(0)
+            }
+            topTabsViewController?.view.removeFromSuperview()
+            topTabsViewController?.removeFromParentViewController()
+            topTabsViewController = nil
+            header.disableBlur = false
         }
 
         view.setNeedsUpdateConstraints()
@@ -322,7 +364,9 @@ class BrowserViewController: UIViewController {
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
-        header = BlurWrapper(view: urlBar)
+        header = BlurWrapper(view: urlBarTopTabsContainer)
+        urlBarTopTabsContainer.addSubview(urlBar)
+        urlBarTopTabsContainer.addSubview(topTabsContainer)
         view.addSubview(header)
 
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
@@ -373,13 +417,19 @@ class BrowserViewController: UIViewController {
     }
 
     private func setupConstraints() {
+        topTabsContainer.snp_makeConstraints { make in
+            make.leading.trailing.equalTo(self.header)
+            make.top.equalTo(urlBarTopTabsContainer)
+        }
+        
         urlBar.snp_makeConstraints { make in
-            make.edges.equalTo(self.header)
+            make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
+            make.height.equalTo(UIConstants.ToolbarHeight)
+            make.top.equalTo(topTabsContainer.snp_bottom)
         }
 
         header.snp_makeConstraints { make in
             scrollController.headerTopConstraint = make.top.equalTo(snp_topLayoutGuideBottom).constraint
-            make.height.equalTo(UIConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
         }
 
@@ -2101,6 +2151,7 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             urlBar.updateTabCount(max(count, 1), animated: animated)
+            topTabsViewController?.updateTabCount(max(count, 1), animated: animated)
         }
     }
 }
@@ -3134,6 +3185,7 @@ extension BrowserViewController: Themeable {
         urlBar.applyTheme(themeName)
         toolbar?.applyTheme(themeName)
         readerModeBar?.applyTheme(themeName)
+        topTabsViewController?.applyTheme(themeName)
 
         switch(themeName) {
         case Theme.NormalMode:
@@ -3159,17 +3211,38 @@ class BlurWrapper: UIView {
             effectView.snp_remakeConstraints { make in
                 make.edges.equalTo(self)
             }
+            effectView.hidden = disableBlur
+            switch blurStyle {
+            case .ExtraLight, .Light:
+                background.backgroundColor = TopTabsUX.TopTabsBackgroundNormalColor
+            case .Dark:
+                background.backgroundColor = TopTabsUX.TopTabsBackgroundPrivateColor
+            }
         }
     }
+    
+    var disableBlur = false {
+        didSet {
+            effectView.hidden = disableBlur
+            background.hidden = !disableBlur
+        }
+    }
+    
 
     private var effectView: UIVisualEffectView
     private var wrappedView: UIView
+    private lazy var background: UIView = {
+        let background = UIView()
+        background.hidden = true
+        return background
+    }()
 
     init(view: UIView) {
         wrappedView = view
         effectView = UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
         super.init(frame: CGRectZero)
 
+        addSubview(background)
         addSubview(effectView)
         addSubview(wrappedView)
 
@@ -3178,6 +3251,10 @@ class BlurWrapper: UIView {
         }
 
         wrappedView.snp_makeConstraints { make in
+            make.edges.equalTo(self)
+        }
+        
+        background.snp_makeConstraints { make in
             make.edges.equalTo(self)
         }
     }
@@ -3238,5 +3315,37 @@ private extension WKNavigationAction {
     /// Allow local requests only if the request is privileged.
     private var isAllowed: Bool {
         return !(request.URL?.isLocal ?? false) || request.isPrivileged
+    }
+}
+
+extension BrowserViewController: TopTabsDelegate {
+    func topTabsDidPressTabs() {
+        self.urlBarDidPressTabs(urlBar)
+    }
+    
+    func topTabsDidPressNewTab() {
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        openBlankNewTabAndFocus(isPrivate: isPrivate)
+    }
+    
+    func topTabsDidPressPrivateTab() {
+        guard let selectedTab = tabManager.selectedTab else {
+            return
+        }
+        if selectedTab.isPrivate {
+            tabManager.selectTab(tabManager.normalTabs.last)
+        }
+        else {
+            if let privateTab = tabManager.privateTabs.last {
+                tabManager.selectTab(privateTab)
+            }
+            else {
+                openBlankNewTabAndFocus(isPrivate: true)
+            }
+        }
+    }
+    
+    func topTabsDidChangeTab() {
+        urlBar.leaveOverlayMode()
     }
 }
