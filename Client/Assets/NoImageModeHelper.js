@@ -31,9 +31,9 @@
 
   function blockImages (elem, enabled) {
     var imgs = document.getElementsByTagName("IMG");
-    for (var i=0; i<imgs.length;i++) {
-        var parent = imgs[i].parentNode;
-        parent.removeChild(imgs[i]);
+    while (imgs.length > 0) {
+        var parent = imgs[0].parentNode;
+        parent.removeChild(imgs[0]);
     }
   }
 
