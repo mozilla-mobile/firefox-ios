@@ -93,6 +93,7 @@ class TopTabsViewController: UIViewController {
         super.viewWillAppear(animated)
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
+        collectionView.reloadData()
     }
     
     override func viewDidLoad() {
