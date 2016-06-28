@@ -218,13 +218,20 @@ extension TopTabsViewController: TopTabCellDelegate {
             collectionView.reloadData()
         }
         else {
+            var nextTab: Tab
+            let currentIndex = indexPath.item
+            if tabsToDisplay.count-1 > currentIndex {
+                nextTab = tabsToDisplay[currentIndex+1]
+            }
+            else {
+                nextTab = tabsToDisplay[currentIndex-1]
+            }
             tabManager.removeTab(tab)
+            tabManager.selectTab(nextTab)
             self.collectionView.performBatchUpdates({
                 self.collectionView.deleteItemsAtIndexPaths([indexPath])
                 }, completion: { finished in
-                    if #available(iOS 9, *) {
-                        self.collectionView.reloadData()
-                    }
+                    self.collectionView.reloadData()
             })
         }
     }
