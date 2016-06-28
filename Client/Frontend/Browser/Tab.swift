@@ -342,7 +342,7 @@ class Tab: NSObject {
                 webView?.customUserAgent = userAgent
 
                 // Reload the initial URL to avoid UA specific redirection
-                loadRequest(NSURLRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 60))
+                loadRequest(PrivilegedRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 60))
                 return
             }
         }
