@@ -184,8 +184,3 @@ extension Strings {
     public static let UnableToAddPassErrorMessage = NSLocalizedString("AddPass.Error.Message", value: "An error occured while adding the pass to Passbook. Please try again later.", comment: "Text of the 'Add Pass Failed' alert")
     public static let UnableToAddPassErrorDismiss = NSLocalizedString("AddPass.Error.Dismiss", value: "OK", comment: "Button to dismiss the 'Add Pass Failed' alert")
 }
-
-// Top Tabs
-extension Strings {
-    public static let TopTabsNewTabTitle = NSLocalizedString("TopTabs.Tiltle.NewTab", value: "New Tab", comment: "The title displayed in the tab when opening a new tab.")
-}
