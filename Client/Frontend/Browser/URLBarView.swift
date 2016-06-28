@@ -143,11 +143,8 @@ class URLBarView: UIView {
     }()
 
     private lazy var tabsButton: TabsButton = {
-        let tabsButton = TabsButton()
-        tabsButton.titleLabel.text = "0"
-        tabsButton.addTarget(self, action: #selector(URLBarView.SELdidClickAddTab), forControlEvents: UIControlEvents.TouchUpInside)
+        let tabsButton = TabsButton.tabTrayButton()
         tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
-        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
         return tabsButton
     }()
 
