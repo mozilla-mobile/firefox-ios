@@ -2356,21 +2356,23 @@ private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data"]
 
 extension BrowserViewController: WKUIDelegate {
     func webView(webView: WKWebView, createWebViewWithConfiguration configuration: WKWebViewConfiguration, forNavigationAction navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        guard let currentTab = tabManager.selectedTab else { return nil }
+        guard let parentTab = tabManager[webView] else { return nil }
 
         if !navigationAction.isAllowed {
             log.warning("Denying unprivileged request: \(navigationAction.request)")
             return nil
         }
 
-        screenshotHelper.takeScreenshot(currentTab)
+        if let currentTab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(currentTab)
+        }
 
         // If the page uses window.open() or target="_blank", open the page in a new tab.
         let newTab: Tab
         if #available(iOS 9, *) {
-            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterCurrentTab: true, isPrivate: currentTab.isPrivate)
+            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterTab: parentTab, isPrivate: parentTab.isPrivate)
         } else {
-            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterCurrentTab: true)
+            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterTab: parentTab)
         }
         tabManager.selectTab(newTab)
 
@@ -2834,7 +2836,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let newTabTitle = NSLocalizedString("Open In New Tab", comment: "Context menu item for opening a link in a new tab")
                 let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url), afterCurrentTab: true)
+                        self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab)
                     })
                 }
                 actionSheetController.addAction(openNewTabAction)
@@ -2844,7 +2846,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let openNewPrivateTabTitle = NSLocalizedString("Open In New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
                 let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url), afterCurrentTab: true, isPrivate: true)
+                        self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)
                     })
                 }
                 actionSheetController.addAction(openNewPrivateTabAction)
