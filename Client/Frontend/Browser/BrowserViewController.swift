@@ -1745,9 +1745,11 @@ extension BrowserViewController: TabDelegate {
         let errorHelper = ErrorPageHelper()
         tab.addHelper(errorHelper, name: ErrorPageHelper.name())
 
-        let windowCloseHelper = WindowCloseHelper(tab: tab)
-        windowCloseHelper.delegate = self
-        tab.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
+        if #available(iOS 9, *) {} else {
+            let windowCloseHelper = WindowCloseHelper(tab: tab)
+            windowCloseHelper.delegate = self
+            tab.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
+        }
 
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
@@ -2479,6 +2481,13 @@ extension BrowserViewController: WKUIDelegate {
 
         openInHelper.open()
         decisionHandler(WKNavigationResponsePolicy.Cancel)
+    }
+    
+    @available(iOS 9, *)
+    func webViewDidClose(webView: WKWebView) {
+        if let tab = tabManager[webView] {
+            self.tabManager.removeTab(tab)
+        }
     }
 }
 
