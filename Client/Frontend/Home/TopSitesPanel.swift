@@ -62,10 +62,11 @@ class TopSitesPanel: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-
-        coordinator.animateAlongsideTransition({ context in
-            self.collection?.reloadData()
-        }, completion: nil)
+        if UIApplication.sharedApplication().applicationState != .Background {
+            coordinator.animateAlongsideTransition({ context in
+                self.collection?.reloadData()
+            }, completion: nil)
+        }
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
