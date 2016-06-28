@@ -18,6 +18,7 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
         menuTitleLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         menuTitleLabel.numberOfLines = 0
         menuTitleLabel.textAlignment = NSTextAlignment.Center
+        menuTitleLabel.adjustsFontSizeToFitWidth = true
         return menuTitleLabel
     }()
 
@@ -33,11 +34,19 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
             make.bottom.equalTo(self.snp_centerYWithinMargins)
         }
 
+        // for iPhone 5S and below, left/right offset should be padding
+        // otherwise it should be 2*padding to make the text wrapping look right.
+        let horizontalOffset: CGFloat
+        if UIScreen.mainScreen().coordinateSpace.bounds.width < 375 {
+            horizontalOffset = padding
+        } else {
+            horizontalOffset = 2 * padding
+        }
         menuTitleLabel.snp_makeConstraints { make in
             make.top.equalTo(menuImageView.snp_bottom).offset(padding)
             make.centerX.equalTo(self)
-            make.left.lessThanOrEqualTo(self).offset(2 * padding)
-            make.right.lessThanOrEqualTo(self).offset(-(2 * padding))
+            make.leading.lessThanOrEqualTo(self).offset(horizontalOffset)
+            make.trailing.lessThanOrEqualTo(self).offset(-horizontalOffset)
         }
 
         self.isAccessibilityElement = true
