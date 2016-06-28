@@ -162,6 +162,9 @@ class BrowserViewController: UIViewController {
     }
 
     func shouldShowTopTabsForTraitCollection(newTraitCollection: UITraitCollection) -> Bool {
+        guard AppConstants.MOZ_TOP_TABS else {
+            return false
+        }
         return newTraitCollection.verticalSizeClass == .Regular &&
             newTraitCollection.horizontalSizeClass == .Regular
     }
