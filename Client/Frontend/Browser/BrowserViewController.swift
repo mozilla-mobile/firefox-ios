@@ -2486,9 +2486,7 @@ extension BrowserViewController: WKUIDelegate {
     @available(iOS 9, *)
     func webViewDidClose(webView: WKWebView) {
         if let tab = tabManager[webView] {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.tabManager.removeTab(tab)
-            }
+            self.tabManager.removeTab(tab)
         }
     }
 }
