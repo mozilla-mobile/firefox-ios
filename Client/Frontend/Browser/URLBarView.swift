@@ -144,6 +144,7 @@ class URLBarView: UIView {
 
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
+        tabsButton.addTarget(self, action: #selector(URLBarView.SELdidClickAddTab), forControlEvents: UIControlEvents.TouchUpInside)
         tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
         return tabsButton
     }()
