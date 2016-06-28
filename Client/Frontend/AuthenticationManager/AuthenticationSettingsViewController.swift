@@ -140,7 +140,7 @@ class AuthenticationSetting: Setting {
         self.navigationController = navigationController
         self.authenticationDelegate = authenticationDelegate
         super.init(title: title, delegate: delegate, enabled: enabled)
-        authenticationDelegate.setting = self
+        authenticationDelegate?.setting = self
     }
 
     override func onConfigureCell(cell: UITableViewCell) {
@@ -152,7 +152,7 @@ class AuthenticationSetting: Setting {
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
         self.authInfo = KeychainWrapper.authenticationInfo()
-        control.on = authenticationDelegate.authInfoUseAuthentication
+        control.on = authenticationDelegate?.authInfoUseAuthentication ?? false
         control.userInteractionEnabled = false
         switchControl = control
 
@@ -279,9 +279,8 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         ])
 
         let requirePasscodeSectionChildren: [Setting] = [RequirePasscodeSetting(settings: self)]
-        var authenticationSection: SettingSection? = nil
         let authenticationSectionTitle = NSAttributedString(string: LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) ? AuthenticationStrings.authenticateFeaturesWithTouchIDPasscode : AuthenticationStrings.authenticateFeaturesWithPasscode)
-        authenticationSection = SettingSection(title: authenticationSectionTitle, children: [
+        let authenticationSection = SettingSection(title: authenticationSectionTitle, children: [
             AuthenticationSetting(
                 title: NSAttributedString.tableRowTitle(
                     NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "List section title for when to use authentication for private browsing")
@@ -330,10 +329,8 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         settings += [
             passcodeSection,
             requirePasscodeSection,
+            authenticationSection
         ]
-        if let authenticationSection = authenticationSection {
-            settings += [authenticationSection]
-        }
 
         return settings
     }
@@ -350,10 +347,27 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         let requirePasscodeSection = SettingSection(title: nil, children: [
             RequirePasscodeSetting(settings: self, delegate: nil, enabled: false),
         ])
+        
+        let authenticationSectionTitle = NSAttributedString(string: LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) ? AuthenticationStrings.authenticateFeaturesWithTouchIDPasscode : AuthenticationStrings.authenticateFeaturesWithPasscode)
+        let authenticationSection = SettingSection(title: authenticationSectionTitle, children: [
+            AuthenticationSetting(
+                title: NSAttributedString.tableRowTitle(
+                    NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "List section title for when to use authentication for private browsing")
+                ),
+                enabled: false
+            ),
+            AuthenticationSetting(
+                title: NSAttributedString.tableRowTitle(
+                    NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID for logins")
+                ),
+                enabled: false
+            )
+        ])
 
         settings += [
             passcodeSection,
             requirePasscodeSection,
+            authenticationSection
         ]
 
         return settings

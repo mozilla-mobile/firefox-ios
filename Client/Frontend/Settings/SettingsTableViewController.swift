@@ -48,6 +48,9 @@ class Setting: NSObject {
         cell.textLabel?.attributedText = title
         cell.textLabel?.textAlignment = textAlignment
         cell.textLabel?.numberOfLines = 0
+        if !enabled {
+            cell.textLabel?.textColor = UIConstants.TableViewDisabledRowTextColor
+        }
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
         cell.selectionStyle = enabled ? .Default : .None
