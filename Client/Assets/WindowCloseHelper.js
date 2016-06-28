@@ -10,12 +10,13 @@
         window.__firefox__.messages = {};
     }
     window.__firefox__.messages.close = "FIREFOX_MESSAGE_CLOSE";
+    window.__firefox__.messages.close = "FIREFOX_MESSAGE_REDIRECT";
  
     var _close = window.close;
  
     window.close = function () {
         webkit.messageHandlers.windowCloseHelper.postMessage(null);
-        _close();
+        _close.apply(this, arguments);
     };
     // A close message applies to the current window, so we need to execute the
     // close method in the context of the child window when we want to close a
@@ -28,7 +29,9 @@
             event.stopPropagation();
         }
     }, true);
+
     var _open = window.open;
+    
     window.open = function (strUrl, strWindowName, strWindowFeatures) {
         // If we simply return the reference returned by window.open(),
         // then (the read-only) window.close() will fail to execute when the
@@ -39,16 +42,14 @@
         // so we can simply return the original window
         var urlHost;
         try {
-            urlHost = new URL(strUrl).host.split(".").slice(-2).join(".");
+            urlHost = new URL(strUrl).origin;
         } catch (error) {
             urlHost = null
         }
-        var crossOrigin = window.location.host.split(".").slice(-2).join(".") !== urlHost;
+        var crossOrigin = window.location.origin !== urlHost;
         if (!crossOrigin) {
-            console.log("local");
             return opened;
         }
-        console.log("external", urlHost, window.location.host);
         proxy = {};
         for (var property in opened) {
             if (typeof opened[property] === "function") {
