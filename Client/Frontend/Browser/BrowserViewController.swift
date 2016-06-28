@@ -2169,7 +2169,7 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if !navigationAction.isAllowed {
+        if !navigationAction.isAllowed && navigationAction.navigationType != .BackForward {
             log.warning("Denying unprivileged request: \(navigationAction.request)")
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
