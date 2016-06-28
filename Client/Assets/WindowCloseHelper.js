@@ -10,7 +10,6 @@
         window.__firefox__.messages = {};
     }
     window.__firefox__.messages.close = "FIREFOX_MESSAGE_CLOSE";
-    window.__firefox__.messages.close = "FIREFOX_MESSAGE_REDIRECT";
  
     var _close = window.close;
  
