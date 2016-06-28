@@ -483,11 +483,10 @@ class TabTrayController: UIViewController {
             return succeed()
         }
         let success = Success()
-        if authInfo.requiresValidation() {
+        if authInfo.requiresValidation(.PrivateBrowsing) {
             let presentingNavController = navigationController ?? self.navigationController
             let cancelAction = { success.fill(Maybe(failure: AuthorisationError(description: "User cancelled authorisation action."))) }
             AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
-                touchIDPurpose: .PrivateBrowsing,
                 touchIDReason: AuthenticationStrings.privateModeReason,
                 success: {
                     success.fill(Maybe(success: ()))

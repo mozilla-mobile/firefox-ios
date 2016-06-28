@@ -23,15 +23,18 @@ extension PasscodeInterval {
 struct AuthenticationStrings {
     static let passcode =
         NSLocalizedString("Passcode", tableName: "AuthenticationManager", comment: "Label for the Passcode item in Settings")
-    
-    static let touchID =
-        NSLocalizedString("Use Touch ID to access:", tableName: "AuthenticationManager", comment: "Label for the Touch ID-related items in Settings")
 
     static let touchIDPasscodeSetting =
         NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Label for the Touch ID/Passcode item in Settings")
 
     static let requirePasscode =
         NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately'")
+    
+    static let authenticateFeaturesWithTouchIDPasscode =
+        NSLocalizedString("Use Touch ID & Passcode to access:", tableName: "AuthenticationManager", comment: "Label for the list of features for which security can be enabled in Settings, with Touch ID enabled")
+    
+    static let authenticateFeaturesWithPasscode =
+        NSLocalizedString("Use Passcode to access:", tableName: "AuthenticationManager", comment: "Label for the list of features for which security can be enabled in Settings, with Touch ID disabled")
 
     static let enterAPasscode =
         NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when entering a new passcode")

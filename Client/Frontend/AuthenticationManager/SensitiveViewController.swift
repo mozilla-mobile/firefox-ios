@@ -26,14 +26,13 @@ class SensitiveViewController: UIViewController {
 
     func checkIfUserRequiresValidation() {
         presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
-        guard let authInfo = KeychainWrapper.authenticationInfo() where authInfo.requiresValidation() else {
+        guard let authInfo = KeychainWrapper.authenticationInfo() where authInfo.requiresValidation(.Logins) else {
             removeBackgroundedBlur()
             return
         }
 
         promptingForTouchID = true
         AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
-            touchIDPurpose: .Logins,
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.promptingForTouchID = false

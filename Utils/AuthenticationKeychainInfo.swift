@@ -41,8 +41,8 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
     private(set) public var requiredPasscodeInterval: PasscodeInterval?
     private(set) public var lockOutInterval: NSTimeInterval?
     private(set) public var failedAttempts: Int
-    public var useTouchIDForPrivateBrowsing: Bool
-    public var useTouchIDForLogins: Bool
+    public var useAuthenticationForPrivateBrowsing: Bool
+    public var useAuthenticationForLogins: Bool
 
     // Timeout period before user can retry entering passcodes
     public var lockTimeInterval: NSTimeInterval = 15 * 60
@@ -51,8 +51,8 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         self.passcode = passcode
         self.requiredPasscodeInterval = .Immediately
         self.failedAttempts = 0
-        self.useTouchIDForPrivateBrowsing = false
-        self.useTouchIDForLogins = false
+        self.useAuthenticationForPrivateBrowsing = false
+        self.useAuthenticationForLogins = false
     }
 
     public func encodeWithCoder(aCoder: NSCoder) {
@@ -69,8 +69,8 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         aCoder.encodeObject(passcode, forKey: "passcode")
         aCoder.encodeObject(requiredPasscodeInterval?.rawValue, forKey: "requiredPasscodeInterval")
         aCoder.encodeInteger(failedAttempts, forKey: "failedAttempts")
-        aCoder.encodeBool(useTouchIDForPrivateBrowsing, forKey: "useTouchIDForPrivateBrowsing")
-        aCoder.encodeBool(useTouchIDForLogins, forKey: "useTouchIDForLogins")
+        aCoder.encodeBool(useAuthenticationForPrivateBrowsing, forKey: "useAuthenticationForPrivateBrowsing")
+        aCoder.encodeBool(useAuthenticationForLogins, forKey: "useAuthenticationForLogins")
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -78,8 +78,8 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         self.lockOutInterval = (aDecoder.decodeObjectForKey("lockOutInterval") as? NSNumber)?.doubleValue
         self.passcode = aDecoder.decodeObjectForKey("passcode") as? String
         self.failedAttempts = aDecoder.decodeIntegerForKey("failedAttempts")
-        self.useTouchIDForPrivateBrowsing = aDecoder.decodeBoolForKey("useTouchIDForPrivateBrowsing")
-        self.useTouchIDForLogins = aDecoder.decodeBoolForKey("useTouchIDForLogins")
+        self.useAuthenticationForPrivateBrowsing = aDecoder.decodeBoolForKey("useAuthenticationForPrivateBrowsing")
+        self.useAuthenticationForLogins = aDecoder.decodeBoolForKey("useAuthenticationForLogins")
         if let interval = aDecoder.decodeObjectForKey("requiredPasscodeInterval") as? NSNumber {
             self.requiredPasscodeInterval = PasscodeInterval(rawValue: interval.integerValue)
         }
@@ -88,6 +88,12 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
 
 // MARK: - API
 public extension AuthenticationKeychainInfo {
+    enum AuthenticationPurpose {
+        case ModifyAuthenticationSettings
+        case PrivateBrowsing
+        case Logins
+    }
+    
     private func resetLockoutState() {
         self.failedAttempts = 0
         self.lockOutInterval = nil
@@ -135,9 +141,15 @@ public extension AuthenticationKeychainInfo {
         return (SystemUtils.systemUptime() - (self.lockOutInterval ?? 0)) < lockTimeInterval
     }
 
-    func requiresValidation() -> Bool {
+    func requiresValidation(purpose: AuthenticationKeychainInfo.AuthenticationPurpose) -> Bool {
         // If there isn't a passcode, don't need validation.
         guard let _ = passcode else {
+            return false
+        }
+        
+        // If the user hasn't turned on authentication for the action they are attempting, don't need validation.
+        if purpose == .PrivateBrowsing && !useAuthenticationForPrivateBrowsing
+            || purpose == .Logins && !useAuthenticationForLogins {
             return false
         }
 

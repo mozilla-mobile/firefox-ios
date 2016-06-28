@@ -87,9 +87,8 @@ class RequirePasscodeSetting: Setting {
             return
         }
 
-        if authInfo.requiresValidation() {
+        if authInfo.requiresValidation(.ModifyAuthenticationSettings) {
             AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
-            touchIDPurpose: nil,
             touchIDReason: AuthenticationStrings.requirePasscodeTouchReason,
             success: {
                 self.navigateToRequireInterval()
@@ -116,37 +115,32 @@ extension RequirePasscodeSetting: PasscodeEntryDelegate {
     }
 }
 
-class TouchIDSetting: Setting {
+class AuthenticationSetting: Setting {
     private var authInfo: AuthenticationKeychainInfo?
 
     private weak var navigationController: UINavigationController?
     private weak var switchControl: UISwitch?
 
-    private var touchIDSuccess: (TouchIDSetting -> Void)? = nil
-    private var touchIDFallback: (TouchIDSetting -> Void)? = nil
+    private var touchIDSuccess: (AuthenticationSetting -> Void)? = nil
+    private var touchIDFallback: (AuthenticationSetting -> Void)? = nil
     
-    enum TouchIDPurpose {
-        case PrivateBrowsing
-        case Logins
-    }
-    
-    var touchIDDelegate: TouchIDSettingDelegate!
+    var authenticationDelegate: AuthenticationSettingDelegate!
 
     init(
         title: NSAttributedString?,
         navigationController: UINavigationController? = nil,
         delegate: SettingsDelegate? = nil,
-        touchIDDelegate: TouchIDSettingDelegate! = nil,
+        authenticationDelegate: AuthenticationSettingDelegate! = nil,
         enabled: Bool? = nil,
-        touchIDSuccess: (TouchIDSetting -> Void)? = nil,
-        touchIDFallback: (TouchIDSetting -> Void)? = nil)
+        touchIDSuccess: (AuthenticationSetting -> Void)? = nil,
+        touchIDFallback: (AuthenticationSetting -> Void)? = nil)
     {
         self.touchIDSuccess = touchIDSuccess
         self.touchIDFallback = touchIDFallback
         self.navigationController = navigationController
-        self.touchIDDelegate = touchIDDelegate
+        self.authenticationDelegate = authenticationDelegate
         super.init(title: title, delegate: delegate, enabled: enabled)
-        touchIDDelegate.setting = self
+        authenticationDelegate.setting = self
     }
 
     override func onConfigureCell(cell: UITableViewCell) {
@@ -158,14 +152,14 @@ class TouchIDSetting: Setting {
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
         self.authInfo = KeychainWrapper.authenticationInfo()
-        control.on = touchIDDelegate.authInfoUseTouchID
+        control.on = authenticationDelegate.authInfoUseAuthentication
         control.userInteractionEnabled = false
         switchControl = control
 
         let accessoryContainer = UIView(frame: control.frame)
         accessoryContainer.addSubview(control)
 
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(TouchIDSetting.switchTapped))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(AuthenticationSetting.switchTapped))
         accessoryContainer.addGestureRecognizer(gesture)
 
         cell.accessoryView = accessoryContainer
@@ -177,15 +171,14 @@ class TouchIDSetting: Setting {
             logger.error("Authentication info should always be present when modifying Touch ID preference.")
             return
         }
-        guard let touchIDDelegate = touchIDDelegate else {
+        guard let authenticationDelegate = authenticationDelegate else {
             logger.error("The Touch ID setting needs to refer to a specific instance.")
             return
         }
         
-        if touchIDDelegate.authInfoUseTouchID {
+        if authenticationDelegate.authInfoUseAuthentication {
             AppAuthenticator.presentAuthenticationUsingInfo(
                 authInfo,
-                touchIDPurpose: touchIDDelegate.purpose,
                 touchIDReason: AuthenticationStrings.disableTouchReason,
                 success: {
                     self.touchIDSuccess?(self)
@@ -202,42 +195,42 @@ class TouchIDSetting: Setting {
 
     func toggleTouchID(enabled enabled: Bool) {
         self.authInfo = KeychainWrapper.authenticationInfo()
-        touchIDDelegate?.authInfoUseTouchID = enabled
+        authenticationDelegate?.authInfoUseAuthentication = enabled
         KeychainWrapper.setAuthenticationInfo(authInfo)
         switchControl?.setOn(enabled, animated: true)
     }
 }
 
-protocol TouchIDSettingDelegate: class {
-    var purpose: TouchIDSetting.TouchIDPurpose { get }
-    var authInfoUseTouchID: Bool { get set }
-    weak var setting: TouchIDSetting? { get set }
+protocol AuthenticationSettingDelegate: class {
+    var purpose: AuthenticationKeychainInfo.AuthenticationPurpose { get }
+    var authInfoUseAuthentication: Bool { get set }
+    weak var setting: AuthenticationSetting? { get set }
 }
 
-class TouchIDForPrivateBrowsingSetting: TouchIDSettingDelegate {
-    let purpose = TouchIDSetting.TouchIDPurpose.PrivateBrowsing
-    var authInfoUseTouchID: Bool {
+class AuthenticationForPrivateBrowsingSetting: AuthenticationSettingDelegate {
+    let purpose = AuthenticationKeychainInfo.AuthenticationPurpose.PrivateBrowsing
+    var authInfoUseAuthentication: Bool {
         get {
-            return setting?.authInfo?.useTouchIDForPrivateBrowsing ?? false
+            return setting?.authInfo?.useAuthenticationForPrivateBrowsing ?? false
         }
         set {
-            setting?.authInfo?.useTouchIDForPrivateBrowsing = newValue
+            setting?.authInfo?.useAuthenticationForPrivateBrowsing = newValue
         }
     }
-    weak var setting: TouchIDSetting?
+    weak var setting: AuthenticationSetting?
 }
 
-class TouchIDForLoginsSetting: TouchIDSettingDelegate {
-    var purpose = TouchIDSetting.TouchIDPurpose.Logins
-    var authInfoUseTouchID: Bool {
+class AuthenticationForLoginsSetting: AuthenticationSettingDelegate {
+    var purpose = AuthenticationKeychainInfo.AuthenticationPurpose.Logins
+    var authInfoUseAuthentication: Bool {
         get {
-            return setting?.authInfo?.useTouchIDForLogins ?? false
+            return setting?.authInfo?.useAuthenticationForLogins ?? false
         }
         set {
-            setting?.authInfo?.useTouchIDForLogins = newValue
+            setting?.authInfo?.useAuthenticationForLogins = newValue
         }
     }
-    weak var setting: TouchIDSetting?
+    weak var setting: AuthenticationSetting?
 }
 
 class AuthenticationSettingsViewController: SettingsTableViewController {
@@ -286,64 +279,60 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         ])
 
         let requirePasscodeSectionChildren: [Setting] = [RequirePasscodeSetting(settings: self)]
-        var touchIDSection: SettingSection? = nil
-        let localAuthContext = LAContext()
-        if localAuthContext.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
-            
-            let touchIDSectionTitle = NSAttributedString(string: AuthenticationStrings.touchID)
-            touchIDSection = SettingSection(title: touchIDSectionTitle, children: [
-                TouchIDSetting(
-                    title: NSAttributedString.tableRowTitle(
-                        NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID for private browsing")
-                    ),
-                    navigationController: self.navigationController,
-                    delegate: nil,
-                    touchIDDelegate: TouchIDForPrivateBrowsingSetting(),
-                    enabled: true,
-                    touchIDSuccess: { touchIDSetting in
-                        touchIDSetting.toggleTouchID(enabled: false)
-                    },
-                    touchIDFallback: { [unowned self] touchIDSetting in
-                        AppAuthenticator.presentPasscodeAuthentication(self.navigationController,
-                            success: { 
-                                touchIDSetting.toggleTouchID(enabled: false)
-                                self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-                            },
-                            cancel: nil
-                        )
-                    }
+        var authenticationSection: SettingSection? = nil
+        let authenticationSectionTitle = NSAttributedString(string: LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) ? AuthenticationStrings.authenticateFeaturesWithTouchIDPasscode : AuthenticationStrings.authenticateFeaturesWithPasscode)
+        authenticationSection = SettingSection(title: authenticationSectionTitle, children: [
+            AuthenticationSetting(
+                title: NSAttributedString.tableRowTitle(
+                    NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "List section title for when to use authentication for private browsing")
                 ),
-                TouchIDSetting(
-                    title: NSAttributedString.tableRowTitle(
-                        NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID for logins")
-                    ),
-                    navigationController: self.navigationController,
-                    delegate: nil,
-                    touchIDDelegate: TouchIDForLoginsSetting(),
-                    enabled: true,
-                    touchIDSuccess: { touchIDSetting in
-                        touchIDSetting.toggleTouchID(enabled: false)
-                    },
-                    touchIDFallback: { [unowned self] touchIDSetting in
-                        AppAuthenticator.presentPasscodeAuthentication(self.navigationController,
-                            success: { 
-                                touchIDSetting.toggleTouchID(enabled: false)
-                                self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-                            },
-                            cancel: nil
-                        )
-                    }
-                )
-            ])
-        }
+                navigationController: self.navigationController,
+                delegate: nil,
+                authenticationDelegate: AuthenticationForPrivateBrowsingSetting(),
+                enabled: true,
+                touchIDSuccess: { touchIDSetting in
+                    touchIDSetting.toggleTouchID(enabled: false)
+                },
+                touchIDFallback: { [unowned self] touchIDSetting in
+                    AppAuthenticator.presentPasscodeAuthentication(self.navigationController,
+                        success: { 
+                            touchIDSetting.toggleTouchID(enabled: false)
+                            self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                        },
+                        cancel: nil
+                    )
+                }
+            ),
+            AuthenticationSetting(
+                title: NSAttributedString.tableRowTitle(
+                    NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID for logins")
+                ),
+                navigationController: self.navigationController,
+                delegate: nil,
+                authenticationDelegate: AuthenticationForLoginsSetting(),
+                enabled: true,
+                touchIDSuccess: { touchIDSetting in
+                    touchIDSetting.toggleTouchID(enabled: false)
+                },
+                touchIDFallback: { [unowned self] touchIDSetting in
+                    AppAuthenticator.presentPasscodeAuthentication(self.navigationController,
+                        success: { 
+                            touchIDSetting.toggleTouchID(enabled: false)
+                            self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                        },
+                        cancel: nil
+                    )
+                }
+            )
+        ])
 
         let requirePasscodeSection = SettingSection(title: nil, children: requirePasscodeSectionChildren)
         settings += [
             passcodeSection,
             requirePasscodeSection,
         ]
-        if let touchIDSection = touchIDSection {
-            settings += [touchIDSection]
+        if let authenticationSection = authenticationSection {
+            settings += [authenticationSection]
         }
 
         return settings
