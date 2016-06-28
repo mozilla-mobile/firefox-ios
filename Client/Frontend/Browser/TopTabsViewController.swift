@@ -209,7 +209,9 @@ extension TopTabsViewController: TopTabCellDelegate {
             return
         }
         let tab = tabsToDisplay[indexPath.item]
+        var selectedTab = false
         if tab == tabManager.selectedTab {
+            selectedTab = true
             delegate?.topTabsDidChangeTab()
         }
         if tabsToDisplay.count == 1 {
@@ -227,7 +229,9 @@ extension TopTabsViewController: TopTabCellDelegate {
                 nextTab = tabsToDisplay[currentIndex-1]
             }
             tabManager.removeTab(tab)
-            tabManager.selectTab(nextTab)
+            if selectedTab {
+                tabManager.selectTab(nextTab)
+            }
             self.collectionView.performBatchUpdates({
                 self.collectionView.deleteItemsAtIndexPaths([indexPath])
                 }, completion: { finished in
