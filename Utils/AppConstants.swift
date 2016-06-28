@@ -34,7 +34,7 @@ public struct AppConstants {
     }()
 
     /// Whether we just mirror (false) or actively merge and upload (true).
-    public static let shouldMergeBookmarks = true
+    public static let shouldMergeBookmarks = false
 
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
@@ -67,9 +67,9 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
-            return true
+            return false
         #elseif MOZ_CHANNEL_FENNEC
             return true
         #elseif MOZ_CHANNEL_AURORA
@@ -78,8 +78,6 @@ public struct AppConstants {
             return true
         #endif
     }()
-
-
 
     /// Enables/disables the de-duplication of awesomebar seach results functionality
     public static let MOZ_AWESOMEBAR_DUPES: Bool = {
@@ -154,9 +152,9 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
-            return true
+            return false
         #elseif MOZ_CHANNEL_FENNEC
             return true
         #elseif MOZ_CHANNEL_AURORA
@@ -171,9 +169,9 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
-            return true
+            return false
         #elseif MOZ_CHANNEL_FENNEC
             return true
         #elseif MOZ_CHANNEL_AURORA
@@ -186,7 +184,7 @@ public struct AppConstants {
     ///  Enables/disables the top tabs for iPad
     public static let MOZ_TOP_TABS: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_NIGHTLY
