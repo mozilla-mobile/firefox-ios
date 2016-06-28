@@ -1,10 +1,6 @@
-//
-//  TopTabCell.swift
-//  Client
-//
-//  Created by Tyler Lacroix on 6/27/16.
-//  Copyright © 2016 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 
@@ -69,7 +65,7 @@ class TopTabCell: UICollectionViewCell {
         return closeButton
     }()
     
-    let bezierView: BezierView = {
+    private let bezierView: BezierView = {
         let bezierView = BezierView()
         bezierView.fillColor = TopTabsUX.TopTabsBackgroundNormalColor
         return bezierView
@@ -159,7 +155,7 @@ class TopTabCell: UICollectionViewCell {
     }
 }
 
-class BezierView: UIView {
+private class BezierView: UIView {
     var fillColor: UIColor?
     init() {
         super.init(frame: CGRect.zero)
@@ -176,71 +172,10 @@ class BezierView: UIView {
         guard let fillColor = self.fillColor else {
             return
         }
-        let bezierPath = TopTabsViewController.TopTabsCurve(frame.width, height: frame.height, direction: .Both)
+        let bezierPath = UIBezierPath.topTabsCurve(frame.width, height: frame.height, direction: .Both)
         
         fillColor.setFill()
         bezierPath.fill()
-    }
-}
-
-class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
-    weak var tabSelectionDelegate: TabSelectionDelegate?
-    
-    @objc func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1
-    }
-    
-    @objc func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSizeMake(TopTabsUX.TabWidth, collectionView.frame.height)
-    }
-    
-    @objc func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(1, TopTabsUX.TopTabsBackgroundShadowWidth, 1, TopTabsUX.TopTabsBackgroundShadowWidth)
-    }
-    
-    @objc func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1
-    }
-    
-    @objc func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
-    }
-}
-
-class TopTabsViewLayout: UICollectionViewFlowLayout {
-    override func collectionViewContentSize() -> CGSize {
-        return CGSize(width: CGFloat(collectionView!.numberOfItemsInSection(0)) * (TopTabsUX.TabWidth+1)+TopTabsUX.TopTabsBackgroundShadowWidth*2,
-                      height: CGRectGetHeight(collectionView!.bounds))
-    }
-    
-    override func prepareLayout() {
-        super.prepareLayout()
-        scrollDirection = UICollectionViewScrollDirection.Horizontal
-        registerClass(TopTabsBackgroundDecorationView.self, forDecorationViewOfKind: TopTabsBackgroundDecorationView.Identifier)
-    }
-    
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
-        return true
-    }
-    
-    // MARK: layoutAttributesForElementsInRect
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        var attributes = super.layoutAttributesForElementsInRect(rect)!
-        
-        // Create decoration attributes
-        let decorationAttributes = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsBackgroundDecorationView.Identifier, withIndexPath: NSIndexPath(forRow: 0, inSection: 0))
-        
-        // Make the decoration view span the entire row
-        let size = collectionViewContentSize()
-        decorationAttributes.frame = CGRectMake(-(TopTabsUX.TopTabsBackgroundPadding-TopTabsUX.TopTabsBackgroundShadowWidth*2)/2, 0, size.width+(TopTabsUX.TopTabsBackgroundPadding-TopTabsUX.TopTabsBackgroundShadowWidth*2), size.height)
-        
-        // Set the zIndex to be behind the item
-        decorationAttributes.zIndex = -1
-        
-        // Add the attribute to the list
-        attributes.append(decorationAttributes)
-        
-        return attributes
     }
 }
 
@@ -334,10 +269,50 @@ class TopTabsBackgroundDecorationView : UICollectionReusableView {
             
             let fillColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
             
-            let bezierPath = TopTabsViewController.TopTabsCurve(frame.width, height: frame.height, direction: right ? .Right : .Left)
+            let bezierPath = UIBezierPath.topTabsCurve(frame.width, height: frame.height, direction: right ? .Right : .Left)
             
             fillColor.setFill()
             bezierPath.fill()
         }
+    }
+}
+
+enum TopTabsCurveDirection {
+    case Right
+    case Left
+    case Both
+}
+
+extension UIBezierPath {
+    static func topTabsCurve(width: CGFloat, height: CGFloat, direction: TopTabsCurveDirection) -> UIBezierPath {
+        let x1: CGFloat = 32.84
+        let x2: CGFloat = 5.1
+        let x3: CGFloat = 19.76
+        let x4: CGFloat = 58.27
+        let x5: CGFloat = -12.15
+        
+        //// Bezier Drawing
+        let bezierPath = UIBezierPath()
+        bezierPath.moveToPoint(CGPoint(x: width, y: height))
+        switch direction {
+        case .Right:
+            bezierPath.addCurveToPoint(CGPoint(x: width-x1, y: 0), controlPoint1: CGPoint(x: width-x3, y: height), controlPoint2: CGPoint(x: width-x2, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: 0, y: 0), controlPoint1: CGPoint(x: 0, y: 0), controlPoint2: CGPoint(x: 0, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: 0, y: height), controlPoint2: CGPoint(x: 0, y: height))
+            bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
+        case .Left:
+            bezierPath.addCurveToPoint(CGPoint(x: width, y: 0), controlPoint1: CGPoint(x: width, y: 0), controlPoint2: CGPoint(x: width, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: x1, y: 0), controlPoint1: CGPoint(x: width-x4, y: 0), controlPoint2: CGPoint(x: x4, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: x2, y: 0), controlPoint2: CGPoint(x: x3, y: height))
+            bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: width, y: height), controlPoint2: CGPoint(x: width, y: height))
+        case .Both:
+            bezierPath.addCurveToPoint(CGPoint(x: width-x1, y: 0), controlPoint1: CGPoint(x: width-x3, y: height), controlPoint2: CGPoint(x: width-x2, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: x1, y: 0), controlPoint1: CGPoint(x: width-x4, y: 0), controlPoint2: CGPoint(x: x4, y: 0))
+            bezierPath.addCurveToPoint(CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: x2, y: 0), controlPoint2: CGPoint(x: x3, y: height))
+            bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
+        }
+        bezierPath.closePath()
+        bezierPath.miterLimit = 4;
+        return bezierPath
     }
 }
