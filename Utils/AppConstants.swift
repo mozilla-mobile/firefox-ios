@@ -34,7 +34,7 @@ public struct AppConstants {
     }()
 
     /// Whether we just mirror (false) or actively merge and upload (true).
-    public static let shouldMergeBookmarks = false
+    public static let shouldMergeBookmarks = true
 
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
@@ -48,7 +48,7 @@ public struct AppConstants {
     /// Enables/disables the new Menu functionality
     public static let MOZ_MENU: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_NIGHTLY
@@ -67,7 +67,7 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return false
+            return true
         #elseif MOZ_CHANNEL_NIGHTLY
             return false
         #elseif MOZ_CHANNEL_FENNEC
