@@ -1,0 +1,33 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "আপনি কি নিশ্চিত?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "বাতিল";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "অনুসন্ধান মুছুন";
+
+/* Copy password text selection menu item */
+"Copy" = "কপি";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "মুছুন";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "সবগুলো অনির্বাচিত করুন";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "সার্চমোডে ঢুকুন";
+
+/* Label for the button used to select all logins. */
+"Select All" = "সবগুলো নির্বাচন করুন";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "পাসওয়ার্ড";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "উজারনেম";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "ওয়েবসাইট";
+

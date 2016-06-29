@@ -1,0 +1,36 @@
+/* Pending feature; currently unused string! Accessibility label for back button to theme chooser */
+"Back to Themes" = "තේමා වෙත";
+
+/* Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker */
+"Choose" = "තෝරන්න";
+
+/* Pending feature; currently unused string! Accessibility label for settings row to enter theme settings */
+"Choose Theme" = "තේමාව තෝරන්න";
+
+/* Pending feature; currently unused string! Accessibility label for themes subheader */
+"Default Themes" = "පෙරනිමි තේමාව";
+
+/* Pending feature; currently unused string! Accessibility label for photo viewer */
+"My Photos" = "මගෙ පිංතූර";
+
+/* Pending feature; currently unused string! Sub header for photo options in theme chooser */
+"Photos" = "පිංතූර";
+
+/* Pending feature; currently unused string! Button to show preview of selected theme */
+"Preview" = "පෙරදසුන";
+
+/* Pending feature; currently unused string! Accessibility label for theme preview button */
+"Preview Theme" = "තේමා පෙරදසුන";
+
+/* Pending feature; currently unused string! Button to set selected theme as current theme */
+"Set" = "තනන්න";
+
+/* Pending feature; currently unused string! Accessibility label for set theme button */
+"Set Theme" = "තේමාව තනන්න";
+
+/* Pending feature; currently unused string! Settings row to enter theme settings */
+"Theme" = "තේමාව";
+
+/* Pending feature; currently unused string! sub header for theme options in theme chooser */
+"Themes" = "තේමා";
+

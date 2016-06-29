@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Gléasanna ar fáil:";
+
+/* Close button in top navigation bar */
+"Close" = "Dún";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Oscail Firefox, ansin na Socruithe, agus logáil isteach le dul ar aghaidh.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Seol";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Seol Cluaisín";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Níl tú logáilte isteach i do chuntas Firefox.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Níl aon ghléasanna eile ceangailte leis an gCuntas Firefox seo atá ar fáil le sioncronú.";
+

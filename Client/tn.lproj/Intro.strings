@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Fopholetsa ditsebe tsa webo tse di ntsintsi gangwe fela ka di thebe.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Tlhopha";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Golaganya Firefox gongwe le gongwe fa o e dirisang teng.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Tshwanedisa";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Fetola motlhofo magareng ga tsebe tse di butsweng le dithebe.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox le cloud";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Selaete sa matseno %1$@ ya %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Rulaganya";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Tshwanedisa Firefox ya gago ka fa o ratang ka teng mo Dithulaganyong.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Tshwanedisa selaodisi kgolo sa patlo-thulaganyetsoruri le Dithulaganyo tse di kgolo.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Aba";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Tsena tirong mo Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Simolola Patlo";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Rulaganya ka tsamaisano Didiriswa tsa gago.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Konya, gatelela o be o sutisetsa aekhone ya Firefox mo kemisothokong ya gago go ka e dirisa motlhofo.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Konopo ya Dithulaganyo e ko tshimologong yaTerei ya Dithebe.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Konopo-Pontsho ya Dithebe e bapile le Aterese ga mmogo le lefelo la patlo dikwalwa go bontsha nomoro ya ga jaana ya dithebe tse di butsweng.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Dirisa tsebe ya kabelano go romela dikgokagano go tsweng mo ditirisong tse dingwe go ya Firefox.";
+

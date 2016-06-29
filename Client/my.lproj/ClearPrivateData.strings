@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "သင့်အချက်အလက်အားလုံးကို ရှင်းပစ်မည်မှာ သေချာပြီလား? ဖွင့်ထားသော တဗ်အားလုံးကိုပိတ်ပစ်မည် ဖြစ်သည်။";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "လှော်လှန်ခြင်း မှတ်တမ်း";
+
+/* Settings item for clearing the cache */
+"Cache" = "ယာယီမှတ်တမ်း";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "ပိတ်လိုက်ပါ";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "ရှင်းလင်းပါ";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "အားလုံးကိုရှင်းပစ်ပါ";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "တစ်ကိုယ်ရေသုံး အချက်အလက်များရှင်းပါ";
+
+/* Settings item for clearing cookies */
+"Cookies" = "ကွတ်ကီးများ";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ချိတ်ဆက်မဲ့သုံးအချက်အလက်";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "သိမ်းထားသော ဝင်ရောက်မှုများ";
+

@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "ຫຼັງຈາກ 1 ຊົ່ວໂມງ";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "ຫຼັງຈາກ 1 ນາທີ";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "ຫຼັງຈາກ 5 ນາທີ";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "ຫຼັງຈາກ 10 ນາທີ";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "ຫຼັງຈາກ 15 ນາທີ";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "ປ່ຽນ Passcode";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "ປ້ອນລະຫັດຜ່ານ";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "ໃສ່ລະຫັດຜ່ານໃຫມ່";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "ປ້ອນຄ່າ Passcode";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "ປ້ອນ Passcode";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "ທັນທີທັນໃດ";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Passcode ບໍ່ຖືກຕ້ອງ. ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ (ທ່ານສາມາດລອງໃສ່ໃຫມ່ໄດ້ອີກ: %d ເທື່ອ).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Passcode ບໍ່ຖືກຕ້ອງ. ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "ລ່ອງໃສ່ຫລາຍຄັ້ງເກີນຄ່າທີ່ກຳນົດໄວ້ແລ້ວ. ກະລຸນາລອງໃຫມ່ອີກຄັ້ງໃນອີກຫນຶ່ງຊົ່ວໂມງ.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "ລ່ອງໃສ່ຫລາຍຄັ້ງເກີນຄ່າທີ່ກຳນົດໄວ້ແລ້ວ. ກະລຸນາລອງໃຫມ່ອີກຄັ້ງໃນພາຍຫລັງ.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Passcode ທີ່ຕັ້ງໃຫມ່ຈະຕ້ອງແຕກຕ່າງກັບ Passcode ເກົ່າ.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Passcode";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Passcode ບໍ່ກົງກັນ. ລອງໃຫມ່ອີກຄັ້ງ.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "ໃສ່ Passcode ໃຫມ່ອີກຄັ້ງ";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "ຕ້ອງການ Passcode";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "ຕັ້ງ Passcode";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID & Passcode";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "ປິດນຳໃຊ້ Passcode";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "ເປີດນຳໃຊ້ Passcode";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "ປິດນຳໃຊ້ Passcode ຂອງທ່ານ.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "ໃຊ້ Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ໃຊ້ລາຍນີ້ວມືຂອງທ່ານເພື່ອເຂົ້ານຳໃຊ້ການເຂົ້າສູ່ລະບົບດຽວນີ້ເລີຍ.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "ໃຊ້ລາຍນີ້ວມືຂອງທ່ານເພື່ອເຂົ້ານຳໃຊ້ການທອງເວັບແບບສ່ວນຕົວດຽວນີ້ເລີຍ.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "ໃຊ້ລາຍນີ້ວມືຂອງທ່ານເພື່ອປິດໃຊ້ງານ Touch ID.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "ໃຊ້ລາຍນີ້ວມືຂອງທ່ານເພື່ອເຂົ້າເຖິງການກຳນົດຄ່າຊ່ວງເວລາທີ່ຕ້ອງການ Passcode ຂອງທ່ານ.";
+

@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Bir vaqtning o‘zida bir nechta sahifalarni ichki oynalarda ko‘rish.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Tanlash";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Har qanday joyda Firefox’dan foydalaning.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Moslash";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Ochiq sahifalarga ichki oynalar yordamida osongina o‘tish mumkin.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox va bulut";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Tanishtirish uchun slayd: %1$@/%2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Tartiblash";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Firefox’ni o‘zingizga yoqqanidek “Sozlamalar”dan moslab oling.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Sozlamalar orqali asosiy qidiruv tizimi va boshqalarni o‘zingizga moslab olishingiz mumkin.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Bo‘lishish";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Firefox’a giriş yap";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Gezinmeye başla";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Qurilmalarni sinxronlash.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Osongina foydalanish uchun Firefox nishonchasi ustiga bosib turing va uni dok menyusiga joylashtiring.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Firefox brauzerini o‘zingizga yoqqanidek “Sozlamalar”dan moslab oling.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "\"Ichki oynalarni ko‘rsatish\" tugmasi \"Manzil\" va \"Izlash\" matn maydonchasiga yaqinroq turibdi va uni bossangiz, ochiq turgan ichki oynalarning sonini ko‘rsatadi.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Boshqa ilova dasturlardan Firefox’ga havolalarni jo‘natish uchun bo‘lishish sahifasidan foydalaning.";
+

@@ -1,0 +1,36 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Μετά από 1 ώρα";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Μετά από 1 λεπτό";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Μετά από 5 λεπτά";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Μετά από 10 λεπτά";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Μετά από 15 λεπτά";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Αλλαγή Συνθηματικού";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Εισαγωγή Συνθηματικού";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Εισάγετε νέο συνθηματικό";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Εισάγετε συνθηματικό";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Εισάγετε συνθηματικό";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Αμέσως";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Συνθηματικό";
+
