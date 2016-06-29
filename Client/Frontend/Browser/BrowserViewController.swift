@@ -3355,6 +3355,6 @@ extension BrowserViewController: TopTabsDelegate {
     }
     
     func topTabsDidChangeTab() {
-        urlBar.leaveOverlayMode()
+        urlBar.leaveOverlayMode(didCancel: true)
     }
 }
