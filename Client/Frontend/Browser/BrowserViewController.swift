@@ -3330,6 +3330,7 @@ private extension WKNavigationAction {
 
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
+        urlBar.leaveOverlayMode(didCancel: true)
         self.urlBarDidPressTabs(urlBar)
     }
     
