@@ -94,6 +94,8 @@ class TopTabsViewController: UIViewController {
         super.viewWillAppear(animated)
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
+        collectionView.reloadData()
+        self.scrollToCurrentTab(false)
     }
     
     override func viewDidLoad() {
@@ -145,12 +147,6 @@ class TopTabsViewController: UIViewController {
     
     func tabsTapped() {
         delegate?.topTabsDidPressTabs()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        collectionView.reloadData()
-        self.scrollToCurrentTab(false)
     }
     
     func newTabTapped() {
