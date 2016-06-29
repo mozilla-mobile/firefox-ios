@@ -862,18 +862,20 @@ class BrowserViewController: UIViewController {
 
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
         let webView = object as! WKWebView
-        if webView !== tabManager.selectedTab?.webView {
-            return
-        }
         guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath)"); return }
         switch path {
         case KVOEstimatedProgress:
-            guard let progress = change?[NSKeyValueChangeNewKey] as? Float else { break }
+            guard webView == tabManager.selectedTab?.webView,
+                let progress = change?[NSKeyValueChangeNewKey] as? Float else { break }
+            
             urlBar.updateProgressBar(progress)
         case KVOLoading:
             guard let loading = change?[NSKeyValueChangeNewKey] as? Bool else { break }
-            toolbar?.updateReloadStatus(loading)
-            urlBar.updateReloadStatus(loading)
+
+            if webView == tabManager.selectedTab?.webView {
+                navigationToolbar.updateReloadStatus(loading)
+            }
+
             if (!loading) {
                 runScriptsOnWebView(webView)
             }
@@ -891,10 +893,14 @@ class BrowserViewController: UIViewController {
                 }
             }
         case KVOCanGoBack:
-            guard let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
+            guard webView == tabManager.selectedTab?.webView,
+                let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
+            
             navigationToolbar.updateBackStatus(canGoBack)
         case KVOCanGoForward:
-            guard let canGoForward = change?[NSKeyValueChangeNewKey] as? Bool else { break }
+            guard webView == tabManager.selectedTab?.webView,
+                let canGoForward = change?[NSKeyValueChangeNewKey] as? Bool else { break }
+
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath)")
