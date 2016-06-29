@@ -135,8 +135,11 @@ class TopTabsViewController: UIViewController {
         }
         
         view.backgroundColor = UIColor.blackColor()
-        updateTabCount(tabsToDisplay.count)
         tabsButton.applyTheme(Theme.NormalMode)
+        if let currentTab = tabManager.selectedTab {
+            applyTheme(currentTab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+        }
+        updateTabCount(tabsToDisplay.count)
     }
     
     func updateTabCount(count: Int, animated: Bool = true) {
