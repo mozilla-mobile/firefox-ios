@@ -83,6 +83,7 @@ class TopTabsViewController: UIViewController {
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: FaviconManager.FaviconDidLoad, object: nil)
+        self.tabManager.removeDelegate(self)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -97,6 +98,7 @@ class TopTabsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabManager.addDelegate(self)
         
         let topTabFader = TopTabFader()
         
@@ -310,4 +312,16 @@ extension TopTabsViewController : WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         collectionView.reloadData()
     }
+}
+
+extension TopTabsViewController: TabManagerDelegate {
+    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {}
+    func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {}
+    func tabManager(tabManager: TabManager, didAddTab tab: Tab) {}
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {}
+    func tabManagerDidRestoreTabs(tabManager: TabManager) {}
+    func tabManagerDidAddTabs(tabManager: TabManager) {
+        collectionView.reloadData()
+    }
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {}
 }
