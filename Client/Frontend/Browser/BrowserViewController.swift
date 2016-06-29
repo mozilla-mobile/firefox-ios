@@ -3341,6 +3341,7 @@ extension BrowserViewController: TopTabsDelegate {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }
+        urlBar.leaveOverlayMode()
         if selectedTab.isPrivate {
             tabManager.selectTab(tabManager.normalTabs.last)
         }
