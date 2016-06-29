@@ -163,7 +163,7 @@ class TabsButton: UIControl {
         let infinity = "\u{221E}"
         let countToBe = (count < 100) ? count.description : infinity
         // only animate a tab count change if the tab count has actually changed
-        if currentCount != count.description {
+        if currentCount != count.description || (clonedTabsButton?.titleLabel.text ?? count.description) != count.description {
             if let _ = self.clonedTabsButton {
                 self.clonedTabsButton?.layer.removeAllAnimations()
                 self.clonedTabsButton?.removeFromSuperview()
