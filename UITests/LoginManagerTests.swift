@@ -18,6 +18,11 @@ class LoginManagerTests: KIFTestCase {
 
     override func tearDown() {
         super.tearDown()
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel("Search or enter address")
+        } catch {
+            closeLoginManager()
+        }
         clearLogins()
         PasscodeUtils.resetPasscode()
     }
