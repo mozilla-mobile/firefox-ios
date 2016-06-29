@@ -22,11 +22,11 @@ class ScreenshotHelper {
         if let url = tab.url {
             if AboutUtils.isAboutHomeURL(url) {
                 if let homePanel = controller?.homePanelController {
-                    screenshot = homePanel.view.screenshot()
+                    screenshot = homePanel.view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 }
             } else {
                 let offset = CGPointMake(0, -(tab.webView?.scrollView.contentInset.top ?? 0))
-                screenshot = tab.webView?.screenshot(offset: offset)
+                screenshot = tab.webView?.screenshot(offset: offset, quality: UIConstants.ActiveScreenshotQuality)
             }
         }
 
