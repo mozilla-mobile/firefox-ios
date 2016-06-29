@@ -18,7 +18,10 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
         menuTitleLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         menuTitleLabel.numberOfLines = 0
         menuTitleLabel.textAlignment = NSTextAlignment.Center
-        menuTitleLabel.adjustsFontSizeToFitWidth = true
+        menuTitleLabel.minimumScaleFactor = 0.1
+        if #available(iOS 9, *) {
+            menuTitleLabel.allowsDefaultTighteningForTruncation = true
+        }
         return menuTitleLabel
     }()
 
@@ -52,6 +55,11 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
         self.isAccessibilityElement = true
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        menuTitleLabel.adjustFontSizeToFit()
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -60,5 +68,37 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         menuImageView.image = nil
         menuTitleLabel.text = nil
+    }
+}
+
+private extension UILabel {
+
+    // this function finds the minimum font size required in order to display
+    // individual words on 1 line of the label
+    // if there is a single word in the label text that would need to wrap at the existing font size, we will shrink
+    // the text until it does fit, then apply that new font size to the entire label.
+    func adjustFontSizeToFit() {
+        var font = self.font
+        let size = self.frame.size
+        guard size.height > 0, let words = text?.characters.split(" ").map(String.init) else { return }
+        let minimumFontSize = font.pointSize - (font.pointSize * self.minimumScaleFactor)
+
+        var newFontSize = CGFloat.max
+        // chunk into single words
+        // this is because trying to get an accurate size on more than 1 line at a time using boundingRectWithSize seems impossible
+        for word in words {
+            var maxFontSize = font.pointSize
+            while maxFontSize >= minimumFontSize {
+                font = font.fontWithSize(maxFontSize)
+                let constraintSize = CGSize(width: .max, height: size.height)
+                let labelSize = word.boundingRectWithSize(constraintSize, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+                if labelSize.width <= size.width {
+                    break
+                }
+                maxFontSize -= 0.5
+            }
+            newFontSize = min(CGFloat(maxFontSize), newFontSize)
+        }
+        self.font = font.fontWithSize(newFontSize)
     }
 }
