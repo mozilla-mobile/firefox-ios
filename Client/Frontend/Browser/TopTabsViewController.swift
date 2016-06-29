@@ -24,7 +24,7 @@ struct TopTabsUX {
 protocol TopTabsDelegate: class {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab()
-    func topTabsDidPressPrivateTab()
+    func topTabsDidPressPrivateTab(tab: Tab?)
     func topTabsDidChangeTab()
 }
 
@@ -70,6 +70,9 @@ class TopTabsViewController: UIViewController {
         delegate.tabSelectionDelegate = self
         return delegate
     }()
+    
+    private weak var lastNormalTab: Tab?
+    private weak var lastPrivateTab: Tab?
     
     private var tabsToDisplay: [Tab] {
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
@@ -172,7 +175,7 @@ class TopTabsViewController: UIViewController {
     }
     
     func togglePrivateModeTapped() {
-        delegate?.topTabsDidPressPrivateTab()
+        delegate?.topTabsDidPressPrivateTab(isPrivate ? lastNormalTab : lastPrivateTab)
         self.collectionView.reloadData()
         self.scrollToCurrentTab(false, centerCell: true)
     }
@@ -319,7 +322,14 @@ extension TopTabsViewController : WKNavigationDelegate {
 }
 
 extension TopTabsViewController: TabManagerDelegate {
-    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {}
+    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+        if selected?.isPrivate ?? false {
+            lastPrivateTab = selected
+        }
+        else {
+            lastNormalTab = selected
+        }
+    }
     func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {}
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {}
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {}

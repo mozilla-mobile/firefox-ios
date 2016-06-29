@@ -3348,7 +3348,7 @@ extension BrowserViewController: TopTabsDelegate {
         openBlankNewTabAndFocus(isPrivate: isPrivate)
     }
     
-    func topTabsDidPressPrivateTab() {
+    func topTabsDidPressPrivateTab(tab: Tab?) {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }
@@ -3357,6 +3357,12 @@ extension BrowserViewController: TopTabsDelegate {
             if profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
                 tabManager.removeAllPrivateTabsAndNotify(false)
             }
+        }
+        
+        if let tab = tab {
+            tabManager.selectTab(tab)
+        }
+        else if selectedTab.isPrivate {
             tabManager.selectTab(tabManager.normalTabs.last)
         }
         else {
