@@ -18,7 +18,7 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
         menuTitleLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         menuTitleLabel.numberOfLines = 0
         menuTitleLabel.textAlignment = NSTextAlignment.Center
-        menuTitleLabel.minimumScaleFactor = 0.1
+        menuTitleLabel.minimumScaleFactor = 0.15
         if #available(iOS 9, *) {
             menuTitleLabel.allowsDefaultTighteningForTruncation = true
         }
@@ -79,8 +79,8 @@ private extension UILabel {
     // the text until it does fit, then apply that new font size to the entire label.
     func adjustFontSizeToFit() {
         var font = self.font
-        let size = self.frame.size
-        guard size.height > 0, let words = text?.characters.split(" ").map(String.init) else { return }
+        let size = systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
+        guard let words = text?.characters.split(" ").map(String.init) else { return }
         let minimumFontSize = font.pointSize - (font.pointSize * self.minimumScaleFactor)
 
         var newFontSize = CGFloat.max
