@@ -747,7 +747,7 @@ extension URLBarView: AppStateDelegate {
         if toolbarIsShowing {
             let showShareButton = HomePageAccessors.isButtonInMenu(appState)
             homePageButton.hidden = showShareButton
-            shareButton.hidden = !showShareButton
+            shareButton.hidden = !showShareButton || inOverlayMode
             homePageButton.enabled = HomePageAccessors.isButtonEnabled(appState)
         } else {
             homePageButton.hidden = true
