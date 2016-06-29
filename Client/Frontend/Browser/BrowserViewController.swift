@@ -3083,8 +3083,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
 
         if let webView = tabManager.selectedTab?.webView {
-            webView.evaluateJavaScript("__firefox__.isActiveElementSearchField()") { (result, _) in
-                guard let isSearchField = result as? Bool where isSearchField == true else {
+            webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
+                guard let _ = result as? [String: String] else {
                     return
                 }
                 self.addCustomSearchButtonToWebView(webView)
