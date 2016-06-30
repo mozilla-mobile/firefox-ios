@@ -92,6 +92,7 @@ public extension AuthenticationKeychainInfo {
         case ModifyAuthenticationSettings
         case PrivateBrowsing
         case Logins
+        case Other
     }
     
     private func resetLockoutState() {

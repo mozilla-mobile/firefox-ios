@@ -117,22 +117,22 @@ extension RequirePasscodeSetting: PasscodeEntryDelegate {
 
 class AuthenticationSetting: Setting {
     private var authInfo: AuthenticationKeychainInfo?
-
+    
     private weak var navigationController: UINavigationController?
     private weak var switchControl: UISwitch?
     
     typealias AuthenticationCallback = (AuthenticationSetting -> Void)?
-
+    
     private var touchIDSuccess: AuthenticationCallback = nil
     private var touchIDFallback: AuthenticationCallback = nil
     
-    weak var authenticationDelegate: AuthenticationSettingDelegate?
-
+    var purpose: AuthenticationKeychainInfo.AuthenticationPurpose = .Other
+    var requiresAuthentication = true
+    
     init(
         title: NSAttributedString?,
         navigationController: UINavigationController? = nil,
         delegate: SettingsDelegate? = nil,
-        authenticationDelegate: AuthenticationSettingDelegate? = nil,
         enabled: Bool? = nil,
         touchIDSuccess: AuthenticationCallback = nil,
         touchIDFallback: AuthenticationCallback = nil)
@@ -140,9 +140,7 @@ class AuthenticationSetting: Setting {
         self.touchIDSuccess = touchIDSuccess
         self.touchIDFallback = touchIDFallback
         self.navigationController = navigationController
-        self.authenticationDelegate = authenticationDelegate
         super.init(title: title, delegate: delegate, enabled: enabled)
-        authenticationDelegate?.setting = self
     }
 
     override func onConfigureCell(cell: UITableViewCell) {
@@ -154,7 +152,7 @@ class AuthenticationSetting: Setting {
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
         self.authInfo = KeychainWrapper.authenticationInfo()
-        control.on = authenticationDelegate?.authInfoUseAuthentication ?? false
+        control.on = requiresAuthentication
         control.userInteractionEnabled = false
         switchControl = control
 
@@ -173,12 +171,8 @@ class AuthenticationSetting: Setting {
             logger.error("Authentication info should always be present when modifying Touch ID preference.")
             return
         }
-        guard let authenticationDelegate = authenticationDelegate else {
-            logger.error("The Touch ID setting needs to refer to a specific instance.")
-            return
-        }
-        
-        if authenticationDelegate.authInfoUseAuthentication {
+
+        if requiresAuthentication {
             AppAuthenticator.presentTouchAuthenticationUsingInfo(
                 authInfo,
                 touchIDReason: AuthenticationStrings.disableTouchReason,
@@ -197,42 +191,50 @@ class AuthenticationSetting: Setting {
 
     func toggleTouchID(enabled enabled: Bool) {
         self.authInfo = KeychainWrapper.authenticationInfo()
-        authenticationDelegate?.authInfoUseAuthentication = enabled
+        requiresAuthentication = enabled
         KeychainWrapper.setAuthenticationInfo(authInfo)
         switchControl?.setOn(enabled, animated: true)
     }
 }
 
-protocol AuthenticationSettingDelegate: class {
-    var purpose: AuthenticationKeychainInfo.AuthenticationPurpose { get }
-    var authInfoUseAuthentication: Bool { get set }
-    weak var setting: AuthenticationSetting? { get set }
+class AuthenticationForModifyingAuthenticationSettings: AuthenticationSetting {
+    override init(title: NSAttributedString?, navigationController: UINavigationController?, delegate: SettingsDelegate?, enabled: Bool?, touchIDSuccess: AuthenticationCallback, touchIDFallback: AuthenticationCallback) {
+        super.init(title: title, navigationController: navigationController, delegate: delegate, enabled: enabled, touchIDSuccess: touchIDSuccess, touchIDFallback: touchIDFallback)
+        requiresAuthentication = true
+        purpose = .ModifyAuthenticationSettings
+    }
 }
 
-class AuthenticationForPrivateBrowsingSetting: AuthenticationSettingDelegate {
-    let purpose = AuthenticationKeychainInfo.AuthenticationPurpose.PrivateBrowsing
-    var authInfoUseAuthentication: Bool {
+class AuthenticationForPrivateBrowsingSetting: AuthenticationSetting {
+    override var requiresAuthentication: Bool {
         get {
-            return setting?.authInfo?.useAuthenticationForPrivateBrowsing ?? false
+            return authInfo?.useAuthenticationForPrivateBrowsing ?? false
         }
         set {
-            setting?.authInfo?.useAuthenticationForPrivateBrowsing = newValue
+            authInfo?.useAuthenticationForPrivateBrowsing = newValue
         }
     }
-    weak var setting: AuthenticationSetting?
+    
+    override init(title: NSAttributedString?, navigationController: UINavigationController?, delegate: SettingsDelegate?, enabled: Bool?, touchIDSuccess: AuthenticationCallback, touchIDFallback: AuthenticationCallback) {
+        super.init(title: title, navigationController: navigationController, delegate: delegate, enabled: enabled, touchIDSuccess: touchIDSuccess, touchIDFallback: touchIDFallback)
+        purpose = .PrivateBrowsing
+    }
 }
 
-class AuthenticationForLoginsSetting: AuthenticationSettingDelegate {
-    var purpose = AuthenticationKeychainInfo.AuthenticationPurpose.Logins
-    var authInfoUseAuthentication: Bool {
+class AuthenticationForLoginsSetting: AuthenticationSetting {
+    override var requiresAuthentication: Bool {
         get {
-            return setting?.authInfo?.useAuthenticationForLogins ?? false
+            return authInfo?.useAuthenticationForLogins ?? false
         }
         set {
-            setting?.authInfo?.useAuthenticationForLogins = newValue
+            authInfo?.useAuthenticationForLogins = newValue
         }
     }
-    weak var setting: AuthenticationSetting?
+    
+    override init(title: NSAttributedString?, navigationController: UINavigationController?, delegate: SettingsDelegate?, enabled: Bool?, touchIDSuccess: AuthenticationCallback, touchIDFallback: AuthenticationCallback) {
+        super.init(title: title, navigationController: navigationController, delegate: delegate, enabled: enabled, touchIDSuccess: touchIDSuccess, touchIDFallback: touchIDFallback)
+        purpose = .Logins
+    }
 }
 
 class AuthenticationSettingsViewController: SettingsTableViewController {
@@ -290,13 +292,12 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 
         let requirePasscodeSectionChildren: [Setting] = [RequirePasscodeSetting(settings: self)]
         let authenticationSection = SettingSection(title: authenticationSectionTitle, children: [
-            AuthenticationSetting(
+            AuthenticationForPrivateBrowsingSetting(
                 title: NSAttributedString.tableRowTitle(
                     NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "List section title for when to use authentication for private browsing")
                 ),
                 navigationController: self.navigationController,
                 delegate: nil,
-                authenticationDelegate: AuthenticationForPrivateBrowsingSetting(),
                 enabled: true,
                 touchIDSuccess: { touchIDSetting in
                     touchIDSetting.toggleTouchID(enabled: false)
@@ -311,13 +312,12 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
                     )
                 }
             ),
-            AuthenticationSetting(
+            AuthenticationForLoginsSetting(
                 title: NSAttributedString.tableRowTitle(
                     NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID for logins")
                 ),
                 navigationController: self.navigationController,
                 delegate: nil,
-                authenticationDelegate: AuthenticationForLoginsSetting(),
                 enabled: true,
                 touchIDSuccess: { touchIDSetting in
                     touchIDSetting.toggleTouchID(enabled: false)
