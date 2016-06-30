@@ -8,7 +8,7 @@ import SwiftKeychainWrapper
 import LocalAuthentication
 
 class AppAuthenticator {
-    static func presentAuthenticationUsingInfo(authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {
+    static func presentTouchAuthenticationUsingInfo(authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {
         let localAuthContext = LAContext()
         localAuthContext.localizedFallbackTitle = AuthenticationStrings.enterPasscode
         localAuthContext.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: touchIDReason) { didSucceed, error in

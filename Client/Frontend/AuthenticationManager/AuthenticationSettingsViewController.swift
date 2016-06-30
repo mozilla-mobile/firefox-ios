@@ -88,7 +88,7 @@ class RequirePasscodeSetting: Setting {
         }
 
         if authInfo.requiresValidation(.ModifyAuthenticationSettings) {
-            AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
+            AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
             touchIDReason: AuthenticationStrings.requirePasscodeTouchReason,
             success: {
                 self.navigateToRequireInterval()
@@ -120,20 +120,22 @@ class AuthenticationSetting: Setting {
 
     private weak var navigationController: UINavigationController?
     private weak var switchControl: UISwitch?
-
-    private var touchIDSuccess: (AuthenticationSetting -> Void)? = nil
-    private var touchIDFallback: (AuthenticationSetting -> Void)? = nil
     
-    var authenticationDelegate: AuthenticationSettingDelegate!
+    typealias AuthenticationCallback = (AuthenticationSetting -> Void)?
+
+    private var touchIDSuccess: AuthenticationCallback = nil
+    private var touchIDFallback: AuthenticationCallback = nil
+    
+    weak var authenticationDelegate: AuthenticationSettingDelegate?
 
     init(
         title: NSAttributedString?,
         navigationController: UINavigationController? = nil,
         delegate: SettingsDelegate? = nil,
-        authenticationDelegate: AuthenticationSettingDelegate! = nil,
+        authenticationDelegate: AuthenticationSettingDelegate? = nil,
         enabled: Bool? = nil,
-        touchIDSuccess: (AuthenticationSetting -> Void)? = nil,
-        touchIDFallback: (AuthenticationSetting -> Void)? = nil)
+        touchIDSuccess: AuthenticationCallback = nil,
+        touchIDFallback: AuthenticationCallback = nil)
     {
         self.touchIDSuccess = touchIDSuccess
         self.touchIDFallback = touchIDFallback
@@ -177,7 +179,7 @@ class AuthenticationSetting: Setting {
         }
         
         if authenticationDelegate.authInfoUseAuthentication {
-            AppAuthenticator.presentAuthenticationUsingInfo(
+            AppAuthenticator.presentTouchAuthenticationUsingInfo(
                 authInfo,
                 touchIDReason: AuthenticationStrings.disableTouchReason,
                 success: {

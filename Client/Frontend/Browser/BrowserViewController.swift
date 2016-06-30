@@ -966,24 +966,21 @@ class BrowserViewController: UIViewController {
 
     @available(iOS 9, *)
     func switchToPrivacyMode(isPrivate isPrivate: Bool) -> Success {
-        
-        let success = Success()
         let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: self.tabManager, profile: self.profile, tabTrayDelegate: self)
         tabTrayController.changePrivacyMode(isInPrivateMode)
         
-        tabTrayController.authorisePrivateMode(self.navigationController).uponQueue(dispatch_get_main_queue()) { result in
-            if let _ = result.successValue {
-                self.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
-                
-                if tabTrayController.privateMode != isPrivate {
-                    tabTrayController.changePrivacyMode(isPrivate)
-                }
-                self.tabTrayController = tabTrayController
+        return tabTrayController.authorisePrivateMode(self.navigationController).bindQueue(dispatch_get_main_queue()) { result in
+            guard result.isSuccess else {
+                return Deferred(value: result)
             }
-            success.fill(result)
+            self.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+            
+            if tabTrayController.privateMode != isPrivate {
+                tabTrayController.changePrivacyMode(isPrivate)
+            }
+            self.tabTrayController = tabTrayController
+            return succeed()
         }
-        
-        return success
     }
 
     func switchToTabForURLOrOpen(url: NSURL, isPrivate: Bool = false) {
