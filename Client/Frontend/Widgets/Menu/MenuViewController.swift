@@ -224,7 +224,7 @@ extension MenuViewController: MenuItemDelegate {
     func heightForRowsInMenuView(menuView: MenuView) -> CGFloat {
         // loop through the labels for the menu items and calculate the largest
         var largestLabel: CGFloat = 0
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: menuConfig.minMenuRowHeight(), height: 0))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).width, height: 0))
         label.font = menuConfig.menuFont()
         for item in menuConfig.menuItems {
             label.text = item.title
@@ -239,9 +239,15 @@ extension MenuViewController: MenuItemDelegate {
         guard let labelText = label.text else {
             return 0
         }
-        let constraint = CGSizeMake(label.frame.width, CGFloat.max)
+        let constraint = CGSizeMake(label.frame.width > 0 ? label.frame.width : menuConfig.minMenuRowHeight() - 20 , CGFloat.max)
         let context = NSStringDrawingContext()
-        let boundingBox = NSString(string: labelText).boundingRectWithSize(constraint, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: label.font], context: context).size
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        paragraph.alignment = .Center
+        if #available(iOS 9.0, *) {
+            paragraph.allowsDefaultTighteningForTruncation = true
+        }
+        let boundingBox = NSString(string: labelText).boundingRectWithSize(constraint, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: label.font, NSParagraphStyleAttributeName: paragraph], context: context).size
         return ceil(boundingBox.height)
     }
 }
