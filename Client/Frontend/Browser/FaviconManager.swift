@@ -38,12 +38,12 @@ class FaviconManager : TabHelper {
     }
     
     private func loadFavicons(tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<Maybe<[Favicon]>> {
-        let deferred = Deferred<Maybe<[Favicon]>>()
         var deferreds: [() -> Deferred<Maybe<Favicon>>]
         deferreds = favicons.map { favicon in
-            return { () -> Deferred<Maybe<Favicon>> in
-                if let url = NSURL(string: favicon.url),
-                   let currentURL = tab.url {
+            return { [weak tab] () -> Deferred<Maybe<Favicon>> in
+                if  let tab = tab,
+                    let url = NSURL(string: favicon.url),
+                    let currentURL = tab.url {
                     return self.getFavicon(tab, iconUrl: url, currentURL: currentURL, icon: favicon, profile: profile)
                 }
                 else {
@@ -51,12 +51,7 @@ class FaviconManager : TabHelper {
                 }
             }
         }
-        
-        accumulate(deferreds) >>== { favicons in
-                deferred.fill(Maybe(success: favicons))
-        }
-        
-        return deferred
+        return accumulate(deferreds)
     }
     
     func getFavicon(tab: Tab, iconUrl: NSURL, currentURL: NSURL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
