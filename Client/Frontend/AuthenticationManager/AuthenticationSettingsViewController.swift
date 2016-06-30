@@ -116,8 +116,6 @@ extension RequirePasscodeSetting: PasscodeEntryDelegate {
 }
 
 class AuthenticationSetting: Setting {
-    private var authInfo: AuthenticationKeychainInfo?
-    
     private weak var navigationController: UINavigationController?
     private weak var switchControl: UISwitch?
     
@@ -127,7 +125,9 @@ class AuthenticationSetting: Setting {
     private var touchIDFallback: AuthenticationCallback = nil
     
     var purpose: AuthenticationKeychainInfo.AuthenticationPurpose = .Other
-    var requiresAuthentication = true
+    var requiresAuthentication: Bool {
+        return true
+    }
     
     init(
         title: NSAttributedString?,
@@ -151,7 +151,6 @@ class AuthenticationSetting: Setting {
         // we can disable interaction of the switch and still handle tap events.
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        self.authInfo = KeychainWrapper.authenticationInfo()
         control.on = requiresAuthentication
         control.userInteractionEnabled = false
         switchControl = control
@@ -166,8 +165,7 @@ class AuthenticationSetting: Setting {
     }
 
     @objc private func switchTapped() {
-        self.authInfo = KeychainWrapper.authenticationInfo()
-        guard let authInfo = authInfo else {
+        guard let authInfo = KeychainWrapper.authenticationInfo() else {
             logger.error("Authentication info should always be present when modifying Touch ID preference.")
             return
         }
@@ -190,9 +188,6 @@ class AuthenticationSetting: Setting {
     }
 
     func toggleTouchID(enabled enabled: Bool) {
-        self.authInfo = KeychainWrapper.authenticationInfo()
-        requiresAuthentication = enabled
-        KeychainWrapper.setAuthenticationInfo(authInfo)
         switchControl?.setOn(enabled, animated: true)
     }
 }
@@ -200,40 +195,47 @@ class AuthenticationSetting: Setting {
 class AuthenticationForModifyingAuthenticationSettings: AuthenticationSetting {
     override init(title: NSAttributedString?, navigationController: UINavigationController?, delegate: SettingsDelegate?, enabled: Bool?, touchIDSuccess: AuthenticationCallback, touchIDFallback: AuthenticationCallback) {
         super.init(title: title, navigationController: navigationController, delegate: delegate, enabled: enabled, touchIDSuccess: touchIDSuccess, touchIDFallback: touchIDFallback)
-        requiresAuthentication = true
         purpose = .ModifyAuthenticationSettings
     }
 }
 
 class AuthenticationForPrivateBrowsingSetting: AuthenticationSetting {
     override var requiresAuthentication: Bool {
-        get {
-            return authInfo?.useAuthenticationForPrivateBrowsing ?? false
-        }
-        set {
-            authInfo?.useAuthenticationForPrivateBrowsing = newValue
-        }
+        return KeychainWrapper.authenticationInfo()?.useAuthenticationForPrivateBrowsing ?? false
     }
     
     override init(title: NSAttributedString?, navigationController: UINavigationController?, delegate: SettingsDelegate?, enabled: Bool?, touchIDSuccess: AuthenticationCallback, touchIDFallback: AuthenticationCallback) {
         super.init(title: title, navigationController: navigationController, delegate: delegate, enabled: enabled, touchIDSuccess: touchIDSuccess, touchIDFallback: touchIDFallback)
         purpose = .PrivateBrowsing
     }
+    
+    override func toggleTouchID(enabled enabled: Bool) {
+        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+            return
+        }
+        authInfo.useAuthenticationForPrivateBrowsing = enabled
+        KeychainWrapper.setAuthenticationInfo(authInfo)
+        super.toggleTouchID(enabled: enabled)
+    }
 }
 
 class AuthenticationForLoginsSetting: AuthenticationSetting {
     override var requiresAuthentication: Bool {
-        get {
-            return authInfo?.useAuthenticationForLogins ?? false
-        }
-        set {
-            authInfo?.useAuthenticationForLogins = newValue
-        }
+        return KeychainWrapper.authenticationInfo()?.useAuthenticationForLogins ?? false
     }
     
     override init(title: NSAttributedString?, navigationController: UINavigationController?, delegate: SettingsDelegate?, enabled: Bool?, touchIDSuccess: AuthenticationCallback, touchIDFallback: AuthenticationCallback) {
         super.init(title: title, navigationController: navigationController, delegate: delegate, enabled: enabled, touchIDSuccess: touchIDSuccess, touchIDFallback: touchIDFallback)
         purpose = .Logins
+    }
+    
+    override func toggleTouchID(enabled enabled: Bool) {
+        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+            return
+        }
+        authInfo.useAuthenticationForLogins = enabled
+        KeychainWrapper.setAuthenticationInfo(authInfo)
+        super.toggleTouchID(enabled: enabled)
     }
 }
 
