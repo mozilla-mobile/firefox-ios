@@ -173,7 +173,7 @@ class AuthenticationSetting: Setting {
         if requiresAuthentication {
             AppAuthenticator.presentTouchAuthenticationUsingInfo(
                 authInfo,
-                touchIDReason: AuthenticationStrings.disableTouchReason,
+                touchIDReason: AuthenticationStrings.disableAuthenticationReason,
                 success: {
                     self.touchIDSuccess?(self)
                 },

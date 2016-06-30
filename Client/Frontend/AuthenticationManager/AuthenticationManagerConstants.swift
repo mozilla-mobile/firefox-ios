@@ -93,9 +93,9 @@ struct AuthenticationStrings {
                           tableName: "AuthenticationManager",
                           comment: "Touch ID prompt subtitle when accessing the require passcode setting")
 
-    static let disableTouchReason =
-        NSLocalizedString("touchid.disable.reason.label",
-                          value: "Use your fingerprint to disable Touch ID.",
+    static let disableAuthenticationReason =
+        NSLocalizedString("authentication.disable.reason.label",
+                          value: "Use your fingerprint to disable authentication for this action.",
                           tableName: "AuthenticationManager",
                           comment: "Touch ID prompt subtitle when disabling Touch ID")
 
