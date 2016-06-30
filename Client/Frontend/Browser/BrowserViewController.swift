@@ -1241,11 +1241,10 @@ class BrowserViewController: UIViewController {
     }
 
     private func getCurrentUIState() -> UIState {
-        guard let tab = tabManager.selectedTab,
-        let displayURL = tab.displayURL where displayURL.absoluteString.characters.count > 0 else {
-            if let homePanelController = homePanelController {
-                return .HomePanels(homePanelState: homePanelController.homePanelState)
-            }
+        if let homePanelController = homePanelController {
+            return .HomePanels(homePanelState: homePanelController.homePanelState)
+        }
+        guard let tab = tabManager.selectedTab where !tab.loading else {
             return .Loading
         }
         return .Tab(tabState: tab.tabState)
