@@ -252,6 +252,9 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         tableView.accessibilityIdentifier = "ReadingTable"
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
+        if #available(iOS 9.0, *) {
+            tableView.cellLayoutMarginsFollowReadableWidth = false
+        }
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.separatorColor = UIConstants.SeparatorColor
