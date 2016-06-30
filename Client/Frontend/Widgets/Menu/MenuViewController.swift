@@ -241,7 +241,7 @@ extension MenuViewController: MenuItemDelegate {
         guard let labelText = label.text else {
             return 0
         }
-        let constraint = CGSizeMake(label.frame.width, CGFloat.max)
+        let constraint = CGSizeMake(label.frame.width > 0 ? label.frame.width : menuConfig.minMenuRowHeight() - 20 , CGFloat.max)
         let context = NSStringDrawingContext()
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = NSLineBreakMode.ByWordWrapping
