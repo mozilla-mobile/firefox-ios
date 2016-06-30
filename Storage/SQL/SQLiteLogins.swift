@@ -531,7 +531,7 @@ public class SQLiteLogins: BrowserLogins {
         return removeLoginsWithGUIDs([guid])
     }
     
-    private func getDeletionStatementsForGUIDs(guids: [GUID], nowMillis: Timestamp) -> [(sql: String, args: Args?)] {
+    private func getDeletionStatementsForGUIDs(guids: ArraySlice<GUID>, nowMillis: Timestamp) -> [(sql: String, args: Args?)] {
         let inClause = BrowserDB.varlist(guids.count)
 
         // Immediately delete anything that's marked as new -- i.e., it's never reached
@@ -572,7 +572,7 @@ public class SQLiteLogins: BrowserLogins {
     public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
         let timestamp = NSDate.now()
         return db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap {
-            self.getDeletionStatementsForGUIDs(Array($0), nowMillis: timestamp)
+            self.getDeletionStatementsForGUIDs($0, nowMillis: timestamp)
         }) >>> effect(self.notifyLoginDidChange)
     }
 
