@@ -362,5 +362,6 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")
         tester().tapViewWithAccessibilityLabel("Cancel")
         tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
     }
 }
