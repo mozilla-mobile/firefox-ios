@@ -1539,7 +1539,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(urlBar: URLBarView) {
-        if [.HomePage, .BlankPage].contains(NewTabAccessors.getNewTabPage(profile.prefs)) {
+        if .BlankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {
             showHomePanelController(inline: false)
