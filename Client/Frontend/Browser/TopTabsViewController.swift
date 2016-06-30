@@ -170,8 +170,13 @@ class TopTabsViewController: UIViewController {
     
     func privateTabTapped() {
         delegate?.topTabsDidPressPrivateTab()
-        self.collectionView.reloadData()
-        scrollToCurrentTab(false)
+        UIView.animateWithDuration(0, animations: {
+            self.collectionView.reloadData()
+            }, completion: { finished in
+                if (finished) {
+                    self.scrollToCurrentTab(false)
+                }
+        })
     }
     
     func closeTab() {
@@ -183,13 +188,16 @@ class TopTabsViewController: UIViewController {
     }
     
     func scrollToCurrentTab(animated: Bool = true) {
+        if !animated {
+            collectionView.contentOffset = CGPoint.zero
+        }
         guard let currentTab = tabManager.selectedTab, let index = tabsToDisplay.indexOf(currentTab) where !collectionView.frame.isEmpty else {
             return
         }
         if let frame = collectionView.layoutAttributesForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0))?.frame {
             // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
             let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
-            collectionView.scrollRectToVisible(padFrame, animated: true)
+            collectionView.scrollRectToVisible(padFrame, animated: animated)
         }
     }
 }
