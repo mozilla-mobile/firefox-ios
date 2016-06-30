@@ -112,9 +112,11 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
 
     public func getOurClientRecord() -> Record<ClientPayload> {
         let guid = self.scratchpad.clientGUID
+        let formfactor = UIDevice.formFactorString()
+        
         let json = JSON([
             "id": guid,
-            "version": "0.1",    // TODO
+            "version": AppInfo.appVersion,
             "protocols": ["1.5"],
             "name": self.scratchpad.clientName,
             "os": "iOS",
@@ -123,10 +125,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
             "appPackage": NSBundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
-
-            // Do better here: Bug 1157518.
-            "formfactor": DeviceInfo.isSimulator() ? "simulator" : "phone",
-            ])
+            "formfactor": formfactor])
 
         let payload = ClientPayload(json)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
@@ -344,5 +343,33 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
                     >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient) }
             }
             >>> { deferMaybe(.Completed) }
+    }
+}
+
+private extension UIDevice {
+    class func formFactorString() -> String {
+        var formfactor: String
+        let FORMFACTOR_PHONE = "phone"
+        let FORMFACTOR_LARGETABLET = "largetablet"
+        let FORMFACTOR_SMALLTABLET = "smalltablet"
+        
+        var size: Int = 2
+        sysctlbyname("hw.machine", nil, &size, nil, 0)
+        var machine = [CChar](count: Int(size), repeatedValue: 0)
+        sysctlbyname("hw.machine", &machine, &size, nil, 0)
+        let hardware: String = String.fromCString(machine)!
+        
+        switch hardware {
+        case "iPhone1,1", "iPhone1,2", "iPhone2,1", "iPhone3,1", "iPhone3,2", "iPhone3,3", "iPhone4,1", "iPhone5,1", "iPhone5,2", "iPhone5,3", "iPhone5,4", "iPhone6,1", "iPhone6,2", "iPhone7,1", "iPhone7,2", "iPhone8,2", "iPhone8,2", "iPhone8,4", "iPod1,1", "iPod2,1", "iPod3,1", "iPod4,1", "iPod5,1":
+            formfactor = FORMFACTOR_PHONE
+        case "iPad1,1", "iPad1,2", "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4", "iPad3,1", "iPad3,2", "iPad3,3", "iPad3,4", "iPad3,5", "iPad3,6", "iPad4,1", "iPad4,2", "iPad4,3", "iPad5.3", "iPad6,3", "iPad6,4", "iPad6,7", "iPad6,8":
+            formfactor = FORMFACTOR_LARGETABLET
+        case "iPad2,5", "iPad4,4", "iPad4,5", "iPad4,6", "iPad4,7", "iPad4,8", "iPad5.1", "iPad5.2":
+            formfactor = FORMFACTOR_SMALLTABLET
+        default:
+            formfactor = FORMFACTOR_PHONE
+        }
+        
+        return formfactor
     }
 }
