@@ -422,9 +422,7 @@ class SimplePageServer {
 
 class SearchUtils {
     static func navigateToSearchSettings(tester: KIFUITestActor, engine: String = "Yahoo") {
-        tester.tapViewWithAccessibilityLabel("Menu")
-        tester.waitForAnimationsToFinish()
-        tester.tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester)
         tester.waitForViewWithAccessibilityLabel("Settings")
         tester.tapViewWithAccessibilityLabel("Search, \(engine)")
         tester.waitForViewWithAccessibilityIdentifier("Search")
@@ -536,8 +534,7 @@ class PasscodeUtils {
 class HomePageUtils {
     static func navigateToHomePageSettings(tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapViewWithAccessibilityLabel("Menu")
-        tester.tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester)
         tester.tapViewWithAccessibilityIdentifier("HomePageSetting")
     }
 
@@ -559,12 +556,16 @@ class HomePageUtils {
 class MenuUtils {
     static func openSettings(tester: KIFUITestActor) {
         tester.tapViewWithAccessibilityLabel("Menu")
-        do {
-            try tester.tryFindingViewWithAccessibilityLabel("Settings")
-            tester.tapViewWithAccessibilityLabel("Settings")
-        } catch {
-            XCTFail("Unable to find settings in menu")
+        tester.waitForAnimationsToFinish()
+        guard let _ = try? tester.tryFindingViewWithAccessibilityLabel("Settings") else {
+            return XCTFail("Unable to find settings in menu")
         }
+
+        guard let settingsButton = tester.waitForViewWithAccessibilityLabel("Settings") else {
+            return XCTFail("Unable to find settings in menu")
+        }
+
+        settingsButton.tap()
     }
 
     static func closeMenuIfOpen(tester: KIFUITestActor) {

@@ -29,8 +29,7 @@ class LoginManagerTests: KIFTestCase {
 
     private func openLoginManager() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Logins")
     }
 
@@ -232,8 +231,7 @@ class LoginManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Private Mode")
 
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Logins")
 
         tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
@@ -677,8 +675,7 @@ class LoginManagerTests: KIFTestCase {
         PasscodeUtils.setPasscode("1337", interval: .Immediately)
 
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Logins")
 
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")
@@ -700,8 +697,7 @@ class LoginManagerTests: KIFTestCase {
         PasscodeUtils.setPasscode("1337", interval: .FiveMinutes)
 
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Logins")
 
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")
@@ -720,8 +716,7 @@ class LoginManagerTests: KIFTestCase {
         PasscodeUtils.setPasscode("1337", interval: .Immediately)
 
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Logins")
 
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")
@@ -744,8 +739,7 @@ class LoginManagerTests: KIFTestCase {
         PasscodeUtils.setPasscode("1337", interval: .FiveMinutes)
 
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Logins")
 
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")

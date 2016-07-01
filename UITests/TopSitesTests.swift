@@ -33,8 +33,7 @@ class TopSitesTests: KIFTestCase {
     // Quick way to clear out all our history items
     private func clearPrivateDataFromHome() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Clear Private Data")
         tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
         tester().tapViewWithAccessibilityLabel("OK")

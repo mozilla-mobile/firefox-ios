@@ -138,6 +138,12 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "ClearPrivateDataTests/testClearsCache()">
+               </Test>
+               <Test
+                  Identifier = "ClearPrivateDataTests/testClearsCookies()">
+               </Test>
+               <Test
                   Identifier = "SessionRestoreTests/testTabRestore()">
                </Test>
             </SkippedTests>
@@ -239,7 +245,8 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "YES"
+      language = "IDELaunchSchemeLanguageDoubleLocalizedStrings">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference

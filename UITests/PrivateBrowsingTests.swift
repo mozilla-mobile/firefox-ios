@@ -120,8 +120,7 @@ class PrivateBrowsingTests: KIFTestCase {
     func testClosePrivateTabsClosesPrivateTabs() {
         // First, make sure that selecting the option to ON will close the tabs
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
 
         let label = "Close Private Tabs, When Leaving Private Browsing"
         tester().scrollViewWithAccessibilityIdentifier("AppSettingsTableViewController.tableView", toViewWithAccessibilityLabel: label)
@@ -147,8 +146,7 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Private Mode")
 
         // Second, make sure selecting the option to OFF will not close the tabs
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().scrollViewWithAccessibilityIdentifier("AppSettingsTableViewController.tableView", toViewWithAccessibilityLabel: label)
         tester().setOn(false, forSwitchWithAccessibilityLabel: label)
         tester().tapViewWithAccessibilityLabel("Done")

@@ -101,9 +101,7 @@ class SearchSettingsUITests: KIFTestCase {
     }
 
     private func navigateToSettings() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().waitForViewWithAccessibilityLabel("Settings")
     }
 }
