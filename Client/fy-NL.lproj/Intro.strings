@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Surf op mear websiden tagelyk mei ljepblêden.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Kieze";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Ferbyn Firefox oeral wêr't jo it brûke.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Oanpasse";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Wikselje ienfâdichwei tusken iepen siden mei ljepblêden.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox en de cloud";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Ynleidende side %1$@ fan %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Oarderje";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Personalisearje jo Firefox hielendal nei winsk yn Ynstellingen.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Personalisearje jo standertsykmasine en mear yn Ynstellingen.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Diele";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Oanmelde by Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Begjinne mei browsen";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Syngronisearje jo apparaten.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Tik, hâld yndrukt en ferpleats it Firefox-piktogram nei jo dock foar flugge tagong.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "De knop Ynstellingen stiet oan it begjin fan it fek Ljepblêden.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "De knop Ljepblêden toane stiet neist it tekstfjild Adres en Sykje en jout it aktuele oantal iepen ljepblêden wer.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Brûk de dielknop om keppelingen fan oare apps nei Firefox te stjoeren.";
+

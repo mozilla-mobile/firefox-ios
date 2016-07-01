@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Tar éis uair an chloig";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Tar éis 1 nóiméad";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Tar éis 5 nóiméad";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Tar éis 10 nóiméad";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Tar éis 15 nóiméad";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Athraigh an Cód Faire";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Iontráil Focal Faire";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Iontráil focal faire nua";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Cuir cód faire isteach";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Iontráil paschód";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Láithreach";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Paschód mícheart. Bain triail eile as (%d: iarracht fágtha).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Paschód mícheart. Bain triail eile as.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Uasmhéid iarrachtaí caite. Bain triail eile as i gceann uair a chloig.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Uasmhéid iarrachtaí caite. Bain triail eile as ar ball.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Caithfidh an paschód nua a bheith éagsúil leis an sean-phaschód.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Cód Faire";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Paschóid gan mheaitseáil. Bain triail eile as.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Cuir an cód faire isteach arís";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Éiligh Cód Faire";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Socraigh Cód Faire";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "ID Tadhaill agus Cód Faire";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Múch an Cód Faire";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Cuir Cód Faire ar siúl";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Múch do chód faire.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Úsáid ID Tadhaill";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Úsáid do mhéarlorg le teacht ar na Focail Fhaire anois.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Úsáid do mhéarlorg le teacht ar Bhrabhsáil Phríobháideach anois.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Úsáid do mhéarlorg chun Aitheantas Tadhaill a dhíchumasú.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Úsáid do mhéarlorg chun teacht ar chumraíocht eatramh an chóid fhaire.";
+

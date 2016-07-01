@@ -1,0 +1,51 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "Blêdwizer tafoegje";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "Alle ljepblêden slute";
+
+/* Accessibility label describing the button that closes the menu when open */
+"Menu.CloseMenu.AccessibilityLabel" = "Menu slute";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "Sykje op side";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "Nij priveeljepblêd";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "Nij ljepblêd";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel. */
+"Menu.OpenBookmarksAction.AccessibilityLabel" = "Blêdwizers";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
+"Menu.OpenHistoryAction.AccessibilityLabel" = "Skiednis";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "Startside";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
+"Menu.OpenReadingListAction.AccessibilityLabel" = "Lêslist";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "Ynstellingen";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Topwebsites";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "Blêdwizer fuortsmite";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SendPageAction.Title" = "Ferstjoere";
+
+/* Label for the button, displayed in the menu, used to set the homepage if none is currently set. */
+"Menu.SetHomePageAction.Title" = "Startside ynstelle";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "Desktop­website opfreegje";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "Mobile website opfreegje";
+

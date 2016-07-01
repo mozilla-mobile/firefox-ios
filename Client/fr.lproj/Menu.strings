@@ -1,0 +1,51 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "Ajouter un marque-page";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "Fermer tous les onglets";
+
+/* Accessibility label describing the button that closes the menu when open */
+"Menu.CloseMenu.AccessibilityLabel" = "Fermer le menu";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "Rechercher dans la page";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "Nouvel onglet privé";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "Nouvel onglet";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel. */
+"Menu.OpenBookmarksAction.AccessibilityLabel" = "Marque-pages";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
+"Menu.OpenHistoryAction.AccessibilityLabel" = "Historique";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "Accueil";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
+"Menu.OpenReadingListAction.AccessibilityLabel" = "Liste de lecture";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "Paramètres";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Sites les plus visités";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "Supprimer le marque-page";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SendPageAction.Title" = "Envoyer";
+
+/* Label for the button, displayed in the menu, used to set the homepage if none is currently set. */
+"Menu.SetHomePageAction.Title" = "En faire la page d’accueil";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "Voir la version ordinateur";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "Voir la version mobile";
+

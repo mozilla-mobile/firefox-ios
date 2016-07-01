@@ -1,0 +1,880 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "یک نام کاربری و گذرواژه توسط %@ درخواست شده است.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "یک نام کاربری و گذرواژه توسط %1$@ درخواست شده است. پایگاه اینترنتی می‌گوید: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "درباره";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "افزودن زبانه";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "افزودن به فهرست مطالعه";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "تأیید";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "یک خطا هنگام اضافه کردن گذرواژه به Wallet رُخ داد. لطفا بعدا دوباره تلاش کنید.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "اضافه کردن گذرواژه شکست خورد";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "صفحه افزوده شده به فهرست مطالعه.";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "آدرس و جستجو";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "اضافه کردن کیبورد‌های جانبی";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "همیشه ارسال شود";
+
+/* Tile title for Amazon */
+"Amazon" = "آمازون";
+
+/* Authentication prompt title */
+"Authentication required" = "تأیید هویت لازم است";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "بازگشت";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "مسدود کردن پنجره‌های بازشو";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "نشانک";
+
+/* Panel accessibility label */
+"Bookmarks" = "نشانک‌ها";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "نشانک‌هایی که شما ذخیره کرده‌اید در اینجا نمایش داده می‌شود.";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "پوشه";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "مکان";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "نام پوشه";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "پوشه جدید";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "عنوان";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "نشانی اینترنتی";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "روشنایی";
+
+/* Alert Call Button */
+"Call" = "تماس";
+
+/* Label for Cancel button */
+"Cancel" = "لغو";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "تغییر رنگ مضمون.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "تغییر نوع فونت";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "پاک‌سازی اطلاعات خصوصی";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "بستن";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "درحال بستن زبانه";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "رونوشت از نشانی";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "رونوشت تصویر";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "رونوشت پیوند";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "امکان اضافه کردن صفحه به فهرست مطالعه نیست. شاید آن‌جا وجود دارد؟";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "امکان اضافه کردن صفحه به فهرست مطالعه نیست";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "امکان بارگذاری صفحه نیست.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ایجاد یک حساب";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "تیره";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "اشکال زدایی: فراموش کردن وضعیت تایید همگام سازی";
+
+/* Debug option */
+"Debug: require password" = "اشکال زدایی: گذرواژه لازم است";
+
+/* Debug option */
+"Debug: require upgrade" = "اشکال زدایی: به‌روزرسانی لازم است";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "کاهش اندازه متن";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "موتور جست‌وجو پیش‌فرض";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "غیرفعال‌سازی صفحات اضافی";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "تنظیمات نمایش";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "آیا مایلید گذرواژه بر%1$@ در %2$@ به خاطر سپرده شود؟";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "آیا مایلید گذرواژه در %@ به خاطر سپرده شود؟";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "آیا مایلید گذرواژه بر%1$@ در %2$@ بروز شود؟";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "آیا مایلید گذرواژه در %@ بروز شود؟";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "ارسال نشود";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "انجام شد";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "برای بازشدن تاریخچه دوبار تپ کنید و نگه‌دارید";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "خیر";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "بله";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "فایرفاکس قادر به دریافت یا نمایش این پرونده نیست. آیا مایلید که آن را با یک برنامه دیگر باز کنید؟";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "دریافت‌های فایرفاکس";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "دریافت ها هنوز در فایرفاکس پشتیبانی نمی‌شود.";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "برای اتصال گذرواژه خود را وارد کنید.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "پیشرفته";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "اخطار: ما نمی‌توانیم امن بودن ارتباط شما با این پایگاه‌ اینترنتی را تایید کنیم.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "ممکن است پیکربندی اشتباه باشد یا توسط یک حمله کننده تغییر کرده باشد. اگر این ریسک‌ را قبول می‌کنید ادامه دهید.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "مالکان %@ سایت خود را به گونه‌ای نادرست پیکربندی کرده‌اند. برای محافظت از اطلاعات شما از دزدیده شدن، فایرفاکس به این سایت متصل نشده است.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "این اتصال غیرقابل اطمینان می‌باشد";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "برگشتن";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "بازدید از پایگاه اینترنتی در هر صورتی";
+
+/* Tile title for Facebook */
+"Facebook" = "فیس‌بوک";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "فایرفاکس نیازمند این است این موارد را برای تاثیر گذاشتن مجددا باز کند.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "فایرفاکس همگام سازی با حساب شما را متوقف خواهد کرد، ولی هیچ کدوم از داده‌های شما بر روی این مرورگر حذف نخواهد شد.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "فایرفاکس مایل است به تصاویر شما دسترسی داشته باشد";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "جلو";
+
+/* General settings section title */
+"General" = "عمومی";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "زبانه‌های باز خود، نشانک‌ها و گذرواژه های خود را از هر دستگاهی بگیرید.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "برو";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "برو به URL کپی‌شده؟";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "راهنما";
+
+/* Panel accessibility label */
+"History" = "تاریخچه";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "پایگاه‌های اینترنتی را که اخیرا بیشتر بازدید کرده‌اید در اینجا نمایش داده می‌شوند.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "زبانه‌های شما از دستگاه‌های دیگر در اینجا نمایش داده می‌شوند.";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "برای مشاهده زبانه‌های باز در دیگر دستگاه ها وارد شوید.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "هم‌گام‌سازی فایرفاکس";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "تاریخچه";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "به تازگی بسته شده";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d دستگاه متصل شده‌اند";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "دستگاه‌های همگام‌ شده";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "لغو";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "شما می‌توانید این را هر زمانی در تنظیمات تغییر دهید";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "تنظیم بر روی صفحه خانگی";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "آیا مایل هستید این صفحه را به عنوان صفحه خانگی خود استفاده کنید؟";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "عقب";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "زبانه‌های بسته شده";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "یافتن";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "جلو";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "زبانه‌ی خصوصی جدید";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "زبانه جدید";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "بارگذاری مجدد صفحه";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "انتخاب نوار مکان";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "نمایش زبانه بعدی";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "نمایش زبانه قبلی";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "افزایش اندازه متن";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "مقدمه تور چرخ‌و‌فلک";
+
+/* History tableview section header */
+"Last month" = "ماه گذشته";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "آخرین همگام سازی:%@";
+
+/* History tableview section header */
+"Last week" = "هفته گذشته";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "مجوز";
+
+/* Light theme setting in Reading View settings */
+"Light" = "نور";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "بارگذاری صفحه اصلی";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "بارگذاری محتوا…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "خروج از سیستم";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "از سیستم خارج شود؟";
+
+/* Authentication prompt log in button */
+"Log in" = "وارد‌ شدن";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "ورود";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ذخیره نشود";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "ذخیره ورود%1$@ برای %2$@؟";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "ذخیره رمز عبور برای %@؟";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "بروزرسانی ورود برای %1$@ بر روی %2$@؟";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "بروزرسانی رمز عبور برای %@؟";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "ذخیره ورود";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "بروزرسانی";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "به نظر می‌رسید فایرفاکس قبلا دچار خرابی شده است. مایل هستید زبانه‌های خود را بازیابی کنید؟";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "علامت گذاری به عنوان خوانده شده";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "علامت‌گذاری به عنوان خوانده نشده";
+
+/* Label for the button, displayed in the menu, used to toggle night mode on or off */
+"Menu.NightModeAction.Title" = "حالت شبانه";
+
+/* Label for the button, displayed in the menu, used to turn night mode off */
+"Menu.NightModeTurnOffAction.Title" = "خاموش کردن حالت شبانه";
+
+/* Label for the button, displayed in the menu, used to turn night mode on */
+"Menu.NightModeTurnOnAction.Title" = "حالت شبانه";
+
+/* Label for the button, displayed in the menu, used to toggle no image mode on or off */
+"Menu.NoImageModeAction.Title" = "حالت بدون تصویر";
+
+/* Label for the button, displayed in the menu, used to turn no image mode off */
+"Menu.NoImageModeTurnOffAction.Title" = "نمایش تصاویر";
+
+/* Label for the button, displayed in the menu, used to turn no image mode on */
+"Menu.NoImageModeTurnOnAction.Title" = "مخفی‌سازی تصاویر";
+
+/* Error for a missing remote error number */
+"Missing error" = "خطا‌ گم‌شده";
+
+/* Error for a missing remote error message */
+"Missing message" = "پیام ازدست رفته";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "نوار ابزار راهبری";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "زبانه جدید: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "نسخه جدید در دسترس است";
+
+/* Restore Tabs Negative Action */
+"No" = "خیر";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "بدون زبانه‌ها";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "درحال حاضر نه";
+
+/* Button to not save the user's password */
+"Not now" = "در حال حاضر نه";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "تایید";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "تایید";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "اوخ! فایرفاکس دچارخرابی شد";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "بازکردن در زبانه جدید";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "باز‌کردن تنظیمات";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "بازکردن مقاله در حالت مطالعه به وسیله تپ کردن بر روی آیکون کتاب وفتی در عنوان بار نمایش داده شد.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "با کردن در…";
+
+/* Opening an external URL */
+"Opening %@" = "درحال بازکردن %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "انتخاب کننده پنل";
+
+/* Password textbox in Authentication prompt */
+"Password" = "گذرواژه";
+
+/* Paste the URL into the location bar */
+"Paste" = "چسباندن";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "چسباندن و رفتن";
+
+/* Privacy section title */
+"Privacy" = "حریم خصوصی";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "سیاست حفظ حریم خصوصی";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "موتور‌های جست‌و‌جو سریع";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "نمای مطالعه";
+
+/* Panel accessibility label */
+"Reading list" = "فهرست خواندن";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "به تازگی بسته شده";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "بارگیری مجدد";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "حذف";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "حذف از فهرست مطالعه";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "حذف صفحه";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "درخواست نسخه رومیزی پایگاه";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "درخواست نسخه تلفن‌همراه";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "ذخیره تصویر";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "ورودهای ذخیره شده";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ذخیره صفحات بر روی فهرست مطالعه با تپ کردن و نگه داشتن آیکون کتاب در کنترل نمایش حالت مطالعه.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "جست و جو";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "جست‌وجو یا ورود نشانی";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "موتور جدید جست‌وجو در نوار جست‌وجو سریع ظاهر خواهد شد.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "افزودن موتور جست‌وجو";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "افزودن سرویس دهنده جست‌وجو؟";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "لغو";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "قادر به افزودن سرویس دهنده جست‌و‌جو وجود ندارد.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "شکست خورد";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "تایید";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "جست‌جو‌هایی برای پیشنهادات";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "اتصال امن";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "ارسال بازخورد";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "ارسال گزارش";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "اطلاعات خرابی‌ها برای حل کردن مشکل به موزیلا ارسال شود؟";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "لغو";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "تنها پیوند‌های HTTPوHTTPS قادر به اشتراک گذاشتن هستند.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "تایید";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "پیوندی که شما در تلاش برای به اشتراک گذاری آن هستید غیرقابل اشتراک‌گذاری است.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "سپیا";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "تنظیمات";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "پاک‌سازی اطلاعات خصوصی";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "پاک‌سازی اطلاعات خصوصی";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "پاک‌سازی اطلاعات خصوصی";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "پاک‌کردن";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "صفحه خانه";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "تنظیمات صفحه خانه";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "در غیراینصورت در نوارابزار نمایش بده";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "نمایش ایکون صفحه خانگی در فهرست";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "واردکردن یک صفحه خانگی";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "صفحه خانگی فعلی";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "استفاده از پیوند برداشت شده";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "استفاده از صفحه فعلی";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "استفاده به عنوان پیش فرض";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "هنگامی که زبانه جدیدی باز می‌کنید:";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "نمایش دادن یک صفحه خالی";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "نمایش دادن نشانک‌های شما";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "نمایش دادن تاریخچه شما";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "نمایش دادن صفحه‌خانگی";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "نمایش دادن فهرست مطالعه شما";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "نمایش دادن سایت‌های پربازدید شما";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "زبانه جدید";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "تنظیمات زبانه جدید";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "انجام شد";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "ویرایش";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "عیب یابی";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "اشتراک‌گذاری";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "به‌اشتراک‌گذاری این پیوند";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "لغو";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "نمایش پیشنهادات جست‌و‌جو";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "نمایش زبانه‌ها";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "نمایش سیاحت";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "نمایش پیشنهادهای جست‌وجو";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "ورود به فایرفاکس";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "ورود";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "وارد شدن برای دریافت زبانه‌ها، نشانک‌ها، و گذرواژه از دستگاه‌های دیگر شما.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "توقف";
+
+/* Support section title */
+"Support" = "پشتیبانی";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "برای بستن زبانه سه انگشت را به سمت راست یا چپ بکشید.";
+
+/* Sync Firefox Account */
+"Sync Now" = "هم‌اکنون همگام‌سازی شود";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "زبانه‌ها ،نشانک‌ها،گذرواژه‌ها و موارد بیشتر خود را همگام‌سازی کنید.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "همگام‌سازی زبانه‌ها، گذرواژه‌ها و بیشتر.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "اولین همگام‌سازی شما ممکن است مقداری زمان ببرد";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "درحال همگام‌سازی";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "در حال همگام سازی…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "نشانک‌ها";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "کارگیر از راه";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "همگام‌سازی شکست خورد";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "تاریخچه";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "ورودها";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "همگام‌سازی در دسترس نیست";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "همگام‌سازی آفلاین است";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "همگام‌سازی در حال تجربه مشکلات همگام‌سازی %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "زبانه‌ها";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "زبانه %1$@ of %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "زبانه‌های %1$@ to %2$@ of %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "تابلو زبانه‌ها";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "برگردان";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d زبانه بسته شده است";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "امکان نمایش این صفحه در نمای مطالعه وجود ندارد.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "نسخه جدیدی برای فایرفاکس آئورورا در دسترسی است برای رفتن صفحه دانلود تپ کنید.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "مشکلی در دسترسی به زبانه‌های شما در دیگر دستگاه‌ها پیش آمده است. چند لحظه دیگر دوباره مجددا اقدام بفرمایید.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "خطایی در هنگام تبدیل این صفحه رخ داده است";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "این اجازه را به شما می‌دهد تا تصویر را در چهارچوب قوانین دوربین خود ذخیره کنید.";
+
+/* Opening an external app */
+"This will open in another application" = "این در برنامه‌ی دیگری باز است";
+
+/* History tableview section header */
+"Today" = "امروز";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "منو";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "صفحه خانگی";
+
+/* Panel accessibility label */
+"Top sites" = "پایگاه‌های برتر";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "پایگاه‌های اینترنتی که بیشتر توسط شما بازدید شده است در اینجا نمایش داده می‌شود.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "به پایگاه‌های اینترنتی برتر خوش‌ آمدید";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "حذف صفحه - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "توییتر";
+
+/* Button to update the user's password */
+"Update" = "بروزرسانی";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "بروزرسانی فایرفاکس برای اتصال.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "استفاده از زبانه‌های متصل به‌هم";
+
+/* Username textbox in Authentication prompt */
+"Username" = "نام‌کاربری";
+
+/* Text message in the settings table view */
+"Verify your email address." = "تایید آدرس پست‌الکترونیکی.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "نسخه %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "نما";
+
+/* Accessibility label for the main web content view */
+"Web content" = "محتوا وب";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "به نمای خواندن خوش‌ آمدید";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "راستش، بسیار متاسفیم.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "ویکی‌پدیا";
+
+/* Button to save the user's password */
+"Yes" = "بله";
+
+/* History tableview section header */
+"Yesterday" = "دیروز";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "شما هیچ‌گونه زبانه باز دیگری در فایرفاکس در دستگاه‌های دیگر ندارید.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "حقوق شما";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "رایانه";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "هم‌اکنون";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "دستگاه همراه";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "بیش از یک ماه";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "بیش از چند هفته قبل";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "خواندن";
+
+/* Relative date for date in past week. */
+"this week" = "این هفته";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "امروز در %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "خوانده‌ نشده";
+
+/* Relative date for yesterday. */
+"yesterday" = "دیروز";
+

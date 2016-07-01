@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "อุปกรณ์ที่ใช้งานได้:";
+
+/* Close button in top navigation bar */
+"Close" = "ปิด";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "โปรดเปิด Firefox ไปที่การตั้งค่าแล้วเข้าสู่ระบบเพื่อดำเนินการต่อ";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "ส่ง";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "ส่งแท็บ";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "คุณไม่ได้เข้าสู่ระบบบัญชี Firefox ของคุณ";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "คุณไม่มีอุปกรณ์ใด ๆ ที่เชื่อมต่อกับบัญชี Firefox นี้ที่สามารถใช้งานการซิงค์ได้";
+

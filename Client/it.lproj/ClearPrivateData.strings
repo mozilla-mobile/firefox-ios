@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Eliminare tutti i dati? Verranno anche chiuse tutte le schede aperte.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Cronologia di navigazione";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Annulla";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Elimina";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Eliminazione dati";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Elimina dati personali";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookie";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Dati non in linea dei siti web";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Accessi salvati";
+

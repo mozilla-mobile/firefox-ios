@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Gizli sekmeleri kapat";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox geçmişinizi ve çerezleri hatırlamayacaktır ama kaydettiğiniz yer imleri saklanacaktır.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Daha fazla bilgi alın";
+
+/* Toggled OFF accessibility value */
+"Off" = "Kapalı";
+
+/* Toggled ON accessibility value */
+"On" = "Açık";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Gizli sekmede aç";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Gizli Gezinti";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Gizli mod";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Gizli modu aç veya kapat";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Gizli gezintiden çıkarken";
+
