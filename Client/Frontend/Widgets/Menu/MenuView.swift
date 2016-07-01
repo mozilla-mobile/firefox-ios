@@ -53,6 +53,7 @@ class MenuView: UIView {
         pagingView.showsHorizontalScrollIndicator = false
         pagingView.pagingEnabled = true
         pagingView.backgroundColor = UIColor.clearColor()
+        pagingView.accessibilityIdentifier = "Menu.Items.CollectionView"
         return pagingView
     }()
 
