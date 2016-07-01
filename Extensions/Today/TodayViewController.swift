@@ -339,7 +339,12 @@ class ButtonWithSublabel: UIButton {
 
     func remakeConstraints() {
         self.label.snp_remakeConstraints { make in
-            make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin / 2 + self.label.frame.height / 2)
+            if !self.subtitleLabel.hidden {
+                make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin / 2)
+            } else {
+                // Vertically centre the label if there is no URL to display
+                make.top.equalTo(self.snp_top).offset(TodayUX.verticalWidgetMargin / 2 + self.label.frame.height / 2)
+            }
             make.left.equalTo(self.snp_left).offset(TodayUX.defaultWidgetTextMargin).priorityHigh()
         }
     }
