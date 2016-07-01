@@ -30,8 +30,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     private func openClearPrivateDataDialog() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Clear Private Data")
     }
 
@@ -115,8 +114,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func testClearsTopSitesPanel() {
         let urls = visitSites(noOfSites: 2)
         let domains = Set<String>(urls.map { $0.domain })
-
-        tester().tapViewWithAccessibilityLabel("Top sites")
 
         // Only one will be found -- we collapse by domain.
         anyDomainsExistOnTopSites(domains)

@@ -230,6 +230,7 @@ extension KIFUITestActor {
 class BrowserUtils {
     /// Close all tabs to restore the browser to startup state.
     class func resetToAboutHome(tester: KIFUITestActor) {
+        MenuUtils.closeMenuIfOpen(tester)
         do {
             try tester.tryFindingTappableViewWithAccessibilityLabel("Cancel")
             tester.tapViewWithAccessibilityLabel("Cancel")
@@ -552,5 +553,22 @@ class HomePageUtils {
     static func navigateFromHomePageSettings(tester: KIFUITestActor) {
         tester.tapViewWithAccessibilityLabel("Settings")
         tester.tapViewWithAccessibilityLabel("Done")
+    }
+}
+
+class MenuUtils {
+    static func openSettings(tester: KIFUITestActor) {
+        tester.tapViewWithAccessibilityLabel("Menu")
+        do {
+            try tester.tryFindingViewWithAccessibilityLabel("Settings")
+            tester.tapViewWithAccessibilityLabel("Settings")
+        } catch {
+            XCTFail("Unable to find settings in menu")
+        }
+    }
+
+    static func closeMenuIfOpen(tester: KIFUITestActor) {
+        guard let _ = try? tester.tryFindingViewWithAccessibilityLabel("Close Menu") else { return }
+        tester.tapViewWithAccessibilityLabel("Close Menu")
     }
 }
