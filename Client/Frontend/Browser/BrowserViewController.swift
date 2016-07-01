@@ -3329,7 +3329,11 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 private extension WKNavigationAction {
     /// Allow local requests only if the request is privileged.
     private var isAllowed: Bool {
-        return !(request.URL?.isLocal ?? false) || request.isPrivileged
+        guard let url = request.URL else {
+            return true
+        }
+
+        return !url.isWebPage() || !url.isLocal || request.isPrivileged
     }
 }
 
