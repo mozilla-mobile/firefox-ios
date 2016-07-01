@@ -330,7 +330,7 @@ class ButtonWithSublabel: UIButton {
         subtitleLabel.lineBreakMode = .ByTruncatingTail
         subtitleLabel.snp_makeConstraints { make in
             make.left.equalTo(titleLabel.snp_left)
-            make.top.equalTo(titleLabel.snp_bottom).offset(TodayUX.verticalWidgetMargin / 2 + subtitleLabel.frame.height / 2)
+            make.top.equalTo(titleLabel.snp_bottom).offset(TodayUX.verticalWidgetMargin / 2)
             make.right.lessThanOrEqualTo(self.snp_right).offset(-TodayUX.horizontalWidgetMargin)
         }
 
