@@ -992,7 +992,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func openURLInNewTab(url: NSURL?, isPrivate: Bool = false) {
+    func openURLInNewTab(url: NSURL?, isPrivate: Bool = false) -> Success {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
         }
@@ -1003,20 +1003,27 @@ class BrowserViewController: UIViewController {
             request = nil
         }
         if #available(iOS 9, *) {
+            let success = Success()
             switchToPrivacyMode(isPrivate: isPrivate).uponQueue(dispatch_get_main_queue()) { result in
                 if let _ = result.successValue {
                     self.tabManager.addTabAndSelect(request, isPrivate: isPrivate)
                 }
+                success.fill(result)
             }
+            return success
         } else {
             tabManager.addTabAndSelect(request)
         }
+        return succeed()
     }
 
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
         popToBVC()
-        openURLInNewTab(nil, isPrivate: isPrivate)
-        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+        openURLInNewTab(nil, isPrivate: isPrivate).uponQueue(dispatch_get_main_queue()) { result in
+            if let _ = result.successValue {
+                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+            }
+        }
     }
 
     private func popToBVC() {
