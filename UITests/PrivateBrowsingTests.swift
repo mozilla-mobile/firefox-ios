@@ -100,8 +100,7 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Show Tabs")
 
-        emptyView = tester().waitForViewWithAccessibilityLabel("Private Browsing")
-        XCTAssertTrue(emptyView.superview!.alpha == 0)
+        tester().waitForAbsenceOfViewWithAccessibilityLabel("Private Browsing")
 
         // Remove the private tab - do we see the empty view now?
         let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
@@ -123,7 +122,10 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
-        tester().setOn(true, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
+
+        let label = "Close Private Tabs, When Leaving Private Browsing"
+        tester().scrollViewWithAccessibilityIdentifier("AppSettingsTableViewController.tableView", toViewWithAccessibilityLabel: label)
+        tester().setOn(true, forSwitchWithAccessibilityLabel: label)
         tester().tapViewWithAccessibilityLabel("Done")
         tester().tapViewWithAccessibilityLabel("Private Mode")
 
@@ -147,7 +149,8 @@ class PrivateBrowsingTests: KIFTestCase {
         // Second, make sure selecting the option to OFF will not close the tabs
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
-        tester().setOn(false, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
+        tester().scrollViewWithAccessibilityIdentifier("AppSettingsTableViewController.tableView", toViewWithAccessibilityLabel: label)
+        tester().setOn(false, forSwitchWithAccessibilityLabel: label)
         tester().tapViewWithAccessibilityLabel("Done")
         tester().tapViewWithAccessibilityLabel("Private Mode")
 

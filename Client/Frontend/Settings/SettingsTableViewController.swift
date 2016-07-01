@@ -176,15 +176,16 @@ class BoolSetting: Setting {
         control.onTintColor = UIConstants.ControlTintColor
         control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? defaultValue
+        cell.accessoryView = PaddedSwitch(switchView: control)
+        cell.accessoryView?.isAccessibilityElement = true
         if let title = title {
             if let status = status {
-                control.accessibilityLabel = "\(title.string), \(status.string)"
+                cell.accessoryView?.accessibilityLabel = "\(title.string), \(status.string)"
             } else {
-                control.accessibilityLabel = title.string
+                cell.accessoryView?.accessibilityLabel = title.string
             }
             cell.accessibilityLabel = nil
         }
-        cell.accessoryView = PaddedSwitch(switchView: control)
         cell.selectionStyle = .None
     }
 

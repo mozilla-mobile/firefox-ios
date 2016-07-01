@@ -210,6 +210,21 @@ extension KIFUITestActor {
     public func deleteCharacterFromFirstResponser() {
         enterTextIntoCurrentFirstResponder("\u{0008}")
     }
+
+    public func scrollViewWithAccessibilityIdentifier(scrollView: String, toViewWithAccessibilityLabel label: String) -> UIView? {
+        var totalScrollFraction: CGFloat = 0
+        let scrollIncrement: CGFloat = 0.05
+        var foundView: UIView? = nil
+        while foundView == nil && totalScrollFraction < 1.0 {
+            scrollViewWithAccessibilityIdentifier(scrollView, byFractionOfSizeHorizontal: -scrollIncrement, vertical: -scrollIncrement)
+            if viewExistsWithLabel(label) {
+                foundView = waitForViewWithAccessibilityLabel(label)
+            }
+            totalScrollFraction += scrollIncrement
+        }
+
+        return foundView
+    }
 }
 
 class BrowserUtils {
