@@ -1003,14 +1003,12 @@ class BrowserViewController: UIViewController {
             request = nil
         }
         if #available(iOS 9, *) {
-            let success = Success()
-            switchToPrivacyMode(isPrivate: isPrivate).uponQueue(dispatch_get_main_queue()) { result in
+            return switchToPrivacyMode(isPrivate: isPrivate).bindQueue(dispatch_get_main_queue()) { result in
                 if let _ = result.successValue {
                     self.tabManager.addTabAndSelect(request, isPrivate: isPrivate)
                 }
-                success.fill(result)
+                return Deferred(value: result)
             }
-            return success
         } else {
             tabManager.addTabAndSelect(request)
         }
