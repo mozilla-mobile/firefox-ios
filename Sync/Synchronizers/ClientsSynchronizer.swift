@@ -349,67 +349,6 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
 private extension UIDevice {
     class func formFactorString() -> String {
         var formfactor: String
-        
-        let phones: Set = [
-            "iPhone1,1", // iPhone 2G
-            "iPhone1,2", // iPhone 3G
-            "iPhone2,1", // iPhone 3GS
-            "iPhone3,1", // iPhone 4
-            "iPhone3,2", // iPhone 4
-            "iPhone3,3", // iPhone 4 CDMA
-            "iPhone4,1", // iPhone 4S
-            "iPhone5,1", // iPhone 5
-            "iPhone5,2", // iPhone 5 CDMA GSM
-            "iPhone5,3", // iPhone 5C
-            "iPhone5,4", // iPhone 5C CDMA GSM
-            "iPhone6,1", // iPhone 5S
-            "iPhone6,2", // iPhone 5S CDMA GSM
-            "iPhone7,1", // iPhone 6 Plus
-            "iPhone7,2", // iPhone 6
-            "iPhone8,2", // iPHone 6s Plus
-            "iPhone8,2", // iPhone 6s
-            "iPhone8,4", // iPhone SE
-            "iPod1,1", // iPod Touch 1G
-            "iPod2,1", // iPod Touch 2G
-            "iPod3,1", // iPod Touch 3G
-            "iPod4,1", // iPod Touch 4G
-            "iPod5,1" // iPod Touch 5G
-        ]
-        
-        let largeTablets: Set = [
-            "iPad1,1", // iPad
-            "iPad1,2", // iPad 3G
-            "iPad2,1", // iPad 2 Wifi
-            "iPad2,2", // iPad 2
-            "iPad2,3", // iPad 2 CDMA
-            "iPad2,4", // iPad 2
-            "iPad3,1", // iPad 3 WIFI
-            "iPad3,2", // iPad 3 CDMA
-            "iPad3,3", // iPad 3
-            "iPad3,4", // iPad 4 WIFI
-            "iPad3,5", // iPad 4
-            "iPad3,6", // iPad 4 GSM CDMA
-            "iPad4,1", // iPad Air
-            "iPad4,2", // iPad Air GSM
-            "iPad4,3", // iPad Air CDMA
-            "iPad5.3", // iPad Air 2
-            "iPad6,3", // iPad Pro 9.7 Wifi Only
-            "iPad6,4", // iPad Pro 9.7 Wifi + Cellular
-            "iPad6,7", // iPad Pro
-            "iPad6,8" // iPad Pro Cellular
-        ]
-        
-        let smallTablets: Set = [
-            "iPad2,5", // iPad Mini WIFI
-            "iPad4,4", // iPad Mini Retina
-            "iPad4,5", // iPad Mini Retina CDMA
-            "iPad4,6", // iPad Mini Retina Cellular CN
-            "iPad4,7", // iPad Mini 3
-            "iPad4,8", // iPad Mini 3 Cellular
-            "iPad5.1", // iPad Mini 4
-            "iPad5.2" // iPad Mini 4 Cellular
-        ]
-        
         var size: Int = 2
         sysctlbyname("hw.machine", nil, &size, nil, 0)
         var machine = [CChar](count: Int(size), repeatedValue: 0)
@@ -440,3 +379,63 @@ private extension UIDevice {
         case smalltablet = "smalltablet"
     }
 }
+
+private let phones: Set = [
+    "iPhone1,1", // iPhone 2G
+    "iPhone1,2", // iPhone 3G
+    "iPhone2,1", // iPhone 3GS
+    "iPhone3,1", // iPhone 4
+    "iPhone3,2", // iPhone 4
+    "iPhone3,3", // iPhone 4 CDMA
+    "iPhone4,1", // iPhone 4S
+    "iPhone5,1", // iPhone 5
+    "iPhone5,2", // iPhone 5 CDMA GSM
+    "iPhone5,3", // iPhone 5C
+    "iPhone5,4", // iPhone 5C CDMA GSM
+    "iPhone6,1", // iPhone 5S
+    "iPhone6,2", // iPhone 5S CDMA GSM
+    "iPhone7,1", // iPhone 6 Plus
+    "iPhone7,2", // iPhone 6
+    "iPhone8,2", // iPHone 6s Plus
+    "iPhone8,2", // iPhone 6s
+    "iPhone8,4", // iPhone SE
+    "iPod1,1", // iPod Touch 1G
+    "iPod2,1", // iPod Touch 2G
+    "iPod3,1", // iPod Touch 3G
+    "iPod4,1", // iPod Touch 4G
+    "iPod5,1" // iPod Touch 5G
+]
+
+private let largeTablets: Set = [
+    "iPad1,1", // iPad
+    "iPad1,2", // iPad 3G
+    "iPad2,1", // iPad 2 Wifi
+    "iPad2,2", // iPad 2
+    "iPad2,3", // iPad 2 CDMA
+    "iPad2,4", // iPad 2
+    "iPad3,1", // iPad 3 WIFI
+    "iPad3,2", // iPad 3 CDMA
+    "iPad3,3", // iPad 3
+    "iPad3,4", // iPad 4 WIFI
+    "iPad3,5", // iPad 4
+    "iPad3,6", // iPad 4 GSM CDMA
+    "iPad4,1", // iPad Air
+    "iPad4,2", // iPad Air GSM
+    "iPad4,3", // iPad Air CDMA
+    "iPad5.3", // iPad Air 2
+    "iPad6,3", // iPad Pro 9.7 Wifi Only
+    "iPad6,4", // iPad Pro 9.7 Wifi + Cellular
+    "iPad6,7", // iPad Pro
+    "iPad6,8" // iPad Pro Cellular
+]
+
+private let smallTablets: Set = [
+    "iPad2,5", // iPad Mini WIFI
+    "iPad4,4", // iPad Mini Retina
+    "iPad4,5", // iPad Mini Retina CDMA
+    "iPad4,6", // iPad Mini Retina Cellular CN
+    "iPad4,7", // iPad Mini 3
+    "iPad4,8", // iPad Mini 3 Cellular
+    "iPad5.1", // iPad Mini 4
+    "iPad5.2" // iPad Mini 4 Cellular
+]
