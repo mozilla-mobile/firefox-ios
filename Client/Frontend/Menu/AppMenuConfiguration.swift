@@ -112,7 +112,14 @@ struct AppMenuConfiguration: MenuConfiguration {
             if #available(iOS 9, *) {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             }
-            menuItems.append(tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem)
+            var menuItem: MenuItem
+            if let errorPageUrl = tabState.url where ErrorPageHelper.isErrorPageURL(errorPageUrl) {
+                menuItem = AppMenuConfiguration.AddBookmarkMenuItem
+                menuItem.isDisabled = true
+            } else {
+                menuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
+            }
+            menuItems.append(menuItem)
             if NoImageModeHelper.isNoImageModeAvailable(appState) {
                 if NoImageModeHelper.isNoImageModeActivated(appState) {
                     menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)

@@ -9,12 +9,25 @@ struct AppMenuItem: MenuItem {
     let action: MenuAction
     let secondaryAction: MenuAction?
     let animation: Animatable?
+    var isDisabled: Bool
     private let iconName: String
     private let privateModeIconName: String
     private let selectedIconName: String?
 
     private var icon: UIImage? {
-        return UIImage(named: iconName)
+        if isDisabled {
+            let imageView = UIImageView(image: UIImage(named: iconName))
+            imageView.image = imageView.image?.imageWithRenderingMode(.AlwaysTemplate)
+            imageView.tintColor = UIColor.lightGrayColor()
+            
+            UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, imageView.opaque, 0.0)
+            imageView.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
+        } else {
+            return UIImage(named: iconName)
+        }
     }
 
     private var privateModeIcon: UIImage? {
@@ -36,7 +49,7 @@ struct AppMenuItem: MenuItem {
         return selectedIcon
     }
 
-    init(title: String, action: MenuAction, secondaryAction: MenuAction? = nil, icon: String, privateModeIcon: String, selectedIcon: String? = nil, animation: Animatable? = nil) {
+    init(title: String, action: MenuAction, secondaryAction: MenuAction? = nil, icon: String, privateModeIcon: String, selectedIcon: String? = nil, animation: Animatable? = nil, isDisabled: Bool = false) {
         self.title = title
         self.action = action
         self.iconName = icon
@@ -44,5 +57,6 @@ struct AppMenuItem: MenuItem {
         self.selectedIconName = selectedIcon
         self.animation = animation
         self.secondaryAction = secondaryAction
+        self.isDisabled = isDisabled
     }
 }

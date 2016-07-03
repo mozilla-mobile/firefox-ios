@@ -220,6 +220,15 @@ extension MenuViewController: MenuItemDelegate {
         }
         performMenuAction(action, withAnimation: animation, onView: menuItemCell.menuImageView)
     }
+    
+    func menuView(menuView: MenuView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
+        if menuItem.isDisabled {
+            return false
+        } else {
+            return true
+        }
+    }
 
     func heightForRowsInMenuView(menuView: MenuView) -> CGFloat {
         // loop through the labels for the menu items and calculate the largest
