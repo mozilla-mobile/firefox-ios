@@ -7,6 +7,7 @@ import Shared
 import SnapKit
 import UIKit
 import WebKit
+import OnePasswordExtension
 
 protocol FxAContentViewControllerDelegate: class {
     func contentViewControllerDidSignIn(viewController: FxAContentViewController, data: JSON) -> Void
@@ -42,6 +43,11 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        addOnePasswordButton()
     }
 
     override func makeWebView() -> WKWebView {
@@ -82,6 +88,17 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let json = JSON(data).toString(false)
         let script = "window.postMessage(\(json), '\(self.url)');"
         webView.evaluateJavaScript(script, completionHandler: nil)
+    }
+
+    @objc private func fillUsingOnePassword(sender: AnyObject) {
+        OnePasswordExtension.sharedExtension().fillItemIntoWebView(webView, forViewController: self, sender: self, showOnlyLogins: true, completion: nil)
+    }
+
+    private func addOnePasswordButton() {
+        if let items = navigationController?.navigationBar.items, let item = items.last where items.count == 2 {
+            let image = UIImage(named: "onepassword-navbar")
+            item.rightBarButtonItem = UIBarButtonItem(image: image, style: .Plain, target: self, action: #selector(fillUsingOnePassword))
+        }
     }
 
     private func onCanLinkAccount(data: JSON) {

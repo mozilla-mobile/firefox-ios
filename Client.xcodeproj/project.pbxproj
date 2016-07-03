@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */; };
+		0AD14D541D19695900E2DC11 /* 1Password.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AD14D531D19695900E2DC11 /* 1Password.xcassets */; };
 		0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */; };
 		0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */; };
 		0B3E7DB81B27A7F600E2E84D /* AboutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */; };
@@ -1103,6 +1104,7 @@
 
 /* Begin PBXFileReference section */
 		03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelativeDatesTests.swift; sourceTree = "<group>"; };
+		0AD14D531D19695900E2DC11 /* 1Password.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = 1Password.xcassets; sourceTree = "<group>"; };
 		0B1C05D51A798B1F004C78B0 /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
 		0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHomeHandler.swift; sourceTree = "<group>"; };
@@ -1945,6 +1947,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0AD14D521D19695900E2DC11 /* AgileBits */ = {
+			isa = PBXGroup;
+			children = (
+				0AD14D531D19695900E2DC11 /* 1Password.xcassets */,
+			);
+			name = AgileBits;
+			path = ThirdParty/AgileBits;
+			sourceTree = "<group>";
+		};
 		0B1C05D41A798B1F004C78B0 /* UIImageViewAligned */ = {
 			isa = PBXGroup;
 			children = (
@@ -2169,6 +2180,7 @@
 		28CE83EF1A1D246900576538 /* Third-Party Source */ = {
 			isa = PBXGroup;
 			children = (
+				0AD14D521D19695900E2DC11 /* AgileBits */,
 				7BD997001C68D9A4001CE131 /* SWTableViewCell */,
 				E66C5B451BDA81050051AA93 /* Apple */,
 				288A2D7F1AB8B2B20023ABC3 /* Box */,
@@ -4162,6 +4174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D38A1EE01CB458EC0080C842 /* CertError.html in Resources */,
+				0AD14D541D19695900E2DC11 /* 1Password.xcassets in Resources */,
 				0BA1E0301B051A07007675AF /* NetError.css in Resources */,
 				E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */,
 				F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */,
