@@ -144,6 +144,6 @@ class TopSitesTests: KIFTestCase {
     override func tearDown() {
         DynamicFontUtils.restoreDynamicFontSize(tester())
         BrowserUtils.resetToAboutHome(tester())
-        clearPrivateDataFromHome()
+        AppUtils.clearData()
     }
 }
