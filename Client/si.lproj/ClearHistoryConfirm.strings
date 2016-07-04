@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "අවලංගු කරන්න";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "හිස් කරන්න";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "හරි";
+

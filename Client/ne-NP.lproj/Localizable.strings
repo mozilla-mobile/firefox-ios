@@ -1,0 +1,339 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "प्रयोगकर्ता नाम र पासवर्ड %@ द्वारा अनुरोध भइरहेको छ।";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "प्रयोगकर्ता नाम र पासवर्ड %1$@ द्वारा अनुरोध भइरहेको छ। साइट भन्छ: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "बारेमा";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ट्याब थप्नुहोस्";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "पढ्ने सूचीमा थप्नुहोस्";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ठिक छ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "पढ्ने सूचीमा थपियो";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ठेगाना र खोजि";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "सधैँ पठाउनुहोस्";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "प्रमाणीकरण आवश्यक";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "पछाडि";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "पप-अप सञ्झ्यालहरूलाई अवरुद्द गर्नुहोस्";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "पुस्तकचिनो";
+
+/* Panel accessibility label */
+"Bookmarks" = "पुस्तकचिनो";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "फोल्डर";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "स्थान";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "फोल्डरको नाम";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "नयाँ फोल्डर";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "शीर्षक";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "युआरएल";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "चमक";
+
+/* Alert Call Button */
+"Call" = "कल गर्नुहोस्";
+
+/* Label for Cancel button */
+"Cancel" = "रद्द गर्नुहोस्";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "व्यक्तिगत डाटा हटाउनुहोस्";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "बन्द गर्नुहोस्";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ट्याब बन्द गरिँदै";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ठेगाना प्रतिलिपि गर्नुहोस्";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "छवि प्रतिलिपि गर्नुहोस्";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "लिङ्कको प्रतिलिपि बनाउनुहोस्";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "पृष्ठ लोड गर्न सकेन।";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "खाता खोल्नुहोस्";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "अँध्यारो";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "पाठ साइज घटाउनुहोस्";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "पूर्वनिर्धारित खोज इन्जिन";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "प्रदर्शन सेटिङ";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "नपठाउनुहोस्";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "पूरा भयो";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "जडान गर्न तपाईँको पासवर्ड प्रविष्ट गर्नुहोस्।";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "अगाडि";
+
+/* General settings section title */
+"General" = "साधारण";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "जानुहोस्";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "मद्दत";
+
+/* Panel accessibility label */
+"History" = "इतिहास";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "पाठ साइज बढाउनुहोस्";
+
+/* History tableview section header */
+"Last month" = "गएको महिना";
+
+/* History tableview section header */
+"Last week" = "गएको हप्ता";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "इजाजतपत्रहरु";
+
+/* Light theme setting in Reading View settings */
+"Light" = "प्रकाश";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "सामग्री लोड गरिदै…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "लगआउट";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "लग आउट गर्ने?";
+
+/* Authentication prompt log in button */
+"Log in" = "लगइन";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "लग-इनहरू";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "पढेको रूपमा चिन्ह लगाउनुहोस्";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "नपढेको रूपमा चिन्ह लगाउनुहोस्";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "नेभिगेसन उपकरणपट्टी";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "नयाँ ट्याब: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "नयाँ संस्करण उपलब्ध छ";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "अहिले होइन";
+
+/* Button to not save the user's password */
+"Not now" = "अहिले होइन";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "ठिक छ";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ठिक छ";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "नयाँ ट्याबमा खोल्नुहोस्";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "…मा खोल्नुहोस्";
+
+/* Opening an external URL */
+"Opening %@" = "%@ खोल्दै";
+
+/* Password textbox in Authentication prompt */
+"Password" = "पासवर्ड";
+
+/* Paste the URL into the location bar */
+"Paste" = "टाँस्नुहोस्";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "टाँस्नुहोस् र जानुहोस्";
+
+/* Privacy section title */
+"Privacy" = "गोपनीयता";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "गोपनीयता निति";
+
+/* Panel accessibility label */
+"Reading list" = "पढ्ने सुची";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "पृष्ठ हटाउनुहोस्";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "सान-सेरिफ";
+
+/* Context menu item for saving an image */
+"Save Image" = "तस्विर सङ्ग्रह गर्नुहोस्";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "लग-इनहरू सङ्ग्रह गर्नुहोस्";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "खोज्नुहोस वा ठेगाना प्रविष्ट गर्नुहोस्";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "सुरक्षित जडान";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "प्रतिवेदन पठाउनुहोस्";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "सेटिङ";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "खोजि सुझाबहरु देखाउनुहोस्";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "खोजि सुझाबहरु देखाउनुहोस्";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Firefox मा साइन इन गर्नुहोस्";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "साइन इन";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "रोक्नुहोस्";
+
+/* Sync Firefox Account */
+"Sync Now" = "अहिले सिङ्क गर्नुहोस्";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "%1$@ of %2$@ ट्याब";
+
+/* History tableview section header */
+"Today" = "आज";
+
+/* Username textbox in Authentication prompt */
+"Username" = "प्रयोगकर्ता नाम";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "संस्करण %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "वेब सामग्री";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "यो लज्जादायी छ।";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "विकिपीडिया";
+
+/* Button to save the user's password */
+"Yes" = "हो";
+
+/* History tableview section header */
+"Yesterday" = "हिजो";
+
+/* Tile title for YouTube */
+"YouTube" = "युट्युब";
+
+/* Your Rights settings section title */
+"Your Rights" = "तपाईँका अधिकारहरु";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "कम्प्युटर";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "अहिले भर्खरै";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "मोबाईल उपकरण";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "एक महिना बढी भन्दा पहिले";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "एक हप्ता बढी भन्दा पहिले";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "पढ्नुहोस्";
+
+/* Relative date for date in past week. */
+"this week" = "यो हप्ता";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "आज %@ मा";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "नपढिएका";
+
+/* Relative date for yesterday. */
+"yesterday" = "हिजो";
+

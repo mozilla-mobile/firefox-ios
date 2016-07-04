@@ -1,0 +1,21 @@
+/* Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet. */
+"Allow Firefox to use my Photos" = "Firefox लाई मेरो फोटोहरू प्रयोग गर्ने अनुमति दिनुहोस्";
+
+/* Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker */
+"Choose" = "रोज्नुहोस्";
+
+/* Pending feature; currently unused string! Accessibility label for photo viewer */
+"My Photos" = "मेरो फोटोहरू";
+
+/* Pending feature; currently unused string! Sub header for photo options in theme chooser */
+"Photos" = "फोटोहरू";
+
+/* Pending feature; currently unused string! Button to show preview of selected theme */
+"Preview" = "पूर्वावलोकन";
+
+/* Pending feature; currently unused string! Button to set selected theme as current theme */
+"Set" = "सेट गर्नुहोस्";
+
+/* Pending feature; currently unused string! sub header for theme options in theme chooser */
+"Themes" = "आवरणहरू";
+

@@ -1,0 +1,9 @@
+/* Go to link on clipboard */
+"TodayWidget.GoToCopiedLinkLabel" = "Otwórz skopiowany odnośnik";
+
+/* New Private Tab button label */
+"TodayWidget.NewPrivateTabButtonLabel" = "Nowa karta prywatna";
+
+/* New Tab button label */
+"TodayWidget.NewTabButtonLabel" = "Nowa karta";
+

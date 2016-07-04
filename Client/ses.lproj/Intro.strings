@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Interneti booboyaŋ ceeci nda kanjey waati follokaa ra.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Suuba";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Firefox dobu nungu kul kaŋ ra n g'a ka goy.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Hanse war boŋše";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Kanjey ka moo feerantey bere nda faala.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox nda duulaa";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Šintin cebebii %1$@%2$@ se";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Kanandi";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Wa Firefox hanse war boŋ ibaayoo ra kayandiyaney ra.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "War tilasu ceecijinaa nda suubari tana soolu kayandiyaŋey ra.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Žemna";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Huru Firefox ra";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Ceeciyan šintin";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "War jinawey hangandi cere.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Firefox biyoo karkar, naagu k'a deke porogaramey ra duuyan faala se.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Kayandiyaney butoŋoo goo kanjey dekeroo šintinoo ga.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Kanji cebe butoŋoo goo aderesu nda hantum-gam ceecidoo jere ga nd'a ga sohõda kanji feerantey hinnaa cebe.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Goy nda žemna kaddasu ka porogaram waaney dobey sanba Firefox do.";
+

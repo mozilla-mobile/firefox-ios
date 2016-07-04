@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "တစ်ကိုယ်ရေသုံးတပ်ဗ်များကို ပိတ်ပါ";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "သင်၏ မည်သည့်မှတ်တမ်း သို့မဟုတ် ကွတ်ကီးများကို မီးမြေခွေးက မှတ်ထားမည်မဟုတ်ပါ။ သို့သော် စာမှတ်အသစ်များကိုမူ သိမ်းထားပါလိမ့်မည်။";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "ပိုမိုလေ့လာရန်";
+
+/* Toggled OFF accessibility value */
+"Off" = "ပိတ်";
+
+/* Toggled ON accessibility value */
+"On" = "ဖွင့်";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "တစ်ကိုယ်ရေသုံးတပ်ဗ်အသစ်ဖွင့်ရန်";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "လုံခြုံစွာဝဘ်ဆိုက်ကြည့်ရှုခြင်း";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "သီးသန့်ပုံစံ";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "သီးသန့်အသုံးပြုမှုကို ဖွင့်ရန် သို့မဟုတ် ပိတ်ရန်";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "သီးသန့်ရှာဖွေကြည့်ရှုခြင်းမှ ထွက်သောအချိန်တွင်";
+

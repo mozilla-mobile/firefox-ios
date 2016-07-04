@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "%@ ရှာ";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "မဟုတ်ဘူး";
+
+/* Label for search settings button. */
+"Search Settings" = "ရှာဖွေရေး အပြင်အဆင်များ";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "%@ မှ အကြံပေးချက်များ ရှာပါ";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "ရှာဖွေရေး အကြံပေးချက်များ ဖွင့်ထားမလား ?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "ကောင်းပြီ";
+

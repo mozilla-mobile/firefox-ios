@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Jste si jisti?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Zrušit";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Zrušit hledání";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopírovat";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Smazat";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Zrušit výběr";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Vyhledávání";
+
+/* Hide password text selection menu item */
+"Hide" = "Skrýt";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "Naposledy změněno %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "Přihlášení";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Přihlášení budou trvale smazána.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Přihlášení budou smazána ze všech synchronizovaných zařízení.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Žádná přihlášení nenalezena";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Otevřít a vyplnit";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Ukázat";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Hledat";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Vstupní pole vyhledávání";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Vybrat vše";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "heslo";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "uživatel";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "server";
+
