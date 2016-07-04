@@ -26,6 +26,10 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
+        if let _ = try? tester().tryFindingViewWithAccessibilityLabel("Settings") {
+            closeClearPrivateDataDialog()
+
+        }
         BrowserUtils.clearHistoryItems(tester())
     }
 
