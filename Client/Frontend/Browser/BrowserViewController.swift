@@ -3354,6 +3354,9 @@ extension BrowserViewController: TopTabsDelegate {
         }
         urlBar.leaveOverlayMode()
         if selectedTab.isPrivate {
+            if profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
+                tabManager.removeAllPrivateTabsAndNotify(false)
+            }
             tabManager.selectTab(tabManager.normalTabs.last)
         }
         else {
