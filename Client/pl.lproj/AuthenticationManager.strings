@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Po godzinie";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Po minucie";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Po 5 minutach";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Po 10 minutach";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Po 15 minutach";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Zmiana kodu";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Weryfikacja kodu";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Nowy kod";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Podaj kod";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Podaj kod";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Natychmiast";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Nieprawidłowy kod. Spróbuj ponownie (posotałe próby: %d)";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Nieprawidłowy kod. Spróbuj ponownie.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Osiągnięto maksymalną liczbę prób. Proszę spróbować ponownie za godzinę.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Osiągnięto maksymalną liczbę prób. Proszę spróbować ponownie później.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Nowy kod musi się różnić od istniejącego.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Kod";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Wprowadzone kody nie są takie same. Spróbuj ponownie.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Podaj ponownie kod";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Wymagany kod";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Ustawianie kodu";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID i kod";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Wyłącz kod";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Włącz kod";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Wyłącz kod.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Użyj Touch ID, aby uzyskać dostęp do danych logowania.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Użyj Touch ID, aby uzyskać dostęp do przeglądania prywatnego.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Użyj odcisku palca, by wyłączyć Touch ID.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Użyj odcisku palca, by skonfigurować opóźnienie wymagania kodu.";
+

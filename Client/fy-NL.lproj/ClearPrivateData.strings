@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Binne jo wis dat jo al jo gegevens wiskje wolle? Hjirtroch wurde ek alle iepen ljepblêden sluten.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Navigaasjeskiednis";
+
+/* Settings item for clearing the cache */
+"Cache" = "Buffer";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Annulearje";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Wiskje";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Alles wiskje";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Priveegegevens wiskje";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Offlinewebsitegegevens";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Bewarre oanmeldingen";
+
