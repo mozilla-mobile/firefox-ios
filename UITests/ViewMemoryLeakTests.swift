@@ -5,6 +5,8 @@
 import Foundation
 import WebKit
 
+@testable import Client
+
 /// Set of tests that wait for weak references to views to be cleared. Technically, this is
 /// non-deterministic and there are no guarantees the references will be set to nil. In practice,
 /// though, the references are consistently cleared, which should be good enough for testing.
@@ -106,7 +108,8 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
     }
 
     private func getTopViewController() -> UIViewController {
-        return (UIApplication.sharedApplication().keyWindow!.rootViewController as! UINavigationController).topViewController!
+        let rootViewController = UIApplication.sharedApplication().keyWindow!.rootViewController as! NotificationRootViewController
+        return (rootViewController.rootViewController as! UINavigationController).topViewController!
     }
 
     private func getChildViewController(parent: UIViewController, childClass: String) -> UIViewController {
