@@ -9,7 +9,7 @@ import WebKit
 
 class TopTabsTests: KIFTestCase {
     private var webRoot: String!
-    let numberOfTabs = 3
+    let numberOfTabs = 4
     
     override func setUp() {
         webRoot = SimplePageServer.start()
@@ -23,28 +23,32 @@ class TopTabsTests: KIFTestCase {
     }
     
     private func testAddTab() {
+        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
+        
         tester().tapViewWithAccessibilityIdentifier("url")
         
-        for i in 0...numberOfTabs {
+        for i in 0...(numberOfTabs-1) {
             let url = "\(webRoot)/numberedPage.html?page=\(i)"
             tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(i)")
             tester().tapViewWithAccessibilityLabel("New Tab")
         }
+        
+        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: String(1+numberOfTabs), traits: UIAccessibilityTraitButton)
     }
     
     private func testSwitchTabs() {
         let urlField = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
         
-        tester().tapViewWithAccessibilityLabel("Page 1")
-        tester().waitForAnimationsToFinish()
-        tester().waitForTimeInterval(0.1)
-        XCTAssertEqual(urlField.text, "\(webRoot)/numberedPage.html?page=1")
-        
         tester().tapViewWithAccessibilityLabel("Page 2")
         tester().waitForAnimationsToFinish()
-        tester().waitForTimeInterval(0.1)
+        tester().waitForTimeInterval(0.2)
         XCTAssertEqual(urlField.text, "\(webRoot)/numberedPage.html?page=2")
+        
+        tester().tapViewWithAccessibilityLabel("Page 1")
+        tester().waitForAnimationsToFinish()
+        tester().waitForTimeInterval(0.2)
+        XCTAssertEqual(urlField.text, "\(webRoot)/numberedPage.html?page=1")
     }
     
     private func testPrivateModeButton() {
@@ -59,7 +63,7 @@ class TopTabsTests: KIFTestCase {
     
     private func testCloseTab() {
         tester().tapViewWithAccessibilityLabel("Remove page - New Tab")
-        for i in 0...numberOfTabs {
+        for i in 0...(numberOfTabs-1) {
             tester().tapViewWithAccessibilityLabel("Remove page - Page \(i)")
         }
     }
