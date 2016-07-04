@@ -30,7 +30,7 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().waitForTimeInterval(3)
 
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
 
         var tableView = tester().waitForViewWithAccessibilityIdentifier("History List") as! UITableView
         XCTAssertEqual(tableView.numberOfRowsInSection(0), 1)
@@ -45,7 +45,7 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
 
         tableView = tester().waitForViewWithAccessibilityIdentifier("History List") as! UITableView
         XCTAssertEqual(tableView.numberOfRowsInSection(0), 1)

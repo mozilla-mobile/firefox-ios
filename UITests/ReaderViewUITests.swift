@@ -37,7 +37,7 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
     func addToReadingList() {
         tester().tapViewWithAccessibilityLabel("Add to Reading List")
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
         tester().waitForViewWithAccessibilityLabel("Reader View Test")
 
         // TODO: Check for rows in this table
@@ -47,25 +47,17 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
 
     func markAsReadFromReaderView() {
         tester().tapViewWithAccessibilityLabel("Mark as Read")
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
-        tester().swipeViewWithAccessibilityLabel("Reader View Test", inDirection: KIFSwipeDirection.Right)
         tester().waitForViewWithAccessibilityLabel("Mark as Unread")
-        tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
     func markAsUnreadFromReaderView() {
         tester().tapViewWithAccessibilityLabel("Mark as Unread")
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
-        tester().swipeViewWithAccessibilityLabel("Reader View Test", inDirection: KIFSwipeDirection.Right)
         tester().waitForViewWithAccessibilityLabel("Mark as Read")
-        tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
     func markAsReadFromReadingList() {
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
         tester().swipeViewWithAccessibilityLabel("Reader View Test", inDirection: KIFSwipeDirection.Right)
         tester().tapViewWithAccessibilityLabel("Mark as Read")
         tester().tapViewWithAccessibilityLabel("Cancel")
@@ -74,7 +66,7 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
 
     func markAsUnreadFromReadingList() {
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
         tester().swipeViewWithAccessibilityLabel("Reader View Test", inDirection: KIFSwipeDirection.Right)
         tester().tapViewWithAccessibilityLabel("Mark as Unread")
         tester().tapViewWithAccessibilityLabel("Cancel")
@@ -83,7 +75,7 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
 
     func removeFromReadingList() {
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
         tester().swipeViewWithAccessibilityLabel("Reader View Test", inDirection: KIFSwipeDirection.Left)
         tester().tapViewWithAccessibilityLabel("Remove")
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Reader View Test")
@@ -95,7 +87,7 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Remove from Reading List")
         tester().waitForViewWithAccessibilityLabel("Add to Reading List")
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
         
         // TODO: Check for rows in this table
         

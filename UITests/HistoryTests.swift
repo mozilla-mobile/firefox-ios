@@ -38,7 +38,7 @@ class HistoryTests: KIFTestCase {
 
         // Check that both appear in the history home panel
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
 
 
         let firstHistoryRow = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "History List")
@@ -59,7 +59,7 @@ class HistoryTests: KIFTestCase {
         _ = addHistoryItems(2)
 
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
 
         let historyRow = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "History List")
         let size = historyRow.textLabel?.font.pointSize
@@ -82,7 +82,7 @@ class HistoryTests: KIFTestCase {
 
         // Check that both appear in the history home panel
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
 
         tester().swipeViewWithAccessibilityLabel(urls[0], inDirection: KIFSwipeDirection.Left)
         tester().tapViewWithAccessibilityLabel("Remove")
@@ -98,17 +98,16 @@ class HistoryTests: KIFTestCase {
     }
 
     func testDeleteHistoryItemFromListWithMoreThan100Items() {
-        do {
-            try tester().tryFindingTappableViewWithAccessibilityLabel("Top sites")
-            tester().tapViewWithAccessibilityLabel("Top sites")
-        } catch _ {
+        if let _ = try? tester().tryFindingTappableViewWithAccessibilityLabel("Top sites") {
+            tester().tapViewWithAccessibilityIdentifier("HomePanels.TopSites")
         }
+
         for pageNo in 1...102 {
             BrowserUtils.addHistoryEntry("Page \(pageNo)", url: NSURL(string: "\(webRoot)/numberedPage.html?page=\(pageNo)")!)
         }
         let urlToDelete = "Page \(102), \(webRoot)/numberedPage.html?page=\(102)"
 
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
 
         tester().swipeViewWithAccessibilityLabel(urlToDelete, inDirection: KIFSwipeDirection.Left)
         tester().tapViewWithAccessibilityLabel("Remove")

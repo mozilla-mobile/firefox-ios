@@ -67,7 +67,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the bookmarks home panel
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.Bookmarks")
         tester().waitForViewWithAccessibilityLabel("Page 1")
 
         // Tap to open it
@@ -80,7 +80,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it no longer appears in the bookmarks home panel
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.Bookmarks")
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Page 1")
     }
 
@@ -88,7 +88,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         DynamicFontUtils.restoreDynamicFontSize(tester())
 
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.Bookmarks")
 
         let cell = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "SiteTable")
 
@@ -117,7 +117,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that its row in the bookmarks panel has a url instead of a title
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.Bookmarks")
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Page 1")
         // XXX: Searching for the table cell directly here can result in finding the wrong view.
         let cell = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "SiteTable")
