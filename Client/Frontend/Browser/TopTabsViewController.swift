@@ -265,9 +265,11 @@ extension TopTabsViewController: UICollectionViewDataSource {
                 tabCell.titleText.text = tab.displayURL?.absoluteString
             }
             tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
+            tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tabCell.titleText.text ?? "")
         }
         else {
             tabCell.accessibilityLabel = tab.displayTitle
+            tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }
 
         tabCell.selectedTab = (tab == tabManager.selectedTab)
