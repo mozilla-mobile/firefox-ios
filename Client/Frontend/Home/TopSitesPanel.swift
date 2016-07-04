@@ -106,6 +106,12 @@ class TopSitesPanel: UIViewController {
         self.refreshTopSites(maxFrecencyLimit)
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        layout.invalidateLayout()
+        collection?.reloadData()
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
