@@ -138,13 +138,22 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "ClearPrivateDataTests/testClearsCache()">
+                  Identifier = "BookmarkingTests/testChangingDynamicFontOnBookmarks()">
                </Test>
                <Test
-                  Identifier = "ClearPrivateDataTests/testClearsCookies()">
+                  Identifier = "HistoryTests/testChangingDynamicFontOnHistory()">
+               </Test>
+               <Test
+                  Identifier = "ReadingListTests/testChangingDyamicFontOnReadingList()">
+               </Test>
+               <Test
+                  Identifier = "SearchTests/testChangingDyamicFontOnSearch()">
                </Test>
                <Test
                   Identifier = "SessionRestoreTests/testTabRestore()">
+               </Test>
+               <Test
+                  Identifier = "TopSitesTests/testChangingDyamicFontOnTopSites()">
                </Test>
             </SkippedTests>
          </TestableReference>
