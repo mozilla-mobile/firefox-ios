@@ -20,10 +20,10 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
         addToReadingList()
         markAsReadFromReaderView()
         markAsUnreadFromReaderView()
-        markAsReadFromReadingList()
-        markAsUnreadFromReadingList()
-        removeFromReadingList()
-        addToReadingList()
+//        markAsReadFromReadingList()
+//        markAsUnreadFromReadingList()
+//        removeFromReadingList()
+//        addToReadingList()
         removeFromReadingListInView()
     }
 
