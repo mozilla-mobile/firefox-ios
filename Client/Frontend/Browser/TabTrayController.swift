@@ -626,8 +626,8 @@ extension TabTrayController: TabManagerDelegate {
             }
         }
 
-        tabDataSource.addTab(tab)
         self.collectionView?.performBatchUpdates({ _ in
+            self.tabDataSource.addTab(tab)
             self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
         }, completion: { finished in
             if finished {
@@ -644,28 +644,30 @@ extension TabTrayController: TabManagerDelegate {
         // it is possible that we are removing a tab that we are not currently displaying
         // through the Close All Tabs feature (which will close tabs that are not in our current privacy mode)
         // check this before removing the item from the collection
-        let removedIndex = tabDataSource.removeTab(tab)
-        if removedIndex > -1 {
-            self.collectionView.performBatchUpdates({
-                self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
-            }, completion: { finished in
-                if #available(iOS 9, *) {
-                    guard finished && self.privateTabsAreEmpty() else { return }
-                    self.emptyPrivateTabsView.hidden = false
-                }
-            })
-
-            // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
-            // animation has finished which causes cells that animate from above to suddenly 'appear'. This
-            // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
-            if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
-                let visibleCount = collectionView.indexPathsForVisibleItems().count
-                var offscreenIndexPaths = [NSIndexPath]()
-                for i in 0..<(tabsToDisplay.count - visibleCount) {
-                    offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
-                }
-                self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
+        guard let removedIndex = tabDataSource.tabs.indexOf(tab) else {
+            return
+        }
+        
+        self.collectionView.performBatchUpdates({
+            self.tabDataSource.removeTab(tab)
+            self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
+        }, completion: { finished in
+            if #available(iOS 9, *) {
+                guard finished && self.privateTabsAreEmpty() else { return }
+                self.emptyPrivateTabsView.hidden = false
             }
+        })
+
+        // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
+        // animation has finished which causes cells that animate from above to suddenly 'appear'. This
+        // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
+            let visibleCount = collectionView.indexPathsForVisibleItems().count
+            var offscreenIndexPaths = [NSIndexPath]()
+            for i in 0..<(tabsToDisplay.count - visibleCount) {
+                offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
+            }
+            self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
         }
     }
 
