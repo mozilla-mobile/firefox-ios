@@ -174,6 +174,8 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
             if self.profile.hasSyncableAccount() {
                 resyncHistory()
+            } else {
+                self.reloadData()
             }
             break
         case NotificationDynamicFontChanged:
