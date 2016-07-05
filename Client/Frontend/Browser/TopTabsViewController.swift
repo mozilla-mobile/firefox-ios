@@ -24,7 +24,7 @@ struct TopTabsUX {
 protocol TopTabsDelegate: class {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab()
-    func topTabsDidPressPrivateTab(tab: Tab?)
+    func didTogglePrivateMode(cachedTab: Tab?)
     func topTabsDidChangeTab()
 }
 
@@ -175,7 +175,7 @@ class TopTabsViewController: UIViewController {
     }
     
     func togglePrivateModeTapped() {
-        delegate?.topTabsDidPressPrivateTab(isPrivate ? lastNormalTab : lastPrivateTab)
+        delegate?.didTogglePrivateMode(isPrivate ? lastNormalTab : lastPrivateTab)
         self.collectionView.reloadData()
         self.scrollToCurrentTab(false, centerCell: true)
     }
@@ -337,5 +337,12 @@ extension TopTabsViewController: TabManagerDelegate {
     func tabManagerDidAddTabs(tabManager: TabManager) {
         collectionView.reloadData()
     }
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {}
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
+        if let privateTab = lastPrivateTab where !tabManager.tabs.contains(privateTab) {
+            lastPrivateTab = nil
+        }
+        if let normalTab = lastNormalTab where !tabManager.tabs.contains(normalTab) {
+            lastNormalTab = nil
+        }
+    }
 }

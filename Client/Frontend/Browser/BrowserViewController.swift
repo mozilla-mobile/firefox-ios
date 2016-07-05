@@ -3348,18 +3348,19 @@ extension BrowserViewController: TopTabsDelegate {
         openBlankNewTabAndFocus(isPrivate: isPrivate)
     }
     
-    func topTabsDidPressPrivateTab(tab: Tab?) {
+    func didTogglePrivateMode(cachedTab: Tab?) {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }
         urlBar.leaveOverlayMode()
+        
         if selectedTab.isPrivate {
             if profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
                 tabManager.removeAllPrivateTabsAndNotify(false)
             }
         }
         
-        if let tab = tab {
+        if let tab = cachedTab {
             tabManager.selectTab(tab)
         }
         else if selectedTab.isPrivate {
