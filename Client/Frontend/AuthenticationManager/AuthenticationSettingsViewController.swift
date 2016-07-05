@@ -95,7 +95,11 @@ class RequirePasscodeSetting: Setting {
             },
             cancel: nil,
             fallback: {
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, success: {
+                    self.navigationController?.dismissViewControllerAnimated(true) {
+                        self.navigateToRequireInterval()
+                    }
+                }, cancel: nil)
             })
         } else {
             self.navigateToRequireInterval()
@@ -104,14 +108,6 @@ class RequirePasscodeSetting: Setting {
 
     private func navigateToRequireInterval() {
         navigationController?.pushViewController(RequirePasscodeIntervalViewController(), animated: true)
-    }
-}
-
-extension RequirePasscodeSetting: PasscodeEntryDelegate {
-    @objc func passcodeValidationDidSucceed() {
-        navigationController?.dismissViewControllerAnimated(true) {
-            self.navigateToRequireInterval()
-        }
     }
 }
 
@@ -306,7 +302,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
                 },
                 touchIDFallback: { [unowned self] touchIDSetting in
                     AppAuthenticator.presentPasscodeAuthentication(self.navigationController,
-                        success: { 
+                        success: {
                             touchIDSetting.toggleTouchID(enabled: false)
                             self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
                         },

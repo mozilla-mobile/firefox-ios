@@ -599,7 +599,11 @@ class LoginsSetting: Setting {
             },
             cancel: nil,
             fallback: {
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self.settings)
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, success: {
+                    self.navigationController?.dismissViewControllerAnimated(true) {
+                        self.settings?.navigateToLoginsList()
+                    }
+                }, cancel: nil)
             })
         } else {
             settings?.navigateToLoginsList()

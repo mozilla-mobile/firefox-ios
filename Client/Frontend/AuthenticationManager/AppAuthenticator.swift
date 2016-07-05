@@ -40,14 +40,6 @@ class AppAuthenticator {
             }
         }
     }
-
-    static func presentPasscodeAuthentication(presentingNavController: UINavigationController?, delegate: PasscodeEntryDelegate?) {
-        let passcodeVC = PasscodeEntryViewController()
-        passcodeVC.delegate = delegate
-        let navController = UINavigationController(rootViewController: passcodeVC)
-        navController.modalPresentationStyle = .FormSheet
-        presentingNavController?.presentViewController(navController, animated: true, completion: nil)
-    }
     
     static func presentPasscodeAuthentication(presentingNavController: UINavigationController?, success: (() -> Void)?, cancel: (() -> Void)?) {
         let passcodeVC = PasscodeEntryViewController()
