@@ -342,6 +342,8 @@ class MenuView: UIView {
             }
             toolbar.setItems(displayToolbarItems, animated: false)
         }
+        toolbar.backgroundColor = toolbarColor
+        toolbar.setNeedsDisplay()
     }
 
 
