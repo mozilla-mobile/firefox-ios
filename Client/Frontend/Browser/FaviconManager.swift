@@ -16,6 +16,8 @@ class FaviconManager : TabHelper {
     
     let profile: Profile!
     weak var tab: Tab?
+    
+    static let maximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
 
     init(tab: Tab, profile: Profile) {
         self.profile = profile
@@ -61,9 +63,14 @@ class FaviconManager : TabHelper {
             [SDWebImageOptions.LowPriority, SDWebImageOptions.CacheMemoryOnly] : [SDWebImageOptions.LowPriority]
         let url = currentURL.absoluteString
         let site = Site(url: url, title: "")
-        manager.downloadImageWithURL(iconUrl,
+        let fetch = Deferred<SDWebImageOperation!>()
+        fetch.fill(manager.downloadImageWithURL(iconUrl,
                                      options: SDWebImageOptions(options),
-                                     progress: nil,
+                                     progress: { (receivedSize, expectedSize) in
+                                        if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
+                                            fetch.upon({ $0.cancel() })
+                                        }
+                                     },
                                      completed: { (img, err, cacheType, success, url) -> Void in
                                         let fav = Favicon(url: url.absoluteString,
                                             date: NSDate(),
@@ -89,7 +96,7 @@ class FaviconManager : TabHelper {
                                             tab.favicons.append(fav)
                                             deferred.fill(Maybe(success: fav))
                                         }
-        })
+        }))
         return deferred
     }
 
