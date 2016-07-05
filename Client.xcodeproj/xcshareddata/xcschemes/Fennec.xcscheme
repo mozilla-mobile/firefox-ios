@@ -138,22 +138,25 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "BookmarkingTests/testChangingDynamicFontOnBookmarks()">
+                  Identifier = "LoginManagerTests/testListEditButton()">
                </Test>
                <Test
-                  Identifier = "HistoryTests/testChangingDynamicFontOnHistory()">
+                  Identifier = "LoginManagerTests/testLoginsDetailsPromptsForPasscodeOnReentryFromBackground()">
                </Test>
                <Test
-                  Identifier = "ReadingListTests/testChangingDyamicFontOnReadingList()">
+                  Identifier = "LoginManagerTests/testLoginsDetailsPromptsForPasscodeOnReentryFromBackgroundWithDelay()">
                </Test>
                <Test
-                  Identifier = "SearchTests/testChangingDyamicFontOnSearch()">
+                  Identifier = "LoginManagerTests/testLoginsListPromptsForPasscodeOnReentryFromBackground()">
+               </Test>
+               <Test
+                  Identifier = "LoginManagerTests/testLoginsListPromptsForPasscodeOnReentryFromBackgroundWithDelay()">
                </Test>
                <Test
                   Identifier = "SessionRestoreTests/testTabRestore()">
                </Test>
                <Test
-                  Identifier = "TopSitesTests/testChangingDyamicFontOnTopSites()">
+                  Identifier = "ViewMemoryLeakTests">
                </Test>
             </SkippedTests>
          </TestableReference>
