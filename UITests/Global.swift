@@ -466,8 +466,11 @@ class DynamicFontUtils {
 
     static func restoreDynamicFontSize(tester: KIFUITestActor) {
         let value = UIContentSizeCategoryMedium
-        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
-        tester.waitForTimeInterval(0.3)
+        let currentValue = UIApplication.sharedApplication().valueForKey("preferredContentSizeCategory") as? String
+        if value != currentValue {
+            UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
+            tester.waitForTimeInterval(0.3)
+        }
     }
 }
 
@@ -516,15 +519,11 @@ class MenuUtils {
     static func openSettings(tester: KIFUITestActor) {
         tester.tapViewWithAccessibilityLabel("Menu")
         tester.waitForAnimationsToFinish()
-        guard let _ = try? tester.tryFindingViewWithAccessibilityLabel("Settings") else {
+        if let _ = try? tester.tryFindingViewWithAccessibilityLabel("Settings") {
+            tester.tapViewWithAccessibilityLabel("Settings")
+        } else {
             return XCTFail("Unable to find settings in menu")
         }
-
-        guard let settingsButton = tester.waitForViewWithAccessibilityLabel("Settings") else {
-            return XCTFail("Unable to find settings in menu")
-        }
-
-        settingsButton.tap()
     }
 
     static func closeMenuIfOpen(tester: KIFUITestActor) {
