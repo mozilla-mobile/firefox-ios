@@ -63,12 +63,12 @@ class FaviconManager : TabHelper {
             [SDWebImageOptions.LowPriority, SDWebImageOptions.CacheMemoryOnly] : [SDWebImageOptions.LowPriority]
         let url = currentURL.absoluteString
         let site = Site(url: url, title: "")
-        let fetch = Deferred<SDWebImageOperation!>()
-        fetch.fill(manager.downloadImageWithURL(iconUrl,
+        var fetch: SDWebImageOperation?
+        fetch = manager.downloadImageWithURL(iconUrl,
                                      options: SDWebImageOptions(options),
                                      progress: { (receivedSize, expectedSize) in
                                         if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
-                                            fetch.upon({ $0.cancel() })
+                                            fetch?.cancel()
                                         }
                                      },
                                      completed: { (img, err, cacheType, success, url) -> Void in
@@ -96,7 +96,7 @@ class FaviconManager : TabHelper {
                                             tab.favicons.append(fav)
                                             deferred.fill(Maybe(success: fav))
                                         }
-        }))
+        })
         return deferred
     }
 

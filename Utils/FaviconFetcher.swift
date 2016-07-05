@@ -178,12 +178,12 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
 
         var fav = Favicon(url: url, type: icon.type)
         if let url = url.asURL {
-            let fetch = Deferred<SDWebImageOperation!>()
-            fetch.fill(manager.downloadImageWithURL(url,
+            var fetch: SDWebImageOperation?
+            fetch = manager.downloadImageWithURL(url,
                 options: SDWebImageOptions.LowPriority,
                 progress: { (receivedSize, expectedSize) in
                     if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
-                        fetch.upon({ $0.cancel() })
+                        fetch?.cancel()
                     }
                 },
                 completed: { (img, err, cacheType, success, url) -> Void in
@@ -200,7 +200,7 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 }
 
                 deferred.fill(Maybe(success: fav))
-            }))
+            })
         } else {
             return deferMaybe(FaviconFetcherErrorType(description: "Invalid URL \(url)"))
         }
