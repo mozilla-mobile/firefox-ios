@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Navegue em várias páginas ao mesmo tempo.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Escolher";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Conecte o Firefox em qualquer lugar.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Personalizar";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Alterne facilmente entre as páginas abertas com as abas.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox e a nuvem";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Slide introdutório %1$@ de %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Organizar";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Personalize o Firefox do seu jeito usando as configurações.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Personalize o seu mecanismo de pesquisa padrão e muito mais nas configurações.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Compartilhar";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Entrar no Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Iniciar navegação";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Sincronizar seus dispositivos.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Toque, segure e mova o ícone do Firefox para a sua doca para acesso facil.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "O botão de configurações está no início da barra de abas.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "O botão Mostrar abas está ao lado do campo de endereço e pesquisa e exibe o número atual de abas abertas.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Use a folha de compartilhamento para enviar links de outros aplicativos para o Firefox.";
+

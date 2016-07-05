@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "使用标签页方式同时浏览多个网页。";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "选择";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "无处不在的连通 Firefox。";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "定制";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "轻松切换已打开的页面标签页。";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox 与云";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "介绍页面，第 %1$@ 张，共 %2$@ 张";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "管理";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "个性化您的 Firefox，在“设置”页面中按您所想自由定制。";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "在“设置”中个性化您的默认搜索引擎等设置。";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "共享";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "登录 Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "开始浏览";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "同步您的设备。";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "按住并移动 Firefox 图标到您的 Dock，便于快捷打开。";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "“设置”按钮在标签页托盘的开头。";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "“显示标签页”按钮在地址栏和搜索框的旁边，并显示了当前已打开的标签页数量。";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "使用“共享”表单在其他应用中将链接发送到 Firefox。";
+

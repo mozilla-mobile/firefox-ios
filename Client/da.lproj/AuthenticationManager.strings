@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Efter 1 time";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Efter 1 minut";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Efter 5 minutter";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Efter 10 minutter";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Efter 15 minutter";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Skift adgangskode";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Indtast adgangskode";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Indtast en ny adgangskode";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Indtast adgangskode";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Indtast adgangskode";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Med det samme";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Forkert adgangskode. Prøv igen (%d forsøg tilbage).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Forkert adgangskode. Prøv igen.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Maksimalt antal forsøg nået. Forsøg igen om en time.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Maksimalt antal forsøg nået. Forsøg igen senere.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Den nye adgangskode skal være anderledes end den gamle.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Adgangskode";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Adgangskoderne var ikke ens. Prøv igen.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Indtast adgangskode igen";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Kræv adgangskode";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Angiv adgangskode";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID og adgangskode";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Slå adgangskode fra";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Slå adgangskode til";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Slå din adgangskode fra.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Brug Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Brug dit fingeraftryk til at få adgang til logins.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Brug dit fingeraftryk for at få adgang til privat browsing.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Brug dit fingeraftryk til at deaktivere Touch ID.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Brug dit fingeraftryk til at konfigurere dit adgangskode-interval.";
+

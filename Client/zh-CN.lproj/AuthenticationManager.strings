@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "在 1 小时后";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "在 1 分钟后";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "在 5 分钟后";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "在 10 分钟后";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "在 15 分钟后";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "更改密码";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "请输入密码";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "请输入新密码";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "输入一个密码";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "请输入密码";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "立即";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "密码不正确。请重试（剩余 %d 次机会）。";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "密码不正确。请重试。";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "尝试已达到限制。请一小时后再试。";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "尝试已达到限制。请稍后再试。";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "新密码必须与现有密码不同。";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "密码";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "两次密码不符。请重试。";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "重新输入密码";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "需要密码";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "设置密码";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID 和密码";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "关闭密码";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "开启密码";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "关闭您的密码。";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "使用 Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "现在使用您的指纹访问登录信息。";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "现在使用您的指纹访问隐私浏览。";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "使用您的指纹来禁用 Touch ID。";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "使用您的指纹来配置您所需的密码间隔。";
+

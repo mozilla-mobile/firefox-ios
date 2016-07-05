@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "關閉隱私分頁";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox 將不會留下瀏覽紀錄或 cookie，但會保留新建立的書籤。";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "瞭解更多";
+
+/* Toggled OFF accessibility value */
+"Off" = "關閉";
+
+/* Toggled ON accessibility value */
+"On" = "開啟";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "用新隱私分頁開啟";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "隱私瀏覽";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "隱私模式";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "開啟或關閉隱私模式";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "離開隱私瀏覽時關閉分頁";
+

@@ -11,6 +11,6 @@ MOZ_BUNDLE_ID = org.mozilla.ios.Firefox
 INCLUDE_SETTINGS_BUNDLE = NO
 
 // Adjust SDK Variables
-ADJUST_ENVIRONMENT =
+ADJUST_ENVIRONMENT = production
 
-ADJUST_APP_TOKEN =
+ADJUST_APP_TOKEN = gqrwnbypw28p
