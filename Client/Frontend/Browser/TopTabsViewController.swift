@@ -49,7 +49,7 @@ class TopTabsViewController: UIViewController {
     
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTapped), forControlEvents: UIControlEvents.TouchUpInside)
+        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), forControlEvents: UIControlEvents.TouchUpInside)
         return tabsButton
     }()
     
@@ -145,7 +145,7 @@ class TopTabsViewController: UIViewController {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
     
-    func tabsTapped() {
+    func tabsTrayTapped() {
         delegate?.topTabsDidPressTabs()
     }
     
