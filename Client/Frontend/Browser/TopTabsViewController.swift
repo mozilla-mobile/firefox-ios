@@ -43,6 +43,7 @@ class TopTabsViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
         collectionView.clipsToBounds = false
+        collectionView.accessibilityIdentifier = "Top Tabs View"
         
         return collectionView
     }()
