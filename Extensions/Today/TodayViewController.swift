@@ -81,6 +81,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }()
 
     private lazy var buttonSpacer: UIView = UIView()
+    private var heightConstraint: Constraint?
 
     private var copiedURL: NSURL? {
         if let string = UIPasteboard.generalPasteboard().string,
@@ -152,7 +153,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             if hasCopiedURL {
                 extraHeight += TodayUX.copyLinkButtonHeight + TodayUX.verticalWidgetMargin
             }
-            make.height.equalTo(buttonSpacer.snp_height).offset(extraHeight).priorityHigh()
         }
     }
 
@@ -171,24 +171,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         } else {
             self.openCopiedLinkButton.hidden = true
         }
-
-        self.view.setNeedsLayout()
     }
 
     func widgetMarginInsetsForProposedMarginInsets(defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
         TodayUX.defaultWidgetTextMargin = defaultMarginInsets.left
         return UIEdgeInsetsMake(0, 0, TodayUX.verticalWidgetMargin, 0)
-    }
-
-    func widgetPerformUpdateWithCompletionHandler(completionHandler: ((NCUpdateResult) -> Void)) {
-        // Perform any setup necessary in order to update the view.
-        dispatch_async(dispatch_get_main_queue()) {
-            // updates need to be made on the main thread
-            self.updateCopiedLink()
-            // and we need to call the completion handler in every branch.
-            completionHandler(NCUpdateResult.NewData)
-        }
-        completionHandler(NCUpdateResult.NewData)
     }
 
     // MARK: Button behaviour
