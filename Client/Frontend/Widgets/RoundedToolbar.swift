@@ -25,6 +25,7 @@ class RoundedToolbar: UIToolbar {
      * view to do this
      */
     override func drawRect(rect: CGRect) {
+        super.drawRect(rect)
         layer.sublayers?.filter { $0.mask != nil } .forEach { $0.removeFromSuperlayer() }
         addRoundedCorners(cornersToRound: cornersToRound, cornerRadius: cornerRadius, color: layerBackgroundColor ?? UIColor.whiteColor())
     }

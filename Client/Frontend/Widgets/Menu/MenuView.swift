@@ -9,6 +9,7 @@ class MenuView: UIView {
     lazy var toolbar: RoundedToolbar = {
         let toolbar = RoundedToolbar()
         toolbar.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
+        toolbar.contentMode = .Redraw
         return toolbar
     }()
 
@@ -343,7 +344,6 @@ class MenuView: UIView {
             toolbar.setItems(displayToolbarItems, animated: false)
         }
         toolbar.backgroundColor = toolbarColor
-        toolbar.setNeedsDisplay()
     }
 
 
