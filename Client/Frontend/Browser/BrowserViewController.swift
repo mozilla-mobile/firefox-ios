@@ -1062,9 +1062,7 @@ class BrowserViewController: UIViewController {
         guard let currentViewController = navigationController?.topViewController else {
                 return
         }
-        if let presentedViewController = currentViewController.presentedViewController {
-            presentedViewController.dismissViewControllerAnimated(true, completion: nil)
-        }
+        currentViewController.dismissViewControllerAnimated(true, completion: nil)
         if currentViewController != self {
             self.navigationController?.popViewControllerAnimated(true)
         } else if urlBar.inOverlayMode {
