@@ -49,7 +49,7 @@ class TopTabsViewController: UIViewController {
     
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTapped), forControlEvents: UIControlEvents.TouchUpInside)
+        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), forControlEvents: UIControlEvents.TouchUpInside)
         return tabsButton
     }()
     
@@ -61,7 +61,7 @@ class TopTabsViewController: UIViewController {
     
     private lazy var privateTab: UIButton = {
         let privateTab = UIButton.privateModeButton()
-        privateTab.addTarget(self, action: #selector(TopTabsViewController.privateTabTapped), forControlEvents: UIControlEvents.TouchUpInside)
+        privateTab.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), forControlEvents: UIControlEvents.TouchUpInside)
         return privateTab
     }()
     
@@ -95,7 +95,7 @@ class TopTabsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
         collectionView.reloadData()
-        self.scrollToCurrentTab(false)
+        self.scrollToCurrentTab(false, centerCell: true)
     }
     
     override func viewDidLoad() {
@@ -148,7 +148,7 @@ class TopTabsViewController: UIViewController {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
     
-    func tabsTapped() {
+    func tabsTrayTapped() {
         delegate?.topTabsDidPressTabs()
     }
     
@@ -171,10 +171,10 @@ class TopTabsViewController: UIViewController {
         })
     }
     
-    func privateTabTapped() {
+    func togglePrivateModeTapped() {
         delegate?.topTabsDidPressPrivateTab()
         self.collectionView.reloadData()
-        scrollToCurrentTab(false)
+        self.scrollToCurrentTab(false, centerCell: true)
     }
     
     func closeTab() {
@@ -185,14 +185,19 @@ class TopTabsViewController: UIViewController {
         self.collectionView.reloadData()
     }
     
-    func scrollToCurrentTab(animated: Bool = true) {
+    func scrollToCurrentTab(animated: Bool = true, centerCell: Bool = false) {
         guard let currentTab = tabManager.selectedTab, let index = tabsToDisplay.indexOf(currentTab) where !collectionView.frame.isEmpty else {
             return
         }
         if let frame = collectionView.layoutAttributesForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0))?.frame {
-            // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
-            let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
-            collectionView.scrollRectToVisible(padFrame, animated: true)
+            if centerCell {
+                collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0), atScrollPosition: .CenteredHorizontally, animated: false)
+            }
+            else {
+                // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
+                let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
+                collectionView.scrollRectToVisible(padFrame, animated: animated)
+            }
         }
     }
 }
