@@ -1294,7 +1294,7 @@ class BrowserViewController: UIViewController {
         if let homePanelController = homePanelController {
             return .HomePanels(homePanelState: homePanelController.homePanelState)
         }
-        guard let tab = tabManager.selectedTab where !tab.loading else {
+        guard let tab = tabManager.selectedTab else {
             return .Loading
         }
         return .Tab(tabState: tab.tabState)
