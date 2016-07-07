@@ -67,6 +67,7 @@ class ReaderModeBarView: UIView {
 
     var readStatusButton: UIButton!
     var settingsButton: UIButton!
+    var speechButton: UIButton!
     var listStatusButton: UIButton!
 
     dynamic var buttonTintColor: UIColor = UIColor.clearColor() {

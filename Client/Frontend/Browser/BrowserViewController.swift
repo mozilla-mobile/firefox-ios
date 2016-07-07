@@ -2721,37 +2721,44 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
         switch buttonType {
         case .Settings:
             if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode where readerMode.state == ReaderModeState.Active {
-                var readerModeStyle = DefaultReaderModeStyle
-                if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-                    if let style = ReaderModeStyle(dict: dict) {
-                        readerModeStyle = style
-                    }
+                if readerMode.isDictating {
+                    readerMode.pauseDictation()
+                } else {
+                    readerMode.resumeDictation()
                 }
-
-                let readerModeStyleViewController = ReaderModeStyleViewController()
-                readerModeStyleViewController.delegate = self
-                readerModeStyleViewController.readerModeStyle = readerModeStyle
-                readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
-
-                let setupPopover = { [unowned self] in
-                    if let popoverPresentationController = readerModeStyleViewController.popoverPresentationController {
-                        popoverPresentationController.backgroundColor = UIColor.whiteColor()
-                        popoverPresentationController.delegate = self
-                        popoverPresentationController.sourceView = readerModeBar
-                        popoverPresentationController.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: UIConstants.ToolbarHeight, width: 1, height: 1)
-                        popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
-                    }
-                }
-
-                setupPopover()
-
-                if readerModeStyleViewController.popoverPresentationController != nil {
-                    displayedPopoverController = readerModeStyleViewController
-                    updateDisplayedPopoverProperties = setupPopover
-                }
-
-                self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
             }
+//            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode where readerMode.state == ReaderModeState.Active {
+//                var readerModeStyle = DefaultReaderModeStyle
+//                if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
+//                    if let style = ReaderModeStyle(dict: dict) {
+//                        readerModeStyle = style
+//                    }
+//                }
+//
+//                let readerModeStyleViewController = ReaderModeStyleViewController()
+//                readerModeStyleViewController.delegate = self
+//                readerModeStyleViewController.readerModeStyle = readerModeStyle
+//                readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
+//
+//                let setupPopover = { [unowned self] in
+//                    if let popoverPresentationController = readerModeStyleViewController.popoverPresentationController {
+//                        popoverPresentationController.backgroundColor = UIColor.whiteColor()
+//                        popoverPresentationController.delegate = self
+//                        popoverPresentationController.sourceView = readerModeBar
+//                        popoverPresentationController.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: UIConstants.ToolbarHeight, width: 1, height: 1)
+//                        popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+//                    }
+//                }
+//
+//                setupPopover()
+//
+//                if readerModeStyleViewController.popoverPresentationController != nil {
+//                    displayedPopoverController = readerModeStyleViewController
+//                    updateDisplayedPopoverProperties = setupPopover
+//                }
+//
+//                self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
+//            }
 
         case .MarkAsRead:
             if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {

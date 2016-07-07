@@ -229,6 +229,20 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
+
+    enum Notifications: String {
+        case TabBeginScrollNotification = "TabBeginScrollNotification"
+        case TabBeginZoomNotification = "TabBeginZoomNotification"
+    }
+
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.TabBeginScrollNotification.rawValue, object: scrollView)
+    }
+
+    func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?) {
+        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.TabBeginZoomNotification.rawValue, object: scrollView)
+    }
+
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if tabIsLoading() {
             return

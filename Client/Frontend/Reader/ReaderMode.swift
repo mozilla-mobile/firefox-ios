@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import WebKit
+import AVFoundation
 
 let ReaderModeProfileKeyStyle = "readermode.style"
 
@@ -217,6 +218,8 @@ class ReaderMode: TabHelper {
     private weak var tab: Tab?
     var state: ReaderModeState = ReaderModeState.Unavailable
     private var originalURL: NSURL?
+    
+    private var dictation = ReaderModeDictation()
 
     class func name() -> String {
         return "ReaderMode"
@@ -287,6 +290,104 @@ class ReaderMode: TabHelper {
                     return
                 })
             }
+        }
+    }
+    
+    var isDictating: Bool {
+        return dictation.state == .Playing
+    }
+    
+    func resumeDictation() {
+        switch dictation.state {
+            case .Unstarted:
+                if let webView = self.tab?.webView {
+                    dictation.parseWebView(webView)
+                }
+//                fallthrough
+            case .Finished:
+                dictation.start()
+            case .Paused:
+                dictation.resume()
+            case .Playing:
+                break
+        }
+    }
+    
+    func pauseDictation() {
+        dictation.pause()
+    }
+}
+
+class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
+    
+    enum DictationState {
+        case Unstarted
+        case Playing
+        case Paused
+        case Finished
+    }
+    
+    var state: DictationState = .Unstarted
+    private let synthesiser = AVSpeechSynthesizer()
+    
+    private var webView: WKWebView?
+    private var scrollObservers: [String: NSObjectProtocol] = [:]
+    private var scrollsToFollowDictation = true
+    private var contentText: String?
+    
+    
+    override init() {
+        super.init()
+        self.synthesiser.delegate = self
+    }
+    
+    deinit {
+        if let webView = self.webView {
+            for (notification, observer) in self.scrollObservers {
+                NSNotificationCenter.defaultCenter().removeObserver(observer, name: notification, object: webView.scrollView)
+            }
+        }
+    }
+    
+    func parseWebView(webView: WKWebView) {
+        self.webView = webView
+        for notification in ([TabScrollingController.Notifications.TabBeginScrollNotification, TabScrollingController.Notifications.TabBeginZoomNotification].map { $0.rawValue }) {
+            scrollObservers[notification] = NSNotificationCenter.defaultCenter().addObserverForName(notification, object: webView.scrollView, queue: nil) { [unowned self] _ in
+                self.scrollsToFollowDictation = false
+            }
+        }
+        webView.evaluateJavaScript("\(ReaderModeNamespace).extractContentForDictation()") { (result, _) in
+            if let content = result as? [String: AnyObject] {
+                self.contentText = content["text"] as? String
+                guard let text = self.contentText else {
+                    return
+                }
+                
+                let utterance = AVSpeechUtterance(string: text)
+                utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
+                self.synthesiser.speakUtterance(utterance)
+            }
+        }
+    }
+    
+    func start() {
+        state = .Playing
+    }
+    
+    func resume() {
+        state = .Playing
+    }
+    
+    func pause() {
+        state = .Paused
+    }
+    
+    @objc func speechSynthesizer(synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
+        guard let webView = self.webView else {
+            return
+        }
+        if let range = characterRange.toRange() {
+            webView.evaluateJavaScript("\(ReaderModeNamespace).markDictatedContent(\(range.startIndex), \(range.endIndex), \(self.scrollsToFollowDictation))", completionHandler: nil)
         }
     }
 }
