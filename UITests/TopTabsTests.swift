@@ -61,7 +61,7 @@ class TopTabsTests: KIFTestCase {
         
         tester().tapViewWithAccessibilityIdentifier("url")
         
-        for i in 0...(numberOfTabs-1) {
+        for i in 0..<numberOfTabs {
             let url = "\(webRoot)/numberedPage.html?page=\(i)"
             tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(i)")
