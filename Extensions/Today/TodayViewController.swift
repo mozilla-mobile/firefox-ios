@@ -148,12 +148,17 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             make.height.equalTo(TodayUX.copyLinkButtonHeight)
         }
 
-        view.snp_remakeConstraints { make in
-            var extraHeight = TodayUX.verticalWidgetMargin
-            if hasCopiedURL {
-                extraHeight += TodayUX.copyLinkButtonHeight + TodayUX.verticalWidgetMargin
-            }
+        view.snp_remakeConstraints { heightConstraint = $0.height.equalTo(buttonSpacer.snp_height).priorityHigh().constraint }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        updateCopiedLink()
+        var extraHeight = TodayUX.verticalWidgetMargin
+        if hasCopiedURL {
+            extraHeight += TodayUX.copyLinkButtonHeight + TodayUX.verticalWidgetMargin
         }
+        heightConstraint?.updateOffset(extraHeight)
     }
 
     override func viewDidLayoutSubviews() {
