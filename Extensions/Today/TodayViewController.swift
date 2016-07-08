@@ -319,7 +319,7 @@ class ButtonWithSublabel: UIButton {
         let imageView = self.imageView!
 
         let subtitleLabel = self.subtitleLabel
-        subtitleLabel.textColor = UIColor.whiteColor()
+        subtitleLabel.textColor = UIColor.lightGrayColor()
         self.addSubview(subtitleLabel)
 
         imageView.snp_remakeConstraints { make in
