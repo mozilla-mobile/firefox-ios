@@ -24,6 +24,8 @@ struct ReaderModeUtils {
                 if let tmplPath = NSBundle.mainBundle().pathForResource("Reader", ofType: "html") {
                     do {
                         let tmpl = try NSMutableString(contentsOfFile: tmplPath, encoding: NSUTF8StringEncoding)
+                        tmpl.replaceOccurrencesOfString("%READER-LANG%", withString: readabilityResult.language,
+                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
                         tmpl.replaceOccurrencesOfString("%READER-CSS%", withString: css as String,
                             options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
 
