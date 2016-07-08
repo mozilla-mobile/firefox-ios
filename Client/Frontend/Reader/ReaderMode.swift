@@ -333,6 +333,8 @@ class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
     private var scrollsToFollowDictation = true
     private var contentText: String?
     
+    // We need this to deal with a bug with only one AVSpeechSynthesizer being able to be running/paused at one time
+    private var cutoffPoint: Int?
     
     override init() {
         super.init()
@@ -360,18 +362,19 @@ class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
         }
     }
     
+    private func speakUtterance(string: String) {
+        let utterance = AVSpeechUtterance(string: string)
+        utterance.voice = AVSpeechSynthesisVoice(language: NSBundle.mainBundle().accessibilityLanguage ?? NSLocale.preferredLanguages().first ?? "en-GB")
+        self.synthesiser.speakUtterance(utterance)
+    }
+    
     func start() {
         guard let contentText = self.contentText else {
             return
         }
-        
         self.state = .Playing
         self.scrollsToFollowDictation = true
-        
-        let utterance = AVSpeechUtterance(string: contentText)
-        NSBundle.mainBundle().preferredLocalizations
-        utterance.voice = AVSpeechSynthesisVoice(language: NSBundle.mainBundle().accessibilityLanguage ?? NSLocale.preferredLanguages().first ?? "en-GB")
-        self.synthesiser.speakUtterance(utterance)
+        self.speakUtterance(contentText)
     }
     
     func resume() {
@@ -380,20 +383,25 @@ class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
         if let webView = self.webView {
             webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.setScrollToDictationOn(true);", completionHandler: nil)
         }
-        self.synthesiser.continueSpeaking()
+        guard let contentText = self.contentText, cutoffPoint = cutoffPoint else {
+            return
+        }
+        self.speakUtterance(NSString(string: contentText).substringFromIndex(cutoffPoint))
     }
     
     func pause() {
         self.state = .Paused
-        self.synthesiser.pauseSpeakingAtBoundary(.Immediate)
+        self.synthesiser.stopSpeakingAtBoundary(.Immediate)
     }
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
-        guard let webView = self.webView else {
+        guard let webView = self.webView, contentText = self.contentText else {
             return
         }
         if let range = characterRange.toRange() {
-            webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.markDictatedContent(\(range.startIndex), \(range.endIndex), \(self.scrollsToFollowDictation));", completionHandler: nil)
+            let offset = contentText.characters.count - utterance.speechString.characters.count
+            self.cutoffPoint = characterRange.location + offset
+            webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.markDictatedContent(\(range.startIndex + offset), \(range.endIndex + offset), \(self.scrollsToFollowDictation));", completionHandler: nil)
         }
     }
     
