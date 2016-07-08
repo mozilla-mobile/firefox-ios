@@ -352,7 +352,7 @@ class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
         for notification in ([TabScrollingController.Notifications.TabBeginScrollNotification, TabScrollingController.Notifications.TabBeginZoomNotification].map { $0.rawValue }) {
             scrollObservers[notification] = NSNotificationCenter.defaultCenter().addObserverForName(notification, object: webView.scrollView, queue: nil) { [unowned self] _ in
                 self.scrollsToFollowDictation = false
-                webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.unlockScrolling();", completionHandler: nil)
+                webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.setScrollToDictationOn(false);", completionHandler: nil)
             }
         }
         webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.extractContentText();") { (result, _) in
@@ -378,7 +378,7 @@ class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
         self.state = .Playing
         self.scrollsToFollowDictation = true
         if let webView = self.webView {
-            webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.lockScrolling();", completionHandler: nil)
+            webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.setScrollToDictationOn(true);", completionHandler: nil)
         }
         self.synthesiser.continueSpeaking()
     }

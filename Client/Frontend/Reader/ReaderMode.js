@@ -177,7 +177,7 @@ var _firefox_ReaderMode = {
 
     		motion: new Array(2).fill(0),
 
-    		magnitude: 0.5,
+    		magnitude: null,
 
     		target: null,
 
@@ -245,7 +245,6 @@ var _firefox_ReaderMode = {
 			for (var dictating of Array.prototype.slice.call(document.querySelectorAll(".dictating"))) {
 				dictating.parentNode.textContent = dictating.parentNode.textContent;
 			}
-			var scrollPosition = 0;
 			for (var anchor of throughAnchors) {
 				var contained = this.reference[anchor];
 				var preDictation = document.createElement("span"), dictation = document.createElement("span"), postDictation = document.createElement("span");
@@ -258,25 +257,26 @@ var _firefox_ReaderMode = {
 				for (var element of [preDictation, dictation, postDictation]) {
 					contained.appendChild(element);
 				}
-				scrollPosition += dictation.getBoundingClientRect().top;
 			}
-			if (scrollToViewDictation && throughAnchors.length > 0) {
-				this.scrolling.target = scrollPosition / throughAnchors.length + window.scrollY - window.innerHeight / 2;
-			} else {
-				this.unlockScrolling();
-			}
+			this.setScrollToDictationOn(scrollToViewDictation);
 		},
 
-		unlockScrolling: function () {
-			this.scrolling.motion.fill(0);
-			this.scrolling.target = null;
-		},
-
-		lockScrolling: function () {
-			var elements = Array.prototype.slice.call(document.querySelectorAll(".dictating"));
-			if (elements.length > 0) {
-				var scrollPosition = elements.reduce(function (sum, dictation) { return sum + dictation.getBoundingClientRect().top }, 0);
-				this.scrolling.target = scrollPosition / elements.length + window.scrollY - window.innerHeight / 2;
+		setScrollToDictationOn: function (on) {
+			// The higher the scaling, the slower the acceleration will be
+			var SCROLLING_SPEED_SCALING = 100;
+			if (on) {
+				var elements = Array.prototype.slice.call(document.querySelectorAll(".dictating"));
+				if (elements.length > 0) {
+					var scrollPosition = elements.reduce(function (sum, dictation) { return sum + dictation.getBoundingClientRect().top }, 0);
+					this.scrolling.target = scrollPosition / elements.length + window.scrollY - window.innerHeight / 2;
+					this.scrolling.magnitude = Math.abs(window.scrollY - this.scrolling.target) / SCROLLING_SPEED_SCALING;
+				} else {
+					on = false;
+				}
+			}
+			if (!on) {
+				this.scrolling.motion.fill(0);
+				this.scrolling.target = null;
 			}
 		}
 
