@@ -254,6 +254,9 @@ class ReaderMode: TabHelper {
             case .PageShow:
                 if let tab = tab {
                     delegate?.readerMode(self, didDisplayReaderizedContentForTab: tab)
+                    if let webView = self.tab?.webView {
+                        dictation.parseWebView(webView)
+                    }
                 }
         }
     }
@@ -299,12 +302,7 @@ class ReaderMode: TabHelper {
     
     func resumeDictation() {
         switch dictation.state {
-            case .Unstarted:
-                if let webView = self.tab?.webView {
-                    dictation.parseWebView(webView)
-                }
-//                fallthrough
-            case .Finished:
+            case .Unstarted, .Finished:
                 dictation.start()
             case .Paused:
                 dictation.resume()
@@ -354,40 +352,52 @@ class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
         for notification in ([TabScrollingController.Notifications.TabBeginScrollNotification, TabScrollingController.Notifications.TabBeginZoomNotification].map { $0.rawValue }) {
             scrollObservers[notification] = NSNotificationCenter.defaultCenter().addObserverForName(notification, object: webView.scrollView, queue: nil) { [unowned self] _ in
                 self.scrollsToFollowDictation = false
+                webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.unlockScrolling();", completionHandler: nil)
             }
         }
-        webView.evaluateJavaScript("\(ReaderModeNamespace).extractContentForDictation()") { (result, _) in
-            if let content = result as? [String: AnyObject] {
-                self.contentText = content["text"] as? String
-                guard let text = self.contentText else {
-                    return
-                }
-                
-                let utterance = AVSpeechUtterance(string: text)
-                utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
-                self.synthesiser.speakUtterance(utterance)
-            }
+        webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.extractContentText();") { (result, _) in
+            self.contentText = result as? String
         }
     }
     
     func start() {
-        state = .Playing
+        guard let contentText = self.contentText else {
+            return
+        }
+        
+        self.state = .Playing
+        self.scrollsToFollowDictation = true
+        
+        let utterance = AVSpeechUtterance(string: contentText)
+        NSBundle.mainBundle().preferredLocalizations
+        utterance.voice = AVSpeechSynthesisVoice(language: NSBundle.mainBundle().accessibilityLanguage ?? NSLocale.preferredLanguages().first ?? "en-GB")
+        self.synthesiser.speakUtterance(utterance)
     }
     
     func resume() {
-        state = .Playing
+        self.state = .Playing
+        self.scrollsToFollowDictation = true
+        if let webView = self.webView {
+            webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.lockScrolling();", completionHandler: nil)
+        }
+        self.synthesiser.continueSpeaking()
     }
     
     func pause() {
-        state = .Paused
+        self.state = .Paused
+        self.synthesiser.pauseSpeakingAtBoundary(.Immediate)
     }
     
-    @objc func speechSynthesizer(synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
         guard let webView = self.webView else {
             return
         }
         if let range = characterRange.toRange() {
-            webView.evaluateJavaScript("\(ReaderModeNamespace).markDictatedContent(\(range.startIndex), \(range.endIndex), \(self.scrollsToFollowDictation))", completionHandler: nil)
+            webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.markDictatedContent(\(range.startIndex), \(range.endIndex), \(self.scrollsToFollowDictation));", completionHandler: nil)
         }
+    }
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didFinishSpeechUtterance utterance: AVSpeechUtterance) {
+        state = .Finished
     }
 }

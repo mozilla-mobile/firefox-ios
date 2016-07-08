@@ -703,6 +703,12 @@ body {
   background-image: url('chrome://browser/skin/images/reader-style-icon-mdpi.png');
 }
 
+/* Dictation styling */
+.dictating {
+    background-color: hsl(60, 100%, 80%);
+    transition: background-color 0.2s;
+}
+
 @media screen and (min-resolution: 1.25dppx) {
   .dropdown-arrow {
     background-image: url('chrome://browser/skin/images/reader-dropdown-arrow-hdpi.png');

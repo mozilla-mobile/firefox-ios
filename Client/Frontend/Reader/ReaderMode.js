@@ -160,10 +160,6 @@ var _firefox_ReaderMode = {
         var style = JSON.parse(document.body.getAttribute("data-readerStyle"));
         _firefox_ReaderMode.setStyle(style);
 
-        var dictationStyling = document.createElement("style");
-        document.head.appendChild(dictationStyling);
-        dictationStyling.sheet.insertRule(".dictating { background-color: hsl(60, 100%, 70%); transition: background-color 0.2s; }", dictationStyling.sheet.cssRules.length);
-
         // The order here is important. Because updateImageMargins depends on contentElement.offsetWidth which
         // will not be set until contentElement is visible. If this leads to annoying content reflowing then we
         // need to look at an alternative way to do this.
@@ -171,75 +167,121 @@ var _firefox_ReaderMode = {
         _firefox_ReaderMode.updateImageMargins();
     },
 
-    dictationReference: null,
-    anchors: [],
+    dictation: {
 
-    extractContentForDictation: function () {
-		var content = {
-			text: "",
-			anchors: this.anchors,
-			debug: []
-		};
-		var dictationReference = this.dictationReference = {};
-	    var extract = function (node, content) {
-	    	for (var child of Array.prototype.slice.call(node.childNodes)) {
-	    		switch (child.nodeType) {
-		            case Node.ELEMENT_NODE:
-		            	// Content elements that we want to read from (this excludes some tags, such as <sup> to avoid reading citations)
-		            	var blockElements = ["DIV", "P"], inlineElements = ["B", "I", "A"];
-		            	if (blockElements.indexOf(child.tagName) !== -1 || inlineElements.indexOf(child.tagName) !== -1) {
-		            		extract(child, content);
-		            	}
-		            	if (blockElements.indexOf(child.tagName) !== -1 && content.text.slice(-1) !== "\n" && !/^\s+$/.test(child.textContent)) {
-		            		content.text += "\n";
-		            	}
-		            	break;
-		            case Node.TEXT_NODE:
-		            	if (!/^\s+$/.test(child.textContent)) {
-		            		var wrapper = document.createElement("span");
-		            		wrapper.classList.add("dictation-wrapper");
-		            		node.insertBefore(wrapper, child);
-		            		wrapper.appendChild(child);
-			            	content.anchors.push(content.text.length);
-			            	dictationReference[content.anchors[content.anchors.length - 1]] = wrapper;
-			            	content.text += child.textContent;
-			            	content.debug.push(child.textContent);
-		            	}
-		            	break;
-		        }
-	    	}
-	    	return content;
-	    };
-	    return extract(document.querySelector("#reader-content"), content);
-	},
+    	reference: null,
 
-	markDictatedContent: function (start, end, scrollToViewDictation) {
-		if (this.dictationReference === null) {
-			return;
-		}
-		var throughAnchors = [this.anchors.reduce(function (previous, next) { return next <= start ? next : previous; })].concat(this.anchors.filter(function (x) { return x > start && x < end; }));
-		for (var dictating of Array.prototype.slice.call(document.querySelectorAll(".dictating"))) {
-			dictating.parentNode.textContent = dictating.parentNode.textContent;
-		}
-		var scrollPosition = 0;
-		for (var anchor of throughAnchors) {
-			var contained = this.dictationReference[anchor];
-			var preDictation = document.createElement("span"), dictation = document.createElement("span"), postDictation = document.createElement("span");
-			dictation.classList.add("dictating");
-			var textContent = contained.textContent;
-			contained.textContent = "";
-			preDictation.textContent = textContent.substring(0, start - anchor);
-			dictation.textContent = textContent.substring(start - anchor, end - anchor);
-			postDictation.textContent = textContent.substring(end - anchor);
-			for (var element of [preDictation, dictation, postDictation]) {
-				contained.appendChild(element);
+    	anchors: null,
+
+    	scrolling: {
+
+    		motion: new Array(2).fill(0),
+
+    		magnitude: 0.5,
+
+    		target: null,
+
+    		interval: setInterval(function () {
+    			var scrolling = _firefox_ReaderMode.dictation.scrolling;
+    			if (scrolling.target === null) {
+    				return;
+    			}
+    			var difference = scrolling.target - window.scrollY;
+    			if (difference !== 0) {
+    				scrolling.motion[scrolling.motion.length - 1] = window.scrollY < scrolling.target ? scrolling.magnitude : -scrolling.magnitude;
+    				for (var order = scrolling.motion.length - 2; order >= 0; -- order) {
+    					scrolling.motion[order] += scrolling.motion[order + 1];
+    				}
+    				var displacement = Math.min(Math.abs(difference), Math.abs(scrolling.motion[0])) * Math.sign(scrolling.motion[0]);
+    				if (window.scrollY + displacement === scrolling.target) {
+    					scrolling.motion.fill(0);
+    				}
+    				window.scrollTo(window.scrollX, window.scrollY + displacement);
+    			}
+    		}, 1000 / 60)
+
+    	},
+
+    	extractContentText: function () {
+			var contentText = "";
+			var anchors = this.anchors = [];
+			var reference = this.reference = {};
+		    var extract = function (node, content) {
+		    	for (var child of Array.prototype.slice.call(node.childNodes)) {
+		    		switch (child.nodeType) {
+			            case Node.ELEMENT_NODE:
+			            	// Content elements that we want to read from (this excludes some tags, such as <sup> to avoid reading citations)
+			            	var blockElements = ["DIV", "P"], inlineElements = ["B", "I", "A"];
+			            	if (blockElements.indexOf(child.tagName) !== -1 || inlineElements.indexOf(child.tagName) !== -1) {
+			            		extract(child, content);
+			            	}
+			            	if (blockElements.indexOf(child.tagName) !== -1 && contentText.slice(-1) !== "\n" && !/^\s+$/.test(child.textContent)) {
+			            		contentText += "\n";
+			            	}
+			            	break;
+			            case Node.TEXT_NODE:
+			            	if (!/^\s+$/.test(child.textContent)) {
+			            		var wrapper = document.createElement("span");
+			            		wrapper.classList.add("dictation-wrapper");
+			            		node.insertBefore(wrapper, child);
+			            		wrapper.appendChild(child);
+				            	anchors.push(contentText.length);
+				            	reference[anchors[anchors.length - 1]] = wrapper;
+				            	contentText += child.textContent;
+			            	}
+			            	break;
+			        }
+		    	}
+		    }
+		    extract(document.querySelector("#reader-content"));
+		    return contentText;
+		},
+
+		markDictatedContent: function (start, end, scrollToViewDictation) {
+			if (this.reference === null) {
+				return;
 			}
-			scrollPosition += dictation.getBoundingClientRect().top;
+			var throughAnchors = [this.anchors.reduce(function (previous, next) { return next <= start ? next : previous; })].concat(this.anchors.filter(function (x) { return x > start && x < end; }));
+			for (var dictating of Array.prototype.slice.call(document.querySelectorAll(".dictating"))) {
+				dictating.parentNode.textContent = dictating.parentNode.textContent;
+			}
+			var scrollPosition = 0;
+			for (var anchor of throughAnchors) {
+				var contained = this.reference[anchor];
+				var preDictation = document.createElement("span"), dictation = document.createElement("span"), postDictation = document.createElement("span");
+				dictation.classList.add("dictating");
+				var textContent = contained.textContent;
+				contained.textContent = "";
+				preDictation.textContent = textContent.substring(0, start - anchor);
+				dictation.textContent = textContent.substring(start - anchor, end - anchor);
+				postDictation.textContent = textContent.substring(end - anchor);
+				for (var element of [preDictation, dictation, postDictation]) {
+					contained.appendChild(element);
+				}
+				scrollPosition += dictation.getBoundingClientRect().top;
+			}
+			if (scrollToViewDictation && throughAnchors.length > 0) {
+				this.scrolling.target = scrollPosition / throughAnchors.length + window.scrollY - window.innerHeight / 2;
+			} else {
+				this.unlockScrolling();
+			}
+		},
+
+		unlockScrolling: function () {
+			this.scrolling.motion.fill(0);
+			this.scrolling.target = null;
+		},
+
+		lockScrolling: function () {
+			var elements = Array.prototype.slice.call(document.querySelectorAll(".dictating"));
+			if (elements.length > 0) {
+				var scrollPosition = elements.reduce(function (sum, dictation) { return sum + dictation.getBoundingClientRect().top }, 0);
+				this.scrolling.target = scrollPosition / elements.length + window.scrollY - window.innerHeight / 2;
+			}
 		}
-		if (scrollToViewDictation && throughAnchors.length > 0) {
-			window.scrollTo(window.scrollX, scrollPosition / throughAnchors.length + window.scrollY - window.innerHeight / 2);
-		}
-	}
+
+    }
+
 };
 
 window.addEventListener('load', function(event) {
