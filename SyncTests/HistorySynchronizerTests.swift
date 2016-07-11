@@ -13,7 +13,7 @@ import XCTest
 private let log = Logger.syncLogger
 
 class MockSyncDelegate: SyncDelegate {
-    func displaySentTabForURL(_ URL: Foundation.URL, title: String) {
+    func displaySentTab(url: Foundation.URL, title: String) {
     }
 }
 

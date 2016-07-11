@@ -24,7 +24,7 @@ private class MockBackoffStorage: BackoffStorage {
         self.serverBackoffUntilLocalTimestamp = nil
     }
 
-    func isInBackoff(_ now: Timestamp) -> Timestamp? {
+    func isInBackoff(timestamp now: Timestamp) -> Timestamp? {
         if let ts = self.serverBackoffUntilLocalTimestamp where now < ts {
             return ts
         }
@@ -66,7 +66,7 @@ class LiveStorageClientTests : LiveAccountTest {
         })
     }
 
-    func getState(_ user: String, password: String) -> Deferred<Maybe<FxAState>> {
+    func getState(user: String, password: String) -> Deferred<Maybe<FxAState>> {
         let err: NSError = NSError(domain: FxAClientErrorDomain, code: 0, userInfo: nil)
         return Deferred(value: Maybe<FxAState>(failure: FxAClientError.Local(err)))
     }

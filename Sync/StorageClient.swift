@@ -271,7 +271,7 @@ public typealias ResponseHandler = (URLRequest?, HTTPURLResponse?, Result<AnyObj
 public protocol BackoffStorage {
     var serverBackoffUntilLocalTimestamp: Timestamp? { get set }
     func clearServerBackoff()
-    func isInBackoff(_ now: Timestamp) -> Timestamp?   // Returns 'until' for convenience.
+    func isInBackoff(timestamp now: Timestamp) -> Timestamp?   // Returns 'until' for convenience.
 }
 
 // Don't forget to batch downloads.
@@ -460,7 +460,7 @@ public class Sync15StorageClient {
      * Returns false otherwise.
      */
     private func checkBackoff<T>(_ deferred: Deferred<Maybe<T>>) -> Bool {
-        if let until = self.backoff.isInBackoff(Date.now()) {
+        if let until = self.backoff.isInBackoff(timestamp: Date.now()) {
             deferred.fill(Maybe<T>(failure: ServerInBackoffError(until: until)))
             return true
         }
@@ -503,12 +503,12 @@ public class Sync15StorageClient {
     }
 
     // Sync storage responds with a plain timestamp to a PUT, not with a JSON body.
-    private func putResource<T>(_ path: String, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
+    private func putResource<T>(path: String, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
         let url = try! self.serverURI.appendingPathComponent(path)
-        return self.putResource(url, body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: parser)
+        return self.putResource(url: url, body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: parser)
     }
 
-    private func putResource<T>(_ URL: Foundation.URL, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
+    private func putResource<T>(url: Foundation.URL, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
 
         let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
@@ -582,7 +582,7 @@ public class Sync15StorageClient {
         }
 
         let record: JSON = JSON(["payload": payload.toString(), "id": "global"])
-        return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
+        return putResource(path: "storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
     }
 
     // The crypto/keys record is a special snowflake: it is encrypted with the Sync key bundle.  All other records are
@@ -663,7 +663,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
     public func put(_ record: Record<T>, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
         if let body = self.encrypter.serializer(record) {
-            return self.client.putResource(uriForRecord(record.id), body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
+            return self.client.putResource(url: uriForRecord(record.id), body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
         }
         return deferMaybe(RecordParseError())
     }

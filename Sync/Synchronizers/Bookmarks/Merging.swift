@@ -262,12 +262,12 @@ class MergedTreeNode {
         return self.mergedChildren != nil
     }
 
-    func dump(_ indent: Int) {
+    func dump(indent: Int) {
         precondition(indent < 200)
         let r: Character = "R"
         let l: Character = "L"
         let m: Character = "M"
-        let ind = indenting(indent)
+        let ind = indenting(by: indent)
         print(ind, "[V: ", box(self.remote, r), box(self.mirror, m), box(self.local, l), self.guid, self.valueState.label, "]")
         guard self.isFolder else {
             return
@@ -277,7 +277,7 @@ class MergedTreeNode {
         if let children = self.mergedChildren {
             print(ind, "  ..")
             for child in children {
-                child.dump(indent + 2)
+                child.dump(indent: indent + 2)
             }
         }
     }
@@ -290,7 +290,7 @@ private func box<T>(_ x: T?, _ c: Character) -> Character {
     return c
 }
 
-private func indenting(_ by: Int) -> String {
+private func indenting(by: Int) -> String {
     return String(repeating: " " as Character, count: by)
 }
 
@@ -327,6 +327,6 @@ class MergedTree {
         print("Accepted local deletions: \(self.acceptLocalDeletion.joinWithSeparator(", "))")
         print("Accepted remote deletions: \(self.acceptRemoteDeletion.joinWithSeparator(", "))")
         print("Root: ")
-        self.root.dump(0)
+        self.root.dump(indent: 0)
     }
 }

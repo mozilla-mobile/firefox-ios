@@ -106,7 +106,7 @@ public class SyncStateMachine {
     }
 
     public func toReady(_ authState: SyncAuthState) -> ReadyDeferred {
-        let token = authState.token(Date.now(), canBeExpired: false)
+        let token = authState.token(now: Date.now(), canBeExpired: false)
         return chainDeferred(token, f: { (token, kB) in
             log.debug("Got token from auth state.")
             if Logger.logPII {

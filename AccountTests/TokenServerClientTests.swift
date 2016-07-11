@@ -57,7 +57,7 @@ class TokenServerClientTests: LiveAccountTest {
                 certificate: certificate, audience: audience)
 
             let client = TokenServerClient()
-            client.token(assertion).upon { result in
+            client.token(assertion: assertion).upon { result in
                 if let token = result.successValue {
                     XCTAssertNotNil(token.id)
                     XCTAssertNotNil(token.key)
@@ -82,7 +82,7 @@ class TokenServerClientTests: LiveAccountTest {
             let assertion = "BAD ASSERTION"
 
             let client = TokenServerClient()
-            client.token(assertion).upon { result in
+            client.token(assertion: assertion).upon { result in
                 if let token = result.successValue {
                     XCTFail("Got token: \(token)")
                 } else {

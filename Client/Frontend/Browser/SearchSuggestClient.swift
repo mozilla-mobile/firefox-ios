@@ -32,7 +32,7 @@ class SearchSuggestClient {
     }
 
     func query(query: String, callback: (response: [String]?, error: NSError?) -> ()) {
-        let url = searchEngine.suggestURLForQuery(query)
+        let url = searchEngine.suggestURL(query: query)
         if url == nil {
             let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)
             callback(response: nil, error: error)

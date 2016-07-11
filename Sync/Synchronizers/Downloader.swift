@@ -135,7 +135,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         if self._advance != nil && !self.batch.isEmpty {
             log.warning("Downloading another batch without having advanced. This might be a bug.")
         }
-        return self.downloadNextBatchWithLimit(limit, infoModified: modified)
+        return self.downloadNextBatch(limit: limit, infoModified: modified)
     }
 
     func advanceTimestampTo(_ timestamp: Timestamp) {
@@ -152,7 +152,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         return (nil, max(self.lastModified, self.baseTimestamp))
     }
 
-    func downloadNextBatchWithLimit(_ limit: Int, infoModified: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
+    func downloadNextBatch(limit: Int, infoModified: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
         let (offset, since) = self.fetchParameters()
         log.debug("Fetching newer=\(since), offset=\(offset).")
 

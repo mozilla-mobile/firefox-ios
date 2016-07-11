@@ -56,7 +56,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
     private let batchSize: Int = 500  // A balance between number of requests and per-request size.
 
-    private func mask(_ maxFailures: Int) -> (Maybe<()>) -> Success {
+    private func mask(maxFailures: Int) -> (Maybe<()>) -> Success {
         var failures = 0
         return { result in
             if result.isSuccess {
@@ -82,7 +82,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     func applyIncomingToStorage(_ storage: SyncableHistory, records: [Record<HistoryPayload>]) -> Success {
 
         // Skip over at most this many failing records before aborting the sync.
-        let maskSomeFailures = self.mask(3)
+        let maskSomeFailures = self.mask(maxFailures: 3)
 
         // TODO: it'd be nice to put this in an extension on SyncableHistory. Waiting for Swift 2.0...
         func applyRecord(_ rec: Record<HistoryPayload>) -> Success {

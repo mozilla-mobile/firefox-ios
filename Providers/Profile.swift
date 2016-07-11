@@ -110,8 +110,8 @@ class CommandStoringSyncDelegate: SyncDelegate {
         profile = BrowserProfile(localName: "profile", app: nil)
     }
 
-    func displaySentTabForURL(URL: NSURL, title: String) {
-        let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
+    func displaySentTab(url: NSURL, title: String) {
+        let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
         self.profile.queue.addToQueue(item)
     }
 }
@@ -142,7 +142,7 @@ class BrowserProfileSyncDelegate: SyncDelegate {
     }
 
     // SyncDelegate
-    func displaySentTabForURL(URL: NSURL, title: String) {
+    func displaySentTab(url: NSURL, title: String) {
         // check to see what the current notification settings are and only try and send a notification if
         // the user has agreed to them
         if let currentSettings = app.currentUserNotificationSettings() {

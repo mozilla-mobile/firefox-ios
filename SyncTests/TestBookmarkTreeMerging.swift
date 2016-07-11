@@ -153,13 +153,13 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         super.tearDown()
     }
 
-    private func getBrowserDB(_ name: String) -> BrowserDB? {
+    private func getBrowserDB(name: String) -> BrowserDB? {
         let file = "TBookmarkTreeMerging\(name).db"
         return getBrowserDBForFile(file, files: self.files)
     }
 
-    func getSyncableBookmarks(_ name: String) -> MergedSQLiteBookmarks? {
-        guard let db = self.getBrowserDB(name) else {
+    func getSyncableBookmarks(name: String) -> MergedSQLiteBookmarks? {
+        guard let db = self.getBrowserDB(name: name) else {
             XCTFail("Couldn't get prepared DB.")
             return nil
         }
@@ -167,8 +167,8 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         return MergedSQLiteBookmarks(db: db)
     }
 
-    func getSQLiteBookmarks(_ name: String) -> SQLiteBookmarks? {
-        guard let db = self.getBrowserDB(name) else {
+    func getSQLiteBookmarks(name: String) -> SQLiteBookmarks? {
+        guard let db = self.getBrowserDB(name: name) else {
             XCTFail("Couldn't get prepared DB.")
             return nil
         }
@@ -177,7 +177,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
     }
 
     func dbLocalTree(_ name: String) -> BookmarkTree? {
-        guard let bookmarks = self.getSQLiteBookmarks(name) else {
+        guard let bookmarks = self.getSQLiteBookmarks(name: name) else {
             XCTFail("Couldn't get bookmarks.")
             return nil
         }
@@ -291,7 +291,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
     }
 
     func testMergingStorageLocalRootsEmptyServer() {
-        guard let bookmarks = self.getSyncableBookmarks("B") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "B") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -358,7 +358,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         //       |    |
         //       F    E
         //
-        guard let bookmarks = self.getSyncableBookmarks("G") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "G") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -377,7 +377,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
             BookmarkMirrorItem.folder("folderDDDDDD", modified: mirrorDate, hasDupe: false, parentID: "folderCCCCCC", parentName: "C", title: "D", description: "", children: []),
         ]
 
-        bookmarks.populateMirrorViaBuffer(records, atDate: mirrorDate)
+        bookmarks.populateMirrorViaBuffer(items: records, atDate: mirrorDate)
         bookmarks.wipeLocal()
 
         // Now the buffer is empty, and the mirror tree is what we expect.
@@ -407,7 +407,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         // Make local changes.
         bookmarks.local.modelFactory.value.successValue!.removeByGUID("folderDDDDDD").succeeded()
         bookmarks.local.insertBookmark("http://example.com/e".asURL!, title: "E", favicon: nil, intoFolder: "folderBBBBBB", withTitle: "B").succeeded()
-        let insertedGUID = bookmarks.local.db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) WHERE title IS 'E'")[0]
+        let insertedGUID = bookmarks.local.db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksLocal) WHERE title IS 'E'")[0]
 
         let edges = bookmarks.treesForEdges().value.successValue!
 
@@ -536,7 +536,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         // … but we'll settle for any order of children for [A] that preserves B < E
         // and B < D -- in other words, (B E D) and (B D E) are both acceptable.
         //
-        guard let bookmarks = self.getSyncableBookmarks("F") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "F") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -554,7 +554,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
             BookmarkMirrorItem.bookmark("bookmarkCCCC", modified: mirrorDate, hasDupe: false, parentID: "folderAAAAAA", parentName: "A", title: "C", description: nil, URI: "http://example.com/c", tags: "", keyword: nil),
         ]
 
-        bookmarks.populateMirrorViaBuffer(records, atDate: mirrorDate)
+        bookmarks.populateMirrorViaBuffer(items: records, atDate: mirrorDate)
         bookmarks.wipeLocal()
 
         // Now the buffer is empty, and the mirror tree is what we expect.
@@ -638,7 +638,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
     }
 
     func testApplyingTwoEmptyFoldersDoesntSmush() {
-        guard let bookmarks = self.getSyncableBookmarks("C") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "C") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -764,7 +764,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
      * weren't remotely present.
      */
     func testApplyingTwoEmptyFoldersMatchesOnlyOne() {
-        guard let bookmarks = self.getSyncableBookmarks("D") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "D") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -847,7 +847,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
 
     // TODO: this test should be extended to also exercise the case of a conflict.
     func testLocalRecordsKeepTheirFavicon() {
-        guard let bookmarks = self.getSyncableBookmarks("E") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "E") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -900,7 +900,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
     }
 
     func testRemoteValueOnlyChange() {
-        guard let bookmarks = self.getSyncableBookmarks("F") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "F") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -998,7 +998,7 @@ class TestMergedTree: FailFastTestCase {
 }
 
 private extension MergedSQLiteBookmarks {
-    func populateMirrorViaBuffer(_ items: [BookmarkMirrorItem], atDate mirrorDate: Timestamp) {
+    func populateMirrorViaBuffer(items: [BookmarkMirrorItem], atDate mirrorDate: Timestamp) {
         self.applyRecords(items).succeeded()
 
         // … and add the root relationships that will be missing (we don't do those for the buffer,

@@ -68,7 +68,7 @@ public class DisplayURICommand: Command {
     }
 
     public func run(_ synchronizer: ClientsSynchronizer) -> Success {
-        synchronizer.delegate.displaySentTabForURL(uri, title: title)
+        synchronizer.delegate.displaySentTab(url: uri, title: title)
         return succeed()
     }
 

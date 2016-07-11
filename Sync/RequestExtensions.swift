@@ -7,7 +7,7 @@ import Alamofire
 import Shared
 
 extension Request {
-    public func responsePartialParsedJSON(_ completionHandler: ResponseHandler) -> Self {
+    public func responsePartialParsedJSON(completionHandler: ResponseHandler) -> Self {
         let serializer = PartialParsedJSONResponseSerializer()
         return self.response(responseSerializer: serializer, completionHandler: completionHandler)
     }

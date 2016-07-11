@@ -249,7 +249,7 @@ class ThreeWayTreeMerger {
             }
             let localCounterpart = self.local.find(childGUID)
             let remoteCounterpart = self.remote.find(childGUID)
-            return try self.mergeNode(childGUID, localNode: localCounterpart, mirrorNode: child, remoteNode: remoteCounterpart)
+            return try self.mergeNode(guid: childGUID, localNode: localCounterpart, mirrorNode: child, remoteNode: remoteCounterpart)
         }
 
         result.mergedChildren = out
@@ -311,7 +311,7 @@ class ThreeWayTreeMerger {
                 let remO = orphan
                 let mirO = self.mirror.find(guidO)
                 log.debug("Merging up remote orphan \(guidO).")
-                return try self.mergeNode(guidO, localNode: locO, mirrorNode: mirO, remoteNode: remO)
+                return try self.mergeNode(guid: guidO, localNode: locO, mirrorNode: mirO, remoteNode: remO)
             }
 
             log.debug("Collected \(mergedOrphans.count) remote orphans for deleted folder \(guid).")
@@ -349,7 +349,7 @@ class ThreeWayTreeMerger {
                 let remO = self.remote.find(guidO)
                 let mirO = self.mirror.find(guidO)
                 log.debug("Merging up local orphan \(guidO).")
-                return try self.mergeNode(guidO, localNode: locO, mirrorNode: mirO, remoteNode: remO)
+                return try self.mergeNode(guid: guidO, localNode: locO, mirrorNode: mirO, remoteNode: remO)
             }
 
             log.debug("Collected \(mergedOrphans.count) local orphans for deleted folder \(guid).")
@@ -465,7 +465,7 @@ class ThreeWayTreeMerger {
                         }
                     }
 
-                    out.append(try self.mergeNode(guid, localNode: localByGUID, mirrorNode: mir, remoteNode: rem))
+                    out.append(try self.mergeNode(guid: guid, localNode: localByGUID, mirrorNode: mir, remoteNode: rem))
                     return
                 }
 
@@ -476,7 +476,7 @@ class ThreeWayTreeMerger {
                 } else {
                     localByContent = nil
                 }
-                out.append(try self.mergeNode(guid, localNode: localByContent, mirrorNode: mir, remoteNode: rem))
+                out.append(try self.mergeNode(guid: guid, localNode: localByContent, mirrorNode: mir, remoteNode: rem))
             }
         }
 
@@ -500,7 +500,7 @@ class ThreeWayTreeMerger {
                 let mir = self.mirror.find(guid)
                 let rem = self.remote.find(guid)
                 changed = true
-                out.append(try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem))
+                out.append(try self.mergeNode(guid: guid, localNode: loc, mirrorNode: mir, remoteNode: rem))
             }
         }
 
@@ -577,12 +577,12 @@ class ThreeWayTreeMerger {
         log.debug("Child list didn't change for \(result.guid). Keeping structure state \(result.structureState).")
     }
 
-    private func resolveThreeWayValueConflict(_ guid: GUID) throws -> MergeState<BookmarkMirrorItem> {
+    private func resolveThreeWayValueConflict(guid: GUID) throws -> MergeState<BookmarkMirrorItem> {
         // TODO
-        return try self.resolveTwoWayValueConflict(guid, localGUID: guid)
+        return try self.resolveTwoWayValueConflict(guid: guid, localGUID: guid)
     }
 
-    private func resolveTwoWayValueConflict(_ guid: GUID, localGUID: GUID) throws -> MergeState<BookmarkMirrorItem> {
+    private func resolveTwoWayValueConflict(guid: GUID, localGUID: GUID) throws -> MergeState<BookmarkMirrorItem> {
         // We don't check for all roots, because we might have to
         // copy them to the mirror or buffer, so we need to pick
         // a direction. The Places root is never uploaded.
@@ -628,7 +628,7 @@ class ThreeWayTreeMerger {
     }
 
     // This will never be called with two primary .Unknown values.
-    private func threeWayMerge(_ guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode, mirrorNode: BookmarkTreeNode?) throws -> MergedTreeNode {
+    private func threeWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode, mirrorNode: BookmarkTreeNode?) throws -> MergedTreeNode {
         if mirrorNode == nil {
             log.debug("Two-way merge for \(guid).")
         } else {
@@ -662,9 +662,9 @@ class ThreeWayTreeMerger {
             result.valueState = MergeState.Local
         } else {
             if mirrorNode == nil {
-                result.valueState = try self.resolveTwoWayValueConflict(guid, localGUID: localNode.recordGUID)
+                result.valueState = try self.resolveTwoWayValueConflict(guid: guid, localGUID: localNode.recordGUID)
             } else {
-                result.valueState = try self.resolveThreeWayValueConflict(guid)
+                result.valueState = try self.resolveThreeWayValueConflict(guid: guid)
             }
         }
 
@@ -714,8 +714,8 @@ class ThreeWayTreeMerger {
         throw BookmarksMergeConsistencyError()
     }
 
-    private func twoWayMerge(_ guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode) throws -> MergedTreeNode {
-        return try self.threeWayMerge(guid, localNode: localNode, remoteNode: remoteNode, mirrorNode: nil)
+    private func twoWayMerge(guid: GUID, localNode: BookmarkTreeNode, remoteNode: BookmarkTreeNode) throws -> MergedTreeNode {
+        return try self.threeWayMerge(guid: guid, localNode: localNode, remoteNode: remoteNode, mirrorNode: nil)
     }
 
     private func unchangedIf(_ out: MergedTreeNode, original: BookmarkMirrorItem?, new: BookmarkMirrorItem?) -> MergedTreeNode {
@@ -836,8 +836,8 @@ class ThreeWayTreeMerger {
     }
 
     // A helper that'll rewrite the resulting node's value to have the right parent.
-    func mergeNode(_ guid: GUID, intoFolder parentID: GUID, withParentName parentName: String?, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
-        let m = try self.mergeNode(guid, localNode: localNode, mirrorNode: mirrorNode, remoteNode: remoteNode)
+    func mergeNode(guid: GUID, intoFolder parentID: GUID, withParentName parentName: String?, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
+        let m = try self.mergeNode(guid: guid, localNode: localNode, mirrorNode: mirrorNode, remoteNode: remoteNode)
 
         // We could check the parent pointers in the tree, but looking at the values themselves
         // will catch any mismatches between the value and structure tables.
@@ -850,7 +850,7 @@ class ThreeWayTreeMerger {
     // TODO: if a local or remote node is kept but put in a different folder, we actually
     // need to generate a .New node, so we can take the parentid and parentNode that we
     // must preserve.
-    func mergeNode(_ guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
+    func mergeNode(guid: GUID, localNode: BookmarkTreeNode?, mirrorNode: BookmarkTreeNode?, remoteNode: BookmarkTreeNode?) throws -> MergedTreeNode {
         if let localGUID = localNode?.recordGUID {
             log.verbose("Merging nodes with GUID \(guid). Local match is \(localGUID).")
         } else {
@@ -924,7 +924,7 @@ class ThreeWayTreeMerger {
             if let loc = localNode where !loc.isUnknown {
                 if let rem = remoteNode {
                     // Two-way merge; probably a disconnect-reconnect scenario.
-                    return try self.twoWayMerge(guid, localNode: loc, remoteNode: rem)
+                    return try self.twoWayMerge(guid: guid, localNode: loc, remoteNode: rem)
                 }
 
                 // No remote. Node only exists locally.
@@ -951,7 +951,7 @@ class ThreeWayTreeMerger {
         if let loc = localNode where !loc.isUnknown {
             if let rem = remoteNode where !rem.isUnknown {
                 log.debug("Both local and remote changes to mirror item \(guid). Resolving conflict.")
-                return try self.threeWayMerge(guid, localNode: loc, remoteNode: rem, mirrorNode: mirrorNode)
+                return try self.threeWayMerge(guid: guid, localNode: loc, remoteNode: rem, mirrorNode: mirrorNode)
             }
             log.verbose("Local-only change to mirror item \(guid).")
             return try takeLocalAndMergeChildren(loc, mirror: mirrorNode)
@@ -1039,7 +1039,7 @@ class ThreeWayTreeMerger {
                 let loc = self.local.find(guid)
                 let mir = self.mirror.find(guid)
                 let rem = self.remote.find(guid)
-                return try self.mergeNode(guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
+                return try self.mergeNode(guid: guid, localNode: loc, mirrorNode: mir, remoteNode: rem)
             }
         } catch let error as MaybeErrorType {
             return deferMaybe(error)
@@ -1374,7 +1374,7 @@ class ThreeWayTreeMerger {
         // Each one also ends up being dropped from the buffer.
         if !mergedTree.deleteRemotely.isEmpty {
             upstreamOp.records.appendContentsOf(mergedTree.deleteRemotely.map {
-                Record<BookmarkBasePayload>(id: $0, payload: BookmarkBasePayload.deletedPayload($0))
+                Record<BookmarkBasePayload>(id: $0, payload: BookmarkBasePayload.deletedPayload(guid: $0))
                 })
             bufferOp.processedBufferChanges.unionInPlace(mergedTree.deleteRemotely)
         }

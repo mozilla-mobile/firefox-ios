@@ -20,7 +20,7 @@ class SearchTests: XCTestCase {
         XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8&client=firefox-b")
 
         // Test search suggestion queries.
-        XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString, "https://www.google.com/complete/search?client=firefox&q=foobar")
+        XCTAssertEqual(engine.suggestURL(query: "foobar")!.absoluteString, "https://www.google.com/complete/search?client=firefox&q=foobar")
     }
 
     func testURIFixup() {

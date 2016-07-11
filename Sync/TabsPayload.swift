@@ -23,7 +23,7 @@ public class TabsPayload: CleartextPayloadJSON {
             self.icon = icon
         }
 
-        func toRemoteTabForClient(_ guid: GUID) -> RemoteTab? {
+        func toRemoteTabForClient(guid: GUID) -> RemoteTab? {
             let urls = optFilter(urlHistory.map({ $0.asURL }))
             if urls.isEmpty {
                 log.debug("Bug 1201875 - Discarding tab as history has no conforming URLs.")
@@ -34,7 +34,7 @@ public class TabsPayload: CleartextPayloadJSON {
         }
 
         class func remoteTabFromJSON(_ json: JSON, clientGUID: GUID) -> RemoteTab? {
-            return fromJSON(json)?.toRemoteTabForClient(clientGUID)
+            return fromJSON(json)?.toRemoteTabForClient(guid: clientGUID)
         }
 
         class func fromJSON(_ json: JSON) -> Tab? {

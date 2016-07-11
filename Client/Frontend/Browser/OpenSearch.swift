@@ -112,7 +112,7 @@ class OpenSearchEngine: NSObject, NSCoding {
     /**
      * Returns the search suggestion URL for the given query.
      */
-    func suggestURLForQuery(_ query: String) -> URL? {
+    func suggestURL(query: String) -> URL? {
         if let suggestTemplate = suggestTemplate {
             return getURLFromTemplate(suggestTemplate, query: query)
         }

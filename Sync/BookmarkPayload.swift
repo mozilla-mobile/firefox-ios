@@ -10,7 +10,7 @@ import XCGLogger
 private let log = Logger.syncLogger
 
 public protocol MirrorItemable {
-    func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem
+    func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem
 }
 
 extension BookmarkMirrorItem {
@@ -139,7 +139,7 @@ public class LivemarkPayload: BookmarkBasePayload {
         return true
     }
 
-    override public func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Livemark, guid: self.id, modified: modified)
         }
@@ -191,7 +191,7 @@ public class SeparatorPayload: BookmarkBasePayload {
         return true
     }
 
-    override public func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Separator, guid: self.id, modified: modified)
         }
@@ -268,7 +268,7 @@ public class FolderPayload: BookmarkBasePayload {
         return true
     }
 
-    override public func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Folder, guid: self.id, modified: modified)
         }
@@ -357,7 +357,7 @@ public class BookmarkPayload: BookmarkBasePayload {
         return "[]"
     }()
 
-    override public func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Bookmark, guid: self.id, modified: modified)
         }
@@ -416,7 +416,7 @@ public class BookmarkQueryPayload: BookmarkPayload {
         return true
     }
 
-    override public func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Query, guid: self.id, modified: modified)
         }
@@ -442,7 +442,7 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
     private static let requiredStringFields: [String] = ["parentid", "type"]
     private static let optionalBooleanFields: [String] = ["hasDupe"]
 
-    static func deletedPayload(_ guid: GUID) -> BookmarkBasePayload {
+    static func deletedPayload(guid: GUID) -> BookmarkBasePayload {
         let remappedGUID = BookmarkRoots.translateOutgoingRootGUID(guid)
         return BookmarkBasePayload(JSON(["id": remappedGUID, "deleted": true]))
     }
@@ -554,7 +554,7 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
     }
 
     // This goes here because extensions cannot override methods yet.
-    public func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
+    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
         precondition(self.deleted, "Non-deleted items should have a specific type.")
         return BookmarkMirrorItem.deleted(.Bookmark, guid: self.id, modified: modified)
     }

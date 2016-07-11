@@ -16,7 +16,7 @@ private class MockBackoffStorage: BackoffStorage {
         serverBackoffUntilLocalTimestamp = nil
     }
 
-    func isInBackoff(_ now: Timestamp) -> Timestamp? {
+    func isInBackoff(timestamp now: Timestamp) -> Timestamp? {
         return nil
     }
 }

@@ -22,7 +22,7 @@ private class MockBackoffStorage: BackoffStorage {
     func clearServerBackoff() {
     }
 
-    func isInBackoff(_ now: Timestamp) -> Timestamp? {
+    func isInBackoff(timestamp now: Timestamp) -> Timestamp? {
         return nil
     }
 

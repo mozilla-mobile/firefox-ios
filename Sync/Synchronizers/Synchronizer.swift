@@ -15,7 +15,7 @@ private let log = Logger.syncLogger
  * expose notification functionality in this way.
  */
 public protocol SyncDelegate {
-    func displaySentTabForURL(_ URL: URL, title: String)
+    func displaySentTab(url: URL, title: String)
     // TODO: storage.
 }
 
@@ -164,7 +164,7 @@ public class BaseCollectionSynchronizer {
 
     public func reasonToNotSync(_ client: Sync15StorageClient) -> SyncNotStartedReason? {
         let now = Date.now()
-        if let until = client.backoff.isInBackoff(now) {
+        if let until = client.backoff.isInBackoff(timestamp: now) {
             let remaining = (until - now) / 1000
             return .Backoff(remainingSeconds: Int(remaining))
         }

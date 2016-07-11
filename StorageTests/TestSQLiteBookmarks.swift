@@ -47,7 +47,7 @@ class TestSQLiteBookmarks: XCTestCase {
     }
 
     func testBookmarks() {
-        guard let db = getBrowserDB("TSQLBtestBookmarks.db", files: self.files) else {
+        guard let db = getBrowserDB(filename: "TSQLBtestBookmarks.db", files: self.files) else {
             XCTFail("Unable to create browser DB.")
             return
         }
@@ -206,7 +206,7 @@ class TestSQLiteBookmarks: XCTestCase {
     }
 
     func testUnrootedBufferRowsDontAppearInTrees() {
-        guard let db = getBrowserDB("TSQLBtestUnrooted.db", files: self.files) else {
+        guard let db = getBrowserDB(filename: "TSQLBtestUnrooted.db", files: self.files) else {
             XCTFail("Unable to create browser DB.")
             return
         }
@@ -240,7 +240,7 @@ class TestSQLiteBookmarks: XCTestCase {
     }
 
     func testTreeBuilding() {
-        guard let db = getBrowserDB("TSQLBtestTreeBuilding.db", files: self.files) else {
+        guard let db = getBrowserDB(filename: "TSQLBtestTreeBuilding.db", files: self.files) else {
             XCTFail("Unable to create browser DB.")
             return
         }
@@ -402,7 +402,7 @@ class TestSQLiteBookmarks: XCTestCase {
     }
 
     func testRecursiveAndURLDelete() {
-        guard let db = getBrowserDB("TSQLBtestRecursiveAndURLDelete.db", files: self.files) else {
+        guard let db = getBrowserDB(filename: "TSQLBtestRecursiveAndURLDelete.db", files: self.files) else {
             XCTFail("Unable to create browser DB.")
             return
         }
@@ -500,7 +500,7 @@ class TestSQLiteBookmarks: XCTestCase {
     }
 
     func testLocalAndMirror() {
-        guard let db = getBrowserDB("TSQLBtestLocalAndMirror.db", files: self.files) else {
+        guard let db = getBrowserDB(filename: "TSQLBtestLocalAndMirror.db", files: self.files) else {
             XCTFail("Unable to create browser DB.")
             return
         }
@@ -521,10 +521,10 @@ class TestSQLiteBookmarks: XCTestCase {
             BookmarkRoots.MobileFolderGUID,
         ]
 
-        XCTAssertEqual(rootGUIDs, db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual(positioned, db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) ORDER BY idx"))
-        XCTAssertEqual([], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror)"))
-        XCTAssertEqual([], db.getGUIDs("SELECT child FROM \(TableBookmarksMirrorStructure)"))
+        XCTAssertEqual(rootGUIDs, db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
+        XCTAssertEqual(positioned, db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) ORDER BY idx"))
+        XCTAssertEqual([], db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksMirror)"))
+        XCTAssertEqual([], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksMirrorStructure)"))
 
         // Add a local bookmark.
         let bookmarks = SQLiteBookmarks(db: db)
@@ -534,8 +534,8 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(rowA.bookmarkURI, "http://example.org/")
         XCTAssertEqual(rowA.title, "Example")
         XCTAssertEqual(rowA.parentName, "The Mobile")
-        XCTAssertEqual(rootGUIDs + [rowA.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual([rowA.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(rootGUIDs + [rowA.guid], db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
+        XCTAssertEqual([rowA.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
         XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(rowA.guid))
 
         // Add another. Order should be maintained.
@@ -544,32 +544,32 @@ class TestSQLiteBookmarks: XCTestCase {
         let rowB = db.getRecordByURL("https://reddit.com/", fromTable: TableBookmarksLocal)
         XCTAssertEqual(rowB.bookmarkURI, "https://reddit.com/")
         XCTAssertEqual(rowB.title, "Reddit")
-        XCTAssertEqual(rootGUIDs + [rowA.guid, rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual([rowA.guid, rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(rootGUIDs + [rowA.guid, rowB.guid], db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
+        XCTAssertEqual([rowA.guid, rowB.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
         XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(rowA.guid))
         XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(rowB.guid))
 
         // The indices should be 0, 1.
-        let positions = db.getPositionsForChildrenOfParent(BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksLocalStructure)
+        let positions = db.getPositionsForChildren(ofParent: BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksLocalStructure)
         XCTAssertEqual(positions.count, 2)
         XCTAssertEqual(positions[rowA.guid], 0)
         XCTAssertEqual(positions[rowB.guid], 1)
 
         // Delete the first. sync_status was New, so the row was immediately deleted.
         bookmarks.testFactory.removeByURL("http://example.org/").succeeded()
-        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
-        let positionsAfterDelete = db.getPositionsForChildrenOfParent(BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksLocalStructure)
+        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
+        XCTAssertEqual([rowB.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        let positionsAfterDelete = db.getPositionsForChildren(ofParent: BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksLocalStructure)
         XCTAssertEqual(positionsAfterDelete.count, 1)
         XCTAssertEqual(positionsAfterDelete[rowB.guid], 0)
 
         // Manually shuffle all of these into the mirror, as if we were fully synchronized.
         db.moveLocalToMirrorForTesting()
-        XCTAssertEqual([], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual([], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure)"))
-        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
-        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
-        let mirrorPositions = db.getPositionsForChildrenOfParent(BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksMirrorStructure)
+        XCTAssertEqual([], db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
+        XCTAssertEqual([], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure)"))
+        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
+        XCTAssertEqual([rowB.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        let mirrorPositions = db.getPositionsForChildren(ofParent: BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksMirrorStructure)
         XCTAssertEqual(mirrorPositions.count, 1)
         XCTAssertEqual(mirrorPositions[rowB.guid], 0)
 
@@ -585,12 +585,12 @@ class TestSQLiteBookmarks: XCTestCase {
         let rowC = db.getRecordByURL("https://letsencrypt.org/", fromTable: TableBookmarksLocal)
 
         // We have the old structure in the mirror.
-        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
-        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
+        XCTAssertEqual([rowB.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
         // We have the new structure in the local table.
-        XCTAssertEqual(Set([BookmarkRoots.MobileFolderGUID, rowC.guid]), Set(db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id")))
-        XCTAssertEqual([rowB.guid, rowC.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(Set([BookmarkRoots.MobileFolderGUID, rowC.guid]), Set(db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksLocal) ORDER BY id")))
+        XCTAssertEqual([rowB.guid, rowC.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
         // Parent is changed. The new record is New. The unmodified and deleted records aren't present.
         XCTAssertNil(db.getSyncStatusForGUID(rowA.guid))
@@ -601,11 +601,11 @@ class TestSQLiteBookmarks: XCTestCase {
         // If we delete the old record, we mark it as changed, and it's no longer in the structure.
         bookmarks.testFactory.removeByGUID(rowB.guid).succeeded()
         XCTAssertEqual(SyncStatus.Changed, db.getSyncStatusForGUID(rowB.guid))
-        XCTAssertEqual([rowC.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual([rowC.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
         // Add a duplicate to test multi-deletion (unstar).
         bookmarks.insertBookmark("https://letsencrypt.org/".asURL!, title: "Let's Encrypt", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Mobile").succeeded()
-        let guidD = db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx").last!
+        let guidD = db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx").last!
         XCTAssertNotEqual(rowC.guid, guidD)
         XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(guidD))
         XCTAssertEqual(SyncStatus.Changed, db.getSyncStatusForGUID(BookmarkRoots.MobileFolderGUID))
@@ -615,18 +615,18 @@ class TestSQLiteBookmarks: XCTestCase {
         bookmarks.testFactory.removeByURL(rowC.bookmarkURI!).succeeded()
         XCTAssertNil(db.getSyncStatusForGUID(rowC.guid))
         XCTAssertNil(db.getSyncStatusForGUID(guidD))
-        XCTAssertEqual([], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual([], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
         // The mirror structure is unchanged after all this.
-        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
-        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
+        XCTAssertEqual([rowB.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
     }
 
     /*
     // This is dead test code after we eliminated the merged view.
     // Expect this to be ported to reflect post-sync state.
     func testBookmarkStructure() {
-        guard let db = getBrowserDB("TSQLBtestBufferStorage.db", files: self.files) else {
+        guard let db = getBrowserDB(filename: "TSQLBtestBufferStorage.db", files: self.files) else {
             XCTFail("Unable to create browser DB.")
             return
         }
@@ -691,7 +691,7 @@ class TestSQLiteBookmarks: XCTestCase {
     */
 
     func testBufferStorage() {
-        guard let db = getBrowserDB("TSQLBtestBufferStorage.db", files: self.files) else {
+        guard let db = getBrowserDB(filename: "TSQLBtestBufferStorage.db", files: self.files) else {
             XCTFail("Unable to create browser DB.")
             return
         }

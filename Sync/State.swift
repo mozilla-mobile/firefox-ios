@@ -163,7 +163,7 @@ class PrefsBackoffStorage: BackoffStorage {
         self.prefs.removeObjectForKey(self.key)
     }
 
-    func isInBackoff(_ now: Timestamp) -> Timestamp? {
+    func isInBackoff(timestamp now: Timestamp) -> Timestamp? {
         if let ts = self.serverBackoffUntilLocalTimestamp where now < ts {
             return ts
         }

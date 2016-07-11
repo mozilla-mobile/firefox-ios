@@ -155,7 +155,7 @@ public class LiveAccountTest: XCTestCase {
     public func syncAuthState(_ now: Timestamp) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
         return getAuthState(now).bind { result in
             if let authState = result.successValue {
-                return authState.token(now, canBeExpired: false)
+                return authState.token(now: now, canBeExpired: false)
             }
             return Deferred(value: Maybe(failure: result.failureValue!))
         }

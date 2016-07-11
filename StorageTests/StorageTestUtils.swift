@@ -92,7 +92,7 @@ extension BrowserDB {
 }
 
 extension BrowserDB {
-    func getGUIDs(_ sql: String) -> [GUID] {
+    func getGUIDs(sql: String) -> [GUID] {
         func guidFactory(_ row: SDRow) -> GUID {
             return row[0] as! GUID
         }
@@ -104,7 +104,7 @@ extension BrowserDB {
         return cursor.asArray()
     }
 
-    func getPositionsForChildrenOfParent(_ parent: GUID, fromTable table: String) -> [GUID: Int] {
+    func getPositionsForChildren(ofParent: GUID, fromTable table: String) -> [GUID: Int] {
         let args: Args = [parent]
         let factory: (SDRow) -> (GUID, Int) = {
             return ($0["child"] as! GUID, $0["idx"] as! Int)
