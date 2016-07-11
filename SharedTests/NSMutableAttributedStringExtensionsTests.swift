@@ -7,8 +7,8 @@ import XCTest
 @testable import Shared
 
 class NSMutableAttributedStringExtensionsTests: XCTestCase {
-    private func checkCharacterAtPosition(position: Int, isColored color: UIColor, inString string: NSAttributedString) -> Bool {
-        let attributes = string.attributesAtIndex(position, effectiveRange: nil)
+    private func checkCharacterAtPosition(_ position: Int, isColored color: UIColor, inString string: AttributedString) -> Bool {
+        let attributes = string.attributes(at: position, effectiveRange: nil)
         if let foregroundColor = attributes[NSForegroundColorAttributeName] as? UIColor {
             if foregroundColor == color {
                 return true
@@ -20,30 +20,30 @@ class NSMutableAttributedStringExtensionsTests: XCTestCase {
     func testColorsSubstring() {
         let substring = "bc"
         let example = NSMutableAttributedString(string: "abcd")
-        example.colorSubstring(substring, withColor: UIColor.redColor())
+        example.colorSubstring(substring, withColor: UIColor.red())
 
-        XCTAssertFalse(checkCharacterAtPosition(0, isColored: UIColor.redColor(), inString: example))
+        XCTAssertFalse(checkCharacterAtPosition(0, isColored: UIColor.red(), inString: example))
         for position in 1..<3 {
-            XCTAssertTrue(checkCharacterAtPosition(position, isColored: UIColor.redColor(), inString: example))
+            XCTAssertTrue(checkCharacterAtPosition(position, isColored: UIColor.red(), inString: example))
         }
-        XCTAssertFalse(checkCharacterAtPosition(3, isColored: UIColor.redColor(), inString: example))
+        XCTAssertFalse(checkCharacterAtPosition(3, isColored: UIColor.red(), inString: example))
     }
 
     func testDoesNothingWithEmptySubstring() {
         let substring = ""
         let example = NSMutableAttributedString(string: "abcd")
-        example.colorSubstring(substring, withColor: UIColor.redColor())
+        example.colorSubstring(substring, withColor: UIColor.red())
         for position in 0..<example.string.characters.count {
-            XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.redColor(), inString: example))
+            XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.red(), inString: example))
         }
     }
 
     func testDoesNothingWhenSubstringNotFound() {
         let substring = "yyz"
         let example = NSMutableAttributedString(string: "abcd")
-        example.colorSubstring(substring, withColor: UIColor.redColor())
+        example.colorSubstring(substring, withColor: UIColor.red())
         for position in 0..<example.string.characters.count {
-            XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.redColor(), inString: example))
+            XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.red(), inString: example))
         }
     }
 }

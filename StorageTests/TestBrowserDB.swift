@@ -14,7 +14,7 @@ private let log = XCGLogger.defaultInstance()
 class TestBrowserDB: XCTestCase {
     let files = MockFiles()
 
-    private func rm(path: String) {
+    private func rm(_ path: String) {
         do {
             try files.remove(path)
         } catch {
@@ -34,24 +34,24 @@ class TestBrowserDB: XCTestCase {
     class MockFailingTable: Table {
         var name: String { return "FAILURE" }
         var version: Int { return 1 }
-        func exists(db: SQLiteDBConnection) -> Bool {
+        func exists(_ db: SQLiteDBConnection) -> Bool {
             return false
         }
-        func drop(db: SQLiteDBConnection) -> Bool {
+        func drop(_ db: SQLiteDBConnection) -> Bool {
             return true
         }
-        func create(db: SQLiteDBConnection) -> Bool {
+        func create(_ db: SQLiteDBConnection) -> Bool {
             return false
         }
-        func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
+        func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
             return false
         }
     }
 
     private class MockListener {
-        var notification: NSNotification?
+        var notification: Notification?
         @objc
-        func onDatabaseWasRecreated(notification: NSNotification) {
+        func onDatabaseWasRecreated(_ notification: Notification) {
             self.notification = notification
         }
     }
@@ -68,14 +68,14 @@ class TestBrowserDB: XCTestCase {
 
         // Grab a pointer to the -shm so we can compare later.
         let shmA = try! files.fileWrapper("foo.db-shm")
-        let creationA = shmA.fileAttributes[NSFileCreationDate] as! NSDate
-        let inodeA = (shmA.fileAttributes[NSFileSystemFileNumber] as! NSNumber).unsignedLongValue
+        let creationA = shmA.fileAttributes[FileAttributeKey.creationDate] as! NSDate
+        let inodeA = (shmA.fileAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).unsignedLongValue
 
         XCTAssertFalse(files.exists("foo.db.bak.1"))
         XCTAssertFalse(files.exists("foo.db.bak.1-shm"))
         XCTAssertFalse(files.exists("foo.db.bak.1-wal"))
 
-        let center = NSNotificationCenter.defaultCenter()
+        let center = NotificationCenter.default
         let listener = MockListener()
         center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
         defer { center.removeObserver(listener) }
@@ -92,9 +92,9 @@ class TestBrowserDB: XCTestCase {
 
         // But now it's been reopened, it's not the same -shm!
         let shmB = try! files.fileWrapper("foo.db-shm")
-        let creationB = shmB.fileAttributes[NSFileCreationDate] as! NSDate
-        let inodeB = (shmB.fileAttributes[NSFileSystemFileNumber] as! NSNumber).unsignedLongValue
-        XCTAssertTrue(creationA.compare(creationB) != NSComparisonResult.OrderedDescending)
+        let creationB = shmB.fileAttributes[FileAttributeKey.creationDate] as! NSDate
+        let inodeB = (shmB.fileAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).unsignedLongValue
+        XCTAssertTrue(creationA.compare(creationB) != ComparisonResult.OrderedDescending)
         XCTAssertNotEqual(inodeA, inodeB)
 
         XCTAssertTrue(files.exists("foo.db.bak.1"))

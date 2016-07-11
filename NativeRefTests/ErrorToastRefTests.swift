@@ -6,21 +6,21 @@ import Foundation
 @testable import Client
 
 class ErrorToastRefTests: FXSnapshotTestCase {
-    let defaultFrame = CGRect(origin: CGPointZero, size: CGSize(width: 320, height: 64))
-    let compressedFrame = CGRect(origin: CGPointZero, size: CGSize(width: 160, height: 64))
-    let stretchedFrame = CGRect(origin: CGPointZero, size: CGSize(width: 728, height: 64))
+    let defaultFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: 320, height: 64))
+    let compressedFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: 160, height: 64))
+    let stretchedFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: 728, height: 64))
 
     var toast: ErrorToast!
 
     override func setUp() {
         super.setUp()
-        toast = ErrorToast(frame: CGRectZero)
+        toast = ErrorToast(frame: CGRect.zero)
     }
 
     func testDefaultCellLayout() {
         toast.textLabel.text = "Incorrect passcode. Try again."
         toast.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
-        toast.frame = CGRect(origin: CGPointZero, size: toast.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize))
+        toast.frame = CGRect(origin: CGPoint.zero, size: toast.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize))
         toast.layoutIfNeeded()
         FBSnapshotVerifyView(toast!)
     }   

@@ -9,14 +9,14 @@ enum ReadingListSyncChanges {
 }
 
 enum ReadingListSyncStatus {
-    case Synced
-    case New
-    case Deleted
-    case Modified
+    case synced
+    case new
+    case deleted
+    case modified
 }
 
 enum ReadingListSyncChange {
-    case None, Unread, Favorite, Resolved
+    case none, unread, favorite, resolved
 }
 
 struct ReadingListSyncMetadata {

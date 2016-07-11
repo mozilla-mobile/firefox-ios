@@ -47,8 +47,8 @@ class UtilsTests: XCTestCase {
     }
 
     func testWithQueryParam() {
-        let urlA = NSURL(string: "http://foo.com/bar/")!
-        let urlB = NSURL(string: "http://bar.com/noo")!
+        let urlA = URL(string: "http://foo.com/bar/")!
+        let urlB = URL(string: "http://bar.com/noo")!
         let urlC = urlA.withQueryParam("ppp", value: "123")
         let urlD = urlB.withQueryParam("qqq", value: "123")
         let urlE = urlC.withQueryParam("rrr", value: "aaa")

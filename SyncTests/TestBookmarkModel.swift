@@ -10,7 +10,7 @@ import Shared
 import XCTest
 
 // Thieved mercilessly from TestSQLiteBookmarks.
-private func getBrowserDBForFile(filename: String, files: FileAccessor) -> BrowserDB? {
+private func getBrowserDBForFile(_ filename: String, files: FileAccessor) -> BrowserDB? {
     let db = BrowserDB(filename: filename, files: files)
 
     // BrowserTable exists only to perform create/update etc. operations -- it's not
@@ -39,7 +39,7 @@ class TestBookmarkModel: FailFastTestCase {
     }
 
     func getSyncableBookmarks(name: String) -> MergedSQLiteBookmarks? {
-        guard let db = self.getBrowserDB(name) else {
+        guard let db = self.getBrowserDB(name: name) else {
             XCTFail("Couldn't get prepared DB.")
             return nil
         }
@@ -48,7 +48,7 @@ class TestBookmarkModel: FailFastTestCase {
     }
 
     func testBookmarkEditableIfNeverSyncedAndEmptyBuffer() {
-        guard let bookmarks = self.getSyncableBookmarks("A") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "A") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -66,7 +66,7 @@ class TestBookmarkModel: FailFastTestCase {
     }
 
     func testBookmarkEditableIfNeverSyncedWithBufferedChanges() {
-        guard let bookmarks = self.getSyncableBookmarks("B") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "B") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -75,7 +75,7 @@ class TestBookmarkModel: FailFastTestCase {
         bookmarks.local.insertBookmark(bookmarkURL, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MenuFolderGUID, withTitle: "").succeeded()
 
         // Add a buffer into the buffer
-        let mirrorDate = NSDate.now() - 100000
+        let mirrorDate = Date.now() - 100000
         bookmarks.applyRecords([
             BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["BBB"]),
             BookmarkMirrorItem.bookmark("BBB", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "BBB", description: nil, URI: "http://BBB.com", tags: "", keyword: nil)
@@ -91,14 +91,14 @@ class TestBookmarkModel: FailFastTestCase {
     }
 
     func testBookmarksEditableWithEmptyBufferAndRemoteBookmark() {
-        guard let bookmarks = self.getSyncableBookmarks("C") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "C") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
 
         // Add a bookmark to the menu folder in our mirror
-        let mirrorDate = NSDate.now() - 100000
-        bookmarks.populateMirrorViaBuffer([
+        let mirrorDate = Date.now() - 100000
+        bookmarks.populateMirrorViaBuffer(items: [
             BookmarkMirrorItem.folder(BookmarkRoots.RootGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "", description: "", children: BookmarkRoots.RootChildren),
             BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["CCC"]),
             BookmarkMirrorItem.bookmark("CCC", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "CCC", description: nil, URI: "http://CCC.com", tags: "", keyword: nil)
@@ -119,14 +119,14 @@ class TestBookmarkModel: FailFastTestCase {
     }
 
     func testBookmarksNotEditableForUnmergedChanges() {
-        guard let bookmarks = self.getSyncableBookmarks("D") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "D") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
 
         // Add a bookmark to the menu folder in our mirror
-        let mirrorDate = NSDate.now() - 100000
-        bookmarks.populateMirrorViaBuffer([
+        let mirrorDate = Date.now() - 100000
+        bookmarks.populateMirrorViaBuffer(items: [
             BookmarkMirrorItem.folder(BookmarkRoots.RootGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "", description: "", children: BookmarkRoots.RootChildren),
             BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE"]),
             BookmarkMirrorItem.bookmark("EEE", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "EEE", description: nil, URI: "http://EEE.com", tags: "", keyword: nil)
@@ -151,7 +151,7 @@ class TestBookmarkModel: FailFastTestCase {
     }
 
     func testLocalBookmarksEditableWhileHavingUnmergedChangesAndEmptyMirror() {
-        guard let bookmarks = self.getSyncableBookmarks("D") else {
+        guard let bookmarks = self.getSyncableBookmarks(name: "D") else {
             XCTFail("Couldn't get bookmarks.")
             return
         }
@@ -159,7 +159,7 @@ class TestBookmarkModel: FailFastTestCase {
         bookmarks.local.insertBookmark("http://AAA.com".asURL!, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Bookmarks Menu").succeeded()
 
         // Add some unmerged bookmarks into the menu folder in the buffer.
-        let mirrorDate = NSDate.now() - 100000
+        let mirrorDate = Date.now() - 100000
         bookmarks.applyRecords([
             BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE", "FFF"]),
             BookmarkMirrorItem.bookmark("FFF", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "FFF", description: nil, URI: "http://FFF.com", tags: "", keyword: nil)

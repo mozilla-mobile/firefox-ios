@@ -21,10 +21,10 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.66) // TODO: Is the correct color documented somewhere?
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
+        ExtensionUtils.extractSharedItem(fromExtensionContext: self.extensionContext, completionHandler: { (item, error) -> Void in
             if let item = item where error == nil {
                 dispatch_async(dispatch_get_main_queue()) {
                     guard item.isShareable else {
@@ -44,8 +44,8 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     
     //
     
-    func shareControllerDidCancel(shareController: ShareDialogController) {
-        UIView.animateWithDuration(0.25, animations: { () -> Void in
+    func shareControllerDidCancel(_ shareController: ShareDialogController) {
+        UIView.animate(withDuration: 0.25, animations: { () -> Void in
             self.shareDialogController.view.alpha = 0.0
         }, completion: { (Bool) -> Void in
             self.dismissShareDialog()
@@ -54,26 +54,26 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     }
 
     func finish() {
-        self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
+        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
 
-    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) {
+    func shareController(_ shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) {
         setLastUsedShareDestinations(destinations)
         
-        UIView.animateWithDuration(0.25, animations: { () -> Void in
+        UIView.animate(withDuration: 0.25, animations: { () -> Void in
             self.shareDialogController.view.alpha = 0.0
         }, completion: { (Bool) -> Void in
             self.dismissShareDialog()
             
-            if destinations.containsObject(ShareDestinationReadingList) {
+            if destinations.contains(ShareDestinationReadingList) {
                 self.shareToReadingList(item)
             }
             
-            if destinations.containsObject(ShareDestinationBookmarks) {
+            if destinations.contains(ShareDestinationBookmarks) {
                 self.shareToBookmarks(item)
             }
 
-            self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
+            self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil);
         })
     }
     
@@ -81,18 +81,18 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     
     // TODO: use Set.
     func getLastUsedShareDestinations() -> NSSet {
-        if let destinations = NSUserDefaults.standardUserDefaults().objectForKey(LastUsedShareDestinationsKey) as? NSArray {
+        if let destinations = UserDefaults.standard.object(forKey: LastUsedShareDestinationsKey) as? NSArray {
             return NSSet(array: destinations as [AnyObject])
         }
         return NSSet(object: ShareDestinationBookmarks)
     }
     
-    func setLastUsedShareDestinations(destinations: NSSet) {
-        NSUserDefaults.standardUserDefaults().setObject(destinations.allObjects, forKey: LastUsedShareDestinationsKey)
-        NSUserDefaults.standardUserDefaults().synchronize()
+    func setLastUsedShareDestinations(_ destinations: NSSet) {
+        UserDefaults.standard.set(destinations.allObjects, forKey: LastUsedShareDestinationsKey)
+        UserDefaults.standard.synchronize()
     }
     
-    func presentShareDialog(item: ShareItem) {
+    func presentShareDialog(_ item: ShareItem) {
         shareDialogController = ShareDialogController()
         shareDialogController.delegate = self
         shareDialogController.item = item
@@ -101,7 +101,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         self.addChildViewController(shareDialogController)
         shareDialogController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(shareDialogController.view)
-        shareDialogController.didMoveToParentViewController(self)
+        shareDialogController.didMove(toParentViewController: self)
 
         // Setup constraints for the dialog. We keep the dialog centered with 16 points of padding on both
         // sides. The dialog grows to max 380 points wide so that it does not look too big on landscape or
@@ -109,38 +109,38 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         
         let views: NSDictionary = ["dialog": shareDialogController.view]
         
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(16@751)-[dialog(<=380@1000)]-(16@751)-|",
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(16@751)-[dialog(<=380@1000)]-(16@751)-|",
             options: NSLayoutFormatOptions(), metrics: nil, views: (views as? [String : AnyObject])!))
         
-        let cx = NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.CenterX,
-            relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+        let cx = NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.centerX,
+            relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0)
         cx.priority = 1000 // TODO: Why does UILayoutPriorityRequired give a linker error? SDK Bug?
         view.addConstraint(cx)
         
-        view.addConstraint(NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.CenterY,
-            relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.centerY,
+            relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0))
         
         // Fade the dialog in
         
         shareDialogController.view.alpha = 0.0
-        UIView.animateWithDuration(0.25, animations: { () -> Void in
+        UIView.animate(withDuration: 0.25, animations: { () -> Void in
             self.shareDialogController.view.alpha = 1.0
         }, completion: nil)
     }
     
     func dismissShareDialog() {
-        shareDialogController.willMoveToParentViewController(nil)
+        shareDialogController.willMove(toParentViewController: nil)
         shareDialogController.view.removeFromSuperview()
         shareDialogController.removeFromParentViewController()
     }
     
     //
     
-    func shareToReadingList(item: ShareItem) {
+    func shareToReadingList(_ item: ShareItem) {
         profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.currentDevice().name)
     }
     
-    func shareToBookmarks(item: ShareItem) {
+    func shareToBookmarks(_ item: ShareItem) {
         profile.bookmarks.shareItem(item)
     }
 }

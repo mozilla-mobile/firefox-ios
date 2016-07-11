@@ -72,7 +72,7 @@ public class FirefoxAccountSyncAuthState: SyncAuthState {
     private func generateAssertionAndFetchTokenAt(audience: String, client: TokenServerClient, clientState: String?, married: MarriedState,
             now: Timestamp, retryCount: Int) -> Deferred<Maybe<TokenServerToken>> {
         let assertion = married.generateAssertionForAudience(audience, now: now)
-        return client.token(assertion, clientState: clientState).bind { result in
+        return client.token(assertion: assertion, clientState: clientState).bind { result in
             if retryCount > 0 {
                 if let tokenServerError = result.failureValue as? TokenServerError {
                     switch tokenServerError {

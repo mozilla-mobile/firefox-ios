@@ -36,10 +36,10 @@ class OpenSearchEngine: NSObject, NSCoding {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        guard let searchTemplate = aDecoder.decodeObjectForKey("searchTemplate") as? String,
-              let shortName = aDecoder.decodeObjectForKey("shortName") as? String,
-              let isCustomEngine = aDecoder.decodeObjectForKey("isCustomEngine") as? Bool,
-              let image = aDecoder.decodeObjectForKey("image") as? UIImage else {
+        guard let searchTemplate = aDecoder.decodeObject(forKey: "searchTemplate") as? String,
+              let shortName = aDecoder.decodeObject(forKey: "shortName") as? String,
+              let isCustomEngine = aDecoder.decodeObject(forKey: "isCustomEngine") as? Bool,
+              let image = aDecoder.decodeObject(forKey: "image") as? UIImage else {
                 assertionFailure()
                 return nil
         }
@@ -48,22 +48,22 @@ class OpenSearchEngine: NSObject, NSCoding {
         self.shortName = shortName
         self.isCustomEngine = isCustomEngine
         self.image = image
-        self.engineID = aDecoder.decodeObjectForKey("engineID") as? String
+        self.engineID = aDecoder.decodeObject(forKey: "engineID") as? String
         self.suggestTemplate = nil
     }
 
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(searchTemplate, forKey: "searchTemplate")
-        aCoder.encodeObject(shortName, forKey: "shortName")
-        aCoder.encodeObject(isCustomEngine, forKey: "isCustomEngine")
-        aCoder.encodeObject(image, forKey: "image")
-        aCoder.encodeObject(engineID, forKey: "engineID")
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(searchTemplate, forKey: "searchTemplate")
+        aCoder.encode(shortName, forKey: "shortName")
+        aCoder.encode(isCustomEngine, forKey: "isCustomEngine")
+        aCoder.encode(image, forKey: "image")
+        aCoder.encode(engineID, forKey: "engineID")
     }
 
     /**
      * Returns the search URL for the given query.
      */
-    func searchURLForQuery(query: String) -> NSURL? {
+    func searchURLForQuery(_ query: String) -> URL? {
         return getURLFromTemplate(searchTemplate, query: query)
     }
 
@@ -76,8 +76,8 @@ class OpenSearchEngine: NSObject, NSCoding {
         // a valid URL, otherwise we cannot do the conversion to NSURLComponents
         // and have to do flaky pattern matching instead.
         let placeholder = "PLACEHOLDER"
-        let template = searchTemplate.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: placeholder)
-        let components = NSURLComponents(string: template)
+        let template = searchTemplate.replacingOccurrences(of: SearchTermComponent, with: placeholder)
+        let components = URLComponents(string: template)
         let searchTerm = components?.queryItems?.filter { item in
             return item.value == placeholder
         }
@@ -88,10 +88,10 @@ class OpenSearchEngine: NSObject, NSCoding {
     /**
      * check that the URL host contains the name of the search engine somewhere inside it
      **/
-    private func isSearchURLForEngine(url: NSURL?) -> Bool {
+    private func isSearchURLForEngine(_ url: URL?) -> Bool {
         guard let urlHost = url?.host,
-            let queryEndIndex = searchTemplate.rangeOfString("?")?.startIndex,
-            let templateURL = NSURL(string: searchTemplate.substringToIndex(queryEndIndex)),
+            let queryEndIndex = searchTemplate.range(of: "?")?.lowerBound,
+            let templateURL = URL(string: searchTemplate.substring(to: queryEndIndex)),
             let templateURLHost = templateURL.host else { return false }
         return urlHost.localizedCaseInsensitiveContainsString(templateURLHost)
     }
@@ -99,7 +99,7 @@ class OpenSearchEngine: NSObject, NSCoding {
     /**
      * Returns the query that was used to construct a given search URL
      **/
-    func queryForSearchURL(url: NSURL?) -> String? {
+    func queryForSearchURL(_ url: URL?) -> String? {
         if isSearchURLForEngine(url) {
             if let key = searchQueryComponentKey,
                 let value = url?.getQuery()[key] {
@@ -112,29 +112,29 @@ class OpenSearchEngine: NSObject, NSCoding {
     /**
      * Returns the search suggestion URL for the given query.
      */
-    func suggestURLForQuery(query: String) -> NSURL? {
+    func suggestURL(query: String) -> URL? {
         if let suggestTemplate = suggestTemplate {
             return getURLFromTemplate(suggestTemplate, query: query)
         }
         return nil
     }
 
-    private func getURLFromTemplate(searchTemplate: String, query: String) -> NSURL? {
-        let allowedCharacters = NSCharacterSet(charactersInString: SearchTermsAllowedCharacters)
-        if let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacters) {
+    private func getURLFromTemplate(_ searchTemplate: String, query: String) -> URL? {
+        let allowedCharacters = CharacterSet(charactersIn: SearchTermsAllowedCharacters)
+        if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: allowedCharacters) {
             // Escape the search template as well in case it contains not-safe characters like symbols
             let templateAllowedSet = NSMutableCharacterSet()
-            templateAllowedSet.formUnionWithCharacterSet(NSCharacterSet.URLAllowedCharacterSet())
+            templateAllowedSet.formUnionWithCharacterSet(CharacterSet.URLAllowedCharacterSet())
 
             // Allow brackets since we use them in our template as our insertion point
-            templateAllowedSet.formUnionWithCharacterSet(NSCharacterSet(charactersInString: "{}"))
+            templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
 
-            if let encodedSearchTemplate = searchTemplate.stringByAddingPercentEncodingWithAllowedCharacters(templateAllowedSet) {
-                let localeString = NSLocale.currentLocale().localeIdentifier
+            if let encodedSearchTemplate = searchTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
+                let localeString = Locale.current.localeIdentifier
                 let urlString = encodedSearchTemplate
-                    .stringByReplacingOccurrencesOfString(SearchTermComponent, withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
-                    .stringByReplacingOccurrencesOfString(LocaleTermComponent, withString: localeString, options: NSStringCompareOptions.LiteralSearch, range: nil)
-                return NSURL(string: urlString)
+                    .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: NSString.CompareOptions.literal, range: nil)
+                    .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: NSString.CompareOptions.literal, range: nil)
+                return URL(string: urlString)
             }
         }
 
@@ -157,8 +157,8 @@ class OpenSearchParser {
         self.pluginMode = pluginMode
     }
 
-    func parse(file: String, engineID: String) -> OpenSearchEngine? {
-        let data = NSData(contentsOfFile: file)
+    func parse(_ file: String, engineID: String) -> OpenSearchEngine? {
+        let data = try? Data(contentsOf: URL(fileURLWithPath: file))
 
         if data == nil {
             print("Invalid search file")
@@ -274,8 +274,8 @@ class OpenSearchParser {
         let uiImage: UIImage
 
         if let imageElement = largestImageElement,
-               imageURL = NSURL(string: imageElement.text!),
-               imageData = NSData(contentsOfURL: imageURL),
+               imageURL = URL(string: imageElement.text!),
+               imageData = try? Data(contentsOf: imageURL),
                image = UIImage.imageFromDataThreadSafe(imageData) {
             uiImage = image
         } else {

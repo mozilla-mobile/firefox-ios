@@ -13,13 +13,13 @@ class DeferredTests: XCTestCase {
         let d = Deferred<Int>()
         XCTAssertNil(d.peek(), "Value not yet filled.")
 
-        let expectation = expectationWithDescription("Waiting on value.")
+        let expectation = self.expectation(withDescription: "Waiting on value.")
         d.upon({ x in
             expectation.fulfill()
         })
 
         d.fill(5)
-        waitForExpectationsWithTimeout(10) { (error) in
+        waitForExpectations(withTimeout: 10) { (error) in
             XCTAssertNil(error, "\(error)")
         }
 
@@ -27,8 +27,8 @@ class DeferredTests: XCTestCase {
     }
 
     func testMultipleUponBlocks() {
-        let e1 = self.expectationWithDescription("First.")
-        let e2 = self.expectationWithDescription("Second.")
+        let e1 = self.expectation(withDescription: "First.")
+        let e2 = self.expectation(withDescription: "Second.")
         let d = Deferred<Int>()
         d.upon { x in
             XCTAssertEqual(x, 5)
@@ -39,12 +39,12 @@ class DeferredTests: XCTestCase {
             e2.fulfill()
         }
         d.fill(5)
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testOperators() {
-        let e1 = self.expectationWithDescription("First.")
-        let e2 = self.expectationWithDescription("Second.")
+        let e1 = self.expectation(withDescription: "First.")
+        let e2 = self.expectation(withDescription: "Second.")
 
         let f1: () -> Deferred<Maybe<Int>> = {
             return deferMaybe(5)
@@ -66,6 +66,6 @@ class DeferredTests: XCTestCase {
             e2.fulfill()
         }
 
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 }

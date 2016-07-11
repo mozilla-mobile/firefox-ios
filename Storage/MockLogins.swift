@@ -12,7 +12,7 @@ public class MockLogins: BrowserLogins, SyncableLogins {
     public init(files: FileAccessor) {
     }
 
-    public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
+    public func getLogins(forProtectionSpace  protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
         let cursor = ArrayCursor(data: cache.filter({ login in
             return login.protectionSpace.host == protectionSpace.host
         }).sort({ (loginA, loginB) -> Bool in
@@ -23,7 +23,7 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return Deferred(value: Maybe(success: cursor))
     }
 
-    public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
+    public func getLogins(forProtectionSpace  protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
         let cursor = ArrayCursor(data: cache.filter({ login in
             return login.protectionSpace.host == protectionSpace.host &&
                    login.username == username
@@ -35,7 +35,7 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return Deferred(value: Maybe(success: cursor))
     }
 
-    public func getLoginDataForGUID(guid: GUID) -> Deferred<Maybe<Login>> {
+    public func getLoginData(forGUID guid: GUID) -> Deferred<Maybe<Login>> {
         if let login = (cache.filter { $0.guid == guid }).first {
             return deferMaybe(login)
         } else {
@@ -44,13 +44,13 @@ public class MockLogins: BrowserLogins, SyncableLogins {
     }
 
     public func getAllLogins() -> Deferred<Maybe<Cursor<Login>>> {
-        let cursor = ArrayCursor(data: cache.sort({ (loginA, loginB) -> Bool in
+        let cursor = ArrayCursor(data: cache.sorted(isOrderedBefore: { (loginA, loginB) -> Bool in
             return loginA.hostname > loginB.hostname
         }))
         return Deferred(value: Maybe(success: cursor))
     }
 
-    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<Login>>> {
+    public func searchLogins(withQuery query: String?) -> Deferred<Maybe<Cursor<Login>>> {
         let cursor = ArrayCursor(data: cache.filter({ login in
             var checks = [Bool]()
             if let query = query {
@@ -59,14 +59,14 @@ public class MockLogins: BrowserLogins, SyncableLogins {
                 checks.append(login.hostname.contains(query))
             }
             return checks.contains(true)
-        }).sort({ (loginA, loginB) -> Bool in
+        }).sorted(isOrderedBefore: { (loginA, loginB) -> Bool in
             return loginA.hostname > loginB.hostname
         }))
         return Deferred(value: Maybe(success: cursor))
     }
 
     // This method is only here for testing
-    public func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>> {
+    public func getUsageDataForLogin(guid: GUID) -> Deferred<Maybe<LoginUsageData>> {
         let res = cache.filter({ login in
             return login.guid == guid
         }).sort({ (loginA, loginB) -> Bool in
@@ -76,7 +76,7 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return Deferred(value: Maybe(success: res))
     }
 
-    public func addLogin(login: LoginData) -> Success {
+    public func addLogin(_ login: LoginData) -> Success {
         if let _ = cache.indexOf(login as! Login) {
             return deferMaybe(LoginDataError(description: "Already in the cache"))
         }
@@ -84,7 +84,7 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return succeed()
     }
 
-    public func updateLoginByGUID(guid: GUID, new: LoginData, significant: Bool) -> Success {
+    public func updateLogin(guid: GUID, new: LoginData, significant: Bool) -> Success {
         // TODO
         return succeed()
     }
@@ -99,23 +99,23 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return deferMaybe([])
     }
 
-    public func updateLogin(login: LoginData) -> Success {
+    public func updateLogin(_ login: LoginData) -> Success {
         if let index = cache.indexOf(login as! Login) {
-            cache[index].timePasswordChanged = NSDate.nowMicroseconds()
+            cache[index].timePasswordChanged = Date.nowMicroseconds()
             return succeed()
         }
         return deferMaybe(LoginDataError(description: "Password wasn't cached yet. Can't update"))
     }
 
-    public func addUseOfLoginByGUID(guid: GUID) -> Success {
+    public func addUseOfLogin(_ guid: GUID) -> Success {
         if let login = cache.filter({ $0.guid == guid }).first {
-            login.timeLastUsed = NSDate.nowMicroseconds()
+            login.timeLastUsed = Date.nowMicroseconds()
             return succeed()
         }
         return deferMaybe(LoginDataError(description: "Password wasn't cached yet. Can't update"))
     }
 
-    public func removeLoginByGUID(guid: GUID) -> Success {
+    public func removeLogin(guid: GUID) -> Success {
         let filtered = cache.filter { $0.guid != guid }
         if filtered.count == cache.count {
             return deferMaybe(LoginDataError(description: "Can not remove a password that wasn't stored"))
@@ -124,14 +124,14 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return succeed()
     }
 
-    public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
+    public func removeLogins(withGUIDS guids: [GUID]) -> Success {
         return walk(guids) { guid in
-            self.removeLoginByGUID(guid)
+            self.removeLogin(guid: guid)
         }
     }
 
     public func removeAll() -> Success {
-        cache.removeAll(keepCapacity: false)
+        cache.removeAll(keepingCapacity: false)
         return succeed()
     }
 
@@ -140,10 +140,10 @@ public class MockLogins: BrowserLogins, SyncableLogins {
     }
 
     // TODO
-    public func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success { return succeed() }
-    public func applyChangedLogin(upstream: ServerLogin) -> Success { return succeed() }
+    public func delete(byGUID guid: GUID, deletedAt: Timestamp) -> Success { return succeed() }
+    public func applyChangedLogin(_ upstream: ServerLogin) -> Success { return succeed() }
     public func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>> { return deferMaybe(0) }
-    public func markAsDeleted(guids: [GUID]) -> Success { return succeed() }
+    public func markAsDeleted(_ guids: [GUID]) -> Success { return succeed() }
     public func onRemovedAccount() -> Success { return succeed() }
 }
 

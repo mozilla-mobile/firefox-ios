@@ -26,7 +26,7 @@ class Authenticator {
         if let proposed = credential {
             if !(proposed.user?.isEmpty ?? true) {
                 if challenge.previousFailureCount == 0 {
-                    return deferMaybe(Login.createWithCredential(credential!, protectionSpace: challenge.protectionSpace))
+                    return deferMaybe(Login.create(credential: credential!, protectionSpace: challenge.protectionSpace))
                 }
             } else {
                 credential = nil
@@ -53,7 +53,7 @@ class Authenticator {
     }
 
     static func findMatchingCredentialsForChallenge(challenge: NSURLAuthenticationChallenge, fromLoginsProvider loginsProvider: BrowserLogins) -> Deferred<Maybe<NSURLCredential?>> {
-        return loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
+        return loginsProvider.getLogins(forProtectionSpace: challenge.protectionSpace) >>== { cursor in
             guard cursor.count >= 1 else {
                 return deferMaybe(nil)
             }
@@ -74,7 +74,7 @@ class Authenticator {
                     }
                     return nil
                 }
-                loginsProvider.removeLoginsWithGUIDs(malformedGUIDs).upon { log.debug("Removed malformed logins. Success :\($0.isSuccess)") }
+                loginsProvider.removeLogins(withGUIDs: malformedGUIDs).upon { log.debug("Removed malformed logins. Success :\($0.isSuccess)") }
             }
 
             // Found a single entry but the schemes don't match. This is a result of a schemeless entry that we
@@ -84,7 +84,7 @@ class Authenticator {
                 let login = logins[0]
                 credentials = login.credentials
                 let new = Login(credential: login.credentials, protectionSpace: challenge.protectionSpace)
-                loginsProvider.updateLoginByGUID(login.guid, new: new, significant: true).value
+                loginsProvider.updateLogin(guid: login.guid, new: new, significant: true).value
             }
 
             // Found a single entry that matches the scheme and host - good to go.
@@ -120,7 +120,7 @@ class Authenticator {
             style: UIAlertActionStyle.Default) { (action) -> Void in
                 guard let user = alert.textFields?[0].text, pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginDataError(description: "Username and Password required"))); return }
 
-                let login = Login.createWithCredential(NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
+                let login = Login.create(credential: NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
                 deferred.fill(Maybe(success: login))
                 loginsHelper?.setCredentials(login)
         }

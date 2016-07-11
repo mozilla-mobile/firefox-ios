@@ -8,19 +8,19 @@ import Storage
 import SnapKit
 
 protocol ClientPickerViewControllerDelegate {
-    func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) -> Void
-    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) -> Void
+    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) -> Void
+    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) -> Void
 }
 
 struct ClientPickerViewControllerUX {
     static let TableHeaderRowHeight = CGFloat(50)
-    static let TableHeaderTextFont = UIFont.systemFontOfSize(16)
-    static let TableHeaderTextColor = UIColor.grayColor()
+    static let TableHeaderTextFont = UIFont.systemFont(ofSize: 16)
+    static let TableHeaderTextColor = UIColor.gray()
     static let TableHeaderTextPaddingLeft = CGFloat(20)
 
     static let DeviceRowTintColor = UIColor(red:0.427, green:0.800, blue:0.102, alpha:1.0)
     static let DeviceRowHeight = CGFloat(50)
-    static let DeviceRowTextFont = UIFont.systemFontOfSize(16)
+    static let DeviceRowTextFont = UIFont.systemFont(ofSize: 16)
     static let DeviceRowTextPaddingLeft = CGFloat(72)
     static let DeviceRowTextPaddingRight = CGFloat(50)
 }
@@ -47,7 +47,7 @@ class ClientPickerViewController: UITableViewController {
         super.viewDidLoad()
         title = NSLocalizedString("Send Tab", tableName: "SendTo", comment: "Title of the dialog that allows you to send a tab to a different device")
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(ClientPickerViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl?.addTarget(self, action: #selector(ClientPickerViewController.refresh), for: UIControlEvents.valueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: Strings.SendToCancelButton,
             style: .Plain,
@@ -55,23 +55,23 @@ class ClientPickerViewController: UITableViewController {
             action:  #selector(ClientPickerViewController.cancel)
         )
 
-        tableView.registerClass(ClientPickerTableViewHeaderCell.self, forCellReuseIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier)
-        tableView.registerClass(ClientPickerTableViewCell.self, forCellReuseIdentifier: ClientPickerTableViewCell.CellIdentifier)
-        tableView.registerClass(ClientPickerNoClientsTableViewCell.self, forCellReuseIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier)
-        tableView.tableFooterView = UIView(frame: CGRectZero)
+        tableView.register(ClientPickerTableViewHeaderCell.self, forCellReuseIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier)
+        tableView.register(ClientPickerTableViewCell.self, forCellReuseIdentifier: ClientPickerTableViewCell.CellIdentifier)
+        tableView.register(ClientPickerNoClientsTableViewCell.self, forCellReuseIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier)
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let refreshControl = refreshControl {
             refreshControl.beginRefreshing()
             let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
-            self.tableView.contentOffset = CGPointMake(0, height)
+            self.tableView.contentOffset = CGPoint(x: 0, y: height)
         }
         reloadClients()
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         if clients.count == 0 {
             return 1
         } else {
@@ -79,7 +79,7 @@ class ClientPickerViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if clients.count == 0 {
             return 1
         } else {
@@ -91,49 +91,49 @@ class ClientPickerViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
 
         if clients.count > 0 {
-            if indexPath.section == 0 {
-                cell = tableView.dequeueReusableCellWithIdentifier(ClientPickerTableViewHeaderCell.CellIdentifier, forIndexPath: indexPath) as! ClientPickerTableViewHeaderCell
+            if (indexPath as NSIndexPath).section == 0 {
+                cell = tableView.dequeueReusableCell(withIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier, for: indexPath) as! ClientPickerTableViewHeaderCell
             } else {
-                let clientCell = tableView.dequeueReusableCellWithIdentifier(ClientPickerTableViewCell.CellIdentifier, forIndexPath: indexPath) as! ClientPickerTableViewCell
+                let clientCell = tableView.dequeueReusableCell(withIdentifier: ClientPickerTableViewCell.CellIdentifier, for: indexPath) as! ClientPickerTableViewCell
                 clientCell.nameLabel.text = clients[indexPath.row].name
                 clientCell.clientType = clients[indexPath.row].type == "mobile" ? ClientType.Mobile : ClientType.Desktop
-                clientCell.checked = selectedClients.containsObject(indexPath)
+                clientCell.checked = selectedClients.contains(indexPath)
                 cell = clientCell
             }
         } else {
             if reloading == false {
-                cell = tableView.dequeueReusableCellWithIdentifier(ClientPickerNoClientsTableViewCell.CellIdentifier, forIndexPath: indexPath) as! ClientPickerNoClientsTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier, for: indexPath) as! ClientPickerNoClientsTableViewCell
             } else {
-                cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "ClientCell")
+                cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "ClientCell")
             }
         }
 
         return cell
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if clients.count > 0 && indexPath.section == 1 {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
 
-            if selectedClients.containsObject(indexPath) {
-                selectedClients.removeObject(indexPath)
+            if selectedClients.contains(indexPath) {
+                selectedClients.remove(indexPath)
             } else {
-                selectedClients.addObject(indexPath)
+                selectedClients.add(indexPath)
             }
 
-            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
 
-            navigationItem.rightBarButtonItem?.enabled = (selectedClients.count != 0)
+            navigationItem.rightBarButtonItem?.isEnabled = (selectedClients.count != 0)
         }
     }
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if clients.count > 0 {
-            if indexPath.section == 0 {
+            if (indexPath as NSIndexPath).section == 0 {
                 return ClientPickerViewControllerUX.TableHeaderRowHeight
             } else {
                 return ClientPickerViewControllerUX.DeviceRowHeight
@@ -227,7 +227,7 @@ class ClientPickerTableViewCell: UITableViewCell {
     var nameLabel: UILabel
     var checked: Bool = false {
         didSet {
-            self.accessoryType = checked ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
+            self.accessoryType = checked ? UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
         }
     }
 
@@ -243,10 +243,10 @@ class ClientPickerTableViewCell: UITableViewCell {
         contentView.addSubview(nameLabel)
         nameLabel.font = ClientPickerViewControllerUX.DeviceRowTextFont
         nameLabel.numberOfLines = 2
-        nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        nameLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         self.tintColor = ClientPickerViewControllerUX.DeviceRowTintColor
         self.preservesSuperviewLayoutMargins = false
-        self.selectionStyle = UITableViewCellSelectionStyle.None
+        self.selectionStyle = UITableViewCellSelectionStyle.none
     }
 
     override func layoutSubviews() {

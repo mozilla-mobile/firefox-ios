@@ -16,7 +16,7 @@ private class MockBackoffStorage: BackoffStorage {
         serverBackoffUntilLocalTimestamp = nil
     }
 
-    func isInBackoff(now: Timestamp) -> Timestamp? {
+    func isInBackoff(timestamp now: Timestamp) -> Timestamp? {
         return nil
     }
 }
@@ -31,14 +31,14 @@ class MockSyncServerTests: XCTestCase {
         client = getClient(server)
     }
 
-    private func getClient(server: MockSyncServer) -> Sync15StorageClient? {
+    private func getClient(_ server: MockSyncServer) -> Sync15StorageClient? {
         guard let url = server.baseURL.asURL else {
             XCTFail("Couldn't get URL.")
             return nil
         }
 
         let authorizer: Authorizer = identity
-        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+        let queue = DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosBackground)
         print("URL: \(url)")
         return Sync15StorageClient(serverURI: url, authorizer: authorizer, workQueue: queue, resultQueue: queue, backoff: MockBackoffStorage())
     }
@@ -64,8 +64,8 @@ class MockSyncServerTests: XCTestCase {
         server.storeRecords([MockSyncServer.makeValidEnvelope(Bytes.generateGUID(), modified: 0)], inCollection: "bookmarks", now: 1326252222000)
         server.storeRecords([MockSyncServer.makeValidEnvelope(Bytes.generateGUID(), modified: 0)], inCollection: "clients",   now: 1326253333000)
 
-        let expectation = self.expectationWithDescription("Waiting for result.")
-        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+        let expectation = self.expectation(withDescription: "Waiting for result.")
+        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(Date.now()))!
         client.getInfoCollections().upon { result in
             XCTAssertNotNil(result.successValue)
             guard let response = result.successValue else {
@@ -90,15 +90,15 @@ class MockSyncServerTests: XCTestCase {
 
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testGet() {
         server.storeRecords([MockSyncServer.makeValidEnvelope("guid", modified: 0)], inCollection: "bookmarks", now: 1326251111000)
         let collectionClient = client.clientForCollection("bookmarks", encrypter: getEncrypter())
 
-        let expectation = self.expectationWithDescription("Waiting for result.")
-        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+        let expectation = self.expectation(withDescription: "Waiting for result.")
+        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(Date.now()))!
         collectionClient.get("guid").upon { result in
             XCTAssertNotNil(result.successValue)
             guard let response = result.successValue else {
@@ -121,7 +121,7 @@ class MockSyncServerTests: XCTestCase {
 
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
 
         // And now a missing record, which should produce a 404.
         collectionClient.get("missing").upon { result in
@@ -141,8 +141,8 @@ class MockSyncServerTests: XCTestCase {
         server.storeRecords([], inCollection: "tabs")
 
         // For now, only testing wiping the storage root, which is the only thing we use in practice.
-        let expectation = self.expectationWithDescription("Waiting for result.")
-        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+        let expectation = self.expectation(withDescription: "Waiting for result.")
+        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(Date.now()))!
         client.wipeStorage().upon { result in
             XCTAssertNotNil(result.successValue)
             guard let response = result.successValue else {
@@ -167,13 +167,13 @@ class MockSyncServerTests: XCTestCase {
 
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testPut() {
         // For now, only test uploading crypto/keys.  There's nothing special about this PUT, however.
-        let expectation = self.expectationWithDescription("Waiting for result.")
-        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+        let expectation = self.expectation(withDescription: "Waiting for result.")
+        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(Date.now()))!
         client.uploadCryptoKeys(Keys.random(), withSyncKeyBundle: KeyBundle.random(), ifUnmodifiedSince: nil).upon { result in
             XCTAssertNotNil(result.successValue)
             guard let response = result.successValue else {
@@ -200,6 +200,6 @@ class MockSyncServerTests: XCTestCase {
 
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 }

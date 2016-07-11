@@ -324,7 +324,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             return .None
         }
 
-        if source.current.itemIsEditableAtIndex(indexPath.row) ?? false {
+        if source.current.itemIsEditable(atIndex: indexPath.row) ?? false {
             return .Delete
         }
 
@@ -360,7 +360,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 return
             }
 
-            if let err = factory.removeByGUID(bookmark.guid).value.failureValue {
+            if let err = factory.remove(byGUID: bookmark.guid).value.failureValue {
                 log.debug("Failed to remove \(bookmark.guid).")
                 self.onModelFailure(err)
                 return

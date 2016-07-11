@@ -12,7 +12,7 @@ public class ReadingListService {
     var storage: ReadingListStorage
 
     public init?(profileStoragePath: String) {
-        databasePath = (profileStoragePath as NSString).stringByAppendingPathComponent("ReadingList.db")
+        databasePath = (profileStoragePath as NSString).appendingPathComponent("ReadingList.db")
         storage = ReadingListSQLStorage(path: "\(profileStoragePath)/ReadingList.db")
     }
 
@@ -20,7 +20,7 @@ public class ReadingListService {
         return storage.getAvailableRecords()
     }
 
-    public func deleteRecord(record: ReadingListClientRecord) -> Maybe<Void> {
+    public func deleteRecord(_ record: ReadingListClientRecord) -> Maybe<Void> {
         return storage.deleteRecord(record)
     }
 
@@ -28,15 +28,15 @@ public class ReadingListService {
         return storage.deleteAllRecords()
     }
 
-    public func createRecordWithURL(url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
+    public func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
         return storage.createRecordWithURL(url, title: title, addedBy: addedBy)
     }
 
-    public func getRecordWithURL(url: String) -> Maybe<ReadingListClientRecord?> {
+    public func getRecordWithURL(_ url: String) -> Maybe<ReadingListClientRecord?> {
         return storage.getRecordWithURL(url)
     }
 
-    public func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
+    public func updateRecord(_ record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
         return storage.updateRecord(record, unread: unread)
     }
 }

@@ -8,7 +8,7 @@ import XCGLogger
 import Deferred
 
 private let log = Logger.syncLogger
-private let DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUEUE_SERIAL)
+private let DeferredQueue = DispatchQueue(label: "BrowserDBQueue", attributes: DispatchQueueAttributes.serial)
 
 /**
     This class is written to mimick an NSOperation, but also provide Deferred capabilities as well.
@@ -67,8 +67,8 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
         super.init()
     }
 
-    func start(onQueue queue: dispatch_queue_t = DeferredQueue) -> DeferredDBOperation<T> {
-        dispatch_async(queue, self.main)
+    func start(onQueue queue: DispatchQueue = DeferredQueue) -> DeferredDBOperation<T> {
+        queue.async(execute: self.main)
         return self
     }
 
@@ -80,7 +80,7 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
         }
 
         var result: T? = nil
-        let err = db.withConnection(SwiftData.Flags.ReadWriteCreate) { (db) -> NSError? in
+        let err = db.withConnection(SwiftData.Flags.readWriteCreate) { (db) -> NSError? in
             self.connection = db
             if self.cancelled {
                 return NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])

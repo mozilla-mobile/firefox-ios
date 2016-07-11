@@ -8,11 +8,11 @@ import Shared
 
 import XCTest
 
-func byValue(a: SyncCommand, b: SyncCommand) -> Bool {
+func byValue(_ a: SyncCommand, b: SyncCommand) -> Bool {
     return a.value < b.value
 }
 
-func byClient(a: RemoteClient, b: RemoteClient) -> Bool{
+func byClient(_ a: RemoteClient, b: RemoteClient) -> Bool{
     return a.guid! < b.guid!
 }
 
@@ -37,7 +37,7 @@ class SyncCommandsTests: XCTestCase {
         db = BrowserDB(filename: "browser.db", files: files)
         // create clients
 
-        let now = NSDate.now()
+        let now = Date.now()
         let client1GUID = Bytes.generateGUID()
         let client2GUID = Bytes.generateGUID()
         let client3GUID = Bytes.generateGUID()
@@ -76,7 +76,7 @@ class SyncCommandsTests: XCTestCase {
 
     func testInsertWithNoURLOrTitle() {
         // Test insert command to table for
-        let e = self.expectationWithDescription("Insert.")
+        let e = self.expectation(withDescription: "Insert.")
         clientsAndTabs.insertCommand(self.wipeCommand, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(3, $0.successValue!)
@@ -91,7 +91,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
         }
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(withTimeout: 5, handler: nil)
     }
 
     func testInsertWithURLOnly() {
@@ -99,7 +99,7 @@ class SyncCommandsTests: XCTestCase {
         let shareItem = shareItems[3]
         let syncCommand = SyncCommand.fromShareItem(shareItem, withAction: action)
 
-        let e = self.expectationWithDescription("Insert.")
+        let e = self.expectation(withDescription: "Insert.")
         clientsAndTabs.insertCommand(syncCommand, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(3, $0.successValue!)
@@ -114,12 +114,12 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
         }
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(withTimeout: 5, handler: nil)
     }
 
     func testInsertWithMultipleCommands() {
         let action = "testcommand"
-        let e = self.expectationWithDescription("Insert.")
+        let e = self.expectation(withDescription: "Insert.")
         let syncCommands = shareItems.map { item in
             return SyncCommand.fromShareItem(item, withAction: action)
         }
@@ -137,7 +137,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(12, commandCursor[0]!)
             e.fulfill()
         }
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(withTimeout: 5, handler: nil)
     }
 
     func testGetForAllClients() {
@@ -147,7 +147,7 @@ class SyncCommandsTests: XCTestCase {
         }.sort(byValue)
         clientsAndTabs.insertCommands(syncCommands, forClients: clients)
 
-        let b = self.expectationWithDescription("Get for invalid client.")
+        let b = self.expectation(withDescription: "Get for invalid client.")
         clientsAndTabs.getCommands().upon({ result in
             XCTAssertTrue(result.isSuccess)
             if let clientCommands = result.successValue {
@@ -160,7 +160,7 @@ class SyncCommandsTests: XCTestCase {
             }
             b.fulfill()
         })
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(withTimeout: 5, handler: nil)
     }
 
     func testDeleteForValidClient() {
@@ -170,9 +170,9 @@ class SyncCommandsTests: XCTestCase {
         }.sort(byValue)
 
         var client = self.clients[0]
-        let a = self.expectationWithDescription("delete for client.")
-        let b = self.expectationWithDescription("Get for deleted client.")
-        let c = self.expectationWithDescription("Get for not deleted client.")
+        let a = self.expectation(withDescription: "delete for client.")
+        let b = self.expectation(withDescription: "Get for deleted client.")
+        let c = self.expectation(withDescription: "Get for not deleted client.")
         clientsAndTabs.insertCommands(syncCommands, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(12, $0.successValue!)
@@ -202,7 +202,7 @@ class SyncCommandsTests: XCTestCase {
             c.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(withTimeout: 5, handler: nil)
     }
 
     func testDeleteForAllClients() {
@@ -211,8 +211,8 @@ class SyncCommandsTests: XCTestCase {
             return SyncCommand.fromShareItem(item, withAction: action)
         }
 
-        let a = self.expectationWithDescription("Wipe for all clients.")
-        let b = self.expectationWithDescription("Get for clients.")
+        let a = self.expectation(withDescription: "Wipe for all clients.")
+        let b = self.expectation(withDescription: "Get for clients.")
         clientsAndTabs.insertCommands(syncCommands, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(12, $0.successValue!)
@@ -232,6 +232,6 @@ class SyncCommandsTests: XCTestCase {
             })
         }
         
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(withTimeout: 5, handler: nil)
     }
 }

@@ -9,9 +9,9 @@ import Shared
 import XCTest
 
 class FxAStateTests: XCTestCase {
-    class func stateForLabel(label: FxAStateLabel) -> FxAState {
+    class func stateForLabel(_ label: FxAStateLabel) -> FxAState {
         let keyLength = UInt(KeyLength) // Ah, Swift.
-        let now = NSDate.now()
+        let now = Date.now()
 
         switch label {
         case .EngagedBeforeVerified:
@@ -32,13 +32,13 @@ class FxAStateTests: XCTestCase {
                 kA: NSData.randomOfLength(keyLength)!, kB: NSData.randomOfLength(keyLength)!)
 
         case .CohabitingAfterKeyPair:
-            let keyPair = RSAKeyPair.generateKeyPairWithModulusSize(512)
+            let keyPair = RSAKeyPair.generate(withModulusSize: 512)
             return CohabitingAfterKeyPairState(sessionToken: NSData.randomOfLength(keyLength)!,
                 kA: NSData.randomOfLength(keyLength)!, kB: NSData.randomOfLength(keyLength)!,
                 keyPair: keyPair, keyPairExpiresAt: now + 1)
 
         case .Married:
-            let keyPair = RSAKeyPair.generateKeyPairWithModulusSize(512)
+            let keyPair = RSAKeyPair.generate(withModulusSize: 512)
             return MarriedState(sessionToken: NSData.randomOfLength(keyLength)!,
                 kA: NSData.randomOfLength(keyLength)!, kB: NSData.randomOfLength(keyLength)!,
                 keyPair: keyPair, keyPairExpiresAt: now + 1,

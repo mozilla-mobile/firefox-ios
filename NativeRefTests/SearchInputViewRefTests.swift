@@ -7,9 +7,9 @@ import Foundation
 
 class SearchInputViewRefTests: FXSnapshotTestCase {
 
-    let defaultFrame = CGRect(origin: CGPointZero, size: CGSize(width: 320, height: 64))
-    let compressedFrame = CGRect(origin: CGPointZero, size: CGSize(width: 160, height: 64))
-    let stretchedFrame = CGRect(origin: CGPointZero, size: CGSize(width: 728, height: 64))
+    let defaultFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: 320, height: 64))
+    let compressedFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: 160, height: 64))
+    let stretchedFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: 728, height: 64))
     let longText = "superduperverylongusernamethatshouldntfit"
 
     var view: SearchInputView!

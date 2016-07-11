@@ -10,7 +10,7 @@ import Deferred
 private let log = Logger.syncLogger
 
 public protocol SearchableBookmarks: class {
-    func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
+    func bookmarks(byURL url: URL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
 public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalDelegate {
@@ -19,40 +19,40 @@ public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalD
     func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>>
     func treesForEdges() -> Deferred<Maybe<(local: BookmarkTree, buffer: BookmarkTree)>>
     func treeForMirror() -> Deferred<Maybe<BookmarkTree>>
-    func applyLocalOverrideCompletionOp(op: LocalOverrideCompletionOp, itemSources: ItemSources) -> Success
+    func applyLocalOverrideCompletionOp(_ op: LocalOverrideCompletionOp, itemSources: ItemSources) -> Success
 }
 
 public let NotificationBookmarkBufferValidated = "NotificationBookmarkBufferValidated"
 
 public protocol BookmarkBufferStorage: class {
     func isEmpty() -> Deferred<Maybe<Bool>>
-    func applyRecords(records: [BookmarkMirrorItem]) -> Success
+    func applyRecords(_ records: [BookmarkMirrorItem]) -> Success
     func doneApplyingRecordsAfterDownload() -> Success
 
     func validate() -> Success
     func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>>
-    func applyBufferCompletionOp(op: BufferCompletionOp, itemSources: ItemSources) -> Success
+    func applyBufferCompletionOp(_ op: BufferCompletionOp, itemSources: ItemSources) -> Success
 
     // Only use for diagnostics.
     func synchronousBufferCount() -> Int?
 }
 
 public protocol MirrorItemSource: class {
-    func getMirrorItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
-    func getMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
-    func prefetchMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
+    func getMirrorItem(withGUID guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
+    func getMirrorItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
+    func prefetchMirrorItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Success
 }
 
 public protocol BufferItemSource: class {
-    func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
-    func getBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
-    func prefetchBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
+    func getBufferItem(withGUIDs guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
+    func getBufferItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
+    func prefetchBufferItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Success
 }
 
 public protocol LocalItemSource: class {
-    func getLocalItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
-    func getLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
-    func prefetchLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
+    func getLocalItem(withGUID guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>
+    func getLocalItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>>
+    func prefetchLocalItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Success
 }
 
 public class ItemSources {
@@ -66,10 +66,10 @@ public class ItemSources {
         self.buffer = buffer
     }
 
-    public func prefetchWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
-        return self.local.prefetchLocalItemsWithGUIDs(guids)
-         >>> { self.mirror.prefetchMirrorItemsWithGUIDs(guids) }
-         >>> { self.buffer.prefetchBufferItemsWithGUIDs(guids) }
+    public func prefetch<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Success {
+        return self.local.prefetchLocalItems(withGUIDs: guids)
+         >>> { self.mirror.prefetchMirrorItems(withGUIDs: guids) }
+         >>> { self.buffer.prefetchBufferItems(withGUIDs: guids) }
     }
 }
 
@@ -135,7 +135,7 @@ public struct BookmarkRoots {
      * TODO: We don't create outbound records yet, so that's why there's no
      * translation in that direction yet!
      */
-    public static func translateIncomingRootGUID(guid: GUID) -> GUID {
+    public static func translateIncomingRootGUID(_ guid: GUID) -> GUID {
         return [
             "places": RootGUID,
             "root": RootGUID,
@@ -146,7 +146,7 @@ public struct BookmarkRoots {
         ][guid] ?? guid
     }
 
-    public static func translateOutgoingRootGUID(guid: GUID) -> GUID {
+    public static func translateOutgoingRootGUID(_ guid: GUID) -> GUID {
         return [
             RootGUID: "places",
             MobileFolderGUID: "mobile",
@@ -177,13 +177,12 @@ public struct BookmarkRoots {
  * These are only used at the DB layer.
  */
 public enum BookmarkNodeType: Int {
-    case Bookmark = 1
-    case Folder = 2
-    case Separator = 3
-    case DynamicContainer = 4
-
-    case Livemark = 5
-    case Query = 6
+    case bookmark = 1
+    case folder = 2
+    case separator = 3
+    case dynamicContainer = 4
+    case livemark = 5
+    case query = 6
 
     // No microsummary: those turn into bookmarks.
 }
@@ -254,7 +253,7 @@ public struct BookmarkMirrorItem: Equatable {
     public let localModified: Timestamp?
     let syncStatus: SyncStatus?
 
-    public func copyWithParentID(parentID: GUID, parentName: String?) -> BookmarkMirrorItem {
+    public func copyWithParentID(_ parentID: GUID, parentName: String?) -> BookmarkMirrorItem {
         return BookmarkMirrorItem(
             guid: self.guid,
             type: self.type,
@@ -281,7 +280,7 @@ public struct BookmarkMirrorItem: Equatable {
 
     // Ignores internal metadata and GUID; a pure value comparison.
     // Does compare child GUIDs!
-    public func sameAs(rhs: BookmarkMirrorItem) -> Bool {
+    public func sameAs(_ rhs: BookmarkMirrorItem) -> Bool {
         if self.type != rhs.type ||
            self.isDeleted != rhs.isDeleted ||
            self.pos != rhs.pos ||
@@ -306,15 +305,15 @@ public struct BookmarkMirrorItem: Equatable {
     }
 
     public func asJSON() -> JSON {
-        return self.asJSONWithChildren(self.children)
+        return self.asJSON(withChildren: self.children)
     }
 
-    public func asJSONWithChildren(children: [GUID]?) -> JSON {
+    public func asJSON(withChildren children: [GUID]?) -> JSON {
         var out: [String: AnyObject] = [:]
 
         out["id"] = BookmarkRoots.translateOutgoingRootGUID(self.guid)
 
-        func take(key: String, _ val: String?) {
+        func take(_ key: String, _ val: String?) {
             guard let val = val else {
                 return
             }
@@ -367,33 +366,33 @@ public struct BookmarkMirrorItem: Equatable {
 
         switch self.type {
 
-        case .Query:
+        case .query:
             out["type"] = "query"
             take("folderName", self.folderName)
             take("queryId", self.queryID)
             takeBookmarkFields()
 
-        case .Bookmark:
+        case .bookmark:
             out["type"] = "bookmark"
             takeBookmarkFields()
 
-        case .Livemark:
+        case .livemark:
             out["type"] = "livemark"
             take("siteUri", self.siteURI)
             take("feedUri", self.feedURI)
             takeFolderFields()
 
-        case .Folder:
+        case .folder:
             out["type"] = "folder"
             takeFolderFields()
 
-        case .Separator:
+        case .separator:
             out["type"] = "separator"
             if let pos = self.pos {
                 out["pos"] = pos
             }
 
-        case .DynamicContainer:
+        case .dynamicContainer:
             // Sigh.
             preconditionFailure("DynamicContainer not supported.")
         }
@@ -402,7 +401,7 @@ public struct BookmarkMirrorItem: Equatable {
     }
 
     // The places root is a folder but has no parentName.
-    public static func folder(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String, description: String?, children: [GUID]) -> BookmarkMirrorItem {
+    public static func folder(_ guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String, description: String?, children: [GUID]) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
@@ -417,7 +416,7 @@ public struct BookmarkMirrorItem: Equatable {
             faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
-    public static func livemark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String?, description: String?, feedURI: String, siteURI: String) -> BookmarkMirrorItem {
+    public static func livemark(_ guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String?, description: String?, feedURI: String, siteURI: String) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
@@ -432,7 +431,7 @@ public struct BookmarkMirrorItem: Equatable {
             faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
-    public static func separator(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, pos: Int) -> BookmarkMirrorItem {
+    public static func separator(_ guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, pos: Int) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
@@ -447,7 +446,7 @@ public struct BookmarkMirrorItem: Equatable {
             faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
-    public static func bookmark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?) -> BookmarkMirrorItem {
+    public static func bookmark(_ guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
@@ -462,7 +461,7 @@ public struct BookmarkMirrorItem: Equatable {
             faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
-    public static func query(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?, folderName: String?, queryID: String?) -> BookmarkMirrorItem {
+    public static func query(_ guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?, folderName: String?, queryID: String?) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
@@ -477,7 +476,7 @@ public struct BookmarkMirrorItem: Equatable {
             faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
-    public static func deleted(type: BookmarkNodeType, guid: GUID, modified: Timestamp) -> BookmarkMirrorItem {
+    public static func deleted(_ type: BookmarkNodeType, guid: GUID, modified: Timestamp) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
 
         return BookmarkMirrorItem(guid: id, type: type, serverModified: modified,

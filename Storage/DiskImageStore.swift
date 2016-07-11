@@ -23,7 +23,7 @@ private class DiskImageStoreErrorType: MaybeErrorType {
 public class DiskImageStore {
     private let files: FileAccessor
     private let filesDir: String
-    private let queue = dispatch_queue_create("DiskImageStore", DISPATCH_QUEUE_CONCURRENT)
+    private let queue = DispatchQueue(label: "DiskImageStore", attributes: DispatchQueueAttributes.concurrent)
     private let quality: CGFloat
     private var keys: Set<String>
 
@@ -34,7 +34,7 @@ public class DiskImageStore {
 
         // Build an in-memory set of keys from the existing images on disk.
         var keys = [String]()
-        if let fileEnumerator = NSFileManager.defaultManager().enumeratorAtPath(filesDir) {
+        if let fileEnumerator = FileManager.default.enumerator(atPath: filesDir) {
             for file in fileEnumerator {
                 keys.append(file as! String)
             }
@@ -43,7 +43,7 @@ public class DiskImageStore {
     }
 
     /// Gets an image for the given key if it is in the store.
-    public func get(key: String) -> Deferred<Maybe<UIImage>> {
+    public func get(_ key: String) -> Deferred<Maybe<UIImage>> {
         if !keys.contains(key) {
             return deferMaybe(DiskImageStoreErrorType(description: "Image key not found"))
         }
@@ -62,7 +62,7 @@ public class DiskImageStore {
     /// Adds an image for the given key.
     /// This put is asynchronous; the image is not recorded in the cache until the write completes.
     /// Does nothing if this key already exists in the store.
-    public func put(key: String, image: UIImage) -> Success {
+    public func put(_ key: String, image: UIImage) -> Success {
         if keys.contains(key) {
             return deferMaybe(DiskImageStoreErrorType(description: "Key already in store"))
         }
@@ -81,18 +81,18 @@ public class DiskImageStore {
     }
 
     /// Clears all images from the cache, excluding the given set of keys.
-    public func clearExcluding(keys: Set<String>) {
-        let keysToDelete = self.keys.subtract(keys)
+    public func clearExcluding(_ keys: Set<String>) {
+        let keysToDelete = self.keys.subtracting(keys)
 
         for key in keysToDelete {
-            let path = NSString(string: filesDir).stringByAppendingPathComponent(key)
+            let path = NSString(string: filesDir).appendingPathComponent(key)
             do {
-                try NSFileManager.defaultManager().removeItemAtPath(path)
+                try FileManager.default.removeItem(atPath: path)
             } catch {
                 log.warning("Failed to remove DiskImageStore item at \(path): \(error)")
             }
         }
 
-        self.keys = self.keys.intersect(keys)
+        self.keys = self.keys.intersection(keys)
     }
 }

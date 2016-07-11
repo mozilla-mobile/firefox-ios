@@ -12,7 +12,7 @@ public class InfoCollections {
         self.collections = collections
     }
 
-    public class func fromJSON(json: JSON) -> InfoCollections? {
+    public class func fromJSON(_ json: JSON) -> InfoCollections? {
         if let dict = json.asDictionary {
             var coll = [String: Timestamp]()
             for (key, value) in dict {
@@ -31,7 +31,7 @@ public class InfoCollections {
         return Array(self.collections.keys)
     }
 
-    public func modified(collection: String) -> Timestamp? {
+    public func modified(_ collection: String) -> Timestamp? {
         return self.collections[collection]
     }
 
@@ -39,7 +39,7 @@ public class InfoCollections {
     // collections. If no collections are specified, they're considered the same
     // if the other I/C has the same values for this I/C's collections, and
     // they have the same collection array.
-    public func same(other: InfoCollections, collections: [String]?) -> Bool {
+    public func same(as other: InfoCollections, collections: [String]?) -> Bool {
         if let collections = collections {
             return collections.every({ self.modified($0) == other.modified($0) })
         }
@@ -47,6 +47,6 @@ public class InfoCollections {
         // Same collections?
         let ours = self.collectionNames()
         let theirs = other.collectionNames()
-        return ours.sameElements(theirs, f: ==) && same(other, collections: ours)
+        return ours.sameElements(theirs, f: ==) && same(as: other, collections: ours)
     }
 }

@@ -36,7 +36,7 @@ class MockMalformableLogin: LoginData {
     var hasMalformedHostname = true
     var isValid = Maybe(success: ())
 
-    static func createWithHostname(hostname: String, username: String, password: String, formSubmitURL: String) -> MockMalformableLogin {
+    static func create(hostname: String, username: String, password: String, formSubmitURL: String) -> MockMalformableLogin {
         return self.init(guid: Bytes.generateGUID(), hostname: hostname, username: username, password: password, formSubmitURL: formSubmitURL)
     }
 
@@ -116,7 +116,7 @@ class AuthenticatorTests: XCTestCase {
     }
 
     func testChallengeMatchesLoginEntry() {
-        let login = Login.createWithHostname("https://securesite.com", username: "username", password: "password", formSubmitURL: "https://submit.me")
+        let login = Login.create(hostname: "https://securesite.com", username: "username", password: "password", formSubmitURL: "https://submit.me")
         logins.addLogin(login).value
         let challenge = mockChallengeForURL(NSURL(string: "https://securesite.com")!, username: "username", password: "password")
         let result = Authenticator.findMatchingCredentialsForChallenge(challenge, fromLoginsProvider: logins).value.successValue!
@@ -127,7 +127,7 @@ class AuthenticatorTests: XCTestCase {
 
     func testChallengeMatchesSingleMalformedLoginEntry() {
         // Since Login has been updated to not store schemeless URL, write directly to simulate a malformed URL
-        let malformedLogin = MockMalformableLogin.createWithHostname("malformed.com", username: "username", password: "password", formSubmitURL: "https://submit.me")
+        let malformedLogin = MockMalformableLogin.create(hostname: "malformed.com", username: "username", password: "password", formSubmitURL: "https://submit.me")
         logins.addLogin(malformedLogin).value
 
         // Pre-condition: Check that the hostname is malformed
@@ -147,10 +147,10 @@ class AuthenticatorTests: XCTestCase {
 
     func testChallengeMatchesDuplicateLoginEntries() {
         // Since Login has been updated to not store schemeless URL, write directly to simulate a malformed URL
-        let malformedLogin = MockMalformableLogin.createWithHostname("malformed.com", username: "malformed_username", password: "malformed_password", formSubmitURL: "https://submit.me")
+        let malformedLogin = MockMalformableLogin.create(hostname: "malformed.com", username: "malformed_username", password: "malformed_password", formSubmitURL: "https://submit.me")
         logins.addLogin(malformedLogin).value
 
-        let login = Login.createWithHostname("https://malformed.com", username: "good_username", password: "good_password", formSubmitURL: "https://submit.me")
+        let login = Login.create(hostname: "https://malformed.com", username: "good_username", password: "good_password", formSubmitURL: "https://submit.me")
         logins.addLogin(login).value
 
         // Pre-condition: Verify that both logins were stored

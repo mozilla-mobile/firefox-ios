@@ -89,7 +89,7 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(writeDuringRead(true), "Insertion succeeded")
     }
 
-    private func writeDuringRead(safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> NSError? {
+    private func writeDuringRead(_ safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> NSError? {
 
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
@@ -109,8 +109,8 @@ class TestSwiftData: XCTestCase {
 
         // Close the cursor after a delay if there's a close timeout set.
         if let closeTimeout = closeTimeout {
-            let queue = dispatch_queue_create("cursor timeout queue", DISPATCH_QUEUE_SERIAL)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(closeTimeout * NSEC_PER_SEC)), queue) {
+            let queue = DispatchQueue(label: "cursor timeout queue", attributes: DispatchQueueAttributes.serial)
+            queue.after(when: DispatchTime.now() + Double(Int64(closeTimeout * NSEC_PER_SEC)) / Double(NSEC_PER_SEC)) {
                 c.close()
             }
         }
@@ -119,7 +119,7 @@ class TestSwiftData: XCTestCase {
         return addSite(BrowserTable(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
     }
 
-    private func addSite(table: BrowserTable, url: String, title: String) -> NSError? {
+    private func addSite(_ table: BrowserTable, url: String, title: String) -> NSError? {
         return swiftData!.withConnection(SwiftData.Flags.ReadWrite) { connection -> NSError? in
             let args: Args = [Bytes.generateGUID(), url, title]
             return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
@@ -135,7 +135,7 @@ class TestSwiftData: XCTestCase {
         } catch _ {
         }
         let path = testDB
-        func verifyData(swiftData: SwiftData) -> NSError? {
+        func verifyData(_ swiftData: SwiftData) -> NSError? {
             return swiftData.withConnection(SwiftData.Flags.ReadOnly) { db in
                 return nil
             }

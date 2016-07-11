@@ -14,45 +14,45 @@ public func ==<T where T: Identifiable>(lhs: T, rhs: T) -> Bool {
 }
 
 public enum IconType: Int {
-    public func isPreferredTo (other: IconType) -> Bool {
+    public func isPreferredTo (_ other: IconType) -> Bool {
         return rank > other.rank
     }
 
     private var rank: Int {
         switch self {
-        case .AppleIconPrecomposed:
+        case .appleIconPrecomposed:
             return 5
-        case .AppleIcon:
+        case .appleIcon:
             return 4
-        case .Icon:
+        case .icon:
             return 3
-        case .Local:
+        case .local:
             return 2
-        case .Guess:
+        case .guess:
             return 1
-        case .NoneFound:
+        case .noneFound:
             return 0
         }
     }
 
-    case Icon = 0
-    case AppleIcon = 1
-    case AppleIconPrecomposed = 2
-    case Guess = 3
-    case Local = 4
-    case NoneFound = 5
+    case icon = 0
+    case appleIcon = 1
+    case appleIconPrecomposed = 2
+    case guess = 3
+    case local = 4
+    case noneFound = 5
 }
 
 public class Favicon: Identifiable {
     public var id: Int? = nil
 
     public let url: String
-    public let date: NSDate
+    public let date: Date
     public var width: Int?
     public var height: Int?
     public let type: IconType
 
-    public init(url: String, date: NSDate = NSDate(), type: IconType) {
+    public init(url: String, date: Date = Date(), type: IconType) {
         self.url = url
         self.date = date
         self.type = type
@@ -65,8 +65,8 @@ public class Site: Identifiable {
     public var id: Int? = nil
     var guid: String? = nil
 
-    public var tileURL: NSURL {
-        return NSURL(string: url)?.domainURL() ?? NSURL(string: "about:blank")!
+    public var tileURL: URL {
+        return URL(string: url)?.domainURL() ?? URL(string: "about:blank")!
     }
 
     public let url: String

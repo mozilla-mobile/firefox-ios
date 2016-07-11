@@ -8,7 +8,7 @@ import XCTest
 
 class NSURLExtensionsTests : XCTestCase {
     func testRemovesHTTPFromURL() {
-        let url = NSURL(string: "http://google.com")
+        let url = URL(string: "http://google.com")
         if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "google.com")
         } else {
@@ -17,7 +17,7 @@ class NSURLExtensionsTests : XCTestCase {
     }
 
     func testRemovesHTTPAndTrailingSlashFromURL() {
-        let url = NSURL(string: "http://google.com/")
+        let url = URL(string: "http://google.com/")
         if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "google.com")
         } else {
@@ -26,7 +26,7 @@ class NSURLExtensionsTests : XCTestCase {
     }
 
     func testRemovesHTTPButNotTrailingSlashFromURL() {
-        let url = NSURL(string: "http://google.com/foo/")
+        let url = URL(string: "http://google.com/foo/")
         if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "google.com/foo/")
         } else {
@@ -35,7 +35,7 @@ class NSURLExtensionsTests : XCTestCase {
     }
 
     func testKeepsHTTPSInURL() {
-        let url = NSURL(string: "https://google.com")
+        let url = URL(string: "https://google.com")
         if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "https://google.com")
         } else {
@@ -44,7 +44,7 @@ class NSURLExtensionsTests : XCTestCase {
     }
 
     func testKeepsHTTPSAndRemovesTrailingSlashInURL() {
-        let url = NSURL(string: "https://google.com/")
+        let url = URL(string: "https://google.com/")
         if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "https://google.com")
         } else {
@@ -53,7 +53,7 @@ class NSURLExtensionsTests : XCTestCase {
     }
 
     func testKeepsHTTPSAndTrailingSlashInURL() {
-        let url = NSURL(string: "https://google.com/foo/")
+        let url = URL(string: "https://google.com/foo/")
         if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "https://google.com/foo/")
         } else {
@@ -62,7 +62,7 @@ class NSURLExtensionsTests : XCTestCase {
     }
 
     func testKeepsAboutSchemeInURL() {
-        let url = NSURL(string: "about:home")
+        let url = URL(string: "about:home")
         if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "about:home")
         } else {

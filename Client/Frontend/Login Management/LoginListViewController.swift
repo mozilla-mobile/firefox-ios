@@ -177,7 +177,7 @@ class LoginListViewController: SensitiveViewController {
     // Wrap the SQLiteLogins method to allow us to cancel it from our end.
     private func queryLogins(query: String) -> Deferred<Maybe<[Login]>> {
         let deferred = Deferred<Maybe<[Login]>>()
-        profile.logins.searchLoginsWithQuery(query) >>== { logins in
+        profile.logins.searchLogins(withQuery: query) >>== { logins in
             deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
             succeed()
         }
@@ -228,7 +228,7 @@ private extension LoginListViewController {
                     self.loginDataSource.loginAtIndexPath(indexPath)!.guid
                 }
 
-                self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
+                self.profile.logins.removeLogins(withGUIDs: guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
                     self.cancelSelection()
                     self.loadLogins()
                 }

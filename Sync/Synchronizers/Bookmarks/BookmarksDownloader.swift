@@ -98,7 +98,7 @@ public class BookmarksMirrorer {
                 return nil
             }
 
-            return (record.payload as MirrorItemable).toMirrorItem(record.modified)
+            return (record.payload as MirrorItemable).toMirrorItem(modified: record.modified)
         }
 
         if mirrorItems.isEmpty {

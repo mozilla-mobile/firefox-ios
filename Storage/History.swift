@@ -19,20 +19,20 @@ public class IgnoredSiteError: MaybeErrorType {
  * `clear` might or might not need to set a bunch of flags to upload deletions.
  */
 public protocol BrowserHistory {
-    func addLocalVisit(visit: SiteVisit) -> Success
+    func addLocalVisit(_ visit: SiteVisit) -> Success
     func clearHistory() -> Success
-    func removeHistoryForURL(url: String) -> Success
-    func removeSiteFromTopSites(site: Site) -> Success
+    func removeHistory(forURL url: String) -> Success
+    func removeSiteFromTopSites(_ site: Site) -> Success
 
-    func getSitesByFrecencyWithHistoryLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
-    func getSitesByFrecencyWithHistoryLimit(limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
-    func getSitesByFrecencyWithHistoryLimit(limit: Int, bookmarksLimit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
-    func getSitesByLastVisit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
+    func getSitesByFrecency(withHistoryLimit limit: Int) -> Deferred<Maybe<Cursor<Site>>>
+    func getSitesByFrecency(withHistoryLimit limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
+    func getSitesByFrecency(withHistoryLimit limit: Int, bookmarksLimit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
+    func getSitesByLastVisit(withLimit limit: Int) -> Deferred<Maybe<Cursor<Site>>>
 
-    func getTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
+    func getTopSites(withLimit limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func setTopSitesNeedsInvalidation()
     func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>>
-    func setTopSitesCacheSize(size: Int32)
+    func setTopSitesCacheSize(_ size: Int32)
     func clearTopSitesCache() -> Success
     func refreshTopSitesCache() -> Success
     func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>>
@@ -47,15 +47,15 @@ public protocol SyncableHistory: AccountRemovalDelegate {
      * Make sure that the local place with the provided URL has the provided GUID.
      * Succeeds if no place exists with that URL.
      */
-    func ensurePlaceWithURL(url: String, hasGUID guid: GUID) -> Success
+    func ensurePlace(withURL url: String, hasGUID guid: GUID) -> Success
 
     /**
      * Delete the place with the provided GUID, and all of its visits. Succeeds if the GUID is unknown.
      */
-    func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success
+    func delete(byGUID guid: GUID, deletedAt: Timestamp) -> Success
 
-    func storeRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Success
-    func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Maybe<GUID>>
+    func storeRemoteVisits(_ visits: [Visit], forGUID guid: GUID) -> Success
+    func insertOrUpdatePlace(_ place: Place, modified: Timestamp) -> Deferred<Maybe<GUID>>
 
     func getModifiedHistoryToUpload() -> Deferred<Maybe<[(Place, [Visit])]>>
     func getDeletedHistoryToUpload() -> Deferred<Maybe<[GUID]>>
@@ -64,7 +64,7 @@ public protocol SyncableHistory: AccountRemovalDelegate {
      * Chains through the provided timestamp.
      */
     func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
-    func markAsDeleted(guids: [GUID]) -> Success
+    func markAsDeleted(_ guids: [GUID]) -> Success
 
     func doneApplyingRecordsAfterDownload() -> Success
     func doneUpdatingMetadataAfterUpload() -> Success

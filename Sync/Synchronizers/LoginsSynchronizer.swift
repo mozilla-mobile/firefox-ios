@@ -10,7 +10,7 @@ import XCGLogger
 private let log = Logger.syncLogger
 let PasswordsStorageVersion = 1
 
-private func makeDeletedLoginRecord(guid: GUID) -> Record<LoginPayload> {
+private func makeDeletedLoginRecord(_ guid: GUID) -> Record<LoginPayload> {
     // Local modified time is ignored in upload serialization.
     let modified: Timestamp = 0
 
@@ -25,7 +25,7 @@ private func makeDeletedLoginRecord(guid: GUID) -> Record<LoginPayload> {
     return Record<LoginPayload>(id: guid, payload: payload, modified: modified, sortindex: sortindex)
 }
 
-func makeLoginRecord(login: Login) -> Record<LoginPayload> {
+func makeLoginRecord(_ login: Login) -> Record<LoginPayload> {
     let id = login.guid
     let modified: Timestamp = 0    // Ignored in upload serialization.
     let sortindex = 1
@@ -68,7 +68,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         return PasswordsStorageVersion
     }
 
-    func getLogin(record: Record<LoginPayload>) -> ServerLogin {
+    func getLogin(_ record: Record<LoginPayload>) -> ServerLogin {
         let guid = record.id
         let payload = record.payload
         let modified = record.modified
@@ -87,7 +87,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         return login
     }
 
-    func applyIncomingToStorage(storage: SyncableLogins, records: [Record<LoginPayload>], fetched: Timestamp) -> Success {
+    func applyIncomingToStorage(_ storage: SyncableLogins, records: [Record<LoginPayload>], fetched: Timestamp) -> Success {
         return self.applyIncomingToStorage(records, fetched: fetched) { rec in
             let guid = rec.id
             let payload = rec.payload
@@ -100,20 +100,20 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             // We apply deletions immediately. That might not be exactly what we want -- perhaps you changed
             // a password locally after deleting it remotely -- but it's expedient.
             if payload.deleted {
-                return storage.deleteByGUID(guid, deletedAt: rec.modified)
+                return storage.delete(byGUID: guid, deletedAt: rec.modified)
             }
 
             return storage.applyChangedLogin(self.getLogin(rec))
         }
     }
 
-    private func uploadModifiedLogins(logins: [Login], lastTimestamp: Timestamp, fromStorage storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> DeferredTimestamp {
+    private func uploadModifiedLogins(_ logins: [Login], lastTimestamp: Timestamp, fromStorage storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> DeferredTimestamp {
         return self.uploadRecords(logins.map(makeLoginRecord), by: 50, lastTimestamp: lastTimestamp, storageClient: storageClient) {
             storage.markAsSynchronized($0.success, modified: $0.modified)
         }
     }
 
-    private func uploadDeletedLogins(guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> DeferredTimestamp {
+    private func uploadDeletedLogins(_ guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> DeferredTimestamp {
 
         let records = guids.map(makeDeletedLoginRecord)
 
@@ -129,16 +129,16 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
     // be equivalent.
     // We will already have reconciled any conflicts on download, so this upload phase should
     // be as simple as uploading any changed or deleted items.
-    private func uploadOutgoingFromStorage(storage: SyncableLogins, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> Success {
+    private func uploadOutgoingFromStorage(_ storage: SyncableLogins, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> Success {
 
-        let uploadDeleted: Timestamp -> DeferredTimestamp = { timestamp in
+        let uploadDeleted: (Timestamp) -> DeferredTimestamp = { timestamp in
             storage.getDeletedLoginsToUpload()
                 >>== { guids in
                     return self.uploadDeletedLogins(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
 
-        let uploadModified: Timestamp -> DeferredTimestamp = { timestamp in
+        let uploadModified: (Timestamp) -> DeferredTimestamp = { timestamp in
             storage.getModifiedLoginsToUpload()
                 >>== { logins in
                     return self.uploadModifiedLogins(logins, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
@@ -152,7 +152,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             >>> succeed
     }
 
-    public func synchronizeLocalLogins(logins: SyncableLogins, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
+    public func synchronizeLocalLogins(_ logins: SyncableLogins, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
             return deferMaybe(.NotStarted(reason))
         }
@@ -166,7 +166,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         let since: Timestamp = self.lastFetched
         log.debug("Synchronizing \(self.collection). Last fetched: \(since).")
 
-        let applyIncomingToStorage: StorageResponse<[Record<LoginPayload>]> -> Success = { response in
+        let applyIncomingToStorage: (StorageResponse<[Record<LoginPayload>]>) -> Success = { response in
             let ts = response.metadata.timestampMilliseconds
             let lm = response.metadata.lastModifiedMilliseconds!
             log.debug("Applying incoming password records from response timestamped \(ts), last modified \(lm).")

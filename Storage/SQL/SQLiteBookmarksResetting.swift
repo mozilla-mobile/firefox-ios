@@ -58,7 +58,7 @@ extension SQLiteBookmarks {
      * we could do so if we were willing to trade local database space to handle this
      * possible situation.
      */
-    private func collapseMirrorIntoLocalPreservingDeletions(preserveDeletions: Bool) -> Success {
+    private func collapseMirrorIntoLocal(preservingDeletions: Bool) -> Success {
         // As implemented, this won't work correctly without ON DELETE CASCADE.
         assert(SwiftData.EnableForeignKeys)
 
@@ -70,11 +70,11 @@ extension SQLiteBookmarks {
         //    deletion now. Optional: keep them around if they're non-uploaded changes.
         let removeLocalDeletions =
         "DELETE FROM \(TableBookmarksLocal) WHERE is_deleted IS 1 " +
-            (preserveDeletions ? "AND sync_status IS NOT \(SyncStatus.Changed.rawValue)" : "")
+            (preservingDeletions ? "AND sync_status IS NOT \(SyncStatus.Changed.rawValue)" : "")
 
         // 3. Mark everything in local as New.
         let markLocalAsNew =
-        "UPDATE \(TableBookmarksLocal) SET sync_status = \(SyncStatus.New.rawValue)"
+        "UPDATE \(TableBookmarksLocal) SET sync_status = \(SyncStatus.new.rawValue)"
 
         // 4. Insert into local anything not overridden left in mirror.
         //    Note that we use the server modified time as our substitute local modified time.
@@ -86,7 +86,7 @@ extension SQLiteBookmarks {
         " guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos," +
         " description, tags, keyword, folderName, queryId, faviconID) " +
         "SELECT " +
-        "\(SyncStatus.New.rawValue) AS sync_status, " +
+        "\(SyncStatus.new.rawValue) AS sync_status, " +
         "server_modified AS local_modified, " +
         "guid, type, bmkUri, title, parentid, parentName, " +
         "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, faviconID " +
@@ -124,7 +124,7 @@ extension SQLiteBookmarks {
 }
 extension SQLiteBookmarks: AccountRemovalDelegate {
     public func onRemovedAccount() -> Success {
-        return self.collapseMirrorIntoLocalPreservingDeletions(false)
+        return self.collapseMirrorIntoLocal(preservingDeletions: false)
     }
 }
 
@@ -141,6 +141,6 @@ extension SQLiteBookmarks: ResettableSyncStorage {
         // Records that are present locally but aren't on the server will be
         // uploaded.
         //
-        return self.collapseMirrorIntoLocalPreservingDeletions(true)
+        return self.collapseMirrorIntoLocal(preservingDeletions: true)
     }
 }

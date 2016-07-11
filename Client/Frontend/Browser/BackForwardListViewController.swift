@@ -96,7 +96,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         
         listData = listData.filter { !(($0.item.title ?? "").isEmpty && $0.item.URL.baseDomain()?.contains("localhost") ?? false)}
         
-        sql.getSitesForURLs(urls).uponQueue(dispatch_get_main_queue()) { result in
+        sql.getSites(forURLs: urls).uponQueue(dispatch_get_main_queue()) { result in
             if let cursor = result.successValue {
                 for cursorSite in cursor {
                     if let site = cursorSite, let url = site?.url {

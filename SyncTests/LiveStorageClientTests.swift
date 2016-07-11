@@ -24,7 +24,7 @@ private class MockBackoffStorage: BackoffStorage {
         self.serverBackoffUntilLocalTimestamp = nil
     }
 
-    func isInBackoff(now: Timestamp) -> Timestamp? {
+    func isInBackoff(timestamp now: Timestamp) -> Timestamp? {
         if let ts = self.serverBackoffUntilLocalTimestamp where now < ts {
             return ts
         }
@@ -33,11 +33,11 @@ private class MockBackoffStorage: BackoffStorage {
 }
 
 class LiveStorageClientTests : LiveAccountTest {
-    func getKeys(kB: NSData, token: TokenServerToken) -> Deferred<Maybe<Record<KeysPayload>>> {
+    func getKeys(_ kB: NSData, token: TokenServerToken) -> Deferred<Maybe<Record<KeysPayload>>> {
         let endpoint = token.api_endpoint
         XCTAssertTrue(endpoint.rangeOfString("services.mozilla.com") != nil, "We got a Sync server.")
 
-        let cryptoURI = NSURL(string: endpoint)
+        let cryptoURI = URL(string: endpoint)
         let authorizer: Authorizer = {
             (r: NSMutableURLRequest) -> NSMutableURLRequest in
             let helper = HawkHelper(id: token.id, key: token.key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
@@ -49,8 +49,8 @@ class LiveStorageClientTests : LiveAccountTest {
         let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
         let encrypter = Keys(defaultBundle: keyBundle).encrypter("crypto", encoder: encoder)
 
-        let workQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-        let resultQueue = dispatch_get_main_queue()
+        let workQueue = DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault)
+        let resultQueue = DispatchQueue.main
         let backoff = MockBackoffStorage()
 
         let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: resultQueue, backoff: backoff)
@@ -72,7 +72,7 @@ class LiveStorageClientTests : LiveAccountTest {
     }
 
     func getTokenAndDefaultKeys() -> Deferred<Maybe<(TokenServerToken, KeyBundle)>> {
-        let authState = self.syncAuthState(NSDate.now())
+        let authState = self.syncAuthState(Date.now())
 
         let keysPayload: Deferred<Maybe<Record<KeysPayload>>> = authState.bind {
             tokenResult in
@@ -105,7 +105,7 @@ class LiveStorageClientTests : LiveAccountTest {
     }
 
     func testLive() {
-        let expectation = expectationWithDescription("Waiting on value.")
+        let expectation = self.expectation(withDescription: "Waiting on value.")
         let deferred = getTokenAndDefaultKeys()
         deferred.upon {
             res in
@@ -118,14 +118,14 @@ class LiveStorageClientTests : LiveAccountTest {
         }
 
         // client: mgWl22CIzHiE
-        waitForExpectationsWithTimeout(20) { (error) in
+        waitForExpectations(withTimeout: 20) { (error) in
             XCTAssertNil(error, "\(error)")
         }
     }
 
     func testStateMachine() {
-        let expectation = expectationWithDescription("Waiting on value.")
-        let authState = self.getAuthState(NSDate.now())
+        let expectation = self.expectation(withDescription: "Waiting on value.")
+        let authState = self.getAuthState(Date.now())
 
         let d = chainDeferred(authState, f: { SyncStateMachine(prefs: MockProfilePrefs()).toReady($0) })
 
@@ -141,7 +141,7 @@ class LiveStorageClientTests : LiveAccountTest {
             expectation.fulfill()
         }
 
-        waitForExpectationsWithTimeout(20) { (error) in
+        waitForExpectations(withTimeout: 20) { (error) in
             XCTAssertNil(error, "\(error)")
         }
     }

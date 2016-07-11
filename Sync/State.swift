@@ -30,34 +30,34 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     // We've seen something (a blank server, a changed global sync ID, a
     // crypto/keys with a different meta/global) that requires us to reset all
     // local engine timestamps (save the ones listed) and possibly re-upload.
-    case ResetAllEngines(except: Set<String>)
+    case resetAllEngines(except: Set<String>)
 
     // We've seen something (a changed engine sync ID, a crypto/keys with a
     // different per-engine bulk key) that requires us to reset our local engine
     // timestamp and possibly re-upload.
-    case ResetEngine(engine: String)
+    case resetEngine(engine: String)
 
     // We've seen a change in meta/global: an engine has come or gone.
-    case EnableEngine(engine: String)
-    case DisableEngine(engine: String)
+    case enableEngine(engine: String)
+    case disableEngine(engine: String)
 
     public func toJSON() -> JSON {
         switch (self) {
-        case let .ResetAllEngines(except):
+        case let .resetAllEngines(except):
             return JSON(["type": "ResetAllEngines", "except": Array(except).sort()])
 
-        case let .ResetEngine(engine):
+        case let .resetEngine(engine):
             return JSON(["type": "ResetEngine", "engine": engine])
 
-        case let .EnableEngine(engine):
+        case let .enableEngine(engine):
             return JSON(["type": "EnableEngine", "engine": engine])
 
-        case let .DisableEngine(engine):
+        case let .disableEngine(engine):
             return JSON(["type": "DisableEngine", "engine": engine])
         }
     }
 
-    public static func fromJSON(json: JSON) -> LocalCommand? {
+    public static func fromJSON(_ json: JSON) -> LocalCommand? {
         if json.isError {
             return nil
         }
@@ -101,16 +101,16 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
 
 public func ==(lhs: LocalCommand, rhs: LocalCommand) -> Bool {
     switch (lhs, rhs) {
-    case (let .ResetAllEngines(exceptL), let .ResetAllEngines(exceptR)):
+    case (let .resetAllEngines(exceptL), let .resetAllEngines(exceptR)):
         return exceptL == exceptR
 
-    case (let .ResetEngine(engineL), let .ResetEngine(engineR)):
+    case (let .resetEngine(engineL), let .resetEngine(engineR)):
         return engineL == engineR
 
-    case (let .EnableEngine(engineL), let .EnableEngine(engineR)):
+    case (let .enableEngine(engineL), let .enableEngine(engineR)):
         return engineL == engineR
 
-    case (let .DisableEngine(engineL), let .DisableEngine(engineR)):
+    case (let .disableEngine(engineL), let .disableEngine(engineR)):
         return engineL == engineR
 
     default:
@@ -163,7 +163,7 @@ class PrefsBackoffStorage: BackoffStorage {
         self.prefs.removeObjectForKey(self.key)
     }
 
-    func isInBackoff(now: Timestamp) -> Timestamp? {
+    func isInBackoff(timestamp now: Timestamp) -> Timestamp? {
         if let ts = self.serverBackoffUntilLocalTimestamp where now < ts {
             return ts
         }
@@ -218,11 +218,11 @@ public class Scratchpad {
             return self
         }
 
-        public func addLocalCommandsFromKeys(keys: Fetched<Keys>?) -> Builder {
+        public func addLocalCommandsFromKeys(_ keys: Fetched<Keys>?) -> Builder {
             // Getting new keys can force local collection resets.
             guard let freshKeys = keys?.value, staleKeys = self.keys?.value where staleKeys.valid else {
                 // Removing keys, or new keys and either we didn't have old keys or they weren't valid.  Everybody gets a reset!
-                self.localCommands.insert(LocalCommand.ResetAllEngines(except: []))
+                self.localCommands.insert(LocalCommand.resetAllEngines(except: []))
                 return self
             }
 
@@ -241,29 +241,29 @@ public class Scratchpad {
                         except.insert(collection)
                     }
                 }
-                self.localCommands.insert(.ResetAllEngines(except: except))
+                self.localCommands.insert(.resetAllEngines(except: except))
             } else {
                 // Default bundle is the same.  Reset collections that have changed bulk keys.
                 for (collection, keyBundle) in staleKeys.collectionKeys {
                     if keyBundle != freshKeys.forCollection(collection) {
-                        self.localCommands.insert(.ResetEngine(engine: collection))
+                        self.localCommands.insert(.resetEngine(engine: collection))
                     }
                 }
                 for (collection, keyBundle) in freshKeys.collectionKeys {
                     if keyBundle != staleKeys.forCollection(collection) {
-                        self.localCommands.insert(.ResetEngine(engine: collection))
+                        self.localCommands.insert(.resetEngine(engine: collection))
                     }
                 }
             }
             return self
         }
 
-        public func setKeys(keys: Fetched<Keys>?) -> Builder {
+        public func setKeys(_ keys: Fetched<Keys>?) -> Builder {
             self.keys = keys
             return self
         }
 
-        public func setGlobal(global: Fetched<MetaGlobal>?) -> Builder {
+        public func setGlobal(_ global: Fetched<MetaGlobal>?) -> Builder {
             self.global = global
             if let global = global {
                 // We always take the incoming meta/global's engine configuration.
@@ -272,7 +272,7 @@ public class Scratchpad {
             return self
         }
 
-        public func setEngineConfiguration(engineConfiguration: EngineConfiguration?) -> Builder {
+        public func setEngineConfiguration(_ engineConfiguration: EngineConfiguration?) -> Builder {
             self.engineConfiguration = engineConfiguration
             return self
         }
@@ -380,7 +380,7 @@ public class Scratchpad {
         self.clientName = DeviceInfo.defaultClientName()
     }
 
-    func freshStartWithGlobal(global: Fetched<MetaGlobal>) -> Scratchpad {
+    func freshStartWithGlobal(_ global: Fetched<MetaGlobal>) -> Scratchpad {
         // TODO: I *think* a new keyLabel is unnecessary.
         return self.evolve()
                    .setGlobal(global)
@@ -389,7 +389,7 @@ public class Scratchpad {
                    .build()
     }
 
-    private class func unpickleV1FromPrefs(prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad {
+    private class func unpickleV1FromPrefs(_ prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad {
         let b = Scratchpad(b: syncKeyBundle, persistingTo: prefs).evolve()
 
         if let mg = prefs.stringForKey(PrefGlobal) {
@@ -451,7 +451,7 @@ public class Scratchpad {
     /**
      * Remove anything that might be left around after prefs is wiped.
      */
-    public class func clearFromPrefs(prefs: Prefs) {
+    public class func clearFromPrefs(_ prefs: Prefs) {
         if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
             log.debug("Removing saved key from keychain.")
             KeychainWrapper.removeObjectForKey(keyLabel)
@@ -460,7 +460,7 @@ public class Scratchpad {
         }
     }
 
-    public class func restoreFromPrefs(prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad? {
+    public class func restoreFromPrefs(_ prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad? {
         if let ver = prefs.intForKey(PrefVersion) {
             switch (ver) {
             case 1:
@@ -484,7 +484,7 @@ public class Scratchpad {
         return pickle(self.prefs)
     }
 
-    func pickle(prefs: Prefs) -> Scratchpad {
+    func pickle(_ prefs: Prefs) -> Scratchpad {
         prefs.setInt(1, forKey: PrefVersion)
         if let global = global {
             prefs.setLong(global.timestamp, forKey: PrefGlobalTS)

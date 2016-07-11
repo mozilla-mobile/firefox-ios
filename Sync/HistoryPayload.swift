@@ -7,7 +7,7 @@ import Shared
 import Storage
 
 public class HistoryPayload: CleartextPayloadJSON {
-    public class func fromJSON(json: JSON) -> HistoryPayload? {
+    public class func fromJSON(_ json: JSON) -> HistoryPayload? {
         let p = HistoryPayload(json)
         if p.isValid() {
             return p
@@ -41,7 +41,7 @@ public class HistoryPayload: CleartextPayloadJSON {
         return self["histUri"].asString!
     }
 
-    var historyURI: NSURL {
+    var historyURI: URL {
         return self.histURI.asURL!
     }
 
@@ -49,7 +49,7 @@ public class HistoryPayload: CleartextPayloadJSON {
         return self["title"].asString ?? ""
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override public func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if let p = obj as? HistoryPayload {
             if !super.equalPayloads(p) {
                 return false;

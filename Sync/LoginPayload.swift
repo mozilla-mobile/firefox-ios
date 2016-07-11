@@ -29,7 +29,7 @@ public class LoginPayload: CleartextPayloadJSON {
         "passwordField",
     ]
 
-    public class func fromJSON(json: JSON) -> LoginPayload? {
+    public class func fromJSON(_ json: JSON) -> LoginPayload? {
         let p = LoginPayload(json)
         if p.isValid() {
             return p
@@ -106,7 +106,7 @@ public class LoginPayload: CleartextPayloadJSON {
         return self["httpRealm"].asString
     }
 
-    private func timestamp(field: String) -> Timestamp? {
+    private func timestamp(_ field: String) -> Timestamp? {
         let json = self[field]
         if let i = json.asInt64 where i > 0 {
             return Timestamp(i)
@@ -130,7 +130,7 @@ public class LoginPayload: CleartextPayloadJSON {
         return self.timestamp("timePasswordChanged")
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override public func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if let p = obj as? LoginPayload {
             if !super.equalPayloads(p) {
                 return false;

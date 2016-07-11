@@ -18,7 +18,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     private var sharedItem: ShareItem?
 
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white()
 
         super.viewDidLoad()
 
@@ -26,11 +26,11 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
             let instructionsViewController = InstructionsViewController()
             instructionsViewController.delegate = self
             let navigationController = UINavigationController(rootViewController: instructionsViewController)
-            presentViewController(navigationController, animated: false, completion: nil)
+            present(navigationController, animated: false, completion: nil)
             return
         }
 
-        ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
+        ExtensionUtils.extractSharedItem(fromExtensionContext: self.extensionContext, completionHandler: { (item, error) -> Void in
             guard let item = item where error == nil && item.isShareable else {
                 let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .Default) { _ in self.finish() })
@@ -48,10 +48,10 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     }
 
     func finish() {
-        self.extensionContext!.completeRequestReturningItems(nil, completionHandler: nil)
+        self.extensionContext!.completeRequest(returningItems: nil, completionHandler: nil)
     }
 
-    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
         // TODO: hook up Send Tab via Sync.
         // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
         if let item = sharedItem {
@@ -60,11 +60,11 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
         finish()
     }
     
-    func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) {
+    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
         finish()
     }
 
-    func instructionsViewControllerDidClose(instructionsViewController: InstructionsViewController) {
+    func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         finish()
     }
 }

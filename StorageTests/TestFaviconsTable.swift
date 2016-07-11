@@ -10,7 +10,7 @@ import XCTest
 class TestFaviconsTable : XCTestCase {
     var db: BrowserDB!
 
-    private func addIcon(favicons: FaviconsTable<Favicon>, url: String, s: Bool = true) -> Favicon {
+    private func addIcon(_ favicons: FaviconsTable<Favicon>, url: String, s: Bool = true) -> Favicon {
         var inserted: Int? = -1;
         var icon: Favicon!
         var err: NSError?
@@ -29,7 +29,7 @@ class TestFaviconsTable : XCTestCase {
         return icon
     }
 
-    private func checkIcons(favicons: FaviconsTable<Favicon>, options: QueryOptions?, urls: [String], s: Bool = true) {
+    private func checkIcons(_ favicons: FaviconsTable<Favicon>, options: QueryOptions?, urls: [String], s: Bool = true) {
         var err: NSError?
         self.db.withConnection(flags: SwiftData.Flags.ReadOnly, err: &err) { (connection, err) -> Bool in
             XCTAssertNil(err)
@@ -50,7 +50,7 @@ class TestFaviconsTable : XCTestCase {
         }
     }
 
-    private func clear(favicons: FaviconsTable<Favicon>, icon: Favicon? = nil, s: Bool = true) {
+    private func clear(_ favicons: FaviconsTable<Favicon>, icon: Favicon? = nil, s: Bool = true) {
         var deleted = -1;
         var err: NSError?
         self.db.withConnection(flags: SwiftData.Flags.ReadWriteCreate, err: &err) { (db, err) -> Int in

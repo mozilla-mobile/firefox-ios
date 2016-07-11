@@ -23,8 +23,8 @@ class TokenServerClientTests: LiveAccountTest {
     }
 
     func testAudienceForEndpoint() {
-        func audienceFor(endpoint: String) -> String {
-            return TokenServerClient.getAudienceForURL(NSURL(string: endpoint)!)
+        func audienceFor(_ endpoint: String) -> String {
+            return TokenServerClient.getAudienceForURL(URL(string: endpoint)!)
         }
 
         // Sub-domains and path components.
@@ -57,7 +57,7 @@ class TokenServerClientTests: LiveAccountTest {
                 certificate: certificate, audience: audience)
 
             let client = TokenServerClient()
-            client.token(assertion).upon { result in
+            client.token(assertion: assertion).upon { result in
                 if let token = result.successValue {
                     XCTAssertNotNil(token.id)
                     XCTAssertNotNil(token.key)
@@ -71,18 +71,18 @@ class TokenServerClientTests: LiveAccountTest {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+        self.waitForExpectations(withTimeout: 100, handler: nil)
     }
 
     func testTokenFailure() {
         withVerifiedAccount { _, _ in
             // Account details aren't used, but we want to skip when we're not running live tests.
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(withDescription: "")
 
             let assertion = "BAD ASSERTION"
 
             let client = TokenServerClient()
-            client.token(assertion).upon { result in
+            client.token(assertion: assertion).upon { result in
                 if let token = result.successValue {
                     XCTFail("Got token: \(token)")
                 } else {
@@ -103,6 +103,6 @@ class TokenServerClientTests: LiveAccountTest {
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(withTimeout: 10, handler: nil)
     }
 }

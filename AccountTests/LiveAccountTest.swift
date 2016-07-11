@@ -15,8 +15,8 @@ import XCTest
  */
 public class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
-        if let path = NSBundle(forClass: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
-            if let contents = try? String(contentsOfFile: path, encoding: NSUTF8StringEncoding) {
+        if let path = Bundle(for: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
+            if let contents = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) {
                 let json = JSON.parse(contents)
                 if json.isError {
                     return nil
@@ -37,10 +37,10 @@ public class LiveAccountTest: XCTestCase {
     // If signedInUser.json contains an email address, we use that email address.
     // Since there's no way to get the corresponding password (from any client!), we assume that any
     // test account has password identical to its email address.
-    private func withExistingAccount(mustBeVerified: Bool, completion: (NSData, NSData) -> Void) {
+    private func withExistingAccount(_ mustBeVerified: Bool, completion: (Data, Data) -> Void) {
         // If we don't create at least one expectation, waitForExpectations fails.
         // So we unconditionally create one, even though the callback may not execute.
-        self.expectationWithDescription("withExistingAccount").fulfill()
+        self.expectation(withDescription: "withExistingAccount").fulfill()
         if let json = self.signedInUser {
             if mustBeVerified {
                 XCTAssertTrue(json["verified"].asBool ?? false)
@@ -56,15 +56,15 @@ public class LiveAccountTest: XCTestCase {
         }
     }
 
-    func withVerifiedAccount(completion: (NSData, NSData) -> Void) {
+    func withVerifiedAccount(_ completion: (Data, Data) -> Void) {
         withExistingAccount(true, completion: completion)
     }
 
-    func withCertificate(completion: (XCTestExpectation, NSData, KeyPair, String) -> Void) {
+    func withCertificate(_ completion: (XCTestExpectation, Data, KeyPair, String) -> Void) {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
-            let expectation = self.expectationWithDescription("withCertificate")
+            let expectation = self.expectation(withDescription: "withCertificate")
 
-            let keyPair = RSAKeyPair.generateKeyPairWithModulusSize(1024)
+            let keyPair = RSAKeyPair.generate(withModulusSize: 1024)
             let client = FxAClient10()
             let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
             let sign: Deferred<Maybe<FxASignResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
@@ -89,21 +89,21 @@ public class LiveAccountTest: XCTestCase {
     }
 
     public enum AccountError: MaybeErrorType {
-        case BadParameters
-        case NoSignedInUser
-        case UnverifiedSignedInUser
+        case badParameters
+        case noSignedInUser
+        case unverifiedSignedInUser
 
         public var description: String {
             switch self {
-            case BadParameters: return "Bad account parameters (email, password, or a derivative thereof)."
-            case NoSignedInUser: return "No signedInUser.json (missing, no email, etc)."
-            case UnverifiedSignedInUser: return "signedInUser.json describes an unverified account."
+            case badParameters: return "Bad account parameters (email, password, or a derivative thereof)."
+            case noSignedInUser: return "No signedInUser.json (missing, no email, etc)."
+            case unverifiedSignedInUser: return "signedInUser.json describes an unverified account."
             }
         }
     }
 
     // Internal helper.
-    func account(email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
+    func account(_ email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
         if let emailUTF8 = email.utf8EncodedData {
             if let passwordUTF8 = email.utf8EncodedData {
@@ -140,7 +140,7 @@ public class LiveAccountTest: XCTestCase {
             configuration: ProductionFirefoxAccountConfiguration())
     }
 
-    public func getAuthState(now: Timestamp) -> Deferred<Maybe<SyncAuthState>> {
+    public func getAuthState(_ now: Timestamp) -> Deferred<Maybe<SyncAuthState>> {
         let account = self.getTestAccount()
         print("Got test account.")
         return account.map { result in
@@ -152,10 +152,10 @@ public class LiveAccountTest: XCTestCase {
         }
     }
 
-    public func syncAuthState(now: Timestamp) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
+    public func syncAuthState(_ now: Timestamp) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
         return getAuthState(now).bind { result in
             if let authState = result.successValue {
-                return authState.token(now, canBeExpired: false)
+                return authState.token(now: now, canBeExpired: false)
             }
             return Deferred(value: Maybe(failure: result.failureValue!))
         }

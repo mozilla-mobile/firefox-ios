@@ -20,10 +20,10 @@ public class FileAccessor {
     /**
      * Gets the absolute directory path at the given relative path, creating it if it does not exist.
      */
-    public func getAndEnsureDirectory(relativeDir: String? = nil) throws -> String {
+    public func getAndEnsureDirectory(_ relativeDir: String? = nil) throws -> String {
         var absolutePath = rootPath
         if let relativeDir = relativeDir {
-            absolutePath = absolutePath.stringByAppendingPathComponent(relativeDir)
+            absolutePath = absolutePath.appendingPathComponent(relativeDir)
         }
 
         let absPath = absolutePath as String
@@ -34,20 +34,20 @@ public class FileAccessor {
     /**
      * Removes the file or directory at the given path, relative to the root.
      */
-    public func remove(relativePath: String) throws {
-        let path = rootPath.stringByAppendingPathComponent(relativePath)
-        try NSFileManager.defaultManager().removeItemAtPath(path)
+    public func remove(_ relativePath: String) throws {
+        let path = rootPath.appendingPathComponent(relativePath)
+        try FileManager.default.removeItem(atPath: path)
     }
 
     /**
      * Removes the contents of the directory without removing the directory itself.
      */
-    public func removeFilesInDirectory(relativePath: String = "") throws {
-        let fileManager = NSFileManager.defaultManager()
-        let path = rootPath.stringByAppendingPathComponent(relativePath)
-        let files = try fileManager.contentsOfDirectoryAtPath(path)
+    public func removeFilesInDirectory(_ relativePath: String = "") throws {
+        let fileManager = FileManager.default
+        let path = rootPath.appendingPathComponent(relativePath)
+        let files = try fileManager.contentsOfDirectory(atPath: path)
         for file in files {
-            try remove(NSString(string:relativePath).stringByAppendingPathComponent(file))
+            try remove(NSString(string:relativePath).appendingPathComponent(file))
         }
         return
     }
@@ -55,59 +55,59 @@ public class FileAccessor {
     /**
      * Determines whether a file exists at the given path, relative to the root.
      */
-    public func exists(relativePath: String) -> Bool {
-        let path = rootPath.stringByAppendingPathComponent(relativePath)
-        return NSFileManager.defaultManager().fileExistsAtPath(path)
+    public func exists(_ relativePath: String) -> Bool {
+        let path = rootPath.appendingPathComponent(relativePath)
+        return FileManager.default.fileExists(atPath: path)
     }
 
-    public func fileWrapper(relativePath: String) throws -> NSFileWrapper {
-        let path = rootPath.stringByAppendingPathComponent(relativePath)
-        return try NSFileWrapper(URL: NSURL.fileURLWithPath(path), options: NSFileWrapperReadingOptions.Immediate)
+    public func fileWrapper(_ relativePath: String) throws -> FileWrapper {
+        let path = rootPath.appendingPathComponent(relativePath)
+        return try FileWrapper(url: URL.fileURL(withPath: path), options: FileWrapper.ReadingOptions.immediate)
     }
 
     /**
      * Moves the file or directory to the given destination, with both paths relative to the root.
      * The destination directory is created if it does not exist.
      */
-    public func move(fromRelativePath: String, toRelativePath: String) throws {
-        let fromPath = rootPath.stringByAppendingPathComponent(fromRelativePath)
-        let toPath = rootPath.stringByAppendingPathComponent(toRelativePath) as NSString
-        let toDir = toPath.stringByDeletingLastPathComponent
+    public func move(_ fromRelativePath: String, toRelativePath: String) throws {
+        let fromPath = rootPath.appendingPathComponent(fromRelativePath)
+        let toPath = rootPath.appendingPathComponent(toRelativePath) as NSString
+        let toDir = toPath.deletingLastPathComponent
 
         try createDir(toDir)
 
-        try NSFileManager.defaultManager().moveItemAtPath(fromPath, toPath: toPath as String)
+        try FileManager.default.moveItem(atPath: fromPath, toPath: toPath as String)
     }
 
-    public func copyMatching(fromRelativeDirectory relativePath: String, toAbsoluteDirectory absolutePath: String, matching: String -> Bool) throws {
-        let fileManager = NSFileManager.defaultManager()
-        let path = rootPath.stringByAppendingPathComponent(relativePath)
-        let pathURL = NSURL.fileURLWithPath(path)
-        let destURL = NSURL.fileURLWithPath(absolutePath, isDirectory: true)
+    public func copyMatching(fromRelativeDirectory relativePath: String, toAbsoluteDirectory absolutePath: String, matching: (String) -> Bool) throws {
+        let fileManager = FileManager.default
+        let path = rootPath.appendingPathComponent(relativePath)
+        let pathURL = URL.fileURL(withPath: path)
+        let destURL = URL.fileURL(withPath: absolutePath, isDirectory: true)
 
-        let files = try fileManager.contentsOfDirectoryAtPath(path)
+        let files = try fileManager.contentsOfDirectory(atPath: path)
         for file in files {
             if !matching(file) {
                 continue
             }
 
-            let from = pathURL.URLByAppendingPathComponent(file, isDirectory: false).path!
-            let to = destURL.URLByAppendingPathComponent(file, isDirectory: false).path!
+            let from = try! pathURL.appendingPathComponent(file, isDirectory: false).path!
+            let to = try! destURL.appendingPathComponent(file, isDirectory: false).path!
             do {
-                try fileManager.copyItemAtPath(from, toPath: to)
+                try fileManager.copyItem(atPath: from, toPath: to)
             } catch {
             }
         }
     }
 
-    public func copy(fromRelativePath: String, toAbsolutePath: String) throws -> Bool {
-        let fromPath = rootPath.stringByAppendingPathComponent(fromRelativePath)
-        guard let dest = NSURL.fileURLWithPath(toAbsolutePath).URLByDeletingLastPathComponent?.path else {
+    public func copy(_ fromRelativePath: String, toAbsolutePath: String) throws -> Bool {
+        let fromPath = rootPath.appendingPathComponent(fromRelativePath)
+        guard let dest = try! NSURL.fileURL(withPath: toAbsolutePath).deletingLastPathComponent().path else {
             return false
         }
 
         try createDir(dest)
-        try NSFileManager.defaultManager().copyItemAtPath(fromPath, toPath: toAbsolutePath)
+        try FileManager.default.copyItem(atPath: fromPath, toPath: toAbsolutePath)
         return true
     }
 
@@ -115,7 +115,7 @@ public class FileAccessor {
      * Creates a directory with the given path, including any intermediate directories.
      * Does nothing if the directory already exists.
      */
-    private func createDir(absolutePath: String) throws {
-        try NSFileManager.defaultManager().createDirectoryAtPath(absolutePath, withIntermediateDirectories: true, attributes: nil)
+    private func createDir(_ absolutePath: String) throws {
+        try FileManager.default.createDirectory(atPath: absolutePath, withIntermediateDirectories: true, attributes: nil)
     }
 }

@@ -113,11 +113,11 @@ public class BrowserTable: Table {
         let v = sqlite3_libversion_number()
         self.sqliteVersion = v
         self.supportsPartialIndices = v >= 3008000          // 3.8.0.
-        let ver = String.fromCString(sqlite3_libversion())!
+        let ver = String(cString: sqlite3_libversion())
         log.info("SQLite version: \(ver) (\(v)).")
     }
 
-    func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
+    func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
         if err != nil {
             log.error("Error running SQL in BrowserTable. \(err?.localizedDescription)")
@@ -127,7 +127,7 @@ public class BrowserTable: Table {
     }
 
     // TODO: transaction.
-    func run(db: SQLiteDBConnection, queries: [(String, Args?)]) -> Bool {
+    func run(_ db: SQLiteDBConnection, queries: [(String, Args?)]) -> Bool {
         for (sql, args) in queries {
             if !run(db, sql: sql, args: args) {
                 return false
@@ -136,7 +136,7 @@ public class BrowserTable: Table {
         return true
     }
 
-    func run(db: SQLiteDBConnection, queries: [String]) -> Bool {
+    func run(_ db: SQLiteDBConnection, queries: [String]) -> Bool {
         for sql in queries {
             if !run(db, sql: sql) {
                 return false
@@ -145,7 +145,7 @@ public class BrowserTable: Table {
         return true
     }
 
-    func runValidQueries(db: SQLiteDBConnection, queries: [(String?, Args?)]) -> Bool {
+    func runValidQueries(_ db: SQLiteDBConnection, queries: [(String?, Args?)]) -> Bool {
         for (sql, args) in queries {
             if let sql = sql {
                 if !run(db, sql: sql, args: args) {
@@ -156,14 +156,14 @@ public class BrowserTable: Table {
         return true
     }
 
-    func runValidQueries(db: SQLiteDBConnection, queries: [String?]) -> Bool {
+    func runValidQueries(_ db: SQLiteDBConnection, queries: [String?]) -> Bool {
         return self.run(db, queries: optFilter(queries))
     }
 
-    func prepopulateRootFolders(db: SQLiteDBConnection) -> Bool {
-        let type = BookmarkNodeType.Folder.rawValue
-        let now = NSDate.nowNumber()
-        let status = SyncStatus.New.rawValue
+    func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
+        let type = BookmarkNodeType.folder.rawValue
+        let now = Date.nowNumber()
+        let status = SyncStatus.new.rawValue
 
         let localArgs: Args = [
             BookmarkRoots.RootID,    BookmarkRoots.RootGUID,          type, BookmarkRoots.RootGUID, status, now,
@@ -243,7 +243,7 @@ public class BrowserTable: Table {
     let localColumns = ", local_modified INTEGER" +            // Can be null. Client clock. In extremis only.
                        ", sync_status TINYINT NOT NULL"        // SyncStatus enum. Set when changed or created.
 
-    func getBookmarksTableCreationStringForTable(table: String, withAdditionalColumns: String="") -> String {
+    func getBookmarksTableCreationString(forTable table: String, withAdditionalColumns: String="") -> String {
         // The stupid absence of naming conventions here is thanks to pre-Sync Weave. Sorry.
         // For now we have the simplest possible schema: everything in one.
         let sql =
@@ -279,7 +279,7 @@ public class BrowserTable: Table {
      * We need to explicitly store what's provided by the server, because we can't rely on
      * referenced child nodes to exist yet!
      */
-    func getBookmarksStructureTableCreationStringForTable(table: String, referencingMirror mirror: String) -> String {
+    func getBookmarksStructureTableCreationString(forTable table: String, referencingMirror mirror: String) -> String {
         let sql =
         "CREATE TABLE IF NOT EXISTS \(table) " +
         "( parent TEXT NOT NULL REFERENCES \(mirror)(guid) ON DELETE CASCADE" +
@@ -372,15 +372,15 @@ public class BrowserTable: Table {
     "CREATE VIEW \(ViewAllBookmarks) AS " +
     "SELECT guid, bmkUri AS url, title, description, faviconID FROM " +
     "\(TableBookmarksMirror) WHERE " +
-    "type = \(BookmarkNodeType.Bookmark.rawValue) AND is_overridden IS 0 AND is_deleted IS 0 " +
+    "type = \(BookmarkNodeType.bookmark.rawValue) AND is_overridden IS 0 AND is_deleted IS 0 " +
     "UNION ALL " +
     "SELECT guid, bmkUri AS url, title, description, faviconID FROM " +
     "\(TableBookmarksLocal) WHERE " +
-    "type = \(BookmarkNodeType.Bookmark.rawValue) AND is_deleted IS 0 " +
+    "type = \(BookmarkNodeType.bookmark.rawValue) AND is_deleted IS 0 " +
     "UNION ALL " +
     "SELECT guid, bmkUri AS url, title, description, -1 AS faviconID FROM " +
     "\(TableBookmarksBuffer) WHERE " +
-    "type = \(BookmarkNodeType.Bookmark.rawValue) AND is_deleted IS 0"
+    "type = \(BookmarkNodeType.bookmark.rawValue) AND is_deleted IS 0"
 
     // This smushes together remote and local visits. So it goes.
     private let historyVisitsView =
@@ -410,7 +410,7 @@ public class BrowserTable: Table {
     "LEFT JOIN " +
     "\(TableFavicons) f ON f.id = b.faviconID"
 
-    func create(db: SQLiteDBConnection) -> Bool {
+    func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -504,12 +504,12 @@ public class BrowserTable: Table {
         // Locally we track faviconID.
         // Local changes end up in the mirror, so we track it there too.
         // The buffer and the mirror additionally track some server metadata.
-        let bookmarksLocal = getBookmarksTableCreationStringForTable(TableBookmarksLocal, withAdditionalColumns: self.localColumns + self.iconColumns)
-        let bookmarksLocalStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksLocalStructure, referencingMirror: TableBookmarksLocal)
-        let bookmarksBuffer = getBookmarksTableCreationStringForTable(TableBookmarksBuffer, withAdditionalColumns: self.serverColumns)
-        let bookmarksBufferStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksBufferStructure, referencingMirror: TableBookmarksBuffer)
-        let bookmarksMirror = getBookmarksTableCreationStringForTable(TableBookmarksMirror, withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns)
-        let bookmarksMirrorStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
+        let bookmarksLocal = getBookmarksTableCreationString(forTable: TableBookmarksLocal, withAdditionalColumns: self.localColumns + self.iconColumns)
+        let bookmarksLocalStructure = getBookmarksStructureTableCreationString(forTable: TableBookmarksLocalStructure, referencingMirror: TableBookmarksLocal)
+        let bookmarksBuffer = getBookmarksTableCreationString(forTable: TableBookmarksBuffer, withAdditionalColumns: self.serverColumns)
+        let bookmarksBufferStructure = getBookmarksStructureTableCreationString(forTable: TableBookmarksBufferStructure, referencingMirror: TableBookmarksBuffer)
+        let bookmarksMirror = getBookmarksTableCreationString(forTable: TableBookmarksMirror, withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns)
+        let bookmarksMirrorStructure = getBookmarksStructureTableCreationString(forTable: TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
 
         let indexLocalStructureParentIdx = "CREATE INDEX IF NOT EXISTS \(IndexBookmarksLocalStructureParentIdx) " +
             "ON \(TableBookmarksLocalStructure) (parent, idx)"
@@ -561,7 +561,7 @@ public class BrowserTable: Table {
                self.prepopulateRootFolders(db)
     }
 
-    func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
+    func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
         let to = BrowserTable.DefaultVersion
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
@@ -604,7 +604,7 @@ public class BrowserTable: Table {
 
             let urls = db.executeQuery("SELECT DISTINCT url FROM \(TableHistory) WHERE url IS NOT NULL",
                                        factory: { $0["url"] as! String })
-            if !fillDomainNamesFromCursor(urls, db: db) {
+            if !fillDomainNames(fromCursor: urls, db: db) {
                 return false
             }
         }
@@ -615,13 +615,13 @@ public class BrowserTable: Table {
         }
 
         if from < 9 && to >= 9 {
-            if !self.run(db, sql: getBookmarksTableCreationStringForTable(TableBookmarksMirror)) {
+            if !self.run(db, sql: getBookmarksTableCreationString(forTable: TableBookmarksMirror)) {
                 return false
             }
         }
 
         if from < 10 && to >= 10 {
-            if !self.run(db, sql: getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)) {
+            if !self.run(db, sql: getBookmarksStructureTableCreationString(forTable: TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)) {
                 return false
             }
 
@@ -639,10 +639,10 @@ public class BrowserTable: Table {
         }
 
         if from < 12 && to >= 12 {
-            let bookmarksLocal = getBookmarksTableCreationStringForTable(TableBookmarksLocal, withAdditionalColumns: self.localColumns + self.iconColumns)
-            let bookmarksLocalStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksLocalStructure, referencingMirror: TableBookmarksLocal)
-            let bookmarksMirror = getBookmarksTableCreationStringForTable(TableBookmarksMirror, withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns)
-            let bookmarksMirrorStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
+            let bookmarksLocal = getBookmarksTableCreationString(forTable: TableBookmarksLocal, withAdditionalColumns: self.localColumns + self.iconColumns)
+            let bookmarksLocalStructure = getBookmarksStructureTableCreationString(forTable: TableBookmarksLocalStructure, referencingMirror: TableBookmarksLocal)
+            let bookmarksMirror = getBookmarksTableCreationString(forTable: TableBookmarksMirror, withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns)
+            let bookmarksMirrorStructure = getBookmarksStructureTableCreationString(forTable: TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
 
             let indexLocalStructureParentIdx = "CREATE INDEX IF NOT EXISTS \(IndexBookmarksLocalStructureParentIdx) " +
                 "ON \(TableBookmarksLocalStructure) (parent, idx)"
@@ -670,8 +670,8 @@ public class BrowserTable: Table {
             // Only migrate bookmarks. The only folders are our roots, and we'll create those later.
             // There should be nothing else in the table, and no structure.
             // Our old bookmarks table didn't have creation date, so we use the current timestamp.
-            let modified = NSDate.now()
-            let status = SyncStatus.New.rawValue
+            let modified = Date.now()
+            let status = SyncStatus.new.rawValue
 
             // We don't specify a title, expecting it to be generated on the fly, because we're smarter than Android.
             // We also don't migrate the 'id' column; we'll generate new ones that won't conflict with our roots.
@@ -690,7 +690,7 @@ public class BrowserTable: Table {
             let temporaryTable =
             "CREATE TEMPORARY TABLE children AS " +
             "SELECT guid FROM \(_TableBookmarks) WHERE " +
-            "type IS \(BookmarkNodeType.Bookmark.rawValue) ORDER BY id ASC"
+            "type IS \(BookmarkNodeType.bookmark.rawValue) ORDER BY id ASC"
 
             let createStructure =
             "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) " +
@@ -764,7 +764,7 @@ public class BrowserTable: Table {
         return true
     }
 
-    private func fillDomainNamesFromCursor(cursor: Cursor<String>, db: SQLiteDBConnection) -> Bool {
+    private func fillDomainNames(fromCursor cursor: Cursor<String>, db: SQLiteDBConnection) -> Bool {
         if cursor.count == 0 {
             return true
         }
@@ -829,11 +829,11 @@ public class BrowserTable: Table {
      * that we get back more than one.
      * Note that we don't check for views -- trust to luck.
      */
-    func exists(db: SQLiteDBConnection) -> Bool {
+    func exists(_ db: SQLiteDBConnection) -> Bool {
         return db.tablesExist(AllTables)
     }
 
-    func drop(db: SQLiteDBConnection) -> Bool {
+    func drop(_ db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping all browser tables.")
         let additional = [
             "DROP TABLE IF EXISTS faviconSites" // We renamed it to match naming convention.

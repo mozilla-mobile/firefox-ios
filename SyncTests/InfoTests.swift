@@ -24,32 +24,32 @@ class InfoTests: XCTestCase {
         let iTwoA = InfoCollections.fromJSON(twoA)!
         let iTwoB = InfoCollections.fromJSON(twoB)!
 
-        XCTAssertTrue(iEmpty.same(iEmpty, collections: nil))
-        XCTAssertTrue(iEmpty.same(iEmpty, collections: []))
-        XCTAssertTrue(iEmpty.same(iEmpty, collections: ["anything"]))
+        XCTAssertTrue(iEmpty.same(as: iEmpty, collections: nil))
+        XCTAssertTrue(iEmpty.same(as: iEmpty, collections: []))
+        XCTAssertTrue(iEmpty.same(as: iEmpty, collections: ["anything"]))
         
-        XCTAssertTrue(iEmpty.same(iOneA, collections: []))
-        XCTAssertTrue(iEmpty.same(iOneA, collections: ["anything"]))
-        XCTAssertTrue(iOneA.same(iEmpty, collections: []))
-        XCTAssertTrue(iOneA.same(iEmpty, collections: ["anything"]))
+        XCTAssertTrue(iEmpty.same(as: iOneA, collections: []))
+        XCTAssertTrue(iEmpty.same(as: iOneA, collections: ["anything"]))
+        XCTAssertTrue(iOneA.same(as: iEmpty, collections: []))
+        XCTAssertTrue(iOneA.same(as: iEmpty, collections: ["anything"]))
 
-        XCTAssertFalse(iEmpty.same(iOneA, collections: ["foo"]))
-        XCTAssertFalse(iOneA.same(iEmpty, collections: ["foo"]))
-        XCTAssertFalse(iEmpty.same(iOneA, collections: nil))
-        XCTAssertFalse(iOneA.same(iEmpty, collections: nil))
+        XCTAssertFalse(iEmpty.same(as: iOneA, collections: ["foo"]))
+        XCTAssertFalse(iOneA.same(as: iEmpty, collections: ["foo"]))
+        XCTAssertFalse(iEmpty.same(as: iOneA, collections: nil))
+        XCTAssertFalse(iOneA.same(as: iEmpty, collections: nil))
 
-        XCTAssertTrue(iOneA.same(iOneA, collections: nil))
-        XCTAssertTrue(iOneA.same(iOneA, collections: ["foo", "bar", "baz"]))
-        XCTAssertTrue(iOneA.same(iOneB, collections: ["foo", "bar", "baz"]))
-        XCTAssertTrue(iOneB.same(iOneA, collections: ["foo", "bar", "baz"]))
+        XCTAssertTrue(iOneA.same(as: iOneA, collections: nil))
+        XCTAssertTrue(iOneA.same(as: iOneA, collections: ["foo", "bar", "baz"]))
+        XCTAssertTrue(iOneA.same(as: iOneB, collections: ["foo", "bar", "baz"]))
+        XCTAssertTrue(iOneB.same(as: iOneA, collections: ["foo", "bar", "baz"]))
         
-        XCTAssertFalse(iTwoA.same(iOneA, collections: nil))
-        XCTAssertTrue(iTwoA.same(iOneA, collections: ["bar", "baz"]))
-        XCTAssertTrue(iOneA.same(iTwoA, collections: ["bar", "baz"]))
-        XCTAssertTrue(iTwoB.same(iOneA, collections: ["foo", "baz"]))
+        XCTAssertFalse(iTwoA.same(as: iOneA, collections: nil))
+        XCTAssertTrue(iTwoA.same(as: iOneA, collections: ["bar", "baz"]))
+        XCTAssertTrue(iOneA.same(as: iTwoA, collections: ["bar", "baz"]))
+        XCTAssertTrue(iTwoB.same(as: iOneA, collections: ["foo", "baz"]))
         
-        XCTAssertFalse(iTwoA.same(iTwoB, collections: nil))
-        XCTAssertFalse(iTwoA.same(iTwoB, collections: ["foo"]))
-        XCTAssertFalse(iTwoA.same(iTwoB, collections: ["bar"]))
+        XCTAssertFalse(iTwoA.same(as: iTwoB, collections: nil))
+        XCTAssertFalse(iTwoA.same(as: iTwoB, collections: ["foo"]))
+        XCTAssertFalse(iTwoA.same(as: iTwoB, collections: ["bar"]))
     }
 }

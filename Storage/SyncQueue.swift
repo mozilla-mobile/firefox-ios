@@ -34,7 +34,7 @@ public struct SyncCommand: Equatable {
     }
 
 
-    public static func fromShareItem(shareItem: ShareItem, withAction action: String) -> SyncCommand {
+    public static func fromShareItem(_ shareItem: ShareItem, withAction action: String) -> SyncCommand {
         let jsonObj: [String: AnyObject] = [
             "command": action,
             "args": [shareItem.url, "", shareItem.title ?? ""]
@@ -42,7 +42,7 @@ public struct SyncCommand: Equatable {
         return SyncCommand(value: JSON.stringify(jsonObj, pretty: false))
     }
 
-    public func withClientGUID(clientGUID: String?) -> SyncCommand {
+    public func withClientGUID(_ clientGUID: String?) -> SyncCommand {
         return SyncCommand(id: self.commandID, value: self.value, clientGUID: clientGUID)
     }
 }
@@ -53,10 +53,10 @@ public func ==(lhs: SyncCommand, rhs: SyncCommand) -> Bool {
 
 public protocol SyncCommands {
     func deleteCommands() -> Success
-    func deleteCommands(clientGUID: GUID) -> Success
+    func deleteCommands(_ clientGUID: GUID) -> Success
 
     func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>>
 
-    func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
-    func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
+    func insertCommand(_ command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
+    func insertCommands(_ commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
 }

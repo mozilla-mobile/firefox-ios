@@ -234,7 +234,7 @@ class TopSitesPanel: UIViewController {
             // Update the UICollectionView.
             self.deleteOrUpdateSites(indexPath) >>> {
                 // Finally, requery to pull in the latest sites.
-                self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit).uponQueue(dispatch_get_main_queue()) { result in
+                self.profile.history.getTopSites(withLimit: self.maxFrecencyLimit).uponQueue(dispatch_get_main_queue()) { result in
                     self.updateDataSourceWithSites(result)
                     self.collection?.userInteractionEnabled = true
                 }
@@ -273,7 +273,7 @@ class TopSitesPanel: UIViewController {
     }
 
     private func reloadTopSitesWithLimit(limit: Int) -> Success {
-        return self.profile.history.getTopSitesWithLimit(limit).bindQueue(dispatch_get_main_queue()) { result in
+        return self.profile.history.getTopSites(withLimit: limit).bindQueue(dispatch_get_main_queue()) { result in
             self.updateDataSourceWithSites(result)
             self.collection?.reloadData()
             return succeed()

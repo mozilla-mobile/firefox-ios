@@ -10,11 +10,11 @@ import Account
 private let KeyLength = 32
 
 public class KeyBundle: Hashable {
-    let encKey: NSData
-    let hmacKey: NSData
+    let encKey: Data
+    let hmacKey: Data
 
-    public class func fromKB(kB: NSData) -> KeyBundle {
-        let salt = NSData()
+    public class func fromKB(_ kB: Data) -> KeyBundle {
+        let salt = Data()
         let contextInfo = FxAClient10.KW("oldsync")
         let len: UInt = 64               // KeyLength + KeyLength, without type nonsense.
         let derived = kB.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: len)
@@ -39,48 +39,48 @@ public class KeyBundle: Hashable {
         self.hmacKey = Bytes.decodeBase64(hmacKeyB64)
     }
 
-    public init(encKey: NSData, hmacKey: NSData) {
+    public init(encKey: Data, hmacKey: Data) {
         self.encKey = encKey
         self.hmacKey = hmacKey
     }
 
-    private func _hmac(ciphertext: NSData) -> (data: UnsafeMutablePointer<CUnsignedChar>, len: Int) {
+    private func _hmac(_ ciphertext: Data) -> (data: UnsafeMutablePointer<CUnsignedChar>, len: Int) {
         let hmacAlgorithm = CCHmacAlgorithm(kCCHmacAlgSHA256)
         let digestLen: Int = Int(CC_SHA256_DIGEST_LENGTH)
-        let result = UnsafeMutablePointer<CUnsignedChar>.alloc(digestLen)
+        let result = UnsafeMutablePointer<CUnsignedChar>(allocatingCapacity: digestLen)
         CCHmac(hmacAlgorithm, hmacKey.bytes, hmacKey.length, ciphertext.bytes, ciphertext.length, result)
         return (result, digestLen)
     }
 
-    public func hmac(ciphertext: NSData) -> NSData {
+    public func hmac(_ ciphertext: Data) -> Data {
         let (result, digestLen) = _hmac(ciphertext)
         let data = NSMutableData(bytes: result, length: digestLen)
 
-        result.destroy()
-        return data
+        result.deinitialize()
+        return data as Data
     }
 
     /**
      * Returns a hex string for the HMAC.
      */
-    public func hmacString(ciphertext: NSData) -> String {
+    public func hmacString(_ ciphertext: Data) -> String {
         let (result, digestLen) = _hmac(ciphertext)
         let hash = NSMutableString()
         for i in 0..<digestLen {
             hash.appendFormat("%02x", result[i])
         }
 
-        result.destroy()
+        result.deinitialize()
         return String(hash)
     }
 
-    public func encrypt(cleartext: NSData, iv: NSData?=nil) -> (ciphertext: NSData, iv: NSData)? {
+    public func encrypt(_ cleartext: Data, iv: Data?=nil) -> (ciphertext: Data, iv: Data)? {
         let iv = iv ?? Bytes.generateRandomBytes(16)
 
         let (success, b, copied) = self.crypt(cleartext, iv: iv, op: CCOperation(kCCEncrypt))
         if success == CCCryptorStatus(kCCSuccess) {
             // Hooray!
-            let d = NSData(bytes: b, length: Int(copied))
+            let d = Data(bytes: b, length: Int(copied))
             b.destroy()
             return (d, iv)
         }
@@ -90,12 +90,12 @@ public class KeyBundle: Hashable {
     }
 
     // You *must* verify HMAC before calling this.
-    public func decrypt(ciphertext: NSData, iv: NSData) -> String? {
+    public func decrypt(_ ciphertext: Data, iv: Data) -> String? {
         let (success, b, copied) = self.crypt(ciphertext, iv: iv, op: CCOperation(kCCDecrypt))
         if success == CCCryptorStatus(kCCSuccess) {
             // Hooray!
-            let d = NSData(bytesNoCopy: b, length: Int(copied))
-            let s = NSString(data: d, encoding: NSUTF8StringEncoding)
+            let d = Data(bytesNoCopy: b, length: Int(copied))
+            let s = NSString(data: d, encoding: String.Encoding.utf8)
             b.destroy()
             return s as String?
         }
@@ -105,7 +105,7 @@ public class KeyBundle: Hashable {
     }
 
 
-    private func crypt(input: NSData, iv: NSData, op: CCOperation) -> (status: CCCryptorStatus, buffer: UnsafeMutablePointer<Void>, count: Int) {
+    private func crypt(_ input: NSData, iv: NSData, op: CCOperation) -> (status: CCCryptorStatus, buffer: UnsafeMutablePointer<Void>, count: Int) {
         let resultSize = input.length + kCCBlockSizeAES128
         let result = UnsafeMutablePointer<Void>.alloc(resultSize)
         var copied: Int = 0
@@ -127,10 +127,10 @@ public class KeyBundle: Hashable {
         return (success, result, copied)
     }
 
-    public func verify(hmac hmac: NSData, ciphertextB64: NSData) -> Bool {
+    public func verify(hmac: Data, ciphertextB64: Data) -> Bool {
         let expectedHMAC = hmac
         let computedHMAC = self.hmac(ciphertextB64)
-        return expectedHMAC.isEqualToData(computedHMAC)
+        return (expectedHMAC == computedHMAC)
     }
 
     /**
@@ -147,7 +147,7 @@ public class KeyBundle: Hashable {
      *
      * For this reason, be careful trying to simplify or improve this code.
      */
-    public func factory<T: CleartextPayloadJSON>(f: JSON -> T) -> String -> T? {
+    public func factory<T: CleartextPayloadJSON>(_ f: (JSON) -> T) -> (String) -> T? {
         return { (payload: String) -> T? in
             let potential = EncryptedJSON(json: payload, keyBundle: self)
             if !(potential.isValid()) {
@@ -163,7 +163,7 @@ public class KeyBundle: Hashable {
     }
 
     // TODO: how much do we want to move this into EncryptedJSON?
-    public func serializer<T: CleartextPayloadJSON>(f: T -> JSON) -> Record<T> -> JSON? {
+    public func serializer<T: CleartextPayloadJSON>(_ f: (T) -> JSON) -> (Record<T>) -> JSON? {
         return { (record: Record<T>) -> JSON? in
             let json = f(record.payload)
 
@@ -209,8 +209,8 @@ public class KeyBundle: Hashable {
 }
 
 public func == (lhs: KeyBundle, rhs: KeyBundle) -> Bool {
-    return lhs.encKey.isEqualToData(rhs.encKey) &&
-           lhs.hmacKey.isEqualToData(rhs.hmacKey)
+    return (lhs.encKey == rhs.encKey) &&
+           (lhs.hmacKey == rhs.hmacKey)
 }
 
 public class Keys: Equatable {
@@ -246,14 +246,14 @@ public class Keys: Equatable {
         return Keys(defaultBundle: KeyBundle.random())
     }
 
-    public func forCollection(collection: String) -> KeyBundle {
+    public func forCollection(_ collection: String) -> KeyBundle {
         if let bundle = collectionKeys[collection] {
             return bundle
         }
         return defaultBundle
     }
 
-    public func encrypter<T: CleartextPayloadJSON>(collection: String, encoder: RecordEncoder<T>) -> RecordEncrypter<T> {
+    public func encrypter<T: CleartextPayloadJSON>(_ collection: String, encoder: RecordEncoder<T>) -> RecordEncrypter<T> {
         return RecordEncrypter(bundle: forCollection(collection), encoder: encoder)
     }
 
@@ -272,20 +272,20 @@ public class Keys: Equatable {
  * Yup, these are basically typed tuples.
  */
 public struct RecordEncoder<T: CleartextPayloadJSON> {
-    let decode: JSON -> T
-    let encode: T -> JSON
+    let decode: (JSON) -> T
+    let encode: (T) -> JSON
 }
 
 public struct RecordEncrypter<T: CleartextPayloadJSON> {
-    let serializer: Record<T> -> JSON?
-    let factory: String -> T?
+    let serializer: (Record<T>) -> JSON?
+    let factory: (String) -> T?
 
     init(bundle: KeyBundle, encoder: RecordEncoder<T>) {
         self.serializer = bundle.serializer(encoder.encode)
         self.factory = bundle.factory(encoder.decode)
     }
 
-    init(serializer: Record<T> -> JSON?, factory: String -> T?) {
+    init(serializer: (Record<T>) -> JSON?, factory: (String) -> T?) {
         self.serializer = serializer
         self.factory = factory
     }

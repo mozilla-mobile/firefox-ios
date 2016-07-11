@@ -18,7 +18,7 @@ class TrivialBookmarkStorer: BookmarkStorer {
         self.uploader = uploader
     }
 
-    func applyUpstreamCompletionOp(op: UpstreamCompletionOp, itemSources: ItemSources, trackingTimesInto local: LocalOverrideCompletionOp) -> Deferred<Maybe<POSTResult>> {
+    func applyUpstreamCompletionOp(_ op: UpstreamCompletionOp, itemSources: ItemSources, trackingTimesInto local: LocalOverrideCompletionOp) -> Deferred<Maybe<POSTResult>> {
         log.debug("Uploading \(op.records.count) modified records.")
         log.debug("Uploading \(op.amendChildrenFromBuffer.count) amended buffer records.")
         log.debug("Uploading \(op.amendChildrenFromMirror.count) amended mirror records.")
@@ -28,7 +28,7 @@ class TrivialBookmarkStorer: BookmarkStorer {
         records.reserveCapacity(op.records.count + op.amendChildrenFromBuffer.count + op.amendChildrenFromLocal.count + op.amendChildrenFromMirror.count)
         records.appendContentsOf(op.records)
 
-        func accumulateFromAmendMap(itemsWithNewChildren: [GUID: [GUID]], fetch: [GUID: [GUID]] -> Maybe<[GUID: BookmarkMirrorItem]>) throws /* MaybeErrorType */ {
+        func accumulateFromAmendMap(_ itemsWithNewChildren: [GUID: [GUID]], fetch: ([GUID: [GUID]]) -> Maybe<[GUID: BookmarkMirrorItem]>) throws /* MaybeErrorType */ {
             if itemsWithNewChildren.isEmpty {
                 return
             }
@@ -48,9 +48,9 @@ class TrivialBookmarkStorer: BookmarkStorer {
         }
 
         do {
-            try accumulateFromAmendMap(op.amendChildrenFromBuffer, fetch: { itemSources.buffer.getBufferItemsWithGUIDs($0.keys).value })
-            try accumulateFromAmendMap(op.amendChildrenFromMirror, fetch: { itemSources.mirror.getMirrorItemsWithGUIDs($0.keys).value })
-            try accumulateFromAmendMap(op.amendChildrenFromLocal, fetch: { itemSources.local.getLocalItemsWithGUIDs($0.keys).value })
+            try accumulateFromAmendMap(op.amendChildrenFromBuffer, fetch: { itemSources.buffer.getBufferItems(withGUIDs: $0.keys).value })
+            try accumulateFromAmendMap(op.amendChildrenFromMirror, fetch: { itemSources.mirror.getMirrorItems(withGUIDs: $0.keys).value })
+            try accumulateFromAmendMap(op.amendChildrenFromLocal, fetch: { itemSources.local.getLocalItems(withGUIDs: $0.keys).value })
         } catch {
             return deferMaybe(error as! MaybeErrorType)
         }
@@ -59,7 +59,7 @@ class TrivialBookmarkStorer: BookmarkStorer {
         var success: [GUID] = []
         var failed: [GUID: String] = [:]
 
-        func onUpload(result: POSTResult) -> DeferredTimestamp {
+        func onUpload(_ result: POSTResult) -> DeferredTimestamp {
             modified = result.modified
             success.appendContentsOf(result.success)
             result.failed.forEach { guid, message in
@@ -90,7 +90,7 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
         return BookmarksStorageVersion
     }
 
-    public func synchronizeBookmarksToStorage(storage: protocol<SyncableBookmarks, LocalItemSource, MirrorItemSource>, usingBuffer buffer: protocol<BookmarkBufferStorage, BufferItemSource>, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
+    public func synchronizeBookmarksToStorage(_ storage: protocol<SyncableBookmarks, LocalItemSource, MirrorItemSource>, usingBuffer buffer: protocol<BookmarkBufferStorage, BufferItemSource>, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
             return deferMaybe(.NotStarted(reason))
         }
@@ -102,7 +102,7 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
             return deferMaybe(FatalError(message: "Couldn't make bookmarks factory."))
         }
 
-        let start = NSDate.nowMicroseconds()
+        let start = Date.nowMicroseconds()
         let mirrorer = BookmarksMirrorer(storage: buffer, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks")
         let storer = TrivialBookmarkStorer(uploader: { records, lastTimestamp, onUpload in
             // Default to our last fetch time for If-Unmodified-Since.
@@ -168,7 +168,7 @@ class MergeApplier {
     }
 
     // Exposed for use from tests.
-    func applyResult(result: BookmarksMergeResult) -> Success {
+    func applyResult(_ result: BookmarksMergeResult) -> Success {
         return result.applyToClient(self.client, storage: self.storage, buffer: self.buffer)
     }
 
