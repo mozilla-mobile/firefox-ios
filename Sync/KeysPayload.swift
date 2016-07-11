@@ -14,7 +14,7 @@ public class KeysPayload: CleartextPayloadJSON {
                self["default"].isArray
     }
     
-    private func keyBundleFromPair(input: JSON) -> KeyBundle? {
+    private func keyBundleFromPair(_ input: JSON) -> KeyBundle? {
         if let pair: [JSON] = input.asArray {
             if let encKey = pair[0].asString {
                 if let hmacKey = pair[1].asString {
@@ -36,7 +36,7 @@ public class KeysPayload: CleartextPayloadJSON {
         return [:]
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override public func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if !(obj is KeysPayload) {
             return false;
         }

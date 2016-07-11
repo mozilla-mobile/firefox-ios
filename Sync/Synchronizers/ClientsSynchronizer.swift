@@ -13,9 +13,9 @@ let ClientsStorageVersion = 1
 
 // TODO
 public protocol Command {
-    static func fromName(command: String, args: [JSON]) -> Command?
-    func run(synchronizer: ClientsSynchronizer) -> Success
-    static func commandFromSyncCommand(syncCommand: SyncCommand) -> Command?
+    static func fromName(_ command: String, args: [JSON]) -> Command?
+    func run(_ synchronizer: ClientsSynchronizer) -> Success
+    static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command?
 }
 
 // Shit.
@@ -28,15 +28,15 @@ public class WipeCommand: Command {
         return nil
     }
 
-    public class func fromName(command: String, args: [JSON]) -> Command? {
+    public class func fromName(_ command: String, args: [JSON]) -> Command? {
         return WipeCommand(command: command, args: args)
     }
 
-    public func run(synchronizer: ClientsSynchronizer) -> Success {
+    public func run(_ synchronizer: ClientsSynchronizer) -> Success {
         return succeed()
     }
 
-    public static func commandFromSyncCommand(syncCommand: SyncCommand) -> Command? {
+    public static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
         let json = JSON.parse(syncCommand.value)
         if let name = json["command"].asString,
             args = json["args"].asArray {
@@ -47,7 +47,7 @@ public class WipeCommand: Command {
 }
 
 public class DisplayURICommand: Command {
-    let uri: NSURL
+    let uri: URL
     let title: String
 
     public init?(command: String, args: [JSON]) {
@@ -63,16 +63,16 @@ public class DisplayURICommand: Command {
         }
     }
 
-    public class func fromName(command: String, args: [JSON]) -> Command? {
+    public class func fromName(_ command: String, args: [JSON]) -> Command? {
         return DisplayURICommand(command: command, args: args)
     }
 
-    public func run(synchronizer: ClientsSynchronizer) -> Success {
+    public func run(_ synchronizer: ClientsSynchronizer) -> Success {
         synchronizer.delegate.displaySentTabForURL(uri, title: title)
         return succeed()
     }
 
-    public static func commandFromSyncCommand(syncCommand: SyncCommand) -> Command? {
+    public static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
         let json = JSON.parse(syncCommand.value)
         if let name = json["command"].asString,
             args = json["args"].asArray {
@@ -120,7 +120,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
             "os": "iOS",
             "commands": [JSON](),
             "type": "mobile",
-            "appPackage": NSBundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
+            "appPackage": Bundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
 
@@ -132,7 +132,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
     }
 
-    private func clientRecordToLocalClientEntry(record: Record<ClientPayload>) -> RemoteClient {
+    private func clientRecordToLocalClientEntry(_ record: Record<ClientPayload>) -> RemoteClient {
         let modified = record.modified
         let payload = record.payload
         return RemoteClient(json: payload, modified: modified)
@@ -141,7 +141,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
     // If this is a fresh start, do a wipe.
     // N.B., we don't wipe outgoing commands! (TODO: check this when we implement commands!)
     // N.B., but perhaps we should discard outgoing wipe/reset commands!
-    private func wipeIfNecessary(localClients: RemoteClientsAndTabs) -> Success {
+    private func wipeIfNecessary(_ localClients: RemoteClientsAndTabs) -> Success {
         if self.lastFetched == 0 {
             return localClients.wipeClients()
         }
@@ -153,14 +153,14 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
      * needs to be uploaded). Also returns the commands: we run them after we
      * upload a replacement record.
      */
-    private func processCommandsFromRecord(record: Record<ClientPayload>?, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Deferred<Maybe<(Bool, [Command])>> {
+    private func processCommandsFromRecord(_ record: Record<ClientPayload>?, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Deferred<Maybe<(Bool, [Command])>> {
         log.debug("Processing commands from downloaded record.")
 
         // TODO: short-circuit based on the modified time of the record we uploaded, so we don't need to skip ahead.
         if let record = record {
             let commands = record.payload.commands
             if !commands.isEmpty {
-                func parse(json: JSON) -> Command? {
+                func parse(_ json: JSON) -> Command? {
                     if let name = json["command"].asString,
                         args = json["args"].asArray,
                         constructor = Commands[name] {
@@ -185,7 +185,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
         }
     }
 
-    private func syncClientCommands(clientGUID: GUID, commands: [SyncCommand], clientsAndTabs: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
+    private func syncClientCommands(_ clientGUID: GUID, commands: [SyncCommand], clientsAndTabs: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
 
         let deleteCommands: () -> Success = {
             return clientsAndTabs.deleteCommands(clientGUID).bind({ x in return succeed() })
@@ -234,10 +234,10 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
      * Upload our record if either (a) we know we should upload, or (b)
      * our own notes tell us we're due to reupload.
      */
-    private func maybeUploadOurRecord(should: Bool, ifUnmodifiedSince: Timestamp?, toServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
+    private func maybeUploadOurRecord(_ should: Bool, ifUnmodifiedSince: Timestamp?, toServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
 
         let lastUpload = self.clientRecordLastUpload
-        let expired = lastUpload < (NSDate.now() - (2 * OneDayInMilliseconds))
+        let expired = lastUpload < (Date.now() - (2 * OneDayInMilliseconds))
         log.debug("Should we upload our client record? Caller = \(should), expired = \(expired).")
         if !should && !expired {
             return succeed()
@@ -256,7 +256,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
         }
     }
 
-    private func applyStorageResponse(response: StorageResponse<[Record<ClientPayload>]>, toLocalClients localClients: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
+    private func applyStorageResponse(_ response: StorageResponse<[Record<ClientPayload>]>, toLocalClients localClients: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
         log.debug("Applying clients response.")
 
         let records = response.value
@@ -305,7 +305,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
         }
     }
 
-    public func synchronizeLocalClients(localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
+    public func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         log.debug("Synchronizing clients.")
 
         if let reason = self.reasonToNotSync(storageClient) {

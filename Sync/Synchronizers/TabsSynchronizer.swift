@@ -30,7 +30,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
         }
     }
 
-    private func createOwnTabsRecord(tabs: [RemoteTab]) -> Record<TabsPayload> {
+    private func createOwnTabsRecord(_ tabs: [RemoteTab]) -> Record<TabsPayload> {
         let guid = self.scratchpad.clientGUID
 
         let jsonTabs: [JSON] = optFilter(tabs.map { $0.toJSON() })
@@ -46,10 +46,10 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
     }
 
-    private func uploadOurTabs(localTabs: RemoteClientsAndTabs, toServer tabsClient: Sync15CollectionClient<TabsPayload>) -> Success{
+    private func uploadOurTabs(_ localTabs: RemoteClientsAndTabs, toServer tabsClient: Sync15CollectionClient<TabsPayload>) -> Success{
         // check to see if our tabs have changed or we're in a fresh start
         let lastUploadTime: Timestamp? = (self.tabsRecordLastUpload == 0) ? nil : self.tabsRecordLastUpload
-        let expired = lastUploadTime < (NSDate.now() - (OneMinuteInMilliseconds))
+        let expired = lastUploadTime < (Date.now() - (OneMinuteInMilliseconds))
         if !expired {
             log.debug("Not uploading tabs: already did so at \(lastUploadTime).")
             return succeed()
@@ -80,8 +80,8 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
         }
     }
 
-    public func synchronizeLocalTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
-        func onResponseReceived(response: StorageResponse<[Record<TabsPayload>]>) -> Success {
+    public func synchronizeLocalTabs(_ localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
+        func onResponseReceived(_ response: StorageResponse<[Record<TabsPayload>]>) -> Success {
 
             func afterWipe() -> Success {
                 let doInsert: (Record<TabsPayload>) -> Deferred<Maybe<(Int)>> = { record in
@@ -165,7 +165,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
      * This is a dedicated resetting interface that does both tabs and clients at the
      * same time.
      */
-    public static func resetClientsAndTabsWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs) -> Success {
+    public static func resetClientsAndTabsWithStorage(_ storage: ResettableSyncStorage, basePrefs: Prefs) -> Success {
         let clientPrefs = BaseCollectionSynchronizer.prefsForCollection("clients", withBasePrefs: basePrefs)
         let tabsPrefs = BaseCollectionSynchronizer.prefsForCollection("tabs", withBasePrefs: basePrefs)
         clientPrefs.removeObjectForKey("lastFetched")

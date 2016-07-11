@@ -15,7 +15,7 @@ private let log = Logger.syncLogger
  * expose notification functionality in this way.
  */
 public protocol SyncDelegate {
-    func displaySentTabForURL(URL: NSURL, title: String)
+    func displaySentTabForURL(_ URL: URL, title: String)
     // TODO: storage.
 }
 
@@ -33,7 +33,7 @@ public protocol SyncDelegate {
  * Persisted long-term/local data is kept, and will later be reconciled as appropriate.
  */
 public protocol ResettableSynchronizer {
-    static func resetSynchronizerWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success
+    static func resetSynchronizerWithStorage(_ storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success
 }
 
 // TODO: return values?
@@ -76,17 +76,17 @@ public protocol Synchronizer {
  * for batch scheduling, success-case backoff and so on.
  */
 public enum SyncStatus {
-    case Completed                 // TODO: we pick up a bunch of info along the way. Pass it along.
-    case NotStarted(SyncNotStartedReason)
-    case Partial
+    case completed                 // TODO: we pick up a bunch of info along the way. Pass it along.
+    case notStarted(SyncNotStartedReason)
+    case partial
 
     public var description: String {
         switch self {
-        case .Completed:
+        case .completed:
             return "Completed"
-        case let .NotStarted(reason):
+        case let .notStarted(reason):
             return "Not started: \(reason.description)"
-        case .Partial:
+        case .partial:
             return "Partial"
         }
     }
@@ -97,23 +97,23 @@ typealias DeferredTimestamp = Deferred<Maybe<Timestamp>>
 public typealias SyncResult = Deferred<Maybe<SyncStatus>>
 
 public enum SyncNotStartedReason {
-    case NoAccount
-    case Offline
-    case Backoff(remainingSeconds: Int)
-    case EngineRemotelyNotEnabled(collection: String)
-    case EngineFormatOutdated(needs: Int)
-    case EngineFormatTooNew(expected: Int)   // This'll disappear eventually; we'll wipe the server and upload m/g.
-    case StorageFormatOutdated(needs: Int)
-    case StorageFormatTooNew(expected: Int)  // This'll disappear eventually; we'll wipe the server and upload m/g.
-    case StateMachineNotReady                // Because we're not done implementing.
-    case RedLight
-    case Unknown                             // Likely a programming error.
+    case noAccount
+    case offline
+    case backoff(remainingSeconds: Int)
+    case engineRemotelyNotEnabled(collection: String)
+    case engineFormatOutdated(needs: Int)
+    case engineFormatTooNew(expected: Int)   // This'll disappear eventually; we'll wipe the server and upload m/g.
+    case storageFormatOutdated(needs: Int)
+    case storageFormatTooNew(expected: Int)  // This'll disappear eventually; we'll wipe the server and upload m/g.
+    case stateMachineNotReady                // Because we're not done implementing.
+    case redLight
+    case unknown                             // Likely a programming error.
 
     var description: String {
         switch self {
-        case .NoAccount:
+        case .noAccount:
             return "no account"
-        case let .Backoff(remaining):
+        case let .backoff(remaining):
             return "in backoff: \(remaining) seconds remaining"
         default:
             return "undescribed reason"
@@ -133,7 +133,7 @@ public class FatalError: SyncError {
 }
 
 public protocol SingleCollectionSynchronizer {
-    func remoteHasChanges(info: InfoCollections) -> Bool
+    func remoteHasChanges(_ info: InfoCollections) -> Bool
 }
 
 public class BaseCollectionSynchronizer {
@@ -143,7 +143,7 @@ public class BaseCollectionSynchronizer {
     let delegate: SyncDelegate
     let prefs: Prefs
 
-    static func prefsForCollection(collection: String, withBasePrefs basePrefs: Prefs) -> Prefs {
+    static func prefsForCollection(_ collection: String, withBasePrefs basePrefs: Prefs) -> Prefs {
         let branchName = "synchronizer." + collection + "."
         return basePrefs.branch(branchName)
     }
@@ -162,8 +162,8 @@ public class BaseCollectionSynchronizer {
         return 0
     }
 
-    public func reasonToNotSync(client: Sync15StorageClient) -> SyncNotStartedReason? {
-        let now = NSDate.now()
+    public func reasonToNotSync(_ client: Sync15StorageClient) -> SyncNotStartedReason? {
+        let now = Date.now()
         if let until = client.backoff.isInBackoff(now) {
             let remaining = (until - now) / 1000
             return .Backoff(remainingSeconds: Int(remaining))
@@ -174,28 +174,28 @@ public class BaseCollectionSynchronizer {
             // done so.
             if let engineMeta = metaGlobal.engines[collection] {
                 if engineMeta.version > self.storageVersion {
-                    return .EngineFormatOutdated(needs: engineMeta.version)
+                    return .engineFormatOutdated(needs: engineMeta.version)
                 }
                 if engineMeta.version < self.storageVersion {
-                    return .EngineFormatTooNew(expected: engineMeta.version)
+                    return .engineFormatTooNew(expected: engineMeta.version)
                 }
             } else {
-                return .EngineRemotelyNotEnabled(collection: self.collection)
+                return .engineRemotelyNotEnabled(collection: self.collection)
             }
         } else {
             // But a missing meta/global is a real problem.
-            return .StateMachineNotReady
+            return .stateMachineNotReady
         }
 
         // Success!
         return nil
     }
 
-    func encrypter<T>(encoder: RecordEncoder<T>) -> RecordEncrypter<T>? {
+    func encrypter<T>(_ encoder: RecordEncoder<T>) -> RecordEncrypter<T>? {
         return self.scratchpad.keys?.value.encrypter(self.collection, encoder: encoder)
     }
 
-    func collectionClient<T>(encoder: RecordEncoder<T>, storageClient: Sync15StorageClient) -> Sync15CollectionClient<T>? {
+    func collectionClient<T>(_ encoder: RecordEncoder<T>, storageClient: Sync15StorageClient) -> Sync15CollectionClient<T>? {
         if let encrypter = self.encrypter(encoder) {
             return storageClient.clientForCollection(self.collection, encrypter: encrypter)
         }
@@ -219,18 +219,18 @@ public class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer
         }
     }
 
-    func setTimestamp(timestamp: Timestamp) {
+    func setTimestamp(_ timestamp: Timestamp) {
         log.debug("Setting post-upload lastFetched to \(timestamp).")
         self.lastFetched = timestamp
     }
 
-    public func remoteHasChanges(info: InfoCollections) -> Bool {
+    public func remoteHasChanges(_ info: InfoCollections) -> Bool {
         return info.modified(self.collection) > self.lastFetched
     }
 }
 
 extension BaseCollectionSynchronizer: ResettableSynchronizer {
-    public static func resetSynchronizerWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success {
+    public static func resetSynchronizerWithStorage(_ storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success {
         let synchronizerPrefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
         synchronizerPrefs.removeObjectForKey("lastFetched")
 

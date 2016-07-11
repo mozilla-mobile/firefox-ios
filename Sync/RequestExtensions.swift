@@ -7,44 +7,44 @@ import Alamofire
 import Shared
 
 extension Request {
-    public func responsePartialParsedJSON(completionHandler: ResponseHandler) -> Self {
+    public func responsePartialParsedJSON(_ completionHandler: ResponseHandler) -> Self {
         let serializer = PartialParsedJSONResponseSerializer()
         return self.response(responseSerializer: serializer, completionHandler: completionHandler)
     }
 
-    public func responsePartialParsedJSON(queue queue: dispatch_queue_t, completionHandler: ResponseHandler) -> Self {
+    public func responsePartialParsedJSON(queue: DispatchQueue, completionHandler: ResponseHandler) -> Self {
         let serializer = PartialParsedJSONResponseSerializer()
         return self.response(queue: queue, responseSerializer: serializer, completionHandler: completionHandler)
     }
 
-    public func responseParsedJSON(partial: Bool, completionHandler: ResponseHandler) -> Self {
+    public func responseParsedJSON(_ partial: Bool, completionHandler: ResponseHandler) -> Self {
         let serializer = ParsedJSONResponseSerializer()
         return self.response(responseSerializer: serializer, completionHandler: completionHandler)
     }
 
-    public func responseParsedJSON(queue queue: dispatch_queue_t, completionHandler: ResponseHandler) -> Self {
+    public func responseParsedJSON(queue: DispatchQueue, completionHandler: ResponseHandler) -> Self {
         let serializer = ParsedJSONResponseSerializer()
         return self.response(queue: queue, responseSerializer: serializer, completionHandler: completionHandler)
     }
 }
 
-private enum JSONSerializeError: ErrorType {
-    case NoData
-    case ParseError
+private enum JSONSerializeError: ErrorProtocol {
+    case noData
+    case parseError
 }
 
 private struct ParsedJSONResponseSerializer: ResponseSerializer {
-    private var serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?) -> Result<AnyObject>
+    private var serializeResponse: (URLRequest?, HTTPURLResponse?, Data?) -> Result<AnyObject>
 
     private init() {
         self.serializeResponse = { (request, response, data) in
-            if data == nil || data?.length == 0 {
-                return Result.Failure(nil, JSONSerializeError.NoData)
+            if data == nil || data?.count == 0 {
+                return Result.failure(nil, JSONSerializeError.noData)
             }
 
             let json = JSON(data: data!)
             if json.isError {
-                return Result.Failure(data, JSONSerializeError.ParseError)
+                return Result.failure(data, JSONSerializeError.parseError)
             }
 
             return Result.Success(json)
@@ -53,23 +53,23 @@ private struct ParsedJSONResponseSerializer: ResponseSerializer {
 }
 
 private struct PartialParsedJSONResponseSerializer: ResponseSerializer {
-    private var serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?) -> Result<AnyObject>
+    private var serializeResponse: (URLRequest?, HTTPURLResponse?, Data?) -> Result<AnyObject>
 
     private init() {
         self.serializeResponse = { (request, response, data) in
-            if data == nil || data?.length == 0 {
-                return Result.Failure(nil, JSONSerializeError.NoData)
+            if data == nil || data?.count == 0 {
+                return Result.failure(nil, JSONSerializeError.noData)
             }
 
             let o: AnyObject?
             do {
-                try o = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)
+                try o = JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments)
             } catch {
-                return Result.Failure(nil, error)
+                return Result.failure(nil, error)
             }
 
             guard let object = o else {
-                return Result.Failure(nil, JSONSerializeError.NoData)
+                return Result.failure(nil, JSONSerializeError.noData)
             }
 
             let json = JSON(object)

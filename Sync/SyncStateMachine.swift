@@ -41,7 +41,7 @@ private let DefaultEngines: [String: Int] = [
 private let DefaultDeclined: [String] = [String]()
 
 // public for testing.
-public func createMetaGlobalWithEngineConfiguration(engineConfiguration: EngineConfiguration) -> MetaGlobal {
+public func createMetaGlobalWithEngineConfiguration(_ engineConfiguration: EngineConfiguration) -> MetaGlobal {
     var engines: [String: EngineMeta] = [:]
     for engine in engineConfiguration.enabled {
         // We take this device's version, or, if we don't know the correct version, 0.  Another client should recognize
@@ -79,13 +79,13 @@ public class SyncStateMachine {
         self.scratchpadPrefs = prefs.branch("scratchpad")
     }
 
-    public class func clearStateFromPrefs(prefs: Prefs) {
+    public class func clearStateFromPrefs(_ prefs: Prefs) {
         log.debug("Clearing all Sync prefs.")
         Scratchpad.clearFromPrefs(prefs.branch("scratchpad")) // XXX this is convoluted.
         prefs.clearAll()
     }
 
-    private func advanceFromState(state: SyncState) -> ReadyDeferred {
+    private func advanceFromState(_ state: SyncState) -> ReadyDeferred {
         log.info("advanceFromState: \(state.label)")
 
         // Record visibility before taking any action.
@@ -105,8 +105,8 @@ public class SyncStateMachine {
         return state.advance() >>== self.advanceFromState
     }
 
-    public func toReady(authState: SyncAuthState) -> ReadyDeferred {
-        let token = authState.token(NSDate.now(), canBeExpired: false)
+    public func toReady(_ authState: SyncAuthState) -> ReadyDeferred {
+        let token = authState.token(Date.now(), canBeExpired: false)
         return chainDeferred(token, f: { (token, kB) in
             log.debug("Got token from auth state.")
             if Logger.logPII {
@@ -233,7 +233,7 @@ public class BaseSyncState: SyncState {
         log.info("Inited \(self.label.rawValue)")
     }
 
-    public func synchronizer<T: Synchronizer>(synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs) -> T {
+    public func synchronizer<T: Synchronizer>(_ synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs) -> T {
         return T(scratchpad: self.scratchpad, delegate: delegate, basePrefs: prefs)
     }
 
@@ -509,7 +509,7 @@ public class InitialWithLiveToken: BaseSyncState {
         super.init(client: client, scratchpad: scratchpad, token: token)
     }
 
-    func advanceWithInfo(info: InfoCollections) -> SyncState {
+    func advanceWithInfo(_ info: InfoCollections) -> SyncState {
         return InitialWithLiveTokenAndInfo(scratchpad: self.scratchpad, token: self.token, info: info)
     }
 
@@ -543,7 +543,7 @@ public class ResolveMetaGlobalVersion: BaseSyncStateWithInfo {
     }
     public override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalVersion }
 
-    class func fromState(state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalVersion {
+    class func fromState(_ state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalVersion {
         return ResolveMetaGlobalVersion(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
     }
 
@@ -575,7 +575,7 @@ public class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
     }
     public override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalContent }
 
-    class func fromState(state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalContent {
+    class func fromState(_ state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalContent {
         return ResolveMetaGlobalContent(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
     }
 
@@ -595,22 +595,22 @@ public class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
             let previousEngines = Set(previous.engines.keys)
             let remoteEngines = Set(fetched.value.engines.keys)
 
-            for engine in previousEngines.subtract(remoteEngines) {
+            for engine in previousEngines.subtracting(remoteEngines) {
                 log.info("Remote meta/global disabled previously enabled engine \(engine).")
-                b.localCommands.insert(.DisableEngine(engine: engine))
+                b.localCommands.insert(.disableEngine(engine: engine))
             }
 
-            for engine in remoteEngines.subtract(previousEngines) {
+            for engine in remoteEngines.subtracting(previousEngines) {
                 log.info("Remote meta/global enabled previously disabled engine \(engine).")
-                b.localCommands.insert(.EnableEngine(engine: engine))
+                b.localCommands.insert(.enableEngine(engine: engine))
             }
 
-            for engine in remoteEngines.intersect(previousEngines) {
+            for engine in remoteEngines.intersection(previousEngines) {
                 let remoteEngine = fetched.value.engines[engine]!
                 let previousEngine = previous.engines[engine]!
                 if previousEngine.syncID != remoteEngine.syncID {
                     log.info("Remote sync ID for \(engine) has changed. Resetting local.")
-                    b.localCommands.insert(.ResetEngine(engine: engine))
+                    b.localCommands.insert(.resetEngine(engine: engine))
                 }
             }
 
@@ -624,7 +624,7 @@ public class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
     }
 }
 
-private func processFailure(failure: MaybeErrorType?) -> MaybeErrorType {
+private func processFailure(_ failure: MaybeErrorType?) -> MaybeErrorType {
     if let failure = failure as? ServerInBackoffError {
         log.warning("Server in backoff. Bailing out. \(failure.description)")
         return failure
@@ -707,11 +707,11 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
 public class HasMetaGlobal: BaseSyncStateWithInfo {
     public override var label: SyncStateLabel { return SyncStateLabel.HasMetaGlobal }
 
-    class func fromState(state: BaseSyncStateWithInfo) -> HasMetaGlobal {
+    class func fromState(_ state: BaseSyncStateWithInfo) -> HasMetaGlobal {
         return HasMetaGlobal(client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
     }
 
-    class func fromState(state: BaseSyncStateWithInfo, scratchpad: Scratchpad) -> HasMetaGlobal {
+    class func fromState(_ state: BaseSyncStateWithInfo, scratchpad: Scratchpad) -> HasMetaGlobal {
         return HasMetaGlobal(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info)
     }
 
@@ -751,7 +751,7 @@ public class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
     public override var label: SyncStateLabel { return SyncStateLabel.NeedsFreshCryptoKeys }
     let staleCollectionKeys: Keys?
 
-    class func fromState(state: BaseSyncStateWithInfo, scratchpad: Scratchpad, staleCollectionKeys: Keys?) -> NeedsFreshCryptoKeys {
+    class func fromState(_ state: BaseSyncStateWithInfo, scratchpad: Scratchpad, staleCollectionKeys: Keys?) -> NeedsFreshCryptoKeys {
         return NeedsFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info, keys: staleCollectionKeys)
     }
 
@@ -793,7 +793,7 @@ public class HasFreshCryptoKeys: BaseSyncStateWithInfo {
     public override var label: SyncStateLabel { return SyncStateLabel.HasFreshCryptoKeys }
     let collectionKeys: Keys
 
-    class func fromState(state: BaseSyncStateWithInfo, scratchpad: Scratchpad, collectionKeys: Keys) -> HasFreshCryptoKeys {
+    class func fromState(_ state: BaseSyncStateWithInfo, scratchpad: Scratchpad, collectionKeys: Keys) -> HasFreshCryptoKeys {
         return HasFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info, keys: collectionKeys)
     }
 
@@ -829,41 +829,41 @@ extension Ready: EngineStateChanges {
         var needReset: Set<String> = Set()
         for command in self.scratchpad.localCommands {
             switch command {
-            case let .ResetAllEngines(except: except):
-                needReset.unionInPlace(Set(LocalEngines).subtract(except))
-            case let .ResetEngine(engine):
+            case let .resetAllEngines(except: except):
+                needReset.formUnion(Set(LocalEngines).subtracting(except))
+            case let .resetEngine(engine):
                 needReset.insert(engine)
-            case .EnableEngine, .DisableEngine:
+            case .enableEngine, .disableEngine:
                 break
             }
         }
-        return Array(needReset).sort()
+        return Array(needReset).sorted()
     }
 
     public func enginesEnabled() -> [String] {
         var engines: Set<String> = Set()
         for command in self.scratchpad.localCommands {
             switch command {
-            case let .EnableEngine(engine):
+            case let .enableEngine(engine):
                 engines.insert(engine)
             default:
                 break
             }
         }
-        return Array(engines).sort()
+        return Array(engines).sorted()
     }
 
     public func enginesDisabled() -> [String] {
         var engines: Set<String> = Set()
         for command in self.scratchpad.localCommands {
             switch command {
-            case let .DisableEngine(engine):
+            case let .disableEngine(engine):
                 engines.insert(engine)
             default:
                 break
             }
         }
-        return Array(engines).sort()
+        return Array(engines).sorted()
     }
 
     public func clearLocalCommands() {

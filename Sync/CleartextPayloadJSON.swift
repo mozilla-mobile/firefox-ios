@@ -46,7 +46,7 @@ public class CleartextPayloadJSON: BasePayloadJSON {
 
     // Override me.
     // Doesn't check id. Should it?
-    public func equalPayloads (obj: CleartextPayloadJSON) -> Bool {
+    public func equalPayloads (_ obj: CleartextPayloadJSON) -> Bool {
         return self.deleted == obj.deleted
     }
 }

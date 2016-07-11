@@ -31,7 +31,7 @@ public class ClientPayload: CleartextPayloadJSON {
         return self["type"].asString!
     }
     
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override public func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if !(obj is ClientPayload) {
             return false;
         }

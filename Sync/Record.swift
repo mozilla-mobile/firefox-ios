@@ -39,12 +39,12 @@ public class Record<T: CleartextPayloadJSON> {
     //   should also specify a record for decryption.
     //
     // @seealso EncryptedRecord.
-    public class func payloadFromPayloadString(envelope: EnvelopeJSON, payload: String) -> T? {
+    public class func payloadFromPayloadString(_ envelope: EnvelopeJSON, payload: String) -> T? {
         return T(payload)
     }
 
     // TODO: consider using error tuples.
-    public class func fromEnvelope(envelope: EnvelopeJSON, payloadFactory: (String) -> T?) -> Record<T>? {
+    public class func fromEnvelope(_ envelope: EnvelopeJSON, payloadFactory: (String) -> T?) -> Record<T>? {
         if !(envelope.isValid()) {
             log.error("Invalid envelope.")
             return nil
@@ -68,7 +68,7 @@ public class Record<T: CleartextPayloadJSON> {
      */
     convenience init(envelope: EnvelopeJSON, payload: T) {
         // TODO: modified, sortindex, ttl
-        self.init(id: envelope.id, payload: payload, modified: envelope.modified, sortindex: envelope.sortindex)
+        self.dynamicType.init(id: envelope.id, payload: payload, modified: envelope.modified, sortindex: envelope.sortindex)
     }
 
     init(id: GUID, payload: T, modified: Timestamp = Timestamp(time(nil)), sortindex: Int = 0, ttl: Int? = nil) {
@@ -81,16 +81,16 @@ public class Record<T: CleartextPayloadJSON> {
         self.ttl = ttl
     }
 
-    func equalIdentifiers(rec: Record) -> Bool {
+    func equalIdentifiers(_ rec: Record) -> Bool {
         return rec.id == self.id
     }
 
     // Override me.
-    func equalPayloads(rec: Record) -> Bool {
+    func equalPayloads(_ rec: Record) -> Bool {
         return equalIdentifiers(rec) && rec.payload.deleted == self.payload.deleted
     }
 
-    func equals(rec: Record) -> Bool {
+    func equals(_ rec: Record) -> Bool {
         return rec.sortindex == self.sortindex &&
                rec.modified == self.modified &&
                equalPayloads(rec)
