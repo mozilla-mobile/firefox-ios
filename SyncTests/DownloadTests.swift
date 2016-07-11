@@ -8,7 +8,7 @@ import Shared
 
 import XCTest
 
-func identity<T>(x: T) -> T {
+func identity<T>(_ x: T) -> T {
     return x
 }
 
@@ -19,27 +19,27 @@ private class MockBackoffStorage: BackoffStorage {
         serverBackoffUntilLocalTimestamp = nil
     }
 
-    func isInBackoff(now: Timestamp) -> Timestamp? {
+    func isInBackoff(_ now: Timestamp) -> Timestamp? {
         return nil
     }
 }
 
 // Non-encrypting 'encrypter'.
 internal func getEncrypter() -> RecordEncrypter<CleartextPayloadJSON> {
-    let serializer: Record<CleartextPayloadJSON> -> JSON? = { $0.payload }
-    let factory: String -> CleartextPayloadJSON = { CleartextPayloadJSON($0) }
+    let serializer: (Record<CleartextPayloadJSON>) -> JSON? = { $0.payload }
+    let factory: (String) -> CleartextPayloadJSON = { CleartextPayloadJSON($0) }
     return RecordEncrypter(serializer: serializer, factory: factory)
 }
 
 class DownloadTests: XCTestCase {
-    func getClient(server: MockSyncServer) -> Sync15StorageClient? {
+    func getClient(_ server: MockSyncServer) -> Sync15StorageClient? {
         guard let url = server.baseURL.asURL else {
             XCTFail("Couldn't get URL.")
             return nil
         }
 
         let authorizer: Authorizer = identity
-        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+        let queue = DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosBackground)
         print("URL: \(url)")
         return Sync15StorageClient(serverURI: url, authorizer: authorizer, workQueue: queue, resultQueue: queue, backoff: MockBackoffStorage())
     }
@@ -58,13 +58,13 @@ class DownloadTests: XCTestCase {
         let storageClient = getClient(server)!
         let bookmarksClient = storageClient.clientForCollection("bookmarks", encrypter: getEncrypter())
 
-        let expectation = self.expectationWithDescription("Waiting for result.")
+        let expectation = self.expectation(withDescription: "Waiting for result.")
         let deferred = bookmarksClient.getSince(0)
         deferred >>== { response in
             XCTAssertEqual(response.metadata.status, 200)
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testDownloadBatches() {

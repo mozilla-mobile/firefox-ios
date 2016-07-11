@@ -13,7 +13,7 @@ import XCTest
 private let log = Logger.syncLogger
 
 class MockSyncDelegate: SyncDelegate {
-    func displaySentTabForURL(URL: NSURL, title: String) {
+    func displaySentTabForURL(_ URL: Foundation.URL, title: String) {
     }
 }
 
@@ -33,7 +33,7 @@ class MockSyncableHistory {
     init() {
     }
 
-    private func placeForURL(url: String) -> DBPlace? {
+    private func placeForURL(_ url: String) -> DBPlace? {
         return findOneValue(places) { $0.url == url }
     }
 }
@@ -53,7 +53,7 @@ extension MockSyncableHistory: SyncableHistory {
     // they might apply our new record first, renaming their local copy of
     // the old record with that URL, and thus bring all the old visits back to life.
     // Desktop just finds by GUID then deletes by URL.
-    func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Deferred<Maybe<()>> {
+    func deleteByGUID(_ guid: GUID, deletedAt: Timestamp) -> Deferred<Maybe<()>> {
         self.remoteVisits.removeValueForKey(guid)
         self.localVisits.removeValueForKey(guid)
         self.places.removeValueForKey(guid)
@@ -69,7 +69,7 @@ extension MockSyncableHistory: SyncableHistory {
     /**
      * This assumes that the provided GUID doesn't already map to a different URL!
      */
-    func ensurePlaceWithURL(url: String, hasGUID guid: GUID) -> Success {
+    func ensurePlaceWithURL(_ url: String, hasGUID guid: GUID) -> Success {
         // Find by URL.
         if let existing = self.placeForURL(url) {
             let p = DBPlace(guid: guid, url: url, title: existing.title)
@@ -83,7 +83,7 @@ extension MockSyncableHistory: SyncableHistory {
         return succeed()
     }
 
-    func storeRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Success {
+    func storeRemoteVisits(_ visits: [Visit], forGUID guid: GUID) -> Success {
         // Strip out existing local visits.
         // We trust that an identical timestamp and type implies an identical visit.
         var remote = Set<Visit>(visits)
@@ -100,7 +100,7 @@ extension MockSyncableHistory: SyncableHistory {
         return succeed()
     }
 
-    func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Maybe<GUID>> {
+    func insertOrUpdatePlace(_ place: Place, modified: Timestamp) -> Deferred<Maybe<GUID>> {
         // See if we've already applied this one.
         if let existingModified = self.places[place.guid]?.serverModified {
             if existingModified == modified {
@@ -181,7 +181,7 @@ extension MockSyncableHistory: SyncableHistory {
 
 
 class HistorySynchronizerTests: XCTestCase {
-    private func applyRecords(records: [Record<HistoryPayload>], toStorage storage: protocol<SyncableHistory, ResettableSyncStorage>) -> (synchronizer: HistorySynchronizer, prefs: Prefs, scratchpad: Scratchpad) {
+    private func applyRecords(_ records: [Record<HistoryPayload>], toStorage storage: protocol<SyncableHistory, ResettableSyncStorage>) -> (synchronizer: HistorySynchronizer, prefs: Prefs, scratchpad: Scratchpad) {
         let delegate = MockSyncDelegate()
 
         // We can use these useless values because we're directly injecting decrypted
@@ -191,7 +191,7 @@ class HistorySynchronizerTests: XCTestCase {
 
         let synchronizer = HistorySynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs)
 
-        let expectation = expectationWithDescription("Waiting for application.")
+        let expectation = self.expectation(withDescription: "Waiting for application.")
         var succeeded = false
         synchronizer.applyIncomingToStorage(storage, records: records)
                     .upon({ result in
@@ -199,13 +199,13 @@ class HistorySynchronizerTests: XCTestCase {
             expectation.fulfill()
         })
 
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
         XCTAssertTrue(succeeded, "Application succeeded.")
         return (synchronizer, prefs, scratchpad)
     }
 
     func testApplyRecords() {
-        let earliest = NSDate.now()
+        let earliest = Date.now()
 
         let empty = MockSyncableHistory()
         let noRecords = [Record<HistoryPayload>]()

@@ -10,7 +10,7 @@ import Shared
 import XCTest
 
 // Thieved mercilessly from TestSQLiteBookmarks.
-private func getBrowserDBForFile(filename: String, files: FileAccessor) -> BrowserDB? {
+private func getBrowserDBForFile(_ filename: String, files: FileAccessor) -> BrowserDB? {
     let db = BrowserDB(filename: filename, files: files)
 
     // BrowserTable exists only to perform create/update etc. operations -- it's not
@@ -32,13 +32,13 @@ class TestBookmarkModel: FailFastTestCase {
         super.tearDown()
     }
 
-    private func getBrowserDB(name: String) -> BrowserDB? {
+    private func getBrowserDB(_ name: String) -> BrowserDB? {
         let file = "TBookmarkModel\(name).db"
         print("DB file named: \(file)")
         return getBrowserDBForFile(file, files: self.files)
     }
 
-    func getSyncableBookmarks(name: String) -> MergedSQLiteBookmarks? {
+    func getSyncableBookmarks(_ name: String) -> MergedSQLiteBookmarks? {
         guard let db = self.getBrowserDB(name) else {
             XCTFail("Couldn't get prepared DB.")
             return nil
@@ -75,7 +75,7 @@ class TestBookmarkModel: FailFastTestCase {
         bookmarks.local.insertBookmark(bookmarkURL, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MenuFolderGUID, withTitle: "").succeeded()
 
         // Add a buffer into the buffer
-        let mirrorDate = NSDate.now() - 100000
+        let mirrorDate = Date.now() - 100000
         bookmarks.applyRecords([
             BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["BBB"]),
             BookmarkMirrorItem.bookmark("BBB", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "BBB", description: nil, URI: "http://BBB.com", tags: "", keyword: nil)
@@ -97,7 +97,7 @@ class TestBookmarkModel: FailFastTestCase {
         }
 
         // Add a bookmark to the menu folder in our mirror
-        let mirrorDate = NSDate.now() - 100000
+        let mirrorDate = Date.now() - 100000
         bookmarks.populateMirrorViaBuffer([
             BookmarkMirrorItem.folder(BookmarkRoots.RootGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "", description: "", children: BookmarkRoots.RootChildren),
             BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["CCC"]),
@@ -125,7 +125,7 @@ class TestBookmarkModel: FailFastTestCase {
         }
 
         // Add a bookmark to the menu folder in our mirror
-        let mirrorDate = NSDate.now() - 100000
+        let mirrorDate = Date.now() - 100000
         bookmarks.populateMirrorViaBuffer([
             BookmarkMirrorItem.folder(BookmarkRoots.RootGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "", description: "", children: BookmarkRoots.RootChildren),
             BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE"]),
@@ -159,7 +159,7 @@ class TestBookmarkModel: FailFastTestCase {
         bookmarks.local.insertBookmark("http://AAA.com".asURL!, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Bookmarks Menu").succeeded()
 
         // Add some unmerged bookmarks into the menu folder in the buffer.
-        let mirrorDate = NSDate.now() - 100000
+        let mirrorDate = Date.now() - 100000
         bookmarks.applyRecords([
             BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE", "FFF"]),
             BookmarkMirrorItem.bookmark("FFF", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "FFF", description: nil, URI: "http://FFF.com", tags: "", keyword: nil)
@@ -181,7 +181,7 @@ private extension MergedSQLiteBookmarks {
         self.local.db.run(["DELETE FROM \(TableBookmarksLocalStructure)", "DELETE FROM \(TableBookmarksLocal)"]).succeeded()
     }
 
-    func populateMirrorViaBuffer(items: [BookmarkMirrorItem], atDate mirrorDate: Timestamp) {
+    func populateMirrorViaBuffer(_ items: [BookmarkMirrorItem], atDate mirrorDate: Timestamp) {
         self.applyRecords(items).succeeded()
 
         // … and add the root relationships that will be missing (we don't do those for the buffer,

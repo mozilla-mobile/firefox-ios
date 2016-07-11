@@ -9,7 +9,7 @@ import Shared
 import XCTest
 
 // Always return a gigantic encoded payload.
-func massivify(record: Record<CleartextPayloadJSON>) -> JSON? {
+func massivify(_ record: Record<CleartextPayloadJSON>) -> JSON? {
     return JSON([
         "id": record.id,
         "foo": String(count: Sync15StorageClient.maxRecordSizeBytes + 1, repeatedValue: "X" as Character)
@@ -22,7 +22,7 @@ private class MockBackoffStorage: BackoffStorage {
     func clearServerBackoff() {
     }
 
-    func isInBackoff(now: Timestamp) -> Timestamp? {
+    func isInBackoff(_ now: Timestamp) -> Timestamp? {
         return nil
     }
 
@@ -33,7 +33,7 @@ private class MockBackoffStorage: BackoffStorage {
 class StorageClientTests: XCTestCase {
     func testPartialJSON() {
         let body = "0"
-        let o: AnyObject? = try! NSJSONSerialization.JSONObjectWithData(body.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments)
+        let o: AnyObject? = try! JSONSerialization.jsonObject(with: body.data(using: String.Encoding.utf8)!, options: JSONSerialization.ReadingOptions.allowFragments)
         XCTAssertTrue(JSON(o!).isInt)
     }
 
@@ -85,7 +85,7 @@ class StorageClientTests: XCTestCase {
 
         let x: StorageResponse<JSON> = StorageResponse<JSON>(value: v, metadata: m)
 
-        func doTesting(y: StorageResponse<JSON>) {
+        func doTesting(_ y: StorageResponse<JSON>) {
             // Make sure that reference fields in a struct are copies of the same reference,
             // not references to a copy.
             XCTAssertTrue(x.value === y.value)
@@ -114,9 +114,9 @@ class StorageClientTests: XCTestCase {
         let jA = "{\"id\":\"aaaaaa\",\"histUri\":\"http://foo.com/\",\"title\": \"ñ\",\"visits\":[{\"date\":1222222222222222,\"type\":1}]}"
         let rA = Record<CleartextPayloadJSON>(id: "aaaaaa", payload: CleartextPayloadJSON(JSON.parse(jA)), modified: 10000, sortindex: 123, ttl: 1000000)
 
-        let storageClient = Sync15StorageClient(serverURI: "http://example.com/".asURL!, authorizer: identity, workQueue: dispatch_get_main_queue(), resultQueue: dispatch_get_main_queue(), backoff: MockBackoffStorage())
+        let storageClient = Sync15StorageClient(serverURI: "http://example.com/".asURL!, authorizer: identity, workQueue: DispatchQueue.main, resultQueue: DispatchQueue.main, backoff: MockBackoffStorage())
         let collectionClient = storageClient.clientForCollection("foo", encrypter: RecordEncrypter<CleartextPayloadJSON>(serializer: massivify, factory: { CleartextPayloadJSON($0) }))
-        let result = synchronizer.uploadRecordsInChunks([rA], lastTimestamp: NSDate.now(), storageClient: collectionClient, onUpload: { _ in deferMaybe(NSDate.now()) })
+        let result = synchronizer.uploadRecordsInChunks([rA], lastTimestamp: Date.now(), storageClient: collectionClient, onUpload: { _ in deferMaybe(Date.now()) })
 
         XCTAssertTrue(result.value.failureValue is RecordTooLargeError)
     }
