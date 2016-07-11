@@ -32,7 +32,7 @@ extension BookmarkMirrorItem {
             remappedChildren = nil
         }
 
-        let json = self.asJSONWithChildren(remappedChildren)
+        let json = self.asJSON(withChildren: remappedChildren)
         return BookmarkType.somePayloadFromJSON(json)
     }
 }

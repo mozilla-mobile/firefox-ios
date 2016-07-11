@@ -17,7 +17,7 @@ class TestHistory : ProfileTest {
 
     private func innerCheckSites(history: BrowserHistory, callback: (cursor: Cursor<Site>) -> Void) {
         // Retrieve the entry
-        history.getSitesByLastVisit(100).upon {
+        history.getSitesByLastVisit(withLimit: 100).upon {
             XCTAssertTrue($0.isSuccess)
             callback(cursor: $0.successValue!)
         }
@@ -26,7 +26,7 @@ class TestHistory : ProfileTest {
 
     private func checkSites(history: BrowserHistory, urls: [String: String], s: Bool = true) {
         // Retrieve the entry.
-        if let cursor = history.getSitesByLastVisit(100).value.successValue {
+        if let cursor = history.getSitesByLastVisit(withLimit: 100).value.successValue {
             XCTAssertEqual(cursor.status, CursorStatus.Success, "Returned success \(cursor.statusMessage).")
             XCTAssertEqual(cursor.count, urls.count, "Cursor has \(urls.count) entries.")
 
@@ -48,9 +48,9 @@ class TestHistory : ProfileTest {
 
     private func checkVisits(history: BrowserHistory, url: String) {
         let expectation = self.expectationWithDescription("Wait for history")
-        history.getSitesByLastVisit(100).upon { result in
+        history.getSitesByLastVisit(withLimit: 100).upon { result in
             XCTAssertTrue(result.isSuccess)
-            history.getSitesByFrecencyWithHistoryLimit(100, whereURLContains: url).upon { result in
+            history.getSitesByFrecency(withHistoryLimit: 100, whereURLContains: url).upon { result in
                 XCTAssertTrue(result.isSuccess)
                 let cursor = result.successValue!
                 XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")

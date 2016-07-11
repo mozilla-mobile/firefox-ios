@@ -93,7 +93,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             // We apply deletions immediately. Yes, this will throw away local visits
             // that haven't yet been synced. That's how Sync works, alas.
             if payload.deleted {
-                return storage.deleteByGUID(guid, deletedAt: modified).bind(maskSomeFailures)
+                return storage.delete(byGUID: guid, deletedAt: modified).bind(maskSomeFailures)
             }
 
             // It's safe to apply other remote records, too -- even if we re-download, we know

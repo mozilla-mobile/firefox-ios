@@ -21,10 +21,10 @@ public struct ShareItem {
 
     // We only support sharing HTTP and HTTPS URLs.
     public var isShareable: Bool {
-        return NSURL(string: url)?.isWebPage() ?? false
+        return URL(string: url)?.isWebPage() ?? false
     }
 }
 
 public protocol ShareToDestination {
-    func shareItem(item: ShareItem)
+    func shareItem(_ item: ShareItem)
 }

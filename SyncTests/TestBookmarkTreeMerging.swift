@@ -21,14 +21,14 @@ extension Dictionary {
 class MockLocalItemSource: LocalItemSource {
     var local: [GUID: BookmarkMirrorItem] = [:]
 
-    func getLocalItemWithGUID(_ guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+    func getLocalItem(withGUID guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         guard let item = self.local[guid] else {
             return deferMaybe(DatabaseError(description: "Couldn't find item \(guid)."))
         }
         return deferMaybe(item)
     }
 
-    func getLocalItemsWithGUIDs<T: Collection where T.Iterator.Element == GUID>(_ guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    func getLocalItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         var acc: [GUID: BookmarkMirrorItem] = [:]
         guids.forEach { guid in
             if let item = self.local[guid] {
@@ -38,7 +38,7 @@ class MockLocalItemSource: LocalItemSource {
         return deferMaybe(acc)
     }
 
-    func prefetchLocalItemsWithGUIDs<T: Collection where T.Iterator.Element == GUID>(_ guids: T) -> Success {
+    func prefetchLocalItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Success {
         return succeed()
     }
 }
@@ -46,14 +46,14 @@ class MockLocalItemSource: LocalItemSource {
 class MockMirrorItemSource: MirrorItemSource {
     var mirror: [GUID: BookmarkMirrorItem] = [:]
 
-    func getMirrorItemWithGUID(_ guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+    func getMirrorItem(withGUID guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         guard let item = self.mirror[guid] else {
             return deferMaybe(DatabaseError(description: "Couldn't find item \(guid)."))
         }
         return deferMaybe(item)
     }
 
-    func getMirrorItemsWithGUIDs<T: Collection where T.Iterator.Element == GUID>(_ guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    func getMirrorItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         var acc: [GUID: BookmarkMirrorItem] = [:]
         guids.forEach { guid in
             if let item = self.mirror[guid] {
@@ -63,7 +63,7 @@ class MockMirrorItemSource: MirrorItemSource {
         return deferMaybe(acc)
     }
 
-    func prefetchMirrorItemsWithGUIDs<T: Collection where T.Iterator.Element == GUID>(_ guids: T) -> Success {
+    func prefetchMirrorItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Success {
         return succeed()
     }
 }
@@ -71,7 +71,7 @@ class MockMirrorItemSource: MirrorItemSource {
 class MockBufferItemSource: BufferItemSource {
     var buffer: [GUID: BookmarkMirrorItem] = [:]
 
-    func getBufferItemsWithGUIDs<T: Collection where T.Iterator.Element == GUID>(_ guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    func getBufferItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
         var acc: [GUID: BookmarkMirrorItem] = [:]
         guids.forEach { guid in
             if let item = self.buffer[guid] {
@@ -81,14 +81,14 @@ class MockBufferItemSource: BufferItemSource {
         return deferMaybe(acc)
     }
 
-    func getBufferItemWithGUID(_ guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+    func getBufferItem(withGUID guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         guard let item = self.buffer[guid] else {
             return deferMaybe(DatabaseError(description: "Couldn't find item \(guid)."))
         }
         return deferMaybe(item)
     }
 
-    func prefetchBufferItemsWithGUIDs<T: Collection where T.Iterator.Element == GUID>(_ guids: T) -> Success {
+    func prefetchBufferItems<T: Collection where T.Iterator.Element == GUID>(withGUIDs guids: T) -> Success {
         return succeed()
     }
 }
@@ -405,7 +405,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         bookmarks.applyRecords(changedBufferRecords).succeeded()
 
         // Make local changes.
-        bookmarks.local.modelFactory.value.successValue!.removeByGUID("folderDDDDDD").succeeded()
+        bookmarks.local.modelFactory.value.successValue!.remove(byGUID: "folderDDDDDD").succeeded()
         bookmarks.local.insertBookmark("http://example.com/e".asURL!, title: "E", favicon: nil, intoFolder: "folderBBBBBB", withTitle: "B").succeeded()
         let insertedGUID = bookmarks.local.db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksLocal) WHERE title IS 'E'")[0]
 

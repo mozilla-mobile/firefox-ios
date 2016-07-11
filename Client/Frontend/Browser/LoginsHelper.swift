@@ -91,16 +91,16 @@ class LoginsHelper: TabHelper {
         return attr
     }
 
-    func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
-        return profile.logins.getLoginsForProtectionSpace(protectionSpace)
+    func getLogins(forProtectionSpace: protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
+        return profile.logins.getLogins(forProtectionSpace: protectionSpace)
     }
 
-    func updateLoginByGUID(guid: GUID, new: LoginData, significant: Bool) -> Success {
-        return profile.logins.updateLoginByGUID(guid, new: new, significant: significant)
+    func updateLogin(guid: guid: GUID, new: LoginData, significant: Bool) -> Success {
+        return profile.logins.updateLogin(guid: guid, new: new, significant: significant)
     }
 
-    func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
-        return profile.logins.removeLoginsWithGUIDs(guids)
+    func removeLogins(guids: [GUID]) -> Success {
+        return profile.logins.removeLogins(withGUIDs: guids)
     }
 
     func setCredentials(login: LoginData) {
@@ -110,14 +110,14 @@ class LoginsHelper: TabHelper {
         }
 
         profile.logins
-               .getLoginsForProtectionSpace(login.protectionSpace, withUsername: login.username)
+               .getLogins(forProtectionSpace: login.protectionSpace, withUsername: login.username)
                .uponQueue(dispatch_get_main_queue()) { res in
             if let data = res.successValue {
                 log.debug("Found \(data.count) logins.")
                 for saved in data {
                     if let saved = saved {
                         if saved.password == login.password {
-                            self.profile.logins.addUseOfLoginByGUID(saved.guid)
+                            self.profile.logins.addUseOfLogin(guid: saved.guid)
                             return
                         }
 
@@ -200,7 +200,7 @@ class LoginsHelper: TabHelper {
                 SnackButton(title: Strings.LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", callback: { (bar: SnackBar) -> Void in
                     self.tab?.removeSnackbar(bar)
                     self.snackBar = nil
-                    self.profile.logins.updateLoginByGUID(guid, new: new,
+                    self.profile.logins.updateLogin(guid: guid, new: new,
                                                           significant: new.isSignificantlyDifferentFrom(old))
                 })
             ])
@@ -208,7 +208,7 @@ class LoginsHelper: TabHelper {
     }
 
     private func requestLogins(login: LoginData, requestId: String) {
-        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(dispatch_get_main_queue()) { res in
+        profile.logins.getLogins(forProtectionSpace: login.protectionSpace).uponQueue(dispatch_get_main_queue()) { res in
             var jsonObj = [String: AnyObject]()
             if let cursor = res.successValue {
                 log.debug("Found \(cursor.count) logins.")

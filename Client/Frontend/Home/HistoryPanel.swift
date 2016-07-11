@@ -216,7 +216,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
      * fetch from the profile
      **/
     private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
-        return profile.history.getSitesByLastVisit(QueryLimit)
+        return profile.history.getSitesByLastVisit(withLimit: QueryLimit)
     }
 
     private func setData(data: Cursor<Site>) {
@@ -459,7 +459,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
                 // queue, and so calling anything else that calls through to the DB will
                 // deadlock. This problem will go away when the history API switches to
                 // Deferred instead of using callbacks.
-                self.profile.history.removeHistoryForURL(site.url)
+                self.profile.history.removeHistory(forURL: site.url)
                     .upon { res in
                         self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
                             // If a section will be empty after removal, we must remove the section itself.

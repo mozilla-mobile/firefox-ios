@@ -8,12 +8,12 @@ import Foundation
  * Status results for a Cursor
  */
 public enum CursorStatus {
-    case Success
-    case Failure
-    case Closed
+    case success
+    case failure
+    case closed
 }
 
-public protocol TypedCursor: SequenceType {
+public protocol TypedCursor: Sequence {
     associatedtype T
     var count: Int { get }
     var status: CursorStatus { get }
@@ -35,11 +35,11 @@ public class Cursor<T>: TypedCursor {
     public var statusMessage: String
 
     init(err: NSError) {
-        self.status = .Failure
+        self.status = .failure
         self.statusMessage = err.description
     }
 
-    public init(status: CursorStatus = CursorStatus.Success, msg: String = "") {
+    public init(status: CursorStatus = CursorStatus.success, msg: String = "") {
         self.status = status
         self.statusMessage = msg
     }
@@ -62,10 +62,10 @@ public class Cursor<T>: TypedCursor {
         return acc
     }
 
-    public func generate() -> AnyGenerator<T?> {
+    public func makeIterator() -> AnyIterator<T?> {
         var nextIndex = 0
-        return AnyGenerator() {
-            if (nextIndex >= self.count || self.status != CursorStatus.Success) {
+        return AnyIterator() {
+            if (nextIndex >= self.count || self.status != CursorStatus.success) {
                 return nil
             }
 
@@ -75,12 +75,12 @@ public class Cursor<T>: TypedCursor {
     }
 
     public func close() {
-        status = .Closed
+        status = .closed
         statusMessage = "Closed"
     }
 
     deinit {
-        if status != CursorStatus.Closed {
+        if status != CursorStatus.closed {
             close()
         }
     }
@@ -93,7 +93,7 @@ public class ArrayCursor<T> : Cursor<T> {
     private var data : [T]
 
     public override var count : Int {
-        if (status != .Success) {
+        if (status != .success) {
             return 0
         }
         return data.count
@@ -105,12 +105,12 @@ public class ArrayCursor<T> : Cursor<T> {
     }
 
     public convenience init(data: [T]) {
-        self.init(data: data, status: CursorStatus.Success, statusMessage: "Success")
+        self.init(data: data, status: CursorStatus.success, statusMessage: "Success")
     }
 
     public override subscript(index: Int) -> T? {
         get {
-            if (index >= data.count || index < 0 || status != .Success) {
+            if (index >= data.count || index < 0 || status != .success) {
                 return nil
             }
             return data[index]

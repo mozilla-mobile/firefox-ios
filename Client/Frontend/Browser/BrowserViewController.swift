@@ -816,7 +816,7 @@ class BrowserViewController: UIViewController {
     private func removeBookmark(tabState: TabState) {
         guard let url = tabState.url else { return }
         profile.bookmarks.modelFactory >>== {
-            $0.removeByURL(url.absoluteString)
+            $0.remove(byURL: url.absoluteString)
                 .uponQueue(dispatch_get_main_queue()) { res in
                 if res.isSuccess {
                     if let tab = self.tabManager.getTabForURL(url) {

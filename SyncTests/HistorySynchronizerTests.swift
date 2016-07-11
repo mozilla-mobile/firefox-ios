@@ -53,7 +53,7 @@ extension MockSyncableHistory: SyncableHistory {
     // they might apply our new record first, renaming their local copy of
     // the old record with that URL, and thus bring all the old visits back to life.
     // Desktop just finds by GUID then deletes by URL.
-    func deleteByGUID(_ guid: GUID, deletedAt: Timestamp) -> Deferred<Maybe<()>> {
+    func delete(byGUID guid: GUID, deletedAt: Timestamp) -> Deferred<Maybe<()>> {
         self.remoteVisits.removeValueForKey(guid)
         self.localVisits.removeValueForKey(guid)
         self.places.removeValueForKey(guid)
@@ -69,7 +69,7 @@ extension MockSyncableHistory: SyncableHistory {
     /**
      * This assumes that the provided GUID doesn't already map to a different URL!
      */
-    func ensurePlaceWithURL(_ url: String, hasGUID guid: GUID) -> Success {
+    func ensurePlace(withURL url: String, hasGUID guid: GUID) -> Success {
         // Find by URL.
         if let existing = self.placeForURL(url) {
             let p = DBPlace(guid: guid, url: url, title: existing.title)
@@ -111,7 +111,7 @@ extension MockSyncableHistory: SyncableHistory {
 
         // Make sure that we collide with any matching URLs -- whether locally
         // modified or not. Then overwrite the upstream and merge any local changes.
-        return self.ensurePlaceWithURL(place.url, hasGUID: place.guid)
+        return self.ensurePlace(withURL: place.url, hasGUID: place.guid)
             >>> {
                 if let existingLocal = self.places[place.guid] {
                     if existingLocal.shouldUpload {

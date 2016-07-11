@@ -67,10 +67,10 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        return insertOrUpdateTabsForClientGUID(nil, tabs: [RemoteTab]())
+        return insertOrUpdateTabs(forClientGUID: nil, tabs: [RemoteTab]())
     }
 
-    public func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+    public func insertOrUpdateTabs(forClientGUID: clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return deferMaybe(-1)
     }
 
@@ -86,7 +86,7 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferMaybe(Set<GUID>(optFilter(self.clientsAndTabs.map { $0.client.guid })))
     }
 
-    public func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Maybe<[RemoteTab]>> {
+    public func getTabsForClient(withGUID guid: GUID?) -> Deferred<Maybe<[RemoteTab]>> {
         return deferMaybe(optFilter(self.clientsAndTabs.map { $0.client.guid == guid ? $0.tabs : nil })[0])
     }
 
@@ -134,7 +134,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
                 XCTAssertTrue($0.isSuccess)
                 e.fulfill()
             }
-            clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs)
+            clientsAndTabs.insertOrUpdateTabs(forClientGUID: c.client.guid, tabs: c.tabs)
         }
 
         let f = self.expectationWithDescription("Get after insert.")
@@ -162,7 +162,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
 
         func doUpdate(guid: String?, tabs: [RemoteTab]) {
             let g0 = self.expectationWithDescription("Update client \(guid).")
-            clientsAndTabs.insertOrUpdateTabsForClientGUID(guid, tabs: tabs).upon {
+            clientsAndTabs.insertOrUpdateTabs(forClientGUID: guid, tabs: tabs).upon {
                 if let rowID = $0.successValue {
                     XCTAssertTrue(rowID > -1)
                 } else {
@@ -214,13 +214,13 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
                 XCTAssertTrue($0.isSuccess)
                 e.fulfill()
             }
-            clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs)
+            clientsAndTabs.insertOrUpdateTabs(forClientGUID: c.client.guid, tabs: c.tabs)
         }
 
 
         let e = self.expectationWithDescription("Get after insert.")
         let ct = clients[0]
-        clientsAndTabs.getTabsForClientWithGUID(ct.client.guid).upon {
+        clientsAndTabs.getTabsForClient(withGUID: ct.client.guid).upon {
             if let got = $0.successValue {
                 // This comparison will fail if the order of the tabs changes. We sort the result
                 // as part of the DB query, so it's not actively sorted in Swift.
@@ -234,7 +234,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
 
         let f = self.expectationWithDescription("Get after insert.")
         let localClient = clients[0]
-        clientsAndTabs.getTabsForClientWithGUID(localClient.client.guid).upon {
+        clientsAndTabs.getTabsForClient(withGUID: localClient.client.guid).upon {
             if let got = $0.successValue {
                 // This comparison will fail if the order of the tabs changes. We sort the result
                 // as part of the DB query, so it's not actively sorted in Swift.

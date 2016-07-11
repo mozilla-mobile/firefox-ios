@@ -12,17 +12,17 @@ public class SuggestedSite: Site {
     public let wordmark: Favicon
     public let backgroundColor: UIColor
 
-    override public var tileURL: NSURL {
-        return NSURL(string: url) ?? NSURL(string: "about:blank")!
+    override public var tileURL: URL {
+        return URL(string: url) ?? URL(string: "about:blank")!
     }
 
     let trackingId: Int
     init(data: SuggestedSiteData) {
         self.backgroundColor = UIColor(colorString: data.bgColor)
         self.trackingId = data.trackingId
-        self.wordmark = Favicon(url: data.imageUrl, date: NSDate(), type: .Icon)
+        self.wordmark = Favicon(url: data.imageUrl, date: Date(), type: .icon)
         super.init(url: data.url, title: data.title, bookmarked: nil)
-        self.icon = Favicon(url: data.faviconUrl, date: NSDate(), type: .Icon)
+        self.icon = Favicon(url: data.faviconUrl, date: Date(), type: .icon)
     }
 }
 
@@ -30,11 +30,11 @@ public let SuggestedSites: SuggestedSitesCursor = SuggestedSitesCursor()
 
 public class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
     private init() {
-        let locale = NSLocale.currentLocale()
+        let locale = Locale.current
         let sites = DefaultSuggestedSites.sites[locale.localeIdentifier] ??
                     DefaultSuggestedSites.sites["default"]! as Array<SuggestedSiteData>
         let tiles = sites.map({data in SuggestedSite(data: data)})
-        super.init(data: tiles, status: .Success, statusMessage: "Loaded")
+        super.init(data: tiles, status: .success, statusMessage: "Loaded")
     }
 }
 

@@ -9,8 +9,8 @@ public class ClosedTabsStore {
     let prefs: Prefs
 
     lazy public var tabs: [ClosedTab] = {
-        guard let tabsArray: NSData = self.prefs.objectForKey("recentlyClosedTabs"),
-              let unarchivedArray = NSKeyedUnarchiver.unarchiveObjectWithData(tabsArray) as? [ClosedTab] else {
+        guard let tabsArray: Data = self.prefs.objectForKey("recentlyClosedTabs"),
+              let unarchivedArray = NSKeyedUnarchiver.unarchiveObject(with: ta bsArray) as? [ClosedTab] else {
             return []
         }
         return unarchivedArray
@@ -20,13 +20,13 @@ public class ClosedTabsStore {
         self.prefs = prefs
     }
 
-    public func addTab(url: NSURL, title: String?, faviconURL: String?) {
+    public func addTab(_ url: URL, title: String?, faviconURL: String?) {
         let recentlyClosedTab = ClosedTab(url: url, title: title ?? "", faviconURL: faviconURL ?? "")
-        tabs.insert(recentlyClosedTab, atIndex: 0)
+        tabs.insert(recentlyClosedTab, at: 0)
         if tabs.count > 5 {
             tabs.removeLast()
         }
-        let archivedTabsArray = NSKeyedArchiver.archivedDataWithRootObject(tabs)
+        let archivedTabsArray = NSKeyedArchiver.archivedData(withRootObject: tabs)
         prefs.setObject(archivedTabsArray, forKey: "recentlyClosedTabs")
     }
 
@@ -37,7 +37,7 @@ public class ClosedTabsStore {
 }
 
 public class ClosedTab: NSObject, NSCoding {
-    public let url: NSURL
+    public let url: URL
     public let title: String?
     public let faviconURL: String?
 
@@ -50,8 +50,8 @@ public class ClosedTab: NSObject, NSCoding {
         return json
     }
 
-    init(url: NSURL, title: String?, faviconURL: String?) {
-        assert(NSThread.isMainThread())
+    init(url: URL, title: String?, faviconURL: String?) {
+        assert(Thread.isMainThread)
         self.title = title
         self.url = url
         self.faviconURL = faviconURL
@@ -59,9 +59,9 @@ public class ClosedTab: NSObject, NSCoding {
     }
 
     required convenience public init?(coder: NSCoder) {
-        guard let url = coder.decodeObjectForKey("url") as? NSURL,
-              let faviconURL = coder.decodeObjectForKey("faviconURL") as? String,
-              let title = coder.decodeObjectForKey("title") as? String else { return nil }
+        guard let url = coder.decodeObject(forKey: "url") as? URL,
+              let faviconURL = coder.decodeObject(forKey: "faviconURL") as? String,
+              let title = coder.decodeObject(forKey: "title") as? String else { return nil }
 
         self.init(
             url: url,
@@ -70,9 +70,9 @@ public class ClosedTab: NSObject, NSCoding {
         )
     }
 
-    public func encodeWithCoder(coder: NSCoder) {
-        coder.encodeObject(url, forKey: "url")
-        coder.encodeObject(faviconURL, forKey: "faviconURL")
-        coder.encodeObject(title, forKey: "title")
+    public func encode(with coder: NSCoder) {
+        coder.encode(url, forKey: "url")
+        coder.encode(faviconURL, forKey: "faviconURL")
+        coder.encode(title, forKey: "title")
     }
 }

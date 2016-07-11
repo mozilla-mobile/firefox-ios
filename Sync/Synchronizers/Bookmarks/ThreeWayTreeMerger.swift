@@ -212,13 +212,13 @@ class ThreeWayTreeMerger {
                    !self.done.contains(childGUID)                 // Not already processed elsewhere in the tree.
         }
 
-        guard let remoteValue = self.itemSources.buffer.getBufferItemWithGUID(remote.recordGUID).value.successValue else {
+        guard let remoteValue = self.itemSources.buffer.getBufferItem(withGUID: remote.recordGUID).value.successValue else {
             log.error("Couldn't find remote value for \(remote.recordGUID).")
             return nil
         }
 
         let guids = candidates.map { $0.recordGUID }
-        guard let items = self.itemSources.local.getLocalItemsWithGUIDs(guids).value.successValue else {
+        guard let items = self.itemSources.local.getLocalItems(withGUIDs: guids).value.successValue else {
             log.error("Couldn't find local values for \(candidates.count) candidates.")
             return nil
         }
@@ -443,8 +443,8 @@ class ThreeWayTreeMerger {
                                 log.debug("… and locally it has changed since our last sync, moving from \(mirrorParentGUID) to \(localParentGUID).")
 
                                 // Find out which parent is most recent.
-                                if let localRecords = self.itemSources.local.getLocalItemsWithGUIDs([localParentGUID, guid]).value.successValue,
-                                   let remoteRecords = self.itemSources.buffer.getBufferItemsWithGUIDs([result.guid, guid]).value.successValue {
+                                if let localRecords = self.itemSources.local.getLocalItems(withGUIDs: [localParentGUID, guid]).value.successValue,
+                                   let remoteRecords = self.itemSources.buffer.getBufferItems(withGUIDs: [result.guid, guid]).value.successValue {
 
                                     let latestLocalTimestamp = max(localRecords[guid]?.localModified ?? 0, localRecords[localParentGUID]?.localModified ?? 0)
                                     let latestRemoteTimestamp = max(remoteRecords[guid]?.serverModified ?? 0, remoteRecords[result.guid]?.serverModified ?? 0)
@@ -591,8 +591,8 @@ class ThreeWayTreeMerger {
             return MergeState.Unchanged
         }
 
-        let localRecord = self.itemSources.local.getLocalItemWithGUID(localGUID).value.successValue
-        let remoteRecord = self.itemSources.buffer.getBufferItemWithGUID(guid).value.successValue
+        let localRecord = self.itemSources.local.getLocalItem(withGUID: localGUID).value.successValue
+        let remoteRecord = self.itemSources.buffer.getBufferItem(withGUID: guid).value.successValue
 
         if let local = localRecord {
             if let remote = remoteRecord {
@@ -731,8 +731,8 @@ class ThreeWayTreeMerger {
 
     private func takeLocalIfChanged(_ local: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
         let guid = local.recordGUID
-        let localValues = self.itemSources.local.getLocalItemWithGUID(guid).value.successValue
-        let mirrorValues = self.itemSources.mirror.getMirrorItemWithGUID(guid).value.successValue
+        let localValues = self.itemSources.local.getLocalItem(withGUID: guid).value.successValue
+        let mirrorValues = self.itemSources.mirror.getMirrorItem(withGUID: guid).value.successValue
 
         // We don't expect these to ever fail to exist.
         assert(localValues != nil)
@@ -743,8 +743,8 @@ class ThreeWayTreeMerger {
 
     private func takeRemoteIfChanged(_ remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
         let guid = remote.recordGUID
-        let remoteValues = self.itemSources.buffer.getBufferItemWithGUID(guid).value.successValue
-        let mirrorValues = self.itemSources.mirror.getMirrorItemWithGUID(guid).value.successValue
+        let remoteValues = self.itemSources.buffer.getBufferItem(withGUID: guid).value.successValue
+        let mirrorValues = self.itemSources.mirror.getMirrorItem(withGUID: guid).value.successValue
 
         assert(remoteValues != nil)
 
@@ -768,17 +768,17 @@ class ThreeWayTreeMerger {
             return v.title
         case .Unchanged:
             if let mirror = folder.mirror?.recordGUID,
-               let title = self.itemSources.mirror.getMirrorItemWithGUID(mirror).value.successValue?.title {
+               let title = self.itemSources.mirror.getMirrorItem(withGUID: mirror).value.successValue?.title {
                 return title
             }
         case .Remote:
             if let remote = folder.remote?.recordGUID,
-               let title = self.itemSources.buffer.getBufferItemWithGUID(remote).value.successValue?.title {
+               let title = self.itemSources.buffer.getBufferItem(withGUID: remote).value.successValue?.title {
                 return title
             }
         case .Local:
             if let local = folder.local?.recordGUID,
-               let title = self.itemSources.local.getLocalItemWithGUID(local).value.successValue?.title {
+               let title = self.itemSources.local.getLocalItem(withGUID: local).value.successValue?.title {
                 return title
             }
         case .Unknown:
@@ -825,11 +825,11 @@ class ThreeWayTreeMerger {
         case .Unknown:
             return node
         case .Unchanged:
-            return try copyWithMirrorItem(self.itemSources.mirror.getMirrorItemWithGUID(node.guid).value.successValue)
+            return try copyWithMirrorItem(self.itemSources.mirror.getMirrorItem(withGUID: node.guid).value.successValue)
         case .Local:
-            return try copyWithMirrorItem(self.itemSources.local.getLocalItemWithGUID(node.guid).value.successValue)
+            return try copyWithMirrorItem(self.itemSources.local.getLocalItem(withGUIDs: node.guid).value.successValue)
         case .Remote:
-            return try copyWithMirrorItem(self.itemSources.buffer.getBufferItemWithGUID(node.guid).value.successValue)
+            return try copyWithMirrorItem(self.itemSources.buffer.getBufferItem(withGUIDs: node.guid).value.successValue)
         case let .New(value):
             return try copyWithMirrorItem(value)
         }
@@ -1019,7 +1019,7 @@ class ThreeWayTreeMerger {
     }
 
     private func prefetchItems() -> Success {
-        return self.itemSources.prefetchWithGUIDs(self.allChangedGUIDs)
+        return self.itemSources.prefetch(withGUIDs: self.allChangedGUIDs)
     }
 
     // This should only be called once.
@@ -1331,7 +1331,7 @@ class ThreeWayTreeMerger {
                 // content-based merges will only ever take the remote value.
                 precondition(localGUID == node.guid, "Can't take local value without keeping local GUID.")
 
-                guard let value = self.itemSources.local.getLocalItemWithGUID(localGUID).value.successValue else {
+                guard let value = self.itemSources.local.getLocalItem(withGUID localGUID).value.successValue else {
                     assertionFailure("Couldn't fetch local value for new item \(localGUID). This should never happen.")
                     return
                 }

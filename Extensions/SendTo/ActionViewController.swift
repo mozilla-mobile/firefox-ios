@@ -30,7 +30,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
             return
         }
 
-        ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
+        ExtensionUtils.extractSharedItem(fromExtensionContext: self.extensionContext, completionHandler: { (item, error) -> Void in
             guard let item = item where error == nil && item.isShareable else {
                 let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .Default) { _ in self.finish() })

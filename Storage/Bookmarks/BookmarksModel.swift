@@ -55,7 +55,7 @@ public class BookmarkFolder: BookmarkNode {
     public var count: Int { return 0 }
     public subscript(index: Int) -> BookmarkNode? { return nil }
 
-    public func itemIsEditableAtIndex(index: Int) -> Bool {
+    public func itemIsEditable(atIndex index: Int) -> Bool {
         return self[index]?.canDelete ?? false
     }
 
@@ -87,14 +87,14 @@ public class BookmarksModel: BookmarksModelFactorySource {
     /**
      * Produce a new model rooted at the appropriate folder. Fails if the folder doesn't exist.
      */
-    public func selectFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+    public func selectFolder(_ folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
         return self.factory.modelForFolder(folder)
     }
 
     /**
      * Produce a new model rooted at the appropriate folder. Fails if the folder doesn't exist.
      */
-    public func selectFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
+    public func selectFolder(_ guid: String) -> Deferred<Maybe<BookmarksModel>> {
         return self.factory.modelForFolder(guid)
     }
 
@@ -123,9 +123,9 @@ public protocol BookmarksModelFactorySource {
 }
 
 public protocol BookmarksModelFactory {
-    func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>>
-    func modelForFolder(guid: GUID) -> Deferred<Maybe<BookmarksModel>>
-    func modelForFolder(guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>>
+    func modelForFolder(_ folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>>
+    func modelForFolder(_ guid: GUID) -> Deferred<Maybe<BookmarksModel>>
+    func modelForFolder(_ guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>>
 
     func modelForRoot() -> Deferred<Maybe<BookmarksModel>>
 
@@ -133,15 +133,15 @@ public protocol BookmarksModelFactory {
     // a placeholder that behaves correctly for the period between kickoff and set.
     var nullModel: BookmarksModel { get }
 
-    func isBookmarked(url: String) -> Deferred<Maybe<Bool>>
-    func removeByGUID(guid: GUID) -> Success
-    func removeByURL(url: String) -> Success
+    func isBookmarked(_ url: String) -> Deferred<Maybe<Bool>>
+    func remove(byGUID guid: GUID) -> Success
+    func remove(byURL url: String) -> Success
 }
 
 /*
  * A folder that contains an array of children.
  */
-public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
+public class MemoryBookmarkFolder: BookmarkFolder, Sequence {
     let children: [BookmarkNode]
 
     public init(guid: GUID, title: String, children: [BookmarkNode]) {
@@ -149,7 +149,7 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
         super.init(guid: guid, title: title)
     }
 
-    public struct BookmarkNodeGenerator: GeneratorType {
+    public struct BookmarkNodeGenerator: IteratorProtocol {
         public typealias Element = BookmarkNode
         let children: [BookmarkNode]
         var index: Int = 0
@@ -169,9 +169,9 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
 
     override public var favicon: Favicon? {
         get {
-            if let path = NSBundle.mainBundle().pathForResource("bookmarkFolder", ofType: "png") {
-                let url = NSURL(fileURLWithPath: path)
-                return Favicon(url: url.absoluteString, date: NSDate(), type: IconType.Local)
+            if let path = Bundle.main.pathForResource("bookmarkFolder", ofType: "png") {
+                let url = URL(fileURLWithPath: path)
+                return Favicon(url: url.absoluteString!, date: Date(), type: IconType.local)
             }
             return nil
         }
@@ -189,11 +189,11 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
         }
     }
 
-    override public func itemIsEditableAtIndex(index: Int) -> Bool {
+    override public func itemIsEditable(atIndex index: Int) -> Bool {
         return true
     }
 
-    public func generate() -> BookmarkNodeGenerator {
+    public func makeIterator() -> BookmarkNodeGenerator {
         return BookmarkNodeGenerator(children: self.children)
     }
 
@@ -201,7 +201,7 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
      * Return a new immutable folder that's just like this one,
      * but also contains the new items.
      */
-    func append(items: [BookmarkNode]) -> MemoryBookmarkFolder {
+    func append(_ items: [BookmarkNode]) -> MemoryBookmarkFolder {
         if (items.isEmpty) {
             return self
         }
@@ -212,9 +212,9 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
 public class MemoryBookmarksSink: ShareToDestination {
     var queue: [BookmarkNode] = []
     public init() { }
-    public func shareItem(item: ShareItem) {
+    public func shareItem(_ item: ShareItem) {
         let title = item.title == nil ? "Untitled" : item.title!
-        func exists(e: BookmarkNode) -> Bool {
+        func exists(_ e: BookmarkNode) -> Bool {
             if let bookmark = e as? BookmarkItem {
                 return bookmark.url == item.url;
             }
@@ -259,8 +259,8 @@ public class PrependedBookmarkFolder: BookmarkFolder {
         return self.main[index - 1]
     }
 
-    override public func itemIsEditableAtIndex(index: Int) -> Bool {
-        return index > 0 && self.main.itemIsEditableAtIndex(index - 1)
+    override public func itemIsEditable(atIndex index: Int) -> Bool {
+        return index > 0 && self.main.itemIsEditable(atIndex: index - 1)
     }
 }
 
@@ -285,15 +285,15 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         root = MemoryBookmarkFolder(guid: BookmarkRoots.RootGUID, title: "Root", children: [mobile, unsorted])
     }
 
-    public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+    public func modelForFolder(_ folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
         return self.modelForFolder(folder.guid, title: folder.title)
     }
 
-    public func modelForFolder(guid: GUID) -> Deferred<Maybe<BookmarksModel>> {
+    public func modelForFolder(_ guid: GUID) -> Deferred<Maybe<BookmarksModel>> {
         return self.modelForFolder(guid, title: "")
     }
 
-    public func modelForFolder(guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>> {
+    public func modelForFolder(_ guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>> {
         var m: BookmarkFolder
         switch (guid) {
         case BookmarkRoots.MobileFolderGUID:
@@ -325,19 +325,19 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         return BookmarksModel(modelFactory: self, root: f)
     }
 
-    public func shareItem(item: ShareItem) {
+    public func shareItem(_ item: ShareItem) {
         self.sink.shareItem(item)
     }
 
-    public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
+    public func isBookmarked(_ url: String) -> Deferred<Maybe<Bool>> {
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
-    public func removeByGUID(guid: GUID) -> Success {
+    public func remove(byGUID guid: GUID) -> Success {
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
-    public func removeByURL(url: String) -> Success {
+    public func remove(byURL url: String) -> Success {
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 

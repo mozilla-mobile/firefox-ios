@@ -1129,9 +1129,9 @@
 		0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkingTests.swift; sourceTree = "<group>"; };
 		0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = LoginsHelper.js; sourceTree = "<group>"; };
-		0BDA56AE1B26B1D5008C9B96 /* TestLogins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLogins.swift; sourceTree = "<group>"; };
+		0BDA56AE1B26B1D5008C9B96 /* TestLogins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TestLogins.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0BDA56B11B26B1E4008C9B96 /* Logins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Logins.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		0BDA56B31B26B203008C9B96 /* SQLiteLogins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteLogins.swift; sourceTree = "<group>"; };
+		0BDA56B31B26B203008C9B96 /* SQLiteLogins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SQLiteLogins.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0BF0DB931A8545800039F300 /* URLBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBarView.swift; sourceTree = "<group>"; };
 		0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsetButton.swift; sourceTree = "<group>"; };
 		0BF42D361A7C0B8E00889E28 /* FaviconManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaviconManager.swift; sourceTree = "<group>"; };
@@ -1187,7 +1187,7 @@
 		28926B361AC0F0DD009C0B1D /* EnvelopeJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnvelopeJSON.swift; sourceTree = "<group>"; };
 		28926B391AC0F128009C0B1D /* CleartextPayloadJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CleartextPayloadJSON.swift; sourceTree = "<group>"; };
 		2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HistorySynchronizer.swift; path = Synchronizers/HistorySynchronizer.swift; sourceTree = "<group>"; };
-		2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabsSynchronizer.swift; path = Synchronizers/TabsSynchronizer.swift; sourceTree = "<group>"; };
+		2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = TabsSynchronizer.swift; path = Synchronizers/TabsSynchronizer.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		2894C1681AE89DDC00F1F92F /* ClientsSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientsSynchronizer.swift; path = Synchronizers/ClientsSynchronizer.swift; sourceTree = "<group>"; };
 		2894C16B1AE89FD500F1F92F /* HistoryPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPayload.swift; sourceTree = "<group>"; };
 		289A4C121C4EB90600A460E3 /* StorageTestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageTestUtils.swift; sourceTree = "<group>"; };
@@ -1282,11 +1282,11 @@
 		2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabsTable.swift; sourceTree = "<group>"; };
 		2FCAE2531ABB531100877008 /* SchemaTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaTable.swift; sourceTree = "<group>"; };
 		2FCAE2551ABB531100877008 /* SQLiteHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteHistory.swift; sourceTree = "<group>"; };
-		2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteRemoteClientsAndTabs.swift; sourceTree = "<group>"; };
+		2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SQLiteRemoteClientsAndTabs.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		2FCAE25B1ABB531100877008 /* SwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
 		2FCAE25C1ABB531100877008 /* Visit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visit.swift; sourceTree = "<group>"; };
 		2FCAE2791ABB533A00877008 /* MockFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFiles.swift; sourceTree = "<group>"; };
-		2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteRemoteClientsAndTabs.swift; sourceTree = "<group>"; };
+		2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TestSQLiteRemoteClientsAndTabs.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFaviconsTable.swift; sourceTree = "<group>"; };
 		2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteHistory.swift; sourceTree = "<group>"; };
 		2FCAE2821ABB533A00877008 /* TestTableTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTableTable.swift; sourceTree = "<group>"; };
@@ -1458,7 +1458,7 @@
 		D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
 		D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SiteTableViewControllerHeader.xib; sourceTree = "<group>"; };
 		D38A1EDF1CB458EC0080C842 /* CertError.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CertError.html; sourceTree = "<group>"; };
-		D38F02D01C05127100175932 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
+		D38F02D01C05127100175932 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Authenticator.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D38F036F1C06387900175932 /* AuthenticationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTests.swift; sourceTree = "<group>"; };
 		D3921DBD1CEFD33600679798 /* ClientTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientTelemetry.swift; sourceTree = "<group>"; };
 		D3968F241A38FE8500CEFD3B /* TabManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
@@ -1603,12 +1603,12 @@
 		E6231C041B90A472005ABB0D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsBundleOptions.swift; sourceTree = "<group>"; };
 		E633E2321C21E293001FFF6C /* FXSnapshotTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FXSnapshotTestCase.swift; sourceTree = "<group>"; };
-		E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginDetailViewController.swift; path = ../Settings/LoginDetailViewController.swift; sourceTree = "<group>"; };
+		E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = LoginDetailViewController.swift; path = ../Settings/LoginDetailViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginManagerTests.swift; sourceTree = "<group>"; };
 		E635D25D1B729DEE0078962F /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E63ED7B31BFCD9800097D08E /* LoginTableViewCellRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCellRefTests.swift; sourceTree = "<group>"; };
 		E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
-		E63ED8E01BFD25580097D08E /* LoginListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
+		E63ED8E01BFD25580097D08E /* LoginListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LoginListViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeEntryViewController.swift; sourceTree = "<group>"; };
 		E640E8691C73A47C00C5F072 /* PasscodeViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeViews.swift; sourceTree = "<group>"; };
 		E640E86F1C73BCF500C5F072 /* AuthenticationManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManagerTests.swift; sourceTree = "<group>"; };
@@ -3772,6 +3772,7 @@
 					};
 					2FCAE2191ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
+						LastSwiftMigration = 0800;
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
@@ -5371,6 +5372,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Fennec;
 		};
@@ -5393,6 +5395,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxNightly;
 		};
@@ -5906,6 +5909,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Firefox;
 		};
@@ -6596,6 +6600,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 3.0;
 			};
 			name = FennecAurora;
 		};
@@ -7126,6 +7131,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
 		};

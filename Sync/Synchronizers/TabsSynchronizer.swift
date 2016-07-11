@@ -55,7 +55,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
             return succeed()
         }
 
-        return localTabs.getTabsForClientWithGUID(nil) >>== { tabs in
+        return localTabs.getTabsForClient(withGUID: nil) >>== { tabs in
             if let lastUploadTime = lastUploadTime {
                 // TODO: track this in memory so we don't have to hit the disk to figure out when our tabs have
                 // changed and need to be uploaded.
@@ -86,7 +86,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
             func afterWipe() -> Success {
                 let doInsert: (Record<TabsPayload>) -> Deferred<Maybe<(Int)>> = { record in
                     let remotes = record.payload.isValid() ? record.payload.remoteTabs : []
-                    let ins = localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
+                    let ins = localTabs.insertOrUpdateTabs(forClientGUID: record.id, tabs: remotes)
                     ins.upon() { res in
                         if let inserted = res.successValue {
                             if inserted != remotes.count {

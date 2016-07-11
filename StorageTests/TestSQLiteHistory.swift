@@ -874,7 +874,7 @@ class TestSQLiteHistory: XCTestCase {
 
             >>> { history.storeRemoteVisits([siteVisitBR1], forGUID: siteB.guid!) }
 
-            >>> { history.getSitesByFrecencyWithHistoryLimit(3)
+            >>> { history.getSitesByFrecency(withHistoryLimit: 3)
                 >>== { (sites: Cursor) -> Success in
                     XCTAssertEqual(3, sites.count)
 
@@ -951,7 +951,7 @@ class TestSQLiteHistory: XCTestCase {
 
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
-        let results = history?.getSitesByLastVisit(10).value.successValue
+        let results = history?.getSitesByLastVisit(withLimit: 10).value.successValue
         XCTAssertNotNil(results)
         XCTAssertEqual(results![0]?.url, "http://www.example.com")
 
@@ -1007,13 +1007,13 @@ class TestSQLiteHistory: XCTestCase {
             return history.insertOrUpdatePlace(site13, modified: NSDate.nowMicroseconds())
         }).bind({ guid in
             XCTAssertEqual(guid.successValue!, initialGuid, "Guid is correct")
-            return history.getSitesByFrecencyWithHistoryLimit(10)
+            return history.getSitesByFrecency(withHistoryLimit: 10)
         }).bind({ (sites: Maybe<Cursor<Site>>) -> Success in
             XCTAssert(sites.successValue!.count == 2, "2 sites returned")
             return history.removeSiteFromTopSites(site11)
         }).bind({ success in
             XCTAssertTrue(success.isSuccess, "Remove was successful")
-            return history.getSitesByFrecencyWithHistoryLimit(10)
+            return history.getSitesByFrecency(withHistoryLimit: 10)
         }).upon({ (sites: Maybe<Cursor<Site>>) in
             XCTAssert(sites.successValue!.count == 1, "1 site returned")
             expectation.fulfill()
@@ -1064,21 +1064,21 @@ class TestSQLiteHistory: XCTestCase {
 
         func checkSitesByFrecency(f: Cursor<Site> -> Success) -> () -> Success {
             return {
-                history.getSitesByFrecencyWithHistoryLimit(10)
+                history.getSitesByFrecency(withHistoryLimit: 10)
                     >>== f
             }
         }
 
         func checkSitesByDate(f: Cursor<Site> -> Success) -> () -> Success {
             return {
-                history.getSitesByLastVisit(10)
+                history.getSitesByLastVisit(withLimit: 10)
                 >>== f
             }
         }
 
         func checkSitesWithFilter(filter: String, f: Cursor<Site> -> Success) -> () -> Success {
             return {
-                history.getSitesByFrecencyWithHistoryLimit(10, whereURLContains: filter)
+                history.getSitesByFrecency(withHistoryLimit: 10, whereURLContains: filter)
                 >>== f
             }
         }
@@ -1145,7 +1145,7 @@ class TestSQLiteHistory: XCTestCase {
             >>>
             checkDeletedCount(0)
             >>>
-            { history.removeHistoryForURL("http://url2/") }
+            { history.removeHistory(forURL: "http://url2/") }
             >>>
             checkDeletedCount(1)
             >>> checkSitesByFrecency
@@ -1197,7 +1197,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkFaviconForBookmarkIsNil() -> Success {
-            return bookmarks.bookmarksByURL("http://bookmarkedurl/".asURL!) >>== { results in
+            return bookmarks.bookmarks(byURL: "http://bookmarkedurl/".asURL!) >>== { results in
                 XCTAssertEqual(1, results.count)
                 XCTAssertNil(results[0]?.favicon)
                 return succeed()
@@ -1205,7 +1205,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkFaviconWasSetForBookmark() -> Success {
-            return history.getFaviconsForBookmarkedURL("http://bookmarkedurl/") >>== { results in
+            return history.getFavicons(forBookmarkedURL: "http://bookmarkedurl/") >>== { results in
                 XCTAssertEqual(1, results.count)
                 if let actualFaviconURL = results[0]??.url {
                     XCTAssertEqual("http://url2/", actualFaviconURL)
@@ -1215,11 +1215,11 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func removeBookmark() -> Success {
-            return bookmarks.testFactory.removeByURL("http://bookmarkedurl/")
+            return bookmarks.testFactory.remove(byURL: "http://bookmarkedurl/")
         }
 
         func checkFaviconWasRemovedForBookmark() -> Success {
-            return history.getFaviconsForBookmarkedURL("http://bookmarkedurl/") >>== { results in
+            return history.getFavicons(forBookmarkedURL: "http://bookmarkedurl/") >>== { results in
                 XCTAssertEqual(0, results.count)
                 return succeed()
             }
@@ -1270,7 +1270,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkTopSitesReturnsResults() -> Success {
-            return history.getTopSitesWithLimit(20) >>== { topSites in
+            return history.getTopSites(withLimit: 20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
                 XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
                 return succeed()
@@ -1279,7 +1279,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func invalidateIfNeededDoesntChangeResults() -> Success {
             return history.updateTopSitesCacheIfInvalidated() >>> {
-                return history.getTopSitesWithLimit(20) >>== { topSites in
+                return history.getTopSites(withLimit: 20) >>== { topSites in
                     XCTAssertEqual(topSites.count, 20)
                     XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
                     return succeed()
@@ -1304,7 +1304,7 @@ class TestSQLiteHistory: XCTestCase {
         func checkSitesInvalidate() -> Success {
             history.updateTopSitesCacheIfInvalidated().value
 
-            return history.getTopSitesWithLimit(20) >>== { topSites in
+            return history.getTopSites(withLimit: 20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
                 XCTAssertEqual(topSites[0]!.guid, "abc\(0)def")
                 return succeed()
@@ -1360,7 +1360,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
 
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                history.getSitesByFrecencyWithHistoryLimit(10, includeIcon: false).value
+                history.getSitesByFrecency(withHistoryLimit: 10, includeIcon: false).value
             }
             self.stopMeasuring()
         }
@@ -1396,37 +1396,37 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
     }()
 
     func testWithSingleWord() {
-        let (fragment, args) = history.computeWhereFragmentWithFilter("foo", perWordFragment: "?", perWordArgs: { [$0] })
+        let (fragment, args) = history.computeWhereFragment(withFilter: "foo", perWordFragment: "?", perWordArgs: { [$0] })
         XCTAssertEqual(fragment, "?")
         XCTAssert(stringArgsEqual(args, ["foo"]))
     }
 
     func testWithIdenticalWords() {
-        let (fragment, args) = history.computeWhereFragmentWithFilter("foo fo foo", perWordFragment: "?", perWordArgs: { [$0] })
+        let (fragment, args) = history.computeWhereFragment(withFilter: "foo fo foo", perWordFragment: "?", perWordArgs: { [$0] })
         XCTAssertEqual(fragment, "?")
         XCTAssert(stringArgsEqual(args, ["foo"]))
     }
 
     func testWithDistinctWords() {
-        let (fragment, args) = history.computeWhereFragmentWithFilter("foo bar", perWordFragment: "?", perWordArgs: { [$0] })
+        let (fragment, args) = history.computeWhereFragment(withFilter: "foo bar", perWordFragment: "?", perWordArgs: { [$0] })
         XCTAssertEqual(fragment, "? AND ?")
         XCTAssert(stringArgsEqual(args, ["foo", "bar"]))
     }
 
     func testWithDistinctWordsAndWhitespace() {
-        let (fragment, args) = history.computeWhereFragmentWithFilter("  foo    bar  ", perWordFragment: "?", perWordArgs: { [$0] })
+        let (fragment, args) = history.computeWhereFragment(withFilter: "  foo    bar  ", perWordFragment: "?", perWordArgs: { [$0] })
         XCTAssertEqual(fragment, "? AND ?")
         XCTAssert(stringArgsEqual(args, ["foo", "bar"]))
     }
 
     func testWithSubstrings() {
-        let (fragment, args) = history.computeWhereFragmentWithFilter("foo bar foobar", perWordFragment: "?", perWordArgs: { [$0] })
+        let (fragment, args) = history.computeWhereFragment(withFilter: "foo bar foobar", perWordFragment: "?", perWordArgs: { [$0] })
         XCTAssertEqual(fragment, "?")
         XCTAssert(stringArgsEqual(args, ["foobar"]))
     }
 
     func testWithSubstringsAndIdenticalWords() {
-        let (fragment, args) = history.computeWhereFragmentWithFilter("foo bar foobar foobar", perWordFragment: "?", perWordArgs: { [$0] })
+        let (fragment, args) = history.computeWhereFragment(withFilter: "foo bar foobar foobar", perWordFragment: "?", perWordArgs: { [$0] })
         XCTAssertEqual(fragment, "?")
         XCTAssert(stringArgsEqual(args, ["foobar"]))
     }

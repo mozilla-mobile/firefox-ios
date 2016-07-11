@@ -10,7 +10,7 @@ public struct ExtensionUtils {
     /// Has a completionHandler because ultimately an XPC call to the sharing application is done.
     /// We can always extract a URL and sometimes a title. The favicon is currently just a placeholder, but
     /// future code can possibly interact with a web page to find a proper icon.
-    public static func extractSharedItemFromExtensionContext(extensionContext: NSExtensionContext?, completionHandler: (ShareItem?, NSError!) -> Void) {
+    public static func extractSharedItem(fromExtensionContext extensionContext: NSExtensionContext?, completionHandler: (ShareItem?, NSError?) -> Void) {
         guard let extensionContext = extensionContext,
               let inputItems = extensionContext.inputItems as? [NSExtensionItem] else {
             completionHandler(nil, nil)
@@ -22,19 +22,19 @@ public struct ExtensionUtils {
 
             for attachment in attachments {
                 if attachment.hasItemConformingToTypeIdentifier(kUTTypeURL as String) {
-                    attachment.loadItemForTypeIdentifier(kUTTypeURL as String, options: nil) { obj, err in
+                    attachment.loadItem(forTypeIdentifier: kUTTypeURL as String, options: nil) { obj, err in
                         guard err == nil else {
                             completionHandler(nil, err)
                             return
                         }
 
-                        guard let url = obj as? NSURL else {
+                        guard let url = obj as? URL else {
                             completionHandler(nil, NSError(domain: "org.mozilla.fennec", code: 999, userInfo: ["Problem": "Non-URL result."]))
                             return
                         }
 
                         let title = inputItem.attributedContentText?.string
-                        completionHandler(ShareItem(url: url.absoluteString, title: title, favicon: nil), nil)
+                        completionHandler(ShareItem(url: url.absoluteString!, title: title, favicon: nil), nil)
                     }
 
                     return

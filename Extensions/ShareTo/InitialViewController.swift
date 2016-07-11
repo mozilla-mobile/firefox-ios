@@ -24,7 +24,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
+        ExtensionUtils.extractSharedItem(fromExtensionContext: self.extensionContext, completionHandler: { (item, error) -> Void in
             if let item = item where error == nil {
                 dispatch_async(dispatch_get_main_queue()) {
                     guard item.isShareable else {

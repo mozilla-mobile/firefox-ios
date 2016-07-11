@@ -13,7 +13,7 @@ class LoginTableViewCellRefTests: FXSnapshotTestCase {
     let stretchedFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: 728, height: 64))
 
     var cell: LoginTableViewCell!
-    let mockLogin = Login.createWithHostname("alphabet.com", username: "myawesomeusername@email.com", password: "hunter2")
+    let mockLogin = Login.create(hostname: "alphabet.com", username: "myawesomeusername@email.com", password: "hunter2")
 
     override func setUp() {
         super.setUp()

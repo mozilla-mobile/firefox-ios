@@ -48,9 +48,9 @@ class TrivialBookmarkStorer: BookmarkStorer {
         }
 
         do {
-            try accumulateFromAmendMap(op.amendChildrenFromBuffer, fetch: { itemSources.buffer.getBufferItemsWithGUIDs($0.keys).value })
-            try accumulateFromAmendMap(op.amendChildrenFromMirror, fetch: { itemSources.mirror.getMirrorItemsWithGUIDs($0.keys).value })
-            try accumulateFromAmendMap(op.amendChildrenFromLocal, fetch: { itemSources.local.getLocalItemsWithGUIDs($0.keys).value })
+            try accumulateFromAmendMap(op.amendChildrenFromBuffer, fetch: { itemSources.buffer.getBufferItems(withGUIDs: $0.keys).value })
+            try accumulateFromAmendMap(op.amendChildrenFromMirror, fetch: { itemSources.mirror.getMirrorItems(withGUIDs: $0.keys).value })
+            try accumulateFromAmendMap(op.amendChildrenFromLocal, fetch: { itemSources.local.getLocalItems(withGUIDs: $0.keys).value })
         } catch {
             return deferMaybe(error as! MaybeErrorType)
         }

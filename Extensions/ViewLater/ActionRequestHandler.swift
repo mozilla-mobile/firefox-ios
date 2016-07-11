@@ -10,7 +10,7 @@ import Storage
 
 class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
     func beginRequestWithExtensionContext(context: NSExtensionContext) {
-        ExtensionUtils.extractSharedItemFromExtensionContext(context, completionHandler: {
+        ExtensionUtils.extractSharedItem(fromExtensionContext: context, completionHandler: {
             (item, error) -> Void in
             if let item = item where error == nil && item.isShareable {
                 let profile = BrowserProfile(localName: "profile", app: nil)

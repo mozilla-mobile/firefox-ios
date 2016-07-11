@@ -100,7 +100,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             // We apply deletions immediately. That might not be exactly what we want -- perhaps you changed
             // a password locally after deleting it remotely -- but it's expedient.
             if payload.deleted {
-                return storage.deleteByGUID(guid, deletedAt: rec.modified)
+                return storage.delete(byGUID: guid, deletedAt: rec.modified)
             }
 
             return storage.applyChangedLogin(self.getLogin(rec))

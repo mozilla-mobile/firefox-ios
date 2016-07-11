@@ -61,7 +61,7 @@ class TestSQLiteBookmarks: XCTestCase {
         let model = factory.modelForFolder(BookmarkRoots.MobileFolderGUID).value.successValue
         XCTAssertEqual((model?.current[0] as? BookmarkItem)?.url, url)
         XCTAssertTrue(factory.isBookmarked(url).value.successValue ?? false)
-        factory.removeByURL("").succeeded()
+        factory.remove(byURL: "").succeeded()
 
         // Grab that GUID and move it into desktop bookmarks.
         let guid = (model?.current[0] as! BookmarkItem).guid
@@ -446,7 +446,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(false, db.isOverridden("bookmark3001"))
         XCTAssertNil(db.isLocallyDeleted("bookmark3001"))
 
-        bookmarks.testFactory.removeByGUID("folderBBBBBB").succeeded()
+        bookmarks.testFactory.remove(byGUID: "folderBBBBBB").succeeded()
 
         XCTAssertEqual(true, db.isOverridden("folderBBBBBB"))
         XCTAssertEqual(true, db.isLocallyDeleted("folderBBBBBB"))
@@ -471,7 +471,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(false, db.isOverridden("bookmark1002"))
         XCTAssertNil(db.isLocallyDeleted("bookmark1002"))
 
-        bookmarks.testFactory.removeByURL("http://example.org/1").succeeded()
+        bookmarks.testFactory.remove(byURL: "http://example.org/1").succeeded()
 
         // To conclude, check the entire hierarchy.
         // Menu: overridden, only the locally-added bookmark 2.
@@ -556,7 +556,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(positions[rowB.guid], 1)
 
         // Delete the first. sync_status was New, so the row was immediately deleted.
-        bookmarks.testFactory.removeByURL("http://example.org/").succeeded()
+        bookmarks.testFactory.remove(byURL: "http://example.org/").succeeded()
         XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs(sql: "SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
         XCTAssertEqual([rowB.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
         let positionsAfterDelete = db.getPositionsForChildren(ofParent: BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksLocalStructure)
@@ -599,7 +599,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(SyncStatus.Changed, db.getSyncStatusForGUID(BookmarkRoots.MobileFolderGUID))
 
         // If we delete the old record, we mark it as changed, and it's no longer in the structure.
-        bookmarks.testFactory.removeByGUID(rowB.guid).succeeded()
+        bookmarks.testFactory.remove(byGUID: rowB.guid).succeeded()
         XCTAssertEqual(SyncStatus.Changed, db.getSyncStatusForGUID(rowB.guid))
         XCTAssertEqual([rowC.guid], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
@@ -612,7 +612,7 @@ class TestSQLiteBookmarks: XCTestCase {
 
         // Delete by URL.
         // If we delete the new records, they just go away -- there's no server version to delete.
-        bookmarks.testFactory.removeByURL(rowC.bookmarkURI!).succeeded()
+        bookmarks.testFactory.remove(byURL: rowC.bookmarkURI!).succeeded()
         XCTAssertNil(db.getSyncStatusForGUID(rowC.guid))
         XCTAssertNil(db.getSyncStatusForGUID(guidD))
         XCTAssertEqual([], db.getGUIDs(sql: "SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))

@@ -19,12 +19,12 @@ public class SQLiteQueue: TabQueue {
         self.db = db
     }
 
-    public func addToQueue(tab: ShareItem) -> Success {
+    public func addToQueue(_ tab: ShareItem) -> Success {
         let args: Args = [tab.url, tab.title]
         return db.run("INSERT OR IGNORE INTO \(TableQueuedTabs) (url, title) VALUES (?, ?)", withArgs: args)
     }
 
-    private func factory(row: SDRow) -> ShareItem {
+    private func factory(_ row: SDRow) -> ShareItem {
         return ShareItem(url: row["url"] as! String, title: row["title"] as? String, favicon: nil)
     }
 

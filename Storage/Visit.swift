@@ -8,13 +8,13 @@ import Shared
 // These are taken from the Places docs
 // http://mxr.mozilla.org/mozilla-central/source/toolkit/components/places/nsINavHistoryService.idl#1187
 @objc public enum VisitType : Int {
-    case Unknown = 0
+    case unknown = 0
 
     /**
      * This transition type means the user followed a link and got a new toplevel
      * window.
      */
-    case Link = 1
+    case link = 1
 
     /**
      * This transition type means that the user typed the page's URL in the
@@ -22,14 +22,14 @@ import Shared
      * it from a history query (from the History sidebar, History menu,
      * or history query in the personal toolbar or Places organizer).
      */
-    case Typed = 2
+    case typed = 2
 
-    case Bookmark = 3
-    case Embed = 4
-    case PermanentRedirect = 5
-    case TemporaryRedirect = 6
-    case Download = 7
-    case FramedLink = 8
+    case bookmark = 3
+    case embed = 4
+    case permanentRedirect = 5
+    case temporaryRedirect = 6
+    case download = 7
+    case framedLink = 8
 }
 
 // WKWebView has these:
@@ -67,7 +67,7 @@ public class Visit: Hashable {
         self.type = type
     }
 
-    public class func fromJSON(json: JSON) -> Visit? {
+    public class func fromJSON(_ json: JSON) -> Visit? {
         if let type = json["type"].asInt,
                typeEnum = VisitType(rawValue: type),
                date = json["date"].asInt64 where date >= 0 {
