@@ -92,7 +92,7 @@ extension BrowserDB {
 }
 
 extension BrowserDB {
-    func getGUIDs(sql: String) -> [GUID] {
+    func getGUIDs(_ sql: String) -> [GUID] {
         func guidFactory(_ row: SDRow) -> GUID {
             return row[0] as! GUID
         }

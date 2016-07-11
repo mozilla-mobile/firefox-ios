@@ -67,7 +67,7 @@ class AuthenticationTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
-    private func enterCredentials(usernameValue usernameValue: String, passwordValue: String, username: String, password: String) {
+    private func enterCredentials(usernameValue: String, passwordValue: String, username: String, password: String) {
         let usernameField = tester().waitForViewWithAccessibilityValue(usernameValue) as! UITextField
         let passwordField = tester().waitForViewWithAccessibilityValue(passwordValue) as! UITextField
         usernameField.text = username

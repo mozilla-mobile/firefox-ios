@@ -13,14 +13,14 @@ let threeMonthsInMillis: UInt64 = 3 * 30 * 24 * 60 * 60 * 1000
 let threeMonthsInMicros: UInt64 = UInt64(threeMonthsInMillis) * UInt64(1000)
 
 // Start everything three months ago.
-let baseInstantInMillis = NSDate.now() - threeMonthsInMillis
-let baseInstantInMicros = NSDate.nowMicroseconds() - threeMonthsInMicros
+let baseInstantInMillis = Date.now() - threeMonthsInMillis
+let baseInstantInMicros = Date.nowMicroseconds() - threeMonthsInMicros
 
-func advanceTimestamp(timestamp: Timestamp, by: Int) -> Timestamp {
+func advanceTimestamp(_ timestamp: Timestamp, by: Int) -> Timestamp {
     return timestamp + UInt64(by)
 }
 
-func advanceMicrosecondTimestamp(timestamp: MicrosecondTimestamp, by: Int) -> MicrosecondTimestamp {
+func advanceMicrosecondTimestamp(_ timestamp: MicrosecondTimestamp, by: Int) -> MicrosecondTimestamp {
     return timestamp + UInt64(by)
 }
 
@@ -31,15 +31,15 @@ extension Site {
 }
 
 class BaseHistoricalBrowserTable {
-    func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
+    func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
         assert(false, "Should never be called.")
     }
 
-    func exists(db: SQLiteDBConnection) -> Bool {
+    func exists(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
 
-    func drop(db: SQLiteDBConnection) -> Bool {
+    func drop(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
 
@@ -58,7 +58,7 @@ class BaseHistoricalBrowserTable {
         "date REAL NOT NULL" +
         ") "
 
-    func run(db: SQLiteDBConnection, sql: String?, args: Args? = nil) -> Bool {
+    func run(_ db: SQLiteDBConnection, sql: String?, args: Args? = nil) -> Bool {
         if let sql = sql {
             let err = db.executeChange(sql, withArgs: args)
             return err == nil
@@ -66,7 +66,7 @@ class BaseHistoricalBrowserTable {
         return true
     }
 
-    func run(db: SQLiteDBConnection, queries: [String?]) -> Bool {
+    func run(_ db: SQLiteDBConnection, queries: [String?]) -> Bool {
         for sql in queries {
             if let sql = sql {
                 if !run(db, sql: sql) {
@@ -77,7 +77,7 @@ class BaseHistoricalBrowserTable {
         return true
     }
 
-    func run(db: SQLiteDBConnection, queries: [String]) -> Bool {
+    func run(_ db: SQLiteDBConnection, queries: [String]) -> Bool {
         for sql in queries {
             if !run(db, sql: sql) {
                 return false
@@ -103,7 +103,7 @@ class BrowserTableV6: BaseHistoricalBrowserTable {
     var name: String { return "BROWSER" }
     var version: Int { return 6 }
 
-    func prepopulateRootFolders(db: SQLiteDBConnection) -> Bool {
+    func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.Folder.rawValue
         let root = BookmarkRoots.RootID
 
@@ -163,7 +163,7 @@ class BrowserTableV6: BaseHistoricalBrowserTable {
 }
 
 extension BrowserTableV6: Table {
-    func create(db: SQLiteDBConnection) -> Bool {
+    func create(_ db: SQLiteDBConnection) -> Bool {
         let visits =
         "CREATE TABLE IF NOT EXISTS \(TableVisits) (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -256,7 +256,7 @@ class BrowserTableV7: BaseHistoricalBrowserTable {
     var name: String { return "BROWSER" }
     var version: Int { return 7 }
 
-    func prepopulateRootFolders(db: SQLiteDBConnection) -> Bool {
+    func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.Folder.rawValue
         let root = BookmarkRoots.RootID
 
@@ -316,7 +316,7 @@ class BrowserTableV7: BaseHistoricalBrowserTable {
 }
 
 extension BrowserTableV7: SectionCreator, TableInfo {
-    func create(db: SQLiteDBConnection) -> Bool {
+    func create(_ db: SQLiteDBConnection) -> Bool {
         // Right now we don't need to track per-visit deletions: Sync can't
         // represent them! See Bug 1157553 Comment 6.
         // We flip the should_upload flag on the history item when we add a visit.
@@ -414,7 +414,7 @@ class BrowserTableV8: BaseHistoricalBrowserTable {
     var name: String { return "BROWSER" }
     var version: Int { return 8 }
 
-    func prepopulateRootFolders(db: SQLiteDBConnection) -> Bool {
+    func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.Folder.rawValue
         let root = BookmarkRoots.RootID
 
@@ -474,7 +474,7 @@ class BrowserTableV8: BaseHistoricalBrowserTable {
 }
 
 extension BrowserTableV8: SectionCreator, TableInfo {
-    func create(db: SQLiteDBConnection) -> Bool {
+    func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS favicons (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -586,7 +586,7 @@ class BrowserTableV10: BaseHistoricalBrowserTable {
     var name: String { return "BROWSER" }
     var version: Int { return 10 }
 
-    func prepopulateRootFolders(db: SQLiteDBConnection) -> Bool {
+    func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.Folder.rawValue
         let root = BookmarkRoots.RootID
 
@@ -691,7 +691,7 @@ class BrowserTableV10: BaseHistoricalBrowserTable {
 }
 
 extension BrowserTableV10: SectionCreator, TableInfo {
-    func create(db: SQLiteDBConnection) -> Bool {
+    func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS favicons (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -976,7 +976,7 @@ class TestSQLiteHistory: XCTestCase {
         })
 
         // Now insert it again. This should update the domain
-        history.addLocalVisit(SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: VisitType.Link))
+        history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.Link))
 
         // DomainID isn't normally exposed, so we manually query to get it
         let results = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor<Int> in
@@ -997,12 +997,12 @@ class TestSQLiteHistory: XCTestCase {
         let site12 = Site(url: "http://www.example.com/test1.2", title: "title two")
         let site13 = Place(guid: initialGuid, url: "http://www.example.com/test1.3", title: "title three")
         let site3 = Site(url: "http://www.example2.com/test1", title: "title three")
-        let expectation = self.expectationWithDescription("First.")
+        let expectation = self.expectation(withDescription: "First.")
 
         history.clearHistory().bind({ success in
-            return all([history.addLocalVisit(SiteVisit(site: site11, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
-                        history.addLocalVisit(SiteVisit(site: site12, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
-                        history.addLocalVisit(SiteVisit(site: site3, date: NSDate.nowMicroseconds(), type: VisitType.Link))])
+            return all([history.addLocalVisit(SiteVisit(site: site11, date: Date.nowMicroseconds(), type: VisitType.Link)),
+                        history.addLocalVisit(SiteVisit(site: site12, date: Date.nowMicroseconds(), type: VisitType.Link)),
+                        history.addLocalVisit(SiteVisit(site: site3, date: Date.nowMicroseconds(), type: VisitType.Link))])
         }).bind({ (results: [Maybe<()>]) in
             return history.insertOrUpdatePlace(site13, modified: NSDate.nowMicroseconds())
         }).bind({ guid in
@@ -1019,7 +1019,7 @@ class TestSQLiteHistory: XCTestCase {
             expectation.fulfill()
         })
 
-        waitForExpectationsWithTimeout(10.0) { error in
+        waitForExpectations(withTimeout: 10.0) { error in
             return
         }
     }
@@ -1034,7 +1034,7 @@ class TestSQLiteHistory: XCTestCase {
 
         XCTAssertFalse(history.hasSyncedHistory().value.successValue ?? true)
 
-        XCTAssertTrue(history.insertOrUpdatePlace(site, modified: NSDate.now()).value.isSuccess)
+        XCTAssertTrue(history.insertOrUpdatePlace(site, modified: Date.now()).value.isSuccess)
 
         XCTAssertTrue(history.hasSyncedHistory().value.successValue ?? false)
     }
@@ -1050,40 +1050,40 @@ class TestSQLiteHistory: XCTestCase {
         let site1 = Site(url: "http://url1/", title: "title one")
         let site1Changed = Site(url: "http://url1/", title: "title one alt")
 
-        let siteVisit1 = SiteVisit(site: site1, date: NSDate.nowMicroseconds(), type: VisitType.Link)
-        let siteVisit2 = SiteVisit(site: site1Changed, date: NSDate.nowMicroseconds() + 1000, type: VisitType.Bookmark)
+        let siteVisit1 = SiteVisit(site: site1, date: Date.nowMicroseconds(), type: VisitType.Link)
+        let siteVisit2 = SiteVisit(site: site1Changed, date: Date.nowMicroseconds() + 1000, type: VisitType.Bookmark)
 
         let site2 = Site(url: "http://url2/", title: "title two")
-        let siteVisit3 = SiteVisit(site: site2, date: NSDate.nowMicroseconds() + 2000, type: VisitType.Link)
+        let siteVisit3 = SiteVisit(site: site2, date: Date.nowMicroseconds() + 2000, type: VisitType.Link)
 
-        let expectation = self.expectationWithDescription("First.")
+        let expectation = self.expectation(withDescription: "First.")
         func done() -> Success {
             expectation.fulfill()
             return succeed()
         }
 
-        func checkSitesByFrecency(f: Cursor<Site> -> Success) -> () -> Success {
+        func checkSitesByFrecency(_ f: (Cursor<Site>) -> Success) -> () -> Success {
             return {
                 history.getSitesByFrecency(withHistoryLimit: 10)
                     >>== f
             }
         }
 
-        func checkSitesByDate(f: Cursor<Site> -> Success) -> () -> Success {
+        func checkSitesByDate(_ f: (Cursor<Site>) -> Success) -> () -> Success {
             return {
                 history.getSitesByLastVisit(withLimit: 10)
                 >>== f
             }
         }
 
-        func checkSitesWithFilter(filter: String, f: Cursor<Site> -> Success) -> () -> Success {
+        func checkSitesWithFilter(_ filter: String, f: (Cursor<Site>) -> Success) -> () -> Success {
             return {
                 history.getSitesByFrecency(withHistoryLimit: 10, whereURLContains: filter)
                 >>== f
             }
         }
 
-        func checkDeletedCount(expected: Int) -> () -> Success {
+        func checkDeletedCount(_ expected: Int) -> () -> Success {
             return {
                 history.getDeletedHistoryToUpload()
                 >>== { guids in
@@ -1172,7 +1172,7 @@ class TestSQLiteHistory: XCTestCase {
             >>> done
 
 
-        waitForExpectationsWithTimeout(10.0) { error in
+        waitForExpectations(withTimeout: 10.0) { error in
             return
         }
     }
@@ -1183,14 +1183,14 @@ class TestSQLiteHistory: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)!
         let bookmarks = SQLiteBookmarks(db: db)
 
-        let expectation = self.expectationWithDescription("First.")
+        let expectation = self.expectation(withDescription: "First.")
         func done() -> Success {
             expectation.fulfill()
             return succeed()
         }
 
         func updateFavicon() -> Success {
-            let fav = Favicon(url: "http://url2/", date: NSDate(), type: .Icon)
+            let fav = Favicon(url: "http://url2/", date: Date(), type: .Icon)
             fav.id = 1
             let site = Site(url: "http://bookmarkedurl/", title: "My Bookmark")
             return history.addFavicon(fav, forSite: site) >>> succeed
@@ -1235,7 +1235,7 @@ class TestSQLiteHistory: XCTestCase {
             >>> checkFaviconWasRemovedForBookmark
             >>> done
 
-        waitForExpectationsWithTimeout(10.0) { error in
+        waitForExpectations(withTimeout: 10.0) { error in
             return
         }
     }
@@ -1256,10 +1256,10 @@ class TestSQLiteHistory: XCTestCase {
         let site = Site(url: "http://s\(5)ite\(5)/foo", title: "A \(5)")
         site.guid = "abc\(5)def"
         for i in 0...20 {
-            addVisitForSite(site, intoHistory: history, from: .Local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
+            addVisit(forSite: site, intoHistory: history, from: .Local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
         }
 
-        let expectation = self.expectationWithDescription("First.")
+        let expectation = self.expectation(withDescription: "First.")
         func done() -> Success {
             expectation.fulfill()
             return succeed()
@@ -1291,7 +1291,7 @@ class TestSQLiteHistory: XCTestCase {
             let site = Site(url: "http://s\(0)ite\(0)/foo", title: "A \(0)")
             site.guid = "abc\(0)def"
             for i in 0...20 {
-                addVisitForSite(site, intoHistory: history, from: .Local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
+                addVisit(forSite: site, intoHistory: history, from: .Local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
             }
             return succeed()
         }
@@ -1319,7 +1319,7 @@ class TestSQLiteHistory: XCTestCase {
             >>> checkSitesInvalidate
             >>> done
 
-        waitForExpectationsWithTimeout(10.0) { error in
+        waitForExpectations(withTimeout: 10.0) { error in
             return
         }
     }
@@ -1431,7 +1431,7 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
         XCTAssert(stringArgsEqual(args, ["foobar"]))
     }
 
-    private func stringArgsEqual(one: Args, _ other: Args) -> Bool {
+    private func stringArgsEqual(_ one: Args, _ other: Args) -> Bool {
         return one.elementsEqual(other, isEquivalent: { (oneElement: AnyObject?, otherElement: AnyObject?) -> Bool in
             return (oneElement as! String) == (otherElement as! String)
         })
@@ -1441,11 +1441,11 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
 // MARK - Private Test Helper Methods
 
 private enum VisitOrigin {
-    case Local
-    case Remote
+    case local
+    case remote
 }
 
-private func populateHistoryForFrecencyCalculations(history: SQLiteHistory, siteCount count: Int) {
+private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, siteCount count: Int) {
     for i in 0...count {
         let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
@@ -1455,18 +1455,18 @@ private func populateHistoryForFrecencyCalculations(history: SQLiteHistory, site
 
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
-            addVisitForSite(site, intoHistory: history, from: .Local, atTime: visitTime)
-            addVisitForSite(site, intoHistory: history, from: .Remote, atTime: visitTime)
+            addVisit(forSite: site, intoHistory: history, from: .Local, atTime: visitTime)
+            addVisit(forSite: site, intoHistory: history, from: .Remote, atTime: visitTime)
         }
     }
 }
 
-private func addVisitForSite(site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
+private func addVisit(forSite site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
     let visit = SiteVisit(site: site, date: atTime, type: VisitType.Link)
     switch from {
-    case .Local:
+    case .local:
             history.addLocalVisit(visit).value
-    case .Remote:
+    case .remote:
         history.storeRemoteVisits([visit], forGUID: site.guid!).value
     }
 }

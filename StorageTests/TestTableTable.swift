@@ -52,7 +52,7 @@ class TestSchemaTable: XCTestCase {
     }
 
     // Helper for verifying that the data in a cursor matches whats in a table
-    private func verifyTable(cursor: Cursor<TableInfo>, table: TestTable) {
+    private func verifyTable(_ cursor: Cursor<TableInfo>, table: TestTable) {
         XCTAssertEqual(cursor.count, 1, "Cursor is the right size")
         let data = cursor[0] as! TableInfoWrapper
         XCTAssertNotNil(data, "Found an object of the right type")
@@ -86,12 +86,12 @@ class TestSchemaTable: XCTestCase {
             self.dropCallback = dropCallback
         }
 
-        func exists(db: SQLiteDBConnection) -> Bool {
+        func exists(_ db: SQLiteDBConnection) -> Bool {
             let res = db.executeQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name=?", factory: StringFactory, withArgs: [name])
             return res.count > 0
         }
 
-        func drop(db: SQLiteDBConnection) -> Bool {
+        func drop(_ db: SQLiteDBConnection) -> Bool {
             if let dropCallback = dropCallback {
                 dropCallback()
             }
@@ -100,21 +100,21 @@ class TestSchemaTable: XCTestCase {
             return err == nil
         }
 
-        func create(db: SQLiteDBConnection) -> Bool {
+        func create(_ db: SQLiteDBConnection) -> Bool {
             // BrowserDB uses a different query to determine if a table exists, so we need to ensure it actually happens
             db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (ID INTEGER PRIMARY KEY AUTOINCREMENT)")
             return createCallback()
         }
 
-        func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
+        func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
             return updateCallback(from: from)
         }
 
         // These are all no-ops for testing
-        func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int { return -1 }
-        func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int { return -1 }
-        func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int { return -1 }
-        func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type> { return Cursor(status: .Failure, msg: "Shouldn't hit this") }
+        func insert(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int { return -1 }
+        func update(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int { return -1 }
+        func delete(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int { return -1 }
+        func query(_ db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type> { return Cursor(status: .Failure, msg: "Shouldn't hit this") }
     }
 
     // This function will create a table with appropriate callbacks set. Pass "create" if you expect the table to

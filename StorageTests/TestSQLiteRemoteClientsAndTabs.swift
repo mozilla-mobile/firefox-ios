@@ -13,27 +13,27 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
     public let clientsAndTabs: [ClientAndTabs]
 
     public init() {
-        let now = NSDate.now()
+        let now = Date.now()
         let client1GUID = Bytes.generateGUID()
         let client2GUID = Bytes.generateGUID()
-        let u11 = NSURL(string: "http://test.com/test1")!
+        let u11 = URL(string: "http://test.com/test1")!
         let tab11 = RemoteTab(clientGUID: client1GUID, URL: u11, title: "Test 1", history: [    ], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
 
-        let u12 = NSURL(string: "http://test.com/test2")!
+        let u12 = URL(string: "http://test.com/test2")!
         let tab12 = RemoteTab(clientGUID: client1GUID, URL: u12, title: "Test 2", history: [], lastUsed: (now - OneHourInMilliseconds), icon: nil)
 
         let tab21 = RemoteTab(clientGUID: client2GUID, URL: u11, title: "Test 1", history: [], lastUsed: (now - OneDayInMilliseconds), icon: nil)
 
-        let u22 = NSURL(string: "http://different.com/test2")!
+        let u22 = URL(string: "http://different.com/test2")!
         let tab22 = RemoteTab(clientGUID: client2GUID, URL: u22, title: "Different Test 2", history: [], lastUsed: now + OneHourInMilliseconds, icon: nil)
 
         let client1 = RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS")
         let client2 = RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin")
 
         let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS")
-        let localUrl1 = NSURL(string: "http://test.com/testlocal1")!
+        let localUrl1 = URL(string: "http://test.com/testlocal1")!
         let localTab1 = RemoteTab(clientGUID: nil, URL: localUrl1, title: "Local test 1", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
-        let localUrl2 = NSURL(string: "http://test.com/testlocal2")!
+        let localUrl2 = URL(string: "http://test.com/testlocal2")!
         let localTab2 = RemoteTab(clientGUID: nil, URL: localUrl2, title: "Local test 2", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
 
         // Tabs are ordered most-recent-first.
@@ -58,15 +58,15 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return succeed()
     }
 
-    public func insertOrUpdateClients(clients: [RemoteClient]) -> Success {
+    public func insertOrUpdateClients(_ clients: [RemoteClient]) -> Success {
         return succeed()
     }
 
-    public func insertOrUpdateClient(client: RemoteClient) -> Success {
+    public func insertOrUpdateClient(_ client: RemoteClient) -> Success {
         return succeed()
     }
 
-    public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+    public func insertOrUpdateTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return insertOrUpdateTabs(forClientGUID: nil, tabs: [RemoteTab]())
     }
 
@@ -91,23 +91,23 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     public func deleteCommands() -> Success { return succeed() }
-    public func deleteCommands(clientGUID: GUID) -> Success { return succeed() }
+    public func deleteCommands(_ clientGUID: GUID) -> Success { return succeed() }
 
     public func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>>  { return deferMaybe([GUID: [SyncCommand]]()) }
 
-    public func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>  { return deferMaybe(0) }
-    public func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>  { return deferMaybe(0) }
+    public func insertCommand(_ command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>  { return deferMaybe(0) }
+    public func insertCommands(_ commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>  { return deferMaybe(0) }
 }
 
-func removeLocalClient(a: ClientAndTabs) -> Bool {
+func removeLocalClient(_ a: ClientAndTabs) -> Bool {
     return a.client.guid != nil
 }
 
-func byGUID(a: ClientAndTabs, b: ClientAndTabs) -> Bool {
+func byGUID(_ a: ClientAndTabs, b: ClientAndTabs) -> Bool {
     return a.client.guid < b.client.guid
 }
 
-func byURL(a: RemoteTab, b: RemoteTab) -> Bool {
+func byURL(_ a: RemoteTab, b: RemoteTab) -> Bool {
     return a.URL.absoluteString < b.URL.absoluteString
 }
 
@@ -137,7 +137,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             clientsAndTabs.insertOrUpdateTabs(forClientGUID: c.client.guid, tabs: c.tabs)
         }
 
-        let f = self.expectationWithDescription("Get after insert.")
+        let f = self.expectation(withDescription: "Get after insert.")
         clientsAndTabs.getClientsAndTabs().upon {
             if let got = $0.successValue {
                 let expected = self.clients.sort(byGUID).filter(removeLocalClient)
@@ -160,8 +160,8 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             ClientAndTabs(client: clients[1].client, tabs: client1NewTabs),
         ].sort(byGUID)
 
-        func doUpdate(guid: String?, tabs: [RemoteTab]) {
-            let g0 = self.expectationWithDescription("Update client \(guid).")
+        func doUpdate(_ guid: String?, tabs: [RemoteTab]) {
+            let g0 = self.expectation(withDescription: "Update client \(guid).")
             clientsAndTabs.insertOrUpdateTabs(forClientGUID: guid, tabs: tabs).upon {
                 if let rowID = $0.successValue {
                     XCTAssertTrue(rowID > -1)
@@ -177,7 +177,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         // Also update the local tabs list. It should still not appear in the expected tabs below.
         doUpdate(clients[2].client.guid, tabs: client1NewTabs)
 
-        let h = self.expectationWithDescription("Get after update.")
+        let h = self.expectation(withDescription: "Get after update.")
         clientsAndTabs.getClientsAndTabs().upon {
             if let clients = $0.successValue {
                 XCTAssertEqual(expected, clients.sort(byGUID))
@@ -188,13 +188,13 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         }
 
         // Now clear everything, and verify we have no clients or tabs whatsoever.
-        let i = self.expectationWithDescription("Clear.")
+        let i = self.expectation(withDescription: "Clear.")
         clientsAndTabs.clear().upon {
             XCTAssertTrue($0.isSuccess)
             i.fulfill()
         }
 
-        let j = self.expectationWithDescription("Get after clear.")
+        let j = self.expectation(withDescription: "Get after clear.")
         clientsAndTabs.getClientsAndTabs().upon {
             if let clients = $0.successValue {
                 XCTAssertEqual(0, clients.count)
@@ -204,7 +204,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             j.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testGetTabsForClient() {
@@ -218,7 +218,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         }
 
 
-        let e = self.expectationWithDescription("Get after insert.")
+        let e = self.expectation(withDescription: "Get after insert.")
         let ct = clients[0]
         clientsAndTabs.getTabsForClient(withGUID: ct.client.guid).upon {
             if let got = $0.successValue {
@@ -232,7 +232,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             e.fulfill()
         }
 
-        let f = self.expectationWithDescription("Get after insert.")
+        let f = self.expectation(withDescription: "Get after insert.")
         let localClient = clients[0]
         clientsAndTabs.getTabsForClient(withGUID: localClient.client.guid).upon {
             if let got = $0.successValue {
@@ -246,6 +246,6 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             f.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(withTimeout: 10, handler: nil)
     }
 }

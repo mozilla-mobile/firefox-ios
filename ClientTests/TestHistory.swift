@@ -168,7 +168,7 @@ class TestHistory : ProfileTest {
 
 
     // Runs a random command on a database. Calls cb when finished.
-    private func runRandom(inout history: BrowserHistory, cmdIn: Int, cb: () -> Void) {
+    private func runRandom(history: inout BrowserHistory, cmdIn: Int, cb: () -> Void) {
         var cmd = cmdIn
         if cmd < 0 {
             cmd = Int(rand() % 5)
@@ -194,7 +194,7 @@ class TestHistory : ProfileTest {
 
     // Calls numCmds random methods on this database. val is a counter used by this interally (i.e. always pass zero for it).
     // Calls cb when finished.
-    private func runMultiRandom(inout history: BrowserHistory, val: Int, numCmds: Int, cb: () -> Void) {
+    private func runMultiRandom(history: inout BrowserHistory, val: Int, numCmds: Int, cb: () -> Void) {
         if val == numCmds {
             cb()
             return
@@ -206,7 +206,7 @@ class TestHistory : ProfileTest {
     }
 
     // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done.
-    private func runRandom(inout history: BrowserHistory, queue: dispatch_queue_t, cb: () -> Void) {
+    private func runRandom(history: inout BrowserHistory, queue: dispatch_queue_t, cb: () -> Void) {
         dispatch_async(queue) {
             // Each thread creates its own history provider
             self.runMultiRandom(&history, val: 0, numCmds: self.NumCmds) { _ in

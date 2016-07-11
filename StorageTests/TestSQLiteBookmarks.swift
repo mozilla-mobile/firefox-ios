@@ -8,7 +8,7 @@ import Shared
 
 import XCTest
 
-private func getBrowserDB(filename: String, files: FileAccessor) -> BrowserDB? {
+private func getBrowserDB(_ filename: String, files: FileAccessor) -> BrowserDB? {
     let db = BrowserDB(filename: filename, files: files)
 
     // BrowserTable exists only to perform create/update etc. operations -- it's not
@@ -30,7 +30,7 @@ extension SQLiteBookmarks {
 class TestSQLiteBookmarks: XCTestCase {
     let files = MockFiles()
 
-    private func remove(path: String) {
+    private func remove(_ path: String) {
         do {
             try self.files.remove(path)
         } catch {}
@@ -76,22 +76,22 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertTrue(factory.hasDesktopBookmarks().value.successValue ?? true)
     }
 
-    private func createStockMirrorTree(db: BrowserDB) {
+    private func createStockMirrorTree(_ db: BrowserDB) {
         // Set up a mirror tree.
         let mirrorQuery =
         "INSERT INTO \(TableBookmarksMirror) (guid, type, bmkUri, title, parentid, parentName, description, tags, keyword, is_overridden, server_modified, pos) " +
         "VALUES " +
-        "(?, \(BookmarkNodeType.Folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(NSDate.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(NSDate.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(NSDate.now()), NULL), " +
+        "(?, \(BookmarkNodeType.Folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.Folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.Folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
 
-        "(?, \(BookmarkNodeType.Separator.rawValue), NULL, NULL, ?, '', '', '', '', 0, \(NSDate.now()), 0), " +
+        "(?, \(BookmarkNodeType.Separator.rawValue), NULL, NULL, ?, '', '', '', '', 0, \(Date.now()), 0), " +
 
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(NSDate.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(NSDate.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(NSDate.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(NSDate.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(NSDate.now()), NULL) "
+        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL) "
 
         let mirrorArgs: Args = [
             "folderAAAAAA", "AAA", BookmarkRoots.ToolbarFolderGUID,
@@ -138,7 +138,7 @@ class TestSQLiteBookmarks: XCTestCase {
         ]).succeeded()
     }
 
-    private func isUnknown(folder: BookmarkTreeNode, withGUID: GUID) {
+    private func isUnknown(_ folder: BookmarkTreeNode, withGUID: GUID) {
         switch folder {
         case .Unknown(let guid):
             XCTAssertEqual(withGUID, guid)
@@ -147,7 +147,7 @@ class TestSQLiteBookmarks: XCTestCase {
         }
     }
 
-    private func isNonFolder(folder: BookmarkTreeNode, withGUID: GUID) {
+    private func isNonFolder(_ folder: BookmarkTreeNode, withGUID: GUID) {
         switch folder {
         case .NonFolder(let guid):
             XCTAssertEqual(withGUID, guid)
@@ -156,7 +156,7 @@ class TestSQLiteBookmarks: XCTestCase {
         }
     }
 
-    private func isFolder(folder: BookmarkTreeNode, withGUID: GUID) {
+    private func isFolder(_ folder: BookmarkTreeNode, withGUID: GUID) {
         switch folder {
         case .Folder(let record):
             XCTAssertEqual(withGUID, record.guid)
@@ -165,13 +165,13 @@ class TestSQLiteBookmarks: XCTestCase {
         }
     }
 
-    private func areFolders(folders: [BookmarkTreeNode], withGUIDs: [GUID]) {
+    private func areFolders(_ folders: [BookmarkTreeNode], withGUIDs: [GUID]) {
         folders.zip(withGUIDs).forEach { (node, guid) in
             self.isFolder(node, withGUID: guid)
         }
     }
 
-    private func assertTreeIsEmpty(treeMaybe: Maybe<BookmarkTree>) {
+    private func assertTreeIsEmpty(_ treeMaybe: Maybe<BookmarkTree>) {
         guard let tree = treeMaybe.successValue else {
             XCTFail("Couldn't get tree!")
             return
@@ -181,7 +181,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertTrue(tree.isEmpty)
     }
 
-    private func assertTreeContainsOnlyRoots(treeMaybe: Maybe<BookmarkTree>) {
+    private func assertTreeContainsOnlyRoots(_ treeMaybe: Maybe<BookmarkTree>) {
         guard let tree = treeMaybe.successValue else {
             XCTFail("Couldn't get tree!")
             return
@@ -221,7 +221,7 @@ class TestSQLiteBookmarks: XCTestCase {
             "rooted000002", BookmarkNodeType.Bookmark.rawValue, 0, "somefolder02", "Some Other Folder", "I have a folder", "http://example.org/",
             "somefolder02", BookmarkNodeType.Folder.rawValue, 0, BookmarkRoots.MobileFolderGUID, "Mobile Bookmarks", "Some Other Folder",
         ]
-        let now = NSDate.now()
+        let now = Date.now()
         let bufferSQL =
         "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
         "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
@@ -373,7 +373,7 @@ class TestSQLiteBookmarks: XCTestCase {
             "iwasdeleted", BookmarkNodeType.Bookmark.rawValue,
         ]
 
-        let now = NSDate.now()
+        let now = Date.now()
         let bufferSQL = "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
         "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
         "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
@@ -420,7 +420,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(["folderBBBBBB"], getMenuChildren())
 
         // Locally add an item to the menu. This'll override the menu folder.
-        bookmarks.insertBookmark(NSURL(string: "http://example.com/2")!, title: "Bookmark 2 added locally", favicon: nil, intoFolder: BookmarkRoots.MenuFolderGUID, withTitle: "Bookmarks Menu").succeeded()
+        bookmarks.insertBookmark(URL(string: "http://example.com/2")!, title: "Bookmark 2 added locally", favicon: nil, intoFolder: BookmarkRoots.MenuFolderGUID, withTitle: "Bookmarks Menu").succeeded()
 
         XCTAssertTrue(db.isOverridden(BookmarkRoots.MenuFolderGUID) ?? false)
 
@@ -697,9 +697,9 @@ class TestSQLiteBookmarks: XCTestCase {
         }
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)
 
-        let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", modified: NSDate.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
-        let record2 = BookmarkMirrorItem.bookmark("bbbbbbbbbbbb", modified: NSDate.now() + 10, hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "BBB", description: "BBB desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
-        let toolbar = BookmarkMirrorItem.folder("toolbar", modified: NSDate.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
+        let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
+        let record2 = BookmarkMirrorItem.bookmark("bbbbbbbbbbbb", modified: Date.now() + 10, hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "BBB", description: "BBB desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
+        let toolbar = BookmarkMirrorItem.folder("toolbar", modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
         let recordsA: [BookmarkMirrorItem] = [record1, toolbar, record2]
         bookmarks.applyRecords(recordsA, withMaxVars: 3).succeeded()
 
@@ -707,12 +707,12 @@ class TestSQLiteBookmarks: XCTestCase {
 
         let children = ["M87np9Vfh_2s","-JxRyqNte-ue","6lIQzUtbjE8O","eOg3jPSslzXl","1WJIi9EjQErp","z5uRo45Rvfbd","EK3lcNd0sUFN","gFD3GTljgu12","eRZGsbN1ew9-","widfEdgGn9de","l7eTOR4Uf6xq","vPbxG-gpN4Rb","4dwJ8CototFe","zK-kw9Ii6ScW","eDmDU-gtEFW6","lKjqWQaL_syt","ETVDvWgGT31Q","3Z_bMIHPSZQ8","Fqu4_bJOk7fT","Uo_5K1QrA67j","gDTXNg4m1AJZ","zpds8P-9xews","87zjNtVGPtEp","ZJru8Sn3qhW7","txVnzBBBOgLP","JTnRqFaj_oNa","soaMlfmM4kjR","g8AcVBjo6IRf","uPUDaiG4q637","rfq2bUud_w4d","XBGxsiuUG2UD","-VQRnJlyAvMs","6wu7TScKdTU7","ZeFji2hLVpLj","HpCn_TVizMWX","IPR5HZwRdlwi","00JFOGuWnhWB","P1jb3qKt32Vg","D6MQJ43V1Ir5","qWSoXFteRfsq","o2avfYqEdomL","xRS0U0YnjK9G","VgOgzE_xfP4w","SwP3rMJGvoO3","Hf2jEgI_-PWa","AyhmBi7Cv598","-PaMuzTJXxVk","JMhYrg8SlY5K","SQeySEjzyplL","GTAwd2UkEQEe","x3RsZj5Ilebr","sRZWZqPi74FP","amHR50TpygA6","XSk782ceVNN6","ipiMyYQzeypI","ph2k3Nqfhau4","m5JKC3hAEQ0H","yTVerkmQbNxk","7taA6FbbbUbH","PZvpbSRuJLPs","C8atoa25U94F","KOfNJk_ISLc6","Bt74lBG9tJq6","BuHoY2rUhuKA","XTmoWKnwfIPl","ZATwa3oTD1m0","e8TczN5It6Am","6kCUYs8hQtKg","jDD8s5aiKoex","QmpmcrYwLU29","nCRcekynuJ08","resttaI4J9tu","EKSX3HV55VU3","2-yCz0EIsVls","sSeeGw3VbBY-","qfpCrU34w9y0","RKDgzPWecD6m","5SgXEKu_dICW","R143WAeB5E5r","8Ns4-NiKG62r","4AHuZDvop5XX","YCP1OsO1goFF","CYYaU1mQ_N6t","UGkzEOMK8cuU","1RzZOarkzQBa","qSW2Z3cZSI9c","ooPlKEAfQsnn","jIUScoKLiXQt","bjNTKugzRRL1","hR24ZVnHUZcs","3j2IDAZgUyYi","xnWcy-sQDJRu","UCcgJqGk3bTV","WSSRWeptH9tq","4ugv47OGD2E2","XboCZgUx-x3x","HrmWqiqsuLrm","OjdxvRJ3Jb6j"]
 
-        let mA = BookmarkMirrorItem.bookmark("jIUScoKLiXQt", modified: NSDate.now(), hasDupe: false, parentID: "mobile", parentName: "mobile", title: "Join the Engineering Leisure Class — Medium", description: nil, URI: "https://medium.com/@chrisloer/join-the-engineering-leisure-class-b3083c09a78e", tags: "[]", keyword: nil)
+        let mA = BookmarkMirrorItem.bookmark("jIUScoKLiXQt", modified: Date.now(), hasDupe: false, parentID: "mobile", parentName: "mobile", title: "Join the Engineering Leisure Class — Medium", description: nil, URI: "https://medium.com/@chrisloer/join-the-engineering-leisure-class-b3083c09a78e", tags: "[]", keyword: nil)
 
-        let mB = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: NSDate.now(), hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: children)
+        let mB = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: children)
         bookmarks.applyRecords([mA, mB]).succeeded()
 
-        func childCount(parent: GUID) -> Int? {
+        func childCount(_ parent: GUID) -> Int? {
             let sql = "SELECT COUNT(*) AS childCount FROM \(TableBookmarksBufferStructure) WHERE parent = ?"
             let args: Args = [parent]
             return db.runQuery(sql, args: args, factory: { $0["childCount"] as! Int }).value.successValue?[0]
@@ -722,7 +722,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(children.count, childCount("UjAHxFOGEqU8"))
 
         // Insert an empty mobile bookmarks folder, so we can verify that the structure table is wiped.
-        let mBEmpty = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: NSDate.now() + 1, hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: [])
+        let mBEmpty = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: Date.now() + 1, hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: [])
         bookmarks.applyRecords([mBEmpty]).succeeded()
 
         // We no longer have children.
