@@ -47,7 +47,7 @@ class SearchEngines {
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
     var defaultEngine: OpenSearchEngine {
@@ -60,18 +60,18 @@ class SearchEngines {
             self.enableEngine(defaultEngine)
             // The default engine is always first in the list.
             var orderedEngines = self.orderedEngines.filter { engine in engine.shortName != defaultEngine.shortName }
-            orderedEngines.insert(defaultEngine, atIndex: 0)
+            orderedEngines.insert(defaultEngine, at: 0)
             self.orderedEngines = orderedEngines
         }
     }
 
     @objc
-    func SELdidResetPrompt(notification: NSNotification) {
+    func SELdidResetPrompt(_ notification: Notification) {
         self.shouldShowSearchSuggestionsOptIn = true
         self.shouldShowSearchSuggestions = false
     }
 
-    func isEngineDefault(engine: OpenSearchEngine) -> Bool {
+    func isEngineDefault(_ engine: OpenSearchEngine) -> Bool {
         return defaultEngine.shortName == engine.shortName
     }
 
@@ -106,15 +106,15 @@ class SearchEngines {
         }
     }
 
-    func isEngineEnabled(engine: OpenSearchEngine) -> Bool {
-        return disabledEngineNames.indexForKey(engine.shortName) == nil
+    func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {
+        return disabledEngineNames.index(forKey: engine.shortName) == nil
     }
 
-    func enableEngine(engine: OpenSearchEngine) {
-        disabledEngineNames.removeValueForKey(engine.shortName)
+    func enableEngine(_ engine: OpenSearchEngine) {
+        disabledEngineNames.removeValue(forKey: engine.shortName)
     }
 
-    func disableEngine(engine: OpenSearchEngine) {
+    func disableEngine(_ engine: OpenSearchEngine) {
         if isEngineDefault(engine) {
             // Can't disable default engine.
             return
@@ -122,25 +122,25 @@ class SearchEngines {
         disabledEngineNames[engine.shortName] = true
     }
 
-    func deleteCustomEngine(engine: OpenSearchEngine) {
+    func deleteCustomEngine(_ engine: OpenSearchEngine) {
         // We can't delete a preinstalled engine or an engine that is currently the default.
         if !engine.isCustomEngine || isEngineDefault(engine) {
             return
         }
 
-        customEngines.removeAtIndex(customEngines.indexOf(engine)!)
+        customEngines.remove(at: customEngines.index(of: engine)!)
         saveCustomEngines()
         orderedEngines = getOrderedEngines()
     }
 
     /// Adds an engine to the front of the search engines list.
-    func addSearchEngine(engine: OpenSearchEngine) {
+    func addSearchEngine(_ engine: OpenSearchEngine) {
         customEngines.append(engine)
-        orderedEngines.insert(engine, atIndex: 1)
+        orderedEngines.insert(engine, at: 1)
         saveCustomEngines()
     }
 
-    func queryForSearchURL(url: NSURL?) -> String? {
+    func queryForSearchURL(_ url: URL?) -> String? {
         for engine in orderedEngines {
             guard let searchTerm = engine.queryForSearchURL(url) else { continue }
             return searchTerm
@@ -166,7 +166,7 @@ class SearchEngines {
     }
 
     private lazy var customEngines: [OpenSearchEngine] = {
-        return NSKeyedUnarchiver.unarchiveObjectWithFile(self.customEngineFilePath()) as? [OpenSearchEngine] ?? []
+        return NSKeyedUnarchiver.unarchiveObject(withFile: self.customEngineFilePath()) as? [OpenSearchEngine] ?? []
     }()
 
     private func saveCustomEngines() {
@@ -176,9 +176,9 @@ class SearchEngines {
     /// Return all possible paths for a language identifier in the order of most specific to least specific.
     /// For example, zh-Hans-CN with a default of en will return [zh-Hans-CN, zh-CN, zh, en]. The fallback
     /// identifier must be a known one that is guaranteed to exist in the SearchPlugins directory.
-    class func directoriesForLanguageIdentifier(languageIdentifier: String, basePath: NSString, fallbackIdentifier: String) -> [String] {
+    class func directoriesForLanguageIdentifier(_ languageIdentifier: String, basePath: NSString, fallbackIdentifier: String) -> [String] {
         var directories = [String]()
-        let components = languageIdentifier.componentsSeparatedByString("-")
+        let components = languageIdentifier.components(separatedBy: "-")
         if components.count == 1 {
             // zh
             directories.append(languageIdentifier)
@@ -196,7 +196,7 @@ class SearchEngines {
         }
         
         return directories.map { (path) -> String in
-            return basePath.stringByAppendingPathComponent(path)
+            return basePath.appendingPathComponent(path)
         }
     }
 
@@ -207,7 +207,7 @@ class SearchEngines {
     // These exceptions can go away when we drop iOS 8 or when we start using a better mechanism for search
     // engine selection that is not based on language identifier.
     class func languageIdentifierForSearchEngines() -> String {
-        let languageIdentifier = NSLocale.preferredLanguages().first!
+        let languageIdentifier = Locale.preferredLanguages.first!
         switch languageIdentifier {
             case "zh-Hans":
                 return "zh-Hans-CN"
@@ -221,13 +221,13 @@ class SearchEngines {
     /// Get all bundled (not custom) search engines, with the default search engine first,
     /// but the others in no particular order.
     class func getUnorderedBundledEngines() -> [OpenSearchEngine] {
-        let pluginBasePath: NSString = (NSBundle.mainBundle().resourcePath! as NSString).stringByAppendingPathComponent("SearchPlugins")
+        let pluginBasePath: NSString = (Bundle.main.resourcePath! as NSString).appendingPathComponent("SearchPlugins")
         let languageIdentifier = languageIdentifierForSearchEngines()
-        let fallbackDirectory: NSString = pluginBasePath.stringByAppendingPathComponent("en")
+        let fallbackDirectory: NSString = pluginBasePath.appendingPathComponent("en")
 
         var directory: String?
         for path in directoriesForLanguageIdentifier(languageIdentifier, basePath: pluginBasePath, fallbackIdentifier: "en") {
-            if NSFileManager.defaultManager().fileExistsAtPath(path) {
+            if FileManager.default.fileExists(atPath: path) {
                 directory = path
                 break
             }
@@ -238,13 +238,13 @@ class SearchEngines {
             return []
         }
 
-        let index = (searchDirectory as NSString).stringByAppendingPathComponent("list.txt")
-        let listFile = try? String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
+        let index = (searchDirectory as NSString).appendingPathComponent("list.txt")
+        let listFile = try? String(contentsOfFile: index, encoding: String.Encoding.utf8)
         assert(listFile != nil, "Read the list of search engines")
 
         let engineNames = listFile!
-            .stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
-            .componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+            .trimmingCharacters(in: CharacterSet.newlines)
+            .components(separatedBy: CharacterSet.newlines)
 
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
@@ -256,11 +256,11 @@ class SearchEngines {
 
             // Search the current localized search plugins directory for the search engine.
             // If it doesn't exist, fall back to English.
-            var fullPath = (searchDirectory as NSString).stringByAppendingPathComponent("\(engineName).xml")
-            if !NSFileManager.defaultManager().fileExistsAtPath(fullPath) {
-                fullPath = fallbackDirectory.stringByAppendingPathComponent("\(engineName).xml")
+            var fullPath = (searchDirectory as NSString).appendingPathComponent("\(engineName).xml")
+            if !FileManager.default.fileExists(atPath: fullPath) {
+                fullPath = fallbackDirectory.appendingPathComponent("\(engineName).xml")
             }
-            assert(NSFileManager.defaultManager().fileExistsAtPath(fullPath), "\(fullPath) exists")
+            assert(FileManager.default.fileExists(atPath: fullPath), "\(fullPath) exists")
 
             let engine = parser.parse(fullPath, engineID: engineName)
             assert(engine != nil, "Engine at \(fullPath) successfully parsed")
@@ -268,10 +268,10 @@ class SearchEngines {
             engines.append(engine!)
         }
 
-        let defaultEngineFile = (searchDirectory as NSString).stringByAppendingPathComponent("default.txt")
-        let defaultEngineName = try? String(contentsOfFile: defaultEngineFile, encoding: NSUTF8StringEncoding).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        let defaultEngineFile = (searchDirectory as NSString).appendingPathComponent("default.txt")
+        let defaultEngineName = try? String(contentsOfFile: defaultEngineFile, encoding: String.Encoding.utf8).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
 
-        return engines.sort { e, _ in e.shortName == defaultEngineName }
+        return engines.sorted { e, _ in e.shortName == defaultEngineName }
     }
 
     /// Get all known search engines, possibly as ordered by the user.
@@ -287,7 +287,7 @@ class SearchEngines {
         // We may have found engines that weren't persisted in the ordered list
         // (if the user changed locales or added a new engine); these engines
         // will be appended to the end of the list.
-        return unorderedEngines.sort { engine1, engine2 in
+        return unorderedEngines.sorted { engine1, engine2 in
             let index1 = orderedEngineNames.indexOf(engine1.shortName)
             let index2 = orderedEngineNames.indexOf(engine2.shortName)
 
