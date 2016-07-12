@@ -44,7 +44,7 @@ public class MockSyncManager: SyncManager {
     public func onAddedAccount() -> Success {
         return succeed()
     }
-    public func onRemovedAccount(account: FirefoxAccount?) -> Success {
+    public func onRemovedAccount(_ account: FirefoxAccount?) -> Success {
         return succeed()
     }
 
@@ -54,7 +54,7 @@ public class MockSyncManager: SyncManager {
 }
 
 public class MockTabQueue: TabQueue {
-    public func addToQueue(tab: ShareItem) -> Success {
+    public func addToQueue(_ tab: ShareItem) -> Success {
         return succeed()
     }
 
@@ -166,7 +166,7 @@ public class MockProfile: Profile {
         return account
     }
 
-    func setAccount(account: FirefoxAccount) {
+    func setAccount(_ account: FirefoxAccount) {
         self.account = account
         self.syncManager.onAddedAccount()
     }
@@ -189,10 +189,10 @@ public class MockProfile: Profile {
         return deferMaybe([])
     }
 
-    func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return deferMaybe(0)
     }
 
-    func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
+    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) {
     }
 }

@@ -43,7 +43,7 @@ class MockEngineStateChanges: EngineStateChanges {
     }
 }
 
-func assertClientsHaveGUIDsFromStorage(storage: RemoteClientsAndTabs, expected: [GUID]) {
+func assertClientsHaveGUIDs(fromStorage storage: RemoteClientsAndTabs, expected: [GUID]) {
     let recs = storage.getClients().value.successValue
     XCTAssertNotNil(recs)
     XCTAssertEqual(expected, recs!.map { $0.guid! })
@@ -55,10 +55,10 @@ class ResetTests: XCTestCase {
 
         // Add a client.
         let tabs = profile.peekTabs
-        XCTAssertTrue(tabs.insertOrUpdateClient(RemoteClient(guid: "abcdefghijkl", name: "Remote", modified: NSDate.now(), type: "mobile", formfactor: "tablet", os: "Windows")).value.isSuccess)
+        XCTAssertTrue(tabs.insertOrUpdateClient(RemoteClient(guid: "abcdefghijkl", name: "Remote", modified: Date.now(), type: "mobile", formfactor: "tablet", os: "Windows")).value.isSuccess)
 
         // Verify that it's there.
-        assertClientsHaveGUIDsFromStorage(tabs, expected: ["abcdefghijkl"])
+        assertClientsHaveGUIDs(fromStorage: tabs, expected: ["abcdefghijkl"])
 
         // Tell the sync manager that "clients" has changed syncID.
         let e = MockEngineStateChanges()

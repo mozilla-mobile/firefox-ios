@@ -14,10 +14,10 @@ class WebServerTests: XCTestCase {
 
     /// Setup a basic web server that binds to a random port and that has one default handler on /hello
     private func setupWebServer() {
-        webServer.addHandlerForMethod("GET", path: "/hello", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            return GCDWebServerDataResponse(HTML: "<html><body><p>Hello World</p></body></html>")
+        webServer.addHandler(forMethod: "GET", path: "/hello", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            return GCDWebServerDataResponse(html: "<html><body><p>Hello World</p></body></html>")
         }
-        if webServer.startWithPort(0, bonjourName: nil) == false {
+        if webServer.start(withPort: 0, bonjourName: nil) == false {
             XCTFail("Can't start the GCDWebServer")
         }
         webServerBase = "http://localhost:\(webServer.port)"
@@ -33,13 +33,13 @@ class WebServerTests: XCTestCase {
     }
 
     func testWebServerIsRunning() {
-        XCTAssertTrue(webServer.running)
+        XCTAssertTrue(webServer.isRunning)
     }
 
     func testWebServerIsServingRequests() {
         let response: NSString?
         do {
-            response = try NSString(contentsOfURL: NSURL(string: "\(webServerBase)/hello")!, encoding: NSUTF8StringEncoding)
+            response = try NSString(contentsOf: URL(string: "\(webServerBase)/hello")!, encoding: String.Encoding.utf8.rawValue)
         } catch _ {
             response = nil
         }

@@ -12,7 +12,7 @@ import XCTest
 class SearchTests: XCTestCase {
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
-        let file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
+        let file = Bundle.main.pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
         let engine: OpenSearchEngine! = parser.parse(file!, engineID: "google")
         XCTAssertEqual(engine.shortName, "Google")
 
@@ -43,11 +43,11 @@ class SearchTests: XCTestCase {
         checkInvalidURL("a/b")
     }
 
-    private func checkValidURL(beforeFixup: String, afterFixup: String) {
+    private func checkValidURL(_ beforeFixup: String, afterFixup: String) {
         XCTAssertEqual(URIFixup.getURL(beforeFixup)!.absoluteString, afterFixup)
     }
 
-    private func checkInvalidURL(beforeFixup: String) {
+    private func checkInvalidURL(_ beforeFixup: String) {
         XCTAssertNil(URIFixup.getURL(beforeFixup))
     }
 
@@ -58,7 +58,7 @@ class SearchTests: XCTestCase {
         let client = SearchSuggestClient(searchEngine: engine, userAgent: "Fx-testSuggestClient")
 
 
-        let query1 = self.expectationWithDescription("foo query")
+        let query1 = self.expectation(withDescription: "foo query")
         client.query("foo", callback: { response, error in
             withExtendedLifetime(client) {
                 if error != nil {
@@ -72,9 +72,9 @@ class SearchTests: XCTestCase {
                 query1.fulfill()
             }
         })
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
 
-        let query2 = self.expectationWithDescription("foo bar query")
+        let query2 = self.expectation(withDescription: "foo bar query")
         client.query("foo bar", callback: { response, error in
             withExtendedLifetime(client) {
                 if error != nil {
@@ -88,20 +88,20 @@ class SearchTests: XCTestCase {
                 query2.fulfill()
             }
         })
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testExtractingOfSearchTermsFromURL() {
         let parser = OpenSearchParser(pluginMode: true)
-        var file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
+        var file = Bundle.main.pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
         let googleEngine: OpenSearchEngine! = parser.parse(file!, engineID: "google")
 
         // create URL
         let searchTerm = "Foo Bar"
-        let encodedSeachTerm = searchTerm.stringByReplacingOccurrencesOfString(" ", withString: "+")
-        let googleSearchURL = NSURL(string: "https://www.google.com/search?q=\(encodedSeachTerm)&ie=utf-8&oe=utf-8&gws_rd=cr&ei=I0UyVp_qK4HtUoytjagM")
-        let duckDuckGoSearchURL = NSURL(string: "https://duckduckgo.com/?q=\(encodedSeachTerm)&ia=about")
-        let invalidSearchURL = NSURL(string: "https://www.google.co.uk")
+        let encodedSeachTerm = searchTerm.replacingOccurrences(of: " ", with: "+")
+        let googleSearchURL = URL(string: "https://www.google.com/search?q=\(encodedSeachTerm)&ie=utf-8&oe=utf-8&gws_rd=cr&ei=I0UyVp_qK4HtUoytjagM")
+        let duckDuckGoSearchURL = URL(string: "https://duckduckgo.com/?q=\(encodedSeachTerm)&ia=about")
+        let invalidSearchURL = URL(string: "https://www.google.co.uk")
 
         // check it correctly matches google search term given google config
         XCTAssertEqual(searchTerm, googleEngine.queryForSearchURL(googleSearchURL))
@@ -110,7 +110,7 @@ class SearchTests: XCTestCase {
         XCTAssertNil(googleEngine.queryForSearchURL(invalidSearchURL))
 
         // check that it matches given a different configuration
-        file = NSBundle.mainBundle().pathForResource("duckduckgo", ofType: "xml", inDirectory: "SearchPlugins/en")
+        file = Bundle.main.pathForResource("duckduckgo", ofType: "xml", inDirectory: "SearchPlugins/en")
         let duckDuckGoEngine: OpenSearchEngine! = parser.parse(file!, engineID: "duckduckgo")
         XCTAssertEqual(searchTerm, duckDuckGoEngine.queryForSearchURL(duckDuckGoSearchURL))
 
@@ -124,9 +124,9 @@ class SearchTests: XCTestCase {
     private func startMockSuggestServer() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
-        webServer.addHandlerForMethod("GET", path: "/", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var suggestions: [String]!
-            let query = request.query["q"] as! String
+            let query = request?.query["q"] as! String
             switch query {
             case "foo":
                 suggestions = ["foo", "foo2", "foo you"]
@@ -135,10 +135,10 @@ class SearchTests: XCTestCase {
             default:
                 XCTFail("Unexpected query: \(query)")
             }
-            return GCDWebServerDataResponse(JSONObject: [query, suggestions])
+            return GCDWebServerDataResponse(jsonObject: [query, suggestions])
         }
 
-        if !webServer.startWithPort(0, bonjourName: nil) {
+        if !webServer.start(withPort: 0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")
         }
 

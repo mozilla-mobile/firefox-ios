@@ -6,20 +6,20 @@ import Foundation
 import XCTest
 
 extension XCTestCase {
-    func wait(time: NSTimeInterval) {
-        let expectation = expectationWithDescription("Wait")
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
+    func wait(_ time: TimeInterval) {
+        let expectation = self.expectation(withDescription: "Wait")
+        let delayTime = DispatchTime.now() + Double(Int64(time * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.after(when: delayTime) {
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(time + 1, handler: nil)
+        waitForExpectations(withTimeout: time + 1, handler: nil)
     }
 
-    func waitForCondition(timeout timeout: NSTimeInterval = 10, condition: () -> Bool) {
-        let timeoutTime = NSDate.timeIntervalSinceReferenceDate() + timeout
+    func waitForCondition(timeout: TimeInterval = 10, condition: () -> Bool) {
+        let timeoutTime = Date.timeIntervalSinceReferenceDate + timeout
 
         while !condition() {
-            if NSDate.timeIntervalSinceReferenceDate() > timeoutTime {
+            if Date.timeIntervalSinceReferenceDate > timeoutTime {
                 XCTFail("Condition timed out")
                 return
             }

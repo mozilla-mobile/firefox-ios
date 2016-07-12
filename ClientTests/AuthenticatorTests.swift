@@ -11,21 +11,21 @@ import Deferred
 
 class MockFiles: FileAccessor {
     init() {
-        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]
+        let docPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
         super.init(rootPath: (docPath as NSString).stringByAppendingPathComponent("testing"))
     }
 }
 
-class MockChallengeSender: NSObject, NSURLAuthenticationChallengeSender {
-    func useCredential(credential: NSURLCredential, forAuthenticationChallenge challenge: NSURLAuthenticationChallenge) {}
-    func continueWithoutCredentialForAuthenticationChallenge(challenge: NSURLAuthenticationChallenge) {}
-    func cancelAuthenticationChallenge(challenge: NSURLAuthenticationChallenge) {}
+class MockChallengeSender: NSObject, URLAuthenticationChallengeSender {
+    func use(_ credential: URLCredential, for challenge: URLAuthenticationChallenge) {}
+    func continueWithoutCredential(for challenge: URLAuthenticationChallenge) {}
+    func cancel(_ challenge: URLAuthenticationChallenge) {}
 }
 
 class MockMalformableLogin: LoginData {
     var guid: String
-    var credentials: NSURLCredential
-    var protectionSpace: NSURLProtectionSpace
+    var credentials: URLCredential
+    var protectionSpace: URLProtectionSpace
     var hostname: String
     var username: String?
     var password: String
@@ -36,17 +36,17 @@ class MockMalformableLogin: LoginData {
     var hasMalformedHostname = true
     var isValid = Maybe(success: ())
 
-    static func create(hostname: String, username: String, password: String, formSubmitURL: String) -> MockMalformableLogin {
+    static func create(_ hostname: String, username: String, password: String, formSubmitURL: String) -> MockMalformableLogin {
         return self.init(guid: Bytes.generateGUID(), hostname: hostname, username: username, password: password, formSubmitURL: formSubmitURL)
     }
 
     required init(guid: String, hostname: String, username: String, password: String, formSubmitURL: String) {
         self.guid = guid
-        self.credentials = NSURLCredential(user: username, password: password, persistence: NSURLCredentialPersistence.None)
+        self.credentials = URLCredential(user: username, password: password, persistence: URLCredential.Persistence.none)
         self.hostname = hostname
         self.password = password
         self.username = username
-        self.protectionSpace = NSURLProtectionSpace(host: hostname, port: 0, protocol: nil, realm: nil, authenticationMethod: nil)
+        self.protectionSpace = URLProtectionSpace(host: hostname, port: 0, protocol: nil, realm: nil, authenticationMethod: nil)
         self.formSubmitURL = formSubmitURL
     }
 
@@ -55,7 +55,7 @@ class MockMalformableLogin: LoginData {
         return [String: String]()
     }
 
-    func isSignificantlyDifferentFrom(login: LoginData) -> Bool {
+    func isSignificantlyDifferentFrom(_ login: LoginData) -> Bool {
         // Not used for this mock
         return true
     }
@@ -80,18 +80,18 @@ class AuthenticatorTests: XCTestCase {
         self.logins.removeAll().value
     }
 
-    private func mockChallengeForURL(url: NSURL, username: String, password: String) -> NSURLAuthenticationChallenge {
+    private func mockChallenge(for url: URL, username: String, password: String) -> URLAuthenticationChallenge {
         let scheme = url.scheme
         let host = url.host ?? ""
-        let port = url.port?.integerValue ?? 80
+        let port = (url as NSURL).port?.intValue ?? 80
 
-        let credential = NSURLCredential(user: username, password: password, persistence: .None)
-        let protectionSpace = NSURLProtectionSpace(host: host,
+        let credential = URLCredential(user: username, password: password, persistence: .none)
+        let protectionSpace = URLProtectionSpace(host: host,
             port: port,
             protocol: scheme,
             realm: "Secure Site",
             authenticationMethod: nil)
-        return NSURLAuthenticationChallenge(protectionSpace: protectionSpace,
+        return URLAuthenticationChallenge(protectionSpace: protectionSpace,
             proposedCredential: credential,
             previousFailureCount: 0,
             failureResponse: nil,
@@ -99,7 +99,7 @@ class AuthenticatorTests: XCTestCase {
             sender: MockChallengeSender())
     }
 
-    private func hostnameFactory(row: SDRow) -> String {
+    private func hostnameFactory(_ row: SDRow) -> String {
         return row["hostname"] as! String
     }
 
@@ -118,7 +118,7 @@ class AuthenticatorTests: XCTestCase {
     func testChallengeMatchesLoginEntry() {
         let login = Login.create(hostname: "https://securesite.com", username: "username", password: "password", formSubmitURL: "https://submit.me")
         logins.addLogin(login).value
-        let challenge = mockChallengeForURL(NSURL(string: "https://securesite.com")!, username: "username", password: "password")
+        let challenge = mockChallenge(for: URL(string: "https://securesite.com")!, username: "username", password: "password")
         let result = Authenticator.findMatchingCredentials(forChallenge: challenge, fromLoginsProvider: logins).value.successValue!
         XCTAssertNotNil(result)
         XCTAssertEqual(result?.user, "username")
@@ -127,14 +127,14 @@ class AuthenticatorTests: XCTestCase {
 
     func testChallengeMatchesSingleMalformedLoginEntry() {
         // Since Login has been updated to not store schemeless URL, write directly to simulate a malformed URL
-        let malformedLogin = MockMalformableLogin.create(hostname: "malformed.com", username: "username", password: "password", formSubmitURL: "https://submit.me")
+        let malformedLogin = MockMalformableLogin.create("malformed.com", username: "username", password: "password", formSubmitURL: "https://submit.me")
         logins.addLogin(malformedLogin).value
 
         // Pre-condition: Check that the hostname is malformed
         let oldHostname = rawQueryForAllLogins().value.successValue![0]
         XCTAssertEqual(oldHostname, "malformed.com")
 
-        let challenge = mockChallengeForURL(NSURL(string: "https://malformed.com")!, username: "username", password: "password")
+        let challenge = mockChallenge(for: URL(string: "https://malformed.com")!, username: "username", password: "password")
         let result = Authenticator.findMatchingCredentials(forChallenge: challenge, fromLoginsProvider: logins).value.successValue!
         XCTAssertNotNil(result)
         XCTAssertEqual(result?.user, "username")
@@ -147,7 +147,7 @@ class AuthenticatorTests: XCTestCase {
 
     func testChallengeMatchesDuplicateLoginEntries() {
         // Since Login has been updated to not store schemeless URL, write directly to simulate a malformed URL
-        let malformedLogin = MockMalformableLogin.create(hostname: "malformed.com", username: "malformed_username", password: "malformed_password", formSubmitURL: "https://submit.me")
+        let malformedLogin = MockMalformableLogin.create("malformed.com", username: "malformed_username", password: "malformed_password", formSubmitURL: "https://submit.me")
         logins.addLogin(malformedLogin).value
 
         let login = Login.create(hostname: "https://malformed.com", username: "good_username", password: "good_password", formSubmitURL: "https://submit.me")
@@ -159,7 +159,7 @@ class AuthenticatorTests: XCTestCase {
         XCTAssertEqual(hostnames[0], "https://malformed.com")
         XCTAssertEqual(hostnames[1], "malformed.com")
 
-        let challenge = mockChallengeForURL(NSURL(string: "https://malformed.com")!, username: "username", password: "password")
+        let challenge = mockChallenge(for: URL(string: "https://malformed.com")!, username: "username", password: "password")
         let result = Authenticator.findMatchingCredentials(forChallenge: challenge, fromLoginsProvider: logins).value.successValue!
         XCTAssertNotNil(result)
         XCTAssertEqual(result?.user, "good_username")

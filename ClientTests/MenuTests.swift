@@ -18,14 +18,14 @@ class MenuTests: XCTestCase {
         super.tearDown()
     }
 
-    func appState(ui: UIState) -> AppState {
+    func appState(_ ui: UIState) -> AppState {
         let prefs = MockProfilePrefs()
         prefs.setString("http://mozilla.com", forKey: HomePageConstants.HomePageURLPrefKey)
         return AppState(ui: ui, prefs: prefs)
     }
 
     func testMenuConfigurationForBrowser() {
-        var tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        var tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         var browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         XCTAssertEqual(browserConfiguration.menuItems.count, 7)
         XCTAssertEqual(browserConfiguration.menuItems[0].title, AppMenuConfiguration.FindInPageTitleString)
@@ -44,7 +44,7 @@ class MenuTests: XCTestCase {
         XCTAssertEqual(browserConfiguration.menuToolbarItems![3].title, AppMenuConfiguration.ReadingListTitleString)
 
 
-        tabState = TabState(isPrivate: true, desktopSite: true, isBookmarked: true, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        tabState = TabState(isPrivate: true, desktopSite: true, isBookmarked: true, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         XCTAssertEqual(browserConfiguration.menuItems.count, 7)
         XCTAssertEqual(browserConfiguration.menuItems[0].title, AppMenuConfiguration.FindInPageTitleString)

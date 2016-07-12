@@ -4,19 +4,19 @@ import Storage
 
 class TestFavicons : ProfileTest {
 
-    private func innerAddIcon(favicons: Favicons, url: String, callback: (success: Bool) -> Void) {
+    private func innerAddIcon(_ favicons: Favicons, url: String, callback: (success: Bool) -> Void) {
         // Add an entry
     }
 
-    private func addSite(favicons: Favicons, url: String, s: Bool = true) {
-        let expectation = self.expectationWithDescription("Wait for history")
+    private func addSite(_ favicons: Favicons, url: String, s: Bool = true) {
+        let expectation = self.expectation(withDescription: "Wait for history")
         let site = Site(url: url, title: "")
         let icon = Favicon(url: url + "/icon.png", type: IconType.Icon)
         favicons.addFavicon(icon, forSite: site).upon {
             XCTAssertEqual($0.isSuccess, s, "Icon added \(url)")
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+        self.waitForExpectations(withTimeout: 100, handler: nil)
     }
 
     // TODO: uncomment.

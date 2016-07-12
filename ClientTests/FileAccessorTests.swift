@@ -11,7 +11,7 @@ class FileAccessorTests: XCTestCase {
     private var files: FileAccessor!
 
     override func setUp() {
-        let docPath: NSString = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]
+        let docPath: NSString = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
         files = FileAccessor(rootPath: docPath.stringByAppendingPathComponent("filetest"))
 
         testDir = try! files.getAndEnsureDirectory()
@@ -55,18 +55,18 @@ class FileAccessorTests: XCTestCase {
         XCTAssertFalse(files.exists("foo"), "Directory doesn't exist")
             let path = try files.getAndEnsureDirectory("foo")
             var isDirectory = ObjCBool(false)
-            NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDirectory)
+            FileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDirectory)
             XCTAssertTrue(isDirectory, "Directory exists")
         } catch {
             XCTFail("Unable to find directory 'foo' \(error)")
         }
     }
 
-    private func createFile(filename: String) {
-        let path = (testDir as NSString).stringByAppendingPathComponent(filename)
+    private func createFile(_ filename: String) {
+        let path = (testDir as NSString).appendingPathComponent(filename)
         let success: Bool
         do {
-            try "foo".writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+            try "foo".write(toFile: path, atomically: false, encoding: String.Encoding.utf8)
             success = true
         } catch _ {
             success = false
