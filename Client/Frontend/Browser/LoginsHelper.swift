@@ -29,8 +29,8 @@ class LoginsHelper: TabHelper {
         self.tab = tab
         self.profile = profile
 
-        if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
+        if let path = Bundle.main.pathForResource("LoginsHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
@@ -39,16 +39,16 @@ class LoginsHelper: TabHelper {
         return "loginsManagerMessageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard var res = message.body as? [String: AnyObject] else { return }
         guard let type = res["type"] as? String else { return }
 
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
         // right before requesting login data. See bug 1194567 for more context.
-        if let url = message.frameInfo.request.URL {
+        if let url = message.frameInfo.request.url {
             // Since responses go to the main frame, make sure we only listen for main frame requests
             // to avoid XSS attacks.
-            if message.frameInfo.mainFrame && type == "request" {
+            if message.frameInfo.isMainFrame && type == "request" {
                 res["username"] = ""
                 res["password"] = ""
                 if let login = Login.fromScript(url, script: res),
@@ -65,27 +65,27 @@ class LoginsHelper: TabHelper {
         }
     }
 
-    class func replace(base: String, keys: [String], replacements: [String]) -> NSMutableAttributedString {
+    class func replace(_ base: String, keys: [String], replacements: [String]) -> NSMutableAttributedString {
         var ranges = [NSRange]()
         var string = base
-        for (index, key) in keys.enumerate() {
+        for (index, key) in keys.enumerated() {
             let replace = replacements[index]
-            let range = string.rangeOfString(key,
-                options: NSStringCompareOptions.LiteralSearch,
+            let range = string.range(of: key,
+                options: NSString.CompareOptions.literal,
                 range: nil,
                 locale: nil)!
-            string.replaceRange(range, with: replace)
-            let nsRange = NSMakeRange(string.startIndex.distanceTo(range.startIndex),
+            string.replaceSubrange(range, with: replace)
+            let nsRange = NSMakeRange(string.distance(from: string.startIndex, to: range.lowerBound),
                 replace.characters.count)
             ranges.append(nsRange)
         }
 
         var attributes = [String: AnyObject]()
-        attributes[NSFontAttributeName] = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
-        attributes[NSForegroundColorAttributeName] = UIColor.darkGrayColor()
+        attributes[NSFontAttributeName] = UIFont.systemFont(ofSize: 13, weight: UIFontWeightRegular)
+        attributes[NSForegroundColorAttributeName] = UIColor.darkGray()
         let attr = NSMutableAttributedString(string: string, attributes: attributes)
-        let font: UIFont = UIFont.systemFontOfSize(13, weight: UIFontWeightMedium)
-        for (_, range) in ranges.enumerate() {
+        let font: UIFont = UIFont.systemFont(ofSize: 13, weight: UIFontWeightMedium)
+        for (_, range) in ranges.enumerated() {
             attr.addAttribute(NSFontAttributeName, value: font, range: range)
         }
         return attr
@@ -95,7 +95,7 @@ class LoginsHelper: TabHelper {
         return profile.logins.getLogins(forProtectionSpace: protectionSpace)
     }
 
-    func updateLogin(guid: guid: GUID, new: LoginData, significant: Bool) -> Success {
+    func updateLogin(guid: GUID, new: LoginData, significant: Bool) -> Success {
         return profile.logins.updateLogin(guid: guid, new: new, significant: significant)
     }
 
@@ -103,7 +103,7 @@ class LoginsHelper: TabHelper {
         return profile.logins.removeLogins(withGUIDs: guids)
     }
 
-    func setCredentials(login: LoginData) {
+    func setCredentials(_ login: LoginData) {
         if login.password.isEmpty {
             log.debug("Empty password")
             return
@@ -111,7 +111,7 @@ class LoginsHelper: TabHelper {
 
         profile.logins
                .getLogins(forProtectionSpace: login.protectionSpace, withUsername: login.username)
-               .uponQueue(dispatch_get_main_queue()) { res in
+               .uponQueue(DispatchQueue.main) { res in
             if let data = res.successValue {
                 log.debug("Found \(data.count) logins.")
                 for saved in data {
@@ -131,18 +131,18 @@ class LoginsHelper: TabHelper {
         }
     }
 
-    private func promptSave(login: LoginData) {
+    private func promptSave(_ login: LoginData) {
         guard login.isValid.isSuccess else {
             return
         }
 
-        let promptMessage: NSAttributedString
+        let promptMessage: AttributedString
         if let username = login.username {
             let promptStringFormat = NSLocalizedString("LoginsHelper.PromptSaveLogin.Title", value: "Save login %@ for %@?", comment: "Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site.")
-            promptMessage = NSAttributedString(string: String(format: promptStringFormat, username, login.hostname))
+            promptMessage = AttributedString(string: String(format: promptStringFormat, username, login.hostname))
         } else {
             let promptStringFormat = NSLocalizedString("LoginsHelper.PromptSavePassword.Title", value: "Save password for %@?", comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.")
-            promptMessage = NSAttributedString(string: String(format: promptStringFormat, login.hostname))
+            promptMessage = AttributedString(string: String(format: promptStringFormat, login.hostname))
         }
 
         if snackBar != nil {
@@ -182,7 +182,7 @@ class LoginsHelper: TabHelper {
             let promptStringFormat = NSLocalizedString("LoginsHelper.PromptUpdatePassword.Title", value: "Update password for %@?", comment: "Prompt for updating a password with no username. The parameter is the hostname of the site.")
             formatted = String(format: promptStringFormat, new.hostname)
         }
-        let promptMessage = NSAttributedString(string: formatted)
+        let promptMessage = AttributedString(string: formatted)
 
         if snackBar != nil {
             tab?.removeSnackbar(snackBar!)
@@ -207,8 +207,8 @@ class LoginsHelper: TabHelper {
         tab?.addSnackbar(snackBar!)
     }
 
-    private func requestLogins(login: LoginData, requestId: String) {
-        profile.logins.getLogins(forProtectionSpace: login.protectionSpace).uponQueue(dispatch_get_main_queue()) { res in
+    private func requestLogins(_ login: LoginData, requestId: String) {
+        profile.logins.getLogins(forProtectionSpace: login.protectionSpace).uponQueue(DispatchQueue.main) { res in
             var jsonObj = [String: AnyObject]()
             if let cursor = res.successValue {
                 log.debug("Found \(cursor.count) logins.")

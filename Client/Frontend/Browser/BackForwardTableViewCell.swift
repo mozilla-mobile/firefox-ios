@@ -19,14 +19,14 @@ class BackForwardTableViewCell: UITableViewCell {
     
     lazy var faviconView: UIImageView = {
         let faviconView = UIImageView(image: FaviconFetcher.defaultFavicon)
-        faviconView.backgroundColor = UIColor.whiteColor()
+        faviconView.backgroundColor = UIColor.white()
         return faviconView
     }()
     
     lazy var label: UILabel = {
         let label = UILabel()
         label.text = " "
-        label.font = label.font.fontWithSize(BackForwardViewCellUX.fontSize)
+        label.font = label.font.withSize(BackForwardViewCellUX.fontSize)
         return label
     }()
     
@@ -67,14 +67,14 @@ class BackForwardTableViewCell: UITableViewCell {
     
     var isPrivate = false  {
         didSet {
-            label.textColor = isPrivate ? UIColor.whiteColor() : UIColor.blackColor()
+            label.textColor = isPrivate ? UIColor.white() : UIColor.black()
         }
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor.clearColor()
-        selectionStyle = .None
+        backgroundColor = UIColor.clear()
+        selectionStyle = .none
         
         contentView.addSubview(bg)
         contentView.addSubview(faviconView)
@@ -105,37 +105,39 @@ class BackForwardTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
-        let context = UIGraphicsGetCurrentContext();
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
         
-        var startPoint = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
-                                     rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
-        var endPoint   = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
-                                     rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
+        var startPoint = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
+                                     y: rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
+        var endPoint   = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
+                                     y: rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
         
         // flip the x component if RTL
-        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .RightToLeft {
+        if UIApplication.shared().userInterfaceLayoutDirection == .rightToLeft {
             startPoint.x = rect.origin.x - startPoint.x + rect.size.width
             endPoint.x = rect.origin.x - endPoint.x + rect.size.width
         }
-        
-        CGContextSaveGState(context)
-        CGContextSetLineCap(context, CGLineCap.Square)
-        CGContextSetStrokeColorWithColor(context, BackForwardViewCellUX.bgColor.CGColor)
-        CGContextSetLineWidth(context, 1.0)
-        CGContextMoveToPoint(context, startPoint.x, startPoint.y)
-        CGContextAddLineToPoint(context, endPoint.x, endPoint.y)
-        CGContextStrokePath(context)
-        CGContextRestoreGState(context)
+
+        context.saveGState()
+        context.setLineCap(CGLineCap.square)
+        context.setStrokeColor(BackForwardViewCellUX.bgColor.cgColor)
+        context.setLineWidth(1.0)
+        context.moveTo(x: startPoint.x, y: startPoint.y)
+        context.addLineTo(x: endPoint.x, y: endPoint.y)
+        context.strokePath()
+        context.restoreGState()
     }
     
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         if (highlighted) {
             self.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.1)
         }
         else {
-            self.backgroundColor = UIColor.clearColor()
+            self.backgroundColor = UIColor.clear()
         }
     }
     

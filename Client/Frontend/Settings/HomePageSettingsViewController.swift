@@ -18,7 +18,7 @@ class HomePageSettingsViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
         let helper = HomePageHelper(prefs: prefs)
-        func setHomePage(url: NSURL?) -> (UINavigationController? -> ()) {
+        func setHomePage(_ url: URL?) -> ((UINavigationController?) -> ()) {
             weak var tableView: UITableView? = self.tableView
             return { nav in
                 helper.currentURL = url
@@ -26,46 +26,46 @@ class HomePageSettingsViewController: SettingsTableViewController {
             }
         }
 
-        func isHomePage(url: NSURL?) -> (() -> Bool) {
+        func isHomePage(_ url: URL?) -> (() -> Bool) {
             return {
                 return url?.isWebPage() ?? false
             }
         }
 
-        func URLFromString(string: String?) -> NSURL? {
+        func URLFromString(_ string: String?) -> URL? {
             guard let string = string else {
                 return nil
             }
-            return NSURL(string: string)
+            return URL(string: string)
         }
 
         let currentTabURL = self.tabManager.selectedTab?.displayURL
-        let clipboardURL = URLFromString(UIPasteboard.generalPasteboard().string)
+        let clipboardURL = URLFromString(UIPasteboard.general().string)
 
         var basicSettings: [Setting] = [
             WebPageSetting(prefs: prefs,
                 prefKey: HomePageConstants.HomePageURLPrefKey,
                 placeholder: helper.defaultURLString ?? Strings.SettingsHomePagePlaceholder,
                 accessibilityIdentifier: "HomePageSetting"),
-            ButtonSetting(title: NSAttributedString(string: Strings.SettingsHomePageUseCurrentPage),
+            ButtonSetting(title: AttributedString(string: Strings.SettingsHomePageUseCurrentPage),
                 accessibilityIdentifier: "UseCurrentTab",
                 isEnabled: isHomePage(currentTabURL),
                 onClick: setHomePage(currentTabURL)),
-            ButtonSetting(title: NSAttributedString(string: Strings.SettingsHomePageUseCopiedLink),
+            ButtonSetting(title: AttributedString(string: Strings.SettingsHomePageUseCopiedLink),
                 accessibilityIdentifier: "UseCopiedLink",
                 isEnabled: isHomePage(clipboardURL),
                 onClick: setHomePage(clipboardURL)),
             ]
 
         basicSettings += [
-            ButtonSetting(title: NSAttributedString(string: Strings.SettingsHomePageClear),
+            ButtonSetting(title: AttributedString(string: Strings.SettingsHomePageClear),
                 destructive: true,
                 accessibilityIdentifier: "ClearHomePage",
                 onClick: setHomePage(nil)),
             ]
 
         var settings: [SettingSection] = [
-            SettingSection(title: NSAttributedString(string: Strings.SettingsHomePageURLSectionTitle), children: basicSettings),
+            SettingSection(title: AttributedString(string: Strings.SettingsHomePageURLSectionTitle), children: basicSettings),
             ]
 
         if AppConstants.MOZ_MENU {
@@ -85,7 +85,7 @@ class HomePageSettingsViewController: SettingsTableViewController {
 }
 
 class WebPageSetting: StringSetting {
-    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingDidChange: (String? -> Void)? = nil) {
+    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingDidChange: ((String?) -> Void)? = nil) {
         super.init(prefs: prefs,
                    prefKey: prefKey,
                    defaultValue: defaultValue,
@@ -105,10 +105,10 @@ class WebPageSetting: StringSetting {
         return URIFixup.getURL(value)?.absoluteString
     }
 
-    static func isURLOrEmpty(string: String?) -> Bool {
+    static func isURLOrEmpty(_ string: String?) -> Bool {
         guard let string = string where !string.isEmpty else {
             return true
         }
-        return NSURL(string: string)?.isWebPage() ?? false
+        return URL(string: string)?.isWebPage() ?? false
     }
 }

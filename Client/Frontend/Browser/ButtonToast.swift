@@ -51,20 +51,20 @@ class ButtonToast: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func createView(labelText: String, buttonText: String) -> UIView {
+    private func createView(_ labelText: String, buttonText: String) -> UIView {
         let label = UILabel()
-        label.textColor = UIColor.whiteColor()
+        label.textColor = UIColor.white()
         label.font = SimpleToastUX.ToastFont
         label.text = labelText
-        label.lineBreakMode = .ByWordWrapping
+        label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         toast.addSubview(label)
         
         let button = UIButton()
         button.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
         button.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
-        button.layer.borderColor = UIColor.whiteColor().CGColor
-        button.setTitle(buttonText, forState: .Normal)
+        button.layer.borderColor = UIColor.white().cgColor
+        button.setTitle(buttonText, for: UIControlState())
         button.titleLabel?.font = SimpleToastUX.ToastFont
         
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(ButtonToast.buttonPressed(_:)))
@@ -87,14 +87,14 @@ class ButtonToast: UIView {
         return toast
     }
     
-    private func dismiss(buttonPressed: Bool) {
+    private func dismiss(_ buttonPressed: Bool) {
         guard dismissed == false else {
             return
         }
         dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
         
-        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration, animations: {
+        UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
                 self.animationConstraint?.updateOffset(SimpleToastUX.ToastHeight)
                 self.layoutIfNeeded()
             },
@@ -109,20 +109,20 @@ class ButtonToast: UIView {
     
     func showToast() {
         layoutIfNeeded()
-        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration, animations: {
+        UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
                 self.animationConstraint?.updateOffset(0)
                 self.layoutIfNeeded()
             },
             completion: { finished in
-                let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(SimpleToastUX.ToastDismissAfter * Double(NSEC_PER_SEC)))
-                dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+                let dispatchTime = DispatchTime.now() + Double(Int64(SimpleToastUX.ToastDismissAfter * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+                DispatchQueue.main.after(when: dispatchTime, block: {
                     self.dismiss(false)
                 })
             }
         )
     }
     
-    @objc func buttonPressed(gestureRecognizer: UIGestureRecognizer) {
+    @objc func buttonPressed(_ gestureRecognizer: UIGestureRecognizer) {
         self.completionHandler?(true)
         self.dismiss(true)
     }
@@ -132,7 +132,7 @@ class ButtonToast: UIView {
         superview?.addGestureRecognizer(gestureRecognizer)
     }
     
-    func handleTap(gestureRecognizer: UIGestureRecognizer) {
+    func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
         dismiss(false)
     }
 }

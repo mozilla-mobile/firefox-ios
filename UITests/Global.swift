@@ -232,7 +232,7 @@ class BrowserUtils {
             } catch _ {}
 
             while tabsView.numberOfItemsInSection(0) > 0 {
-                let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+                let cell = tabsView.cellForItem(at: NSIndexPath(forItem: 0, inSection: 0))!
                 tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
                 tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
             }
@@ -240,14 +240,14 @@ class BrowserUtils {
         }
 
         while tabsView.numberOfItemsInSection(0) > 1 {
-            let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+            let cell = tabsView.cellForItem(at: NSIndexPath(forItem: 0, inSection: 0))!
             tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
             tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
         }
 
         // When the last tab is closed, the tabs tray will automatically be closed
         // since a new about:home tab will be selected.
-        if let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) {
+        if let cell = tabsView.cellForItem(at: NSIndexPath(forItem: 0, inSection: 0)) {
             tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
             tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
         }

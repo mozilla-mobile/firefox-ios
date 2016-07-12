@@ -32,14 +32,14 @@ class SnackButton : UIButton {
     init(title: String, accessibilityIdentifier: String, callback: (bar: SnackBar) -> Void) {
         self.callback = callback
 
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
-        setTitle(title, forState: .Normal)
+        setTitle(title, for: UIControlState())
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        setBackgroundImage(highlightImg, forState: .Highlighted)
-        setTitleColor(UIConstants.HighlightText, forState: .Highlighted)
+        setBackgroundImage(highlightImg, for: .highlighted)
+        setTitleColor(UIConstants.HighlightText, for: .highlighted)
 
-        addTarget(self, action: #selector(SnackButton.onClick), forControlEvents: .TouchUpInside)
+        addTarget(self, action: #selector(SnackButton.onClick), for: .touchUpInside)
 
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -84,19 +84,19 @@ class SnackBar: UIView {
     convenience init(text: String, img: UIImage?, buttons: [SnackButton]?) {
         var attributes = [String: AnyObject]()
         attributes[NSFontAttributeName] = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        attributes[NSBackgroundColorAttributeName] = UIColor.clearColor()
-        let attrText = NSAttributedString(string: text, attributes: attributes)
+        attributes[NSBackgroundColorAttributeName] = UIColor.clear()
+        let attrText = AttributedString(string: text, attributes: attributes)
         self.init(attrText: attrText, img: img, buttons: buttons)
     }
 
-    init(attrText: NSAttributedString, img: UIImage?, buttons: [SnackButton]?) {
+    init(attrText: AttributedString, img: UIImage?, buttons: [SnackButton]?) {
         imageView = UIImageView()
         textLabel = UILabel()
         contentView = UIView()
         buttonsView = Toolbar()
-        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.extraLight))
 
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         imageView.image = img
         textLabel.attributedText = attrText
@@ -113,7 +113,7 @@ class SnackBar: UIView {
         textLabel = UILabel()
         contentView = UIView()
         buttonsView = Toolbar()
-        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.extraLight))
 
         super.init(frame: frame)
     }
@@ -127,17 +127,17 @@ class SnackBar: UIView {
         contentView.addSubview(textLabel)
         addSubview(buttonsView)
 
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear()
         buttonsView.drawTopBorder = true
         buttonsView.drawBottomBorder = false
         buttonsView.drawSeperators = true
 
-        imageView.contentMode = UIViewContentMode.Left
+        imageView.contentMode = UIViewContentMode.left
 
         textLabel.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        textLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         textLabel.numberOfLines = 0
-        textLabel.backgroundColor = UIColor.clearColor()
+        textLabel.backgroundColor = UIColor.clear()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -156,15 +156,15 @@ class SnackBar: UIView {
         super.layoutSubviews()
     }
 
-    private func drawLine(context: CGContextRef, start: CGPoint, end: CGPoint) {
-        CGContextSetStrokeColorWithColor(context, UIConstants.BorderColor.CGColor)
-        CGContextSetLineWidth(context, 1)
-        CGContextMoveToPoint(context, start.x, start.y)
-        CGContextAddLineToPoint(context, end.x, end.y)
-        CGContextStrokePath(context)
+    private func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
+        context.setStrokeColor(UIConstants.BorderColor.cgColor)
+        context.setLineWidth(1)
+        context.moveTo(x: start.x, y: start.y)
+        context.addLineTo(x: end.x, y: end.y)
+        context.strokePath()
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         drawLine(context!, start: CGPoint(x: 0, y: 1), end: CGPoint(x: frame.size.width, y: 1))
     }
@@ -174,7 +174,7 @@ class SnackBar: UIView {
      * Override this class or use a class like CountdownSnackbar if you want things expire
      * - returns: true if the snackbar should be kept alive
      */
-    func shouldPersist(tab: Tab) -> Bool {
+    func shouldPersist(_ tab: Tab) -> Bool {
         return true
     }
 
@@ -250,7 +250,7 @@ class SnackBar: UIView {
         bottom?.updateOffset(h)
     }
 
-    private func addButton(snackButton: SnackButton) {
+    private func addButton(_ snackButton: SnackButton) {
         snackButton.bar = self
         buttonsView.addButtons(snackButton)
         buttonsView.setNeedsUpdateConstraints()
@@ -263,11 +263,11 @@ class SnackBar: UIView {
  * you stay on the current tab though, it will persist until you interact with it.
  */
 class TimerSnackBar: SnackBar {
-    private var prevURL: NSURL? = nil
-    private var timer: NSTimer? = nil
-    private var timeout: NSTimeInterval
+    private var prevURL: URL? = nil
+    private var timer: Timer? = nil
+    private var timeout: TimeInterval
 
-    init(timeout: NSTimeInterval = 10, attrText: NSAttributedString, img: UIImage?, buttons: [SnackButton]?) {
+    init(timeout: TimeInterval = 10, attrText: AttributedString, img: UIImage?, buttons: [SnackButton]?) {
         self.timeout = timeout
         super.init(attrText: attrText, img: img, buttons: buttons)
     }
@@ -282,8 +282,8 @@ class TimerSnackBar: SnackBar {
     }
 
     override func show() {
-        self.timer = NSTimer(timeInterval: timeout, target: self, selector: #selector(TimerSnackBar.SELTimerDone), userInfo: nil, repeats: false)
-        NSRunLoop.currentRunLoop().addTimer(self.timer!, forMode: NSDefaultRunLoopMode)
+        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(TimerSnackBar.SELTimerDone), userInfo: nil, repeats: false)
+        RunLoop.current.add(self.timer!, forMode: RunLoopMode.defaultRunLoopMode)
         super.show()
     }
 
@@ -292,7 +292,7 @@ class TimerSnackBar: SnackBar {
         self.timer = nil
     }
 
-    override func shouldPersist(tab: Tab) -> Bool {
+    override func shouldPersist(_ tab: Tab) -> Bool {
         if !showing {
             return timer != nil
         }

@@ -27,7 +27,7 @@ class TitleActivityItemProvider: UIActivityItemProvider {
         return placeholderItem!
     }
 
-    override func activityViewController(activityViewController: UIActivityViewController, subjectForActivityType activityType: String?) -> String {
+    override func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: String?) -> String {
         return placeholderItem as! String
     }
 }

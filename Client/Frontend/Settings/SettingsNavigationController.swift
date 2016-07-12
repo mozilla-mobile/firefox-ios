@@ -11,11 +11,11 @@ class SettingsNavigationController: UINavigationController {
         if let delegate = popoverDelegate {
             delegate.dismissPresentedModalViewController(self, animated: true)
         } else {
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
 }
 
 protocol PresentingModalViewControllerDelegate {
-    func dismissPresentedModalViewController(modalViewController: UIViewController, animated: Bool)
+    func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool)
 }

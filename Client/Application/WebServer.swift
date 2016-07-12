@@ -19,14 +19,14 @@ class WebServer {
     }
 
     func start() throws -> Bool{
-        if !server.running {
-            try server.startWithOptions([GCDWebServerOption_Port: 6571, GCDWebServerOption_BindToLocalhost: true, GCDWebServerOption_AutomaticallySuspendInBackground: true])
+        if !server.isRunning {
+            try server.start(options: [GCDWebServerOption_Port: 6571, GCDWebServerOption_BindToLocalhost: true, GCDWebServerOption_AutomaticallySuspendInBackground: true])
         }
-        return server.running
+        return server.isRunning
     }
 
     /// Convenience method to register a dynamic handler. Will be mounted at $base/$module/$resource
-    func registerHandlerForMethod(method: String, module: String, resource: String, handler: (request: GCDWebServerRequest!) -> GCDWebServerResponse!) {
+    func registerHandler(forMethod method: String, module: String, resource: String, handler: (request: GCDWebServerRequest?) -> GCDWebServerResponse!) {
         // Prevent serving content if the requested host isn't a whitelisted local host.
         let wrappedHandler = {(request: GCDWebServerRequest!) -> GCDWebServerResponse! in
             guard request.URL.isLocal else {
@@ -36,39 +36,39 @@ class WebServer {
             return handler(request: request)
         }
 
-        server.addHandlerForMethod(method, path: "/\(module)/\(resource)", requestClass: GCDWebServerRequest.self, processBlock: wrappedHandler)
+        server.addHandler(forMethod: method, path: "/\(module)/\(resource)", request: GCDWebServerRequest.self, processBlock: wrappedHandler)
     }
 
     /// Convenience method to register a resource in the main bundle. Will be mounted at $base/$module/$resource
-    func registerMainBundleResource(resource: String, module: String) {
-        if let path = NSBundle.mainBundle().pathForResource(resource, ofType: nil) {
-            server.addGETHandlerForPath("/\(module)/\(resource)", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+    func registerMainBundleResource(_ resource: String, module: String) {
+        if let path = Bundle.main.pathForResource(resource, ofType: nil) {
+            server.addGETHandler(forPath: "/\(module)/\(resource)", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
         }
     }
 
     /// Convenience method to register all resources in the main bundle of a specific type. Will be mounted at $base/$module/$resource
-    func registerMainBundleResourcesOfType(type: String, module: String) {
-        for path: NSString in NSBundle.pathsForResourcesOfType(type, inDirectory: NSBundle.mainBundle().bundlePath) {
+    func registerMainBundleResources(ofType type: String, module: String) {
+        for path: NSString in Bundle.pathsForResources(ofType: type, inDirectory: Bundle.main.bundlePath) {
             let resource = path.lastPathComponent
-            server.addGETHandlerForPath("/\(module)/\(resource)", filePath: path as String, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+            server.addGETHandler(forPath: "/\(module)/\(resource)", filePath: path as String, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
         }
     }
 
     /// Return a full url, as a string, for a resource in a module. No check is done to find out if the resource actually exist.
-    func URLForResource(resource: String, module: String) -> String {
+    func URL(forResource: _ resource: String, module: String) -> String {
         return "\(base)/\(module)/\(resource)"
     }
 
     /// Return a full url, as an NSURL, for a resource in a module. No check is done to find out if the resource actually exist.
-    func URLForResource(resource: String, module: String) -> NSURL {
-        return NSURL(string: "\(base)/\(module)/\(resource)")!
+    func URL(forResource resource: String, module: String) -> URL {
+        return URL(string: "\(base)/\(module)/\(resource)")!
     }
 
-    func updateLocalURL(url: NSURL) -> NSURL? {
-        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+    func updateLocalURL(_ url: URL) -> URL? {
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         if components?.host == "localhost" && components?.scheme == "http" {
             components?.port = WebServer.sharedInstance.server.port
         }
-        return components?.URL
+        return components?.url
     }
 }

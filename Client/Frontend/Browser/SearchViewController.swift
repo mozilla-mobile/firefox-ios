@@ -11,19 +11,19 @@ private let PromptYes = NSLocalizedString("Yes", tableName: "Search", comment: "
 private let PromptNo = NSLocalizedString("No", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
 
 private enum SearchListSection: Int {
-    case SearchSuggestions
-    case BookmarksAndHistory
+    case searchSuggestions
+    case bookmarksAndHistory
     static let Count = 2
 }
 
 private struct SearchViewControllerUX {
-    static let SearchEngineScrollViewBackgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8).CGColor
-    static let SearchEngineScrollViewBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.2).CGColor
+    static let SearchEngineScrollViewBackgroundColor = UIColor.white().withAlphaComponent(0.8).cgColor
+    static let SearchEngineScrollViewBorderColor = UIColor.black().withAlphaComponent(0.2).cgColor
 
     // TODO: This should use ToolbarHeight in BVC. Fix this when we create a shared theming file.
     static let EngineButtonHeight: Float = 44
     static let EngineButtonWidth = EngineButtonHeight * 1.4
-    static let EngineButtonBackgroundColor = UIColor.clearColor().CGColor
+    static let EngineButtonBackgroundColor = UIColor.clear().cgColor
 
     static let SearchImage = "search"
     static let SearchEngineTopBorderWidth = 0.5
@@ -40,15 +40,15 @@ private struct SearchViewControllerUX {
     static let SuggestionCellMaxRows = 2
 
     static let PromptColor = UIConstants.PanelBackgroundColor
-    static let PromptFont = UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)
-    static let PromptYesFont = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
-    static let PromptNoFont = UIFont.systemFontOfSize(15, weight: UIFontWeightRegular)
+    static let PromptFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+    static let PromptYesFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightBold)
+    static let PromptNoFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
     static let PromptInsets = UIEdgeInsets(top: 15, left: 12, bottom: 15, right: 12)
     static let PromptButtonColor = UIColor(rgb: 0x007aff)
 }
 
 protocol SearchViewControllerDelegate: class {
-    func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL)
+    func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
     func presentSearchSettingsController()
 }
 
@@ -69,7 +69,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     // Cell for the suggestion flow layout. Since heightForHeaderInSection is called *before*
     // cellForRowAtIndexPath, we create the cell to find its height before it's added to the table.
-    private let suggestionCell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+    private let suggestionCell = SuggestionCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
 
     private var suggestionPrompt: UIView?
     static var userAgent: String?
@@ -85,7 +85,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.PanelBackgroundColor
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light))
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light))
         view.addSubview(blur)
 
         super.viewDidLoad()
@@ -102,7 +102,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchEngineScrollView.decelerationRate = UIScrollViewDecelerationRateFast
         view.addSubview(searchEngineScrollView)
 
-        searchEngineScrollViewContent.layer.backgroundColor = UIColor.clearColor().CGColor
+        searchEngineScrollViewContent.layer.backgroundColor = UIColor.clear().cgColor
         searchEngineScrollView.addSubview(searchEngineScrollViewContent)
 
         layoutTable()
@@ -111,7 +111,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchEngineScrollViewContent.snp_makeConstraints { make in
             make.center.equalTo(self.searchEngineScrollView).priorityLow()
             //left-align the engines on iphones, center on ipad
-            if(UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) {
+            if(UIScreen.main().traitCollection.horizontalSizeClass == .compact) {
                 make.left.equalTo(self.searchEngineScrollView).priorityHigh()
             } else {
                 make.left.greaterThanOrEqualTo(self.searchEngineScrollView).priorityHigh()
@@ -127,20 +127,20 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         suggestionCell.delegate = self
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SearchViewController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.SELDynamicFontChanged(_:)), name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
     }
 
-    func SELDynamicFontChanged(notification: NSNotification) {
+    func SELDynamicFontChanged(_ notification: Notification) {
         guard notification.name == NotificationDynamicFontChanged else { return }
 
         reloadData()
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadSearchEngines()
         reloadData()
@@ -183,7 +183,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             engines.insert(searchEngines.defaultEngine, atIndex: 0)
         }
 
-        return engines
+        return engines!
     }
 
     private func layoutSuggestionsOptInPrompt() {
@@ -199,7 +199,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             suggestionPrompt = nil
             layoutTable()
 
-            UIView.animateWithDuration(0.2,
+            UIView.animate(withDuration: 0.2,
                 animations: {
                     self.view.layoutIfNeeded()
                     prompt?.alpha = 0
@@ -215,7 +215,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         prompt.backgroundColor = SearchViewControllerUX.PromptColor
 
         let promptBottomBorder = UIView()
-        promptBottomBorder.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
+        promptBottomBorder.backgroundColor = UIColor.black().withAlphaComponent(0.1)
         prompt.addSubview(promptBottomBorder)
 
         // Insert behind the tableView so the tableView slides on top of it
@@ -232,29 +232,29 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         promptLabel.text = PromptMessage
         promptLabel.font = SearchViewControllerUX.PromptFont
         promptLabel.numberOfLines = 0
-        promptLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        promptLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         prompt.addSubview(promptLabel)
 
         let promptYesButton = InsetButton()
-        promptYesButton.setTitle(PromptYes, forState: UIControlState.Normal)
-        promptYesButton.setTitleColor(SearchViewControllerUX.PromptButtonColor, forState: UIControlState.Normal)
+        promptYesButton.setTitle(PromptYes, for: UIControlState())
+        promptYesButton.setTitleColor(SearchViewControllerUX.PromptButtonColor, for: UIControlState.Normal)
         promptYesButton.titleLabel?.font = SearchViewControllerUX.PromptYesFont
         promptYesButton.titleEdgeInsets = SearchViewControllerUX.PromptInsets
         // If the prompt message doesn't fit, this prevents it from pushing the buttons
         // off the row and makes it wrap instead.
-        promptYesButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-        promptYesButton.addTarget(self, action: #selector(SearchViewController.SELdidClickOptInYes), forControlEvents: UIControlEvents.TouchUpInside)
+        promptYesButton.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.horizontal)
+        promptYesButton.addTarget(self, action: #selector(SearchViewController.SELdidClickOptInYes), for: UIControlEvents.touchUpInside)
         prompt.addSubview(promptYesButton)
 
         let promptNoButton = InsetButton()
-        promptNoButton.setTitle(PromptNo, forState: UIControlState.Normal)
-        promptNoButton.setTitleColor(SearchViewControllerUX.PromptButtonColor, forState: UIControlState.Normal)
+        promptNoButton.setTitle(PromptNo, for: UIControlState())
+        promptNoButton.setTitleColor(SearchViewControllerUX.PromptButtonColor, for: UIControlState.Normal)
         promptNoButton.titleLabel?.font = SearchViewControllerUX.PromptNoFont
         promptNoButton.titleEdgeInsets = SearchViewControllerUX.PromptInsets
         // If the prompt message doesn't fit, this prevents it from pushing the buttons
         // off the row and makes it wrap instead.
-        promptNoButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-        promptNoButton.addTarget(self, action: #selector(SearchViewController.SELdidClickOptInNo), forControlEvents: UIControlEvents.TouchUpInside)
+        promptNoButton.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.horizontal)
+        promptNoButton.addTarget(self, action: #selector(SearchViewController.SELdidClickOptInNo), for: UIControlEvents.touchUpInside)
         prompt.addSubview(promptNoButton)
 
         // otherwise the label (i.e. question) is visited by VoiceOver *after* yes and no buttons
@@ -322,10 +322,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         //search settings icon
         let searchButton = UIButton()
-        searchButton.setImage(UIImage(named: "quickSearch"), forState: UIControlState.Normal)
-        searchButton.imageView?.contentMode = UIViewContentMode.Center
+        searchButton.setImage(UIImage(named: "quickSearch"), for: UIControlState())
+        searchButton.imageView?.contentMode = UIViewContentMode.center
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-        searchButton.addTarget(self, action: #selector(SearchViewController.SELdidClickSearchButton), forControlEvents: UIControlEvents.TouchUpInside)
+        searchButton.addTarget(self, action: #selector(SearchViewController.SELdidClickSearchButton), for: UIControlEvents.touchUpInside)
         searchButton.accessibilityLabel = String(format: NSLocalizedString("Search Settings", tableName: "Search", comment: "Label for search settings button."))
 
         searchButton.imageView?.snp_makeConstraints { make in
@@ -347,10 +347,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         leftEdge = searchButton.snp_right
         for engine in quickSearchEngines {
             let engineButton = UIButton()
-            engineButton.setImage(engine.image, forState: UIControlState.Normal)
-            engineButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+            engineButton.setImage(engine.image, for: UIControlState())
+            engineButton.imageView?.contentMode = UIViewContentMode.scaleAspectFit
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-            engineButton.addTarget(self, action: #selector(SearchViewController.SELdidSelectEngine(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            engineButton.addTarget(self, action: #selector(SearchViewController.SELdidSelectEngine(_:)), for: UIControlEvents.touchUpInside)
             engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
 
             engineButton.imageView?.snp_makeConstraints { make in
@@ -373,10 +373,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    func SELdidSelectEngine(sender: UIButton) {
+    func SELdidSelectEngine(_ sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
-        guard let index = searchEngineScrollViewContent.subviews.indexOf(sender) else {
+        guard let index = searchEngineScrollViewContent.subviews.index(of: sender) else {
             assertionFailure()
             return
         }
@@ -411,26 +411,26 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         reloadSearchEngines()
     }
 
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         animateSearchEnginesWithKeyboard(state)
     }
 
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
     }
 
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         animateSearchEnginesWithKeyboard(state)
     }
 
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
-        coordinator.animateAlongsideTransition({ _ in
+        coordinator.animate(alongsideTransition: { _ in
             self.tableView.reloadData()
         }, completion: nil)
     }
 
-    private func animateSearchEnginesWithKeyboard(keyboardState: KeyboardState) {
+    private func animateSearchEnginesWithKeyboard(_ keyboardState: KeyboardState) {
         layoutSearchEngineScrollView()
 
         UIView.animateWithDuration(keyboardState.animationDuration, animations: {
@@ -485,49 +485,49 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 }
 
 extension SearchViewController {
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let section = SearchListSection(rawValue: indexPath.section)!
-        if section == SearchListSection.BookmarksAndHistory {
+    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+        let section = SearchListSection(rawValue: (indexPath as NSIndexPath).section)!
+        if section == SearchListSection.bookmarksAndHistory {
             if let site = data[indexPath.row] {
-                if let url = NSURL(string: site.url) {
+                if let url = URL(string: site.url) {
                     searchDelegate?.searchViewController(self, didSelectURL: url)
                 }
             }
         }
     }
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if let currentSection = SearchListSection(rawValue: indexPath.section) {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let currentSection = SearchListSection(rawValue: (indexPath as NSIndexPath).section) {
             switch currentSection {
-            case .SearchSuggestions:
+            case .searchSuggestions:
                 // heightForRowAtIndexPath is called *before* the cell is created, so to get the height,
                 // force a layout pass first.
                 suggestionCell.layoutIfNeeded()
                 return suggestionCell.frame.height
             default:
-                return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+                return super.tableView(tableView, heightForRowAt: indexPath)
             }
         }
 
         return 0
     }
 
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
 }
 
 extension SearchViewController {
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch SearchListSection(rawValue: indexPath.section)! {
-        case .SearchSuggestions:
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch SearchListSection(rawValue: (indexPath as NSIndexPath).section)! {
+        case .searchSuggestions:
             suggestionCell.imageView?.image = searchEngines.defaultEngine.image
             suggestionCell.imageView?.isAccessibilityElement = true
             suggestionCell.imageView?.accessibilityLabel = String(format: NSLocalizedString("Search suggestions from %@", tableName: "Search", comment: "Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google"), searchEngines.defaultEngine.shortName)
             return suggestionCell
 
-        case .BookmarksAndHistory:
-            let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+        case .bookmarksAndHistory:
+            let cell = super.tableView(tableView, cellForRowAt: indexPath)
             if let site = data[indexPath.row] {
                 if let cell = cell as? TwoLineTableViewCell {
                     let isBookmark = site.bookmarked ?? false
@@ -540,22 +540,22 @@ extension SearchViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
-        case .SearchSuggestions:
+        case .searchSuggestions:
             return searchEngines.shouldShowSearchSuggestions && !searchQuery.looksLikeAURL() && !isPrivate ? 1 : 0
-        case .BookmarksAndHistory:
+        case .bookmarksAndHistory:
             return data.count
         }
     }
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return SearchListSection.Count
     }
 }
 
 extension SearchViewController: SuggestionCellDelegate {
-    private func suggestionCell(suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String) {
+    private func suggestionCell(_ suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String) {
         // Assume that only the default search engine can provide search suggestions.
         let engine = searchEngines.defaultEngine
 
@@ -588,13 +588,13 @@ private extension String {
  * UIScrollView that prevents buttons from interfering with scroll.
  */
 private class ButtonScrollView: UIScrollView {
-    private override func touchesShouldCancelInContentView(view: UIView) -> Bool {
+    private override func touchesShouldCancel(in view: UIView) -> Bool {
         return true
     }
 }
 
 private protocol SuggestionCellDelegate: class {
-    func suggestionCell(suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String)
+    func suggestionCell(_ suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String)
 }
 
 /**
@@ -611,11 +611,11 @@ private class SuggestionCell: UITableViewCell {
         accessibilityLabel = nil
         layoutMargins = UIEdgeInsetsZero
         separatorInset = UIEdgeInsetsZero
-        selectionStyle = UITableViewCellSelectionStyle.None
+        selectionStyle = UITableViewCellSelectionStyle.none
 
-        container.backgroundColor = UIColor.clearColor()
-        contentView.backgroundColor = UIColor.clearColor()
-        backgroundColor = UIColor.clearColor()
+        container.backgroundColor = UIColor.clear()
+        contentView.backgroundColor = UIColor.clear()
+        backgroundColor = UIColor.clear()
         contentView.addSubview(container)
     }
 
@@ -631,13 +631,13 @@ private class SuggestionCell: UITableViewCell {
 
             for suggestion in suggestions {
                 let button = SuggestionButton()
-                button.setTitle(suggestion, forState: UIControlState.Normal)
-                button.addTarget(self, action: #selector(SuggestionCell.SELdidSelectSuggestion(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+                button.setTitle(suggestion, for: UIControlState())
+                button.addTarget(self, action: #selector(SuggestionCell.SELdidSelectSuggestion(_:)), for: UIControlEvents.touchUpInside)
 
                 // If this is the first image, add the search icon.
                 if container.subviews.isEmpty {
                     let image = UIImage(named: SearchViewControllerUX.SearchImage)
-                    button.setImage(image, forState: UIControlState.Normal)
+                    button.setImage(image, for: UIControlState())
                     button.titleEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0)
                 }
 
@@ -649,7 +649,7 @@ private class SuggestionCell: UITableViewCell {
     }
 
     @objc
-    func SELdidSelectSuggestion(sender: UIButton) {
+    func SELdidSelectSuggestion(_ sender: UIButton) {
         delegate?.suggestionCell(self, didSelectSuggestion: sender.titleLabel!.text!)
     }
 
@@ -690,7 +690,7 @@ private class SuggestionCell: UITableViewCell {
                     currentRow += 1
                     if currentRow >= SearchViewControllerUX.SuggestionCellMaxRows {
                         // Don't draw this button if it doesn't fit on the row.
-                        button.frame = CGRectZero
+                        button.frame = CGRect.zero
                         continue
                     }
 
@@ -706,7 +706,7 @@ private class SuggestionCell: UITableViewCell {
                 }
             }
 
-            button.frame = CGRectMake(currentLeft, currentTop, buttonSize.width, buttonSize.height)
+            button.frame = CGRect(x: currentLeft, y: currentTop, width: buttonSize.width, height: buttonSize.height)
             currentLeft += buttonSize.width + SearchViewControllerUX.SuggestionMargin
         }
 
@@ -716,7 +716,7 @@ private class SuggestionCell: UITableViewCell {
 
         let imageX = (48 - imageSize) / 2
         let imageY = (frame.size.height - imageSize) / 2
-        imageView!.frame = CGRectMake(imageX, imageY, imageSize, imageSize)
+        imageView!.frame = CGRect(x: imageX, y: imageY, width: imageSize, height: imageSize)
     }
 }
 
@@ -727,11 +727,11 @@ private class SuggestionButton: InsetButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        setTitleColor(UIConstants.HighlightBlue, forState: UIControlState.Normal)
-        setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
+        setTitleColor(UIConstants.HighlightBlue, for: UIControlState())
+        setTitleColor(UIColor.white(), for: UIControlState.highlighted)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         backgroundColor = SearchViewControllerUX.SuggestionBackgroundColor
-        layer.borderColor = SearchViewControllerUX.SuggestionBorderColor.CGColor
+        layer.borderColor = SearchViewControllerUX.SuggestionBorderColor.cgColor
         layer.borderWidth = SearchViewControllerUX.SuggestionBorderWidth
         layer.cornerRadius = SearchViewControllerUX.SuggestionCornerRadius
         contentEdgeInsets = SearchViewControllerUX.SuggestionInsets
@@ -744,9 +744,9 @@ private class SuggestionButton: InsetButton {
     }
 
     @objc
-    override var highlighted: Bool {
+    override var isHighlighted: Bool {
         didSet {
-            backgroundColor = highlighted ? UIConstants.HighlightBlue : SearchViewControllerUX.SuggestionBackgroundColor
+            backgroundColor = isHighlighted ? UIConstants.HighlightBlue : SearchViewControllerUX.SuggestionBackgroundColor
         }
     }
 }

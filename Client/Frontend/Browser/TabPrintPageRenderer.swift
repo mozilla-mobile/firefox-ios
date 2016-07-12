@@ -17,10 +17,10 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
 
     required init(tab: Tab) {
         self.tab = tab
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .ShortStyle
-        dateFormatter.timeStyle = .ShortStyle
-        self.dateString = dateFormatter.stringFromDate(NSDate())
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        self.dateString = dateFormatter.string(from: Date())
 
         super.init()
 
@@ -30,12 +30,12 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         if let tab = self.tab {
             let formatter = tab.webView!.viewPrintFormatter()
             formatter.perPageContentInsets = UIEdgeInsets(top: PrintedPageUX.PageInsets, left: PrintedPageUX.PageInsets, bottom: PrintedPageUX.PageInsets, right: PrintedPageUX.PageInsets)
-            addPrintFormatter(formatter, startingAtPageAtIndex: 0)
+            addPrintFormatter(formatter, startingAtPageAt: 0)
         }
     }
 
-    override func drawFooterForPageAtIndex(pageIndex: Int, inRect headerRect: CGRect) {
-        let headerInsets = UIEdgeInsets(top: CGRectGetMinY(headerRect), left: PrintedPageUX.PageInsets, bottom: CGRectGetMaxY(paperRect) - CGRectGetMaxY(headerRect), right: PrintedPageUX.PageInsets)
+    override func drawFooterForPage(at pageIndex: Int, in headerRect: CGRect) {
+        let headerInsets = UIEdgeInsets(top: headerRect.minY, left: PrintedPageUX.PageInsets, bottom: paperRect.maxY - headerRect.maxY, right: PrintedPageUX.PageInsets)
         let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // url on left
@@ -46,8 +46,8 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         self.drawTextAtPoint(pageNumberString, rect: headerRect, onLeft: false)
     }
 
-    override func drawHeaderForPageAtIndex(pageIndex: Int, inRect headerRect: CGRect) {
-        let headerInsets = UIEdgeInsets(top: CGRectGetMinY(headerRect), left: PrintedPageUX.PageInsets, bottom: CGRectGetMaxY(paperRect) - CGRectGetMaxY(headerRect), right: PrintedPageUX.PageInsets)
+    override func drawHeaderForPage(at pageIndex: Int, in headerRect: CGRect) {
+        let headerInsets = UIEdgeInsets(top: headerRect.minY, left: PrintedPageUX.PageInsets, bottom: paperRect.maxY - headerRect.maxY, right: PrintedPageUX.PageInsets)
         let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // page title on left
@@ -57,17 +57,17 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         self.drawTextAtPoint(dateString, rect: headerRect, onLeft: false)
     }
 
-    func drawTextAtPoint(text: String, rect:CGRect, onLeft: Bool){
-        let size = text.sizeWithAttributes(textAttributes)
+    func drawTextAtPoint(_ text: String, rect:CGRect, onLeft: Bool){
+        let size = text.size(attributes: textAttributes)
         let x, y: CGFloat
         if onLeft {
-            x = CGRectGetMinX(rect)
-            y = CGRectGetMidY(rect) - size.height / 2
+            x = rect.minX
+            y = rect.midY - size.height / 2
         } else {
-            x = CGRectGetMaxX(rect) - size.width
-            y = CGRectGetMidY(rect) - size.height / 2
+            x = rect.maxX - size.width
+            y = rect.midY - size.height / 2
         }
-        text.drawAtPoint(CGPoint(x: x, y: y), withAttributes: textAttributes)
+        text.draw(at: CGPoint(x: x, y: y), withAttributes: textAttributes)
     }
     
 }

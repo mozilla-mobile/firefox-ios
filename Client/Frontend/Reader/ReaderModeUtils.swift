@@ -8,42 +8,42 @@ struct ReaderModeUtils {
 
     static let DomainPrefixesToSimplify = ["www.", "mobile.", "m.", "blog."]
 
-    static func simplifyDomain(domain: String) -> String {
+    static func simplifyDomain(_ domain: String) -> String {
         for prefix in DomainPrefixesToSimplify {
             if domain.hasPrefix(prefix) {
-                return domain.substringFromIndex(domain.startIndex.advancedBy(prefix.characters.count))
+                return domain.substring(from: domain.characters.index(domain.startIndex, offsetBy: prefix.characters.count))
             }
         }
         return domain
     }
 
-    static func generateReaderContent(readabilityResult: ReadabilityResult, initialStyle: ReaderModeStyle) -> String? {
-        if let stylePath = NSBundle.mainBundle().pathForResource("Reader", ofType: "css") {
+    static func generateReaderContent(_ readabilityResult: ReadabilityResult, initialStyle: ReaderModeStyle) -> String? {
+        if let stylePath = Bundle.main.pathForResource("Reader", ofType: "css") {
             do {
-                let css = try NSString(contentsOfFile: stylePath, encoding: NSUTF8StringEncoding)
-                if let tmplPath = NSBundle.mainBundle().pathForResource("Reader", ofType: "html") {
+                let css = try NSString(contentsOfFile: stylePath, encoding: String.Encoding.utf8.rawValue)
+                if let tmplPath = Bundle.main.pathForResource("Reader", ofType: "html") {
                     do {
-                        let tmpl = try NSMutableString(contentsOfFile: tmplPath, encoding: NSUTF8StringEncoding)
-                        tmpl.replaceOccurrencesOfString("%READER-CSS%", withString: css as String,
-                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
+                        let tmpl = try NSMutableString(contentsOfFile: tmplPath, encoding: String.Encoding.utf8.rawValue)
+                        tmpl.replaceOccurrences(of: "%READER-CSS%", with: css as String,
+                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
 
-                        tmpl.replaceOccurrencesOfString("%READER-STYLE%", withString: initialStyle.encode(),
-                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
+                        tmpl.replaceOccurrences(of: "%READER-STYLE%", with: initialStyle.encode(),
+                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
 
-                        tmpl.replaceOccurrencesOfString("%READER-DOMAIN%", withString: simplifyDomain(readabilityResult.domain),
-                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
+                        tmpl.replaceOccurrences(of: "%READER-DOMAIN%", with: simplifyDomain(readabilityResult.domain),
+                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
 
-                        tmpl.replaceOccurrencesOfString("%READER-URL%", withString: readabilityResult.url,
-                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
+                        tmpl.replaceOccurrences(of: "%READER-URL%", with: readabilityResult.url,
+                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
 
-                        tmpl.replaceOccurrencesOfString("%READER-TITLE%", withString: readabilityResult.title,
-                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
+                        tmpl.replaceOccurrences(of: "%READER-TITLE%", with: readabilityResult.title,
+                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
 
-                        tmpl.replaceOccurrencesOfString("%READER-CREDITS%", withString: readabilityResult.credits,
-                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
+                        tmpl.replaceOccurrences(of: "%READER-CREDITS%", with: readabilityResult.credits,
+                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
 
-                        tmpl.replaceOccurrencesOfString("%READER-CONTENT%", withString: readabilityResult.content,
-                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
+                        tmpl.replaceOccurrences(of: "%READER-CONTENT%", with: readabilityResult.content,
+                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
 
                         return tmpl as String
                     } catch _ {
@@ -55,27 +55,27 @@ struct ReaderModeUtils {
         return nil
     }
 
-    static func isReaderModeURL(url: NSURL) -> Bool {
+    static func isReaderModeURL(_ url: URL) -> Bool {
         let scheme = url.scheme, host = url.host, path = url.path
         return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
     }
 
-    static func decodeURL(url: NSURL) -> NSURL? {
+    static func decodeURL(_ url: URL) -> URL? {
         if ReaderModeUtils.isReaderModeURL(url) {
-            if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false), queryItems = components.queryItems where queryItems.count == 1 {
+            if let components = URLComponents(url: url, resolvingAgainstBaseURL: false), queryItems = components.queryItems where queryItems.count == 1 {
                 if let queryItem = queryItems.first, value = queryItem.value {
-                    return NSURL(string: value)
+                    return URL(string: value)
                 }
             }
         }
         return nil
     }
 
-    static func encodeURL(url: NSURL?) -> NSURL? {
-        let baseReaderModeURL: String = WebServer.sharedInstance.URLForResource("page", module: "reader-mode")
+    static func encodeURL(_ url: URL?) -> URL? {
+        let baseReaderModeURL: String = WebServer.sharedInstance.URL(forResource: "page", module: "reader-mode")
         if let absoluteString = url?.absoluteString {
-            if let encodedURL = absoluteString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
-                if let aboutReaderURL = NSURL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
+            if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) {
+                if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
                     return aboutReaderURL
                 }
             }

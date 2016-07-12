@@ -95,7 +95,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
 
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
-        let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+        let cell = tabsView.cellForItem(at: NSIndexPath(forItem: 0, inSection: 0))!
         tester().swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
         tester().waitForTappableViewWithAccessibilityLabel("Show Tabs")
 

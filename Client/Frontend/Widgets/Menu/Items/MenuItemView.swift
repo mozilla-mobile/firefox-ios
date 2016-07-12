@@ -15,9 +15,9 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
     lazy var menuImageView: UIImageView = UIImageView()
     lazy var menuTitleLabel: UILabel = {
         let menuTitleLabel = UILabel()
-        menuTitleLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        menuTitleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         menuTitleLabel.numberOfLines = 0
-        menuTitleLabel.textAlignment = NSTextAlignment.Center
+        menuTitleLabel.textAlignment = NSTextAlignment.center
         return menuTitleLabel
     }()
 

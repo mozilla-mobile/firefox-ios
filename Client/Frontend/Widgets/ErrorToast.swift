@@ -9,14 +9,14 @@ private struct ErrorToastDefaultUX {
     static let cornerRadius: CGFloat = 40
     static let fillColor = UIColor(red: 186/255, green: 32/255, blue: 36/255, alpha: 1)
     static let margins = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
-    static let textColor = UIColor.whiteColor()
+    static let textColor = UIColor.white()
 }
 
 class ErrorToast: UIView {
     lazy var textLabel: UILabel = {
         let label = UILabel()
         label.textColor = ErrorToastDefaultUX.textColor
-        label.textAlignment = .Center
+        label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()
@@ -35,7 +35,7 @@ class ErrorToast: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        opaque = false
+        isOpaque = false
         addSubview(textLabel)
         textLabel.snp_makeConstraints { make in
             make.edges.equalTo(self).inset(ErrorToastDefaultUX.margins)
@@ -46,8 +46,8 @@ class ErrorToast: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         fillColor.setFill()
         let path = UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius)
         path.fill()

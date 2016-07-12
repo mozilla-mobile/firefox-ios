@@ -5,12 +5,12 @@
 import Foundation
 
 // MARK: - Common UITableView text styling
-extension NSAttributedString {
-    static func tableRowTitle(string: String) -> NSAttributedString {
-        return NSAttributedString(string: string, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+extension AttributedString {
+    static func tableRowTitle(_ string: String) -> AttributedString {
+        return AttributedString(string: string, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
-    static func disabledTableRowTitle(string: String) -> NSAttributedString {
-        return NSAttributedString(string: string, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewDisabledRowTextColor])
+    static func disabledTableRowTitle(_ string: String) -> AttributedString {
+        return AttributedString(string: string, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewDisabledRowTextColor])
     }
 }

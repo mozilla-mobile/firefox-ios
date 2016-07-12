@@ -9,22 +9,22 @@ import UIKit
 // toolbar
 protocol MenuToolbarDataSource: class {
     // how many items we will be displaying in our toolbar
-    func numberOfToolbarItemsInMenuView(menuView: MenuView) -> Int
+    func numberOfToolbarItems(in menuView: MenuView) -> Int
 
     // the button that we should display at this point in the toolbar
-    func menuView(menuView: MenuView, buttonForItemAtIndex index: Int) -> UIView
+    func menuView(_ menuView: MenuView, buttonForItemAtIndex index: Int) -> UIView
 }
 
 // menu items
 protocol MenuItemDataSource: class {
     // how many pages we should provide in our menu
-    func numberOfPagesInMenuView(menuView: MenuView) -> Int
+    func numberOfPages(in menuView: MenuView) -> Int
 
-    func numberOfItemsPerRowInMenuView(menuView: MenuView) -> Int
+    func numberOfItemsPerRow(in menuView: MenuView) -> Int
 
     // for this page, the number of items that we will display
-    func menuView(menuView: MenuView, numberOfItemsForPage page: Int) -> Int
+    func menuView(_ menuView: MenuView, numberOfItemsForPage page: Int) -> Int
 
     // get the menu cell for this page item
-    func menuView(menuView: MenuView, menuItemCellForIndexPath indexPath: NSIndexPath) -> MenuItemCollectionViewCell
+    func menuView(_ menuView: MenuView, menuItemCellFor indexPath: IndexPath) -> MenuItemCollectionViewCell
 }

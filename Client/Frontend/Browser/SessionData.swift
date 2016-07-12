@@ -8,7 +8,7 @@ import Shared
 
 class SessionData: NSObject, NSCoding {
     let currentPage: Int
-    let urls: [NSURL]
+    let urls: [URL]
     let lastUsedTime: Timestamp
 
     var jsonDictionary: [String: AnyObject] {
@@ -27,7 +27,7 @@ class SessionData: NSObject, NSCoding {
         - parameter urls:            The sequence of URLs in this tab's session history.
         - parameter lastUsedTime:    The last time this tab was modified.
     **/
-    init(currentPage: Int, urls: [NSURL], lastUsedTime: Timestamp) {
+    init(currentPage: Int, urls: [URL], lastUsedTime: Timestamp) {
         self.currentPage = currentPage
         self.urls = urls
         self.lastUsedTime = lastUsedTime
@@ -37,14 +37,14 @@ class SessionData: NSObject, NSCoding {
     }
 
     required init?(coder: NSCoder) {
-        self.currentPage = coder.decodeObjectForKey("currentPage") as? Int ?? 0
-        self.urls = coder.decodeObjectForKey("urls") as? [NSURL] ?? []
-        self.lastUsedTime = UInt64(coder.decodeInt64ForKey("lastUsedTime")) ?? NSDate.now()
+        self.currentPage = coder.decodeObject(forKey: "currentPage") as? Int ?? 0
+        self.urls = coder.decodeObject(forKey: "urls") as? [URL] ?? []
+        self.lastUsedTime = UInt64(coder.decodeInt64ForKey("lastUsedTime")) ?? Date.now()
     }
 
-    func encodeWithCoder(coder: NSCoder) {
-        coder.encodeObject(currentPage, forKey: "currentPage")
-        coder.encodeObject(urls, forKey: "urls")
+    func encode(with coder: NSCoder) {
+        coder.encode(currentPage, forKey: "currentPage")
+        coder.encode(urls, forKey: "urls")
         coder.encodeInt64(Int64(lastUsedTime), forKey: "lastUsedTime")
     }
 }

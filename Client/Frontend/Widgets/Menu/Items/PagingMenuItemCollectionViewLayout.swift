@@ -12,13 +12,13 @@ class PagingMenuItemCollectionViewLayout: UICollectionViewLayout {
     var interitemSpacing: CGFloat = 0
 
     var contentSize = CGSize.zero
-    var layoutCellAttributes = [NSIndexPath: UICollectionViewLayoutAttributes]()
+    var layoutCellAttributes = [IndexPath: UICollectionViewLayoutAttributes]()
 
     override func collectionViewContentSize() -> CGSize {
         return contentSize
     }
 
-    private func cellSizeForCollectionView(collectionView: UICollectionView) -> CGSize {
+    private func cellSize(for collectionView: UICollectionView) -> CGSize {
         // calculate cell size
         var cellWidth = (collectionView.bounds.size.width - self.interitemSpacing) / CGFloat(self.maxNumberOfItemsPerPageRow)
         cellWidth -= self.interitemSpacing
@@ -26,8 +26,8 @@ class PagingMenuItemCollectionViewLayout: UICollectionViewLayout {
         return CGSize(width: cellWidth, height: cellHeight)
     }
 
-    override func prepareLayout() {
-        super.prepareLayout()
+    override func prepare() {
+        super.prepare()
         guard let collectionView = self.collectionView,
             let collectionViewDataSource = collectionView.dataSource else {
                 return
@@ -35,22 +35,22 @@ class PagingMenuItemCollectionViewLayout: UICollectionViewLayout {
         
         layoutCellAttributes.removeAll()
 
-        let cellSize = cellSizeForCollectionView(collectionView)
+        let cellSize = cellSize(for: collectionView)
 
         var x: CGFloat = 0
         var y: CGFloat
         let pageWidth = interitemSpacing + ((cellSize.width + interitemSpacing) * CGFloat(maxNumberOfItemsPerPageRow))
         var cellIndex: Int
-        let numberOfPages = collectionViewDataSource.numberOfSectionsInCollectionView?(collectionView) ?? 0
+        let numberOfPages = collectionViewDataSource.numberOfSections?(in: collectionView) ?? 0
         let maxNumberOfItemsForPage = collectionViewDataSource.collectionView(collectionView, numberOfItemsInSection: 0)
         for pageIndex in 0..<numberOfPages {
             x = (pageWidth * CGFloat(pageIndex)) + self.interitemSpacing
             y = self.lineSpacing
             cellIndex = 0
             for itemIndex in 0..<(collectionViewDataSource.collectionView(collectionView, numberOfItemsInSection: pageIndex)) {
-                let index = NSIndexPath(forItem: itemIndex, inSection: pageIndex)
+                let index = IndexPath(item: itemIndex, section: pageIndex)
 
-                let cellAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: index)
+                let cellAttributes = UICollectionViewLayoutAttributes(forCellWith: index)
                 cellAttributes.frame = CGRect(x: x, y: y, width: cellSize.width, height: cellSize.height)
                 cellAttributes.zIndex = 1
                 layoutCellAttributes[index] = cellAttributes
@@ -71,10 +71,10 @@ class PagingMenuItemCollectionViewLayout: UICollectionViewLayout {
         contentSize = CGSize(width: width, height: menuHeight)
     }
 
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var newAttributes = [UICollectionViewLayoutAttributes]()
         for attribute in layoutCellAttributes.values {
-            if CGRectIntersectsRect(rect, attribute.frame) {
+            if rect.intersects(attribute.frame) {
                 newAttributes.append(attribute)
             }
         }
@@ -82,11 +82,11 @@ class PagingMenuItemCollectionViewLayout: UICollectionViewLayout {
         return newAttributes
     }
 
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return layoutCellAttributes[indexPath]
     }
 
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
-        return super.shouldInvalidateLayoutForBoundsChange(newBounds)
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return super.shouldInvalidateLayout(forBoundsChange: newBounds)
     }
 }

@@ -19,8 +19,8 @@ private let REQUEST_KEY_PRIVILEGED = "privileged"
  needed, and when you are sure the URL is from a trustworthy source!
  **/
 class PrivilegedRequest: NSMutableURLRequest {
-    override init(URL: NSURL, cachePolicy: NSURLRequestCachePolicy, timeoutInterval: NSTimeInterval) {
-        super.init(URL: URL, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
+    override init(url URL: URL, cachePolicy: NSURLRequest.CachePolicy, timeoutInterval: TimeInterval) {
+        super.init(url: URL, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
         setPrivileged()
     }
 
@@ -30,12 +30,12 @@ class PrivilegedRequest: NSMutableURLRequest {
     }
 
     private func setPrivileged() {
-        NSURLProtocol.setProperty(true, forKey: REQUEST_KEY_PRIVILEGED, inRequest: self)
+        URLProtocol.setProperty(true, forKey: REQUEST_KEY_PRIVILEGED, in: self)
     }
 }
 
-extension NSURLRequest {
+extension Foundation.URLRequest {
     var isPrivileged: Bool {
-        return NSURLProtocol.propertyForKey(REQUEST_KEY_PRIVILEGED, inRequest: self) != nil
+        return URLProtocol.property(forKey: REQUEST_KEY_PRIVILEGED, in: self) != nil
     }
 }

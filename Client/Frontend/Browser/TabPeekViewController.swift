@@ -10,10 +10,10 @@ import WebKit
 
 @available(iOS 9.0, *)
 protocol TabPeekDelegate: class {
-    func tabPeekDidAddBookmark(tab: Tab)
-    func tabPeekDidAddToReadingList(tab: Tab) -> ReadingListClientRecord?
-    func tabPeekRequestsPresentationOf(viewController viewController: UIViewController)
-    func tabPeekDidCloseTab(tab: Tab)
+    func tabPeekDidAddBookmark(_ tab: Tab)
+    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
+    func tabPeekRequestsPresentationOf(viewController: UIViewController)
+    func tabPeekDidClose(tab: Tab)
 }
 
 @available(iOS 9.0, *)
@@ -42,19 +42,19 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         var actions = [UIPreviewActionItem]()
         if(!self.ignoreURL) {
             if !self.isInReadingList {
-                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .Default) { previewAction, viewController in
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .default) { previewAction, viewController in
                     guard let tab = self.tab else { return }
                     self.delegate?.tabPeekDidAddToReadingList(tab)
                 })
             }
             if !self.isBookmarked {
-                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .Default) { previewAction, viewController in
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .default) { previewAction, viewController in
                     guard let tab = self.tab else { return }
                     self.delegate?.tabPeekDidAddBookmark(tab)
                     })
             }
             if self.hasRemoteClients {
-                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionSendToDevice, style: .Default) { previewAction, viewController in
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionSendToDevice, style: .default) { previewAction, viewController in
                     guard let clientPicker = self.clientPicker else { return }
                     self.delegate?.tabPeekRequestsPresentationOf(viewController: clientPicker)
                     })
@@ -62,16 +62,16 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             // only add the copy URL action if we don't already have 3 items in our list
             // as we are only allowed 4 in total and we always want to display close tab
             if actions.count < 3 {
-                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
-                    guard let url = self.tab?.url where url.absoluteString.characters.count > 0 else { return }
-                    let pasteBoard = UIPasteboard.generalPasteboard()
-                    pasteBoard.URL = url
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .default) { previewAction, viewController in
+                    guard let url = self.tab?.url where url.absoluteString?.characters.count > 0 else { return }
+                    let pasteBoard = UIPasteboard.general()
+                    pasteBoard.url = url as URL
                     })
             }
         }
-        actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCloseTab, style: .Destructive) { previewAction, viewController in
+        actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCloseTab, style: .destructive) { previewAction, viewController in
             guard let tab = self.tab else { return }
-            self.delegate?.tabPeekDidCloseTab(tab)
+            self.delegate?.tabPeekDidClose(tab: tab)
             })
 
         return actions
@@ -97,10 +97,10 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         // otherwise just show the screenshot
         setupWebView(tab?.webView)
         guard let screenshot = tab?.screenshot else { return }
-        setupWithScreenshot(screenshot)
+        setup(withScreenshot: screenshot)
     }
 
-    private func setupWithScreenshot(screenshot: UIImage) {
+    private func setup(withScreenshot screenshot: UIImage) {
         let imageView = UIImageView(image: screenshot)
         self.view.addSubview(imageView)
 
@@ -112,8 +112,8 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         screenShot?.accessibilityLabel = previewAccessibilityLabel
     }
 
-    private func setupWebView(webView: WKWebView?) {
-        guard let webView = webView, let url = webView.URL where !isIgnoredURL(url) else { return }
+    private func setupWebView(_ webView: WKWebView?) {
+        guard let webView = webView, let url = webView.url where !isIgnoredURL(url) else { return }
         let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
         clonedWebView.allowsLinkPreview = false
         webView.accessibilityLabel = previewAccessibilityLabel
@@ -125,11 +125,11 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
         clonedWebView.navigationDelegate = self
 
-        clonedWebView.loadRequest(NSURLRequest(URL: url))
+        clonedWebView.load(URLRequest(url: url))
     }
 
     func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: ClientPickerViewControllerDelegate) {
-        assert(NSThread.currentThread().isMainThread)
+        assert(Thread.current.isMainThread)
 
         guard let tab = self.tab else {
             return
@@ -139,7 +139,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             return
         }
 
-        let mainQueue = dispatch_get_main_queue()
+        let mainQueue = DispatchQueue.main
         browserProfile.bookmarks.modelFactory >>== {
             $0.isBookmarked(displayURL).uponQueue(mainQueue) {
                 self.isBookmarked = $0.successValue ?? false
@@ -168,7 +168,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         self.ignoreURL = isIgnoredURL(displayURL)
     }
 
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         screenShot?.removeFromSuperview()
         screenShot = nil
     }

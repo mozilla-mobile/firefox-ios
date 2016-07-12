@@ -26,12 +26,12 @@ class RequestDesktopSiteActivity: UIActivity {
             UIImage(named: "shareRequestDesktopSite")
     }
 
-    override func performActivity() {
+    override func perform() {
         callback()
         activityDidFinish(true)
     }
 
-    override func canPerformWithActivityItems(activityItems: [AnyObject]) -> Bool {
+    override func canPerform(withActivityItems activityItems: [AnyObject]) -> Bool {
         return true
     }
 }

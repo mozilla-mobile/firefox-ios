@@ -8,20 +8,20 @@
 import GCDWebServers
 
 struct AboutHomeHandler {
-    static func register(webServer: WebServer) {
-        webServer.registerHandlerForMethod("GET", module: "about", resource: "home") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
+    static func register(_ webServer: WebServer) {
+        webServer.registerHandler(forMethod: "GET", module: "about", resource: "home") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
             return GCDWebServerResponse(statusCode: 200)
         }
     }
 }
 
 struct AboutLicenseHandler {
-    static func register(webServer: WebServer) {
-        webServer.registerHandlerForMethod("GET", module: "about", resource: "license") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
-            let path = NSBundle.mainBundle().pathForResource("Licenses", ofType: "html")
+    static func register(_ webServer: WebServer) {
+        webServer.registerHandler(forMethod: "GET", module: "about", resource: "license") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
+            let path = Bundle.main.pathForResource("Licenses", ofType: "html")
             do {
-                let html = try NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding) as String
-                return GCDWebServerDataResponse(HTML: html)
+                let html = try NSString(contentsOfFile: path!, encoding: String.Encoding.utf8) as String
+                return GCDWebServerDataResponse(html: html)
             } catch {
                 print("Unable to register webserver \(error)")
             }
@@ -32,7 +32,7 @@ struct AboutLicenseHandler {
 
 extension GCDWebServerDataResponse {
     convenience init(XHTML: String) {
-        let data = XHTML.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        let data = XHTML.data(using: String.Encoding.utf8, allowLossyConversion: false)
         self.init(data: data, contentType: "application/xhtml+xml; charset=utf-8")
     }
 }

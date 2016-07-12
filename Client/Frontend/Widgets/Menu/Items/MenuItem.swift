@@ -9,6 +9,6 @@ protocol MenuItem {
     var action: MenuAction { get }
     var secondaryAction: MenuAction? { get }
     var animation: Animatable? { get }
-    func iconForState(appState: AppState) -> UIImage?
-    func selectedIconForState(appState: AppState) -> UIImage?
+    func icon(forState appState: AppState) -> UIImage?
+    func selectedIcon(forState appState: AppState) -> UIImage?
 }

@@ -5,11 +5,11 @@
 import Foundation
 
 @objc public protocol MenuHelperInterface {
-    optional func menuHelperCopy(sender: NSNotification)
-    optional func menuHelperOpenAndFill(sender: NSNotification)
-    optional func menuHelperReveal(sender: NSNotification)
-    optional func menuHelperSecure(sender: NSNotification)
-    optional func menuHelperFindInPage(sender: NSNotification)
+    @objc optional func menuHelperCopy(_ sender: Notification)
+    @objc optional func menuHelperOpenAndFill(_ sender: Notification)
+    @objc optional func menuHelperReveal(_ sender: Notification)
+    @objc optional func menuHelperSecure(_ sender: Notification)
+    @objc optional func menuHelperFindInPage(_ sender: Notification)
 }
 
 public class MenuHelper: NSObject {
@@ -42,6 +42,6 @@ public class MenuHelper: NSObject {
         let findInPageTitle = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Text selection menu item")
         let findInPageItem = UIMenuItem(title: findInPageTitle, action: MenuHelper.SelectorFindInPage)
 
-        UIMenuController.sharedMenuController().menuItems = [copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem]
+        UIMenuController.shared().menuItems = [copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem]
     }
 }

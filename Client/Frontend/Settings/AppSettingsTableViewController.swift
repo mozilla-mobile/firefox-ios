@@ -17,7 +17,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         navigationItem.title = NSLocalizedString("Settings", comment: "Settings")
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
-            style: UIBarButtonItemStyle.Done,
+            style: UIBarButtonItemStyle.done,
             target: navigationController, action: Selector("SELdone"))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
@@ -56,7 +56,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         ]
 
         let accountChinaSyncSetting: [Setting]
-        let locale = NSLocale.currentLocale()
+        let locale = Locale.current
         if locale.localeIdentifier != "zh_CN" {
             accountChinaSyncSetting = []
         } else {
@@ -68,7 +68,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+        if UIDevice.current().userInterfaceIdiom == .phone {
             generalSettings +=  [
                 BoolSetting(prefs: prefs, prefKey: "CompactTabLayout", defaultValue: true,
                     titleText: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview"))
@@ -85,10 +85,10 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ] + accountChinaSyncSetting + accountDebugSettings)]
 
         if !profile.hasAccount() {
-            settings += [SettingSection(title: NSAttributedString(string: NSLocalizedString("Sign in to get your tabs, bookmarks, and passwords from your other devices.", comment: "Clarify value prop under Sign In to Firefox in Settings.")), children: [])]
+            settings += [SettingSection(title: AttributedString(string: NSLocalizedString("Sign in to get your tabs, bookmarks, and passwords from your other devices.", comment: "Clarify value prop under Sign In to Firefox in Settings.")), children: [])]
         }
 
-        settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]
+        settings += [ SettingSection(title: AttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]
 
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
@@ -112,14 +112,14 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
 
         settings += [
-            SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
+            SettingSection(title: AttributedString(string: privacyTitle), children: privacySettings),
+            SettingSection(title: AttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self),
                 SendFeedbackSetting(),
                 SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate),
                 OpenSupportPageSetting(delegate: settingsDelegate),
             ]),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
+            SettingSection(title: AttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),
@@ -138,16 +138,16 @@ class AppSettingsTableViewController: SettingsTableViewController {
         return settings
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if !profile.hasAccount() {
-            let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
             let sectionSetting = settings[section]
             headerView.titleLabel.text = sectionSetting.title?.string
 
             switch section {
                 // Hide the bottom border for the Sign In to Firefox value prop
                 case 1:
-                    headerView.titleAlignment = .Top
+                    headerView.titleAlignment = .top
                     headerView.titleLabel.numberOfLines = 0
                     headerView.showBottomBorder = false
                     headerView.titleLabel.snp_updateConstraints { make in
@@ -177,7 +177,7 @@ extension AppSettingsTableViewController {
 
 extension AppSettingsTableViewController: PasscodeEntryDelegate {
     @objc func passcodeValidationDidSucceed() {
-        navigationController?.dismissViewControllerAnimated(true) {
+        navigationController?.dismiss(animated: true) {
             self.navigateToLoginsList()
         }
     }

@@ -15,8 +15,8 @@ class PrintHelper: TabHelper {
 
     required init(tab: Tab) {
         self.tab = tab
-        if let path = NSBundle.mainBundle().pathForResource("PrintHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
+        if let path = Bundle.main.pathForResource("PrintHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
@@ -25,11 +25,11 @@ class PrintHelper: TabHelper {
         return "printHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if let tab = tab, webView = tab.webView {
-            let printController = UIPrintInteractionController.sharedPrintController()
+            let printController = UIPrintInteractionController.shared()
             printController.printFormatter = webView.viewPrintFormatter()
-            printController.presentAnimated(true, completionHandler: nil)
+            printController.present(animated: true, completionHandler: nil)
         }
     }
 }

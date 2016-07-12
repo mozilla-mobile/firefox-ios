@@ -7,8 +7,8 @@ import Shared
 import WebKit
 
 protocol FindInPageHelperDelegate: class {
-    func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int)
-    func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int)
+    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int)
+    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int)
 }
 
 class FindInPageHelper: TabHelper {
@@ -22,8 +22,8 @@ class FindInPageHelper: TabHelper {
     required init(tab: Tab) {
         self.tab = tab
 
-        if let path = NSBundle.mainBundle().pathForResource("FindInPage", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+        if let path = Bundle.main.pathForResource("FindInPage", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
@@ -32,7 +32,7 @@ class FindInPageHelper: TabHelper {
         return "findInPageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         let data = message.body as! [String: Int]
 
         if let currentResult = data["currentResult"] {

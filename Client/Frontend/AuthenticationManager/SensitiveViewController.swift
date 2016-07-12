@@ -10,29 +10,29 @@ class SensitiveViewController: UIViewController {
     var promptingForTouchID: Bool = false
     var backgroundedBlur: UIImageView?
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: UIApplicationWillEnterForegroundNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.blurContents), name: UIApplicationWillResignActiveNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.blurContents), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
-        notificationCenter.removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
 
     func checkIfUserRequiresValidation() {
-        presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
+        presentedViewController?.dismiss(animated: false, completion: nil)
         guard let authInfo = KeychainWrapper.authenticationInfo() where authInfo.requiresValidation() else {
             removeBackgroundedBlur()
             return
         }
 
         promptingForTouchID = true
-        AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
+        AppAuthenticator.presentAuthentication(usingInfo: authInfo,
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.promptingForTouchID = false
@@ -67,7 +67,7 @@ class SensitiveViewController: UIViewController {
             return nil
         }
 
-        let blurredSnapshot = snapshot.applyBlurWithRadius(10, blurType: BOXFILTER, tintColor: UIColor.init(white: 1, alpha: 0.3), saturationDeltaFactor: 1.8, maskImage: nil)
+        let blurredSnapshot = snapshot.applyBlur(withRadius: 10, blurType: BOXFILTER, tintColor: UIColor.init(white: 1, alpha: 0.3), saturationDeltaFactor: 1.8, maskImage: nil)
         let blurView = UIImageView(image: blurredSnapshot)
         view.addSubview(blurView)
         blurView.snp_makeConstraints { $0.edges.equalTo(self.view) }
@@ -81,11 +81,11 @@ class SensitiveViewController: UIViewController {
 extension SensitiveViewController: PasscodeEntryDelegate {
     func passcodeValidationDidSucceed() {
         removeBackgroundedBlur()
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
 
     func userDidCancelValidation() {
-        self.navigationController?.popToRootViewControllerAnimated(false)
+        self.navigationController?.popToRootViewController(animated: false)
     }
 }
 

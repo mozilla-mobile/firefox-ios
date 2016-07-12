@@ -18,7 +18,7 @@ class HomePageHelper {
 
     let prefs: Prefs
 
-    var currentURL: NSURL? {
+    var currentURL: URL? {
         get {
             return HomePageAccessors.getHomePage(prefs)
         }
@@ -41,13 +41,13 @@ class HomePageHelper {
         self.prefs = prefs
     }
 
-    func openHomePage(tab: Tab) {
+    func openHomePage(_ tab: Tab) {
         guard let url = currentURL else {
             // this should probably never happen.
             log.error("User requested a homepage that wasn't a valid URL")
             return
         }
-        tab.loadRequest(NSURLRequest(URL: url))
+        tab.load(URLRequest(url: url))
     }
 
     func openHomePage(inTab tab: Tab, withNavigationController navigationController: UINavigationController?) {

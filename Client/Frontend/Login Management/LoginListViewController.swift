@@ -13,17 +13,17 @@ import Deferred
 private struct LoginListUX {
     static let RowHeight: CGFloat = 58
     static let SearchHeight: CGFloat = 58
-    static let selectionButtonFont = UIFont.systemFontOfSize(16)
-    static let selectionButtonTextColor = UIColor.whiteColor()
+    static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
+    static let selectionButtonTextColor = UIColor.white()
     static let selectionButtonBackground = UIConstants.HighlightBlue
-    static let NoResultsFont: UIFont = UIFont.systemFontOfSize(16)
-    static let NoResultsTextColor: UIColor = UIColor.lightGrayColor()
+    static let NoResultsFont: UIFont = UIFont.systemFont(ofSize: 16)
+    static let NoResultsTextColor: UIColor = UIColor.lightGray()
 }
 
 private extension UITableView {
-    var allIndexPaths: [NSIndexPath] {
+    var allIndexPaths: [IndexPath] {
         return (0..<self.numberOfSections).flatMap { sectionNum in
-            (0..<self.numberOfRowsInSection(sectionNum)).map { NSIndexPath(forRow: $0, inSection: sectionNum) }
+            (0..<self.numberOfRows(inSection: sectionNum)).map { IndexPath(row: $0, section: sectionNum) }
         }
     }
 }
@@ -58,15 +58,15 @@ class LoginListViewController: SensitiveViewController {
     private lazy var selectionButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = LoginListUX.selectionButtonFont
-        button.setTitle(self.selectAllTitle, forState: .Normal)
-        button.setTitleColor(LoginListUX.selectionButtonTextColor, forState: .Normal)
+        button.setTitle(self.selectAllTitle, for: UIControlState())
+        button.setTitleColor(LoginListUX.selectionButtonTextColor, for: UIControlState())
         button.backgroundColor = LoginListUX.selectionButtonBackground
-        button.addTarget(self, action: #selector(LoginListViewController.tappedSelectionButton), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(LoginListViewController.tappedSelectionButton), for: .touchUpInside)
         return button
     }()
 
     private var selectionButtonHeightConstraint: Constraint?
-    private var selectedIndexPaths = [NSIndexPath]()
+    private var selectedIndexPaths = [IndexPath]()
 
     private let tableView = UITableView()
 
@@ -84,24 +84,24 @@ class LoginListViewController: SensitiveViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let notificationCenter = NSNotificationCenter.defaultCenter()
+        let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(LoginListViewController.remoteLoginsDidChange), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
-        self.view.backgroundColor = UIColor.whiteColor()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditing))
+        self.view.backgroundColor = UIColor.white()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginListViewController.beginEditing))
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen.")
 
         searchView.delegate = self
-        tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
+        tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
 
         view.addSubview(searchView)
         view.addSubview(tableView)
         view.addSubview(loadingStateView)
         view.addSubview(selectionButton)
 
-        loadingStateView.hidden = true
+        loadingStateView.isHidden = true
 
         searchView.snp_makeConstraints { make in
             make.top.equalTo(snp_topLayoutGuideBottom).constraint
@@ -127,7 +127,7 @@ class LoginListViewController: SensitiveViewController {
         }
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.accessibilityIdentifier = "Login List"
         tableView.dataSource = loginDataSource
@@ -147,8 +147,8 @@ class LoginListViewController: SensitiveViewController {
     }
 
     deinit {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationProfileDidFinishSyncing), object: nil)
         notificationCenter.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
         notificationCenter.removeObserver(self, name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
     }
@@ -157,8 +157,8 @@ class LoginListViewController: SensitiveViewController {
         // Show delete bar button item if we have selected any items
         if loginSelectionController.selectedCount > 0 {
             if (navigationItem.rightBarButtonItem == nil) {
-                navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .Plain, target: self, action: #selector(LoginListViewController.tappedDelete))
-                navigationItem.rightBarButtonItem?.tintColor = UIColor.redColor()
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .plain, target: self, action: #selector(LoginListViewController.tappedDelete))
+                navigationItem.rightBarButtonItem?.tintColor = UIColor.red()
             }
         } else {
             navigationItem.rightBarButtonItem = nil
@@ -167,15 +167,15 @@ class LoginListViewController: SensitiveViewController {
 
     private func toggleSelectionTitle() {
         if loginSelectionController.selectedCount == loginDataSource.count {
-            selectionButton.setTitle(deselectAllTitle, forState: .Normal)
+            selectionButton.setTitle(deselectAllTitle, for: UIControlState())
         } else {
-            selectionButton.setTitle(selectAllTitle, forState: .Normal)
+            selectionButton.setTitle(selectAllTitle, for: UIControlState())
         }
     }
 
 
     // Wrap the SQLiteLogins method to allow us to cancel it from our end.
-    private func queryLogins(query: String) -> Deferred<Maybe<[Login]>> {
+    private func queryLogins(_ query: String) -> Deferred<Maybe<[Login]>> {
         let deferred = Deferred<Maybe<[Login]>>()
         profile.logins.searchLogins(withQuery: query) >>== { logins in
             deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
@@ -191,8 +191,8 @@ private extension LoginListViewController {
         loadLogins()
     }
 
-    func loadLogins(query: String? = nil) {
-        loadingStateView.hidden = false
+    func loadLogins(_ query: String? = nil) {
+        loadingStateView.isHidden = false
 
         // Fill in an in-flight query and re-query
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
@@ -202,7 +202,7 @@ private extension LoginListViewController {
 
     @objc func beginEditing() {
         navigationItem.rightBarButtonItem = nil
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(LoginListViewController.cancelSelection))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(LoginListViewController.cancelSelection))
         selectionButtonHeightConstraint?.updateOffset(UIConstants.ToolbarHeight)
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
@@ -217,15 +217,15 @@ private extension LoginListViewController {
 
         tableView.setEditing(false, animated: true)
         navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditing))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginListViewController.beginEditing))
     }
 
     @objc func tappedDelete() {
-        profile.logins.hasSyncedLogins().uponQueue(dispatch_get_main_queue()) { yes in
+        profile.logins.hasSyncedLogins().uponQueue(DispatchQueue.main) { yes in
             let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
                 let guidsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
-                    self.loginDataSource.loginAtIndexPath(indexPath)!.guid
+                    self.loginDataSource.login(at: indexPath)!.guid
                 }
 
                 self.profile.logins.removeLogins(withGUIDs: guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
@@ -247,7 +247,7 @@ private extension LoginListViewController {
             }
             loginSelectionController.selectIndexPaths(unselectedPaths)
             unselectedPaths.forEach { indexPath in
-                self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .None)
+                self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
             }
         }
 
@@ -255,7 +255,7 @@ private extension LoginListViewController {
         else {
             loginSelectionController.deselectAll()
             tableView.allIndexPaths.forEach { indexPath in
-                self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                self.tableView.deselectRow(at: indexPath, animated: true)
             }
         }
 
@@ -267,45 +267,45 @@ private extension LoginListViewController {
 // MARK: - LoginDataSourceObserver
 extension LoginListViewController: LoginDataSourceObserver {
     func loginSectionsDidUpdate() {
-        self.loadingStateView.hidden = true
+        self.loadingStateView.isHidden = true
         self.tableView.reloadData()
         self.activeLoginQuery = nil
-        self.navigationItem.rightBarButtonItem?.enabled = self.loginDataSource.count > 0
+        self.navigationItem.rightBarButtonItem?.isEnabled = self.loginDataSource.count > 0
     }
 }
 
 // MARK: - UITableViewDelegate
 extension LoginListViewController: UITableViewDelegate {
 
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Force the headers to be hidden
         return 0
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return LoginListUX.RowHeight
     }
 
-    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        return .None
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return .none
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if tableView.editing {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
             loginSelectionController.selectIndexPath(indexPath)
             toggleSelectionTitle()
             toggleDeleteBarButton()
         } else {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            let login = loginDataSource.loginAtIndexPath(indexPath)!
+            tableView.deselectRow(at: indexPath, animated: true)
+            let login = loginDataSource.login(at: indexPath)!
             let detailViewController = LoginDetailViewController(profile: profile, login: login)
             detailViewController.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(detailViewController, animated: true)
         }
     }
 
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        if tableView.editing {
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
             loginSelectionController.deselectIndexPath(indexPath)
             toggleSelectionTitle()
             toggleDeleteBarButton()
@@ -316,15 +316,15 @@ extension LoginListViewController: UITableViewDelegate {
 // MARK: - KeyboardHelperDelegate
 extension LoginListViewController: KeyboardHelperDelegate {
 
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
     }
 
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
     }
 
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         tableView.contentInset.bottom = 0
     }
 }
@@ -332,11 +332,11 @@ extension LoginListViewController: KeyboardHelperDelegate {
 // MARK: - SearchInputViewDelegate
 extension LoginListViewController: SearchInputViewDelegate {
 
-    @objc func searchInputView(searchView: SearchInputView, didChangeTextTo text: String) {
+    @objc func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String) {
         loadLogins(text)
     }
 
-    @objc func searchInputViewBeganEditing(searchView: SearchInputView) {
+    @objc func searchInputViewBeganEditing(_ searchView: SearchInputView) {
         // Trigger a cancel for editing
         cancelSelection()
 
@@ -345,9 +345,9 @@ extension LoginListViewController: SearchInputViewDelegate {
         loadLogins()
     }
 
-    @objc func searchInputViewFinishedEditing(searchView: SearchInputView) {
+    @objc func searchInputViewFinishedEditing(_ searchView: SearchInputView) {
         // Show the edit after we're done with the search
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(LoginListViewController.beginEditing))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginListViewController.beginEditing))
         loadLogins()
     }
 }
@@ -357,7 +357,7 @@ private class ListSelectionController: NSObject {
 
     private unowned let tableView: UITableView
 
-    private(set) var selectedIndexPaths = [NSIndexPath]()
+    private(set) var selectedIndexPaths = [IndexPath]()
 
     var selectedCount: Int {
         return selectedIndexPaths.count
@@ -368,30 +368,30 @@ private class ListSelectionController: NSObject {
         super.init()
     }
 
-    func selectIndexPath(indexPath: NSIndexPath) {
+    func selectIndexPath(_ indexPath: IndexPath) {
         selectedIndexPaths.append(indexPath)
     }
 
-    func indexPathIsSelected(indexPath: NSIndexPath) -> Bool {
+    func indexPathIsSelected(_ indexPath: IndexPath) -> Bool {
         return selectedIndexPaths.contains(indexPath) { path1, path2 in
             return path1.row == path2.row && path1.section == path2.section
         }
     }
 
-    func deselectIndexPath(indexPath: NSIndexPath) {
-        guard let foundSelectedPath = (selectedIndexPaths.filter { $0.row == indexPath.row && $0.section == indexPath.section }).first,
-              let indexToRemove = selectedIndexPaths.indexOf(foundSelectedPath) else {
+    func deselectIndexPath(_ indexPath: IndexPath) {
+        guard let foundSelectedPath = (selectedIndexPaths.filter { ($0 as NSIndexPath).row == (indexPath as NSIndexPath).row && ($0 as NSIndexPath).section == (indexPath as NSIndexPath).section }).first,
+              let indexToRemove = selectedIndexPaths.index(of: foundSelectedPath) else {
             return
         }
 
-        selectedIndexPaths.removeAtIndex(indexToRemove)
+        selectedIndexPaths.remove(at: indexToRemove)
     }
 
     func deselectAll() {
         selectedIndexPaths.removeAll()
     }
 
-    func selectIndexPaths(indexPaths: [NSIndexPath]) {
+    func selectIndexPaths(_ indexPaths: [IndexPath]) {
         selectedIndexPaths += indexPaths
     }
 }
@@ -411,63 +411,63 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 
     private var sections = [Character: [Login]]() {
         didSet {
-            assert(NSThread.isMainThread(), "Must be assigned to from the main thread or else data will be out of sync with reloadData.")
+            assert(Thread.isMainThread, "Must be assigned to from the main thread or else data will be out of sync with reloadData.")
             self.dataObserver?.loginSectionsDidUpdate()
         }
     }
 
     private var titles = [Character]()
 
-    private func loginsForSection(section: Int) -> [Login]? {
+    private func logins(forSection section: Int) -> [Login]? {
         let titleForSectionIndex = titles[section]
         return sections[titleForSectionIndex]
     }
 
-    func loginAtIndexPath(indexPath: NSIndexPath) -> Login? {
+    func login(at indexPath: NSIndexPath) -> Login? {
         let titleForSectionIndex = titles[indexPath.section]
         return sections[titleForSectionIndex]?[indexPath.row]
     }
 
-    @objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    @objc func numberOfSections(in tableView: UITableView) -> Int {
         let numOfSections = sections.count
         if numOfSections == 0 {
             tableView.backgroundView = emptyStateView
-            tableView.separatorStyle = .None
+            tableView.separatorStyle = .none
         } else {
             tableView.backgroundView = nil
-            tableView.separatorStyle = .SingleLine
+            tableView.separatorStyle = .singleLine
         }
         return numOfSections
     }
 
-    @objc func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return loginsForSection(section)?.count ?? 0
+    @objc func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return logins(forSection: section)?.count ?? 0
     }
 
-    @objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
-        let login = loginAtIndexPath(indexPath)!
-        cell.style = .NoIconAndBothLabels
+    @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: LoginCellIdentifier, for: indexPath) as! LoginTableViewCell
+        let login = login(at: indexPath)!
+        cell.style = .noIconAndBothLabels
         cell.updateCellWithLogin(login)
         return cell
     }
 
-    @objc func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+    @objc func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return titles.map { String($0) }
     }
 
-    @objc func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
-        return titles.indexOf(Character(title)) ?? 0
+    @objc func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        return titles.index(of: Character(title)) ?? 0
     }
 
-    @objc func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    @objc func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return String(titles[section])
     }
 
-    func setLogins(logins: [Login]) {
+    func setLogins(_ logins: [Login]) {
         // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
         //     prevent race conditions between data/UI indexing.
-        return computeSectionsFromLogins(logins).uponQueue(dispatch_get_main_queue()) { result in
+        return computeSections(from: logins).uponQueue(dispatch_get_main_queue()) { result in
             guard let (titles, sections) = result.successValue else {
                 self.count = 0
                 self.titles = []
@@ -481,7 +481,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         }
     }
 
-    private func computeSectionsFromLogins(logins: [Login]) -> Deferred<Maybe<([Character], [Character: [Login]])>> {
+    private func computeSections(from logins: [Login]) -> Deferred<Maybe<([Character], [Character: [Login]])>> {
         guard logins.count > 0 else {
             return deferMaybe( ([Character](), [Character: [Login]]()) )
         }
@@ -492,7 +492,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 
         // Small helper method for using the precomputed base domain to determine the title/section of the
         // given login.
-        func titleForLogin(login: Login) -> Character {
+        func title(for login: Login) -> Character {
             // Fallback to hostname if we can't extract a base domain.
             let titleString = domainLookup[login.guid]?.baseDomain?.uppercaseString ?? login.hostname
             return titleString.characters.first ?? Character("")
@@ -502,7 +502,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         // 1. Compare base domains
         // 2. If bases are equal, compare hosts
         // 3. If login URL was invalid, revert to full hostname
-        func sortByDomain(loginA: Login, loginB: Login) -> Bool {
+        func sortByDomain(_ loginA: Login, loginB: Login) -> Bool {
             guard let domainsA = domainLookup[loginA.guid],
                   let domainsB = domainLookup[loginB.guid] else {
                 return false
@@ -534,13 +534,13 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             }
 
             // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
-            logins.forEach { titleSet.insert(titleForLogin($0)) }
+            logins.forEach { titleSet.insert(title(for: $0)) }
 
             // 2. Setup an empty list for each title found.
             titleSet.forEach { sections[$0] = [Login]() }
 
             // 3. Go through our logins and put them in the right section.
-            logins.forEach { sections[titleForLogin($0)]?.append($0) }
+            logins.forEach { sections[title(for: $0)]?.append($0) }
 
             // 4. Go through each section and sort.
             sections.forEach { sections[$0] = $1.sort(sortByDomain) }
@@ -597,7 +597,7 @@ private class LoadingLoginsView: UIView {
     }
 
     lazy var indicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         indicator.hidesWhenStopped = false
         return indicator
     }()
@@ -605,7 +605,7 @@ private class LoadingLoginsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(indicator)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white()
         indicator.startAnimating()
     }
 

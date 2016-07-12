@@ -8,15 +8,15 @@ import Shared
 struct ThumbnailCellUX {
     /// Ratio of width:height of the thumbnail image.
     static let ImageAspectRatio: Float = 1.0
-    static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
+    static let BorderColor = UIColor.black().withAlphaComponent(0.1)
     static let BorderWidth: CGFloat = 1
-    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x353535)
+    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black() : UIColor(rgb: 0x353535)
     static let LabelBackgroundColor = UIColor(white: 1.0, alpha: 0.5)
-    static let LabelAlignment: NSTextAlignment = .Center
+    static let LabelAlignment: NSTextAlignment = .center
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let InsetSize: CGFloat = 20
     static let InsetSizeCompact: CGFloat = 6
-    static func insetsForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection) -> UIEdgeInsets {
+    static func insetsForCollectionViewSize(_ size: CGSize, traitCollection: UITraitCollection) -> UIEdgeInsets {
         let largeInsets = UIEdgeInsets(
                 top: ThumbnailCellUX.InsetSize,
                 left: ThumbnailCellUX.InsetSize,
@@ -30,7 +30,7 @@ struct ThumbnailCellUX {
                 right: ThumbnailCellUX.InsetSizeCompact
             )
 
-        if traitCollection.horizontalSizeClass == .Compact {
+        if traitCollection.horizontalSizeClass == .compact {
             return smallInsets
         } else {
             return largeInsets
@@ -39,7 +39,7 @@ struct ThumbnailCellUX {
 
     static let ImagePaddingWide: CGFloat = 20
     static let ImagePaddingCompact: CGFloat = 10
-    static func imageInsetsForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection) -> UIEdgeInsets {
+    static func imageInsetsForCollectionViewSize(_ size: CGSize, traitCollection: UITraitCollection) -> UIEdgeInsets {
         let largeInsets = UIEdgeInsets(
                 top: ThumbnailCellUX.ImagePaddingWide,
                 left: ThumbnailCellUX.ImagePaddingWide,
@@ -53,7 +53,7 @@ struct ThumbnailCellUX {
                 bottom: ThumbnailCellUX.ImagePaddingCompact,
                 right: ThumbnailCellUX.ImagePaddingCompact
             )
-        if traitCollection.horizontalSizeClass == .Compact {
+        if traitCollection.horizontalSizeClass == .compact {
             return smallInsets
         } else {
             return largeInsets
@@ -67,15 +67,15 @@ struct ThumbnailCellUX {
     // Make the remove button look 20x20 in size but have the clickable area be 44x44
     static let RemoveButtonSize: CGFloat = 44
     static let RemoveButtonInsets = UIEdgeInsets(top: 11, left: 11, bottom: 11, right: 11)
-    static let RemoveButtonAnimationDuration: NSTimeInterval = 0.4
+    static let RemoveButtonAnimationDuration: TimeInterval = 0.4
     static let RemoveButtonAnimationDamping: CGFloat = 0.6
 
     static let NearestNeighbordScalingThreshold: CGFloat = 24
 }
 
 @objc protocol ThumbnailCellDelegate {
-    func didRemoveThumbnail(thumbnailCell: ThumbnailCell)
-    func didLongPressThumbnail(thumbnailCell: ThumbnailCell)
+    func didRemoveThumbnail(_ thumbnailCell: ThumbnailCell)
+    func didLongPressThumbnail(_ thumbnailCell: ThumbnailCell)
 }
 
 class ThumbnailCell: UICollectionViewCell {
@@ -109,7 +109,7 @@ class ThumbnailCell: UICollectionViewCell {
         didSet {
             if let image = image {
                 imageView.image = image
-                imageView.contentMode = UIViewContentMode.ScaleAspectFit
+                imageView.contentMode = UIViewContentMode.scaleAspectFit
 
                 // Force nearest neighbor scaling for small favicons
                 if image.size.width < ThumbnailCellUX.NearestNeighbordScalingThreshold {
@@ -121,7 +121,7 @@ class ThumbnailCell: UICollectionViewCell {
 
             } else {
                 imageView.image = ThumbnailCellUX.PlaceholderImage
-                imageView.contentMode = UIViewContentMode.Center
+                imageView.contentMode = UIViewContentMode.center
             }
         }
     }
@@ -138,7 +138,7 @@ class ThumbnailCell: UICollectionViewCell {
 
     lazy var textLabel: UILabel = {
         let textLabel = UILabel()
-        textLabel.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
+        textLabel.setContentHuggingPriority(1000, for: UILayoutConstraintAxis.vertical)
         textLabel.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
         textLabel.textColor = ThumbnailCellUX.LabelColor
         textLabel.textAlignment = ThumbnailCellUX.LabelAlignment
@@ -147,7 +147,7 @@ class ThumbnailCell: UICollectionViewCell {
 
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.contentMode = UIViewContentMode.scaleAspectFit
 
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = ThumbnailCellUX.CornerRadius
@@ -157,7 +157,7 @@ class ThumbnailCell: UICollectionViewCell {
 
     lazy var imageWrapper: UIView = {
         let imageWrapper = UIView()
-        imageWrapper.layer.borderColor = ThumbnailCellUX.BorderColor.CGColor
+        imageWrapper.layer.borderColor = ThumbnailCellUX.BorderColor.cgColor
         imageWrapper.layer.borderWidth = ThumbnailCellUX.BorderWidth
         imageWrapper.layer.cornerRadius = ThumbnailCellUX.CornerRadius
         imageWrapper.clipsToBounds = true
@@ -166,31 +166,31 @@ class ThumbnailCell: UICollectionViewCell {
 
     lazy var removeButton: UIButton = {
         let removeButton = UIButton()
-        removeButton.exclusiveTouch = true
-        removeButton.setImage(UIImage(named: "TileCloseButton"), forState: UIControlState.Normal)
-        removeButton.addTarget(self, action: #selector(ThumbnailCell.SELdidRemove), forControlEvents: UIControlEvents.TouchUpInside)
+        removeButton.isExclusiveTouch = true
+        removeButton.setImage(UIImage(named: "TileCloseButton"), for: UIControlState())
+        removeButton.addTarget(self, action: #selector(ThumbnailCell.SELdidRemove), for: UIControlEvents.touchUpInside)
         removeButton.accessibilityLabel = NSLocalizedString("Remove page", comment: "Button shown in editing mode to remove this site from the top sites panel.")
-        removeButton.hidden = true
+        removeButton.isHidden = true
         removeButton.imageEdgeInsets = ThumbnailCellUX.RemoveButtonInsets
         return removeButton
     }()
 
     lazy var backgroundImage: UIImageView = {
         let backgroundImage = UIImageView()
-        backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
+        backgroundImage.contentMode = UIViewContentMode.scaleAspectFill
         return backgroundImage
     }()
 
     lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
         selectedOverlay.backgroundColor = ThumbnailCellUX.SelectedOverlayColor
-        selectedOverlay.hidden = true
+        selectedOverlay.isHidden = true
         return selectedOverlay
     }()
 
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
-            self.selectedOverlay.hidden = !selected
+            self.selectedOverlay.isHidden = !isSelected
         }
     }
 
@@ -198,7 +198,7 @@ class ThumbnailCell: UICollectionViewCell {
         super.init(frame: frame)
 
         layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.mainScreen().scale
+        layer.rasterizationScale = UIScreen.main().scale
 
         isAccessibilityElement = true
         addGestureRecognizer(longPressGesture)
@@ -228,7 +228,7 @@ class ThumbnailCell: UICollectionViewCell {
         }
 
         // Prevents the textLabel from getting squished in relation to other view priorities.
-        textLabel.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
+        textLabel.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
     }
 
 
@@ -251,8 +251,8 @@ class ThumbnailCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         backgroundImage.image = nil
-        removeButton.hidden = true
-        imageWrapper.backgroundColor = UIColor.clearColor()
+        removeButton.isHidden = true
+        imageWrapper.backgroundColor = UIColor.clear()
         textLabel.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
     }
 
@@ -265,28 +265,28 @@ class ThumbnailCell: UICollectionViewCell {
         delegate?.didLongPressThumbnail(self)
     }
 
-    func toggleRemoveButton(show: Bool) {
+    func toggleRemoveButton(_ show: Bool) {
         // Only toggle if we change state
-        if removeButton.hidden != show {
+        if removeButton.isHidden != show {
             return
         }
 
         if show {
-            removeButton.hidden = false
+            removeButton.isHidden = false
         }
 
-        let scaleTransform = CGAffineTransformMakeScale(0.01, 0.01)
-        removeButton.transform = show ? scaleTransform : CGAffineTransformIdentity
-        UIView.animateWithDuration(ThumbnailCellUX.RemoveButtonAnimationDuration,
+        let scaleTransform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        removeButton.transform = show ? scaleTransform : CGAffineTransform.identity
+        UIView.animate(withDuration: ThumbnailCellUX.RemoveButtonAnimationDuration,
             delay: 0,
             usingSpringWithDamping: ThumbnailCellUX.RemoveButtonAnimationDamping,
             initialSpringVelocity: 0,
-            options: [UIViewAnimationOptions.AllowUserInteraction, UIViewAnimationOptions.CurveEaseInOut],
+            options: [UIViewAnimationOptions.allowUserInteraction, UIViewAnimationOptions.curveEaseInOut],
             animations: {
-                self.removeButton.transform = show ? CGAffineTransformIdentity : scaleTransform
+                self.removeButton.transform = show ? CGAffineTransform.identity : scaleTransform
             }, completion: { _ in
                 if !show {
-                    self.removeButton.hidden = true
+                    self.removeButton.isHidden = true
                 }
             })
     }
@@ -296,7 +296,7 @@ class ThumbnailCell: UICollectionViewCell {
 
      - parameter size: Size of the container collection view
      */
-    func updateLayoutForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection, forSuggestedSite: Bool) {
+    func updateLayout(forCollectionViewSize size: CGSize, traitCollection: UITraitCollection, forSuggestedSite: Bool) {
         let cellInsets = ThumbnailCellUX.insetsForCollectionViewSize(size,
             traitCollection: traitCollection)
         let imageInsets = ThumbnailCellUX.imageInsetsForCollectionViewSize(size,

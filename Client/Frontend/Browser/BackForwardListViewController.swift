@@ -10,9 +10,9 @@ import SnapKit
 class BackForwardListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
     
     enum BackForwardType {
-        case Forward
-        case Current
-        case Backward
+        case forward
+        case current
+        case backward
     }
     
     struct BackForwardViewUX {
@@ -30,13 +30,13 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
         tableView.alwaysBounceVertical = false
-        tableView.registerClass(BackForwardTableViewCell.self, forCellReuseIdentifier: self.BackForwardListCellIdentifier)
+        tableView.register(BackForwardTableViewCell.self, forCellReuseIdentifier: self.BackForwardListCellIdentifier)
         tableView.backgroundColor = self.isPrivate ? BackForwardViewUX.BackgroundColorPrivate:BackForwardViewUX.BackgroundColor
-        let blurEffect = UIBlurEffect(style: self.isPrivate ? .Dark : .ExtraLight)
+        let blurEffect = UIBlurEffect(style: self.isPrivate ? .dark : .extraLight)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         tableView.backgroundView = blurEffectView
         
@@ -56,7 +56,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     var tableHeight: CGFloat
     {
         get {
-            assert(NSThread.isMainThread(), "tableHeight interacts with UIKit components - cannot call from background thread.")
+            assert(Thread.isMainThread, "tableHeight interacts with UIKit components - cannot call from background thread.")
             return min(CGFloat(BackForwardViewUX.RowHeight*listData.count), self.view.frame.height/2)
         }
     }
@@ -75,28 +75,28 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         loadSites(backForwardList)
     }
     
-    func loadSites(backForwardList: WKBackForwardList) {
+    func loadSites(_ backForwardList: WKBackForwardList) {
         let sql = profile.favicons as! SQLiteHistory
         var urls: [String] = [String]()
         
-        for page in backForwardList.forwardList.reverse() {
-            urls.append(page.URL.absoluteString)
-            listData.append((page, .Forward))
+        for page in backForwardList.forwardList.reversed() {
+            urls.append(page.url.absoluteString!)
+            listData.append((page, .forward))
         }
         
         if let currentPage = backForwardList.currentItem {
             currentRow = listData.count
-            urls.append(currentPage.URL.absoluteString)
-            listData.append((currentPage, .Current))
+            urls.append(currentPage.url.absoluteString!)
+            listData.append((currentPage, .current))
         }
-        for page in backForwardList.backList.reverse() {
-            urls.append(page.URL.absoluteString)
-            listData.append((page, .Backward))
+        for page in backForwardList.backList.reversed() {
+            urls.append(page.url.absoluteString!)
+            listData.append((page, .backward))
         }
         
         listData = listData.filter { !(($0.item.title ?? "").isEmpty && $0.item.URL.baseDomain()?.contains("localhost") ?? false)}
         
-        sql.getSites(forURLs: urls).uponQueue(dispatch_get_main_queue()) { result in
+        sql.getSites(forURLs: urls).uponQueue(DispatchQueue.main) { result in
             if let cursor = result.successValue {
                 for cursorSite in cursor {
                     if let site = cursorSite, let url = site?.url {
@@ -108,17 +108,17 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    func scrollTableViewToIndex(index: Int) {
+    func scrollTableView(toIndex index: Int) {
         guard index > 1 else {
             return
         }
-        let moveToIndexPath = NSIndexPath(forRow: index-2, inSection: 0)
-        self.tableView.reloadRowsAtIndexPaths([moveToIndexPath], withRowAnimation: .None)
-        self.tableView.scrollToRowAtIndexPath(moveToIndexPath, atScrollPosition: UITableViewScrollPosition.Middle, animated: false)
+        let moveToIndexPath = IndexPath(row: index-2, section: 0)
+        self.tableView.reloadRows(at: [moveToIndexPath], with: .none)
+        self.tableView.scrollToRow(at: moveToIndexPath, at: UITableViewScrollPosition.middle, animated: false)
     }
     
-    override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
         guard let bvc = self.bvc else {
             return
         }
@@ -127,8 +127,8 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         tableView.snp_updateConstraints { make in
             make.height.equalTo(min(CGFloat(BackForwardViewUX.RowHeight*listData.count), size.height/2))
         }
@@ -151,7 +151,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             make.bottom.equalTo(tableView.snp_top)
         }
         view.layoutIfNeeded()
-        scrollTableViewToIndex(currentRow)
+        scrollTableView(toIndex: currentRow)
         setupDismissTap()
     }
     
@@ -163,11 +163,11 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func handleTap() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-        if touch.view?.isDescendantOfView(tableView) ?? true {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if touch.view?.isDescendant(of: tableView) ?? true {
             return false
         }
         return true
@@ -179,13 +179,13 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     // MARK: - Table view
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return listData.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-       let cell = self.tableView.dequeueReusableCellWithIdentifier(BackForwardListCellIdentifier, forIndexPath: indexPath) as! BackForwardTableViewCell
-        let item = listData[indexPath.item].item
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+       let cell = self.tableView.dequeueReusableCell(withIdentifier: BackForwardListCellIdentifier, for: indexPath) as! BackForwardTableViewCell
+        let item = listData[(indexPath as NSIndexPath).item].item
         
         if let site = sites[item.URL.absoluteString] {
             cell.site = site
@@ -194,9 +194,9 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             cell.site = Site(url: item.initialURL.absoluteString, title: item.title ?? "")
         }
         
-        cell.isCurrentTab = (listData[indexPath.item].type == .Current)
-        cell.connectingBackwards = (indexPath.item != listData.count-1)
-        cell.connectingForwards = (indexPath.item != 0)
+        cell.isCurrentTab = (listData[(indexPath as NSIndexPath).item].type == .current)
+        cell.connectingBackwards = ((indexPath as NSIndexPath).item != listData.count-1)
+        cell.connectingForwards = ((indexPath as NSIndexPath).item != 0)
         cell.isPrivate = isPrivate
         
         cell.setNeedsDisplay()
@@ -204,12 +204,12 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         return cell
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tabManager.selectedTab?.goToBackForwardListItem(listData[indexPath.item].item)
-        dismissViewControllerAnimated(true, completion: nil)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tabManager.selectedTab?.goToBackForwardListItem(listData[(indexPath as NSIndexPath).item].item)
+        dismiss(animated: true, completion: nil)
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath  indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt  indexPath: IndexPath) -> CGFloat {
         return CGFloat(BackForwardViewUX.RowHeight);
     }
 }

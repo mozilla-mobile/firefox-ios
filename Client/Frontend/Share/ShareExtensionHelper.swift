@@ -11,22 +11,22 @@ private let log = Logger.browserLogger
 class ShareExtensionHelper: NSObject {
     private weak var selectedTab: Tab?
 
-    private let selectedURL: NSURL
+    private let selectedURL: URL
     private var onePasswordExtensionItem: NSExtensionItem!
     private let activities: [UIActivity]
 
-    init(url: NSURL, tab: Tab?, activities: [UIActivity]) {
+    init(url: URL, tab: Tab?, activities: [UIActivity]) {
         self.selectedURL = url
         self.selectedTab = tab
         self.activities = activities
     }
 
-    func createActivityViewController(completionHandler: (Bool) -> Void) -> UIActivityViewController {
+    func createActivityViewController(_ completionHandler: (Bool) -> Void) -> UIActivityViewController {
         var activityItems = [AnyObject]()
 
         let printInfo = UIPrintInfo(dictionary: nil)
-        printInfo.jobName = selectedTab?.url?.absoluteString ?? selectedURL.absoluteString
-        printInfo.outputType = .General
+        printInfo.jobName = selectedTab?.url?.absoluteString ?? selectedURL.absoluteString!
+        printInfo.outputType = .general
         activityItems.append(printInfo)
 
         if let tab = selectedTab {
@@ -73,14 +73,14 @@ class ShareExtensionHelper: NSObject {
 }
 
 extension ShareExtensionHelper: UIActivityItemSource {
-    func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> AnyObject {
         if let displayURL = selectedTab?.displayURL {
             return displayURL
         }
         return selectedURL
     }
 
-    func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
         if isPasswordManagerActivityType(activityType) {
             return onePasswordExtensionItem
         } else {
@@ -93,7 +93,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
         }
     }
 
-    func activityViewController(activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: String?) -> String {
+    func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: String?) -> String {
         // Because of our UTI declaration, this UTI now satisfies both the 1Password Extension and the usual NSURL for Share extensions.
         return "org.appextension.fill-browser-action"
     }
@@ -101,10 +101,10 @@ extension ShareExtensionHelper: UIActivityItemSource {
 
 private extension ShareExtensionHelper {
     static func isPasswordManagerExtensionAvailable() -> Bool {
-        return OnePasswordExtension.sharedExtension().isAppExtensionAvailable()
+        return OnePasswordExtension.shared().isAppExtensionAvailable()
     }
 
-    func isPasswordManagerActivityType(activityType: String?) -> Bool {
+    func isPasswordManagerActivityType(_ activityType: String?) -> Bool {
         if (!ShareExtensionHelper.isPasswordManagerExtensionAvailable()) {
             return false
         }
@@ -112,7 +112,7 @@ private extension ShareExtensionHelper {
         // com.agilebits.onepassword-ios.extension
         // com.app77.ios.pwsafe2.find-login-action-password-actionExtension
         // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle identifier.
-        return (activityType?.rangeOfString("password") != nil)
+        return (activityType?.range(of: "password") != nil)
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
 
     }
@@ -122,12 +122,12 @@ private extension ShareExtensionHelper {
             return
         }
 
-        if selectedWebView.URL?.absoluteString == nil {
+        if selectedWebView.url?.absoluteString == nil {
             return
         }
 
         // Add 1Password to share sheet
-        OnePasswordExtension.sharedExtension().createExtensionItemForWebView(selectedWebView, completion: {(extensionItem, error) -> Void in
+        OnePasswordExtension.shared().createExtensionItem(forWebView: selectedWebView, completion: {(extensionItem, error) -> Void in
             if extensionItem == nil {
                 log.error("Failed to create the password manager extension item: \(error).")
                 return
@@ -138,12 +138,12 @@ private extension ShareExtensionHelper {
         })
     }
 
-    func fillPasswords(returnedItems: [AnyObject]) {
+    func fillPasswords(_ returnedItems: [AnyObject]) {
         guard let selectedWebView = selectedTab?.webView else {
             return
         }
 
-        OnePasswordExtension.sharedExtension().fillReturnedItems(returnedItems, intoWebView: selectedWebView, completion: { (success, returnedItemsError) -> Void in
+        OnePasswordExtension.shared().fillReturnedItems(returnedItems, intoWebView: selectedWebView, completion: { (success, returnedItemsError) -> Void in
             if !success {
                 log.error("Failed to fill item into webview: \(returnedItemsError).")
             }

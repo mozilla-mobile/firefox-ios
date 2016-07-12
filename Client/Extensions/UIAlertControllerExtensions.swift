@@ -20,31 +20,31 @@ extension UIAlertController {
     - returns: UIAlertController for opting into crash reporting after a crash occurred
     */
     class func crashOptInAlert(
-        sendReportCallback sendReportCallback: UIAlertActionCallback,
+        sendReportCallback: UIAlertActionCallback,
         alwaysSendCallback: UIAlertActionCallback,
         dontSendCallback: UIAlertActionCallback) -> UIAlertController {
 
         let alert = UIAlertController(
             title: NSLocalizedString("Oops! Firefox crashed", comment: "Title for prompt displayed to user after the app crashes"),
             message: NSLocalizedString("Send a crash report so Mozilla can fix the problem?", comment: "Message displayed in the crash dialog above the buttons used to select when sending reports"),
-            preferredStyle: UIAlertControllerStyle.Alert
+            preferredStyle: UIAlertControllerStyle.alert
         )
 
         let sendReport = UIAlertAction(
             title: NSLocalizedString("Send Report", comment: "Used as a button label for crash dialog prompt"),
-            style: UIAlertActionStyle.Default,
+            style: UIAlertActionStyle.default,
             handler: sendReportCallback
         )
 
         let alwaysSend = UIAlertAction(
             title: NSLocalizedString("Always Send", comment: "Used as a button label for crash dialog prompt"),
-            style: UIAlertActionStyle.Default,
+            style: UIAlertActionStyle.default,
             handler: alwaysSendCallback
         )
 
         let dontSend = UIAlertAction(
             title: NSLocalizedString("Don't Send", comment: "Used as a button label for crash dialog prompt"),
-            style: UIAlertActionStyle.Default,
+            style: UIAlertActionStyle.default,
             handler: dontSendCallback
         )
 
@@ -63,22 +63,22 @@ extension UIAlertController {
 
     - returns: UIAlertController for asking the user to restore tabs after a crash
     */
-    class func restoreTabsAlert(okayCallback okayCallback: UIAlertActionCallback, noCallback: UIAlertActionCallback) -> UIAlertController {
+    class func restoreTabsAlert(okayCallback: UIAlertActionCallback, noCallback: UIAlertActionCallback) -> UIAlertController {
         let alert = UIAlertController(
             title: NSLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title"),
             message: NSLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description"),
-            preferredStyle: UIAlertControllerStyle.Alert
+            preferredStyle: UIAlertControllerStyle.alert
         )
 
         let noOption = UIAlertAction(
             title: NSLocalizedString("No", comment: "Restore Tabs Negative Action"),
-            style: UIAlertActionStyle.Cancel,
+            style: UIAlertActionStyle.cancel,
             handler: noCallback
         )
 
         let okayOption = UIAlertAction(
             title: NSLocalizedString("Okay", comment: "Restore Tabs Affirmative Action"),
-            style: UIAlertActionStyle.Default,
+            style: UIAlertActionStyle.default,
             handler: okayCallback
         )
 
@@ -87,22 +87,22 @@ extension UIAlertController {
         return alert
     }
 
-    class func clearPrivateDataAlert(okayCallback: (UIAlertAction) -> Void) -> UIAlertController {
+    class func clearPrivateDataAlert(_ okayCallback: (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
             message: NSLocalizedString("This action will clear all of your private data. It cannot be undone.", tableName: "ClearPrivateDataConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear their private data."),
-            preferredStyle: UIAlertControllerStyle.Alert
+            preferredStyle: UIAlertControllerStyle.alert
         )
 
         let noOption = UIAlertAction(
             title: NSLocalizedString("Cancel", tableName: "ClearPrivateDataConfirm", comment: "The cancel button when confirming clear private data."),
-            style: UIAlertActionStyle.Cancel,
+            style: UIAlertActionStyle.cancel,
             handler: nil
         )
 
         let okayOption = UIAlertAction(
             title: NSLocalizedString("OK", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data."),
-            style: UIAlertActionStyle.Destructive,
+            style: UIAlertActionStyle.destructive,
             handler: okayCallback
         )
 
@@ -119,22 +119,22 @@ extension UIAlertController {
      - returns: UIAlertController for asking the user to restore tabs after a crash
      */
 
-    class func clearSyncedHistoryAlert(okayCallback: (UIAlertAction) -> Void) -> UIAlertController {
+    class func clearSyncedHistoryAlert(_ okayCallback: (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
             message: NSLocalizedString("This action will clear all of your private data, including history from your synced devices.", tableName: "ClearHistoryConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device."),
-            preferredStyle: UIAlertControllerStyle.Alert
+            preferredStyle: UIAlertControllerStyle.alert
         )
 
         let noOption = UIAlertAction(
             title: NSLocalizedString("Cancel", tableName: "ClearHistoryConfirm", comment: "The cancel button when confirming clear history."),
-            style: UIAlertActionStyle.Cancel,
+            style: UIAlertActionStyle.cancel,
             handler: nil
         )
 
         let okayOption = UIAlertAction(
             title: NSLocalizedString("OK", tableName: "ClearHistoryConfirm", comment: "The confirmation button that clears history even when Sync is connected."),
-            style: UIAlertActionStyle.Destructive,
+            style: UIAlertActionStyle.destructive,
             handler: okayCallback
         )
 
@@ -153,7 +153,7 @@ extension UIAlertController {
      - returns: UIAlertController instance
      */
     class func deleteLoginAlertWithDeleteCallback(
-        deleteCallback: UIAlertActionCallback,
+        _ deleteCallback: UIAlertActionCallback,
         hasSyncedLogins: Bool) -> UIAlertController {
 
         let areYouSureTitle = NSLocalizedString("Are you sure?",
@@ -174,13 +174,13 @@ extension UIAlertController {
 
         let deleteAlert: UIAlertController
         if hasSyncedLogins {
-            deleteAlert = UIAlertController(title: areYouSureTitle, message: deleteSyncedDevicesMessage, preferredStyle: .Alert)
+            deleteAlert = UIAlertController(title: areYouSureTitle, message: deleteSyncedDevicesMessage, preferredStyle: .alert)
         } else {
-            deleteAlert = UIAlertController(title: areYouSureTitle, message: deleteLocalMessage, preferredStyle: .Alert)
+            deleteAlert = UIAlertController(title: areYouSureTitle, message: deleteLocalMessage, preferredStyle: .alert)
         }
 
-        let cancelAction = UIAlertAction(title: cancelActionTitle, style: .Cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: deleteActionTitle, style: .Destructive, handler: deleteCallback)
+        let cancelAction = UIAlertAction(title: cancelActionTitle, style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: deleteActionTitle, style: .destructive, handler: deleteCallback)
 
         deleteAlert.addAction(cancelAction)
         deleteAlert.addAction(deleteAction)

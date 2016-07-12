@@ -22,7 +22,7 @@ class SearchSuggestClient {
     private let userAgent: String
 
     lazy private var alamofire: Alamofire.Manager = {
-        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+        let configuration = URLSessionConfiguration.ephemeral
         return Alamofire.Manager.managerWithUserAgent(self.userAgent, configuration: configuration)
     }()
 
@@ -31,7 +31,7 @@ class SearchSuggestClient {
         self.userAgent = userAgent
     }
 
-    func query(query: String, callback: (response: [String]?, error: NSError?) -> ()) {
+    func query(_ query: String, callback: (response: [String]?, error: NSError?) -> ()) {
         let url = searchEngine.suggestURL(query: query)
         if url == nil {
             let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)

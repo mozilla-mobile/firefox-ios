@@ -5,5 +5,5 @@
 import UIKit
 
 protocol Animatable {
-    func animateFromView(view: UIView, offset: CGFloat?, completion: ((Bool) -> Void)?)
+    func animateFromView(_ view: UIView, offset: CGFloat?, completion: ((Bool) -> Void)?)
 }

@@ -19,16 +19,16 @@ class SearchTelemetry {
 
     private init() {}
 
-    class func makeEvent(engine engine: OpenSearchEngine, source: Source) -> TelemetryEvent {
+    class func makeEvent(engine: OpenSearchEngine, source: Source) -> TelemetryEvent {
         let engineID = engine.engineID ?? "other"
         return SearchTelemetryEvent(engineWithSource: "\(engineID).\(source.rawValue)")
     }
 
-    class func getData(prefs: Prefs) -> [String: Int]? {
+    class func getData(_ prefs: Prefs) -> [String: Int]? {
         return prefs.dictionaryForKey(PrefKeySearches) as? [String: Int]
     }
 
-    class func resetCount(prefs: Prefs) {
+    class func resetCount(_ prefs: Prefs) {
         prefs.removeObjectForKey(PrefKeySearches)
     }
 }
@@ -40,7 +40,7 @@ private class SearchTelemetryEvent: TelemetryEvent {
         self.engineWithSource = engineWithSource
     }
 
-    func record(prefs: Prefs) {
+    func record(_ prefs: Prefs) {
         var searches = SearchTelemetry.getData(prefs) ?? [:]
         searches[engineWithSource] = (searches[engineWithSource] ?? 0) + 1
         prefs.setObject(searches, forKey: PrefKeySearches)
@@ -51,19 +51,19 @@ private class SearchTelemetryEvent: TelemetryEvent {
 class UsageTelemetry {
     private init() {}
 
-    class func makeEvent(usageInterval: Int) -> TelemetryEvent {
+    class func makeEvent(_ usageInterval: Int) -> TelemetryEvent {
         return UsageTelemetryEvent(usageInterval: usageInterval)
     }
 
-    class func getCount(prefs: Prefs) -> Int {
+    class func getCount(_ prefs: Prefs) -> Int {
         return Int(prefs.intForKey(PrefKeyUsageCount) ?? 0)
     }
 
-    class func getTime(prefs: Prefs) -> Int {
+    class func getTime(_ prefs: Prefs) -> Int {
         return Int(prefs.intForKey(PrefKeyUsageTime) ?? 0)
     }
 
-    class func reset(prefs: Prefs) {
+    class func reset(_ prefs: Prefs) {
         prefs.setInt(0, forKey: PrefKeyUsageCount)
         prefs.setInt(0, forKey: PrefKeyUsageTime)
     }
@@ -76,7 +76,7 @@ private class UsageTelemetryEvent: TelemetryEvent {
         self.usageInterval = usageInterval
     }
 
-    func record(prefs: Prefs) {
+    func record(_ prefs: Prefs) {
         let count = Int32(UsageTelemetry.getCount(prefs) + 1)
         prefs.setInt(count, forKey: PrefKeyUsageCount)
 

@@ -8,8 +8,8 @@ class MenuPresentationAnimator: NSObject, UIViewControllerAnimatedTransitioning 
 
     var presenting: Bool = false
 
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        let screens = (from: transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!, to: transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!)
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let screens = (from: transitionContext.viewController(forKey: UITransitionContextFromViewControllerKey)!, to: transitionContext.viewController(forKey: UITransitionContextToViewControllerKey)!)
 
         guard let menuViewController = !self.presenting ? screens.from as? MenuViewController : screens.to as? MenuViewController else {
             return
@@ -18,7 +18,7 @@ class MenuPresentationAnimator: NSObject, UIViewControllerAnimatedTransitioning 
         var bottomViewController = !self.presenting ? screens.to as UIViewController : screens.from as UIViewController
 
         // don't do anything special if it's a popover presentation
-        if menuViewController.presentationStyle == .Popover {
+        if menuViewController.presentationStyle == .popover {
             return
         }
 
@@ -26,33 +26,33 @@ class MenuPresentationAnimator: NSObject, UIViewControllerAnimatedTransitioning 
             bottomViewController = navController.viewControllers.last ?? bottomViewController
         }
 
-        if bottomViewController.isKindOfClass(BrowserViewController) {
-            animateWithMenu(menuViewController, browserViewController: bottomViewController as! BrowserViewController, transitionContext: transitionContext)
-        } else if bottomViewController.isKindOfClass(TabTrayController) {
-            animateWithMenu(menuViewController, tabTrayController: bottomViewController as! TabTrayController, transitionContext: transitionContext)
+        if bottomViewController.isKind(of: BrowserViewController.self) {
+            animate(withMenu: menuViewController, browserViewController: bottomViewController as! BrowserViewController, transitionContext: transitionContext)
+        } else if bottomViewController.isKind(of: TabTrayController.self) {
+            animate(withMenu: menuViewController, tabTrayController: bottomViewController as! TabTrayController, transitionContext: transitionContext)
         }
     }
 
 
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return presenting ? 0.4 : 0.2
     }
 }
 
 extension MenuPresentationAnimator: UIViewControllerTransitioningDelegate {
-    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         self.presenting = true
         return self
     }
 
-    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         self.presenting = false
         return self
     }
 }
 
 extension MenuPresentationAnimator {
-    private func animateWithMenu(menu: MenuViewController, browserViewController bvc: BrowserViewController, transitionContext: UIViewControllerContextTransitioning) {
+    private func animate(withMenu menu: MenuViewController, browserViewController bvc: BrowserViewController, transitionContext: UIViewControllerContextTransitioning) {
         let leftViews: [UIView]?
         let rightViews: [UIView]?
         let sourceView: UIView?
@@ -66,14 +66,14 @@ extension MenuPresentationAnimator {
             rightViews = nil
         }
 
-        self.animateWithMenu(menu, baseController: bvc, viewsToAnimateLeft: leftViews, viewsToAnimateRight: rightViews, sourceView: sourceView, withTransitionContext: transitionContext)
+        self.animate(withMenu: menu, baseController: bvc, viewsToAnimateLeft: leftViews, viewsToAnimateRight: rightViews, sourceView: sourceView, withTransitionContext: transitionContext)
     }
 
-    private func animateWithMenu(menu: MenuViewController, tabTrayController ttc: TabTrayController, transitionContext: UIViewControllerContextTransitioning) {
-        animateWithMenu(menu, baseController: ttc, viewsToAnimateLeft: ttc.leftToolbarButtons, viewsToAnimateRight: ttc.rightToolbarButtons, sourceView: ttc.toolbar.menuButton, withTransitionContext: transitionContext)
+    private func animate(withMenu menu: MenuViewController, tabTrayController ttc: TabTrayController, transitionContext: UIViewControllerContextTransitioning) {
+        animate(withMenu: menu, baseController: ttc, viewsToAnimateLeft: ttc.leftToolbarButtons, viewsToAnimateRight: ttc.rightToolbarButtons, sourceView: ttc.toolbar.menuButton, withTransitionContext: transitionContext)
     }
 
-    private func animateWithMenu(menuController: MenuViewController, baseController: UIViewController, viewsToAnimateLeft: [UIView]?, viewsToAnimateRight: [UIView]?, sourceView: UIView?, withTransitionContext transitionContext: UIViewControllerContextTransitioning) {
+    private func animate(withMenu menuController: MenuViewController, baseController: UIViewController, viewsToAnimateLeft: [UIView]?, viewsToAnimateRight: [UIView]?, sourceView: UIView?, withTransitionContext transitionContext: UIViewControllerContextTransitioning) {
 
         guard let container = transitionContext.containerView() else { return }
 
@@ -84,51 +84,51 @@ extension MenuPresentationAnimator {
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
         if presenting {
             container.insertSubview(menuView, belowSubview: bottomView)
-            menuView.layoutSubviews()
+            menuView?.layoutSubviews()
         }
 
         let vanishingPoint: CGPoint
         if let sourceView = sourceView {
-            vanishingPoint = menuView.convertPoint(sourceView.center, fromView: sourceView.superview)
+            vanishingPoint = (menuView?.convert(sourceView.center, from: sourceView.superview))!
         } else {
-            vanishingPoint = CGPoint(x: menuView.center.x, y: menuView.frame.size.height)
+            vanishingPoint = CGPoint(x: (menuView?.center.x)!, y: (menuView?.frame.size.height)!)
         }
         let minimisedFrame = CGRect(origin: vanishingPoint, size: CGSize.zero)
 
         let menuViewSnapshot: UIView
         if presenting {
-            menuViewSnapshot = menuView.snapshotViewAfterScreenUpdates(true)
+            menuViewSnapshot = (menuView?.snapshotView(afterScreenUpdates: true)!)!
             menuViewSnapshot.frame = minimisedFrame
             menuViewSnapshot.alpha = 0
-            menuView.backgroundColor = menuView.backgroundColor?.colorWithAlphaComponent(0.0)
-            menuView.addSubview(menuViewSnapshot)
+            menuView?.backgroundColor = menuView?.backgroundColor?.withAlphaComponent(0.0)
+            menuView?.addSubview(menuViewSnapshot)
         } else {
-            menuViewSnapshot = menuView.snapshotViewAfterScreenUpdates(false)
-            menuViewSnapshot.frame = menuView.frame
+            menuViewSnapshot = (menuView?.snapshotView(afterScreenUpdates: false)!)!
+            menuViewSnapshot.frame = (menuView?.frame)!
             container.insertSubview(menuViewSnapshot, aboveSubview: menuView)
-            menuView.hidden = true
+            menuView?.isHidden = true
         }
 
-        let offstageValue = bottomView.bounds.size.width / 2
-        let offstageLeft = CGAffineTransformMakeTranslation(-offstageValue, 0)
-        let offstageRight = CGAffineTransformMakeTranslation(offstageValue, 0)
+        let offstageValue = (bottomView?.bounds.size.width)! / 2
+        let offstageLeft = CGAffineTransform(translationX: -offstageValue, y: 0)
+        let offstageRight = CGAffineTransform(translationX: offstageValue, y: 0)
 
         if presenting {
-            menuView.alpha = 0
-            menuController.menuView.hidden = true
+            menuView?.alpha = 0
+            menuController.menuView.isHidden = true
         } else {
             // move the buttons to their offstage positions
             viewsToAnimateLeft?.forEach { $0.transform = offstageLeft }
             viewsToAnimateRight?.forEach { $0.transform = offstageRight }
         }
 
-        UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [], animations: {
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [], animations: {
 
             if (self.presenting) {
                 menuViewSnapshot.alpha = 1
-                menuViewSnapshot.frame = menuView.frame
-                menuView.backgroundColor = menuView.backgroundColor?.colorWithAlphaComponent(0.4)
-                menuView.alpha = 1
+                menuViewSnapshot.frame = (menuView?.frame)!
+                menuView?.backgroundColor = menuView?.backgroundColor?.withAlphaComponent(0.4)
+                menuView?.alpha = 1
                 // animate back and forward buttons off to the left
                 viewsToAnimateLeft?.forEach { $0.transform = offstageLeft }
                 // animate reload and share buttons off to the right
@@ -136,18 +136,18 @@ extension MenuPresentationAnimator {
             }
             else {
                 // animate back and forward buttons in from the left
-                viewsToAnimateLeft?.forEach { $0.transform = CGAffineTransformIdentity }
+                viewsToAnimateLeft?.forEach { $0.transform = CGAffineTransform.identity }
                 // animate reload and share buttons in from the right
-                viewsToAnimateRight?.forEach { $0.transform = CGAffineTransformIdentity }
+                viewsToAnimateRight?.forEach { $0.transform = CGAffineTransform.identity }
                 menuViewSnapshot.frame = minimisedFrame
                 menuViewSnapshot.alpha = 0
-                menuView.alpha = 0
+                menuView?.alpha = 0
             }
 
             }, completion: { finished in
                 menuViewSnapshot.removeFromSuperview()
                 // tell our transitionContext object that we've finished animating
-                menuController.menuView.hidden = !self.presenting
+                menuController.menuView.isHidden = !self.presenting
                 transitionContext.completeTransition(true)
         })
     }

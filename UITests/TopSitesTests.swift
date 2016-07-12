@@ -77,7 +77,7 @@ class TopSitesTests: KIFTestCase {
         let collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
 
         // Get the first cell (test10.com).
-        let cell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+        let cell = collection.cellForItem(at: NSIndexPath(forItem: 0, inSection: 0))!
 
         let cellToDeleteLabel = cell.accessibilityLabel
         tester().longPressViewWithAccessibilityLabel(cellToDeleteLabel, duration: 1)
@@ -98,7 +98,7 @@ class TopSitesTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Top sites")
 
         var collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
-        let firstCell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+        let firstCell = collection.cellForItem(at: NSIndexPath(forItem: 0, inSection: 0))!
         let cellToDeleteLabel = firstCell.accessibilityLabel
         tester().longPressViewWithAccessibilityLabel(cellToDeleteLabel, duration: 1)
         tester().tapViewWithAccessibilityLabel("Remove page - \(cellToDeleteLabel!)")

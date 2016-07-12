@@ -25,20 +25,20 @@ class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputVi
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         panes.forEach { $0.codeInputView.delegate = self }
 
         // Don't show the keyboard or allow typing if we're locked out. Also display the error.
         if authenticationInfo?.isLocked() ?? false {
             displayLockoutError()
-            panes.first?.codeInputView.userInteractionEnabled = false
+            panes.first?.codeInputView.isUserInteractionEnabled = false
         } else {
             panes.first?.codeInputView.becomeFirstResponder()
         }
     }
 
-    func passcodeInputView(inputView: PasscodeInputView, didFinishEnteringCode code: String) {
+    func passcodeInputView(_ inputView: PasscodeInputView, didFinishEnteringCode code: String) {
         switch currentPaneIndex {
         case 0:
             confirmCode = code
@@ -53,16 +53,16 @@ class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputVi
                 return
             }
 
-            createPasscodeWithCode(code)
+            createPasscode(code: code)
             dismiss()
         default:
             break
         }
     }
 
-    private func createPasscodeWithCode(code: String) {
+    private func createPasscode(code: String) {
         KeychainWrapper.setAuthenticationInfo(AuthenticationKeychainInfo(passcode: code))
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.postNotificationName(NotificationPasscodeDidCreate, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.post(name: Notification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
     }
 }

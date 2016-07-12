@@ -9,8 +9,8 @@ class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     var presenting: Bool = false
     let animationDuration = 0.4
     
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        let screens = (from: transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!, to: transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!)
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let screens = (from: transitionContext.viewController(forKey: UITransitionContextFromViewControllerKey)!, to: transitionContext.viewController(forKey: UITransitionContextToViewControllerKey)!)
         
         guard let backForwardViewController = !self.presenting ? screens.from as? BackForwardListViewController : screens.to as? BackForwardListViewController else {
             return
@@ -27,25 +27,25 @@ class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         }
     }
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return animationDuration
     }
 }
 
 extension BackForwardListAnimator: UIViewControllerTransitioningDelegate {
-    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         self.presenting = true
         return self
     }
     
-    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         self.presenting = false
         return self
     }
 }
 
 extension BackForwardListAnimator {
-    private func animateWithBackForward(backForward: BackForwardListViewController, browserViewController bvc: BrowserViewController, transitionContext: UIViewControllerContextTransitioning) {
+    private func animateWithBackForward(_ backForward: BackForwardListViewController, browserViewController bvc: BrowserViewController, transitionContext: UIViewControllerContextTransitioning) {
         guard let containerView = transitionContext.containerView() else {
             return
         }
@@ -59,7 +59,7 @@ extension BackForwardListAnimator {
             }
             backForward.view.layoutIfNeeded()
             
-            UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: [], animations: { () -> Void in
+            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: [], animations: { () -> Void in
                 backForward.view.alpha = 1;
                 backForward.tableView.snp_updateConstraints { make in
                     make.height.equalTo(backForward.tableHeight)
@@ -70,7 +70,7 @@ extension BackForwardListAnimator {
             })
             
         } else {
-            UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, usingSpringWithDamping: 1.2, initialSpringVelocity: 0.0, options: [], animations: { () -> Void in
+            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 1.2, initialSpringVelocity: 0.0, options: [], animations: { () -> Void in
                 backForward.view.alpha = 0;
                 backForward.tableView.snp_updateConstraints { make in
                     make.height.equalTo(0)

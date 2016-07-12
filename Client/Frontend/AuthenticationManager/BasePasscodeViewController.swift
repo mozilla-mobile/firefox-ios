@@ -26,18 +26,18 @@ class BasePasscodeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(BasePasscodeViewController.dismiss))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(BasePasscodeViewController.dismiss))
         automaticallyAdjustsScrollViewInsets = false
     }
 
     func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
 // MARK: - Error Helpers
 extension BasePasscodeViewController {
-    private func displayError(text: String) {
+    private func displayError(_ text: String) {
         errorToast?.removeFromSuperview()
         errorToast = {
             let toast = ErrorToast()
@@ -72,13 +72,13 @@ extension BasePasscodeViewController {
         displayError(useNewPasscodeError)
     }
 
-    func failIncorrectPasscode(inputView inputView: PasscodeInputView) {
+    func failIncorrectPasscode(inputView: PasscodeInputView) {
         authenticationInfo?.recordFailedAttempt()
         let numberOfAttempts = authenticationInfo?.failedAttempts ?? 0
         if numberOfAttempts == AllowedPasscodeFailedAttempts {
             authenticationInfo?.lockOutUser()
             displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
-            inputView.userInteractionEnabled = false
+            inputView.isUserInteractionEnabled = false
             resignFirstResponder()
         } else {
             displayError(String(format: AuthenticationStrings.incorrectAttemptsRemaining, (AllowedPasscodeFailedAttempts - numberOfAttempts)))

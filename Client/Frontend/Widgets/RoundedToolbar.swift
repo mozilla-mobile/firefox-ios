@@ -16,16 +16,16 @@ class RoundedToolbar: UIToolbar {
         }
     }
 
-    var cornerRadius: CGSize = CGSizeZero
+    var cornerRadius: CGSize = CGSize.zero
 
-    var cornersToRound: UIRectCorner = [.AllCorners]
+    var cornersToRound: UIRectCorner = [.allCorners]
 
     /**
      * The toolbar on the menu requires rounded corners on the top and bottom so we need a custom
      * view to do this
      */
-    override func drawRect(rect: CGRect) {
-        addRoundedCorners(cornersToRound: cornersToRound, cornerRadius: cornerRadius, color: layerBackgroundColor ?? UIColor.whiteColor())
+    override func draw(_ rect: CGRect) {
+        addRoundedCorners(cornersToRound: cornersToRound, cornerRadius: cornerRadius, color: layerBackgroundColor ?? UIColor.white())
     }
 
 

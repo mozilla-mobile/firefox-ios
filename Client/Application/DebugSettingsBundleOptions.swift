@@ -9,12 +9,12 @@ struct DebugSettingsBundleOptions {
 
     /// Don't restore tabs on app launch
     static var skipSessionRestore: Bool {
-        return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleSkipSessionRestore") ?? false
+        return UserDefaults.standard.bool(forKey: "SettingsBundleSkipSessionRestore") ?? false
     }
 
     /// Disable the local web server we use for restoration, error pages, etc
     static var disableLocalWebServer: Bool {
-        return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleDisableLocalWebServer") ?? false
+        return UserDefaults.standard.bool(forKey: "SettingsBundleDisableLocalWebServer") ?? false
     }
 
     /// When enabled, the app launch will be replaced with the mail compose view appearing with the device
@@ -25,11 +25,11 @@ struct DebugSettingsBundleOptions {
 
     /// When enabled, the email composer will have the tab state attached.
     static var attachTabStateToDebugEmail: Bool {
-        return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleEmailTabState") ?? false
+        return UserDefaults.standard.bool(forKey: "SettingsBundleEmailTabState") ?? false
     }
 
     /// When enabled, the email composer will have the application logs attached.
     static var attachLogsToDebugEmail: Bool {
-        return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleEmailLogsOnLaunch") ?? false
+        return UserDefaults.standard.bool(forKey: "SettingsBundleEmailLogsOnLaunch") ?? false
     }
 }

@@ -42,7 +42,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
     private var clearButtonEnabled = true {
         didSet {
-            clearButton?.textLabel?.textColor = clearButtonEnabled ? UIConstants.DestructiveRed : UIColor.lightGrayColor()
+            clearButton?.textLabel?.textColor = clearButtonEnabled ? UIConstants.DestructiveRed : UIColor.lightGray()
         }
     }
 
@@ -51,7 +51,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
         title = Strings.SettingsClearPrivateDataTitle
 
-        tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
+        tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
@@ -60,22 +60,22 @@ class ClearPrivateDataTableViewController: UITableViewController {
         tableView.tableFooterView = footer
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
 
-        if indexPath.section == SectionToggles {
-            cell.textLabel?.text = clearables[indexPath.item].clearable.label
+        if (indexPath as NSIndexPath).section == SectionToggles {
+            cell.textLabel?.text = clearables[(indexPath as NSIndexPath).item].clearable.label
             let control = UISwitch()
             control.onTintColor = UIConstants.ControlTintColor
-            control.addTarget(self, action: #selector(ClearPrivateDataTableViewController.switchValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-            control.on = toggles[indexPath.item]
+            control.addTarget(self, action: #selector(ClearPrivateDataTableViewController.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+            control.isOn = toggles[(indexPath as NSIndexPath).item]
             cell.accessoryView = control
-            cell.selectionStyle = .None
-            control.tag = indexPath.item
+            cell.selectionStyle = .none
+            control.tag = (indexPath as NSIndexPath).item
         } else {
-            assert(indexPath.section == SectionButton)
+            assert((indexPath as NSIndexPath).section == SectionButton)
             cell.textLabel?.text = Strings.SettingsClearPrivateDataClearButton
-            cell.textLabel?.textAlignment = NSTextAlignment.Center
+            cell.textLabel?.textAlignment = NSTextAlignment.center
             cell.textLabel?.textColor = UIConstants.DestructiveRed
             cell.accessibilityTraits = UIAccessibilityTraitButton
             cell.accessibilityIdentifier = "ClearPrivateData"
@@ -85,11 +85,11 @@ class ClearPrivateDataTableViewController: UITableViewController {
         return cell
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return NumberOfSections
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionToggles {
             return clearables.count
         }
@@ -98,20 +98,20 @@ class ClearPrivateDataTableViewController: UITableViewController {
         return 1
     }
 
-    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        guard indexPath.section == SectionButton else { return false }
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        guard (indexPath as NSIndexPath).section == SectionButton else { return false }
 
         // Highlight the button only if it's enabled.
         return clearButtonEnabled
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        guard indexPath.section == SectionButton else { return }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard (indexPath as NSIndexPath).section == SectionButton else { return }
 
-        func clearPrivateData(action: UIAlertAction) {
+        func clearPrivateData(_ action: UIAlertAction) {
             let toggles = self.toggles
             self.clearables
-                .enumerate()
+                .enumerated()
                 .flatMap { (i, pair) in
                     guard toggles[i] else {
                         return nil
@@ -136,7 +136,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
         // We have been asked to clear history and we have an account.
         // (Whether or not it's in a good state is irrelevant.)
         if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
-            profile.syncManager.hasSyncedHistory().uponQueue(dispatch_get_main_queue()) { yes in
+            profile.syncManager.hasSyncedHistory().uponQueue(DispatchQueue.main) { yes in
                 // Err on the side of warning, but this shouldn't fail.
                 let alert: UIAlertController
                 if yes.successValue ?? true {
@@ -151,22 +151,22 @@ class ClearPrivateDataTableViewController: UITableViewController {
             }
         } else {
             let alert = UIAlertController.clearPrivateDataAlert(clearPrivateData)
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
         }
 
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderFooterIdentifier) as! SettingsTableSectionHeaderFooterView
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! SettingsTableSectionHeaderFooterView
     }
 
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UIConstants.TableViewHeaderFooterHeight
     }
 
-    @objc func switchValueChanged(toggle: UISwitch) {
-        toggles[toggle.tag] = toggle.on
+    @objc func switchValueChanged(_ toggle: UISwitch) {
+        toggles[toggle.tag] = toggle.isOn
 
         // Dim the clear button if no clearables are selected.
         clearButtonEnabled = toggles.contains(true)

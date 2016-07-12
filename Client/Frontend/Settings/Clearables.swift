@@ -52,9 +52,9 @@ class HistoryClearable: Clearable {
 }
 
 struct ClearableErrorType: MaybeErrorType {
-    let err: ErrorType
+    let err: ErrorProtocol
 
-    init(err: ErrorType) {
+    init(err: ErrorProtocol) {
         self.err = err
     }
 
@@ -78,7 +78,7 @@ class CacheClearable: Clearable {
     func clear() -> Success {
         if #available(iOS 9.0, *) {
             let dataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
-            WKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
+            WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {})
         } else {
             // First ensure we close all open tabs first.
             tabManager.removeAll()
@@ -87,7 +87,7 @@ class CacheClearable: Clearable {
             tabManager.resetProcessPool()
 
             // Remove the basic cache.
-            NSURLCache.sharedURLCache().removeAllCachedResponses()
+            URLCache.shared.removeAllCachedResponses()
 
             // Now let's finish up by destroying our Cache directory.
             do {
@@ -102,14 +102,14 @@ class CacheClearable: Clearable {
     }
 }
 
-private func deleteLibraryFolderContents(folder: String) throws {
-    let manager = NSFileManager.defaultManager()
-    let library = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
-    let dir = library.URLByAppendingPathComponent(folder)
-    let contents = try manager.contentsOfDirectoryAtPath(dir.path!)
+private func deleteLibraryFolderContents(_ folder: String) throws {
+    let manager = FileManager.default
+    let library = manager.urlsForDirectory(FileManager.SearchPathDirectory.libraryDirectory, inDomains: .userDomainMask)[0]
+    let dir = try! library.appendingPathComponent(folder)
+    let contents = try manager.contentsOfDirectory(atPath: dir.path!)
     for content in contents {
         do {
-            try manager.removeItemAtURL(dir.URLByAppendingPathComponent(content))
+            try manager.removeItem(at: try! dir.appendingPathComponent(content))
         } catch where ((error as NSError).userInfo[NSUnderlyingErrorKey] as? NSError)?.code == Int(EPERM) {
             // "Not permitted". We ignore this.
             log.debug("Couldn't delete some library contents.")
@@ -117,11 +117,11 @@ private func deleteLibraryFolderContents(folder: String) throws {
     }
 }
 
-private func deleteLibraryFolder(folder: String) throws {
-    let manager = NSFileManager.defaultManager()
-    let library = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
-    let dir = library.URLByAppendingPathComponent(folder)
-    try manager.removeItemAtURL(dir)
+private func deleteLibraryFolder(_ folder: String) throws {
+    let manager = FileManager.default
+    let library = manager.urlsForDirectory(FileManager.SearchPathDirectory.libraryDirectory, inDomains: .userDomainMask)[0]
+    let dir = try! library.appendingPathComponent(folder)
+    try manager.removeItem(at: dir)
 }
 
 // Removes all app cache storage.
@@ -138,7 +138,7 @@ class SiteDataClearable: Clearable {
     func clear() -> Success {
         if #available(iOS 9.0, *) {
             let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
-            WKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
+            WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {})
         } else {
             // First, close all tabs to make sure they don't hold anything in memory.
             tabManager.removeAll()
@@ -170,13 +170,13 @@ class CookiesClearable: Clearable {
     func clear() -> Success {
         if #available(iOS 9.0, *) {
             let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
-            WKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
+            WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {})
         } else {
             // First close all tabs to make sure they aren't holding anything in memory.
             tabManager.removeAll()
 
             // Now we wipe the system cookie store (for our app).
-            let storage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+            let storage = HTTPCookieStorage.shared
             if let cookies = storage.cookies {
                 for cookie in cookies {
                     storage.deleteCookie(cookie)

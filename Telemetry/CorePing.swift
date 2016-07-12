@@ -21,7 +21,7 @@ class CorePing: TelemetryPing {
     init(profile: Profile) {
         self.prefs = profile.prefs
 
-        let version = NSProcessInfo.processInfo().operatingSystemVersion
+        let version = ProcessInfo.processInfo.operatingSystemVersion
         let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
 
         let pingCount = profile.prefs.intForKey(PrefKeyPingCount) ?? 0
@@ -30,8 +30,8 @@ class CorePing: TelemetryPing {
         let profileDate: Int
         if let date = profile.prefs.intForKey(PrefKeyProfileDate) {
             profileDate = Int(date)
-        } else if let attributes = try? NSFileManager.defaultManager().attributesOfItemAtPath(profile.files.rootPath as String),
-                  let date = attributes[NSFileCreationDate] as? NSDate {
+        } else if let attributes = try? FileManager.default.attributesOfItemAtPath(profile.files.rootPath as String),
+                  let date = attributes[FileAttributeKey.creationDate] as? NSDate {
             let seconds = date.timeIntervalSince1970
             profileDate = Int(UInt64(seconds) * OneSecondInMilliseconds / OneDayInMilliseconds)
             profile.prefs.setInt(Int32(profileDate), forKey: PrefKeyProfileDate)
@@ -43,7 +43,7 @@ class CorePing: TelemetryPing {
         if let id = profile.prefs.stringForKey(PrefKeyClientID) {
             clientID = id
         } else {
-            clientID = NSUUID().UUIDString
+            clientID = UUID().uuidString
             profile.prefs.setString(clientID, forKey: PrefKeyClientID)
         }
 
@@ -53,19 +53,19 @@ class CorePing: TelemetryPing {
         } else {
             var sysinfo = utsname()
             uname(&sysinfo)
-            let rawModel = NSString(bytes: &sysinfo.machine, length: Int(_SYS_NAMELEN), encoding: NSASCIIStringEncoding)!
-            model = rawModel.stringByTrimmingCharactersInSet(NSCharacterSet.controlCharacterSet())
+            let rawModel = NSString(bytes: &sysinfo.machine, length: Int(_SYS_NAMELEN), encoding: String.Encoding.ascii.rawValue)!
+            model = rawModel.trimmingCharacters(in: CharacterSet.controlCharacters)
             profile.prefs.setString(model, forKey: PrefKeyModel)
         }
 
-        let locale = NSBundle.mainBundle().preferredLocalizations.first!.stringByReplacingOccurrencesOfString("_", withString: "-")
+        let locale = Bundle.main.preferredLocalizations.first!.replacingOccurrences(of: "_", with: "-")
         let defaultEngine = profile.searchEngines.defaultEngine
 
-        let formatter = NSDateFormatter()
+        let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        let date = formatter.stringFromDate(NSDate())
+        let date = formatter.string(from: Date())
 
-        let timezoneOffset = NSTimeZone.localTimeZone().secondsFromGMT / 60
+        let timezoneOffset = TimeZone.local.secondsFromGMT / 60
 
         let usageCount = UsageTelemetry.getCount(prefs)
         let usageTime = UsageTelemetry.getTime(prefs)

@@ -32,10 +32,10 @@ class NewTabChoiceViewController: UITableViewController {
 
         tableView.accessibilityIdentifier = "NewTabPage.Setting.Options"
 
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
 
-        let headerFooterFrame = CGRect(origin: CGPointZero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
+        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.showTopBorder = false
         headerView.showBottomBorder = true
@@ -48,40 +48,40 @@ class NewTabChoiceViewController: UITableViewController {
         tableView.tableFooterView = footerView
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.currentChoice = NewTabAccessors.getNewTabPage(prefs)
         self.hasHomePage = HomePageAccessors.getHomePage(prefs) != nil
         tableView.reloadData()
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.prefs.setString(currentChoice.rawValue, forKey: NewTabAccessors.PrefKey)
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(BasicCheckmarkCell, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
 
-        let option = newTabOptions[indexPath.row]
-        cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.settingTitle)
+        let option = newTabOptions[(indexPath as NSIndexPath).row]
+        cell.textLabel?.attributedText = AttributedString.tableRowTitle(option.settingTitle)
 
-        cell.accessoryType = (currentChoice == option) ? .Checkmark : .None
+        cell.accessoryType = (currentChoice == option) ? .checkmark : .none
 
         let enabled = (option != .HomePage) || hasHomePage
 
         cell.textLabel?.textColor = enabled ? UIConstants.TableViewRowTextColor : UIConstants.TableViewDisabledRowTextColor
-        cell.userInteractionEnabled = enabled
+        cell.isUserInteractionEnabled = enabled
 
         return cell
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return newTabOptions.count
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        currentChoice = newTabOptions[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        currentChoice = newTabOptions[(indexPath as NSIndexPath).row]
         tableView.reloadData()
     }
 }

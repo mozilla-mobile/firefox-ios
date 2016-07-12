@@ -11,9 +11,9 @@ class CustomSearchHelper: TabHelper {
 
     required init(tab: Tab) {
         self.tab = tab
-        if let path = NSBundle.mainBundle().pathForResource("CustomSearchHelper", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+        if let path = Bundle.main.pathForResource("CustomSearchHelper", ofType: "js") {
+            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -23,7 +23,7 @@ class CustomSearchHelper: TabHelper {
         return "customSearchHelper"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         //We don't listen to messages because the BVC calls the searchHelper script by itself.
     }
 

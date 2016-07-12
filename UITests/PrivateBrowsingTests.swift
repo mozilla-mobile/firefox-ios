@@ -106,7 +106,7 @@ class PrivateBrowsingTests: KIFTestCase {
         // Remove the private tab - do we see the empty view now?
         let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
         while tabsView.numberOfItemsInSection(0) > 0 {
-            let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+            let cell = tabsView.cellForItem(at: NSIndexPath(forItem: 0, inSection: 0))!
             tester().swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
             tester().waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
         }

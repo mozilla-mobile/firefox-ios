@@ -8,14 +8,14 @@ class MenuView: UIView {
 
     lazy var toolbar: RoundedToolbar = {
         let toolbar = RoundedToolbar()
-        toolbar.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: UILayoutConstraintAxis.Vertical)
+        toolbar.setContentHuggingPriority(UILayoutPriorityRequired, for: UILayoutConstraintAxis.vertical)
         return toolbar
     }()
 
     lazy var openMenuImage: UIImageView = {
         let openMenuImage = UIImageView()
-        openMenuImage.contentMode = UIViewContentMode.ScaleAspectFit
-        openMenuImage.userInteractionEnabled = true
+        openMenuImage.contentMode = UIViewContentMode.scaleAspectFit
+        openMenuImage.isUserInteractionEnabled = true
         openMenuImage.isAccessibilityElement = true
         openMenuImage.accessibilityTraits = UIAccessibilityTraitButton
         openMenuImage.accessibilityLabel =  NSLocalizedString("Menu.CloseMenu.AccessibilityLabel", value: "Close Menu", tableName: "Menu", comment: "Accessibility label describing the button that closes the menu when open")
@@ -27,7 +27,7 @@ class MenuView: UIView {
         let pageControl = UIPageControl()
         pageControl.currentPage = 0
         pageControl.hidesForSinglePage = true
-        pageControl.addTarget(self, action: #selector(self.pageControlDidPage(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        pageControl.addTarget(self, action: #selector(self.pageControlDidPage(_:)), for: UIControlEvents.valueChanged)
         return pageControl
     }()
 
@@ -46,13 +46,13 @@ class MenuView: UIView {
     }()
 
     private lazy var menuPagingView: UICollectionView = {
-        let pagingView = UICollectionView(frame: CGRectZero, collectionViewLayout: self.menuPagingLayout)
-        pagingView.registerClass(MenuItemCollectionViewCell.self, forCellWithReuseIdentifier: self.pagingCellReuseIdentifier)
+        let pagingView = UICollectionView(frame: CGRect.zero, collectionViewLayout: self.menuPagingLayout)
+        pagingView.register(MenuItemCollectionViewCell.self, forCellWithReuseIdentifier: self.pagingCellReuseIdentifier)
         pagingView.dataSource = self
         pagingView.delegate = self
         pagingView.showsHorizontalScrollIndicator = false
-        pagingView.pagingEnabled = true
-        pagingView.backgroundColor = UIColor.clearColor()
+        pagingView.isPagingEnabled = true
+        pagingView.backgroundColor = UIColor.clear()
         return pagingView
     }()
 
@@ -63,14 +63,14 @@ class MenuView: UIView {
     var cornersToRound: UIRectCorner?
     var cornerRadius: CGSize?
 
-    var menuColor: UIColor = UIColor.clearColor() {
+    var menuColor: UIColor = UIColor.clear() {
         didSet {
             menuContainerView.backgroundColor = menuColor
             menuFooterView.backgroundColor = menuColor
         }
     }
 
-    var toolbarColor: UIColor = UIColor.whiteColor() {
+    var toolbarColor: UIColor = UIColor.white() {
         didSet {
             toolbar.backgroundColor = toolbarColor
         }
@@ -86,7 +86,7 @@ class MenuView: UIView {
         didSet {
             menuPagingView.tintColor = tintColor
             pageControl.currentPageIndicatorTintColor = tintColor
-            pageControl.pageIndicatorTintColor = tintColor.colorWithAlphaComponent(0.25)
+            pageControl.pageIndicatorTintColor = tintColor.withAlphaComponent(0.25)
         }
     }
 
@@ -130,7 +130,7 @@ class MenuView: UIView {
     init(presentationStyle: MenuViewPresentationStyle) {
         self.presentationStyle = presentationStyle
 
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         self.addSubview(menuContainerView)
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(menuLongPressed))
@@ -141,7 +141,7 @@ class MenuView: UIView {
         self.addSubview(toolbar)
 
         switch presentationStyle {
-        case .Modal:
+        case .modal:
             addFooter()
             toolbar.snp_makeConstraints { make in
                 make.height.equalTo(toolbarHeight)
@@ -164,7 +164,7 @@ class MenuView: UIView {
                 make.centerX.equalTo(self)
             }
 
-        case .Popover:
+        case .popover:
             menuContainerView.snp_makeConstraints { make in
                 make.bottom.equalTo(toolbar.snp_top)
                 make.left.right.top.equalTo(self)
@@ -193,7 +193,7 @@ class MenuView: UIView {
     private func addFooter() {
         self.addSubview(menuFooterView)
         // so it always displays the colour of the background
-        menuFooterView.backgroundColor = UIColor.clearColor()
+        menuFooterView.backgroundColor = UIColor.clear()
         menuFooterView.snp_makeConstraints { make in
             make.height.equalTo(menuFooterHeight)
             make.left.right.equalTo(self)
@@ -206,42 +206,42 @@ class MenuView: UIView {
         }
     }
 
-    @objc func pageControlDidPage(sender: AnyObject) {
+    @objc func pageControlDidPage(_ sender: AnyObject) {
         let pageSize = menuPagingView.bounds.size
         let xOffset = pageSize.width * CGFloat(pageControl.currentPage)
-        menuPagingView.setContentOffset(CGPointMake(xOffset,0) , animated: true)
+        menuPagingView.setContentOffset(CGPoint(x: xOffset,y: 0) , animated: true)
     }
 
-    @objc private func toolbarButtonSelected(sender: UIView) {
-        guard let selectedItemIndex = toolbarItems.indexOf({ $0.customView == sender }) else {
+    @objc private func toolbarButtonSelected(_ sender: UIView) {
+        guard let selectedItemIndex = toolbarItems.index(where: { $0.customView == sender }) else {
             return
         }
         toolbarDelegate?.menuView(self, didSelectItemAtIndex: selectedItemIndex)
     }
 
-    @objc private func toolbarButtonTapped(gesture: UIGestureRecognizer) {
+    @objc private func toolbarButtonTapped(_ gesture: UIGestureRecognizer) {
         guard let view = gesture.view else { return }
         toolbarButtonSelected(view)
     }
 
-    @objc private func toolbarLongPressed(recognizer: UILongPressGestureRecognizer) {
-        guard recognizer.state == .Began else {
+    @objc private func toolbarLongPressed(_ recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .began else {
             return
         }
         let view = recognizer.view
-        guard let index = toolbarItems.indexOf({ $0.customView == view }) else {
+        guard let index = toolbarItems.index(where: { $0.customView == view }) else {
             return
         }
         toolbarDelegate?.menuView(self, didLongPressItemAtIndex: index)
     }
 
-    @objc private func menuLongPressed(recognizer: UILongPressGestureRecognizer) {
-        guard recognizer.state == .Began else {
+    @objc private func menuLongPressed(_ recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .began else {
             return
         }
 
-        let point = recognizer.locationInView(menuPagingView)
-        guard let indexPath = menuPagingView.indexPathForItemAtPoint(point) else {
+        let point = recognizer.location(in: menuPagingView)
+        guard let indexPath = menuPagingView.indexPathForItem(at: point) else {
             return
         }
 
@@ -261,13 +261,13 @@ class MenuView: UIView {
 
     private func loadToolbar() {
         guard let toolbarDataSource = toolbarDataSource else { return }
-        let numberOfToolbarItems = toolbarDataSource.numberOfToolbarItemsInMenuView(self)
+        let numberOfToolbarItems = toolbarDataSource.numberOfToolbarItems(in: self)
         for index in 0..<numberOfToolbarItems {
             let toolbarItemView = toolbarDataSource.menuView(self, buttonForItemAtIndex: index)
             if let buttonView = toolbarItemView as? UIButton {
-                buttonView.addTarget(self, action: #selector(self.toolbarButtonSelected(_:)), forControlEvents: .TouchUpInside)
+                buttonView.addTarget(self, action: #selector(self.toolbarButtonSelected(_:)), for: .touchUpInside)
             } else {
-                toolbarItemView.userInteractionEnabled = true
+                toolbarItemView.isUserInteractionEnabled = true
                 toolbarItemView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.toolbarButtonTapped(_:))))
             }
 
@@ -282,7 +282,7 @@ class MenuView: UIView {
     }
 
     private func loadMenu() {
-        let numberOfPages = menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0
+        let numberOfPages = menuItemDataSource?.numberOfPages(in: self) ?? 0
         pageControl.numberOfPages = numberOfPages
         pageControl.currentPage = currentPageIndex
         menuPagingView.reloadData()
@@ -326,10 +326,10 @@ class MenuView: UIView {
 
     private func layoutToolbar() {
         var displayToolbarItems = [UIBarButtonItem]()
-        for (index, item) in toolbarItems.enumerate() {
+        for (index, item) in toolbarItems.enumerated() {
             displayToolbarItems.append(item)
             if index < toolbarItems.count-1 {
-                displayToolbarItems.append(UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil))
+                displayToolbarItems.append(UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil))
             }
         }
         if displayToolbarItems.count == 0 {
@@ -347,10 +347,10 @@ class MenuView: UIView {
 
     private func layoutMenu() {
         menuContainerView.backgroundColor = menuColor
-        let numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0)
+        let numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRow(in: self) ?? 0)
         menuPagingLayout.maxNumberOfItemsPerPageRow = Int(numberOfItemsInRow)
 
-        menuPagingLayout.menuRowHeight = CGFloat(menuItemDelegate?.heightForRowsInMenuView(self) ?? 0)
+        menuPagingLayout.menuRowHeight = CGFloat(menuItemDelegate?.heightForRows(in: self) ?? 0)
         menuRowHeight = Float(menuPagingLayout.menuRowHeight)
 
         menuPagingView.snp_updateConstraints { make in
@@ -374,36 +374,36 @@ class MenuView: UIView {
 
 extension MenuView: UICollectionViewDataSource {
 
-    func dequeueReusableCellForIndexPath(indexPath: NSIndexPath) -> MenuItemCollectionViewCell {
-        return self.menuPagingView.dequeueReusableCellWithReuseIdentifier(pagingCellReuseIdentifier, forIndexPath: indexPath) as! MenuItemCollectionViewCell
+    func dequeueReusableCell(for indexPath: IndexPath) -> MenuItemCollectionViewCell {
+        return self.menuPagingView.dequeueReusableCell(withReuseIdentifier: pagingCellReuseIdentifier, for: indexPath) as! MenuItemCollectionViewCell
     }
 
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return menuItemDataSource?.numberOfPagesInMenuView(self) ?? 0
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return menuItemDataSource?.numberOfPages(in: self) ?? 0
     }
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return menuItemDataSource?.menuView(self, numberOfItemsForPage: section) ?? 0
     }
 
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let dataSource = menuItemDataSource else {
-            return collectionView.dequeueReusableCellWithReuseIdentifier(pagingCellReuseIdentifier, forIndexPath: indexPath)
+            return collectionView.dequeueReusableCell(withReuseIdentifier: pagingCellReuseIdentifier, for: indexPath)
         }
 
-        return dataSource.menuView(self, menuItemCellForIndexPath: indexPath)
+        return dataSource.menuView(self, menuItemCellFor: indexPath)
     }
 }
 
 extension MenuView: UICollectionViewDelegateFlowLayout {
 
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         menuItemDelegate?.menuView(self, didSelectItemAtIndexPath: indexPath)
     }
 }
 
 extension MenuView: UIScrollViewDelegate {
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageSize = menuPagingView.bounds.size
         let selectedPageIndex = Int(floor((scrollView.contentOffset.x-pageSize.width/2)/pageSize.width))+1
         pageControl.currentPage = Int(selectedPageIndex)

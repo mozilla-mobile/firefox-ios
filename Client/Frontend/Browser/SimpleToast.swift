@@ -9,14 +9,14 @@ struct SimpleToastUX {
     static let ToastHeight = CGFloat(50)
     static let ToastAnimationDuration = 0.5
     static let ToastDefaultColor = UIColor(red: 76.0 / 255, green: 158.0 / 255, blue: 255.0 / 255, alpha: 1)
-    static let ToastFont = UIFont.systemFontOfSize(15)
+    static let ToastFont = UIFont.systemFont(ofSize: 15)
     static let ToastDismissAfter = 2.0
 }
 
 struct SimpleToast {
 
-     func showAlertWithText(text: String) {
-        guard let window = UIApplication.sharedApplication().windows.first,
+     func showAlert(withText text: String) {
+        guard let window = UIApplication.shared().windows.first,
               let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(window) else {
             return
         }
@@ -34,15 +34,15 @@ struct SimpleToast {
 
     private func createView() -> UILabel {
         let toast = UILabel()
-        toast.textColor = UIColor.whiteColor()
+        toast.textColor = UIColor.white()
         toast.backgroundColor = SimpleToastUX.ToastDefaultColor
         toast.font = SimpleToastUX.ToastFont
-        toast.textAlignment = .Center
+        toast.textAlignment = .center
         return toast
     }
 
-    private func dismiss(toast: UIView) {
-        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration,
+    private func dismiss(_ toast: UIView) {
+        UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration,
             animations: {
                 var frame = toast.frame
                 frame.origin.y = frame.origin.y + SimpleToastUX.ToastHeight
@@ -54,16 +54,16 @@ struct SimpleToast {
         )
     }
 
-    private func animate(toast: UIView) {
-        UIView.animateWithDuration(SimpleToastUX.ToastAnimationDuration,
+    private func animate(_ toast: UIView) {
+        UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration,
             animations: {
                 var frame = toast.frame
                 frame.origin.y = frame.origin.y - SimpleToastUX.ToastHeight
                 toast.frame = frame
             },
             completion: { finished in
-                let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(SimpleToastUX.ToastDismissAfter * Double(NSEC_PER_SEC)))
-                dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+                let dispatchTime = DispatchTime.now() + Double(Int64(SimpleToastUX.ToastDismissAfter * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+                DispatchQueue.main.after(when: dispatchTime, block: {
                     self.dismiss(toast)
                 })
             }

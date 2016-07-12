@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 class TestAppDelegate: AppDelegate {
-    override func getProfile(application: UIApplication) -> Profile {
+    override func getProfile(_ application: UIApplication) -> Profile {
         if let profile = self.profile {
             return profile
         }

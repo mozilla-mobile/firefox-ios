@@ -12,23 +12,23 @@ import XCGLogger
 class HomePageAccessors {
     private static let getPrefs = Accessors.getPrefs
 
-    static func getHomePage(state: AppState) -> NSURL? {
+    static func getHomePage(_ state: AppState) -> URL? {
         return getHomePage(getPrefs(state))
     }
 
-    static func hasHomePage(state: AppState) -> Bool {
+    static func hasHomePage(_ state: AppState) -> Bool {
         return getHomePage(state) != nil
     }
 
-    static func isButtonInMenu(state: AppState) -> Bool {
+    static func isButtonInMenu(_ state: AppState) -> Bool {
         return isButtonInMenu(getPrefs(state))
     }
 
-    static func isButtonEnabled(state: AppState) -> Bool {
+    static func isButtonEnabled(_ state: AppState) -> Bool {
         switch state.ui {
-        case .Tab:
+        case .tab:
             return true
-        case .HomePanels, .Loading:
+        case .homePanels, .loading:
             return hasHomePage(state)
         default:
             return false
@@ -37,11 +37,11 @@ class HomePageAccessors {
 }
 
 extension HomePageAccessors {
-    static func isButtonInMenu(prefs: Prefs) -> Bool {
+    static func isButtonInMenu(_ prefs: Prefs) -> Bool {
         return prefs.boolForKey(HomePageConstants.HomePageButtonIsInMenuPrefKey) ?? true
     }
 
-    static func getHomePage(prefs: Prefs) -> NSURL? {
+    static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(HomePageConstants.HomePageURLPrefKey) ?? getDefaultHomePageString(prefs)
         guard let urlString = string else {
             return nil
@@ -49,7 +49,7 @@ extension HomePageAccessors {
         return NSURL(string: urlString)
     }
 
-    static func getDefaultHomePageString(prefs: Prefs) -> String? {
+    static func getDefaultHomePageString(_ prefs: Prefs) -> String? {
         return prefs.stringForKey(HomePageConstants.DefaultHomePageURLPrefKey)
     }
 }

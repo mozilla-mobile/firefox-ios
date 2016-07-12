@@ -6,7 +6,7 @@ import Foundation
 
 protocol MenuConfiguration {
 
-    func menuForState(appState: AppState) -> MenuConfiguration
+    func menu(forState appState: AppState) -> MenuConfiguration
 
     var menuItems: [MenuItem] { get }
     var menuToolbarItems: [MenuToolbarItem]? { get }
@@ -25,7 +25,7 @@ protocol MenuConfiguration {
 }
 
 protocol MenuActionDelegate: class {
-    func performMenuAction(action: MenuAction, withAppState appState: AppState)
+    func performMenuAction(_ action: MenuAction, withAppState appState: AppState)
 }
 
 struct MenuAction {

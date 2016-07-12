@@ -10,12 +10,12 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 struct TabsButtonUX {
-    static let TitleColor: UIColor = UIColor.blackColor()
-    static let TitleBackgroundColor: UIColor = UIColor.whiteColor()
+    static let TitleColor: UIColor = UIColor.black()
+    static let TitleBackgroundColor: UIColor = UIColor.white()
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 1
-    static let BorderColor: UIColor = UIColor.clearColor()
+    static let BorderColor: UIColor = UIColor.clear()
     static let TitleInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
 
     static let Themes: [String: Theme] = {
@@ -51,9 +51,9 @@ struct TabsButtonUX {
 class TabsButton: UIControl {
     private var theme: Theme = TabsButtonUX.Themes[Theme.NormalMode]!
     
-    override var highlighted: Bool {
+    override var isHighlighted: Bool {
         didSet {
-            if highlighted {
+            if isHighlighted {
                 borderColor = theme.highlightBorderColor!
                 titleBackgroundColor = theme.highlightButtonColor
                 textColor = theme.highlightTextColor
@@ -69,22 +69,22 @@ class TabsButton: UIControl {
         let label = UILabel()
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
-        label.textAlignment = NSTextAlignment.Center
-        label.userInteractionEnabled = false
+        label.textAlignment = NSTextAlignment.center
+        label.isUserInteractionEnabled = false
         return label
     }()
 
     lazy var insideButton: UIView = {
         let view = UIView()
         view.clipsToBounds = false
-        view.userInteractionEnabled = false
+        view.isUserInteractionEnabled = false
         return view
     }()
 
     private lazy var labelBackground: UIView = {
         let background = UIView()
         background.layer.cornerRadius = TabsButtonUX.CornerRadius
-        background.userInteractionEnabled = false
+        background.isUserInteractionEnabled = false
         return background
     }()
 
@@ -92,7 +92,7 @@ class TabsButton: UIControl {
         let border = InnerStrokedView()
         border.strokeWidth = TabsButtonUX.BorderStrokeWidth
         border.cornerRadius = TabsButtonUX.CornerRadius
-        border.userInteractionEnabled = false
+        border.isUserInteractionEnabled = false
         return border
     }()
 
@@ -150,7 +150,7 @@ class TabsButton: UIControl {
 }
 
 extension TabsButton: Themeable {
-    func applyTheme(themeName: String) {
+    func applyTheme(_ themeName: String) {
 
         guard let theme = TabsButtonUX.Themes[themeName] else {
             log.error("Unable to apply unknown theme \(themeName)")

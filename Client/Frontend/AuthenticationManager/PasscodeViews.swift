@@ -13,7 +13,7 @@ private struct PasscodeUX {
 }
 
 @objc protocol PasscodeInputViewDelegate: class {
-    func passcodeInputView(inputView: PasscodeInputView, didFinishEnteringCode code: String)
+    func passcodeInputView(_ inputView: PasscodeInputView, didFinishEnteringCode code: String)
 }
 
 /// A custom, keyboard-able view that displays the blank/filled digits when entrering a passcode.
@@ -30,24 +30,24 @@ class PasscodeInputView: UIView, UIKeyInput {
 
     private var inputtedCode: String = ""
 
-    private var blankDigitString: NSAttributedString {
-        return NSAttributedString(string: "\(blankCharacter)", attributes: [NSFontAttributeName: digitFont])
+    private var blankDigitString: AttributedString {
+        return AttributedString(string: "\(blankCharacter)", attributes: [NSFontAttributeName: digitFont])
     }
 
-    private var filledDigitString: NSAttributedString {
-        return NSAttributedString(string: "\(filledCharacter)", attributes: [NSFontAttributeName: digitFont])
+    private var filledDigitString: AttributedString {
+        return AttributedString(string: "\(filledCharacter)", attributes: [NSFontAttributeName: digitFont])
     }
 
-    @objc var keyboardType: UIKeyboardType = .NumberPad
+    @objc var keyboardType: UIKeyboardType = .numberPad
 
     init(frame: CGRect, passcodeSize: Int) {
         self.passcodeSize = passcodeSize
         super.init(frame: frame)
-        opaque = false
+        isOpaque = false
     }
 
     convenience init(passcodeSize: Int) {
-        self.init(frame: CGRectZero, passcodeSize: passcodeSize)
+        self.init(frame: CGRect.zero, passcodeSize: passcodeSize)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -67,7 +67,7 @@ class PasscodeInputView: UIView, UIKeyInput {
         return inputtedCode.characters.count > 0
     }
 
-    @objc func insertText(text: String) {
+    @objc func insertText(_ text: String) {
         guard inputtedCode.characters.count < passcodeSize else {
             return
         }
@@ -85,27 +85,27 @@ class PasscodeInputView: UIView, UIKeyInput {
             return
         }
 
-        inputtedCode.removeAtIndex(inputtedCode.endIndex.predecessor())
+        inputtedCode.remove(at: inputtedCode.index(before: inputtedCode.endIndex))
         setNeedsDisplay()
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let circleSize = CGSize(width: 14, height: 14)
 
         (0..<passcodeSize).forEach { index in
             let context = UIGraphicsGetCurrentContext()
-            CGContextSetLineWidth(context, 1)
-            CGContextSetStrokeColorWithColor(context, UIConstants.PasscodeDotColor.CGColor)
-            CGContextSetFillColorWithColor(context, UIConstants.PasscodeDotColor.CGColor)
+            context?.setLineWidth(1)
+            context.setStrokeColor(UIConstants.PasscodeDotColor.CGColor)
+            context.setFillColor(UIConstants.PasscodeDotColor.CGColor)
 
             let offset = floor(rect.width / CGFloat(passcodeSize))
-            var circleRect = CGRect(origin: CGPointZero, size: circleSize)
+            var circleRect = CGRect(origin: CGPoint.zero, size: circleSize)
             circleRect.center = CGPoint(x: (offset * CGFloat(index + 1))  - offset / 2, y: rect.height / 2)
 
             if index < inputtedCode.characters.count {
-                CGContextFillEllipseInRect(context, circleRect)
+                context?.fillEllipse(in: circleRect)
             } else {
-                CGContextStrokeEllipseInRect(context, circleRect)
+                context?.strokeEllipse(in: circleRect)
             }
         }
     }
@@ -131,7 +131,7 @@ class PasscodePane: UIView {
         return 1
     }
 
-    override func accessibilityElementAtIndex(index: Int) -> AnyObject? {
+    override func accessibilityElement(at index: Int) -> AnyObject? {
         switch index {
         case 0:     return titleLabel
         default:    return nil
@@ -139,7 +139,7 @@ class PasscodePane: UIView {
     }
 
     init(title: String? = nil) {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         backgroundColor = UIConstants.TableViewHeaderBackgroundColor
 
         titleLabel.text = title
@@ -164,16 +164,16 @@ class PasscodePane: UIView {
             make.size.equalTo(PasscodeUX.PasscodeFieldSize)
         }
         layoutIfNeeded()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PasscodePane.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PasscodePane.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PasscodePane.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PasscodePane.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
 
     func shakePasscode() {
-        UIView.animateWithDuration(0.1, animations: {
+        UIView.animate(withDuration: 0.1, animations: {
                 self.codeViewCenterConstraint?.updateOffset(-10)
                 self.layoutIfNeeded()
         }) { complete in
-            UIView.animateWithDuration(0.1) {
+            UIView.animate(withDuration: 0.1) {
                 self.codeViewCenterConstraint?.updateOffset(0)
                 self.layoutIfNeeded()
             }
@@ -185,23 +185,23 @@ class PasscodePane: UIView {
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
     
-    func keyboardWillShow(sender: NSNotification) {
-        guard let keyboardFrame = sender.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue else {
+    func keyboardWillShow(_ sender: Notification) {
+        guard let keyboardFrame = (sender as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey]?.cgRectValue else {
             return
         }
         
-        UIView.animateWithDuration(0.1, animations: {
+        UIView.animate(withDuration: 0.1, animations: {
             self.containerCenterConstraint?.updateOffset(-keyboardFrame.height/2)
             self.layoutIfNeeded()
         })
     }
     
-    func keyboardWillHide(sender: NSNotification) {
-        UIView.animateWithDuration(0.1, animations: {
+    func keyboardWillHide(_ sender: Notification) {
+        UIView.animate(withDuration: 0.1, animations: {
             self.containerCenterConstraint?.updateOffset(0)
             self.layoutIfNeeded()
         })

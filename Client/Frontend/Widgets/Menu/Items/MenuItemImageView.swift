@@ -7,7 +7,7 @@ import UIKit
 
 class MenuItemImageView: UIImageView {
 
-    var overlayColor: UIColor = UIColor.clearColor() {
+    var overlayColor: UIColor = UIColor.clear() {
         didSet {
             setNeedsDisplay()
         }
@@ -25,16 +25,18 @@ class MenuItemImageView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSaveGState(context)
+    override func draw(_ rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
+        context.saveGState()
 
-        CGContextDrawImage(context, rect, image?.CGImage)
+        context.draw(in: rect, image: (image?.cgImage)!)
 
-        CGContextSetBlendMode(context, .Multiply)
-        CGContextSetFillColor(context, CGColorGetComponents(overlayColor.CGColor))
-        CGContextFillRect(context, self.bounds)
-        CGContextRestoreGState(context)
+        context.setBlendMode(.multiply)
+        context.setFillColor(overlayColor.cgColor.components!)
+        context.fill(self.bounds)
+        context.restoreGState()
     }
 
 }

@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 @objc protocol JSPromptAlertControllerDelegate: class {
-    func promptAlertControllerDidDismiss(alertController: JSPromptAlertController)
+    func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController)
 }
 
 /// A simple version of UIAlertController that attaches a delegate to the viewDidDisappear method
@@ -18,7 +18,7 @@ class JSPromptAlertController: UIAlertController {
 
     weak var delegate: JSPromptAlertControllerDelegate?
 
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         delegate?.promptAlertControllerDidDismiss(self)
     }
@@ -42,10 +42,10 @@ struct MessageAlert: JSAlertInfo {
     let completionHandler: () -> Void
 
     func alertController() -> JSPromptAlertController {
-        let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame),
+        let alertController = JSPromptAlertController(title: titleForJavaScriptPanel(initiatedByFrame: frame),
             message: message,
-            preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default) { _ in
+            preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.default) { _ in
             self.completionHandler()
         })
         alertController.alertInfo = self
@@ -70,11 +70,11 @@ struct ConfirmPanelAlert: JSAlertInfo {
 
     func alertController() -> JSPromptAlertController {
         // Show JavaScript confirm dialogs.
-        let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default) { _ in
+        let alertController = JSPromptAlertController(title: titleForJavaScriptPanel(initiatedByFrame: frame), message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.default) { _ in
             self.completionHandler(true)
         })
-        alertController.addAction(UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.Cancel) { _ in
+        alertController.addAction(UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.cancel) { _ in
             self.cancel()
         })
         alertController.alertInfo = self
@@ -102,16 +102,16 @@ struct TextInputAlert: JSAlertInfo {
     }
 
     func alertController() -> JSPromptAlertController {
-        let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = JSPromptAlertController(title: titleForJavaScriptPanel(initiatedByFrame: frame), message: message, preferredStyle: UIAlertControllerStyle.alert)
         var input: UITextField!
-        alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField) in
+        alertController.addTextField(configurationHandler: { (textField: UITextField) in
             input = textField
             input.text = self.defaultText
         })
-        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default) { _ in
+        alertController.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.default) { _ in
             self.completionHandler(input.text)
         })
-        alertController.addAction(UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.Cancel) { _ in
+        alertController.addAction(UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.cancel) { _ in
             self.cancel()
         })
         alertController.alertInfo = self
@@ -126,7 +126,7 @@ struct TextInputAlert: JSAlertInfo {
 /// Show a title for a JavaScript Panel (alert) based on the WKFrameInfo. On iOS9 we will use the new securityOrigin
 /// and on iOS 8 we will fall back to the request URL. If the request URL is nil, which happens for JavaScript pages,
 /// we fall back to "JavaScript" as a title.
-private func titleForJavaScriptPanelInitiatedByFrame(frame: WKFrameInfo) -> String {
+private func titleForJavaScriptPanel(initiatedByFrame frame: WKFrameInfo) -> String {
     var title: String = "JavaScript"
     if #available(iOS 9, *) {
         title = "\(frame.securityOrigin.`protocol`)://\(frame.securityOrigin.host)"
@@ -134,7 +134,7 @@ private func titleForJavaScriptPanelInitiatedByFrame(frame: WKFrameInfo) -> Stri
             title += ":\(frame.securityOrigin.port)"
         }
     } else {
-        if let url = frame.request.URL {
+        if let url = frame.request.url {
             title = "\(url.scheme)://\(url.hostPort))"
         }
     }

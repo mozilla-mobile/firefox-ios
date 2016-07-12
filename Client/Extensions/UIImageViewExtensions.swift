@@ -7,9 +7,9 @@ import Storage
 import WebImage
 
 public extension UIImageView {
-    public func setIcon(icon: Favicon?, withPlaceholder placeholder: UIImage) {
+    public func setIcon(_ icon: Favicon?, withPlaceholder placeholder: UIImage) {
         if let icon = icon {
-            let imageURL = NSURL(string: icon.url)
+            let imageURL = URL(string: icon.url)
             self.sd_setImageWithURL(imageURL, placeholderImage: placeholder)
             return
         }
@@ -19,11 +19,11 @@ public extension UIImageView {
 
 
 public class ImageOperation : NSObject, SDWebImageOperation {
-    public var cacheOperation: NSOperation?
+    public var cacheOperation: Operation?
 
     var cancelled: Bool {
         if let cacheOperation = cacheOperation {
-            return cacheOperation.cancelled
+            return cacheOperation.isCancelled
         }
         return false
     }
@@ -41,12 +41,12 @@ extension UIImageView {
     // This is a helper function for custom async loaders. It starts an operation that will check for the image in
     // a cache (either one passed in or the default if none is specified). If its found in the cache its returned,
     // otherwise, block is run and should return an image to show.
-    private func runBlockIfNotInCache(key: String, cache: SDImageCache, completed: CompletionBlock, block: () -> UIImage?) {
+    private func runBlockIfNotInCache(_ key: String, cache: SDImageCache, completed: CompletionBlock, block: () -> UIImage?) {
         self.sd_cancelCurrentImageLoad()
 
         let operation = ImageOperation()
 
-        operation.cacheOperation = cache.queryDiskCacheForKey(key, done: { (image, cacheType) -> Void in
+        operation.cacheOperation = cache.queryDiskCache(forKey: key, done: { (image, cacheType) -> Void in
             let err = NSError(domain: "UIImage+Extensions.runBlockIfNotInCache", code: 0, userInfo: nil)
             // If this was cancelled, don't bother notifying the caller
             if operation.cancelled {
@@ -62,7 +62,7 @@ extension UIImageView {
                 let image = block()
                 if image != nil {
                     self.image = image
-                    cache.storeImage(image, forKey: key)
+                    cache.store(image, forKey: key)
                 }
             }
 
@@ -72,7 +72,7 @@ extension UIImageView {
         self.sd_setImageLoadOperation(operation, forKey: "UIImageViewImageLoad")
     }
 
-    public func moz_getImageFromCache(key: String, cache: SDImageCache, completed: CompletionBlock) {
+    public func moz_getImageFromCache(_ key: String, cache: SDImageCache, completed: CompletionBlock) {
         // This cache is filled outside of here. If we don't find the key in it, nothing to do here.
         runBlockIfNotInCache(key, cache: cache, completed: completed) { _ in return nil}
     }

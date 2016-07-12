@@ -10,15 +10,15 @@ class LocalRequestHelper: TabHelper {
         return "localRequestHelper"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard message.frameInfo.request.URL?.isLocal ?? false else { return }
+    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        guard message.frameInfo.request.url?.isLocal ?? false else { return }
 
         let params = message.body as! [String: String]
 
         if params["type"] == "load",
            let urlString = params["url"],
-           let url = NSURL(string: urlString) {
-            message.webView?.loadRequest(PrivilegedRequest(URL: url))
+           let url = URL(string: urlString) {
+            message.webView?.load(PrivilegedRequest(coder: url))
         } else if params["type"] == "reload" {
             message.webView?.reload()
         } else {

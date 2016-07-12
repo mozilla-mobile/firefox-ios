@@ -25,7 +25,7 @@ class UIPasteboardExtensionsTests: XCTestCase {
         let path = NSBundle(forClass: self.classForCoder).pathForResource("image", ofType: "png")!
         let data = NSData(contentsOfFile: path)!
         let url = NSURL(string: "http://foo.bar")!
-        pasteboard.addImageWithData(data, forURL: url)
+        pasteboard.addImage(with: data, forURL: url)
         verifyPasteboard(expectedURL: url, expectedImageTypeKey: kUTTypePNG)
     }
 
@@ -33,11 +33,11 @@ class UIPasteboardExtensionsTests: XCTestCase {
         let path = NSBundle(forClass: self.classForCoder).pathForResource("image", ofType: "gif")!
         let data = NSData(contentsOfFile: path)!
         let url = NSURL(string: "http://foo.bar")!
-        pasteboard.addImageWithData(data, forURL: url)
+        pasteboard.addImage(with: data, forURL: url)
         verifyPasteboard(expectedURL: url, expectedImageTypeKey: kUTTypeGIF)
     }
 
-    private func verifyPasteboard(expectedURL expectedURL: NSURL, expectedImageTypeKey: CFString) {
+    private func verifyPasteboard(expectedURL: NSURL, expectedImageTypeKey: CFString) {
         XCTAssertEqual(pasteboard.items.count, 1)
         XCTAssertEqual(pasteboard.items[0].count, 2)
         XCTAssertEqual(pasteboard.items[0][kUTTypeURL as String], expectedURL)

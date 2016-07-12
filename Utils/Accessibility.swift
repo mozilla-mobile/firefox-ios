@@ -5,7 +5,7 @@
 import UIKit
 
 public protocol AccessibilityActionsSource: class {
-    func accessibilityCustomActionsForView(view: UIView) -> [UIAccessibilityCustomAction]?
+    func accessibilityCustomActions(for view: UIView) -> [UIAccessibilityCustomAction]?
 }
 
 public class AccessibleAction {

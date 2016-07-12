@@ -6,15 +6,15 @@ import Foundation
 import UIKit
 
 protocol MenuToolbarItemDelegate: class {
-    func menuView(menuView: MenuView, didSelectItemAtIndex index: Int)
+    func menuView(_ menuView: MenuView, didSelectItemAtIndex index: Int)
 
-    func menuView(menuView: MenuView, didLongPressItemAtIndex index: Int)
+    func menuView(_ menuView: MenuView, didLongPressItemAtIndex index: Int)
 }
 
 protocol MenuItemDelegate: class {
-    func menuView(menuView: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath)
+    func menuView(_ menuView: MenuView, didSelectItemAtIndexPath indexPath: IndexPath)
 
-    func menuView(menuView: MenuView, didLongPressItemAtIndexPath indexPath: NSIndexPath)
+    func menuView(_ menuView: MenuView, didLongPressItemAtIndexPath indexPath: IndexPath)
 
-    func heightForRowsInMenuView(menuView: MenuView) -> CGFloat
+    func heightForRows(in menuView: MenuView) -> CGFloat
 }

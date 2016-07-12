@@ -49,9 +49,9 @@ class AdjustIntegration: NSObject {
 
         let config = ADJConfig(appToken: settings.appToken, environment: settings.environment.rawValue)
         if settings.environment == .Sandbox {
-            config.logLevel = ADJLogLevelDebug
+            config?.logLevel = ADJLogLevelDebug
         }
-        config.delegate = self
+        config?.delegate = self
         return config
     }
 
@@ -59,7 +59,7 @@ class AdjustIntegration: NSObject {
     /// environment, then it will return nil.
 
     private func getSettings() -> AdjustSettings? {
-        let bundle = NSBundle.mainBundle()
+        let bundle = Bundle.main
         guard let adjustAppToken = bundle.objectForInfoDictionaryKey(AdjustAppTokenKey) as? String,
                 adjustEnvironment = bundle.objectForInfoDictionaryKey(AdjustEnvironmentKey) as? String else {
             return nil
@@ -77,25 +77,25 @@ class AdjustIntegration: NSObject {
     /// Returns true if the attribution file is present.
 
     private func hasAttribution() throws -> Bool {
-        return NSFileManager.defaultManager().fileExistsAtPath(try getAttributionPath())
+        return FileManager.default.fileExists(atPath: try getAttributionPath())
     }
 
     /// Save an `ADJAttribution` instance to a JSON file. Throws an error if the file could not be written. The file
     /// written is a JSON file with a single dictionary in it. We add one extra item to it that contains the current
     /// timestamp in seconds since the UNIX epoch.
 
-    private func saveAttribution(attribution: ADJAttribution) throws -> Void {
+    private func saveAttribution(_ attribution: ADJAttribution) throws -> Void {
         let dictionary = NSMutableDictionary(dictionary: attribution.dictionary())
-        dictionary["_timestamp"] = NSNumber(longLong: Int64(NSDate().timeIntervalSince1970))
-        let data = try NSJSONSerialization.dataWithJSONObject(dictionary, options: [NSJSONWritingOptions.PrettyPrinted])
-        try data.writeToFile(try getAttributionPath(), options: [])
+        dictionary["_timestamp"] = NSNumber(value: Int64(Date().timeIntervalSince1970))
+        let data = try JSONSerialization.data(withJSONObject: dictionary, options: [JSONSerialization.WritingOptions.prettyPrinted])
+        try data.write(to: URL(fileURLWithPath: try getAttributionPath()), options: [])
     }
 
     /// Return the path to the `AdjustAttribution.json` file. Throws an `NSError` if we could not build the path.
 
     private func getAttributionPath() throws -> String {
-        guard let url = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first,
-                path = url.URLByAppendingPathComponent(AdjustAttributionFileName).path else {
+        guard let url = FileManager.default.urlsForDirectory(.documentDirectory, inDomains: .userDomainMask).first,
+                path = try! url.appendingPathComponent(AdjustAttributionFileName).path else {
             throw NSError(domain: AdjustIntegrationErrorDomain, code: -1,
                 userInfo: [NSLocalizedDescriptionKey: "Could not build \(AdjustAttributionFileName) path"])
         }
@@ -126,7 +126,7 @@ extension AdjustIntegration: AdjustDelegate {
     /// Adjust SDK. We always let it send the initial attribution ping. Session tracking is only enabled if
     /// the Send Anonymous Usage Data setting is turned on.
 
-    func triggerApplicationDidFinishLaunchingWithOptions(launchOptions: [NSObject : AnyObject]?) -> Void {
+    func triggerApplicationDidFinishLaunching(withOptions launchOptions: [NSObject : AnyObject]?) -> Void {
         do {
             if let config = getConfig() {
                 // Always initialize Adjust - otherwise we cannot enable/disable it later. Their SDK must be
@@ -157,7 +157,7 @@ extension AdjustIntegration: AdjustDelegate {
     ///
     /// Here we also disable Adjust based on the Send Anonymous Usage Data setting.
 
-    func adjustAttributionChanged(attribution: ADJAttribution!) {
+    func adjustAttributionChanged(_ attribution: ADJAttribution!) {
         do {
             Logger.browserLogger.info("Adjust - Saving attribution info to disk")
             try saveAttribution(attribution)
@@ -177,7 +177,7 @@ extension AdjustIntegration: AdjustDelegate {
     /// This is called from the Settings screen. The settings screen will remember the choice in the
     /// profile and then use this method to disable or enable Adjust.
     
-    static func setEnabled(enabled: Bool) {
+    static func setEnabled(_ enabled: Bool) {
         Adjust.setEnabled(enabled)
     }
 }

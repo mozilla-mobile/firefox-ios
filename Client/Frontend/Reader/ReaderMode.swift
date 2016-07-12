@@ -35,22 +35,22 @@ enum ReaderModeFontType: String {
 }
 
 enum ReaderModeFontSize: Int {
-    case Size1 = 1
-    case Size2 = 2
-    case Size3 = 3
-    case Size4 = 4
-    case Size5 = 5
-    case Size6 = 6
-    case Size7 = 7
-    case Size8 = 8
-    case Size9 = 9
-    case Size10 = 10
-    case Size11 = 11
-    case Size12 = 12
-    case Size13 = 13
+    case size1 = 1
+    case size2 = 2
+    case size3 = 3
+    case size4 = 4
+    case size5 = 5
+    case size6 = 6
+    case size7 = 7
+    case size8 = 8
+    case size9 = 9
+    case size10 = 10
+    case size11 = 11
+    case size12 = 12
+    case size13 = 13
 
     func isSmallest() -> Bool {
-        return self == Size1
+        return self == size1
     }
 
     func smaller() -> ReaderModeFontSize {
@@ -62,27 +62,27 @@ enum ReaderModeFontSize: Int {
     }
 
     func isLargest() -> Bool {
-        return self == Size13
+        return self == size13
     }
 
     static var defaultSize: ReaderModeFontSize {
-        switch UIApplication.sharedApplication().preferredContentSizeCategory {
+        switch UIApplication.shared().preferredContentSizeCategory {
         case UIContentSizeCategoryExtraSmall:
-            return .Size1
+            return .size1
         case UIContentSizeCategorySmall:
-            return .Size3
+            return .size3
         case UIContentSizeCategoryMedium:
-            return .Size5
+            return .size5
         case UIContentSizeCategoryLarge:
-            return .Size7
+            return .size7
         case UIContentSizeCategoryExtraLarge:
-            return .Size9
+            return .size9
         case UIContentSizeCategoryExtraExtraLarge:
-            return .Size11
+            return .size11
         case UIContentSizeCategoryExtraExtraExtraLarge:
-            return .Size13
+            return .size13
         default:
-            return .Size5
+            return .size5
         }
     }
 
@@ -205,8 +205,8 @@ struct ReadabilityResult {
 
 /// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
 protocol ReaderModeDelegate {
-    func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
-    func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
+    func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
+    func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
 }
 
 let ReaderModeNamespace = "_firefox_ReaderMode"
@@ -216,7 +216,7 @@ class ReaderMode: TabHelper {
 
     private weak var tab: Tab?
     var state: ReaderModeState = ReaderModeState.Unavailable
-    private var originalURL: NSURL?
+    private var originalURL: URL?
 
     class func name() -> String {
         return "ReaderMode"
@@ -226,17 +226,17 @@ class ReaderMode: TabHelper {
         self.tab = tab
 
         // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
-        if let path = NSBundle.mainBundle().pathForResource("Readability", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+        if let path = Bundle.main.pathForResource("Readability", ofType: "js") {
+            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
 
         // This is executed after a page has been loaded. It executes Readability and then fires a script message to let us know if the page is compatible with reader mode.
-        if let path = NSBundle.mainBundle().pathForResource("ReaderMode", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+        if let path = Bundle.main.pathForResource("ReaderMode", ofType: "js") {
+            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -246,7 +246,7 @@ class ReaderMode: TabHelper {
         return "readerModeMessageHandler"
     }
 
-    private func handleReaderPageEvent(readerPageEvent: ReaderPageEvent) {
+    private func handleReaderPageEvent(_ readerPageEvent: ReaderPageEvent) {
         switch readerPageEvent {
             case .PageShow:
                 if let tab = tab {
@@ -255,12 +255,12 @@ class ReaderMode: TabHelper {
         }
     }
 
-    private func handleReaderModeStateChange(state: ReaderModeState) {
+    private func handleReaderModeStateChange(_ state: ReaderModeState) {
         self.state = state
         delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab!)
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if let msg = message.body as? Dictionary<String,String> {
             if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
                 switch messageType {

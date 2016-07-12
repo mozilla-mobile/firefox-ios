@@ -34,10 +34,10 @@ class RequirePasscodeIntervalViewController: UITableViewController {
 
         tableView.accessibilityIdentifier = "AuthenticationManager.passcodeIntervalTableView"
 
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
 
-        let headerFooterFrame = CGRect(origin: CGPointZero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
+        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.showTopBorder = false
         headerView.showBottomBorder = true
@@ -50,26 +50,26 @@ class RequirePasscodeIntervalViewController: UITableViewController {
         tableView.tableFooterView = footerView
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.authenticationInfo = KeychainWrapper.authenticationInfo()
         tableView.reloadData()
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(BasicCheckmarkCell, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
         let option = intervalOptions[indexPath.row]
-        let intervalTitle = NSAttributedString.tableRowTitle(option.settingTitle)
+        let intervalTitle = AttributedString.tableRowTitle(option.settingTitle)
         cell.textLabel?.attributedText = intervalTitle
         cell.accessoryType = authenticationInfo?.requiredPasscodeInterval == option ? .Checkmark : .None
         return cell
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return intervalOptions.count
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         authenticationInfo?.updateRequiredPasscodeInterval(intervalOptions[indexPath.row])
         KeychainWrapper.setAuthenticationInfo(authenticationInfo)
         tableView.reloadData()
