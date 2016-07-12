@@ -28,18 +28,18 @@
 public enum Collation {
 
     /// Compares string by raw data.
-    case Binary
+    case binary
 
     /// Like binary, but folds uppercase ASCII letters into their lowercase
     /// equivalents.
-    case Nocase
+    case nocase
 
     /// Like binary, but strips trailing space.
-    case Rtrim
+    case rtrim
 
     /// A custom collating sequence identified by the given string, registered
     /// using `Database.create(collation:…)`
-    case Custom(String)
+    case custom(String)
 
 }
 
@@ -55,13 +55,13 @@ extension Collation : CustomStringConvertible {
 
     public var description : String {
         switch self {
-        case Binary:
+        case binary:
             return "BINARY"
-        case Nocase:
+        case nocase:
             return "NOCASE"
-        case Rtrim:
+        case rtrim:
             return "RTRIM"
-        case Custom(let collation):
+        case custom(let collation):
             return collation.quote()
         }
     }

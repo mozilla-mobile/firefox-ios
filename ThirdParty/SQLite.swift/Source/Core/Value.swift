@@ -39,7 +39,7 @@ public protocol Value : Expressible { // extensions cannot have inheritance clau
 
     static var declaredDatatype: String { get }
 
-    static func fromDatatypeValue(datatypeValue: Datatype) -> ValueType
+    static func fromDatatypeValue(_ datatypeValue: Datatype) -> ValueType
 
     var datatypeValue: Datatype { get }
 
@@ -49,7 +49,7 @@ extension Double : Number, Value {
 
     public static let declaredDatatype = "REAL"
 
-    public static func fromDatatypeValue(datatypeValue: Double) -> Double {
+    public static func fromDatatypeValue(_ datatypeValue: Double) -> Double {
         return datatypeValue
     }
 
@@ -63,7 +63,7 @@ extension Int64 : Number, Value {
 
     public static let declaredDatatype = "INTEGER"
 
-    public static func fromDatatypeValue(datatypeValue: Int64) -> Int64 {
+    public static func fromDatatypeValue(_ datatypeValue: Int64) -> Int64 {
         return datatypeValue
     }
 
@@ -77,7 +77,7 @@ extension String : Binding, Value {
 
     public static let declaredDatatype = "TEXT"
 
-    public static func fromDatatypeValue(datatypeValue: String) -> String {
+    public static func fromDatatypeValue(_ datatypeValue: String) -> String {
         return datatypeValue
     }
 
@@ -91,7 +91,7 @@ extension Blob : Binding, Value {
 
     public static let declaredDatatype = "BLOB"
 
-    public static func fromDatatypeValue(datatypeValue: Blob) -> Blob {
+    public static func fromDatatypeValue(_ datatypeValue: Blob) -> Blob {
         return datatypeValue
     }
 
@@ -107,7 +107,7 @@ extension Bool : Binding, Value {
 
     public static var declaredDatatype = Int64.declaredDatatype
 
-    public static func fromDatatypeValue(datatypeValue: Int64) -> Bool {
+    public static func fromDatatypeValue(_ datatypeValue: Int64) -> Bool {
         return datatypeValue != 0
     }
 
@@ -121,7 +121,7 @@ extension Int : Number, Value {
 
     public static var declaredDatatype = Int64.declaredDatatype
 
-    public static func fromDatatypeValue(datatypeValue: Int64) -> Int {
+    public static func fromDatatypeValue(_ datatypeValue: Int64) -> Int {
         return Int(datatypeValue)
     }
 

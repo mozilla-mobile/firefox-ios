@@ -40,7 +40,7 @@ extension Optional : _OptionalType {
 
 }
 
-func check(resultCode: Int32, statement: Statement? = nil) throws -> Int32 {
+func check(_ resultCode: Int32, statement: Statement? = nil) throws -> Int32 {
     if let error = Result(errorCode: resultCode, statement: statement) {
         throw error
     }
@@ -49,28 +49,28 @@ func check(resultCode: Int32, statement: Statement? = nil) throws -> Int32 {
 }
 
 // let SQLITE_STATIC = unsafeBitCast(0, sqlite3_destructor_type.self)
-let SQLITE_TRANSIENT = unsafeBitCast(-1, sqlite3_destructor_type.self)
+let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
 extension String {
 
-    @warn_unused_result func quote(mark: Character = "\"") -> String {
+    @warn_unused_result func quote(_ mark: Character = "\"") -> String {
         let escaped = characters.reduce("") { string, character in
             string + (character == mark ? "\(mark)\(mark)" : "\(character)")
         }
         return "\(mark)\(escaped)\(mark)"
     }
 
-    @warn_unused_result func join(expressions: [Expressible]) -> Expressible {
+    @warn_unused_result func join(_ expressions: [Expressible]) -> Expressible {
         var (template, bindings) = ([String](), [Binding?]())
         for expressible in expressions {
             let expression = expressible.expression
             template.append(expression.template)
-            bindings.appendContentsOf(expression.bindings)
+            bindings.append(contentsOf: expression.bindings)
         }
-        return Expression<Void>(template.joinWithSeparator(self), bindings)
+        return Expression<Void>(template.joined(separator: self), bindings)
     }
 
-    @warn_unused_result func infix<T>(lhs: Expressible, _ rhs: Expressible, wrap: Bool = true) -> Expression<T> {
+    @warn_unused_result func infix<T>(_ lhs: Expressible, _ rhs: Expressible, wrap: Bool = true) -> Expression<T> {
         let expression = Expression<T>(" \(self) ".join([lhs, rhs]).expression)
         guard wrap else {
             return expression
@@ -78,41 +78,41 @@ extension String {
         return "".wrap(expression)
     }
 
-    @warn_unused_result func prefix(expressions: Expressible) -> Expressible {
+    @warn_unused_result func prefix(_ expressions: Expressible) -> Expressible {
         return "\(self) ".wrap(expressions) as Expression<Void>
     }
 
-    @warn_unused_result func prefix(expressions: [Expressible]) -> Expressible {
+    @warn_unused_result func prefix(_ expressions: [Expressible]) -> Expressible {
         return "\(self) ".wrap(expressions) as Expression<Void>
     }
 
-    @warn_unused_result func wrap<T>(expression: Expressible) -> Expression<T> {
+    @warn_unused_result func wrap<T>(_ expression: Expressible) -> Expression<T> {
         return Expression("\(self)(\(expression.expression.template))", expression.expression.bindings)
     }
 
-    @warn_unused_result func wrap<T>(expressions: [Expressible]) -> Expression<T> {
+    @warn_unused_result func wrap<T>(_ expressions: [Expressible]) -> Expression<T> {
         return wrap(", ".join(expressions))
     }
 
 }
 
-@warn_unused_result func infix<T>(lhs: Expressible, _ rhs: Expressible, wrap: Bool = true, function: String = #function) -> Expression<T> {
+@warn_unused_result func infix<T>(_ lhs: Expressible, _ rhs: Expressible, wrap: Bool = true, function: String = #function) -> Expression<T> {
     return function.infix(lhs, rhs, wrap: wrap)
 }
 
-@warn_unused_result func wrap<T>(expression: Expressible, function: String = #function) -> Expression<T> {
+@warn_unused_result func wrap<T>(_ expression: Expressible, function: String = #function) -> Expression<T> {
     return function.wrap(expression)
 }
 
-@warn_unused_result func wrap<T>(expressions: [Expressible], function: String = #function) -> Expression<T> {
+@warn_unused_result func wrap<T>(_ expressions: [Expressible], function: String = #function) -> Expression<T> {
     return function.wrap(", ".join(expressions))
 }
 
-@warn_unused_result func transcode(literal: Binding?) -> String {
+@warn_unused_result func transcode(_ literal: Binding?) -> String {
     if let literal = literal {
-        if let literal = literal as? NSData {
-            let buf = UnsafeBufferPointer(start: UnsafePointer<UInt8>(literal.bytes), count: literal.length)
-            let hex = buf.map { String(format: "%02x", $0) }.joinWithSeparator("")
+        if let literal = literal as? Data {
+            let buf = UnsafeBufferPointer(start: UnsafePointer<UInt8>((literal as NSData).bytes), count: literal.count)
+            let hex = buf.map { String(format: "%02x", $0) }.joined(separator: "")
             return "x'\(hex)'"
         }
         if let literal = literal as? String { return literal.quote("'") }
@@ -121,10 +121,10 @@ extension String {
     return "NULL"
 }
 
-@warn_unused_result func value<A: Value>(v: Binding) -> A {
+@warn_unused_result func value<A: Value>(_ v: Binding) -> A {
     return A.fromDatatypeValue(v as! A.Datatype) as! A
 }
 
-@warn_unused_result func value<A: Value>(v: Binding?) -> A {
+@warn_unused_result func value<A: Value>(_ v: Binding?) -> A {
     return value(v!)
 }
