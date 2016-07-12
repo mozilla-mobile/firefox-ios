@@ -101,6 +101,11 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastUpgradeCheck = 0800;
+				TargetAttributes = {
+					D2AAC045055464E500DB518D = {
+						LastSwiftMigration = 0800;
+					};
+				};
 			};
 			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "sqlcipher" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -165,6 +170,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = sqlcipher;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
@@ -204,6 +210,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = sqlcipher;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;
