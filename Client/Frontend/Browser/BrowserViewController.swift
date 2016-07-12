@@ -3077,23 +3077,22 @@ extension BrowserViewController {
             return
         }
         webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
-            guard let searchParams = result as? [String: String] else {
+            guard let searchQuery = result as? String, favicon = self.tabManager.selectedTab!.displayFavicon else {
                 //Javascript responded with an incorrectly formatted message. Show an error.
                 let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                 self.presentViewController(alert, animated: true, completion: nil)
                 return
             }
-            self.addSearchEngine(searchParams)
+            self.addSearchEngine(searchQuery, favicon: favicon)
             self.customSearchEngineButton.tintColor = UIColor.grayColor()
             self.customSearchEngineButton.userInteractionEnabled = false
         }
     }
 
-    func addSearchEngine(params: [String: String]) {
-        guard let template = params["url"] where template != "",
-            let iconString = params["icon"],
-            let iconURL = NSURL(string: iconString),
-            let url = NSURL(string: template.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!),
+    func addSearchEngine(searchQuery: String, favicon: Favicon) {
+        guard searchQuery != "",
+            let iconURL = NSURL(string: favicon.url),
+            let url = NSURL(string: searchQuery.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!),
             let shortName = url.domainURL().host else {
                 let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                 self.presentViewController(alert, animated: true, completion: nil)
@@ -3103,15 +3102,15 @@ extension BrowserViewController {
         let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
             self.customSearchEngineButton.tintColor = UIColor.grayColor()
             self.customSearchEngineButton.userInteractionEnabled = false
-
             SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
                 guard image != nil else {
+                    print(error.localizedDescription)
                     let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                     self.presentViewController(alert, animated: true, completion: nil)
                     return
                 }
 
-                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true))
+                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image, searchTemplate: searchQuery, suggestTemplate: nil, isCustomEngine: true))
                 let Toast = SimpleToast()
                 Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
             }
@@ -3134,7 +3133,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
         if let webView = tabManager.selectedTab?.webView {
             webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
-                guard let _ = result as? [String: String] else {
+                guard let _ = result as? String else {
                     return
                 }
                 self.addCustomSearchButtonToWebView(webView)
