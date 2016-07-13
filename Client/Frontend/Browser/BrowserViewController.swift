@@ -3077,7 +3077,7 @@ extension BrowserViewController {
             return
         }
         webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
-            guard let searchQuery = result as? String, favicon = self.tabManager.selectedTab!.smallestFavicon(withMinimumSize: (width: 30, height: 30)) else {
+            guard let searchQuery = result as? String, favicon = self.tabManager.selectedTab!.displayFavicon else {
                 //Javascript responded with an incorrectly formatted message. Show an error.
                 let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                 self.presentViewController(alert, animated: true, completion: nil)
@@ -3104,6 +3104,7 @@ extension BrowserViewController {
             self.customSearchEngineButton.userInteractionEnabled = false
             SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
                 guard image != nil else {
+                    print(error.localizedDescription)
                     let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                     self.presentViewController(alert, animated: true, completion: nil)
                     return
