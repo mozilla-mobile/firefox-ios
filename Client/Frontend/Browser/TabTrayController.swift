@@ -248,7 +248,6 @@ class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
-    weak var appStateDelegate: AppStateDelegate?
 
     var collectionView: UICollectionView!
     lazy var toolbar: TrayToolbar = {
@@ -284,12 +283,7 @@ class TabTrayController: UIViewController {
     }
     
     private func switchToMode(privateMode privateMode: Bool) {
-        let modeDidChange = privateMode != tabManager.isInPrivateMode
         tabManager.isInPrivateMode = privateMode
-        
-        if modeDidChange {
-            updateAppState()
-        }
         
         tabDataSource.tabs = tabsToDisplay
         toolbar.styleToolbar(isPrivate: tabManager.isInPrivateMode)
@@ -579,11 +573,6 @@ class TabTrayController: UIViewController {
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
-    }
-
-    private func updateAppState() {
-        let state = mainStore.updateState(.TabTray(tabTrayState: self.tabTrayState))
-        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     private func closeTabsForCurrentTray() {

@@ -87,7 +87,13 @@ class TabManager : NSObject {
     var selectedIndex: Int { return _selectedIndex }
     var tempTabs: [Tab]?
     
-    internal var isInPrivateMode = false
+    internal var isInPrivateMode = false {
+        didSet {
+            if oldValue != isInPrivateMode {
+                self.updateAppState()
+            }
+        }
+    }
 
     var normalTabs: [Tab] {
         assert(NSThread.isMainThread())
@@ -161,6 +167,13 @@ class TabManager : NSObject {
         }
 
         return nil
+    }
+    
+    weak var appStateDelegate: AppStateDelegate?
+    
+    private func updateAppState() {
+        let state = mainStore.updateState(.TabTray(tabTrayState: TabTrayState(isPrivate: self.isInPrivateMode)))
+        self.appStateDelegate?.appDidUpdateState(state)
     }
     
     func authorisePrivateMode(navigationController: UINavigationController) -> Success {

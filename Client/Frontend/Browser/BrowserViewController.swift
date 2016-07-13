@@ -970,7 +970,11 @@ class BrowserViewController: UIViewController {
             guard result.isSuccess else {
                 return Deferred(value: result)
             }
-            self.tabTrayController?.changePrivacyMode(self.tabManager.isInPrivateMode)
+            if let tabTrayController = self.tabTrayController {
+                tabTrayController.changePrivacyMode(isPrivate)
+            } else {
+                self.tabManager.isInPrivateMode = isPrivate
+            }
             self.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
             return succeed()
         }
