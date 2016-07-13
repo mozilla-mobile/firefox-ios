@@ -136,9 +136,11 @@ class TabCell: UICollectionViewCell {
         case .Light:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight))
             self.titleText.textColor = LightTabCellUX.TabTitleTextColor
+            self.background.backgroundColor = UIColor.whiteColor()
         case .Dark:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
             self.titleText.textColor = DarkTabCellUX.TabTitleTextColor
+            self.background.backgroundColor = UIColor.grayColor()
         }
 
         titleText.backgroundColor = UIColor.clearColor()

@@ -176,8 +176,8 @@ class TabManager : NSObject {
         self.appStateDelegate?.appDidUpdateState(state)
     }
     
-    func authorisePrivateMode(navigationController: UINavigationController) -> Success {
-        if self.isInPrivateMode {
+    func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool = false) -> Success {
+        if self.isInPrivateMode != reverseAuthorisationRequirement {
             return succeed()
         }
         guard let authInfo = KeychainWrapper.authenticationInfo() else {

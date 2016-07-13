@@ -126,7 +126,11 @@ private extension BrowserToTrayAnimator {
 
         // Build a tab cell that we will use to animate the scaling of the browser to the tab
         let expandedFrame = calculateExpandedCellFrameFromBVC(bvc)
-        let cell = createTransitionCellFromTab(bvc.tabManager.selectedTab, withFrame: expandedFrame)
+        let cell = createTransitionCellFromTab(selectedTab, withFrame: expandedFrame)
+        if !tabManager.isInPrivateMode && selectedTab.isPrivate {
+            // Hide the screenshot if the tab is being minimised in order to escape private browsing mode
+            cell.background.image = nil
+        }
         cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         cell.innerStroke.hidden = true
 

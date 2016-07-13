@@ -255,20 +255,32 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappDidBecomeActiveNotification() {
-        // Re-show any components that might have been hidden because they were being displayed
-        // as part of a private mode tab
-        UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-            self.webViewContainer.alpha = 1
-            self.urlBar.locationView.alpha = 1
-            self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
-            self.presentedViewController?.view.alpha = 1
-            self.view.backgroundColor = UIColor.clearColor()
-        }, completion: { _ in
-            self.webViewContainerBackdrop.alpha = 0
-        })
-
-        // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-        scrollController.showToolbars(animated: false)
+        guard let navigationController = self.navigationController else {
+            return
+        }
+        tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true).uponQueue(dispatch_get_main_queue()) { result in
+            guard result.isSuccess else {
+                if #available(iOS 9, *) {
+                    self.openTabTray()
+                    self.tabTrayController.changePrivacyMode(false)
+                }
+                return
+            }
+            // Re-show any components that might have been hidden because they were being displayed
+            // as part of a private mode tab
+            UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                self.webViewContainer.alpha = 1
+                self.urlBar.locationView.alpha = 1
+                self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
+                self.presentedViewController?.view.alpha = 1
+                self.view.backgroundColor = UIColor.clearColor()
+                }, completion: { _ in
+                    self.webViewContainerBackdrop.alpha = 0
+            })
+            
+            // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
+            self.scrollController.showToolbars(animated: false)
+        }
     }
 
     deinit {
@@ -1020,6 +1032,20 @@ class BrowserViewController: UIViewController {
             }
         }
     }
+    
+    func openTabTray() {
+        self.webViewContainerToolbar.hidden = true
+        updateFindInPageVisibility(visible: false)
+        
+        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
+        
+        if let tab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(tab)
+        }
+        
+        self.navigationController?.pushViewController(tabTrayController, animated: true)
+        self.tabTrayController = tabTrayController
+    }
 
     private func popToBVC() {
         guard let currentViewController = navigationController?.topViewController else {
@@ -1414,17 +1440,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
-        self.webViewContainerToolbar.hidden = true
-        updateFindInPageVisibility(visible: false)
-
-        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-
-        if let tab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(tab)
-        }
-
-        self.navigationController?.pushViewController(tabTrayController, animated: true)
-        self.tabTrayController = tabTrayController
+        self.openTabTray()
     }
 
     func urlBarDidPressReaderMode(urlBar: URLBarView) {
