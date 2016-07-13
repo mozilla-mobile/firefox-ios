@@ -744,7 +744,6 @@ class BrowserViewController: UIViewController {
                     controller.willMoveToParentViewController(nil)
                     controller.view.removeFromSuperview()
                     controller.removeFromParentViewController()
-                    self.homePanelController = nil
                     self.webViewContainer.accessibilityElementsHidden = false
                     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
@@ -753,13 +752,14 @@ class BrowserViewController: UIViewController {
                         self.showReaderModeBar(animated: false)
                     }
                 }
+                self.homePanelController = nil
             })
         }
     }
 
     private func updateInContentHomePanel(url: NSURL?) {
         if !urlBar.inOverlayMode {
-            if AboutUtils.isAboutHomeURL(url){
+            if AboutUtils.isAboutHomeURL(url) {
                 let showInline = AppConstants.MOZ_MENU || ((tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
                 showHomePanelController(inline: showInline)
             } else {
