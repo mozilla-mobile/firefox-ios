@@ -3104,7 +3104,6 @@ extension BrowserViewController {
             self.customSearchEngineButton.userInteractionEnabled = false
             SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
                 guard image != nil else {
-                    print(error.localizedDescription)
                     let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                     self.presentViewController(alert, animated: true, completion: nil)
                     return
