@@ -360,6 +360,16 @@ class Tab: NSObject {
             restore(webView)
         }
     }
+    
+    func smallestFavicon(withMinimumSize size: (width: Int, height: Int) = (width: 0, height: 0)) -> Favicon? {
+        var smallest: (favicon: Favicon?, area: Int) = (nil, 0)
+        for icon in favicons {
+            if let width = icon.width, height = icon.height where (smallest.favicon == nil || width * height < smallest.area && width >= size.width && height >= size.height) {
+                smallest = (favicon: icon, area: width * height)
+            }
+        }
+        return smallest.favicon
+    }
 
     func addHelper(helper: TabHelper, name: String) {
         helperManager!.addHelper(helper, name: name)
