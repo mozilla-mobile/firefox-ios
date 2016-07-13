@@ -130,6 +130,7 @@ private extension BrowserToTrayAnimator {
         if !tabManager.isInPrivateMode && selectedTab.isPrivate {
             // Hide the screenshot if the tab is being minimised in order to escape private browsing mode
             cell.background.image = nil
+            cell.titleText.alpha = 0
         }
         cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         cell.innerStroke.hidden = true

@@ -2111,6 +2111,7 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
+        SELappWillEnterForegroundNotification()
     }
     
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {

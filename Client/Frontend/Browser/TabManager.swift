@@ -733,6 +733,8 @@ extension TabManager {
         if tabToSelect == nil {
             tabToSelect = tabs.first
         }
+        
+        self.isInPrivateMode = tabToSelect?.isPrivate ?? false
 
         log.debug("Done adding tabs.")
 
@@ -747,7 +749,6 @@ extension TabManager {
         if let tab = tabToSelect {
             log.debug("Selecting a tab.")
             selectTab(tab)
-            self.isInPrivateMode = tab.isPrivate
             log.debug("Creating webview for selected tab.")
             tab.createWebview()
         }
