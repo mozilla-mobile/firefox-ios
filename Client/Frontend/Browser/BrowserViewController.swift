@@ -2274,7 +2274,12 @@ extension BrowserViewController: WKNavigationDelegate {
         // prompting. On iOS9, depending on the scheme, iOS will prompt: "Firefox" wants to open "Twitter". It will ask
         // every time. There is no way around this prompt. (TODO Confirm this is true by adding them to the Info.plist)
 
-        UIApplication.sharedApplication().openURL(url)
+        let openedURL = UIApplication.sharedApplication().openURL(url)
+        if !openedURL {
+            let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
         decisionHandler(WKNavigationActionPolicy.Cancel)
     }
 
