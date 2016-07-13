@@ -253,39 +253,45 @@ class BrowserViewController: UIViewController {
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
     }
-
-    func SELappDidBecomeActiveNotification() {
+    
+    func SELappWillEnterForegroundNotification() {
         guard let navigationController = self.navigationController else {
             return
         }
         tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true).uponQueue(dispatch_get_main_queue()) { result in
             guard result.isSuccess else {
                 if #available(iOS 9, *) {
-                    self.openTabTray()
+                    if self.navigationController?.topViewController === self {
+                        self.openTabTray()
+                    }
                     self.tabTrayController.changePrivacyMode(false)
                 }
                 return
             }
-            // Re-show any components that might have been hidden because they were being displayed
-            // as part of a private mode tab
-            UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                self.webViewContainer.alpha = 1
-                self.urlBar.locationView.alpha = 1
-                self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
-                self.presentedViewController?.view.alpha = 1
-                self.view.backgroundColor = UIColor.clearColor()
-                }, completion: { _ in
-                    self.webViewContainerBackdrop.alpha = 0
-            })
-            
-            // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-            self.scrollController.showToolbars(animated: false)
         }
+    }
+
+    func SELappDidBecomeActiveNotification() {
+        // Re-show any components that might have been hidden because they were being displayed
+        // as part of a private mode tab
+        UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+            self.webViewContainer.alpha = 1
+            self.urlBar.locationView.alpha = 1
+            self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
+            self.presentedViewController?.view.alpha = 1
+            self.view.backgroundColor = UIColor.clearColor()
+            }, completion: { _ in
+                self.webViewContainerBackdrop.alpha = 0
+        })
+        
+        // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
+        self.scrollController.showToolbars(animated: false)
     }
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: BookmarkStatusChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
     }
@@ -297,6 +303,7 @@ class BrowserViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELBookmarkStatusDidChange(_:)), name: BookmarkStatusChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappWillResignActiveNotification), name: UIApplicationWillResignActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappDidBecomeActiveNotification), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappWillEnterForegroundNotification), name: UIApplicationDidBecomeActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappDidEnterBackgroundNotification), name: UIApplicationDidEnterBackgroundNotification, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
