@@ -8,7 +8,6 @@ import SnapKit
 import Storage
 import ReadingList
 import Shared
-import SwiftKeychainWrapper
 import Deferred
 
 struct TabTrayControllerUX {
@@ -269,7 +268,7 @@ class TabTrayController: UIViewController {
     }()
 
     var tabTrayState: TabTrayState {
-        return TabTrayState(isPrivate: self.privateMode)
+        return TabTrayState(isPrivate: tabManager.isInPrivateMode)
     }
 
     var leftToolbarButtons: [UIButton] {
@@ -283,21 +282,22 @@ class TabTrayController: UIViewController {
             return []
         }
     }
-
-    private(set) internal var privateMode: Bool = false {
-        didSet {
-            if oldValue != privateMode {
-                updateAppState()
-            }
-
-            tabDataSource.tabs = tabsToDisplay
-            toolbar.styleToolbar(isPrivate: privateMode)
-            collectionView?.reloadData()
+    
+    private func switchToMode(privateMode privateMode: Bool) {
+        let modeDidChange = privateMode != tabManager.isInPrivateMode
+        tabManager.isInPrivateMode = privateMode
+        
+        if modeDidChange {
+            updateAppState()
         }
+        
+        tabDataSource.tabs = tabsToDisplay
+        toolbar.styleToolbar(isPrivate: tabManager.isInPrivateMode)
+        collectionView?.reloadData()
     }
 
     private var tabsToDisplay: [Tab] {
-        return self.privateMode ? tabManager.privateTabs : tabManager.normalTabs
+        return tabManager.isInPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
     }
 
     @available(iOS 9, *)
@@ -372,10 +372,8 @@ class TabTrayController: UIViewController {
                 make.top.left.right.equalTo(self.collectionView)
                 make.bottom.equalTo(self.toolbar.snp_top)
             }
-
-            if let tab = tabManager.selectedTab where tab.isPrivate {
-                privateMode = true
-            }
+            
+            self.switchToMode(privateMode: self.tabManager.isInPrivateMode)
 
             // register for previewing delegate to enable peek and pop if force touch feature available
             if traitCollection.forceTouchCapability == .Available {
@@ -475,39 +473,6 @@ class TabTrayController: UIViewController {
         self.presentViewController(mvc, animated: true, completion: nil)
     }
     
-    func authorisePrivateMode(navigationController: UINavigationController? = nil) -> Success {
-        if privateMode {
-            return succeed()
-        }
-        guard let authInfo = KeychainWrapper.authenticationInfo() else {
-            return succeed()
-        }
-        let success = Success()
-        if authInfo.requiresValidation(.PrivateBrowsing) {
-            let presentingNavController = navigationController ?? self.navigationController
-            let cancelAction = { success.fill(Maybe(failure: AuthorisationError(description: "User cancelled authorisation action."))) }
-            AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
-                touchIDReason: AuthenticationStrings.privateModeReason,
-                success: {
-                    success.fill(Maybe(success: ()))
-                },
-                cancel: cancelAction,
-                fallback: {
-                    AppAuthenticator.presentPasscodeAuthentication(presentingNavController,
-                    success: {
-                        presentingNavController?.dismissViewControllerAnimated(true) {
-                            success.fill(Maybe(success: ()))
-                        }
-                    },
-                    cancel: cancelAction)
-                }
-            )
-        } else {
-            return succeed()
-        }
-        return success
-    }
-    
     @available(iOS 9, *)
     func SELdidTapMask() {
         attemptToTogglePrivateMode()
@@ -515,8 +480,11 @@ class TabTrayController: UIViewController {
 
     @available(iOS 9, *)
     func attemptToTogglePrivateMode() -> Success {
+        guard let navigationController = self.navigationController else {
+            return deferMaybe(AuthorisationError(description: "Failed to switch the private mode due to an inexistent navigation controller."))
+        }
         let success = Success()
-        authorisePrivateMode().uponQueue(dispatch_get_main_queue()) { result in
+        tabManager.authorisePrivateMode(navigationController).uponQueue(dispatch_get_main_queue()) { result in
             if let _ = result.successValue {
                 let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
                 
@@ -530,14 +498,15 @@ class TabTrayController: UIViewController {
                     fromView = snapshot
                 }
                 
-                self.privateMode = !self.privateMode
+                self.switchToMode(privateMode: !self.tabManager.isInPrivateMode)
+                
                 // If we are exiting private mode and we have the close private tabs option selected, make sure
                 // we clear out all of the private tabs
-                if !self.privateMode && self.profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
+                if !self.tabManager.isInPrivateMode && self.profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
                     self.tabManager.removeAllPrivateTabsAndNotify(false)
                 }
                 
-                self.toolbar.maskButton.setSelected(self.privateMode, animated: true)
+                self.toolbar.maskButton.setSelected(self.tabManager.isInPrivateMode, animated: true)
                 self.collectionView.layoutSubviews()
                 
                 let toView: UIView
@@ -577,14 +546,14 @@ class TabTrayController: UIViewController {
 
     @available(iOS 9, *)
     private func privateTabsAreEmpty() -> Bool {
-        return privateMode && tabManager.privateTabs.count == 0
+        return tabManager.isInPrivateMode && tabManager.privateTabs.count == 0
     }
 
     @available(iOS 9, *)
     func changePrivacyMode(isPrivate: Bool) {
-        if isPrivate != privateMode {
+        if isPrivate != tabManager.isInPrivateMode {
             guard let _ = collectionView else {
-                privateMode = isPrivate
+                switchToMode(privateMode: isPrivate)
                 return
             }
             attemptToTogglePrivateMode()
@@ -599,7 +568,7 @@ class TabTrayController: UIViewController {
         self.collectionView.performBatchUpdates({ _ in
             var tab: Tab
             if #available(iOS 9, *) {
-                tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
+                tab = self.tabManager.addTab(request, isPrivate: self.tabManager.isInPrivateMode)
             } else {
                 tab = self.tabManager.addTab(request)
             }
@@ -626,7 +595,7 @@ class TabTrayController: UIViewController {
 // MARK: - App Notifications
 extension TabTrayController {
     func SELappWillResignActiveNotification() {
-        if privateMode {
+        if tabManager.isInPrivateMode {
             collectionView.alpha = 0
         }
     }
@@ -721,7 +690,7 @@ extension TabTrayController: TabManagerDelegate {
     }
     
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
-        guard privateMode else {
+        guard tabManager.isInPrivateMode else {
             return
         }
         if let undoToast = toast {
@@ -1110,7 +1079,7 @@ extension TabTrayController: MenuActionDelegate {
             case .OpenNewNormalTab:
                 dispatch_async(dispatch_get_main_queue()) {
                     if #available(iOS 9, *) {
-                        if self.privateMode {
+                        if self.tabManager.isInPrivateMode {
                             self.attemptToTogglePrivateMode()
                         }
                     }
@@ -1120,7 +1089,7 @@ extension TabTrayController: MenuActionDelegate {
             case .OpenNewPrivateTab:
                 if #available(iOS 9, *) {
                     dispatch_async(dispatch_get_main_queue()) {
-                        if !self.privateMode {
+                        if !self.tabManager.isInPrivateMode {
                             self.attemptToTogglePrivateMode().uponQueue(dispatch_get_main_queue()) { result in
                                 if let _ = result.successValue {
                                     self.openNewTab()
@@ -1257,12 +1226,5 @@ class TrayToolbar: UIView {
         maskButton.setImage(maskImage, forState: .Normal)
         maskButton.selected = isPrivate
         maskButton.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
-    }
-}
-
-public class AuthorisationError: MaybeErrorType {
-    public let description: String
-    public init(description: String) {
-        self.description = description
     }
 }

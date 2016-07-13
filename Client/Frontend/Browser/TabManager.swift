@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+import SwiftKeychainWrapper
 
 private let log = Logger.browserLogger
 
@@ -85,6 +86,8 @@ class TabManager : NSObject {
     private let prefs: Prefs
     var selectedIndex: Int { return _selectedIndex }
     var tempTabs: [Tab]?
+    
+    internal var isInPrivateMode = false
 
     var normalTabs: [Tab] {
         assert(NSThread.isMainThread())
@@ -158,6 +161,38 @@ class TabManager : NSObject {
         }
 
         return nil
+    }
+    
+    func authorisePrivateMode(navigationController: UINavigationController) -> Success {
+        if self.isInPrivateMode {
+            return succeed()
+        }
+        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+            return succeed()
+        }
+        let success = Success()
+        if authInfo.requiresValidation(.PrivateBrowsing) {
+            let cancelAction = { success.fill(Maybe(failure: AuthorisationError(description: "User cancelled authorisation action."))) }
+            AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
+                touchIDReason: AuthenticationStrings.privateModeReason,
+                success: {
+                    success.fill(Maybe(success: ()))
+                },
+                cancel: cancelAction,
+                fallback: {
+                    AppAuthenticator.presentPasscodeAuthentication(navigationController,
+                        success: {
+                            navigationController.dismissViewControllerAnimated(true) {
+                                success.fill(Maybe(success: ()))
+                            }
+                        },
+                    cancel: cancelAction)
+                }
+            )
+        } else {
+            return succeed()
+        }
+        return success
     }
 
     func getTabFor(url: NSURL) -> Tab? {
@@ -699,6 +734,7 @@ extension TabManager {
         if let tab = tabToSelect {
             log.debug("Selecting a tab.")
             selectTab(tab)
+            self.isInPrivateMode = tab.isPrivate
             log.debug("Creating webview for selected tab.")
             tab.createWebview()
         }
@@ -892,5 +928,12 @@ class TabManagerNavDelegate : NSObject, WKNavigationDelegate {
             }
 
             decisionHandler(res)
+    }
+}
+
+public class AuthorisationError: MaybeErrorType {
+    public let description: String
+    public init(description: String) {
+        self.description = description
     }
 }
