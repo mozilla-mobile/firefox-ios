@@ -1,36 +1,45 @@
-//
-//  XCUITests.swift
-//  XCUITests
-//
-//  Created by Farhan Patel on 7/11/16.
-//  Copyright © 2016 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
 
-class XCUITests: XCTestCase {
-        
+class ResetOptionsTest: BaseTestCase {
+
     override func setUp() {
         super.setUp()
-        
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-        // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        XCUIApplication().launch()
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
-    
+
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+
+    func testResetLaunchOptions() {
+        let app = XCUIApplication()
+        let numberOfTopSites = app.collectionViews["Top Sites View"].cells.count
+
+        // Vist a webpage to add it to TopSites
+        app.textFields["url"].tap()
+        app.textFields["address"]
+        app.typeText("mozilla.org\r")
+
+        // I need to sleep before terminating to make sure the page loads and the domain is added to the topSites
+        sleep(2)
+        restart(app, reset: false)
+
+        // Now check to make sure app was not reset
+        app.buttons["URLBarView.tabsButton"].tap()
+        app.buttons["TabTrayController.addTabButton"].tap()
+        sleep(1)
+        XCTAssertTrue(app.collectionViews["Top Sites View"].cells.count == numberOfTopSites + 1, "A new site should have been added to the topSites")
+
+        restart(app, reset: true)
+
+        // Check to make sure topSites reset
+        XCTAssertTrue(app.collectionViews["Top Sites View"].cells.count == numberOfTopSites, "Only the default topSites should exist")
     }
-    
+
+
 }
+
+
