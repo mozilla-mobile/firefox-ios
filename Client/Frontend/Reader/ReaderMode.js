@@ -2,25 +2,29 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-var _firefox_ReaderMode = {
-    // If this is http or https content, and not an index page, then try to run Readability. If anything
-    // fails, the app will never be notified and we don't show the button. That is ok for now since there
-    // is no error feedback possible anyway.
+(function() {
+    if (!window.__firefox__) {
+      window.__firefox__ = {};
+    }
 
-    readabilityResult: null,
+    var readabilityResult = null;
+    var currentStyle = null;
 
-    DEBUG: false,
+    var BLOCK_IMAGES_SELECTOR = ".content p > img:only-child, " +
+        ".content p > a:only-child > img:only-child, " +
+        ".content .wp-caption img, " +
+        ".content figure img";
 
-    debug: function(s) {
-        if (!this.DEBUG) {
+    function debug(s) {
+        if (!window.__firefox__.reader.DEBUG) {
             return;
         }
         console.log(s);
-    },
+    }
 
-    checkReadability: function() {
+    function checkReadability() {
         if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
-            this.debug({Type: "ReaderModeStateChange", Value: "Active"});
+            debug({Type: "ReaderModeStateChange", Value: "Active"});
             webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Active"});
             return;
         }
@@ -28,8 +32,8 @@ var _firefox_ReaderMode = {
         if ((document.location.protocol === "http:" || document.location.protocol === "https:") && document.location.pathname !== "/") {
             // Short circuit in case we already ran Readability. This mostly happens when going
             // back/forward: the page will be cached and the result will still be there.
-            if (_firefox_ReaderMode.readabilityResult && _firefox_ReaderMode.readabilityResult.content) {
-                this.debug({Type: "ReaderModeStateChange", Value: "Available"});
+            if (readabilityResult && readabilityResult.content) {
+                debug({Type: "ReaderModeStateChange", Value: "Available"});
                 webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Available"});
                 return;
             }
@@ -47,59 +51,51 @@ var _firefox_ReaderMode = {
             var docStr = new XMLSerializer().serializeToString(document);
             var doc = new DOMParser().parseFromString(docStr, "text/html");
             var readability = new Readability(uri, doc);
-            _firefox_ReaderMode.readabilityResult = readability.parse();
+            readabilityResult = readability.parse();
 
-            this.debug({Type: "ReaderModeStateChange", Value: _firefox_ReaderMode.readabilityResult !== null ? "Available" : "Unavailable"});
-            webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: _firefox_ReaderMode.readabilityResult !== null ? "Available" : "Unavailable"});
+            debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
+            webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
 
             return;
         }
 
-        this.debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
+        debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
         webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
-    },
+    }
 
     // Readerize the document. Since we did the actual readerization already in checkReadability, we
     // can simply return the results we already have.
-
-    readerize: function() {
-        return _firefox_ReaderMode.readabilityResult;
-    },
+    function readerize() {
+        return readabilityResult;
+    }
 
     // TODO The following code only makes sense in about:reader context. It may be a good idea to move
     //   it out of this file and into for example a Reader.js.
-    
-    currentStyle: null,
-    
-    setStyle: function(style) {
+
+    function setStyle(style) {
         // Configure the theme (light, dark)
-        if (_firefox_ReaderMode.currentStyle != null) {
-            document.body.classList.remove(_firefox_ReaderMode.currentStyle.theme);
+        if (currentStyle != null) {
+            document.body.classList.remove(currentStyle.theme);
         }
         document.body.classList.add(style.theme);
         
         // Configure the font size (1-5)
-        if (_firefox_ReaderMode.currentStyle != null) {
-            document.body.classList.remove("font-size" + _firefox_ReaderMode.currentStyle.fontSize);
+        if (currentStyle != null) {
+            document.body.classList.remove("font-size" + currentStyle.fontSize);
         }
         document.body.classList.add("font-size" + style.fontSize);
 
         // Configure the font type
-        if (_firefox_ReaderMode.currentStyle != null) {
-            document.body.classList.remove(_firefox_ReaderMode.currentStyle.fontType);
+        if (currentStyle != null) {
+            document.body.classList.remove(currentStyle.fontType);
         }
         document.body.classList.add(style.fontType);
         
         // Remember the style
-        _firefox_ReaderMode.currentStyle = style;
-    },
+        currentStyle = style;
+    }
 
-    _BLOCK_IMAGES_SELECTOR: ".content p > img:only-child, " +
-        ".content p > a:only-child > img:only-child, " +
-        ".content .wp-caption img, " +
-        ".content figure img",
-    
-    updateImageMargins: function() {
+    function updateImageMargins() {
         var contentElement = document.getElementById('reader-content');
         
         var windowWidth = window.innerWidth;
@@ -132,7 +128,7 @@ var _firefox_ReaderMode = {
             img.style.cssText = cssText;
         }
         
-        var imgs = document.querySelectorAll(_firefox_ReaderMode._BLOCK_IMAGES_SELECTOR);
+        var imgs = document.querySelectorAll(BLOCK_IMAGES_SELECTOR);
         for (var i = imgs.length; --i >= 0;) {
             var img = imgs[i];
             if (img.width > 0) {
@@ -143,9 +139,9 @@ var _firefox_ReaderMode = {
                 }
             }
         }
-    },
+    }
 
-    showContent: function() {
+    function showContent() {
         // Make the reader visible
         var messageElement = document.getElementById('reader-message');
         messageElement.style.display = "none";
@@ -153,32 +149,42 @@ var _firefox_ReaderMode = {
         headerElement.style.display = "block"
         var contentElement = document.getElementById('reader-content');
         contentElement.style.display = "block";
-    },
-    
-    configureReader: function() {
+    }
+
+    function configureReader() {
         // Configure the reader with the initial style that was injected in the page.
         var style = JSON.parse(document.body.getAttribute("data-readerStyle"));
-        _firefox_ReaderMode.setStyle(style);
+        setStyle(style);
 
         // The order here is important. Because updateImageMargins depends on contentElement.offsetWidth which
         // will not be set until contentElement is visible. If this leads to annoying content reflowing then we
-        // need to look at an alternative way to do this.
-        _firefox_ReaderMode.showContent();
-        _firefox_ReaderMode.updateImageMargins();
+        // need to look at an alternative way to do 
+        showContent();
+        updateImageMargins();
     }
-};
 
-window.addEventListener('load', function(event) {
-    // If this is an about:reader page that we are loading, apply the initial style to the page.
-    if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
-        _firefox_ReaderMode.configureReader();
-    }
-});
+    window.__firefox__.reader = {
+        // If this is http or https content, and not an index page, then try to run Readability. If anything
+        // fails, the app will never be notified and we don't show the button. That is ok for now since there
+        // is no error feedback possible anyway.
+        DEBUG: false,
+        checkReadability: checkReadability,
+        readerize: readerize,
+        setStyle: setStyle
+    };
+
+    window.addEventListener('load', function(event) {
+        // If this is an about:reader page that we are loading, apply the initial style to the page.
+        if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
+            configureReader();
+        }
+    });
 
 
-window.addEventListener('pageshow', function(event) {
-    // If this is an about:reader page that we are showing, fire an event to the native code
-    if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
-        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});
-    }
-});
+    window.addEventListener('pageshow', function(event) {
+        // If this is an about:reader page that we are showing, fire an event to the native code
+        if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
+            webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});
+        }
+    });
+})();
