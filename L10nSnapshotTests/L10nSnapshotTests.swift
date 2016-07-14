@@ -105,8 +105,38 @@ class L10nSnapshotTests: XCTestCase {
 
     func test03MenuOnTopSites() {
         let app = XCUIApplication()
+        app.buttons.elementBoundByIndex(1).tap()
         app.buttons["TabToolbar.menuButton"].tap()
         snapshot("03MenuOnTopSites-01")
+        app.coordinateWithNormalizedOffset(CGVector(dx: 0.5, dy: 0.25)).tap()
+
+        loadWebPage("about:blank", waitForLoadToFinish: false)
+        sleep(2)
+        app.buttons["TabToolbar.menuButton"].tap()
+        snapshot("10MenuOnWebPage-01")
+        app.otherElements["MenuViewController.menuView"].swipeLeft()
+        snapshot("10MenuOnWebPage-02")
+        app.coordinateWithNormalizedOffset(CGVector(dx: 0.5, dy: 0.25)).tap()
+
+        app.buttons["URLBarView.tabsButton"].tap()
+        app.buttons["TabTrayController.menuButton"].tap()
+        snapshot("10MenuOnTabsTray-02")
+    }
+
+    func test03MenuOnTopSites() {
+        let app = XCUIApplication()
+        app.buttons.elementBoundByIndex(1).tap()
+        app.buttons["TabToolbar.menuButton"].tap()
+        snapshot("03MenuOnTopSites-01")
+    }
+
+    func test04Foo() {
+        let app = XCUIApplication()
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        snapshot("10MenuOnWebPage-01")
+        app.otherElements["MenuViewController.menuView"].swipeLeft()
+        snapshot("10MenuOnWebPage-02")
     }
 
     func test04Settings() {
@@ -206,6 +236,7 @@ class L10nSnapshotTests: XCTestCase {
 
     func test10MenuOnWebPage() {
         let app = XCUIApplication()
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
         app.buttons["TabToolbar.menuButton"].tap()
         snapshot("10MenuOnWebPage-01")
         app.otherElements["MenuViewController.menuView"].swipeLeft()
