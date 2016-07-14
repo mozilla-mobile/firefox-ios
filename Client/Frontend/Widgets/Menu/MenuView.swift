@@ -402,11 +402,7 @@ extension MenuView: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        guard let x = menuItemDelegate?.menuView(self, shouldSelectItemAtIndexPath: indexPath) else {
-            return false
-        }
-        
-        return x
+        return menuItemDelegate?.menuView(self, shouldSelectItemAtIndexPath: indexPath) ?? false
     }
 }
 

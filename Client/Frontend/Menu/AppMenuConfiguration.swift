@@ -81,6 +81,10 @@ struct AppMenuConfiguration: MenuConfiguration {
     func selectedItemTintColor() -> UIColor {
         return UIConstants.MenuSelectedItemTintColor
     }
+    
+    func disabledItemTintColor() -> UIColor {
+        return UIConstants.MenuDisabledItemTintColor
+    }
 
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
         switch appState.ui {
@@ -112,12 +116,9 @@ struct AppMenuConfiguration: MenuConfiguration {
             if #available(iOS 9, *) {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             }
-            var menuItem: MenuItem
+            var menuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
             if let errorPageUrl = tabState.url where ErrorPageHelper.isErrorPageURL(errorPageUrl) {
-                menuItem = AppMenuConfiguration.AddBookmarkMenuItem
                 menuItem.isDisabled = true
-            } else {
-                menuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
             }
             menuItems.append(menuItem)
             if NoImageModeHelper.isNoImageModeAvailable(appState) {

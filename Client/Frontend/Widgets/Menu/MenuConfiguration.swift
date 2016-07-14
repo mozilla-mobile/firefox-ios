@@ -22,6 +22,7 @@ protocol MenuConfiguration {
     func minMenuRowHeight() -> CGFloat
     func shadowColor() -> UIColor
     func selectedItemTintColor() -> UIColor
+    func disabledItemTintColor() -> UIColor
 }
 
 protocol MenuActionDelegate: class {
