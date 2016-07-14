@@ -15,19 +15,7 @@ struct AppMenuItem: MenuItem {
     private let selectedIconName: String?
 
     private var icon: UIImage? {
-/*        if isDisabled {
-            let imageView = UIImageView(image: UIImage(named: iconName))
-            imageView.image = imageView.image?.imageWithRenderingMode(.AlwaysTemplate)
-            imageView.tintColor = UIColor.lightGrayColor()
-            
-            UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, imageView.opaque, 0.0)
-            imageView.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            return image
-        } else {*/
-            return UIImage(named: iconName)
-        //}
+        return UIImage(named: iconName)
     }
 
     private var privateModeIcon: UIImage? {
