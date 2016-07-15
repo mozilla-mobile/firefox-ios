@@ -1212,6 +1212,7 @@ class BrowserViewController: UIViewController {
     }
 
     func selectLocationBar(){
+        scrollController.showToolbars(animated: true)
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
