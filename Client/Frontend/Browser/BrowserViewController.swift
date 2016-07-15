@@ -990,6 +990,7 @@ class BrowserViewController: UIViewController {
     /// Call this whenever the page URL changes.
     private func updateURLBarDisplayURL(tab: Tab) {
         urlBar.currentURL = tab.displayURL
+        topTouchArea.updateForTab(tab)
 
         let isPage = tab.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isWebPage: isPage)
@@ -2329,8 +2330,6 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         let tab: Tab! = tabManager[webView]
         tabManager.expireSnackbars()
-        
-        topTouchArea.updateForTab(tab)
 
         if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
             tab.lastExecutedTime = NSDate.now()
