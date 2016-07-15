@@ -128,7 +128,7 @@ class URLBarView: UIView {
         return locationView
     }()
 
-    private lazy var locationContainer: UIView = {
+    lazy var locationContainer: UIView = {
         let locationContainer = UIView()
         locationContainer.translatesAutoresizingMaskIntoConstraints = false
 
