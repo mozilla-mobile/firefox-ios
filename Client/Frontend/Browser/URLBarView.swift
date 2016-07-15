@@ -936,3 +936,50 @@ extension ToolbarTextField: Themeable {
         highlightColor = theme.highlightColor!
     }
 }
+
+class URLBarMinifiedView: BlurWrapper {
+    
+    let touchTarget: UIButton
+    private let title: UILabel
+    private let border: UIView
+    
+    init() {
+        self.touchTarget = UIButton()
+        self.touchTarget.isAccessibilityElement = false
+        
+        self.title = UILabel()
+        self.title.font = UIConstants.DefaultChromeFont
+        self.title.textAlignment = .Center
+        self.title.lineBreakMode = .ByTruncatingMiddle
+        
+        self.border = UIView()
+        self.border.backgroundColor = UIConstants.BorderColor
+        
+        super.init(view: touchTarget)
+        
+        self.addSubview(self.border)
+        self.addSubview(self.title)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func updateConstraints() {
+        super.updateConstraints()
+        
+        self.title.snp_remakeConstraints() { make in
+            make.center.equalTo(self)
+            make.width.equalTo(self).offset(-UIConstants.DefaultPadding)
+        }
+        
+        self.border.snp_remakeConstraints() { make in
+            make.bottom.left.right.equalTo(self)
+            make.height.equalTo(0.5)
+        }
+    }
+    
+    func updateForTab(tab: Tab) {
+        self.title.text = tab.displayTitle
+    }
+}

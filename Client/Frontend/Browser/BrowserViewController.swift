@@ -29,7 +29,7 @@ private let ActionSheetTitleMaxLength = 120
 
 private struct BrowserViewControllerUX {
     private static let BackgroundColor = UIConstants.AppBackgroundColor
-    private static let ShowHeaderTapAreaHeight: CGFloat = 32
+    private static let ShowHeaderTapAreaHeight: CGFloat = 24
     private static let BookmarkStarAnimationDuration: Double = 0.5
     private static let BookmarkStarAnimationOffset: CGFloat = 80
 }
@@ -83,7 +83,7 @@ class BrowserViewController: UIViewController {
     var footer: UIView!
     var footerBackdrop: UIView!
     private var footerBackground: BlurWrapper?
-    private var topTouchArea: UIButton!
+    private var topTouchArea: URLBarMinifiedView!
     let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
 
     // Backdrop used for displaying greyed background for private tabs
@@ -353,9 +353,8 @@ class BrowserViewController: UIViewController {
         view.addSubview(statusBarOverlay)
 
         log.debug("BVC setting up top touch area…")
-        topTouchArea = UIButton()
-        topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), forControlEvents: UIControlEvents.TouchUpInside)
+        topTouchArea = URLBarMinifiedView()
+        topTouchArea.touchTarget.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(topTouchArea)
 
         log.debug("BVC setting up URL bar…")
@@ -2330,6 +2329,8 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         let tab: Tab! = tabManager[webView]
         tabManager.expireSnackbars()
+        
+        topTouchArea.updateForTab(tab)
 
         if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
             tab.lastExecutedTime = NSDate.now()
@@ -3247,7 +3248,7 @@ class BlurWrapper: UIView {
     }
     
 
-    private var effectView: UIVisualEffectView
+    var effectView: UIVisualEffectView
     private var wrappedView: UIView
     private lazy var background: UIView = {
         let background = UIView()
