@@ -739,19 +739,17 @@ class BrowserViewController: UIViewController {
         if let controller = homePanelController {
             UIView.animateWithDuration(0.2, delay: 0, options: .BeginFromCurrentState, animations: { () -> Void in
                 controller.view.alpha = 0
-            }, completion: { finished in
-                if finished {
-                    controller.willMoveToParentViewController(nil)
-                    controller.view.removeFromSuperview()
-                    controller.removeFromParentViewController()
-                    self.homePanelController = nil
-                    self.webViewContainer.accessibilityElementsHidden = false
-                    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+            }, completion: { _ in
+                controller.willMoveToParentViewController(nil)
+                controller.view.removeFromSuperview()
+                controller.removeFromParentViewController()
+                self.homePanelController = nil
+                self.webViewContainer.accessibilityElementsHidden = false
+                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
-                    // Refresh the reading view toolbar since the article record may have changed
-                    if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
-                        self.showReaderModeBar(animated: false)
-                    }
+                // Refresh the reading view toolbar since the article record may have changed
+                if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
+                    self.showReaderModeBar(animated: false)
                 }
             })
         }
@@ -759,7 +757,7 @@ class BrowserViewController: UIViewController {
 
     private func updateInContentHomePanel(url: NSURL?) {
         if !urlBar.inOverlayMode {
-            if AboutUtils.isAboutHomeURL(url){
+            if AboutUtils.isAboutHomeURL(url) {
                 let showInline = AppConstants.MOZ_MENU || ((tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
                 showHomePanelController(inline: showInline)
             } else {
