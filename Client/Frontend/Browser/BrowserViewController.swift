@@ -247,7 +247,7 @@ class BrowserViewController: UIViewController {
 
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
-        urlBar.locationView.alpha = 0
+        urlBar.locationContainer.alpha = 0
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
     }
@@ -257,7 +257,7 @@ class BrowserViewController: UIViewController {
         // as part of a private mode tab
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
             self.webViewContainer.alpha = 1
-            self.urlBar.locationView.alpha = 1
+            self.urlBar.locationContainer.alpha = 1
             self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
             self.presentedViewController?.view.alpha = 1
             self.view.backgroundColor = UIColor.clearColor()
