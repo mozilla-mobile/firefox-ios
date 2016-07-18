@@ -599,7 +599,7 @@ class LoginsSetting: Setting {
             },
             cancel: {
                 if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
-                    self.settings!.tableView.deselectRowAtIndexPath(selectedRow, animated: true)
+                    self.settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: true)
                 }
             },
             fallback: {
