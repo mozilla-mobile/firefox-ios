@@ -29,10 +29,6 @@ if (!window.__firefox__) {
     params = params.concat(selectParams);
     if (!form.action) return null; //an invalid form.
     var url = [form.action, params.join('&')].join('?');
-
-    var iconElement = document.head.querySelector("link[rel~='icon']");
-    var icon = iconElement ? iconElement.href : [window.location.origin, 'favicon.ico'].join('/');
-    return {url:url, icon: icon};
+    return url;
   };
-
 })();
