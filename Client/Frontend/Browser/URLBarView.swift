@@ -937,11 +937,11 @@ extension ToolbarTextField: Themeable {
     }
 }
 
-class URLBarMinifiedView: BlurWrapper {
+class URLBarMinifiedView: UIView {
     
     let touchTarget: UIButton
+    private let blurWrapper: BlurWrapper
     private let title: UILabel
-    private let border: UIView
     
     init() {
         self.touchTarget = UIButton()
@@ -952,31 +952,34 @@ class URLBarMinifiedView: BlurWrapper {
         self.title.textAlignment = .Center
         self.title.lineBreakMode = .ByTruncatingMiddle
         
-        self.border = UIView()
-        self.border.backgroundColor = UIConstants.BorderColor
+        let border = UIView()
+        border.backgroundColor = UIConstants.BorderColor
         
-        super.init(view: touchTarget)
+        self.blurWrapper = BlurWrapper(view: self.touchTarget)
+        self.blurWrapper.addSubview(border)
+        self.blurWrapper.addSubview(self.title)
         
-        self.addSubview(self.border)
-        self.addSubview(self.title)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func updateConstraints() {
-        super.updateConstraints()
+        super.init(frame: .zero)
         
-        self.title.snp_remakeConstraints() { make in
+        self.addSubview(self.blurWrapper)
+        
+        self.blurWrapper.snp_makeConstraints() { make in
+            make.center.width.height.equalTo(self)
+        }
+        
+        self.title.snp_makeConstraints() { make in
             make.center.equalTo(self)
             make.width.equalTo(self).offset(-UIConstants.DefaultPadding)
         }
         
-        self.border.snp_remakeConstraints() { make in
+        border.snp_makeConstraints() { make in
             make.bottom.left.right.equalTo(self)
             make.height.equalTo(0.5)
         }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func updateForTab(tab: Tab) {
