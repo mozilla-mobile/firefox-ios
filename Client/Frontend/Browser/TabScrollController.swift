@@ -209,7 +209,7 @@ private extension TabScrollingController {
         }
 
         if animated {
-            UIView.animateWithDuration(duration, animations: animation, completion: completion)
+            UIView.animateWithDuration(duration, delay: 0, options: .AllowUserInteraction, animations: animation, completion: completion)
         } else {
             animation()
             completion?(finished: true)
