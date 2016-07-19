@@ -3247,7 +3247,7 @@ class BlurWrapper: UIView {
     }
     
 
-    var effectView: UIVisualEffectView
+    private var effectView: UIVisualEffectView
     private var wrappedView: UIView
     private lazy var background: UIView = {
         let background = UIView()
