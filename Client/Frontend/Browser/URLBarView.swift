@@ -846,7 +846,7 @@ class ToolbarTextField: AutocompleteTextField {
         theme.backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
         theme.textColor = UIColor.whiteColor()
         theme.buttonTintColor = UIColor.whiteColor()
-        theme.highlightColor = UIConstants.PrivateModeTextHighlightColor
+        theme.highlightColor = UIConstants.PrivateModeInputHighlightColor
         themes[Theme.PrivateMode] = theme
 
         theme = Theme()
