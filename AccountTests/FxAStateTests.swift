@@ -9,7 +9,7 @@ import Shared
 import XCTest
 
 class FxAStateTests: XCTestCase {
-    class func stateForLabel(_ label: FxAStateLabel) -> FxAState {
+    class func state(forLabel label: FxAStateLabel) -> FxAState {
         let keyLength = UInt(KeyLength) // Ah, Swift.
         let now = Date.now()
 
@@ -55,10 +55,10 @@ class FxAStateTests: XCTestCase {
     func testSerialization() {
         // Journal of Negative Results: make sure we aren't *always* succeeding.
         // This Married state will have an earlier timestamp than the one generated after the loop.
-        let state1 = FxAStateTests.stateForLabel(.Married) as! MarriedState
+        let state1 = FxAStateTests.state(forLabel: .Married) as! MarriedState
 
         for stateLabel in FxAStateLabel.allValues {
-            let state = FxAStateTests.stateForLabel(stateLabel)
+            let state = FxAStateTests.state(forLabel: stateLabel)
             let d = state.asJSON()
             if let e = stateFromJSON(d)?.asJSON() {
                 // We can't compare arbitrary Swift Dictionary instances directly, but the following appears to work.
@@ -71,7 +71,7 @@ class FxAStateTests: XCTestCase {
         }
 
         // This Married state will have a later timestamp than the one generated before the loop.
-        let state2 = FxAStateTests.stateForLabel(.Married) as! MarriedState
+        let state2 = FxAStateTests.state(forLabel: .Married) as! MarriedState
         // We can't compare arbitrary Swift Dictionary instances directly, but the following appears to work.
         XCTAssertNotEqual(
             NSDictionary(dictionary: JSON.unwrap(state1.asJSON()) as! [String: AnyObject]),

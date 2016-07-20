@@ -7,7 +7,7 @@ import XCTest
 @testable import Shared
 
 class NSMutableAttributedStringExtensionsTests: XCTestCase {
-    private func checkCharacterAtPosition(_ position: Int, isColored color: UIColor, inString string: AttributedString) -> Bool {
+    private func checkCharacter(atPosition position: Int, isColored color: UIColor, inString string: AttributedString) -> Bool {
         let attributes = string.attributes(at: position, effectiveRange: nil)
         if let foregroundColor = attributes[NSForegroundColorAttributeName] as? UIColor {
             if foregroundColor == color {
@@ -22,11 +22,11 @@ class NSMutableAttributedStringExtensionsTests: XCTestCase {
         let example = NSMutableAttributedString(string: "abcd")
         example.colorSubstring(substring, withColor: UIColor.red())
 
-        XCTAssertFalse(checkCharacterAtPosition(0, isColored: UIColor.red(), inString: example))
+        XCTAssertFalse(checkCharacter(atPosition: 0, isColored: UIColor.red(), inString: example))
         for position in 1..<3 {
-            XCTAssertTrue(checkCharacterAtPosition(position, isColored: UIColor.red(), inString: example))
+            XCTAssertTrue(checkCharacter(atPosition: position, isColored: UIColor.red(), inString: example))
         }
-        XCTAssertFalse(checkCharacterAtPosition(3, isColored: UIColor.red(), inString: example))
+        XCTAssertFalse(checkCharacter(atPosition: 3, isColored: UIColor.red(), inString: example))
     }
 
     func testDoesNothingWithEmptySubstring() {
@@ -34,7 +34,7 @@ class NSMutableAttributedStringExtensionsTests: XCTestCase {
         let example = NSMutableAttributedString(string: "abcd")
         example.colorSubstring(substring, withColor: UIColor.red())
         for position in 0..<example.string.characters.count {
-            XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.red(), inString: example))
+            XCTAssertFalse(checkCharacter(atPosition: position, isColored: UIColor.red(), inString: example))
         }
     }
 
@@ -43,7 +43,7 @@ class NSMutableAttributedStringExtensionsTests: XCTestCase {
         let example = NSMutableAttributedString(string: "abcd")
         example.colorSubstring(substring, withColor: UIColor.red())
         for position in 0..<example.string.characters.count {
-            XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.red(), inString: example))
+            XCTAssertFalse(checkCharacter(atPosition: position, isColored: UIColor.red(), inString: example))
         }
     }
 }

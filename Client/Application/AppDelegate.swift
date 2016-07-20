@@ -138,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = (notification as NSNotification).userInfo, url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
+                profile.readingList?.createRecord(withURL: url.absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
             }
         }
 

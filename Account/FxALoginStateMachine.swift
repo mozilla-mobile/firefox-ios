@@ -91,7 +91,7 @@ class FxALoginStateMachine {
         case .CohabitingAfterKeyPair:
             let state = state as! CohabitingAfterKeyPairState
             log.debug("Signing public key.")
-            return client.sign(state.sessionToken, publicKey: state.keyPair.publicKey).bind { result in
+            return client.sign(sessionToken: state.sessionToken, publicKey: state.keyPair.publicKey).bind { result in
                 if let response = result.successValue {
                     log.info("Signed public key!  Transitioning to Married.")
                     let newState = MarriedState(sessionToken: state.sessionToken,
@@ -131,7 +131,7 @@ class FxALoginStateMachine {
         case .EngagedBeforeVerified, .EngagedAfterVerified:
             let state = state as! ReadyForKeys
             log.debug("Fetching keys.")
-            return client.keys(state.keyFetchToken).bind { result in
+            return client.keys(keyFetchToken: state.keyFetchToken).bind { result in
                 if let response = result.successValue {
                     if let kB = response.wrapkB.xoredWith(state.unwrapkB) {
                         log.info("Unwrapped keys response.  Transition to CohabitingBeforeKeyPair.")

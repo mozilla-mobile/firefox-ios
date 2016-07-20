@@ -28,12 +28,12 @@ public class ReadingListService {
         return storage.deleteAllRecords()
     }
 
-    public func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
-        return storage.createRecordWithURL(url, title: title, addedBy: addedBy)
+    public func createRecord(withURL url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
+        return storage.createRecord(withURL: url, title: title, addedBy: addedBy)
     }
 
-    public func getRecordWithURL(_ url: String) -> Maybe<ReadingListClientRecord?> {
-        return storage.getRecordWithURL(url)
+    public func getRecord(withURL url: String) -> Maybe<ReadingListClientRecord?> {
+        return storage.getRecord(withURL: url)
     }
 
     public func updateRecord(_ record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {

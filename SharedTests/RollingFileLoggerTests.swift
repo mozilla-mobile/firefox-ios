@@ -46,7 +46,7 @@ class RollingFileLoggerTests: XCTestCase {
         let manager = FileManager.default()
         let dirURL = URL(fileURLWithPath: logDir)
         let prefix = "test"
-        let expectedPath = createNewLogFileWithSize(sizeLimit + 1)
+        let expectedPath = createNewLogFile(withSize: sizeLimit + 1)
 
         let directorySize = try! manager.getAllocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix)
 
@@ -75,7 +75,7 @@ class RollingFileLoggerTests: XCTestCase {
         let prefix = "test"
 
         // Create 5 log files with spread out over 5 hours and reorder paths so oldest is first
-        let logFilePaths = [0,1,2,3,4].map { self.createNewLogFileWithSize(200, withDate: Date().addingTimeInterval(60 * 60 * $0)) }
+        let logFilePaths = [0,1,2,3,4].map { self.createNewLogFile(withSize: 200, withDate: Date().addingTimeInterval(60 * 60 * $0)) }
             .sorted { $0 < $1 }
 
         let directorySize = try! manager.getAllocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix)
@@ -101,7 +101,7 @@ class RollingFileLoggerTests: XCTestCase {
 
     - returns: Path to log file
     */
-    private func createNewLogFileWithSize(_ size: Int, withDate date: Date = Date()) -> String {
+    private func createNewLogFile(withSize size: Int, withDate date: Date = Date()) -> String {
         let expected = "test.\(formatter.string(from: date)).log"
         let expectedPath = "\(logDir)/\(expected)"
         logger.newLogWithDate(date)

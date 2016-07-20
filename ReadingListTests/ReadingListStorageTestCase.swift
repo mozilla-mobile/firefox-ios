@@ -25,7 +25,7 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testCreateRecord() {
-        let result = storage.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
+        let result = storage.createRecord(withURL: "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
         switch result {
         case .failure(let error):
             XCTFail(error.description)
@@ -40,7 +40,7 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testGetRecordWithURL() {
-        let result1 = storage.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
+        let result1 = storage.createRecord(withURL: "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
         switch result1 {
         case .failure(let error):
             XCTFail(error.description)
@@ -48,7 +48,7 @@ class ReadingListStorageTestCase: XCTestCase {
             break
         }
 
-        let result2 = storage.getRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
+        let result2 = storage.getRecord(withURL: "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
         switch result2 {
         case .failure(let error):
             XCTFail(error.description)
@@ -59,9 +59,9 @@ class ReadingListStorageTestCase: XCTestCase {
 
     func testGetUnreadRecords() {
         // Create 3 records, mark the 2nd as read.
-        createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        let createResult2 = createRecord(withURL: "http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         if let record = createResult2.successValue {
             updateRecord(record, unread: false)
         }
@@ -78,9 +78,9 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testGetAllRecords() {
-        createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        let createResult2 = createRecord(withURL: "http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         if let record = createResult2.successValue {
             updateRecord(record, unread: false)
         }
@@ -92,9 +92,9 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testGetNewRecords() {
-        createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         let getAllResult = getAllRecords()
         if let records = getAllResult.successValue {
             XCTAssertEqual(3, records.count)
@@ -103,7 +103,7 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testDeleteRecord() {
-        let result1 = storage.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
+        let result1 = storage.createRecord(withURL: "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
         switch result1 {
         case .failure(let error):
             XCTFail(error.description)
@@ -119,7 +119,7 @@ class ReadingListStorageTestCase: XCTestCase {
             break
         }
 
-        let result3 = storage.getRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
+        let result3 = storage.getRecord(withURL: "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
         switch result3 {
         case .failure(let error):
             XCTFail(error.description)
@@ -129,9 +129,9 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testDeleteAllRecords() {
-        createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        createRecord(withURL: "http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
 
         let getAllResult1 = storage.getAllRecords()
         if let records = getAllResult1.successValue {
@@ -147,7 +147,7 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testUpdateRecord() {
-        let result = createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
+        let result = createRecord(withURL: "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
         if let record = result.successValue {
             XCTAssertEqual(record.url, "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
             XCTAssertEqual(record.title, "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma")
@@ -170,8 +170,8 @@ class ReadingListStorageTestCase: XCTestCase {
 
     // Helpers that croak if the storage call was not succesful
 
-    func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
-        let result = storage.createRecordWithURL(url, title: title, addedBy: addedBy)
+    func createRecord(withURL url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
+        let result = storage.createRecord(withURL: url, title: title, addedBy: addedBy)
         XCTAssertTrue(result.isSuccess)
         return result
     }

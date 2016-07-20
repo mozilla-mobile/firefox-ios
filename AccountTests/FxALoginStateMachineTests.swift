@@ -20,12 +20,12 @@ class MockFxALoginClient: FxALoginClient {
         return Deferred(value: Maybe(success: keyPair))
     }
 
-    func keys(_ keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
+    func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         let response = FxAKeysResponse(kA: kA, wrapkB: wrapkB)
         return Deferred(value: Maybe(success: response))
     }
 
-    func sign(_ sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
+    func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
         let response = FxASignResponse(certificate: "certificate")
         return Deferred(value: Maybe(success: response))
     }
@@ -33,12 +33,12 @@ class MockFxALoginClient: FxALoginClient {
 
 // A mock client that fails locally (i.e., cannot connect to the network).
 class MockFxALoginClientWithoutNetwork: MockFxALoginClient {
-    override func keys(_ keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
+    override func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         // Fail!
         return Deferred(value: Maybe(failure: FxAClientError.Local(NSError(domain: NSURLErrorDomain, code: -1000, userInfo: nil))))
     }
 
-    override func sign(_ sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
+    override func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
         // Fail!
         return Deferred(value: Maybe(failure: FxAClientError.Local(NSError(domain: NSURLErrorDomain, code: -1000, userInfo: nil))))
     }
@@ -46,12 +46,12 @@ class MockFxALoginClientWithoutNetwork: MockFxALoginClient {
 
 // A mock client that responds to keys and sign with 401 errors.
 class MockFxALoginClientAfterPasswordChange: MockFxALoginClient {
-    override func keys(_ keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
+    override func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         let response = FxAClientError.Remote(RemoteError(code: 401, errno: 103, error: "Bad auth", message: "Bad auth message", info: "Bad auth info"))
         return Deferred(value: Maybe(failure: response))
     }
 
-    override func sign(_ sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
+    override func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
         let response = FxAClientError.Remote(RemoteError(code: 401, errno: 103, error: "Bad auth", message: "Bad auth message", info: "Bad auth info"))
         return Deferred(value: Maybe(failure: response))
     }
@@ -59,7 +59,7 @@ class MockFxALoginClientAfterPasswordChange: MockFxALoginClient {
 
 // A mock client that responds to keys with 400/104 (needs verification responses).
 class MockFxALoginClientBeforeVerification: MockFxALoginClient {
-    override func keys(_ keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
+    override func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         let response = FxAClientError.Remote(RemoteError(code: 400, errno: 104,
             error: "Unverified", message: "Unverified message", info: "Unverified info"))
         return Deferred(value: Maybe(failure: response))
@@ -68,7 +68,7 @@ class MockFxALoginClientBeforeVerification: MockFxALoginClient {
 
 // A mock client that responds to sign with 503/999 (unknown server error).
 class MockFxALoginClientDuringOutage: MockFxALoginClient {
-    override func sign(_ sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
+    override func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
         let response = FxAClientError.Remote(RemoteError(code: 503, errno: 999,
             error: "Unknown", message: "Unknown error", info: "Unknown err info"))
         return Deferred(value: Maybe(failure: response))
@@ -76,7 +76,7 @@ class MockFxALoginClientDuringOutage: MockFxALoginClient {
 }
 
 class FxALoginStateMachineTests: XCTestCase {
-    let marriedState = FxAStateTests.stateForLabel(FxAStateLabel.Married) as! MarriedState
+    let marriedState = FxAStateTests.state(forLabel: FxAStateLabel.Married) as! MarriedState
 
     override func setUp() {
         super.setUp()
@@ -100,7 +100,7 @@ class FxALoginStateMachineTests: XCTestCase {
         // We just have to wait for user interaction.
         for stateLabel in [FxAStateLabel.Separated, FxAStateLabel.Doghouse] {
             let e = expectationWithDescription("Wait for login state machine.")
-            let state = FxAStateTests.stateForLabel(stateLabel)
+            let state = FxAStateTests.state(forLabel: stateLabel)
             withMachineAndClient { stateMachine, _ in
                 stateMachine.advanceFromState(state, now: 0).upon { newState in
                     XCTAssertEqual(newState.label, stateLabel)
@@ -114,7 +114,7 @@ class FxALoginStateMachineTests: XCTestCase {
     func testAdvanceFromEngagedBeforeVerified() {
         // Advancing from engaged before verified stays put.
         let e = self.expectation(withDescription: "Wait for login state machine.")
-        let engagedState = (FxAStateTests.stateForLabel(.EngagedBeforeVerified) as! EngagedBeforeVerifiedState)
+        let engagedState = (FxAStateTests.state(forLabel: .EngagedBeforeVerified) as! EngagedBeforeVerifiedState)
         withMachine(MockFxALoginClientBeforeVerification()) { stateMachine in
             stateMachine.advanceFromState(engagedState, now: engagedState.knownUnverifiedAt).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, engagedState.label.rawValue)
@@ -129,7 +129,7 @@ class FxALoginStateMachineTests: XCTestCase {
         withMachineAndClient { stateMachine, client in
             // let unwrapkB = Bytes.generateRandomBytes(UInt(KeyLength))
             let unwrapkB = client.wrapkB // This way we get all 0s, which is easy to test.
-            let engagedState = (FxAStateTests.stateForLabel(.EngagedAfterVerified) as! EngagedAfterVerifiedState).withUnwrapKey(unwrapkB)
+            let engagedState = (FxAStateTests.state(forLabel: .EngagedAfterVerified) as! EngagedAfterVerifiedState).withUnwrapKey(unwrapkB)
 
             let e = self.expectationWithDescription("Wait for login state machine.")
             stateMachine.advanceFromState(engagedState, now: 0).upon { newState in
@@ -149,7 +149,7 @@ class FxALoginStateMachineTests: XCTestCase {
     func testAdvanceFromEngagedAfterVerifiedWithoutNetwork() {
         // Advancing from engaged after verified, but during outage, stays put.
         withMachine(MockFxALoginClientWithoutNetwork()) { stateMachine in
-            let engagedState = FxAStateTests.stateForLabel(.EngagedAfterVerified)
+            let engagedState = FxAStateTests.state(forLabel: .EngagedAfterVerified)
 
             let e = self.expectationWithDescription("Wait for login state machine.")
             stateMachine.advanceFromState(engagedState, now: 0).upon { newState in
@@ -163,7 +163,7 @@ class FxALoginStateMachineTests: XCTestCase {
     func testAdvanceFromCohabitingAfterVerifiedDuringOutage() {
         // Advancing from engaged after verified, but during outage, stays put.
         let e = self.expectation(withDescription: "Wait for login state machine.")
-        let state = (FxAStateTests.stateForLabel(.CohabitingAfterKeyPair) as! CohabitingAfterKeyPairState)
+        let state = (FxAStateTests.state(forLabel: .CohabitingAfterKeyPair) as! CohabitingAfterKeyPairState)
         withMachine(MockFxALoginClientDuringOutage()) { stateMachine in
             stateMachine.advanceFromState(state, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, state.label.rawValue)
@@ -176,7 +176,7 @@ class FxALoginStateMachineTests: XCTestCase {
     func testAdvanceFromCohabitingAfterVerifiedWithoutNetwork() {
         // Advancing from cohabiting after verified, but when the network is not available, stays put.
         let e = self.expectation(withDescription: "Wait for login state machine.")
-        let state = (FxAStateTests.stateForLabel(.CohabitingAfterKeyPair) as! CohabitingAfterKeyPairState)
+        let state = (FxAStateTests.state(forLabel: .CohabitingAfterKeyPair) as! CohabitingAfterKeyPairState)
         withMachine(MockFxALoginClientWithoutNetwork()) { stateMachine in
             stateMachine.advanceFromState(state, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, state.label.rawValue)

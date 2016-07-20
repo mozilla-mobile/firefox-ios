@@ -73,7 +73,7 @@ public class LiveAccountTest: XCTestCase {
                     expectation.fulfill()
                     return Deferred(value: .Failure(error))
                 case let .Success(loginResponse):
-                    return client.sign(loginResponse.value.sessionToken, publicKey: keyPair.publicKey)
+                    return client.sign(sessionToken: loginResponse.value.sessionToken, publicKey: keyPair.publicKey)
                 }
             }
             sign.upon { result in
@@ -103,7 +103,7 @@ public class LiveAccountTest: XCTestCase {
     }
 
     // Internal helper.
-    func account(_ email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
+    func account(withEmail email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
         if let emailUTF8 = email.utf8EncodedData {
             if let passwordUTF8 = email.utf8EncodedData {
@@ -130,17 +130,17 @@ public class LiveAccountTest: XCTestCase {
         if !(self.signedInUser?["verified"].asBool ?? false) {
             return Deferred(value: Maybe(failure: AccountError.UnverifiedSignedInUser))
         }
-        return self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
+        return self.account(withEmail: "testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
             configuration: ProductionFirefoxAccountConfiguration())
     }
 
     func getTestAccount() -> Deferred<Maybe<FirefoxAccount>> {
         // TODO: Use signedInUser.json here.  It's hard to include the same resource file in two Xcode targets.
-        return self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
+        return self.account(withEmail: "testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
             configuration: ProductionFirefoxAccountConfiguration())
     }
 
-    public func getAuthState(_ now: Timestamp) -> Deferred<Maybe<SyncAuthState>> {
+    public func getAuthState(forTime now: Timestamp) -> Deferred<Maybe<SyncAuthState>> {
         let account = self.getTestAccount()
         print("Got test account.")
         return account.map { result in
@@ -152,8 +152,8 @@ public class LiveAccountTest: XCTestCase {
         }
     }
 
-    public func syncAuthState(_ now: Timestamp) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
-        return getAuthState(now).bind { result in
+    public func syncAuthState(forTime now: Timestamp) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
+        return getAuthState(forTime: now).bind { result in
             if let authState = result.successValue {
                 return authState.token(now: now, canBeExpired: false)
             }

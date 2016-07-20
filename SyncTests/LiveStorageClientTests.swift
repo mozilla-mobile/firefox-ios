@@ -72,7 +72,7 @@ class LiveStorageClientTests : LiveAccountTest {
     }
 
     func getTokenAndDefaultKeys() -> Deferred<Maybe<(TokenServerToken, KeyBundle)>> {
-        let authState = self.syncAuthState(Date.now())
+        let authState = self.syncAuthState(forTime: Date.now())
 
         let keysPayload: Deferred<Maybe<Record<KeysPayload>>> = authState.bind {
             tokenResult in
@@ -125,7 +125,7 @@ class LiveStorageClientTests : LiveAccountTest {
 
     func testStateMachine() {
         let expectation = self.expectation(withDescription: "Waiting on value.")
-        let authState = self.getAuthState(Date.now())
+        let authState = self.getAuthState(forTime: Date.now())
 
         let d = chainDeferred(authState, f: { SyncStateMachine(prefs: MockProfilePrefs()).toReady($0) })
 

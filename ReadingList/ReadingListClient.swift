@@ -54,7 +54,7 @@ class ReadingListClient {
     var articlesBaseURL: URL!
     var batchURL: URL!
 
-    func getRecordWithGuid(_ guid: String, ifModifiedSince: ReadingListTimestamp?, completion: (ReadingListGetRecordResult) -> Void) {
+    func getRecord(withGUID guid: String, ifModifiedSince: ReadingListTimestamp?, completion: (ReadingListGetRecordResult) -> Void) {
         if let url = URL(string: guid, relativeTo: articlesBaseURL) {
             Alamofire.Manager.sharedInstance.request(createRequest("GET", url, ifModifiedSince: ifModifiedSince)).responseJSON(options: [], completionHandler: { (request, response, json) -> Void in
                 if let json = json.value, response = response{
@@ -77,11 +77,11 @@ class ReadingListClient {
         }
     }
 
-    func getRecordWithGuid(_ guid: String, completion: (ReadingListGetRecordResult) -> Void) {
-        getRecordWithGuid(guid, ifModifiedSince: nil, completion: completion)
+    func getRecord(withGUID guid: String, completion: (ReadingListGetRecordResult) -> Void) {
+        getRecord(withGUID: guid, ifModifiedSince: nil, completion: completion)
     }
 
-    func getAllRecordsWithFetchSpec(_ fetchSpec: ReadingListFetchSpec, ifModifiedSince: ReadingListTimestamp?, completion: (ReadingListGetAllRecordsResult) -> Void) {
+    func getAllRecords(withFetchSpec fetchSpec: ReadingListFetchSpec, ifModifiedSince: ReadingListTimestamp?, completion: (ReadingListGetAllRecordsResult) -> Void) {
         if let url = fetchSpec.getURL(serviceURL: serviceURL, path: "/v1/articles") {
             Alamofire.Manager.sharedInstance.request(createRequest("GET", url)).responseJSON(options: [], completionHandler: { (request, response, json) -> Void in
                 if let response = response, json = json.value {
@@ -102,8 +102,8 @@ class ReadingListClient {
         }
     }
 
-    func getAllRecordsWithFetchSpec(_ fetchSpec: ReadingListFetchSpec, completion: (ReadingListGetAllRecordsResult) -> Void) {
-        getAllRecordsWithFetchSpec(fetchSpec, ifModifiedSince: nil, completion: completion)
+    func getAllRecords(withFetchSpec fetchSpec: ReadingListFetchSpec, completion: (ReadingListGetAllRecordsResult) -> Void) {
+        getAllRecords(withFetchSpec: fetchSpec, ifModifiedSince: nil, completion: completion)
     }
 
     func patchRecord(_ record: ReadingListClientRecord, completion: (ReadingListPatchRecordResult) -> Void) {
@@ -149,7 +149,7 @@ class ReadingListClient {
         })
     }
 
-    func deleteRecordWithGuid(_ guid: String, ifUnmodifiedSince: ReadingListTimestamp?, completion: (ReadingListDeleteRecordResult) -> Void) {
+    func deleteRecord(withGuid guid: String, ifUnmodifiedSince: ReadingListTimestamp?, completion: (ReadingListDeleteRecordResult) -> Void) {
         if let url = URL(string: guid, relativeTo: articlesBaseURL) {
             Alamofire.Manager.sharedInstance.request(createRequest("DELETE", url, ifUnmodifiedSince: ifUnmodifiedSince)).responseJSON(options: [], completionHandler: { (request, response, json) -> Void in
                 if let response = response,
@@ -173,8 +173,8 @@ class ReadingListClient {
         }
     }
 
-    func deleteRecordWithGuid(_ guid: String, completion: (ReadingListDeleteRecordResult) -> Void) {
-        deleteRecordWithGuid(guid, ifUnmodifiedSince: nil, completion: completion)
+    func deleteRecord(withGuid guid: String, completion: (ReadingListDeleteRecordResult) -> Void) {
+        deleteRecord(withGuid: guid, ifUnmodifiedSince: nil, completion: completion)
     }
 
     func createRequest(_ method: String, _ url: URL, ifUnmodifiedSince: ReadingListTimestamp? = nil, ifModifiedSince: ReadingListTimestamp? = nil, json: AnyObject? = nil) -> URLRequest {

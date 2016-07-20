@@ -26,7 +26,7 @@ protocol ReadingListStorage {
     func getAvailableRecords() -> Maybe<[ReadingListClientRecord]>
     func deleteRecord(_ record: ReadingListClientRecord) -> Maybe<Void>
     func deleteAllRecords() -> Maybe<Void>
-    func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord>
-    func getRecordWithURL(_ url: String) -> Maybe<ReadingListClientRecord?>
+    func createRecord(withURL url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord>
+    func getRecord(withURL url: String) -> Maybe<ReadingListClientRecord?>
     func updateRecord(_ record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?>
 }

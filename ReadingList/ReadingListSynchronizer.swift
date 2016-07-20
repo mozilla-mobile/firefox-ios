@@ -31,10 +31,10 @@ class ReadingListSynchronizer {
         switch type {
         case .uploadOnly:
             let synchronizer = ReadingListUploadOnlySynchronizer(storage: storage, client: client)
-            synchronizer.synchronizeWithCompletion(completion)
+            synchronizer.synchronize(withCompletion: completion)
         case .full:
             let synchronizer = ReadingListFullSynchronizer(storage: storage, client: client)
-            synchronizer.synchronizeWithCompletion(completion)
+            synchronizer.synchronize(withCompletion: completion)
         }
     }
 }
@@ -51,7 +51,7 @@ private class ReadingListUploadOnlySynchronizer {
         self.client = client
     }
 
-    func synchronizeWithCompletion(_ completion: (ReadingListSynchronizerResult) -> Void) {
+    func synchronize(withCompletion completion: (ReadingListSynchronizerResult) -> Void) {
     }
 }
 
@@ -64,6 +64,6 @@ private class ReadingListFullSynchronizer {
         self.client = client
     }
 
-    func synchronizeWithCompletion(_ completion: (ReadingListSynchronizerResult) -> Void) {
+    func synchronize(withCompletion completion: (ReadingListSynchronizerResult) -> Void) {
     }
 }

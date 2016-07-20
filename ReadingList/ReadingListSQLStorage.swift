@@ -87,7 +87,7 @@ class ReadingListSQLStorage: ReadingListStorage {
         }
     }
 
-    func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
+    func createRecord(withURL url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
         let insert = items.insert(ItemColumns.ClientLastModified <- ReadingListNow(), ItemColumns.Url <- url, ItemColumns.Title <- title, ItemColumns.AddedBy <- addedBy)
 
         do {
@@ -106,7 +106,7 @@ class ReadingListSQLStorage: ReadingListStorage {
         }
     }
 
-    func getRecordWithURL(_ url: String) -> Maybe<ReadingListClientRecord?> {
+    func getRecord(withURL url: String) -> Maybe<ReadingListClientRecord?> {
         if let item = Array(db.prepare(items.filter(ItemColumns.Url == url))).first {
             if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
                 return Maybe(success: record)

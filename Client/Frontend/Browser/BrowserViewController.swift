@@ -1430,7 +1430,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
         guard let tab = tabManager.selectedTab,
                url = tab.displayURL,
-               result = profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name)
+               result = profile.readingList?.createRecord(withURL: url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name)
             else {
                 UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed."))
                 return false
@@ -1442,7 +1442,7 @@ extension BrowserViewController: URLBarDelegate {
             // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
         case .Failure(let error):
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it's already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
-            log.error("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
+            log.error("readingList.createRecord(withURL: url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
         }
         return true
     }
@@ -2542,7 +2542,7 @@ extension BrowserViewController {
             } else {
                 readerModeBar.applyTheme(Theme.NormalMode)
             }
-            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
+            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecord(withURL: url) {
                 if let successValue = result.successValue, record = successValue {
                     readerModeBar.unread = record.unread
                     readerModeBar.added = true
@@ -2690,7 +2690,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             }
 
         case .markAsRead:
-            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
+            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecord(withURL: url) {
                 if let successValue = result.successValue, record = successValue {
                     profile.readingList?.updateRecord(record, unread: false) // TODO Check result, can this fail?
                     readerModeBar.unread = false
@@ -2698,7 +2698,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             }
 
         case .markAsUnread:
-            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
+            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecord(withURL: url) {
                 if let successValue = result.successValue, record = successValue {
                     profile.readingList?.updateRecord(record, unread: true) // TODO Check result, can this fail?
                     readerModeBar.unread = true
@@ -2709,14 +2709,14 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             if let tab = tabManager.selectedTab,
                let url = tab.url where ReaderModeUtils.isReaderModeURL(url) {
                 if let url = ReaderModeUtils.decodeURL(url) {
-                    profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
+                    profile.readingList?.createRecord(withURL: url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
                     readerModeBar.added = true
                     readerModeBar.unread = true
                 }
             }
 
         case .removeFromReadingList:
-            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
+            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecord(withURL: url) {
                 if let successValue = result.successValue, record = successValue {
                     profile.readingList?.deleteRecord(record) // TODO Check result, can this fail?
                     readerModeBar.added = false
@@ -3119,7 +3119,7 @@ extension BrowserViewController: TabTrayDelegate {
 
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord? {
         guard let url = tab.url?.absoluteString where url.characters.count > 0 else { return nil }
-        return profile.readingList?.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.currentDevice().name).successValue
+        return profile.readingList?.createRecord(withURL: url, title: tab.title ?? url, addedBy: UIDevice.currentDevice().name).successValue
     }
 
     func tabTrayRequestsPresentationOf(viewController: UIViewController) {

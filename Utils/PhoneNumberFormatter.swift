@@ -26,7 +26,7 @@ public class PhoneNumberFormatter {
     public func formatPhoneNumber(rawNumber: String, fallbackLocale: NSLocale = NSLocale.currentLocale()) -> String {
         let countryCode = guessCurrentCountryCode(fallbackLocale)
 
-        guard let parsedNumber = try? util.parseAndKeepRawInput(rawNumber, defaultRegion: countryCode) where util.isValidNumber(parsedNumber) else {
+        guard let parsedNumber = try? util.parseAndKeepRawInput(rawNumber, defaultRegion: countryCode) where util.isValid(number: parsedNumber) else {
             return rawNumber
         }
 

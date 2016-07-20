@@ -114,7 +114,7 @@ private class PhoneNumberUtilMock: NBPhoneNumberUtil {
         return NBPhoneNumber(countryCodeSource: .from_NUMBER_WITH_PLUS_SIGN)
     }
 
-    private override func isValidNumber(_ number: NBPhoneNumber!) -> Bool {
+    private override func isValid(number: NBPhoneNumber!) -> Bool {
         didValidate = true
         return !failOnValidating
     }
