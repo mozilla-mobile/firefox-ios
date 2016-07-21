@@ -270,6 +270,23 @@ class TabManager : NSObject {
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
+    
+    func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
+        assert(NSThread.isMainThread())
+        
+        let fromIndex = tabs.indexOf((privateMode ? privateTabs : normalTabs)[visibleFromIndex]) ?? tabs.count - 1
+        let toIndex = tabs.indexOf((privateMode ? privateTabs : normalTabs)[visibleToIndex]) ?? tabs.count - 1
+        
+        let previouslySelectedTab = selectedTab
+        
+        tabs.insert(tabs.removeAtIndex(fromIndex), atIndex: toIndex)
+        
+        if let previouslySelectedTab = previouslySelectedTab, previousSelectedIndex = tabs.indexOf(previouslySelectedTab) {
+            _selectedIndex = previousSelectedIndex
+        }
+        
+        storeChanges()
+    }
 
     func configureTab(tab: Tab, request: NSURLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool) {
         assert(NSThread.isMainThread())
