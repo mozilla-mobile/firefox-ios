@@ -29,7 +29,7 @@ struct TabTrayControllerUX {
     static let MenuFixedWidth: CGFloat = 320
     
     static let RearrangeWobblePeriod: NSTimeInterval = 0.1
-     static let RearrangeTransitionDuration: NSTimeInterval = 0.2
+    static let RearrangeTransitionDuration: NSTimeInterval = 0.2
     static let RearrangeWobbleAngle: CGFloat = 0.02
     static let RearrangeDragScale: CGFloat = 1.1
     static let RearrangeDragAlpha: CGFloat = 0.9
