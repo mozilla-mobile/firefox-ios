@@ -270,6 +270,8 @@ class TabTrayController: UIViewController {
     weak var appStateDelegate: AppStateDelegate?
 
     var collectionView: UICollectionView!
+    var draggedCell: TabCell?
+    var dragOffset: CGPoint = CGPointZero
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
@@ -501,7 +503,8 @@ class TabTrayController: UIViewController {
     func didLongPressTab(gesture: UILongPressGestureRecognizer) {
         switch gesture.state {
             case .Began:
-                guard let indexPath = self.collectionView.indexPathForItemAtPoint(gesture.locationInView(self.collectionView)) else {
+                let pressPosition = gesture.locationInView(self.collectionView)
+                guard let indexPath = self.collectionView.indexPathForItemAtPoint(pressPosition) else {
                     break
                 }
                 self.collectionView.beginInteractiveMovementForItemAtIndexPath(indexPath)
@@ -510,6 +513,9 @@ class TabTrayController: UIViewController {
                         continue
                     }
                     if item == indexPath.item {
+                        let cellPosition = cell.contentView.convertPoint(cell.bounds.center, toView: self.collectionView)
+                        self.draggedCell = cell
+                        self.dragOffset = CGPoint(x: pressPosition.x - cellPosition.x, y: pressPosition.y - cellPosition.y)
                         UIView.animateWithDuration(TabTrayControllerUX.RearrangeTransitionDuration, delay: 0, options: [.AllowUserInteraction, .BeginFromCurrentState], animations: {
                             cell.contentView.transform = CGAffineTransformMakeScale(TabTrayControllerUX.RearrangeDragScale, TabTrayControllerUX.RearrangeDragScale)
                             cell.contentView.alpha = TabTrayControllerUX.RearrangeDragAlpha
@@ -520,8 +526,11 @@ class TabTrayController: UIViewController {
                 }
                 break
             case .Changed:
-                if let view = gesture.view {
-                    collectionView.updateInteractiveMovementTargetPosition(gesture.locationInView(view))
+                if let view = gesture.view, draggedCell = self.draggedCell {
+                    var dragPosition = gesture.locationInView(view)
+                    let offsetPosition = CGPoint(x: dragPosition.x + draggedCell.frame.center.x * (1 - TabTrayControllerUX.RearrangeDragScale), y: dragPosition.y + draggedCell.frame.center.y * (1 - TabTrayControllerUX.RearrangeDragScale))
+                    dragPosition = CGPoint(x: offsetPosition.x - self.dragOffset.x, y: offsetPosition.y - self.dragOffset.y)
+                    collectionView.updateInteractiveMovementTargetPosition(dragPosition)
                 }
             case .Ended, .Cancelled:
                 for item in 0..<self.tabDataSource.collectionView(self.collectionView, numberOfItemsInSection: 0) {
