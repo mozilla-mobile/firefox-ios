@@ -926,7 +926,10 @@ class BrowserViewController: UIViewController {
                 navigationToolbar.updateReloadStatus(loading)
             }
 
-            if (!loading) {
+            if !loading {
+                if let tab = tabManager.selectedTab {
+                    topTouchArea.updateForTab(tab)
+                }
                 runScriptsOnWebView(webView)
             }
         case KVOURL:
