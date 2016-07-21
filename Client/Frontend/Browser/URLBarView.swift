@@ -984,5 +984,12 @@ class URLBarMinifiedView: UIView {
     
     func updateForTab(tab: Tab) {
         self.title.text = tab.displayTitle
+        if tab.isPrivate {
+            self.blurWrapper.blurStyle = .Dark
+            self.title.textColor = UIColor.lightTextColor()
+        } else {
+            self.blurWrapper.blurStyle = .ExtraLight
+            self.title.textColor = UIColor.darkTextColor()
+        }
     }
 }
