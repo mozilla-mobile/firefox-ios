@@ -553,6 +553,7 @@ class BrowserViewController: UIViewController {
         presentIntroViewController()
         log.debug("BVC intro presented.")
         self.webViewContainerToolbar.hidden = false
+        self.topTouchArea.hidden = false
 
         screenshotHelper.viewIsVisible = true
         log.debug("BVC taking pending screenshots….")
@@ -1453,6 +1454,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
         self.webViewContainerToolbar.hidden = true
+        self.topTouchArea.hidden = true
         updateFindInPageVisibility(visible: false)
 
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
