@@ -21,6 +21,7 @@ private let log = Logger.browserLogger
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 private let KVOURL = "URL"
+private let KVOTitle = "title"
 private let KVOCanGoBack = "canGoBack"
 private let KVOCanGoForward = "canGoForward"
 private let KVOContentSize = "contentSize"
@@ -927,9 +928,6 @@ class BrowserViewController: UIViewController {
             }
 
             if !loading {
-                if let tab = tabManager.selectedTab {
-                    topTouchArea.updateForTab(tab)
-                }
                 runScriptsOnWebView(webView)
             }
         case KVOURL:
@@ -945,6 +943,9 @@ class BrowserViewController: UIViewController {
                     updateUIForReaderHomeStateForTab(tab)
                 }
             }
+        case KVOTitle:
+            guard let tab = tabManager[webView] else { break }
+            self.topTouchArea.updateForTab(tab)
         case KVOCanGoBack:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
@@ -994,7 +995,6 @@ class BrowserViewController: UIViewController {
     /// Call this whenever the page URL changes.
     private func updateURLBarDisplayURL(tab: Tab) {
         urlBar.currentURL = tab.displayURL
-        topTouchArea.updateForTab(tab)
 
         let isPage = tab.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isWebPage: isPage)
@@ -1778,6 +1778,7 @@ extension BrowserViewController: TabDelegate {
         webView.addObserver(self, forKeyPath: KVOCanGoBack, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoForward, options: .New, context: nil)
         tab.webView?.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
+        tab.webView?.addObserver(self, forKeyPath: KVOTitle, options: .New, context: nil)
 
         webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .New, context: nil)
 
