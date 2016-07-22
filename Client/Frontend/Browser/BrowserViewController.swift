@@ -3333,7 +3333,7 @@ private extension WKNavigationAction {
             return true
         }
 
-        return !url.isWebPage() || !url.isLocal || request.isPrivileged
+        return !url.isWebPage(includeDataURIs: false) || !url.isLocal || request.isPrivileged
     }
 }
 
