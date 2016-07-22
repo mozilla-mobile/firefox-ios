@@ -123,6 +123,7 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
             "appPackage": NSBundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
+            //"fxaDeviceId", // TODO
 
             // Do better here: Bug 1157518.
             "formfactor": DeviceInfo.isSimulator() ? "simulator" : "phone",

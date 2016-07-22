@@ -48,6 +48,47 @@ public struct FxASignResponse {
     }
 }
 
+public struct FxAStatusResponse {
+    let exists: Bool
+    let locked: Bool
+
+    init(exists: Bool, locked: Bool) {
+        self.exists = exists
+        self.locked = locked
+    }
+}
+
+public struct FxADevicesResponse {
+    struct FxADevice {
+        let id: String
+        let isCurrentDevice: Bool
+        let name: String
+        let type: String
+
+        init(id: String, name: String, type: String, isCurrentDevice: Bool) {
+            self.id = id
+            self.name = name
+            self.type = type
+            self.isCurrentDevice = isCurrentDevice
+        }
+    }
+    let devices: [FxADevice]
+
+    init(devices: [FxADevice]) {
+        self.devices = devices
+    }
+}
+
+public struct FxADeviceRegistrationResponse {
+    let id: String
+    let name: String
+
+    init(id: String, name: String) {
+        self.id = id
+        self.name = name
+    }
+}
+
 // fxa-auth-server produces error details like:
 //        {
 //            "code": 400, // matches the HTTP status code
@@ -212,6 +253,53 @@ public class FxAClient10 {
         return nil
     }
 
+    private class func statusResponseFromJSON(json: JSON) -> FxAStatusResponse? {
+        if json.isError {
+            return nil
+        }
+
+        guard let exists = json["exists"].asBool,
+            let locked = json["locked"].asBool else {
+                return nil
+        }
+
+        return FxAStatusResponse(exists: exists, locked: locked)
+    }
+
+    private class func devicesResponseFromJSON(json: JSON) -> FxADevicesResponse? {
+        if json.isError {
+            return nil
+        }
+
+        guard let jsonDevices = json.asArray else {
+            return nil
+        }
+
+        let devices = jsonDevices.flatMap { (jsonDevice) -> FxADevicesResponse.FxADevice? in
+            guard let id = jsonDevice["id"].asString,
+                let name = jsonDevice["name"].asString,
+                let type = jsonDevice["type"].asString,
+                let isCurrentDevice = jsonDevice["isCurrentDevice"].asBool else {
+                    return nil
+            }
+            return FxADevicesResponse.FxADevice(id: id, name: name, type: type, isCurrentDevice: isCurrentDevice)
+        }
+        return FxADevicesResponse(devices: devices)
+    }
+
+    private class func deviceRegistrationResponseFromJSON(json: JSON) -> FxADeviceRegistrationResponse? {
+        if json.isError {
+            return nil
+        }
+
+        guard let id = json["id"].asString,
+            let name = json["name"].asString else {
+                return nil
+        }
+
+        return FxADeviceRegistrationResponse(id: id, name: name)
+    }
+
     lazy private var alamofire: Alamofire.Manager = {
         let ua = UserAgent.fxaUserAgent
         let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
@@ -353,6 +441,147 @@ public class FxAClient10 {
                     }
 
                     if let response = FxAClient10.signResponseFromJSON(json) {
+                        deferred.fill(Maybe(success: response))
+                        return
+                    }
+                }
+
+                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+        }
+        return deferred
+    }
+
+    public func status(uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
+        let deferred = Deferred<Maybe<FxAStatusResponse>>()
+
+        let baseURL = self.URL.URLByAppendingPathComponent("/account/devices")
+        let queryParams = "?uid=" + uid
+        let URL = NSURL(string: queryParams, relativeToURL: baseURL)
+        let mutableURLRequest = NSMutableURLRequest(URL: URL!)
+        mutableURLRequest.HTTPMethod = Method.GET.rawValue
+
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        alamofire.request(mutableURLRequest)
+            .validate(contentType: ["application/json"])
+            .responseJSON { (request, response, result) in
+                if let error = result.error as? NSError {
+                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
+                    return
+                }
+
+                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    let json = JSON(data)
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                        return
+                    }
+
+                    if let response = FxAClient10.statusResponseFromJSON(json) {
+                        deferred.fill(Maybe(success: response))
+                        return
+                    }
+                }
+
+                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+        }
+        return deferred
+    }
+
+    public func devices(sessionToken: NSData) -> Deferred<Maybe<FxADevicesResponse>> {
+        let deferred = Deferred<Maybe<FxADevicesResponse>>()
+
+        let salt: NSData = NSData()
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")!
+        let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
+        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
+        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
+        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
+
+        let URL = self.URL.URLByAppendingPathComponent("/account/devices")
+        let mutableURLRequest = NSMutableURLRequest(URL: URL)
+        mutableURLRequest.HTTPMethod = Method.GET.rawValue
+
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
+        mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
+
+        alamofire.request(mutableURLRequest)
+            .validate(contentType: ["application/json"])
+            .responseJSON { (request, response, result) in
+                if let error = result.error as? NSError {
+                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
+                    return
+                }
+
+                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    let json = JSON(data)
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                        return
+                    }
+
+                    if let response = FxAClient10.devicesResponseFromJSON(json) {
+                        deferred.fill(Maybe(success: response))
+                        return
+                    }
+                }
+
+                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+        }
+        return deferred
+    }
+
+    public func registerOrUpdateDevice(sessionToken: NSData, id: String?, name: String, type: String?) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
+        let deferred = Deferred<Maybe<FxADeviceRegistrationResponse>>()
+        let parameters: [String:AnyObject]
+
+        if id == nil { // New device
+            parameters = [
+                "name": name,
+                "type": type!
+            ]
+        } else { // Update
+            parameters = [
+                "id": id!,
+                "name": name
+            ]
+        }
+
+        let salt: NSData = NSData()
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")!
+        let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
+        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
+        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
+        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
+
+        let URL = self.URL.URLByAppendingPathComponent("/account/device")
+        let mutableURLRequest = NSMutableURLRequest(URL: URL)
+        mutableURLRequest.HTTPMethod = Method.POST.rawValue
+
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        mutableURLRequest.HTTPBody = JSON(parameters).toString(false).utf8EncodedData
+
+        let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
+        mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
+
+        alamofire.request(mutableURLRequest)
+            .validate(contentType: ["application/json"])
+            .responseJSON { (request, response, result) in
+                if let error = result.error as? NSError {
+                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
+                    return
+                }
+
+                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    let json = JSON(data)
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                        return
+                    }
+
+                    if let response = FxAClient10.deviceRegistrationResponseFromJSON(json) {
                         deferred.fill(Maybe(success: response))
                         return
                     }
