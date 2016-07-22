@@ -12,6 +12,7 @@ struct TopTabsUX {
     static let TopTabsBackgroundPrivateColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1)
     static let TopTabsBackgroundNormalColorInactive = UIColor(red: 198/255, green: 198/255, blue: 198/255, alpha: 1)
     static let TopTabsBackgroundPrivateColorInactive = UIColor(red: 53/255, green: 53/255, blue: 53/255, alpha: 1)
+    static let PrivateModeToolbarTintColor = UIColor(red: 124 / 255, green: 124 / 255, blue: 124 / 255, alpha: 1)
     static let TopTabsBackgroundPadding: CGFloat = 35
     static let TopTabsBackgroundShadowWidth: CGFloat = 35
     static let TabWidth: CGFloat = 180
@@ -25,7 +26,7 @@ struct TopTabsUX {
 protocol TopTabsDelegate: class {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab()
-    func topTabsDidPressPrivateTab()
+    func topTabsDidPressPrivateModeButton()
     func topTabsDidChangeTab()
 }
 
@@ -61,10 +62,11 @@ class TopTabsViewController: UIViewController {
         return newTab
     }()
     
-    private lazy var privateTab: UIButton = {
-        let privateTab = UIButton.privateModeButton()
-        privateTab.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), forControlEvents: UIControlEvents.TouchUpInside)
-        return privateTab
+    lazy var privateModeButton: UIButton.PrivateModeButton = {
+        let privateModeButton = UIButton.PrivateModeButton()
+        privateModeButton.light = true
+        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), forControlEvents: UIControlEvents.TouchUpInside)
+        return privateModeButton
     }()
     
     private lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
@@ -108,7 +110,7 @@ class TopTabsViewController: UIViewController {
         
         view.addSubview(tabsButton)
         view.addSubview(newTab)
-        view.addSubview(privateTab)
+        view.addSubview(privateModeButton)
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
         
@@ -122,19 +124,19 @@ class TopTabsViewController: UIViewController {
             make.trailing.equalTo(newTab.snp_leading)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
-        privateTab.snp_makeConstraints { make in
+        privateModeButton.snp_makeConstraints { make in
             make.centerY.equalTo(view)
             make.leading.equalTo(view)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
         topTabFader.snp_makeConstraints { make in
             make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateTab.snp_trailing).offset(-TopTabsUX.FaderPading)
+            make.leading.equalTo(privateModeButton.snp_trailing).offset(-TopTabsUX.FaderPading)
             make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.FaderPading)
         }
         collectionView.snp_makeConstraints { make in
             make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateTab.snp_trailing).offset(-TopTabsUX.CollectionViewPadding)
+            make.leading.equalTo(privateModeButton.snp_trailing).offset(-TopTabsUX.CollectionViewPadding)
             make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.CollectionViewPadding)
         }
         
@@ -174,7 +176,8 @@ class TopTabsViewController: UIViewController {
     }
     
     func togglePrivateModeTapped() {
-        delegate?.topTabsDidPressPrivateTab()
+        delegate?.topTabsDidPressPrivateModeButton()
+        self.privateModeButton.setSelected(isPrivate, animated: true)
         self.collectionView.reloadData()
         self.scrollToCurrentTab(false, centerCell: true)
     }
@@ -208,6 +211,7 @@ extension TopTabsViewController: Themeable {
     func applyTheme(themeName: String) {
         tabsButton.applyTheme(themeName)
         isPrivate = (themeName == Theme.PrivateMode)
+        privateModeButton.styleForMode(privateMode: isPrivate)
         if let layout = collectionView.collectionViewLayout as? TopTabsViewLayout {
             if isPrivate {
                 layout.themeColor = TopTabsUX.TopTabsBackgroundPrivateColorInactive

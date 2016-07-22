@@ -1227,13 +1227,7 @@ class TrayToolbar: UIView {
         return button
     }()
 
-    lazy var maskButton: ToggleButton = {
-        let button = ToggleButton()
-        button.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
-        button.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
-        return button
-    }()
-
+    lazy var maskButton: UIButton.PrivateModeButton = UIButton.PrivateModeButton()
     private let sideOffset: CGFloat = 32
 
     private override init(frame: CGRect) {
@@ -1284,16 +1278,7 @@ class TrayToolbar: UIView {
         } else {
             settingsButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
         }
-        maskButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
         backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : .whiteColor()
-        updateMaskButtonState(isPrivate: isPrivate)
-    }
-
-    private func updateMaskButtonState(isPrivate isPrivate: Bool) {
-        let maskImage = UIImage(named: "smallPrivateMask")?.imageWithRenderingMode(.AlwaysTemplate)
-        maskButton.imageView?.tintColor = isPrivate ? .whiteColor() : UIConstants.PrivateModeToolbarTintColor
-        maskButton.setImage(maskImage, forState: .Normal)
-        maskButton.selected = isPrivate
-        maskButton.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+        maskButton.styleForMode(privateMode: isPrivate)
     }
 }

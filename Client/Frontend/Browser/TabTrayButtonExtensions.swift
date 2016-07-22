@@ -5,13 +5,27 @@
 import UIKit
 
 extension UIButton {
-    static func privateModeButton() -> UIButton {
-        let privateTab = UIButton()
-        privateTab.setImage(UIImage.templateImageNamed("menu-NewPrivateTab-pbm"), forState: .Normal)
-        privateTab.tintColor = UIColor(white: 0.9, alpha: 1)
-        privateTab.setImage(UIImage(named: "menu-NewPrivateTab-pbm"), forState: .Highlighted)
-        privateTab.accessibilityLabel = NSLocalizedString("Private Tab", comment: "Accessibility label for the Private Tab button in the tab toolbar.")
-        return privateTab
+    class PrivateModeButton: ToggleButton {
+        var light: Bool = false
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            self.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
+            self.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        func styleForMode(privateMode isPrivate: Bool) {
+            let maskImage = UIImage(named: "smallPrivateMask")?.imageWithRenderingMode(.AlwaysTemplate)
+            self.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
+            self.imageView?.tintColor = isPrivate ? .whiteColor() : self.light ? TopTabsUX.PrivateModeToolbarTintColor : UIConstants.PrivateModeToolbarTintColor
+            self.setImage(maskImage, forState: .Normal)
+            self.selected = isPrivate
+            self.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+        }
     }
     
     static func newTabButton() -> UIButton {

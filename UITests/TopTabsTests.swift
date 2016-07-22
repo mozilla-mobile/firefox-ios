@@ -94,13 +94,13 @@ class TopTabsTests: KIFTestCase {
     private func testPrivateModeButton() {
         let tabManager = (UIApplication.sharedApplication().delegate as! AppDelegate).tabManager
         
-        tester().tapViewWithAccessibilityLabel("Private Tab")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
         XCTAssertTrue(tabManager.selectedTab!.isPrivate)
         
-        tester().tapViewWithAccessibilityLabel("Private Tab")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
         XCTAssertFalse(tabManager.selectedTab!.isPrivate)
         
-        tester().tapViewWithAccessibilityLabel("Private Tab")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
         tester().tapViewWithAccessibilityLabel("Remove page - New Tab")
         XCTAssertFalse(tabManager.selectedTab!.isPrivate)
     }

@@ -2021,13 +2021,16 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, webView = tab.webView {
             updateURLBarDisplayURL(tab)
-
+            
             if tab.isPrivate {
                 readerModeCache = MemoryReaderModeCache.sharedInstance
                 applyTheme(Theme.PrivateMode)
             } else {
                 readerModeCache = DiskReaderModeCache.sharedInstance
                 applyTheme(Theme.NormalMode)
+            }
+            if let privateModeButton = topTabsViewController?.privateModeButton where previous?.isPrivate != tab.isPrivate {
+                privateModeButton.setSelected(tab.isPrivate, animated: true)
             }
             ReaderModeHandlers.readerModeCache = readerModeCache
 
@@ -3348,7 +3351,7 @@ extension BrowserViewController: TopTabsDelegate {
         openBlankNewTabAndFocus(isPrivate: isPrivate)
     }
     
-    func topTabsDidPressPrivateTab() {
+    func topTabsDidPressPrivateModeButton() {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }
