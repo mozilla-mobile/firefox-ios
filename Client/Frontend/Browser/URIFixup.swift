@@ -6,11 +6,8 @@ import Foundation
 
 class URIFixup {
     static func getURL(entry: String) -> NSURL? {
-        let allowedCharacters = NSMutableCharacterSet(charactersInString: "%")
-        allowedCharacters.formUnionWithCharacterSet(NSCharacterSet.URLFragmentAllowedCharacterSet())
-        
         let trimmed = entry.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-        let escaped = trimmed.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacters)
+        let escaped = trimmed.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLAllowedCharacterSet())
 
         // Then check if the URL includes a scheme. This will handle
         // all valid requests starting with "http://", "about:", etc.
