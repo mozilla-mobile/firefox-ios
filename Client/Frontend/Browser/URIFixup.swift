@@ -6,9 +6,13 @@ import Foundation
 
 class URIFixup {
     static func getURL(entry: String) -> NSURL? {
-        let trimmed = entry.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        let allowedCharacters = NSMutableCharacterSet(charactersInString: "%")
+        allowedCharacters.formUnionWithCharacterSet(NSCharacterSet.URLFragmentAllowedCharacterSet())
+        guard let trimmed = entry.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacters) else {
+            return nil
+        }
 
-        // First check if the URL includes a scheme. This will handle
+        // Then check if the URL includes a scheme. This will handle
         // all valid requests starting with "http://", "about:", etc.
         // However, we ensure that the scheme is one that is listed in
         // the official URI scheme list, so that other such search phrases
