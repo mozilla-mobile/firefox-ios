@@ -240,7 +240,7 @@ extension NSURL {
         if httpSchemes.contains(scheme) || includeDataURIs && dataSchemes.contains(scheme) {
             return true
         }
-        
+
         return false
     }
 
