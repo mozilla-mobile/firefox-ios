@@ -29,6 +29,8 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
 }
 
 class TopTabsViewLayout: UICollectionViewFlowLayout {
+    var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
+    
     override func collectionViewContentSize() -> CGSize {
         return CGSize(width: CGFloat(collectionView!.numberOfItemsInSection(0)) * (TopTabsUX.TabWidth+1)+TopTabsUX.TopTabsBackgroundShadowWidth*2,
                       height: CGRectGetHeight(collectionView!.bounds))
@@ -49,7 +51,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         var attributes = super.layoutAttributesForElementsInRect(rect)!
         
         // Create decoration attributes
-        let decorationAttributes = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsBackgroundDecorationView.Identifier, withIndexPath: NSIndexPath(forRow: 0, inSection: 0))
+        let decorationAttributes = TopTabsViewLayoutAttributes(forDecorationViewOfKind: TopTabsBackgroundDecorationView.Identifier, withIndexPath: NSIndexPath(forRow: 0, inSection: 0))
         
         // Make the decoration view span the entire row
         let size = collectionViewContentSize()
@@ -57,6 +59,9 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         
         // Set the zIndex to be behind the item
         decorationAttributes.zIndex = -1
+        
+        // Set the style (light or dark)
+        decorationAttributes.themeColor = self.themeColor
         
         // Add the attribute to the list
         attributes.append(decorationAttributes)
