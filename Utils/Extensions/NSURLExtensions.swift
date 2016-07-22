@@ -139,7 +139,7 @@ extension NSURL {
     }
 
     public var origin: String? {
-        guard isWebPage(),
+        guard isWebPage(includeDataURIs: false),
               let hostPort = self.hostPort else {
             return nil
         }
@@ -233,13 +233,14 @@ extension NSURL {
         }
     }
 
-    public func isWebPage() -> Bool {
+    public func isWebPage(includeDataURIs includeDataURIs: Bool = true) -> Bool {
         let httpSchemes = ["http", "https"]
+        let dataSchemes = ["data"]
 
-        if let _ = httpSchemes.indexOf(scheme) {
+        if httpSchemes.contains(scheme) || includeDataURIs && dataSchemes.contains(scheme) {
             return true
         }
-
+        
         return false
     }
 
