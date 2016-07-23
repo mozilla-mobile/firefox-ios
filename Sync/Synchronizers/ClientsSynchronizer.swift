@@ -110,9 +110,15 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
         }
     }
 
+    // Sync Object Format (Version 1) for Form Factors: http://docs.services.mozilla.com/sync/objectformats.html#id2
+    private enum SyncFormFactorFormat: String {
+        case phone = "phone"
+        case tablet = "tablet"
+    }
+
     public func getOurClientRecord() -> Record<ClientPayload> {
         let guid = self.scratchpad.clientGUID
-        let formfactor = UIDevice.formFactorString()
+        let formfactor = formFactorString()
         
         let json = JSON([
             "id": guid,
@@ -129,6 +135,22 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
 
         let payload = ClientPayload(json)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
+    }
+
+    private func formFactorString() -> String {
+        let userInterfaceIdiom = UIDevice.currentDevice().userInterfaceIdiom
+        var formfactor: String
+        
+        switch userInterfaceIdiom {
+        case .Phone:
+            formfactor = SyncFormFactorFormat.phone.rawValue
+        case .Pad:
+            formfactor = SyncFormFactorFormat.tablet.rawValue
+        default:
+            formfactor = SyncFormFactorFormat.phone.rawValue
+        }
+        
+        return formfactor
     }
 
     private func clientRecordToLocalClientEntry(record: Record<ClientPayload>) -> RemoteClient {
@@ -345,97 +367,3 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
             >>> { deferMaybe(.Completed) }
     }
 }
-
-private extension UIDevice {
-    class func formFactorString() -> String {
-        var formfactor: String
-        var size: Int = 2
-        sysctlbyname("hw.machine", nil, &size, nil, 0)
-        var machine = [CChar](count: Int(size), repeatedValue: 0)
-        sysctlbyname("hw.machine", &machine, &size, nil, 0)
-
-        guard let hardware = String.fromCString(machine) else {
-            return SyncFormFactorFormat.phone.rawValue
-        }
-        
-        switch hardware {
-        case _ where phones.contains(hardware):
-            formfactor = SyncFormFactorFormat.phone.rawValue
-        case _ where largeTablets.contains(hardware):
-            formfactor = SyncFormFactorFormat.largetablet.rawValue
-        case _ where smallTablets.contains(hardware):
-            formfactor = SyncFormFactorFormat.smalltablet.rawValue
-        default:
-            formfactor = SyncFormFactorFormat.phone.rawValue
-        }
-        
-        return formfactor
-    }
-    
-    // Sync Object Format (Version 1) for Form Factors: http://docs.services.mozilla.com/sync/objectformats.html#id2
-    private enum SyncFormFactorFormat: String {
-        case phone = "phone"
-        case largetablet = "largetablet"
-        case smalltablet = "smalltablet"
-    }
-}
-
-private let phones: Set = [
-    "iPhone1,1", // iPhone 2G
-    "iPhone1,2", // iPhone 3G
-    "iPhone2,1", // iPhone 3GS
-    "iPhone3,1", // iPhone 4
-    "iPhone3,2", // iPhone 4
-    "iPhone3,3", // iPhone 4 CDMA
-    "iPhone4,1", // iPhone 4S
-    "iPhone5,1", // iPhone 5
-    "iPhone5,2", // iPhone 5 CDMA GSM
-    "iPhone5,3", // iPhone 5C
-    "iPhone5,4", // iPhone 5C CDMA GSM
-    "iPhone6,1", // iPhone 5S
-    "iPhone6,2", // iPhone 5S CDMA GSM
-    "iPhone7,1", // iPhone 6 Plus
-    "iPhone7,2", // iPhone 6
-    "iPhone8,2", // iPHone 6s Plus
-    "iPhone8,2", // iPhone 6s
-    "iPhone8,4", // iPhone SE
-    "iPod1,1", // iPod Touch 1G
-    "iPod2,1", // iPod Touch 2G
-    "iPod3,1", // iPod Touch 3G
-    "iPod4,1", // iPod Touch 4G
-    "iPod5,1" // iPod Touch 5G
-]
-
-private let largeTablets: Set = [
-    "iPad1,1", // iPad
-    "iPad1,2", // iPad 3G
-    "iPad2,1", // iPad 2 Wifi
-    "iPad2,2", // iPad 2
-    "iPad2,3", // iPad 2 CDMA
-    "iPad2,4", // iPad 2
-    "iPad3,1", // iPad 3 WIFI
-    "iPad3,2", // iPad 3 CDMA
-    "iPad3,3", // iPad 3
-    "iPad3,4", // iPad 4 WIFI
-    "iPad3,5", // iPad 4
-    "iPad3,6", // iPad 4 GSM CDMA
-    "iPad4,1", // iPad Air
-    "iPad4,2", // iPad Air GSM
-    "iPad4,3", // iPad Air CDMA
-    "iPad5.3", // iPad Air 2
-    "iPad6,3", // iPad Pro 9.7 Wifi Only
-    "iPad6,4", // iPad Pro 9.7 Wifi + Cellular
-    "iPad6,7", // iPad Pro
-    "iPad6,8" // iPad Pro Cellular
-]
-
-private let smallTablets: Set = [
-    "iPad2,5", // iPad Mini WIFI
-    "iPad4,4", // iPad Mini Retina
-    "iPad4,5", // iPad Mini Retina CDMA
-    "iPad4,6", // iPad Mini Retina Cellular CN
-    "iPad4,7", // iPad Mini 3
-    "iPad4,8", // iPad Mini 3 Cellular
-    "iPad5.1", // iPad Mini 4
-    "iPad5.2" // iPad Mini 4 Cellular
-]
