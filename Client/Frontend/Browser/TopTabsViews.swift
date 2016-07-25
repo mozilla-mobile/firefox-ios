@@ -207,7 +207,7 @@ class TopTabFader: UIView {
     }
 }
 
-class TopTabsBackgroundDecorationView : UICollectionReusableView {
+class TopTabsBackgroundDecorationView: UICollectionReusableView {
     static let Identifier = "TopTabsBackgroundDecorationViewIdentifier"
     private lazy var rightCurve = SingleCurveView(right: true)
     private lazy var leftCurve = SingleCurveView(right: false)

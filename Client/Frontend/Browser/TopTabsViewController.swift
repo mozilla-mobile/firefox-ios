@@ -212,6 +212,7 @@ extension TopTabsViewController: Themeable {
         tabsButton.applyTheme(themeName)
         isPrivate = (themeName == Theme.PrivateMode)
         privateModeButton.styleForMode(privateMode: isPrivate)
+        newTab.tintColor = isPrivate ? UIConstants.PrivateModePurple : UIColor.whiteColor()
         if let layout = collectionView.collectionViewLayout as? TopTabsViewLayout {
             if isPrivate {
                 layout.themeColor = TopTabsUX.TopTabsBackgroundPrivateColorInactive
