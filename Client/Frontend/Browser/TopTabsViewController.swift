@@ -262,11 +262,11 @@ extension TopTabsViewController: UICollectionViewDataSource {
         tabCell.titleText.text = tab.displayTitle
         
         if tab.displayTitle.isEmpty {
-            if (tab.url?.baseDomain()?.contains("localhost") ?? true) {
+            if (tab.webView?.URL?.baseDomain()?.contains("localhost") ?? true) {
                 tabCell.titleText.text = AppMenuConfiguration.NewTabTitleString
             }
             else {
-                tabCell.titleText.text = tab.displayURL?.absoluteString
+                tabCell.titleText.text = tab.webView?.URL?.absoluteDisplayString()
             }
             tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tabCell.titleText.text ?? "")
@@ -320,6 +320,10 @@ extension TopTabsViewController: TabSelectionDelegate {
 
 extension TopTabsViewController : WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        collectionView.reloadData()
+    }
+    
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         collectionView.reloadData()
     }
 }
