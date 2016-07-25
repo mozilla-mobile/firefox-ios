@@ -8,12 +8,11 @@ import Shared
 import SwiftKeychainWrapper
 
 private enum InfoItem: Int {
-    case TitleItem = 0
+    case WebsiteItem = 0
     case UsernameItem = 1
     case PasswordItem = 2
-    case WebsiteItem = 3
-    case LastModifiedSeparator = 4
-    case DeleteItem = 5
+    case LastModifiedSeparator = 3
+    case DeleteItem = 4
 
     var indexPath: NSIndexPath {
         return NSIndexPath(forRow: rawValue, inSection: 0)
@@ -123,7 +122,7 @@ class LoginDetailViewController: SensitiveViewController {
         // draws its own separators. The last item in the list draws its seperator full width.
 
         // Prevent seperators from showing by pushing them off screen by the width of the cell
-        let itemsToHideSeperators: [InfoItem] = [.WebsiteItem, .LastModifiedSeparator]
+        let itemsToHideSeperators: [InfoItem] = [.PasswordItem, .LastModifiedSeparator]
         itemsToHideSeperators.forEach { item in
             let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: item.rawValue, inSection: 0))
             cell?.separatorInset = UIEdgeInsetsMake(0, cell?.bounds.width ?? 0, 0, 0)
@@ -145,12 +144,6 @@ extension LoginDetailViewController: UITableViewDataSource {
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch InfoItem(rawValue: indexPath.row)! {
-        case .TitleItem:
-            let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.style = .NoIconAndBothLabels
-            loginCell.descriptionLabel.text = login.hostname
-            return loginCell
-
         case .UsernameItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
             loginCell.style = .NoIconAndBothLabels
@@ -217,7 +210,7 @@ extension LoginDetailViewController: UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 5
     }
 }
 
@@ -232,7 +225,7 @@ extension LoginDetailViewController: UITableViewDelegate {
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         switch InfoItem(rawValue: indexPath.row)! {
-        case .TitleItem, .UsernameItem, .PasswordItem, .WebsiteItem:
+        case .UsernameItem, .PasswordItem, .WebsiteItem:
             return LoginDetailUX.InfoRowHeight
         case .LastModifiedSeparator:
             return LoginDetailUX.SeparatorHeight
