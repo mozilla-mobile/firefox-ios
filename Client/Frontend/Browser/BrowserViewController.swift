@@ -2029,7 +2029,7 @@ extension BrowserViewController: TabManagerDelegate {
                 readerModeCache = DiskReaderModeCache.sharedInstance
                 applyTheme(Theme.NormalMode)
             }
-            if let privateModeButton = topTabsViewController?.privateModeButton where previous?.isPrivate != tab.isPrivate {
+            if let privateModeButton = topTabsViewController?.privateModeButton where previous != nil && previous?.isPrivate != tab.isPrivate {
                 privateModeButton.setSelected(tab.isPrivate, animated: true)
             }
             ReaderModeHandlers.readerModeCache = readerModeCache
