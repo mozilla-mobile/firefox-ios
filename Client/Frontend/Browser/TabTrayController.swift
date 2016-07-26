@@ -508,6 +508,7 @@ class TabTrayController: UIViewController {
                     break
                 }
                 self.collectionView.beginInteractiveMovementForItemAtIndexPath(indexPath)
+                self.tabDataSource.isRearrangingTabs = true
                 for item in 0..<self.tabDataSource.collectionView(self.collectionView, numberOfItemsInSection: 0) {
                     guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TabCell else {
                         continue
@@ -546,6 +547,7 @@ class TabTrayController: UIViewController {
                     }
                     cell.isBeingArranged = false
                 }
+                self.tabDataSource.isRearrangingTabs = false
                 gesture.state == .Ended ? self.collectionView.endInteractiveMovement() : self.collectionView.cancelInteractiveMovement()
             default:
                 break
@@ -832,6 +834,7 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     unowned var cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>
     private var tabs: [Tab]
     private var tabManager: TabManager
+    var isRearrangingTabs: Bool = false
 
     init(tabs: [Tab], cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>, tabManager: TabManager) {
         self.cellDelegate = cellDelegate
@@ -882,6 +885,8 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         } else {
             tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
         }
+
+        tabCell.isBeingArranged = self.isRearrangingTabs
 
         tabCell.isAccessibilityElement = true
         tabCell.accessibilityHint = NSLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
