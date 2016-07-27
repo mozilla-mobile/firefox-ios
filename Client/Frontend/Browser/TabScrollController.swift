@@ -39,6 +39,7 @@ class TabScrollingController: NSObject {
     var footerBottomConstraint: Constraint?
     var headerTopConstraint: Constraint?
     var toolbarsShowing: Bool { return headerTopOffset == 0 }
+    private var suppressToolbarHiding: Bool = false
 
     private var headerTopOffset: CGFloat = 0 {
         didSet {
@@ -142,7 +143,7 @@ private extension TabScrollingController {
 
             lastContentOffset = translation.y
             if checkRubberbandingForDelta(delta) && checkScrollHeightIsLargeEnoughForScrolling() {
-                if toolbarState != .Collapsed || contentOffset.y <= 0 {
+                if (toolbarState != .Collapsed || contentOffset.y <= 0) && contentOffset.y + scrollViewHeight < contentSize.height {
                     scrollWithDelta(delta)
                 }
 
@@ -209,7 +210,7 @@ private extension TabScrollingController {
         }
 
         if animated {
-            UIView.animateWithDuration(duration, animations: animation, completion: completion)
+            UIView.animateWithDuration(duration, delay: 0, options: .AllowUserInteraction, animations: animation, completion: completion)
         } else {
             animation()
             completion?(finished: true)
@@ -229,6 +230,13 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if targetContentOffset.memory.y + scrollView.frame.size.height >= scrollView.contentSize.height {
+            suppressToolbarHiding = true
+            showToolbars(animated: true)
+        }
+    }
+
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if tabIsLoading() {
             return
@@ -237,10 +245,12 @@ extension TabScrollingController: UIScrollViewDelegate {
         if (decelerate || (toolbarState == .Animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .Up {
                 showToolbars(animated: true)
-            } else if scrollDirection == .Down {
+            } else if scrollDirection == .Down && !suppressToolbarHiding {
                 hideToolbars(animated: true)
             }
         }
+
+        suppressToolbarHiding = false
     }
 
     func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
