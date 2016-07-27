@@ -23,6 +23,7 @@ public struct UIConstants {
     static let DefaultRowHeight: CGFloat = 58
     static let DefaultPadding: CGFloat = 10
     static let SnackbarButtonHeight: CGFloat = 48
+    static let ToolbarPopoverOffset: CGFloat = 32
 
     // Static fonts
     static let DefaultChromeSize: CGFloat = 14

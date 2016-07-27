@@ -2532,10 +2532,14 @@ extension BrowserViewController: WKUIDelegate {
             return
         }
 
-        guard let openInHelper = helperForURL else {
+        guard var openInHelper = helperForURL else {
             let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
             ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.URL!, inWebView: webView)
             return decisionHandler(WKNavigationResponsePolicy.Allow)
+        }
+        
+        if openInHelper.openInView == nil {
+            openInHelper.openInView = urlBar.locationView
         }
 
         openInHelper.open()
