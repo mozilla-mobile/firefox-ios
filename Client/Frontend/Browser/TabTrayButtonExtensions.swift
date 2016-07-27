@@ -4,30 +4,30 @@
 
 import UIKit
 
-extension UIButton {
-    class PrivateModeButton: ToggleButton {
-        var light: Bool = false
-        
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            self.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
-            self.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
-        func styleForMode(privateMode isPrivate: Bool) {
-            let maskImage = UIImage(named: "smallPrivateMask")?.imageWithRenderingMode(.AlwaysTemplate)
-            self.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
-            self.imageView?.tintColor = isPrivate ? .whiteColor() : self.light ? TopTabsUX.PrivateModeToolbarTintColor : UIConstants.PrivateModeToolbarTintColor
-            self.setImage(maskImage, forState: .Normal)
-            self.selected = isPrivate
-            self.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
-        }
+class PrivateModeButton: ToggleButton {
+    var light: Bool = false
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
+        self.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func styleForMode(privateMode isPrivate: Bool) {
+        let maskImage = UIImage(named: "smallPrivateMask")?.imageWithRenderingMode(.AlwaysTemplate)
+        self.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
+        self.imageView?.tintColor = isPrivate ? .whiteColor() : self.light ? TopTabsUX.PrivateModeToolbarTintColor : UIConstants.PrivateModeToolbarTintColor
+        self.setImage(maskImage, forState: .Normal)
+        self.selected = isPrivate
+        self.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+    }
+}
+
+extension UIButton {
     static func newTabButton() -> UIButton {
         let newTab = UIButton()
         newTab.setImage(UIImage.templateImageNamed("menu-NewTab-pbm"), forState: .Normal)

@@ -62,8 +62,8 @@ class TopTabsViewController: UIViewController {
         return newTab
     }()
     
-    lazy var privateModeButton: UIButton.PrivateModeButton = {
-        let privateModeButton = UIButton.PrivateModeButton()
+    lazy var privateModeButton: PrivateModeButton = {
+        let privateModeButton = PrivateModeButton()
         privateModeButton.light = true
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), forControlEvents: UIControlEvents.TouchUpInside)
         return privateModeButton

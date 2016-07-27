@@ -1227,7 +1227,7 @@ class TrayToolbar: UIView {
         return button
     }()
 
-    lazy var maskButton: UIButton.PrivateModeButton = UIButton.PrivateModeButton()
+    lazy var maskButton: PrivateModeButton = PrivateModeButton()
     private let sideOffset: CGFloat = 32
 
     private override init(frame: CGRect) {
