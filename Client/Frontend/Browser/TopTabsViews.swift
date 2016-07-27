@@ -298,7 +298,10 @@ class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
         guard let object = object as? TopTabsViewLayoutAttributes else {
             return false
         }
-        return object.themeColor == self.themeColor
+        if object.themeColor != self.themeColor {
+            return false
+        }
+        return super.isEqual(object)
     }
 }
 
