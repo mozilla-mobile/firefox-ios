@@ -293,6 +293,13 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
 
 class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
     var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        guard let object = object as? TopTabsViewLayoutAttributes else {
+            return false
+        }
+        return object.themeColor == self.themeColor
+    }
 }
 
 enum TopTabsCurveDirection {
