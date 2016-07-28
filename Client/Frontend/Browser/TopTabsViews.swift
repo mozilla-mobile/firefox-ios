@@ -212,11 +212,11 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
     private lazy var rightCurve = SingleCurveView(right: true)
     private lazy var leftCurve = SingleCurveView(right: false)
     
-    private var themeColour: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive {
+    private var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive {
         didSet {
-            centerBackground.backgroundColor = themeColour
+            centerBackground.backgroundColor = themeColor
             for curve in [rightCurve, leftCurve] {
-                curve.themeColor = themeColour
+                curve.themeColor = themeColor
                 curve.setNeedsDisplay()
             }
         }
@@ -262,8 +262,8 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
     
     override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
         super.applyLayoutAttributes(layoutAttributes)
-        if let decorationAttributes = layoutAttributes as? TopTabsViewLayoutAttributes {
-            self.themeColour = decorationAttributes.themeColor
+        if let decorationAttributes = layoutAttributes as? TopTabsViewLayoutAttributes, themeColor = decorationAttributes.themeColor {
+            self.themeColor = themeColor
         }
     }
     
@@ -292,7 +292,7 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
 }
 
 class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
-    var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
+    var themeColor: UIColor?
     
     override func isEqual(object: AnyObject?) -> Bool {
         guard let object = object as? TopTabsViewLayoutAttributes else {
