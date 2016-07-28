@@ -50,3 +50,11 @@ public class InfoCollections {
         return ours.sameElements(theirs, f: ==) && same(other, collections: ours)
     }
 }
+
+public struct InfoConfiguration {
+    public let maxRequestBytes: Int
+    public let maxPostRecords: Int
+    public let maxPostBytes: Int
+    public let maxBatchRecord: Int
+    public let maxBatchBytes: Int
+}

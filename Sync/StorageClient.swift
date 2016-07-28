@@ -91,6 +91,12 @@ public class RecordTooLargeError: MaybeErrorType {
     }
 }
 
+public class BatchingNotSupported: MaybeErrorType {
+    public var description: String {
+        return "Sync server does not support batching."
+    }
+}
+
 /**
  * Raised when the storage client is refusing to make a request due to a known
  * server backoff.
@@ -232,15 +238,27 @@ public struct StorageResponse<T> {
     }
 }
 
+public typealias BatchToken = String
+
 public struct POSTResult {
     public let modified: Timestamp
     public let success: [GUID]
     public let failed: [GUID: String]
+    public let batchToken: BatchToken?
+
+    public init(modified: Timestamp, success: [GUID], failed: [GUID: String], batchToken: BatchToken? = nil) {
+        self.modified = modified
+        self.success = success
+        self.failed = failed
+        self.batchToken = batchToken
+    }
 
     public static func fromJSON(json: JSON) -> POSTResult? {
         if json.isError {
             return nil
         }
+
+        let batchToken = json["batch"].asString
 
         if let mDecimalSeconds = json["modified"].asDouble,
            let s = json["success"].asArray,
@@ -258,7 +276,7 @@ public struct POSTResult {
                 return nil
             }
             let msec = Timestamp(1000 * mDecimalSeconds)
-            return POSTResult(modified: msec, success: successGUIDs, failed: failedGUIDs)
+            return POSTResult(modified: msec, success: successGUIDs, failed: failedGUIDs, batchToken: batchToken)
         }
         return nil
     }
@@ -605,6 +623,208 @@ public class Sync15StorageClient {
     }
 }
 
+public class Sync15BatchClient<T: CleartextPayloadJSON> {
+    private let config: InfoConfiguration
+
+    private var records: [Record<T>] = []
+    private let ifUnmodifiedSince: Timestamp?
+    private let collectionClient: Sync15CollectionClient<T>
+
+    // TODO: use I-U-S.
+    // Each time we do the storage operation, we might receive a backoff notification.
+    // For a success response, this will be on the subsequent request, which means we don't
+    // have to worry about handling successes and failures mixed with backoffs here.
+
+    init(config: InfoConfiguration, collectionClient: Sync15CollectionClient<T>, ifUnmodifiedSince: Timestamp? = nil) {
+        self.config = config
+        self.ifUnmodifiedSince = ifUnmodifiedSince
+        self.collectionClient = collectionClient
+    }
+
+    public func addRecords(records: [Record<T>]) {
+        log.debug("Adding \(records.count) records into batch")
+        self.records += records
+    }
+
+    public func commit(onCollectionUploaded: (POSTResult -> Void)) -> Success {
+
+        if records.isEmpty {
+            return succeed()
+        }
+
+        // Need to deduce how big the data is we're sending across using this reducer
+        let sizeReducer: (total: ByteCount, record: Record<T>) -> ByteCount = { total, record in
+            return total + (self.collectionClient.serializeRecord(record) ?? "").utf8.count
+        }
+
+        let sizeOfRecords = records.reduce(0, combine: sizeReducer)
+
+        // We have too many records for a single post so we'll either need to upload in a single batch or
+        // multiple batches
+        if records.count > config.maxBatchRecord || sizeOfRecords > config.maxBatchBytes {
+            // TODO: Break into multiple batches
+            return succeed()
+        }
+
+        if records.count > config.maxPostRecords || sizeOfRecords > config.maxPostBytes {
+            return self.batchUpload(records, ifUnmodifiedSince: self.ifUnmodifiedSince, onCollectionUploaded: onCollectionUploaded)
+        }
+
+        // We can just do a single post instead of batching
+        log.debug("Batch fits within a single request. Submitting records in a single post.")
+        return self.collectionClient.post(records, ifUnmodifiedSince: self.ifUnmodifiedSince)
+            >>== effect({ onCollectionUploaded($0.value) })
+            >>> succeed
+    }
+
+    public func batchUpload(records: [Record<T>], ifUnmodifiedSince: Timestamp?, onCollectionUploaded: (POSTResult -> Void)) -> Success {
+        let batchingResult = batchesFromRecords(records, serializer: collectionClient.serializeRecord)
+        guard var batches = batchingResult.successValue else {
+            log.debug("Unable to generate batches from records submitted to batch client")
+            return deferMaybe(batchingResult.failureValue!)
+        }
+
+        let firstBatch = batches.removeFirst()
+        let lastBatch = batches.last ?? []
+
+        return startBatch(firstBatch).bind { result in
+            guard let token = result.successValue else {
+
+                // Check if we didn't get a token back/batching isn't supported and push up records using regular single posts
+                let error = result.failureValue!
+                switch error {
+                case is BatchingNotSupported:
+
+                    // Walk through the batches, posting along the way and invoking onUpload
+                    let perChunk: (lines: [String]) -> Success = { lines in
+                        return self.collectionClient.post(lines, ifUnmodifiedSince: ifUnmodifiedSince)
+                            >>== effect({ onCollectionUploaded($0.value) })
+                            >>> succeed
+                    }
+                    return walk(batches, f: perChunk)
+                default:
+                    // Bubble up other errors
+                    return deferMaybe(error)
+                }
+            }
+
+            // Remove the last batch - we handle the last call in a special case.
+            batches.removeLast()
+
+            // When batching, each upload in the batch is uploaded to a temporary collection until we specif
+            // commit=true. At this point, the temporary collection is pushed to the real collection on the server.
+            // It is at this point we want to say the collection has been uploaded.
+            return self.uploadBatches(token, batches: batches) >>> {
+                return self.finishBatch(token, lines: lastBatch)
+                    >>== effect({ onCollectionUploaded($0.value) })
+                    >>> succeed
+            }
+        }
+    }
+
+    private func startBatch(lines: [String]) -> Deferred<Maybe<BatchToken>> {
+        let batchStartParam = NSURLQueryItem(name: "batch", value: "true")
+
+        // Attempt to upload some records and see if we get back a token we can use for batches.
+        return self.collectionClient.post(lines, ifUnmodifiedSince: nil, queryParams: [batchStartParam]) >>== { storageResponse in
+            if let batchToken = storageResponse.value.batchToken {
+                log.debug("Uploaded \(lines.count) records and received batch token \(batchToken)")
+                return deferMaybe(batchToken)
+            } else {
+                log.debug("Uploaded \(lines.count) records but received no batch token")
+                return deferMaybe(BatchingNotSupported())
+            }
+        }
+    }
+
+    private func uploadBatches(token: BatchToken, batches: [[String]]) -> Success {
+        let batchParam = NSURLQueryItem(name: "batch", value: token)
+        let uploadBatch: (lines: [String]) -> Success = { lines in
+            return self.collectionClient.post(lines, ifUnmodifiedSince: nil, queryParams: [batchParam])
+                >>> effect({ log.debug(("Uploaded \(lines.count) records for batch \(token)")) })
+        }
+
+        return walk(batches, f: uploadBatch)
+    }
+
+    private func finishBatch(token: BatchToken, lines: [String]) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
+        let batchParam = NSURLQueryItem(name: "batch", value: token)
+        let commitParam = NSURLQueryItem(name: "commit", value: "true")
+        return self.collectionClient.post(lines, ifUnmodifiedSince: nil, queryParams: [batchParam, commitParam])
+    }
+
+    public func batchesFromRecords<T>(records: [Record<T>], serializer: (Record<T>) -> String?) -> Maybe<[[String]]> {
+        var failedGUID: GUID? = nil
+        var largest: ByteCount = 0
+
+        // Schwartzian transform -- decorate, sort, undecorate.
+        func decorate(record: Record<T>) -> (String, ByteCount)? {
+            guard failedGUID == nil else {
+                // If we hit an over-sized record, or fail to serialize, we stop processing
+                // everything: we don't want to upload only some of the user's bookmarks.
+                return nil
+            }
+
+            guard let string = serializer(record) else {
+                failedGUID = record.id
+                return nil
+            }
+
+            let size = string.utf8.count
+            if size > largest {
+                largest = size
+                if size > Sync15StorageClient.maxRecordSizeBytes {
+                    // If we hit this case, we cannot ever successfully sync until the user
+                    // takes action. Let's hope they do.
+                    failedGUID = record.id
+                    return nil
+                }
+            }
+
+            return (string, size)
+        }
+
+        // Put small records first.
+        let sorted = records.flatMap(decorate).sort { $0.1 < $1.1 }
+
+        if let failed = failedGUID {
+            return Maybe(failure: RecordTooLargeError(size: largest, guid: failed))
+        }
+
+        // Cut this up into chunks of a maximum size.
+        var batches: [[String]] = []
+        var batch: [String] = []
+        var bytes = 0
+        var count = 0
+        sorted.forEach { (string, size) in
+            let expectedBytes = bytes + size + 1   // Include newlines.
+            if expectedBytes > Sync15StorageClient.maxPayloadSizeBytes ||
+               count >= Sync15StorageClient.maxPayloadItemCount {
+                batches.append(batch)
+                batch = []
+                bytes = 0
+                count = 0
+            }
+            batch.append(string)
+            bytes += size + 1
+            count += 1
+        }
+
+        // Catch the last one.
+        if !batch.isEmpty {
+            batches.append(batch)
+        }
+
+        return Maybe(success: batches)
+    }
+}
+
+private let DefaultInfoConfiguration = InfoConfiguration(maxRequestBytes: 1048576,
+                                                         maxPostRecords: 100,
+                                                         maxPostBytes: 1048576,
+                                                         maxBatchRecord: 10000,
+                                                         maxBatchBytes: 104857600)
+
 /**
  * We'd love to nest this in the overall storage client, but Swift
  * forbids the nesting of a generic class inside another class.
@@ -614,6 +834,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     private let encrypter: RecordEncrypter<T>
     private let collectionURI: NSURL
     private let collectionQueue = dispatch_queue_create("com.mozilla.sync.collectionclient", DISPATCH_QUEUE_SERIAL)
+    private let infoConfig = DefaultInfoConfiguration
 
     init(client: Sync15StorageClient, serverURI: NSURL, collection: String, encrypter: RecordEncrypter<T>) {
         self.client = client
@@ -625,12 +846,16 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return self.collectionURI.URLByAppendingPathComponent(guid)
     }
 
+    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil) -> Sync15BatchClient<T> {
+        return Sync15BatchClient(config: infoConfig, collectionClient: self, ifUnmodifiedSince: ifUnmodifiedSince)
+    }
+
     // Exposed so we can batch by size.
     public func serializeRecord(record: Record<T>) -> String? {
         return self.encrypter.serializer(record)?.toString(false)
     }
 
-    public func post(lines: [String], ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
+    public func post(lines: [String], ifUnmodifiedSince: Timestamp?, queryParams: [NSURLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
         let deferred = Deferred<Maybe<StorageResponse<POSTResult>>>(defaultQueue: client.resultQueue)
 
         if self.client.checkBackoff(deferred) {
@@ -653,12 +878,11 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return deferred
     }
 
-    public func post(records: [Record<T>], ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
-
+    public func post(records: [Record<T>], ifUnmodifiedSince: Timestamp?, queryParams: [NSURLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
         // TODO: charset
         // TODO: if any of these fail, we should do _something_. Right now we just ignore them.
         let lines = optFilter(records.map(self.serializeRecord))
-        return self.post(lines, ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.post(lines, ifUnmodifiedSince: ifUnmodifiedSince, queryParams: queryParams)
     }
 
     public func put(record: Record<T>, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
