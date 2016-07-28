@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Deferred
 @testable import Sync
 
 import XCTest
@@ -119,5 +120,116 @@ class StorageClientTests: XCTestCase {
         let result = synchronizer.uploadRecordsInChunks([rA], lastTimestamp: NSDate.now(), storageClient: collectionClient, onUpload: { _ in deferMaybe(NSDate.now()) })
 
         XCTAssertTrue(result.value.failureValue is RecordTooLargeError)
+    }
+}
+
+private func jsonFromRecord<T>(record: Record<T>) -> JSON? {
+    return JSON([
+        "id": record.id,
+        "foo": "bar"
+    ])
+}
+
+class Sync15BatchClientTests: XCTestCase {
+    // Setup a configuration thats pretty small record-wise for testing
+    private let miniConfig = InfoConfiguration(maxRequestBytes: 1048576, maxPostRecords: 2, maxPostBytes: 1048576, maxBatchRecord: 10, maxBatchBytes: 104857600)
+    private let emptyResponse = StorageResponse(value: POSTResult(modified: NSDate.now(), success: [], failed: [:]), metadata: ResponseMetadata(status: 200, headers: [:]))
+
+    private func serializeRecord(record: Record<CleartextPayloadJSON>) -> String? {
+        return jsonFromRecord(record)?.asString
+    }
+
+    private func generateMockRecords(count: Int) -> [Record<CleartextPayloadJSON>] {
+        return (0..<count).reduce([]) { previous, id in
+            let jA = "{\"id\":\"record\(id)\",\"histUri\":\"http://foo.com/\",\"title\": \"ñ\",\"visits\":[{\"date\":1222222222222222,\"type\":1}]}"
+            return previous + [Record<CleartextPayloadJSON>(id: "record\(id)", payload: CleartextPayloadJSON(JSON.parse(jA)), modified: 10000, sortindex: 123, ttl: 1000000)]
+        }
+    }
+
+    func testNoUploadWhenEmpty() {
+        var onCollectionUploadCalled = false
+        var onUploadCalled = false
+
+        let uploader: BatchUploadFunction = { _ in
+            onUploadCalled = true
+            return deferMaybe(self.emptyResponse)
+        }
+
+        let onCollectionUpload: (POSTResult -> Void) = { _ in onCollectionUploadCalled = true }
+
+        let batch = Sync15BatchClient(config: miniConfig, ifUnmodifiedSince: nil, serializeRecord: serializeRecord, uploader: uploader)
+        batch.addRecords([])
+        batch.commit(onCollectionUpload).succeeded()
+
+        // Shouldn't invoke the callback if we didn't actually upload anything
+        XCTAssertFalse(onCollectionUploadCalled)
+        XCTAssertFalse(onUploadCalled)
+    }
+
+    func testSinglePOSTUpload() {
+        var collectionUploadCount = 0
+        var uploadOpCount = 0
+
+        let uploader: BatchUploadFunction = { lines, timestamp, queryParams in
+            // Single POST should not have query parameters attached
+            XCTAssertNil(queryParams)
+            uploadOpCount += 1
+            return deferMaybe(self.emptyResponse)
+        }
+
+        let onCollectionUpload: (POSTResult -> Void) = { _ in collectionUploadCount += 1 }
+
+        let batch = Sync15BatchClient(config: miniConfig, ifUnmodifiedSince: nil, serializeRecord: serializeRecord, uploader: uploader)
+        let records = generateMockRecords(miniConfig.maxPostRecords)
+        batch.addRecords(records)
+        batch.commit(onCollectionUpload).succeeded()
+
+        // Should only have called the upload/collection callbacks once
+        XCTAssertEqual(collectionUploadCount, 1)
+        XCTAssertEqual(uploadOpCount, 1)
+    }
+
+    func testBatchUpload() {
+        var collectionUploadCount = 0
+        var uploadOpCount = 0
+
+        var startedBatch: Bool = false
+        var committedBatch: Bool = false
+
+        let uploader: BatchUploadFunction = { lines, timestamp, queryParams in
+            if let params = queryParams where params.contains({ $0.name == "batch" && $0.value == "batch" }) {
+                startedBatch = true
+                let batchStart = POSTResult(modified: 100000, success: [], failed: [:], batchToken: "token")
+                return deferMaybe(StorageResponse(value: batchStart, metadata: ResponseMetadata(status: 200, headers: [:])))
+            }
+
+            if let params = queryParams where params.contains({ $0.name == "commit" && $0.value == "true" }) {
+                committedBatch = true
+            }
+
+            uploadOpCount += 1
+            return deferMaybe(self.emptyResponse)
+        }
+
+        let onCollectionUpload: (POSTResult -> Void) = { _ in collectionUploadCount += 1 }
+
+        let batch = Sync15BatchClient(config: miniConfig, ifUnmodifiedSince: nil, serializeRecord: serializeRecord, uploader: uploader)
+        let records = generateMockRecords(miniConfig.maxBatchRecord)
+        batch.addRecords(records)
+        batch.commit(onCollectionUpload).succeeded()
+
+        // Should only have called the upload/collection callbacks once
+        XCTAssertEqual(collectionUploadCount, 1)
+        XCTAssertEqual(uploadOpCount, 2)
+        XCTAssertTrue(startedBatch)
+        XCTAssertTrue(committedBatch)
+    }
+
+    func testBatchNotSupportedUpload() {
+
+    }
+
+    func testMultipleBatchUpload() {
+
     }
 }

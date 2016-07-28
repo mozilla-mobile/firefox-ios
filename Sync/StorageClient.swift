@@ -623,22 +623,27 @@ public class Sync15StorageClient {
     }
 }
 
+
+typealias BatchUploadFunction = (lines: [String], ifUnmodifiedSince: Timestamp?, queryParams: [NSURLQueryItem]?) -> Deferred<Maybe<StorageResponse<POSTResult>>>
+
 public class Sync15BatchClient<T: CleartextPayloadJSON> {
     private let config: InfoConfiguration
 
     private var records: [Record<T>] = []
     private let ifUnmodifiedSince: Timestamp?
-    private let collectionClient: Sync15CollectionClient<T>
+    private let uploader: BatchUploadFunction
+    private let serializeRecord: (Record<T>) -> String?
 
     // TODO: use I-U-S.
     // Each time we do the storage operation, we might receive a backoff notification.
     // For a success response, this will be on the subsequent request, which means we don't
     // have to worry about handling successes and failures mixed with backoffs here.
 
-    init(config: InfoConfiguration, collectionClient: Sync15CollectionClient<T>, ifUnmodifiedSince: Timestamp? = nil) {
+    init(config: InfoConfiguration, ifUnmodifiedSince: Timestamp? = nil, serializeRecord: (Record<T>) -> String?, uploader: BatchUploadFunction) {
         self.config = config
         self.ifUnmodifiedSince = ifUnmodifiedSince
-        self.collectionClient = collectionClient
+        self.uploader = uploader
+        self.serializeRecord = serializeRecord
     }
 
     public func addRecords(records: [Record<T>]) {
@@ -654,7 +659,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
         // Need to deduce how big the data is we're sending across using this reducer
         let sizeReducer: (total: ByteCount, record: Record<T>) -> ByteCount = { total, record in
-            return total + (self.collectionClient.serializeRecord(record) ?? "").utf8.count
+            return total + (self.serializeRecord(record) ?? "").utf8.count
         }
 
         let sizeOfRecords = records.reduce(0, combine: sizeReducer)
@@ -672,13 +677,14 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
         // We can just do a single post instead of batching
         log.debug("Batch fits within a single request. Submitting records in a single post.")
-        return self.collectionClient.post(records, ifUnmodifiedSince: self.ifUnmodifiedSince)
+        let lines = optFilter(records.map(self.serializeRecord))
+        return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: nil)
             >>== effect({ onCollectionUploaded($0.value) })
             >>> succeed
     }
 
     public func batchUpload(records: [Record<T>], ifUnmodifiedSince: Timestamp?, onCollectionUploaded: (POSTResult -> Void)) -> Success {
-        let batchingResult = batchesFromRecords(records, serializer: collectionClient.serializeRecord)
+        let batchingResult = batchesFromRecords(records, serializer: self.serializeRecord)
         guard var batches = batchingResult.successValue else {
             log.debug("Unable to generate batches from records submitted to batch client")
             return deferMaybe(batchingResult.failureValue!)
@@ -697,7 +703,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
                     // Walk through the batches, posting along the way and invoking onUpload
                     let perChunk: (lines: [String]) -> Success = { lines in
-                        return self.collectionClient.post(lines, ifUnmodifiedSince: ifUnmodifiedSince)
+                        return self.uploader(lines: lines, ifUnmodifiedSince: ifUnmodifiedSince, queryParams: nil)
                             >>== effect({ onCollectionUploaded($0.value) })
                             >>> succeed
                     }
@@ -726,7 +732,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
         let batchStartParam = NSURLQueryItem(name: "batch", value: "true")
 
         // Attempt to upload some records and see if we get back a token we can use for batches.
-        return self.collectionClient.post(lines, ifUnmodifiedSince: nil, queryParams: [batchStartParam]) >>== { storageResponse in
+        return self.uploader(lines: lines, ifUnmodifiedSince: ifUnmodifiedSince, queryParams: [batchStartParam]) >>== { storageResponse in
             if let batchToken = storageResponse.value.batchToken {
                 log.debug("Uploaded \(lines.count) records and received batch token \(batchToken)")
                 return deferMaybe(batchToken)
@@ -740,7 +746,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     private func uploadBatches(token: BatchToken, batches: [[String]]) -> Success {
         let batchParam = NSURLQueryItem(name: "batch", value: token)
         let uploadBatch: (lines: [String]) -> Success = { lines in
-            return self.collectionClient.post(lines, ifUnmodifiedSince: nil, queryParams: [batchParam])
+            return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: [batchParam])
                 >>> effect({ log.debug(("Uploaded \(lines.count) records for batch \(token)")) })
         }
 
@@ -750,7 +756,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     private func finishBatch(token: BatchToken, lines: [String]) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
         let batchParam = NSURLQueryItem(name: "batch", value: token)
         let commitParam = NSURLQueryItem(name: "commit", value: "true")
-        return self.collectionClient.post(lines, ifUnmodifiedSince: nil, queryParams: [batchParam, commitParam])
+        return self.uploader(lines: lines, ifUnmodifiedSince: ifUnmodifiedSince, queryParams: [batchParam, commitParam])
     }
 
     public func batchesFromRecords<T>(records: [Record<T>], serializer: (Record<T>) -> String?) -> Maybe<[[String]]> {
@@ -836,7 +842,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     private let collectionQueue = dispatch_queue_create("com.mozilla.sync.collectionclient", DISPATCH_QUEUE_SERIAL)
     private let infoConfig = DefaultInfoConfiguration
 
-    init(client: Sync15StorageClient, serverURI: NSURL, collection: String, encrypter: RecordEncrypter<T>) {
+    public init(client: Sync15StorageClient, serverURI: NSURL, collection: String, encrypter: RecordEncrypter<T>) {
         self.client = client
         self.encrypter = encrypter
         self.collectionURI = serverURI.URLByAppendingPathComponent(collection, isDirectory: false)
@@ -847,7 +853,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     }
 
     public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil) -> Sync15BatchClient<T> {
-        return Sync15BatchClient(config: infoConfig, collectionClient: self, ifUnmodifiedSince: ifUnmodifiedSince)
+        return Sync15BatchClient(config: infoConfig, ifUnmodifiedSince: ifUnmodifiedSince, serializeRecord: self.serializeRecord, uploader: self.post)
     }
 
     // Exposed so we can batch by size.
