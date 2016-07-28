@@ -401,7 +401,7 @@ class TabManager : NSObject {
             if !tab.isPrivate {
                 addTab()
             } else {
-                selectTab(tabs.first)
+                selectTab(tabs.last)
             }
         }
 
