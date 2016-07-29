@@ -252,9 +252,9 @@ public class FirefoxAccount {
         let client = FxAClient10()
         let name = DeviceInfo.defaultClientName()
         if fxaDeviceId.isEmpty { // Create device
-            result = client.registerOrUpdateDevice(sessionToken, id: nil, name: name, type: "mobile")
+            result = client.registerOrUpdateDevice(self, sessionToken: sessionToken, id: nil, name: name, type: "mobile")
         } else { // Update device
-            result = client.registerOrUpdateDevice(sessionToken, id: fxaDeviceId, name: name, type: nil)
+            result = client.registerOrUpdateDevice(self, sessionToken: sessionToken, id: fxaDeviceId, name: name, type: nil)
         }
 
         return result.map { result in
@@ -263,8 +263,6 @@ public class FirefoxAccount {
                 self.deviceRegistrationVersion = DEVICE_REGISTRATION_VERSION
                 return Maybe(success: device.id)
             } else {
-                let failure = result.failureValue
-                // TODO: error cases
                 return Maybe(failure: AccountError.DeviceRegistrationFailed)
             }
         }
