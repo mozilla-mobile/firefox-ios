@@ -26,26 +26,23 @@ enum MimeType: String {
     case PASS = "application/vnd.apple.pkpass"
 }
 
-protocol ResponseHandlerHelper {
-    var anchorView: UIView? { get set }
+protocol OpenInHelper {
     init?(response: NSURLResponse)
-    func trigger()
-}
-
-protocol OpenInHelper: ResponseHandlerHelper {
-    var openInView: OpenInView? { get }
+    var openInView: UIView? { get set }
+    func open()
 }
 
 struct OpenIn {
-    static let helpers: [ResponseHandlerHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, ShareFileHelper.self]
+    static let helpers: [OpenInHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, ShareFileHelper.self]
     
-    static func helperForResponse(response: NSURLResponse) -> ResponseHandlerHelper? {
+    static func helperForResponse(response: NSURLResponse) -> OpenInHelper? {
         return helpers.flatMap { $0.init(response: response) }.first
     }
 }
 
-class ShareFileHelper: NSObject, ResponseHandlerHelper {
-    var anchorView: UIView?
+class ShareFileHelper: NSObject, OpenInHelper {
+    var openInView: UIView? = nil
+
     private var url: NSURL
     var pathExtension: String?
 
@@ -56,7 +53,7 @@ class ShareFileHelper: NSObject, ResponseHandlerHelper {
         super.init()
     }
 
-    func trigger() {
+    func open() {
         let alertController = UIAlertController(
             title: Strings.OpenInDownloadHelperAlertTitle,
             message: Strings.OpenInDownloadHelperAlertMessage,
@@ -65,19 +62,19 @@ class ShareFileHelper: NSObject, ResponseHandlerHelper {
         alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .Default){ (action) in
             let objectsToShare = [self.url]
             let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-            if let sourceView = self.anchorView {
+            if let sourceView = self.openInView {
                 activityVC.popoverPresentationController?.sourceView = sourceView
                 activityVC.popoverPresentationController?.sourceRect = CGRect(origin: CGPoint(x: UIConstants.ToolbarPopoverOffset, y: CGRectGetMidY(sourceView.bounds)), size: CGSizeZero)
-                UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(activityVC, animated: true, completion: nil)
             }
+            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(activityVC, animated: true, completion: nil)
         })
         UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
 }
 
 class OpenPassBookHelper: NSObject, OpenInHelper {
-    var anchorView: UIView?
-    let openInView: OpenInView? = nil
+    var openInView: UIView? = nil
+
     private var url: NSURL
 
     required init?(response: NSURLResponse) {
@@ -87,7 +84,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
         super.init()
     }
 
-    func trigger() {
+    func open() {
         guard let passData = NSData(contentsOfURL: url) else { return }
         var error: NSError? = nil
         let pass = PKPass(data: passData, error: &error)
@@ -116,12 +113,11 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
 }
 
 class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDelegate {
-    var anchorView: UIView?
     private var url: NSURL
     private var docController: UIDocumentInteractionController? = nil
     private var openInURL: NSURL?
 
-    lazy var openInView: OpenInView? = getOpenInView(self)()
+    lazy var openInView: UIView? = getOpenInView(self)()
 
     lazy var documentDirectory: NSURL = {
         return NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent("pdfs")
@@ -159,7 +155,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     func getOpenInView() -> OpenInView {
         let overlayView = OpenInView()
 
-        overlayView.openInButton.addTarget(self, action: #selector(OpenPdfInHelper.trigger), forControlEvents: .TouchUpInside)
+        overlayView.openInButton.addTarget(self, action: #selector(OpenPdfInHelper.open), forControlEvents: .TouchUpInside)
         return overlayView
     }
 
@@ -196,7 +192,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
         }
     }
 
-    func trigger() {
+    func open() {
         createLocalCopyOfPDF()
         guard let _parentView = self.openInView!.superview, docController = self.docController else { log.error("view doesn't have a superview so can't open anything"); return }
         // iBooks should be installed by default on all devices we care about, so regardless of whether or not there are other pdf-capable

@@ -2525,24 +2525,24 @@ extension BrowserViewController: WKUIDelegate {
     func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
         let helperForURL = OpenIn.helperForResponse(navigationResponse.response)
         if navigationResponse.canShowMIMEType {
-            if let openInHelper = helperForURL as? OpenInHelper {
+            if let openInHelper = helperForURL {
                 addViewForOpenInHelper(openInHelper)
-            } else if var responseHandler = helperForURL {
-                responseHandler.anchorView = urlBar.locationView
-                responseHandler.trigger()
             }
             decisionHandler(WKNavigationResponsePolicy.Allow)
             return
         }
 
-        guard var responseHandler = helperForURL else {
+        guard var openInHelper = helperForURL else {
             let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
             ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.URL!, inWebView: webView)
             return decisionHandler(WKNavigationResponsePolicy.Allow)
         }
         
-        responseHandler.anchorView = urlBar.locationView
-        responseHandler.trigger()
+        if openInHelper.openInView == nil {
+            openInHelper.openInView = urlBar.locationView
+        }
+
+        openInHelper.open()
         decisionHandler(WKNavigationResponsePolicy.Cancel)
     }
     
