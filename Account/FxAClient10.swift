@@ -30,6 +30,13 @@ public struct FxALoginResponse {
     }
 }
 
+public enum FxAccountRemoteError {
+    static let INVALID_AUTHENTICATION_TOKEN = 110
+    static let UNKNOWN_DEVICE = 123
+    static let DEVICE_SESSION_CONFLICT = 124
+    static let UNKNOWN_ERROR = 999
+}
+
 public struct FxAKeysResponse {
     let kA: NSData
     let wrapkB: NSData
@@ -454,7 +461,7 @@ public class FxAClient10 {
     public func status(uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
         let deferred = Deferred<Maybe<FxAStatusResponse>>()
 
-        let baseURL = self.URL.URLByAppendingPathComponent("/account/devices")
+        let baseURL = self.URL.URLByAppendingPathComponent("/account/status")
         let queryParams = "?uid=" + uid
         let URL = NSURL(string: queryParams, relativeToURL: baseURL)
         let mutableURLRequest = NSMutableURLRequest(URL: URL!)
@@ -465,25 +472,27 @@ public class FxAClient10 {
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, result) in
-                if let error = result.error as? NSError {
-                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
-                    return
-                }
-
-                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
-                    let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                withExtendedLifetime(self.alamofire) {
+                    if let error = result.error as? NSError {
+                        deferred.fill(Maybe(failure: FxAClientError.Local(error)))
                         return
                     }
 
-                    if let response = FxAClient10.statusResponseFromJSON(json) {
-                        deferred.fill(Maybe(success: response))
-                        return
-                    }
-                }
+                    if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                        let json = JSON(data)
+                        if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                            deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                            return
+                        }
 
-                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+                        if let response = FxAClient10.statusResponseFromJSON(json) {
+                            deferred.fill(Maybe(success: response))
+                            return
+                        }
+                    }
+
+                    deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+                }
         }
         return deferred
     }
@@ -510,30 +519,32 @@ public class FxAClient10 {
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, result) in
-                if let error = result.error as? NSError {
-                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
-                    return
-                }
-
-                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
-                    let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                withExtendedLifetime(self.alamofire) {
+                    if let error = result.error as? NSError {
+                        deferred.fill(Maybe(failure: FxAClientError.Local(error)))
                         return
                     }
 
-                    if let response = FxAClient10.devicesResponseFromJSON(json) {
-                        deferred.fill(Maybe(success: response))
-                        return
-                    }
-                }
+                    if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                        let json = JSON(data)
+                        if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                            deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                            return
+                        }
 
-                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+                        if let response = FxAClient10.devicesResponseFromJSON(json) {
+                            deferred.fill(Maybe(success: response))
+                            return
+                        }
+                    }
+
+                    deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+                }
         }
         return deferred
     }
 
-    public func registerOrUpdateDevice(sessionToken: NSData, id: String?, name: String, type: String?) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
+    public func registerOrUpdateDevice(account: FirefoxAccount, sessionToken: NSData, id: String?, name: String, type: String?) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
         let deferred = Deferred<Maybe<FxADeviceRegistrationResponse>>()
         let parameters: [String:AnyObject]
 
@@ -569,26 +580,65 @@ public class FxAClient10 {
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, result) in
-                if let error = result.error as? NSError {
-                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
-                    return
-                }
-
-                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
-                    let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                withExtendedLifetime(self.alamofire) {
+                    if let error = result.error as? NSError {
+                        deferred.fill(Maybe(failure: FxAClientError.Local(error)))
                         return
                     }
 
-                    if let response = FxAClient10.deviceRegistrationResponseFromJSON(json) {
-                        deferred.fill(Maybe(success: response))
-                        return
-                    }
-                }
+                    if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                        let json = JSON(data)
+                        if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                            //deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                            self.handleError(account, deferred:deferred, error: remoteError, sessionToken: sessionToken)
+                            return
+                        }
 
-                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+                        if let response = FxAClient10.deviceRegistrationResponseFromJSON(json) {
+                            deferred.fill(Maybe(success: response))
+                            return
+                        }
+                    }
+
+                    deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
+                }
         }
         return deferred
+    }
+    
+    public func handleError(account: FirefoxAccount, deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError, sessionToken: NSData)  {
+        if (error.code == 400) {
+            if (Int(error.errno) == FxAccountRemoteError.UNKNOWN_DEVICE) {
+                recoverFromUnknownDevice();
+                deferred.fill(Maybe(failure: FxAClientError.Remote(error)))
+            } else if (Int(error.errno) == FxAccountRemoteError.DEVICE_SESSION_CONFLICT) {
+                recoverFromDeviceSessionConflict(deferred, error: error, sessionToken: sessionToken)
+            }
+        } else
+            if (error.code == 401 && Int(error.errno) == FxAccountRemoteError.INVALID_AUTHENTICATION_TOKEN) {
+                //handleTokenError(...);
+            } else {
+                //logErrorAndResetDeviceRegistrationVersion(...);
+        }
+    }
+    
+    public func recoverFromDeviceSessionConflict(deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError, sessionToken: NSData) {
+        devices(sessionToken).upon { response in
+            if let success = response.successValue {
+                if let currentDevice = (success.devices.filter { $0.isCurrentDevice }).first {
+                    deferred.fill(Maybe(success: FxADeviceRegistrationResponse(id: currentDevice.id, name: currentDevice.name)))
+                }
+            }
+            deferred.fillIfUnfilled(Maybe(failure: FxAClientError.Remote(error)))
+        }
+    }
+    
+    public func recoverFromUnknownDevice() {
+         print("unknown device id, clearing the cached device id");
+        /* TODO */
+    }
+    
+    public func handleTokenError(account: FirefoxAccount, deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError) {
+        /* TODO */
     }
 }
