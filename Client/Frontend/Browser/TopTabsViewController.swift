@@ -47,6 +47,7 @@ class TopTabsViewController: UIViewController {
         
         return collectionView
     }()
+    var dragState: TabDragState?
     
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
@@ -146,6 +147,10 @@ class TopTabsViewController: UIViewController {
             applyTheme(currentTab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
         }
         updateTabCount(tabsToDisplay.count)
+        
+        if #available(iOS 9, *) {
+            self.view.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTab)))
+        }
     }
     
     func updateTabCount(count: Int, animated: Bool = true) {
@@ -185,8 +190,68 @@ class TopTabsViewController: UIViewController {
         delegate?.topTabsDidPressTabs()
     }
     
+    @available(iOS 9, *)
+    func didLongPressTab(gesture: UILongPressGestureRecognizer) {
+        switch gesture.state {
+        case .Began:
+            let pressPosition = gesture.locationInView(self.collectionView)
+            guard let indexPath = self.collectionView.indexPathForItemAtPoint(pressPosition) else {
+                break
+            }
+            self.view.userInteractionEnabled = false
+            for item in 0..<self.collectionView.numberOfItemsInSection(0) {
+                guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TopTabCell else {
+                    continue
+                }
+                if item == indexPath.item {
+                    let cellPosition = cell.contentView.convertPoint(cell.bounds.center, toView: self.collectionView)
+                    self.dragState = TabDragState(cell: cell, indexPath: indexPath, offset: CGPoint(x: pressPosition.x - cellPosition.x - self.collectionView.contentOffset.x, y: pressPosition.y - cellPosition.y), hasBegun: false)
+                    self.didSelectTabAtIndex(indexPath.item)
+                    continue
+                }
+                cell.isBeingArranged = true
+            }
+            break
+        case .Changed:
+            if let dragState = self.dragState {
+                if !dragState.hasBegun {
+                    dragState.hasBegun = true
+                    self.collectionView.beginInteractiveMovementForItemAtIndexPath(dragState.indexPath)
+                }
+                if let view = gesture.view {
+                    var dragPosition = gesture.locationInView(view)
+                    let offsetPosition = CGPoint(x: dragPosition.x, y: dragPosition.y)
+                    dragPosition = CGPoint(x: offsetPosition.x - dragState.offset.x, y: self.collectionView.frame.height / 2)
+                    collectionView.updateInteractiveMovementTargetPosition(dragPosition)
+                }
+            }
+        case .Ended, .Cancelled:
+            for item in 0..<self.collectionView.numberOfItemsInSection(0) {
+                guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TopTabCell else {
+                    continue
+                }
+                if !cell.isBeingArranged {
+                    continue
+                }
+                cell.isBeingArranged = false
+            }
+            self.dragState = nil
+            self.view.userInteractionEnabled = true
+            self.collectionView.performBatchUpdates({
+                gesture.state == .Ended ? self.collectionView.endInteractiveMovement() : self.collectionView.cancelInteractiveMovement()
+            }) { _ in
+                self.collectionView.reloadData()
+                self.scrollToCurrentTab()
+            }
+        default:
+            break
+        }
+    }
+    
     func reloadFavicons() {
-        self.collectionView.reloadData()
+        if self.dragState == nil {
+            self.collectionView.reloadData()
+        }
     }
     
     func scrollToCurrentTab(animated: Bool = true, centerCell: Bool = false) {
@@ -305,6 +370,12 @@ extension TopTabsViewController: UICollectionViewDataSource {
     @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabsToDisplay.count
     }
+    
+    @objc func collectionView(collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        let fromIndex = sourceIndexPath.item
+        let toIndex = destinationIndexPath.item
+        tabManager.moveTab(isPrivate: tabsToDisplay[fromIndex].isPrivate, fromIndex: fromIndex, toIndex: toIndex)
+    }
 }
 
 extension TopTabsViewController: TabSelectionDelegate {
@@ -320,11 +391,15 @@ extension TopTabsViewController: TabSelectionDelegate {
 
 extension TopTabsViewController : WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        collectionView.reloadData()
+        if self.dragState == nil {
+            collectionView.reloadData()
+        }
     }
     
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        collectionView.reloadData()
+        if self.dragState == nil {
+            collectionView.reloadData()
+        }
     }
 }
 

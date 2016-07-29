@@ -4,7 +4,7 @@
 
 import Foundation
 
-class TopTabCell: UICollectionViewCell {
+class TopTabCell: TabCell {
     enum Style {
         case Light
         case Dark

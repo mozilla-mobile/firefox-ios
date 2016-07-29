@@ -583,7 +583,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func showQueuedAlertIfAvailable() {
-        if var queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
+        if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
             alertController.delegate = self
             presentViewController(alertController, animated: true, completion: nil)

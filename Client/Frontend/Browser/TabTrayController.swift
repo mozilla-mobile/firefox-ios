@@ -52,10 +52,14 @@ struct DarkTabCellUX {
 }
 
 protocol TabCellDelegate: class {
-    func tabCellDidClose(cell: TabCell)
+    func tabCellDidClose(cell: TabTrayCell)
 }
 
 class TabCell: UICollectionViewCell {
+    var isBeingArranged: Bool = false
+}
+
+class TabTrayCell: TabCell {
     enum Style {
         case Light
         case Dark
@@ -78,7 +82,7 @@ class TabCell: UICollectionViewCell {
 
     var title: UIVisualEffectView!
     var animator: SwipeAnimator!
-    var isBeingArranged: Bool = false {
+    override var isBeingArranged: Bool {
         didSet {
             if isBeingArranged {
                 self.contentView.transform = CGAffineTransformMakeRotation(TabTrayControllerUX.RearrangeWobbleAngle)
@@ -131,9 +135,9 @@ class TabCell: UICollectionViewCell {
         self.innerStroke.layer.backgroundColor = UIColor.clearColor().CGColor
 
         super.init(frame: frame)
-        
+
         self.animator = SwipeAnimator(animatingView: self.backgroundHolder, container: self)
-        self.closeButton.addTarget(self, action: #selector(TabCell.SELclose), forControlEvents: UIControlEvents.TouchUpInside)
+        self.closeButton.addTarget(self, action: #selector(TabTrayCell.SELclose), forControlEvents: UIControlEvents.TouchUpInside)
 
         contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.background)
@@ -263,6 +267,20 @@ struct TabTrayState {
     var isPrivate: Bool = false
 }
 
+class TabDragState {
+    var cell: TabCell
+    var indexPath: NSIndexPath
+    var offset: CGPoint
+    var hasBegun: Bool
+    
+    init(cell: TabCell, indexPath: NSIndexPath, offset: CGPoint, hasBegun: Bool) {
+        self.cell = cell
+        self.indexPath = indexPath
+        self.offset = offset
+        self.hasBegun = hasBegun
+    }
+}
+
 class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
@@ -270,8 +288,7 @@ class TabTrayController: UIViewController {
     weak var appStateDelegate: AppStateDelegate?
 
     var collectionView: UICollectionView!
-    var draggedCell: TabCell?
-    var dragOffset: CGPoint = CGPointZero
+    var dragState: TabDragState?
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
@@ -378,7 +395,7 @@ class TabTrayController: UIViewController {
         collectionView.dataSource = tabDataSource
         collectionView.delegate = tabLayoutDelegate
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
-        collectionView.registerClass(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
+        collectionView.registerClass(TabTrayCell.self, forCellWithReuseIdentifier: TabTrayCell.Identifier)
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
         
         if #available(iOS 9, *) {
@@ -515,8 +532,7 @@ class TabTrayController: UIViewController {
                     }
                     if item == indexPath.item {
                         let cellPosition = cell.contentView.convertPoint(cell.bounds.center, toView: self.collectionView)
-                        self.draggedCell = cell
-                        self.dragOffset = CGPoint(x: pressPosition.x - cellPosition.x, y: pressPosition.y - cellPosition.y)
+                        self.dragState = TabDragState(cell: cell, indexPath: indexPath, offset: CGPoint(x: pressPosition.x - cellPosition.x, y: pressPosition.y - cellPosition.y), hasBegun: true)
                         UIView.animateWithDuration(TabTrayControllerUX.RearrangeTransitionDuration, delay: 0, options: [.AllowUserInteraction, .BeginFromCurrentState], animations: {
                             cell.contentView.transform = CGAffineTransformMakeScale(TabTrayControllerUX.RearrangeDragScale, TabTrayControllerUX.RearrangeDragScale)
                             cell.contentView.alpha = TabTrayControllerUX.RearrangeDragAlpha
@@ -527,10 +543,10 @@ class TabTrayController: UIViewController {
                 }
                 break
             case .Changed:
-                if let view = gesture.view, draggedCell = self.draggedCell {
+                if let view = gesture.view, dragState = self.dragState {
                     var dragPosition = gesture.locationInView(view)
-                    let offsetPosition = CGPoint(x: dragPosition.x + draggedCell.frame.center.x * (1 - TabTrayControllerUX.RearrangeDragScale), y: dragPosition.y + draggedCell.frame.center.y * (1 - TabTrayControllerUX.RearrangeDragScale))
-                    dragPosition = CGPoint(x: offsetPosition.x - self.dragOffset.x, y: offsetPosition.y - self.dragOffset.y)
+                    let offsetPosition = CGPoint(x: dragPosition.x + dragState.cell.frame.center.x * (1 - TabTrayControllerUX.RearrangeDragScale), y: dragPosition.y + dragState.cell.frame.center.y * (1 - TabTrayControllerUX.RearrangeDragScale))
+                    dragPosition = CGPoint(x: offsetPosition.x - dragState.offset.x, y: offsetPosition.y - dragState.offset.y)
                     collectionView.updateInteractiveMovementTargetPosition(dragPosition)
                 }
             case .Ended, .Cancelled:
@@ -547,6 +563,7 @@ class TabTrayController: UIViewController {
                     }
                     cell.isBeingArranged = false
                 }
+                self.dragState = nil
                 self.tabDataSource.isRearrangingTabs = false
                 gesture.state == .Ended ? self.collectionView.endInteractiveMovement() : self.collectionView.cancelInteractiveMovement()
             default:
@@ -773,7 +790,7 @@ extension TabTrayController: TabManagerDelegate {
 
 extension TabTrayController: UIScrollViewAccessibilityDelegate {
     func accessibilityScrollStatusForScrollView(scrollView: UIScrollView) -> String? {
-        var visibleCells = collectionView.visibleCells() as! [TabCell]
+        var visibleCells = collectionView.visibleCells() as! [TabTrayCell]
         var bounds = collectionView.bounds
         bounds = CGRectOffset(bounds, collectionView.contentInset.left, collectionView.contentInset.top)
         bounds.size.width -= collectionView.contentInset.left + collectionView.contentInset.right
@@ -806,7 +823,7 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
 
 extension TabTrayController: SwipeAnimatorDelegate {
     func swipeAnimator(animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
-        let tabCell = animator.container as! TabCell
+        let tabCell = animator.container as! TabTrayCell
         if let indexPath = collectionView.indexPathForCell(tabCell) {
             let tab = tabsToDisplay[indexPath.item]
             tabManager.removeTab(tab)
@@ -816,7 +833,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
 }
 
 extension TabTrayController: TabCellDelegate {
-    func tabCellDidClose(cell: TabCell) {
+    func tabCellDidClose(cell: TabTrayCell) {
         let indexPath = collectionView.indexPathForCell(cell)!
         let tab = tabsToDisplay[indexPath.item]
         tabManager.removeTab(tab)
@@ -872,7 +889,7 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     }
 
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let tabCell = collectionView.dequeueReusableCellWithReuseIdentifier(TabCell.Identifier, forIndexPath: indexPath) as! TabCell
+        let tabCell = collectionView.dequeueReusableCellWithReuseIdentifier(TabTrayCell.Identifier, forIndexPath: indexPath) as! TabTrayCell
         tabCell.animator.delegate = cellDelegate
         tabCell.delegate = cellDelegate
 
@@ -1080,7 +1097,7 @@ extension TabTrayController: TabPeekDelegate {
 
     func tabPeekDidCloseTab(tab: Tab) {
         if let index = self.tabDataSource.tabs.indexOf(tab),
-            let cell = self.collectionView?.cellForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) as? TabCell {
+            let cell = self.collectionView?.cellForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) as? TabTrayCell {
             cell.SELclose()
         }
     }
