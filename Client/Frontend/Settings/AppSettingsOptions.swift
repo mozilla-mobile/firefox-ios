@@ -712,7 +712,7 @@ class HomePageSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
-    override var accessibilityIdentifier: String? { return "HomePageSetting" }
+    override var accessibilityIdentifier: String? { return "Homepage" }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -735,7 +735,7 @@ class NewTabPageSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
-    override var accessibilityIdentifier: String? { return "NewTabPage.Setting" }
+    override var accessibilityIdentifier: String? { return "NewTab" }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile

@@ -103,127 +103,205 @@ class L10nSnapshotTests: XCTestCase {
         snapshot("02DefaultTopSites-01")
     }
 
-    func test03Settings() {
+    func test03MenuOnTopSites() {
         let app = XCUIApplication()
+        app.buttons.elementBoundByIndex(1).tap()
+        app.buttons["TabToolbar.menuButton"].tap()
+        snapshot("03MenuOnTopSites-01")
+        app.coordinateWithNormalizedOffset(CGVector(dx: 0.5, dy: 0.25)).tap()
+
+        loadWebPage("about:blank", waitForLoadToFinish: false)
+        sleep(2)
+        app.buttons["TabToolbar.menuButton"].tap()
+        snapshot("10MenuOnWebPage-01")
+        app.otherElements["MenuViewController.menuView"].swipeLeft()
+        snapshot("10MenuOnWebPage-02")
+        app.coordinateWithNormalizedOffset(CGVector(dx: 0.5, dy: 0.25)).tap()
+
         app.buttons["URLBarView.tabsButton"].tap()
-        app.buttons["TabTrayController.settingsButton"].tap()
+        app.buttons["TabTrayController.menuButton"].tap()
+        snapshot("10MenuOnTabsTray-02")
+    }
 
-        var index = 1
+    func test03MenuOnTopSites() {
+        let app = XCUIApplication()
+        app.buttons.elementBoundByIndex(1).tap()
+        app.buttons["TabToolbar.menuButton"].tap()
+        snapshot("03MenuOnTopSites-01")
+    }
 
-        // Screenshot the settings by scrolling through it
-        snapshot("03Settings-\(index)")
-        let element = app.images["SettingsTableFooterView.logo"]
-        while !element.visible() {
-            app.swipeUp()
-            sleep(2)
-            index += 1
-            snapshot("03Settings-\(index)")
-        }
+    func test04Foo() {
+        let app = XCUIApplication()
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        snapshot("10MenuOnWebPage-01")
+        app.otherElements["MenuViewController.menuView"].swipeLeft()
+        snapshot("10MenuOnWebPage-02")
+    }
+
+    func test04Settings() {
+        let app = XCUIApplication()
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.otherElements["MenuViewController.menuView"].swipeLeft()
+        app.cells["SettingsMenuItem"].tap()
+
+// This stopped working for unknown reasons
+//        // Screenshot the settings by scrolling through it
+//
+//        var index = 1
+//        while true {
+//            snapshot("03Settings-\(index)")
+//            let element = app.otherElements["SettingsTableFooterView"]
+//            if element.visible() {
+//                break
+//            }
+//            index += 1
+//            app.swipeUp()
+//            sleep(2)
+//        }
 
         // Screenshot all the settings that have a separate page
-        for cellName in ["Search", "Logins", "TouchIDPasscode", "ClearPrivateData"] {
+        for cellName in ["Search", "NewTab", "Homepage", "Logins", "TouchIDPasscode", "ClearPrivateData"] {
             app.tables["AppSettingsTableViewController.tableView"].cells[cellName].tap()
-            index++
-            snapshot("03Settings-\(index)")
+            snapshot("04Settings-\(cellName)")
             app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
         }
     }
 
-    func test04PrivateBrowsingTabsEmptyState() {
+    func test05PrivateBrowsingTabsEmptyState() {
         let app = XCUIApplication()
         app.buttons["URLBarView.tabsButton"].tap() // Open tabs tray
-        app.buttons["TabTrayController.togglePrivateMode"].tap() // Switch to private mode
-        snapshot("04PrivateBrowsingTabsEmptyState-01")
+        app.buttons["TabTrayController.maskButton"].tap() // Switch to private mode
+        snapshot("05PrivateBrowsingTabsEmptyState-01")
     }
 
-    func test05PanelsEmptyState() {
+    func test06PanelsEmptyState() {
         let app = XCUIApplication()
         app.textFields["url"].tap()
         app.buttons["HomePanels.Bookmarks"].tap()
-        snapshot("05PanelsEmptyState-01")
+        snapshot("06PanelsEmptyState-01")
         app.buttons["HomePanels.History"].tap()
-        snapshot("05PanelsEmptyState-02")
-        app.buttons["HomePanels.SyncedTabs"].tap()
-        snapshot("05PanelsEmptyState-03")
+        snapshot("06PanelsEmptyState-02")
+        app.buttons["HistoryPanel.syncedTabsButton"].tap()
+        snapshot("06PanelsEmptyState-03")
         app.buttons["HomePanels.ReadingList"].tap()
-        snapshot("05PanelsEmptyState-04")
+        snapshot("06PanelsEmptyState-04")
     }
 
-    func test06URLBar() {
+    // From here on it is fine to load pages
+
+    func test07AddSearchProvider() {
+        let app = XCUIApplication()
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/addSearchProvider.html", waitForOtherElementWithAriaLabel: "body")
+        app.webViews.elementBoundByIndex(0).buttons["focus"].tap()
+        snapshot("07AddSearchProvider-01", waitForLoadingIndicator: false)
+        app.buttons["BrowserViewController.customSearchEngineButton"].tap()
+        snapshot("07AddSearchProvider-02", waitForLoadingIndicator: false)
+
+        let alert = XCUIApplication().alerts.elementBoundByIndex(0)
+        expectationForPredicate(NSPredicate(format: "exists == 1"), evaluatedWithObject: alert, handler: nil)
+        waitForExpectationsWithTimeout(3, handler: nil)
+        alert.buttons.elementBoundByIndex(0).tap()
+
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/addSearchProviderFail.html", waitForOtherElementWithAriaLabel: "body")
+        app.webViews.elementBoundByIndex(0).buttons["focus"].tap()
+        app.buttons["BrowserViewController.customSearchEngineButton"].tap()
+        snapshot("07AddSearchProvider-03", waitForLoadingIndicator: false)
+        
+    }
+
+    func test08URLBar() {
         let app = XCUIApplication()
         app.textFields["url"].tap()
-        snapshot("06URLBar-01")
+        snapshot("08URLBar-01")
         app.textFields["address"].typeText("moz")
-        snapshot("06URLBar-02")
+        snapshot("08URLBar-02")
     }
 
-    func test07URLBarContextMenu() {
+    func test09URLBarContextMenu() {
         let app = XCUIApplication()
         // Long press with nothing on the clipboard
         app.textFields["url"].pressForDuration(2.0)
-        snapshot("07LocationBarContextMenu-01")
+        snapshot("09LocationBarContextMenu-01")
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
         sleep(2)
 
         // Long press with a URL on the clipboard
         UIPasteboard.generalPasteboard().string = "https://www.mozilla.com"
         app.textFields["url"].pressForDuration(2.0)
-        snapshot("07LocationBarContextMenu-02")
+        snapshot("09LocationBarContextMenu-02")
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
         sleep(2)
     }
 
-    func test08WebViewContextMenu() {
+    func test10MenuOnWebPage() {
+        let app = XCUIApplication()
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        snapshot("10MenuOnWebPage-01")
+        app.otherElements["MenuViewController.menuView"].swipeLeft()
+        snapshot("10MenuOnWebPage-02")
+    }
+
+    func test11WebViewContextMenu() {
         let app = XCUIApplication()
 
         // Link
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/link.html", waitForOtherElementWithAriaLabel: "body")
         app.webViews.elementBoundByIndex(0).links["link"].pressForDuration(2.0)
-        snapshot("08WebViewContextMenu-01")
+        snapshot("11WebViewContextMenu-01")
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(app.sheets.elementBoundByIndex(0).buttons.count-1).tap()
 
         // Image
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/image.html", waitForOtherElementWithAriaLabel: "body")
         app.webViews.elementBoundByIndex(0).images["image"].pressForDuration(2.0)
-        snapshot("08WebViewContextMenu-02")
+        snapshot("11WebViewContextMenu-02")
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(app.sheets.elementBoundByIndex(0).buttons.count-1).tap()
 
         // Image inside Link
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/imageWithLink.html", waitForOtherElementWithAriaLabel: "body")
         app.webViews.elementBoundByIndex(0).links["link"].pressForDuration(2.0)
-        snapshot("08WebViewContextMenu-03")
+        snapshot("11WebViewContextMenu-03")
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(app.sheets.elementBoundByIndex(0).buttons.count-1).tap()
     }
 
-    func test09WebViewAuthenticationDialog() {
-        loadWebPage("https://phonebook.mozilla.org", waitForLoadToFinish: false)
+    func test12WebViewAuthenticationDialog() {
+        loadWebPage("https://people.mozilla.org/iosbuilds/builds/doesnotexist.html", waitForLoadToFinish: false)
         let predicate = NSPredicate(format: "exists == 1")
         let query = XCUIApplication().alerts.elementBoundByIndex(0)
         expectationForPredicate(predicate, evaluatedWithObject: query, handler: nil)
         self.waitForExpectationsWithTimeout(3, handler: nil)
-        snapshot("09WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
+        snapshot("12WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
     }
 
-    func test10ReloadButtonContextMenu() {
+    func test13ReloadButtonContextMenu() {
         let app = XCUIApplication()
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
         app.buttons["TabToolbar.stopReloadButton"].pressForDuration(2.0)
-        snapshot("10ContextMenuReloadButton-01", waitForLoadingIndicator: false)
+        snapshot("13ContextMenuReloadButton-01", waitForLoadingIndicator: false)
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
         app.buttons["TabToolbar.stopReloadButton"].pressForDuration(2.0)
-        snapshot("10ContextMenuReloadButton-02", waitForLoadingIndicator: false)
+        snapshot("13ContextMenuReloadButton-02", waitForLoadingIndicator: false)
     }
 
-    func test11LocationDialog() {
+    func test14SetHompage() {
+        let app = XCUIApplication()
+        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.cells["SetHomePageMenuItem"].tap()
+        snapshot("14SetHomepage-01", waitForLoadingIndicator: false)
+    }
+
+    func test15LocationDialog() {
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html", waitForOtherElementWithAriaLabel: "body")
-        snapshot("11LocationDialog-01")
+        snapshot("15LocationDialog-01")
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
     }
 
     // This is a fragile testcase because it depends on the specific position of items in the
     // share sheet. This is pretty stable on the 9.2.1 simulator but may change with iOS releases.
 
-    func test12ShareSheetAndExtensions() {
+    func test16ShareSheetAndExtensions() {
         let app = XCUIApplication()
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
         app.buttons["TabToolbar.shareButton"].tap()
@@ -231,23 +309,23 @@ class L10nSnapshotTests: XCTestCase {
         app.collectionViews.elementBoundByIndex(0).swipeLeft()
         app.collectionViews.elementBoundByIndex(0).buttons.elementBoundByIndex(app.collectionViews.elementBoundByIndex(0).buttons.count-1).tap()
         app.tables.switches.elementBoundByIndex(app.tables.switches.count-1).tap()
-        snapshot("12ShareSheetAndExtensions-01") // Shows Share Extension in a list
+        snapshot("16ShareSheetAndExtensions-01") // Shows Share Extension in a list
         app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(1).tap()
 
         app.collectionViews.elementBoundByIndex(1).swipeLeft()
         app.collectionViews.elementBoundByIndex(1).buttons.elementBoundByIndex(app.collectionViews.elementBoundByIndex(1).buttons.count-1).tap()
         app.tables.switches.elementBoundByIndex(app.tables.switches.count-1).tap()
         app.tables.switches.elementBoundByIndex(app.tables.switches.count-2).tap()
-        snapshot("12ShareSheetAndExtensions-02") // Shows Action Extensions in a list
+        snapshot("16ShareSheetAndExtensions-02") // Shows Action Extensions in a list
         app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(1).tap()
 
-        snapshot("12ShareSheetAndExtensions-03") // Shows all extensions in the share sheet
+        snapshot("16ShareSheetAndExtensions-03") // Shows all extensions in the share sheet
 
         // At this point our extensions are all enabled. ShareTo has index 2, ViewLater 2, SendTab 3
 
         // ShareTo
         app.collectionViews.elementBoundByIndex(0).buttons.elementBoundByIndex(2).tap()
-        snapshot("12ShareSheetAndExtensions-03") // ShareTo
+        snapshot("16ShareSheetAndExtensions-03") // ShareTo
         app.buttons["ShareDialogController.navigationItem.leftBarButtonItem"].tap()
 
         sleep(2)
@@ -260,105 +338,105 @@ class L10nSnapshotTests: XCTestCase {
             app.buttons["TabToolbar.shareButton"].tap()
             app.collectionViews.elementBoundByIndex(1).buttons.elementBoundByIndex(3).tap()
         }
-        snapshot("12ShareSheetAndExtensions-04") // SendTo - Empty state because not logged in
+        snapshot("16ShareSheetAndExtensions-04") // SendTo - Empty state because not logged in
         app.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"].tap()
     }
 
-    func test13PasswordSnackbar() {
+    func test17PasswordSnackbar() {
         let app = XCUIApplication()
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/password.html", waitForOtherElementWithAriaLabel: "body")
         app.webViews.elementBoundByIndex(0).buttons["submit"].tap()
-        snapshot("13PasswordSnackbar-01")
+        snapshot("17PasswordSnackbar-01")
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
         // The password is pre-filled with a random value so second this this will cause the update prompt
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/password.html", waitForOtherElementWithAriaLabel: "body")
         app.webViews.elementBoundByIndex(0).buttons["submit"].tap()
-        snapshot("13PasswordSnackbar-02")
+        snapshot("17PasswordSnackbar-02")
     }
 
-    func test50ClearPrivateData() {
-        let app = XCUIApplication()
-        var index = 1
-
-        func mySnapshot(name: String) {
-            snapshot(name)
-            index += 1
-        }
-
-        func clearPrivateData() {
-            let clearPrivateDataCell = app.tables.cells["ClearPrivateData"]
-            clearPrivateDataCell.tap()
-            mySnapshot("50ClearPrivateData-\(index)")
-            let clearPrivateDataButton = app.tables.cells["ClearPrivateData"]
-            clearPrivateDataButton.tap()
-            mySnapshot("50ClearPrivateData-\(index)")
-            let button = app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(0)
-            button.tap()
-            let navBar = app.navigationBars.elementBoundByIndex(0)
-            navBar.buttons.elementBoundByIndex(0).tap()
-        }
-
-        let loginUsername = "testtesto@mockmyid.com"
-        let loginPassword = "testtesto@mockmyid.com"
-
-        app.buttons["URLBarView.tabsButton"].tap()
-        app.buttons["TabTrayController.settingsButton"].tap()
-
-        mySnapshot("50ClearPrivateData-\(index)")
-
-        let logOutCell = app.tables.cells["LogOut"]
-        if logOutCell.exists {
-            logOutCell.tap()
-            sleep(2)
-            app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
-        }
-
-        sleep(2)
-        clearPrivateData()
-
-        app.tables.cells["SignInToFirefox"].tap()
-
-        let passwordField = app.webViews.secureTextFields.elementBoundByIndex(0)
-        let exists = NSPredicate(format: "exists == 1")
-        expectationForPredicate(exists, evaluatedWithObject: passwordField, handler: nil)
-
-        waitForExpectationsWithTimeout(10, handler: nil)
-
-        let usernameField = app.webViews.textFields.elementBoundByIndex(0)
-        if !usernameField.exists {
-            app.webViews.links.elementBoundByIndex(1).tap()
-            expectationForPredicate(exists, evaluatedWithObject: usernameField, handler: nil)
-            waitForExpectationsWithTimeout(10, handler: nil)
-        }
-        usernameField.tap()
-        usernameField.typeText(loginUsername)
-
-        passwordField.tap()
-        sleep(2)
-        passwordField.typeText(loginPassword)
-
-        addUIInterruptionMonitorWithDescription("Location Dialog") { (alert) -> Bool in
-            mySnapshot("50ClearPrivateData-\(index)")
-            alert.buttons.elementBoundByIndex(1).tap()
-            return true
-        }
-
-        app.webViews.buttons.elementBoundByIndex(0).tap()
-
-        mySnapshot("50ClearPrivateData-\(index)")
-
-        sleep(2)
-        clearPrivateData()
-
-        app.tables["AppSettingsTableViewController.tableView"].swipeUp()
-        app.tables["AppSettingsTableViewController.tableView"].swipeUp()
-        mySnapshot("50ClearPrivateData-\(index)")
-
-        app.tables["AppSettingsTableViewController.tableView"].cells["LogOut"].tap()
-        mySnapshot("50ClearPrivateData-\(index)")
-        app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
-        mySnapshot("50ClearPrivateData-\(index)")
-    }
+//    func test50ClearPrivateData() {
+//        let app = XCUIApplication()
+//        var index = 1
+//
+//        func mySnapshot(name: String) {
+//            snapshot(name)
+//            index += 1
+//        }
+//
+//        func clearPrivateData() {
+//            let clearPrivateDataCell = app.tables.cells["ClearPrivateData"]
+//            clearPrivateDataCell.tap()
+//            mySnapshot("50ClearPrivateData-\(index)")
+//            let clearPrivateDataButton = app.tables.cells["ClearPrivateData"]
+//            clearPrivateDataButton.tap()
+//            mySnapshot("50ClearPrivateData-\(index)")
+//            let button = app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(0)
+//            button.tap()
+//            let navBar = app.navigationBars.elementBoundByIndex(0)
+//            navBar.buttons.elementBoundByIndex(0).tap()
+//        }
+//
+//        let loginUsername = "testtesto@mockmyid.com"
+//        let loginPassword = "testtesto@mockmyid.com"
+//
+//        app.buttons["URLBarView.tabsButton"].tap()
+//        app.buttons["TabTrayController.settingsButton"].tap()
+//
+//        mySnapshot("50ClearPrivateData-\(index)")
+//
+//        let logOutCell = app.tables.cells["LogOut"]
+//        if logOutCell.exists {
+//            logOutCell.tap()
+//            sleep(2)
+//            app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
+//        }
+//
+//        sleep(2)
+//        clearPrivateData()
+//
+//        app.tables.cells["SignInToFirefox"].tap()
+//
+//        let passwordField = app.webViews.secureTextFields.elementBoundByIndex(0)
+//        let exists = NSPredicate(format: "exists == 1")
+//        expectationForPredicate(exists, evaluatedWithObject: passwordField, handler: nil)
+//
+//        waitForExpectationsWithTimeout(10, handler: nil)
+//
+//        let usernameField = app.webViews.textFields.elementBoundByIndex(0)
+//        if !usernameField.exists {
+//            app.webViews.links.elementBoundByIndex(1).tap()
+//            expectationForPredicate(exists, evaluatedWithObject: usernameField, handler: nil)
+//            waitForExpectationsWithTimeout(10, handler: nil)
+//        }
+//        usernameField.tap()
+//        usernameField.typeText(loginUsername)
+//
+//        passwordField.tap()
+//        sleep(2)
+//        passwordField.typeText(loginPassword)
+//
+//        addUIInterruptionMonitorWithDescription("Location Dialog") { (alert) -> Bool in
+//            mySnapshot("50ClearPrivateData-\(index)")
+//            alert.buttons.elementBoundByIndex(1).tap()
+//            return true
+//        }
+//
+//        app.webViews.buttons.elementBoundByIndex(0).tap()
+//
+//        mySnapshot("50ClearPrivateData-\(index)")
+//
+//        sleep(2)
+//        clearPrivateData()
+//
+//        app.tables["AppSettingsTableViewController.tableView"].swipeUp()
+//        app.tables["AppSettingsTableViewController.tableView"].swipeUp()
+//        mySnapshot("50ClearPrivateData-\(index)")
+//
+//        app.tables["AppSettingsTableViewController.tableView"].cells["LogOut"].tap()
+//        mySnapshot("50ClearPrivateData-\(index)")
+//        app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
+//        mySnapshot("50ClearPrivateData-\(index)")
+//    }
 }
 
 extension XCUIElement {
