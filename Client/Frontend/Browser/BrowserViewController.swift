@@ -2527,6 +2527,9 @@ extension BrowserViewController: WKUIDelegate {
         if navigationResponse.canShowMIMEType {
             if let openInHelper = helperForURL as? OpenInHelper {
                 addViewForOpenInHelper(openInHelper)
+            } else if var responseHandler = helperForURL {
+                responseHandler.anchorView = urlBar.locationView
+                responseHandler.trigger()
             }
             decisionHandler(WKNavigationResponsePolicy.Allow)
             return
