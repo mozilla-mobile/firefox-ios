@@ -508,6 +508,7 @@ class TabTrayController: UIViewController {
                     break
                 }
                 self.collectionView.beginInteractiveMovementForItemAtIndexPath(indexPath)
+                self.view.userInteractionEnabled = false
                 self.tabDataSource.isRearrangingTabs = true
                 for item in 0..<self.tabDataSource.collectionView(self.collectionView, numberOfItemsInSection: 0) {
                     guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TabCell else {
@@ -548,6 +549,7 @@ class TabTrayController: UIViewController {
                     cell.isBeingArranged = false
                 }
                 self.tabDataSource.isRearrangingTabs = false
+                self.view.userInteractionEnabled = true
                 gesture.state == .Ended ? self.collectionView.endInteractiveMovement() : self.collectionView.cancelInteractiveMovement()
             default:
                 break
