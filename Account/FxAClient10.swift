@@ -609,7 +609,7 @@ public class FxAClient10 {
     public func handleError(account: FirefoxAccount, deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError, sessionToken: NSData)  {
         if (error.code == 400) {
             if (Int(error.errno) == FxAccountRemoteError.UNKNOWN_DEVICE) {
-                recoverFromUnknownDevice();
+                recoverFromUnknownDevice(account);
                 deferred.fill(Maybe(failure: FxAClientError.Remote(error)))
             } else if (Int(error.errno) == FxAccountRemoteError.DEVICE_SESSION_CONFLICT) {
                 recoverFromDeviceSessionConflict(deferred, error: error, sessionToken: sessionToken)
@@ -633,12 +633,26 @@ public class FxAClient10 {
         }
     }
     
-    public func recoverFromUnknownDevice() {
-         print("unknown device id, clearing the cached device id");
-        /* TODO */
+    public func recoverFromUnknownDevice(account: FirefoxAccount) {
+        print("unknown device id, clearing the cached device id");
+        account.fxaDeviceId = ""
     }
     
     public func handleTokenError(account: FirefoxAccount, deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError) {
-        /* TODO */
+        print("recovering from invalid token error: \(error)")
+        print("device registration failed")
+        account.deviceRegistrationVersion = 0
+        self.status(account.uid).upon() { result in
+            if let status = result.successValue {
+                if !status.exists {
+                    print("token was invalidated because the account no longer exists")
+                    // TODO: This should possibly be in a different state (see the Android source code for the same method)
+                    account.makeDoghouse()
+                } else {
+                    print("the session token was invalid")
+                    account.makeDoghouse()
+                }
+            }
+        }
     }
 }
