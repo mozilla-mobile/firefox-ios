@@ -15,6 +15,8 @@ private struct HomePanelViewControllerUX {
     static let BackgroundColorNormalMode = UIConstants.PanelBackgroundColor
     static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
     static let EditDoneButtonRightPadding: CGFloat = -12
+    static let ToolbarButtonDeselectedColorNormalMode = UIColor(white: 0.2, alpha: 1)
+    static let ToolbarButtonDeselectedColorPrivateMode = UIColor(white: 0.9, alpha: 1)
 }
 
 protocol HomePanelViewControllerDelegate: class {
@@ -78,7 +80,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     var isPrivateMode: Bool = false {
         didSet {
             if oldValue != isPrivateMode {
-                buttonContainerView.backgroundColor = isPrivateMode ? HomePanelViewControllerUX.BackgroundColorPrivateMode : HomePanelViewControllerUX.BackgroundColorNormalMode
+                self.buttonContainerView.backgroundColor = isPrivateMode ? HomePanelViewControllerUX.BackgroundColorPrivateMode : HomePanelViewControllerUX.BackgroundColorNormalMode
+                self.updateButtonTints()
                 self.updateAppState()
             }
         }
@@ -159,6 +162,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 if index < buttons.count {
                     let currentButton = buttons[index]
                     currentButton.selected = false
+                    currentButton.userInteractionEnabled = true
                 }
             }
 
@@ -168,6 +172,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 if index < buttons.count {
                     let newButton = buttons[index]
                     newButton.selected = true
+                    newButton.userInteractionEnabled = false
                 }
 
                 if index < panels.count {
@@ -183,6 +188,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                     }
                 }
             }
+            self.updateButtonTints()
             self.updateAppState()
         }
     }
@@ -217,7 +223,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     func SELtappedButton(sender: UIButton!) {
         for (index, button) in buttons.enumerate() {
-            if (button == sender) {
+            if button == sender {
                 selectedPanel = HomePanelType(rawValue: index)
                 delegate?.homePanelViewController(self, didSelectPanel: index)
                 break
@@ -243,10 +249,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             let button = UIButton()
             buttonContainerView.addSubview(button)
             button.addTarget(self, action: #selector(HomePanelViewController.SELtappedButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            if let image = UIImage(named: "panelIcon\(panel.imageName)") {
+            if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)") {
                 button.setImage(image, forState: UIControlState.Normal)
             }
-            if let image = UIImage(named: "panelIcon\(panel.imageName)Selected") {
+            if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)Selected") {
                 button.setImage(image, forState: UIControlState.Selected)
             }
             button.accessibilityLabel = panel.accessibilityLabel
@@ -261,6 +267,16 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             }
 
             prev = button
+        }
+    }
+    
+    func updateButtonTints() {
+        for (index, button) in self.buttons.enumerate() {
+            if index == self.selectedPanel?.rawValue {
+                button.tintColor = isPrivateMode ? UIConstants.PrivateModePurple : UIConstants.HighlightBlue
+            } else {
+                button.tintColor = isPrivateMode ? HomePanelViewControllerUX.ToolbarButtonDeselectedColorPrivateMode : HomePanelViewControllerUX.ToolbarButtonDeselectedColorNormalMode
+            }
         }
     }
 
