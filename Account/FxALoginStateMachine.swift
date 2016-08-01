@@ -77,8 +77,8 @@ class FxALoginStateMachine {
             }
             log.info("Key pair and certificate are fresh; staying Married.")
 
-            if (account != nil && (account!.fxaDeviceId.isEmpty || account!.deviceRegistrationVersion == 0)) {
-                account!.registerOrUpdateDevice(state)
+            if let account = account where account.fxaDeviceId.isEmpty || account.deviceRegistrationVersion == 0 {
+                account.registerOrUpdateDevice(state)
             }
 
             return same
