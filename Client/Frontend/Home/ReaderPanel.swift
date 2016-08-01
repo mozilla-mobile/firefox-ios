@@ -58,7 +58,7 @@ private struct ReadingListPanelUX {
     static let WelcomeScreenCircleSpacer = 10
 }
 
-class ReadingListTableViewCell: SWTableViewCell {
+class ReadingListTableViewCell: UITableViewCell {
     var title: String = "Example" {
         didSet {
             titleLabel.text = title
@@ -78,29 +78,18 @@ class ReadingListTableViewCell: SWTableViewCell {
             readStatusImageView.image = UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread")
             titleLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             hostnameLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
-            markAsReadButton.setTitle(unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText, forState: UIControlState.Normal)
-            if let text = markAsReadButton.titleLabel?.text {
-                markAsReadAction.name = text
-            }
             updateAccessibilityLabel()
         }
     }
 
-    private var deleteAction: UIAccessibilityCustomAction!
-    private var markAsReadAction: UIAccessibilityCustomAction!
-
     let readStatusImageView: UIImageView!
     let titleLabel: UILabel!
     let hostnameLabel: UILabel!
-    let deleteButton: UIButton!
-    let markAsReadButton: UIButton!
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         readStatusImageView = UIImageView()
         titleLabel = UILabel()
         hostnameLabel = UILabel()
-        deleteButton = UIButton()
-        markAsReadButton = UIButton()
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -138,41 +127,12 @@ class ReadingListTableViewCell: SWTableViewCell {
             make.leading.trailing.equalTo(self.titleLabel)
         }
 
-        deleteButton.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
-        deleteButton.titleLabel?.textColor = ReadingListTableViewCellUX.DeleteButtonTitleColor
-        deleteButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        deleteButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
-        deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
-        deleteAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.DeleteButtonTitleText, target: self, selector: #selector(ReadingListTableViewCell.deleteActionActivated))
-
-        markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
-        markAsReadButton.titleLabel?.textColor = ReadingListTableViewCellUX.MarkAsReadButtonTitleColor
-        markAsReadButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        markAsReadButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
-        markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
-        markAsReadAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.MarkAsReadButtonTitleText, target: self, selector: #selector(ReadingListTableViewCell.markAsReadActionActivated))
-
-        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .LeftToRight {
-            rightUtilityButtons = [deleteButton]
-            leftUtilityButtons = [markAsReadButton]
-        } else {
-            rightUtilityButtons = [markAsReadButton]
-            leftUtilityButtons = [deleteButton]
-        }
-
-        accessibilityCustomActions = [deleteAction, markAsReadAction]
         setupDynamicFonts()
     }
 
     func setupDynamicFonts() {
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         hostnameLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        deleteButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        markAsReadButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
     }
 
     override func prepareForReuse() {
@@ -194,16 +154,6 @@ class ReadingListTableViewCell: SWTableViewCell {
             }
         }
         return hostname
-    }
-
-    @objc private func markAsReadActionActivated() -> Bool {
-        self.delegate?.swipeableTableViewCell?(self, didTriggerLeftUtilityButtonWithIndex: 0)
-        return true
-    }
-
-    @objc private func deleteActionActivated() -> Bool {
-        self.delegate?.swipeableTableViewCell?(self, didTriggerRightUtilityButtonWithIndex: 0)
-        return true
     }
 
     private func updateAccessibilityLabel() {
@@ -228,7 +178,7 @@ class ReadingListTableViewCell: SWTableViewCell {
     }
 }
 
-class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegate {
+class ReadingListPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
@@ -252,6 +202,9 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         tableView.accessibilityIdentifier = "ReadingTable"
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
+        if #available(iOS 9.0, *) {
+            tableView.cellLayoutMarginsFollowReadableWidth = false
+        }
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.separatorColor = UIConstants.SeparatorColor
@@ -418,7 +371,6 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ReadingListTableViewCell", forIndexPath: indexPath) as! ReadingListTableViewCell
-        cell.delegate = self
         if let record = records?[indexPath.row] {
             cell.title = record.title
             cell.url = NSURL(string: record.url)!
@@ -426,49 +378,29 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         }
         return cell
     }
-    
-    private func deleteItemAtCell(cell: SWTableViewCell) {
-        if let cell = cell as? ReadingListTableViewCell, indexPath = tableView.indexPathForCell(cell), record = records?[indexPath.row] {
-            if let result = profile.readingList?.deleteRecord(record) where result.isSuccess {
-                records?.removeAtIndex(indexPath.row)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-                // reshow empty state if no records left
-                if records?.count == 0 {
-                    view.addSubview(emptyStateOverlayView)
-                }
-            }
+
+    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        guard let record = records?[indexPath.row] else {
+            return []
         }
-    }
-    
-    private func toggleItemAtCell(cell: SWTableViewCell) {
-        if let cell = cell as? ReadingListTableViewCell {
-            cell.hideUtilityButtonsAnimated(true)
-            if let indexPath = tableView.indexPathForCell(cell), record = records?[indexPath.row] {
-                if let result = profile.readingList?.updateRecord(record, unread: !record.unread) where result.isSuccess {
-                    // TODO This is a bit odd because the success value of the update is an optional optional Record
-                    if let successValue = result.successValue, updatedRecord = successValue {
-                        records?[indexPath.row] = updatedRecord
-                        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-                    }
-                }
-            }
+
+        let delete = UITableViewRowAction(style: .Normal, title: ReadingListTableViewCellUX.DeleteButtonTitleText) { [weak self] action, index in
+            self?.deleteItem(atIndex: index)
         }
+        delete.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
+
+        let toggleText = record.unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText
+        let unreadToggle = UITableViewRowAction(style: .Normal, title: toggleText.stringSplitWithNewline()) { [weak self] (action, index) in
+            self?.toggleItem(atIndex: index)
+        }
+        unreadToggle.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
+
+        return [unreadToggle, delete]
     }
 
-    func swipeableTableViewCell(cell: SWTableViewCell!, didTriggerLeftUtilityButtonWithIndex index: Int) {
-        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .LeftToRight {
-            toggleItemAtCell(cell)
-        } else {
-            deleteItemAtCell(cell)
-        }
-    }
-
-    func swipeableTableViewCell(cell: SWTableViewCell!, didTriggerRightUtilityButtonWithIndex index: Int) {
-        if UIApplication.sharedApplication().userInterfaceLayoutDirection == .LeftToRight {
-            deleteItemAtCell(cell)
-        } else {
-            toggleItemAtCell(cell)
-        }
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // the cells you would like the actions to appear needs to be editable
+        return true
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -481,4 +413,30 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
             homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)
         }
     }
+    
+    private func deleteItem(atIndex indexPath: NSIndexPath) {
+        if let record = records?[indexPath.row] {
+            if let result = profile.readingList?.deleteRecord(record) where result.isSuccess {
+                records?.removeAtIndex(indexPath.row)
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                // reshow empty state if no records left
+                if records?.count == 0 {
+                    view.addSubview(emptyStateOverlayView)
+                }
+            }
+        }
+    }
+
+    private func toggleItem(atIndex indexPath: NSIndexPath) {
+        if let record = records?[indexPath.row] {
+            if let result = profile.readingList?.updateRecord(record, unread: !record.unread) where result.isSuccess {
+                // TODO This is a bit odd because the success value of the update is an optional optional Record
+                if let successValue = result.successValue, updatedRecord = successValue {
+                    records?[indexPath.row] = updatedRecord
+                    tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                }
+            }
+        }
+    }
+
 }

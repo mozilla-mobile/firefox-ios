@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
     var rootViewController: UIViewController!
-    weak var profile: BrowserProfile?
+    weak var profile: Profile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
     var foregroundStartTime = 0
@@ -34,6 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var openInFirefoxParams: LaunchParams? = nil
 
     var appStateStore: AppStateStore!
+
+    var systemBrightness: CGFloat = UIScreen.mainScreen().brightness
 
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Hold references to willFinishLaunching parameters for delayed app launch
@@ -202,7 +204,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.profile = p
         return p
     }
-    
+
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
@@ -310,6 +312,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
 
+        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: true)
         self.profile?.syncManager.applicationDidBecomeActive()
 
         // We could load these here, but then we have to futz with the tab counter
@@ -373,6 +376,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.profile?.shutdown()
             application.endBackgroundTask(taskId)
         }
+    }
+
+    func applicationWillResignActive(application: UIApplication) {
+        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: false)
     }
 
     func applicationWillEnterForeground(application: UIApplication) {

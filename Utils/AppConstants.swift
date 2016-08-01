@@ -13,7 +13,7 @@ public enum AppBuildChannel {
 }
 
 public struct AppConstants {
-    public static let IsRunningTest = NSClassFromString("XCTestCase") != nil
+    public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || NSProcessInfo.processInfo().arguments.contains("FIREFOX_TESTS")
 
     // True if this process is executed as part of a Fastlane Snapshot test
     public static let IsRunningFastlaneSnapshot = NSProcessInfo.processInfo().arguments.contains("FASTLANE_SNAPSHOT")
@@ -136,6 +136,57 @@ public struct AppConstants {
     public static let MOZ_NEW_TAB_CHOICES: Bool = {
         #if MOZ_CHANNEL_RELEASE
             return true
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    /// Enables/disables the availability of No Image Mode.
+    public static let MOZ_NO_IMAGE_MODE: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    /// Enables/disables the availability of Night Mode.
+    public static let MOZ_NIGHT_MODE: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
+    
+    ///  Enables/disables the top tabs for iPad
+    public static let MOZ_TOP_TABS: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_NIGHTLY

@@ -90,6 +90,9 @@ class Tab: NSObject {
 
     private(set) var screenshot: UIImage?
     var screenshotUUID: NSUUID?
+    
+    // If this tab has been opened from another, its parent will point to the tab from which it was opened
+    var parent: Tab? = nil
 
     private var helperManager: HelperManager? = nil
     private var configuration: WKWebViewConfiguration? = nil
@@ -342,7 +345,7 @@ class Tab: NSObject {
                 webView?.customUserAgent = userAgent
 
                 // Reload the initial URL to avoid UA specific redirection
-                loadRequest(NSURLRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 60))
+                loadRequest(PrivilegedRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 60))
                 return
             }
         }
@@ -456,11 +459,26 @@ class Tab: NSObject {
 
         updateAppState()
     }
+    
+    func isDescendentOf(ancestor: Tab) -> Bool {
+        var tab = parent
+        while tab != nil {
+            if tab! == ancestor {
+                return true
+            }
+            tab = tab?.parent
+        }
+        return false
+    }
 
     func setNoImageMode(enabled: Bool = false, force: Bool) {
         if enabled || force {
             webView?.evaluateJavaScript("__firefox__.setNoImageMode(\(enabled))", completionHandler: nil)
         }
+    }
+
+    func setNightMode(enabled: Bool) {
+        webView?.evaluateJavaScript("__firefox__.setNightMode(\(enabled))", completionHandler: nil)
     }
 }
 

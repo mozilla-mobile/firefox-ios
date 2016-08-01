@@ -178,9 +178,14 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
 
         var fav = Favicon(url: url, type: icon.type)
         if let url = url.asURL {
-            manager.downloadImageWithURL(url,
+            var fetch: SDWebImageOperation?
+            fetch = manager.downloadImageWithURL(url,
                 options: SDWebImageOptions.LowPriority,
-                progress: nil,
+                progress: { (receivedSize, expectedSize) in
+                    if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
+                        fetch?.cancel()
+                    }
+                },
                 completed: { (img, err, cacheType, success, url) -> Void in
                 fav = Favicon(url: url.absoluteString,
                     type: icon.type)
@@ -205,27 +210,29 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
 
     // Returns the default favicon for a site based on the first letter of the site's domain
     class func getDefaultFavicon(url: NSURL) -> UIImage {
-        if let letterFromUrl = url.baseDomain() {
-            let faviconLetter = String(letterFromUrl[letterFromUrl.startIndex]).uppercaseString
-            if let cachedFavicon = characterToFaviconCache[faviconLetter] {
-                return cachedFavicon
-            }
-
-            var faviconImage = UIImage()
-            let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize))
-            faviconLabel.text = faviconLetter
-            faviconLabel.textAlignment = .Center
-            faviconLabel.font = UIFont.systemFontOfSize(18, weight: UIFontWeightMedium)
-            faviconLabel.textColor = UIColor.grayColor()
-            UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
-            faviconLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-            faviconImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-
-            characterToFaviconCache[faviconLetter] = faviconImage
-            return faviconImage
+        guard let character = url.baseDomain()?.characters.first else {
+            return defaultFavicon
         }
-        return defaultFavicon
+
+        let faviconLetter = String(character).uppercaseString
+
+        if let cachedFavicon = characterToFaviconCache[faviconLetter] {
+            return cachedFavicon
+        }
+
+        var faviconImage = UIImage()
+        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize))
+        faviconLabel.text = faviconLetter
+        faviconLabel.textAlignment = .Center
+        faviconLabel.font = UIFont.systemFontOfSize(18, weight: UIFontWeightMedium)
+        faviconLabel.textColor = UIColor.grayColor()
+        UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
+        faviconLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        faviconImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        characterToFaviconCache[faviconLetter] = faviconImage
+        return faviconImage
     }
 }
 

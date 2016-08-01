@@ -62,10 +62,11 @@ class TopSitesPanel: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-
-        coordinator.animateAlongsideTransition({ context in
-            self.collection?.reloadData()
-        }, completion: nil)
+        if UIApplication.sharedApplication().applicationState != .Background {
+            coordinator.animateAlongsideTransition({ context in
+                self.collection?.reloadData()
+            }, completion: nil)
+        }
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -105,6 +106,12 @@ class TopSitesPanel: UIViewController {
         self.refreshTopSites(maxFrecencyLimit)
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        layout.invalidateLayout()
+        collection?.reloadData()
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
@@ -114,13 +121,19 @@ class TopSitesPanel: UIViewController {
 
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
-            refreshTopSites(maxFrecencyLimit)
-            break
+        case NotificationProfileDidFinishSyncing:
+            // Only reload top sites if there the cache is dirty since the finish syncing
+            // notification is fired everytime the user re-enters the app from the background.
+            self.profile.history.areTopSitesDirty(withLimit: self.maxFrecencyLimit) >>== { dirty in
+                if dirty {
+                    self.refreshTopSites(self.maxFrecencyLimit)
+                }
+            }
+        case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
+            self.refreshTopSites(self.maxFrecencyLimit)
         default:
             // no need to do anything at all
             log.warning("Received unexpected notification \(notification.name)")
-            break
         }
     }
 

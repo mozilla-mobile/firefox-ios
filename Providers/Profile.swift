@@ -941,10 +941,12 @@ public class BrowserProfile: Profile {
                 return .Good
             }
             guard let results = result.successValue else {
-                guard let _ = result.failureValue as? BookmarksMergeError else {
+                switch result.failureValue {
+                case _ as BookmarksMergeError, _ as BookmarksDatabaseError:
+                    return SyncDisplayState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
+                default:
                     return SyncDisplayState.Bad(message: nil)
                 }
-                return SyncDisplayState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
             }
             let errorResults: [SyncDisplayState]? = results.flatMap { identifier, status in
                 let displayState = self.displayStateForSyncState(status, identifier: identifier)

@@ -6,25 +6,37 @@ import Foundation
 import SnapKit
 import SwiftKeychainWrapper
 
+enum AuthenticationState {
+    case NotAuthenticating
+    case Presenting
+}
+
 class SensitiveViewController: UIViewController {
     var promptingForTouchID: Bool = false
     var backgroundedBlur: UIImageView?
+    var authState: AuthenticationState = .NotAuthenticating
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: UIApplicationWillEnterForegroundNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: UIApplicationDidBecomeActiveNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.blurContents), name: UIApplicationWillResignActiveNotification, object: nil)
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
+        notificationCenter.removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
         notificationCenter.removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
+        notificationCenter.removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
 
     func checkIfUserRequiresValidation() {
+        guard authState != .Presenting else {
+            return
+        }
+
         presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
         guard let authInfo = KeychainWrapper.authenticationInfo() where authInfo.requiresValidation(.Logins) else {
             removeBackgroundedBlur()
@@ -36,10 +48,12 @@ class SensitiveViewController: UIViewController {
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.promptingForTouchID = false
+                self.authState = .NotAuthenticating
                 self.removeBackgroundedBlur()
             },
             cancel: {
                 self.promptingForTouchID = false
+                self.authState = .NotAuthenticating
                 self.navigationController?.popToRootViewControllerAnimated(true)
             },
             fallback: {
@@ -52,6 +66,7 @@ class SensitiveViewController: UIViewController {
                 })
             }
         )
+        authState = .Presenting
     }
 
     func blurContents() {

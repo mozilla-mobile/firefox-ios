@@ -8,13 +8,6 @@ if (!window.__firefox__) {
 }
 
 (function() {
-  window.__firefox__.isActiveElementSearchField = function() {
-    var input = document.activeElement;
-    if (input.tagName.toLowerCase() !== "input") return false;
-    var form = input.form;
-    return form && form.method && form.method.toLowerCase() == 'get';
-  };
-
   window.__firefox__.searchQueryForField = function() {
     var input = document.activeElement;
     if (input.tagName.toLowerCase() !== "input") return null;
@@ -36,10 +29,6 @@ if (!window.__firefox__) {
     params = params.concat(selectParams);
     if (!form.action) return null; //an invalid form.
     var url = [form.action, params.join('&')].join('?');
-
-    var iconElement = document.head.querySelector("link[rel~='icon']");
-    var icon = iconElement ? iconElement.href : [window.location.origin, 'favicon.ico'].join('/');
-    return {url:url, icon: icon};
+    return url;
   };
-
 })();

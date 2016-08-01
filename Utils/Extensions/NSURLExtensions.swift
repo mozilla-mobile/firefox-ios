@@ -90,6 +90,9 @@ extension NSURL {
     }
 }
 
+// The list of permanent URI schemes has been taken from http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml 
+private let permanentURISchemes = ["aaa", "aaas", "about", "acap", "acct", "cap", "cid", "coap", "coaps", "crid", "data", "dav", "dict", "dns", "example", "file", "ftp", "geo", "go", "gopher", "h323", "http", "https", "iax", "icap", "im", "imap", "info", "ipp", "ipps", "iris", "iris.beep", "iris.lwz", "iris.xpc", "iris.xpcs", "jabber", "ldap", "mailto", "mid", "msrp", "msrps", "mtqp", "mupdate", "news", "nfs", "ni", "nih", "nntp", "opaquelocktoken", "pkcs11", "pop", "pres", "reload", "rtsp", "rtsps", "rtspu", "service", "session", "shttp", "sieve", "sip", "sips", "sms", "snmp", "soap.beep", "soap.beeps", "stun", "stuns", "tag", "tel", "telnet", "tftp", "thismessage", "tip", "tn3270", "turn", "turns", "tv", "urn", "vemmi", "vnc", "ws", "wss", "xcon", "xcon-userid", "xmlrpc.beep", "xmlrpc.beeps", "xmpp", "z39.50r", "z39.50s"]
+
 extension NSURL {
 
     public func withQueryParams(params: [NSURLQueryItem]) -> NSURL {
@@ -136,7 +139,7 @@ extension NSURL {
     }
 
     public var origin: String? {
-        guard isWebPage(),
+        guard isWebPage(includeDataURIs: false),
               let hostPort = self.hostPort else {
             return nil
         }
@@ -173,16 +176,14 @@ extension NSURL {
     :returns: The base domain string for the given host name.
     */
     public func baseDomain() -> String? {
-        if let host = self.host {
-            // If this is just a hostname and not a FQDN, use the entire hostname.
-            if !host.contains(".") {
-                return host
-            }
+        guard !isIPv6, let host = host else { return nil }
 
-            return publicSuffixFromHost(host, withAdditionalParts: 1)
-        } else {
-            return nil
+        // If this is just a hostname and not a FQDN, use the entire hostname.
+        if !host.contains(".") {
+            return host
         }
+
+        return publicSuffixFromHost(host, withAdditionalParts: 1)
     }
 
     /**
@@ -194,19 +195,28 @@ extension NSURL {
      */
     public func domainURL() -> NSURL {
         if let normalized = self.normalizedHost() {
-            return NSURL(scheme: self.scheme, host: normalized, path: "/") ?? self
+            // Use NSURLComponents instead of NSURL since the former correctly preserves
+            // brackets for IPv6 hosts, whereas the latter escapes them.
+            let components = NSURLComponents()
+            components.scheme = self.scheme
+            components.host = normalized
+            components.path = "/"
+            return components.URL ?? self
         }
         return self
     }
 
     public func normalizedHost() -> String? {
-        if var host = self.host {
-            if let range = host.rangeOfString("^(www|mobile|m)\\.", options: .RegularExpressionSearch) {
-                host.replaceRange(range, with: "")
-            }
-            return host
+        // Use components.host instead of self.host since the former correctly preserves
+        // brackets for IPv6 hosts, whereas the latter strips them.
+        guard let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false),
+              var host = components.host else { return nil }
+
+        if let range = host.rangeOfString("^(www|mobile|m)\\.", options: .RegularExpressionSearch) {
+            host.replaceRange(range, with: "")
         }
-        return nil
+
+        return host
     }
 
     /**
@@ -223,10 +233,11 @@ extension NSURL {
         }
     }
 
-    public func isWebPage() -> Bool {
+    public func isWebPage(includeDataURIs includeDataURIs: Bool = true) -> Bool {
         let httpSchemes = ["http", "https"]
+        let dataSchemes = ["data"]
 
-        if let _ = httpSchemes.indexOf(scheme) {
+        if httpSchemes.contains(scheme) || includeDataURIs && dataSchemes.contains(scheme) {
             return true
         }
 
@@ -234,7 +245,24 @@ extension NSURL {
     }
 
     public var isLocal: Bool {
-        return host?.lowercaseString == "localhost" || host == "127.0.0.1" || host == "::1"
+        // iOS forwards hostless URLs (e.g., http://:6571) to localhost.
+        guard let host = host where !host.isEmpty else {
+            return true
+        }
+
+        return host.lowercaseString == "localhost" || host == "127.0.0.1"
+    }
+
+    public var isIPv6: Bool {
+        return host?.containsString(":") ?? false
+    }
+    
+    /**
+     Returns whether the URL's scheme is one of those listed on the official list of URI schemes.
+     This only accepts permanent schemes: historical and provisional schemes are not accepted.
+     */
+    public var schemeIsValid: Bool {
+        return permanentURISchemes.contains(scheme)
     }
 }
 

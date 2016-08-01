@@ -141,6 +141,7 @@ class AuthenticationSetting: Setting {
 
     override func onConfigureCell(cell: UITableViewCell) {
         super.onConfigureCell(cell)
+        cell.selectionStyle = .None
 
         // In order for us to recognize a tap gesture without toggling the switch,
         // the switch is wrapped in a UIView which has a tap gesture recognizer. This way

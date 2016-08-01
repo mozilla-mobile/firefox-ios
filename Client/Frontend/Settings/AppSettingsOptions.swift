@@ -597,7 +597,11 @@ class LoginsSetting: Setting {
             success: {
                 self.settings?.navigateToLoginsList()
             },
-            cancel: nil,
+            cancel: {
+                if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
+                    self.settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: true)
+                }
+            },
             fallback: {
                 AppAuthenticator.presentPasscodeAuthentication(self.navigationController, success: {
                     self.navigationController?.dismissViewControllerAnimated(true) {
