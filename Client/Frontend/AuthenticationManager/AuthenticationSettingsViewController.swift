@@ -147,7 +147,7 @@ class AuthenticationSetting: Setting {
         // the switch is wrapped in a UIView which has a tap gesture recognizer. This way
         // we can disable interaction of the switch and still handle tap events.
         let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
+        control.onTintColor = self.enabled ? UIConstants.ControlTintColor : UIConstants.ControlDisabledColor
         control.on = requiresAuthentication
         control.userInteractionEnabled = false
         switchControl = control
