@@ -18,7 +18,6 @@ public protocol Command {
     static func commandFromSyncCommand(syncCommand: SyncCommand) -> Command?
 }
 
-// Shit.
 // We need a way to wipe or reset engines.
 // We need a way to log out the account.
 // So when we sync commands, we're gonna need a delegate of some kind.
