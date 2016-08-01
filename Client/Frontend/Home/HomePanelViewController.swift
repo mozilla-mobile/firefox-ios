@@ -12,7 +12,8 @@ private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 40
     static let ButtonContainerBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
-    static let BackgroundColor = UIConstants.PanelBackgroundColor
+    static let BackgroundColorNormalMode = UIConstants.PanelBackgroundColor
+    static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
     static let EditDoneButtonRightPadding: CGFloat = -12
 }
 
@@ -77,6 +78,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     var isPrivateMode: Bool = false {
         didSet {
             if oldValue != isPrivateMode {
+                buttonContainerView.backgroundColor = isPrivateMode ? HomePanelViewControllerUX.BackgroundColorPrivateMode : HomePanelViewControllerUX.BackgroundColorNormalMode
                 self.updateAppState()
             }
         }
@@ -87,7 +89,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = HomePanelViewControllerUX.BackgroundColor
+        view.backgroundColor = HomePanelViewControllerUX.BackgroundColorNormalMode
 
         let blur: UIVisualEffectView? = DeviceInfo.isBlurSupported() ? UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light)) : nil
 
@@ -96,7 +98,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
 
         buttonContainerView = UIView()
-        buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
+        buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColorNormalMode
         buttonContainerView.clipsToBounds = true
         buttonContainerView.accessibilityNavigationStyle = .Combined
         buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
