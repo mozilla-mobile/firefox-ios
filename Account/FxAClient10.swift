@@ -30,11 +30,16 @@ public struct FxALoginResponse {
     }
 }
 
-public enum FxAccountRemoteError {
-    static let INVALID_AUTHENTICATION_TOKEN = 110
-    static let UNKNOWN_DEVICE = 123
-    static let DEVICE_SESSION_CONFLICT = 124
-    static let UNKNOWN_ERROR = 999
+public enum FxAccountRemoteError: Int32 {
+    case attemptToOperateOnAnUnverifiedAccount = 104
+    case invalidAuthenticationToken = 110
+    case endpointNoLongerSupported = 116
+    case incorrectLoginMethodForThisAccount = 117
+    case incorrectKeyRetrievalMethodForThisAccount = 118
+    case incorrectAPIVersionForThisAccount = 119
+    case unknownDevice = 123
+    case sessionAlreadyRegisteredByAnotherDevice = 124
+    case unknownError = 999
 }
 
 public struct FxAKeysResponse {
@@ -108,6 +113,9 @@ public struct FxADeviceRegistrationResponse {
 public enum FxAClientError {
     case Remote(RemoteError)
     case Local(NSError)
+    
+    static let ErrorDomain = "FxAClientError.Local"
+    static let ErrorCode = 6624
 }
 
 // Be aware that string interpolation doesn't work: rdar://17318018, much good that it will do.
@@ -117,7 +125,7 @@ extension FxAClientError: MaybeErrorType {
         case let .Remote(error):
             let errorString = error.error ?? NSLocalizedString("Missing error", comment: "Error for a missing remote error number")
             let messageString = error.message ?? NSLocalizedString("Missing message", comment: "Error for a missing remote error message")
-            return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
+            return "<FxAClientError.Remote \(error.code)/\(error.reason?.rawValue): \(errorString) (\(messageString))>"
         case let .Local(error):
             return "<FxAClientError.Local Error Domain=\(error.domain) Code=\(error.code) \"\(error.localizedDescription)\">"
         }
@@ -126,16 +134,17 @@ extension FxAClientError: MaybeErrorType {
 
 public struct RemoteError {
     let code: Int32
-    let errno: Int32
+    let reason: FxAccountRemoteError?
     let error: String?
     let message: String?
     let info: String?
 
     var isUpgradeRequired: Bool {
-        return errno == 116 // ENDPOINT_IS_NO_LONGER_SUPPORTED
-            || errno == 117 // INCORRECT_LOGIN_METHOD_FOR_THIS_ACCOUNT
-            || errno == 118 // INCORRECT_KEY_RETRIEVAL_METHOD_FOR_THIS_ACCOUNT
-            || errno == 119 // INCORRECT_API_VERSION_FOR_THIS_ACCOUNT
+        guard let reason = self.reason else {
+            return false
+        }
+        let mandantoryUpgradeErrors: [FxAccountRemoteError] = [.endpointNoLongerSupported, .incorrectLoginMethodForThisAccount, .incorrectKeyRetrievalMethodForThisAccount, .incorrectAPIVersionForThisAccount]
+        return mandantoryUpgradeErrors.contains(reason)
     }
 
     var isInvalidAuthentication: Bool {
@@ -143,7 +152,7 @@ public struct RemoteError {
     }
 
     var isUnverified: Bool {
-        return errno == 104 // ATTEMPT_TO_OPERATE_ON_AN_UNVERIFIED_ACCOUNT
+        return reason == .attemptToOperateOnAnUnverifiedAccount
     }
 }
 
@@ -194,7 +203,7 @@ public class FxAClient10 {
         }
         if let code = json["code"].asInt32 {
             if let errno = json["errno"].asInt32 {
-                return RemoteError(code: code, errno: errno,
+                return RemoteError(code: code, reason: FxAccountRemoteError(rawValue: errno),
                                    error: json["error"].asString,
                                    message: json["message"].asString,
                                    info: json["info"].asString)
@@ -367,7 +376,9 @@ public class FxAClient10 {
         let deferred = Deferred<Maybe<FxAKeysResponse>>()
 
         let salt: NSData = NSData()
-        let contextInfo: NSData = FxAClient10.KW("keyFetchToken")!
+        guard let contextInfo: NSData = FxAClient10.KW("keyFetchToken") else {
+            return self.implementationError()
+        }
         let bytes = keyFetchToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
@@ -416,7 +427,9 @@ public class FxAClient10 {
         ]
 
         let salt: NSData = NSData()
-        let contextInfo: NSData = FxAClient10.KW("sessionToken")!
+        guard let contextInfo: NSData = FxAClient10.KW("sessionToken") else {
+            return self.implementationError()
+        }
         let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
@@ -457,14 +470,23 @@ public class FxAClient10 {
         }
         return deferred
     }
+    
+    // A temporary error that indicates a null value would otherwise have been explicitly unwrapped
+    func implementationError<T>() -> Deferred<Maybe<T>> {
+        let deferred = Deferred<Maybe<T>>()
+        deferred.fill(Maybe<T>(failure: FxAClientError.Local(NSError(domain: FxAClientError.ErrorDomain, code: FxAClientError.ErrorCode, userInfo: nil))))
+        return deferred
+    }
 
     public func status(uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
         let deferred = Deferred<Maybe<FxAStatusResponse>>()
 
         let baseURL = self.URL.URLByAppendingPathComponent("/account/status")
         let queryParams = "?uid=" + uid
-        let URL = NSURL(string: queryParams, relativeToURL: baseURL)
-        let mutableURLRequest = NSMutableURLRequest(URL: URL!)
+        guard let URL = NSURL(string: queryParams, relativeToURL: baseURL) else {
+            return self.implementationError()
+        }
+        let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -501,7 +523,9 @@ public class FxAClient10 {
         let deferred = Deferred<Maybe<FxADevicesResponse>>()
 
         let salt: NSData = NSData()
-        let contextInfo: NSData = FxAClient10.KW("sessionToken")!
+        guard let contextInfo: NSData = FxAClient10.KW("sessionToken") else {
+            return self.implementationError()
+        }
         let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
@@ -548,15 +572,19 @@ public class FxAClient10 {
         let deferred = Deferred<Maybe<FxADeviceRegistrationResponse>>()
         let parameters: [String:AnyObject]
 
-        if id == nil { // New device
+        if let id = id { // Update
+            parameters = [
+                "id": id,
+                "name": name
+            ]
+            
+        } else { // New device
+            guard let type = type else {
+                return self.implementationError()
+            }
             parameters = [
                 "name": name,
-                "type": type!
-            ]
-        } else { // Update
-            parameters = [
-                "id": id!,
-                "name": name
+                "type": type
             ]
         }
 
@@ -607,41 +635,37 @@ public class FxAClient10 {
     }
     
     public func handleError(account: FirefoxAccount, deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError, sessionToken: NSData)  {
-        if (error.code == 400) {
-            if (Int(error.errno) == FxAccountRemoteError.UNKNOWN_DEVICE) {
-                recoverFromUnknownDevice(account);
+        if error.code == 400 {
+            if error.reason == .unknownDevice {
+                recoverFromUnknownDevice(account)
                 deferred.fill(Maybe(failure: FxAClientError.Remote(error)))
-            } else if (Int(error.errno) == FxAccountRemoteError.DEVICE_SESSION_CONFLICT) {
+            } else if error.reason == .sessionAlreadyRegisteredByAnotherDevice {
                 recoverFromDeviceSessionConflict(deferred, error: error, sessionToken: sessionToken)
             }
-        } else
-            if (error.code == 401 && Int(error.errno) == FxAccountRemoteError.INVALID_AUTHENTICATION_TOKEN) {
-                //handleTokenError(...);
-            } else {
-                //logErrorAndResetDeviceRegistrationVersion(...);
+        } else if error.code == 401 && error.reason == .invalidAuthenticationToken {
+            handleTokenError(account, deferred: deferred, error: error)
+        } else {
+            logErrorAndResetDeviceRegistrationVersion(account, error: error)
         }
     }
     
     public func recoverFromDeviceSessionConflict(deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError, sessionToken: NSData) {
         devices(sessionToken).upon { response in
-            if let success = response.successValue {
-                if let currentDevice = (success.devices.filter { $0.isCurrentDevice }).first {
-                    deferred.fill(Maybe(success: FxADeviceRegistrationResponse(id: currentDevice.id, name: currentDevice.name)))
-                }
+            if let success = response.successValue, currentDevice = (success.devices.filter { $0.isCurrentDevice }).first {
+                deferred.fill(Maybe(success: FxADeviceRegistrationResponse(id: currentDevice.id, name: currentDevice.name)))
             }
             deferred.fillIfUnfilled(Maybe(failure: FxAClientError.Remote(error)))
         }
     }
     
     public func recoverFromUnknownDevice(account: FirefoxAccount) {
-        print("unknown device id, clearing the cached device id");
+        print("unknown device id, clearing the cached device id")
         account.fxaDeviceId = ""
     }
     
     public func handleTokenError(account: FirefoxAccount, deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError) {
         print("recovering from invalid token error: \(error)")
-        print("device registration failed")
-        account.deviceRegistrationVersion = 0
+        logErrorAndResetDeviceRegistrationVersion(account, error: error)
         self.status(account.uid).upon() { result in
             if let status = result.successValue {
                 if !status.exists {
@@ -654,5 +678,10 @@ public class FxAClient10 {
                 }
             }
         }
+    }
+    
+    public func logErrorAndResetDeviceRegistrationVersion(account: FirefoxAccount, error: RemoteError) {
+        print("device registration failed: \(error)")
+        account.deviceRegistrationVersion = 0
     }
 }
