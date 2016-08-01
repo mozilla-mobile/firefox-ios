@@ -735,11 +735,9 @@ class BrowserViewController: UIViewController {
         log.debug("BVC done with showHomePanelController.")
     }
 
-    private func hideHomePanelController() {
+    private func hideHomePanelController(animated: Bool = true) {
         if let controller = homePanelController {
-            UIView.animateWithDuration(0.2, delay: 0, options: .BeginFromCurrentState, animations: { () -> Void in
-                controller.view.alpha = 0
-            }, completion: { _ in
+            let completion: (Bool) -> Void = { _ in
                 controller.willMoveToParentViewController(nil)
                 controller.view.removeFromSuperview()
                 controller.removeFromParentViewController()
@@ -751,17 +749,24 @@ class BrowserViewController: UIViewController {
                 if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
                     self.showReaderModeBar(animated: false)
                 }
-            })
+            }
+            if animated {
+                UIView.animateWithDuration(0.2, delay: 0, options: .BeginFromCurrentState, animations: { () -> Void in
+                    controller.view.alpha = 0
+                }, completion: completion)
+            } else {
+                completion(true)
+            }
         }
     }
 
-    private func updateInContentHomePanel(url: NSURL?) {
+    private func updateInContentHomePanel(url: NSURL?, animated: Bool = true) {
         if !urlBar.inOverlayMode {
             if AboutUtils.isAboutHomeURL(url) {
                 let showInline = AppConstants.MOZ_MENU || ((tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
                 showHomePanelController(inline: showInline)
             } else {
-                hideHomePanelController()
+                hideHomePanelController(animated)
             }
         }
     }
@@ -2100,7 +2105,7 @@ extension BrowserViewController: TabManagerDelegate {
             urlBar.updateReaderModeState(ReaderModeState.Unavailable)
         }
 
-        updateInContentHomePanel(selected?.url)
+        updateInContentHomePanel(selected?.url, animated: false)
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {
