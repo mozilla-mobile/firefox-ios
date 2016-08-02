@@ -209,7 +209,7 @@ protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
 }
 
-let ReaderModeNamespace = "_firefox_ReaderMode"
+let ReaderModeNamespace = "window.__firefox__.reader"
 
 class ReaderMode: TabHelper {
     var delegate: ReaderModeDelegate?
