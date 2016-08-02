@@ -687,13 +687,13 @@ class BrowserViewController: UIViewController {
 
     private func hideHomePanelController() {
         if let controller = homePanelController {
+            self.homePanelController = nil
             UIView.animateWithDuration(0.2, delay: 0, options: .BeginFromCurrentState, animations: { () -> Void in
                 controller.view.alpha = 0
             }, completion: { _ in
                 controller.willMoveToParentViewController(nil)
                 controller.view.removeFromSuperview()
                 controller.removeFromParentViewController()
-                self.homePanelController = nil
                 self.webViewContainer.accessibilityElementsHidden = false
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
