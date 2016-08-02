@@ -62,9 +62,10 @@ class ShareFileHelper: NSObject, OpenInHelper {
         alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .Default){ (action) in
             let objectsToShare = [self.url]
             let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-            if let sourceView = self.openInView {
-                activityVC.popoverPresentationController?.sourceView = sourceView
-                activityVC.popoverPresentationController?.sourceRect = CGRect(origin: CGPoint(x: UIConstants.ToolbarPopoverOffset, y: CGRectGetMidY(sourceView.bounds)), size: CGSizeZero)
+            if let sourceView = self.openInView, popoverController = activityVC.popoverPresentationController {
+                popoverController.sourceView = sourceView
+                popoverController.sourceRect = CGRect(origin: CGPoint(x: CGRectGetMidX(sourceView.bounds), y: CGRectGetMaxY(sourceView.bounds)), size: CGSizeZero)
+                popoverController.permittedArrowDirections = .Up
             }
             UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(activityVC, animated: true, completion: nil)
         })

@@ -2539,7 +2539,7 @@ extension BrowserViewController: WKUIDelegate {
         }
         
         if openInHelper.openInView == nil {
-            openInHelper.openInView = urlBar.locationView
+            openInHelper.openInView = navigationToolbar.shareButton
         }
 
         openInHelper.open()
