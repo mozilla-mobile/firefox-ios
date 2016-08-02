@@ -3,12 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 (function() {
+    "use strict";
+ 
     if (!window.__firefox__) {
       window.__firefox__ = {};
     }
 
     var readabilityResult = null;
     var currentStyle = null;
+ 
+    var readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
 
     var BLOCK_IMAGES_SELECTOR = ".content p > img:only-child, " +
         ".content p > a:only-child > img:only-child, " +
@@ -23,7 +27,7 @@
     }
 
     function checkReadability() {
-        if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
+        if (document.location.href.match(readerModeURL)) {
             debug({Type: "ReaderModeStateChange", Value: "Active"});
             webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Active"});
             return;
@@ -175,7 +179,7 @@
 
     window.addEventListener('load', function(event) {
         // If this is an about:reader page that we are loading, apply the initial style to the page.
-        if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
+        if (document.location.href.match(readerModeURL)) {
             configureReader();
         }
     });
@@ -183,7 +187,7 @@
 
     window.addEventListener('pageshow', function(event) {
         // If this is an about:reader page that we are showing, fire an event to the native code
-        if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
+        if (document.location.href.match(readerModeURL)) {
             webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});
         }
     });
