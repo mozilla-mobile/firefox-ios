@@ -92,8 +92,14 @@ public class RecordTooLargeError: MaybeErrorType {
 }
 
 public class BatchingNotSupported: MaybeErrorType {
+    public let response: POSTResult
+
     public var description: String {
         return "Sync server does not support batching."
+    }
+
+    public init(response: POSTResult) {
+        self.response = response
     }
 }
 
@@ -666,7 +672,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
         // We have too many records for a single post so we'll either need to upload in a single batch or
         // multiple batches
-        if records.count > config.maxBatchRecord || sizeOfRecords > config.maxBatchBytes {
+        if records.count > config.maxTotalRecords || sizeOfRecords > config.maxTotalBytes {
             // TODO: Break into multiple batches
             return succeed()
         }
@@ -684,10 +690,11 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     }
 
     public func batchUpload(records: [Record<T>], ifUnmodifiedSince: Timestamp?, onCollectionUploaded: (POSTResult -> Void)) -> Success {
-        let batchingResult = batchesFromRecords(records, serializer: self.serializeRecord)
+        let batchingResult = batchesFromRecords(records)
         guard var batches = batchingResult.successValue else {
-            log.debug("Unable to generate batches from records submitted to batch client")
-            return deferMaybe(batchingResult.failureValue!)
+            let failure = batchingResult.failureValue!
+            log.debug("Unable to generate batches from records submitted to batch client: \(failure)")
+            return deferMaybe(failure)
         }
 
         let firstBatch = batches.removeFirst()
@@ -695,11 +702,13 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
         return startBatch(firstBatch).bind { result in
             guard let token = result.successValue else {
-
                 // Check if we didn't get a token back/batching isn't supported and push up records using regular single posts
-                let error = result.failureValue!
-                switch error {
-                case is BatchingNotSupported:
+                if let error = result.failureValue as? BatchingNotSupported {
+
+                    // Since we uploaded the first set already as part of the start call and we don't support
+                    // batching, make sure to invoke the upload callback to let the others know we committed
+                    // new records to the collection server-side
+                    onCollectionUploaded(error.response)
 
                     // Walk through the batches, posting along the way and invoking onUpload
                     let perChunk: (lines: [String]) -> Success = { lines in
@@ -708,9 +717,9 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
                             >>> succeed
                     }
                     return walk(batches, f: perChunk)
-                default:
+                } else {
                     // Bubble up other errors
-                    return deferMaybe(error)
+                    return deferMaybe(result.failureValue!)
                 }
             }
 
@@ -738,7 +747,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
                 return deferMaybe(batchToken)
             } else {
                 log.debug("Uploaded \(lines.count) records but received no batch token")
-                return deferMaybe(BatchingNotSupported())
+                return deferMaybe(BatchingNotSupported(response: storageResponse.value))
             }
         }
     }
@@ -759,64 +768,46 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
         return self.uploader(lines: lines, ifUnmodifiedSince: ifUnmodifiedSince, queryParams: [batchParam, commitParam])
     }
 
-    public func batchesFromRecords<T>(records: [Record<T>], serializer: (Record<T>) -> String?) -> Maybe<[[String]]> {
-        var failedGUID: GUID? = nil
-        var largest: ByteCount = 0
+    func batchesFromRecords(records: [Record<T>]) -> Maybe<[[String]]> {
 
-        // Schwartzian transform -- decorate, sort, undecorate.
-        func decorate(record: Record<T>) -> (String, ByteCount)? {
-            guard failedGUID == nil else {
-                // If we hit an over-sized record, or fail to serialize, we stop processing
-                // everything: we don't want to upload only some of the user's bookmarks.
+        // Place the record ID alongside the line text for error reporting later on
+        let idWithLine: (record: Record<T>) -> (GUID, String)? = { record in
+            guard let line = self.serializeRecord(record) else {
                 return nil
             }
-
-            guard let string = serializer(record) else {
-                failedGUID = record.id
-                return nil
-            }
-
-            let size = string.utf8.count
-            if size > largest {
-                largest = size
-                if size > Sync15StorageClient.maxRecordSizeBytes {
-                    // If we hit this case, we cannot ever successfully sync until the user
-                    // takes action. Let's hope they do.
-                    failedGUID = record.id
-                    return nil
-                }
-            }
-
-            return (string, size)
+            return (record.id, line)
         }
 
-        // Put small records first.
-        let sorted = records.flatMap(decorate).sort { $0.1 < $1.1 }
+        let pairs : [(GUID, String)] = records.flatMap(idWithLine)
 
-        if let failed = failedGUID {
-            return Maybe(failure: RecordTooLargeError(size: largest, guid: failed))
-        }
+        var batches = [[String]]()
+        var batch = [String]()
+        var size = 0
 
-        // Cut this up into chunks of a maximum size.
-        var batches: [[String]] = []
-        var batch: [String] = []
-        var bytes = 0
-        var count = 0
-        sorted.forEach { (string, size) in
-            let expectedBytes = bytes + size + 1   // Include newlines.
-            if expectedBytes > Sync15StorageClient.maxPayloadSizeBytes ||
-               count >= Sync15StorageClient.maxPayloadItemCount {
+        for (id, line) in pairs {
+            let lineSize = line.utf8.count
+
+            if lineSize > Sync15StorageClient.maxRecordSizeBytes {
+                return Maybe(failure: RecordTooLargeError(size: lineSize, guid: id))
+            }
+
+            // If adding the line keeps the batch size and number of records below the limits, proceed.
+            // Otherwise, add the filled batch to our batches and start a new one.
+
+            // Add 1 to account for the newline
+            guard (size + lineSize + 1) <= config.maxPostBytes && (batch.count + 1) <= config.maxPostRecords else {
+                // Start the next batch
                 batches.append(batch)
-                batch = []
-                bytes = 0
-                count = 0
+                size = lineSize
+                batch = [line]
+                continue
             }
-            batch.append(string)
-            bytes += size + 1
-            count += 1
+
+            size += (lineSize + 1)
+            batch.append(line)
         }
 
-        // Catch the last one.
+        // Don't forget to add the last batch!
         if !batch.isEmpty {
             batches.append(batch)
         }
@@ -828,8 +819,8 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 private let DefaultInfoConfiguration = InfoConfiguration(maxRequestBytes: 1048576,
                                                          maxPostRecords: 100,
                                                          maxPostBytes: 1048576,
-                                                         maxBatchRecord: 10000,
-                                                         maxBatchBytes: 104857600)
+                                                         maxTotalRecords: 10000,
+                                                         maxTotalBytes: 104857600)
 
 /**
  * We'd love to nest this in the overall storage client, but Swift
