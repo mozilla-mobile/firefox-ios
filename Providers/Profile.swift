@@ -177,6 +177,7 @@ protocol Profile: class {
     func sendItems(items: [ShareItem], toClients clients: [RemoteClient])
 
     var syncManager: SyncManager { get }
+    var isChinaEdition: Bool { get }
 }
 
 public class BrowserProfile: Profile {
@@ -469,13 +470,12 @@ public class BrowserProfile: Profile {
         return Singleton.instance
     }()
 
-    var isChinaEdition: Bool {
-        let locale = NSLocale.currentLocale()
-        return prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN")
-    }
+    lazy var isChinaEdition: Bool = {
+        return NSLocale.currentLocale().localeIdentifier == "zh_CN"
+    }()
 
     var accountConfiguration: FirefoxAccountConfiguration {
-        if isChinaEdition {
+        if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()

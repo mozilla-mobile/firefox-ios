@@ -56,8 +56,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         ]
 
         let accountChinaSyncSetting: [Setting]
-        let locale = NSLocale.currentLocale()
-        if locale.localeIdentifier != "zh_CN" {
+        if !profile.isChinaEdition {
             accountChinaSyncSetting = []
         } else {
             accountChinaSyncSetting = [
