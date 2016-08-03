@@ -600,6 +600,7 @@
 		E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */; };
 		E67422C51CFF2D39009E8373 /* youtube.ico in Resources */ = {isa = PBXBuildFile; fileRef = E67422C41CFF2D39009E8373 /* youtube.ico */; };
 		E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */; };
+		E67D57031D527449003917B1 /* BatchingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67D57021D527449003917B1 /* BatchingClient.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */; };
 		E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E7ACA1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift */; };
@@ -1655,6 +1656,7 @@
 		E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		E67422C41CFF2D39009E8373 /* youtube.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = youtube.ico; sourceTree = "<group>"; };
 		E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTests.swift; sourceTree = "<group>"; };
+		E67D57021D527449003917B1 /* BatchingClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatchingClient.swift; sourceTree = "<group>"; };
 		E682F53C1C89E72600ECB6B2 /* FennecAurora.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FennecAurora.xcconfig; path = Configuration/FennecAurora.xcconfig; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsTableViewController.swift; sourceTree = "<group>"; };
@@ -2157,6 +2159,7 @@
 				282731601ABC9BE600AA1954 /* Supporting Files */,
 				28926B3D1AC0F1A6009C0B1D /* Meta */,
 				28926B3C1AC0F176009C0B1D /* Records */,
+				E67D57021D527449003917B1 /* BatchingClient.swift */,
 				28CE83BC1A1D1D3200576538 /* KeyBundle.swift */,
 				2F3724E31ABF3C19007607FA /* StorageClient.swift */,
 				28E91E741B443AD5009DF274 /* SyncConstants.swift */,
@@ -4343,6 +4346,7 @@
 				2827319D1ABC9C2F00AA1954 /* SyncMeta.swift in Sources */,
 				2894C1661AE89DD200F1F92F /* TabsSynchronizer.swift in Sources */,
 				282731991ABC9C2F00AA1954 /* ClientPayload.swift in Sources */,
+				E67D57031D527449003917B1 /* BatchingClient.swift in Sources */,
 				2894C1431AE89D8900F1F92F /* HistorySynchronizer.swift in Sources */,
 				28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */,
 				28ED02291B262E0A003948B2 /* IndependentRecordSynchronizer.swift in Sources */,
