@@ -51,6 +51,7 @@ class BrowserViewController: UIViewController {
     private let webViewContainerToolbar = UIView()
     private var findInPageBar: FindInPageBar?
     private let findInPageContainer = UIView()
+    private weak var backForwardViewController: BackForwardListViewController?
 
     lazy private var customSearchEngineButton: UIButton = {
         let searchButton = UIButton()
@@ -177,9 +178,19 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
+    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator?) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
+        
+        // If the history buttons are changing their position, we'll hide the back/forward list until the transition finishes.
+        if showToolbar != (toolbar != nil) {
+            if backForwardViewController != nil {
+                coordinator?.animateAlongsideTransition(nil) { _ in
+                    self.showBackForwardList()
+                }
+            }
+            backForwardViewController?.dismissViewControllerAnimated(true, completion: nil)
+        }
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
@@ -252,7 +263,7 @@ class BrowserViewController: UIViewController {
         // During split screen launching on iPad, this callback gets fired before viewDidLoad gets a chance to
         // set things up. Make sure to only update the toolbar state if the view is ready for it.
         if isViewLoaded() {
-            updateToolbarStateForTraitCollection(newCollection)
+            updateToolbarStateForTraitCollection(newCollection, withTransitionCoordinator: coordinator)
         }
 
         displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
@@ -409,7 +420,7 @@ class BrowserViewController: UIViewController {
         scrollController.snackBars = snackBars
 
         log.debug("BVC updating toolbar state…")
-        self.updateToolbarStateForTraitCollection(self.traitCollection)
+        self.updateToolbarStateForTraitCollection(self.traitCollection, withTransitionCoordinator: nil)
 
         log.debug("BVC setting up constraints…")
         setupConstraints()
@@ -1723,6 +1734,7 @@ extension BrowserViewController: TabToolbarDelegate {
             backForwardViewController.bvc = self
             backForwardViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
             backForwardViewController.backForwardTransitionDelegate = BackForwardListAnimator()
+            self.backForwardViewController = backForwardViewController
             self.presentViewController(backForwardViewController, animated: true, completion: nil)
         }
     }

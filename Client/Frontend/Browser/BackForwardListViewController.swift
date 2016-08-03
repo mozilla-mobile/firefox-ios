@@ -141,14 +141,25 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         }
         view.addSubview(shadow)
         view.addSubview(tableView)
+        let snappedToBottom = bvc.toolbar != nil
         tableView.snp_makeConstraints { make in
             make.height.equalTo(0)
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height)
+            if snappedToBottom {
+                make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height)
+            } else {
+                make.top.equalTo(self.view).offset(bvc.header.frame.height)
+            }
         }
         shadow.snp_makeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.bottom.equalTo(tableView.snp_top)
+            make.left.right.equalTo(self.view)
+            if snappedToBottom {
+                make.bottom.equalTo(tableView.snp_top)
+                make.top.equalTo(self.view)
+            } else {
+                make.top.equalTo(tableView.snp_bottom)
+                make.bottom.equalTo(self.view)
+            }
         }
         view.layoutIfNeeded()
         scrollTableViewToIndex(currentRow)
