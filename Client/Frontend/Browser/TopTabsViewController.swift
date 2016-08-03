@@ -205,7 +205,7 @@ class TopTabsViewController: UIViewController {
                 }
                 if item == indexPath.item {
                     let cellPosition = cell.contentView.convertPoint(cell.bounds.center, toView: self.collectionView)
-                    self.dragState = TabDragState(cell: cell, indexPath: indexPath, offset: CGPoint(x: pressPosition.x - cellPosition.x - self.collectionView.contentOffset.x, y: pressPosition.y - cellPosition.y), hasBegun: false)
+                    self.dragState = TabDragState(cell: cell, indexPath: indexPath, offset: CGPoint(x: pressPosition.x - cellPosition.x, y: pressPosition.y - cellPosition.y), hasBegun: false)
                     self.didSelectTabAtIndex(indexPath.item)
                     continue
                 }
@@ -221,7 +221,7 @@ class TopTabsViewController: UIViewController {
                 if let view = gesture.view {
                     var dragPosition = gesture.locationInView(view)
                     let offsetPosition = CGPoint(x: dragPosition.x, y: dragPosition.y)
-                    dragPosition = CGPoint(x: offsetPosition.x - dragState.offset.x, y: self.collectionView.frame.height / 2)
+                    dragPosition = CGPoint(x: offsetPosition.x - dragState.offset.x + self.collectionView.contentOffset.x, y: self.collectionView.frame.height / 2)
                     collectionView.updateInteractiveMovementTargetPosition(dragPosition)
                 }
             }
