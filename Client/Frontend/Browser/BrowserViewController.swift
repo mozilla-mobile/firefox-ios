@@ -3398,11 +3398,24 @@ extension BrowserViewController: TopTabsDelegate {
     }
     
     func topTabsDidPressNewTab() {
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        openBlankNewTabAndFocus(isPrivate: isPrivate)
+        openBlankNewTabAndFocus(isPrivate: self.tabManager.isInPrivateMode)
     }
     
-    func didTogglePrivateMode(cachedTab: Tab?) {
+    func didAttemptToTogglePrivateMode(cachedTab: Tab?) -> Success {
+        if #available(iOS 9, *) {
+            return switchToPrivacyMode(isPrivate: !self.tabManager.isInPrivateMode).bindQueue(dispatch_get_main_queue()) { result in
+                if result.isSuccess {
+                    self.togglePrivateMode(cachedTab)
+                }
+                return Deferred(value: result)
+            }
+        } else {
+            togglePrivateMode(cachedTab)
+        }
+        return succeed()
+    }
+    
+    func togglePrivateMode(cachedTab: Tab?) {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }
