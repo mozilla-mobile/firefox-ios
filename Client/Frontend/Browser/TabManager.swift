@@ -87,10 +87,10 @@ class TabManager : NSObject {
     var selectedIndex: Int { return _selectedIndex }
     var tempTabs: [Tab]?
     
-    internal var isInPrivateMode = false {
+    var isInPrivateMode = false {
         didSet {
             if oldValue != isInPrivateMode {
-                self.updateAppState()
+                self.setAppStateForTabTray()
             }
         }
     }
@@ -171,7 +171,7 @@ class TabManager : NSObject {
     
     weak var appStateDelegate: AppStateDelegate?
     
-    private func updateAppState() {
+    private func setAppStateForTabTray() {
         let state = mainStore.updateState(.TabTray(tabTrayState: TabTrayState(isPrivate: self.isInPrivateMode)))
         self.appStateDelegate?.appDidUpdateState(state)
     }

@@ -499,6 +499,62 @@ class TabTrayController: UIViewController {
     func SELdidTapMask() {
         attemptToTogglePrivateMode()
     }
+    
+    @available(iOS 9, *)
+    private func transitionBetweenModes() {
+        let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
+        
+        let fromView: UIView
+        if self.privateTabsAreEmpty() {
+            fromView = self.emptyPrivateTabsView
+        } else {
+            let snapshot = self.collectionView.snapshotViewAfterScreenUpdates(false)
+            snapshot.frame = self.collectionView.frame
+            self.view.insertSubview(snapshot, aboveSubview: self.collectionView)
+            fromView = snapshot
+        }
+        
+        self.switchToMode(privateMode: !self.tabManager.isInPrivateMode)
+        
+        // If we are exiting private mode and we have the close private tabs option selected, make sure
+        // we clear out all of the private tabs
+        if !self.tabManager.isInPrivateMode && self.profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
+            self.tabManager.removeAllPrivateTabsAndNotify(false)
+        }
+        
+        self.toolbar.maskButton.setSelected(self.tabManager.isInPrivateMode, animated: true)
+        self.collectionView.layoutSubviews()
+        
+        let toView: UIView
+        if self.privateTabsAreEmpty() {
+            self.emptyPrivateTabsView.hidden = false
+            toView = self.emptyPrivateTabsView
+        } else {
+            self.emptyPrivateTabsView.hidden = true
+            let newSnapshot = self.collectionView.snapshotViewAfterScreenUpdates(true)
+            newSnapshot.frame = self.collectionView.frame
+            self.view.insertSubview(newSnapshot, aboveSubview: fromView)
+            self.collectionView.alpha = 0
+            toView = newSnapshot
+        }
+        toView.alpha = 0
+        toView.transform = scaleDownTransform
+        
+        UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
+            fromView.transform = scaleDownTransform
+            fromView.alpha = 0
+            toView.transform = CGAffineTransformIdentity
+            toView.alpha = 1
+        }) { finished in
+            if fromView != self.emptyPrivateTabsView {
+                fromView.removeFromSuperview()
+            }
+            if toView != self.emptyPrivateTabsView {
+                toView.removeFromSuperview()
+            }
+            self.collectionView.alpha = 1
+        }
+    }
 
     @available(iOS 9, *)
     func attemptToTogglePrivateMode() -> Success {
@@ -507,59 +563,8 @@ class TabTrayController: UIViewController {
         }
         let success = Success()
         tabManager.authorisePrivateMode(navigationController).uponQueue(dispatch_get_main_queue()) { result in
-            if let _ = result.successValue {
-                let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
-                
-                let fromView: UIView
-                if self.privateTabsAreEmpty() {
-                    fromView = self.emptyPrivateTabsView
-                } else {
-                    let snapshot = self.collectionView.snapshotViewAfterScreenUpdates(false)
-                    snapshot.frame = self.collectionView.frame
-                    self.view.insertSubview(snapshot, aboveSubview: self.collectionView)
-                    fromView = snapshot
-                }
-                
-                self.switchToMode(privateMode: !self.tabManager.isInPrivateMode)
-                
-                // If we are exiting private mode and we have the close private tabs option selected, make sure
-                // we clear out all of the private tabs
-                if !self.tabManager.isInPrivateMode && self.profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
-                    self.tabManager.removeAllPrivateTabsAndNotify(false)
-                }
-                
-                self.toolbar.maskButton.setSelected(self.tabManager.isInPrivateMode, animated: true)
-                self.collectionView.layoutSubviews()
-                
-                let toView: UIView
-                if self.privateTabsAreEmpty() {
-                    self.emptyPrivateTabsView.hidden = false
-                    toView = self.emptyPrivateTabsView
-                } else {
-                    self.emptyPrivateTabsView.hidden = true
-                    let newSnapshot = self.collectionView.snapshotViewAfterScreenUpdates(true)
-                    newSnapshot.frame = self.collectionView.frame
-                    self.view.insertSubview(newSnapshot, aboveSubview: fromView)
-                    self.collectionView.alpha = 0
-                    toView = newSnapshot
-                }
-                toView.alpha = 0
-                toView.transform = scaleDownTransform
-                
-                UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
-                    fromView.transform = scaleDownTransform
-                    fromView.alpha = 0
-                    toView.transform = CGAffineTransformIdentity
-                    toView.alpha = 1
-                }) { finished in
-                    if fromView != self.emptyPrivateTabsView {
-                        fromView.removeFromSuperview()
-                    }
-                    if toView != self.emptyPrivateTabsView {
-                        toView.removeFromSuperview()
-                    }
-                    self.collectionView.alpha = 1
-                }
+            if result.isSuccess {
+                self.transitionBetweenModes()
             }
             success.fill(result)
         }
@@ -1175,7 +1180,7 @@ extension TabTrayController: MenuActionDelegate {
                     dispatch_async(dispatch_get_main_queue()) {
                         if !self.tabManager.isInPrivateMode {
                             self.attemptToTogglePrivateMode().uponQueue(dispatch_get_main_queue()) { result in
-                                if let _ = result.successValue {
+                                if result.isSuccess {
                                     self.openNewTab()
                                 }
                             }

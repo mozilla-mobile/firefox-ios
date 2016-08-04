@@ -1074,7 +1074,7 @@ class BrowserViewController: UIViewController {
         }
         if #available(iOS 9, *) {
             return switchToPrivacyMode(isPrivate: isPrivate).bindQueue(dispatch_get_main_queue()) { result in
-                if let _ = result.successValue {
+                if result.isSuccess {
                     self.tabManager.addTabAndSelect(request, isPrivate: isPrivate)
                 }
                 return Deferred(value: result)
@@ -1088,7 +1088,7 @@ class BrowserViewController: UIViewController {
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate).uponQueue(dispatch_get_main_queue()) { result in
-            if let _ = result.successValue {
+            if result.isSuccess {
                 self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
             }
         }
@@ -2959,7 +2959,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                         return
                     }
                     self.tabManager.authorisePrivateMode(navigationController).uponQueue(dispatch_get_main_queue()) { result in
-                        if let _ = result.successValue {
+                        if result.isSuccess {
                             self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                                 self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)
                             })

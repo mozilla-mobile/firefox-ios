@@ -18,6 +18,13 @@ public enum PasscodeInterval: Int {
     case OneHour        = 3600
 }
 
+public enum AuthenticationPurpose {
+    case ModifyAuthenticationSettings
+    case PrivateBrowsing
+    case Logins
+    case Other
+}
+
 // MARK: - Helper methods for accessing Authentication information from the Keychain
 public extension KeychainWrapper {
     class func authenticationInfo() -> AuthenticationKeychainInfo? {
@@ -88,13 +95,6 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
 
 // MARK: - API
 public extension AuthenticationKeychainInfo {
-    enum AuthenticationPurpose {
-        case ModifyAuthenticationSettings
-        case PrivateBrowsing
-        case Logins
-        case Other
-    }
-    
     private func resetLockoutState() {
         self.failedAttempts = 0
         self.lockOutInterval = nil
@@ -142,7 +142,7 @@ public extension AuthenticationKeychainInfo {
         return (SystemUtils.systemUptime() - (self.lockOutInterval ?? 0)) < lockTimeInterval
     }
 
-    func requiresValidation(purpose: AuthenticationKeychainInfo.AuthenticationPurpose) -> Bool {
+    func requiresValidation(purpose: AuthenticationPurpose) -> Bool {
         // If there isn't a passcode, don't need validation.
         guard let _ = passcode else {
             return false

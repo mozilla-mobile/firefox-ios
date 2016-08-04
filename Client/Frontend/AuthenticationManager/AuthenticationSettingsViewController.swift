@@ -120,7 +120,7 @@ class AuthenticationSetting: Setting {
     private var touchIDSuccess: AuthenticationCallback = nil
     private var touchIDFallback: AuthenticationCallback = nil
     
-    var purpose: AuthenticationKeychainInfo.AuthenticationPurpose = .Other
+    var purpose: AuthenticationPurpose = .Other
     var requiresAuthentication: Bool {
         return true
     }
