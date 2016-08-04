@@ -143,6 +143,8 @@ class TabsButton: UIControl {
         button.accessibilityLabel = accessibilityLabel
         button.titleLabel.text = titleLabel.text
 
+        button.theme = theme
+
         // Copy all of the styable properties over to the new TabsButton
         button.titleLabel.font = titleLabel.font
         button.titleLabel.textColor = titleLabel.textColor
