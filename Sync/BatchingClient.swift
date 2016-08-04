@@ -172,7 +172,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
             // Remove the last batch - we handle the last call in a special case.
             batch.removeLast()
 
-            // When batching, each upload in the batch is uploaded to a temporary collection until we specif
+            // When batching, each upload in the batch is uploaded to a temporary collection until we specify
             // commit=true. At this point, the temporary collection is pushed to the real collection on the server.
             // It is at this point we want to say the collection has been uploaded.
             return self.uploadBatches(token, batches: batch) >>> {
@@ -191,10 +191,10 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
             if let batchToken = storageResponse.value.batchToken {
                 log.debug("Uploaded \(lines.count) records and received batch token \(batchToken)")
                 return deferMaybe(batchToken)
-            } else {
-                log.debug("Uploaded \(lines.count) records but received no batch token")
-                return deferMaybe(BatchingNotSupported(response: storageResponse.value))
             }
+
+            log.debug("Uploaded \(lines.count) records but received no batch token")
+            return deferMaybe(BatchingNotSupported(response: storageResponse.value))
         }
     }
 
