@@ -644,8 +644,12 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return self.collectionURI.URLByAppendingPathComponent(guid)
     }
 
-    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil) -> Sync15BatchClient<T> {
-        return Sync15BatchClient(config: infoConfig, ifUnmodifiedSince: ifUnmodifiedSince, serializeRecord: self.serializeRecord, uploader: self.post)
+    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: (POSTResult -> Void)? = nil) -> Sync15BatchClient<T> {
+        return Sync15BatchClient(config: infoConfig,
+                                 ifUnmodifiedSince: ifUnmodifiedSince,
+                                 serializeRecord: self.serializeRecord,
+                                 uploader: self.post,
+                                 onCollectionUploaded: onCollectionUploaded)
     }
 
     // Exposed so we can batch by size.
