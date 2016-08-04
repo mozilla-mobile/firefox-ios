@@ -279,6 +279,52 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
             return NSAttributedString(string: AuthenticationStrings.authenticateFeaturesWithPasscode)
         }
     }
+    
+    private func privateBrowsingSetting(navigationController: UINavigationController?) -> AuthenticationForPrivateBrowsingSetting {
+        return AuthenticationForPrivateBrowsingSetting(
+            title: NSAttributedString.tableRowTitle(
+                NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "List section title for when to use authentication for private browsing")
+            ),
+            navigationController: navigationController,
+            delegate: nil,
+            enabled: true,
+            touchIDSuccess: { touchIDSetting in
+                touchIDSetting.toggleTouchID(enabled: false)
+            },
+            touchIDFallback: { [unowned self] touchIDSetting in
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController,
+                    success: {
+                        touchIDSetting.toggleTouchID(enabled: false)
+                        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                    },
+                    cancel: nil
+                )
+            }
+        )
+    }
+    
+    private func loginsSetting(navigationController: UINavigationController?) -> AuthenticationForLoginsSetting {
+        return AuthenticationForLoginsSetting(
+            title: NSAttributedString.tableRowTitle(
+                NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID for logins")
+            ),
+            navigationController: navigationController,
+            delegate: nil,
+            enabled: true,
+            touchIDSuccess: { touchIDSetting in
+                touchIDSetting.toggleTouchID(enabled: false)
+            },
+            touchIDFallback: { [unowned self] touchIDSetting in
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController,
+                    success: { 
+                        touchIDSetting.toggleTouchID(enabled: false)
+                        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                    },
+                    cancel: nil
+                )
+            }
+        )
+    }
 
     private func passcodeEnabledSettings() -> [SettingSection] {
         var settings = [SettingSection]()
@@ -291,46 +337,8 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 
         let requirePasscodeSectionChildren: [Setting] = [RequirePasscodeSetting(settings: self)]
         let authenticationSection = SettingSection(title: authenticationSectionTitle, children: [
-            AuthenticationForPrivateBrowsingSetting(
-                title: NSAttributedString.tableRowTitle(
-                    NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "List section title for when to use authentication for private browsing")
-                ),
-                navigationController: self.navigationController,
-                delegate: nil,
-                enabled: true,
-                touchIDSuccess: { touchIDSetting in
-                    touchIDSetting.toggleTouchID(enabled: false)
-                },
-                touchIDFallback: { [unowned self] touchIDSetting in
-                    AppAuthenticator.presentPasscodeAuthentication(self.navigationController,
-                        success: {
-                            touchIDSetting.toggleTouchID(enabled: false)
-                            self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-                        },
-                        cancel: nil
-                    )
-                }
-            ),
-            AuthenticationForLoginsSetting(
-                title: NSAttributedString.tableRowTitle(
-                    NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID for logins")
-                ),
-                navigationController: self.navigationController,
-                delegate: nil,
-                enabled: true,
-                touchIDSuccess: { touchIDSetting in
-                    touchIDSetting.toggleTouchID(enabled: false)
-                },
-                touchIDFallback: { [unowned self] touchIDSetting in
-                    AppAuthenticator.presentPasscodeAuthentication(self.navigationController,
-                        success: { 
-                            touchIDSetting.toggleTouchID(enabled: false)
-                            self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-                        },
-                        cancel: nil
-                    )
-                }
-            )
+            privateBrowsingSetting(self.navigationController),
+            loginsSetting(self.navigationController)
         ])
 
         let requirePasscodeSection = SettingSection(title: nil, children: requirePasscodeSectionChildren)

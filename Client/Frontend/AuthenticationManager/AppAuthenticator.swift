@@ -32,8 +32,6 @@ class AppAuthenticator {
                 switch code {
                 case .UserFallback, .TouchIDNotEnrolled, .TouchIDNotAvailable, .TouchIDLockout:
                     fallback?()
-                case .UserCancel:
-                    cancel?()
                 default:
                     cancel?()
                 }
