@@ -192,16 +192,14 @@ extension Strings {
 
 // Night mode
 extension Strings {
-    public static let MenuNightModeTitleString = NSLocalizedString("Menu.NightModeAction.Title", value: "Night Mode",  comment: "Label for the button, displayed in the menu, used to toggle night mode on or off")
-    public static let MenuNightModeTurnOnTitleString = NSLocalizedString("Menu.NightModeTurnOnAction.Title", value: "Night Mode",  comment: "Label for the button, displayed in the menu, used to turn night mode on")
-    public static let MenuNightModeTurnOffTitleString = NSLocalizedString("Menu.NightModeTurnOffAction.Title", value: "Night Mode Off", comment: "Label for the button, displayed in the menu, used to turn night mode off")
+    public static let MenuNightModeTurnOnLabel = NSLocalizedString("Menu.NightModeTurnOnAction.Label", value: "Night Mode",  comment: "Label for the button, displayed in the menu, used to turn night mode on. 'Turn On' is an indication of state, and thus redundant.")
+    public static let MenuNightModeTurnOffLabel = NSLocalizedString("Menu.NightModeTurnOffAction.Label", value: "Night Mode Off", comment: "Label for the button, displayed in the menu, used to turn night mode off. 'Off' is only displayed when the mode is on.")
 }
 
 // No image mode
 extension Strings {
-    public static let MenuNoImageModeTitleString = NSLocalizedString("Menu.NoImageModeAction.Title", value: "No Image Mode",  comment: "Label for the button, displayed in the menu, used to toggle no image mode on or off")
-    public static let MenuNoImageModeTurnOnTitleString = NSLocalizedString("Menu.NoImageModeTurnOnAction.Title", value: "Hide Images",  comment: "Label for the button, displayed in the menu, used to turn no image mode on")
-    public static let MenuNoImageModeTurnOffTitleString = NSLocalizedString("Menu.NoImageModeTurnOffAction.Title", value: "Show Images", comment: "Label for the button, displayed in the menu, used to turn no image mode off")
+    public static let MenuNoImageModeTurnOnLabel = NSLocalizedString("Menu.NoImageModeTurnOnAction.Label", value: "Hide Images",  comment: "Label for the button, displayed in the menu, used to turn no image mode on.")
+    public static let MenuNoImageModeTurnOffLabel = NSLocalizedString("Menu.NoImageModeTurnOffAction.Label", value: "Show Images", comment: "Label for the button, displayed in the menu, used to turn no image mode off.")
 }
 
 // open in

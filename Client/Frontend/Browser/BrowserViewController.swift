@@ -758,13 +758,13 @@ class BrowserViewController: UIViewController {
 
     private func hideHomePanelController() {
         if let controller = homePanelController {
+            self.homePanelController = nil
             UIView.animateWithDuration(0.2, delay: 0, options: .BeginFromCurrentState, animations: { () -> Void in
                 controller.view.alpha = 0
             }, completion: { _ in
                 controller.willMoveToParentViewController(nil)
                 controller.view.removeFromSuperview()
                 controller.removeFromParentViewController()
-                self.homePanelController = nil
                 self.webViewContainer.accessibilityElementsHidden = false
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
@@ -2386,7 +2386,7 @@ extension BrowserViewController: WKNavigationDelegate {
             // because that event wil not always fire due to unreliable page caching. This will either let us know that
             // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
             // ignore the result because we are being called back asynchronous when the readermode status changes.
-            webView.evaluateJavaScript("_firefox_ReaderMode.checkReadability()", completionHandler: nil)
+            webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
         }
 
         if tab === tabManager.selectedTab {
@@ -2575,10 +2575,14 @@ extension BrowserViewController: WKUIDelegate {
             return
         }
 
-        guard let openInHelper = helperForURL else {
+        guard var openInHelper = helperForURL else {
             let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
             ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.URL!, inWebView: webView)
             return decisionHandler(WKNavigationResponsePolicy.Allow)
+        }
+        
+        if openInHelper.openInView == nil {
+            openInHelper.openInView = navigationToolbar.shareButton
         }
 
         openInHelper.open()

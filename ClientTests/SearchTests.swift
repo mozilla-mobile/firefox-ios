@@ -28,6 +28,7 @@ class SearchTests: XCTestCase {
         checkValidURL("http://www.mozilla.org", afterFixup: "http://www.mozilla.org")
         checkValidURL("about:", afterFixup: "about:")
         checkValidURL("about:config", afterFixup: "about:config")
+        checkValidURL("about: config", afterFixup: "about:%20config")
         checkValidURL("file:///f/o/o", afterFixup: "file:///f/o/o")
         checkValidURL("ftp://ftp.mozilla.org", afterFixup: "ftp://ftp.mozilla.org")
         checkValidURL("foo.bar", afterFixup: "http://foo.bar")
@@ -38,7 +39,6 @@ class SearchTests: XCTestCase {
         checkInvalidURL("foobar")
         checkInvalidURL("foo bar")
         checkInvalidURL("mozilla. org")
-        checkInvalidURL("about: config")
         checkInvalidURL("123")
         checkInvalidURL("a/b")
     }
