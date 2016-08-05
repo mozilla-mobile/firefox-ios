@@ -15,7 +15,7 @@ private struct HomePanelViewControllerUX {
     static let BackgroundColorNormalMode = UIConstants.PanelBackgroundColor
     static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
     static let EditDoneButtonRightPadding: CGFloat = -12
-    static let ToolbarButtonDeselectedColorNormalMode = UIColor(white: 0.2, alpha: 1)
+    static let ToolbarButtonDeselectedColorNormalMode = UIColor(white: 0.2, alpha: 0.5)
     static let ToolbarButtonDeselectedColorPrivateMode = UIColor(white: 0.9, alpha: 1)
 }
 
