@@ -437,10 +437,6 @@ class URLBarView: UIView {
             self.progressBar.setProgress(progress, animated: !isTransitioning)
             UIView.animateWithDuration(1.5, animations: {
                 self.progressBar.alpha = 0.0
-            }, completion: { finished in
-                if finished {
-                    self.progressBar.setProgress(0.0, animated: false)
-                }
             })
         } else {
             if self.progressBar.alpha < 1.0 {

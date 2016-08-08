@@ -51,6 +51,7 @@ class TopTabsViewController: UIViewController {
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
         tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), forControlEvents: UIControlEvents.TouchUpInside)
+        tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
     
