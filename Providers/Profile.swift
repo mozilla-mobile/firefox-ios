@@ -917,7 +917,7 @@ public class BrowserProfile: Profile {
             // Only sync if we're green lit. This makes sure that we don't sync unverified accounts.
             guard self.profile.hasSyncableAccount() else { return succeed() }
 
-            self.beginTimedSyncs();
+            self.beginTimedSyncs()
             return self.syncEverything()
         }
 

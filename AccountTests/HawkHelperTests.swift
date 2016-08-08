@@ -19,7 +19,7 @@ class HawkHelperTests: XCTestCase {
         "example.com\n" +
         "8000\n" +
         "\n" +
-        "some-app-ext-data\n";
+        "some-app-ext-data\n"
 
         let expected = HawkHelper.getSignatureFor(input.utf8EncodedData!, key: "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn".utf8EncodedData!)
         XCTAssertEqual("6R4rV5iE+NPoym+WwjeHzjAGXUtLNIxmo1vpMofpLAE=", expected)
@@ -38,7 +38,7 @@ class HawkHelperTests: XCTestCase {
             "example.com\n" +
             "8000\n" +
             "\n" +
-            "some-app-ext-data\n";
+            "some-app-ext-data\n"
         XCTAssertEqual(HawkHelper.getRequestStringFor(req.request!, timestampString: String(timestamp), nonce: nonce, hash: "", extra: extra).componentsSeparatedByString("\n"),
             expected.componentsSeparatedByString("\n"))
     }
@@ -51,7 +51,7 @@ class HawkHelperTests: XCTestCase {
         let nonce = "j4h3g2"
         let extra = "some-app-ext-data"
         let value = helper.getAuthorizationValueFor(req.request!, at: timestamp, nonce: nonce, extra: extra)
-        let expected = "Hawk id=\"dh37fgj492je\", ts=\"1353832234\", nonce=\"j4h3g2\", ext=\"some-app-ext-data\", mac=\"6R4rV5iE+NPoym+WwjeHzjAGXUtLNIxmo1vpMofpLAE=\"";
+        let expected = "Hawk id=\"dh37fgj492je\", ts=\"1353832234\", nonce=\"j4h3g2\", ext=\"some-app-ext-data\", mac=\"6R4rV5iE+NPoym+WwjeHzjAGXUtLNIxmo1vpMofpLAE=\""
         XCTAssertEqual(value, expected)
     }
 
@@ -70,7 +70,7 @@ class HawkHelperTests: XCTestCase {
         let nonce = "j4h3g2"
         let extra = "some-app-ext-data"
         let value = helper.getAuthorizationValueFor(req.request!, at: timestamp, nonce: nonce, extra: extra)
-        let expected = "Hawk id=\"dh37fgj492je\", ts=\"1353832234\", nonce=\"j4h3g2\", hash=\"Yi9LfIIFRtBEPt74PVmbTF/xVAwPn7ub15ePICfgnuY=\", ext=\"some-app-ext-data\", mac=\"aSe1DERmZuRl3pI36/9BdZmnErTw3sNzOOAUlfeKjVw=\"";
+        let expected = "Hawk id=\"dh37fgj492je\", ts=\"1353832234\", nonce=\"j4h3g2\", hash=\"Yi9LfIIFRtBEPt74PVmbTF/xVAwPn7ub15ePICfgnuY=\", ext=\"some-app-ext-data\", mac=\"aSe1DERmZuRl3pI36/9BdZmnErTw3sNzOOAUlfeKjVw=\""
         XCTAssertEqual(value, expected)
     }
 

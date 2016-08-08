@@ -130,8 +130,7 @@ class TouchIDSetting: Setting {
         delegate: SettingsDelegate? = nil,
         enabled: Bool? = nil,
         touchIDSuccess: (() -> Void)? = nil,
-        touchIDFallback: (() -> Void)? = nil)
-    {
+        touchIDFallback: (() -> Void)? = nil) {
         self.touchIDSuccess = touchIDSuccess
         self.touchIDFallback = touchIDFallback
         self.navigationController = navigationController

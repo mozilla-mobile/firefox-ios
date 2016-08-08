@@ -40,7 +40,7 @@ public class CleartextPayloadJSON: BasePayloadJSON {
         if d.isBool {
             return d.asBool!
         } else {
-            return false;
+            return false
         }
     }
 

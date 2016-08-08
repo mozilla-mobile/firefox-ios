@@ -38,11 +38,11 @@ public class KeysPayload: CleartextPayloadJSON {
 
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
         if !(obj is KeysPayload) {
-            return false;
+            return false
         }
         
         if !super.equalPayloads(obj) {
-            return false;
+            return false
         }
         
         let p = obj as! KeysPayload

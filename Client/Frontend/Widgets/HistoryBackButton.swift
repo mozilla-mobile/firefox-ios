@@ -11,7 +11,7 @@ private struct HistoryBackButtonUX {
     static let HistoryHistoryBackButtonHeaderChevronLineWidth: CGFloat = 3.0
 }
 
-class HistoryBackButton : UIButton {
+class HistoryBackButton: UIButton {
     lazy var title: UILabel = {
         let label = UILabel()
         label.textColor = UIConstants.HighlightBlue

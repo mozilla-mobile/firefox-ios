@@ -32,7 +32,7 @@ private class MockBackoffStorage: BackoffStorage {
     }
 }
 
-class LiveStorageClientTests : LiveAccountTest {
+class LiveStorageClientTests: LiveAccountTest {
     func getKeys(kB: NSData, token: TokenServerToken) -> Deferred<Maybe<Record<KeysPayload>>> {
         let endpoint = token.api_endpoint
         XCTAssertTrue(endpoint.rangeOfString("services.mozilla.com") != nil, "We got a Sync server.")
