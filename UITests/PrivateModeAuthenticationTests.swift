@@ -46,6 +46,10 @@ class PrivateModeAuthenticationTests: KIFTestCase {
     }
 
     func testPasscodeAuthenticationFromTopTabs() {
+        let bvc = getBrowserViewController()
+        guard bvc.shouldShowTopTabsForTraitCollection(bvc.traitCollection) else {
+            return
+        }
         enablePasscodeAuthentication()
         checkBrowsingMode(isPrivate: false)
         tester().tapViewWithAccessibilityLabel("Private Tab")
@@ -56,6 +60,15 @@ class PrivateModeAuthenticationTests: KIFTestCase {
 
     func testPasscodeAuthenticationForNewPrivateTab() {
         enablePasscodeAuthentication()
+        checkBrowsingMode(isPrivate: false)
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Private Tab")
+        enterCorrectPasscode()
+    }
+    
+    func testPasscodeAuthenticationForNewPrivateTabFromTabTray() {
+        enablePasscodeAuthentication()
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
         checkBrowsingMode(isPrivate: false)
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("New Private Tab")
