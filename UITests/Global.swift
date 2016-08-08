@@ -220,7 +220,11 @@ class BrowserUtils {
             tester.tapViewWithAccessibilityLabel("Cancel")
         } catch _ {
         }
-        tester.tapViewWithAccessibilityLabel("Show Tabs")
+        do {
+            try tester.tryFindingTappableViewWithAccessibilityLabel("Show Tabs")
+            tester.tapViewWithAccessibilityLabel("Show Tabs")
+        } catch _ {
+        }
         let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
 
         // Clear all private tabs if we're running iOS 9
