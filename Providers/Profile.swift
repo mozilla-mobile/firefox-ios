@@ -19,40 +19,6 @@ public let NotificationProfileDidStartSyncing = "NotificationProfileDidStartSync
 public let NotificationProfileDidFinishSyncing = "NotificationProfileDidFinishSyncing"
 public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
-public enum SyncDisplayState {
-    case InProgress
-    case Good
-    case Bad(message: String?)
-    case Stale(message: String)
-
-    func asObject() -> [String: String]? {
-        switch self {
-        case .Bad(let msg):
-            guard let message = msg else {
-                return ["state": "Error"]
-            }
-            return ["state": "Error",
-                    "message": message]
-        case .Stale(let message):
-            return ["state": "Warning",
-                    "message": message]
-        default:
-            break
-        }
-        return nil
-    }
-}
-
-public func ==(a: SyncDisplayState, b: SyncDisplayState) -> Bool {
-    switch (a, b) {
-    case (.InProgress,   .InProgress): return true
-    case (.Good,   .Good): return true
-    case (.Bad(let a), .Bad(let b)) where a == b: return true
-    case (.Stale(let a), .Stale(let b)) where a == b: return true
-    default: return false
-    }
-}
-
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
@@ -80,7 +46,8 @@ public protocol SyncManager {
 
 typealias EngineIdentifier = String
 typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
-private typealias EngineStatus = (EngineIdentifier, SyncStatus)
+typealias EngineStatus = (EngineIdentifier, SyncStatus)
+typealias EngineResults = [EngineStatus]
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -681,7 +648,13 @@ public class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
-            syncDisplayState = displayStateForEngineResults(result)
+
+            if let syncResult = result {
+                syncDisplayState = SyncStatusResolver(engineResults: syncResult).resolveResults()
+            } else {
+                syncDisplayState = .Good
+            }
+
             reportEndSyncingStatus(syncDisplayState, engineResults: result)
             notifySyncing(NotificationProfileDidFinishSyncing)
             syncReducer = nil
@@ -933,46 +906,6 @@ public class BrowserProfile: Profile {
             defer { syncLock.unlock() }
             if let syncState = syncDisplayState where syncState == .Good {
                 self.lastSyncFinishTime = NSDate.now()
-            }
-        }
-
-        private func displayStateForEngineResults(result: Maybe<EngineResults>?) -> SyncDisplayState {
-            guard let result = result else {
-                return .Good
-            }
-            guard let results = result.successValue else {
-                switch result.failureValue {
-                case _ as BookmarksMergeError, _ as BookmarksDatabaseError:
-                    return SyncDisplayState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
-                default:
-                    return SyncDisplayState.Bad(message: nil)
-                }
-            }
-            let errorResults: [SyncDisplayState]? = results.flatMap { identifier, status in
-                let displayState = self.displayStateForSyncState(status, identifier: identifier)
-                return displayState == .Good ? nil : displayState
-            }
-            return errorResults?.first ?? .Good
-        }
-
-        private func displayStateForSyncState(syncStatus: SyncStatus, identifier: String? = nil) -> SyncDisplayState {
-            switch syncStatus {
-            case .Completed:
-                return SyncDisplayState.Good
-            case .NotStarted(let reason):
-                let message: String
-                switch reason {
-                case .Offline:
-                    message = Strings.FirefoxSyncOfflineTitle
-                default:
-                    message = Strings.FirefoxSyncNotStartedTitle
-                }
-                return SyncDisplayState.Stale(message: message)
-            case .Partial:
-                if let identifier = identifier {
-                    return SyncDisplayState.Stale(message: String(format:Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent(identifier) ?? ""))
-                }
-                return SyncDisplayState.Stale(message: Strings.FirefoxSyncNotStartedTitle)
             }
         }
 
