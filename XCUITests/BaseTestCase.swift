@@ -9,8 +9,6 @@
 import XCTest
 
 class BaseTestCase: XCTestCase {
-    
-    private var pageLoaded: XCTestExpectation?
 
     override func setUp() {
         super.setUp()
@@ -34,26 +32,19 @@ class BaseTestCase: XCTestCase {
     }
 
     func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
-        let exists = NSPredicate(format: "exists == true")
-        let doesNotExist = NSPredicate(format: "exists == false")
+        let loaded = NSPredicate(format: "value BEGINSWITH '100'")
 
         let app = XCUIApplication()
-        let progressIndicator = app.descendantsMatchingType(.Any)["Loaded web page"]
-        let webPageWasNotAlreadyLoading = progressIndicator.exists
 
         UIPasteboard.generalPasteboard().string = url
         app.textFields["url"].pressForDuration(2.0)
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
 
         if waitForLoadToFinish {
-            let startLoadingTimeout: NSTimeInterval = 5
             let finishLoadingTimeout: NSTimeInterval = 10
-
-            if webPageWasNotAlreadyLoading {
-                expectationForPredicate(doesNotExist, evaluatedWithObject: progressIndicator, handler: nil)
-                waitForExpectationsWithTimeout(startLoadingTimeout, handler: nil) // It takes a short time for a page to begin loading after the navigation action has been made
-            }
-            expectationForPredicate(exists, evaluatedWithObject: progressIndicator, handler: nil)
+            
+            let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
+            expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)
             waitForExpectationsWithTimeout(finishLoadingTimeout, handler: nil)
         }
     }

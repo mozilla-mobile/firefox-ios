@@ -2320,12 +2320,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
         tab.url = webView.URL
 
-        for child in webView.subviews {
-            if child.accessibilityLabel == "Loaded web page" {
-                child.removeFromSuperview()
-            }
-        }
-
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)
             appDidUpdateState(getCurrentAppState())
@@ -2342,10 +2336,6 @@ extension BrowserViewController: WKNavigationDelegate {
             if navigation == nil {
                 log.warning("Implicitly unwrapped optional navigation was nil.")
             }
-
-            let pageLoadAccessibilityIndicator = UIView()
-            pageLoadAccessibilityIndicator.accessibilityIdentifier = "Loaded web page"
-            webView.addSubview(pageLoadAccessibilityIndicator)
 
             postLocationChangeNotificationForTab(tab, navigation: navigation)
 
