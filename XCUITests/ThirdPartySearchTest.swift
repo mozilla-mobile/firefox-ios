@@ -13,6 +13,16 @@ class ThirdPartySearchTest: BaseTestCase {
     override func tearDown() {
         super.tearDown()
     }
+    
+    private func dismissKeyboardAssistant(forApp app: XCUIApplication) {
+        if app.buttons["Done"].exists {
+            // iPhone
+            app.buttons["Done"].tap()
+        } else {
+            // iPad
+            app.buttons["Dismiss"].tap()
+        }
+    }
 
     func testCustomSearchEngines() {
         let app = XCUIApplication()
@@ -24,10 +34,10 @@ class ThirdPartySearchTest: BaseTestCase {
         app.buttons["AddSearch"].tap()
         app.alerts["Add Search Provider?"].collectionViews.buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].enabled)
-        app.buttons["Done"].tap()
+        dismissKeyboardAssistant(forApp: app)
 
         // Perform a search using a custom search engine
-        app.buttons["URLBarView.tabsButton"].tap()
+        tabTrayButton(forApp: app).tap()
         app.buttons["TabTrayController.addTabButton"].tap()
         app.textFields["url"].tap()
         app.typeText("window")
@@ -48,10 +58,10 @@ class ThirdPartySearchTest: BaseTestCase {
         app.buttons["AddSearch"].tap()
         app.alerts["Add Search Provider?"].collectionViews.buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].enabled)
-        app.buttons["Done"].tap()
+        dismissKeyboardAssistant(forApp: app)
 
         // Go to settings and set MDN as the default
-        app.buttons["URLBarView.tabsButton"].tap()
+        tabTrayButton(forApp: app).tap()
         app.buttons["TabTrayController.menuButton"].tap()
         app.collectionViews.cells["Settings"].tap()
         let tablesQuery = app.tables
@@ -81,9 +91,11 @@ class ThirdPartySearchTest: BaseTestCase {
         app.buttons["AddSearch"].tap()
         app.alerts["Add Search Provider?"].collectionViews.buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].enabled)
-        app.buttons["Done"].tap()
+        dismissKeyboardAssistant(forApp: app)
 
-        app.buttons["URLBarView.tabsButton"].tap()
+        let tabTrayButton = self.tabTrayButton(forApp: app)
+
+        tabTrayButton.tap()
         app.buttons["TabTrayController.addTabButton"].tap()
         app.textFields["url"].tap()
         app.typeText("window")
@@ -91,7 +103,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.typeText("\r")
 
         // Go to settings and set MDN as the default
-        app.buttons["URLBarView.tabsButton"].tap()
+        tabTrayButton.tap(force: true)
         app.buttons["TabTrayController.menuButton"].tap()
         app.collectionViews.cells["Settings"].tap()
         let tablesQuery = app.tables

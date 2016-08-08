@@ -28,7 +28,7 @@ class ResetOptionsTest: BaseTestCase {
         restart(app, reset: false)
 
         // Now check to make sure app was not reset
-        app.buttons["URLBarView.tabsButton"].tap()
+        tabTrayButton(forApp: app).tap()
         app.buttons["TabTrayController.addTabButton"].tap()
         sleep(1)
         XCTAssertTrue(app.collectionViews["Top Sites View"].cells.count == numberOfTopSites + 1, "A new site should have been added to the topSites")
