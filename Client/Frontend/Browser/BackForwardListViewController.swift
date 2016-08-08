@@ -126,7 +126,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             return
         }
         if bvc.shouldShowFooterForTraitCollection(newCollection) != snappedToBottom {
-            self.dismissing = true
             tableView.snp_updateConstraints { make in
                 if snappedToBottom {
                     make.bottom.equalTo(self.view).offset(0)
@@ -146,14 +145,9 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
                 make.height.equalTo(min(CGFloat(BackForwardViewUX.RowHeight * self.listData.count), size.height / 2))
             }
         }
-        if !self.dismissing {
+        coordinator.animateAlongsideTransition(nil) { _ in
+            self.remakeVerticalConstraints()
             correctHeight()
-        } else {
-            coordinator.animateAlongsideTransition(nil) { _ in
-                self.remakeVerticalConstraints()
-                correctHeight()
-                self.dismissing = false
-            }
         }
     }
     
