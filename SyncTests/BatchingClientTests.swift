@@ -69,7 +69,7 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: serializeRecord,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in })
+                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
 
         let record = createRecordWithID("A")
         let result = batch.addRecord(record).value
@@ -83,7 +83,7 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: { _ in nil },
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in })
+                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
 
         let record = createRecordWithID("A")
         let result = batch.addRecord(record).value
@@ -134,7 +134,7 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: 10_000,
                                       serializeRecord: basicSerializer,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in })
+                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
 
         let recordA = createRecordWithID("A")
         let recordB = createRecordWithID("B")
@@ -168,7 +168,10 @@ class Sync15BatchClientTests: XCTestCase {
             return deferEmptyResponse()
         }
 
-        let collectionUploaded: (POSTResult) -> Void = { _ in uploadedCollectionCount += 1 }
+        let collectionUploaded: (POSTResult) -> DeferredTimestamp = { _ in
+            uploadedCollectionCount += 1
+            return deferMaybe(NSDate.now())
+        }
 
         // Setup a configuration so we each payload would be one record
         let twoRecordBatchesConfig = InfoConfiguration(
@@ -224,7 +227,10 @@ class Sync15BatchClientTests: XCTestCase {
             }
         }
 
-        let collectionUploaded: (POSTResult) -> Void = { _ in uploadedCollectionCount += 1 }
+        let collectionUploaded: (POSTResult) -> DeferredTimestamp = { _ in
+            uploadedCollectionCount += 1
+            return deferMaybe(NSDate.now())
+        }
 
         // Setup a configuration so we send 2 records per each payload
         let twoRecordBatchesConfig = InfoConfiguration(
@@ -313,7 +319,10 @@ class Sync15BatchClientTests: XCTestCase {
             }
         }
 
-        let collectionUploaded: (POSTResult) -> Void = { _ in uploadedCollectionCount += 1 }
+        let collectionUploaded: (POSTResult) -> DeferredTimestamp = { _ in
+            uploadedCollectionCount += 1
+            return deferMaybe(NSDate.now())
+        }
 
         // Setup a configuration so each batch supports two payloads of two records each
         let twoRecordBatchesConfig = InfoConfiguration(
@@ -341,5 +350,34 @@ class Sync15BatchClientTests: XCTestCase {
 
         // Validate we only called collection uploaded once per batch sent
         XCTAssertEqual(uploadedCollectionCount, 2)
+    }
+
+    func testBackoffDuringBatchUploading() {
+        let uploader: BatchUploadFunction = { lines, ius, queryParams in
+            deferMaybe(ServerInBackoffError(until: 10_000))
+        }
+
+        // Setup a configuration so each batch supports two payloads of two records each
+        let twoRecordBatchesConfig = InfoConfiguration(
+            maxRequestBytes: 1_048_576,
+            maxPostRecords: 1,
+            maxPostBytes: 1_048_576,
+            maxTotalRecords: 4,
+            maxTotalBytes: 104_857_600
+        )
+
+        let batch = Sync15BatchClient(config: twoRecordBatchesConfig,
+                                      ifUnmodifiedSince: 10_000,
+                                      serializeRecord: basicSerializer,
+                                      uploader: uploader,
+                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+
+        let record = createRecordWithID("A")
+        batch.addRecord(record).succeeded()
+        let result = batch.endBatch().value
+
+        // Verify that when the server goes into backoff, we get those bubbled up through the batching client
+        XCTAssertTrue(result.isFailure)
+        XCTAssertTrue(result.failureValue! is ServerInBackoffError)
     }
 }

@@ -86,15 +86,16 @@ private struct BatchMeta {
 typealias BatchUploadFunction = (lines: [String], ifUnmodifiedSince: Timestamp?, queryParams: [NSURLQueryItem]?) -> Deferred<Maybe<StorageResponse<POSTResult>>>
 
 public class Sync15BatchClient<T: CleartextPayloadJSON> {
+    private(set) var ifUnmodifiedSince: Timestamp?
+
     private let config: InfoConfiguration
     private let uploader: BatchUploadFunction
     private let serializeRecord: (Record<T>) -> String?
-    private var ifUnmodifiedSince: Timestamp?
 
     private var batchMeta: BatchMeta
     private var batchToken: BatchToken?
     private var currentPayload: Payload
-    private var onCollectionUploaded: (POSTResult -> Void)
+    private var onCollectionUploaded: (POSTResult -> DeferredTimestamp)
 
     // TODO: use I-U-S.
     // Each time we do the storage operation, we might receive a backoff notification.
@@ -102,7 +103,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     // have to worry about handling successes and failures mixed with backoffs here.
 
     init(config: InfoConfiguration, ifUnmodifiedSince: Timestamp? = nil, serializeRecord: (Record<T>) -> String?,
-         uploader: BatchUploadFunction, onCollectionUploaded: (POSTResult -> Void))
+         uploader: BatchUploadFunction, onCollectionUploaded: (POSTResult -> DeferredTimestamp))
     {
         self.config = config
         self.ifUnmodifiedSince = ifUnmodifiedSince

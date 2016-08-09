@@ -234,6 +234,8 @@ public struct StorageResponse<T> {
 
 public typealias BatchToken = String
 
+public typealias ByteCount = Int
+
 public struct POSTResult {
     public let modified: Timestamp
     public let success: [GUID]
@@ -644,7 +646,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return self.collectionURI.URLByAppendingPathComponent(guid)
     }
 
-    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: (POSTResult -> Void)) -> Sync15BatchClient<T> {
+    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: (POSTResult -> DeferredTimestamp)) -> Sync15BatchClient<T> {
         return Sync15BatchClient(config: infoConfig,
                                  ifUnmodifiedSince: ifUnmodifiedSince,
                                  serializeRecord: self.serializeRecord,
