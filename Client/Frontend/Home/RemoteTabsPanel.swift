@@ -97,7 +97,10 @@ class RemoteTabsPanel: UIViewController, HomePanel {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing:
-            tableViewController.refreshTabs()
+            dispatch_async(dispatch_get_main_queue()) {
+                print(notification.name)
+                self.tableViewController.refreshTabs()
+            }
             break
         default:
             // no need to do anything at all
@@ -540,6 +543,8 @@ private class RemoteTabsTableViewController : UITableViewController {
     @objc private func refreshTabs() {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
 
+        assert(NSThread.isMainThread())
+
         tableView.scrollEnabled = false
         tableView.allowsSelection = false
         tableView.tableFooterView = UIView(frame: CGRectZero)
@@ -556,13 +561,15 @@ private class RemoteTabsTableViewController : UITableViewController {
                 self.updateDelegateClientAndTabData(clientAndTabs)
             }
 
-            // Otherwise, fetch the tabs cloud if its been more than 1 minute since last sync
+            // Otherwise, fetch the tabs cloud if it's been more than 1 minute since last sync
             let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
             if NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds && !(self.refreshControl?.refreshing ?? false) {
                 self.startRefreshing()
                 self.profile.getClientsAndTabs().uponQueue(dispatch_get_main_queue()) { result in
+                    // We set the last sync time to now, regardless of whether the sync was successful, to avoid trying to sync over
+                    // and over again in cases whether the client is unable to sync (e.g. when there is no network connectivity).
+                    self.profile.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
                     if let clientAndTabs = result.successValue {
-                        self.profile.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
                         self.updateDelegateClientAndTabData(clientAndTabs)
                     }
                     self.endRefreshing()
