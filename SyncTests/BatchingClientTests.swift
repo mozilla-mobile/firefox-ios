@@ -17,13 +17,47 @@ private func massivify<T>(record: Record<T>) -> JSON? {
     ])
 }
 
+private func basicSerializer<T>(record: Record<T>) -> String {
+    return JSON([
+        "id": record.id,
+        "payload": record.payload
+    ]).toString()
+}
+
+// Create a basic record with an ID and a title that is the `Site$ID`.
+private func createRecordWithID(id: String) -> Record<CleartextPayloadJSON> {
+    let jsonString = "{\"id\":\"\(id)\",\"title\": \"\(id)\"}"
+    return Record<CleartextPayloadJSON>(id: id,
+                                        payload: CleartextPayloadJSON(JSON.parse(jsonString)),
+                                        modified: 10_000,
+                                        sortindex: 123,
+                                        ttl: 1_000_000)
+}
+
+private func assertLinesMatchRecords<T>(lines: [String], records: [Record<T>], serializer: (Record<T>) -> String) {
+    guard lines.count == records.count else {
+        XCTFail("Number of lines mismatch number of records")
+        return
+    }
+
+    lines.enumerate().forEach { index, line in
+        let record = records[index]
+        XCTAssertEqual(line, serializer(record))
+    }
+}
+
 private let deferEmptyResponse: () -> Deferred<Maybe<StorageResponse<POSTResult>>> = {
     return deferMaybe(
         StorageResponse(value: POSTResult(modified: NSDate.now(), success: [], failed: [:]), metadata: ResponseMetadata(status: 200, headers: [:]))
     )
 }
 
-private let miniConfig = InfoConfiguration(maxRequestBytes: 1048576, maxPostRecords: 2, maxPostBytes: 1048576, maxTotalRecords: 10, maxTotalBytes: 104857600)
+// Small helper operator for comparing query parameters below
+private func ==(param1: NSURLQueryItem, param2: NSURLQueryItem) -> Bool {
+    return param1.name == param2.name && param1.value == param2.value
+}
+
+private let miniConfig = InfoConfiguration(maxRequestBytes: 1_048_576, maxPostRecords: 2, maxPostBytes: 1_048_576, maxTotalRecords: 10, maxTotalBytes: 104_857_600)
 
 class Sync15BatchClientTests: XCTestCase {
 
@@ -35,11 +69,9 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: serializeRecord,
                                       uploader: uploader,
-                                      onCollectionUploaded: nil)
+                                      onCollectionUploaded: { _ in })
 
-        let jA = "{\"id\":\"mock\",\"histUri\":\"http://foo.com/\",\"title\": \"ñ\",\"visits\":[{\"date\":1222222222222222,\"type\":1}]}"
-        let record = Record<CleartextPayloadJSON>(id: "mock",payload: CleartextPayloadJSON(JSON.parse(jA)), modified: 10000, sortindex: 123, ttl: 1000000)
-
+        let record = createRecordWithID("A")
         let result = batch.addRecord(record).value
         XCTAssertTrue(result.isFailure)
         XCTAssertTrue(result.failureValue! is RecordTooLargeError)
@@ -51,35 +83,38 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: { _ in nil },
                                       uploader: uploader,
-                                      onCollectionUploaded: nil)
+                                      onCollectionUploaded: { _ in })
 
-        let jA = "{\"id\":\"mock\",\"histUri\":\"http://foo.com/\",\"title\": \"ñ\",\"visits\":[{\"date\":1222222222222222,\"type\":1}]}"
-        let record = Record<CleartextPayloadJSON>(id: "mock",payload: CleartextPayloadJSON(JSON.parse(jA)), modified: 10000, sortindex: 123, ttl: 1000000)
-
+        let record = createRecordWithID("A")
         let result = batch.addRecord(record).value
         XCTAssertTrue(result.isFailure)
         XCTAssertTrue(result.failureValue! is SerializeRecordFailure)
     }
 
-    func testIfUnmodifiedSinceUpdates() {
+    func testIfUnmodifiedSinceUpdatesForSinglePOSTs() {
         let firstResponse  =
-            StorageResponse(value: POSTResult(modified: 20000, success: [], failed: [:]), metadata: ResponseMetadata(status: 200, headers: [:]))
+            StorageResponse(value: POSTResult(modified: 20_000, success: [], failed: [:]), metadata: ResponseMetadata(status: 200, headers: [:]))
         let secondResponse =
-            StorageResponse(value: POSTResult(modified: 30000, success: [], failed: [:]), metadata: ResponseMetadata(status: 200, headers: [:]))
+            StorageResponse(value: POSTResult(modified: 30_000, success: [], failed: [:]), metadata: ResponseMetadata(status: 200, headers: [:]))
+
         var requestCount = 0
+        var linesSent = [String]()
+        var lastIUS: Timestamp? = 0
 
         // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
-        let uploader: BatchUploadFunction = { _, ius, _ in
+        let uploader: BatchUploadFunction = { lines, ius, _ in
+            linesSent += lines
             requestCount += 1
             switch requestCount {
             case 1:
-                XCTAssertEqual(ius, 10000)
+                XCTAssertEqual(ius, 10_000)
                 return deferMaybe(firstResponse)
             case 2:
-                XCTAssertEqual(ius, 20000)
+                XCTAssertEqual(ius, 20_000)
                 return deferMaybe(secondResponse)
             case 3:
-                XCTAssertEqual(ius, 30000)
+                XCTAssertEqual(ius, 30_000)
+                lastIUS = ius
                 return deferEmptyResponse()
             default:
                 XCTFail()
@@ -87,31 +122,224 @@ class Sync15BatchClientTests: XCTestCase {
             }
         }
 
-        let serializeRecord: (Record<CleartextPayloadJSON>) -> String = { record in
-            return JSON(["id": record.id, "foo": "foo"]).toString()
-        }
-
         let singleRecordConfig = InfoConfiguration(
-            maxRequestBytes: 1048576,
+            maxRequestBytes: 1_048_576,
             maxPostRecords: 1,
-            maxPostBytes: 1048576,
+            maxPostBytes: 1_048_576,
             maxTotalRecords: 10,
-            maxTotalBytes: 104857600
+            maxTotalBytes: 104_857_600
         )
 
         let batch = Sync15BatchClient(config: singleRecordConfig,
-                                      ifUnmodifiedSince: 10000,
-                                      serializeRecord: serializeRecord,
+                                      ifUnmodifiedSince: 10_000,
+                                      serializeRecord: basicSerializer,
                                       uploader: uploader,
-                                      onCollectionUploaded: nil)
+                                      onCollectionUploaded: { _ in })
 
-        let recordA = Record<CleartextPayloadJSON>(id: "A", payload: CleartextPayloadJSON(JSON.parse("{}")), modified: 10000, sortindex: 123, ttl: 1000000)
-        let recordB = Record<CleartextPayloadJSON>(id: "B", payload: CleartextPayloadJSON(JSON.parse("{}")), modified: 10000, sortindex: 123, ttl: 1000000)
-        let recordC = Record<CleartextPayloadJSON>(id: "C", payload: CleartextPayloadJSON(JSON.parse("{}")), modified: 10000, sortindex: 123, ttl: 1000000)
+        let recordA = createRecordWithID("A")
+        let recordB = createRecordWithID("B")
+        let recordC = createRecordWithID("C")
+        let allRecords = [recordA, recordB, recordC]
 
         batch.addRecord(recordA).succeeded()
         batch.addRecord(recordB).succeeded()
         batch.addRecord(recordC).succeeded()
+        batch.endBatch().succeeded()
+
+        // Validate number of requests sent
         XCTAssertEqual(requestCount, 3)
+
+        // Validate contents sent to the server
+        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+
+        // Validate the last IUS we got is the last request
+        XCTAssertEqual(lastIUS, 30_000)
+    }
+
+    func testUploadBatchUnsupportedBatching() {
+        var requestCount = 0
+        var uploadedCollectionCount = 0
+        var linesSent = [String]()
+
+        // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
+        let uploader: BatchUploadFunction = { lines, ius, _ in
+            linesSent += lines
+            requestCount += 1
+            return deferEmptyResponse()
+        }
+
+        let collectionUploaded: (POSTResult) -> Void = { _ in uploadedCollectionCount += 1 }
+
+        // Setup a configuration so we each payload would be one record
+        let twoRecordBatchesConfig = InfoConfiguration(
+            maxRequestBytes: 1_048_576,
+            maxPostRecords: 1,
+            maxPostBytes: 1_048_576,
+            maxTotalRecords: 10,
+            maxTotalBytes: 104_857_600
+        )
+
+        let batch = Sync15BatchClient(config: twoRecordBatchesConfig,
+                                      ifUnmodifiedSince: 10_000,
+                                      serializeRecord: basicSerializer,
+                                      uploader: uploader,
+                                      onCollectionUploaded: collectionUploaded)
+
+        let recordA = createRecordWithID("A")
+        let recordB = createRecordWithID("B")
+        let allRecords = [recordA, recordB]
+
+        batch.addRecord(recordA).succeeded()
+        batch.addRecord(recordB).succeeded()
+        batch.endBatch().succeeded()
+
+        // Validate number of requests sent. One for the start post, and one for the committing
+        XCTAssertEqual(requestCount, 2)
+
+        // Validate contents sent to the server
+        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+
+        // Validate we only made 2 calls to collection uploaded since we're doing single POSTs
+        XCTAssertEqual(uploadedCollectionCount, 2)
+    }
+
+    func testUploadSingleBatch() {
+        let firstResponse  =
+            StorageResponse(value: POSTResult(modified: 20_000, success: [], failed: [:], batchToken: "token"), metadata: ResponseMetadata(status: 200, headers: [:]))
+
+        var requestCount = 0
+        var uploadedCollectionCount = 0
+        var linesSent = [String]()
+
+        // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
+        let uploader: BatchUploadFunction = { lines, ius, _ in
+            linesSent += lines
+            requestCount += 1
+            switch requestCount {
+            case 1:
+                XCTAssertEqual(ius, 10_000)
+                return deferMaybe(firstResponse)
+            default:
+                return deferEmptyResponse()
+            }
+        }
+
+        let collectionUploaded: (POSTResult) -> Void = { _ in uploadedCollectionCount += 1 }
+
+        // Setup a configuration so we send 2 records per each payload
+        let twoRecordBatchesConfig = InfoConfiguration(
+            maxRequestBytes: 1_048_576,
+            maxPostRecords: 2,
+            maxPostBytes: 1_048_576,
+            maxTotalRecords: 10,
+            maxTotalBytes: 104_857_600
+        )
+
+        let batch = Sync15BatchClient(config: twoRecordBatchesConfig,
+                                      ifUnmodifiedSince: 10_000,
+                                      serializeRecord: basicSerializer,
+                                      uploader: uploader,
+                                      onCollectionUploaded: collectionUploaded)
+
+        let recordA = createRecordWithID("A")
+        let recordB = createRecordWithID("B")
+        let recordC = createRecordWithID("C")
+        let recordD = createRecordWithID("D")
+        let allRecords = [recordA, recordB, recordC, recordD]
+
+        batch.addRecord(recordA).succeeded()
+        batch.addRecord(recordB).succeeded()
+        batch.addRecord(recordC).succeeded()
+        batch.addRecord(recordD).succeeded()
+        batch.endBatch().succeeded()
+
+        // Validate number of requests sent. One for the start post, and one for the committing
+        XCTAssertEqual(requestCount, 2)
+
+        // Validate contents sent to the server
+        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+
+        // Validate we only made one call to the collection upload callback
+        XCTAssertEqual(uploadedCollectionCount, 1)
+    }
+
+    func testMultipleBatchUpload() {
+        let firstResponse  =
+            StorageResponse(value: POSTResult(modified: 20_000, success: [], failed: [:], batchToken: "tokenA"), metadata: ResponseMetadata(status: 200, headers: [:]))
+
+        let thirdResponse =
+            StorageResponse(value: POSTResult(modified: 30_000, success: [], failed: [:], batchToken: "tokenB"), metadata: ResponseMetadata(status: 200, headers: [:]))
+
+        var requestCount = 0
+        var uploadedCollectionCount = 0
+        var linesSent = [String]()
+
+        let allRecords: [Record<CleartextPayloadJSON>] = "ABCDEFGH".characters.reduce([]) { list, char in
+            return list + [createRecordWithID(String(char))]
+        }
+
+        // For each upload, verify that we are getting the correct queryParams and records to be sent.
+        let uploader: BatchUploadFunction = { lines, ius, queryParams in
+            linesSent += lines
+            requestCount += 1
+            switch requestCount {
+            case 1:
+                let expected = NSURLQueryItem(name: "batch", value: "true")
+                XCTAssertEqual(expected, queryParams![0])
+                assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
+                return deferMaybe(firstResponse)
+            case 2:
+                let expectedBatch = NSURLQueryItem(name: "batch", value: "tokenA")
+                let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
+                XCTAssertEqual(expectedBatch, queryParams![0])
+                XCTAssertEqual(expectedCommit, queryParams![1])
+                assertLinesMatchRecords(lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
+                return deferEmptyResponse()
+            case 3:
+                let expected = NSURLQueryItem(name: "batch", value: "true")
+                XCTAssertEqual(expected, queryParams![0])
+                assertLinesMatchRecords(lines, records: Array(allRecords[4..<6]), serializer: basicSerializer)
+                return deferMaybe(thirdResponse)
+            case 4:
+                let expectedBatch = NSURLQueryItem(name: "batch", value: "tokenB")
+                let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
+                XCTAssertEqual(expectedBatch, queryParams![0])
+                XCTAssertEqual(expectedCommit, queryParams![1])
+                assertLinesMatchRecords(lines, records: Array(allRecords[6..<8]), serializer: basicSerializer)
+                return deferEmptyResponse()
+            default:
+                XCTFail()
+                return deferEmptyResponse()
+            }
+        }
+
+        let collectionUploaded: (POSTResult) -> Void = { _ in uploadedCollectionCount += 1 }
+
+        // Setup a configuration so each batch supports two payloads of two records each
+        let twoRecordBatchesConfig = InfoConfiguration(
+            maxRequestBytes: 1_048_576,
+            maxPostRecords: 2,
+            maxPostBytes: 1_048_576,
+            maxTotalRecords: 4,
+            maxTotalBytes: 104_857_600
+        )
+
+        let batch = Sync15BatchClient(config: twoRecordBatchesConfig,
+                                      ifUnmodifiedSince: 10_000,
+                                      serializeRecord: basicSerializer,
+                                      uploader: uploader,
+                                      onCollectionUploaded: collectionUploaded)
+
+        allRecords.forEach { batch.addRecord($0).succeeded() }
+        batch.endBatch().succeeded()
+
+        // Validate number of requests sent. One for the start post, and one for the committing
+        XCTAssertEqual(requestCount, 4)
+
+        // Validate contents sent to the server
+        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+
+        // Validate we only called collection uploaded once per batch sent
+        XCTAssertEqual(uploadedCollectionCount, 2)
     }
 }

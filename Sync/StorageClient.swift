@@ -617,11 +617,11 @@ public class Sync15StorageClient {
     }
 }
 
-private let DefaultInfoConfiguration = InfoConfiguration(maxRequestBytes: 1048576,
+private let DefaultInfoConfiguration = InfoConfiguration(maxRequestBytes: 1_048_576,
                                                          maxPostRecords: 100,
-                                                         maxPostBytes: 1048576,
-                                                         maxTotalRecords: 10000,
-                                                         maxTotalBytes: 104857600)
+                                                         maxPostBytes: 1_048_576,
+                                                         maxTotalRecords: 10_000,
+                                                         maxTotalBytes: 104_857_600)
 
 /**
  * We'd love to nest this in the overall storage client, but Swift
@@ -644,7 +644,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return self.collectionURI.URLByAppendingPathComponent(guid)
     }
 
-    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: (POSTResult -> Void)? = nil) -> Sync15BatchClient<T> {
+    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: (POSTResult -> Void)) -> Sync15BatchClient<T> {
         return Sync15BatchClient(config: infoConfig,
                                  ifUnmodifiedSince: ifUnmodifiedSince,
                                  serializeRecord: self.serializeRecord,

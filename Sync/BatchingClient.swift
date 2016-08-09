@@ -71,17 +71,15 @@ private struct BatchMeta {
     }
 
     mutating func add(payload: Payload) -> Bool {
-        guard payloadFitsInBatch(payload) else {
+        guard (bytes + payload.bytes <= config.maxTotalBytes) &&
+              (count + payload.count < config.maxTotalRecords) else
+        {
             return false
         }
 
         count += payload.count
         bytes += payload.bytes
         return true
-    }
-
-    private func payloadFitsInBatch(payload: Payload) -> Bool {
-        return (bytes + payload.bytes <= config.maxTotalBytes) && (count + payload.count < config.maxTotalRecords)
     }
 }
 
@@ -96,14 +94,16 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     private var batchMeta: BatchMeta
     private var batchToken: BatchToken?
     private var currentPayload: Payload
-    private var onCollectionUploaded: (POSTResult -> Void)?
+    private var onCollectionUploaded: (POSTResult -> Void)
 
     // TODO: use I-U-S.
     // Each time we do the storage operation, we might receive a backoff notification.
     // For a success response, this will be on the subsequent request, which means we don't
     // have to worry about handling successes and failures mixed with backoffs here.
 
-    init(config: InfoConfiguration, ifUnmodifiedSince: Timestamp? = nil, serializeRecord: (Record<T>) -> String?, uploader: BatchUploadFunction, onCollectionUploaded: (POSTResult -> Void)?) {
+    init(config: InfoConfiguration, ifUnmodifiedSince: Timestamp? = nil, serializeRecord: (Record<T>) -> String?,
+         uploader: BatchUploadFunction, onCollectionUploaded: (POSTResult -> Void))
+    {
         self.config = config
         self.ifUnmodifiedSince = ifUnmodifiedSince
         self.uploader = uploader
@@ -115,10 +115,6 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     }
 
     public func addRecord(record: Record<T>) -> Success {
-        // Sanity checks and assumptions
-        precondition(config.maxPostBytes <= config.maxTotalBytes)
-        precondition(config.maxPostRecords <= config.maxTotalRecords)
-
         guard let line = self.serializeRecord(record) else {
             return deferMaybe(SerializeRecordFailure(record: record))
         }
@@ -145,41 +141,49 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
                 // Based on the precondition, we must be able to add at least one payload into the batch 
                 // without it failing
-                >>> effect({ self.batchMeta.add(self.currentPayload) })
-                >>> effect({ self.currentPayload = Payload(config: self.config) })
+                >>> effect({
+                    self.batchMeta.add(self.currentPayload)
+                    self.currentPayload = self.addRecordToNewPayload(uploadRecord)
+                })
                 >>> succeed
         }
 
         // If we can fit in another payload, push it up using our batch token
         if batchMeta.add(self.currentPayload) {
             return self.uploadPayload(self.currentPayload, queryParams: [NSURLQueryItem(name: "batch", value: token)])
-                >>> effect({ self.currentPayload = Payload(config: self.config) })
+                >>> effect({
+                    self.currentPayload = self.addRecordToNewPayload(uploadRecord)
+                })
                 >>> succeed
         }
 
-        // Otherwise, 
-        // 1. Commit the batch
-        // 2. Start up a new batch
-        // 3. Place the payload into the new batch
-        return self.commit(token) >>> {
-            return self.start(self.currentPayload)
-                >>== effect({ self.batchToken = $0 })
-                >>> effect({ self.batchMeta = BatchMeta(config: self.config) })
-                >>> effect({ self.batchMeta.add(self.currentPayload) })
-                >>> succeed
-        }
+        return self.commit(token)
+            >>> effect({
+                self.batchToken = nil
+                self.batchMeta = BatchMeta(config: self.config)
+                self.currentPayload = self.addRecordToNewPayload(uploadRecord)
+            })
+            >>> succeed
     }
 
     public func endBatch() -> Success {
         // When not batching, just upload whatever is left over
         guard let token = batchToken else {
             return uploadPayload(self.currentPayload)
-                >>== effect({ self.ifUnmodifiedSince = $0.value.modified })
-                >>== effect({ self.onCollectionUploaded?($0.value) })
+                >>== effect({ response in
+                    self.ifUnmodifiedSince = response.value.modified
+                    self.onCollectionUploaded(response.value)
+                })
                 >>> succeed
         }
 
         return self.commit(token)
+    }
+
+    private func addRecordToNewPayload(uploadRecord: UploadRecord) -> Payload {
+        var newPayload = Payload(config: self.config)
+        newPayload.add(uploadRecord)
+        return newPayload
     }
 
     private func start(payload: Payload) -> Deferred<Maybe<BatchToken?>> {
@@ -197,7 +201,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
             // the collection so we should update our timestamp and invoke our upload callback.
             log.debug("Uploaded \(lines.count) records but received no batch token - records will be committed to collection right away")
             self.ifUnmodifiedSince = storageResponse.value.modified
-            self.onCollectionUploaded?(storageResponse.value)
+            self.onCollectionUploaded(storageResponse.value)
             return deferMaybe(nil)
         }
     }
@@ -206,16 +210,16 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
         let batchParam = NSURLQueryItem(name: "batch", value: token)
         let commitParam = NSURLQueryItem(name: "commit", value: "true")
 
-        // We could send a payload when committing the batch but that would involve us slicing up the in-progress 
-        // payload to make it fit just right. Easier to just push it up in a new batch.
-        return self.uploadPayload(Payload(config: self.config), queryParams: [batchParam, commitParam])
-            >>== effect({ self.ifUnmodifiedSince = $0.value.modified })
-            >>== effect({ self.onCollectionUploaded?($0.value) })
+        return self.uploadPayload(self.currentPayload, queryParams: [batchParam, commitParam])
+            >>== effect({ response in
+                self.ifUnmodifiedSince = response.value.modified
+                self.onCollectionUploaded(response.value)
+            })
             >>> succeed
     }
 
     private func uploadPayload(payload: Payload, queryParams: [NSURLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
         let lines = payload.records.map { $0.payload }
-        return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: nil)
+        return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: queryParams)
     }
 }
