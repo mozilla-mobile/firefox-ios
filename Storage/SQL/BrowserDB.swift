@@ -246,9 +246,7 @@ public class BrowserDB {
     func withConnection<T>(flags flags: SwiftData.Flags, inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> T {
         var res: T!
         err = db.withConnection(flags) { connection in
-            // This should never occur. Make it fail hard in debug builds.
-            assert(!(connection is FailedSQLiteDBConnection))
-
+            // An error may occur if the internet connection is dropped.
             var err: NSError? = nil
             res = callback(connection: connection, err: &err)
             return err
