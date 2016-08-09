@@ -116,15 +116,15 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
     public func addRecord(record: Record<T>) -> Success {
         // Sanity checks and assumptions
-        precondition(config.maxPostBytes < config.maxTotalBytes)
-        precondition(config.maxPostRecords < config.maxTotalRecords)
+        precondition(config.maxPostBytes <= config.maxTotalBytes)
+        precondition(config.maxPostRecords <= config.maxTotalRecords)
 
         guard let line = self.serializeRecord(record) else {
             return deferMaybe(SerializeRecordFailure(record: record))
         }
 
         let lineSize = line.utf8.count
-        guard lineSize < Sync15StorageClient.maxPayloadSizeBytes else {
+        guard lineSize < Sync15StorageClient.maxRecordSizeBytes else {
             return deferMaybe(RecordTooLargeError(size: lineSize, guid: record.id))
         }
 
@@ -216,6 +216,6 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
     private func uploadPayload(payload: Payload, queryParams: [NSURLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
         let lines = payload.records.map { $0.payload }
-        return self.uploader(lines: lines, ifUnmodifiedSince: nil, queryParams: nil)
+        return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: nil)
     }
 }
