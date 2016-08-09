@@ -5,18 +5,29 @@
 import SwiftKeychainWrapper
 @testable import Client
 
+@available(iOS 9, *)
 class PrivateModeAuthenticationTests: KIFTestCase {
 
+    private var webRoot: String!
     private static let passcode = "0000"
+    
+    override func setUp() {
+        super.setUp()
+        webRoot = SimplePageServer.start()
+    }
 
     override func tearDown() {
         super.tearDown()
         PasscodeUtils.resetPasscode()
         BrowserUtils.resetToAboutHome(tester())
     }
+    
+    private func getAppDelegate() -> AppDelegate {
+        return UIApplication.sharedApplication().delegate as! AppDelegate
+    }
 
     private func getBrowserViewController() -> BrowserViewController {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).browserViewController
+        return getAppDelegate().browserViewController
     }
 
     private func enablePasscodeAuthentication() {
@@ -31,18 +42,23 @@ class PrivateModeAuthenticationTests: KIFTestCase {
 
     private func enterCorrectPasscode() {
         checkBrowsingMode(isPrivate: false)
-        PasscodeUtils.enterPasscode(tester(), digits: PrivateModeAuthenticationTests.passcode)
+        tester().enterTextIntoCurrentFirstResponder(PrivateModeAuthenticationTests.passcode)
+        tester().waitForAnimationsToFinish()
         checkBrowsingMode(isPrivate: true)
+    }
+    
+    private func checkActionEnablesPrivateBrowsingMode(action: () -> ()) {
+        enablePasscodeAuthentication()
+        checkBrowsingMode(isPrivate: false)
+        action()
+        enterCorrectPasscode()
     }
 
     func testPasscodeAuthenticationFromTabTray() {
-        enablePasscodeAuthentication()
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        checkBrowsingMode(isPrivate: false)
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        enterCorrectPasscode()
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        checkBrowsingMode(isPrivate: false)
+        checkActionEnablesPrivateBrowsingMode() {
+            self.tester().tapViewWithAccessibilityLabel("Private Mode")
+        }
     }
 
     func testPasscodeAuthenticationFromTopTabs() {
@@ -50,28 +66,35 @@ class PrivateModeAuthenticationTests: KIFTestCase {
         guard bvc.shouldShowTopTabsForTraitCollection(bvc.traitCollection) else {
             return
         }
-        enablePasscodeAuthentication()
-        checkBrowsingMode(isPrivate: false)
-        tester().tapViewWithAccessibilityLabel("Private Tab")
-        enterCorrectPasscode()
-        tester().tapViewWithAccessibilityLabel("Private Tab")
-        checkBrowsingMode(isPrivate: false)
+        checkActionEnablesPrivateBrowsingMode() {
+            self.tester().tapViewWithAccessibilityLabel("Private Tab")
+        }
     }
 
     func testPasscodeAuthenticationForNewPrivateTab() {
-        enablePasscodeAuthentication()
-        checkBrowsingMode(isPrivate: false)
         tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Private Tab")
-        enterCorrectPasscode()
+        checkActionEnablesPrivateBrowsingMode() {
+            self.tester().tapViewWithAccessibilityLabel("New Private Tab")
+        }
     }
     
     func testPasscodeAuthenticationForNewPrivateTabFromTabTray() {
-        enablePasscodeAuthentication()
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        checkBrowsingMode(isPrivate: false)
         tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Private Tab")
-        enterCorrectPasscode()
+        checkActionEnablesPrivateBrowsingMode() {
+            self.tester().tapViewWithAccessibilityLabel("New Private Tab")
+        }
+    }
+    
+    func testPasscodeAuthenticationForNewPrivateTabFromTodayView() {
+        checkActionEnablesPrivateBrowsingMode() {
+            self.getAppDelegate().launchFromURL(LaunchParams(url: NSURL(string: "\(self.webRoot)/numberedPage.html?page=1"), isPrivate: true))
+        }
+    }
+    
+    func testPassCodeAuthenticationForNewPrivateTabFrom3DTouchQuickAction() {
+        checkActionEnablesPrivateBrowsingMode() {
+            QuickActions.sharedInstance.handleOpenNewTab(withBrowserViewController: self.getBrowserViewController(), isPrivate: true)
+        }
     }
 }
