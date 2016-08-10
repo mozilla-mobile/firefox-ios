@@ -197,8 +197,7 @@ class TopTabsViewController: UIViewController {
         if let frame = collectionView.layoutAttributesForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0))?.frame {
             if centerCell {
                 collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0), atScrollPosition: .CenteredHorizontally, animated: false)
-            }
-            else {
+            } else {
                 // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
                 let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
                 collectionView.scrollRectToVisible(padFrame, animated: animated)
@@ -229,14 +228,12 @@ extension TopTabsViewController: TopTabCellDelegate {
             tabManager.removeTab(tab)
             tabManager.selectTab(tabsToDisplay.first)
             collectionView.reloadData()
-        }
-        else {
+        } else {
             var nextTab: Tab
             let currentIndex = indexPath.item
             if tabsToDisplay.count-1 > currentIndex {
                 nextTab = tabsToDisplay[currentIndex+1]
-            }
-            else {
+            } else {
                 nextTab = tabsToDisplay[currentIndex-1]
             }
             tabManager.removeTab(tab)
@@ -265,14 +262,12 @@ extension TopTabsViewController: UICollectionViewDataSource {
         if tab.displayTitle.isEmpty {
             if (tab.webView?.URL?.baseDomain()?.contains("localhost") ?? true) {
                 tabCell.titleText.text = AppMenuConfiguration.NewTabTitleString
-            }
-            else {
+            } else {
                 tabCell.titleText.text = tab.webView?.URL?.absoluteDisplayString()
             }
             tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tabCell.titleText.text ?? "")
-        }
-        else {
+        } else {
             tabCell.accessibilityLabel = tab.displayTitle
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }
@@ -281,8 +276,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
         
         if index > 0 && index < tabsToDisplay.count && tabsToDisplay[index] != tabManager.selectedTab && tabsToDisplay[index-1] != tabManager.selectedTab {
             tabCell.seperatorLine = true
-        }
-        else {
+        } else {
             tabCell.seperatorLine = false
         }
         
@@ -333,8 +327,7 @@ extension TopTabsViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         if selected?.isPrivate ?? false {
             lastPrivateTab = selected
-        }
-        else {
+        } else {
             lastNormalTab = selected
         }
     }
@@ -345,7 +338,7 @@ extension TopTabsViewController: TabManagerDelegate {
     func tabManagerDidAddTabs(tabManager: TabManager) {
         collectionView.reloadData()
     }
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {
         if let privateTab = lastPrivateTab where !tabManager.tabs.contains(privateTab) {
             lastPrivateTab = nil
         }

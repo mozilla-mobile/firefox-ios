@@ -8,7 +8,7 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
+let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60
 
 /**
  * Immutable representation for Sync records.
@@ -74,7 +74,7 @@ public class Record<T: CleartextPayloadJSON> {
     init(id: GUID, payload: T, modified: Timestamp = Timestamp(time(nil)), sortindex: Int = 0, ttl: Int? = nil) {
         self.id = id
 
-        self.payload = payload;
+        self.payload = payload
 
         self.modified = modified
         self.sortindex = sortindex

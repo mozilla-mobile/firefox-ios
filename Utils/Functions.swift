@@ -208,7 +208,7 @@ private class Callback {
  * Taken from http://stackoverflow.com/questions/27116684/how-can-i-debounce-a-method-call
  * Allows creating a block that will fire after a delay. Resets the timer if called again before the delay expires.
  **/
-public func debounce(delay:NSTimeInterval, action:()->()) -> ()->() {
+public func debounce(delay: NSTimeInterval, action:()->()) -> ()->() {
     let callback = Callback(handler: action)
     var timer: NSTimer?
 

@@ -133,8 +133,7 @@ extension MenuPresentationAnimator {
                 viewsToAnimateLeft?.forEach { $0.transform = offstageLeft }
                 // animate reload and share buttons off to the right
                 viewsToAnimateRight?.forEach { $0.transform = offstageRight }
-            }
-            else {
+            } else {
                 // animate back and forward buttons in from the left
                 viewsToAnimateLeft?.forEach { $0.transform = CGAffineTransformIdentity }
                 // animate reload and share buttons in from the right

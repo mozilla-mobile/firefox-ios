@@ -10,7 +10,7 @@ import WebKit
 class TopTabsTests: KIFTestCase {
     private var webRoot: String!
     let numberOfTabs = 4
-    lazy var collection : UICollectionView = self.tester().waitForViewWithAccessibilityIdentifier("Top Tabs View") as! UICollectionView
+    lazy var collection: UICollectionView = self.tester().waitForViewWithAccessibilityIdentifier("Top Tabs View") as! UICollectionView
     
     override func setUp() {
         super.setUp()

@@ -221,11 +221,11 @@ extension AppMenuConfiguration {
         return AppMenuItem(title: Strings.MenuNoImageModeTurnOffLabel, action:  MenuAction(action: AppMenuAction.ShowImageMode.rawValue), icon: "menu-NoImageMode-Engaged", privateModeIcon: "menu-NoImageMode-Engaged")
    }
  
-    private static var HideNightModeItem : MenuItem {
+    private static var HideNightModeItem: MenuItem {
         return AppMenuItem(title: Strings.MenuNightModeTurnOnLabel, action:  MenuAction(action: AppMenuAction.HideNightMode.rawValue), icon: "menu-NightMode", privateModeIcon: "menu-NightMode-pbm")
     }
 
-    private static var ShowNightModeItem : MenuItem {
+    private static var ShowNightModeItem: MenuItem {
         return AppMenuItem(title: Strings.MenuNightModeTurnOffLabel, action:  MenuAction(action: AppMenuAction.ShowNightMode.rawValue), icon: "menu-NightMode-Engaged", privateModeIcon: "menu-NightMode-Engaged")
     }
 

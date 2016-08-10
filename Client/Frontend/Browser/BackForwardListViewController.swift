@@ -53,8 +53,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     weak var bvc: BrowserViewController?
     var listData = [(item:WKBackForwardListItem, type:BackForwardType)]()
     
-    var tableHeight: CGFloat
-    {
+    var tableHeight: CGFloat {
         get {
             assert(NSThread.isMainThread(), "tableHeight interacts with UIKit components - cannot call from background thread.")
             return min(CGFloat(BackForwardViewUX.RowHeight*listData.count), self.view.frame.height/2)
@@ -189,8 +188,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         
         if let site = sites[item.URL.absoluteString] {
             cell.site = site
-        }
-        else {
+        } else {
             cell.site = Site(url: item.initialURL.absoluteString, title: item.title ?? "")
         }
         
@@ -210,6 +208,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath  indexPath: NSIndexPath) -> CGFloat {
-        return CGFloat(BackForwardViewUX.RowHeight);
+        return CGFloat(BackForwardViewUX.RowHeight)
     }
 }

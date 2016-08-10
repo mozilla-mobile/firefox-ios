@@ -68,7 +68,7 @@ public class FirefoxAccount {
             let unwrapkB = data["unwrapBKey"].asString?.hexDecodedData else {
                 return nil
         }
-        
+
         let verified = data["verified"].asBool ?? false
         return FirefoxAccount.fromConfigurationAndParameters(configuration,
             email: email, uid: uid, verified: verified,

@@ -473,7 +473,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     }
 }
 
-private class RemoteTabsTableViewController : UITableViewController {
+private class RemoteTabsTableViewController: UITableViewController {
     weak var remoteTabsPanel: RemoteTabsPanel?
     var profile: Profile!
     var tableViewDelegate: RemoteTabsPanelDataSource? {

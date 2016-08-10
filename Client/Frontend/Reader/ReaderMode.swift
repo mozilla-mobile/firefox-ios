@@ -261,7 +261,7 @@ class ReaderMode: TabHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let msg = message.body as? Dictionary<String,String> {
+        if let msg = message.body as? Dictionary<String, String> {
             if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
                 switch messageType {
                     case .PageEvent:
