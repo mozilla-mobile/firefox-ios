@@ -221,8 +221,9 @@ class TopTabsViewController: UIViewController {
                 if let view = gesture.view {
                     var dragPosition = gesture.locationInView(view)
                     let offsetPosition = CGPoint(x: dragPosition.x, y: dragPosition.y)
-                    dragPosition = CGPoint(x: offsetPosition.x - dragState.offset.x + self.collectionView.contentOffset.x, y: self.collectionView.frame.height / 2)
-                    collectionView.updateInteractiveMovementTargetPosition(dragPosition)
+                    let lockedXPosition = min(max(TopTabsUX.TopTabsBackgroundShadowWidth + TopTabsUX.TabWidth / 2, offsetPosition.x - dragState.offset.x + self.collectionView.contentOffset.x), collectionView.contentSize.width - TopTabsUX.TopTabsBackgroundShadowWidth - TopTabsUX.TabWidth / 2)
+                    dragPosition = CGPoint(x: lockedXPosition, y: self.collectionView.frame.height / 2)
+                    self.collectionView.updateInteractiveMovementTargetPosition(dragPosition)
                 }
             }
         case .Ended, .Cancelled:
