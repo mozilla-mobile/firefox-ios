@@ -115,6 +115,10 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
         self.onCollectionUploaded = onCollectionUploaded
     }
 
+    public func addRecords(records: [Record<T>]) -> Success {
+        return walk(records, f: addRecord)
+    }
+
     public func addRecord(record: Record<T>) -> Success {
         guard let line = self.serializeRecord(record) else {
             return deferMaybe(SerializeRecordFailure(record: record))

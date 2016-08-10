@@ -115,16 +115,12 @@ extension TimestampedSingleCollectionSynchronizer {
         }
 
         let batch = storageClient.newBatch(ifUnmodifiedSince: lastTimestamp) { onUpload($0) }
-        let perRecord: (Record<T>, Timestamp) -> DeferredTimestamp = { record, timestamp in
-            return batch.addRecord(record) >>> { deferMaybe(batch.ifUnmodifiedSince ?? lastTimestamp) }
-        }
-
-        return walk(records, start: deferMaybe(lastTimestamp), f: perRecord) >>> {
-            return batch.endBatch() >>> {
+        return batch.addRecords(records)
+            >>> batch.endBatch
+            >>> {
                 let timestamp = batch.ifUnmodifiedSince ?? lastTimestamp
                 self.setTimestamp(timestamp)
                 return deferMaybe(timestamp)
             }
-        }
     }
 }
