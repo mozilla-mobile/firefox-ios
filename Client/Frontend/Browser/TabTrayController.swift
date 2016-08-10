@@ -897,6 +897,10 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         } else {
             tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
         }
+        if tabCell.accessibilityLabel?.isEmpty != false {
+            // If a tab has no accessibility label, it will be both difficult for a user using Voice Over, as well as cause issues for testing.
+            tabCell.accessibilityLabel = "Tab"
+        }
 
         tabCell.isBeingArranged = self.isRearrangingTabs
 

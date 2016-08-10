@@ -162,6 +162,37 @@ extension KIFUITestActor {
             return stepResult
         }
     }
+    
+    /**
+     * Long presses a WKWebView element with the given label, for a given duration.
+     */
+    func longPressWebViewElementWithAccessibilityLabel(text: String, duration: NSTimeInterval) {
+        let webView = getWebViewWithKIFHelper()
+        let stepResult = MutableBox(KIFTestStepResult.Wait)
+        
+        let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+        webView.evaluateJavaScript("KIFHelper.longPressElementWithAccessibilityLabel(\"\(escaped)\", \(duration * 1000))") { success, _ in
+            if success as? Bool == false {
+                stepResult.value =  KIFTestStepResult.Failure
+            } else {
+                NSTimer.scheduledTimerWithTimeInterval(duration, target: self, selector: #selector(self.didFinishWaitingForLongPressToComplete), userInfo: stepResult, repeats: false)
+            }
+        }
+        
+        runBlock { error in
+            if stepResult.value == KIFTestStepResult.Failure {
+                error.memory = NSError(domain: "KIFHelper", code: 0, userInfo: [NSLocalizedDescriptionKey: "Accessibility label not found in webview: \(escaped)"])
+            }
+            return stepResult.value
+        }
+    }
+    
+    func didFinishWaitingForLongPressToComplete(timer: NSTimer) {
+        print(timer.userInfo)
+        if let stepResult = timer.userInfo as? MutableBox<KIFTestStepResult> {
+            stepResult.value = KIFTestStepResult.Success
+        }
+    }
 
     /**
      * Determines whether an element in the page exists.
@@ -345,13 +376,13 @@ class SimplePageServer {
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
-        for page in ["findPage", "noTitle", "readablePage", "JSPrompt"] {
+        for page in ["findPage", "noTitle", "readablePage", "JSPrompt", "pageWithLink"] {
             webServer.addHandlerForMethod("GET", path: "/\(page).html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
                 return GCDWebServerDataResponse(HTML: self.getPageData(page))
             }
         }
 
-        // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
+        // we may create more than one of these but we need to give them unique accessibility ids in the tab manager so we'll pass in a page number
         webServer.addHandlerForMethod("GET", path: "/scrollablePage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var pageData = self.getPageData("scrollablePage")
             let page = Int((request.query["page"] as! String))!
