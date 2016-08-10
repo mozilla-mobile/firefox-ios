@@ -294,6 +294,7 @@ extension SQLiteHistory: BrowserHistory {
         return updateTopSitesCacheWithLimit(cacheSize)
     }
 
+    //swiftlint:disable opening_brace
     public func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>> {
         let (whereData, groupBy) = self.topSiteClauses()
         let (query, args) = self.filteredSitesByFrecencyQueryWithHistoryLimit(limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
@@ -330,8 +331,9 @@ extension SQLiteHistory: BrowserHistory {
             return deferMaybe(isDirty)
         }
     }
+    //swiftlint:enable opening_brace
 
-    private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
+    private func updateTopSitesCacheWithLimit(limit: Int) -> Success {
         let (whereData, groupBy) = self.topSiteClauses()
         let (query, args) = self.filteredSitesByFrecencyQueryWithHistoryLimit(limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
 
@@ -1078,7 +1080,7 @@ extension SQLiteHistory: SyncableHistory {
                 c.close()
 
                 // Now collect the return value.
-                return deferMaybe(ids.map { return (places[$0]!, visits[$0]!) } )
+                return deferMaybe(ids.map { return (places[$0]!, visits[$0]!) })
         }
     }
 

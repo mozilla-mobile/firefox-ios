@@ -279,7 +279,7 @@ private class ReaderModeButton: UIButton {
     
     var readerModeState: ReaderModeState {
         get {
-            return _readerModeState;
+            return _readerModeState
         }
         set (newReaderModeState) {
             _readerModeState = newReaderModeState

@@ -17,7 +17,7 @@ protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab)
     func tabManagerDidRestoreTabs(tabManager: TabManager)
     func tabManagerDidAddTabs(tabManager: TabManager)
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?)
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?)
 }
 
 protocol TabManagerStateDelegate: class {
@@ -26,7 +26,7 @@ protocol TabManagerStateDelegate: class {
 
 // We can't use a WeakList here because this is a protocol.
 class WeakTabManagerDelegate {
-    weak var value : TabManagerDelegate?
+    weak var value: TabManagerDelegate?
 
     init (value: TabManagerDelegate) {
         self.value = value
@@ -38,7 +38,7 @@ class WeakTabManagerDelegate {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class TabManager : NSObject {
+class TabManager: NSObject {
     private var delegates = [WeakTabManagerDelegate]()
     weak var stateDelegate: TabManagerStateDelegate?
 
@@ -479,8 +479,7 @@ class TabManager : NSObject {
                 let removed = tabsCopy.removeAtIndex(selectedIndex)
                 removeTabs(tabsCopy)
                 removeTab(removed)
-            }
-            else {
+            } else {
                 removeTabs(tabsCopy)
             }
         }
@@ -488,7 +487,7 @@ class TabManager : NSObject {
             tab.hideContent()
         }
         var toast: ButtonToast?
-        if let numberOfTabs = tempTabs?.count where numberOfTabs > 0  {
+        if let numberOfTabs = tempTabs?.count where numberOfTabs > 0 {
             toast = ButtonToast(labelText: String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, completion: { buttonPressed in
                 if (buttonPressed) {
                     self.undoCloseTabs()
@@ -699,8 +698,7 @@ extension TabManager {
                 savedTabs.append(savedTab)
 
                 if let screenshot = tab.screenshot,
-                   let screenshotUUID = tab.screenshotUUID
-                {
+                   let screenshotUUID = tab.screenshotUUID {
                     savedUUIDs.insert(screenshotUUID.UUIDString)
                     imageStore?.put(screenshotUUID.UUIDString, image: screenshot)
                 }
@@ -896,7 +894,7 @@ extension TabManager {
 }
 
 // WKNavigationDelegates must implement NSObjectProtocol
-class TabManagerNavDelegate : NSObject, WKNavigationDelegate {
+class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     private var delegates = WeakList<WKNavigationDelegate>()
 
     func insert(delegate: WKNavigationDelegate) {

@@ -90,7 +90,7 @@ class QuickActions: NSObject {
 
     func removeDynamicApplicationShortcutItemOfType(type: ShortcutType, fromApplication application: UIApplication) {
         guard var dynamicShortcutItems = application.shortcutItems,
-            let index = (dynamicShortcutItems.indexOf{ $0.type == type.type }) else { return }
+            let index = (dynamicShortcutItems.indexOf { $0.type == type.type }) else { return }
 
         dynamicShortcutItems.removeAtIndex(index)
         application.shortcutItems = dynamicShortcutItems

@@ -767,7 +767,7 @@ extension TabTrayController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
     }
-    
+
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
         guard tabManager.isInPrivateMode else {
             return

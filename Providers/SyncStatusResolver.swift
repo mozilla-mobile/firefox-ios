@@ -35,9 +35,9 @@ public enum SyncDisplayState {
 
 public func ==(a: SyncDisplayState, b: SyncDisplayState) -> Bool {
     switch (a, b) {
-    case (.InProgress,   .InProgress):
+    case (.InProgress, .InProgress):
         return true
-    case (.Good,   .Good):
+    case (.Good, .Good):
         return true
     case (.Bad(let a), .Bad(let b)) where a == b:
         return true

@@ -59,7 +59,7 @@ class ShareFileHelper: NSObject, OpenInHelper {
             message: Strings.OpenInDownloadHelperAlertMessage,
             preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction( UIAlertAction(title: Strings.OpenInDownloadHelperAlertCancel, style: .Cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .Default){ (action) in
+        alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .Default) { (action) in
             let objectsToShare = [self.url]
             let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
             if let sourceView = self.openInView, popoverController = activityVC.popoverPresentationController {
@@ -171,7 +171,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
             log.error("failed to create proper URL")
             return
         }
-        if docController == nil{
+        if docController == nil {
             // if we already have a URL but no document controller, just create the document controller
             if let url = openInURL {
                 createDocumentControllerForURL(url)

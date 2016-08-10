@@ -223,8 +223,7 @@ class BrowserViewController: UIViewController {
                 make.height.equalTo(TopTabsUX.TopTabsViewHeight)
             }
             header.disableBlur = true
-        }
-        else {
+        } else {
             topTabsContainer.snp_updateConstraints { make in
                 make.height.equalTo(0)
             }
@@ -903,8 +902,8 @@ class BrowserViewController: UIViewController {
     func SELBookmarkStatusDidChange(notification: NSNotification) {
         if let bookmark = notification.object as? BookmarkItem {
             if bookmark.url == urlBar.currentURL?.absoluteString {
-                if let userInfo = notification.userInfo as? Dictionary<String, Bool>{
-                    if let added = userInfo["added"]{
+                if let userInfo = notification.userInfo as? Dictionary<String, Bool> {
+                    if let added = userInfo["added"] {
                         if let tab = self.tabManager.getTabForURL(urlBar.currentURL!) {
                             tab.isBookmarked = false
                         }
@@ -1238,67 +1237,64 @@ class BrowserViewController: UIViewController {
         return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
     }
 
-    func reloadTab(){
-        if(homePanelController == nil){
+    func reloadTab() {
+        if(homePanelController == nil) {
             tabManager.selectedTab?.reload()
         }
     }
 
-    func goBack(){
-        if(tabManager.selectedTab?.canGoBack == true && homePanelController == nil){
+    func goBack() {
+        if(tabManager.selectedTab?.canGoBack == true && homePanelController == nil) {
             tabManager.selectedTab?.goBack()
         }
     }
-    func goForward(){
-        if(tabManager.selectedTab?.canGoForward == true && homePanelController == nil){
+    func goForward() {
+        if(tabManager.selectedTab?.canGoForward == true && homePanelController == nil) {
             tabManager.selectedTab?.goForward()
         }
     }
 
-    func findOnPage(){
-        if(homePanelController == nil){
+    func findOnPage() {
+        if(homePanelController == nil) {
             tab( (tabManager.selectedTab)!, didSelectFindInPageForSelection: "")
         }
     }
 
-    func selectLocationBar(){
+    func selectLocationBar() {
         scrollController.showToolbars(animated: true)
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
-    func newTab(){
+    func newTab() {
         openBlankNewTabAndFocus(isPrivate: false)
     }
-    func newPrivateTab(){
+    func newPrivateTab() {
         openBlankNewTabAndFocus(isPrivate: true)
     }
 
-    func closeTab(){
-        if(tabManager.tabs.count > 1){
-            tabManager.removeTab(tabManager.selectedTab!);
-        }
-        else{
+    func closeTab() {
+        if(tabManager.tabs.count > 1) {
+            tabManager.removeTab(tabManager.selectedTab!)
+        } else {
             //need to close the last tab and show the favorites screen thing
         }
     }
 
-    func nextTab(){
-        if(tabManager.selectedIndex < (tabManager.tabs.count - 1) ){
+    func nextTab() {
+        if(tabManager.selectedIndex < (tabManager.tabs.count - 1) ) {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex+1])
-        }
-        else{
-            if(tabManager.tabs.count > 1){
-                tabManager.selectTab(tabManager.tabs[0]);
+        } else {
+            if(tabManager.tabs.count > 1) {
+                tabManager.selectTab(tabManager.tabs[0])
             }
         }
     }
 
-    func previousTab(){
-        if(tabManager.selectedIndex > 0){
+    func previousTab() {
+        if(tabManager.selectedIndex > 0) {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex-1])
-        }
-        else{
-            if(tabManager.tabs.count > 1){
+        } else {
+            if(tabManager.tabs.count > 1) {
                 tabManager.selectTab(tabManager.tabs[tabManager.count-1])
             }
         }
@@ -2175,12 +2171,12 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
         SELappWillEnterForegroundNotification()
     }
-    
+
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
         guard !self.tabManager.isInPrivateMode else {
             return
         }
-        
+
         if let undoToast = toast {
             let time = dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(ButtonToastUX.ToastDelay * Double(NSEC_PER_SEC)))
             dispatch_after(time, dispatch_get_main_queue()) {
@@ -2843,7 +2839,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 }
 
 extension BrowserViewController: IntroViewControllerDelegate {
-    func presentIntroViewController(force: Bool = false) -> Bool{
+    func presentIntroViewController(force: Bool = false) -> Bool {
         if force || profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             let introViewController = IntroViewController()
             introViewController.delegate = self
@@ -3206,7 +3202,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         updateViewConstraints()
         //If the searchEngineButton exists remove it form the keyboard
         if #available(iOS 9.0, *) {
-            if let buttonGroup = customSearchBarButton?.buttonGroup  {
+            if let buttonGroup = customSearchBarButton?.buttonGroup {
                 buttonGroup.barButtonItems = buttonGroup.barButtonItems.filter { $0 != customSearchBarButton }
                 customSearchBarButton = nil
             }
@@ -3429,15 +3425,12 @@ extension BrowserViewController: TopTabsDelegate {
         
         if let tab = cachedTab {
             tabManager.selectTab(tab)
-        }
-        else if selectedTab.isPrivate {
+        } else if selectedTab.isPrivate {
             tabManager.selectTab(tabManager.normalTabs.last)
-        }
-        else {
+        } else {
             if let privateTab = tabManager.privateTabs.last {
                 tabManager.selectTab(privateTab)
-            }
-            else {
+            } else {
                 openBlankNewTabAndFocus(isPrivate: true)
             }
         }

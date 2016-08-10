@@ -37,7 +37,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
                     self.presentShareDialog(item)
                 }
             } else {
-                self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
+                self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
             }
         })
     }
@@ -73,7 +73,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
                 self.shareToBookmarks(item)
             }
 
-            self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
+            self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
         })
     }
     

@@ -313,13 +313,13 @@ private extension NSURL {
             if let entry = etldEntries?[currentDomain] {
                 if entry.isWild && (previousDomain != nil) {
                     suffix = previousDomain
-                    break;
+                    break
                 } else if entry.isNormal || (nextDot == nil) {
                     suffix = currentDomain
-                    break;
+                    break
                 } else if entry.isException {
                     suffix = nextDot
-                    break;
+                    break
                 }
             }
 

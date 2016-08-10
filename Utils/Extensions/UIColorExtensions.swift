@@ -9,7 +9,7 @@ private struct Color {
     var red: CGFloat
     var green: CGFloat
     var blue: CGFloat
-};
+}
 
 extension UIColor {
     /**

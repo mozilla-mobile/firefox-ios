@@ -19,9 +19,7 @@ class ResetOptionsTest: BaseTestCase {
         let numberOfTopSites = app.collectionViews["Top Sites View"].cells.count
 
         // Vist a webpage to add it to TopSites
-        app.textFields["url"].tap()
-        app.textFields["address"]
-        app.typeText("mozilla.org\r")
+        loadWebPage("http://example.com")
 
         // I need to sleep before terminating to make sure the page loads and the domain is added to the topSites
         sleep(2)
@@ -30,7 +28,7 @@ class ResetOptionsTest: BaseTestCase {
         // Now check to make sure app was not reset
         tabTrayButton(forApp: app).tap()
         app.buttons["TabTrayController.addTabButton"].tap()
-        sleep(1)
+        sleep(2)
         XCTAssertTrue(app.collectionViews["Top Sites View"].cells.count == numberOfTopSites + 1, "A new site should have been added to the topSites")
 
         restart(app, reset: true)
