@@ -124,7 +124,7 @@ class TopTabCell: TabCell {
         switch style {
         case Style.Light:
             bezierView.fillColor = TopTabsUX.TopTabsBackgroundNormalColor
-            titleText.textColor = UIColor.darkTextColor()
+            titleText.textColor = selectedTab ? UIColor.darkTextColor() : UIColor.lightTextColor()
         case Style.Dark:
             bezierView.fillColor = TopTabsUX.TopTabsBackgroundPrivateColor
             titleText.textColor = UIColor.lightTextColor()
