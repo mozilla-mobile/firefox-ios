@@ -696,16 +696,21 @@ class BrowserViewController: UIViewController {
         homePanelIsInline = inline
 
         if homePanelController == nil {
-            homePanelController = HomePanelViewController()
-            homePanelController!.profile = profile
-            homePanelController!.delegate = self
-            homePanelController!.appStateDelegate = self
-            homePanelController!.url = tabManager.selectedTab?.displayURL
-            homePanelController!.view.alpha = 0
+            self.homePanelController = HomePanelViewController()
+            if let homePanelController = self.homePanelController {
+                homePanelController.profile = profile
+                homePanelController.delegate = self
+                homePanelController.appStateDelegate = self
+                homePanelController.url = tabManager.selectedTab?.displayURL
+                homePanelController.view.alpha = 0
 
-            addChildViewController(homePanelController!)
-            view.addSubview(homePanelController!.view)
-            homePanelController!.didMoveToParentViewController(self)
+                addChildViewController(homePanelController)
+                view.addSubview(homePanelController.view)
+                homePanelController.didMoveToParentViewController(self)
+            }
+        }
+        guard let homePanelController = self.homePanelController else {
+            return
         }
 
         let panelNumber = tabManager.selectedTab?.url?.fragment
@@ -717,13 +722,13 @@ class BrowserViewController: UIViewController {
                 newSelectedButtonIndex = lastInt
             }
         }
-        homePanelController?.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
-        homePanelController?.isPrivateMode = tabTrayController?.privateMode ?? tabManager.selectedTab?.isPrivate ?? false
+        homePanelController.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
+        homePanelController.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
         UIView.animateWithDuration(0.2, animations: { () -> Void in
-            self.homePanelController!.view.alpha = 1
+            homePanelController.view.alpha = 1
         }, completion: { finished in
             if finished {
                 self.webViewContainer.accessibilityElementsHidden = true
