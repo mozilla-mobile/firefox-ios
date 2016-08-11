@@ -32,6 +32,15 @@ protocol TopTabCellDelegate: class {
     func tabCellDidClose(cell: TopTabCell)
 }
 
+class ExtendedTabDragState: TabDragState {
+    var position: CGPoint
+    
+    override init(cell: TabCell, indexPath: NSIndexPath, offset: CGPoint, hasBegun: Bool) {
+        self.position = .zero
+        super.init(cell: cell, indexPath: indexPath, offset: offset, hasBegun: hasBegun)
+    }
+}
+
 class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
@@ -47,7 +56,7 @@ class TopTabsViewController: UIViewController {
         
         return collectionView
     }()
-    var dragState: TabDragState?
+    var dragState: ExtendedTabDragState?
     
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
@@ -70,6 +79,7 @@ class TopTabsViewController: UIViewController {
     private lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
         let delegate = TopTabsLayoutDelegate()
         delegate.tabSelectionDelegate = self
+        delegate.tabScrollDelegate = self
         return delegate
     }()
     
@@ -190,6 +200,20 @@ class TopTabsViewController: UIViewController {
         delegate?.topTabsDidPressTabs()
     }
     
+    @available(iOS 9.0, *)
+    private func updateDraggedTabPosition(offsetPosition: CGPoint?) {
+        if let dragState = self.dragState {
+            if let offsetPosition = offsetPosition {
+                dragState.position = offsetPosition 
+            }
+            let lockedXPosition = min(max(TopTabsUX.TopTabsBackgroundShadowWidth + TopTabsUX.TabWidth / 2, dragState.position.x - dragState.offset.x + self.collectionView.contentOffset.x), collectionView.contentSize.width - TopTabsUX.TopTabsBackgroundShadowWidth - TopTabsUX.TabWidth / 2)
+            let dragPosition = CGPoint(x: lockedXPosition, y: self.collectionView.frame.height / 2)
+            self.collectionView.updateInteractiveMovementTargetPosition(dragPosition)
+        }
+    }
+    
+    private var icvx: CGFloat = 0
+    
     @available(iOS 9, *)
     func didLongPressTab(gesture: UILongPressGestureRecognizer) {
         switch gesture.state {
@@ -205,11 +229,12 @@ class TopTabsViewController: UIViewController {
                 }
                 if item == indexPath.item {
                     let cellPosition = cell.contentView.convertPoint(cell.bounds.center, toView: self.collectionView)
-                    self.dragState = TabDragState(cell: cell, indexPath: indexPath, offset: CGPoint(x: pressPosition.x - cellPosition.x, y: pressPosition.y - cellPosition.y), hasBegun: false)
+                    self.dragState = ExtendedTabDragState(cell: cell, indexPath: indexPath, offset: CGPoint(x: pressPosition.x - cellPosition.x, y: pressPosition.y - cellPosition.y), hasBegun: false)
                     self.didSelectTabAtIndex(indexPath.item)
                     continue
                 }
                 cell.isBeingArranged = true
+                icvx = self.collectionView.contentOffset.x
             }
             break
         case .Changed:
@@ -219,11 +244,10 @@ class TopTabsViewController: UIViewController {
                     self.collectionView.beginInteractiveMovementForItemAtIndexPath(dragState.indexPath)
                 }
                 if let view = gesture.view {
-                    var dragPosition = gesture.locationInView(view)
-                    let offsetPosition = CGPoint(x: dragPosition.x, y: dragPosition.y)
-                    let lockedXPosition = min(max(TopTabsUX.TopTabsBackgroundShadowWidth + TopTabsUX.TabWidth / 2, offsetPosition.x - dragState.offset.x + self.collectionView.contentOffset.x), collectionView.contentSize.width - TopTabsUX.TopTabsBackgroundShadowWidth - TopTabsUX.TabWidth / 2)
-                    dragPosition = CGPoint(x: lockedXPosition, y: self.collectionView.frame.height / 2)
-                    self.collectionView.updateInteractiveMovementTargetPosition(dragPosition)
+                    print()
+                    print("DRG \(gesture.locationInView(view).x)")
+                    print()
+                    self.updateDraggedTabPosition(gesture.locationInView(view))
                 }
             }
         case .Ended, .Cancelled:
@@ -387,6 +411,16 @@ extension TopTabsViewController: TabSelectionDelegate {
         collectionView.setNeedsDisplay()
         delegate?.topTabsDidChangeTab()
         scrollToCurrentTab()
+    }
+}
+
+extension TopTabsViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if #available(iOS 9.0, *) {
+            if self.dragState != nil {
+                self.updateDraggedTabPosition(nil)
+            }
+        }
     }
 }
 

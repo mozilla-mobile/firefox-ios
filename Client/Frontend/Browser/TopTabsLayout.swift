@@ -4,8 +4,10 @@
 
 import Foundation
 
-class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
+class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
+
     weak var tabSelectionDelegate: TabSelectionDelegate?
+    weak var tabScrollDelegate: UIScrollViewDelegate?
     
     @objc func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 1
@@ -25,6 +27,10 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     
     @objc func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        tabScrollDelegate?.scrollViewDidScroll?(scrollView)
     }
 }
 
