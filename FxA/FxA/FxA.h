@@ -18,6 +18,7 @@ FOUNDATION_EXPORT const unsigned char FxAVersionString[];
 
 #include <FxA/DSAKeyPair.h>
 #include <FxA/RSAKeyPair.h>
+#include <FxA/ECDSAKeyPair.h>
 #include <FxA/JSONWebTokenUtils.h>
 #include <FxA/MockMyIDTokenFactory.h>
 #include <FxA/NSData+Base16.h>

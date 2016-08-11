@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import FxA
 import UIKit
 import Shared
 import Storage
@@ -79,5 +80,64 @@ class CryptoTests: XCTestCase {
         } else {
             XCTFail("Encrypt failed.")
         }
+    }
+    
+    func testSignVerify() {
+        let cleartext = Bytes.decodeBase64(cleartextB64)
+        
+        // DSA
+        let dsa = DSAKeyPair.generateKeyPairWithSize(1024)
+        XCTAssertNotEqual(dsa, nil)
+        XCTAssertNotEqual(dsa.privateKey, nil)
+        XCTAssertNotEqual(dsa.publicKey, nil)
+        
+        let sigDSA = dsa.privateKey.signMessage(cleartext)
+        XCTAssertNotEqual(sigDSA, nil)
+        
+        let verDSA = dsa.publicKey.verifySignature(sigDSA, againstMessage: cleartext)
+        XCTAssertTrue(verDSA)
+        
+        // RSA
+        let rsa = DSAKeyPair.generateKeyPairWithSize(1024)
+        XCTAssertNotEqual(rsa, nil)
+        XCTAssertNotEqual(rsa.privateKey, nil)
+        XCTAssertNotEqual(rsa.publicKey, nil)
+        
+        let sigRSA = rsa.privateKey.signMessage(cleartext)
+        XCTAssertNotEqual(sigRSA, nil)
+
+        let verRSA = rsa.publicKey.verifySignature(sigRSA, againstMessage: cleartext)
+        XCTAssertTrue(verRSA)
+        
+        // ECDSA
+        let ecdsa = ECDSAKeyPair.generateKeyPairForGroup(ECDSAGroup.P256)
+        XCTAssertNotEqual(ecdsa, nil)
+        XCTAssertNotEqual(ecdsa.privateKey, nil)
+        XCTAssertNotEqual(ecdsa.publicKey, nil)
+        
+        let sigECDSA = ecdsa.privateKey.signMessage(cleartext)
+        XCTAssertNotEqual(sigECDSA, nil)
+        
+        let verECDSA = ecdsa.publicKey.verifySignature(sigECDSA, againstMessage: cleartext)
+        XCTAssertTrue(verECDSA)
+
+        let privBytes = ecdsa.privateKey.BinaryRepresentation()
+        XCTAssertNotNil(privBytes)
+        
+        let privECDSA2 = ECDSAPrivateKey(binaryRepresentation: privBytes, group: .P256)
+        XCTAssertNotNil(privECDSA2)
+        let sigECDSA2 = privECDSA2.signMessage(cleartext)
+        let verECDSA2 = ecdsa.publicKey.verifySignature(sigECDSA2, againstMessage: cleartext)
+        XCTAssertTrue(verECDSA2)
+
+        let pubBytes = ecdsa.publicKey.BinaryRepresentation()
+        let pubECDSA3 = ECDSAPublicKey(binaryRepresentation: pubBytes, group: .P256)
+        XCTAssertNotNil(pubECDSA3)
+        let verECDSA3 = pubECDSA3.verifySignature(sigECDSA, againstMessage: cleartext)
+        XCTAssertTrue(verECDSA3)
+
+        // Just test that this runs and produces non-empty output
+        let cert = ecdsa.privateKey.selfSignedCertificateWithName("Test cert", slack: 0, lifetime: 60 * 60)
+        XCTAssertNotNil(cert)
     }
 }

@@ -9,5 +9,5 @@ github "fluffyemily/SwiftKeychainWrapper" "e3805fbdef595151f299b2b8c1b89760fc711
 github "thebnich/XCGLogger" "trycatch"
 github "adjust/ios_sdk" "v4.5.0"
 github "iziz/libPhoneNumber-iOS" "0.8.11"
-github "AgileBits/onepassword-extension" "fdfb415ce768933c31e4ad5022e18779f5270be2"
-github "mozilla/readability" "c3c91a739beab6fd067404cd7610f6d64f53ad5a"
+github "AgileBits/onepassword-extension" "024c0f9e3d7179e6ea6ce4d59ad142ec519138a8"
+github "mozilla/readability" "fcc645019f90800179bca0c12f40622e913bb696"

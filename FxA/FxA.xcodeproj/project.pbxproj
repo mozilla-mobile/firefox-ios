@@ -122,6 +122,8 @@
 		2FF8264B19D3CAFF003ED08E /* NSData+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825E819D3CAFF003ED08E /* NSData+Utils.m */; };
 		2FF8264C19D3CAFF003ED08E /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF825E919D3CAFF003ED08E /* NSString+Utils.h */; };
 		2FF8264D19D3CAFF003ED08E /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */; };
+		E5076CCE1CA2DC0A002DB286 /* ECDSAKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = E5076CCD1CA2DC0A002DB286 /* ECDSAKeyPair.m */; };
+		E5D4407D1CA46293006A6CAB /* ECDSAKeyPair.h in Headers */ = {isa = PBXBuildFile; fileRef = E5076CCF1CA2DC2D002DB286 /* ECDSAKeyPair.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -254,6 +256,8 @@
 		2FF825E819D3CAFF003ED08E /* NSData+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Utils.m"; sourceTree = "<group>"; };
 		2FF825E919D3CAFF003ED08E /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
 		2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utils.m"; sourceTree = "<group>"; };
+		E5076CCD1CA2DC0A002DB286 /* ECDSAKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECDSAKeyPair.m; sourceTree = "<group>"; };
+		E5076CCF1CA2DC2D002DB286 /* ECDSAKeyPair.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ECDSAKeyPair.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -326,6 +330,8 @@
 				2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */,
 				2FF824D219D3C6D8003ED08E /* DSAKeyPair.h */,
 				2FF824D319D3C6D8003ED08E /* DSAKeyPair.m */,
+				E5076CCF1CA2DC2D002DB286 /* ECDSAKeyPair.h */,
+				E5076CCD1CA2DC0A002DB286 /* ECDSAKeyPair.m */,
 				2FF824D419D3C6D8003ED08E /* KeyPair.h */,
 				2FF824D519D3C6D8003ED08E /* KeyPair.m */,
 				2FF824D619D3C6D8003ED08E /* PrivateKey.h */,
@@ -561,6 +567,7 @@
 				2FA1800619D3D32300F3D844 /* rc4.h in Headers */,
 				2FA1800A19D3D32300F3D844 /* seed.h in Headers */,
 				2FA1800D19D3D32300F3D844 /* srtp.h in Headers */,
+				E5D4407D1CA46293006A6CAB /* ECDSAKeyPair.h in Headers */,
 				2FA1800819D3D32300F3D844 /* rsa.h in Headers */,
 				2FA1800919D3D32300F3D844 /* safestack.h in Headers */,
 				2FA17FD519D3D32300F3D844 /* asn1t.h in Headers */,
@@ -673,6 +680,7 @@
 				2FF8264519D3CAFF003ED08E /* NSData+Base32.m in Sources */,
 				2FF824E319D3C6D8003ED08E /* PrivateKey.m in Sources */,
 				2FF8264319D3CAFF003ED08E /* NSData+Base16.m in Sources */,
+				E5076CCE1CA2DC0A002DB286 /* ECDSAKeyPair.m in Sources */,
 				2FA1801E19D3D32300F3D844 /* JSONWebTokenUtils.m in Sources */,
 				2FF824E719D3C6D8003ED08E /* RSAKeyPair.m in Sources */,
 				2FA17F7F19D3D2D100F3D844 /* MockMyIDTokenFactory.m in Sources */,
