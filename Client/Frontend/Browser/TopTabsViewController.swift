@@ -206,13 +206,14 @@ class TopTabsViewController: UIViewController {
             if let offsetPosition = offsetPosition {
                 dragState.position = offsetPosition 
             }
-            let lockedXPosition = min(max(TopTabsUX.TopTabsBackgroundShadowWidth + TopTabsUX.TabWidth / 2, dragState.position.x - dragState.offset.x + self.collectionView.contentOffset.x), collectionView.contentSize.width - TopTabsUX.TopTabsBackgroundShadowWidth - TopTabsUX.TabWidth / 2)
+            // When the tab is first picked up, it jumps slightly, and so needs to be corrected. I couldn't figure out what factors were causing this
+            // so it's hard-coded for now. None of the obvious solutions were quite right. Dragging is a delicate issue and it's hard to get perfect.
+            let cellSnapOffset: CGFloat = 29
+            let lockedXPosition = min(max(TopTabsUX.TopTabsBackgroundShadowWidth + TopTabsUX.TabWidth / 2, dragState.position.x - dragState.offset.x + self.collectionView.contentOffset.x - cellSnapOffset), collectionView.contentSize.width - TopTabsUX.TopTabsBackgroundShadowWidth - TopTabsUX.TabWidth / 2)
             let dragPosition = CGPoint(x: lockedXPosition, y: self.collectionView.frame.height / 2)
             self.collectionView.updateInteractiveMovementTargetPosition(dragPosition)
         }
     }
-    
-    private var icvx: CGFloat = 0
     
     @available(iOS 9, *)
     func didLongPressTab(gesture: UILongPressGestureRecognizer) {
@@ -234,7 +235,6 @@ class TopTabsViewController: UIViewController {
                     continue
                 }
                 cell.isBeingArranged = true
-                icvx = self.collectionView.contentOffset.x
             }
             break
         case .Changed:
@@ -244,9 +244,6 @@ class TopTabsViewController: UIViewController {
                     self.collectionView.beginInteractiveMovementForItemAtIndexPath(dragState.indexPath)
                 }
                 if let view = gesture.view {
-                    print()
-                    print("DRG \(gesture.locationInView(view).x)")
-                    print()
                     self.updateDraggedTabPosition(gesture.locationInView(view))
                 }
             }
