@@ -341,6 +341,7 @@ extension TopTabsViewController: TopTabCellDelegate {
 extension TopTabsViewController: UICollectionViewDataSource {
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let index = indexPath.item
+        assert(index != -1)
         let tabCell = collectionView.dequeueReusableCellWithReuseIdentifier(TopTabCell.Identifier, forIndexPath: indexPath) as! TopTabCell
         tabCell.delegate = self
         
@@ -348,17 +349,17 @@ extension TopTabsViewController: UICollectionViewDataSource {
         tabCell.style = tab.isPrivate ? .Dark : .Light
         tabCell.titleText.text = tab.displayTitle
         
+        tabCell.isBeingArranged = self.dragState != nil
+        
         if tab.displayTitle.isEmpty {
             if (tab.webView?.URL?.baseDomain()?.contains("localhost") ?? true) {
                 tabCell.titleText.text = AppMenuConfiguration.NewTabTitleString
-            }
-            else {
+            } else {
                 tabCell.titleText.text = tab.webView?.URL?.absoluteDisplayString()
             }
             tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tabCell.titleText.text ?? "")
-        }
-        else {
+        } else {
             tabCell.accessibilityLabel = tab.displayTitle
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }

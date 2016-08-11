@@ -33,11 +33,18 @@ class TopTabCell: TabCell {
             bezierView.hidden = !selectedTab
             if style == Style.Light {
                 titleText.textColor = selectedTab ? UIColor.darkTextColor() : UIColor.lightTextColor()
-            }
-            else {
+            } else {
                 titleText.textColor = UIColor.lightTextColor()
             }
             favicon.alpha = selectedTab ? 1.0 : 0.6
+        }
+    }
+    
+    override var isBeingArranged: Bool {
+        didSet {
+            if isBeingArranged != oldValue {
+                setNeedsDisplay()
+            }
         }
     }
     
@@ -140,7 +147,7 @@ class TopTabCell: TabCell {
     
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
-        guard seperatorLine else {
+        guard seperatorLine && !isBeingArranged else {
             return
         }
         let context = UIGraphicsGetCurrentContext();
