@@ -215,6 +215,33 @@ class TopTabsViewController: UIViewController {
         }
     }
     
+    private func endTabDragging(cancelled cancelled: Bool) -> Bool {
+        guard #available(iOS 9, *) else {
+            return false
+        }
+        if self.dragState != nil && self.dragState!.hasBegun {
+            self.dragState = nil
+            self.view.userInteractionEnabled = true
+            self.collectionView.performBatchUpdates({
+                cancelled ? self.collectionView.cancelInteractiveMovement() : self.collectionView.endInteractiveMovement()
+            }) { _ in
+                self.collectionView.reloadData()
+                for item in 0..<self.collectionView.numberOfItemsInSection(0) {
+                    guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TopTabCell else {
+                        continue
+                    }
+                    if !cell.isBeingArranged {
+                        continue
+                    }
+                    cell.isBeingArranged = false
+                }
+                self.scrollToCurrentTab()
+            }
+            return true
+        }
+        return false
+    }
+    
     @available(iOS 9, *)
     func didLongPressTab(gesture: UILongPressGestureRecognizer) {
         switch gesture.state {
@@ -248,23 +275,7 @@ class TopTabsViewController: UIViewController {
                 }
             }
         case .Ended, .Cancelled:
-            self.dragState = nil
-            self.view.userInteractionEnabled = true
-            self.collectionView.performBatchUpdates({
-                gesture.state == .Ended ? self.collectionView.endInteractiveMovement() : self.collectionView.cancelInteractiveMovement()
-            }) { _ in
-                self.collectionView.reloadData()
-                for item in 0..<self.collectionView.numberOfItemsInSection(0) {
-                    guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TopTabCell else {
-                        continue
-                    }
-                    if !cell.isBeingArranged {
-                        continue
-                    }
-                    cell.isBeingArranged = false
-                }
-                self.scrollToCurrentTab()
-            }
+            self.endTabDragging(cancelled: gesture.state == .Cancelled)
         default:
             break
         }
@@ -314,9 +325,11 @@ extension TopTabsViewController: TopTabCellDelegate {
         if tabsToDisplay.count == 1 {
             tabManager.removeTab(tab)
             tabManager.selectTab(tabsToDisplay.first)
-            collectionView.reloadData()
-        }
-        else {
+            // By ending tab dragging, we also reload the data, and avoid any issues with reloading while dragging
+            if !self.endTabDragging(cancelled: true) {
+                self.collectionView.reloadData()
+            }
+        } else {
             var nextTab: Tab
             let currentIndex = indexPath.item
             if tabsToDisplay.count-1 > currentIndex {
@@ -331,8 +344,8 @@ extension TopTabsViewController: TopTabCellDelegate {
             }
             self.collectionView.performBatchUpdates({
                 self.collectionView.deleteItemsAtIndexPaths([indexPath])
-                }, completion: { finished in
-                    self.collectionView.reloadData()
+            }, completion: { finished in
+                self.collectionView.reloadData()
             })
         }
     }
@@ -407,7 +420,10 @@ extension TopTabsViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(index: Int) {
         let tab = tabsToDisplay[index]
         tabManager.selectTab(tab)
-        collectionView.reloadData()
+        // By ending tab dragging, we also reload the data, and avoid any issues with reloading while dragging
+        if !self.endTabDragging(cancelled: true) {
+            self.collectionView.reloadData()
+        }
         collectionView.setNeedsDisplay()
         delegate?.topTabsDidChangeTab()
         scrollToCurrentTab()
@@ -451,7 +467,10 @@ extension TopTabsViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {}
     func tabManagerDidRestoreTabs(tabManager: TabManager) {}
     func tabManagerDidAddTabs(tabManager: TabManager) {
-        collectionView.reloadData()
+        // By ending tab dragging, we also reload the data, and avoid any issues with reloading while dragging
+        if !self.endTabDragging(cancelled: true) {
+            self.collectionView.reloadData()
+        }
     }
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
         if let privateTab = lastPrivateTab where !tabManager.tabs.contains(privateTab) {
