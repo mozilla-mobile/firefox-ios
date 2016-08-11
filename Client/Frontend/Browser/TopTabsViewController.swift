@@ -248,21 +248,21 @@ class TopTabsViewController: UIViewController {
                 }
             }
         case .Ended, .Cancelled:
-            for item in 0..<self.collectionView.numberOfItemsInSection(0) {
-                guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TopTabCell else {
-                    continue
-                }
-                if !cell.isBeingArranged {
-                    continue
-                }
-                cell.isBeingArranged = false
-            }
             self.dragState = nil
             self.view.userInteractionEnabled = true
             self.collectionView.performBatchUpdates({
                 gesture.state == .Ended ? self.collectionView.endInteractiveMovement() : self.collectionView.cancelInteractiveMovement()
             }) { _ in
                 self.collectionView.reloadData()
+                for item in 0..<self.collectionView.numberOfItemsInSection(0) {
+                    guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TopTabCell else {
+                        continue
+                    }
+                    if !cell.isBeingArranged {
+                        continue
+                    }
+                    cell.isBeingArranged = false
+                }
                 self.scrollToCurrentTab()
             }
         default:
@@ -296,7 +296,7 @@ class TopTabsViewController: UIViewController {
 extension TopTabsViewController: Themeable {
     func applyTheme(themeName: String) {
         tabsButton.applyTheme(themeName)
-        isPrivate = (themeName == Theme.PrivateMode)
+        isPrivate = themeName == Theme.PrivateMode
     }
 }
 
@@ -341,6 +341,9 @@ extension TopTabsViewController: TopTabCellDelegate {
 extension TopTabsViewController: UICollectionViewDataSource {
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let index = indexPath.item
+        // This should never happen. However, it can do when the integrity is corrupted when, for example, calling collectionView.reloadData()
+        // while the tabs are being reärranged. It's easier to catch this with an assertion rather than try to figure out why all these weird
+        // graphical bugs are happening (sometimes leading to a crash, sometimes not).
         assert(index != -1)
         let tabCell = collectionView.dequeueReusableCellWithReuseIdentifier(TopTabCell.Identifier, forIndexPath: indexPath) as! TopTabCell
         tabCell.delegate = self
@@ -364,12 +367,11 @@ extension TopTabsViewController: UICollectionViewDataSource {
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }
 
-        tabCell.selectedTab = (tab == tabManager.selectedTab)
+        tabCell.selectedTab = tab == tabManager.selectedTab
         
         if index > 0 && index < tabsToDisplay.count && tabsToDisplay[index] != tabManager.selectedTab && tabsToDisplay[index-1] != tabManager.selectedTab {
             tabCell.seperatorLine = true
-        }
-        else {
+        } else {
             tabCell.seperatorLine = false
         }
         
@@ -386,7 +388,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
                 tabCell.favicon.image = defaultFavicon
             }
         }
-        
+
         return tabCell
     }
     
@@ -440,8 +442,7 @@ extension TopTabsViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         if selected?.isPrivate ?? false {
             lastPrivateTab = selected
-        }
-        else {
+        } else {
             lastNormalTab = selected
         }
     }
