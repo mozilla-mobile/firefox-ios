@@ -434,6 +434,12 @@ class TabTrayController: UIViewController {
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 
+        if let visibleCells = self.collectionView.visibleCells() as? [TabCell] {
+            for cell in visibleCells {
+                cell.animator.cancelExistingGestures()
+            }
+        }
+
         coordinator.animateAlongsideTransition({ _ in
             self.collectionView.collectionViewLayout.invalidateLayout()
         }, completion: nil)
