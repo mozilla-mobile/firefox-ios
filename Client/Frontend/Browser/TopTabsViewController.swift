@@ -15,7 +15,7 @@ struct TopTabsUX {
     static let TopTabsBackgroundShadowWidth: CGFloat = 35
     static let TabWidth: CGFloat = 180
     static let CollectionViewPadding: CGFloat = 15
-    static let FaderPading: CGFloat = 5
+    static let FaderPadding: CGFloat = 5
     static let BackgroundSeparatorLinePadding: CGFloat = 5
     static let TabTitleWidth: CGFloat = 110
     static let TabTitlePadding: CGFloat = 10
@@ -142,8 +142,8 @@ class TopTabsViewController: UIViewController {
         }
         topTabFader.snp_makeConstraints { make in
             make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateTab.snp_trailing).offset(-TopTabsUX.FaderPading)
-            make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.FaderPading)
+            make.leading.equalTo(privateTab.snp_trailing).offset(-TopTabsUX.FaderPadding)
+            make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.FaderPadding)
         }
         collectionView.snp_makeConstraints { make in
             make.top.bottom.equalTo(view)
@@ -286,7 +286,7 @@ class TopTabsViewController: UIViewController {
             }
             else {
                 // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
-                let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
+                let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPadding), dy: 0)
                 collectionView.scrollRectToVisible(padFrame, animated: animated)
             }
         }
