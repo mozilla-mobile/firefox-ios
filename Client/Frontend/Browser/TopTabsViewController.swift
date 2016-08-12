@@ -100,7 +100,9 @@ class TopTabsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
         collectionView.reloadData()
-        self.scrollToCurrentTab(false, centerCell: true)
+        dispatch_async(dispatch_get_main_queue()) { 
+             self.scrollToCurrentTab(false, centerCell: true)
+        }
     }
     
     override func viewDidLoad() {
