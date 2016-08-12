@@ -21,6 +21,7 @@ class FirefoxAccountTests: XCTestCase {
             "email": "testtest@test.com",
             "uid": "uid",
             "fxaDeviceId": "bogusid",
+            "deviceRegistrationVersion": 0,
         ]
 
         let account1 = FirefoxAccount(
@@ -28,6 +29,7 @@ class FirefoxAccountTests: XCTestCase {
                 email: d["email"] as! String,
                 uid: d["uid"] as! String,
                 fxaDeviceId: d["fxaDeviceId"] as! String,
+                deviceRegistrationVersion: d["deviceRegistrationVersion"] as! Int,
                 stateKeyLabel: Bytes.generateGUID(),
                 state: SeparatedState())
         let d1 = account1.asDictionary()
