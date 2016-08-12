@@ -162,7 +162,7 @@ public class FxAClient10 {
         self.URL = endpoint ?? ProductionFirefoxAccountConfiguration().authEndpointURL
     }
 
-    public class func KW(kw: String) -> NSData? {
+    public class func KW(kw: String) -> NSData {
         return ("identity.mozilla.com/picl/v1/" + kw).utf8EncodedData
     }
 
@@ -179,15 +179,15 @@ public class FxAClient10 {
     }
 
     public class func quickStretchPW(email: NSData, password: NSData) -> NSData {
-        let salt: NSMutableData = NSMutableData(data: KW("quickStretch")!)
-        salt.appendData(":".utf8EncodedData!)
+        let salt: NSMutableData = NSMutableData(data: KW("quickStretch"))
+        salt.appendData(":".utf8EncodedData)
         salt.appendData(email)
         return password.derivePBKDF2HMACSHA256KeyWithSalt(salt, iterations: 1000, length: 32)
     }
 
     public class func computeUnwrapKey(stretchedPW: NSData) -> NSData {
         let salt: NSData = NSData()
-        let contextInfo: NSData = KW("unwrapBkey")!
+        let contextInfo: NSData = KW("unwrapBkey")
         let bytes = stretchedPW.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(KeyLength))
         return bytes
     }
@@ -240,7 +240,7 @@ public class FxAClient10 {
             let MAC = data.subdataWithRange(NSMakeRange(2 * KeyLength, 1 * KeyLength))
 
             let salt: NSData = NSData()
-            let contextInfo: NSData = KW("account/keys")!
+            let contextInfo: NSData = KW("account/keys")
             let bytes = keyRequestKey.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
             let respHMACKey = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, 1 * KeyLength))
             let respXORKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, 2 * KeyLength))
@@ -323,7 +323,7 @@ public class FxAClient10 {
 
     public func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Maybe<FxALoginResponse>> {
         let deferred = Deferred<Maybe<FxALoginResponse>>()
-        let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: FxAClient10.KW("authPW")!, length: 32)
+        let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: FxAClient10.KW("authPW"), length: 32)
 
         let parameters = [
             "email": NSString(data: emailUTF8, encoding: NSUTF8StringEncoding)!,
@@ -375,9 +375,7 @@ public class FxAClient10 {
         let deferred = Deferred<Maybe<FxAKeysResponse>>()
 
         let salt: NSData = NSData()
-        guard let contextInfo: NSData = FxAClient10.KW("keyFetchToken") else {
-            return self.implementationError()
-        }
+        let contextInfo: NSData = FxAClient10.KW("keyFetchToken")
         let bytes = keyFetchToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
@@ -426,9 +424,7 @@ public class FxAClient10 {
         ]
 
         let salt: NSData = NSData()
-        guard let contextInfo: NSData = FxAClient10.KW("sessionToken") else {
-            return self.implementationError()
-        }
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")
         let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
@@ -469,22 +465,13 @@ public class FxAClient10 {
         }
         return deferred
     }
-    
-    // A temporary error that indicates a null value would otherwise have been explicitly unwrapped
-    func implementationError<T>() -> Deferred<Maybe<T>> {
-        let deferred = Deferred<Maybe<T>>()
-        deferred.fill(Maybe<T>(failure: FxAClientError.Local(NSError(domain: FxAClientError.ErrorDomain, code: FxAClientError.ErrorCode, userInfo: nil))))
-        return deferred
-    }
 
     public func status(uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
         let deferred = Deferred<Maybe<FxAStatusResponse>>()
 
         let baseURL = self.URL.URLByAppendingPathComponent("/account/status")
         let queryParams = "?uid=" + uid
-        guard let URL = NSURL(string: queryParams, relativeToURL: baseURL) else {
-            return self.implementationError()
-        }
+        let URL = NSURL(string: queryParams, relativeToURL: baseURL)!
         let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
@@ -522,9 +509,7 @@ public class FxAClient10 {
         let deferred = Deferred<Maybe<FxADevicesResponse>>()
 
         let salt: NSData = NSData()
-        guard let contextInfo: NSData = FxAClient10.KW("sessionToken") else {
-            return self.implementationError()
-        }
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")
         let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
@@ -578,7 +563,7 @@ public class FxAClient10 {
     private func registerOrUpdateDevice(account: FirefoxAccount, sessionToken: NSData, parameters: [String: String]) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
         let deferred = Deferred<Maybe<FxADeviceRegistrationResponse>>()
         let salt: NSData = NSData()
-        let contextInfo: NSData = FxAClient10.KW("sessionToken")!
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")
         let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
