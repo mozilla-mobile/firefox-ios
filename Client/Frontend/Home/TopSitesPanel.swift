@@ -48,6 +48,7 @@ class TopSitesPanel: UIViewController {
         didSet {
             if editingThumbnails != oldValue {
                 dataSource.editingThumbnails = editingThumbnails
+                collection?.allowsSelection = !editingThumbnails
 
                 if editingThumbnails {
                     homePanelDelegate?.homePanelWillEnterEditingMode?(self)
@@ -94,7 +95,6 @@ class TopSitesPanel: UIViewController {
         collection.dataSource = dataSource
         collection.registerClass(ThumbnailCell.self, forCellWithReuseIdentifier: ThumbnailIdentifier)
         collection.keyboardDismissMode = .OnDrag
-        collection.allowsSelection = false
         collection.accessibilityIdentifier = "Top Sites View"
         view.addSubview(collection)
         collection.snp_makeConstraints { make in
