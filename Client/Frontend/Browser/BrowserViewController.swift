@@ -182,6 +182,14 @@ class BrowserViewController: UIViewController {
     private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
+        
+        if let mvc = menuViewController where showToolbar != (toolbar != nil) {
+            // Hide the menu, and then re-open it so that the menu is always the correct one for the given traits
+            mvc.dismissViewControllerAnimated(true, completion: nil)
+            dispatch_async(dispatch_get_main_queue()) {
+                self.tabToolbarDidPressMenu(self.navigationToolbar, button: self.navigationToolbar.menuButton)
+            }
+        }
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
