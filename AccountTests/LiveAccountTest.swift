@@ -46,8 +46,8 @@ public class LiveAccountTest: XCTestCase {
                 XCTAssertTrue(json["verified"].asBool ?? false)
             }
             let email = json["email"].asString!
-            let emailUTF8 = email.utf8EncodedData!
-            let password = email.utf8EncodedData!
+            let emailUTF8 = email.utf8EncodedData
+            let password = email.utf8EncodedData
             let stretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: password)
             completion(emailUTF8, stretchedPW)
         } else {
@@ -105,21 +105,18 @@ public class LiveAccountTest: XCTestCase {
     // Internal helper.
     func account(email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
-        if let emailUTF8 = email.utf8EncodedData {
-            if let passwordUTF8 = email.utf8EncodedData {
-                let quickStretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: passwordUTF8)
-                let login = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
-                return login.bind { result in
-                    if let response = result.successValue {
-                        let unwrapkB = FxAClient10.computeUnwrapKey(quickStretchedPW)
-                        return Deferred(value: Maybe(success: FirefoxAccount.fromConfigurationAndLoginResponse(configuration, response: response, unwrapkB: unwrapkB)))
-                    } else {
-                        return Deferred(value: Maybe(failure: result.failureValue!))
-                    }
-                }
+        let emailUTF8 = email.utf8EncodedData
+        let passwordUTF8 = email.utf8EncodedData
+        let quickStretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: passwordUTF8)
+        let login = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
+        return login.bind { result in
+            if let response = result.successValue {
+                let unwrapkB = FxAClient10.computeUnwrapKey(quickStretchedPW)
+                return Deferred(value: Maybe(success: FirefoxAccount.fromConfigurationAndLoginResponse(configuration, response: response, unwrapkB: unwrapkB)))
+            } else {
+                return Deferred(value: Maybe(failure: result.failureValue!))
             }
         }
-        return Deferred(value: Maybe(failure: AccountError.BadParameters))
     }
 
     // Override this to configure test account.
