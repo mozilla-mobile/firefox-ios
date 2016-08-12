@@ -252,9 +252,9 @@ public class FirefoxAccount {
         let client = FxAClient10()
         let name = DeviceInfo.defaultClientName()
         if fxaDeviceId.isEmpty { // Create device
-            result = client.registerOrUpdateDevice(self, sessionToken: sessionToken, id: nil, name: name, type: "mobile")
+            result = client.registerDevice(self, sessionToken: sessionToken, name: name, type: "mobile")
         } else { // Update device
-            result = client.registerOrUpdateDevice(self, sessionToken: sessionToken, id: fxaDeviceId, name: name, type: nil)
+            result = client.updateDevice(self, sessionToken: sessionToken, id: fxaDeviceId, name: name)
         }
 
         return result.map { result in
