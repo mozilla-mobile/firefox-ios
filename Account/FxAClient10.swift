@@ -30,16 +30,16 @@ public struct FxALoginResponse {
     }
 }
 
-public enum FxAccountRemoteError: Int32 {
-    case attemptToOperateOnAnUnverifiedAccount = 104
-    case invalidAuthenticationToken = 110
-    case endpointNoLongerSupported = 116
-    case incorrectLoginMethodForThisAccount = 117
-    case incorrectKeyRetrievalMethodForThisAccount = 118
-    case incorrectAPIVersionForThisAccount = 119
-    case unknownDevice = 123
-    case sessionAlreadyRegisteredByAnotherDevice = 124
-    case unknownError = 999
+public struct FxAccountRemoteError {
+    static let ATTEMPT_TO_OPERATE_ON_AN_UNVERIFIED_ACCOUNT: Int32     = 104
+    static let INVALID_AUTHENTICATION_TOKEN: Int32                    = 110
+    static let ENDPOINT_IS_NO_LONGER_SUPPORTED: Int32                 = 116
+    static let INCORRECT_LOGIN_METHOD_FOR_THIS_ACCOUNT: Int32         = 117
+    static let INCORRECT_KEY_RETRIEVAL_METHOD_FOR_THIS_ACCOUNT: Int32 = 118
+    static let INCORRECT_API_VERSION_FOR_THIS_ACCOUNT: Int32          = 119
+    static let UNKNOWN_DEVICE: Int32                                  = 123
+    static let DEVICE_SESSION_CONFLICT: Int32                         = 124
+    static let UNKNOWN_ERROR: Int32                                   = 999
 }
 
 public struct FxAKeysResponse {
@@ -125,7 +125,7 @@ extension FxAClientError: MaybeErrorType {
         case let .Remote(error):
             let errorString = error.error ?? NSLocalizedString("Missing error", comment: "Error for a missing remote error number")
             let messageString = error.message ?? NSLocalizedString("Missing message", comment: "Error for a missing remote error message")
-            return "<FxAClientError.Remote \(error.code)/\(error.reason?.rawValue): \(errorString) (\(messageString))>"
+            return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
         case let .Local(error):
             return "<FxAClientError.Local Error Domain=\(error.domain) Code=\(error.code) \"\(error.localizedDescription)\">"
         }
@@ -134,17 +134,16 @@ extension FxAClientError: MaybeErrorType {
 
 public struct RemoteError {
     let code: Int32
-    let reason: FxAccountRemoteError?
+    let errno: Int32
     let error: String?
     let message: String?
     let info: String?
 
     var isUpgradeRequired: Bool {
-        guard let reason = self.reason else {
-            return false
-        }
-        let mandantoryUpgradeErrors: [FxAccountRemoteError] = [.endpointNoLongerSupported, .incorrectLoginMethodForThisAccount, .incorrectKeyRetrievalMethodForThisAccount, .incorrectAPIVersionForThisAccount]
-        return mandantoryUpgradeErrors.contains(reason)
+        return errno == FxAccountRemoteError.ENDPOINT_IS_NO_LONGER_SUPPORTED
+            || errno == FxAccountRemoteError.INCORRECT_LOGIN_METHOD_FOR_THIS_ACCOUNT
+            || errno == FxAccountRemoteError.INCORRECT_KEY_RETRIEVAL_METHOD_FOR_THIS_ACCOUNT
+            || errno == FxAccountRemoteError.INCORRECT_API_VERSION_FOR_THIS_ACCOUNT
     }
 
     var isInvalidAuthentication: Bool {
@@ -152,7 +151,7 @@ public struct RemoteError {
     }
 
     var isUnverified: Bool {
-        return reason == .attemptToOperateOnAnUnverifiedAccount
+        return errno == FxAccountRemoteError.ATTEMPT_TO_OPERATE_ON_AN_UNVERIFIED_ACCOUNT
     }
 }
 
@@ -203,7 +202,7 @@ public class FxAClient10 {
         }
         if let code = json["code"].asInt32 {
             if let errno = json["errno"].asInt32 {
-                return RemoteError(code: code, reason: FxAccountRemoteError(rawValue: errno),
+                return RemoteError(code: code, errno: errno,
                                    error: json["error"].asString,
                                    message: json["message"].asString,
                                    info: json["info"].asString)
@@ -626,13 +625,13 @@ public class FxAClient10 {
     
     public func handleError(account: FirefoxAccount, deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError, sessionToken: NSData)  {
         if error.code == 400 {
-            if error.reason == .unknownDevice {
+            if error.errno == FxAccountRemoteError.UNKNOWN_DEVICE {
                 recoverFromUnknownDevice(account)
                 deferred.fill(Maybe(failure: FxAClientError.Remote(error)))
-            } else if error.reason == .sessionAlreadyRegisteredByAnotherDevice {
+            } else if error.errno == FxAccountRemoteError.DEVICE_SESSION_CONFLICT {
                 recoverFromDeviceSessionConflict(deferred, error: error, sessionToken: sessionToken)
             }
-        } else if error.code == 401 && error.reason == .invalidAuthenticationToken {
+        } else if error.code == 401 && error.errno == FxAccountRemoteError.INVALID_AUTHENTICATION_TOKEN {
             handleTokenError(account, deferred: deferred, error: error)
         } else {
             logErrorAndResetDeviceRegistrationVersion(account, error: error)
