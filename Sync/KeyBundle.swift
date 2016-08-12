@@ -166,12 +166,11 @@ public class KeyBundle: Hashable {
     public func serializer<T: CleartextPayloadJSON>(f: T -> JSON) -> Record<T> -> JSON? {
         return { (record: Record<T>) -> JSON? in
             let json = f(record.payload)
+            let data = json.toString(false).utf8EncodedData
 
-            if let data = json.toString(false).utf8EncodedData,
-               // We pass a null IV, which means "generate me a new one".
-               // We then include the generated IV in the resulting record.
-               let (ciphertext, iv) = self.encrypt(data, iv: nil) {
-
+            // We pass a null IV, which means "generate me a new one".
+            // We then include the generated IV in the resulting record.
+            if let (ciphertext, iv) = self.encrypt(data, iv: nil) {
                 // So we have the encrypted payload. Now let's build the envelope around it.
                 let ciphertext = ciphertext.base64EncodedString
 

@@ -46,8 +46,8 @@ extension NSData {
 }
 
 extension String {
-    public var utf8EncodedData: NSData? {
-        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+    public var utf8EncodedData: NSData {
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
     }
 }
 
