@@ -568,26 +568,16 @@ public class FxAClient10 {
         return deferred
     }
 
-    public func registerOrUpdateDevice(account: FirefoxAccount, sessionToken: NSData, id: String?, name: String, type: String?) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
+    public func updateDevice(account: FirefoxAccount, sessionToken: NSData, id: String, name: String) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
+        return registerOrUpdateDevice(account, sessionToken: sessionToken, parameters: ["id": id, "name": name])
+    }
+
+    public func registerDevice(account: FirefoxAccount, sessionToken: NSData, name: String, type: String) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
+        return registerOrUpdateDevice(account, sessionToken: sessionToken, parameters: ["name": name, "type": type])
+    }
+
+    private func registerOrUpdateDevice(account: FirefoxAccount, sessionToken: NSData, parameters: [String: String]) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
         let deferred = Deferred<Maybe<FxADeviceRegistrationResponse>>()
-        let parameters: [String:AnyObject]
-
-        if let id = id { // Update
-            parameters = [
-                "id": id,
-                "name": name
-            ]
-            
-        } else { // New device
-            guard let type = type else {
-                return self.implementationError()
-            }
-            parameters = [
-                "name": name,
-                "type": type
-            ]
-        }
-
         let salt: NSData = NSData()
         let contextInfo: NSData = FxAClient10.KW("sessionToken")!
         let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
@@ -679,7 +669,7 @@ public class FxAClient10 {
             }
         }
     }
-    
+
     public func logErrorAndResetDeviceRegistrationVersion(account: FirefoxAccount, error: RemoteError) {
         print("device registration failed: \(error)")
         account.deviceRegistrationVersion = 0
