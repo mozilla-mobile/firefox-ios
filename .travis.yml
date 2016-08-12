@@ -10,4 +10,4 @@ before_install:
   - brew update
   - brew install swiftlint || true
 
-script: swiftlint || echo Swiftlint exited with errors!
+script: swiftlint
