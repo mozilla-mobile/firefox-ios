@@ -696,20 +696,20 @@ class BrowserViewController: UIViewController {
         homePanelIsInline = inline
 
         if homePanelController == nil {
-            self.homePanelController = HomePanelViewController()
-            if let homePanelController = self.homePanelController {
-                homePanelController.profile = profile
-                homePanelController.delegate = self
-                homePanelController.appStateDelegate = self
-                homePanelController.url = tabManager.selectedTab?.displayURL
-                homePanelController.view.alpha = 0
+            let homePanelController = HomePanelViewController()
+            homePanelController.profile = profile
+            homePanelController.delegate = self
+            homePanelController.appStateDelegate = self
+            homePanelController.url = tabManager.selectedTab?.displayURL
+            homePanelController.view.alpha = 0
+            self.homePanelController = homePanelController
 
-                addChildViewController(homePanelController)
-                view.addSubview(homePanelController.view)
-                homePanelController.didMoveToParentViewController(self)
-            }
+            addChildViewController(homePanelController)
+            view.addSubview(homePanelController.view)
+            homePanelController.didMoveToParentViewController(self)
         }
         guard let homePanelController = self.homePanelController else {
+            assertionFailure("homePanelController is still nil after assignment.")
             return
         }
 
