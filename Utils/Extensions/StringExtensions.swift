@@ -41,7 +41,7 @@ public extension String {
         let raw: NSString = self
         let str = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
             raw,
-            "[].",":/?&=;+!@#$()',*",
+            "[].", ":/?&=;+!@#$()',*",
             CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding))
         return str as String
     }
@@ -106,7 +106,7 @@ public extension String {
             }
             return nil
         }
-        guard let closest = arr.enumerate().minElement( { abs($0.1 - mid) < abs($1.1 - mid)} ) else {
+        guard let closest = arr.enumerate().minElement({ abs($0.1 - mid) < abs($1.1 - mid)}) else {
             return self
         }
         var newString = self

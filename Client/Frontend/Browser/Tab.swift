@@ -340,8 +340,7 @@ class Tab: NSObject {
         if #available(iOS 9.0, *) {
             let userAgent: String? = desktopSite ? UserAgent.desktopUserAgent() : nil
             if (userAgent ?? "") != webView?.customUserAgent,
-               let currentItem = webView?.backForwardList.currentItem
-            {
+               let currentItem = webView?.backForwardList.currentItem {
                 webView?.customUserAgent = userAgent
 
                 // Reload the initial URL to avoid UA specific redirection
@@ -473,12 +472,12 @@ class Tab: NSObject {
 
     func setNoImageMode(enabled: Bool = false, force: Bool) {
         if enabled || force {
-            webView?.evaluateJavaScript("__firefox__.setNoImageMode(\(enabled))", completionHandler: nil)
+            webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
         }
     }
 
     func setNightMode(enabled: Bool) {
-        webView?.evaluateJavaScript("__firefox__.setNightMode(\(enabled))", completionHandler: nil)
+        webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(enabled))", completionHandler: nil)
     }
 }
 

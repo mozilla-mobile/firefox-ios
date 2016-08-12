@@ -348,8 +348,7 @@ class URLBarView: UIView {
                     make.leading.equalTo(self.snp_trailing)
                     make.size.equalTo(UIConstants.ToolbarHeight)
                 }
-            }
-            else {
+            } else {
                 tabsButton.snp_remakeConstraints { make in
                     make.centerY.equalTo(self.locationContainer)
                     make.trailing.equalTo(self)
@@ -437,10 +436,6 @@ class URLBarView: UIView {
             self.progressBar.setProgress(progress, animated: !isTransitioning)
             UIView.animateWithDuration(1.5, animations: {
                 self.progressBar.alpha = 0.0
-            }, completion: { finished in
-                if finished {
-                    self.progressBar.setProgress(0.0, animated: false)
-                }
             })
         } else {
             if self.progressBar.alpha < 1.0 {
@@ -680,8 +675,12 @@ extension URLBarView: TabLocationViewDelegate {
 extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldReturn(autocompleteTextField: AutocompleteTextField) -> Bool {
         guard let text = locationTextField?.text else { return true }
-        delegate?.urlBar(self, didSubmitText: text)
-        return true
+        if !text.stringByTrimmingCharactersInSet(.whitespaceCharacterSet()).isEmpty {
+            delegate?.urlBar(self, didSubmitText: text)
+            return true
+        } else {
+            return false
+        }
     }
 
     func autocompleteTextField(autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
@@ -812,7 +811,7 @@ private class CurveView: UIView {
               controlPoint1: CGPoint(x: from.0 + width * W_M1, y: from.1),
               controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M1))
 
-        path.addCurveToPoint(CGPoint(x: from.0 + width,        y: from.1 + height),
+        path.addCurveToPoint(CGPoint(x: from.0 + width, y: from.1 + height),
               controlPoint1: CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M3),
               controlPoint2: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M4))
     }

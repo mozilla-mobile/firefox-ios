@@ -150,7 +150,7 @@ class TopTabCell: TabCell {
         guard seperatorLine && !isBeingArranged else {
             return
         }
-        let context = UIGraphicsGetCurrentContext();
+        let context = UIGraphicsGetCurrentContext()
         CGContextSaveGState(context)
         CGContextSetLineCap(context, CGLineCap.Square)
         CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().colorWithAlphaComponent(0.2).CGColor)
@@ -215,7 +215,7 @@ class TopTabFader: UIView {
     }
 }
 
-class TopTabsBackgroundDecorationView : UICollectionReusableView {
+class TopTabsBackgroundDecorationView: UICollectionReusableView {
     static let Identifier = "TopTabsBackgroundDecorationViewIdentifier"
     private lazy var rightCurve = SingleCurveView(right: true)
     private lazy var leftCurve = SingleCurveView(right: false)
@@ -319,7 +319,7 @@ extension UIBezierPath {
             bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
         }
         bezierPath.closePath()
-        bezierPath.miterLimit = 4;
+        bezierPath.miterLimit = 4
         return bezierPath
     }
 }

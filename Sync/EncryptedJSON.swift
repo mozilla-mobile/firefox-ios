@@ -17,7 +17,7 @@ private let log = Logger.syncLogger
  *
  * into a new JSON object resulting from decrypting and parsing the ciphertext.
  */
-public class EncryptedJSON : JSON {
+public class EncryptedJSON: JSON {
     var _cleartext: JSON?               // Cache decrypted cleartext.
     var _ciphertextBytes: NSData?       // Cache decoded ciphertext.
     var _hmacBytes: NSData?             // Cache decoded HMAC.

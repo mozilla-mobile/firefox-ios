@@ -159,14 +159,14 @@ public class FxAClient10 {
         if json.isError {
             return nil
         }
-        
+
         guard let uid = json["uid"].asString,
             let verified = json["verified"].asBool,
             let sessionToken = json["sessionToken"].asString,
             let keyFetchToken = json["keyFetchToken"].asString else {
                 return nil
         }
-        
+
         return FxALoginResponse(remoteEmail: "", uid: uid, verified: verified,
             sessionToken: sessionToken.hexDecodedData, keyFetchToken: keyFetchToken.hexDecodedData)
     }

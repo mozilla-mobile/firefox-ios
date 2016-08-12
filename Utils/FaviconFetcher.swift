@@ -24,7 +24,7 @@ class FaviconFetcherErrorType: MaybeErrorType {
  * This will load the page and parse any icons it finds out of it.
  * If that fails, it will attempt to find a favicon.ico in the root host domain.
  */
-public class FaviconFetcher : NSObject, NSXMLParserDelegate {
+public class FaviconFetcher: NSObject, NSXMLParserDelegate {
     public static var userAgent: String = ""
     static let ExpirationTime = NSTimeInterval(60*60*24*7) // Only check for icons once a week
     private static var characterToFaviconCache = [String : UIImage]()

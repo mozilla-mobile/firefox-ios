@@ -65,8 +65,7 @@ private extension TrayToBrowserAnimator {
             delay: 0, usingSpringWithDamping: 1,
             initialSpringVelocity: 0,
             options: UIViewAnimationOptions.CurveEaseInOut,
-            animations:
-        {
+            animations: {
             // Scale up the cell and reset the transforms for the header/footers
             cell.frame = finalFrame
             container.layoutIfNeeded()
@@ -160,8 +159,7 @@ private extension BrowserToTrayAnimator {
                 delay: 0, usingSpringWithDamping: 1,
                 initialSpringVelocity: 0,
                 options: UIViewAnimationOptions.CurveEaseInOut,
-                animations:
-            {
+                animations: {
                 cell.frame = finalFrame
                 cell.title.transform = CGAffineTransformIdentity
                 cell.layoutIfNeeded()

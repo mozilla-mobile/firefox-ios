@@ -61,6 +61,7 @@ class TopTabsViewController: UIViewController {
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
         tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), forControlEvents: UIControlEvents.TouchUpInside)
+        tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
     
@@ -110,7 +111,9 @@ class TopTabsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
         collectionView.reloadData()
-        self.scrollToCurrentTab(false, centerCell: true)
+        dispatch_async(dispatch_get_main_queue()) { 
+             self.scrollToCurrentTab(false, centerCell: true)
+        }
     }
     
     override func viewDidLoad() {
@@ -294,8 +297,7 @@ class TopTabsViewController: UIViewController {
         if let frame = collectionView.layoutAttributesForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0))?.frame {
             if centerCell {
                 collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0), atScrollPosition: .CenteredHorizontally, animated: false)
-            }
-            else {
+            } else {
                 // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
                 let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPadding), dy: 0)
                 collectionView.scrollRectToVisible(padFrame, animated: animated)
@@ -334,8 +336,7 @@ extension TopTabsViewController: TopTabCellDelegate {
             let currentIndex = indexPath.item
             if tabsToDisplay.count-1 > currentIndex {
                 nextTab = tabsToDisplay[currentIndex+1]
-            }
-            else {
+            } else {
                 nextTab = tabsToDisplay[currentIndex-1]
             }
             tabManager.removeTab(tab)
@@ -472,7 +473,7 @@ extension TopTabsViewController: TabManagerDelegate {
             self.collectionView.reloadData()
         }
     }
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {
         if let privateTab = lastPrivateTab where !tabManager.tabs.contains(privateTab) {
             lastPrivateTab = nil
         }
