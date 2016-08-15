@@ -28,7 +28,7 @@ private typealias UploadRecord = (guid: GUID, payload: String, size: Int)
 
 /**
  *  A payload represents a block of records sent in a single POST to the server within a batch.
- *  The payload tries to contains as many records it can fit while respecting the limits imposed
+ *  The payload tries to contain as many records it can fit while respecting the limits imposed
  *  by the info/configuration endpoint.
  */
 private struct Payload {
@@ -96,11 +96,6 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     private var batchToken: BatchToken?
     private var currentPayload: Payload
     private var onCollectionUploaded: (POSTResult -> DeferredTimestamp)
-
-    // TODO: use I-U-S.
-    // Each time we do the storage operation, we might receive a backoff notification.
-    // For a success response, this will be on the subsequent request, which means we don't
-    // have to worry about handling successes and failures mixed with backoffs here.
 
     init(config: InfoConfiguration, ifUnmodifiedSince: Timestamp? = nil, serializeRecord: (Record<T>) -> String?,
          uploader: BatchUploadFunction, onCollectionUploaded: (POSTResult -> DeferredTimestamp))
