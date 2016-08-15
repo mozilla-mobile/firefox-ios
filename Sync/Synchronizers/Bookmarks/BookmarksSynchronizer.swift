@@ -10,7 +10,7 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-typealias UploadFunction = ([Record<BookmarkBasePayload>], lastTimestamp: Timestamp?, onUpload: (POSTResult) -> DeferredTimestamp) -> DeferredTimestamp
+typealias UploadFunction = ([Record<BookmarkBasePayload>], lastTimestamp: Timestamp?, onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp) -> DeferredTimestamp
 
 class TrivialBookmarkStorer: BookmarkStorer {
     let uploader: UploadFunction
@@ -59,23 +59,22 @@ class TrivialBookmarkStorer: BookmarkStorer {
         var success: [GUID] = []
         var failed: [GUID: String] = [:]
 
-        func onUpload(result: POSTResult) -> DeferredTimestamp {
-            modified = result.modified
+        func onUpload(result: POSTResult, lastModified: Timestamp?) -> DeferredTimestamp {
             success.appendContentsOf(result.success)
             result.failed.forEach { guid, message in
                 failed[guid] = message
             }
 
-            log.debug("Uploaded records got timestamp \(modified).")
-            local.setModifiedTime(modified, guids: result.success)
-            return deferMaybe(result.modified)
+            log.debug("Uploaded records got timestamp \(lastModified).")
+            local.setModifiedTime(lastModified ?? modified, guids: result.success)
+            return deferMaybe(modified)
         }
 
         // Chain the last upload timestamp right into our lastFetched timestamp.
         // This is what Sync clients tend to do, but we can probably do better.
         return uploader(records, lastTimestamp: op.ifUnmodifiedSince, onUpload: onUpload)
             // As if we uploaded everything in one go.
-            >>> { deferMaybe(POSTResult(modified: modified, success: success, failed: failed)) }
+            >>> { deferMaybe(POSTResult(success: success, failed: failed)) }
     }
 }
 
@@ -105,9 +104,8 @@ public class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchron
         let start = NSDate.nowMicroseconds()
         let mirrorer = BookmarksMirrorer(storage: buffer, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks")
         let storer = TrivialBookmarkStorer(uploader: { records, lastTimestamp, onUpload in
-            // Default to our last fetch time for If-Unmodified-Since.
             let timestamp = lastTimestamp ?? self.lastFetched
-            return self.uploadRecordsInChunks(records, lastTimestamp: timestamp, storageClient: bookmarksClient, onUpload: onUpload)
+            return self.uploadRecords(records, lastTimestamp: timestamp, storageClient: bookmarksClient, onUpload: onUpload)
               >>== effect { timestamp in
                 // We need to advance our batching downloader timestamp to match. See Bug 1253458.
                 self.setTimestamp(timestamp)

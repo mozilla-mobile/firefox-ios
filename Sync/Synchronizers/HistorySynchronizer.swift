@@ -122,9 +122,9 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     }
 
     private func uploadModifiedPlaces(places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
-        return self.uploadRecords(places.map(makeHistoryRecord), by: 50, lastTimestamp: lastTimestamp, storageClient: storageClient) {
+        return self.uploadRecords(places.map(makeHistoryRecord), lastTimestamp: lastTimestamp, storageClient: storageClient) { result, lastModified in
             // We don't do anything with failed.
-            storage.markAsSynchronized($0.success, modified: $0.modified)
+            storage.markAsSynchronized(result.success, modified: lastModified ?? lastTimestamp)
         }
     }
 
@@ -133,8 +133,8 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         let records = guids.map(makeDeletedHistoryRecord)
 
         // Deletions are smaller, so upload 100 at a time.
-        return self.uploadRecords(records, by: 100, lastTimestamp: lastTimestamp, storageClient: storageClient) {
-            storage.markAsDeleted($0.success) >>> always($0.modified)
+        return self.uploadRecords(records, lastTimestamp: lastTimestamp, storageClient: storageClient) { result, lastModified in
+            storage.markAsDeleted(result.success) >>> always(lastModified ?? lastTimestamp)
         }
     }
 

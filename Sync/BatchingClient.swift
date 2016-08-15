@@ -25,6 +25,7 @@ private let log = Logger.syncLogger
 
 // MARK: Internal Types
 private typealias UploadRecord = (guid: GUID, payload: String, size: Int)
+private typealias DeferredResponse = Deferred<Maybe<StorageResponse<POSTResult>>>
 
 /**
  *  A payload represents a block of records sent in a single POST to the server within a batch.
@@ -33,6 +34,11 @@ private typealias UploadRecord = (guid: GUID, payload: String, size: Int)
  */
 private struct Payload {
     let config: InfoConfiguration
+
+    var isEmpty: Bool {
+        return records.isEmpty
+    }
+
     private(set) var records: [UploadRecord] = []
     private var bytes: ByteCount = 0
     private var count: Int = 0
@@ -41,13 +47,8 @@ private struct Payload {
         self.config = config
     }
 
-    /** Returns true if the record was added to this payload; false otherwise. */
     mutating func add(record: UploadRecord) -> Bool {
-        if (record.size + bytes + 1) > config.maxPostBytes {
-            return false
-        }
-
-        if count >= config.maxPostRecords {
+        guard (record.size + bytes + 1 <= config.maxPostBytes) && (count < config.maxPostRecords) else {
             return false
         }
 
@@ -58,30 +59,44 @@ private struct Payload {
     }
 }
 
-/**
- * Used to keep track of number of bytes and records sent as part of a batch
- */
-private struct BatchMeta {
+private struct Batch {
     let config: InfoConfiguration
+
+    // Batch is full if we can't add another payload to it
+    var isFull: Bool {
+        return (config.maxPostRecords + count > config.maxTotalRecords) ||
+               (config.maxPostBytes + bytes > config.maxTotalBytes)
+    }
+
+    var isEmpty: Bool {
+        return count == 0
+    }
+
+    var commitParams: [NSURLQueryItem] {
+        return [NSURLQueryItem(name: "batch", value: String(token)), NSURLQueryItem(name: "commit", value: "true")]
+    }
+
+    var batchParams: [NSURLQueryItem] {
+        return [NSURLQueryItem(name: "batch", value: String(token))]
+    }
+
     private var bytes: ByteCount = 0
     private var count: Int = 0
+    private var token: BatchToken
 
-    init(config: InfoConfiguration) {
+    init(config: InfoConfiguration, token: BatchToken) {
         self.config = config
+        self.token = token
     }
 
-    mutating func add(payload: Payload) -> Bool {
-        guard (bytes + payload.bytes <= config.maxTotalBytes) &&
-              (count + payload.count < config.maxTotalRecords) else
-        {
-            return false
-        }
-
+    mutating func add(payload: Payload) {
         count += payload.count
         bytes += payload.bytes
-        return true
     }
 }
+
+
+// MARK: Batching Client
 
 typealias BatchUploadFunction = (lines: [String], ifUnmodifiedSince: Timestamp?, queryParams: [NSURLQueryItem]?) -> Deferred<Maybe<StorageResponse<POSTResult>>>
 
@@ -92,134 +107,140 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     private let uploader: BatchUploadFunction
     private let serializeRecord: (Record<T>) -> String?
 
-    private var batchMeta: BatchMeta
-    private var batchToken: BatchToken?
+    private var currentBatch: Batch?
     private var currentPayload: Payload
-    private var onCollectionUploaded: (POSTResult -> DeferredTimestamp)
+
+    private var onCollectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp
 
     init(config: InfoConfiguration, ifUnmodifiedSince: Timestamp? = nil, serializeRecord: (Record<T>) -> String?,
-         uploader: BatchUploadFunction, onCollectionUploaded: (POSTResult -> DeferredTimestamp))
+         uploader: BatchUploadFunction, onCollectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp)
     {
         self.config = config
         self.ifUnmodifiedSince = ifUnmodifiedSince
         self.uploader = uploader
         self.serializeRecord = serializeRecord
 
-        self.batchMeta = BatchMeta(config: config)
         self.currentPayload = Payload(config: config)
         self.onCollectionUploaded = onCollectionUploaded
     }
 
-    public func addRecords(records: [Record<T>]) -> Success {
-        return walk(records, f: addRecord)
+    public func endBatch() -> Success {
+        func uploadPayload() -> Success {
+            let lines = self.currentPayload.records.map { $0.payload }
+            let batchStartParam = NSURLQueryItem(name: "batch", value: "true")
+            let commitParam = NSURLQueryItem(name: "commit", value: "true")
+            return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: [batchStartParam, commitParam])
+                >>== effect(moveForward) >>> succeed
+        }
+
+        // Send up as a single upload if we're not batching.
+        guard let batch = self.currentBatch else {
+            return self.currentPayload.isEmpty ? succeed() : uploadPayload()
+        }
+
+        // If we have a batch and both it and the payload are empty, don't need to do anything
+        if batch.isEmpty && self.currentPayload.isEmpty {
+            return succeed()
+        }
+
+        if batch.isFull {
+            return commit(batch) >>> uploadPayload
+        } else {
+            return commit(batch) >>> succeed
+        }
     }
 
-    public func addRecord(record: Record<T>) -> Success {
+    public func addRecords(records: [Record<T>]) -> Success {
+        if records.isEmpty {
+            return succeed()
+        }
+
+        do {
+            var generator = records.generate()
+            while let record = generator.next() {
+                let serializedRecord = try serialize(record)
+                if let uploadOp = accumulateRecord(serializedRecord) {
+                    // Since we couldn't add this record, throw it onto the rest and try adding everything again.
+                    let restOfRecords = generator.map { $0 }
+                    return uploadOp >>> { self.addRecords([record] + restOfRecords) }
+                }
+            }
+        } catch let e {
+            return deferMaybe(e as! MaybeErrorType)
+        }
+        return succeed()
+    }
+
+    private func accumulateRecord(record: UploadRecord) -> DeferredResponse? {
+        // No upload operation happens while queuing records in a payload.
+        if self.currentPayload.add(record) {
+            return nil
+        }
+
+        // Once the payload is full, see if we have a batch we can upload it in. If not, start one.
+        guard var batch = self.currentBatch else {
+            return start()
+        }
+
+        batch.add(self.currentPayload)
+        if batch.isFull {
+            return commit(batch)
+        } else {
+            self.currentBatch = batch
+            return push(batch)
+        }
+    }
+
+    private func serialize(record: Record<T>) throws -> UploadRecord {
         guard let line = self.serializeRecord(record) else {
-            return deferMaybe(SerializeRecordFailure(record: record))
+            throw SerializeRecordFailure(record: record)
         }
 
         let lineSize = line.utf8.count
         guard lineSize < Sync15StorageClient.maxRecordSizeBytes else {
-            return deferMaybe(RecordTooLargeError(size: lineSize, guid: record.id))
+            throw RecordTooLargeError(size: lineSize, guid: record.id)
         }
 
-        let uploadRecord: UploadRecord = (record.id, line, lineSize)
+        return (record.id, line, lineSize)
+    }
 
-        // If we can add a record to the payload, all is good - we don't need to push to the server yet.
-        // Otherwise, try to push the payload (since it's full) to the server in a batch
-        if self.currentPayload.add(uploadRecord) {
-            return succeed()
-        }
+    private func push(batch: Batch) -> DeferredResponse {
+        // Push up the current payload to the server and reset
+        let lines = self.currentPayload.records.map { $0.payload }
+        return uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: batch.batchParams)
+            >>== effect({ _  in self.currentPayload = Payload(config: self.config) })
+    }
 
-        // If we have a batch token, go ahead and push up the payload using the token.
-        // Otherwise, attempt to start a new batch. If we fail starting - no problem! The records would
-        // have already been sent in a single POST call.
-        guard let token = batchToken else {
-            return self.start(self.currentPayload)
-                >>== effect({ self.batchToken = $0 })
-
-                // Based on the precondition, we must be able to add at least one payload into the batch 
-                // without it failing
-                >>> effect({
-                    self.batchMeta.add(self.currentPayload)
-                    self.currentPayload = self.addRecordToNewPayload(uploadRecord)
-                })
-                >>> succeed
-        }
-
-        // If we can fit in another payload, push it up using our batch token
-        if batchMeta.add(self.currentPayload) {
-            return self.uploadPayload(self.currentPayload, queryParams: [NSURLQueryItem(name: "batch", value: String(token))])
-                >>> effect({
-                    self.currentPayload = self.addRecordToNewPayload(uploadRecord)
-                })
-                >>> succeed
-        }
-
-        return self.commit(token)
-            >>> effect({
-                self.batchToken = nil
-                self.batchMeta = BatchMeta(config: self.config)
-                self.currentPayload = self.addRecordToNewPayload(uploadRecord)
+    private func commit(batch: Batch) -> DeferredResponse {
+        let lines = self.currentPayload.records.map { $0.payload }
+        return uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: batch.commitParams)
+            >>== effect(moveForward)
+            >>== effect({  _ in
+                self.currentBatch = nil
+                self.currentPayload = Payload(config: self.config)
             })
-            >>> succeed
     }
 
-    public func endBatch() -> Success {
-        // When not batching, just upload whatever is left over
-        guard let token = batchToken else {
-            return uploadPayload(self.currentPayload)
-                >>== effect({ response in
-                    self.ifUnmodifiedSince = response.value.modified
-                    self.onCollectionUploaded(response.value)
-                })
-                >>> succeed
-        }
-
-        return self.commit(token)
-    }
-
-    private func addRecordToNewPayload(uploadRecord: UploadRecord) -> Payload {
-        var newPayload = Payload(config: self.config)
-        newPayload.add(uploadRecord)
-        return newPayload
-    }
-
-    private func start(payload: Payload) -> Deferred<Maybe<BatchToken?>> {
+    private func start() -> DeferredResponse {
+        let lines = self.currentPayload.records.map { $0.payload }
         let batchStartParam = NSURLQueryItem(name: "batch", value: "true")
-        let lines = payload.records.map { $0.payload }
-        return self.uploadPayload(payload, queryParams: [batchStartParam]) >>== { storageResponse in
-            self.ifUnmodifiedSince = storageResponse.value.modified
+        return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: [batchStartParam])
+             >>== effect(moveForward)
+             >>== { response in
+                if let token = response.value.batchToken {
+                    var startedBatch = Batch(config: self.config, token: token)
+                    startedBatch.add(self.currentPayload)
+                    self.currentBatch = startedBatch
+                }
 
-            if let batchToken = storageResponse.value.batchToken {
-                log.debug("Uploaded \(lines.count) records and received batch token \(batchToken)")
-                return deferMaybe(batchToken)
+                self.currentPayload = Payload(config: self.config)
+                return deferMaybe(response)
             }
-
-            // Since we were unable to start a batch, the records that were sent will be committed directly to
-            // the collection so we should update our timestamp and invoke our upload callback.
-            log.debug("Uploaded \(lines.count) records but received no batch token - records will be committed to collection right away")
-            self.ifUnmodifiedSince = storageResponse.value.modified
-            self.onCollectionUploaded(storageResponse.value)
-            return deferMaybe(nil)
-        }
     }
 
-    private func commit(token: BatchToken) -> Success {
-        let batchParam = NSURLQueryItem(name: "batch", value: String(token))
-        let commitParam = NSURLQueryItem(name: "commit", value: "true")
-
-        return self.uploadPayload(self.currentPayload, queryParams: [batchParam, commitParam])
-            >>== effect({ response in
-                self.ifUnmodifiedSince = response.value.modified
-                self.onCollectionUploaded(response.value)
-            })
-            >>> succeed
-    }
-
-    private func uploadPayload(payload: Payload, queryParams: [NSURLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
-        let lines = payload.records.map { $0.payload }
-        return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: queryParams)
+    private func moveForward(response: StorageResponse<POSTResult>) {
+        let lastModified = response.metadata.lastModifiedMilliseconds
+        self.ifUnmodifiedSince = lastModified
+        self.onCollectionUploaded(response.value, lastModified)
     }
 }

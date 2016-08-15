@@ -83,38 +83,13 @@ extension TimestampedSingleCollectionSynchronizer {
      * In order to implement the latter, we'd need to chain the date from getSince in place of the
      * 0 in the call to uploadOutgoingFromStorage in each synchronizer.
      */
-    func uploadRecords<T>(records: [Record<T>], by: Int, lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: POSTResult -> DeferredTimestamp) -> DeferredTimestamp {
+    func uploadRecords<T>(records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp) -> DeferredTimestamp {
         if records.isEmpty {
             log.debug("No modified records to upload.")
             return deferMaybe(lastTimestamp)
         }
 
-        let storageOp: ([Record<T>], Timestamp) -> DeferredTimestamp = { records, timestamp in
-            // TODO: use I-U-S.
-
-            // Each time we do the storage operation, we might receive a backoff notification.
-            // For a success response, this will be on the subsequent request, which means we don't
-            // have to worry about handling successes and failures mixed with backoffs here.
-            return storageClient.post(records, ifUnmodifiedSince: nil)
-                >>== { onUpload($0.value) }
-        }
-
-        log.debug("Uploading \(records.count) modified records.")
-
-        // Chain the last upload timestamp right into our lastFetched timestamp.
-        // This is what Sync clients tend to do, but we can probably do better.
-        // Upload 50 records at a time.
-        return Uploader().sequentialPosts(records, by: by, lastTimestamp: lastTimestamp, storageOp: storageOp)
-            >>== effect(self.setTimestamp)
-    }
-
-    func uploadRecordsInChunks<T>(records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: POSTResult -> DeferredTimestamp) -> DeferredTimestamp {
-        if records.isEmpty {
-            log.debug("No modified records to upload.")
-            return deferMaybe(lastTimestamp)
-        }
-
-        let batch = storageClient.newBatch(ifUnmodifiedSince: lastTimestamp) { onUpload($0) }
+        let batch = storageClient.newBatch(ifUnmodifiedSince: (lastTimestamp == 0) ? nil : lastTimestamp, onCollectionUploaded: onUpload)
         return batch.addRecords(records)
             >>> batch.endBatch
             >>> {

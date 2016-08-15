@@ -108,22 +108,20 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         }
     }
 
-    private func uploadChangedRecords<T>(deleted: [GUID], modified: [GUID], records: [Record<T>], lastTimestamp: Timestamp,
+    private func uploadChangedRecords<T>(deleted: Set<GUID>, modified: Set<GUID>, records: [Record<T>], lastTimestamp: Timestamp,
                                       storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<T>) -> Success {
-        let onUpload: (POSTResult) -> DeferredTimestamp = { result in
-            let uploaded = result.success
 
-            // Figure out which ones the server deleted and which ones were modified
-            let guidsDeleted = deleted.filter(uploaded.contains)
-            let guidsModified = modified.filter(uploaded.contains)
-
-            return storage.markAsDeleted(guidsDeleted) >>> { storage.markAsSynchronized(guidsModified, modified: result.modified) }
+        let onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp = { result, lastModified in
+            let uploaded = Set(result.success)
+            let deletedGUIDs = Array(uploaded.intersect(deleted))
+            let modifiedGUIDS = Array(uploaded.intersect(modified))
+            return storage.markAsDeleted(deletedGUIDs) >>> { storage.markAsSynchronized(modifiedGUIDS, modified: lastModified ?? lastTimestamp) }
         }
 
-        return uploadRecordsInChunks(records,
-                                     lastTimestamp: lastTimestamp,
-                                     storageClient: storageClient,
-                                     onUpload: onUpload) >>> effect({ log.debug("Done syncing.") })
+        return uploadRecords(records,
+                             lastTimestamp: lastTimestamp,
+                             storageClient: storageClient,
+                             onUpload: onUpload) >>> effect({ log.debug("Done syncing.") })
     }
 
     // Find any records for which a local overlay exists. If we want to be really precise,
@@ -133,16 +131,16 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
     // We will already have reconciled any conflicts on download, so this upload phase should
     // be as simple as uploading any changed or deleted items.
     private func uploadOutgoingFromStorage(storage: SyncableLogins, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> Success {
-        let deleted: () -> Deferred<Maybe<([GUID], [Record<LoginPayload>])>> = {
+        let deleted: () -> Deferred<Maybe<(Set<GUID>, [Record<LoginPayload>])>> = {
             return storage.getDeletedLoginsToUpload() >>== { guids in
                 let records = guids.map(makeDeletedLoginRecord)
-                return deferMaybe((guids, records))
+                return deferMaybe((Set(guids), records))
             }
         }
 
-        let modified: () -> Deferred<Maybe<([GUID], [Record<LoginPayload>])>> = {
+        let modified: () -> Deferred<Maybe<(Set<GUID>, [Record<LoginPayload>])>> = {
             return storage.getModifiedLoginsToUpload() >>== { logins in
-                let guids = logins.map { $0.guid }
+                let guids = Set(logins.map { $0.guid })
                 let records = logins.map(makeLoginRecord)
                 return deferMaybe((guids, records))
             }

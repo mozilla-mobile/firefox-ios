@@ -237,13 +237,11 @@ public typealias BatchToken = Int64
 public typealias ByteCount = Int
 
 public struct POSTResult {
-    public let modified: Timestamp
     public let success: [GUID]
     public let failed: [GUID: String]
     public let batchToken: BatchToken?
 
-    public init(modified: Timestamp, success: [GUID], failed: [GUID: String], batchToken: BatchToken? = nil) {
-        self.modified = modified
+    public init(success: [GUID], failed: [GUID: String], batchToken: BatchToken? = nil) {
         self.success = success
         self.failed = failed
         self.batchToken = batchToken
@@ -256,8 +254,7 @@ public struct POSTResult {
 
         let batchToken = json["batch"].asInt64
 
-        if let mDecimalSeconds = json["modified"].asDouble,
-           let s = json["success"].asArray,
+        if let s = json["success"].asArray,
            let f = json["failed"].asDictionary {
             var failed = false
             let asStringOrFail: JSON -> String = { $0.asString ?? { failed = true; return "" }() }
@@ -271,8 +268,7 @@ public struct POSTResult {
             if failed {
                 return nil
             }
-            let msec = Timestamp(1000 * mDecimalSeconds)
-            return POSTResult(modified: msec, success: successGUIDs, failed: failedGUIDs, batchToken: batchToken)
+            return POSTResult(success: successGUIDs, failed: failedGUIDs, batchToken: batchToken)
         }
         return nil
     }
@@ -646,7 +642,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return self.collectionURI.URLByAppendingPathComponent(guid)
     }
 
-    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: (POSTResult -> DeferredTimestamp)) -> Sync15BatchClient<T> {
+    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp) -> Sync15BatchClient<T> {
         return Sync15BatchClient(config: infoConfig,
                                  ifUnmodifiedSince: ifUnmodifiedSince,
                                  serializeRecord: self.serializeRecord,
