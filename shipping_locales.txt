@@ -7,6 +7,7 @@ cy
 da
 de
 dsb
+en-GB
 en-US
 eo
 es
@@ -27,6 +28,7 @@ lo
 lt
 lv
 nb-NO
+ne-NP
 nl
 nn-NO
 pl
@@ -39,6 +41,7 @@ ses
 sk
 sl
 sv-SE
+te
 th
 tl
 tr
