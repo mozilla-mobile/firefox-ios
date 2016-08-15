@@ -666,7 +666,14 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
             return deferred
         }
 
-        let req = client.requestPOST(self.collectionURI, body: lines, ifUnmodifiedSince: nil)
+        let requestURI: NSURL
+        if let queryParams = queryParams {
+            requestURI = self.collectionURI.withQueryParams(queryParams)
+        } else {
+            requestURI = self.collectionURI
+        }
+
+        let req = client.requestPOST(requestURI, body: lines, ifUnmodifiedSince: ifUnmodifiedSince)
         req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, result) in
             if let json: JSON = result.value as? JSON,
                let result = POSTResult.fromJSON(json) {
