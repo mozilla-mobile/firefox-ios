@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "您确定要删除此文件夹和其中的内容？";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "取消";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "删除";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "此文件夹不是空的。";
+

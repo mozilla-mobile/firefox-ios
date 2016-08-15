@@ -1,0 +1,6 @@
+/* Action button for deleting bookmarks in the bookmarks panel. */
+"Delete" = "Löschen";
+
+/* The folder name for the virtual folder that contains all desktop bookmarks. */
+"Desktop Bookmarks" = "Desktop-Lesezeichen";
+

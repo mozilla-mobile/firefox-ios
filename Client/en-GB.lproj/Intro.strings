@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Browse multiple Web pages at the same time with tabs.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Choose";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Connect Firefox everywhere you use it.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Customise";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Easily switch between open pages with tabs.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox and the cloud";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Introductory slide %1$@ of %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Organise";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Personalise your Firefox just the way you like in Settings.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Personalise your default search engine and more in Settings.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Share";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Sign in to Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Start Browsing";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Sync your Devices.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Tap, hold and move the Firefox icon into your dock for easy access.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "The Settings button is at the beginning of the Tabs Tray.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Use the share sheet to send links from other apps to Firefox.";
+

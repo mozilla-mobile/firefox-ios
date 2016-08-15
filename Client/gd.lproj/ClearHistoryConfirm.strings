@@ -1,0 +1,18 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Sguir dheth";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Falamhaich";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "Thèid an eachdraidh a sguabadh à gach uidheam co‑cheangailte. Cha ghabh seo a neo‑dhèanamh.";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "Ceart ma-thà";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "A bheil thu airson an eachdraidh a sguabadh às a’ chunntas Firefox agad?";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "Falamhaichidh an gnìomh seo an dàta prìobhaideach agad uile, a’ gabhail a-steach an eachdraidh o na h-uidheaman sioncronaichte agad.";
+

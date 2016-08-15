@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Több weblap egyidejű böngészése lapokkal.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Válasszon";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Kapcsolódjon a Firefoxhoz, mindenhol ahol használja.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Testreszabás";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Váltson könnyen a nyitott oldalak között a lapokkal.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox és a felhő";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Bevezető dia %1$@ / %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Rendszerezés";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "A beállításokban szabja személyre a Firefoxát, úgy ahogy szeretné.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "A beállításokban személyre szabhatja az alapértelmezett keresési szolgáltatást, és még több mindent.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Megosztás";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Jelentkezzen be a Firefoxba";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Böngészés megkezdése";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Szinkronizálja eszközeit.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Érintse meg, tartsa és mozgassa a Firefox ikont a dokkolóba a könnyű hozzáférésért.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "A Beállítások gomb a lapok tálca elején található.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "A Lapok megjelenítése gomb a Cím és a Keresés szövegmezők mellett található, és a jelenleg nyitott lapok számát jeleníti meg.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Használja a megosztási lapot, hogy hivatkozásokat küldjön más alkalmazásokból a Firefoxnak.";
+

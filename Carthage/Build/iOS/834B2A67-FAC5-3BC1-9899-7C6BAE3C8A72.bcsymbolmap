@@ -1,0 +1,2608 @@
+BCSymbolMap Version: 1.0
+-[POPAnimation init]
+-[POPAnimation _init]
+-[POPAnimation _initState]
+-[POPAnimation dealloc]
+-[POPAnimation delegate]
+-[POPAnimation setDelegate:]
+_ZN18_POPAnimationState11setDelegateEP11objc_object
+-[POPAnimation isPaused]
+-[POPAnimation setPaused:]
+_ZN18_POPAnimationState9setPausedEb
+-[POPAnimation repeatCount]
+-[POPAnimation setRepeatCount:]
+-[POPAnimation autoreverses]
+-[POPAnimation setAutoreverses:]
+-[POPAnimation type]
+-[POPAnimation animationDidStartBlock]
+-[POPAnimation setAnimationDidStartBlock:]
+-[POPAnimation animationDidReachToValueBlock]
+-[POPAnimation setAnimationDidReachToValueBlock:]
+-[POPAnimation completionBlock]
+-[POPAnimation setCompletionBlock:]
+-[POPAnimation animationDidApplyBlock]
+-[POPAnimation setAnimationDidApplyBlock:]
+-[POPAnimation name]
+-[POPAnimation setName:]
+-[POPAnimation beginTime]
+-[POPAnimation setBeginTime:]
+-[POPAnimation removedOnCompletion]
+-[POPAnimation setRemovedOnCompletion:]
+-[POPAnimation repeatForever]
+-[POPAnimation setRepeatForever:]
+-[POPAnimation valueForUndefinedKey:]
+-[POPAnimation setValue:forUndefinedKey:]
+-[POPAnimation tracer]
+-[POPAnimation description]
+-[POPAnimation debugDescription]
+-[POPAnimation _advance:currentTime:elapsedTime:]
+-[POPAnimation _appendDescription:debug:]
+-[POPAnimation solver]
+-[POPAnimation setSolver:]
+-[POPAnimation currentValue]
+-[POPAnimation progressMarkers]
+-[POPAnimation setProgressMarkers:]
+-[POPAnimation .cxx_destruct]
+-[NSObject(POP) pop_addAnimation:forKey:]
+-[NSObject(POP) pop_removeAllAnimations]
+-[NSObject(POP) pop_removeAnimationForKey:]
+-[NSObject(POP) pop_animationKeys]
+-[NSObject(POP) pop_animationForKey:]
+-[NSProxy(POP) pop_addAnimation:forKey:]
+-[NSProxy(POP) pop_removeAllAnimations]
+-[NSProxy(POP) pop_removeAnimationForKey:]
+-[NSProxy(POP) pop_animationKeys]
+-[NSProxy(POP) pop_animationForKey:]
+-[POPAnimation(NSCopying) copyWithZone:]
+_ZN18_POPAnimationStateD1Ev
+_ZN18_POPAnimationStateD0Ev
+_ZN18_POPAnimationState14handleDidStartEv
+_ZN18_POPAnimationState6isDoneEv
+_ZN18_POPAnimationState7willRunEbP11objc_object
+_ZN18_POPAnimationState7advanceEddP11objc_object
+_ZN18_POPAnimationState15computeProgressEv
+_ZN18_POPAnimationState16delegateProgressEv
+_ZN18_POPAnimationState13delegateApplyEv
+_ZN18_POPAnimationState5resetEb
+_ZN18_POPAnimationStateD2Ev
+__clang_call_terminate
+OBJC_CLASSLIST_REFERENCES_$_
+OBJC_METH_VAR_NAME_
+OBJC_SELECTOR_REFERENCES_
+.str
+_unnamed_cfstring_
+OBJC_METH_VAR_NAME_.1
+OBJC_SELECTOR_REFERENCES_.2
+OBJC_CLASSLIST_SUP_REFS_$_
+OBJC_METH_VAR_NAME_.3
+OBJC_SELECTOR_REFERENCES_.4
+OBJC_METH_VAR_NAME_.5
+OBJC_SELECTOR_REFERENCES_.6
+OBJC_METH_VAR_NAME_.7
+OBJC_SELECTOR_REFERENCES_.8
+OBJC_METH_VAR_NAME_.9
+OBJC_SELECTOR_REFERENCES_.10
+OBJC_METH_VAR_NAME_.11
+OBJC_SELECTOR_REFERENCES_.12
+OBJC_METH_VAR_NAME_.13
+OBJC_SELECTOR_REFERENCES_.14
+OBJC_METH_VAR_NAME_.15
+OBJC_SELECTOR_REFERENCES_.16
+OBJC_CLASSLIST_REFERENCES_$_.17
+OBJC_METH_VAR_NAME_.18
+OBJC_SELECTOR_REFERENCES_.19
+OBJC_METH_VAR_NAME_.20
+OBJC_SELECTOR_REFERENCES_.21
+OBJC_CLASSLIST_REFERENCES_$_.22
+OBJC_METH_VAR_NAME_.23
+OBJC_SELECTOR_REFERENCES_.24
+OBJC_CLASSLIST_REFERENCES_$_.25
+.str.26
+_unnamed_cfstring_.27
+OBJC_METH_VAR_NAME_.28
+OBJC_SELECTOR_REFERENCES_.29
+OBJC_METH_VAR_NAME_.30
+OBJC_SELECTOR_REFERENCES_.31
+.str.32
+_unnamed_cfstring_.33
+OBJC_METH_VAR_NAME_.34
+OBJC_SELECTOR_REFERENCES_.35
+.str.36
+_unnamed_cfstring_.37
+OBJC_METH_VAR_NAME_.38
+OBJC_SELECTOR_REFERENCES_.39
+OBJC_METH_VAR_NAME_.40
+OBJC_SELECTOR_REFERENCES_.41
+.str.42
+_unnamed_cfstring_.43
+.str.44
+_unnamed_cfstring_.45
+.str.46
+_unnamed_cfstring_.47
+.str.48
+_unnamed_cfstring_.49
+OBJC_METH_VAR_NAME_.50
+OBJC_SELECTOR_REFERENCES_.51
+.str.52
+_unnamed_cfstring_.53
+OBJC_IVAR_$_POPAnimation._solver
+OBJC_IVAR_$_POPAnimation._currentValue
+OBJC_IVAR_$_POPAnimation._progressMarkers
+OBJC_CLASS_NAME_
+l_OBJC_METACLASS_RO_$_POPAnimation
+OBJC_CLASS_NAME_.54
+OBJC_METH_VAR_TYPE_
+OBJC_METH_VAR_NAME_.55
+OBJC_METH_VAR_TYPE_.56
+OBJC_METH_VAR_NAME_.57
+OBJC_METH_VAR_NAME_.58
+OBJC_METH_VAR_TYPE_.59
+OBJC_METH_VAR_NAME_.60
+OBJC_METH_VAR_TYPE_.61
+OBJC_METH_VAR_NAME_.62
+OBJC_METH_VAR_TYPE_.63
+OBJC_METH_VAR_NAME_.64
+OBJC_METH_VAR_TYPE_.65
+OBJC_METH_VAR_TYPE_.66
+OBJC_METH_VAR_NAME_.67
+OBJC_METH_VAR_NAME_.68
+OBJC_METH_VAR_NAME_.69
+OBJC_METH_VAR_NAME_.70
+OBJC_METH_VAR_TYPE_.71
+OBJC_METH_VAR_NAME_.72
+OBJC_METH_VAR_TYPE_.73
+OBJC_METH_VAR_NAME_.74
+OBJC_METH_VAR_NAME_.75
+OBJC_METH_VAR_NAME_.76
+OBJC_METH_VAR_NAME_.77
+OBJC_METH_VAR_NAME_.78
+OBJC_METH_VAR_NAME_.79
+OBJC_METH_VAR_NAME_.80
+OBJC_METH_VAR_NAME_.81
+OBJC_METH_VAR_NAME_.82
+OBJC_METH_VAR_TYPE_.83
+OBJC_METH_VAR_NAME_.84
+OBJC_METH_VAR_TYPE_.85
+OBJC_METH_VAR_NAME_.86
+OBJC_METH_VAR_NAME_.87
+OBJC_METH_VAR_NAME_.88
+OBJC_METH_VAR_NAME_.89
+OBJC_METH_VAR_TYPE_.90
+OBJC_METH_VAR_NAME_.91
+OBJC_METH_VAR_TYPE_.92
+OBJC_METH_VAR_NAME_.93
+OBJC_METH_VAR_NAME_.94
+OBJC_METH_VAR_NAME_.95
+OBJC_METH_VAR_NAME_.96
+OBJC_METH_VAR_TYPE_.97
+OBJC_METH_VAR_TYPE_.98
+OBJC_METH_VAR_NAME_.99
+OBJC_METH_VAR_NAME_.100
+OBJC_METH_VAR_TYPE_.101
+OBJC_METH_VAR_NAME_.102
+OBJC_METH_VAR_TYPE_.103
+OBJC_METH_VAR_NAME_.104
+OBJC_METH_VAR_NAME_.105
+OBJC_METH_VAR_NAME_.106
+l_OBJC_$_INSTANCE_METHODS_POPAnimation
+OBJC_METH_VAR_NAME_.107
+OBJC_METH_VAR_TYPE_.108
+OBJC_METH_VAR_NAME_.109
+OBJC_METH_VAR_TYPE_.110
+OBJC_METH_VAR_NAME_.111
+OBJC_METH_VAR_TYPE_.112
+OBJC_METH_VAR_NAME_.113
+OBJC_METH_VAR_TYPE_.114
+l_OBJC_$_INSTANCE_VARIABLES_POPAnimation
+OBJC_PROP_NAME_ATTR_
+OBJC_PROP_NAME_ATTR_.115
+OBJC_PROP_NAME_ATTR_.116
+OBJC_PROP_NAME_ATTR_.117
+OBJC_PROP_NAME_ATTR_.118
+OBJC_PROP_NAME_ATTR_.119
+OBJC_PROP_NAME_ATTR_.120
+OBJC_PROP_NAME_ATTR_.121
+OBJC_PROP_NAME_ATTR_.122
+OBJC_PROP_NAME_ATTR_.123
+OBJC_PROP_NAME_ATTR_.124
+OBJC_PROP_NAME_ATTR_.125
+OBJC_PROP_NAME_ATTR_.126
+OBJC_PROP_NAME_ATTR_.127
+OBJC_PROP_NAME_ATTR_.128
+OBJC_PROP_NAME_ATTR_.129
+OBJC_PROP_NAME_ATTR_.130
+OBJC_PROP_NAME_ATTR_.131
+OBJC_PROP_NAME_ATTR_.132
+OBJC_PROP_NAME_ATTR_.133
+OBJC_PROP_NAME_ATTR_.134
+OBJC_PROP_NAME_ATTR_.135
+OBJC_PROP_NAME_ATTR_.136
+OBJC_PROP_NAME_ATTR_.137
+OBJC_PROP_NAME_ATTR_.138
+OBJC_PROP_NAME_ATTR_.139
+OBJC_PROP_NAME_ATTR_.140
+OBJC_PROP_NAME_ATTR_.141
+OBJC_PROP_NAME_ATTR_.142
+l_OBJC_$_PROP_LIST_POPAnimation
+l_OBJC_CLASS_RO_$_POPAnimation
+OBJC_CLASSLIST_REFERENCES_$_.143
+OBJC_METH_VAR_NAME_.144
+OBJC_SELECTOR_REFERENCES_.145
+OBJC_METH_VAR_NAME_.146
+OBJC_SELECTOR_REFERENCES_.147
+OBJC_METH_VAR_NAME_.148
+OBJC_SELECTOR_REFERENCES_.149
+OBJC_METH_VAR_NAME_.150
+OBJC_SELECTOR_REFERENCES_.151
+OBJC_METH_VAR_NAME_.152
+OBJC_SELECTOR_REFERENCES_.153
+OBJC_METH_VAR_NAME_.154
+OBJC_SELECTOR_REFERENCES_.155
+OBJC_CLASS_NAME_.156
+OBJC_METH_VAR_NAME_.157
+OBJC_METH_VAR_NAME_.158
+OBJC_METH_VAR_NAME_.159
+OBJC_METH_VAR_NAME_.160
+OBJC_METH_VAR_NAME_.161
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_NSObject_$_POP
+l_OBJC_$_CATEGORY_NSObject_$_POP
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_NSProxy_$_POP
+l_OBJC_$_CATEGORY_NSProxy_$_POP
+OBJC_METH_VAR_NAME_.162
+OBJC_SELECTOR_REFERENCES_.163
+OBJC_SELECTOR_REFERENCES_.164
+OBJC_SELECTOR_REFERENCES_.165
+OBJC_SELECTOR_REFERENCES_.166
+OBJC_SELECTOR_REFERENCES_.167
+OBJC_SELECTOR_REFERENCES_.168
+OBJC_SELECTOR_REFERENCES_.169
+OBJC_SELECTOR_REFERENCES_.170
+OBJC_SELECTOR_REFERENCES_.171
+OBJC_SELECTOR_REFERENCES_.172
+OBJC_SELECTOR_REFERENCES_.173
+OBJC_SELECTOR_REFERENCES_.174
+OBJC_SELECTOR_REFERENCES_.175
+OBJC_SELECTOR_REFERENCES_.176
+OBJC_SELECTOR_REFERENCES_.177
+OBJC_SELECTOR_REFERENCES_.178
+OBJC_SELECTOR_REFERENCES_.179
+OBJC_SELECTOR_REFERENCES_.180
+OBJC_SELECTOR_REFERENCES_.181
+OBJC_SELECTOR_REFERENCES_.182
+OBJC_SELECTOR_REFERENCES_.183
+OBJC_CLASS_NAME_.184
+OBJC_METH_VAR_NAME_.185
+OBJC_METH_VAR_TYPE_.186
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_POPAnimation_$_NSCopying
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_NSCopying
+l_OBJC_$_PROTOCOL_METHOD_TYPES_NSCopying
+l_OBJC_PROTOCOL_$_NSCopying
+l_OBJC_LABEL_PROTOCOL_$_NSCopying
+l_OBJC_CATEGORY_PROTOCOLS_$_POPAnimation_$_NSCopying
+l_OBJC_$_CATEGORY_POPAnimation_$_NSCopying
+OBJC_METH_VAR_NAME_.187
+OBJC_SELECTOR_REFERENCES_.188
+OBJC_METH_VAR_NAME_.189
+OBJC_SELECTOR_REFERENCES_.190
+OBJC_CLASSLIST_REFERENCES_$_.191
+OBJC_METH_VAR_NAME_.192
+OBJC_SELECTOR_REFERENCES_.193
+OBJC_METH_VAR_NAME_.194
+OBJC_SELECTOR_REFERENCES_.195
+OBJC_METH_VAR_NAME_.196
+OBJC_SELECTOR_REFERENCES_.197
+OBJC_METH_VAR_NAME_.198
+OBJC_SELECTOR_REFERENCES_.199
+OBJC_METH_VAR_NAME_.200
+OBJC_SELECTOR_REFERENCES_.201
+OBJC_METH_VAR_NAME_.202
+OBJC_SELECTOR_REFERENCES_.203
+OBJC_METH_VAR_NAME_.204
+OBJC_SELECTOR_REFERENCES_.205
+.str.206
+_unnamed_cfstring_.207
+.str.208
+_unnamed_cfstring_.209
+OBJC_LABEL_CLASS_$
+OBJC_LABEL_CATEGORY_$
+Apple LLVM version 7.3.0 (clang-703.0.31)
+POPStringFromBOOL
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimationRuntime.h
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop
+setPaused
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimationInternal.h
+setDelegate
+reset
+delegateApply
+delegateProgress
+computeProgress
+advance
+willRun
+isCustom
+isDone
+~ActionEnabler
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAction.h
+ActionEnabler
+handleDidStart
+~_POPAnimationState
+_POPAnimationState
+-[POPAnimation(NSCopying) copyWithZone:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimation.mm
+-[NSProxy(POP) pop_animationForKey:]
+-[NSProxy(POP) pop_animationKeys]
+-[NSProxy(POP) pop_removeAnimationForKey:]
+-[NSProxy(POP) pop_removeAllAnimations]
+-[NSProxy(POP) pop_addAnimation:forKey:]
+-[NSObject(POP) pop_animationForKey:]
+-[NSObject(POP) pop_animationKeys]
+-[NSObject(POP) pop_removeAnimationForKey:]
+-[NSObject(POP) pop_removeAllAnimations]
+-[NSObject(POP) pop_addAnimation:forKey:]
+-[POPAnimation .cxx_destruct]
+-[POPAnimation setProgressMarkers:]
+-[POPAnimation progressMarkers]
+-[POPAnimation currentValue]
+-[POPAnimation setSolver:]
+-[POPAnimation solver]
+-[POPAnimation _appendDescription:debug:]
+-[POPAnimation _advance:currentTime:elapsedTime:]
+POPAnimationGetState
+-[POPAnimation debugDescription]
+-[POPAnimation description]
+-[POPAnimation tracer]
+-[POPAnimation setValue:forUndefinedKey:]
+-[POPAnimation valueForUndefinedKey:]
+-[POPAnimation setRepeatForever:]
+-[POPAnimation repeatForever]
+-[POPAnimation setRemovedOnCompletion:]
+-[POPAnimation removedOnCompletion]
+-[POPAnimation setBeginTime:]
+-[POPAnimation beginTime]
+-[POPAnimation setName:]
+-[POPAnimation name]
+-[POPAnimation setAnimationDidApplyBlock:]
+-[POPAnimation animationDidApplyBlock]
+-[POPAnimation setCompletionBlock:]
+-[POPAnimation completionBlock]
+-[POPAnimation setAnimationDidReachToValueBlock:]
+-[POPAnimation animationDidReachToValueBlock]
+-[POPAnimation setAnimationDidStartBlock:]
+-[POPAnimation animationDidStartBlock]
+-[POPAnimation type]
+-[POPAnimation setAutoreverses:]
+-[POPAnimation autoreverses]
+-[POPAnimation setRepeatCount:]
+-[POPAnimation repeatCount]
+-[POPAnimation setPaused:]
+-[POPAnimation isPaused]
+-[POPAnimation setDelegate:]
+-[POPAnimation delegate]
+-[POPAnimation dealloc]
+-[POPAnimation _initState]
+-[POPAnimation _init]
+-[POPAnimation init]
+-[POPPropertyAnimation _initState]
+-[POPPropertyAnimation isAdditive]
+-[POPPropertyAnimation setAdditive:]
+-[POPPropertyAnimation roundingFactor]
+-[POPPropertyAnimation setRoundingFactor:]
+-[POPPropertyAnimation clampMode]
+-[POPPropertyAnimation setClampMode:]
+-[POPPropertyAnimation property]
+-[POPPropertyAnimation setProperty:]
+-[POPPropertyAnimation progressMarkers]
+-[POPPropertyAnimation setProgressMarkers:]
+_ZN26_POPPropertyAnimationState22updatedProgressMarkersEv
+-[POPPropertyAnimation fromValue]
+-[POPPropertyAnimation setFromValue:]
+-[POPPropertyAnimation toValue]
+-[POPPropertyAnimation setToValue:]
+-[POPPropertyAnimation currentValue]
+_ZN26_POPPropertyAnimationState12currentValueEv
+-[POPPropertyAnimation _appendDescription:debug:]
+-[POPPropertyAnimation(NSCopying) copyWithZone:]
+_ZN26_POPPropertyAnimationStateD1Ev
+_ZN26_POPPropertyAnimationStateD0Ev
+_ZN26_POPPropertyAnimationState6isDoneEv
+_ZN26_POPPropertyAnimationState7willRunEbP11objc_object
+_ZN26_POPPropertyAnimationState15computeProgressEv
+_ZN26_POPPropertyAnimationState16delegateProgressEv
+_ZN26_POPPropertyAnimationState5resetEb
+_ZN26_POPPropertyAnimationState24updatedDynamicsThresholdEv
+_ZN26_POPPropertyAnimationStateD2Ev
+_ZN26_POPPropertyAnimationState15readObjectValueEPNSt3__110shared_ptrIN3POP6VectorEEEP11objc_object
+_ZNSt3__120__shared_ptr_pointerIPN3POP6VectorENS_14default_deleteIS2_EENS_9allocatorIS2_EEED1Ev
+_ZNSt3__120__shared_ptr_pointerIPN3POP6VectorENS_14default_deleteIS2_EENS_9allocatorIS2_EEED0Ev
+_ZNK22ComputeProgressFunctorIN3POP7Vector4IfEEEclERKS2_S5_S5_
+_ZN26_POPPropertyAnimationState21handleDidReachToValueEv
+___ZN26_POPPropertyAnimationState22updatedProgressMarkersEv_block_invoke
+.str.7
+_unnamed_cfstring_.8
+.str.9
+_unnamed_cfstring_.10
+.str.13
+_unnamed_cfstring_.14
+.str.15
+_unnamed_cfstring_.16
+.str.17
+_unnamed_cfstring_.18
+OBJC_METH_VAR_NAME_.19
+OBJC_SELECTOR_REFERENCES_.20
+.str.21
+_unnamed_cfstring_.22
+l_OBJC_METACLASS_RO_$_POPPropertyAnimation
+OBJC_METH_VAR_NAME_.24
+OBJC_METH_VAR_TYPE_.25
+OBJC_METH_VAR_NAME_.26
+OBJC_METH_VAR_TYPE_.27
+OBJC_METH_VAR_TYPE_.29
+OBJC_METH_VAR_TYPE_.31
+OBJC_METH_VAR_NAME_.32
+OBJC_METH_VAR_TYPE_.33
+OBJC_METH_VAR_TYPE_.35
+OBJC_METH_VAR_NAME_.36
+OBJC_METH_VAR_TYPE_.37
+OBJC_METH_VAR_TYPE_.39
+OBJC_METH_VAR_NAME_.41
+OBJC_METH_VAR_NAME_.42
+OBJC_METH_VAR_NAME_.43
+OBJC_METH_VAR_NAME_.44
+OBJC_METH_VAR_NAME_.45
+OBJC_METH_VAR_NAME_.46
+OBJC_METH_VAR_NAME_.47
+OBJC_METH_VAR_TYPE_.48
+l_OBJC_$_INSTANCE_METHODS_POPPropertyAnimation
+OBJC_PROP_NAME_ATTR_.49
+OBJC_PROP_NAME_ATTR_.50
+OBJC_PROP_NAME_ATTR_.51
+OBJC_PROP_NAME_ATTR_.52
+OBJC_PROP_NAME_ATTR_.53
+OBJC_PROP_NAME_ATTR_.54
+OBJC_PROP_NAME_ATTR_.55
+OBJC_PROP_NAME_ATTR_.56
+OBJC_PROP_NAME_ATTR_.57
+OBJC_PROP_NAME_ATTR_.58
+l_OBJC_$_PROP_LIST_POPPropertyAnimation
+l_OBJC_CLASS_RO_$_POPPropertyAnimation
+OBJC_METH_VAR_NAME_.59
+OBJC_SELECTOR_REFERENCES_.60
+OBJC_SELECTOR_REFERENCES_.61
+OBJC_SELECTOR_REFERENCES_.62
+OBJC_SELECTOR_REFERENCES_.63
+OBJC_SELECTOR_REFERENCES_.64
+OBJC_SELECTOR_REFERENCES_.65
+OBJC_SELECTOR_REFERENCES_.66
+OBJC_SELECTOR_REFERENCES_.67
+OBJC_SELECTOR_REFERENCES_.68
+OBJC_SELECTOR_REFERENCES_.69
+OBJC_SELECTOR_REFERENCES_.70
+OBJC_SELECTOR_REFERENCES_.71
+OBJC_SELECTOR_REFERENCES_.72
+OBJC_CLASS_NAME_.73
+OBJC_METH_VAR_TYPE_.74
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_POPPropertyAnimation_$_NSCopying
+l_OBJC_$_CATEGORY_POPPropertyAnimation_$_NSCopying
+OBJC_SELECTOR_REFERENCES_.76
+OBJC_SELECTOR_REFERENCES_.78
+OBJC_SELECTOR_REFERENCES_.80
+OBJC_SELECTOR_REFERENCES_.82
+OBJC_METH_VAR_NAME_.83
+OBJC_SELECTOR_REFERENCES_.84
+OBJC_METH_VAR_NAME_.85
+OBJC_SELECTOR_REFERENCES_.86
+_ZZN26_POPPropertyAnimationState15computeProgressEvE4func
+OBJC_SELECTOR_REFERENCES_.88
+OBJC_SELECTOR_REFERENCES_.90
+OBJC_SELECTOR_REFERENCES_.92
+OBJC_SELECTOR_REFERENCES_.94
+OBJC_SELECTOR_REFERENCES_.96
+OBJC_METH_VAR_NAME_.97
+OBJC_SELECTOR_REFERENCES_.98
+OBJC_SELECTOR_REFERENCES_.100
+.str.101
+__block_descriptor_tmp
+OBJC_SELECTOR_REFERENCES_.103
+.str.104
+_unnamed_cfstring_.105
+.str.106
+_unnamed_cfstring_.107
+.str.108
+_unnamed_cfstring_.109
+shared_ptr
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory
+move<std::__1::shared_ptr<POP::Vector> &>
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/type_traits
+operator=
+shared_ptr<POP::Vector>
+~shared_ptr
+move<std::__1::__shared_weak_count *&>
+swap<std::__1::__shared_weak_count *>
+swap<POP::Vector *>
+swap
+operator bool
+operator->
+describe
+shouldRound
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPPropertyAnimationInternal.h
+get
+currentValue
+operator*
+operator==<const POP::Vector, const POP::Vector>
+vec_equal
+updatedProgressMarkers
+updatedDynamicsThreshold
+resetProgressMarkerState
+handleDidReachToValue
+operator[]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPVector.h
+__inline_signbitf
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/usr/include/math.h
+data
+sqrtr
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPMath.h
+Vector4
+operator-
+operator()
+operator==<const POP::Vector>
+vector4
+canProgress
+squaredNorm
+operator-=
+operator!=<POP::Vector>
+~unique_ptr
+__enable_weak_this
+release
+addressof<std::__1::__shared_ptr_pointer<POP::Vector *, std::__1::default_delete<POP::Vector>, std::__1::allocator<POP::Vector> > >
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__functional_base
+pointer_to
+__deallocate
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/new
+deallocate
+allocator<POP::Vector>
+second
+__on_zero_shared_weak
+first
+addressof<const std::__1::default_delete<POP::Vector> >
+operator==
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/typeinfo
+__get_deleter
+__on_zero_shared
+~__shared_ptr_pointer
+__libcpp_compressed_pair_imp
+forward<std::__1::allocator<POP::Vector> >
+forward<std::__1::__compressed_pair<POP::Vector *, std::__1::default_delete<POP::Vector> > >
+__compressed_pair
+move<std::__1::allocator<POP::Vector> &>
+forward<std::__1::default_delete<POP::Vector> >
+move<std::__1::default_delete<POP::Vector> &>
+__shared_count
+__shared_weak_count
+__shared_ptr_pointer
+allocator
+forward<POP::Vector *>
+move<POP::Vector *&>
+unique_ptr
+Zero
+read_values
+readObjectValue
+operator==<POP::Vector>
+hasValue
+~_POPPropertyAnimationState
+_POPPropertyAnimationState
+-[POPPropertyAnimation(NSCopying) copyWithZone:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPPropertyAnimation.mm
+-[POPPropertyAnimation _appendDescription:debug:]
+-[POPPropertyAnimation currentValue]
+-[POPPropertyAnimation setToValue:]
+-[POPPropertyAnimation toValue]
+-[POPPropertyAnimation setFromValue:]
+-[POPPropertyAnimation fromValue]
+-[POPPropertyAnimation setProgressMarkers:]
+-[POPPropertyAnimation progressMarkers]
+-[POPPropertyAnimation setProperty:]
+-[POPPropertyAnimation property]
+-[POPPropertyAnimation setClampMode:]
+-[POPPropertyAnimation clampMode]
+-[POPPropertyAnimation setRoundingFactor:]
+-[POPPropertyAnimation roundingFactor]
+-[POPPropertyAnimation setAdditive:]
+-[POPPropertyAnimation isAdditive]
+-[POPPropertyAnimation _initState]
++[POPBasicAnimation animation]
++[POPBasicAnimation animationWithPropertyNamed:]
+-[POPBasicAnimation _initState]
++[POPBasicAnimation linearAnimation]
++[POPBasicAnimation easeInAnimation]
++[POPBasicAnimation easeOutAnimation]
++[POPBasicAnimation easeInEaseOutAnimation]
++[POPBasicAnimation defaultAnimation]
+-[POPBasicAnimation init]
+-[POPBasicAnimation duration]
+-[POPBasicAnimation setDuration:]
+-[POPBasicAnimation timingFunction]
+-[POPBasicAnimation setTimingFunction:]
+_ZN23_POPBasicAnimationState21updatedTimingFunctionEv
+-[POPBasicAnimation _appendDescription:debug:]
+-[POPBasicAnimation(NSCopying) copyWithZone:]
+_ZN23_POPBasicAnimationStateD1Ev
+_ZN23_POPBasicAnimationStateD0Ev
+_ZN23_POPBasicAnimationState6isDoneEv
+_ZN23_POPBasicAnimationState7advanceEddP11objc_object
+_ZN26_POPPropertyAnimationState17clampCurrentValueEj
+OBJC_CLASSLIST_REFERENCES_$_.9
+OBJC_METH_VAR_NAME_.10
+OBJC_SELECTOR_REFERENCES_.11
+OBJC_METH_VAR_NAME_.12
+OBJC_SELECTOR_REFERENCES_.13
+OBJC_METH_VAR_NAME_.14
+OBJC_SELECTOR_REFERENCES_.15
+OBJC_METH_VAR_NAME_.16
+OBJC_SELECTOR_REFERENCES_.17
+OBJC_METH_VAR_TYPE_.21
+OBJC_METH_VAR_NAME_.22
+OBJC_METH_VAR_NAME_.25
+l_OBJC_$_CLASS_METHODS_POPBasicAnimation
+l_OBJC_METACLASS_RO_$_POPBasicAnimation
+OBJC_METH_VAR_NAME_.27
+OBJC_METH_VAR_TYPE_.28
+OBJC_METH_VAR_NAME_.29
+OBJC_METH_VAR_TYPE_.30
+OBJC_METH_VAR_NAME_.31
+OBJC_METH_VAR_TYPE_.32
+OBJC_METH_VAR_NAME_.33
+OBJC_METH_VAR_TYPE_.34
+l_OBJC_$_INSTANCE_METHODS_POPBasicAnimation
+OBJC_PROP_NAME_ATTR_.36
+OBJC_PROP_NAME_ATTR_.37
+OBJC_PROP_NAME_ATTR_.38
+l_OBJC_$_PROP_LIST_POPBasicAnimation
+l_OBJC_CLASS_RO_$_POPBasicAnimation
+OBJC_METH_VAR_NAME_.39
+OBJC_SELECTOR_REFERENCES_.40
+OBJC_SELECTOR_REFERENCES_.42
+OBJC_SELECTOR_REFERENCES_.43
+OBJC_CLASS_NAME_.44
+OBJC_METH_VAR_TYPE_.45
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_POPBasicAnimation_$_NSCopying
+l_OBJC_$_CATEGORY_POPBasicAnimation_$_NSCopying
+OBJC_SELECTOR_REFERENCES_.47
+OBJC_METH_VAR_NAME_.48
+OBJC_SELECTOR_REFERENCES_.49
+OBJC_CLASSLIST_REFERENCES_$_.50
+OBJC_METH_VAR_NAME_.51
+OBJC_SELECTOR_REFERENCES_.52
+OBJC_METH_VAR_NAME_.53
+OBJC_SELECTOR_REFERENCES_.54
+OBJC_SELECTOR_REFERENCES_.56
+OBJC_SELECTOR_REFERENCES_.58
+OBJC_METH_VAR_NAME_.61
+OBJC_METH_VAR_NAME_.63
+OBJC_METH_VAR_NAME_.65
+OBJC_METH_VAR_NAME_.71
+updatedTimingFunction
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPBasicAnimationInternal.h
+clampValue
+clampCurrentValue
+interpolate
+~_POPBasicAnimationState
+_POPBasicAnimationState
+-[POPBasicAnimation(NSCopying) copyWithZone:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPBasicAnimation.mm
+-[POPBasicAnimation _appendDescription:debug:]
+-[POPBasicAnimation setTimingFunction:]
+-[POPBasicAnimation timingFunction]
+-[POPBasicAnimation setDuration:]
+-[POPBasicAnimation duration]
+-[POPBasicAnimation init]
++[POPBasicAnimation defaultAnimation]
++[POPBasicAnimation easeInEaseOutAnimation]
++[POPBasicAnimation easeOutAnimation]
++[POPBasicAnimation easeInAnimation]
++[POPBasicAnimation linearAnimation]
+-[POPBasicAnimation _initState]
++[POPBasicAnimation animationWithPropertyNamed:]
++[POPBasicAnimation animation]
++[POPCustomAnimation animationWithBlock:]
+-[POPCustomAnimation _init]
+-[POPCustomAnimation beginTime]
+-[POPCustomAnimation _advance:currentTime:elapsedTime:]
+-[POPCustomAnimation _appendDescription:debug:]
+-[POPCustomAnimation currentTime]
+-[POPCustomAnimation elapsedTime]
+-[POPCustomAnimation animate]
+-[POPCustomAnimation setAnimate:]
+-[POPCustomAnimation .cxx_destruct]
+-[POPCustomAnimation(NSCopying) copyWithZone:]
+OBJC_IVAR_$_POPCustomAnimation._currentTime
+OBJC_IVAR_$_POPCustomAnimation._elapsedTime
+OBJC_IVAR_$_POPCustomAnimation._animate
+l_OBJC_$_CLASS_METHODS_POPCustomAnimation
+l_OBJC_METACLASS_RO_$_POPCustomAnimation
+OBJC_CLASS_NAME_.8
+OBJC_METH_VAR_TYPE_.9
+OBJC_METH_VAR_TYPE_.11
+OBJC_METH_VAR_TYPE_.13
+OBJC_METH_VAR_TYPE_.15
+OBJC_METH_VAR_TYPE_.17
+OBJC_METH_VAR_TYPE_.22
+l_OBJC_$_INSTANCE_METHODS_POPCustomAnimation
+OBJC_METH_VAR_TYPE_.24
+OBJC_METH_VAR_TYPE_.26
+l_OBJC_$_INSTANCE_VARIABLES_POPCustomAnimation
+OBJC_PROP_NAME_ATTR_.28
+OBJC_PROP_NAME_ATTR_.29
+OBJC_PROP_NAME_ATTR_.30
+OBJC_PROP_NAME_ATTR_.31
+OBJC_PROP_NAME_ATTR_.32
+l_OBJC_$_PROP_LIST_POPCustomAnimation
+l_OBJC_CLASS_RO_$_POPCustomAnimation
+OBJC_SELECTOR_REFERENCES_.34
+OBJC_CLASS_NAME_.36
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_POPCustomAnimation_$_NSCopying
+l_OBJC_$_CATEGORY_POPCustomAnimation_$_NSCopying
+-[POPCustomAnimation(NSCopying) copyWithZone:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPCustomAnimation.mm
+-[POPCustomAnimation .cxx_destruct]
+-[POPCustomAnimation setAnimate:]
+-[POPCustomAnimation animate]
+-[POPCustomAnimation elapsedTime]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPCustomAnimation.h
+-[POPCustomAnimation currentTime]
+-[POPCustomAnimation _appendDescription:debug:]
+-[POPCustomAnimation _advance:currentTime:elapsedTime:]
+-[POPCustomAnimation beginTime]
+-[POPCustomAnimation _init]
++[POPCustomAnimation animationWithBlock:]
++[POPDecayAnimation animation]
++[POPDecayAnimation animationWithPropertyNamed:]
+-[POPDecayAnimation init]
+-[POPDecayAnimation _initState]
+-[POPDecayAnimation deceleration]
+-[POPDecayAnimation setDeceleration:]
+-[POPDecayAnimation toValue]
+-[POPDecayAnimation duration]
+-[POPDecayAnimation setFromValue:]
+-[POPDecayAnimation setToValue:]
+-[POPDecayAnimation reversedVelocity]
+-[POPDecayAnimation originalVelocity]
+-[POPDecayAnimation velocity]
+-[POPDecayAnimation setVelocity:]
+-[POPDecayAnimation _ensureComputedProperties]
+_ZN23_POPDecayAnimationState15computeDurationEv
+_ZN23_POPDecayAnimationState14computeToValueEv
+-[POPDecayAnimation _invalidateComputedProperties]
+-[POPDecayAnimation _appendDescription:debug:]
+-[POPDecayAnimation(NSCopying) copyWithZone:]
+_ZN23_POPDecayAnimationStateD1Ev
+_ZN23_POPDecayAnimationStateD0Ev
+_ZN23_POPDecayAnimationState6isDoneEv
+_ZN23_POPDecayAnimationState7advanceEddP11objc_object
+_ZL14decay_positionPfS_jdf
+OBJC_METH_VAR_NAME_.17
+OBJC_SELECTOR_REFERENCES_.18
+_ZL22supportedVelocityTypes
+OBJC_CLASSLIST_REFERENCES_$_.21
+OBJC_SELECTOR_REFERENCES_.23
+OBJC_SELECTOR_REFERENCES_.25
+OBJC_SELECTOR_REFERENCES_.27
+OBJC_CLASSLIST_REFERENCES_$_.30
+OBJC_SELECTOR_REFERENCES_.32
+OBJC_METH_VAR_NAME_.35
+OBJC_SELECTOR_REFERENCES_.36
+OBJC_METH_VAR_NAME_.37
+OBJC_SELECTOR_REFERENCES_.38
+OBJC_SELECTOR_REFERENCES_.44
+OBJC_SELECTOR_REFERENCES_.46
+.str.47
+_unnamed_cfstring_.48
+OBJC_METH_VAR_NAME_.49
+OBJC_SELECTOR_REFERENCES_.50
+.str.53
+_unnamed_cfstring_.54
+.str.57
+_unnamed_cfstring_.58
+OBJC_METH_VAR_TYPE_.60
+l_OBJC_$_CLASS_METHODS_POPDecayAnimation
+l_OBJC_METACLASS_RO_$_POPDecayAnimation
+OBJC_METH_VAR_TYPE_.62
+OBJC_METH_VAR_TYPE_.64
+OBJC_METH_VAR_TYPE_.68
+OBJC_METH_VAR_TYPE_.69
+OBJC_METH_VAR_NAME_.73
+l_OBJC_$_INSTANCE_METHODS_POPDecayAnimation
+OBJC_PROP_NAME_ATTR_.75
+OBJC_PROP_NAME_ATTR_.76
+OBJC_PROP_NAME_ATTR_.77
+OBJC_PROP_NAME_ATTR_.78
+OBJC_PROP_NAME_ATTR_.79
+OBJC_PROP_NAME_ATTR_.80
+OBJC_PROP_NAME_ATTR_.81
+l_OBJC_$_PROP_LIST_POPDecayAnimation
+l_OBJC_CLASS_RO_$_POPDecayAnimation
+OBJC_SELECTOR_REFERENCES_.83
+OBJC_SELECTOR_REFERENCES_.85
+OBJC_CLASS_NAME_.87
+OBJC_METH_VAR_TYPE_.88
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_POPDecayAnimation_$_NSCopying
+l_OBJC_$_CATEGORY_POPDecayAnimation_$_NSCopying
+OBJC_CLASSLIST_REFERENCES_$_.93
+OBJC_SELECTOR_REFERENCES_.95
+OBJC_SELECTOR_REFERENCES_.97
+OBJC_METH_VAR_NAME_.101
+OBJC_SELECTOR_REFERENCES_.102
+OBJC_METH_VAR_NAME_.103
+OBJC_SELECTOR_REFERENCES_.104
+OBJC_SELECTOR_REFERENCES_.106
+OBJC_SELECTOR_REFERENCES_.108
+OBJC_SELECTOR_REFERENCES_.110
+OBJC_SELECTOR_REFERENCES_.112
+computeToValue
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPDecayAnimationInternal.h
+__inline_isnand
+__libcpp_isnan<double>
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/cmath
+isnan<double>
+operator/
+computeDuration
+UIEdgeInsetsMake
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIGeometry.h
+CGSizeMake
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGGeometry.h
+CGRectMake
+CGPointMake
+__libcpp_signbit<float>
+signbit<float>
+decay_position
+abs
+vec_data
+~_POPDecayAnimationState
+_POPDecayAnimationState
+-[POPDecayAnimation(NSCopying) copyWithZone:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPDecayAnimation.mm
+-[POPDecayAnimation _appendDescription:debug:]
+-[POPDecayAnimation _invalidateComputedProperties]
+-[POPDecayAnimation _ensureComputedProperties]
+-[POPDecayAnimation setVelocity:]
+-[POPDecayAnimation velocity]
+-[POPDecayAnimation originalVelocity]
+-[POPDecayAnimation reversedVelocity]
+-[POPDecayAnimation setToValue:]
+-[POPDecayAnimation setFromValue:]
+-[POPDecayAnimation duration]
+-[POPDecayAnimation toValue]
+-[POPDecayAnimation setDeceleration:]
+-[POPDecayAnimation deceleration]
+-[POPDecayAnimation _initState]
+-[POPDecayAnimation init]
++[POPDecayAnimation animationWithPropertyNamed:]
++[POPDecayAnimation animation]
++[POPSpringAnimation animation]
++[POPSpringAnimation animationWithPropertyNamed:]
+-[POPSpringAnimation _initState]
+-[POPSpringAnimation init]
+_ZN24_POPSpringAnimationState25updatedBouncinessAndSpeedEv
+-[POPSpringAnimation dealloc]
+-[POPSpringAnimation velocity]
+-[POPSpringAnimation setVelocity:]
+-[POPSpringAnimation dynamicsTension]
+-[POPSpringAnimation setDynamicsTension:]
+-[POPSpringAnimation dynamicsFriction]
+-[POPSpringAnimation setDynamicsFriction:]
+-[POPSpringAnimation dynamicsMass]
+-[POPSpringAnimation setDynamicsMass:]
+-[POPSpringAnimation springSpeed]
+-[POPSpringAnimation setSpringSpeed:]
+-[POPSpringAnimation springBounciness]
+-[POPSpringAnimation setSpringBounciness:]
+-[POPSpringAnimation solver]
+-[POPSpringAnimation setSolver:]
+-[POPSpringAnimation _updatedDynamicsTension]
+-[POPSpringAnimation _updatedDynamicsFriction]
+-[POPSpringAnimation _updatedDynamicsMass]
+-[POPSpringAnimation _appendDescription:debug:]
+-[POPSpringAnimation(NSCopying) copyWithZone:]
+_ZN24_POPSpringAnimationStateD1Ev
+_ZN24_POPSpringAnimationStateD0Ev
+_ZN24_POPSpringAnimationState6isDoneEv
+_ZN24_POPSpringAnimationState7advanceEddP11objc_object
+_ZN24_POPSpringAnimationState5resetEb
+_ZN24_POPSpringAnimationState24updatedDynamicsThresholdEv
+_ZN24_POPSpringAnimationState12hasConvergedEv
+_ZN3POP12SpringSolverINS_7Vector4IdEEE12hasConvergedEv
+_ZN3POP12SpringSolverINS_7Vector4IdEEE7advanceERNS_7SSStateIS2_EEdd
+_ZN3POP12SpringSolverINS_7Vector4IdEEE9integrateERNS_7SSStateIS2_EEdd
+_ZN3POP12SpringSolverINS_7Vector4IdEEE8evaluateERKNS_7SSStateIS2_EEddRKNS_12SSDerivativeIS2_EE
+OBJC_METH_VAR_NAME_.21
+OBJC_SELECTOR_REFERENCES_.22
+OBJC_SELECTOR_REFERENCES_.26
+OBJC_SELECTOR_REFERENCES_.28
+OBJC_SELECTOR_REFERENCES_.30
+.str.35
+_unnamed_cfstring_.36
+OBJC_METH_VAR_TYPE_.38
+l_OBJC_$_CLASS_METHODS_POPSpringAnimation
+l_OBJC_METACLASS_RO_$_POPSpringAnimation
+OBJC_METH_VAR_TYPE_.40
+OBJC_METH_VAR_TYPE_.43
+OBJC_METH_VAR_TYPE_.47
+OBJC_METH_VAR_NAME_.52
+OBJC_METH_VAR_NAME_.54
+OBJC_METH_VAR_NAME_.56
+OBJC_METH_VAR_TYPE_.57
+l_OBJC_$_INSTANCE_METHODS_POPSpringAnimation
+OBJC_PROP_NAME_ATTR_.61
+OBJC_PROP_NAME_ATTR_.62
+OBJC_PROP_NAME_ATTR_.63
+OBJC_PROP_NAME_ATTR_.64
+OBJC_PROP_NAME_ATTR_.65
+OBJC_PROP_NAME_ATTR_.66
+OBJC_PROP_NAME_ATTR_.67
+l_OBJC_$_PROP_LIST_POPSpringAnimation
+l_OBJC_CLASS_RO_$_POPSpringAnimation
+OBJC_SELECTOR_REFERENCES_.73
+OBJC_SELECTOR_REFERENCES_.74
+OBJC_SELECTOR_REFERENCES_.75
+OBJC_SELECTOR_REFERENCES_.77
+OBJC_SELECTOR_REFERENCES_.79
+OBJC_CLASS_NAME_.81
+OBJC_METH_VAR_TYPE_.82
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_POPSpringAnimation_$_NSCopying
+l_OBJC_$_CATEGORY_POPSpringAnimation_$_NSCopying
+OBJC_CLASSLIST_REFERENCES_$_.89
+OBJC_METH_VAR_NAME_.90
+OBJC_SELECTOR_REFERENCES_.91
+OBJC_METH_VAR_NAME_.92
+OBJC_SELECTOR_REFERENCES_.93
+OBJC_METH_VAR_NAME_.98
+OBJC_SELECTOR_REFERENCES_.99
+OBJC_SELECTOR_REFERENCES_.101
+OBJC_SELECTOR_REFERENCES_.105
+OBJC_SELECTOR_REFERENCES_.107
+OBJC_CLASSLIST_REFERENCES_$_.108
+~SpringSolver
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPSpringSolver.h
+SpringSolver
+updatedDynamics
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPSpringAnimationInternal.h
+updatedBouncinessAndSpeed
+setThreshold
+setConstants
+operator=<double>
+operator+
+evaluate
+acceleration
+SSDerivative
+integrate
+SSState
+cast<double>
+vector4d
+size
+hasConverged
+started
+~_POPSpringAnimationState
+_POPSpringAnimationState
+-[POPSpringAnimation(NSCopying) copyWithZone:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPSpringAnimation.mm
+-[POPSpringAnimation _appendDescription:debug:]
+-[POPSpringAnimation _updatedDynamicsMass]
+-[POPSpringAnimation _updatedDynamicsFriction]
+-[POPSpringAnimation _updatedDynamicsTension]
+-[POPSpringAnimation setSolver:]
+-[POPSpringAnimation solver]
+-[POPSpringAnimation setSpringBounciness:]
+-[POPSpringAnimation springBounciness]
+-[POPSpringAnimation setSpringSpeed:]
+-[POPSpringAnimation springSpeed]
+-[POPSpringAnimation setDynamicsMass:]
+-[POPSpringAnimation dynamicsMass]
+-[POPSpringAnimation setDynamicsFriction:]
+-[POPSpringAnimation dynamicsFriction]
+-[POPSpringAnimation setDynamicsTension:]
+-[POPSpringAnimation dynamicsTension]
+-[POPSpringAnimation setVelocity:]
+-[POPSpringAnimation velocity]
+-[POPSpringAnimation dealloc]
+-[POPSpringAnimation init]
+-[POPSpringAnimation _initState]
++[POPSpringAnimation animationWithPropertyNamed:]
++[POPSpringAnimation animation]
+_ZL13_staticStates_block_invoke
+_ZL13_staticStates_block_invoke_2
+_ZL13_staticStates_block_invoke_3
+_ZL13_staticStates_block_invoke_4
+_ZL13_staticStates_block_invoke_5
+_ZL13_staticStates_block_invoke_6
+_ZL13_staticStates_block_invoke_7
+_ZL13_staticStates_block_invoke_8
+_ZL13_staticStates_block_invoke_9
+_ZL13_staticStates_block_invoke_10
+_ZL13_staticStates_block_invoke_11
+_ZL13_staticStates_block_invoke_12
+_ZL13_staticStates_block_invoke_13
+_ZL13_staticStates_block_invoke_14
+_ZL13_staticStates_block_invoke_15
+_ZL13_staticStates_block_invoke_16
+_ZL13_staticStates_block_invoke_17
+_ZL13_staticStates_block_invoke_18
+_ZL13_staticStates_block_invoke_19
+_ZL13_staticStates_block_invoke_20
+_ZL13_staticStates_block_invoke_21
+_ZL13_staticStates_block_invoke_22
+_ZL13_staticStates_block_invoke_23
+_ZL13_staticStates_block_invoke_24
+_ZL13_staticStates_block_invoke_25
+_ZL13_staticStates_block_invoke_26
+_ZL13_staticStates_block_invoke_27
+_ZL13_staticStates_block_invoke_28
+_ZL13_staticStates_block_invoke_29
+_ZL13_staticStates_block_invoke_30
+_ZL13_staticStates_block_invoke_31
+_ZL13_staticStates_block_invoke_32
+_ZL13_staticStates_block_invoke_33
+_ZL13_staticStates_block_invoke_34
+_ZL13_staticStates_block_invoke_35
+_ZL13_staticStates_block_invoke_36
+_ZL13_staticStates_block_invoke_37
+_ZL13_staticStates_block_invoke_38
+_ZL13_staticStates_block_invoke_39
+_ZL13_staticStates_block_invoke_40
+_ZL13_staticStates_block_invoke_41
+_ZL13_staticStates_block_invoke_42
+_ZL13_staticStates_block_invoke_43
+_ZL13_staticStates_block_invoke_44
+_ZL13_staticStates_block_invoke_45
+_ZL13_staticStates_block_invoke_46
+_ZL13_staticStates_block_invoke_47
+_ZL13_staticStates_block_invoke_48
+_ZL13_staticStates_block_invoke_49
+_ZL13_staticStates_block_invoke_50
+_ZL13_staticStates_block_invoke_51
+_ZL13_staticStates_block_invoke_52
+_ZL13_staticStates_block_invoke_53
+_ZL13_staticStates_block_invoke_54
+_ZL13_staticStates_block_invoke_55
+_ZL13_staticStates_block_invoke_56
+_ZL13_staticStates_block_invoke_57
+_ZL13_staticStates_block_invoke_58
+_ZL13_staticStates_block_invoke_59
+_ZL13_staticStates_block_invoke_60
+_ZL13_staticStates_block_invoke_61
+_ZL13_staticStates_block_invoke_62
+_ZL13_staticStates_block_invoke_63
+_ZL13_staticStates_block_invoke_64
+_ZL13_staticStates_block_invoke_65
+_ZL13_staticStates_block_invoke_66
+_ZL13_staticStates_block_invoke_67
+_ZL13_staticStates_block_invoke_68
+_ZL13_staticStates_block_invoke_69
+_ZL13_staticStates_block_invoke_70
+_ZL13_staticStates_block_invoke_71
+_ZL13_staticStates_block_invoke_72
+_ZL13_staticStates_block_invoke_73
+_ZL13_staticStates_block_invoke_74
+_ZL13_staticStates_block_invoke_75
+_ZL13_staticStates_block_invoke_76
+_ZL13_staticStates_block_invoke_77
+_ZL13_staticStates_block_invoke_78
+_ZL13_staticStates_block_invoke_79
+_ZL13_staticStates_block_invoke_80
+_ZL13_staticStates_block_invoke_81
+_ZL13_staticStates_block_invoke_82
+_ZL13_staticStates_block_invoke_83
+_ZL13_staticStates_block_invoke_84
+_ZL13_staticStates_block_invoke_85
+_ZL13_staticStates_block_invoke_86
+_ZL13_staticStates_block_invoke_87
+_ZL13_staticStates_block_invoke_88
+_ZL13_staticStates_block_invoke_89
+_ZL13_staticStates_block_invoke_90
+_ZL13_staticStates_block_invoke_91
+_ZL13_staticStates_block_invoke_92
+_ZL13_staticStates_block_invoke_93
+_ZL13_staticStates_block_invoke_94
+_ZL13_staticStates_block_invoke_95
+_ZL13_staticStates_block_invoke_96
+_ZL13_staticStates_block_invoke_97
+_ZL13_staticStates_block_invoke_98
+_ZL13_staticStates_block_invoke_99
+_ZL13_staticStates_block_invoke_100
+_ZL13_staticStates_block_invoke_101
+_ZL13_staticStates_block_invoke_102
+_ZL13_staticStates_block_invoke_103
+_ZL13_staticStates_block_invoke_104
+__cxx_global_array_dtor
+-[POPStaticAnimatableProperty name]
+-[POPStaticAnimatableProperty readBlock]
+-[POPStaticAnimatableProperty writeBlock]
+-[POPStaticAnimatableProperty threshold]
+-[POPConcreteAnimatableProperty initWithName:readBlock:writeBlock:threshold:]
+-[POPConcreteAnimatableProperty name]
+-[POPConcreteAnimatableProperty readBlock]
+-[POPConcreteAnimatableProperty writeBlock]
+-[POPConcreteAnimatableProperty threshold]
+-[POPConcreteAnimatableProperty .cxx_destruct]
+-[POPMutableAnimatableProperty name]
+-[POPMutableAnimatableProperty setName:]
+-[POPMutableAnimatableProperty readBlock]
+-[POPMutableAnimatableProperty setReadBlock:]
+-[POPMutableAnimatableProperty writeBlock]
+-[POPMutableAnimatableProperty setWriteBlock:]
+-[POPMutableAnimatableProperty threshold]
+-[POPMutableAnimatableProperty setThreshold:]
+-[POPMutableAnimatableProperty .cxx_destruct]
+-[POPPlaceholderAnimatableProperty name]
+-[POPPlaceholderAnimatableProperty readBlock]
+-[POPPlaceholderAnimatableProperty writeBlock]
+-[POPPlaceholderAnimatableProperty threshold]
+-[POPPlaceholderAnimatableProperty .cxx_destruct]
++[POPAnimatableProperty initialize]
++[POPAnimatableProperty allocWithZone:]
+-[POPAnimatableProperty copyWithZone:]
+-[POPAnimatableProperty mutableCopyWithZone:]
++[POPAnimatableProperty propertyWithName:]
++[POPAnimatableProperty propertyWithName:initializer:]
+-[POPAnimatableProperty description]
+_GLOBAL__sub_I_POPAnimatableProperty.mm
+.str.1
+_unnamed_cfstring_.2
+.str.3
+_unnamed_cfstring_.4
+.str.5
+_unnamed_cfstring_.6
+.str.11
+_unnamed_cfstring_.12
+.str.19
+_unnamed_cfstring_.20
+.str.23
+_unnamed_cfstring_.24
+.str.25
+_unnamed_cfstring_.26
+.str.27
+_unnamed_cfstring_.28
+.str.29
+_unnamed_cfstring_.30
+.str.31
+_unnamed_cfstring_.32
+.str.33
+_unnamed_cfstring_.34
+.str.37
+_unnamed_cfstring_.38
+.str.39
+_unnamed_cfstring_.40
+.str.41
+_unnamed_cfstring_.42
+.str.43
+_unnamed_cfstring_.44
+.str.45
+_unnamed_cfstring_.46
+.str.49
+_unnamed_cfstring_.50
+.str.51
+_unnamed_cfstring_.52
+.str.55
+_unnamed_cfstring_.56
+.str.59
+_unnamed_cfstring_.60
+.str.61
+_unnamed_cfstring_.62
+.str.63
+_unnamed_cfstring_.64
+.str.65
+_unnamed_cfstring_.66
+.str.67
+_unnamed_cfstring_.68
+.str.69
+_unnamed_cfstring_.70
+.str.71
+_unnamed_cfstring_.72
+.str.73
+_unnamed_cfstring_.74
+.str.75
+_unnamed_cfstring_.76
+.str.77
+_unnamed_cfstring_.78
+.str.79
+_unnamed_cfstring_.80
+.str.81
+_unnamed_cfstring_.82
+.str.83
+_unnamed_cfstring_.84
+.str.85
+_unnamed_cfstring_.86
+.str.88
+_unnamed_cfstring_.89
+.str.90
+_unnamed_cfstring_.91
+.str.92
+_unnamed_cfstring_.93
+.str.94
+_unnamed_cfstring_.95
+.str.96
+_unnamed_cfstring_.97
+.str.98
+_unnamed_cfstring_.99
+_ZL13_staticStates
+.str.111
+__block_literal_global
+OBJC_METH_VAR_NAME_.112
+OBJC_SELECTOR_REFERENCES_.113
+.str.114
+__block_descriptor_tmp.115
+__block_literal_global.116
+OBJC_METH_VAR_NAME_.117
+OBJC_SELECTOR_REFERENCES_.118
+__block_descriptor_tmp.119
+__block_literal_global.120
+OBJC_METH_VAR_NAME_.121
+OBJC_SELECTOR_REFERENCES_.122
+__block_descriptor_tmp.123
+__block_literal_global.124
+OBJC_METH_VAR_NAME_.125
+OBJC_SELECTOR_REFERENCES_.126
+__block_descriptor_tmp.127
+__block_literal_global.128
+OBJC_METH_VAR_NAME_.129
+OBJC_SELECTOR_REFERENCES_.130
+__block_descriptor_tmp.131
+__block_literal_global.132
+OBJC_METH_VAR_NAME_.133
+OBJC_SELECTOR_REFERENCES_.134
+__block_descriptor_tmp.135
+__block_literal_global.136
+OBJC_METH_VAR_NAME_.137
+OBJC_SELECTOR_REFERENCES_.138
+__block_descriptor_tmp.139
+__block_literal_global.140
+OBJC_METH_VAR_NAME_.141
+OBJC_SELECTOR_REFERENCES_.142
+__block_descriptor_tmp.143
+__block_literal_global.144
+OBJC_METH_VAR_NAME_.145
+OBJC_SELECTOR_REFERENCES_.146
+__block_descriptor_tmp.147
+__block_literal_global.148
+OBJC_METH_VAR_NAME_.149
+OBJC_SELECTOR_REFERENCES_.150
+__block_descriptor_tmp.151
+__block_literal_global.152
+OBJC_METH_VAR_NAME_.153
+OBJC_SELECTOR_REFERENCES_.154
+__block_descriptor_tmp.155
+__block_literal_global.156
+__block_descriptor_tmp.157
+__block_literal_global.158
+__block_descriptor_tmp.159
+__block_literal_global.160
+__block_descriptor_tmp.161
+__block_literal_global.162
+__block_descriptor_tmp.163
+__block_literal_global.164
+OBJC_METH_VAR_NAME_.165
+__block_descriptor_tmp.167
+__block_literal_global.168
+OBJC_METH_VAR_NAME_.169
+__block_descriptor_tmp.171
+__block_literal_global.172
+__block_descriptor_tmp.173
+__block_literal_global.174
+__block_descriptor_tmp.175
+__block_literal_global.176
+__block_descriptor_tmp.177
+__block_literal_global.178
+__block_descriptor_tmp.179
+__block_literal_global.180
+__block_descriptor_tmp.181
+__block_literal_global.182
+__block_descriptor_tmp.183
+__block_literal_global.184
+__block_descriptor_tmp.185
+__block_literal_global.186
+__block_descriptor_tmp.187
+__block_literal_global.188
+__block_descriptor_tmp.189
+__block_literal_global.190
+__block_descriptor_tmp.191
+__block_literal_global.192
+__block_descriptor_tmp.193
+__block_literal_global.194
+__block_descriptor_tmp.195
+__block_literal_global.196
+__block_descriptor_tmp.197
+__block_literal_global.198
+__block_descriptor_tmp.199
+__block_literal_global.200
+__block_descriptor_tmp.201
+__block_literal_global.202
+__block_descriptor_tmp.203
+__block_literal_global.204
+__block_descriptor_tmp.205
+__block_literal_global.206
+__block_descriptor_tmp.207
+__block_literal_global.208
+__block_descriptor_tmp.209
+__block_literal_global.210
+__block_descriptor_tmp.211
+__block_literal_global.212
+__block_descriptor_tmp.213
+__block_literal_global.214
+__block_descriptor_tmp.215
+__block_literal_global.216
+__block_descriptor_tmp.217
+__block_literal_global.218
+__block_descriptor_tmp.219
+__block_literal_global.220
+OBJC_METH_VAR_NAME_.221
+OBJC_SELECTOR_REFERENCES_.222
+__block_descriptor_tmp.223
+__block_literal_global.224
+OBJC_METH_VAR_NAME_.225
+OBJC_SELECTOR_REFERENCES_.226
+__block_descriptor_tmp.227
+__block_literal_global.228
+__block_descriptor_tmp.229
+__block_literal_global.230
+__block_descriptor_tmp.231
+__block_literal_global.232
+__block_descriptor_tmp.233
+__block_literal_global.234
+__block_descriptor_tmp.235
+__block_literal_global.236
+__block_descriptor_tmp.237
+__block_literal_global.238
+.str.239
+__block_descriptor_tmp.240
+__block_literal_global.241
+__block_descriptor_tmp.242
+__block_literal_global.243
+__block_descriptor_tmp.244
+__block_literal_global.245
+OBJC_METH_VAR_NAME_.246
+OBJC_SELECTOR_REFERENCES_.247
+__block_descriptor_tmp.248
+__block_literal_global.249
+OBJC_METH_VAR_NAME_.250
+OBJC_SELECTOR_REFERENCES_.251
+__block_descriptor_tmp.252
+__block_literal_global.253
+OBJC_METH_VAR_NAME_.254
+OBJC_SELECTOR_REFERENCES_.255
+__block_descriptor_tmp.256
+__block_literal_global.257
+OBJC_METH_VAR_NAME_.258
+OBJC_SELECTOR_REFERENCES_.259
+__block_descriptor_tmp.260
+__block_literal_global.261
+OBJC_METH_VAR_NAME_.262
+OBJC_SELECTOR_REFERENCES_.263
+__block_descriptor_tmp.264
+__block_literal_global.265
+OBJC_METH_VAR_NAME_.266
+OBJC_SELECTOR_REFERENCES_.267
+__block_descriptor_tmp.268
+__block_literal_global.269
+OBJC_METH_VAR_NAME_.270
+OBJC_SELECTOR_REFERENCES_.271
+__block_descriptor_tmp.272
+__block_literal_global.273
+OBJC_METH_VAR_NAME_.274
+OBJC_SELECTOR_REFERENCES_.275
+__block_descriptor_tmp.276
+__block_literal_global.277
+OBJC_METH_VAR_NAME_.278
+OBJC_SELECTOR_REFERENCES_.279
+.str.280
+__block_descriptor_tmp.281
+__block_literal_global.282
+OBJC_METH_VAR_NAME_.283
+OBJC_SELECTOR_REFERENCES_.284
+.str.285
+__block_descriptor_tmp.286
+__block_literal_global.287
+OBJC_METH_VAR_NAME_.288
+OBJC_SELECTOR_REFERENCES_.289
+__block_descriptor_tmp.290
+__block_literal_global.291
+OBJC_METH_VAR_NAME_.292
+OBJC_SELECTOR_REFERENCES_.293
+__block_descriptor_tmp.294
+__block_literal_global.295
+OBJC_METH_VAR_NAME_.296
+OBJC_SELECTOR_REFERENCES_.297
+__block_descriptor_tmp.298
+__block_literal_global.299
+OBJC_METH_VAR_NAME_.300
+OBJC_SELECTOR_REFERENCES_.301
+__block_descriptor_tmp.302
+__block_literal_global.303
+OBJC_METH_VAR_NAME_.304
+OBJC_SELECTOR_REFERENCES_.305
+__block_descriptor_tmp.306
+__block_literal_global.307
+OBJC_METH_VAR_NAME_.308
+OBJC_SELECTOR_REFERENCES_.309
+__block_descriptor_tmp.310
+__block_literal_global.311
+OBJC_METH_VAR_NAME_.312
+OBJC_SELECTOR_REFERENCES_.313
+__block_descriptor_tmp.314
+__block_literal_global.315
+OBJC_METH_VAR_NAME_.316
+OBJC_SELECTOR_REFERENCES_.317
+__block_descriptor_tmp.318
+__block_literal_global.319
+OBJC_METH_VAR_NAME_.320
+OBJC_SELECTOR_REFERENCES_.321
+__block_descriptor_tmp.322
+__block_literal_global.323
+OBJC_METH_VAR_NAME_.324
+OBJC_SELECTOR_REFERENCES_.325
+__block_descriptor_tmp.326
+__block_literal_global.327
+OBJC_METH_VAR_NAME_.328
+OBJC_SELECTOR_REFERENCES_.329
+.str.330
+__block_descriptor_tmp.331
+__block_literal_global.332
+OBJC_METH_VAR_NAME_.333
+OBJC_SELECTOR_REFERENCES_.334
+.str.335
+__block_descriptor_tmp.336
+__block_literal_global.337
+OBJC_METH_VAR_NAME_.338
+OBJC_SELECTOR_REFERENCES_.339
+.str.340
+__block_descriptor_tmp.341
+__block_literal_global.342
+OBJC_METH_VAR_NAME_.343
+OBJC_SELECTOR_REFERENCES_.344
+.str.345
+__block_descriptor_tmp.346
+__block_literal_global.347
+__block_descriptor_tmp.348
+__block_literal_global.349
+__block_descriptor_tmp.350
+__block_literal_global.351
+OBJC_METH_VAR_NAME_.352
+OBJC_SELECTOR_REFERENCES_.353
+__block_descriptor_tmp.354
+__block_literal_global.355
+OBJC_METH_VAR_NAME_.356
+OBJC_SELECTOR_REFERENCES_.357
+__block_descriptor_tmp.358
+__block_literal_global.359
+OBJC_METH_VAR_NAME_.360
+OBJC_SELECTOR_REFERENCES_.361
+__block_descriptor_tmp.362
+__block_literal_global.363
+OBJC_METH_VAR_NAME_.364
+OBJC_SELECTOR_REFERENCES_.365
+__block_descriptor_tmp.366
+__block_literal_global.367
+OBJC_METH_VAR_NAME_.368
+OBJC_SELECTOR_REFERENCES_.369
+__block_descriptor_tmp.370
+__block_literal_global.371
+__block_descriptor_tmp.372
+__block_literal_global.373
+__block_descriptor_tmp.374
+__block_literal_global.375
+__block_descriptor_tmp.376
+__block_literal_global.377
+__block_descriptor_tmp.378
+__block_literal_global.379
+__block_descriptor_tmp.380
+__block_literal_global.381
+OBJC_METH_VAR_NAME_.382
+OBJC_SELECTOR_REFERENCES_.383
+__block_descriptor_tmp.384
+__block_literal_global.385
+OBJC_METH_VAR_NAME_.386
+OBJC_SELECTOR_REFERENCES_.387
+__block_descriptor_tmp.388
+__block_literal_global.389
+OBJC_METH_VAR_NAME_.390
+OBJC_SELECTOR_REFERENCES_.391
+.str.392
+__block_descriptor_tmp.393
+__block_literal_global.394
+OBJC_METH_VAR_NAME_.395
+OBJC_SELECTOR_REFERENCES_.396
+.str.397
+__block_descriptor_tmp.398
+__block_literal_global.399
+OBJC_METH_VAR_NAME_.400
+OBJC_SELECTOR_REFERENCES_.401
+__block_descriptor_tmp.402
+__block_literal_global.403
+OBJC_METH_VAR_NAME_.404
+OBJC_SELECTOR_REFERENCES_.405
+__block_descriptor_tmp.406
+__block_literal_global.407
+OBJC_METH_VAR_NAME_.408
+OBJC_SELECTOR_REFERENCES_.409
+__block_descriptor_tmp.410
+__block_literal_global.411
+OBJC_METH_VAR_NAME_.412
+OBJC_SELECTOR_REFERENCES_.413
+__block_descriptor_tmp.414
+__block_literal_global.415
+OBJC_METH_VAR_NAME_.416
+OBJC_SELECTOR_REFERENCES_.417
+__block_descriptor_tmp.418
+__block_literal_global.419
+OBJC_METH_VAR_NAME_.420
+OBJC_SELECTOR_REFERENCES_.421
+__block_descriptor_tmp.422
+__block_literal_global.423
+OBJC_METH_VAR_NAME_.424
+OBJC_SELECTOR_REFERENCES_.425
+__block_descriptor_tmp.426
+__block_literal_global.427
+OBJC_METH_VAR_NAME_.428
+OBJC_SELECTOR_REFERENCES_.429
+__block_descriptor_tmp.430
+__block_literal_global.431
+OBJC_METH_VAR_NAME_.432
+OBJC_SELECTOR_REFERENCES_.433
+.str.434
+__block_descriptor_tmp.435
+__block_literal_global.436
+OBJC_METH_VAR_NAME_.437
+OBJC_SELECTOR_REFERENCES_.438
+.str.439
+__block_descriptor_tmp.440
+__block_literal_global.441
+OBJC_METH_VAR_NAME_.442
+OBJC_SELECTOR_REFERENCES_.443
+.str.444
+__block_descriptor_tmp.445
+__block_literal_global.446
+OBJC_METH_VAR_NAME_.447
+OBJC_SELECTOR_REFERENCES_.448
+.str.449
+__block_descriptor_tmp.450
+__block_literal_global.451
+l_OBJC_METACLASS_RO_$_POPStaticAnimatableProperty
+OBJC_METH_VAR_NAME_.452
+OBJC_METH_VAR_NAME_.453
+OBJC_METH_VAR_TYPE_.454
+OBJC_METH_VAR_NAME_.455
+OBJC_METH_VAR_NAME_.456
+OBJC_METH_VAR_TYPE_.457
+l_OBJC_$_INSTANCE_METHODS_POPStaticAnimatableProperty
+OBJC_METH_VAR_NAME_.458
+OBJC_METH_VAR_TYPE_.459
+l_OBJC_$_INSTANCE_VARIABLES_POPStaticAnimatableProperty
+l_OBJC_CLASS_RO_$_POPStaticAnimatableProperty
+OBJC_METH_VAR_NAME_.460
+OBJC_SELECTOR_REFERENCES_.461
+OBJC_METH_VAR_NAME_.462
+OBJC_SELECTOR_REFERENCES_.463
+OBJC_IVAR_$_POPConcreteAnimatableProperty.name
+OBJC_IVAR_$_POPConcreteAnimatableProperty.readBlock
+OBJC_IVAR_$_POPConcreteAnimatableProperty.writeBlock
+OBJC_IVAR_$_POPConcreteAnimatableProperty.threshold
+OBJC_CLASS_NAME_.464
+l_OBJC_METACLASS_RO_$_POPConcreteAnimatableProperty
+OBJC_CLASS_NAME_.465
+OBJC_METH_VAR_NAME_.466
+OBJC_METH_VAR_TYPE_.467
+OBJC_METH_VAR_NAME_.468
+OBJC_METH_VAR_TYPE_.469
+l_OBJC_$_INSTANCE_METHODS_POPConcreteAnimatableProperty
+OBJC_METH_VAR_TYPE_.470
+OBJC_METH_VAR_TYPE_.471
+OBJC_METH_VAR_TYPE_.472
+l_OBJC_$_INSTANCE_VARIABLES_POPConcreteAnimatableProperty
+l_OBJC_CLASS_RO_$_POPConcreteAnimatableProperty
+OBJC_IVAR_$_POPMutableAnimatableProperty.name
+OBJC_IVAR_$_POPMutableAnimatableProperty.readBlock
+OBJC_IVAR_$_POPMutableAnimatableProperty.writeBlock
+OBJC_IVAR_$_POPMutableAnimatableProperty.threshold
+OBJC_CLASS_NAME_.473
+l_OBJC_METACLASS_RO_$_POPMutableAnimatableProperty
+OBJC_CLASS_NAME_.474
+OBJC_METH_VAR_NAME_.475
+OBJC_METH_VAR_TYPE_.476
+OBJC_METH_VAR_NAME_.477
+OBJC_METH_VAR_TYPE_.478
+OBJC_METH_VAR_NAME_.479
+OBJC_METH_VAR_NAME_.480
+OBJC_METH_VAR_TYPE_.481
+l_OBJC_$_INSTANCE_METHODS_POPMutableAnimatableProperty
+l_OBJC_$_INSTANCE_VARIABLES_POPMutableAnimatableProperty
+OBJC_PROP_NAME_ATTR_.482
+OBJC_PROP_NAME_ATTR_.483
+OBJC_PROP_NAME_ATTR_.484
+OBJC_PROP_NAME_ATTR_.485
+OBJC_PROP_NAME_ATTR_.486
+OBJC_PROP_NAME_ATTR_.487
+OBJC_PROP_NAME_ATTR_.488
+l_OBJC_$_PROP_LIST_POPMutableAnimatableProperty
+l_OBJC_CLASS_RO_$_POPMutableAnimatableProperty
+OBJC_IVAR_$_POPPlaceholderAnimatableProperty.name
+OBJC_IVAR_$_POPPlaceholderAnimatableProperty.readBlock
+OBJC_IVAR_$_POPPlaceholderAnimatableProperty.writeBlock
+OBJC_IVAR_$_POPPlaceholderAnimatableProperty.threshold
+OBJC_CLASS_NAME_.489
+l_OBJC_METACLASS_RO_$_POPPlaceholderAnimatableProperty
+OBJC_CLASS_NAME_.490
+l_OBJC_$_INSTANCE_METHODS_POPPlaceholderAnimatableProperty
+l_OBJC_$_INSTANCE_VARIABLES_POPPlaceholderAnimatableProperty
+l_OBJC_CLASS_RO_$_POPPlaceholderAnimatableProperty
+_ZL11placeholder
+OBJC_METH_VAR_NAME_.491
+OBJC_SELECTOR_REFERENCES_.492
+OBJC_CLASSLIST_REFERENCES_$_.493
+OBJC_METH_VAR_NAME_.494
+OBJC_SELECTOR_REFERENCES_.495
+OBJC_CLASSLIST_SUP_REFS_$_.496
+OBJC_METH_VAR_NAME_.497
+OBJC_SELECTOR_REFERENCES_.498
+OBJC_CLASSLIST_REFERENCES_$_.499
+OBJC_METH_VAR_NAME_.500
+OBJC_SELECTOR_REFERENCES_.501
+OBJC_CLASSLIST_REFERENCES_$_.502
+OBJC_SELECTOR_REFERENCES_.503
+OBJC_SELECTOR_REFERENCES_.504
+OBJC_SELECTOR_REFERENCES_.505
+OBJC_SELECTOR_REFERENCES_.506
+OBJC_SELECTOR_REFERENCES_.507
+OBJC_SELECTOR_REFERENCES_.508
+OBJC_SELECTOR_REFERENCES_.509
+OBJC_SELECTOR_REFERENCES_.510
+OBJC_SELECTOR_REFERENCES_.511
+OBJC_METH_VAR_NAME_.512
+OBJC_SELECTOR_REFERENCES_.513
+_ZZ54+[POPAnimatableProperty propertyWithName:initializer:]E13_propertyDict
+OBJC_CLASSLIST_REFERENCES_$_.514
+OBJC_METH_VAR_NAME_.515
+OBJC_SELECTOR_REFERENCES_.516
+OBJC_METH_VAR_NAME_.517
+OBJC_SELECTOR_REFERENCES_.518
+OBJC_CLASSLIST_REFERENCES_$_.519
+OBJC_METH_VAR_NAME_.520
+OBJC_SELECTOR_REFERENCES_.521
+OBJC_CLASSLIST_REFERENCES_$_.522
+.str.523
+_unnamed_cfstring_.524
+OBJC_CLASSLIST_SUP_REFS_$_.525
+OBJC_METH_VAR_NAME_.526
+OBJC_SELECTOR_REFERENCES_.527
+OBJC_METH_VAR_NAME_.528
+OBJC_SELECTOR_REFERENCES_.529
+OBJC_CLASS_NAME_.530
+OBJC_METH_VAR_NAME_.531
+OBJC_METH_VAR_TYPE_.532
+OBJC_METH_VAR_NAME_.533
+OBJC_METH_VAR_TYPE_.534
+OBJC_METH_VAR_TYPE_.535
+l_OBJC_$_CLASS_METHODS_POPAnimatableProperty
+OBJC_METH_VAR_NAME_.536
+OBJC_CLASS_NAME_.537
+OBJC_METH_VAR_NAME_.538
+OBJC_CLASS_NAME_.539
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS_NSMutableCopying
+l_OBJC_$_PROTOCOL_METHOD_TYPES_NSMutableCopying
+l_OBJC_PROTOCOL_$_NSMutableCopying
+l_OBJC_LABEL_PROTOCOL_$_NSMutableCopying
+l_OBJC_CLASS_PROTOCOLS_$_POPAnimatableProperty
+l_OBJC_METACLASS_RO_$_POPAnimatableProperty
+l_OBJC_$_INSTANCE_METHODS_POPAnimatableProperty
+OBJC_PROP_NAME_ATTR_.540
+OBJC_PROP_NAME_ATTR_.541
+OBJC_PROP_NAME_ATTR_.542
+l_OBJC_$_PROP_LIST_POPAnimatableProperty
+l_OBJC_CLASS_RO_$_POPAnimatableProperty
+OBJC_METH_VAR_NAME_.543
+OBJC_SELECTOR_REFERENCES_.544
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimatableProperty.mm
+staticIndexWithName
+~
+values_to_edge_insets
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPCGUtils.h
+values_to_size
+values_from_size
+values_to_point
+values_from_point
+values_to_rect
+values_from_rect
+-[POPAnimatableProperty description]
++[POPAnimatableProperty propertyWithName:initializer:]
++[POPAnimatableProperty propertyWithName:]
+-[POPAnimatableProperty mutableCopyWithZone:]
+-[POPAnimatableProperty copyWithZone:]
++[POPAnimatableProperty allocWithZone:]
++[POPAnimatableProperty initialize]
+-[POPPlaceholderAnimatableProperty .cxx_destruct]
+-[POPAnimatableProperty threshold]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimatableProperty.h
+-[POPAnimatableProperty writeBlock]
+-[POPAnimatableProperty readBlock]
+-[POPAnimatableProperty name]
+-[POPMutableAnimatableProperty .cxx_destruct]
+-[POPMutableAnimatableProperty setThreshold:]
+-[POPMutableAnimatableProperty threshold]
+-[POPMutableAnimatableProperty setWriteBlock:]
+-[POPMutableAnimatableProperty writeBlock]
+-[POPMutableAnimatableProperty setReadBlock:]
+-[POPMutableAnimatableProperty readBlock]
+-[POPMutableAnimatableProperty setName:]
+-[POPMutableAnimatableProperty name]
+-[POPConcreteAnimatableProperty .cxx_destruct]
+-[POPConcreteAnimatableProperty initWithName:readBlock:writeBlock:threshold:]
+-[POPStaticAnimatableProperty threshold]
+-[POPStaticAnimatableProperty writeBlock]
+-[POPStaticAnimatableProperty readBlock]
+-[POPStaticAnimatableProperty name]
+__cxx_global_var_init.110
+__cxx_global_var_init.107
+__cxx_global_var_init.106
+__cxx_global_var_init.103
+__cxx_global_var_init.102
+__cxx_global_var_init.101
+__cxx_global_var_init.100
+__cxx_global_var_init.87
+__cxx_global_var_init
+-[POPAnimationEvent initWithType:time:]
+-[POPAnimationEvent description]
+-[POPAnimationEvent _appendDescription:]
+-[POPAnimationEvent type]
+-[POPAnimationEvent time]
+-[POPAnimationEvent animationDescription]
+-[POPAnimationEvent setAnimationDescription:]
+-[POPAnimationEvent .cxx_destruct]
+-[POPAnimationValueEvent initWithType:time:value:]
+-[POPAnimationValueEvent _appendDescription:]
+-[POPAnimationValueEvent value]
+-[POPAnimationValueEvent velocity]
+-[POPAnimationValueEvent setVelocity:]
+-[POPAnimationValueEvent .cxx_destruct]
+OBJC_IVAR_$_POPAnimationEvent._type
+OBJC_IVAR_$_POPAnimationEvent._time
+OBJC_IVAR_$_POPAnimationEvent._animationDescription
+l_OBJC_METACLASS_RO_$_POPAnimationEvent
+OBJC_CLASS_NAME_.15
+OBJC_METH_VAR_TYPE_.18
+OBJC_METH_VAR_TYPE_.19
+OBJC_METH_VAR_TYPE_.23
+l_OBJC_$_INSTANCE_METHODS_POPAnimationEvent
+l_OBJC_$_INSTANCE_VARIABLES_POPAnimationEvent
+OBJC_PROP_NAME_ATTR_.34
+OBJC_PROP_NAME_ATTR_.35
+l_OBJC_$_PROP_LIST_POPAnimationEvent
+l_OBJC_CLASS_RO_$_POPAnimationEvent
+OBJC_IVAR_$_POPAnimationValueEvent._value
+OBJC_CLASSLIST_SUP_REFS_$_.40
+OBJC_IVAR_$_POPAnimationValueEvent._velocity
+OBJC_CLASS_NAME_.45
+l_OBJC_METACLASS_RO_$_POPAnimationValueEvent
+OBJC_CLASS_NAME_.46
+l_OBJC_$_INSTANCE_METHODS_POPAnimationValueEvent
+OBJC_METH_VAR_TYPE_.53
+l_OBJC_$_INSTANCE_VARIABLES_POPAnimationValueEvent
+l_OBJC_$_PROP_LIST_POPAnimationValueEvent
+l_OBJC_CLASS_RO_$_POPAnimationValueEvent
+stringFromType
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimationEvent.mm
+-[POPAnimationValueEvent .cxx_destruct]
+-[POPAnimationValueEvent setVelocity:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimationEventInternal.h
+-[POPAnimationValueEvent velocity]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimationEvent.h
+-[POPAnimationValueEvent value]
+-[POPAnimationValueEvent _appendDescription:]
+-[POPAnimationValueEvent initWithType:time:value:]
+-[POPAnimationEvent .cxx_destruct]
+-[POPAnimationEvent setAnimationDescription:]
+-[POPAnimationEvent animationDescription]
+-[POPAnimationEvent time]
+-[POPAnimationEvent type]
+-[POPAnimationEvent _appendDescription:]
+-[POPAnimationEvent description]
+-[POPAnimationEvent initWithType:time:]
+-[CAAnimation(POPAnimationExtras) pop_applyDragCoefficient]
++[POPSpringAnimation(POPAnimationExtras) convertBounciness:speed:toTension:friction:mass:]
++[POPSpringAnimation(POPAnimationExtras) convertTension:friction:toBounciness:speed:]
+l_OBJC_$_CATEGORY_INSTANCE_METHODS_CAAnimation_$_POPAnimationExtras
+l_OBJC_$_CATEGORY_CAAnimation_$_POPAnimationExtras
+OBJC_METH_VAR_NAME_.2
+OBJC_METH_VAR_TYPE_.3
+OBJC_METH_VAR_NAME_.4
+OBJC_METH_VAR_TYPE_.5
+l_OBJC_$_CATEGORY_CLASS_METHODS_POPSpringAnimation_$_POPAnimationExtras
+l_OBJC_$_CATEGORY_POPSpringAnimation_$_POPAnimationExtras
++[POPSpringAnimation(POPAnimationExtras) convertTension:friction:toBounciness:speed:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimationExtras.mm
++[POPSpringAnimation(POPAnimationExtras) convertBounciness:speed:toTension:friction:mass:]
+-[CAAnimation(POPAnimationExtras) pop_applyDragCoefficient]
+POPAnimationDragCoefficient
+_ZL12pointerEqualPKvS0_
+_ZL11pointerHashPKv
+OBJC_CLASSLIST_REFERENCES_$_.29
+OBJC_SELECTOR_REFERENCES_.33
+OBJC_SELECTOR_REFERENCES_.37
+OBJC_CLASSLIST_REFERENCES_$_.42
+OBJC_SELECTOR_REFERENCES_.48
+.str.54
+.str.56
+.str.58
+.str.60
+.str.62
+.str.64
+.str.66
+.str.68
+.str.70
+vectorize
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimationRuntime.mm
+FBCompareTypeEncoding
+pointerHash
+pointerEqual
+POPUnbox
+POPBox
+POPValueTypeToString
+POPSelectValueType
+POPDictionaryCreateMutableWeakPointerToStrongObject
+POPDictionaryCreateMutableWeakPointerToWeakPointer
+-[POPAnimationTracer initWithAnimation:]
+-[POPAnimationTracer readPropertyValue:]
+_ZL12create_eventP18POPAnimationTracer21POPAnimationEventTypeP11objc_objectb
+-[POPAnimationTracer writePropertyValue:]
+-[POPAnimationTracer updateToValue:]
+-[POPAnimationTracer updateFromValue:]
+-[POPAnimationTracer updateVelocity:]
+-[POPAnimationTracer updateSpeed:]
+-[POPAnimationTracer updateBounciness:]
+-[POPAnimationTracer updateFriction:]
+-[POPAnimationTracer updateMass:]
+-[POPAnimationTracer updateTension:]
+-[POPAnimationTracer didStart]
+-[POPAnimationTracer didStop:]
+-[POPAnimationTracer didReachToValue:]
+-[POPAnimationTracer autoreversed]
+-[POPAnimationTracer start]
+-[POPAnimationTracer stop]
+-[POPAnimationTracer reset]
+-[POPAnimationTracer allEvents]
+-[POPAnimationTracer writeEvents]
+-[POPAnimationTracer eventsWithType:]
+-[POPAnimationTracer shouldLogAndResetOnCompletion]
+-[POPAnimationTracer setShouldLogAndResetOnCompletion:]
+-[POPAnimationTracer .cxx_destruct]
+OBJC_IVAR_$_POPAnimationTracer._animation
+OBJC_IVAR_$_POPAnimationTracer._animationState
+OBJC_IVAR_$_POPAnimationTracer._events
+OBJC_IVAR_$_POPAnimationTracer._animationHasVelocity
+OBJC_CLASSLIST_REFERENCES_$_.11
+OBJC_IVAR_$_POPAnimationTracer._shouldLogAndResetOnCompletion
+l_OBJC_METACLASS_RO_$_POPAnimationTracer
+OBJC_CLASS_NAME_.32
+OBJC_METH_VAR_TYPE_.41
+OBJC_METH_VAR_TYPE_.49
+OBJC_METH_VAR_TYPE_.54
+l_OBJC_$_INSTANCE_METHODS_POPAnimationTracer
+l_OBJC_$_INSTANCE_VARIABLES_POPAnimationTracer
+OBJC_CLASS_NAME_.70
+OBJC_PROP_NAME_ATTR_.71
+OBJC_PROP_NAME_ATTR_.72
+OBJC_PROP_NAME_ATTR_.73
+OBJC_PROP_NAME_ATTR_.74
+l_OBJC_$_PROP_LIST_POPAnimationTracer
+l_OBJC_CLASS_RO_$_POPAnimationTracer
+OBJC_CLASSLIST_REFERENCES_$_.75
+OBJC_CLASSLIST_REFERENCES_$_.78
+create_event
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimationTracer.mm
+-[POPAnimationTracer .cxx_destruct]
+-[POPAnimationTracer setShouldLogAndResetOnCompletion:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimationTracer.h
+-[POPAnimationTracer shouldLogAndResetOnCompletion]
+-[POPAnimationTracer eventsWithType:]
+-[POPAnimationTracer writeEvents]
+-[POPAnimationTracer allEvents]
+-[POPAnimationTracer reset]
+-[POPAnimationTracer stop]
+-[POPAnimationTracer start]
+-[POPAnimationTracer autoreversed]
+-[POPAnimationTracer didReachToValue:]
+-[POPAnimationTracer didStop:]
+-[POPAnimationTracer didStart]
+-[POPAnimationTracer updateTension:]
+-[POPAnimationTracer updateMass:]
+-[POPAnimationTracer updateFriction:]
+-[POPAnimationTracer updateBounciness:]
+-[POPAnimationTracer updateSpeed:]
+-[POPAnimationTracer updateVelocity:]
+-[POPAnimationTracer updateFromValue:]
+-[POPAnimationTracer updateToValue:]
+-[POPAnimationTracer writePropertyValue:]
+-[POPAnimationTracer readPropertyValue:]
+-[POPAnimationTracer initWithAnimation:]
++[POPAnimator sharedAnimator]
+__29+[POPAnimator sharedAnimator]_block_invoke
++[POPAnimator disableBackgroundThread]
++[POPAnimator setDisableBackgroundThread:]
+-[POPAnimator init]
+-[POPAnimator dealloc]
+-[POPAnimator _processPendingList]
+-[POPAnimator _clearPendingListObserver]
+-[POPAnimator _scheduleProcessPendingList]
+__42-[POPAnimator _scheduleProcessPendingList]_block_invoke
+__copy_helper_block_
+__destroy_helper_block_
+-[POPAnimator _renderTime:items:]
+_ZL17updateDisplayLinkP11POPAnimator
+-[POPAnimator _renderTime:item:]
+_ZL14stopAndCleanupP11POPAnimatorNSt3__110shared_ptrI15POPAnimatorItemEEbb
+_ZN18_POPAnimationState13startIfNeededEP11objc_objectdd
+_ZN18_POPAnimationState4stopEbb
+-[POPAnimator observers]
+-[POPAnimator addAnimation:forObject:key:]
+_ZN15POPAnimatorItemC1EP11objc_objectP8NSStringP12POPAnimation
+-[POPAnimator removeAllAnimationsForObject:]
+-[POPAnimator removeAnimationForObject:key:cleanupDict:]
+_ZL15deleteDictEntryP11POPAnimatorP11objc_objectP8NSStringa
+-[POPAnimator removeAnimationForObject:key:]
+-[POPAnimator animationKeysForObject:]
+-[POPAnimator animationForObject:key:]
+-[POPAnimator _currentRenderTime]
+-[POPAnimator render]
+-[POPAnimator renderTime:]
+-[POPAnimator addObserver:]
+-[POPAnimator removeObserver:]
+-[POPAnimator delegate]
+-[POPAnimator setDelegate:]
+-[POPAnimator disableDisplayLink]
+-[POPAnimator setDisableDisplayLink:]
+-[POPAnimator beginTime]
+-[POPAnimator setBeginTime:]
+-[POPAnimator .cxx_destruct]
+-[POPAnimator .cxx_construct]
+_ZN18_POPAnimationState11advanceTimeEdP11objc_object
+_ZL16updateAnimatableP11objc_objectP26_POPPropertyAnimationStateb
+_ZN26_POPPropertyAnimationState16finalizeProgressEv
+_ZN18_POPAnimationState13handleDidStopEa
+_ZN15POPAnimatorItemC2EP11objc_objectP8NSStringP12POPAnimation
+_ZNSt3__120__shared_ptr_pointerIP15POPAnimatorItemNS_14default_deleteIS1_EENS_9allocatorIS1_EEED1Ev
+_ZNSt3__120__shared_ptr_pointerIP15POPAnimatorItemNS_14default_deleteIS1_EENS_9allocatorIS1_EEED0Ev
+_ZZ29+[POPAnimator sharedAnimator]E9_animator
+_ZZ29+[POPAnimator sharedAnimator]E9onceToken
+_ZL24_disableBackgroundThread
+OBJC_CLASSLIST_REFERENCES_$_.3
+OBJC_SELECTOR_REFERENCES_.5
+OBJC_METH_VAR_NAME_.6
+OBJC_SELECTOR_REFERENCES_.7
+OBJC_IVAR_$_POPAnimator._displayLink
+OBJC_METH_VAR_NAME_.8
+OBJC_SELECTOR_REFERENCES_.9
+OBJC_CLASSLIST_REFERENCES_$_.10
+OBJC_IVAR_$_POPAnimator._dict
+OBJC_IVAR_$_POPAnimator._lock
+OBJC_IVAR_$_POPAnimator._beginTime
+OBJC_IVAR_$_POPAnimator._pendingList
+OBJC_IVAR_$_POPAnimator._pendingListObserver
+__block_descriptor_tmp.28
+OBJC_IVAR_$_POPAnimator._delegate
+OBJC_SELECTOR_REFERENCES_.45
+OBJC_IVAR_$_POPAnimator._slowMotionAccumulator
+OBJC_CLASSLIST_REFERENCES_$_.46
+OBJC_IVAR_$_POPAnimator._observers
+OBJC_CLASSLIST_REFERENCES_$_.71
+OBJC_CLASSLIST_REFERENCES_$_.76
+OBJC_IVAR_$_POPAnimator._list
+OBJC_CLASSLIST_REFERENCES_$_.100
+OBJC_IVAR_$_POPAnimator._disableDisplayLink
+OBJC_METH_VAR_TYPE_.107
+OBJC_METH_VAR_NAME_.108
+OBJC_METH_VAR_TYPE_.109
+l_OBJC_$_CLASS_METHODS_POPAnimator
+l_OBJC_METACLASS_RO_$_POPAnimator
+OBJC_CLASS_NAME_.110
+OBJC_METH_VAR_TYPE_.111
+OBJC_METH_VAR_TYPE_.113
+OBJC_METH_VAR_NAME_.114
+OBJC_METH_VAR_TYPE_.115
+OBJC_METH_VAR_NAME_.116
+OBJC_METH_VAR_TYPE_.117
+OBJC_METH_VAR_TYPE_.118
+OBJC_METH_VAR_NAME_.119
+OBJC_METH_VAR_TYPE_.120
+OBJC_METH_VAR_TYPE_.122
+OBJC_METH_VAR_NAME_.123
+OBJC_METH_VAR_TYPE_.124
+OBJC_METH_VAR_TYPE_.125
+OBJC_METH_VAR_TYPE_.126
+OBJC_METH_VAR_NAME_.127
+OBJC_METH_VAR_NAME_.128
+OBJC_METH_VAR_NAME_.130
+OBJC_METH_VAR_NAME_.131
+OBJC_METH_VAR_NAME_.132
+OBJC_METH_VAR_NAME_.134
+OBJC_METH_VAR_NAME_.135
+OBJC_METH_VAR_NAME_.136
+l_OBJC_$_INSTANCE_METHODS_POPAnimator
+OBJC_METH_VAR_TYPE_.138
+OBJC_METH_VAR_NAME_.139
+OBJC_METH_VAR_TYPE_.140
+OBJC_METH_VAR_TYPE_.142
+OBJC_METH_VAR_NAME_.143
+OBJC_METH_VAR_TYPE_.144
+OBJC_METH_VAR_TYPE_.147
+OBJC_IVAR_$_POPAnimator._slowMotionStartTime
+OBJC_METH_VAR_TYPE_.149
+OBJC_IVAR_$_POPAnimator._slowMotionLastTime
+OBJC_METH_VAR_NAME_.151
+OBJC_METH_VAR_TYPE_.154
+OBJC_METH_VAR_NAME_.155
+OBJC_METH_VAR_TYPE_.156
+OBJC_METH_VAR_TYPE_.158
+l_OBJC_$_INSTANCE_VARIABLES_POPAnimator
+OBJC_CLASS_NAME_.159
+OBJC_PROP_NAME_ATTR_.160
+OBJC_PROP_NAME_ATTR_.161
+OBJC_PROP_NAME_ATTR_.162
+OBJC_PROP_NAME_ATTR_.163
+OBJC_PROP_NAME_ATTR_.164
+l_OBJC_$_PROP_LIST_POPAnimator
+l_OBJC_CLASS_RO_$_POPAnimator
+OBJC_METH_VAR_NAME_.167
+OBJC_METH_VAR_NAME_.171
+OBJC_METH_VAR_NAME_.173
+OBJC_METH_VAR_NAME_.175
+OBJC_METH_VAR_NAME_.177
+OBJC_METH_VAR_NAME_.179
+OBJC_METH_VAR_NAME_.181
+__list_imp
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/list
+list
+__list_const_iterator
+erase
+operator++
+swap<POPAnimatorItem *>
+operator!=
+__link_nodes_at_back
+forward<const std::__1::shared_ptr<POPAnimatorItem> &>
+construct<std::__1::shared_ptr<POPAnimatorItem>, const std::__1::shared_ptr<POPAnimatorItem> &>
+__construct<std::__1::shared_ptr<POPAnimatorItem>, const std::__1::shared_ptr<POPAnimatorItem> &>
+forward<std::__1::__allocator_destructor<std::__1::allocator<std::__1::__list_node<std::__1::shared_ptr<POPAnimatorItem>, void *> > > >
+forward<std::__1::__list_node<std::__1::shared_ptr<POPAnimatorItem>, void *> *>
+move<std::__1::__allocator_destructor<std::__1::allocator<std::__1::__list_node<std::__1::shared_ptr<POPAnimatorItem>, void *> > > &>
+__allocator_destructor
+allocate
+push_back
+addressof<std::__1::__shared_ptr_pointer<POPAnimatorItem *, std::__1::default_delete<POPAnimatorItem>, std::__1::allocator<POPAnimatorItem> > >
+allocator<POPAnimatorItem>
+addressof<const std::__1::default_delete<POPAnimatorItem> >
+~POPAnimatorItem
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimator.mm
+forward<std::__1::allocator<POPAnimatorItem> >
+forward<std::__1::__compressed_pair<POPAnimatorItem *, std::__1::default_delete<POPAnimatorItem> > >
+move<std::__1::allocator<POPAnimatorItem> &>
+forward<std::__1::default_delete<POPAnimatorItem> >
+move<std::__1::default_delete<POPAnimatorItem> &>
+forward<POPAnimatorItem *>
+move<POPAnimatorItem *&>
+shared_ptr<POPAnimatorItem>
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iterator
+base
+operator==<std::__1::shared_ptr<POPAnimatorItem> *, std::__1::shared_ptr<POPAnimatorItem> *>
+operator!=<std::__1::shared_ptr<POPAnimatorItem> *>
+end
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector
+__wrap_iter
+__make_iter
+begin
+__done
+forward<std::__1::shared_ptr<POPAnimatorItem> &>
+construct<std::__1::shared_ptr<POPAnimatorItem>, std::__1::shared_ptr<POPAnimatorItem> &>
+__construct<std::__1::shared_ptr<POPAnimatorItem>, std::__1::shared_ptr<POPAnimatorItem> &>
+__construct_range_forward<std::__1::__list_iterator<std::__1::shared_ptr<POPAnimatorItem>, void *>, std::__1::shared_ptr<POPAnimatorItem> *>
+__RAII_IncreaseAnnotator
+__construct_at_end<std::__1::__list_iterator<std::__1::shared_ptr<POPAnimatorItem>, void *> >
+capacity
+__annotate_contiguous_container
+__annotate_new
+__end_cap
+__allocate
+max
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/limits
+__alloc
+max_size
+__max_size
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/algorithm
+min<unsigned long, std::__1::__less<unsigned long, unsigned long> >
+min<unsigned long>
+__distance<std::__1::__list_iterator<std::__1::shared_ptr<POPAnimatorItem>, void *> >
+distance<std::__1::__list_iterator<std::__1::shared_ptr<POPAnimatorItem>, void *> >
+forward<std::__1::shared_ptr<POPAnimatorItem> *>
+__vector_base_common
+__vector_base
+vector<std::__1::__list_iterator<std::__1::shared_ptr<POPAnimatorItem>, void *> >
+__list_iterator
+clear
+forward<std::__1::allocator<std::__1::__list_node<std::__1::shared_ptr<POPAnimatorItem>, void *> > >
+forward<unsigned long>
+allocator<std::__1::shared_ptr<POPAnimatorItem> >
+__self
+__list_node_base
+allocator<std::__1::__list_node<std::__1::shared_ptr<POPAnimatorItem>, void *> >
+__node_alloc
+select_on_container_copy_construction
+deleteDictEntry
+POPAnimatorItem
+isStarted
+handleDidStop
+stop
+finalizeProgress
+applyAnimationToValue
+operator+=
+updateAnimatable
+advanceTime
+applyAnimationTime
+startIfNeeded
+operator==<POPAnimatorItem, POPAnimatorItem>
+find<std::__1::__list_iterator<std::__1::shared_ptr<POPAnimatorItem>, void *>, std::__1::shared_ptr<POPAnimatorItem> >
+stopAndCleanup
+empty
+updateDisplayLink
+__to_raw_pointer<std::__1::shared_ptr<POPAnimatorItem> >
+destroy
+__destroy<std::__1::shared_ptr<POPAnimatorItem> >
+destroy<std::__1::shared_ptr<POPAnimatorItem> >
+__destruct_at_end
+~__vector_base
+~vector
+addressof<std::__1::shared_ptr<POPAnimatorItem> >
+__sz
+__unlink_nodes
+addressof<std::__1::__list_node_base<std::__1::shared_ptr<POPAnimatorItem>, void *> >
+~__list_imp
+~list
+_dispatch_once
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/usr/include/dispatch/once.h
+-[POPAnimator .cxx_construct]
+-[POPAnimator .cxx_destruct]
+-[POPAnimator setBeginTime:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimatorPrivate.h
+-[POPAnimator beginTime]
+-[POPAnimator setDisableDisplayLink:]
+-[POPAnimator disableDisplayLink]
+-[POPAnimator setDelegate:]
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPAnimator.h
+-[POPAnimator delegate]
+-[POPAnimator removeObserver:]
+-[POPAnimator addObserver:]
+-[POPAnimator renderTime:]
+-[POPAnimator render]
+-[POPAnimator _currentRenderTime]
+-[POPAnimator animationForObject:key:]
+-[POPAnimator animationKeysForObject:]
+-[POPAnimator removeAnimationForObject:key:]
+-[POPAnimator removeAnimationForObject:key:cleanupDict:]
+-[POPAnimator removeAllAnimationsForObject:]
+-[POPAnimator addAnimation:forObject:key:]
+-[POPAnimator observers]
+-[POPAnimator _renderTime:item:]
+-[POPAnimator _renderTime:items:]
+-[POPAnimator _scheduleProcessPendingList]
+-[POPAnimator _clearPendingListObserver]
+-[POPAnimator _processPendingList]
+-[POPAnimator dealloc]
+-[POPAnimator init]
++[POPAnimator setDisableBackgroundThread:]
++[POPAnimator disableBackgroundThread]
++[POPAnimator sharedAnimator]
+POPUIColorRGBACreate
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPCGUtils.mm
+POPUIColorGetRGBAComponents
+POPCGColorWithColor
+POPCGColorRGBACreate
+POPCGColorGetRGBAComponents
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPGeometry.mm
+ensureNonZeroValue
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPLayerExtras.mm
+POPLayerSetSubTranslationXY
+POPLayerGetSubTranslationXY
+POPLayerSetSubTranslationZ
+POPLayerGetSubTranslationZ
+POPLayerSetSubTranslationY
+POPLayerGetSubTranslationY
+POPLayerSetSubTranslationX
+POPLayerGetSubTranslationX
+POPLayerSetSubScaleXY
+POPLayerGetSubScaleXY
+POPLayerSetRotation
+POPLayerGetRotation
+POPLayerSetRotationZ
+POPLayerGetRotationZ
+POPLayerSetRotationY
+POPLayerGetRotationY
+POPLayerSetRotationX
+POPLayerGetRotationX
+POPLayerSetTranslationXY
+POPLayerGetTranslationXY
+POPLayerSetTranslationZ
+POPLayerGetTranslationZ
+POPLayerSetTranslationY
+POPLayerGetTranslationY
+POPLayerSetTranslationX
+POPLayerGetTranslationX
+POPLayerSetScaleXY
+POPLayerGetScaleXY
+POPLayerSetScaleZ
+POPLayerGetScaleZ
+POPLayerSetScaleY
+POPLayerGetScaleY
+POPLayerSetScaleX
+POPLayerGetScaleX
+_ZN7WebCore10UnitBezier11solveCurveXEdd
+b3_friction3
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPMath.mm
+b3_friction2
+b3_friction1
+linear_interpolation
+sampleCurveDerivativeX
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/WebCore/UnitBezier.h
+sampleCurveX
+solveCurveX
+sampleCurveY
+solve
+UnitBezier
+POPQuadraticSolve
+POPBouncy3NoBounce
+POPQuadraticOutInterpolation
+POPProjectNormal
+POPNormalize
+POPTimingFunctionSolve
+POPInterpolateVector
+OBJC_CLASSLIST_REFERENCES_$_.5
+.str.8
+_unnamed_cfstring_.9
+.str.12
+_unnamed_cfstring_.13
+.str.14
+_unnamed_cfstring_.15
+Vector2
+move<float *&>
+swap<float *>
+move<unsigned long &>
+swap<unsigned long>
+POPSubRound
+toString
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/POPVector.mm
+norm
+subRound
+new_cg_color
+cg_color
+new_cg_affine_transform
+cg_affine_transform
+new_ui_edge_insets
+ui_edge_insets
+new_cg_rect
+cg_rect
+new_cg_size
+cg_size
+new_cg_point
+cg_point
+new_cg_float
+vector2r
+vector4r
+new_vector
+~Vector
+Vector
+_ZNK7WebCore20TransformationMatrix23isIdentityOrTranslationEv
+_ZN7WebCoreL14determinant4x4ERA4_A4_Kd
+_ZN7WebCoreL7inverseERA4_A4_KdRA4_A4_d
+_ZNK7WebCore20TransformationMatrix10isIdentityEv
+setM21
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/WebCore/TransformationMatrix.h
+setM31
+setM32
+makeIdentity
+v3Cross
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/WebCore/TransformationMatrix.cpp
+v3Combine
+v3Dot
+v3Scale
+v3Length
+v4MulPointByMatrix
+transposeMatrix4
+decompose
+slerp
+blendFloat
+isIdentity
+adjoint
+inverse
+TransformationMatrix
+determinant2x2
+determinant3x3
+determinant4x4
+isIdentityOrTranslation
+setMatrix
+deg2rad
+rad2deg
+rotate
+m44
+m43
+m42
+m41
+m34
+m33
+m32
+m31
+m24
+m23
+m22
+m21
+m14
+m13
+m12
+m11
+narrowPrecisionToFloat<double>
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/pop/pop/WebCore/FloatConversion.h
+recompose
+blend
+makeAffine
+isInvertible
+multVecMatrix
+multiply
+applyPerspective
+skew
+translateRight3d
+translateRight
+translate3d
+translate
+rotate3d
+scale3d
+scaleNonUniform
+flipY
+flipX
+rotateFromVector
+scale
+operator CATransform3D
+affineTransform
+transform3d
+_ZL15__ARCLite__loadv
+_ZL30add_image_hook_autoreleasepoolPK11mach_headerl
+_ZL34__arclite_objc_autoreleasePoolPushv
+_ZL33__arclite_objc_autoreleasePoolPopPv
+_ZL19patch_lazy_pointersPK11mach_headerP7patch_tm
+_ZL42__arclite_NSArray_objectAtIndexedSubscriptP7NSArrayP13objc_selectorj
+_ZL53__arclite_NSMutableArray_setObject_atIndexedSubscriptP14NSMutableArrayP13objc_selectorP11objc_objectj
+_ZL46__arclite_NSDictionary_objectForKeyedSubscriptP12NSDictionaryP13objc_selectorP11objc_object
+_ZL47__arclite_NSOrderedSet_objectAtIndexedSubscriptP12NSOrderedSetP13objc_selectorj
+_ZL58__arclite_NSMutableOrderedSet_setObject_atIndexedSubscriptP19NSMutableOrderedSetP13objc_selectorP11objc_objectj
+_ZL58__arclite_NSMutableDictionary__setObject_forKeyedSubscriptP19NSMutableDictionaryP13objc_selectorP11objc_objectS4_
+_ZL18add_image_hook_ARCPK11mach_headerl
+_ZL36__arclite_object_setInstanceVariableP11objc_objectPKcPv
+_ZL24__arclite_object_setIvarP11objc_objectP9objc_ivarS0_
+_ZL21__arclite_object_copyP11objc_objectm
+_ZL21__arclite_objc_retainP11objc_object
+_ZL26__arclite_objc_retainBlockP11objc_object
+_ZL22__arclite_objc_releaseP11objc_object
+_ZL26__arclite_objc_autoreleaseP11objc_object
+_ZL32__arclite_objc_retainAutoreleaseP11objc_object
+_ZL37__arclite_objc_autoreleaseReturnValueP11objc_object
+_ZL43__arclite_objc_retainAutoreleaseReturnValueP11objc_object
+_ZL44__arclite_objc_retainAutoreleasedReturnValueP11objc_object
+_ZL26__arclite_objc_storeStrongPP11objc_objectS0_
+_ZL22add_image_hook_swiftV1PK11mach_headerl
+_ZL42__arclite_NSUndoManagerProxy_isKindOfClassP11objc_objectP13objc_selectorP10objc_class
+_ZL13replaceMethodP10objc_classP13objc_selectorPFP11objc_objectS4_S2_zEPS6_
+_ZL30__arclite_NSManagedObject_initP11objc_objectP13objc_selector
+_ZL41__arclite_NSManagedObject_allocWithEntityP11objc_objectP13objc_selectorS0_
+_ZL36__arclite_NSManagedObject_allocBatchP11objc_objectP13objc_selectorPS0_S0_j
+_ZL37__arclite_NSKKMS_fastIndexForKnownKeyP11objc_objectP13objc_selectorS0_
+_ZL28__arclite_NSKKMS_indexForKeyP11objc_objectP13objc_selectorS0_
+_ZL29__arclite_NSKKsD_objectForKeyP11objc_objectP13objc_selectorS0_
+_ZL35__arclite_NSKKsD_removeObjectForKeyP11objc_objectP13objc_selectorS0_
+_ZL33__arclite_NSKKsD_setObject_forKeyP11objc_objectP13objc_selectorS0_S0_
+_ZL41__arclite_NSKKsD_addEntriesFromDictionaryP11objc_objectP13objc_selectorP12NSDictionary
+_ZL28__arclite_objc_readClassPairP10objc_classPK15objc_image_info
+_ZL32__arclite_objc_allocateClassPairP10objc_classPKcm
+_ZL32__arclite_object_getIndexedIvarsP11objc_object
+_ZL23__arclite_objc_getClassPKc
+_ZL27__arclite_objc_getMetaClassPKc
+_ZL31__arclite_objc_getRequiredClassPKc
+_ZL26__arclite_objc_lookUpClassPKc
+_ZL26__arclite_objc_getProtocolPKc
+_ZL23__arclite_class_getNameP10objc_class
+_ZL26__arclite_protocol_getNameP8Protocol
+_ZL37__arclite_objc_copyClassNamesForImagePKcPj
+_ZL17transcribeMethodsP10objc_classP15glue_class_ro_t
+_ZL19transcribeProtocolsP10objc_classP15glue_class_ro_t
+_ZL20transcribePropertiesP10objc_classP15glue_class_ro_t
+_ZL14initialize_impP11objc_objectP13objc_selector
+_ZL18allocateMaybeSwiftP18glue_swift_class_tm
+_ZL22copySwiftV1MangledNamePKcb
+_ZL13demangledNamePKcb
+_ZL16scanMangledFieldRPKcS0_S1_Ri
+_ZL30arclite_uninitialized_functionv
+_ZL12cxxConstructP11objc_object
+_ZL20fixStringForCoreDataP11objc_object
+OBJC_METACLASS_$___ARCLite__
+_ZL24OBJC_CLASS_$___ARCLite__
+_ZL31OBJC_METACLASS_RO_$___ARCLite__
+_non_lazy_classes
+_ZL27OBJC_CLASS_RO_$___ARCLite__
+_ZL11_class_name
+_ZL32OBJC_$_CLASS_METHODS___ARCLite__
+_ZL17_load_method_name
+_ZL17_load_method_type
+_ZL23NSAutoreleasePool_class
+_ZZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+_ZGVZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+.str.2
+.str.6
+.str.10
+.str.16
+OBJC_METH_VAR_TYPE_.20
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS___ARCLiteIndexedSubscripting__
+l_OBJC_$_PROTOCOL_METHOD_TYPES___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteIndexedSubscripting__
+l_OBJC_$_PROTOCOL_INSTANCE_METHODS___ARCLiteKeyedSubscripting__
+l_OBJC_$_PROTOCOL_METHOD_TYPES___ARCLiteKeyedSubscripting__
+l_OBJC_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteKeyedSubscripting__
+_ZZL18add_image_hook_ARCPK11mach_headerlE7patches
+_ZGVZL18add_image_hook_ARCPK11mach_headerlE7patches
+.str.50
+_ZL30NSUndoManagerProxy_targetClass
+_ZL29original_NSManagedObject_init
+_ZL40original_NSManagedObject_allocWithEntity
+_ZL35original_NSManagedObject_allocBatch
+_ZL25NSMutableDictionary_class
+_ZL22NSConstantString_class
+.str.72
+_ZL14NSString_class
+_ZL36original_NSKKMS_fastIndexForKnownKey
+_ZL27original_NSKKMS_indexForKey
+.str.78
+_ZL28original_NSKKsD_objectForKey
+_ZL34original_NSKKsD_removeObjectForKey
+_ZL32original_NSKKsD_setObject_forKey
+_ZL40original_NSKKsD_addEntriesFromDictionary
+_ZZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+_ZGVZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+.str.82
+_ZL31original_objc_allocateClassPair
+_ZL31original_object_getIndexedIvars
+.str.84
+_ZL22original_objc_getClass
+_ZL26original_objc_getMetaClass
+.str.86
+_ZL30original_objc_getRequiredClass
+.str.87
+_ZL25original_objc_lookUpClass
+_ZL25original_objc_getProtocol
+.str.89
+_ZL22original_class_getName
+_ZL25original_protocol_getName
+.str.91
+_ZL36original_objc_copyClassNamesForImage
+.str.97
+.str.99
+.str.100
+.str.102
+.str.103
+_ZL12demangleLock
+_ZL9Demangled
+.str.105
+OBJC_SELECTOR_REFERENCES_.109
+OBJC_METH_VAR_NAME_.110
+OBJC_SELECTOR_REFERENCES_.111
+OBJC_SELECTOR_REFERENCES_.115
+OBJC_SELECTOR_REFERENCES_.117
+Apple LLVM version 7.3.0 (clang-703.0.21)
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c++ -arch armv7 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -Wno-trigraphs -fno-exceptions -fno-rtti -mpascal-strings -Os -Wno-missing-field-initializers -Wmissing-prototypes -Wno-implicit-atomic-properties -Wno-arc-repeated-use-of-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -D NDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.Internal.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -miphoneos-version-min=4.3 -g -fno-threadsafe-statics -Wno-sign-conversion -fembed-bitcode -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/TempContent/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-generated-files.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/TempContent/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-own-target-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/TempContent/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-all-target-headers.hmap -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/TempContent/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-project-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/Symbols/BuiltProducts/include -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/TempContent/Objects/arclite.build/arclite_iOS.build/DerivedSources/armv7 -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/TempContent/Objects/arclite.build/arclite_iOS.build/DerivedSources -F/Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/Symbols/BuiltProducts -F/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.Internal.sdk/System/Library/PrivateFrameworks -Wall -Wextra -Wno-gcc-compat -fgnu-inline-asm -MMD -MT dependencies -MF /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/TempContent/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.d --serialize-diagnostics /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/TempContent/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.dia -c /Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm -o /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~248/TempContent/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.o -mlinker-version=264.3 -march=armv7a
+__arclite_NSKKsD_addEntriesFromDictionary
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65
+__arclite_NSKKsD_setObject_forKey
+__arclite_NSKKsD_removeObjectForKey
+__arclite_NSKKsD_objectForKey
+__arclite_NSKKMS_indexForKey
+fixStringForCoreData
+__arclite_NSKKMS_fastIndexForKnownKey
+__arclite_NSManagedObject_allocBatch
+__arclite_NSManagedObject_allocWithEntity
+cxxConstruct
+__arclite_NSManagedObject_init
+arclite_uninitialized_function
+replaceMethod
+__arclite_NSUndoManagerProxy_isKindOfClass
+patch_t<const char **(const char *, unsigned int *)>
+__arclite_objc_copyClassNamesForImage
+patch_t<const char *(Protocol *)>
+__arclite_protocol_getName
+patch_t<const char *(Class)>
+__isctype
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.Internal.sdk/usr/include/ctype.h
+isdigit
+scanMangledField
+copySwiftV1DemangledName
+demangledName
+__arclite_class_getName
+patch_t<Protocol *(const char *)>
+__arclite_objc_getProtocol
+__arclite_objc_lookUpClass
+__arclite_objc_getRequiredClass
+__arclite_objc_getMetaClass
+patch_t<Class (const char *)>
+copySwiftV1MangledName
+__arclite_objc_getClass
+patch_t<void *(id)>
+word_align
+__arclite_object_getIndexedIvars
+patch_t<Class (Class, const char *, unsigned long)>
+allocateMaybeSwift
+isSwift
+metaclass
+__arclite_objc_allocateClassPair
+patch_t<Class (Class, const objc_image_info *)>
+initialize_imp
+property_list_nth
+transcribeProperties
+transcribeProtocols
+method_list_nth
+transcribeMethods
+alignment
+ivar_list_nth
+transcribeIvars
+fastFlags
+ro
+__arclite_objc_readClassPair
+add_image_hook_swiftV1
+install_swiftV1
+patch_t<void (id *, id)>
+__arclite_objc_storeStrong
+__arclite_objc_retainAutoreleasedReturnValue
+__arclite_objc_retainAutoreleaseReturnValue
+__arclite_objc_autoreleaseReturnValue
+__arclite_objc_retainAutorelease
+__arclite_objc_autorelease
+patch_t<void (id)>
+__arclite_objc_release
+__arclite_objc_retainBlock
+patch_t<id (id)>
+__arclite_objc_retain
+patch_t<id (id, unsigned long)>
+fixupCopiedReferences
+classOrSuperClassesUseARR
+__arclite_object_copy
+patch_t<void (id, objc_ivar *, id)>
+isScannedOffset
+alignedInstanceStart
+_class_getInstanceStart
+__arclite_class_usesAutomaticRetainRelease
+_ivar_getClass
+__arclite_object_setIvar
+patch_t<objc_ivar *(id, const char *, void *)>
+__arclite_object_setInstanceVariable
+add_image_hook_ARC
+install_ARC
+objc_collectingEnabled
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.Internal.sdk/usr/include/objc/objc-auto.h
+__arclite_NSMutableDictionary__setObject_forKeyedSubscript
+addOrReplaceMethod
+install_dict_nil_value
+__arclite_NSMutableOrderedSet_setObject_atIndexedSubscript
+__arclite_NSOrderedSet_objectAtIndexedSubscript
+keyedGetter
+__arclite_NSDictionary_objectForKeyedSubscript
+__arclite_NSMutableArray_setObject_atIndexedSubscript
+indexedGetter
+__arclite_NSArray_objectAtIndexedSubscript
+addMethod
+install_subscripting
+patch_lazy_pointers
+patch_t<void (void *)>
+__arclite_objc_autoreleasePoolPop
+patch_t<void *()>
+__arclite_objc_autoreleasePoolPush
+add_image_hook_autoreleasepool
+install_autoreleasepool
+__ARCLite__load

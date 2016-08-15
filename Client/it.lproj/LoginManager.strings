@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Procedere con l’eliminazione?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Annulla";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Azzera ricerca";
+
+/* Copy password text selection menu item */
+"Copy" = "Copia";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Elimina";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Deseleziona tutto";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Attiva modalità ricerca";
+
+/* Hide password text selection menu item */
+"Hide" = "Nascondi";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "Ultima modifica %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "Accessi";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Gli accessi verranno eliminati in modo definitivo.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Gli accessi verranno rimossi da tutti i dispositivi connessi.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Nessun accesso disponibile";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Apri e compila";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Mostra";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Ricerca";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Campo di ricerca";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Seleziona tutto";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "password";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "utente";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "sito web";
+

@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "ప్రయివేటు ట్యాబులను మూసివేయి";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "ఫైర్ఫాక్స్ మీ చరిత్ర లేదా కుకీలను ఏవీ గుర్తుంచుకోదు, కానీ కొత్త బుక్మార్క్లు సేవ్ చేయబడుతుంది.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "మరింత తెలుసుకోండి";
+
+/* Toggled OFF accessibility value */
+"Off" = "ఆఫ్ చేయి";
+
+/* Toggled ON accessibility value */
+"On" = "ఆన్ చేయి";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "కొత్త ప్రైవేట్ టాబ్ లో తెరువు";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "ప్రైవేట్ బ్రౌజింగ్";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "ప్రైవేట్ మోడ్";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "ప్రైవేట్ మోడ్ ఆన్ లేదా ఆఫ్ కు మార్చండి";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "ప్రైవేట్ బ్రౌజింగ్ విడిచిపెట్టునప్పుడు";
+

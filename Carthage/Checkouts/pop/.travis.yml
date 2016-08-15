@@ -1,0 +1,10 @@
+language: objective-c
+before_install:
+  - brew update
+  - brew reinstall xctool
+  - gem update cocoapods
+xcode_workspace: pop.xcworkspace
+xcode_scheme: pop-ios-static
+xcode_sdk:
+  - iphonesimulator
+  - iphonesimulator8.1
