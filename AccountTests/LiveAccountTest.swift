@@ -119,18 +119,6 @@ public class LiveAccountTest: XCTestCase {
         }
     }
 
-    // Override this to configure test account.
-    public func account() -> Deferred<Maybe<FirefoxAccount>> {
-        if self.signedInUser == nil {
-            return Deferred(value: Maybe(failure: AccountError.NoSignedInUser))
-        }
-        if !(self.signedInUser?["verified"].asBool ?? false) {
-            return Deferred(value: Maybe(failure: AccountError.UnverifiedSignedInUser))
-        }
-        return self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
-            configuration: ProductionFirefoxAccountConfiguration())
-    }
-
     func getTestAccount() -> Deferred<Maybe<FirefoxAccount>> {
         // TODO: Use signedInUser.json here.  It's hard to include the same resource file in two Xcode targets.
         return self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
