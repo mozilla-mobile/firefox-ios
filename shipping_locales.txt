@@ -7,6 +7,7 @@ cy
 da
 de
 dsb
+en-GB
 en-US
 eo
 es
@@ -16,6 +17,7 @@ fy-NL
 ga-IE
 gd
 hsb
+hu
 id
 is
 it
@@ -27,6 +29,7 @@ lo
 lt
 lv
 nb-NO
+ne-NP
 nl
 nn-NO
 pl
@@ -39,6 +42,7 @@ ses
 sk
 sl
 sv-SE
+te
 th
 tl
 tr
