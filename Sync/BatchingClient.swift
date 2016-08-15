@@ -155,7 +155,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
         // If we can fit in another payload, push it up using our batch token
         if batchMeta.add(self.currentPayload) {
-            return self.uploadPayload(self.currentPayload, queryParams: [NSURLQueryItem(name: "batch", value: token)])
+            return self.uploadPayload(self.currentPayload, queryParams: [NSURLQueryItem(name: "batch", value: String(token))])
                 >>> effect({
                     self.currentPayload = self.addRecordToNewPayload(uploadRecord)
                 })
@@ -212,7 +212,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     }
 
     private func commit(token: BatchToken) -> Success {
-        let batchParam = NSURLQueryItem(name: "batch", value: token)
+        let batchParam = NSURLQueryItem(name: "batch", value: String(token))
         let commitParam = NSURLQueryItem(name: "commit", value: "true")
 
         return self.uploadPayload(self.currentPayload, queryParams: [batchParam, commitParam])

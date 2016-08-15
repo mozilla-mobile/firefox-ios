@@ -208,7 +208,7 @@ class Sync15BatchClientTests: XCTestCase {
 
     func testUploadSingleBatch() {
         let firstResponse  =
-            StorageResponse(value: POSTResult(modified: 20_000, success: [], failed: [:], batchToken: "token"), metadata: ResponseMetadata(status: 200, headers: [:]))
+            StorageResponse(value: POSTResult(modified: 20_000, success: [], failed: [:], batchToken: 1), metadata: ResponseMetadata(status: 200, headers: [:]))
 
         var requestCount = 0
         var uploadedCollectionCount = 0
@@ -271,10 +271,10 @@ class Sync15BatchClientTests: XCTestCase {
 
     func testMultipleBatchUpload() {
         let firstResponse  =
-            StorageResponse(value: POSTResult(modified: 20_000, success: [], failed: [:], batchToken: "tokenA"), metadata: ResponseMetadata(status: 200, headers: [:]))
+            StorageResponse(value: POSTResult(modified: 20_000, success: [], failed: [:], batchToken: 1), metadata: ResponseMetadata(status: 200, headers: [:]))
 
         let thirdResponse =
-            StorageResponse(value: POSTResult(modified: 30_000, success: [], failed: [:], batchToken: "tokenB"), metadata: ResponseMetadata(status: 200, headers: [:]))
+            StorageResponse(value: POSTResult(modified: 30_000, success: [], failed: [:], batchToken: 2), metadata: ResponseMetadata(status: 200, headers: [:]))
 
         var requestCount = 0
         var uploadedCollectionCount = 0
@@ -295,7 +295,7 @@ class Sync15BatchClientTests: XCTestCase {
                 assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
                 return deferMaybe(firstResponse)
             case 2:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "tokenA")
+                let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
                 let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
                 XCTAssertEqual(expectedBatch, queryParams![0])
                 XCTAssertEqual(expectedCommit, queryParams![1])
@@ -307,7 +307,7 @@ class Sync15BatchClientTests: XCTestCase {
                 assertLinesMatchRecords(lines, records: Array(allRecords[4..<6]), serializer: basicSerializer)
                 return deferMaybe(thirdResponse)
             case 4:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "tokenB")
+                let expectedBatch = NSURLQueryItem(name: "batch", value: "2")
                 let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
                 XCTAssertEqual(expectedBatch, queryParams![0])
                 XCTAssertEqual(expectedCommit, queryParams![1])
