@@ -950,7 +950,7 @@ class BrowserViewController: UIViewController {
             if tab.url?.origin == webView.URL?.origin {
                 tab.url = webView.URL
 
-                if tab === tabManager.selectedTab {
+                if tab === tabManager.selectedTab && !tab.restoring {
                     updateUIForReaderHomeStateForTab(tab)
                 }
             }
@@ -1814,6 +1814,10 @@ extension BrowserViewController: TabDelegate {
             tab.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
         }
 
+        let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
+        sessionRestoreHelper.delegate = self
+        tab.addHelper(sessionRestoreHelper, name: SessionRestoreHelper.name())
+
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
         tab.addHelper(findInPageHelper, name: FindInPageHelper.name())
@@ -2234,6 +2238,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if !navigationAction.isAllowed && navigationAction.navigationType != .BackForward {
+            print("\(navigationAction.isAllowed) \(navigationAction.navigationType == .BackForward) \(navigationAction.request.URL)")
             log.warning("Denying unprivileged request: \(navigationAction.request)")
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
@@ -2520,6 +2525,14 @@ extension BrowserViewController: WKUIDelegate {
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
+            
+            // If the local web server isn't working for some reason (Firefox cellular data is
+            // disabled in settings, for example), we'll fail to load the session restore URL.
+            // We rely on loading that page to get the restore callback to reset the restoring
+            // flag, so if we fail to load that page, reset it here.
+            if AboutUtils.getAboutComponent(url) == "sessionrestore" {
+                tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
+            }
         }
     }
 
@@ -3181,6 +3194,16 @@ extension BrowserViewController: KeyboardHelperDelegate {
             UIView.setAnimationCurve(state.animationCurve)
             self.findInPageContainer.layoutIfNeeded()
             self.snackBars.layoutIfNeeded()
+        }
+    }
+}
+
+extension BrowserViewController: SessionRestoreHelperDelegate {
+    func sessionRestoreHelper(helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
+        tab.restoring = false
+        
+        if let tab = tabManager.selectedTab where tab.webView === tab.webView {
+            updateUIForReaderHomeStateForTab(tab)
         }
     }
 }
