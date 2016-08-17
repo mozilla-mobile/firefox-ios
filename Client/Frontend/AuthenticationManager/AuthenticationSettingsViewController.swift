@@ -131,8 +131,8 @@ class AuthenticationSetting: Setting {
         delegate: SettingsDelegate? = nil,
         enabled: Bool? = nil,
         touchIDSuccess: AuthenticationCallback = nil,
-        touchIDFallback: AuthenticationCallback = nil)
-    {
+        touchIDFallback: AuthenticationCallback = nil
+    ) {
         self.touchIDSuccess = touchIDSuccess
         self.touchIDFallback = touchIDFallback
         self.navigationController = navigationController

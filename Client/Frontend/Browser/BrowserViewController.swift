@@ -2189,7 +2189,7 @@ extension BrowserViewController: TabManagerDelegate {
         SELappWillEnterForegroundNotification()
     }
 
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {
         guard !self.tabManager.isInPrivateMode else {
             return
         }
