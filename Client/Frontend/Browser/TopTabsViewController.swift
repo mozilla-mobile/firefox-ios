@@ -10,7 +10,7 @@ struct TopTabsUX {
     static let TopTabsViewHeight: CGFloat = 40
     static let TopTabsBackgroundNormalColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
     static let TopTabsBackgroundPrivateColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1)
-    static let TopTabsBackgroundNormalColorInactive = UIColor(red: 198/255, green: 198/255, blue: 198/255, alpha: 1)
+    static let TopTabsBackgroundNormalColorInactive = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1)
     static let TopTabsBackgroundPrivateColorInactive = UIColor(red: 53/255, green: 53/255, blue: 53/255, alpha: 1)
     static let PrivateModeToolbarTintColor = UIColor(red: 124 / 255, green: 124 / 255, blue: 124 / 255, alpha: 1)
     static let TopTabsBackgroundPadding: CGFloat = 35

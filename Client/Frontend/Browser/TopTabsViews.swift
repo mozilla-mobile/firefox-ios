@@ -33,7 +33,6 @@ class TopTabCell: UICollectionViewCell {
             bezierView.hidden = !selectedTab
             if style == Style.Light {
                 titleText.textColor = UIColor.darkTextColor()
-                titleText.textColor = selectedTab ? UIColor.darkTextColor() : UIColor.lightTextColor()
             } else {
                 titleText.textColor = UIColor.lightTextColor()
             }
