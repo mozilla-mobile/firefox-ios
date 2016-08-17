@@ -29,18 +29,12 @@ extension FxAClient10: FxALoginClient {
 
 class FxALoginStateMachine {
     let client: FxALoginClient
-    let account: FirefoxAccount?
 
     // The keys are used as a set, to prevent cycles in the state machine.
     var stateLabelsSeen = [FxAStateLabel: Bool]()
 
-    convenience init(client: FxALoginClient) {
-        self.init(client: client, account: nil)
-    }
-
-    init(client: FxALoginClient, account: FirefoxAccount?) {
+    init(client: FxALoginClient) {
         self.client = client
-        self.account = account
     }
 
     func advanceFromState(state: FxAState, now: Timestamp) -> Deferred<FxAState> {
@@ -76,10 +70,6 @@ class FxALoginStateMachine {
                 return advanceOneState(state.withoutCertificate(), now: now)
             }
             log.info("Key pair and certificate are fresh; staying Married.")
-
-            if let account = account where account.fxaDeviceId == nil || account.deviceRegistrationVersion == 0 {
-                account.registerOrUpdateDevice(state)
-            }
 
             return same
 

@@ -91,16 +91,6 @@ public struct FxADevicesResponse {
     }
 }
 
-public struct FxADeviceRegistrationResponse {
-    let id: String
-    let name: String
-
-    init(id: String, name: String) {
-        self.id = id
-        self.name = name
-    }
-}
-
 // fxa-auth-server produces error details like:
 //        {
 //            "code": 400, // matches the HTTP status code
@@ -113,9 +103,6 @@ public struct FxADeviceRegistrationResponse {
 public enum FxAClientError {
     case Remote(RemoteError)
     case Local(NSError)
-    
-    static let ErrorDomain = "FxAClientError.Local"
-    static let ErrorCode = 6624
 }
 
 // Be aware that string interpolation doesn't work: rdar://17318018, much good that it will do.
@@ -300,19 +287,6 @@ public class FxAClient10 {
             return FxADevicesResponse.FxADevice(id: id, name: name, type: type, isCurrentDevice: isCurrentDevice)
         }
         return FxADevicesResponse(devices: devices)
-    }
-
-    private class func deviceRegistrationResponseFromJSON(json: JSON) -> FxADeviceRegistrationResponse? {
-        if json.isError {
-            return nil
-        }
-
-        guard let id = json["id"].asString,
-            let name = json["name"].asString else {
-                return nil
-        }
-
-        return FxADeviceRegistrationResponse(id: id, name: name)
     }
 
     lazy private var alamofire: Alamofire.Manager = {
@@ -552,16 +526,8 @@ public class FxAClient10 {
         return deferred
     }
 
-    public func updateDevice(account: FirefoxAccount, sessionToken: NSData, id: String, name: String) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
-        return registerOrUpdateDevice(account, sessionToken: sessionToken, parameters: ["id": id, "name": name])
-    }
-
-    public func registerDevice(account: FirefoxAccount, sessionToken: NSData, name: String, type: String) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
-        return registerOrUpdateDevice(account, sessionToken: sessionToken, parameters: ["name": name, "type": type])
-    }
-
-    private func registerOrUpdateDevice(account: FirefoxAccount, sessionToken: NSData, parameters: [String: String]) -> Deferred<Maybe<FxADeviceRegistrationResponse>> {
-        let deferred = Deferred<Maybe<FxADeviceRegistrationResponse>>()
+    public func registerOrUpdateDevice(sessionToken: NSData, device: FxADevice) -> Deferred<Maybe<FxADevice>> {
+        let deferred = Deferred<Maybe<FxADevice>>()
         let salt: NSData = NSData()
         let contextInfo: NSData = FxAClient10.KW("sessionToken")
         let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
@@ -574,7 +540,7 @@ public class FxAClient10 {
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.HTTPBody = JSON(parameters).toString(false).utf8EncodedData
+        mutableURLRequest.HTTPBody = device.toJSON().toString(false).utf8EncodedData
 
         let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
         mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
@@ -588,16 +554,16 @@ public class FxAClient10 {
                         return
                     }
 
-                    if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    if let data: AnyObject = result.value {
                         let json = JSON(data)
                         if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                            //deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
-                            self.handleError(account, deferred:deferred, error: remoteError, sessionToken: sessionToken)
+                            deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
                             return
                         }
 
-                        if let response = FxAClient10.deviceRegistrationResponseFromJSON(json) {
-                            deferred.fill(Maybe(success: response))
+                        if let responseDevice = FxADevice.fromJSON(json) {
+                            deferred.fill(Maybe(success: responseDevice))
                             return
                         }
                     }
@@ -606,56 +572,5 @@ public class FxAClient10 {
                 }
         }
         return deferred
-    }
-    
-    public func handleError(account: FirefoxAccount, deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError, sessionToken: NSData)  {
-        if error.code == 400 {
-            if error.errno == FxAccountRemoteError.UNKNOWN_DEVICE {
-                recoverFromUnknownDevice(account)
-                deferred.fill(Maybe(failure: FxAClientError.Remote(error)))
-            } else if error.errno == FxAccountRemoteError.DEVICE_SESSION_CONFLICT {
-                recoverFromDeviceSessionConflict(deferred, error: error, sessionToken: sessionToken)
-            }
-        } else if error.code == 401 && error.errno == FxAccountRemoteError.INVALID_AUTHENTICATION_TOKEN {
-            handleTokenError(account, deferred: deferred, error: error)
-        } else {
-            logErrorAndResetDeviceRegistrationVersion(account, error: error)
-        }
-    }
-    
-    public func recoverFromDeviceSessionConflict(deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError, sessionToken: NSData) {
-        devices(sessionToken).upon { response in
-            if let success = response.successValue, currentDevice = (success.devices.filter { $0.isCurrentDevice }).first {
-                deferred.fill(Maybe(success: FxADeviceRegistrationResponse(id: currentDevice.id, name: currentDevice.name)))
-            }
-            deferred.fillIfUnfilled(Maybe(failure: FxAClientError.Remote(error)))
-        }
-    }
-    
-    public func recoverFromUnknownDevice(account: FirefoxAccount) {
-        print("unknown device id, clearing the cached device id")
-        account.fxaDeviceId = ""
-    }
-    
-    public func handleTokenError(account: FirefoxAccount, deferred: Deferred<Maybe<FxADeviceRegistrationResponse>>, error: RemoteError) {
-        print("recovering from invalid token error: \(error)")
-        logErrorAndResetDeviceRegistrationVersion(account, error: error)
-        self.status(account.uid).upon() { result in
-            if let status = result.successValue {
-                if !status.exists {
-                    print("token was invalidated because the account no longer exists")
-                    // TODO: This should possibly be in a different state (see the Android source code for the same method)
-                    account.makeDoghouse()
-                } else {
-                    print("the session token was invalid")
-                    account.makeDoghouse()
-                }
-            }
-        }
-    }
-
-    public func logErrorAndResetDeviceRegistrationVersion(account: FirefoxAccount, error: RemoteError) {
-        print("device registration failed: \(error)")
-        account.deviceRegistrationVersion = 0
     }
 }
