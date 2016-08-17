@@ -122,7 +122,7 @@ public class KeyBundle: Hashable {
                 result,
                 resultSize,
                 &copied
-        );
+        )
 
         return (success, result, copied)
     }

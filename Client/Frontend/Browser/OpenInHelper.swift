@@ -28,7 +28,7 @@ enum MimeType: String {
 
 protocol OpenInHelper {
     init?(response: NSURLResponse)
-    var openInView: OpenInView? { get }
+    var openInView: UIView? { get set }
     func open()
 }
 
@@ -41,7 +41,7 @@ struct OpenIn {
 }
 
 class ShareFileHelper: NSObject, OpenInHelper {
-    let openInView: OpenInView? = nil
+    var openInView: UIView? = nil
 
     private var url: NSURL
     var pathExtension: String?
@@ -59,9 +59,14 @@ class ShareFileHelper: NSObject, OpenInHelper {
             message: Strings.OpenInDownloadHelperAlertMessage,
             preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction( UIAlertAction(title: Strings.OpenInDownloadHelperAlertCancel, style: .Cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .Default){ (action) in
+        alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .Default) { (action) in
             let objectsToShare = [self.url]
             let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            if let sourceView = self.openInView, popoverController = activityVC.popoverPresentationController {
+                popoverController.sourceView = sourceView
+                popoverController.sourceRect = CGRect(origin: CGPoint(x: CGRectGetMidX(sourceView.bounds), y: CGRectGetMaxY(sourceView.bounds)), size: CGSizeZero)
+                popoverController.permittedArrowDirections = .Up
+            }
             UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(activityVC, animated: true, completion: nil)
         })
         UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
@@ -69,7 +74,7 @@ class ShareFileHelper: NSObject, OpenInHelper {
 }
 
 class OpenPassBookHelper: NSObject, OpenInHelper {
-    let openInView: OpenInView? = nil
+    var openInView: UIView? = nil
 
     private var url: NSURL
 
@@ -113,7 +118,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     private var docController: UIDocumentInteractionController? = nil
     private var openInURL: NSURL?
 
-    lazy var openInView: OpenInView? = getOpenInView(self)()
+    lazy var openInView: UIView? = getOpenInView(self)()
 
     lazy var documentDirectory: NSURL = {
         return NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent("pdfs")
@@ -166,7 +171,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
             log.error("failed to create proper URL")
             return
         }
-        if docController == nil{
+        if docController == nil {
             // if we already have a URL but no document controller, just create the document controller
             if let url = openInURL {
                 createDocumentControllerForURL(url)

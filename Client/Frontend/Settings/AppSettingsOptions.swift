@@ -109,7 +109,7 @@ class SyncNowSetting: WithAccountSetting {
         case .Bad(let message):
             guard let message = message else { return syncNowTitle }
             return NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowErrorTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
-        case .Stale(let message):
+        case .Warning(let message):
             return  NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowWarningTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .InProgress:
             return syncingTitle
@@ -182,7 +182,7 @@ class SyncNowSetting: WithAccountSetting {
                     cell.detailTextLabel?.attributedText = status
                     cell.accessoryView = nil
                 }
-            case .Stale(_):
+            case .Warning(_):
                 // add the amber warning symbol
                 // add a link to the MANA page
                 cell.detailTextLabel?.attributedText = nil
@@ -410,7 +410,7 @@ class ExportBrowserDataSetting: HiddenSetting {
 }
 
 // Show the current version of Firefox
-class VersionSetting : Setting {
+class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
 
     init(settings: SettingsTableViewController) {

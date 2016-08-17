@@ -214,19 +214,19 @@ extension AppMenuConfiguration {
     }
 
     private static var HideImageModeMenuItem: MenuItem {
-        return AppMenuItem(title: Strings.MenuNoImageModeTurnOnTitleString, action:  MenuAction(action: AppMenuAction.HideImageMode.rawValue), icon: "menu-NoImageMode", privateModeIcon: "menu-NoImageMode-pbm")
+        return AppMenuItem(title: Strings.MenuNoImageModeTurnOnLabel, action:  MenuAction(action: AppMenuAction.HideImageMode.rawValue), icon: "menu-NoImageMode", privateModeIcon: "menu-NoImageMode-pbm")
     }
 
     private static var ShowImageModeMenuItem: MenuItem {
-        return AppMenuItem(title: Strings.MenuNoImageModeTurnOffTitleString, action:  MenuAction(action: AppMenuAction.ShowImageMode.rawValue), icon: "menu-NoImageMode-Engaged", privateModeIcon: "menu-NoImageMode-Engaged")
+        return AppMenuItem(title: Strings.MenuNoImageModeTurnOffLabel, action:  MenuAction(action: AppMenuAction.ShowImageMode.rawValue), icon: "menu-NoImageMode-Engaged", privateModeIcon: "menu-NoImageMode-Engaged")
    }
  
-    private static var HideNightModeItem : MenuItem {
-        return AppMenuItem(title: Strings.MenuNightModeTurnOnTitleString, action:  MenuAction(action: AppMenuAction.HideNightMode.rawValue), icon: "menu-NightMode", privateModeIcon: "menu-NightMode-pbm")
+    private static var HideNightModeItem: MenuItem {
+        return AppMenuItem(title: Strings.MenuNightModeTurnOnLabel, action:  MenuAction(action: AppMenuAction.HideNightMode.rawValue), icon: "menu-NightMode", privateModeIcon: "menu-NightMode-pbm")
     }
 
-    private static var ShowNightModeItem : MenuItem {
-        return AppMenuItem(title: Strings.MenuNightModeTurnOffTitleString, action:  MenuAction(action: AppMenuAction.ShowNightMode.rawValue), icon: "menu-NightMode-Engaged", privateModeIcon: "menu-NightMode-Engaged")
+    private static var ShowNightModeItem: MenuItem {
+        return AppMenuItem(title: Strings.MenuNightModeTurnOffLabel, action:  MenuAction(action: AppMenuAction.ShowNightMode.rawValue), icon: "menu-NightMode-Engaged", privateModeIcon: "menu-NightMode-Engaged")
     }
 
     private static var SettingsMenuItem: MenuItem {

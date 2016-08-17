@@ -48,7 +48,7 @@ class SpotlightHelper: NSObject {
     }
 
     func update(pageContent: [String: String], forURL url: NSURL) {
-        if !url.isWebPage() {
+        guard url.isWebPage(includeDataURIs: false) else {
             return
         }
 

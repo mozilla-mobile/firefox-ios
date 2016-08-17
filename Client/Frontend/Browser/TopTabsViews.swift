@@ -33,6 +33,7 @@ class TopTabCell: UICollectionViewCell {
             bezierView.hidden = !selectedTab
             if style == Style.Light {
                 titleText.textColor = UIColor.darkTextColor()
+                titleText.textColor = selectedTab ? UIColor.darkTextColor() : UIColor.lightTextColor()
             } else {
                 titleText.textColor = UIColor.lightTextColor()
             }
@@ -142,7 +143,7 @@ class TopTabCell: UICollectionViewCell {
         guard seperatorLine else {
             return
         }
-        let context = UIGraphicsGetCurrentContext();
+        let context = UIGraphicsGetCurrentContext()
         CGContextSaveGState(context)
         CGContextSetLineCap(context, CGLineCap.Square)
         CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().colorWithAlphaComponent(0.2).CGColor)
@@ -340,7 +341,7 @@ extension UIBezierPath {
             bezierPath.addCurveToPoint(CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
         }
         bezierPath.closePath()
-        bezierPath.miterLimit = 4;
+        bezierPath.miterLimit = 4
         return bezierPath
     }
 }

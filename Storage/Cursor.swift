@@ -90,9 +90,9 @@ public class Cursor<T>: TypedCursor {
  * A cursor implementation that wraps an array.
  */
 public class ArrayCursor<T> : Cursor<T> {
-    private var data : [T]
+    private var data: [T]
 
-    public override var count : Int {
+    public override var count: Int {
         if (status != .Success) {
             return 0
         }
@@ -100,7 +100,7 @@ public class ArrayCursor<T> : Cursor<T> {
     }
 
     public init(data: [T], status: CursorStatus, statusMessage: String) {
-        self.data = data;
+        self.data = data
         super.init(status: status, msg: statusMessage)
     }
 

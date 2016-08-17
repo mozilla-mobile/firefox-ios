@@ -132,7 +132,7 @@ enum EqualError: ErrorType {
     case NoRightHandValue
 }
 
-func equalInts(a a: Int?, b: Int?) throws -> Bool{
+func equalInts(a a: Int?, b: Int?) throws -> Bool {
     defer {
         print("closing file handle")
         print("closing network connection")
@@ -256,7 +256,7 @@ func optionalTryExample() {
     if let result2 = try? cleanDivision(7, by: 3) {
         print("7 was cleanly divisibly by 3 \(result2)")
     } else {
-        print("7 was not cleanly divisibly by 3");
+        print("7 was not cleanly divisibly by 3")
     }
 }
 

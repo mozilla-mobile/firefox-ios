@@ -7,11 +7,11 @@ import Foundation
 
 import XCTest
 
-class TestFaviconsTable : XCTestCase {
+class TestFaviconsTable: XCTestCase {
     var db: BrowserDB!
 
     private func addIcon(favicons: FaviconsTable<Favicon>, url: String, s: Bool = true) -> Favicon {
-        var inserted: Int? = -1;
+        var inserted: Int? = -1
         var icon: Favicon!
         var err: NSError?
         self.db.withConnection(flags: SwiftData.Flags.ReadWrite, err: &err) { (connection, err) -> Int? in
@@ -51,7 +51,7 @@ class TestFaviconsTable : XCTestCase {
     }
 
     private func clear(favicons: FaviconsTable<Favicon>, icon: Favicon? = nil, s: Bool = true) {
-        var deleted = -1;
+        var deleted = -1
         var err: NSError?
         self.db.withConnection(flags: SwiftData.Flags.ReadWriteCreate, err: &err) { (db, err) -> Int in
             deleted = favicons.delete(db, item: icon, err: &err)
