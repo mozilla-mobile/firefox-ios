@@ -190,9 +190,12 @@ class TopTabsViewController: UIViewController {
     }
     
     func togglePrivateModeTapped() {
-        delegate?.didAttemptToTogglePrivateMode(isPrivate ? lastNormalTab : lastPrivateTab)
-        self.collectionView.reloadData()
-        self.scrollToCurrentTab(false, centerCell: true)
+        delegate?.didAttemptToTogglePrivateMode(isPrivate ? lastNormalTab : lastPrivateTab).uponQueue(dispatch_get_main_queue()) { result in
+            if result.isSuccess {
+                self.collectionView.reloadData()
+                self.scrollToCurrentTab(false, centerCell: true)
+            }
+        }
     }
     
     func closeTab() {
