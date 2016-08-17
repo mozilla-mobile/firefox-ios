@@ -24,7 +24,7 @@ struct TopTabsUX {
 protocol TopTabsDelegate: class {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab()
-    func didTogglePrivateMode(cachedTab: Tab?)
+    func didAttemptToTogglePrivateMode(cachedTab: Tab?) -> Success
     func topTabsDidChangeTab()
 }
 
@@ -190,7 +190,7 @@ class TopTabsViewController: UIViewController {
     }
     
     func togglePrivateModeTapped() {
-        delegate?.didTogglePrivateMode(isPrivate ? lastNormalTab : lastPrivateTab)
+        delegate?.didAttemptToTogglePrivateMode(isPrivate ? lastNormalTab : lastPrivateTab)
         self.collectionView.reloadData()
         self.scrollToCurrentTab(false, centerCell: true)
     }

@@ -421,7 +421,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func updateAuthenticationInfo() {
         if let authInfo = KeychainWrapper.authenticationInfo() {
             if !LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
-                authInfo.useTouchID = false
                 KeychainWrapper.setAuthenticationInfo(authInfo)
             }
         }

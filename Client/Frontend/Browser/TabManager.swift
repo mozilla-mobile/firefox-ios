@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+import SwiftKeychainWrapper
 
 private let log = Logger.browserLogger
 
@@ -85,6 +86,14 @@ class TabManager: NSObject {
     private let prefs: Prefs
     var selectedIndex: Int { return _selectedIndex }
     var tempTabs: [Tab]?
+    
+    var isInPrivateMode = false {
+        didSet {
+            if oldValue != isInPrivateMode {
+                self.setAppStateForTabTray()
+            }
+        }
+    }
 
     var normalTabs: [Tab] {
         assert(NSThread.isMainThread())
@@ -158,6 +167,45 @@ class TabManager: NSObject {
         }
 
         return nil
+    }
+    
+    weak var appStateDelegate: AppStateDelegate?
+    
+    private func setAppStateForTabTray() {
+        let state = mainStore.updateState(.TabTray(tabTrayState: TabTrayState(isPrivate: self.isInPrivateMode)))
+        self.appStateDelegate?.appDidUpdateState(state)
+    }
+    
+    func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool = false) -> Success {
+        if self.isInPrivateMode != reverseAuthorisationRequirement {
+            return succeed()
+        }
+        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+            return succeed()
+        }
+        let success = Success()
+        if authInfo.requiresValidation(.PrivateBrowsing) {
+            let cancelAction = { success.fill(Maybe(failure: AuthorisationError(description: "User cancelled authorisation action."))) }
+            AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
+                touchIDReason: AuthenticationStrings.privateModeReason,
+                success: {
+                    success.fill(Maybe(success: ()))
+                },
+                cancel: cancelAction,
+                fallback: {
+                    AppAuthenticator.presentPasscodeAuthentication(navigationController,
+                        success: {
+                            navigationController.dismissViewControllerAnimated(true) {
+                                success.fill(Maybe(success: ()))
+                            }
+                        },
+                    cancel: cancelAction)
+                }
+            )
+        } else {
+            return succeed()
+        }
+        return success
     }
 
     func getTabFor(url: NSURL) -> Tab? {
@@ -721,6 +769,8 @@ extension TabManager {
         if tabToSelect == nil {
             tabToSelect = tabs.first
         }
+        
+        self.isInPrivateMode = tabToSelect?.isPrivate ?? false
 
         log.debug("Done adding tabs.")
 
@@ -930,5 +980,12 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
             }
 
             decisionHandler(res)
+    }
+}
+
+public class AuthorisationError: MaybeErrorType {
+    public let description: String
+    public init(description: String) {
+        self.description = description
     }
 }
