@@ -121,7 +121,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         return uploadRecords(records,
                              lastTimestamp: lastTimestamp,
                              storageClient: storageClient,
-                             onUpload: onUpload) >>> effect({ log.debug("Done syncing.") })
+                             onUpload: onUpload)
     }
 
     // Find any records for which a local overlay exists. If we want to be really precise,
