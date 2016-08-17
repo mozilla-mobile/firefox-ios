@@ -12,10 +12,6 @@ private let log = Logger.syncLogger
 // The version of the account schema we persist.
 let AccountSchemaVersion = 1
 
-// The current version of the device registration, we use this to re-register
-// devices after we update what we send on device registration.
-let DEVICE_REGISTRATION_VERSION = 1
-
 /// A FirefoxAccount mediates access to identity attached services.
 ///
 /// All data maintained as part of the account or its state should be
@@ -188,7 +184,7 @@ public class FirefoxAccount {
 
         // Alright, we haven't an advance() in progress.  Schedule a new deferred to chain from.
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
-        let stateMachine = FxALoginStateMachine(client: client, account: self)
+        let stateMachine = FxALoginStateMachine(client: client)
         let now = NSDate.now()
         let deferred: Deferred<FxAState> = stateMachine.advanceFromState(stateCache.value!, now: now).map { newState in
             self.stateCache.value = newState
@@ -244,27 +240,5 @@ public class FirefoxAccount {
         }
         log.info("Cannot make Account State be CohabitingWithoutKeyPair from state with label \(self.stateCache.value?.label).")
         return false
-    }
-
-    public func registerOrUpdateDevice(state: MarriedState) -> Deferred<Maybe<String>> {
-        let sessionToken = state.sessionToken
-        let result: Deferred<Maybe<FxADeviceRegistrationResponse>>
-        let client = FxAClient10()
-        let name = DeviceInfo.defaultClientName()
-        if let deviceId = fxaDeviceId { // Create device
-            result = client.updateDevice(self, sessionToken: sessionToken, id: deviceId, name: name)
-        } else { // Update device
-            result = client.registerDevice(self, sessionToken: sessionToken, name: name, type: "mobile")
-        }
-
-        return result.map { result in
-            if let device = result.successValue {
-                self.fxaDeviceId = device.id
-                self.deviceRegistrationVersion = DEVICE_REGISTRATION_VERSION
-                return Maybe(success: device.id)
-            } else {
-                return Maybe(failure: AccountError.DeviceRegistrationFailed)
-            }
-        }
     }
 }

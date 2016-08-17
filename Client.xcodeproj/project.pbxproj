@@ -378,6 +378,7 @@
 		D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */; };
 		D32109941B8CFD62006D5B74 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
 		D328175B1BD07BA900185845 /* NSCharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32817591BD07B6F00185845 /* NSCharacterSetExtensions.swift */; };
+		D32A350E1D6530D80066DAE9 /* FxADevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32A350D1D6530D80066DAE9 /* FxADevice.swift */; };
 		D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */; };
 		D331DFCA1CB6E9EE009B5DA2 /* OldStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */; };
 		D339C2831AD354B400C087BD /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D339C2821AD354B400C087BD /* Loader.swift */; };
@@ -438,6 +439,7 @@
 		D3C744D01A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
 		D3CFD3641CC5605B0064AB4A /* SecurityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CFD3631CC5605B0064AB4A /* SecurityTests.swift */; };
 		D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */; };
+		D3DBE6E51D6516FE00033FFF /* FxADeviceRegistrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DBE6E41D6516FE00033FFF /* FxADeviceRegistrator.swift */; };
 		D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D3E171C11A841EAD00AB44CD /* KIFHelper.js */; };
 		D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */; };
 		D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA777A1A43B2990010CD32 /* SearchTests.swift */; };
@@ -1440,6 +1442,7 @@
 		D31EC05E1CC57ED80096F4AB /* localhostLoad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = localhostLoad.html; sourceTree = "<group>"; };
 		D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotHelper.swift; sourceTree = "<group>"; };
 		D32817591BD07B6F00185845 /* NSCharacterSetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCharacterSetExtensions.swift; sourceTree = "<group>"; };
+		D32A350D1D6530D80066DAE9 /* FxADevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxADevice.swift; sourceTree = "<group>"; };
 		D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSwiftData.swift; sourceTree = "<group>"; };
 		D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OldStrings.swift; sourceTree = "<group>"; };
 		D339C2821AD354B400C087BD /* Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
@@ -1498,6 +1501,7 @@
 		D3C744CC1A687D6C004CE85D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
 		D3CFD3631CC5605B0064AB4A /* SecurityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecurityTests.swift; sourceTree = "<group>"; };
 		D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAccessorTests.swift; sourceTree = "<group>"; };
+		D3DBE6E41D6516FE00033FFF /* FxADeviceRegistrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxADeviceRegistrator.swift; sourceTree = "<group>"; };
 		D3E171C11A841EAD00AB44CD /* KIFHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = KIFHelper.js; sourceTree = "<group>"; };
 		D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearPrivateDataTableViewController.swift; sourceTree = "<group>"; };
 		D3FA777A1A43B2990010CD32 /* SearchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
@@ -2224,6 +2228,8 @@
 				2FA436221ABB8436008031D1 /* FirefoxAccount.swift */,
 				2FA436231ABB8436008031D1 /* FirefoxAccountConfiguration.swift */,
 				2FA436251ABB8436008031D1 /* FxAClient10.swift */,
+				D32A350D1D6530D80066DAE9 /* FxADevice.swift */,
+				D3DBE6E41D6516FE00033FFF /* FxADeviceRegistrator.swift */,
 				2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */,
 				2FFC4D1A1ABE3C360081D675 /* FxAState.swift */,
 				2FA436271ABB8436008031D1 /* HawkHelper.swift */,
@@ -4452,7 +4458,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FA4362B1ABB8436008031D1 /* FirefoxAccountConfiguration.swift in Sources */,
+				D32A350E1D6530D80066DAE9 /* FxADevice.swift in Sources */,
 				2F1A3DE11ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */,
+				D3DBE6E51D6516FE00033FFF /* FxADeviceRegistrator.swift in Sources */,
 				2FA436291ABB8436008031D1 /* FirefoxAccount.swift in Sources */,
 				2FFC4D1B1ABE3C360081D675 /* FxAState.swift in Sources */,
 				2FDBCF611ABFC9DE00AFF7F0 /* SyncAuthState.swift in Sources */,

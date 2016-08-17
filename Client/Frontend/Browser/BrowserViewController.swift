@@ -2879,7 +2879,11 @@ extension BrowserViewController: FxAContentViewControllerDelegate {
         let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
         profile.setAccount(account)
         if let account = self.profile.getAccount() {
-            account.advance()
+            account.advance().upon { state in
+                if let marriedState = state as? MarriedState {
+                    FxADeviceRegistrator.registerOrUpdateDevice(account, state: marriedState)
+                }
+            }
         }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
