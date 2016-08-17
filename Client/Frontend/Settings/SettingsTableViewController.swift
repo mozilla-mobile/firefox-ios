@@ -463,7 +463,11 @@ class SettingsTableViewController: UITableViewController {
         if let account = self.profile.getAccount() {
             account.advance().upon { state in
                 if let marriedState = state as? MarriedState {
-                    FxADeviceRegistrator.registerOrUpdateDevice(account, state: marriedState)
+                    FxADeviceRegistrator.registerOrUpdateDevice(account, state: marriedState) >>== { result in
+                        if (result == .RegisteredOrUpdated) {
+                            self.profile.flushAccount()
+                        }
+                    }
                 }
 
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in

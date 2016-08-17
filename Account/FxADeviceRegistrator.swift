@@ -12,6 +12,11 @@ private let log = Logger.syncLogger
 // devices after we update what we send on device registration.
 private let DeviceRegistrationVersion = 1
 
+public enum FxADeviceRegistrationResult {
+    case RegisteredOrUpdated
+    case AlreadyRegistered
+}
+
 public class FxADeviceRegistrator {
     public enum DeviceRegistratorError: MaybeErrorType {
         case DeviceRegistrationFailed
@@ -23,9 +28,9 @@ public class FxADeviceRegistrator {
         }
     }
 
-    public static func registerOrUpdateDevice(account: FirefoxAccount, state: MarriedState) -> Deferred<Maybe<String>> {
-        if let deviceId = account.fxaDeviceId where account.deviceRegistrationVersion == DeviceRegistrationVersion {
-            return Deferred(value: Maybe(success: deviceId))
+    public static func registerOrUpdateDevice(account: FirefoxAccount, state: MarriedState) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
+        if let _ = account.fxaDeviceId where account.deviceRegistrationVersion == DeviceRegistrationVersion {
+            return Deferred(value: Maybe(success: FxADeviceRegistrationResult.AlreadyRegistered))
         }
 
         let client = FxAClient10(endpoint: account.configuration.authEndpointURL)
@@ -39,13 +44,13 @@ public class FxADeviceRegistrator {
         }
 
         return client.registerOrUpdateDevice(sessionToken, device: device).bind { result in
-            let deferred = Deferred<Maybe<String>>()
+            let deferred = Deferred<Maybe<FxADeviceRegistrationResult>>()
 
             if let device = result.successValue,
                 let deviceId = device.id {
                 account.fxaDeviceId = deviceId
                 account.deviceRegistrationVersion = DeviceRegistrationVersion
-                deferred.fill(Maybe(success: deviceId))
+                deferred.fill(Maybe(success: FxADeviceRegistrationResult.RegisteredOrUpdated))
                 return deferred
             }
 
@@ -83,12 +88,13 @@ public class FxADeviceRegistrator {
         account.fxaDeviceId = nil
     }
 
-    private static func recoverFromDeviceSessionConflict(account: FirefoxAccount, client: FxAClient10, deferred: Deferred<Maybe<String>>, sessionToken: NSData) {
+    private static func recoverFromDeviceSessionConflict(account: FirefoxAccount, client: FxAClient10, deferred: Deferred<Maybe<FxADeviceRegistrationResult>>, sessionToken: NSData) {
         log.warning("device session conflict, attempting to ascertain the correct device id")
         client.devices(sessionToken).upon { response in
             if let success = response.successValue,
                 let currentDevice = success.devices.find({ $0.isCurrentDevice }) {
-                deferred.fill(Maybe(success: currentDevice.id))
+                account.fxaDeviceId = currentDevice.id
+                deferred.fill(Maybe(success: FxADeviceRegistrationResult.RegisteredOrUpdated))
             } else {
                 self.logErrorAndResetDeviceRegistrationVersion(account, description: "conflict recovery failed: \(response.failureValue?.description ?? "")")
                 deferred.fill(Maybe(failure: DeviceRegistratorError.DeviceRegistrationFailed))
