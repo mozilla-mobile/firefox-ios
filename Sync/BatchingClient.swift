@@ -113,8 +113,7 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     private var onCollectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp
 
     init(config: InfoConfiguration, ifUnmodifiedSince: Timestamp? = nil, serializeRecord: (Record<T>) -> String?,
-         uploader: BatchUploadFunction, onCollectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp)
-    {
+         uploader: BatchUploadFunction, onCollectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp) {
         self.config = config
         self.ifUnmodifiedSince = ifUnmodifiedSince
         self.uploader = uploader
