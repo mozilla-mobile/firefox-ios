@@ -33,7 +33,7 @@ public class FirefoxAccount {
     /// particular server (auth endpoint) by its assigned uid.
     public let uid: String
 
-    public var fxaDeviceId: String
+    public var fxaDeviceId: String?
     public var deviceRegistrationVersion: Int
 
     public let configuration: FirefoxAccountConfiguration
@@ -53,11 +53,11 @@ public class FirefoxAccount {
         return stateCache.value!.actionNeeded
     }
 
-    public convenience init(configuration: FirefoxAccountConfiguration, email: String, uid: String, fxaDeviceId: String, deviceRegistrationVersion: Int, stateKeyLabel: String, state: FxAState) {
+    public convenience init(configuration: FirefoxAccountConfiguration, email: String, uid: String, fxaDeviceId: String?, deviceRegistrationVersion: Int, stateKeyLabel: String, state: FxAState) {
         self.init(configuration: configuration, email: email, uid: uid, fxaDeviceId: fxaDeviceId, deviceRegistrationVersion: deviceRegistrationVersion, stateCache: KeychainCache(branch: "account.state", label: stateKeyLabel, value: state))
     }
 
-    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, fxaDeviceId: String, deviceRegistrationVersion: Int, stateCache: KeychainCache<FxAState>) {
+    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, fxaDeviceId: String?, deviceRegistrationVersion: Int, stateCache: KeychainCache<FxAState>) {
         self.email = email
         self.uid = uid
         self.fxaDeviceId = fxaDeviceId
@@ -80,19 +80,19 @@ public class FirefoxAccount {
 
         let verified = data["verified"].asBool ?? false
         return FirefoxAccount.fromConfigurationAndParameters(configuration,
-            email: email, uid: uid, fxaDeviceId: "", deviceRegistrationVersion: 0, verified: verified,
+            email: email, uid: uid, fxaDeviceId: nil, deviceRegistrationVersion: 0, verified: verified,
             sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
     }
 
     public class func fromConfigurationAndLoginResponse(configuration: FirefoxAccountConfiguration,
             response: FxALoginResponse, unwrapkB: NSData) -> FirefoxAccount {
         return FirefoxAccount.fromConfigurationAndParameters(configuration,
-            email: response.remoteEmail, uid: response.uid, fxaDeviceId: "", deviceRegistrationVersion: 0, verified: response.verified,
+            email: response.remoteEmail, uid: response.uid, fxaDeviceId: nil, deviceRegistrationVersion: 0, verified: response.verified,
             sessionToken: response.sessionToken, keyFetchToken: response.keyFetchToken, unwrapkB: unwrapkB)
     }
 
     private class func fromConfigurationAndParameters(configuration: FirefoxAccountConfiguration,
-            email: String, uid: String, fxaDeviceId: String, deviceRegistrationVersion: Int, verified: Bool,
+            email: String, uid: String, fxaDeviceId: String?, deviceRegistrationVersion: Int, verified: Bool,
             sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) -> FirefoxAccount {
         var state: FxAState! = nil
         if !verified {
@@ -152,9 +152,9 @@ public class FirefoxAccount {
         if let
             configurationLabel = configurationLabel,
             email = dictionary["email"] as? String,
-            uid = dictionary["uid"] as? String,
-            fxaDeviceId = dictionary["fxaDeviceId"] as? String,
-            deviceRegistrationVersion = dictionary["deviceRegistrationVersion"] as? Int {
+            uid = dictionary["uid"] as? String {
+                let fxaDeviceId = dictionary["fxaDeviceId"] as? String
+                let deviceRegistrationVersion = dictionary["deviceRegistrationVersion"] as? Int ?? 0
                 let stateCache = KeychainCache.fromBranch("account.state", withLabel: dictionary["stateKeyLabel"] as? String, withDefault: SeparatedState(), factory: stateFromJSON)
                 return FirefoxAccount(
                     configuration: configurationLabel.toConfiguration(),
@@ -251,10 +251,10 @@ public class FirefoxAccount {
         let result: Deferred<Maybe<FxADeviceRegistrationResponse>>
         let client = FxAClient10()
         let name = DeviceInfo.defaultClientName()
-        if fxaDeviceId.isEmpty { // Create device
-            result = client.registerDevice(self, sessionToken: sessionToken, name: name, type: "mobile")
+        if let deviceId = fxaDeviceId { // Create device
+            result = client.updateDevice(self, sessionToken: sessionToken, id: deviceId, name: name)
         } else { // Update device
-            result = client.updateDevice(self, sessionToken: sessionToken, id: fxaDeviceId, name: name)
+            result = client.registerDevice(self, sessionToken: sessionToken, name: name, type: "mobile")
         }
 
         return result.map { result in
