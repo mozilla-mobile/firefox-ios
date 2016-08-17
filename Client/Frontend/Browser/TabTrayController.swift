@@ -426,9 +426,19 @@ class TabTrayController: UIViewController {
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
     }
+    
+    private func cancelExistingGestures() {
+        if let visibleCells = self.collectionView.visibleCells() as? [TabCell] {
+            for cell in visibleCells {
+                cell.animator.cancelExistingGestures()
+            }
+        }
+    }
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+
+        self.cancelExistingGestures()
 
         coordinator.animateAlongsideTransition({ _ in
             self.collectionView.collectionViewLayout.invalidateLayout()
@@ -492,6 +502,7 @@ class TabTrayController: UIViewController {
         mvc.menuTransitionDelegate = MenuPresentationAnimator()
         mvc.modalPresentationStyle = .OverCurrentContext
         mvc.fixedWidth = TabTrayControllerUX.MenuFixedWidth
+        self.cancelExistingGestures()
         self.presentViewController(mvc, animated: true, completion: nil)
     }
 

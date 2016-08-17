@@ -131,7 +131,9 @@ class BrowserViewController: UIViewController {
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 
-        displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
+        displayedPopoverController?.dismissViewControllerAnimated(true) {
+            self.displayedPopoverController = nil
+        }
 
         guard let displayedPopoverController = self.displayedPopoverController else {
             return
@@ -179,9 +181,17 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
+    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
+        
+        if let mvc = menuViewController where showToolbar != (toolbar != nil) {
+            // Hide the menu, and then re-open it so that the menu is always the correct one for the given traits
+            mvc.dismissViewControllerAnimated(true, completion: nil)
+            coordinator?.animateAlongsideTransition(nil, completion: { _ in
+                self.tabToolbarDidPressMenu(self.navigationToolbar, button: self.navigationToolbar.menuButton)
+            })
+        }
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
@@ -253,7 +263,7 @@ class BrowserViewController: UIViewController {
         // During split screen launching on iPad, this callback gets fired before viewDidLoad gets a chance to
         // set things up. Make sure to only update the toolbar state if the view is ready for it.
         if isViewLoaded() {
-            updateToolbarStateForTraitCollection(newCollection)
+            updateToolbarStateForTraitCollection(newCollection, withTransitionCoordinator: coordinator)
         }
 
         displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
@@ -291,6 +301,7 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
         urlBar.locationContainer.alpha = 0
+        topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
     }
@@ -318,6 +329,7 @@ class BrowserViewController: UIViewController {
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
             self.webViewContainer.alpha = 1
             self.urlBar.locationContainer.alpha = 1
+            self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
             self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
             self.presentedViewController?.view.alpha = 1
             self.view.backgroundColor = UIColor.clearColor()
@@ -717,16 +729,21 @@ class BrowserViewController: UIViewController {
         homePanelIsInline = inline
 
         if homePanelController == nil {
-            homePanelController = HomePanelViewController()
-            homePanelController!.profile = profile
-            homePanelController!.delegate = self
-            homePanelController!.appStateDelegate = self
-            homePanelController!.url = tabManager.selectedTab?.displayURL
-            homePanelController!.view.alpha = 0
+            let homePanelController = HomePanelViewController()
+            homePanelController.profile = profile
+            homePanelController.delegate = self
+            homePanelController.appStateDelegate = self
+            homePanelController.url = tabManager.selectedTab?.displayURL
+            homePanelController.view.alpha = 0
+            self.homePanelController = homePanelController
 
-            addChildViewController(homePanelController!)
-            view.addSubview(homePanelController!.view)
-            homePanelController!.didMoveToParentViewController(self)
+            addChildViewController(homePanelController)
+            view.addSubview(homePanelController.view)
+            homePanelController.didMoveToParentViewController(self)
+        }
+        guard let homePanelController = self.homePanelController else {
+            assertionFailure("homePanelController is still nil after assignment.")
+            return
         }
 
         let panelNumber = tabManager.selectedTab?.url?.fragment
@@ -738,13 +755,13 @@ class BrowserViewController: UIViewController {
                 newSelectedButtonIndex = lastInt
             }
         }
-        homePanelController?.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
-        homePanelController?.isPrivateMode = self.tabManager.isInPrivateMode
+        homePanelController.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
+        homePanelController.isPrivateMode = self.tabManager.isInPrivateMode
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
         UIView.animateWithDuration(0.2, animations: { () -> Void in
-            self.homePanelController!.view.alpha = 1
+            homePanelController.view.alpha = 1
         }, completion: { finished in
             if finished {
                 self.webViewContainer.accessibilityElementsHidden = true

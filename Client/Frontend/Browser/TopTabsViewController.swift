@@ -100,7 +100,9 @@ class TopTabsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
         collectionView.reloadData()
-        self.scrollToCurrentTab(false, centerCell: true)
+        dispatch_async(dispatch_get_main_queue()) { 
+             self.scrollToCurrentTab(false, centerCell: true)
+        }
     }
     
     override func viewDidLoad() {
@@ -147,6 +149,17 @@ class TopTabsViewController: UIViewController {
             applyTheme(currentTab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
         }
         updateTabCount(tabsToDisplay.count)
+    }
+    
+    func switchForegroundStatus(isInForeground reveal: Bool) {
+        // Called when the app leaves the foreground to make sure no information is inadvertently revealed
+        if let cells = self.collectionView.visibleCells() as? [TopTabCell] {
+            let alpha: CGFloat = reveal ? 1 : 0
+            for cell in cells {
+                cell.titleText.alpha = alpha
+                cell.favicon.alpha = alpha
+            }
+        }
     }
     
     func updateTabCount(count: Int, animated: Bool = true) {

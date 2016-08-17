@@ -48,6 +48,7 @@ class TopSitesPanel: UIViewController {
         didSet {
             if editingThumbnails != oldValue {
                 dataSource.editingThumbnails = editingThumbnails
+                collection?.allowsSelection = !editingThumbnails
 
                 if editingThumbnails {
                     homePanelDelegate?.homePanelWillEnterEditingMode?(self)

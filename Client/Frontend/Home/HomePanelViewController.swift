@@ -324,6 +324,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             button.addTarget(self, action: #selector(HomePanelViewController.endEditing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             button.transform = translateDown
             button.titleLabel?.textAlignment = .Right
+            button.tintColor = self.isPrivateMode ? UIConstants.PrivateModeActionButtonTintColor : UIConstants.SystemBlueColor
             self.buttonContainerView.addSubview(button)
             button.snp_makeConstraints { make in
                 make.right.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonRightPadding)
