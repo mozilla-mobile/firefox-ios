@@ -309,6 +309,10 @@ extension TopTabsViewController: UICollectionViewDataSource {
                 tabCell.favicon.image = defaultFavicon
             }
         }
+
+        let alpha: CGFloat = tabManager.isInPrivateMode && tabManager.isAuthenticating ? 0 : 1
+        tabCell.titleText.alpha = alpha
+        tabCell.favicon.alpha = alpha
         
         return tabCell
     }

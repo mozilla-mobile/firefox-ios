@@ -289,14 +289,10 @@ class BrowserViewController: UIViewController {
     func SELtappedTopArea() {
         scrollController.showToolbars(animated: true)
     }
-
-    func SELappWillResignActiveNotification() {
+    
+    private func concealPrivateContents() {
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
-        guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
-            return
-        }
-
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
         urlBar.locationContainer.alpha = 0
@@ -304,24 +300,8 @@ class BrowserViewController: UIViewController {
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
     }
-    
-    func SELappWillEnterForegroundNotification() {
-        guard let navigationController = self.navigationController else {
-            return
-        }
-        tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
-            guard success else {
-                if #available(iOS 9, *) {
-                    if self.navigationController?.topViewController === self {
-                        self.openTabTray()
-                    }
-                }
-                return
-            }
-        }
-    }
 
-    func SELappDidBecomeActiveNotification() {
+    private func revealPrivateContent() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
@@ -334,6 +314,31 @@ class BrowserViewController: UIViewController {
             }, completion: { _ in
                 self.webViewContainerBackdrop.alpha = 0
         })
+    }
+
+    func SELappWillResignActiveNotification() {
+        guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
+            return
+        }
+        concealPrivateContents()
+    }
+
+    func SELappDidBecomeActiveNotification() {
+        if let navigationController = self.navigationController {
+            tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
+                guard success else {
+                    if #available(iOS 9, *) {
+                        if self.navigationController?.topViewController === self {
+                            self.openTabTray()
+                        }
+                    }
+                    return
+                }
+                self.revealPrivateContent()
+            }
+        } else {
+            revealPrivateContent()
+        }
         
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
         self.scrollController.showToolbars(animated: false)
@@ -343,7 +348,6 @@ class BrowserViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: BookmarkStatusChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
     }
 
@@ -354,7 +358,6 @@ class BrowserViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELBookmarkStatusDidChange(_:)), name: BookmarkStatusChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappWillResignActiveNotification), name: UIApplicationWillResignActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappDidBecomeActiveNotification), name: UIApplicationDidBecomeActiveNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappWillEnterForegroundNotification), name: UIApplicationDidBecomeActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BrowserViewController.SELappDidEnterBackgroundNotification), name: UIApplicationDidEnterBackgroundNotification, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
@@ -2078,6 +2081,10 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, webView = tab.webView {
             updateURLBarDisplayURL(tab)
+            
+            if !tabManager.isAuthenticating {
+                self.revealPrivateContent()
+            }
 
             if tab.isPrivate {
                 readerModeCache = MemoryReaderModeCache.sharedInstance
@@ -2188,7 +2195,10 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
-        SELappWillEnterForegroundNotification()
+        if tabManager.isInPrivateMode {
+            concealPrivateContents()
+        }
+        SELappDidBecomeActiveNotification()
     }
 
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {

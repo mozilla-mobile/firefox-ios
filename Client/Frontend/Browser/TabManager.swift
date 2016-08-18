@@ -94,6 +94,7 @@ class TabManager: NSObject {
             }
         }
     }
+    var isAuthenticating = false
 
     var normalTabs: [Tab] {
         assert(NSThread.isMainThread())
@@ -178,13 +179,16 @@ class TabManager: NSObject {
     
     func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool, completion: Bool -> ()) {
         let succeedInAuthorising = {
+            self.isAuthenticating = false
             self.isInPrivateMode = !reverseAuthorisationRequirement ? !self.isInPrivateMode : self.isInPrivateMode
             completion(true)
         }
         let failInAuthorising = {
+            self.isAuthenticating = false
             self.isInPrivateMode = false
             completion(false)
         }
+        self.isAuthenticating = true
         if self.isInPrivateMode != reverseAuthorisationRequirement {
             succeedInAuthorising()
             return
