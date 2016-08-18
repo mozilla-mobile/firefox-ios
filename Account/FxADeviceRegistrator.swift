@@ -58,12 +58,12 @@ public class FxADeviceRegistrator {
             switch (error) {
             case let .Remote(remoteError)?:
                 switch (remoteError.code) {
-                case FxAccountRemoteError.DEVICE_SESSION_CONFLICT:
+                case FxAccountRemoteError.DeviceSessionConflict:
                     recoverFromDeviceSessionConflict(account, client: client, deferred: deferred, sessionToken: sessionToken)
-                case FxAccountRemoteError.UNKNOWN_DEVICE:
+                case FxAccountRemoteError.UnknownDevice:
                     // TODO: Shouldn't this also clear registration version? Android doesn't.
                     handleUnknownDevice(account)
-                case FxAccountRemoteError.INVALID_AUTHENTICATION_TOKEN:
+                case FxAccountRemoteError.InvalidAuthenticationToken:
                     logErrorAndResetDeviceRegistrationVersion(account, description: String(remoteError))
                     handleTokenError(account, client: client)
                 default:
