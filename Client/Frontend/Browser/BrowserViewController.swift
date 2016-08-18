@@ -1260,24 +1260,24 @@ class BrowserViewController: UIViewController {
     }
 
     func reloadTab() {
-        if(homePanelController == nil) {
+        if homePanelController == nil {
             tabManager.selectedTab?.reload()
         }
     }
 
     func goBack() {
-        if(tabManager.selectedTab?.canGoBack == true && homePanelController == nil) {
+        if tabManager.selectedTab?.canGoBack == true && homePanelController == nil {
             tabManager.selectedTab?.goBack()
         }
     }
     func goForward() {
-        if(tabManager.selectedTab?.canGoForward == true && homePanelController == nil) {
+        if tabManager.selectedTab?.canGoForward == true && homePanelController == nil {
             tabManager.selectedTab?.goForward()
         }
     }
 
     func findOnPage() {
-        if(homePanelController == nil) {
+        if homePanelController == nil {
             tab( (tabManager.selectedTab)!, didSelectFindInPageForSelection: "")
         }
     }
@@ -1295,7 +1295,7 @@ class BrowserViewController: UIViewController {
     }
 
     func closeTab() {
-        if(tabManager.tabs.count > 1) {
+        if tabManager.tabs.count > 1 {
             tabManager.removeTab(tabManager.selectedTab!)
         } else {
             //need to close the last tab and show the favorites screen thing
@@ -1303,20 +1303,20 @@ class BrowserViewController: UIViewController {
     }
 
     func nextTab() {
-        if(tabManager.selectedIndex < (tabManager.tabs.count - 1) ) {
+        if tabManager.selectedIndex < (tabManager.tabs.count - 1) {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex+1])
         } else {
-            if(tabManager.tabs.count > 1) {
+            if tabManager.tabs.count > 1 {
                 tabManager.selectTab(tabManager.tabs[0])
             }
         }
     }
 
     func previousTab() {
-        if(tabManager.selectedIndex > 0) {
+        if tabManager.selectedIndex > 0 {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex-1])
         } else {
-            if(tabManager.tabs.count > 1) {
+            if tabManager.tabs.count > 1 {
                 tabManager.selectTab(tabManager.tabs[tabManager.count-1])
             }
         }

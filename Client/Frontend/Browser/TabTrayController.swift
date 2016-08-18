@@ -307,8 +307,6 @@ class TabTrayController: UIViewController {
     }
     
     private func switchToMode(privateMode privateMode: Bool) {
-        tabManager.isInPrivateMode = privateMode
-        
         tabDataSource.tabs = tabsToDisplay
         toolbar.styleToolbar(isPrivate: tabManager.isInPrivateMode)
         collectionView?.reloadData()

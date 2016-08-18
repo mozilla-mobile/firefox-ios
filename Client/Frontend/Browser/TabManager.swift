@@ -177,12 +177,16 @@ class TabManager: NSObject {
     }
     
     func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool, completion: Bool -> ()) {
-        if self.isInPrivateMode != reverseAuthorisationRequirement {
+        let succeedInAuthorising = {
+            self.isInPrivateMode = !reverseAuthorisationRequirement ? !self.isInPrivateMode : self.isInPrivateMode
             completion(true)
+        }
+        if self.isInPrivateMode != reverseAuthorisationRequirement {
+            succeedInAuthorising()
             return
         }
         guard let authInfo = KeychainWrapper.authenticationInfo() else {
-            completion(true)
+            succeedInAuthorising()
             return
         }
         if authInfo.requiresValidation(.PrivateBrowsing) {
@@ -190,21 +194,21 @@ class TabManager: NSObject {
             AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
                 touchIDReason: AuthenticationStrings.privateModeReason,
                 success: {
-                    completion(true)
+                    succeedInAuthorising()
                 },
                 cancel: cancelAction,
                 fallback: {
                     AppAuthenticator.presentPasscodeAuthentication(navigationController,
                         success: {
                             navigationController.dismissViewControllerAnimated(true) {
-                                completion(true)
+                                succeedInAuthorising()
                             }
                         },
                     cancel: cancelAction)
                 }
             )
         } else {
-            completion(true)
+            succeedInAuthorising()
         }
     }
     
@@ -241,6 +245,7 @@ class TabManager: NSObject {
         preserveTabs()
 
         assert(tab === selectedTab, "Expected tab is selected")
+        self.isInPrivateMode = tab?.isPrivate ?? self.isInPrivateMode
         selectedTab?.createWebview()
 
         for delegate in delegates {
