@@ -180,13 +180,10 @@ public class FxAClient10 {
     }
 
     private class func remoteErrorFromJSON(json: JSON, statusCode: Int) -> RemoteError? {
-        if json.isError {
+        if json.isError || 200 <= statusCode && statusCode <= 299 {
             return nil
+        }
 
-        }
-        if 200 <= statusCode && statusCode <= 299 {
-            return nil
-        }
         if let code = json["code"].asInt32 {
             if let errno = json["errno"].asInt32 {
                 return RemoteError(code: code, errno: errno,
@@ -199,11 +196,8 @@ public class FxAClient10 {
     }
 
     private class func loginResponseFromJSON(json: JSON) -> FxALoginResponse? {
-        if json.isError {
-            return nil
-        }
-
-        guard let uid = json["uid"].asString,
+        guard !json.isError,
+            let uid = json["uid"].asString,
             let verified = json["verified"].asBool,
             let sessionToken = json["sessionToken"].asString,
             let keyFetchToken = json["keyFetchToken"].asString else {
@@ -215,52 +209,51 @@ public class FxAClient10 {
     }
 
     private class func keysResponseFromJSON(keyRequestKey: NSData, json: JSON) -> FxAKeysResponse? {
-        if json.isError {
+        guard !json.isError,
+            let bundle = json["bundle"].asString else {
+                return nil
+        }
+
+        let data = bundle.hexDecodedData
+        guard data.length == 3 * KeyLength else {
             return nil
         }
-        if let bundle = json["bundle"].asString {
-            let data = bundle.hexDecodedData
-            if data.length != 3 * KeyLength {
-                return nil
-            }
-            let ciphertext = data.subdataWithRange(NSMakeRange(0 * KeyLength, 2 * KeyLength))
-            let MAC = data.subdataWithRange(NSMakeRange(2 * KeyLength, 1 * KeyLength))
 
-            let salt: NSData = NSData()
-            let contextInfo: NSData = KW("account/keys")
-            let bytes = keyRequestKey.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
-            let respHMACKey = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, 1 * KeyLength))
-            let respXORKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, 2 * KeyLength))
+        let ciphertext = data.subdataWithRange(NSMakeRange(0 * KeyLength, 2 * KeyLength))
+        let MAC = data.subdataWithRange(NSMakeRange(2 * KeyLength, 1 * KeyLength))
 
-            if ciphertext.hmacSha256WithKey(respHMACKey) != MAC {
-                NSLog("Bad HMAC in /keys response!")
-                return nil
-            }
-            if let xoredBytes = ciphertext.xoredWith(respXORKey) {
-                let kA = xoredBytes.subdataWithRange(NSMakeRange(0 * KeyLength, 1 * KeyLength))
-                let wrapkB = xoredBytes.subdataWithRange(NSMakeRange(1 * KeyLength, 1 * KeyLength))
-                return FxAKeysResponse(kA: kA, wrapkB: wrapkB)
-            }
+        let salt: NSData = NSData()
+        let contextInfo: NSData = KW("account/keys")
+        let bytes = keyRequestKey.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
+        let respHMACKey = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, 1 * KeyLength))
+        let respXORKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, 2 * KeyLength))
+
+        guard ciphertext.hmacSha256WithKey(respHMACKey) == MAC else {
+            NSLog("Bad HMAC in /keys response!")
+            return nil
         }
-        return nil
+
+        guard let xoredBytes = ciphertext.xoredWith(respXORKey) else {
+            return nil
+        }
+
+        let kA = xoredBytes.subdataWithRange(NSMakeRange(0 * KeyLength, 1 * KeyLength))
+        let wrapkB = xoredBytes.subdataWithRange(NSMakeRange(1 * KeyLength, 1 * KeyLength))
+        return FxAKeysResponse(kA: kA, wrapkB: wrapkB)
     }
 
     private class func signResponseFromJSON(json: JSON) -> FxASignResponse? {
-        if json.isError {
-            return nil
+        guard !json.isError,
+            let cert = json["cert"].asString else {
+                return nil
         }
-        if let cert = json["cert"].asString {
-            return FxASignResponse(certificate: cert)
-        }
-        return nil
+
+        return FxASignResponse(certificate: cert)
     }
 
     private class func statusResponseFromJSON(json: JSON) -> FxAStatusResponse? {
-        if json.isError {
-            return nil
-        }
-
-        guard let exists = json["exists"].asBool,
+        guard !json.isError,
+            let exists = json["exists"].asBool,
             let locked = json["locked"].asBool else {
                 return nil
         }
@@ -269,12 +262,9 @@ public class FxAClient10 {
     }
 
     private class func devicesResponseFromJSON(json: JSON) -> FxADevicesResponse? {
-        if json.isError {
-            return nil
-        }
-
-        guard let jsonDevices = json.asArray else {
-            return nil
+        guard !json.isError,
+            let jsonDevices = json.asArray else {
+                return nil
         }
 
         let devices = jsonDevices.flatMap { (jsonDevice) -> FxADevicesResponse.FxADevice? in
@@ -286,6 +276,7 @@ public class FxAClient10 {
             }
             return FxADevicesResponse.FxADevice(id: id, name: name, type: type, isCurrentDevice: isCurrentDevice)
         }
+
         return FxADevicesResponse(devices: devices)
     }
 
