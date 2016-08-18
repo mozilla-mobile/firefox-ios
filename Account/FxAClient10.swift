@@ -299,7 +299,7 @@ public class FxAClient10 {
                             return
                         }
 
-                        if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                        if let data = result.value {
                             let json = JSON(data)
                             if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
                                 deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
@@ -343,7 +343,7 @@ public class FxAClient10 {
                     return
                 }
 
-                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                if let data = result.value {
                     let json = JSON(data)
                     if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
                         deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
@@ -394,7 +394,7 @@ public class FxAClient10 {
                     return
                 }
 
-                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                if let data = result.value {
                     let json = JSON(data)
                     if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
                         deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
@@ -414,11 +414,8 @@ public class FxAClient10 {
 
     public func status(uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
         let deferred = Deferred<Maybe<FxAStatusResponse>>()
-
-        let baseURL = self.URL.URLByAppendingPathComponent("/account/status")
-        let queryParams = "?uid=" + uid
-        let URL = NSURL(string: queryParams, relativeToURL: baseURL)!
-        let mutableURLRequest = NSMutableURLRequest(URL: URL)
+        let statusURL = self.URL.URLByAppendingPathComponent("/account/status").withQueryParam("uid", value: uid)
+        let mutableURLRequest = NSMutableURLRequest(URL: statusURL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -432,7 +429,7 @@ public class FxAClient10 {
                         return
                     }
 
-                    if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    if let data = result.value {
                         let json = JSON(data)
                         if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
                             deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
@@ -479,7 +476,7 @@ public class FxAClient10 {
                         return
                     }
 
-                    if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    if let data = result.value {
                         let json = JSON(data)
                         if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
                             deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
@@ -526,8 +523,7 @@ public class FxAClient10 {
                         return
                     }
 
-                    // Declaring the type quiets a Swift warning about inferring AnyObject.
-                    if let data: AnyObject = result.value {
+                    if let data = result.value {
                         let json = JSON(data)
                         if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
                             deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
