@@ -163,12 +163,10 @@ public class FirefoxAccount {
 
     public enum AccountError: MaybeErrorType {
         case NotMarried
-        case DeviceRegistrationFailed
 
         public var description: String {
             switch self {
             case NotMarried: return "Not married."
-            case DeviceRegistrationFailed: return "Device registration failed."
             }
         }
     }
