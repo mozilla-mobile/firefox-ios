@@ -181,6 +181,10 @@ class TabManager: NSObject {
             self.isInPrivateMode = !reverseAuthorisationRequirement ? !self.isInPrivateMode : self.isInPrivateMode
             completion(true)
         }
+        let failInAuthorising = {
+            self.isInPrivateMode = false
+            completion(false)
+        }
         if self.isInPrivateMode != reverseAuthorisationRequirement {
             succeedInAuthorising()
             return
@@ -190,13 +194,10 @@ class TabManager: NSObject {
             return
         }
         if authInfo.requiresValidation(.PrivateBrowsing) {
-            let cancelAction = { completion(false) }
             AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
                 touchIDReason: AuthenticationStrings.privateModeReason,
-                success: {
-                    succeedInAuthorising()
-                },
-                cancel: cancelAction,
+                success: succeedInAuthorising,
+                cancel: failInAuthorising,
                 fallback: {
                     AppAuthenticator.presentPasscodeAuthentication(navigationController,
                         success: {
@@ -204,7 +205,7 @@ class TabManager: NSObject {
                                 succeedInAuthorising()
                             }
                         },
-                    cancel: cancelAction)
+                    cancel: failInAuthorising)
                 }
             )
         } else {

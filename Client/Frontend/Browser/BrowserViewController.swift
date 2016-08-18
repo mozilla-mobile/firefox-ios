@@ -315,7 +315,6 @@ class BrowserViewController: UIViewController {
                     if self.navigationController?.topViewController === self {
                         self.openTabTray()
                     }
-                    self.tabTrayController.changePrivacyMode(false)
                 }
                 return
             }
@@ -1061,9 +1060,7 @@ class BrowserViewController: UIViewController {
                 return
             }
             if let tabTrayController = self.tabTrayController {
-                tabTrayController.changePrivacyMode(isPrivate)
-            } else {
-                self.tabManager.isInPrivateMode = isPrivate
+                tabTrayController.transitionBetweenModes()
             }
             self.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
             completion?(true)

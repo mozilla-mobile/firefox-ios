@@ -510,7 +510,7 @@ class TabTrayController: UIViewController {
     }
     
     @available(iOS 9, *)
-    private func transitionBetweenModes() {
+    func transitionBetweenModes() {
         let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
         
         let fromView: UIView
@@ -639,17 +639,6 @@ class TabTrayController: UIViewController {
     @available(iOS 9, *)
     private func privateTabsAreEmpty() -> Bool {
         return tabManager.isInPrivateMode && tabManager.privateTabs.count == 0
-    }
-
-    @available(iOS 9, *)
-    func changePrivacyMode(isPrivate: Bool) {
-        if isPrivate != tabManager.isInPrivateMode {
-            guard let _ = collectionView else {
-                switchToMode(privateMode: isPrivate)
-                return
-            }
-            attemptToTogglePrivateMode()
-        }
     }
 
     private func openNewTab(request: NSURLRequest? = nil) {
