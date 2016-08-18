@@ -568,18 +568,17 @@ class TabTrayController: UIViewController {
     }
 
     @available(iOS 9, *)
-    func attemptToTogglePrivateMode() -> Success {
+    func attemptToTogglePrivateMode(completion: (Bool -> ())? = nil) {
         guard let navigationController = self.navigationController else {
-            return deferMaybe(AuthorisationError(description: "Failed to switch the private mode due to an inexistent navigation controller."))
+            completion?(false)
+            return
         }
-        let success = Success()
-        tabManager.authorisePrivateMode(navigationController).uponQueue(dispatch_get_main_queue()) { result in
-            if result.isSuccess {
+        tabManager.authorisePrivateMode(navigationController) { success in
+            if success {
                 self.transitionBetweenModes()
             }
-            success.fill(result)
+            completion?(success)
         }
-        return success
     }
     
     @available(iOS 9, *)
@@ -1196,8 +1195,8 @@ extension TabTrayController: MenuActionDelegate {
                 if #available(iOS 9, *) {
                     dispatch_async(dispatch_get_main_queue()) {
                         if !self.tabManager.isInPrivateMode {
-                            self.attemptToTogglePrivateMode().uponQueue(dispatch_get_main_queue()) { result in
-                                if result.isSuccess {
+                            self.attemptToTogglePrivateMode() { success in
+                                if success {
                                     self.openNewTab()
                                 }
                             }

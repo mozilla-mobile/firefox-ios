@@ -16,7 +16,6 @@ import ReadingList
 import MobileCoreServices
 import WebImage
 import SwiftKeychainWrapper
-import Deferred
 
 private let log = Logger.browserLogger
 
@@ -310,8 +309,8 @@ class BrowserViewController: UIViewController {
         guard let navigationController = self.navigationController else {
             return
         }
-        tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true).uponQueue(dispatch_get_main_queue()) { result in
-            guard result.isSuccess else {
+        tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
+            guard success else {
                 if #available(iOS 9, *) {
                     if self.navigationController?.topViewController === self {
                         self.openTabTray()
@@ -1050,14 +1049,16 @@ class BrowserViewController: UIViewController {
     // Mark: Opening New Tabs
 
     @available(iOS 9, *)
-    func switchToPrivacyMode(isPrivate isPrivate: Bool) -> Success {
+    func switchToPrivacyMode(isPrivate isPrivate: Bool, completion: (Bool -> ())?) {
         guard let navigationController = self.navigationController else {
-            return deferMaybe(AuthorisationError(description: "Failed to switch the private mode due to an inexistent navigation controller."))
+            completion?(false)
+            return
         }
         
-        return tabManager.authorisePrivateMode(navigationController).bindQueue(dispatch_get_main_queue()) { result in
-            guard result.isSuccess else {
-                return Deferred(value: result)
+        tabManager.authorisePrivateMode(navigationController) { success in
+            guard success else {
+                completion?(false)
+                return
             }
             if let tabTrayController = self.tabTrayController {
                 tabTrayController.changePrivacyMode(isPrivate)
@@ -1065,7 +1066,7 @@ class BrowserViewController: UIViewController {
                 self.tabManager.isInPrivateMode = isPrivate
             }
             self.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
-            return succeed()
+            completion?(true)
         }
     }
 
@@ -1078,7 +1079,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func openURLInNewTab(url: NSURL?, isPrivate: Bool = false) -> Success {
+    func openURLInNewTab(url: NSURL?, isPrivate: Bool, completion: (Bool -> ())? = nil) {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
         }
@@ -1089,22 +1090,26 @@ class BrowserViewController: UIViewController {
             request = nil
         }
         if #available(iOS 9, *) {
-            return switchToPrivacyMode(isPrivate: isPrivate).bindQueue(dispatch_get_main_queue()) { result in
-                if result.isSuccess {
+            switchToPrivacyMode(isPrivate: isPrivate) { success in
+                if success {
                     self.tabManager.addTabAndSelect(request, isPrivate: isPrivate)
                 }
-                return Deferred(value: result)
+                completion?(success)
             }
         } else {
             tabManager.addTabAndSelect(request)
         }
-        return succeed()
+        completion?(true)
+    }
+    
+    func openURLInNewTab(url: NSURL?, completion: (Bool -> ())? = nil) {
+        openURLInNewTab(url, isPrivate: false, completion: completion)
     }
 
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
         popToBVC()
-        openURLInNewTab(nil, isPrivate: isPrivate).uponQueue(dispatch_get_main_queue()) { result in
-            if result.isSuccess {
+        openURLInNewTab(nil, isPrivate: isPrivate) { success in
+            if success {
                 self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
             }
         }
@@ -2975,8 +2980,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     guard let navigationController = self.navigationController else {
                         return
                     }
-                    self.tabManager.authorisePrivateMode(navigationController).uponQueue(dispatch_get_main_queue()) { result in
-                        if result.isSuccess {
+                    self.tabManager.authorisePrivateMode(navigationController) { success in
+                        if success {
                             self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                                 self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)
                             })
@@ -3414,18 +3419,18 @@ extension BrowserViewController: TopTabsDelegate {
         openBlankNewTabAndFocus(isPrivate: self.tabManager.isInPrivateMode)
     }
     
-    func didAttemptToTogglePrivateMode(cachedTab: Tab?) -> Success {
+    func didAttemptToTogglePrivateMode(cachedTab: Tab?, completion: Bool -> ()) {
         if #available(iOS 9, *) {
-            return switchToPrivacyMode(isPrivate: !self.tabManager.isInPrivateMode).bindQueue(dispatch_get_main_queue()) { result in
-                if result.isSuccess {
+            switchToPrivacyMode(isPrivate: !self.tabManager.isInPrivateMode) { success in
+                if success {
                     self.togglePrivateMode(cachedTab)
                 }
-                return Deferred(value: result)
+                completion(success)
             }
         } else {
             togglePrivateMode(cachedTab)
         }
-        return succeed()
+        completion(true)
     }
     
     func togglePrivateMode(cachedTab: Tab?) {

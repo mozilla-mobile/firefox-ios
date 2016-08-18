@@ -176,36 +176,40 @@ class TabManager: NSObject {
         self.appStateDelegate?.appDidUpdateState(state)
     }
     
-    func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool = false) -> Success {
+    func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool, completion: Bool -> ()) {
         if self.isInPrivateMode != reverseAuthorisationRequirement {
-            return succeed()
+            completion(true)
+            return
         }
         guard let authInfo = KeychainWrapper.authenticationInfo() else {
-            return succeed()
+            completion(true)
+            return
         }
-        let success = Success()
         if authInfo.requiresValidation(.PrivateBrowsing) {
-            let cancelAction = { success.fill(Maybe(failure: AuthorisationError(description: "User cancelled authorisation action."))) }
+            let cancelAction = { completion(false) }
             AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
                 touchIDReason: AuthenticationStrings.privateModeReason,
                 success: {
-                    success.fill(Maybe(success: ()))
+                    completion(true)
                 },
                 cancel: cancelAction,
                 fallback: {
                     AppAuthenticator.presentPasscodeAuthentication(navigationController,
                         success: {
                             navigationController.dismissViewControllerAnimated(true) {
-                                success.fill(Maybe(success: ()))
+                                completion(true)
                             }
                         },
                     cancel: cancelAction)
                 }
             )
         } else {
-            return succeed()
+            completion(true)
         }
-        return success
+    }
+    
+    func authorisePrivateMode(navigationController: UINavigationController, completion: Bool -> ()) {
+        authorisePrivateMode(navigationController, toRemainInPrivateMode: false, completion: completion)
     }
 
     func getTabFor(url: NSURL) -> Tab? {
