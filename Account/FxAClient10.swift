@@ -31,15 +31,15 @@ public struct FxALoginResponse {
 }
 
 public struct FxAccountRemoteError {
-    static let ATTEMPT_TO_OPERATE_ON_AN_UNVERIFIED_ACCOUNT: Int32     = 104
-    static let INVALID_AUTHENTICATION_TOKEN: Int32                    = 110
-    static let ENDPOINT_IS_NO_LONGER_SUPPORTED: Int32                 = 116
-    static let INCORRECT_LOGIN_METHOD_FOR_THIS_ACCOUNT: Int32         = 117
-    static let INCORRECT_KEY_RETRIEVAL_METHOD_FOR_THIS_ACCOUNT: Int32 = 118
-    static let INCORRECT_API_VERSION_FOR_THIS_ACCOUNT: Int32          = 119
-    static let UNKNOWN_DEVICE: Int32                                  = 123
-    static let DEVICE_SESSION_CONFLICT: Int32                         = 124
-    static let UNKNOWN_ERROR: Int32                                   = 999
+    static let AttemptToOperateOnAnUnverifiedAccount: Int32     = 104
+    static let InvalidAuthenticationToken: Int32                = 110
+    static let EndpointIsNoLongerSupported: Int32               = 116
+    static let IncorrectLoginMethodForThisAccount: Int32        = 117
+    static let IncorrectKeyRetrievalMethodForThisAccount: Int32 = 118
+    static let IncorrectAPIVersionForThisAccount: Int32         = 119
+    static let UnknownDevice: Int32                             = 123
+    static let DeviceSessionConflict: Int32                     = 124
+    static let UnknownError: Int32                              = 999
 }
 
 public struct FxAKeysResponse {
@@ -127,10 +127,10 @@ public struct RemoteError {
     let info: String?
 
     var isUpgradeRequired: Bool {
-        return errno == FxAccountRemoteError.ENDPOINT_IS_NO_LONGER_SUPPORTED
-            || errno == FxAccountRemoteError.INCORRECT_LOGIN_METHOD_FOR_THIS_ACCOUNT
-            || errno == FxAccountRemoteError.INCORRECT_KEY_RETRIEVAL_METHOD_FOR_THIS_ACCOUNT
-            || errno == FxAccountRemoteError.INCORRECT_API_VERSION_FOR_THIS_ACCOUNT
+        return errno == FxAccountRemoteError.EndpointIsNoLongerSupported
+            || errno == FxAccountRemoteError.IncorrectLoginMethodForThisAccount
+            || errno == FxAccountRemoteError.IncorrectKeyRetrievalMethodForThisAccount
+            || errno == FxAccountRemoteError.IncorrectAPIVersionForThisAccount
     }
 
     var isInvalidAuthentication: Bool {
@@ -138,7 +138,7 @@ public struct RemoteError {
     }
 
     var isUnverified: Bool {
-        return errno == FxAccountRemoteError.ATTEMPT_TO_OPERATE_ON_AN_UNVERIFIED_ACCOUNT
+        return errno == FxAccountRemoteError.AttemptToOperateOnAnUnverifiedAccount
     }
 }
 
