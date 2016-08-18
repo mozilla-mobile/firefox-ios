@@ -71,19 +71,6 @@ public struct FxAStatusResponse {
 }
 
 public struct FxADevicesResponse {
-    struct FxADevice {
-        let id: String
-        let isCurrentDevice: Bool
-        let name: String
-        let type: String
-
-        init(id: String, name: String, type: String, isCurrentDevice: Bool) {
-            self.id = id
-            self.name = name
-            self.type = type
-            self.isCurrentDevice = isCurrentDevice
-        }
-    }
     let devices: [FxADevice]
 
     init(devices: [FxADevice]) {
@@ -267,14 +254,8 @@ public class FxAClient10 {
                 return nil
         }
 
-        let devices = jsonDevices.flatMap { (jsonDevice) -> FxADevicesResponse.FxADevice? in
-            guard let id = jsonDevice["id"].asString,
-                let name = jsonDevice["name"].asString,
-                let type = jsonDevice["type"].asString,
-                let isCurrentDevice = jsonDevice["isCurrentDevice"].asBool else {
-                    return nil
-            }
-            return FxADevicesResponse.FxADevice(id: id, name: name, type: type, isCurrentDevice: isCurrentDevice)
+        let devices = jsonDevices.flatMap { (jsonDevice) -> FxADevice? in
+            return FxADevice.fromJSON(jsonDevice)
         }
 
         return FxADevicesResponse(devices: devices)
