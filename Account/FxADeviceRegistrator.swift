@@ -92,7 +92,7 @@ public class FxADeviceRegistrator {
         log.warning("device session conflict, attempting to ascertain the correct device id")
         client.devices(sessionToken).upon { response in
             if let success = response.successValue,
-                let currentDevice = success.devices.find({ $0.isCurrentDevice }) {
+               let currentDevice = success.devices.find({ $0.isCurrentDevice! }) {
                 account.fxaDeviceId = currentDevice.id
                 deferred.fill(Maybe(success: FxADeviceRegistrationResult.RegisteredOrUpdated))
             } else {
