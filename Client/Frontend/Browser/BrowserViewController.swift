@@ -311,7 +311,7 @@ class BrowserViewController: UIViewController {
             self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
             self.presentedViewController?.view.alpha = 1
             self.view.backgroundColor = UIColor.clearColor()
-            }, completion: { _ in
+        }, completion: { _ in
                 self.webViewContainerBackdrop.alpha = 0
         })
     }
