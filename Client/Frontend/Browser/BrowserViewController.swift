@@ -289,7 +289,7 @@ class BrowserViewController: UIViewController {
     func SELtappedTopArea() {
         scrollController.showToolbars(animated: true)
     }
-    
+
     private func concealPrivateContents() {
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
@@ -320,6 +320,7 @@ class BrowserViewController: UIViewController {
         guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
             return
         }
+        tabManager.needsAuthentication = true
         concealPrivateContents()
     }
 

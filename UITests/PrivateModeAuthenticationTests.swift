@@ -52,12 +52,12 @@ class PrivateModeAuthenticationTests: KIFTestCase {
         enterPasscode(PrivateModeAuthenticationTests.passcode)
         checkBrowsingMode(isPrivate: enterPrivateMode)
     }
-    
+
     private func enterIncorrectPasscode() {
         enterPasscode(PrivateModeAuthenticationTests.incorrectPasscode)
         checkBrowsingMode(isPrivate: false)
     }
-    
+
     private func checkActionEnablesPrivateBrowsingMode(action: () -> ()) {
         enablePasscodeAuthentication()
         checkBrowsingMode(isPrivate: false)
@@ -102,7 +102,7 @@ class PrivateModeAuthenticationTests: KIFTestCase {
             self.tester().tapViewWithAccessibilityLabel("New Private Tab")
         }
     }
-    
+
     func testPasscodeAuthenticationForNewPrivateTabFromTabTray() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Menu")
@@ -110,7 +110,7 @@ class PrivateModeAuthenticationTests: KIFTestCase {
             self.tester().tapViewWithAccessibilityLabel("New Private Tab")
         }
     }
-    
+
     func testPasscodeAuthenticationForNewPrivateTabFromTodayView() {
         checkActionEnablesPrivateBrowsingMode {
             self.getAppDelegate().launchFromURL(LaunchParams(url: NSURL(string: "\(self.webRoot)/pageWithLink.html"), isPrivate: true))

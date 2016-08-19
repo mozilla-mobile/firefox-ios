@@ -94,6 +94,7 @@ class TabManager: NSObject {
             }
         }
     }
+    var needsAuthentication = true
     var isAuthenticating = false
 
     var normalTabs: [Tab] {
@@ -179,6 +180,7 @@ class TabManager: NSObject {
     
     func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool, completion: Bool -> ()) {
         let succeedInAuthorising = {
+            self.needsAuthentication = false
             self.isAuthenticating = false
             self.isInPrivateMode = !reverseAuthorisationRequirement ? !self.isInPrivateMode : self.isInPrivateMode
             completion(true)
@@ -189,7 +191,7 @@ class TabManager: NSObject {
             completion(false)
         }
         self.isAuthenticating = true
-        if self.isInPrivateMode != reverseAuthorisationRequirement {
+        if self.isInPrivateMode != reverseAuthorisationRequirement || reverseAuthorisationRequirement && !self.needsAuthentication {
             succeedInAuthorising()
             return
         }

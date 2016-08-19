@@ -671,18 +671,35 @@ class TabTrayController: UIViewController {
 // MARK: - App Notifications
 extension TabTrayController {
     func SELappWillResignActiveNotification() {
+        tabManager.needsAuthentication = true
         if tabManager.isInPrivateMode {
             collectionView.alpha = 0
         }
     }
-
-    func SELappDidBecomeActiveNotification() {
+    
+    private func revealPrivateContent() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
             self.collectionView.alpha = 1
-        },
-        completion: nil)
+        }, completion: nil)
+    }
+
+    func SELappDidBecomeActiveNotification() {
+        if let navigationController = self.navigationController {
+            tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
+                guard success else {
+                    if #available(iOS 9, *) {
+                        self.transitionBetweenModes()
+                    }
+                    return
+                }
+                self.revealPrivateContent()
+            }
+        } else {
+            revealPrivateContent()
+        }
+        
     }
 }
 
