@@ -464,7 +464,7 @@ class SettingsTableViewController: UITableViewController {
             account.advance().upon { state in
                 if let marriedState = state as? MarriedState {
                     FxADeviceRegistrator.registerOrUpdateDevice(account, state: marriedState) >>== { result in
-                        if (result == .RegisteredOrUpdated) {
+                        if (result == .Registered || result == .Updated) {
                             self.profile.flushAccount()
                         }
                     }
