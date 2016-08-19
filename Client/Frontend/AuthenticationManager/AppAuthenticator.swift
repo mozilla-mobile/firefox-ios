@@ -39,10 +39,10 @@ class AppAuthenticator {
     }
     
     static func presentPasscodeAuthentication(presentingNavController: UINavigationController?, success: (() -> Void)?, cancel: (() -> Void)?) {
-        let passcodeVC = PasscodeEntryViewController()
-        passcodeVC.success = success
-        passcodeVC.cancel = cancel
-        let navController = UINavigationController(rootViewController: passcodeVC)
+        let passcodeController = PasscodeEntryViewController()
+        passcodeController.success = success
+        passcodeController.cancel = cancel
+        let navController = UINavigationController(rootViewController: passcodeController)
         navController.modalPresentationStyle = .FormSheet
         presentingNavController?.presentViewController(navController, animated: true, completion: nil)
     }

@@ -548,12 +548,12 @@ class TabTrayController: UIViewController {
         toView.alpha = 0
         toView.transform = scaleDownTransform
 
-        UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
+        UIView.animateWithDuration(0.2, delay: 0, options: [], animations: {
             fromView.transform = scaleDownTransform
             fromView.alpha = 0
             toView.transform = CGAffineTransformIdentity
             toView.alpha = 1
-        }) { finished in
+        }) { _ in
             if fromView != self.emptyPrivateTabsView {
                 fromView.removeFromSuperview()
             }
