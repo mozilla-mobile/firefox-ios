@@ -669,11 +669,10 @@ class TabTrayController: UIViewController {
 
 // MARK: - App Notifications
 extension TabTrayController {
-    func SELappWillResignActiveNotification() {
-        tabManager.needsAuthentication = true
-        if tabManager.isInPrivateMode {
-            collectionView.alpha = 0
-        }
+    private func concealPrivateContent() {
+        collectionView.alpha = 0
+        presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
+        presentedViewController?.view.alpha = 0
     }
     
     private func revealPrivateContent() {
@@ -681,7 +680,16 @@ extension TabTrayController {
         // as part of a private mode tab
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
             self.collectionView.alpha = 1
+            self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
+            self.presentedViewController?.view.alpha = 1
         }, completion: nil)
+    }
+
+    func SELappWillResignActiveNotification() {
+        tabManager.needsAuthentication = true
+        if tabManager.isInPrivateMode {
+            self.concealPrivateContent()
+        }
     }
 
     func SELappDidBecomeActiveNotification() {

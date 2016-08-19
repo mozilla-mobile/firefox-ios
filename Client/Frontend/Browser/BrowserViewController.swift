@@ -317,7 +317,7 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappWillResignActiveNotification() {
-        guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
+        guard tabManager.isInPrivateMode else {
             return
         }
         tabManager.needsAuthentication = true
@@ -325,17 +325,19 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappDidBecomeActiveNotification() {
-        if let navigationController = self.navigationController where self.tabTrayController == nil {
-            tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
-                guard success else {
-                    if #available(iOS 9, *) {
-                        if self.navigationController?.topViewController === self {
-                            self.openTabTray()
+        if let navigationController = self.navigationController {
+            if self.tabTrayController == nil {
+                tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
+                    guard success else {
+                        if #available(iOS 9, *) {
+                            if self.navigationController?.topViewController === self {
+                                self.openTabTray()
+                            }
                         }
+                        return
                     }
-                    return
+                    self.revealPrivateContent()
                 }
-                self.revealPrivateContent()
             }
         } else {
             revealPrivateContent()
