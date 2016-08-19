@@ -325,7 +325,7 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappDidBecomeActiveNotification() {
-        if let navigationController = self.navigationController {
+        if let navigationController = self.navigationController where self.tabTrayController == nil {
             tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
                 guard success else {
                     if #available(iOS 9, *) {

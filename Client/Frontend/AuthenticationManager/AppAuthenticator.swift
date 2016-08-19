@@ -23,17 +23,16 @@ class AppAuthenticator {
                 return
             }
 
-            guard let authError = error,
-                      code = LAError(rawValue: authError.code) else {
+            guard let authError = error, code = LAError(rawValue: authError.code) else {
                 return
             }
 
             dispatch_async(dispatch_get_main_queue()) {
                 switch code {
-                case .UserFallback, .TouchIDNotEnrolled, .TouchIDNotAvailable, .TouchIDLockout:
-                    fallback?()
-                default:
-                    cancel?()
+                    case .UserFallback, .TouchIDNotEnrolled, .TouchIDNotAvailable, .TouchIDLockout:
+                        fallback?()
+                    default:
+                        cancel?()
                 }
             }
         }
