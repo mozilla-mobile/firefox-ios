@@ -303,8 +303,8 @@ class TabTrayController: UIViewController {
             return []
         }
     }
-    
-    private func switchToMode() {
+
+    private func switchToCurrentBrowsingMode() {
         tabDataSource.tabs = tabsToDisplay
         self.tabTrayState.isPrivate = self.tabManager.isInPrivateMode
         toolbar.styleToolbar(isPrivate: self.tabManager.isInPrivateMode)
@@ -392,7 +392,7 @@ class TabTrayController: UIViewController {
                 make.bottom.equalTo(self.toolbar.snp_top)
             }
 
-            self.switchToMode()
+            self.switchToCurrentBrowsingMode()
 
             // register for previewing delegate to enable peek and pop if force touch feature available
             if traitCollection.forceTouchCapability == .Available {
@@ -511,7 +511,7 @@ class TabTrayController: UIViewController {
     @available(iOS 9, *)
     func transitionBetweenModes() {
         let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
-        
+
         let fromView: UIView
         if self.privateTabsAreEmpty() {
             fromView = self.emptyPrivateTabsView
@@ -521,18 +521,18 @@ class TabTrayController: UIViewController {
             self.view.insertSubview(snapshot, aboveSubview: self.collectionView)
             fromView = snapshot
         }
-        
-        self.switchToMode()
-        
+
+        self.switchToCurrentBrowsingMode()
+
         // If we are exiting private mode and we have the close private tabs option selected, make sure
         // we clear out all of the private tabs
         if !self.tabManager.isInPrivateMode && self.profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
             self.tabManager.removeAllPrivateTabsAndNotify(false)
         }
-        
+
         self.toolbar.maskButton.setSelected(self.tabManager.isInPrivateMode, animated: true)
         self.collectionView.layoutSubviews()
-        
+
         let toView: UIView
         if self.privateTabsAreEmpty() {
             self.emptyPrivateTabsView.hidden = false
@@ -547,7 +547,7 @@ class TabTrayController: UIViewController {
         }
         toView.alpha = 0
         toView.transform = scaleDownTransform
-        
+
         UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
             fromView.transform = scaleDownTransform
             fromView.alpha = 0
@@ -637,7 +637,7 @@ class TabTrayController: UIViewController {
 
     @available(iOS 9, *)
     private func privateTabsAreEmpty() -> Bool {
-        return tabManager.isInPrivateMode && tabManager.privateTabs.count == 0
+        return self.tabTrayState.isPrivate && tabManager.privateTabs.count == 0
     }
 
     private func openNewTab(request: NSURLRequest? = nil) {

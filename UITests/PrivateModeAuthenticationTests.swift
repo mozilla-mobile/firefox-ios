@@ -136,7 +136,6 @@ class PrivateModeAuthenticationTests: KIFTestCase {
         enterIncorrectPasscode()
         enterCorrectPasscode(andExpectToEnterPrivateMode: false)
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().waitForTimeInterval(5)
         checkActionEnablesPrivateBrowsingMode {
             self.tester().tapViewWithAccessibilityLabel("Private Mode")
         }
