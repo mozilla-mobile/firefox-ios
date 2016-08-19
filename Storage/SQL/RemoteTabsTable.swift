@@ -20,7 +20,6 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             "type TEXT",
             "formfactor TEXT",
             "os TEXT",
-            "fxaDeviceId TEXT",
         ].joinWithSeparator(",")
     }
 
@@ -33,9 +32,8 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             item.type,
             item.formfactor,
             item.os,
-            item.fxaDeviceId,
         ]
-        return ("INSERT INTO \(name) (guid, name, modified, type, formfactor, os, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?)", args)
+        return ("INSERT INTO \(name) (guid, name, modified, type, formfactor, os) VALUES (?, ?, ?, ?, ?, ?)", args)
     }
 
     override func getUpdateAndArgs(inout item: RemoteClient) -> (String, [AnyObject?])? {
@@ -45,11 +43,10 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             item.type,
             item.formfactor,
             item.os,
-            item.fxaDeviceId,
             item.guid,
         ]
 
-        return ("UPDATE \(name) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, fxaDeviceId = ? WHERE guid = ?", args)
+        return ("UPDATE \(name) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ? WHERE guid = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: RemoteClient?) -> (String, [AnyObject?])? {
@@ -67,8 +64,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
                                 modified: (row["modified"] as! NSNumber).unsignedLongLongValue,
                                 type: row["type"] as? String,
                                 formfactor: row["formfactor"] as? String,
-                                os: row["os"] as? String,
-                                fxaDeviceId: row["fxaDeviceId"] as? String)
+                                os: row["os"] as? String)
         }
     }
 

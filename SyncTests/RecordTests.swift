@@ -46,7 +46,7 @@ class RecordTests: XCTestCase {
         let invalidPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"invalid\"}"
         let emptyPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"{}\"}"
 
-        let clientBody: [String: AnyObject] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile", "fxaDeviceId": "bogusid"]
+        let clientBody: [String: AnyObject] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile"]
         let clientBodyString = JSON(clientBody).toString(false)
         let clientRecord: [String : AnyObject] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
         let clientPayload = JSON(clientRecord).toString(false)

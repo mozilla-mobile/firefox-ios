@@ -70,7 +70,6 @@ class FxALoginStateMachine {
                 return advanceOneState(state.withoutCertificate(), now: now)
             }
             log.info("Key pair and certificate are fresh; staying Married.")
-
             return same
 
         case .CohabitingBeforeKeyPair:
