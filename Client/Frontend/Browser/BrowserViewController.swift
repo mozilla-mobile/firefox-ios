@@ -2990,7 +2990,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     guard let navigationController = self.navigationController else {
                         return
                     }
-                    self.tabManager.authorisePrivateMode(navigationController) { success in
+                    self.tabManager.authorisePrivateMode(navigationController, changePrivacyMode: false) { success in
                         if success {
                             self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                                 self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)

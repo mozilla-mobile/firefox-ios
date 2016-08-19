@@ -14,10 +14,13 @@ class PrivateModeAuthenticationTests: KIFTestCase {
     
     override func setUp() {
         super.setUp()
+        self.continueAfterFailure = false
         webRoot = SimplePageServer.start()
     }
 
     override func tearDown() {
+        // If tearDown() ever appears to be being called too early, it's probably because an XCTAssert() has failed
+        // but it doesn't abort immediately, so it can often be confusing to debug.
         super.tearDown()
         PasscodeUtils.resetPasscode()
         BrowserUtils.resetToAboutHome(tester())

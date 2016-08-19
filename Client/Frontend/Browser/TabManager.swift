@@ -178,11 +178,13 @@ class TabManager: NSObject {
         self.appStateDelegate?.appDidUpdateState(state)
     }
     
-    func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool, completion: Bool -> ()) {
+    func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool, changePrivacyMode: Bool = true, completion: Bool -> ()) {
         let succeedInAuthorising = {
             self.needsAuthentication = false
             self.isAuthenticating = false
-            self.isInPrivateMode = !reverseAuthorisationRequirement ? !self.isInPrivateMode : self.isInPrivateMode
+            if changePrivacyMode {
+                self.isInPrivateMode = !reverseAuthorisationRequirement ? !self.isInPrivateMode : self.isInPrivateMode
+            }
             completion(true)
         }
         let failInAuthorising = {
@@ -219,8 +221,8 @@ class TabManager: NSObject {
         }
     }
     
-    func authorisePrivateMode(navigationController: UINavigationController, completion: Bool -> ()) {
-        authorisePrivateMode(navigationController, toRemainInPrivateMode: false, completion: completion)
+    func authorisePrivateMode(navigationController: UINavigationController, changePrivacyMode: Bool = true, completion: Bool -> ()) {
+        authorisePrivateMode(navigationController, toRemainInPrivateMode: false, changePrivacyMode: changePrivacyMode, completion: completion)
     }
 
     func getTabFor(url: NSURL) -> Tab? {
