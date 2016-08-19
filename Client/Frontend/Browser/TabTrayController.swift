@@ -304,10 +304,10 @@ class TabTrayController: UIViewController {
         }
     }
     
-    private func switchToMode(privateMode privateMode: Bool) {
-        self.tabTrayState.isPrivate = privateMode
+    private func switchToMode() {
         tabDataSource.tabs = tabsToDisplay
-        toolbar.styleToolbar(isPrivate: tabManager.isInPrivateMode)
+        self.tabTrayState.isPrivate = self.tabManager.isInPrivateMode
+        toolbar.styleToolbar(isPrivate: self.tabManager.isInPrivateMode)
         collectionView?.reloadData()
     }
 
@@ -392,7 +392,7 @@ class TabTrayController: UIViewController {
                 make.bottom.equalTo(self.toolbar.snp_top)
             }
 
-            self.switchToMode(privateMode: self.tabManager.isInPrivateMode)
+            self.switchToMode()
 
             // register for previewing delegate to enable peek and pop if force touch feature available
             if traitCollection.forceTouchCapability == .Available {
@@ -522,7 +522,7 @@ class TabTrayController: UIViewController {
             fromView = snapshot
         }
         
-        self.switchToMode(privateMode: !self.tabManager.isInPrivateMode)
+        self.switchToMode()
         
         // If we are exiting private mode and we have the close private tabs option selected, make sure
         // we clear out all of the private tabs
