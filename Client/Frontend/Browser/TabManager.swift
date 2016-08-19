@@ -94,6 +94,8 @@ class TabManager: NSObject {
             }
         }
     }
+    var needsAuthentication = true
+    var isAuthenticating = false
 
     var normalTabs: [Tab] {
         assert(NSThread.isMainThread())
@@ -176,36 +178,49 @@ class TabManager: NSObject {
         self.appStateDelegate?.appDidUpdateState(state)
     }
     
-    func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool = false) -> Success {
-        if self.isInPrivateMode != reverseAuthorisationRequirement {
-            return succeed()
+    func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool, completion: Bool -> ()) {
+        let succeedInAuthorising = {
+            self.needsAuthentication = false
+            self.isAuthenticating = false
+            self.isInPrivateMode = !reverseAuthorisationRequirement ? !self.isInPrivateMode : self.isInPrivateMode
+            completion(true)
+        }
+        let failInAuthorising = {
+            self.isAuthenticating = false
+            self.isInPrivateMode = false
+            completion(false)
+        }
+        self.isAuthenticating = true
+        if self.isInPrivateMode != reverseAuthorisationRequirement || reverseAuthorisationRequirement && !self.needsAuthentication {
+            succeedInAuthorising()
+            return
         }
         guard let authInfo = KeychainWrapper.authenticationInfo() else {
-            return succeed()
+            succeedInAuthorising()
+            return
         }
-        let success = Success()
         if authInfo.requiresValidation(.PrivateBrowsing) {
-            let cancelAction = { success.fill(Maybe(failure: AuthorisationError(description: "User cancelled authorisation action."))) }
             AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
                 touchIDReason: AuthenticationStrings.privateModeReason,
-                success: {
-                    success.fill(Maybe(success: ()))
-                },
-                cancel: cancelAction,
+                success: succeedInAuthorising,
+                cancel: failInAuthorising,
                 fallback: {
                     AppAuthenticator.presentPasscodeAuthentication(navigationController,
                         success: {
                             navigationController.dismissViewControllerAnimated(true) {
-                                success.fill(Maybe(success: ()))
+                                succeedInAuthorising()
                             }
                         },
-                    cancel: cancelAction)
+                    cancel: failInAuthorising)
                 }
             )
         } else {
-            return succeed()
+            succeedInAuthorising()
         }
-        return success
+    }
+    
+    func authorisePrivateMode(navigationController: UINavigationController, completion: Bool -> ()) {
+        authorisePrivateMode(navigationController, toRemainInPrivateMode: false, completion: completion)
     }
 
     func getTabFor(url: NSURL) -> Tab? {
@@ -237,6 +252,7 @@ class TabManager: NSObject {
         preserveTabs()
 
         assert(tab === selectedTab, "Expected tab is selected")
+        self.isInPrivateMode = tab?.isPrivate ?? self.isInPrivateMode
         selectedTab?.createWebview()
 
         for delegate in delegates {
