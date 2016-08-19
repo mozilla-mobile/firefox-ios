@@ -38,13 +38,13 @@ class SensitiveViewController: UIViewController {
         }
 
         presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
-        guard let authInfo = KeychainWrapper.authenticationInfo() where authInfo.requiresValidation(.Logins) else {
+        guard let authInfo = KeychainWrapper.authenticationInfo() where authInfo.requiresValidation() else {
             removeBackgroundedBlur()
             return
         }
 
         promptingForTouchID = true
-        AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
+        AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.promptingForTouchID = false
@@ -58,12 +58,7 @@ class SensitiveViewController: UIViewController {
             },
             fallback: {
                 self.promptingForTouchID = false
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, success: {
-                    self.removeBackgroundedBlur()
-                    self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-                }, cancel: {
-                    self.navigationController?.popToRootViewControllerAnimated(false)
-                })
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
             }
         )
         authState = .Presenting
@@ -96,3 +91,18 @@ class SensitiveViewController: UIViewController {
         return blurView
     }
 }
+
+// MARK: - PasscodeEntryDelegate
+extension SensitiveViewController: PasscodeEntryDelegate {
+    func passcodeValidationDidSucceed() {
+        removeBackgroundedBlur()
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.authState = .NotAuthenticating
+    }
+
+    func userDidCancelValidation() {
+        self.navigationController?.popToRootViewControllerAnimated(false)
+        self.authState = .NotAuthenticating
+    }
+}
+

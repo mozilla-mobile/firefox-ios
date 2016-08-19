@@ -66,7 +66,6 @@ public struct UIConstants {
 
     // Firefox Orange
     static let ControlTintColor = UIColor(red: 240.0 / 255, green: 105.0 / 255, blue: 31.0 / 255, alpha: 1)
-    static let ControlDisabledColor = UIColor(white: 0.8, alpha: 1)
 
     // Passcode dot gray
     static let PasscodeDotColor = UIColor(rgb: 0x4A4A4A)

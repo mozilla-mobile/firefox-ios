@@ -591,8 +591,8 @@ class LoginsSetting: Setting {
             return
         }
 
-        if authInfo.requiresValidation(.Logins) {
-            AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
+        if authInfo.requiresValidation() {
+            AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.settings?.navigateToLoginsList()
@@ -603,11 +603,7 @@ class LoginsSetting: Setting {
                 }
             },
             fallback: {
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, success: {
-                    self.navigationController?.dismissViewControllerAnimated(true) {
-                        self.settings?.navigateToLoginsList()
-                    }
-                }, cancel: nil)
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self.settings)
             })
         } else {
             settings?.navigateToLoginsList()

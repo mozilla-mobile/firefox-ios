@@ -125,7 +125,7 @@ class QuickActions: NSObject {
         }
     }
 
-    func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController, isPrivate: Bool) {
+    private func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController, isPrivate: Bool) {
         bvc.openBlankNewTabAndFocus(isPrivate: isPrivate)
     }
 

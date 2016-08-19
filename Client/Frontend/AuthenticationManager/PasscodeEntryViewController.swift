@@ -7,10 +7,15 @@ import SnapKit
 import Shared
 import SwiftKeychainWrapper
 
+/// Delegate available for PasscodeEntryViewController consumers to be notified of the validation of a passcode.
+@objc protocol PasscodeEntryDelegate: class {
+    func passcodeValidationDidSucceed()
+    optional func userDidCancelValidation()
+}
+
 /// Presented to the to user when asking for their passcode to validate entry into a part of the app.
 class PasscodeEntryViewController: BasePasscodeViewController {
-    var success: (() -> Void)?
-    var cancel: (() -> Void)?
+    weak var delegate: PasscodeEntryDelegate?
     private let passcodePane = PasscodePane()
 
     override func viewDidLoad() {
@@ -42,7 +47,7 @@ class PasscodeEntryViewController: BasePasscodeViewController {
     }
 
     override func dismiss() {
-        cancel?()
+        delegate?.userDidCancelValidation?()
         super.dismiss()
     }
 }
@@ -52,7 +57,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
         if let passcode = authenticationInfo?.passcode where passcode == code {
             authenticationInfo?.recordValidation()
             KeychainWrapper.setAuthenticationInfo(authenticationInfo)
-            success?()
+            delegate?.passcodeValidationDidSucceed()
         } else {
             passcodePane.shakePasscode()
             failIncorrectPasscode(inputView: inputView)

@@ -174,3 +174,11 @@ extension AppSettingsTableViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
+
+extension AppSettingsTableViewController: PasscodeEntryDelegate {
+    @objc func passcodeValidationDidSucceed() {
+        navigationController?.dismissViewControllerAnimated(true) {
+            self.navigateToLoginsList()
+        }
+    }
+}
