@@ -290,9 +290,7 @@ class TabTrayController: UIViewController {
         return toolbar
     }()
 
-    var tabTrayState: TabTrayState {
-        return TabTrayState(isPrivate: tabManager.isInPrivateMode)
-    }
+    var tabTrayState = TabTrayState(isPrivate: false)
 
     var leftToolbarButtons: [UIButton] {
         return [toolbar.addTabButton]
@@ -307,6 +305,7 @@ class TabTrayController: UIViewController {
     }
     
     private func switchToMode(privateMode privateMode: Bool) {
+        self.tabTrayState.isPrivate = privateMode
         tabDataSource.tabs = tabsToDisplay
         toolbar.styleToolbar(isPrivate: tabManager.isInPrivateMode)
         collectionView?.reloadData()
@@ -392,7 +391,7 @@ class TabTrayController: UIViewController {
                 make.top.left.right.equalTo(self.collectionView)
                 make.bottom.equalTo(self.toolbar.snp_top)
             }
-            
+
             self.switchToMode(privateMode: self.tabManager.isInPrivateMode)
 
             // register for previewing delegate to enable peek and pop if force touch feature available
@@ -424,7 +423,7 @@ class TabTrayController: UIViewController {
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
     }
-    
+
     private func cancelExistingGestures() {
         if let visibleCells = self.collectionView.visibleCells() as? [TabCell] {
             for cell in visibleCells {
@@ -719,6 +718,12 @@ extension TabTrayController: PresentingModalViewControllerDelegate {
 
 extension TabTrayController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+        if !tabManager.isInPrivateMode && self.tabTrayState.isPrivate {
+            // This means the last private tab has been closed, so the selected tab is no longer actually a private tab.
+            // We must therefore override the TabManager's private mode setting, because we want to remain in private mode,
+            // even without any private tabs.
+            tabManager.isInPrivateMode = true
+        }
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {
