@@ -19,8 +19,6 @@ class PrivateModeAuthenticationTests: KIFTestCase {
     }
 
     override func tearDown() {
-        // If tearDown() ever appears to be being called too early, it's probably because an XCTAssert() has failed
-        // but it doesn't abort immediately, so it can often be confusing to debug.
         super.tearDown()
         PasscodeUtils.resetPasscode()
         BrowserUtils.resetToAboutHome(tester())
@@ -41,11 +39,11 @@ class PrivateModeAuthenticationTests: KIFTestCase {
     private func checkBrowsingMode(isPrivate isPrivate: Bool) {
         let bvc = getBrowserViewController()
         tester().waitForAnimationsToFinish()
+        assert(isPrivate ? bvc.tabManager.isInPrivateMode : !bvc.tabManager.isInPrivateMode)
         XCTAssertTrue(isPrivate ? bvc.tabManager.isInPrivateMode : !bvc.tabManager.isInPrivateMode)
     }
 
     private func enterPasscode(passcode: String) {
-        checkBrowsingMode(isPrivate: false)
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")
         tester().enterTextIntoCurrentFirstResponder(passcode)
         tester().waitForAnimationsToFinish()
@@ -144,5 +142,25 @@ class PrivateModeAuthenticationTests: KIFTestCase {
         }
         let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
         XCTAssertEqual(tabsView.numberOfItemsInSection(0), 1)
+    }
+    
+    private func checkCorrectBehaviourWhenBackgrounded() {
+        tester().deactivateAppForDuration(1)
+        checkBrowsingMode(isPrivate: true)
+        enterCorrectPasscode()
+        checkBrowsingMode(isPrivate: true)
+        tester().deactivateAppForDuration(1)
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        checkBrowsingMode(isPrivate: false)
+    }
+    
+    func testPasscodeAuthenticationWhenBackgroundedInWebPage() {
+        testPasscodeAuthenticationForNewPrivateTab()
+        checkCorrectBehaviourWhenBackgrounded()
+    }
+    
+    func testPasscodeAuthenticationWhenBackgroundedInTabTray() {
+        testPasscodeAuthenticationFromTabTray()
+        checkCorrectBehaviourWhenBackgrounded()
     }
 }
