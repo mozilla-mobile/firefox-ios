@@ -18,6 +18,7 @@ public protocol Command {
     static func commandFromSyncCommand(syncCommand: SyncCommand) -> Command?
 }
 
+// Shit.
 // We need a way to wipe or reset engines.
 // We need a way to log out the account.
 // So when we sync commands, we're gonna need a delegate of some kind.
@@ -130,7 +131,6 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
             "appPackage": NSBundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
-            //"fxaDeviceId", // TODO
             "formfactor": formfactor])
 
         let payload = ClientPayload(json)
