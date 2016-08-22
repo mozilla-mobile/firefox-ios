@@ -598,8 +598,8 @@ public protocol SyncableLogins: AccountRemovalDelegate {
     /**
      * Chains through the provided timestamp.
      */
-    func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
-    func markAsDeleted(guids: [GUID]) -> Success
+    func markAsSynchronized<T: CollectionType where T.Generator.Element == GUID>(_: T, modified: Timestamp) -> Deferred<Maybe<Timestamp>>
+    func markAsDeleted<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
 
     /**
      * For inspecting whether we're an active participant in login sync.

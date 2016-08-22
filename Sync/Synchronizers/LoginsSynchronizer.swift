@@ -113,9 +113,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
         let onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp = { result, lastModified in
             let uploaded = Set(result.success)
-            let deletedGUIDs = Array(uploaded.intersect(deleted))
-            let modifiedGUIDS = Array(uploaded.intersect(modified))
-            return storage.markAsDeleted(deletedGUIDs) >>> { storage.markAsSynchronized(modifiedGUIDS, modified: lastModified ?? lastTimestamp) }
+            return storage.markAsDeleted(uploaded.intersect(deleted)) >>> { storage.markAsSynchronized(uploaded.intersect(modified), modified: lastModified ?? lastTimestamp) }
         }
 
         return uploadRecords(records,

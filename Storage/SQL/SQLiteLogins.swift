@@ -921,7 +921,7 @@ extension SQLiteLogins: SyncableLogins {
     /**
      * Chains through the provided timestamp.
      */
-    public func markAsSynchronized(guids: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>> {
+    public func markAsSynchronized<T: CollectionType where T.Generator.Element == GUID>(guids: T, modified: Timestamp) -> Deferred<Maybe<Timestamp>> {
         // Update the mirror from the local record that we just uploaded.
         // sqlite doesn't support UPDATE FROM, so instead of running 10 subqueries * n GUIDs,
         // we issue a single DELETE and a single INSERT on the mirror, then throw away the
@@ -955,7 +955,7 @@ extension SQLiteLogins: SyncableLogins {
          >>> always(modified)
     }
 
-    public func markAsDeleted(guids: [GUID]) -> Success {
+    public func markAsDeleted<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
         log.debug("Marking \(guids.count) GUIDs as deleted.")
 
         let args: Args = guids.map { $0 as AnyObject }
