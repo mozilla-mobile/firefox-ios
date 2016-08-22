@@ -24,7 +24,7 @@ struct TopTabsUX {
 protocol TopTabsDelegate: class {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab()
-    func didAttemptToTogglePrivateMode(cachedTab: Tab?) -> Success
+    func didAttemptToTogglePrivateMode(cachedTab: Tab?, completion: Bool -> ())
     func topTabsDidChangeTab()
 }
 
@@ -190,9 +190,12 @@ class TopTabsViewController: UIViewController {
     }
     
     func togglePrivateModeTapped() {
-        delegate?.didAttemptToTogglePrivateMode(isPrivate ? lastNormalTab : lastPrivateTab)
-        self.collectionView.reloadData()
-        self.scrollToCurrentTab(false, centerCell: true)
+        delegate?.didAttemptToTogglePrivateMode(isPrivate ? lastNormalTab : lastPrivateTab) { success in
+            if success {
+                self.collectionView.reloadData()
+                self.scrollToCurrentTab(false, centerCell: true)
+            }
+        }
     }
     
     func closeTab() {
@@ -306,6 +309,10 @@ extension TopTabsViewController: UICollectionViewDataSource {
                 tabCell.favicon.image = defaultFavicon
             }
         }
+
+        let alpha: CGFloat = tabManager.isInPrivateMode && tabManager.isAuthenticating ? 0 : 1
+        tabCell.titleText.alpha = alpha
+        tabCell.favicon.alpha = alpha
         
         return tabCell
     }

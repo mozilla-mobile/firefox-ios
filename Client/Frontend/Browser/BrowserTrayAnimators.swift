@@ -43,7 +43,7 @@ private extension TrayToBrowserAnimator {
 
         // Create a fake cell to use for the upscaling animation
         let startingFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView, atIndex: expandFromIndex)
-        let cell = createTransitionCellFromTab(bvc.tabManager.selectedTab, withFrame: startingFrame)
+        let cell = createTransitionCellFromTab(bvc.tabManager.selectedTab, withFrame: startingFrame, concealPrivateContent: !tabManager.isInPrivateMode)
         cell.backgroundHolder.layer.cornerRadius = 0
 
         container.insertSubview(bvc.view, aboveSubview: tabCollectionViewSnapshot)
@@ -115,7 +115,7 @@ private extension BrowserToTrayAnimator {
 
         tabTray.view.frame = transitionContext.finalFrameForViewController(tabTray)
 
-        // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
+        // Insert tab tray below the browser and force a layout so the collection view can get its frame right
         container.insertSubview(tabTray.view, belowSubview: bvc.view)
 
         // Force subview layout on the collection view so we can calculate the correct end frame for the animation
@@ -125,7 +125,7 @@ private extension BrowserToTrayAnimator {
 
         // Build a tab cell that we will use to animate the scaling of the browser to the tab
         let expandedFrame = calculateExpandedCellFrameFromBVC(bvc)
-        let cell = createTransitionCellFromTab(selectedTab, withFrame: expandedFrame)
+        let cell = createTransitionCellFromTab(selectedTab, withFrame: expandedFrame, concealPrivateContent: !tabManager.isInPrivateMode)
         if !tabManager.isInPrivateMode && selectedTab.isPrivate {
             // Hide the screenshot if the tab is being minimised in order to escape private browsing mode
             cell.background.image = nil
@@ -287,7 +287,7 @@ private func transformToolbarsToFrame(toolbars: [UIView?], toRect endRect: CGRec
     }
 }
 
-private func createTransitionCellFromTab(tab: Tab?, withFrame frame: CGRect) -> TabCell {
+private func createTransitionCellFromTab(tab: Tab?, withFrame frame: CGRect, concealPrivateContent: Bool) -> TabCell {
     let cell = TabCell(frame: frame)
     cell.background.image = tab?.screenshot
     cell.titleText.text = tab?.displayTitle
@@ -295,17 +295,19 @@ private func createTransitionCellFromTab(tab: Tab?, withFrame frame: CGRect) -> 
     if let tab = tab where tab.isPrivate {
         cell.style = .Dark
     }
-
-    if let favIcon = tab?.displayFavicon {
-        cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
-    } else {
-        var defaultFavicon = UIImage(named: "defaultFavicon")
-        if tab?.isPrivate ?? false {
-            defaultFavicon = defaultFavicon?.imageWithRenderingMode(.AlwaysTemplate)
-            cell.favicon.image = defaultFavicon
-            cell.favicon.tintColor = (tab?.isPrivate ?? false) ? UIColor.whiteColor() : UIColor.darkGrayColor()
+    
+    if !concealPrivateContent {
+        if let favIcon = tab?.displayFavicon {
+            cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
         } else {
-            cell.favicon.image = defaultFavicon
+            var defaultFavicon = UIImage(named: "defaultFavicon")
+            if tab?.isPrivate ?? false {
+                defaultFavicon = defaultFavicon?.imageWithRenderingMode(.AlwaysTemplate)
+                cell.favicon.image = defaultFavicon
+                cell.favicon.tintColor = (tab?.isPrivate ?? false) ? UIColor.whiteColor() : UIColor.darkGrayColor()
+            } else {
+                cell.favicon.image = defaultFavicon
+            }
         }
     }
     return cell

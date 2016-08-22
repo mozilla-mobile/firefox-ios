@@ -14,6 +14,7 @@ class PrivateModeAuthenticationTests: KIFTestCase {
     
     override func setUp() {
         super.setUp()
+        self.continueAfterFailure = false
         webRoot = SimplePageServer.start()
     }
 
@@ -38,11 +39,11 @@ class PrivateModeAuthenticationTests: KIFTestCase {
     private func checkBrowsingMode(isPrivate isPrivate: Bool) {
         let bvc = getBrowserViewController()
         tester().waitForAnimationsToFinish()
+        assert(isPrivate ? bvc.tabManager.isInPrivateMode : !bvc.tabManager.isInPrivateMode)
         XCTAssertTrue(isPrivate ? bvc.tabManager.isInPrivateMode : !bvc.tabManager.isInPrivateMode)
     }
 
     private func enterPasscode(passcode: String) {
-        checkBrowsingMode(isPrivate: false)
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")
         tester().enterTextIntoCurrentFirstResponder(passcode)
         tester().waitForAnimationsToFinish()
@@ -52,12 +53,12 @@ class PrivateModeAuthenticationTests: KIFTestCase {
         enterPasscode(PrivateModeAuthenticationTests.passcode)
         checkBrowsingMode(isPrivate: enterPrivateMode)
     }
-    
+
     private func enterIncorrectPasscode() {
         enterPasscode(PrivateModeAuthenticationTests.incorrectPasscode)
         checkBrowsingMode(isPrivate: false)
     }
-    
+
     private func checkActionEnablesPrivateBrowsingMode(action: () -> ()) {
         enablePasscodeAuthentication()
         checkBrowsingMode(isPrivate: false)
@@ -102,7 +103,7 @@ class PrivateModeAuthenticationTests: KIFTestCase {
             self.tester().tapViewWithAccessibilityLabel("New Private Tab")
         }
     }
-    
+
     func testPasscodeAuthenticationForNewPrivateTabFromTabTray() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Menu")
@@ -110,7 +111,7 @@ class PrivateModeAuthenticationTests: KIFTestCase {
             self.tester().tapViewWithAccessibilityLabel("New Private Tab")
         }
     }
-    
+
     func testPasscodeAuthenticationForNewPrivateTabFromTodayView() {
         checkActionEnablesPrivateBrowsingMode {
             self.getAppDelegate().launchFromURL(LaunchParams(url: NSURL(string: "\(self.webRoot)/pageWithLink.html"), isPrivate: true))
@@ -135,11 +136,30 @@ class PrivateModeAuthenticationTests: KIFTestCase {
         enterIncorrectPasscode()
         enterCorrectPasscode(andExpectToEnterPrivateMode: false)
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().waitForTimeInterval(5)
         checkActionEnablesPrivateBrowsingMode {
             self.tester().tapViewWithAccessibilityLabel("Private Mode")
         }
         let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
         XCTAssertEqual(tabsView.numberOfItemsInSection(0), 1)
+    }
+    
+    private func checkCorrectBehaviourWhenBackgrounded() {
+        tester().deactivateAppForDuration(1)
+        checkBrowsingMode(isPrivate: true)
+        enterCorrectPasscode()
+        checkBrowsingMode(isPrivate: true)
+        tester().deactivateAppForDuration(1)
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        checkBrowsingMode(isPrivate: false)
+    }
+    
+    func testPasscodeAuthenticationWhenBackgroundedInWebPage() {
+        testPasscodeAuthenticationForNewPrivateTab()
+        checkCorrectBehaviourWhenBackgrounded()
+    }
+    
+    func testPasscodeAuthenticationWhenBackgroundedInTabTray() {
+        testPasscodeAuthenticationFromTabTray()
+        checkCorrectBehaviourWhenBackgrounded()
     }
 }

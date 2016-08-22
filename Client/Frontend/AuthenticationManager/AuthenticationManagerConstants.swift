@@ -110,4 +110,8 @@ struct AuthenticationStrings {
 
     static let maximumAttemptsReachedNoTime =
         NSLocalizedString("Maximum attempts reached. Please try again later.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts.")
+
+    static let authenticationRequiredForPrivateBrowsing = NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "Label used as a setting item to enable or disable authentication for Private Browsing")
+
+    static let authenticationRequiredForLoginsScreen = NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "Label used as a setting item to enable or disable authentication for accessing logins")
 }

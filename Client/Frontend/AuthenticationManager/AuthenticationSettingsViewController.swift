@@ -282,9 +282,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     
     private func privateBrowsingSetting(navigationController: UINavigationController?) -> AuthenticationForPrivateBrowsingSetting {
         return AuthenticationForPrivateBrowsingSetting(
-            title: NSAttributedString.tableRowTitle(
-                NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "List section title for whether to use authentication for private browsing")
-            ),
+            title: NSAttributedString.tableRowTitle(AuthenticationStrings.authenticationRequiredForPrivateBrowsing),
             navigationController: navigationController,
             delegate: nil,
             enabled: true,
@@ -305,9 +303,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     
     private func loginsSetting(navigationController: UINavigationController?) -> AuthenticationForLoginsSetting {
         return AuthenticationForLoginsSetting(
-            title: NSAttributedString.tableRowTitle(
-                NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "List section title for whether to use authentication for logins")
-            ),
+            title: NSAttributedString.tableRowTitle(AuthenticationStrings.authenticationRequiredForLoginsScreen),
             navigationController: navigationController,
             delegate: nil,
             enabled: true,
@@ -366,15 +362,11 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         
         let authenticationSection = SettingSection(title: authenticationSectionTitle, children: [
             AuthenticationSetting(
-                title: NSAttributedString.tableRowTitle(
-                    NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "List section title for when to use authentication for private browsing")
-                ),
+                title: NSAttributedString.tableRowTitle(AuthenticationStrings.authenticationRequiredForPrivateBrowsing),
                 enabled: false
             ),
             AuthenticationSetting(
-                title: NSAttributedString.tableRowTitle(
-                    NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID for logins")
-                ),
+                title: NSAttributedString.tableRowTitle(AuthenticationStrings.authenticationRequiredForLoginsScreen),
                 enabled: false
             )
         ])
