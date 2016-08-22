@@ -2168,6 +2168,10 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         updateFindInPageVisibility(visible: false)
+        
+        if let readerMode = getReaderModeHelperForCurrentTab() {
+            readerMode.endDictation()
+        }
 
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
@@ -2599,6 +2603,14 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
 }
 
 extension BrowserViewController {
+    private func getReaderModeHelperForCurrentTab() -> ReaderMode? {
+        if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode where readerMode.state == ReaderModeState.Active {
+            return readerMode
+        } else {
+            return nil
+        }
+    }
+    
     func updateReaderModeBar() {
         if let readerModeBar = readerModeBar {
             if let tab = self.tabManager.selectedTab where tab.isPrivate {
@@ -2720,7 +2732,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
     func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
         switch buttonType {
         case .Settings:
-            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode where readerMode.state == ReaderModeState.Active {
+            if let readerMode = getReaderModeHelperForCurrentTab() {
                 if readerMode.isDictating {
                     readerMode.pauseDictation()
                 } else {

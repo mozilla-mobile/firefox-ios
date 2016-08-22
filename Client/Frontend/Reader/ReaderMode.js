@@ -261,6 +261,12 @@ var _firefox_ReaderMode = {
 			this.setScrollToDictationOn(scrollToViewDictation);
 		},
 
+        unmarkAllContent: function () {
+            for (var dictation of Array.prototype.slice.call(document.querySelectorAll(".dictating"))) {
+                dictation.classList.remove("dictating");
+            }
+        },
+
 		setScrollToDictationOn: function (on) {
 			// The higher the scaling, the slower the acceleration will be
 			var SCROLLING_SPEED_SCALING = 100;

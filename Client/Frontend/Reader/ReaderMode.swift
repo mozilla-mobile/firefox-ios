@@ -320,6 +320,10 @@ class ReaderMode: TabHelper {
     func pauseDictation() {
         dictation.pause()
     }
+    
+    func endDictation() {
+        dictation.end()
+    }
 }
 
 class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
@@ -405,6 +409,12 @@ class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
         self.state = .Paused
         self.synthesiser.stopSpeakingAtBoundary(.Immediate)
     }
+
+    func end() {
+        self.state = .Finished
+        self.synthesiser.stopSpeakingAtBoundary(.Immediate)
+        webView?.evaluateJavaScript("\(ReaderModeNamespace).dictation.unmarkAllContent()", completionHandler: nil)
+    }
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
         guard let webView = self.webView, contentText = self.contentText else {
@@ -418,6 +428,6 @@ class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
     }
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didFinishSpeechUtterance utterance: AVSpeechUtterance) {
-        state = .Finished
+        self.end()
     }
 }
