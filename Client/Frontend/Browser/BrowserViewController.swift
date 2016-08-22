@@ -281,6 +281,10 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappWillResignActiveNotification() {
+        if let readerMode = getReaderModeHelperForCurrentTab() where readerMode.isDictating {
+            readerMode.pauseDictation()
+        }
+
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
