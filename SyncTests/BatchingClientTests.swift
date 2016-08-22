@@ -407,20 +407,18 @@ class Sync15BatchClientTests: XCTestCase {
                 return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
             case 2:
                 let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
+                XCTAssertEqual(expectedBatch, queryParams![0])
+                XCTAssertEqual(ius, 10_000_000)
+                assertLinesMatchRecords(lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
+                return deferEmptyResponse(lastModified: 10_000)
+            case 3:
+                let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
                 let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
                 XCTAssertEqual(expectedBatch, queryParams![0])
                 XCTAssertEqual(expectedCommit, queryParams![1])
                 XCTAssertEqual(ius, 10_000_000)
-                assertLinesMatchRecords(lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
-                return deferEmptyResponse(lastModified: 20_000)
-            case 3:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "true")
-                let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
-                XCTAssertEqual(expectedBatch, queryParams![0])
-                XCTAssertEqual(expectedCommit, queryParams![1])
-                XCTAssertEqual(ius, 20_000_000)
                 assertLinesMatchRecords(lines, records: [allRecords[4]], serializer: basicSerializer)
-                return deferEmptyResponse(lastModified: 30_000)
+                return deferEmptyResponse(lastModified: 20_000)
             default:
                 XCTFail()
                 return deferEmptyResponse(lastModified: 0)
@@ -457,8 +455,8 @@ class Sync15BatchClientTests: XCTestCase {
         assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
 
         // Validate we only made one call to the collection upload callback
-        XCTAssertEqual(uploadedCollectionCount, 3)
-        XCTAssertEqual(batch.ifUnmodifiedSince!, 30_000_000)
+        XCTAssertEqual(uploadedCollectionCount, 2)
+        XCTAssertEqual(batch.ifUnmodifiedSince!, 20_000_000)
     }
 
     /**
