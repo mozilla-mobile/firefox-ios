@@ -281,9 +281,7 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappWillResignActiveNotification() {
-        if let readerMode = getReaderModeHelperForCurrentTab() where readerMode.isDictating {
-            readerMode.pauseDictation()
-        }
+        self.getReaderModeHelperForCurrentTab()?.pauseDictation()
 
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
@@ -1304,6 +1302,8 @@ class BrowserViewController: UIViewController {
 
     @objc private func openSettings() {
         assert(NSThread.isMainThread(), "Opening settings requires being invoked on the main thread")
+
+        self.getReaderModeHelperForCurrentTab()?.pauseDictation()
 
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = profile

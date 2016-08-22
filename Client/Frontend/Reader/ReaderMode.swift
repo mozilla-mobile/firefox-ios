@@ -318,7 +318,9 @@ class ReaderMode: TabHelper {
     }
     
     func pauseDictation() {
-        dictation.pause()
+        if self.isDictating {
+            dictation.pause()
+        }
     }
     
     func endDictation() {
