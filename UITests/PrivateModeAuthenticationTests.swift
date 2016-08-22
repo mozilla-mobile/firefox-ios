@@ -98,7 +98,9 @@ class PrivateModeAuthenticationTests: KIFTestCase {
     }
 
     func testPasscodeAuthenticationForNewPrivateTab() {
+        tester().waitForAnimationsToFinish()
         tester().tapViewWithAccessibilityLabel("Menu")
+        tester().waitForAnimationsToFinish()
         checkActionEnablesPrivateBrowsingMode {
             self.tester().tapViewWithAccessibilityLabel("New Private Tab")
         }
