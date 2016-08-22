@@ -115,7 +115,7 @@ private extension BrowserToTrayAnimator {
 
         tabTray.view.frame = transitionContext.finalFrameForViewController(tabTray)
 
-        // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
+        // Insert tab tray below the browser and force a layout so the collection view can get its frame right
         container.insertSubview(tabTray.view, belowSubview: bvc.view)
 
         // Force subview layout on the collection view so we can calculate the correct end frame for the animation
