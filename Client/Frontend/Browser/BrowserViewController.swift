@@ -553,6 +553,10 @@ class BrowserViewController: UIViewController {
         updateTabCountUsingTabManager(tabManager, animated: false)
         log.debug("BVC done.")
 
+        if !tabManager.isAuthenticating {
+            self.revealPrivateContent()
+        }
+
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(BrowserViewController.openSettings),
                                                          name: NotificationStatusNotificationTapped,
