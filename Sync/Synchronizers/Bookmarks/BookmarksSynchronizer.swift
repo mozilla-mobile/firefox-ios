@@ -55,7 +55,6 @@ class TrivialBookmarkStorer: BookmarkStorer {
             return deferMaybe(error as! MaybeErrorType)
         }
 
-        var modified: Timestamp = 0
         var success: [GUID] = []
         var failed: [GUID: String] = [:]
 
@@ -66,7 +65,7 @@ class TrivialBookmarkStorer: BookmarkStorer {
             }
 
             log.debug("Uploaded records got timestamp \(lastModified).")
-            local.setModifiedTime(lastModified ?? modified, guids: result.success)
+            local.setModifiedTime(lastModified ?? 0, guids: result.success)
             return deferMaybe(modified)
         }
 
