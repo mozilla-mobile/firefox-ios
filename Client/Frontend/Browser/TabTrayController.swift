@@ -509,7 +509,7 @@ class TabTrayController: UIViewController {
     }
     
     @available(iOS 9, *)
-    func transitionBetweenModes() {
+    func transitionBetweenModes(withAnimation animated: Bool = true) {
         let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
 
         let fromView: UIView
@@ -532,6 +532,17 @@ class TabTrayController: UIViewController {
 
         self.toolbar.maskButton.setSelected(self.tabManager.isInPrivateMode, animated: true)
         self.collectionView.layoutSubviews()
+        
+        guard animated else {
+            self.emptyPrivateTabsView.hidden = !self.privateTabsAreEmpty()
+            fromView.transform = scaleDownTransform
+            fromView.alpha = 0
+            if fromView != self.emptyPrivateTabsView {
+                fromView.removeFromSuperview()
+            }
+            self.collectionView.alpha = 1
+            return
+        }
 
         let toView: UIView
         if self.privateTabsAreEmpty() {
@@ -697,7 +708,7 @@ extension TabTrayController {
             tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
                 guard success else {
                     if #available(iOS 9, *) {
-                        self.transitionBetweenModes()
+                        self.transitionBetweenModes(withAnimation: false)
                     }
                     return
                 }
