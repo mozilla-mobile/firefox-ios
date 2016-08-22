@@ -8,6 +8,7 @@ import SnapKit
 import Storage
 import ReadingList
 import Shared
+import Deferred
 
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
@@ -155,9 +156,11 @@ class TabCell: UICollectionViewCell {
         case .Light:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight))
             self.titleText.textColor = LightTabCellUX.TabTitleTextColor
+            self.background.backgroundColor = UIColor.whiteColor()
         case .Dark:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
             self.titleText.textColor = DarkTabCellUX.TabTitleTextColor
+            self.background.backgroundColor = UIColor.whiteColor()
         }
 
         titleText.backgroundColor = UIColor.clearColor()
@@ -267,7 +270,6 @@ class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
-    weak var appStateDelegate: AppStateDelegate?
 
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
@@ -283,13 +285,13 @@ class TabTrayController: UIViewController {
         }
 
         if #available(iOS 9, *) {
-            toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), forControlEvents: .TouchUpInside)
+            toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTapMask), forControlEvents: .TouchUpInside)
         }
         return toolbar
     }()
 
     var tabTrayState: TabTrayState {
-        return TabTrayState(isPrivate: self.privateMode)
+        return TabTrayState(isPrivate: tabManager.isInPrivateMode)
     }
 
     var leftToolbarButtons: [UIButton] {
@@ -303,21 +305,17 @@ class TabTrayController: UIViewController {
             return []
         }
     }
-
-    private(set) internal var privateMode: Bool = false {
-        didSet {
-            if oldValue != privateMode {
-                updateAppState()
-            }
-
-            tabDataSource.tabs = tabsToDisplay
-            toolbar.styleToolbar(isPrivate: privateMode)
-            collectionView?.reloadData()
-        }
+    
+    private func switchToMode(privateMode privateMode: Bool) {
+        tabManager.isInPrivateMode = privateMode
+        
+        tabDataSource.tabs = tabsToDisplay
+        toolbar.styleToolbar(isPrivate: tabManager.isInPrivateMode)
+        collectionView?.reloadData()
     }
 
     private var tabsToDisplay: [Tab] {
-        return self.privateMode ? tabManager.privateTabs : tabManager.normalTabs
+        return tabManager.isInPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
     }
 
     @available(iOS 9, *)
@@ -396,10 +394,8 @@ class TabTrayController: UIViewController {
                 make.top.left.right.equalTo(self.collectionView)
                 make.bottom.equalTo(self.toolbar.snp_top)
             }
-
-            if let tab = tabManager.selectedTab where tab.isPrivate {
-                privateMode = true
-            }
+            
+            self.switchToMode(privateMode: self.tabManager.isInPrivateMode)
 
             // register for previewing delegate to enable peek and pop if force touch feature available
             if traitCollection.forceTouchCapability == .Available {
@@ -509,6 +505,82 @@ class TabTrayController: UIViewController {
         self.cancelExistingGestures()
         self.presentViewController(mvc, animated: true, completion: nil)
     }
+
+    @available(iOS 9, *)
+    func SELdidTapMask() {
+        attemptToTogglePrivateMode()
+    }
+    
+    @available(iOS 9, *)
+    private func transitionBetweenModes() {
+        let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
+        
+        let fromView: UIView
+        if self.privateTabsAreEmpty() {
+            fromView = self.emptyPrivateTabsView
+        } else {
+            let snapshot = self.collectionView.snapshotViewAfterScreenUpdates(false)
+            snapshot.frame = self.collectionView.frame
+            self.view.insertSubview(snapshot, aboveSubview: self.collectionView)
+            fromView = snapshot
+        }
+        
+        self.switchToMode(privateMode: !self.tabManager.isInPrivateMode)
+        
+        // If we are exiting private mode and we have the close private tabs option selected, make sure
+        // we clear out all of the private tabs
+        if !self.tabManager.isInPrivateMode && self.profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
+            self.tabManager.removeAllPrivateTabsAndNotify(false)
+        }
+        
+        self.toolbar.maskButton.setSelected(self.tabManager.isInPrivateMode, animated: true)
+        self.collectionView.layoutSubviews()
+        
+        let toView: UIView
+        if self.privateTabsAreEmpty() {
+            self.emptyPrivateTabsView.hidden = false
+            toView = self.emptyPrivateTabsView
+        } else {
+            self.emptyPrivateTabsView.hidden = true
+            let newSnapshot = self.collectionView.snapshotViewAfterScreenUpdates(true)
+            newSnapshot.frame = self.collectionView.frame
+            self.view.insertSubview(newSnapshot, aboveSubview: fromView)
+            self.collectionView.alpha = 0
+            toView = newSnapshot
+        }
+        toView.alpha = 0
+        toView.transform = scaleDownTransform
+        
+        UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
+            fromView.transform = scaleDownTransform
+            fromView.alpha = 0
+            toView.transform = CGAffineTransformIdentity
+            toView.alpha = 1
+        }) { finished in
+            if fromView != self.emptyPrivateTabsView {
+                fromView.removeFromSuperview()
+            }
+            if toView != self.emptyPrivateTabsView {
+                toView.removeFromSuperview()
+            }
+            self.collectionView.alpha = 1
+        }
+    }
+
+    @available(iOS 9, *)
+    func attemptToTogglePrivateMode() -> Success {
+        guard let navigationController = self.navigationController else {
+            return deferMaybe(AuthorisationError(description: "Failed to switch the private mode due to an inexistent navigation controller."))
+        }
+        let success = Success()
+        tabManager.authorisePrivateMode(navigationController).uponQueue(dispatch_get_main_queue()) { result in
+            if result.isSuccess {
+                self.transitionBetweenModes()
+            }
+            success.fill(result)
+        }
+        return success
+    }
     
     @available(iOS 9, *)
     func didLongPressTab(gesture: UILongPressGestureRecognizer) {
@@ -568,75 +640,18 @@ class TabTrayController: UIViewController {
     }
 
     @available(iOS 9, *)
-    func SELdidTogglePrivateMode() {
-        let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
-
-        let fromView: UIView
-        if privateTabsAreEmpty() {
-            fromView = emptyPrivateTabsView
-        } else {
-            let snapshot = collectionView.snapshotViewAfterScreenUpdates(false)
-            snapshot.frame = collectionView.frame
-            view.insertSubview(snapshot, aboveSubview: collectionView)
-            fromView = snapshot
-        }
-
-        privateMode = !privateMode
-        // If we are exiting private mode and we have the close private tabs option selected, make sure
-        // we clear out all of the private tabs
-        let exitingPrivateMode = !privateMode && profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
-        if exitingPrivateMode {
-            tabManager.removeAllPrivateTabsAndNotify(false)
-        }
-
-        toolbar.maskButton.setSelected(privateMode, animated: true)
-        collectionView.layoutSubviews()
-
-        let toView: UIView
-        if privateTabsAreEmpty() {
-            emptyPrivateTabsView.hidden = false
-            toView = emptyPrivateTabsView
-        } else {
-            emptyPrivateTabsView.hidden = true
-            //when exiting private mode don't screenshot the collectionview (causes the UI to hang)
-            let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(!exitingPrivateMode)
-            newSnapshot.frame = collectionView.frame
-            view.insertSubview(newSnapshot, aboveSubview: fromView)
-            collectionView.alpha = 0
-            toView = newSnapshot
-        }
-        toView.alpha = 0
-        toView.transform = scaleDownTransform
-
-        UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
-            fromView.transform = scaleDownTransform
-            fromView.alpha = 0
-            toView.transform = CGAffineTransformIdentity
-            toView.alpha = 1
-        }) { finished in
-            if fromView != self.emptyPrivateTabsView {
-                fromView.removeFromSuperview()
-            }
-            if toView != self.emptyPrivateTabsView {
-                toView.removeFromSuperview()
-            }
-            self.collectionView.alpha = 1
-        }
-    }
-
-    @available(iOS 9, *)
     private func privateTabsAreEmpty() -> Bool {
-        return privateMode && tabManager.privateTabs.count == 0
+        return tabManager.isInPrivateMode && tabManager.privateTabs.count == 0
     }
 
     @available(iOS 9, *)
     func changePrivacyMode(isPrivate: Bool) {
-        if isPrivate != privateMode {
+        if isPrivate != tabManager.isInPrivateMode {
             guard let _ = collectionView else {
-                privateMode = isPrivate
+                switchToMode(privateMode: isPrivate)
                 return
             }
-            SELdidTogglePrivateMode()
+            attemptToTogglePrivateMode()
         }
     }
 
@@ -648,7 +663,7 @@ class TabTrayController: UIViewController {
         self.collectionView.performBatchUpdates({ _ in
             var tab: Tab
             if #available(iOS 9, *) {
-                tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
+                tab = self.tabManager.addTab(request, isPrivate: self.tabManager.isInPrivateMode)
             } else {
                 tab = self.tabManager.addTab(request)
             }
@@ -661,11 +676,6 @@ class TabTrayController: UIViewController {
         })
     }
 
-    private func updateAppState() {
-        let state = mainStore.updateState(.TabTray(tabTrayState: self.tabTrayState))
-        self.appStateDelegate?.appDidUpdateState(state)
-    }
-
     private func closeTabsForCurrentTray() {
         tabManager.removeTabsWithUndoToast(tabsToDisplay)
         self.collectionView.reloadData()
@@ -675,7 +685,7 @@ class TabTrayController: UIViewController {
 // MARK: - App Notifications
 extension TabTrayController {
     func SELappWillResignActiveNotification() {
-        if privateMode {
+        if tabManager.isInPrivateMode {
             collectionView.alpha = 0
         }
     }
@@ -768,9 +778,9 @@ extension TabTrayController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
     }
-    
+
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {
-        guard privateMode else {
+        guard tabManager.isInPrivateMode else {
             return
         }
         if let undoToast = toast {
@@ -897,6 +907,10 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
             tabCell.accessibilityLabel = tab.displayTitle
         } else {
             tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
+        }
+        if tabCell.accessibilityLabel?.isEmpty != false {
+            // If a tab has no accessibility label, it will be both difficult for a user using Voice Over, as well as cause issues for testing.
+            tabCell.accessibilityLabel = "Tab"
         }
 
         tabCell.isBeingArranged = self.isRearrangingTabs
@@ -1171,8 +1185,8 @@ extension TabTrayController: MenuActionDelegate {
             case .OpenNewNormalTab:
                 dispatch_async(dispatch_get_main_queue()) {
                     if #available(iOS 9, *) {
-                        if self.privateMode {
-                            self.SELdidTogglePrivateMode()
+                        if self.tabManager.isInPrivateMode {
+                            self.attemptToTogglePrivateMode()
                         }
                     }
                     self.openNewTab()
@@ -1181,10 +1195,15 @@ extension TabTrayController: MenuActionDelegate {
             case .OpenNewPrivateTab:
                 if #available(iOS 9, *) {
                     dispatch_async(dispatch_get_main_queue()) {
-                        if !self.privateMode {
-                            self.SELdidTogglePrivateMode()
+                        if !self.tabManager.isInPrivateMode {
+                            self.attemptToTogglePrivateMode().uponQueue(dispatch_get_main_queue()) { result in
+                                if result.isSuccess {
+                                    self.openNewTab()
+                                }
+                            }
+                        } else {
+                            self.openNewTab()
                         }
-                        self.openNewTab()
                     }
                 }
             case .OpenSettings:

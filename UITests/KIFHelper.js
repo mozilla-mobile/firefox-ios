@@ -57,4 +57,25 @@ var KIFHelper = {
     }
     return false;
   },
+    
+  /**
+   * Long presses an element with the given accessibility label, for a given duration.
+   * @return True if successful
+   */
+  longPressElementWithAccessibilityLabel: function (label, duration) {
+    var found = this._getElementWithAccessibilityLabel(document.body, label);
+    var touches = [new Touch()];
+    if (found) {
+      var event = new Event("touchstart");
+      event.touches = touches;
+      found.dispatchEvent(event);
+      setTimeout(function () {
+        var event = new Event("touchend");
+        event.touches = touches;
+        found.dispatchEvent(event);
+      }, duration);
+      return true;
+    }
+    return false;
+  },
 };
