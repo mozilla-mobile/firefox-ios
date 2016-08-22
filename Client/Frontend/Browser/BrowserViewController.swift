@@ -281,7 +281,7 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappWillResignActiveNotification() {
-        self.getReaderModeHelperForCurrentTab()?.pauseDictation()
+        self.getReaderModeHelperForTab()?.pauseDictation()
 
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
@@ -1303,7 +1303,7 @@ class BrowserViewController: UIViewController {
     @objc private func openSettings() {
         assert(NSThread.isMainThread(), "Opening settings requires being invoked on the main thread")
 
-        self.getReaderModeHelperForCurrentTab()?.pauseDictation()
+        self.getReaderModeHelperForTab()?.pauseDictation()
 
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = profile
@@ -2024,6 +2024,8 @@ extension BrowserViewController: TabManagerDelegate {
             wv.removeFromSuperview()
         }
 
+        self.getReaderModeHelperForTab(previous)?.pauseDictation()
+
         if let tab = selected, webView = tab.webView {
             updateURLBarDisplayURL(tab)
 
@@ -2172,8 +2174,8 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         updateFindInPageVisibility(visible: false)
-        
-        if let readerMode = getReaderModeHelperForCurrentTab() {
+
+        if let readerMode = self.getReaderModeHelperForTab() {
             readerMode.endDictation()
         }
 
@@ -2607,8 +2609,8 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
 }
 
 extension BrowserViewController {
-    private func getReaderModeHelperForCurrentTab() -> ReaderMode? {
-        if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode where readerMode.state == ReaderModeState.Active {
+    private func getReaderModeHelperForTab(tab: Tab? = nil) -> ReaderMode? {
+        if let readerMode = (tab ?? self.tabManager.selectedTab)?.getHelper(name: "ReaderMode") as? ReaderMode where readerMode.state == ReaderModeState.Active {
             return readerMode
         } else {
             return nil
@@ -2736,7 +2738,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
     func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
         switch buttonType {
         case .Settings:
-            if let readerMode = getReaderModeHelperForCurrentTab() {
+            if let readerMode = self.getReaderModeHelperForTab() {
                 if readerMode.isDictating {
                     readerMode.pauseDictation()
                 } else {
