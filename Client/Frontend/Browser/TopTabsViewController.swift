@@ -253,7 +253,6 @@ class TopTabsViewController: UIViewController {
             guard let indexPath = self.collectionView.indexPathForItemAtPoint(pressPosition) else {
                 break
             }
-            self.view.userInteractionEnabled = false
             for item in 0..<self.collectionView.numberOfItemsInSection(0) {
                 guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TopTabCell else {
                     continue
@@ -261,6 +260,7 @@ class TopTabsViewController: UIViewController {
                 if item == indexPath.item {
                     let cellPosition = cell.contentView.convertPoint(cell.bounds.center, toView: self.collectionView)
                     self.dragState = ExtendedTabDragState(cell: cell, indexPath: indexPath, offset: CGPoint(x: pressPosition.x - cellPosition.x, y: pressPosition.y - cellPosition.y), hasBegun: false)
+                    self.view.userInteractionEnabled = false
                     self.didSelectTabAtIndex(indexPath.item)
                     continue
                 }
