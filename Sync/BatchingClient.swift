@@ -62,6 +62,10 @@ private struct Payload {
 private struct Batch {
     let config: InfoConfiguration
 
+    private let token: BatchToken
+    private var bytes: ByteCount = 0
+    private var count: Int = 0
+
     // Batch is full if we can't add another payload to it
     var isFull: Bool {
         return (config.maxPostRecords + count > config.maxTotalRecords) ||
@@ -79,10 +83,6 @@ private struct Batch {
     var batchParams: [NSURLQueryItem] {
         return [NSURLQueryItem(name: "batch", value: String(token))]
     }
-
-    private var bytes: ByteCount = 0
-    private var count: Int = 0
-    private var token: BatchToken
 
     init(config: InfoConfiguration, token: BatchToken) {
         self.config = config
@@ -107,6 +107,9 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     private let uploader: BatchUploadFunction
     private let serializeRecord: (Record<T>) -> String?
 
+    private let batchStartParam = NSURLQueryItem(name: "batch", value: "true")
+    private let commitParam = NSURLQueryItem(name: "commit", value: "true")
+
     private var currentBatch: Batch?
     private var currentPayload: Payload
 
@@ -126,8 +129,6 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     public func endBatch() -> Success {
         func uploadPayload() -> Success {
             let lines = self.currentPayload.records.map { $0.payload }
-            let batchStartParam = NSURLQueryItem(name: "batch", value: "true")
-            let commitParam = NSURLQueryItem(name: "commit", value: "true")
             return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: [batchStartParam, commitParam])
                 >>== effect(moveForward) >>> succeed
         }
@@ -150,22 +151,29 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
     }
 
     public func addRecords(records: [Record<T>]) -> Success {
-        if records.isEmpty {
+        guard !records.isEmpty else {
             return succeed()
         }
 
         do {
-            var generator = records.generate()
-            while let record = generator.next() {
-                let serializedRecord = try serialize(record)
-                if let uploadOp = accumulateRecord(serializedRecord) {
-                    // Since we couldn't add this record, throw it onto the rest and try adding everything again.
-                    let restOfRecords = generator.map { $0 }
-                    return uploadOp >>> { self.addRecords([record] + restOfRecords) }
-                }
-            }
+            let serialized = try records.map { try serialize($0) }
+            return addRecords(serialized.generate())
         } catch let e {
             return deferMaybe(e as! MaybeErrorType)
+        }
+    }
+
+    private func addRecords(generator: IndexingGenerator<[UploadRecord]>) -> Success {
+        var mutGenerator = generator
+        while let record = mutGenerator.next() {
+            if let uploadOp = accumulateRecord(record) {
+                return uploadOp >>> {
+                    if let deferred = self.accumulateRecord(record) {
+                        return deferred >>> { self.addRecords(mutGenerator) }
+                    }
+                    return self.addRecords(mutGenerator)
+                }
+            }
         }
         return succeed()
     }
@@ -205,34 +213,29 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
 
     private func push(batch: Batch) -> DeferredResponse {
         // Push up the current payload to the server and reset
-        let lines = self.currentPayload.records.map { $0.payload }
+        let lines = self.freezePayload()
         return uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: batch.batchParams)
-            >>== effect({ _  in self.currentPayload = Payload(config: self.config) })
     }
 
     private func commit(batch: Batch) -> DeferredResponse {
-        let lines = self.currentPayload.records.map { $0.payload }
+        let lines = self.freezePayload()
+        self.currentBatch = nil
         return uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: batch.commitParams)
             >>== effect(moveForward)
-            >>== effect({  _ in
-                self.currentBatch = nil
-                self.currentPayload = Payload(config: self.config)
-            })
     }
 
     private func start() -> DeferredResponse {
-        let lines = self.currentPayload.records.map { $0.payload }
-        let batchStartParam = NSURLQueryItem(name: "batch", value: "true")
+        let payloadCopy = self.currentPayload
+        let lines = self.freezePayload()
         return self.uploader(lines: lines, ifUnmodifiedSince: self.ifUnmodifiedSince, queryParams: [batchStartParam])
              >>== effect(moveForward)
              >>== { response in
                 if let token = response.value.batchToken {
                     var startedBatch = Batch(config: self.config, token: token)
-                    startedBatch.add(self.currentPayload)
+                    startedBatch.add(payloadCopy)
                     self.currentBatch = startedBatch
                 }
 
-                self.currentPayload = Payload(config: self.config)
                 return deferMaybe(response)
             }
     }
@@ -241,5 +244,11 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
         let lastModified = response.metadata.lastModifiedMilliseconds
         self.ifUnmodifiedSince = lastModified
         self.onCollectionUploaded(response.value, lastModified)
+    }
+
+    private func freezePayload() -> [String] {
+        let lines = self.currentPayload.records.map { $0.payload }
+        self.currentPayload = Payload(config: self.config)
+        return lines
     }
 }

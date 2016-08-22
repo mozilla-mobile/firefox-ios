@@ -256,13 +256,13 @@ class Sync15BatchClientTests: XCTestCase {
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000)
                 assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: 1, lastModified: 10_000)
+                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
             case 2:
                 let expected = NSURLQueryItem(name: "batch", value: "1")
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000_000)
                 assertLinesMatchRecords(lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: 1, lastModified: 10_000)
+                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
             case 3:
                 let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
                 let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
@@ -333,7 +333,7 @@ class Sync15BatchClientTests: XCTestCase {
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000)
                 assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: 1, lastModified: 10_000)
+                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
             case 2:
                 let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
                 let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
@@ -404,7 +404,7 @@ class Sync15BatchClientTests: XCTestCase {
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000)
                 assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: 1, lastModified: 10_000)
+                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
             case 2:
                 let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
                 let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
@@ -542,7 +542,7 @@ class Sync15BatchClientTests: XCTestCase {
                 let expected = NSURLQueryItem(name: "batch", value: "true")
                 XCTAssertEqual(expected, queryParams![0])
                 assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: 1, lastModified: 20_000)
+                return deferEmptyResponse(batchToken: "1", lastModified: 20_000)
             case 2:
                 let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
                 XCTAssertEqual(expectedBatch, queryParams![0])
@@ -559,7 +559,7 @@ class Sync15BatchClientTests: XCTestCase {
                 let expected = NSURLQueryItem(name: "batch", value: "true")
                 XCTAssertEqual(expected, queryParams![0])
                 assertLinesMatchRecords(lines, records: Array(allRecords[6..<8]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: 2, lastModified: 30_000)
+                return deferEmptyResponse(batchToken: "2", lastModified: 30_000)
             case 5:
                 let expectedBatch = NSURLQueryItem(name: "batch", value: "2")
                 XCTAssertEqual(expectedBatch, queryParams![0])

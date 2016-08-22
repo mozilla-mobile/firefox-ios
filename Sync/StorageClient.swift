@@ -232,7 +232,7 @@ public struct StorageResponse<T> {
     }
 }
 
-public typealias BatchToken = Int64
+public typealias BatchToken = String
 
 public typealias ByteCount = Int
 
@@ -252,7 +252,7 @@ public struct POSTResult {
             return nil
         }
 
-        let batchToken = json["batch"].asInt64
+        let batchToken = json["batch"].asString
 
         if let s = json["success"].asArray,
            let f = json["failed"].asDictionary {
