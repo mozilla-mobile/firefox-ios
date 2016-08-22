@@ -211,7 +211,7 @@ var _firefox_ReaderMode = {
 		    		switch (child.nodeType) {
 			            case Node.ELEMENT_NODE:
 			            	// Content elements that we want to read from (this excludes some tags, such as <sup> to avoid reading citations)
-			            	var blockElements = ["DIV", "ARTICLE", "P"], inlineElements = ["B", "I", "A"];
+			            	var blockElements = ["DIV", "ARTICLE", "P"], inlineElements = ["SPAN", "B", "I", "A"];
 			            	if (blockElements.indexOf(child.tagName) !== -1 || inlineElements.indexOf(child.tagName) !== -1) {
 			            		extract(child, content);
 			            	}
