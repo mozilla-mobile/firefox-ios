@@ -2088,10 +2088,6 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, webView = tab.webView {
             updateURLBarDisplayURL(tab)
-            
-            if !tabManager.isAuthenticating {
-                self.revealPrivateContent()
-            }
 
             if tab.isPrivate {
                 readerModeCache = MemoryReaderModeCache.sharedInstance
