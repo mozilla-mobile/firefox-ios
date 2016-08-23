@@ -1,0 +1,880 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Wužiwarske mjeno a hesło so wot %@ žadatej.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Wužiwarske mjeno a hesło so wot %1$@ žadatej. Sydło praji: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Wo";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Rajtark přidać";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Čitanskej lisćinje přidać";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "W porjadku";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Při přidawanju pasa listowce je zmylk wustupił. Prošu spytajće pozdźišo hišće raz.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Pas njeda so přidać";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Je stronu čitanskej lisćinje přidał";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adresa a pytanje";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Tastatury třećich poskićowarjow dowolić";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Přeco pósłać";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Awtentifikacija trěbna";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Wróćo";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Wuskakowanske wokna blokować";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Zapołožka";
+
+/* Panel accessibility label */
+"Bookmarks" = "Zapołožki";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Zapołožki, kotrež składujeće, so tu zjewja.";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Rjadowak";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Městno";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Mjeno rjadowaka";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Nowy rjadowak";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Titul";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Swětłosć";
+
+/* Alert Call Button */
+"Call" = "Zawołać";
+
+/* Label for Cancel button */
+"Cancel" = "Přetorhnyć";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Změni barbnu drastu.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Změni pismowu družinu.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Priwatne daty zhašeć";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Začinić";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Rajtark začinić";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Adresu kopěrować";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Wobraz kopěrować";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Wotkaz kopěrować";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Strona njeda so čitanskej lisćinje přidać. Snano je wona hižo wobsahowana?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Strona njeda so čitanskej lisćinje přidać";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Strona njeda so začitać.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Konto załožić";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Ćmowy";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Pytanje zmylkow: synchronizaciski awtentifikaciski status zabyć";
+
+/* Debug option */
+"Debug: require password" = "Pytanje zmylkow: hesło požadać";
+
+/* Debug option */
+"Debug: require upgrade" = "Pytanje zmylkow: aktualizaciju požadać";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Tekstowu wulkosć pomjeńšić";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Standardna pytawa";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Přidatne dialogi strony znjemóžnić";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Zwobraznjenske nastajenja";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Chceće hesło za %1$@ na %2$@ składować?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Chceće hesło na %@ składować?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Chceće hesło za %1$@ na %2$@ aktualizować?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Chceće hesło na %@ aktualizować?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Njesłać";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Dokónčeny";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "Za wočinjenje historije dwójce so podótknyć a dźeržeć";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "Ně";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "Haj";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "Firefox njemóže tutu dataju sćahnyć abo wočinić. Chceće ju w druhim nałoženju wočinić?";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "Sćehnjenja Firefox";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Sćehnjenja so w Firefox hišće njepodpěruje.";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Zapodajće swoje hesło, zo byšće zwjazał.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Rozšěrjene";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Warnowanje: Njemóžemy wobkrućić, zo waš zwisk z tutym websydłom je wěsty.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "To je snano wopačna konfigracija abo manipulacija nadpadowarja. Čińće dale, jeli potencielne riziko akceptujeće.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Wobsedźer %@ je websydło wopak konfigurował. Zo by waše daty před padustwom škitał, Firefox njeje was z tutym websydłom zwjazał.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Tutón zwisk je dowěry njehódny";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Wróćo";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Sydło najebać toho wopytać";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Firefox dyrbi so znowa startować, zo by so to wuskutkowało.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox přestanje z wašim kontom synchronizować, ale njezhaša přehladowanske daty na tutym graće.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox by rady přistup na waše fota měł";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Doprědka";
+
+/* General settings section title */
+"General" = "Powšitkowny";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Wobstarajće sej swoje wočinjene rajtarki, zapołožki a hesła ze swojich druhich gratow.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Start";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Ke kopěrowanemu URL hić?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Pomoc";
+
+/* Panel accessibility label */
+"History" = "Historija";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Websydła, kotrež sće njedawno wopytał, budu so tu pokazować.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Waše rajtarki z druhich gratow so tu pokazuja.";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "Přizjewće so, zo byšće sej wočinjene rajtarki na swojich druhich gratach wobhladał.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Historija";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Njedawno začinjeny";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d gratow zwjazane";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Synchronizowane graty";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Přetorhnyć";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Móžeće to kóždy čas w nastajenjach změnić";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Startowu stronu postajić";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Chceće tutu webstronu jako swoju startowu stronu wužiwać?";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Wróćo";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Rajtark začinjeny";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "pytać";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Dale";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nowe priwatny rajtark";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Nowy rajtark";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Stronu znowa začitać";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Adresowe polo wubrać";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Přichodny rajtark pokazać";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Předchadny rajtark pokazać";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Tekstowu wulkosć powjetšić";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Zawodna tura";
+
+/* History tableview section header */
+"Last month" = "Zańdźeny měsac";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Poslednja synchronizacija: %@";
+
+/* History tableview section header */
+"Last week" = "Zańdźeny tydźeń";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licency";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Swětły";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Originalnu stronu začitać";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Wobsah so začituje…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Wotzjewić";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Wotzjewić?";
+
+/* Authentication prompt log in button */
+"Log in" = "Přizjewić";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Přizjewjenja";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Njeskładować";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Přizjewjenje %1$@ za %2$@ składować?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Hesło za %@ składować?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "Přizjewjenje za %1$@ na %2$@ aktualizować?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Hesło za %@ aktualizować?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Přizjewjenje składować";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Aktualizować";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Zda so, zo Firefox je do toho spadnył. Chceće swoje rajtarki wobnowić?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Jako přečitany markěrować";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Jako nječitany markěrować";
+
+/* Label for the button, displayed in the menu, used to toggle night mode on or off */
+"Menu.NightModeAction.Title" = "Nócny modus";
+
+/* Label for the button, displayed in the menu, used to turn night mode off */
+"Menu.NightModeTurnOffAction.Title" = "Nócny modus wupinjeny";
+
+/* Label for the button, displayed in the menu, used to turn night mode on */
+"Menu.NightModeTurnOnAction.Title" = "Nócny modus";
+
+/* Label for the button, displayed in the menu, used to toggle no image mode on or off */
+"Menu.NoImageModeAction.Title" = "Žadyn wobrazowy modus";
+
+/* Label for the button, displayed in the menu, used to turn no image mode off */
+"Menu.NoImageModeTurnOffAction.Title" = "Wobrazy pokazać";
+
+/* Label for the button, displayed in the menu, used to turn no image mode on */
+"Menu.NoImageModeTurnOnAction.Title" = "Wobrazy schować";
+
+/* Error for a missing remote error number */
+"Missing error" = "Falowacy zmylk";
+
+/* Error for a missing remote error message */
+"Missing message" = "Falowaca powěsć";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Nawigaciska lajsta";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Nowy rajtark: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Nowa wersija k dispoziciji";
+
+/* Restore Tabs Negative Action */
+"No" = "Ně";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Žane rajtarki";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Nic nětko";
+
+/* Button to not save the user's password */
+"Not now" = "Nic nětko";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "W porjadku";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "W porjadku";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Hopla! Firefox je spadnył";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "W nowym rajtarku wočinić";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Nastajenja wočinić";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Wočińće nastawki w čitanskim napohledźe, dótkajo so knižneho symbola, hdyž so w titulnej lajsće jewi.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Wočinić w…";
+
+/* Opening an external URL */
+"Opening %@" = "%@ so wočinja";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Wobłukowy wolak";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Hesło";
+
+/* Paste the URL into the location bar */
+"Paste" = "Zasadźić";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Zasadźić a start";
+
+/* Privacy section title */
+"Privacy" = "Priwatnosć";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Prawidła priwatnosće";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Pytawy za spěšne pytanje";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Čitanski napohlad";
+
+/* Panel accessibility label */
+"Reading list" = "Čitanska lisćina";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Njedawno začinjeny";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Znowa začitać";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Wotstronić";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Z čitanskeje lisćiny wotstronić";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Stronu wotstronić";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Desktopowe sydło požadać";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Mobilne sydło požadać";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "Wobraz składować";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Přizjewjenja składować";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Składujće strony do swojeje čitanskeje lisćiny, dótkajo so knižneho plusoweho symbola we wodźenju čitanskeho napohlada.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Pytać";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Pytać abo adresu zapodać";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Nowa pytawa so w polu spěšneho pytanja zjewi.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Pytawa je so přidała!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Pytanskeho poskićowarja přidać?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Přetorhnyć";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Pytanski poskićowar njeda so přidać.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Je so nimokuliło";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "W porjadku";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Pytanja za namjet";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Wěsty zwisk";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Komentar pósłać";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Rozprawu pósłać";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Chceće rozprawu wo spadźe słać, zo by Mozilla móhł problem rozrisać?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Přetorhnyć";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Jenož wotkazy HTTP a HTTPS dadźa so dźělić.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "W porjadku";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Wotkaz, kotryž chceće dźělić, njeda so dźělić.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Nastajenja";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Priwatne daty zhašeć";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Priwatne daty zhašeć";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Priwatne daty zhašeć";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Zhašeć";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Startowa strona";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Nastajenja startoweje strony";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "abo w symbolowej lajsće";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "Symbol startowej stronje w meniju pokazać";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Webstronu zapodać";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Aktualna startowa strona";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Kopěrowany wotkaz wužiwać";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Aktualnu stronu wužiwać";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Standard wužiwać";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Hdyž nowy rajtark wočinjeće:";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Prózdnu stronu pokazać";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Waše zapołožki pokazać";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Wašu historiju pokazać";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Wašu startowu pokazać";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Wašu čitansku lisćinu pokazać";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "Waše najlubše sydła pokazać";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "Nowy rajtark";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Nowe rajtarkowe nastajenja";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Hotowo";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Wobdźěłać";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Problemy rozrisać";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "Dźělić";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Wotkaz dźělić";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Přetorhnyć";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Pytanske namjety pokazać";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Rajtarki pokazać";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Turu pokazać";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Pytanske namjety pokazać";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Pola Firefox přizjewić";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Přizjewić";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Přizjewće so, zo byšće swoje rajtarki, zapołožki a hesła ze swojich druhich gratow dóstał.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Stój";
+
+/* Support section title */
+"Support" = "Podpěra";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Trějće z třomi porstami naprawo abo nalěwo, zo byšće rajtark začinił.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Nětko synchronizować";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Synchronizujće swoje rajtarki, zapołožki, hesła a wjace.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Synchronizujće swoje rajtarki, hesła a wjace.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Waša prěnja synchronizacija móhła chwilku trać";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Synchronizowanje";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Synchronizuje so…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Zapołožki";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Zdalene klienty";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Synchronizacija je so nimokuliła";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Historija";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Přizjewjenja";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync k dispoziciji njeje";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync je offline";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sync je na problemy storčił, hdyž so %@ synchronizowało";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "rajtarki";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Rajtark %1$@ z %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Rajtarki %1$@ do %2$@ z %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Žłobik rajtarkow";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Cofnyć";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d rajtarkow začinjene";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Strona njeda so w čitanskim napohledźe zwobraznić.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Je nowa wersija Firefox Aurora k dispoziciji. Podótkńće so W porjadku, zo byšće stronu sćahnył.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Při přistupje na rajtarki z wašich druhich gratow je problem wustupił. Spytajće za krótki čas hišće raz.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Při konwertowanju strony je zmylk wustupił";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "To wam zmóžnja, wobraz do Camera Roll składować.";
+
+/* Opening an external app */
+"This will open in another application" = "To so w druhim nałoženju wočini";
+
+/* History tableview section header */
+"Today" = "Dźensa";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Meni";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "Startowa strona";
+
+/* Panel accessibility label */
+"Top sites" = "Najbóle woblubowane sydła";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Waše najbóle woblubowane sydła so tu pokazaja.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Witajće k woblubowanym sydłam";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Stronu wotstronić - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Aktualizować";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Aktualizujće Firefox, zo byšće zwjazał.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Kompaktne rajtarki wužiwać";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Wužiwarske mjeno";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Wobkrućće swoju e-mejlowu adresu.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Wersija %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Pokazać";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Webwobsah";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Witajće k swojej čitanskej lisćinje";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Wodajće, to je nam njepřijomne.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedija";
+
+/* Button to save the user's password */
+"Yes" = "Haj";
+
+/* History tableview section header */
+"Yesterday" = "Wčera";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Nimaće žane wočinjene rajtarki w Firefox na swojich druhich gratach.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Waše prawa";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ličak";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "runje";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobilny grat";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "před přez jednym měsacom";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "před přez jednym tydźenjom";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "přečitany";
+
+/* Relative date for date in past week. */
+"this week" = "tutón tydźeń";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "dźensa w %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "nječitany";
+
+/* Relative date for yesterday. */
+"yesterday" = "wčera";
+

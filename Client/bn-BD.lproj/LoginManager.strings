@@ -1,0 +1,54 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "আপনি কি নিশ্চিত?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "বাতিল";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "অনুসন্ধান পরিষ্কার করুন";
+
+/* Copy password text selection menu item */
+"Copy" = "কপি করুন";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "মুছে ফেলুন";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "সব অনির্বাচন";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "অনুসন্ধান মোডে যান";
+
+/* Hide password text selection menu item */
+"Hide" = "আড়াল করো";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "সর্বশেষ পরিবর্তন %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "লগইন";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "লগইন স্থায়ীভাবে সরিয়ে ফেলা হবে।";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "লগইন সংযুক্ত সব ডিভাইস থেকে সরিয়ে ফেলা হবে।";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "কোন লগইন পাওয়া যায় নি";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "খুলুন এবং পূর্ণ করুন";
+
+/* Reveal password text selection menu item */
+"Reveal" = "প্রকাশ করুন";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "ইনপুট ফিল্ড অনুসন্ধান";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "ব্যবহারকারীর নাম";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "ওয়েবসাইট";
+

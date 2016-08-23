@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Tebɣiḍ ad tsefḍeḍ akk isefka inek? Ayagi ad yemdel akk icarren yeldin.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Amazray n tunigin";
+
+/* Settings item for clearing the cache */
+"Cache" = "Tuffirt";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Sefsex";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Sfeḍ";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Sfeḍ akk";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Sfeḍ isefka n tunigin";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Inagan n tuqqna";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Isefka n usmel web deg uskar n war tuqqna";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Inekcam yettwakelsen";
+

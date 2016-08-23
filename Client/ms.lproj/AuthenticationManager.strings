@@ -1,0 +1,87 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Selepas 1 jam";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Selepas 1 minit";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Selepas 5 minit";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Selepas 10 minit";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Selepas 15 minit";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Tukar Kod Laluan";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Masukkan Kod Laluan";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Masukkan kod laluan baru";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Masukkan kod laluan";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Masukkan kod laluan";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Serta-merta";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Kod Laluan yang salah. Cuba lagi (Percubaan yang tinggal: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Kod Laluan salah. Cuba lagi.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Percubaan yang maksimum. Sila cuba lagi dalam satu jam.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Percubaan yang maksimum. Sila cuba lagi.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Kod Laluan baru mestilah berbeza daripada kod yang sedia ada.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Kod laluan";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Kod Laluan tidak sepadan. Cuba lagi.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Masukkan semula kod laluan";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Memerlukan Kod Laluan";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Set Kod Laluan";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Sentuh ID & Kod Laluan";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Kod Laluan Dimatikan";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Kod Laluan Dihidupkan";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Matikkan kod laluan anda.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Gunakan ID Sentuh";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Gunakan cap jari anda untuk mengakses Log Masuk sekarang.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Gunakan cap jari anda untuk mengakses Pelayaran Peribadi sekarang.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Gunakan cap jari anda untuk melumpuhkan ID Sentuh.";
+

@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Privát lapok bezárása";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "A Firefox nem fog emlékezni az előzményeire vagy a sütijeire, de az új könyvjelzők mentve lesznek.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Tudjon meg többet";
+
+/* Toggled OFF accessibility value */
+"Off" = "Ki";
+
+/* Toggled ON accessibility value */
+"On" = "Be";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Megnyitás új privát lapon";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Privát böngészés";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Privát mód";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Ki- vagy bekapcsolja a privát mód";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Mikor elhagyja a privát böngészést";
+

@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Rzu ɣer deqs n isebtar web deg iwet n tikelt s yiccaren.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Fren";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Qqen ɣer Firefox di yal adig anida tellid.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Sagen";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Nṭew s wudem fessusen gar isebtar yeldin s yiccaren.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox akked s usigna";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Tigri n uqeddem %1$@ si %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Seggem";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Sagen Firefox inek akken tebɣiḍ deg iɣawwaṛen.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Sbadu amsedday inek amezwer akked wayen nniḍen deg iɣewwaṛen.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Bḍu";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Kcem ɣer Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Bdu tunigin";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Mtawi ibenkan inke.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Senned, ṭṭef u selḥu tigni n Firefox ɣer wadig tebɣiḍ akken ad yifsus waggwaḍ ɣur-s.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Taqeffalt niɣewwaṛen tella di tazwara n uzawag n yiccaren.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Taqeffalt n n uskan n yicceren teqqṛeb ɣer wurti n uḍris n tensa d unadi, udiɣ ad tesken amḍan amiran n yiccaren yeldin.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Seqdec affer n beṭṭu akken ad tazneḍ iseɣwan seg isnasen nniḍen ɣer Firefox.";
+

@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Přehladujće wjacore webstrony w samsnym času z rajtarkami.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Wubrać";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Zwjazajće Firefox wšudźe, hdźež jón wužiwaće.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Přiměrić";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Přepinajće lochko mjez wočinjenymi stronami z rajtarkami.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox a mróčel";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Zawodna folija %1$@ z %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Organizować";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Personalizujće swój Firefox w nastajenjach tak, kaž chceće.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Personalizujće swoju standardnu pytawu a wjace w nastajenjach.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Dźělić";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Pola Firefox přizjewić";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Přehladować započeć";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Synchronizujće swoje graty.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Podótkńće so symbola Firefox, dźeržće jón stłóčeny a přesuńće jón do swojeho doka za lochki přistup.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Tłóčatko nastajenjow je na spočatku rajtarkoweho žłobika.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Tłóčatko 'Rajtarki pokazać' je pódla tekstoweho pola 'Adresa a pytanje' a zwobraznja aktualnu ličbu wočinjenych rajtarkow.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Wužiwajće dźělenske łopjeno, zo byšće wotkazy z druhich nałoženjow do Firefox.";
+

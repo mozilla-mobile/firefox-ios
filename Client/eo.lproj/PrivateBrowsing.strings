@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Fermi privatajn langetojn";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ne memoros vian historion aŭ kuketojn, sed novaj legosignoj estos konservitaj.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Pli da informo";
+
+/* Toggled OFF accessibility value */
+"Off" = "Malŝaltita";
+
+/* Toggled ON accessibility value */
+"On" = "Ŝaltita";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Malfermi en nova privata langeto";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Privata retumo";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Privata reĝimo";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Ŝalti kaj malŝalti la privatan reĝimon";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Post forlaso de la privata retumo";
+

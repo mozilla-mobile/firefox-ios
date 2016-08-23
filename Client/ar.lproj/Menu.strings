@@ -1,0 +1,51 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "أضف علامة";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "أغلق كل الألسنة";
+
+/* Accessibility label describing the button that closes the menu when open */
+"Menu.CloseMenu.AccessibilityLabel" = "أغلِق القائمة";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "ابحث في الصفحة";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "لسان خاص جديد";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "لسان جديد";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel. */
+"Menu.OpenBookmarksAction.AccessibilityLabel" = "العلامات";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
+"Menu.OpenHistoryAction.AccessibilityLabel" = "التأريخ";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "البداية";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
+"Menu.OpenReadingListAction.AccessibilityLabel" = "قائمة القراءة";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "الإعدادات";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "المواقع الأكثر زيارة";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "احذف العلامة";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SendPageAction.Title" = "أرسِل";
+
+/* Label for the button, displayed in the menu, used to set the homepage if none is currently set. */
+"Menu.SetHomePageAction.Title" = "حدد صفحة البداية";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "اطلب موقع سطح مكتب";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "اطلب موقع محمول";
+

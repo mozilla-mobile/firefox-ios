@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Brskajte po več spletnih straneh hkrati s pomočjo zavihkov.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Izberi";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Povežite Firefox, kjerkoli ga uporabljate.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Prilagodi";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Preklapljajte odprte strani s pomočjo zavihkov.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox in oblak";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Predstavitvena stran %1$@ od %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Organiziraj";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "V nastavitvah lahko prilagodite Firefox po svojih željah.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "V nastavitvah lahko med drugim izberete tudi privzet iskalnik.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Deli";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Prijavite se v Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Začnite z brskanjem";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Sinhronizirajte svoje naprave.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Za hiter dostop tapnite, zadržite in premaknite ikono Firefoxa v dok.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Gumb za nastavitve je na začetku predala zavihkov.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Gumb Prikaži zavihke se nahaja ob polju za naslov in iskanje ter prikazuje trenutno število odprtih zavihkov.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Uporabite list za deljenje za pošiljanje povezav iz drugih aplikacij v Firefox.";
+

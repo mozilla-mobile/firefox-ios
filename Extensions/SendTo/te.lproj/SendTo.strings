@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "ఆందుబాటులో ఉన్న పరికరాలు:";
+
+/* Close button in top navigation bar */
+"Close" = "మూసివేయి";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "దయచేసి ఫైర్ఫాక్స్ ను తెరిచి, సెట్టింగులు వెళ్ళి మరియు కొనసాగడానికి సైన్ ఇన్ చేయండి.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "పంపించు";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "టాబ్ ను పంపు";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "మీరు మీ ఫైర్ఫాక్సు ఖాతాకు సైన్ ఇన్ చేయలేదు.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "మీరు సింక్ చేయడానికి అందుబాటులో ఈ ఫైర్ఫాక్స్ ఖాతాకు కనెక్ట్ అయ్యున్న ఇతర పరికరాలకు లేదు.";
+

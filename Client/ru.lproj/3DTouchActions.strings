@@ -1,0 +1,24 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "Добавить в закладки";
+
+/* Label for preview action on Tab Tray Tab to add current tab to Reading List */
+"Add to Reading List" = "Добавить в список для чтения";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "Закрыть вкладку";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "Копировать URL";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "Открыть последнюю закладку";
+
+/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
+"Open Last Tab" = "Открыть последнюю вкладку";
+
+/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
+"Preview of %@" = "Предпросмотр %@";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "Отправить на устройство";
+

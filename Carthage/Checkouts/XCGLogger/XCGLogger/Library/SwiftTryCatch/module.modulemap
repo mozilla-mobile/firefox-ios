@@ -1,0 +1,4 @@
+module SwiftTryCatch {
+    header "SwiftTryCatch.h"
+    export *
+}
