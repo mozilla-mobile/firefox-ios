@@ -33,7 +33,8 @@ enum ReaderModeBarButtonType {
             case .Settings: return "SettingsSerif"
             case .AddToReadingList: return "addToReadingList"
             case .RemoveFromReadingList: return "removeFromReadingList"
-            case .BeginDictation, .ResumeDictation, .PauseDictation: return "SettingsSerif"
+            case .BeginDictation, .ResumeDictation: return "ResumeDictation"
+            case .PauseDictation: return "PauseDictation"
         }
     }
 
@@ -94,10 +95,10 @@ class ReaderModeBarView: UIView {
             return button
         }
         
-        readStatusButton = createButtonForBar(withType:       .MarkAsRead, andSelector:       #selector(ReaderModeBarView.SELtappedReadStatusButton(_:)))
-        settingsButton = createButtonForBar(withType:         .Settings, andSelector:         #selector(ReaderModeBarView.SELtappedSettingsButton(_:)))
-        listStatusButton = createButtonForBar(withType:       .AddToReadingList, andSelector:   #selector(ReaderModeBarView.SELtappedListStatusButton(_:)))
-        toggleDictationButton = createButtonForBar(withType:  .BeginDictation, andSelector:   #selector(ReaderModeBarView.SELtappedToggleDictationButton(_:)))
+        readStatusButton = createButtonForBar(withType:       .MarkAsRead, andSelector:       #selector(ReaderModeBarView.didTapReadStatusButton(_:)))
+        settingsButton = createButtonForBar(withType:         .Settings, andSelector:         #selector(ReaderModeBarView.didTapSettingsButton(_:)))
+        listStatusButton = createButtonForBar(withType:       .AddToReadingList, andSelector:   #selector(ReaderModeBarView.didTapListStatusButton(_:)))
+        toggleDictationButton = createButtonForBar(withType:  .BeginDictation, andSelector:   #selector(ReaderModeBarView.didTapToggleDictationButton(_:)))
 
         var previous: UIButton?
         for button in buttons {
@@ -141,19 +142,20 @@ class ReaderModeBarView: UIView {
         return button
     }
 
-    func SELtappedReadStatusButton(sender: UIButton!) {
+    func didTapReadStatusButton(sender: UIButton!) {
         delegate?.readerModeBar(self, didSelectButton: unread ? .MarkAsRead : .MarkAsUnread, sender: sender)
     }
 
-    func SELtappedSettingsButton(sender: UIButton!) {
+    func didTapSettingsButton(sender: UIButton!) {
         delegate?.readerModeBar(self, didSelectButton: .Settings, sender: sender)
     }
 
-    func SELtappedListStatusButton(sender: UIButton!) {
+    func didTapListStatusButton(sender: UIButton!) {
         delegate?.readerModeBar(self, didSelectButton: added ? .RemoveFromReadingList : .AddToReadingList, sender: sender)
     }
 
-    func SELtappedToggleDictationButton(sender: UIButton!) {
+    func didTapToggleDictationButton(sender: UIButton!) {
+        // The dictation button is handled entirely by the delegate, so we can use any of .Begin/Resume/PauseDictation here
         delegate?.readerModeBar(self, didSelectButton: .BeginDictation, sender: sender)
     }
 
@@ -165,11 +167,20 @@ class ReaderModeBarView: UIView {
             readStatusButton.alpha = added ? 1.0 : 0.6
         }
     }
-    
+
     var added: Bool = false {
         didSet {
             let buttonType: ReaderModeBarButtonType = added ? .RemoveFromReadingList : .AddToReadingList
             listStatusButton.setImage(buttonType.image, forState: UIControlState.Normal)
+        }
+    }
+    
+    var isDictating: Bool = false {
+        didSet {
+            if oldValue != isDictating {
+                let buttonType: ReaderModeBarButtonType = isDictating ? .PauseDictation : .ResumeDictation
+                toggleDictationButton.setImage(buttonType.image, forState: UIControlState.Normal)
+            }
         }
     }
 }

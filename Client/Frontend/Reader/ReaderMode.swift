@@ -214,11 +214,12 @@ struct ReadabilityResult {
 protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
+    func readerMode(readerMode: ReaderMode, dictationStateDidChange state: DictationState)
 }
 
 let ReaderModeNamespace = "_firefox_ReaderMode"
 
-class ReaderMode: TabHelper {
+class ReaderMode: TabHelper, ReaderModeDictationDelegate {
     var delegate: ReaderModeDelegate?
 
     private weak var tab: Tab?
@@ -233,6 +234,8 @@ class ReaderMode: TabHelper {
 
     required init(tab: Tab) {
         self.tab = tab
+
+        self.dictation.delegate = self
 
         // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
         if let path = NSBundle.mainBundle().pathForResource("Readability", ofType: "js") {
@@ -301,6 +304,10 @@ class ReaderMode: TabHelper {
             }
         }
     }
+
+    func readerModeDictation(readerModeDictation: ReaderModeDictation, stateDidChange state: DictationState) {
+        self.delegate?.readerMode(self, dictationStateDidChange: state)
+    }
     
     var isDictating: Bool {
         return dictation.state == .Playing
@@ -328,18 +335,28 @@ class ReaderMode: TabHelper {
     }
 }
 
+enum DictationState {
+    case Unstarted
+    case Playing
+    case Paused
+    case Finished
+}
+
+protocol ReaderModeDictationDelegate: class {
+    func readerModeDictation(readerModeDictation: ReaderModeDictation, stateDidChange state: DictationState)
+}
+
 class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
-    
-    enum DictationState {
-        case Unstarted
-        case Playing
-        case Paused
-        case Finished
+    var state: DictationState = .Unstarted {
+        didSet {
+            self.delegate?.readerModeDictation(self, stateDidChange: self.state)
+        }
     }
-    
-    var state: DictationState = .Unstarted
+
+    weak var delegate: ReaderModeDictationDelegate?
+
     private let synthesiser = AVSpeechSynthesizer()
-    
+
     private var webView: WKWebView?
     private var scrollObservers: [String: NSObjectProtocol] = [:]
     private var scrollsToFollowDictation = true

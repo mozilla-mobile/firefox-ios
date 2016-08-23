@@ -1318,7 +1318,6 @@ class BrowserViewController: UIViewController {
 }
 
 extension BrowserViewController: AppStateDelegate {
-
     func appDidUpdateState(appState: AppState) {
         if AppConstants.MOZ_MENU {
             menuViewController?.appState = appState
@@ -2565,6 +2564,10 @@ extension BrowserViewController: ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
         self.showReaderModeBar(animated: true)
         tab.showContent(true)
+    }
+
+    func readerMode(readerMode: ReaderMode, dictationStateDidChange state: DictationState) {
+        self.readerModeBar?.isDictating = readerMode.isDictating
     }
 }
 
