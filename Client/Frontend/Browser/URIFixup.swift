@@ -7,13 +7,14 @@ import Foundation
 class URIFixup {
     static func getURL(entry: String) -> NSURL? {
         let trimmed = entry.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        let escaped = trimmed.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLAllowedCharacterSet())
 
-        // First check if the URL includes a scheme. This will handle
+        // Then check if the URL includes a scheme. This will handle
         // all valid requests starting with "http://", "about:", etc.
         // However, we ensure that the scheme is one that is listed in
         // the official URI scheme list, so that other such search phrases
         // like "filetype:" are recognised as searches rather than URLs.
-        if let url = NSURL(string: trimmed) where url.schemeIsValid {
+        if let escaped = escaped, url = NSURL(string: escaped) where url.schemeIsValid {
             return url
         }
 

@@ -530,13 +530,8 @@ public class SQLiteLogins: BrowserLogins {
     public func removeLoginByGUID(guid: GUID) -> Success {
         return removeLoginsWithGUIDs([guid])
     }
-
-    public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
-        if guids.isEmpty {
-            return succeed()
-        }
-
-        let nowMillis = NSDate.now()
+    
+    private func getDeletionStatementsForGUIDs(guids: ArraySlice<GUID>, nowMillis: Timestamp) -> [(sql: String, args: Args?)] {
         let inClause = BrowserDB.varlist(guids.count)
 
         // Immediately delete anything that's marked as new -- i.e., it's never reached
@@ -555,7 +550,7 @@ public class SQLiteLogins: BrowserLogins {
         ", username = ''" +
         " WHERE guid IN \(inClause)"
 
-       let markMirrorAsOverridden =
+        let markMirrorAsOverridden =
         "UPDATE \(TableLoginsMirror) SET " +
             "is_overridden = 1 " +
             "WHERE guid IN \(inClause)"
@@ -566,12 +561,19 @@ public class SQLiteLogins: BrowserLogins {
         "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
 
         let args: Args = guids.map { $0 as AnyObject }
-        return self.db.run([
+        return [
             (delete, args),
             (update, args),
             (markMirrorAsOverridden, args),
             (insert, args)
-        ]) >>> effect(self.notifyLoginDidChange)
+        ]
+    }
+
+    public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
+        let timestamp = NSDate.now()
+        return db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap {
+            self.getDeletionStatementsForGUIDs($0, nowMillis: timestamp)
+        }) >>> effect(self.notifyLoginDidChange)
     }
 
     public func removeAll() -> Success {

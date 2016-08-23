@@ -36,7 +36,7 @@ public class UserAgent {
 
         if let firefoxUA = defaults.stringForKey("UserAgent") {
             if (!checkiOSVersion || (lastiOSVersion == currentiOSVersion))
-                && (!checkFirefoxVersion || (lastFirefoxVersion == currentFirefoxVersion)){
+                && (!checkFirefoxVersion || (lastFirefoxVersion == currentFirefoxVersion)) {
                 return firefoxUA
             }
         }
@@ -59,7 +59,7 @@ public class UserAgent {
 
         let appVersion = AppInfo.appVersion
         let currentiOSVersion = UIDevice.currentDevice().systemVersion
-        defaults.setObject(currentiOSVersion,forKey: "LastDeviceSystemVersionNumber")
+        defaults.setObject(currentiOSVersion, forKey: "LastDeviceSystemVersionNumber")
         defaults.setObject(appVersion, forKey: "LastFirefoxVersionNumber")
         let userAgent = webView.stringByEvaluatingJavaScriptFromString("navigator.userAgent")!
 

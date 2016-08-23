@@ -27,6 +27,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     private var isPrivate: Bool
     private var dismissing = false
     private var currentRow = 0
+    private var verticalConstraints: [Constraint] = []
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -53,8 +54,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     weak var bvc: BrowserViewController?
     var listData = [(item:WKBackForwardListItem, type:BackForwardType)]()
     
-    var tableHeight: CGFloat
-    {
+    var tableHeight: CGFloat {
         get {
             assert(NSThread.isMainThread(), "tableHeight interacts with UIKit components - cannot call from background thread.")
             return min(CGFloat(BackForwardViewUX.RowHeight*listData.count), self.view.frame.height/2)
@@ -66,6 +66,8 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             self.transitioningDelegate = backForwardTransitionDelegate
         }
     }
+    
+    var snappedToBottom: Bool = true
     
     init(profile: Profile, backForwardList: WKBackForwardList, isPrivate: Bool) {
         self.profile = profile
@@ -122,34 +124,76 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         guard let bvc = self.bvc else {
             return
         }
-        tableView.snp_updateConstraints { make in
-            make.bottom.equalTo(self.view).offset(bvc.shouldShowFooterForTraitCollection(newCollection) ? -UIConstants.ToolbarHeight : 0)
+        if bvc.shouldShowFooterForTraitCollection(newCollection) != snappedToBottom {
+            tableView.snp_updateConstraints { make in
+                if snappedToBottom {
+                    make.bottom.equalTo(self.view).offset(0)
+                } else {
+                    make.top.equalTo(self.view).offset(0)
+                }
+                make.height.equalTo(0)
+            }
+            snappedToBottom = !snappedToBottom
         }
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        tableView.snp_updateConstraints { make in
-            make.height.equalTo(min(CGFloat(BackForwardViewUX.RowHeight*listData.count), size.height/2))
+        let correctHeight = {
+            self.tableView.snp_updateConstraints { make in
+                make.height.equalTo(min(CGFloat(BackForwardViewUX.RowHeight * self.listData.count), size.height / 2))
+            }
+        }
+        coordinator.animateAlongsideTransition(nil) { _ in
+            self.remakeVerticalConstraints()
+            correctHeight()
+        }
+    }
+    
+    func remakeVerticalConstraints() {
+        guard let bvc = self.bvc else {
+            return
+        }
+        for constraint in self.verticalConstraints {
+            constraint.deactivate()
+        }
+        self.verticalConstraints = []
+        tableView.snp_makeConstraints { make in
+            if snappedToBottom {
+                verticalConstraints += [make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height).constraint]
+            } else {
+                verticalConstraints += [make.top.equalTo(self.view).offset(bvc.header.frame.height + UIApplication.sharedApplication().statusBarFrame.size.height).constraint]
+            }
+        }
+        shadow.snp_makeConstraints() { make in
+            if snappedToBottom {
+                verticalConstraints += [
+                    make.bottom.equalTo(tableView.snp_top).constraint,
+                    make.top.equalTo(self.view).constraint
+                ]
+                
+            } else {
+                verticalConstraints += [
+                    make.top.equalTo(tableView.snp_bottom).constraint,
+                    make.bottom.equalTo(self.view).constraint
+                ]
+            }
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let bvc = self.bvc else {
-            return
-        }
         view.addSubview(shadow)
         view.addSubview(tableView)
+        self.snappedToBottom = self.bvc?.toolbar != nil 
         tableView.snp_makeConstraints { make in
             make.height.equalTo(0)
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height)
         }
         shadow.snp_makeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.bottom.equalTo(tableView.snp_top)
+            make.left.right.equalTo(self.view)
         }
+        remakeVerticalConstraints()
         view.layoutIfNeeded()
         scrollTableViewToIndex(currentRow)
         setupDismissTap()
@@ -189,8 +233,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         
         if let site = sites[item.URL.absoluteString] {
             cell.site = site
-        }
-        else {
+        } else {
             cell.site = Site(url: item.initialURL.absoluteString, title: item.title ?? "")
         }
         
@@ -210,6 +253,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath  indexPath: NSIndexPath) -> CGFloat {
-        return CGFloat(BackForwardViewUX.RowHeight);
+        return CGFloat(BackForwardViewUX.RowHeight)
     }
 }

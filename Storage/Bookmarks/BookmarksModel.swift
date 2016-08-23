@@ -216,10 +216,10 @@ public class MemoryBookmarksSink: ShareToDestination {
         let title = item.title == nil ? "Untitled" : item.title!
         func exists(e: BookmarkNode) -> Bool {
             if let bookmark = e as? BookmarkItem {
-                return bookmark.url == item.url;
+                return bookmark.url == item.url
             }
 
-            return false;
+            return false
         }
 
         // Don't create duplicates.
@@ -299,13 +299,13 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         case BookmarkRoots.MobileFolderGUID:
             // Transparently merges in any queued items.
             m = self.mobile.append(self.sink.queue)
-            break;
+            break
         case BookmarkRoots.RootGUID:
             m = self.root
-            break;
+            break
         case BookmarkRoots.UnfiledFolderGUID:
             m = self.unsorted
-            break;
+            break
         default:
             return deferMaybe(DatabaseError(description: "No such folder \(guid)."))
         }

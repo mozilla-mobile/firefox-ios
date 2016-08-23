@@ -139,7 +139,7 @@ extension NSURL {
     }
 
     public var origin: String? {
-        guard isWebPage(),
+        guard isWebPage(includeDataURIs: false),
               let hostPort = self.hostPort else {
             return nil
         }
@@ -233,10 +233,11 @@ extension NSURL {
         }
     }
 
-    public func isWebPage() -> Bool {
+    public func isWebPage(includeDataURIs includeDataURIs: Bool = true) -> Bool {
         let httpSchemes = ["http", "https"]
+        let dataSchemes = ["data"]
 
-        if let _ = httpSchemes.indexOf(scheme) {
+        if httpSchemes.contains(scheme) || includeDataURIs && dataSchemes.contains(scheme) {
             return true
         }
 
@@ -312,13 +313,13 @@ private extension NSURL {
             if let entry = etldEntries?[currentDomain] {
                 if entry.isWild && (previousDomain != nil) {
                     suffix = previousDomain
-                    break;
+                    break
                 } else if entry.isNormal || (nextDot == nil) {
                     suffix = currentDomain
-                    break;
+                    break
                 } else if entry.isException {
                     suffix = nextDot
-                    break;
+                    break
                 }
             }
 

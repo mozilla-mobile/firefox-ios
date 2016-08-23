@@ -33,6 +33,8 @@ class SwipeAnimator: NSObject {
     
     private var prevOffset: CGPoint!
     private let params: SwipeAnimationParameters
+    
+    private var panGestureRecogniser: UIPanGestureRecognizer!
 
     var containerCenter: CGPoint {
         return CGPoint(x: CGRectGetWidth(container.frame) / 2, y: CGRectGetHeight(container.frame) / 2)
@@ -45,9 +47,14 @@ class SwipeAnimator: NSObject {
 
         super.init()
 
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(SwipeAnimator.SELdidPan(_:)))
-        container.addGestureRecognizer(panGesture)
-        panGesture.delegate = self
+        self.panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(SwipeAnimator.SELdidPan(_:)))
+        container.addGestureRecognizer(self.panGestureRecogniser)
+        self.panGestureRecogniser.delegate = self
+    }
+
+    func cancelExistingGestures() {
+        self.panGestureRecogniser.enabled = false
+        self.panGestureRecogniser.enabled = true
     }
 }
 

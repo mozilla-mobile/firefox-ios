@@ -17,7 +17,7 @@ class SnackBarUX {
  *
  *``SnackButton(title: "OK", { _ in print("OK", terminator: "\n") })``
  */
-class SnackButton : UIButton {
+class SnackButton: UIButton {
     let callback: (bar: SnackBar) -> Void
     private var bar: SnackBar!
 

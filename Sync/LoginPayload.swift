@@ -133,7 +133,7 @@ public class LoginPayload: CleartextPayloadJSON {
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
         if let p = obj as? LoginPayload {
             if !super.equalPayloads(p) {
-                return false;
+                return false
             }
 
             if p.deleted || self.deleted {

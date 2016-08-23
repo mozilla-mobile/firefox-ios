@@ -11,7 +11,7 @@ import Deferred
 import Sync
 
 
-class FaviconManager : TabHelper {
+class FaviconManager: TabHelper {
     static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
     
     let profile: Profile!
@@ -47,8 +47,7 @@ class FaviconManager : TabHelper {
                     let url = NSURL(string: favicon.url),
                     let currentURL = tab.url {
                     return self.getFavicon(tab, iconUrl: url, currentURL: currentURL, icon: favicon, profile: profile)
-                }
-                else {
+                } else {
                     return deferMaybe(FaviconError())
                 }
             }
@@ -91,8 +90,7 @@ class FaviconManager : TabHelper {
                                             self.profile.favicons.addFavicon(fav, forSite: site).upon { _ in
                                                 deferred.fill(Maybe(success: fav))
                                             }
-                                        }
-                                        else {
+                                        } else {
                                             tab.favicons.append(fav)
                                             deferred.fill(Maybe(success: fav))
                                         }

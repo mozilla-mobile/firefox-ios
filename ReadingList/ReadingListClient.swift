@@ -57,7 +57,7 @@ class ReadingListClient {
     func getRecordWithGuid(guid: String, ifModifiedSince: ReadingListTimestamp?, completion: (ReadingListGetRecordResult) -> Void) {
         if let url = NSURL(string: guid, relativeToURL: articlesBaseURL) {
             Alamofire.Manager.sharedInstance.request(createRequest("GET", url, ifModifiedSince: ifModifiedSince)).responseJSON(options: [], completionHandler: { (request, response, json) -> Void in
-                if let json = json.value, response = response{
+                if let json = json.value, response = response {
                     switch response.statusCode {
                         case 200:
                             completion(.Success(ReadingListRecordResponse(response: response, json: json)!))

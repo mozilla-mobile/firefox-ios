@@ -23,7 +23,7 @@ public class LiveAccountTest: XCTestCase {
                 }
                 if let email = json["email"].asString {
                     return json
-                }  else {
+                } else {
                     // This is the standard case: signedInUser.json is {}.
                     return nil
                 }

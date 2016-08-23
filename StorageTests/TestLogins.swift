@@ -48,8 +48,7 @@ class TestSQLiteLogins: XCTestCase {
         let login2 = Login.createWithHostname("hostname1", username: "username2", password: "password2")
         login2.formSubmitURL = "http://submit.me"
 
-        addLogin(login) >>>
-            { self.addLogin(login2) } >>>
+        addLogin(login) >>> { self.addLogin(login2) } >>>
             getLoginsFor(login.protectionSpace, expected: [login2, login]) >>>
             done(expectation)
 
@@ -86,6 +85,21 @@ class TestSQLiteLogins: XCTestCase {
         logins.removeLoginsWithGUIDs(guids).value
         let result = logins.getAllLogins().value.successValue!
         XCTAssertEqual(result.count, 2)
+    }
+    
+    func testRemoveManyLogins() {
+        log.debug("Remove a large number of logins at once")
+        var guids: [GUID] = []
+        for i in 0..<2000 {
+            let login = Login.createWithHostname("mozilla.org", username: "Fire", password: "fox", formSubmitURL: formSubmitURL)
+            if i <= 1000 {
+                guids += [login.guid]
+            }
+            addLogin(login).value
+        }
+        logins.removeLoginsWithGUIDs(guids).value
+        let result = logins.getAllLogins().value.successValue!
+        XCTAssertEqual(result.count, 999)
     }
 
     func testUpdateLogin() {
@@ -312,8 +326,7 @@ class TestSQLiteLogins: XCTestCase {
     func removeAllLogins() -> Success {
         log.debug("Remove All")
         // Because we don't want to just mark them as deleted.
-        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>>
-            { self.db.run("DELETE FROM \(TableLoginsLocal)") }
+        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>> { self.db.run("DELETE FROM \(TableLoginsLocal)") }
     }
 }
 
@@ -384,8 +397,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
     func removeAllLogins() -> Success {
         log.debug("Remove All")
         // Because we don't want to just mark them as deleted.
-        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>>
-            { self.db.run("DELETE FROM \(TableLoginsLocal)") }
+        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>> { self.db.run("DELETE FROM \(TableLoginsLocal)") }
     }
 }
 
@@ -408,8 +420,7 @@ class TestSyncableLogins: XCTestCase {
     func removeAllLogins() -> Success {
         log.debug("Remove All")
         // Because we don't want to just mark them as deleted.
-        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>>
-            { self.db.run("DELETE FROM \(TableLoginsLocal)") }
+        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>> { self.db.run("DELETE FROM \(TableLoginsLocal)") }
     }
 
     func testDiffers() {

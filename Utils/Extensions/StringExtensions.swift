@@ -41,7 +41,7 @@ public extension String {
         let raw: NSString = self
         let str = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
             raw,
-            "[].",":/?&=;+!@#$()',*",
+            "[].", ":/?&=;+!@#$()',*",
             CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding))
         return str as String
     }
@@ -93,5 +93,24 @@ public extension String {
             trimmed.removeAtIndex(trimmed.startIndex)
         }
         return trimmed
+    }
+
+    /// Adds a newline at the closest space from the middle of a string.
+    /// Example turning "Mark as Read" into "Mark as\n Read"
+    public func stringSplitWithNewline() -> String {
+        let mid = self.characters.count/2
+
+        let arr = self.characters.indices.flatMap { (index) -> Int? in
+            if let i = Int("\(index)") where self.characters[index] == " " {
+                return i
+            }
+            return nil
+        }
+        guard let closest = arr.enumerate().minElement({ abs($0.1 - mid) < abs($1.1 - mid)}) else {
+            return self
+        }
+        var newString = self
+        newString.insert("\n", atIndex: newString.characters.startIndex.advancedBy(closest.element))
+        return newString
     }
 }

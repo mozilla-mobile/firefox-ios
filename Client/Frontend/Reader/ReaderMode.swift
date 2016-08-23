@@ -217,7 +217,7 @@ protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, dictationStateDidChange state: DictationState)
 }
 
-let ReaderModeNamespace = "_firefox_ReaderMode"
+let ReaderModeNamespace = "window.__firefox__.reader"
 
 class ReaderMode: TabHelper, ReaderModeDictationDelegate {
     var delegate: ReaderModeDelegate?
@@ -276,7 +276,7 @@ class ReaderMode: TabHelper, ReaderModeDictationDelegate {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let msg = message.body as? Dictionary<String,String> {
+        if let msg = message.body as? Dictionary<String, String> {
             if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
                 switch messageType {
                     case .PageEvent:

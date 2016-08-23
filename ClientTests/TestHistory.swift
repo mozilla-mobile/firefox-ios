@@ -8,7 +8,7 @@ import Storage
 
 import XCTest
 
-class TestHistory : ProfileTest {
+class TestHistory: ProfileTest {
     private func addSite(history: BrowserHistory, url: String, title: String, s: Bool = true) {
         let site = Site(url: url, title: title)
         let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
