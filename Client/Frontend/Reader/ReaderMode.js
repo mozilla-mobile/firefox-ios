@@ -56,6 +56,8 @@
             var doc = new DOMParser().parseFromString(docStr, "text/html");
             var readability = new Readability(uri, doc);
             readabilityResult = readability.parse();
+            // Readability discards locale information, so we add it in ourselves.
+            readabilityResult.language = document.documentElement.lang;
 
             debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
             webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
