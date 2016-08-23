@@ -11,25 +11,29 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 enum ReaderModeBarButtonType {
-    case MarkAsRead, MarkAsUnread, Settings, AddToReadingList, RemoveFromReadingList
+    case MarkAsRead, MarkAsUnread, Settings, AddToReadingList, RemoveFromReadingList, BeginDictation, ResumeDictation, PauseDictation
 
     private var localizedDescription: String {
         switch self {
-        case .MarkAsRead: return NSLocalizedString("Mark as Read", comment: "Name for Mark as read button in reader mode")
-        case .MarkAsUnread: return NSLocalizedString("Mark as Unread", comment: "Name for Mark as unread button in reader mode")
-        case .Settings: return NSLocalizedString("Display Settings", comment: "Name for display settings button in reader mode. Display in the meaning of presentation, not monitor.")
-        case .AddToReadingList: return NSLocalizedString("Add to Reading List", comment: "Name for button adding current article to reading list in reader mode")
-        case .RemoveFromReadingList: return NSLocalizedString("Remove from Reading List", comment: "Name for button removing current article from reading list in reader mode")
+            case .MarkAsRead: return NSLocalizedString("Mark as Read", comment: "Name for Mark as read button in reader mode")
+            case .MarkAsUnread: return NSLocalizedString("Mark as Unread", comment: "Name for Mark as unread button in reader mode")
+            case .Settings: return NSLocalizedString("Display Settings", comment: "Name for display settings button in reader mode. Display in the meaning of presentation, not monitor.")
+            case .AddToReadingList: return NSLocalizedString("Add to Reading List", comment: "Name for button adding current article to reading list in reader mode")
+            case .RemoveFromReadingList: return NSLocalizedString("Remove from Reading List", comment: "Name for button removing current article from reading list in reader mode")
+            case .BeginDictation: return NSLocalizedString("Begin Dictation", comment: "Name for button that starts dictation in reader mode")
+            case .ResumeDictation: return NSLocalizedString("Resume Dictation", comment: "Name for button that resumes dictation in reader mode")
+            case .PauseDictation: return NSLocalizedString("Pause Dictation", comment: "Name for button that pauses dictation in reader mode")
         }
     }
 
     private var imageName: String {
         switch self {
-        case .MarkAsRead: return "MarkAsRead"
-        case .MarkAsUnread: return "MarkAsUnread"
-        case .Settings: return "SettingsSerif"
-        case .AddToReadingList: return "addToReadingList"
-        case .RemoveFromReadingList: return "removeFromReadingList"
+            case .MarkAsRead: return "MarkAsRead"
+            case .MarkAsUnread: return "MarkAsUnread"
+            case .Settings: return "SettingsSerif"
+            case .AddToReadingList: return "addToReadingList"
+            case .RemoveFromReadingList: return "removeFromReadingList"
+            case .BeginDictation, .ResumeDictation, .PauseDictation: return "SettingsSerif"
         }
     }
 
@@ -41,7 +45,7 @@ enum ReaderModeBarButtonType {
 }
 
 protocol ReaderModeBarViewDelegate {
-    func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
+    func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType, sender: UIButton!)
 }
 
 struct ReaderModeBarViewUX {
@@ -69,36 +73,47 @@ class ReaderModeBarView: UIView {
     var settingsButton: UIButton!
     var speechButton: UIButton!
     var listStatusButton: UIButton!
+    var toggleDictationButton: UIButton!
 
     dynamic var buttonTintColor: UIColor = UIColor.clearColor() {
         didSet {
             readStatusButton.tintColor = self.buttonTintColor
             settingsButton.tintColor = self.buttonTintColor
             listStatusButton.tintColor = self.buttonTintColor
+            toggleDictationButton.tintColor = self.buttonTintColor
         }
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        readStatusButton = createButton(type: .MarkAsRead, action: #selector(ReaderModeBarView.SELtappedReadStatusButton(_:)))
-        readStatusButton.snp_makeConstraints { (make) -> () in
-            make.left.equalTo(self)
-            make.height.centerY.equalTo(self)
-            make.width.equalTo(80)
+        
+        var buttons: [UIButton] = []
+        func createButtonForBar(withType type: ReaderModeBarButtonType, andSelector selector: Selector) -> UIButton {
+            let button = createButton(withType: type, andAction: selector)
+            buttons += [button]
+            return button
         }
+        
+        readStatusButton = createButtonForBar(withType:       .MarkAsRead, andSelector:       #selector(ReaderModeBarView.SELtappedReadStatusButton(_:)))
+        settingsButton = createButtonForBar(withType:         .Settings, andSelector:         #selector(ReaderModeBarView.SELtappedSettingsButton(_:)))
+        listStatusButton = createButtonForBar(withType:       .AddToReadingList, andSelector:   #selector(ReaderModeBarView.SELtappedListStatusButton(_:)))
+        toggleDictationButton = createButtonForBar(withType:  .BeginDictation, andSelector:   #selector(ReaderModeBarView.SELtappedToggleDictationButton(_:)))
 
-        settingsButton = createButton(type: .Settings, action: #selector(ReaderModeBarView.SELtappedSettingsButton(_:)))
-        settingsButton.snp_makeConstraints { (make) -> () in
-            make.height.centerX.centerY.equalTo(self)
-            make.width.equalTo(80)
+        var previous: UIButton?
+        for button in buttons {
+            button.snp_makeConstraints { make in
+                if let previous = previous {
+                    make.left.equalTo(previous.snp_right)
+                    make.width.equalTo(previous)
+                } else {
+                    make.left.equalTo(self)
+                }
+                make.height.centerY.equalTo(self)
+            }
+            previous = button
         }
-
-        listStatusButton = createButton(type: .AddToReadingList, action: #selector(ReaderModeBarView.SELtappedListStatusButton(_:)))
-        listStatusButton.snp_makeConstraints { (make) -> () in
-            make.right.equalTo(self)
-            make.height.centerY.equalTo(self)
-            make.width.equalTo(80)
+        previous?.snp_makeConstraints { make in
+            make.right.equalTo(0)
         }
     }
 
@@ -118,7 +133,7 @@ class ReaderModeBarView: UIView {
         CGContextStrokePath(context)
     }
 
-    private func createButton(type type: ReaderModeBarButtonType, action: Selector) -> UIButton {
+    private func createButton(withType type: ReaderModeBarButtonType, andAction action: Selector) -> UIButton {
         let button = UIButton()
         addSubview(button)
         button.setImage(type.image, forState: .Normal)
@@ -127,15 +142,19 @@ class ReaderModeBarView: UIView {
     }
 
     func SELtappedReadStatusButton(sender: UIButton!) {
-        delegate?.readerModeBar(self, didSelectButton: unread ? .MarkAsRead : .MarkAsUnread)
+        delegate?.readerModeBar(self, didSelectButton: unread ? .MarkAsRead : .MarkAsUnread, sender: sender)
     }
 
     func SELtappedSettingsButton(sender: UIButton!) {
-        delegate?.readerModeBar(self, didSelectButton: .Settings)
+        delegate?.readerModeBar(self, didSelectButton: .Settings, sender: sender)
     }
 
     func SELtappedListStatusButton(sender: UIButton!) {
-        delegate?.readerModeBar(self, didSelectButton: added ? .RemoveFromReadingList : .AddToReadingList)
+        delegate?.readerModeBar(self, didSelectButton: added ? .RemoveFromReadingList : .AddToReadingList, sender: sender)
+    }
+
+    func SELtappedToggleDictationButton(sender: UIButton!) {
+        delegate?.readerModeBar(self, didSelectButton: .BeginDictation, sender: sender)
     }
 
     var unread: Bool = true {
