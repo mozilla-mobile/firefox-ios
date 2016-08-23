@@ -475,10 +475,6 @@ class Sync15BatchClientTests: XCTestCase {
             requestCount += 1
             switch requestCount {
             case 1:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "true")
-                let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
-                XCTAssertEqual(expectedBatch, queryParams![0])
-                XCTAssertEqual(expectedCommit, queryParams![1])
                 XCTAssertEqual(ius, 10_000)
                 assertLinesMatchRecords(lines, records: [recordA], serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 20_000)
