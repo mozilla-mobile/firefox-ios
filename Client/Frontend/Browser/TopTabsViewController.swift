@@ -226,6 +226,7 @@ extension TopTabsViewController: Themeable {
     func applyTheme(themeName: String) {
         tabsButton.applyTheme(themeName)
         isPrivate = (themeName == Theme.PrivateMode)
+        collectionView.reloadData()
     }
 }
 
