@@ -683,7 +683,9 @@ extension TabTrayController {
     private func concealPrivateContent() {
         collectionView.alpha = 0
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
-        presentedViewController?.view.alpha = 0
+        if !((presentedViewController as? UINavigationController)?.topViewController is PasscodeEntryViewController) {
+            presentedViewController?.view.alpha = 0
+        }
     }
     
     private func revealPrivateContent() {

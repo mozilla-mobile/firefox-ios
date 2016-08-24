@@ -290,7 +290,7 @@ class BrowserViewController: UIViewController {
         scrollController.showToolbars(animated: true)
     }
 
-    private func concealPrivateContents() {
+    private func concealPrivateContent() {
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         webViewContainerBackdrop.alpha = 1
@@ -298,7 +298,9 @@ class BrowserViewController: UIViewController {
         urlBar.locationContainer.alpha = 0
         topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
-        presentedViewController?.view.alpha = 0
+        if !((presentedViewController as? UINavigationController)?.topViewController is PasscodeEntryViewController) {
+            presentedViewController?.view.alpha = 0
+        }
     }
 
     private func revealPrivateContent() {
@@ -321,7 +323,7 @@ class BrowserViewController: UIViewController {
             return
         }
         tabManager.needsAuthentication = true
-        concealPrivateContents()
+        concealPrivateContent()
     }
 
     func SELappDidBecomeActiveNotification() {
@@ -2199,7 +2201,7 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
         if tabManager.isInPrivateMode {
-            concealPrivateContents()
+            concealPrivateContent()
         }
         SELappDidBecomeActiveNotification()
     }
