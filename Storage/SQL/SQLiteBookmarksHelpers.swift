@@ -23,10 +23,16 @@ public func titleForSpecialGUID(guid: GUID) -> String? {
 }
 
 extension SQLiteBookmarks: ShareToDestination {
-    public func addToMobileBookmarks(url: NSURL, title: String, favicon: Favicon?) -> Success {
-        return self.insertBookmark(url, title: title, favicon: favicon,
-                                   intoFolder: BookmarkRoots.MobileFolderGUID,
-                                   withTitle: BookmarksFolderTitleMobile)
+    public func addToMobileBookmarks(url: NSURL, title: String, favicon: Favicon?) {
+        let deferredResult = isBookmarked(url.absoluteString)
+        
+        deferredResult.upon { result in
+            if result.isSuccess && !result.successValue! {
+                self.insertBookmark(url, title: title, favicon: favicon,
+                                    intoFolder: BookmarkRoots.MobileFolderGUID,
+                                    withTitle: BookmarksFolderTitleMobile)
+            }
+        }
     }
 
     public func shareItem(item: ShareItem) {

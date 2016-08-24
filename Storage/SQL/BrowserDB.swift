@@ -430,12 +430,20 @@ extension BrowserDB: Queryable {
 
     func queryReturnsResults(sql: String, args: Args?=nil) -> Deferred<Maybe<Bool>> {
         return self.runQuery(sql, args: args, factory: { row in true })
-         >>== { deferMaybe($0[0] ?? false) }
+            >>== { if ($0.status == .Success) && ($0.count > 0) {
+                return deferMaybe($0[0] ?? false)
+            } else {
+                return deferMaybe(false)
+                }}
     }
-
+    
     func queryReturnsNoResults(sql: String, args: Args?=nil) -> Deferred<Maybe<Bool>> {
         return self.runQuery(sql, args: nil, factory: { row in false })
-          >>== { deferMaybe($0[0] ?? true) }
+            >>== { if ($0.status == .Success) && ($0.count > 0) {
+                return deferMaybe($0[0] ?? true)
+            } else {
+                return deferMaybe(true)
+                }}
     }
 }
 

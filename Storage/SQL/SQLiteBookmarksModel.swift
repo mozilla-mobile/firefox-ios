@@ -136,19 +136,7 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     }
 
     public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
-        let sql = "SELECT id FROM " +
-            "(SELECT id FROM \(self.direction.valueTable) WHERE " +
-            " bmkUri = ? AND is_deleted IS NOT 1" +
-            " UNION ALL " +
-            " SELECT id FROM \(TableBookmarksMirror) WHERE " +
-            " bmkUri = ? AND is_deleted IS NOT 1 AND is_overridden IS NOT 1" +
-            " LIMIT 1)"
-        let args: Args = [url, url]
-
-        return self.bookmarks.db.runQuery(sql, args: args, factory: { $0["id"] as! Int })
-            >>== { cursor in
-                return deferMaybe((cursor.status == .Success) && (cursor.count > 0))
-        }
+        return self.bookmarks.isBookmarked(url)
     }
 
     public func removeByURL(url: String) -> Success {
