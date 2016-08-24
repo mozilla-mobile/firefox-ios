@@ -29,8 +29,18 @@ typealias BatchUploadFunction = (lines: [String], ifUnmodifiedSince: Timestamp?,
 
 private let commitParam = NSURLQueryItem(name: "commit", value: "true")
 
-private enum AccumulateRecordError: ErrorType {
+private enum AccumulateRecordError: MaybeErrorType {
+    var description: String {
+        switch self {
+        case .Full:
+            return "Batch or payload is full."
+        case .Unknown:
+            return "Unknown errored while trying to accumulate records in batch"
+        }
+    }
+
     case Full(uploadOp: DeferredResponse)
+    case Unknown
 }
 
 public class Sync15BatchClient<T: CleartextPayloadJSON> {
@@ -114,29 +124,30 @@ public class Sync15BatchClient<T: CleartextPayloadJSON> {
             // When we're full, run the upload and try to add the record
             // after uploading since we've made room for it.
             return uploadOp >>> { self.accumulateOrUpload(record) }
-        } catch {
+        } catch let e {
             // Should never happen.
-            return succeed()
+            return deferMaybe(e as! MaybeErrorType)
         }
         return succeed()
     }
 
     private func accumulateRecord(record: UploadRecord) throws {
-        if let token = self.batchToken {
-            if fitsInBatch(record) {
-                if addToPost(record) {
-                    addToBatch(record)
-                    return
-                }
-                throw AccumulateRecordError.Full(uploadOp: self.postInBatch(token))
+        guard let token = self.batchToken else {
+            guard addToPost(record) else {
+                throw AccumulateRecordError.Full(uploadOp: self.start())
             }
+            return
+        }
+
+        guard fitsInBatch(record) else {
             throw AccumulateRecordError.Full(uploadOp: self.commitBatch(token))
         }
 
-        if addToPost(record) {
-            return
+        guard addToPost(record) else {
+            throw AccumulateRecordError.Full(uploadOp: self.postInBatch(token))
         }
-        throw AccumulateRecordError.Full(uploadOp: self.start())
+
+        addToBatch(record)
     }
 
     private func serialize(record: Record<T>) throws -> UploadRecord {
