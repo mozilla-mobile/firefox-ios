@@ -705,17 +705,19 @@ extension TabTrayController {
 
     func SELappDidBecomeActiveNotification() {
         if let navigationController = self.navigationController {
-            tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
-                guard success else {
-                    if #available(iOS 9, *) {
-                        self.transitionBetweenModes(withAnimation: false)
+            if !self.tabManager.isAuthenticating {
+                self.tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
+                    guard success else {
+                        if #available(iOS 9, *) {
+                            self.transitionBetweenModes(withAnimation: false)
+                        }
+                        return
                     }
-                    return
+                    self.revealPrivateContent()
                 }
-                self.revealPrivateContent()
             }
         } else {
-            revealPrivateContent()
+            self.revealPrivateContent()
         }
         
     }
