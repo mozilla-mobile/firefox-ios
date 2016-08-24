@@ -24,7 +24,7 @@ struct TabLocationViewUX {
     static let BaseURLFontColor = UIColor.grayColor()
     static let BaseURLPitch = 0.75
     static let HostPitch = 1.0
-    static let LocationContentInset = 8
+    static let LocationContentInset: CGFloat = 8
 
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
@@ -99,6 +99,8 @@ class TabLocationView: UIView {
         return NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
     }()
 
+    var urlTextLeading: CGFloat = 0
+
     lazy var urlTextField: UITextField = {
         let urlTextField = DisplayTextField()
 
@@ -117,7 +119,7 @@ class TabLocationView: UIView {
         return urlTextField
     }()
 
-    private lazy var lockImageView: UIImageView = {
+    lazy var lockImageView: UIImageView = {
         let lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
         lockImageView.hidden = true
         lockImageView.isAccessibilityElement = true
@@ -175,20 +177,19 @@ class TabLocationView: UIView {
         urlTextField.snp_remakeConstraints { make in
             make.top.bottom.equalTo(self)
 
-            if lockImageView.hidden {
-                make.leading.equalTo(self).offset(TabLocationViewUX.LocationContentInset)
-            } else {
-                make.leading.equalTo(self.lockImageView.snp_trailing)
-            }
+            self.urlTextLeading = self.lockImageView.hidden ? TabLocationViewUX.LocationContentInset : self.lockImageView.bounds.width
+            make.leading.equalTo(self).offset(self.urlTextLeading)
 
-            if readerModeButton.hidden {
-                make.trailing.equalTo(self).offset(-TabLocationViewUX.LocationContentInset)
-            } else {
-                make.trailing.equalTo(self.readerModeButton.snp_leading)
-            }
+            let urlTextTrailing = self.readerModeButton.hidden ? -TabLocationViewUX.LocationContentInset : -self.readerModeButton.bounds.width
+            make.trailing.equalTo(self).offset(urlTextTrailing)
         }
 
         super.updateConstraints()
+    }
+    
+    func setBackgroundAlpha(alpha: CGFloat) {
+        self.backgroundColor = self.backgroundColor?.colorWithAlphaComponent(alpha)
+        self.readerModeButton.alpha = alpha
     }
 
     func SELtapReaderModeButton() {

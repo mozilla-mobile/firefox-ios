@@ -29,7 +29,6 @@ private let ActionSheetTitleMaxLength = 120
 
 private struct BrowserViewControllerUX {
     private static let BackgroundColor = UIConstants.AppBackgroundColor
-    private static let ShowHeaderTapAreaHeight: CGFloat = 32
     private static let BookmarkStarAnimationDuration: Double = 0.5
     private static let BookmarkStarAnimationOffset: CGFloat = 80
 }
@@ -83,7 +82,6 @@ class BrowserViewController: UIViewController {
     var footer: UIView!
     var footerBackdrop: UIView!
     private var footerBackground: BlurWrapper?
-    private var topTouchArea: UIButton!
     let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
 
     // Backdrop used for displaying greyed background for private tabs
@@ -285,10 +283,6 @@ class BrowserViewController: UIViewController {
         displayedPopoverController?.dismissViewControllerAnimated(false, completion: nil)
     }
 
-    func SELtappedTopArea() {
-        scrollController.showToolbars(animated: true)
-    }
-
     func SELappWillResignActiveNotification() {
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
@@ -363,12 +357,6 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.backgroundColor = BrowserViewControllerUX.BackgroundColor
         view.addSubview(statusBarOverlay)
 
-        log.debug("BVC setting up top touch area…")
-        topTouchArea = UIButton()
-        topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), forControlEvents: UIControlEvents.TouchUpInside)
-        view.addSubview(topTouchArea)
-
         log.debug("BVC setting up URL bar…")
         // Setup the URL bar, wrapped in a view to get transparency effect
         urlBar = URLBarView()
@@ -378,6 +366,9 @@ class BrowserViewController: UIViewController {
         header = BlurWrapper(view: urlBarTopTabsContainer)
         urlBarTopTabsContainer.addSubview(urlBar)
         urlBarTopTabsContainer.addSubview(topTabsContainer)
+        let showURLBarGesture = UITapGestureRecognizer(target: self, action: #selector(didTapURLBar))
+        showURLBarGesture.cancelsTouchesInView = false
+        urlBar.addGestureRecognizer(showURLBarGesture)
         view.addSubview(header)
 
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
@@ -459,14 +450,18 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
-        log.debug("BVC viewDidLayoutSubviews…")
         super.viewDidLayoutSubviews()
         statusBarOverlay.snp_remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.topLayoutGuide.length)
         }
         self.appDidUpdateState(getCurrentAppState())
-        log.debug("BVC done.")
+    }
+    
+    func didTapURLBar(recogniser: UITapGestureRecognizer) {
+        if self.urlBar.state < 1.0 {
+            self.scrollController.showToolbars(animated: true)
+        }
     }
 
     func loadQueuedTabs() {
@@ -613,7 +608,7 @@ class BrowserViewController: UIViewController {
 
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
-        urlBar.updateAlphaForSubviews(1)
+        urlBar.state = 1.0
 
         [header,
             footer,
@@ -626,11 +621,6 @@ class BrowserViewController: UIViewController {
 
     override func updateViewConstraints() {
         super.updateViewConstraints()
-
-        topTouchArea.snp_remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
-        }
 
         readerModeBar?.snp_remakeConstraints { make in
             make.top.equalTo(self.header.snp_bottom).constraint
@@ -1557,15 +1547,6 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         self.presentViewController(longPressAlertController, animated: true, completion: nil)
-    }
-
-    func urlBarDidPressScrollToTop(urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab {
-            // Only scroll to top if we are not showing the home view controller
-            if homePanelController == nil {
-                selectedTab.webView?.scrollView.setContentOffset(CGPointZero, animated: true)
-            }
-        }
     }
 
     func urlBarLocationAccessibilityActions(urlBar: URLBarView) -> [UIAccessibilityCustomAction]? {
