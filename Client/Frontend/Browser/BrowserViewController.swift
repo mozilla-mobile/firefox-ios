@@ -42,6 +42,7 @@ class BrowserViewController: UIViewController {
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
+    private var currentTheme = ""
     private var statusBarOverlay: UIView!
     private(set) var toolbar: TabToolbar?
     private var searchController: SearchViewController?
@@ -1065,8 +1066,8 @@ class BrowserViewController: UIViewController {
             completion?(false)
             return
         }
-        
-        tabManager.authorisePrivateMode(navigationController) { success in
+
+        self.tabManager.authorisePrivateMode(navigationController) { success in
             guard success else {
                 completion?(false)
                 return
@@ -3279,12 +3280,19 @@ extension BrowserViewController: TabTrayDelegate {
 
 // MARK: Browser Chrome Theming
 extension BrowserViewController: Themeable {
-
     func applyTheme(themeName: String) {
+        // We should be able to simply return if a duplicate theme is being assigned, but
+        // the themes are a complex system that encourages subtle bugs, so it's safer not to,
+        // and only disable it for those objects that it actually causes an issue with.
+        let refreshTheme = self.currentTheme == themeName
+        self.currentTheme = themeName
+
         urlBar.applyTheme(themeName)
         toolbar?.applyTheme(themeName)
         readerModeBar?.applyTheme(themeName)
-        topTabsViewController?.applyTheme(themeName)
+        if !refreshTheme {
+            topTabsViewController?.applyTheme(themeName)
+        }
 
         switch(themeName) {
         case Theme.NormalMode:
