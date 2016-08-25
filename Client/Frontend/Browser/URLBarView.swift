@@ -395,7 +395,11 @@ class URLBarView: UIView {
                 }
             } else {
                 tabsButton.snp_remakeConstraints { make in
-                    make.centerY.equalTo(self)
+                    if self.toolbarIsShowing {
+                        make.centerY.equalTo(self)
+                    } else {
+                        make.centerY.equalTo(self.locationContainer)
+                    }
                     make.trailing.equalTo(self)
                     make.size.equalTo(UIConstants.ToolbarHeight)
                 }
