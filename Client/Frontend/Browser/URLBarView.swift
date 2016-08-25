@@ -101,8 +101,10 @@ class URLBarView: UIView {
             // Spacing
             let offsetToHide = UIConstants.ToolbarHeight + URLBarViewUX.URLBarCurveOffset - URLBarViewUX.LocationLeftPadding
             let offsetForState = inverseState * offsetToHide
-            self.tabsButton.snp_updateConstraints { make in
-                make.trailing.equalTo(offsetForState)
+            if !self.topTabsIsShowing {
+                self.tabsButton.snp_updateConstraints { make in
+                    make.trailing.equalTo(offsetForState)
+                }
             }
             self.curveShape.snp_updateConstraints { make in
                 self.rightBarConstraint = make.right.equalTo(self.defaultRightOffset + offsetForState).constraint
@@ -414,9 +416,6 @@ class URLBarView: UIView {
                     make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                     make.trailing.equalTo(self.tabsButton.snp_leading).offset(-14)
                 }
-
-                make.height.equalTo(URLBarViewUX.LocationHeight)
-                make.centerY.equalTo(self)
             }
         }
         // Fire the didSet handler to update the constraints regarding the minified URL bar

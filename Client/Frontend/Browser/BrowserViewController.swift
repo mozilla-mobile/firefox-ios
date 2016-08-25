@@ -264,7 +264,7 @@ class BrowserViewController: UIViewController {
 
         displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
 
-        // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
+        // WKWebView looks like it has a bug where it doesn't invalidate its visible area when the user
         // performs a device rotation. Since scrolling calls
         // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
         // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
