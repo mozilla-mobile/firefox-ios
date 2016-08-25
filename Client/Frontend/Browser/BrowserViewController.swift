@@ -131,13 +131,12 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
-        guard let displayedPopoverController = self.displayedPopoverController else {
-            return
-        }
-
         coordinator.animateAlongsideTransition(nil) { context in
-            self.updateDisplayedPopoverProperties?()
-            self.presentViewController(displayedPopoverController, animated: true, completion: nil)
+            self.scrollController.showToolbars(animated: false)
+            if let displayedPopoverController = self.displayedPopoverController {
+                self.updateDisplayedPopoverProperties?()
+                self.presentViewController(displayedPopoverController, animated: true, completion: nil)
+            }
         }
     }
 
@@ -272,7 +271,6 @@ class BrowserViewController: UIViewController {
             let contentOffset = scrollView.contentOffset
             coordinator.animateAlongsideTransition({ context in
                 scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
-                self.scrollController.showToolbars(animated: false)
             }, completion: { context in
                 scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
             })
