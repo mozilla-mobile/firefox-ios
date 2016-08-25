@@ -100,6 +100,7 @@ class TabLocationView: UIView {
     }()
 
     var urlTextLeading: CGFloat = 0
+    var urlTextTrailing: CGFloat = 0
 
     lazy var urlTextField: UITextField = {
         let urlTextField = DisplayTextField()
@@ -183,8 +184,8 @@ class TabLocationView: UIView {
             self.urlTextLeading = self.lockImageView.hidden ? TabLocationViewUX.LocationContentInset : self.lockImageView.bounds.width
             make.leading.equalTo(self).offset(self.urlTextLeading)
 
-            let urlTextTrailing = self.readerModeButton.hidden ? -TabLocationViewUX.LocationContentInset : -self.readerModeButton.bounds.width
-            make.trailing.equalTo(self).offset(urlTextTrailing)
+            self.urlTextTrailing = self.readerModeButton.hidden ? -TabLocationViewUX.LocationContentInset : -self.readerModeButton.bounds.width
+            make.trailing.equalTo(self).offset(self.urlTextTrailing)
         }
 
         super.updateConstraints()

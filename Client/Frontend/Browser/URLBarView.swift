@@ -113,11 +113,12 @@ class URLBarView: UIView {
                 make.top.equalTo(border + offset * inverseState)
                 make.bottom.equalTo(-border + offset * inverseState)
             }
-            if let window = self.window {
-                let urlTextWidth = min(self.locationView.urlTextField.intrinsicContentSize().width, self.locationView.urlTextField.bounds.width)
-                let maxOffset = window.bounds.width / 2 - self.locationView.convertPoint(CGPoint(x: urlTextWidth / 2, y: 0), toView: nil).x
+            if let window = self.window, text = self.locationView.urlTextField.text, font = self.locationView.urlTextField.font {
+                let urlTextWidth = min(NSString(string: text).boundingRectWithSize(self.locationView.urlTextField.bounds.size, options: .TruncatesLastVisibleLine, attributes: [NSFontAttributeName: font], context: nil).width, self.locationView.urlTextField.bounds.width)
+                let maxOffset = window.bounds.width / 2 - self.locationView.convertPoint(CGPoint(x: urlTextWidth / 2 + self.locationView.urlTextLeading, y: 0), toView: nil).x
                 self.locationView.urlTextField.snp_updateConstraints { make in
                     make.leading.equalTo(self.locationView.urlTextLeading + inverseState * maxOffset)
+                    make.trailing.equalTo(self.locationView.urlTextTrailing + inverseState * maxOffset)
                 }
                 self.locationView.lockImageView.snp_updateConstraints { make in
                     make.leading.equalTo(inverseState * maxOffset)
@@ -127,7 +128,9 @@ class URLBarView: UIView {
             // Transparency
             self.locationContainer.layer.borderColor = self.locationBorderColor.colorWithAlphaComponent(transitionValue * self.locationBorderColor.alpha).CGColor
             self.locationView.setBackgroundAlpha(transitionValue)
-            self.actionButtons.forEach { $0.alpha = transitionValue }
+            if !self.inOverlayMode {
+                self.actionButtons.forEach { $0.alpha = transitionValue }
+            }
             self.border.alpha = inverseState
         }
     }
@@ -165,6 +168,7 @@ class URLBarView: UIView {
     lazy var locationView: TabLocationView = {
         let locationView = TabLocationView()
         locationView.translatesAutoresizingMaskIntoConstraints = false
+        locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
         return locationView
@@ -173,9 +177,6 @@ class URLBarView: UIView {
     lazy var locationContainer: UIView = {
         let locationContainer = UIView()
         locationContainer.translatesAutoresizingMaskIntoConstraints = false
-
-        // Enable clipping to apply the rounded edges to subviews.
-        locationContainer.clipsToBounds = true
 
         locationContainer.layer.borderColor = self.locationBorderColor.CGColor
         locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
@@ -386,7 +387,7 @@ class URLBarView: UIView {
                 make.centerY.equalTo(self)
             }
         } else {
-            if (topTabsIsShowing) {
+            if topTabsIsShowing {
                 tabsButton.snp_remakeConstraints { make in
                     make.centerY.equalTo(self.locationContainer)
                     make.leading.equalTo(self.snp_trailing)
@@ -414,6 +415,8 @@ class URLBarView: UIView {
                 make.centerY.equalTo(self)
             }
         }
+        // Fire the didSet handler to update the constraints regarding the minified URL bar
+        self.transitionValue = (self.transitionValue)
     }
 
     func createLocationTextField() {
@@ -424,6 +427,7 @@ class URLBarView: UIView {
         guard let locationTextField = locationTextField else { return }
 
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        locationTextField.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationTextField.autocompleteDelegate = self
         locationTextField.keyboardType = UIKeyboardType.WebSearch
         locationTextField.autocorrectionType = UITextAutocorrectionType.No
