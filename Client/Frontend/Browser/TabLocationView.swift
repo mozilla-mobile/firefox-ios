@@ -150,7 +150,10 @@ class TabLocationView: UIView {
         addSubview(readerModeButton)
 
         lockImageView.snp_makeConstraints { make in
-            make.leading.centerY.equalTo(self)
+            make.leading.equalTo(self)
+            // Because the lock has greater visual weight lower down, we offset it slightly to make it look vertically centred.
+            let verticalOffset = -0.5
+            make.centerY.equalTo(self).offset(verticalOffset)
             make.width.equalTo(self.lockImageView.intrinsicContentSize().width + CGFloat(TabLocationViewUX.LocationContentInset * 2))
         }
 
