@@ -136,7 +136,7 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     }
 
     public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
-        return self.bookmarks.isBookmarked(url)
+        return self.bookmarks.isBookmarked(url, direction: self.direction)
     }
 
     public func removeByURL(url: String) -> Success {

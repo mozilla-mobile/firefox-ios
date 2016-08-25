@@ -23,14 +23,14 @@ public class SQLiteBookmarks: BookmarksModelFactorySource {
         self.favicons = FaviconsTable<Favicon>()
     }
     
-    public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
+    public func isBookmarked(url: String, direction: Direction) -> Deferred<Maybe<Bool>> {
         let sql = "SELECT id FROM " +
-            "(SELECT id FROM \(Direction.Local.valueTable) WHERE " +
+            "(SELECT id FROM \(direction.valueTable) WHERE " +
             " bmkUri = ? AND is_deleted IS NOT 1" +
             " UNION ALL " +
             " SELECT id FROM \(TableBookmarksMirror) WHERE " +
             " bmkUri = ? AND is_deleted IS NOT 1 AND is_overridden IS NOT 1" +
-        " LIMIT 1)"
+            " LIMIT 1)"
         let args: Args = [url, url]
         
         return self.db.queryReturnsResults(sql, args: args)
