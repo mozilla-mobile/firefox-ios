@@ -115,9 +115,9 @@ class URLBarView: UIView {
                 make.top.equalTo(border + offset * inverseState)
                 make.bottom.equalTo(-border + offset * inverseState)
             }
-            if let window = self.window, text = self.locationView.urlTextField.text, font = self.locationView.urlTextField.font {
+            if let text = self.locationView.urlTextField.text, font = self.locationView.urlTextField.font {
                 let urlTextWidth = min(NSString(string: text).boundingRectWithSize(self.locationView.urlTextField.bounds.size, options: .TruncatesLastVisibleLine, attributes: [NSFontAttributeName: font], context: nil).width, self.locationView.urlTextField.bounds.width)
-                let maxOffset = window.bounds.width / 2 - self.locationView.convertPoint(CGPoint(x: urlTextWidth / 2 + self.locationView.urlTextLeading, y: 0), toView: nil).x
+                let maxOffset = self.bounds.width / 2 - self.locationView.convertPoint(CGPoint(x: urlTextWidth / 2 + self.locationView.urlTextLeading, y: 0), toView: self).x
                 self.locationView.urlTextField.snp_updateConstraints { make in
                     make.leading.equalTo(self.locationView.urlTextLeading + inverseState * maxOffset)
                     make.trailing.equalTo(self.locationView.urlTextTrailing + inverseState * maxOffset)
