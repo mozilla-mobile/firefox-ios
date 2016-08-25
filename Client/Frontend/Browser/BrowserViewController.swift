@@ -459,7 +459,7 @@ class BrowserViewController: UIViewController {
     }
     
     func didTapURLBar(recogniser: UITapGestureRecognizer) {
-        if self.urlBar.state < 1.0 {
+        if self.urlBar.transitionValue < 1.0 {
             self.scrollController.showToolbars(animated: true)
         }
     }
@@ -608,7 +608,7 @@ class BrowserViewController: UIViewController {
 
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
-        urlBar.state = 1.0
+        urlBar.transitionValue = 1.0
 
         [header,
             footer,

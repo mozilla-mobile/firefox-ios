@@ -47,18 +47,16 @@ class TabScrollingController: NSObject {
 
     private var urlBarState: CGFloat {
         get {
-            return self.urlBar?.state ?? 0.0
+            return self.urlBar?.transitionValue ?? 0.0
         }
         set {
             guard let urlBar = self.urlBar else {
                 return
             }
-            urlBar.state = newValue
-            let inverseState = 1.0 - urlBar.state
+            urlBar.transitionValue = newValue
+            let inverseState = 1.0 - urlBar.transitionValue
             self.headerTopConstraint?.updateOffset(inverseState * self.minifiedHeaderTopOffset)
             self.footerBottomConstraint?.updateOffset(inverseState * self.bottomScrollHeight)
-            self.header?.superview?.setNeedsLayout()
-            self.footer?.superview?.setNeedsLayout()
         }
     }
 
@@ -189,7 +187,6 @@ private extension TabScrollingController {
             scrollView?.contentOffset = CGPoint(x: contentOffset.x, y: contentOffset.y - delta)
         }
 
-//        print("\(updatedOffset) \(clamp(updatedOffset, min: self.minifiedHeaderTopOffset, max: 0)) \(1.0 - (clamp(updatedOffset, min: self.minifiedHeaderTopOffset, max: 0) / self.minifiedHeaderTopOffset))")
         self.urlBarState = 1.0 - (clamp(updatedOffset, min: self.minifiedHeaderTopOffset, max: 0) / self.minifiedHeaderTopOffset)
     }
 

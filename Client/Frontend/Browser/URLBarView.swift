@@ -92,11 +92,11 @@ class URLBarView: UIView {
     }
 
     // The transition between the URL bar being fully displayed (1.0) and being minimised (0.0)
-    var state: CGFloat = 1.0 {
+    var transitionValue: CGFloat = 1.0 {
         didSet {
-            let inverseState = 1.0 - state
+            let inverseState = 1.0 - transitionValue
             // Interaction
-            self.locationContainer.userInteractionEnabled = state == 1.0
+            self.locationContainer.userInteractionEnabled = transitionValue == 1.0
 
             // Spacing
             let offsetToHide = UIConstants.ToolbarHeight + URLBarViewUX.URLBarCurveOffset - URLBarViewUX.LocationLeftPadding
@@ -125,9 +125,9 @@ class URLBarView: UIView {
             }
 
             // Transparency
-            self.locationContainer.layer.borderColor = self.locationBorderColor.colorWithAlphaComponent(state * self.locationBorderColor.alpha).CGColor
-            self.locationView.setBackgroundAlpha(state)
-            self.actionButtons.forEach { $0.alpha = state }
+            self.locationContainer.layer.borderColor = self.locationBorderColor.colorWithAlphaComponent(transitionValue * self.locationBorderColor.alpha).CGColor
+            self.locationView.setBackgroundAlpha(transitionValue)
+            self.actionButtons.forEach { $0.alpha = transitionValue }
             self.border.alpha = inverseState
         }
     }
