@@ -290,7 +290,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func launchFromURL(params: LaunchParams) {
         let isPrivate = params.isPrivate ?? false
-        if let newURL = params.url {
+        if let newURL = params.url where !newURL.isLocal {
             self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
         } else {
             self.browserViewController.openBlankNewTabAndFocus(isPrivate: isPrivate)
