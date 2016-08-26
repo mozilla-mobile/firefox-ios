@@ -266,12 +266,13 @@ extension NSURL {
     }
 
     public func havingRemovedAuthorisationComponents() -> NSURL {
-        if let urlComponents = NSURLComponents(URL: self, resolvingAgainstBaseURL: false) {
-            urlComponents.user = nil
-            urlComponents.password = nil
-            if let url = urlComponents.URL {
-                return url
-            }
+        guard let urlComponents = NSURLComponents(URL: self, resolvingAgainstBaseURL: false) else {
+            return self
+        }
+        urlComponents.user = nil
+        urlComponents.password = nil
+        if let url = urlComponents.URL {
+            return url
         }
         return self
     }
