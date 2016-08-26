@@ -162,6 +162,32 @@ extension KIFUITestActor {
             return stepResult
         }
     }
+    
+    /**
+     * Long presses a WKWebView element with the given label, for a given duration.
+     */
+    func longPressWebViewElementWithAccessibilityLabel(text: String, duration: NSTimeInterval) {
+        let webView = getWebViewWithKIFHelper()
+        var stepResult = KIFTestStepResult.Wait
+        
+        let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+        webView.evaluateJavaScript("KIFHelper.longPressElementWithAccessibilityLabel(\"\(escaped)\", \(duration * 1000))") { success, _ in
+            if success as? Bool == false {
+                stepResult =  KIFTestStepResult.Failure
+            } else {
+                dispatch_after(UInt64(duration * 1000), dispatch_get_main_queue()) {
+                    stepResult = KIFTestStepResult.Success
+                }
+            }
+        }
+        
+        runBlock { error in
+            if stepResult == KIFTestStepResult.Failure {
+                error.memory = NSError(domain: "KIFHelper", code: 0, userInfo: [NSLocalizedDescriptionKey: "Accessibility label not found in webview: \(escaped)"])
+            }
+            return stepResult
+        }
+    }
 
     /**
      * Determines whether an element in the page exists.
@@ -220,7 +246,11 @@ class BrowserUtils {
             tester.tapViewWithAccessibilityLabel("Cancel")
         } catch _ {
         }
-        tester.tapViewWithAccessibilityLabel("Show Tabs")
+        do {
+            try tester.tryFindingTappableViewWithAccessibilityLabel("Show Tabs")
+            tester.tapViewWithAccessibilityLabel("Show Tabs")
+        } catch _ {
+        }
         let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
 
         // Clear all private tabs if we're running iOS 9
@@ -341,13 +371,13 @@ class SimplePageServer {
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
-        for page in ["findPage", "noTitle", "readablePage", "JSPrompt"] {
+        for page in ["findPage", "noTitle", "readablePage", "JSPrompt", "pageWithLink"] {
             webServer.addHandlerForMethod("GET", path: "/\(page).html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
                 return GCDWebServerDataResponse(HTML: self.getPageData(page))
             }
         }
 
-        // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
+        // we may create more than one of these but we need to give them unique accessibility ids in the tab manager so we'll pass in a page number
         webServer.addHandlerForMethod("GET", path: "/scrollablePage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var pageData = self.getPageData("scrollablePage")
             let page = Int((request.query["page"] as! String))!

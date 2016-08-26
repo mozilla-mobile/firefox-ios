@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+import SwiftKeychainWrapper
 
 private let log = Logger.browserLogger
 
@@ -85,6 +86,16 @@ class TabManager: NSObject {
     private let prefs: Prefs
     var selectedIndex: Int { return _selectedIndex }
     var tempTabs: [Tab]?
+    
+    var isInPrivateMode = false {
+        didSet {
+            if oldValue != isInPrivateMode {
+                self.setAppStateForTabTray()
+            }
+        }
+    }
+    var needsAuthentication = true
+    var isAuthenticating = false
 
     var normalTabs: [Tab] {
         assert(NSThread.isMainThread())
@@ -159,6 +170,60 @@ class TabManager: NSObject {
 
         return nil
     }
+    
+    weak var appStateDelegate: AppStateDelegate?
+    
+    private func setAppStateForTabTray() {
+        let state = mainStore.updateState(.TabTray(tabTrayState: TabTrayState(isPrivate: self.isInPrivateMode)))
+        self.appStateDelegate?.appDidUpdateState(state)
+    }
+    
+    func authorisePrivateMode(navigationController: UINavigationController, toRemainInPrivateMode reverseAuthorisationRequirement: Bool, changePrivacyMode: Bool = true, completion: Bool -> ()) {
+        let succeedInAuthorising = {
+            self.needsAuthentication = false
+            self.isAuthenticating = false
+            if changePrivacyMode {
+                self.isInPrivateMode = !reverseAuthorisationRequirement ? !self.isInPrivateMode : self.isInPrivateMode
+            }
+            completion(true)
+        }
+        let failInAuthorising = {
+            self.isAuthenticating = false
+            self.isInPrivateMode = false
+            completion(false)
+        }
+        self.isAuthenticating = true
+        if self.isInPrivateMode != reverseAuthorisationRequirement || reverseAuthorisationRequirement && !self.needsAuthentication {
+            succeedInAuthorising()
+            return
+        }
+        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+            succeedInAuthorising()
+            return
+        }
+        if authInfo.requiresValidation(.PrivateBrowsing) {
+            AppAuthenticator.presentTouchAuthenticationUsingInfo(authInfo,
+                touchIDReason: AuthenticationStrings.privateModeReason,
+                success: succeedInAuthorising,
+                cancel: failInAuthorising,
+                fallback: {
+                    AppAuthenticator.presentPasscodeAuthentication(navigationController,
+                        success: {
+                            navigationController.dismissViewControllerAnimated(true) {
+                                succeedInAuthorising()
+                            }
+                        },
+                    cancel: failInAuthorising)
+                }
+            )
+        } else {
+            succeedInAuthorising()
+        }
+    }
+    
+    func authorisePrivateMode(navigationController: UINavigationController, changePrivacyMode: Bool = true, completion: Bool -> ()) {
+        authorisePrivateMode(navigationController, toRemainInPrivateMode: false, changePrivacyMode: changePrivacyMode, completion: completion)
+    }
 
     func getTabFor(url: NSURL) -> Tab? {
         assert(NSThread.isMainThread())
@@ -189,6 +254,7 @@ class TabManager: NSObject {
         preserveTabs()
 
         assert(tab === selectedTab, "Expected tab is selected")
+        self.isInPrivateMode = tab?.isPrivate ?? self.isInPrivateMode
         selectedTab?.createWebview()
 
         for delegate in delegates {
@@ -721,6 +787,8 @@ extension TabManager {
         if tabToSelect == nil {
             tabToSelect = tabs.first
         }
+        
+        self.isInPrivateMode = tabToSelect?.isPrivate ?? false
 
         log.debug("Done adding tabs.")
 
@@ -930,5 +998,12 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
             }
 
             decisionHandler(res)
+    }
+}
+
+public class AuthorisationError: MaybeErrorType {
+    public let description: String
+    public init(description: String) {
+        self.description = description
     }
 }

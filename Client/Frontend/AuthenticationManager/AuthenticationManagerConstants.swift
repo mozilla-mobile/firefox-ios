@@ -29,6 +29,12 @@ struct AuthenticationStrings {
 
     static let requirePasscode =
         NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately'")
+    
+    static let authenticateFeaturesWithTouchIDPasscode =
+        NSLocalizedString("Use Touch ID & Passcode to access:", tableName: "AuthenticationManager", comment: "Label for the list of features for which security can be enabled in Settings, with Touch ID enabled")
+    
+    static let authenticateFeaturesWithPasscode =
+        NSLocalizedString("Use Passcode to access:", tableName: "AuthenticationManager", comment: "Label for the list of features for which security can be enabled in Settings, with Touch ID disabled")
 
     static let enterAPasscode =
         NSLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when entering a new passcode")
@@ -77,6 +83,9 @@ struct AuthenticationStrings {
 
     static let loginsTouchReason =
         NSLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
+    
+    static let privateModeReason =
+        NSLocalizedString("Use your fingerprint to start browsing privately.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when entering private mode")
 
     static let requirePasscodeTouchReason =
         NSLocalizedString("touchid.require.passcode.reason.label",
@@ -84,9 +93,9 @@ struct AuthenticationStrings {
                           tableName: "AuthenticationManager",
                           comment: "Touch ID prompt subtitle when accessing the require passcode setting")
 
-    static let disableTouchReason =
-        NSLocalizedString("touchid.disable.reason.label",
-                          value: "Use your fingerprint to disable Touch ID.",
+    static let disableAuthenticationReason =
+        NSLocalizedString("authentication.disable.reason.label",
+                          value: "Use your fingerprint to disable authentication for this action.",
                           tableName: "AuthenticationManager",
                           comment: "Touch ID prompt subtitle when disabling Touch ID")
 
@@ -101,4 +110,8 @@ struct AuthenticationStrings {
 
     static let maximumAttemptsReachedNoTime =
         NSLocalizedString("Maximum attempts reached. Please try again later.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts.")
+
+    static let authenticationRequiredForPrivateBrowsing = NSLocalizedString("Private Browsing", tableName:  "AuthenticationManager", comment: "Label used as a setting item to enable or disable authentication for Private Browsing")
+
+    static let authenticationRequiredForLoginsScreen = NSLocalizedString("Logins", tableName:  "AuthenticationManager", comment: "Label used as a setting item to enable or disable authentication for accessing logins")
 }

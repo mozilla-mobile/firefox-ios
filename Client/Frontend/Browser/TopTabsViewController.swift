@@ -24,7 +24,7 @@ struct TopTabsUX {
 protocol TopTabsDelegate: class {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab()
-    func didTogglePrivateMode(cachedTab: Tab?)
+    func didAttemptToTogglePrivateMode(cachedTab: Tab?, completion: Bool -> ())
     func topTabsDidChangeTab()
 }
 
@@ -181,7 +181,12 @@ class TopTabsViewController: UIViewController {
         delegate?.topTabsDidPressNewTab()
         collectionView.performBatchUpdates({ _ in
             let count = self.collectionView.numberOfItemsInSection(0)
-            self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: count, inSection: 0)])
+            // This check prevents any crashes due to self.collectionView's data being reloaded between the new tab being
+            // added to the data source and the batch updates being performed, to animate the new tab's appearance.
+            // This should never happen, but extra safety checks are always a good idea, as this has been a trouble spot before.
+            if count < self.collectionView.dataSource?.collectionView(self.collectionView, numberOfItemsInSection: 0) {
+                self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: count, inSection: 0)])
+            }
             }, completion: { finished in
                 if finished {
                     self.scrollToCurrentTab()
@@ -190,9 +195,12 @@ class TopTabsViewController: UIViewController {
     }
     
     func togglePrivateModeTapped() {
-        delegate?.didTogglePrivateMode(isPrivate ? lastNormalTab : lastPrivateTab)
-        self.collectionView.reloadData()
-        self.scrollToCurrentTab(false, centerCell: true)
+        delegate?.didAttemptToTogglePrivateMode(isPrivate ? lastNormalTab : lastPrivateTab) { success in
+            if success {
+                self.collectionView.reloadData()
+                self.scrollToCurrentTab(false, centerCell: true)
+            }
+        }
     }
     
     func closeTab() {
@@ -223,6 +231,7 @@ extension TopTabsViewController: Themeable {
     func applyTheme(themeName: String) {
         tabsButton.applyTheme(themeName)
         isPrivate = (themeName == Theme.PrivateMode)
+        collectionView.reloadData()
     }
 }
 
@@ -306,6 +315,10 @@ extension TopTabsViewController: UICollectionViewDataSource {
                 tabCell.favicon.image = defaultFavicon
             }
         }
+
+        let alpha: CGFloat = tabManager.isInPrivateMode && tabManager.isAuthenticating ? 0 : 1
+        tabCell.titleText.alpha = alpha
+        tabCell.favicon.alpha = alpha
         
         return tabCell
     }

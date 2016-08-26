@@ -125,13 +125,13 @@ class QuickActions: NSObject {
         }
     }
 
-    private func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController, isPrivate: Bool) {
+    func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController, isPrivate: Bool) {
         bvc.openBlankNewTabAndFocus(isPrivate: isPrivate)
     }
 
     private func handleOpenURL(withBrowserViewController bvc: BrowserViewController, urlToOpen: NSURL) {
         // open bookmark in a non-private browsing tab
-        bvc.switchToPrivacyMode(isPrivate: false)
+        bvc.switchToPrivacyMode(isPrivate: false, completion: nil)
 
         // find out if bookmarked URL is currently open
         // if so, open to that tab,

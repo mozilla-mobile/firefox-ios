@@ -15,6 +15,7 @@ import Account
 import ReadingList
 import MobileCoreServices
 import WebImage
+import SwiftKeychainWrapper
 
 private let log = Logger.browserLogger
 
@@ -289,22 +290,20 @@ class BrowserViewController: UIViewController {
         scrollController.showToolbars(animated: true)
     }
 
-    func SELappWillResignActiveNotification() {
+    private func concealPrivateContent() {
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
-        guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
-            return
-        }
-
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
         urlBar.locationContainer.alpha = 0
         topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
-        presentedViewController?.view.alpha = 0
+        if !((presentedViewController as? UINavigationController)?.topViewController is PasscodeEntryViewController) {
+            presentedViewController?.view.alpha = 0
+        }
     }
 
-    func SELappDidBecomeActiveNotification() {
+    private func revealPrivateContent() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
@@ -315,17 +314,45 @@ class BrowserViewController: UIViewController {
             self.presentedViewController?.view.alpha = 1
             self.view.backgroundColor = UIColor.clearColor()
         }, completion: { _ in
-            self.webViewContainerBackdrop.alpha = 0
+                self.webViewContainerBackdrop.alpha = 0
         })
+    }
 
+    func SELappWillResignActiveNotification() {
+        guard tabManager.isInPrivateMode else {
+            return
+        }
+        tabManager.needsAuthentication = true
+        concealPrivateContent()
+    }
+
+    func SELappDidBecomeActiveNotification() {
+        if let navigationController = self.navigationController {
+            if self.tabTrayController == nil && !self.tabManager.isAuthenticating {
+                tabManager.authorisePrivateMode(navigationController, toRemainInPrivateMode: true) { success in
+                    guard success else {
+                        if #available(iOS 9, *) {
+                            if self.navigationController?.topViewController === self {
+                                self.openTabTray()
+                            }
+                        }
+                        return
+                    }
+                    self.revealPrivateContent()
+                }
+            }
+        } else {
+            revealPrivateContent()
+        }
+        
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-        scrollController.showToolbars(animated: false)
+        self.scrollController.showToolbars(animated: false)
     }
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: BookmarkStatusChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
     }
 
@@ -528,6 +555,10 @@ class BrowserViewController: UIViewController {
         updateTabCountUsingTabManager(tabManager, animated: false)
         log.debug("BVC done.")
 
+        if !tabManager.isAuthenticating {
+            self.revealPrivateContent()
+        }
+
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(BrowserViewController.openSettings),
                                                          name: NotificationStatusNotificationTapped,
@@ -594,7 +625,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func showQueuedAlertIfAvailable() {
-        if var queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
+        if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
             alertController.delegate = self
             presentViewController(alertController, animated: true, completion: nil)
@@ -735,7 +766,7 @@ class BrowserViewController: UIViewController {
             }
         }
         homePanelController.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
-        homePanelController.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
+        homePanelController.isPrivateMode = self.tabManager.isInPrivateMode
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
@@ -1029,14 +1060,30 @@ class BrowserViewController: UIViewController {
     // Mark: Opening New Tabs
 
     @available(iOS 9, *)
-    func switchToPrivacyMode(isPrivate isPrivate: Bool ) {
-        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
-
-        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-        if tabTrayController.privateMode != isPrivate {
-            tabTrayController.changePrivacyMode(isPrivate)
+    func switchToPrivacyMode(isPrivate isPrivate: Bool, completion: (Bool -> ())?) {
+        guard isPrivate && !self.tabManager.isInPrivateMode else {
+            completion?(true)
+            return
         }
-        self.tabTrayController = tabTrayController
+        guard let navigationController = self.navigationController else {
+            completion?(false)
+            return
+        }
+
+        let previousModeWasPrivate = self.tabManager.isInPrivateMode
+        self.tabManager.authorisePrivateMode(navigationController) { success in
+            guard success else {
+                completion?(false)
+                return
+            }
+            if let tabTrayController = self.tabTrayController {
+                tabTrayController.transitionBetweenModes()
+            }
+            if previousModeWasPrivate != self.tabManager.isInPrivateMode {
+                self.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+            }
+            completion?(true)
+        }
     }
 
     func switchToTabForURLOrOpen(url: NSURL, isPrivate: Bool = false) {
@@ -1048,7 +1095,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func openURLInNewTab(url: NSURL?, isPrivate: Bool = false) {
+    func openURLInNewTab(url: NSURL?, isPrivate: Bool, completion: (Bool -> ())? = nil) {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
         }
@@ -1059,17 +1106,43 @@ class BrowserViewController: UIViewController {
             request = nil
         }
         if #available(iOS 9, *) {
-            switchToPrivacyMode(isPrivate: isPrivate)
-            tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+            switchToPrivacyMode(isPrivate: isPrivate) { success in
+                if success {
+                    self.tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+                }
+                completion?(success)
+            }
         } else {
             tabManager.addTabAndSelect(request)
         }
+        completion?(true)
+    }
+    
+    func openURLInNewTab(url: NSURL?, completion: (Bool -> ())? = nil) {
+        openURLInNewTab(url, isPrivate: false, completion: completion)
     }
 
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
         popToBVC()
-        openURLInNewTab(nil, isPrivate: isPrivate)
-        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+        openURLInNewTab(nil, isPrivate: isPrivate) { success in
+            if success {
+                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+            }
+        }
+    }
+    
+    func openTabTray() {
+        self.webViewContainerToolbar.hidden = true
+        updateFindInPageVisibility(visible: false)
+        
+        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
+        
+        if let tab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(tab)
+        }
+        
+        self.navigationController?.pushViewController(tabTrayController, animated: true)
+        self.tabTrayController = tabTrayController
     }
 
     private func popToBVC() {
@@ -1203,24 +1276,24 @@ class BrowserViewController: UIViewController {
     }
 
     func reloadTab() {
-        if(homePanelController == nil) {
+        if homePanelController == nil {
             tabManager.selectedTab?.reload()
         }
     }
 
     func goBack() {
-        if(tabManager.selectedTab?.canGoBack == true && homePanelController == nil) {
+        if tabManager.selectedTab?.canGoBack == true && homePanelController == nil {
             tabManager.selectedTab?.goBack()
         }
     }
     func goForward() {
-        if(tabManager.selectedTab?.canGoForward == true && homePanelController == nil) {
+        if tabManager.selectedTab?.canGoForward == true && homePanelController == nil {
             tabManager.selectedTab?.goForward()
         }
     }
 
     func findOnPage() {
-        if(homePanelController == nil) {
+        if homePanelController == nil {
             tab( (tabManager.selectedTab)!, didSelectFindInPageForSelection: "")
         }
     }
@@ -1238,7 +1311,7 @@ class BrowserViewController: UIViewController {
     }
 
     func closeTab() {
-        if(tabManager.tabs.count > 1) {
+        if tabManager.tabs.count > 1 {
             tabManager.removeTab(tabManager.selectedTab!)
         } else {
             //need to close the last tab and show the favorites screen thing
@@ -1246,20 +1319,20 @@ class BrowserViewController: UIViewController {
     }
 
     func nextTab() {
-        if(tabManager.selectedIndex < (tabManager.tabs.count - 1) ) {
+        if tabManager.selectedIndex < (tabManager.tabs.count - 1) {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex+1])
         } else {
-            if(tabManager.tabs.count > 1) {
+            if tabManager.tabs.count > 1 {
                 tabManager.selectTab(tabManager.tabs[0])
             }
         }
     }
 
     func previousTab() {
-        if(tabManager.selectedIndex > 0) {
+        if tabManager.selectedIndex > 0 {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex-1])
         } else {
-            if(tabManager.tabs.count > 1) {
+            if tabManager.tabs.count > 1 {
                 tabManager.selectTab(tabManager.tabs[tabManager.count-1])
             }
         }
@@ -1464,17 +1537,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
-        self.webViewContainerToolbar.hidden = true
-        updateFindInPageVisibility(visible: false)
-
-        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-
-        if let tab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(tab)
-        }
-
-        self.navigationController?.pushViewController(tabTrayController, animated: true)
-        self.tabTrayController = tabTrayController
+        self.openTabTray()
     }
 
     func urlBarDidPressReaderMode(urlBar: URLBarView) {
@@ -2035,12 +2098,9 @@ extension BrowserViewController: TabManagerDelegate {
         if let tab = selected, webView = tab.webView {
             updateURLBarDisplayURL(tab)
 
-            if tab.isPrivate {
-                readerModeCache = MemoryReaderModeCache.sharedInstance
-                applyTheme(Theme.PrivateMode)
-            } else {
-                readerModeCache = DiskReaderModeCache.sharedInstance
-                applyTheme(Theme.NormalMode)
+            readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
+            if tab.isPrivate != previous?.isPrivate {
+                applyTheme(tab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
             }
             ReaderModeHandlers.readerModeCache = readerModeCache
 
@@ -2144,13 +2204,17 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
+        if tabManager.isInPrivateMode {
+            concealPrivateContent()
+        }
+        SELappDidBecomeActiveNotification()
     }
-    
+
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {
-        guard !tabTrayController.privateMode else {
+        guard !self.tabManager.isInPrivateMode else {
             return
         }
-        
+
         if let undoToast = toast {
             let time = dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(ButtonToastUX.ToastDelay * Double(NSEC_PER_SEC)))
             dispatch_after(time, dispatch_get_main_queue()) {
@@ -2929,9 +2993,16 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             if #available(iOS 9, *) {
                 let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
                 let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
-                    self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)
-                    })
+                    guard let navigationController = self.navigationController else {
+                        return
+                    }
+                    self.tabManager.authorisePrivateMode(navigationController, changePrivacyMode: false) { success in
+                        if success {
+                            self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
+                                self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)
+                            })
+                        }
+                    }
                 }
                 actionSheetController.addAction(openNewPrivateTabAction)
             }
@@ -3212,7 +3283,6 @@ extension BrowserViewController: TabTrayDelegate {
 
 // MARK: Browser Chrome Theming
 extension BrowserViewController: Themeable {
-
     func applyTheme(themeName: String) {
         urlBar.applyTheme(themeName)
         toolbar?.applyTheme(themeName)
@@ -3361,11 +3431,24 @@ extension BrowserViewController: TopTabsDelegate {
     }
     
     func topTabsDidPressNewTab() {
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        openBlankNewTabAndFocus(isPrivate: isPrivate)
+        openBlankNewTabAndFocus(isPrivate: self.tabManager.isInPrivateMode)
     }
     
-    func didTogglePrivateMode(cachedTab: Tab?) {
+    func didAttemptToTogglePrivateMode(cachedTab: Tab?, completion: Bool -> ()) {
+        if #available(iOS 9, *) {
+            switchToPrivacyMode(isPrivate: !self.tabManager.isInPrivateMode) { success in
+                if success {
+                    self.togglePrivateMode(cachedTab)
+                }
+                completion(success)
+            }
+        } else {
+            togglePrivateMode(cachedTab)
+        }
+        completion(true)
+    }
+    
+    func togglePrivateMode(cachedTab: Tab?) {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }
