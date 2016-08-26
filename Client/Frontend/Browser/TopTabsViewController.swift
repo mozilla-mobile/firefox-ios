@@ -166,6 +166,17 @@ class TopTabsViewController: UIViewController {
         }
     }
     
+    func switchForegroundStatus(isInForeground reveal: Bool) {
+        // Called when the app leaves the foreground to make sure no information is inadvertently revealed
+        if let cells = self.collectionView.visibleCells() as? [TopTabCell] {
+            let alpha: CGFloat = reveal ? 1 : 0
+            for cell in cells {
+                cell.titleText.alpha = alpha
+                cell.favicon.alpha = alpha
+            }
+        }
+    }
+    
     func updateTabCount(count: Int, animated: Bool = true) {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
