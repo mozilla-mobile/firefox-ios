@@ -111,8 +111,8 @@ class TopTabsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
         collectionView.reloadData()
-        dispatch_async(dispatch_get_main_queue()) { 
-             self.scrollToCurrentTab(false, centerCell: true)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.scrollToCurrentTab(false, centerCell: true)
         }
     }
     
@@ -271,7 +271,6 @@ class TopTabsViewController: UIViewController {
                 if item == indexPath.item {
                     let cellPosition = cell.contentView.convertPoint(cell.bounds.center, toView: self.collectionView)
                     self.dragState = ExtendedTabDragState(cell: cell, indexPath: indexPath, offset: CGPoint(x: pressPosition.x - cellPosition.x, y: pressPosition.y - cellPosition.y), hasBegun: false)
-                    self.view.userInteractionEnabled = false
                     self.didSelectTabAtIndex(indexPath.item)
                     continue
                 }
@@ -282,6 +281,7 @@ class TopTabsViewController: UIViewController {
             if let dragState = self.dragState {
                 if !dragState.hasBegun {
                     dragState.hasBegun = true
+                    self.view.userInteractionEnabled = false
                     self.collectionView.beginInteractiveMovementForItemAtIndexPath(dragState.indexPath)
                 }
                 if let view = gesture.view {
