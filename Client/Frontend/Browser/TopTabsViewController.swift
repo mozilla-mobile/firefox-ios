@@ -32,18 +32,12 @@ protocol TopTabCellDelegate: class {
     func tabCellDidClose(cell: TopTabCell)
 }
 
-class XUICollectionView: UICollectionView {
-    override func reloadData() {
-        super.reloadData()
-    }
-}
-
 class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     var isPrivate = false
     lazy var collectionView: UICollectionView = {
-        let collectionView = XUICollectionView(frame: CGRectZero, collectionViewLayout: TopTabsViewLayout())
+        let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: TopTabsViewLayout())
         collectionView.registerClass(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -185,11 +179,14 @@ class TopTabsViewController: UIViewController {
             }
         }
         delegate?.topTabsDidPressNewTab()
-        // If this causes a crash, it's probably because self.collectionView's data is being reloaded between the new tab
-        // being added to the data source and the batch updates being performed, to animate the new tab's appearance.
         collectionView.performBatchUpdates({ _ in
             let count = self.collectionView.numberOfItemsInSection(0)
-            self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: count, inSection: 0)])
+            // This check prevents any crashes due to self.collectionView's data being reloaded between the new tab being
+            // added to the data source and the batch updates being performed, to animate the new tab's appearance.
+            // This should never happen, but extra safety checks are always a good idea, as this has been a trouble spot before.
+            if count < self.collectionView.dataSource?.collectionView(self.collectionView, numberOfItemsInSection: 0) {
+                self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: count, inSection: 0)])
+            }
             }, completion: { finished in
                 if finished {
                     self.scrollToCurrentTab()

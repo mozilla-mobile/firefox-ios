@@ -42,7 +42,6 @@ class BrowserViewController: UIViewController {
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
-    private var currentTheme = ""
     private var statusBarOverlay: UIView!
     private(set) var toolbar: TabToolbar?
     private var searchController: SearchViewController?
@@ -1062,11 +1061,16 @@ class BrowserViewController: UIViewController {
 
     @available(iOS 9, *)
     func switchToPrivacyMode(isPrivate isPrivate: Bool, completion: (Bool -> ())?) {
+        guard isPrivate && !self.tabManager.isInPrivateMode else {
+            completion?(true)
+            return
+        }
         guard let navigationController = self.navigationController else {
             completion?(false)
             return
         }
 
+        let previousModeWasPrivate = self.tabManager.isInPrivateMode
         self.tabManager.authorisePrivateMode(navigationController) { success in
             guard success else {
                 completion?(false)
@@ -1075,7 +1079,9 @@ class BrowserViewController: UIViewController {
             if let tabTrayController = self.tabTrayController {
                 tabTrayController.transitionBetweenModes()
             }
-            self.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+            if previousModeWasPrivate != self.tabManager.isInPrivateMode {
+                self.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+            }
             completion?(true)
         }
     }
@@ -2092,12 +2098,9 @@ extension BrowserViewController: TabManagerDelegate {
         if let tab = selected, webView = tab.webView {
             updateURLBarDisplayURL(tab)
 
-            if tab.isPrivate {
-                readerModeCache = MemoryReaderModeCache.sharedInstance
-                applyTheme(Theme.PrivateMode)
-            } else {
-                readerModeCache = DiskReaderModeCache.sharedInstance
-                applyTheme(Theme.NormalMode)
+            readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
+            if tab.isPrivate != previous?.isPrivate {
+                applyTheme(tab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
             }
             ReaderModeHandlers.readerModeCache = readerModeCache
 
@@ -3281,18 +3284,10 @@ extension BrowserViewController: TabTrayDelegate {
 // MARK: Browser Chrome Theming
 extension BrowserViewController: Themeable {
     func applyTheme(themeName: String) {
-        // We should be able to simply return if a duplicate theme is being assigned, but
-        // the themes are a complex system that encourages subtle bugs, so it's safer not to,
-        // and only disable it for those objects that it actually causes an issue with.
-        let refreshTheme = self.currentTheme == themeName
-        self.currentTheme = themeName
-
         urlBar.applyTheme(themeName)
         toolbar?.applyTheme(themeName)
         readerModeBar?.applyTheme(themeName)
-        if !refreshTheme {
-            topTabsViewController?.applyTheme(themeName)
-        }
+        topTabsViewController?.applyTheme(themeName)
 
         switch(themeName) {
         case Theme.NormalMode:
