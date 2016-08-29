@@ -33,12 +33,12 @@ public enum FxADeviceRegistratorError: MaybeErrorType {
 }
 
 public class FxADeviceRegistrator {
-    public static func registerOrUpdateDevice(account: FirefoxAccount, state: MarriedState) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
+    public static func registerOrUpdateDevice(account: FirefoxAccount, state: MarriedState, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
         if let _ = account.fxaDeviceId where account.deviceRegistrationVersion == DeviceRegistrationVersion {
             return deferMaybe(FxADeviceRegistrationResult.AlreadyRegistered)
         }
 
-        let client = FxAClient10(endpoint: account.configuration.authEndpointURL)
+        let client = client ?? FxAClient10(endpoint: account.configuration.authEndpointURL)
         let sessionToken = state.sessionToken
         let name = DeviceInfo.defaultClientName()
         let device: FxADevice
