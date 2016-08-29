@@ -92,7 +92,7 @@ public class FxADeviceRegistrator {
     private static func recoverFromDeviceSessionConflict(account: FirefoxAccount, client: FxAClient10, sessionToken: NSData) -> Deferred<Maybe<String>> {
         log.warning("Device session conflict. Attempting to find the current device ID…")
         return client.devices(sessionToken) >>== { response in
-            guard let currentDevice = response.devices.find({ $0.isCurrentDevice! }) else {
+            guard let currentDevice = response.devices.find({ $0.isCurrentDevice }) else {
                 return deferMaybe(FxADeviceRegistratorError.CurrentDeviceNotFound)
             }
 

@@ -9,9 +9,9 @@ public struct FxADevice {
     let name: String
     let id: String?
     let type: String?
-    let isCurrentDevice: Bool?
+    let isCurrentDevice: Bool
 
-    private init(name: String, id: String?, type: String?, isCurrentDevice: Bool?) {
+    private init(name: String, id: String?, type: String?, isCurrentDevice: Bool = false) {
         self.name = name
         self.id = id
         self.type = type
@@ -19,11 +19,11 @@ public struct FxADevice {
     }
 
     static func forRegister(name: String, type: String) -> FxADevice {
-        return FxADevice(name: name, id: nil, type: type, isCurrentDevice: nil)
+        return FxADevice(name: name, id: nil, type: type)
     }
 
     static func forUpdate(name: String, id: String) -> FxADevice {
-        return FxADevice(name: name, id: id, type: nil, isCurrentDevice: nil)
+        return FxADevice(name: name, id: id, type: nil)
     }
 
     func toJSON() -> JSON {
