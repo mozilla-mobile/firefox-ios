@@ -1,0 +1,393 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C015EF6919992AC70044A194 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C015EF6819992AC70044A194 /* ChangePasswordViewController.m */; };
+		C03D74781AC09700001A4D4A /* OnePasswordExtension.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C03D74771AC096E8001A4D4A /* OnePasswordExtension.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C03D74791AC09706001A4D4A /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C03D74771AC096E8001A4D4A /* OnePasswordExtension.framework */; };
+		C0F0C18819889456000B261F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C0F0C18719889456000B261F /* AppDelegate.m */; };
+		C0F0C19019889467000B261F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0F0C18A19889467000B261F /* LoginViewController.m */; };
+		C0F0C19119889467000B261F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0F0C18C19889467000B261F /* RegisterViewController.m */; };
+		C0F0C19219889467000B261F /* ThankYouViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0F0C18E19889467000B261F /* ThankYouViewController.m */; };
+		C0F0C19519889479000B261F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0F0C19419889479000B261F /* Images.xcassets */; };
+		C0F0C19C198894F8000B261F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C0F0C19B198894F8000B261F /* main.m */; };
+		C0F0C19D19889519000B261F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0F0C19619889498000B261F /* Main.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C03D74761AC096E8001A4D4A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C03D74721AC096E8001A4D4A /* OnePasswordExtension.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9C3F4D8C1A59ACDC004B3ECE;
+			remoteInfo = OnePasswordExtension;
+		};
+		C03D747A1AC097ED001A4D4A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C03D74721AC096E8001A4D4A /* OnePasswordExtension.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 9C3F4D8B1A59ACDC004B3ECE;
+			remoteInfo = OnePasswordExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9C3F4DC11A59B14D004B3ECE /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C03D74781AC09700001A4D4A /* OnePasswordExtension.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C015EF6719992AC70044A194 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChangePasswordViewController.h; path = "App Demo for iOS/App Demo for iOS/ChangePasswordViewController.h"; sourceTree = "<group>"; };
+		C015EF6819992AC70044A194 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChangePasswordViewController.m; path = "App Demo for iOS/App Demo for iOS/ChangePasswordViewController.m"; sourceTree = "<group>"; };
+		C03D74721AC096E8001A4D4A /* OnePasswordExtension.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OnePasswordExtension.xcodeproj; path = ../OnePasswordExtension.xcodeproj; sourceTree = "<group>"; };
+		C0F0C18619889456000B261F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = "App Demo for iOS/App Demo for iOS/AppDelegate.h"; sourceTree = "<group>"; };
+		C0F0C18719889456000B261F /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = "App Demo for iOS/App Demo for iOS/AppDelegate.m"; sourceTree = "<group>"; };
+		C0F0C18919889467000B261F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = "App Demo for iOS/App Demo for iOS/LoginViewController.h"; sourceTree = "<group>"; };
+		C0F0C18A19889467000B261F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = "App Demo for iOS/App Demo for iOS/LoginViewController.m"; sourceTree = "<group>"; };
+		C0F0C18B19889467000B261F /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = "App Demo for iOS/App Demo for iOS/RegisterViewController.h"; sourceTree = "<group>"; };
+		C0F0C18C19889467000B261F /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = "App Demo for iOS/App Demo for iOS/RegisterViewController.m"; sourceTree = "<group>"; };
+		C0F0C18D19889467000B261F /* ThankYouViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThankYouViewController.h; path = "App Demo for iOS/App Demo for iOS/ThankYouViewController.h"; sourceTree = "<group>"; };
+		C0F0C18E19889467000B261F /* ThankYouViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ThankYouViewController.m; path = "App Demo for iOS/App Demo for iOS/ThankYouViewController.m"; sourceTree = "<group>"; };
+		C0F0C19419889479000B261F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "App Demo for iOS/App Demo for iOS/Images.xcassets"; sourceTree = "<group>"; };
+		C0F0C19719889498000B261F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "App Demo for iOS/App Demo for iOS/Base.lproj/Main.storyboard"; sourceTree = "<group>"; };
+		C0F0C199198894ED000B261F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "App Demo for iOS/App Demo for iOS/Info.plist"; sourceTree = "<group>"; };
+		C0F0C19B198894F8000B261F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "App Demo for iOS/App Demo for iOS/main.m"; sourceTree = "<group>"; };
+		C0FA52971974821100570166 /* App Demo for iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "App Demo for iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C0FA52941974821100570166 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C03D74791AC09706001A4D4A /* OnePasswordExtension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C03D74731AC096E8001A4D4A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C03D74771AC096E8001A4D4A /* OnePasswordExtension.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C04A2CB71AC0921F003B4FD0 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				C03D74721AC096E8001A4D4A /* OnePasswordExtension.xcodeproj */,
+			);
+			name = External;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		C0FA528E1974821100570166 = {
+			isa = PBXGroup;
+			children = (
+				C0FA52991974821100570166 /* App Demo for iOS */,
+				C04A2CB71AC0921F003B4FD0 /* External */,
+				C0FA52981974821100570166 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C0FA52981974821100570166 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C0FA52971974821100570166 /* App Demo for iOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C0FA52991974821100570166 /* App Demo for iOS */ = {
+			isa = PBXGroup;
+			children = (
+				C0F0C18619889456000B261F /* AppDelegate.h */,
+				C0F0C18719889456000B261F /* AppDelegate.m */,
+				C0F0C18919889467000B261F /* LoginViewController.h */,
+				C0F0C18A19889467000B261F /* LoginViewController.m */,
+				C0F0C18B19889467000B261F /* RegisterViewController.h */,
+				C0F0C18C19889467000B261F /* RegisterViewController.m */,
+				C015EF6719992AC70044A194 /* ChangePasswordViewController.h */,
+				C015EF6819992AC70044A194 /* ChangePasswordViewController.m */,
+				C0F0C18D19889467000B261F /* ThankYouViewController.h */,
+				C0F0C18E19889467000B261F /* ThankYouViewController.m */,
+				C0F0C19619889498000B261F /* Main.storyboard */,
+				C0F0C19419889479000B261F /* Images.xcassets */,
+				C0FA529A1974821100570166 /* Supporting Files */,
+			);
+			name = "App Demo for iOS";
+			path = ..;
+			sourceTree = "<group>";
+		};
+		C0FA529A1974821100570166 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C0F0C199198894ED000B261F /* Info.plist */,
+				C0F0C19B198894F8000B261F /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C0FA52961974821100570166 /* ACME */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0FA52B71974821100570166 /* Build configuration list for PBXNativeTarget "ACME" */;
+			buildPhases = (
+				C0FA52931974821100570166 /* Sources */,
+				C0FA52941974821100570166 /* Frameworks */,
+				C0FA52951974821100570166 /* Resources */,
+				9C3F4DC11A59B14D004B3ECE /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C03D747B1AC097ED001A4D4A /* PBXTargetDependency */,
+			);
+			name = ACME;
+			productName = "1Password Extension Demo";
+			productReference = C0FA52971974821100570166 /* App Demo for iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C0FA528F1974821100570166 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = AgileBits;
+				TargetAttributes = {
+					C0FA52961974821100570166 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+				};
+			};
+			buildConfigurationList = C0FA52921974821100570166 /* Build configuration list for PBXProject "App Demo for iOS" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C0FA528E1974821100570166;
+			productRefGroup = C0FA52981974821100570166 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C03D74731AC096E8001A4D4A /* Products */;
+					ProjectRef = C03D74721AC096E8001A4D4A /* OnePasswordExtension.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				C0FA52961974821100570166 /* ACME */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C03D74771AC096E8001A4D4A /* OnePasswordExtension.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = OnePasswordExtension.framework;
+			remoteRef = C03D74761AC096E8001A4D4A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C0FA52951974821100570166 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0F0C19519889479000B261F /* Images.xcassets in Resources */,
+				C0F0C19D19889519000B261F /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C0FA52931974821100570166 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0F0C19019889467000B261F /* LoginViewController.m in Sources */,
+				C0F0C19219889467000B261F /* ThankYouViewController.m in Sources */,
+				C0F0C19119889467000B261F /* RegisterViewController.m in Sources */,
+				C0F0C19C198894F8000B261F /* main.m in Sources */,
+				C015EF6919992AC70044A194 /* ChangePasswordViewController.m in Sources */,
+				C0F0C18819889456000B261F /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C03D747B1AC097ED001A4D4A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OnePasswordExtension;
+			targetProxy = C03D747A1AC097ED001A4D4A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C0F0C19619889498000B261F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C0F0C19719889498000B261F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C0FA52B51974821100570166 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C0FA52B61974821100570166 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C0FA52B81974821100570166 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "acme-anvil-corp";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = "$(SRCROOT)/App Demo for iOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.agilebits.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "App Demo for iOS";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C0FA52B91974821100570166 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "acme-anvil-corp";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = "$(SRCROOT)/App Demo for iOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.agilebits.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "App Demo for iOS";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C0FA52921974821100570166 /* Build configuration list for PBXProject "App Demo for iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0FA52B51974821100570166 /* Debug */,
+				C0FA52B61974821100570166 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C0FA52B71974821100570166 /* Build configuration list for PBXNativeTarget "ACME" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0FA52B81974821100570166 /* Debug */,
+				C0FA52B91974821100570166 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C0FA528F1974821100570166 /* Project object */;
+}

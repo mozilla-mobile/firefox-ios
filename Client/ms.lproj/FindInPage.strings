@@ -1,0 +1,13 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Selesai";
+
+/* Share action title
+   Text selection menu item */
+"Find in Page" = "Cari dalam Halaman";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Keputusan seterusnya didalam laman";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Keputusan sebelumnya didalam laman";
+

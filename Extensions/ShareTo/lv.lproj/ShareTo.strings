@@ -1,0 +1,9 @@
+/* Add button in the share dialog */
+"Add" = "Pievienot";
+
+/* On/off toggle to select adding this url to your bookmarks */
+"Add to Bookmarks" = "Pievienot grāmatzīmēm";
+
+/* On/off toggle to select adding this url to your reading list */
+"Add to Reading List" = "Pievienot lasīšanas sarakstam";
+

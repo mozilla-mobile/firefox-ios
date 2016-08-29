@@ -1,0 +1,13 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Klar";
+
+/* Share action title
+   Text selection menu item */
+"Find in Page" = "Hitta på sidan";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Nästa resultat på sidan";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Föregående resultat på sidan";
+

@@ -1,0 +1,18 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "ਰੱਦ ਕਰੋ";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "ਸਾਫ਼ ਕਰੋ";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "ਇਤਿਹਾਸ ਨੂੰ ਤੁਹਾਡੀਆਂ ਸਾਰੀਆਂ ਕਨੈਕਟ ਕੀਤੀ ਡੀਵਾਈਸਾਂ ਤੋਂ ਹਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ। ਇਸ ਨੂੰ ਅਣਕੀਤਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "OK";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "ਕੀ ਇਤਿਹਾਸ ਨੂੰ ਤੁਹਾਡੇ ਫਾਇਰਫਾਕਸ ਖਾਤੇ ਵਿੱਚੋਂ ਹਟਾਉਣਾ ਹੈ?";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "ਇਹ ਕਾਰਵਾਈ ਤੁਹਾਡੀਆਂ ਸਿੰਕ ਕੀਤੀਆਂ ਡੀਵਾਈਸਾਂ ਤੋਂ ਇਤਿਹਾਸ ਸਮੇਤ, ਤੁਹਾਡੇ ਨਿੱਜੀ ਡੇਟਾ ਨੂੰ ਸਾਭ਼ ਕਰ ਦੇਵੇਗੀ।";
+

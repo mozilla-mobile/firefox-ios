@@ -1,0 +1,880 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Nama pengguna dan kata laluan yang diminta oleh %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Nama pengguna dan kata laluan yang diminta oleh %1$@. Laman web ini berkata: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Tentang";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Menambah Tab";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Tambah ke Senarai Bacaan";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Ralat berlaku semasa menambah pas untuk Wallet. Sila cuba sebentar lagi.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Gagal untuk Menambah Pas";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Ditambah halaman ke Senarai Bacaan";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Alamat dan Carian";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Benarkan Papan Kekunci Pihak Ketiga";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Sentiasa Hantar";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Pengesahan diperlukan";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Kembali";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Sekat Tetingkap Timbul";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Penandabuku";
+
+/* Panel accessibility label */
+"Bookmarks" = "Penandabuku";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Penandabuku yang anda simpan dipaparkan di sini.";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Fail";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Lokasi";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Nama Fail";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Fail Baru";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Tajuk";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Kecerahan";
+
+/* Alert Call Button */
+"Call" = "Hubungi";
+
+/* Label for Cancel button */
+"Cancel" = "Batal";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Tukar tema warna.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Tukar jenis tulisan.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Bersihkan Data Peribadi";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Tutup";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Menutup tab";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Salin Alamat";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Salin Imej";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Salin Pautan";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Tidak dapat menambah halaman ke Senarai Bacaan. Mungkin ia sudah ada?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Tidak dapat menambah halaman ke senarai Membaca";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Tidak dapat muat halaman.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Cipta akaun";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Gelap";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Nyahpepijat: lupakan pengesahan Penyegerakan kedudukan";
+
+/* Debug option */
+"Debug: require password" = "Debug: memerlukan katalaluan";
+
+/* Debug option */
+"Debug: require upgrade" = "Debug: memerlukan kemaskini";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Turunkan saiz teks";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Enjin Carian Lalai";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Matikan dialog halaman tambahan";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Tetapan Paparan";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Adakah anda mahu menyimpan kata laluan untuk %1$@ pada %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Adakah anda mahu menyimpan kata laluan pada %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Adakah anda mahu mengemaskini kata laluan untuk %1$@ pada %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Adakah anda mahu mengemaskini kata laluan pada %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Jangan Hantar";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Selesai";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "Tekan dua kali dan pegang untuk membuka sejarah";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "Tidak";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "Ya";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "Firefox tidak dapat untuk memuat turun atau memaparkan fail ini. Adakah anda ingin untuk membukanya dalam aplikasi lain?";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "Firefox Muat turun";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Muat turun tidak disokong dalam Firefox lagi.";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Masukkan kata laluan anda untuk menyambung.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Lanjutan";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Amaran: kami tidak boleh mengesahkan sambungan anda ke laman web ini adalah selamat.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Ia mungkin salah konfigurasi atau di ganggu oleh penyerang. Teruskan jika anda menerima risiko yang berpotensi.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Pemilik %@ masih dikonfigurasikan laman web mereka secara tidak wajar. Untuk melindungi maklumat anda daripada dicuri, Firefox tidak menyambungkan ke laman web ini.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Sambungan ini tidak dipercayai";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Undur";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Walau bagaimanapun Lawat laman";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Firefox perlu membuka semula supaya perubahan ini berkuat kuasa.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox akan menghentikan menyegerak dengan akaun anda, tetapi tidak akan menghapus sebarang data pelayaran anda di dalam peranti ini.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox ingin mengakses Foto anda";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Maju";
+
+/* General settings section title */
+"General" = "Umum";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Dapatkan tab terbuka, penandabuku dan kata laluan dari peranti anda yang lain.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Pergi";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Pergi ke URL yang disalin?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Bantuan";
+
+/* Panel accessibility label */
+"History" = "Sejarah";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Laman web yang kerap anda lawati baru-baru ini akan dipaparkan di sini.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Tab anda daripada peranti lain dipaparkan di sini.";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "Daftar masuk untuk melihat senarai tab dari peranti anda yang lain.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Sejarah";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Ditutup baru-baru ini";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d peranti(s) bersambung";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Selaras Peranti";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Batal";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Anda boleh menukar ini pada bila-bila masa didalam Tetapan";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Tetapkan Halaman Utama";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Adakah anda ingin untuk menggunakan laman web ini sebagai laman utama anda?";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Kembali";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Tutup Tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Cari";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Majukan";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Tab Persendirian Baru";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Tab Baru";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Muat semula laman";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Pilih Lokasi Bar";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Papar Tab Seterusnya";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Papar Tab Sebelumnya";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Besarkan saiz teks";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Perjalanan Pengenalan";
+
+/* History tableview section header */
+"Last month" = "Bulan lepas";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Disegerakkan akhir: %@";
+
+/* History tableview section header */
+"Last week" = "Minggu lepas";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Lesen";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Cahaya";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Memuatkan halaman asal";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Memuaturun kandungan...";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Log Keluar";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Log Keluar?";
+
+/* Authentication prompt log in button */
+"Log in" = "Log masuk";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Log masuk";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Jangan simpan";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Simpan log masuk %1$@ untuk %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Simpan kata laluan untuk %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "Kemaskini log masuk %1$@ untuk %2$@?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Kemaskini kata laluan untuk %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Simpan Log masuk";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Kemaskini";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Nampaknya Firefox terhempas sebelum ini. Adakah anda ingin memulihkan tab anda?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Tandakan sebagai telah Dibaca";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Tandakan sebagai Belum Baca";
+
+/* Label for the button, displayed in the menu, used to toggle night mode on or off */
+"Menu.NightModeAction.Title" = "Mod Malam";
+
+/* Label for the button, displayed in the menu, used to turn night mode off */
+"Menu.NightModeTurnOffAction.Title" = "Nyahaktifkan Mod Malam";
+
+/* Label for the button, displayed in the menu, used to turn night mode on */
+"Menu.NightModeTurnOnAction.Title" = "Mod Malam";
+
+/* Label for the button, displayed in the menu, used to toggle no image mode on or off */
+"Menu.NoImageModeAction.Title" = "Tiada Mod Imej";
+
+/* Label for the button, displayed in the menu, used to turn no image mode off */
+"Menu.NoImageModeTurnOffAction.Title" = "Papar Imej";
+
+/* Label for the button, displayed in the menu, used to turn no image mode on */
+"Menu.NoImageModeTurnOnAction.Title" = "Sembunyi Imej";
+
+/* Error for a missing remote error number */
+"Missing error" = "Ralat hilang";
+
+/* Error for a missing remote error message */
+"Missing message" = "Mesej hilang";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Bar Alatan Navigasi";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Tab baru: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Versi Baru Wujud";
+
+/* Restore Tabs Negative Action */
+"No" = "Tidak";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Tiada tab";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Bukan Sekarang";
+
+/* Button to not save the user's password */
+"Not now" = "Bukan Sekarang";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Okay";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Oops! Firefox terhempas";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Buka di Tab Baru";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Buka Tetapan";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Buka artikel dalam Lihat Pembaca dengan menekan ikon buku apabila ia muncul dalam tajuk bar.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Buka didalam...";
+
+/* Opening an external URL */
+"Opening %@" = "Membuka %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Pemilih Panel";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Katalaluan";
+
+/* Paste the URL into the location bar */
+"Paste" = "Tampal";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Tampal & Pergi";
+
+/* Privacy section title */
+"Privacy" = "Privasi";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Dasar Privasi";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Enjin carian Cepat";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Paparan Pembaca";
+
+/* Panel accessibility label */
+"Reading list" = "Senarai Bacaan";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Ditutup baru-baru ini";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Muat Semula";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Buang";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Mengeluarkan daripada Senarai Bacaan";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Buang halaman";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Permintaan Laman Desktop";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Permintaan laman web Mudah Alih";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "Simpan Imej";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Simpan Log masuk";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Simpan halaman ke Senarai Bacaan anda dengan menekan ikon tambah buku dalam kawalan Paparan Pembaca.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Carian";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Cari atau masukkan alamat";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Enjin carian baru akan muncul dalam bar carian cepat.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Tambah Enjin Pencarian!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Tambah Penyediaan Carian?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Batal";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Pembekal carian tidak dapat ditambah.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Gagal";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Carian untuk cadangan";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Keselamatan sambungan";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Hantar Maklum Balas";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Hantar Laporan";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Menghantar laporan ranap Mozilla boleh menyelesaikan masalah?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Batal";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Hanya pautan HTTP dan HTTPS boleh dikongsi.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Pautan yang anda cuba untuk berkongsi tidak boleh dikongsi.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Tetapan";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Bersihkan Data Peribadi";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Bersihkan Data Peribadi";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Bersihkan Data Peribadi";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Bersih";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Laman utama";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Tetapan Laman utama";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "Jika tidak memaparkan dalam alat bar";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "Papar Ikon Laman utama didalam Menu";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Masukkan halaman web";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Laman utama Terkini";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Gunakan Salinan Pautan";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Gunakan Laman Semasa";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Guna Lalai";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Apabila anda membuka Tab Baru:";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Paparkan laman kosong";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Papar Penandabuku anda";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Papar Sejarah Anda";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Papar Laman utama Anda";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Papar Senarai Bacaan anda";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "Paparkan laman yang teratas anda";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "Tab Baru";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Tetapan Tab Baru";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Selesai";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Sunting";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Penyelesaian masalah";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "Kongsi";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Kongsi Pautan";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Batal";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Papar Cadangan Carian";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Papar Tab";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Papar Lancongan";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Papar cadangan carian";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Daftar masuk ke Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Daftar Masuk";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Daftar masuk untuk mendapatkan tab terbuka anda, penandabuku dan kata laluan dari peranti anda yang lain.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Hentikan";
+
+/* Support section title */
+"Support" = "Sokongan";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Leret ke kanan atau kiri dengan tiga jari untuk menutup tab.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Penyegerakkan Sekarang";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Penyegerakkan tab anda, penanda halaman, kata laluan & lain-lain.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Penyegerakkan tab anda, kata laluan dan banyak lagi.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Penyegerakan pertama anda mungkin mengambil masa";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Penyegerakkan";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Penyegerakan...";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "TandaBuku";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Klien Jauh";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Menyegerakkan telah gagal";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Sejarah";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Log masuk";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Penyegerakan tidak tersedia";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Penyerakan di luar talian";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Penyegerakan mengalami masalah menyegerakkan %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Tab";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Tab %1$@ of %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Tab %1$@ kepada %2$@ daripada %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Dulang Tab";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Kembali Asal";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d tab(s) tutup";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Halaman tidak dapat dipaparkan dalam Paparan Membaca.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Terdapat versi baru Firefox Aurora yang tersedia. Tekan OK untuk pergi ke halaman muat turun.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Terdapat masalah mengakses tab dari peranti anda yang lain. Cuba lagi dalam beberapa ketika.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Terdapat ralat menukar halaman";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Ini membenarkan anda untuk menyimpan imej dalam Jalur Filem anda.";
+
+/* Opening an external app */
+"This will open in another application" = "Ini akan dibuka dalam aplikasi lain";
+
+/* History tableview section header */
+"Today" = "Hari ini";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menu";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "Laman utama";
+
+/* Panel accessibility label */
+"Top sites" = "Laman Web Utama";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Laman web yang paling kerap anda lawati akan dipaparkan di sini.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Selamat Datang ke Laman Web Utama";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Buang Halaman - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Kemaskini";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Menaiktaraf Firefox untuk penyambungan.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Gunakan Tab Padat";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Nama pengguna";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Sahkan alamat emel anda.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versi %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Paparan";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Kandungan Web";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Selamat datang ke Senarai Bacaan anda";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Nampaknya, ini agak memalukan.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Button to save the user's password */
+"Yes" = "Ya";
+
+/* History tableview section header */
+"Yesterday" = "Semalam";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Anda tidak mempunyai apa-apa tab yang dibuka pada Firefox diperanti anda yang lain.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Hak Anda";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "komputer";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "cuma sekarang";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "peranti mudah alih";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "lebih dari sebulan yang lalu";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "lebih dari seminggu yang lalu";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "baca";
+
+/* Relative date for date in past week. */
+"this week" = "minggu ini";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "hari ini, di %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "belum baca";
+
+/* Relative date for yesterday. */
+"yesterday" = "semalam";
+

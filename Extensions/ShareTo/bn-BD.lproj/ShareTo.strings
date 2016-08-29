@@ -1,0 +1,9 @@
+/* Add button in the share dialog */
+"Add" = "যোগ কর";
+
+/* On/off toggle to select adding this url to your bookmarks */
+"Add to Bookmarks" = "বুকমার্কে যুক্ত কর";
+
+/* On/off toggle to select adding this url to your reading list */
+"Add to Reading List" = "পঠন তালিকায় যোগ কর";
+

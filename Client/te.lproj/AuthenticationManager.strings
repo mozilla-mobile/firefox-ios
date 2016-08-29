@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 గంట తరువాత";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 నిమిషం తరువాత";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 నిమిషాల తరువాత";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 నిమిషాల తరువాత";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 నిమిషాల తరువాత";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "పాస్వర్డ్ మార్చండి";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "పాస్ కోడ్ ను ఎంటర్ చేయండి";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "ఒక కొత్త పాస్ కోడ్ ను ఎంటర్ చేయండి";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "ఒక పాస్ కోడ్ ను ఎంటర్ చేయండి";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "పాస్ కోడ్ ను ఎంటర్ చేయండి";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "తక్షణమే";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "సరికాని పాస్కోడ్. మళ్ళీ ప్రయత్నించండి (ప్రయత్నాలు మిగిలిన: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "సరికాని పాస్కోడ్. మళ్ళీ ప్రయత్నించండి.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "గరిష్ట ప్రయత్నాలు చేరుకుంది. దయచేసి గంటలో మళ్లీ ప్రయత్నించండి.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "గరిష్ట ప్రయత్నాలు చేరుకుంది. దయచేసి మళ్లీ ప్రయత్నించండి.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "కొత్త పాస్కోడ్ కోడ్ ఇప్పటి కంటే భిన్నంగా ఉండాలి.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "పాస్‌కోడ్";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "పాస్ కోడ్ లు సరిపోలేదు. మళ్ళీ ప్రయత్నించండి.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "పాస్ కోడ్ ను తిరిగి ఎంటర్ చేయండి";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "పాస్కోడ్ అవసరం";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "పాస్ కోడ్ సెట్ చేయండి";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "టచ్ ID & పాస్ కోడ్";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "పాస్ కోడ్ ఆపివేయండి";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "పాస్ కోడ్ ఆన్ చేయండి";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "మీ పాస్ కోడ్ ను ఆపివేయండి.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "టచ్ ID ఉపయోగించండి";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ఇప్పుడు లాగిన్ యాక్సెస్ చేయడానికి మీ వేలిముద్రను ఉపయోగించండి.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "ఇప్పుడు ప్రైవేట్ బ్రౌజింగ్ యాక్సెస్ చేయడానికి మీ వేలిముద్రను ఉపయోగించండి.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "టచ్ ID డిసేబుల్ చేయడానికి మీ వేలిముద్ర ఉపయోగించండి.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "మీ అవసరమైన పాస్కోడ్ విరామం ఆకృతీకరించుట యాక్సెస్ మీ వేలిముద్ర ఉపయోగించండి.";
+

@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Seld 1 n usrag";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Seld 1 n tesdat";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Seld 5 n tesdatin";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Seld 10 n tesdatin";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Seld 15 n tesdatin";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Snifel azamul uffir";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Sekcem azamul uffir";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Sekcem azamul uffir amaynut";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Sekcem azamul uffir";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Sekcem azamul uffir";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Tura kan";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Azamul uffir mačči d ameɣtu, Ɛreḍ tikelt nniḍen (Aɛraḍ d-iqqimen : %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Azamul uffir mačči d ameɛtu: Ɛreḍ tikelt nniḍen.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Tebbḍeḍ ɣer uɛraḍ afellay. Ma ulac aɣili, ɛreḍ tikelt nniḍen seld asrag.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Tebbḍeḍ ɣer uɛraḍ afellay. Ma ulac aɣili, ɛreḍ tikelt nniḍen.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Yessefk azamul uffir amaynut ad yili yemgarad akked uzamul yellan.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Azamul uffir";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Azamul uffir ur imeɣri ara. Ɛreḍ tikelt nniḍen.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Sekcem tikelt nniḍen azamul uffir";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Yesra azamul uffir";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Sbadu azamul uffir";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Asulay n unali & uzamul uffir";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Kkes armad n uzamul uffir";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Rmed azamul uffir";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Kkes armad n uzamul uffir.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Seqdec asulay n unadi";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Seqdec adsil umḍin akken i yinekcam tura.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Seqdec adsil umḍin akken ad tkecmeḍ. Tunigin tusrigt tura.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Seqdec adsil umdin akken ad tekkseḍ asulay n unali.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Sekqdec adsil inek umḍin akken ad tkecmeḍ ɣer uswel n tenzagt n uzmul uffir yettwasran.";
+

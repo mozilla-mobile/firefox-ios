@@ -1,0 +1,880 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ petas nomon de uzanto kaj pasvorton.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ petas nomon de uzanto kaj pasvorton. La retejo diras: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Pri";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Aldoni langeton";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Aldoni al legolisto";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "Akcepti";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Eraro okazis dum aldono de la bileto al la monujo. Bonvolu klopodi denove poste.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Ne eblis aldoni la bileton";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Paĝo aldonita al la lego";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adreso kaj serĉo";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Permesi klavarojn de aliaj";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Ĉiam sendi";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Legitimo postulata";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Reen";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Bloki ŝprucfenestrojn";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Legosigno";
+
+/* Panel accessibility label */
+"Bookmarks" = "Legosignoj";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Konservitaj legosignoj aperos ĉi tie.";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Dosierujo";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Loko";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Nomo de dosierujo";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Nova dosierujo";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Titolo";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "Retadreso";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Brileco";
+
+/* Alert Call Button */
+"Call" = "Voki";
+
+/* Label for Cancel button */
+"Cancel" = "Nuligi";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Ŝanĝi koloran etoson.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Ŝanĝi tiparon.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Viŝi privatajn datumojn";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Fermi";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Langeto fermata";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Kopii adreson";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Kopii bildon";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Kopii ligilon";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Ne eblis aldoni paĝon al legolist. Ĉu ĝi eble jam estas tie?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Ne eblis aldoni paĝon al legolisto";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Ne eblis ŝargi paĝon.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Krei konton";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Malhela";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Sencimigo: forgesi la legitiman staton de Speguli";
+
+/* Debug option */
+"Debug: require password" = "Sencimigo: postuli pasvorton";
+
+/* Debug option */
+"Debug: require upgrade" = "Sencimigo: postuli ĝisdatigon";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Etigi tekston";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Norma serĉilo";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Malaktivigi aldonajn paĝajn dialogojn";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Ekranaj agordoj";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Ĉu vi volas konservi la pasvorton por %1$@ ĉe %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Ĉu vi volas konservi la pasvorton ĉe %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Ĉu vi volas ĝisdatigi la pasvorton por %1$@ ĉe %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Ĉu vi volas ĝisdatigi la pasvorton ĉe %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Ne sendi";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Farita";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "Duoble tuŝetu kaj premu por malfermi historion";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "Ne";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "Jes";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "Firefox ne povas elŝuti aŭ montri tiun ĉi dosieron. Ĉu vi ŝatus malfermi ĝin per alia programo?";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "Elŝutoj de Firefox";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Elŝutoj ne estas ankoraŭ subtenataj en Firefox";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Tajpu vian pasvorton por konekti.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Spertula";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Averto: ni ne povas konfirmi ĉu la konekto al tiu ĉi retejo estas sekura.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Tion povas okazigi misagordo aŭ atakanto. Daŭrigu se vi akceptas la eblan riskon.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "La posedanto de %@ malĝuste agordis sian retejon. Por protekti vian informon de ŝtelo, Firefox ne konektiĝis al tiu ĉi retejo.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Tiu ĉi konekto ne estas fidata";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Reen";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Tamen viziti retejon";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Firefox devas esti malfermita de nove por ke tiu ĉi ŝanĝo ekefiku.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox ne plu spegulos vian konton, sed ĝi ne forigos iun ajn el viaj retumaj datumoj en tiu ĉi aparato.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox ŝatus aliri viajn fotojn";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Antaŭen";
+
+/* General settings section title */
+"General" = "Ĝeneralaj";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Ricevi viajn malfermitajn langetojn, legosignojn kaj pasvortojn el viaj aliaj aparatoj.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Iri";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Ĉu iri al la kopiita URL?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Helpo";
+
+/* Panel accessibility label */
+"History" = "Historio";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Ĵuse vizititaj retejoj aperos ĉi tie.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Viaj langetoj el aliaj aparatoj aperos ĉi tie.";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "Komencu seancon por vidi malfermitajn langetojn en viaj aliaj aparatoj.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Spegulado de Firefox";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Historio";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Ĵuse fermitaj";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d konektitaj aparato(j)";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Spegulitaj aparatoj";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Nuligi";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Vi povas ŝanĝi tion ĉi iam ajn en Agordoj";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Difini hejmpaĝon";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Ĉu vi volas uzi tiun ĉi paĝon kiel hejman?";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Reen";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Fermi langeton";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Serĉi";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Antaŭen";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nova privata langeto";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Nova langeto";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Reŝargi paĝon";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Elekti adresstrion";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Montri venontan langeton";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Montri antaŭan langeton";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Grandigi tekston";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Prezento de Carousel";
+
+/* History tableview section header */
+"Last month" = "Lasta monato";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Laste aktualigita: %@";
+
+/* History tableview section header */
+"Last week" = "Lasta semajno";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Permesiloj";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Luma";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Ŝargi originalan paĝon";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Enhavo ŝargata…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Fini seancon";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Ĉu fini seancon?";
+
+/* Authentication prompt log in button */
+"Log in" = "Komenci seancon";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Akreditiloj";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Ne konservi";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Ĉu konservi akreditilon %1$@ por %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Ĉu konservi pasvorton por %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "Ĉu gisdatigi akreditilon %1$@ por %2$@?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Ĉu konservi pasvorton por %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Konservi akreditilon";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Ĝisdatigi";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Ŝajne Firefox antaŭe paneis. Ĉu vi ŝatus restarigi viajn langetojn?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Marki kiel legita";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Marki kiel nelegita";
+
+/* Label for the button, displayed in the menu, used to toggle night mode on or off */
+"Menu.NightModeAction.Title" = "Nokta reĝimo";
+
+/* Label for the button, displayed in the menu, used to turn night mode off */
+"Menu.NightModeTurnOffAction.Title" = "Nokta reĝimo malŝaltita";
+
+/* Label for the button, displayed in the menu, used to turn night mode on */
+"Menu.NightModeTurnOnAction.Title" = "Nokta reĝimo";
+
+/* Label for the button, displayed in the menu, used to toggle no image mode on or off */
+"Menu.NoImageModeAction.Title" = "Neniu bilda reĝimo";
+
+/* Label for the button, displayed in the menu, used to turn no image mode off */
+"Menu.NoImageModeTurnOffAction.Title" = "Montri bildojn";
+
+/* Label for the button, displayed in the menu, used to turn no image mode on */
+"Menu.NoImageModeTurnOnAction.Title" = "Kaŝi bildojn";
+
+/* Error for a missing remote error number */
+"Missing error" = "Eraro mankas";
+
+/* Error for a missing remote error message */
+"Missing message" = "Mesaĝo mankas";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Retuma ilaro";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Nova langeto: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Disponeblas nova versio";
+
+/* Restore Tabs Negative Action */
+"No" = "Ne";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Neniu langeto";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Ne nun";
+
+/* Button to not save the user's password */
+"Not now" = "Ne nun";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "Akcepti";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Bone";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Fuŝ! Firefox paneis";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Malfermi en nova langeto";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Malfermi agordojn";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Malfermi artikolojn en legila vido per tuŝeto sur la emblemo de libro, kiam ĝi aperas en la titolstrio.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Malfermi per…";
+
+/* Opening an external URL */
+"Opening %@" = "%@ malfermata";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Elektilo de panelo";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Pasvorto";
+
+/* Paste the URL into the location bar */
+"Paste" = "Alglui";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Alglui kaj iri";
+
+/* Privacy section title */
+"Privacy" = "Privateco";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Politiko pri privateco";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Rapidaj serĉiloj";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Legila vido";
+
+/* Panel accessibility label */
+"Reading list" = "Legolisto";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Ĵuse fermitaj";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Reŝargi";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Forigi";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Forigi el legolisto";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Forigi paĝon";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Peti retejon por komputiloj";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Peti retejon por porteblaĵoj";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Senserifa";
+
+/* Context menu item for saving an image */
+"Save Image" = "Konservi bildon";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Konservi akreditilojn";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Konservu paĝojn en via legolisto per tuŝo de la emblemo kun libro kaj plussigno en la regiloj de legila vido.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Serĉi";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Serĉu aŭ tajpu adreson";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "La nova serĉilo aperos en la rapida serĉostrio.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Serĉilo aldonita!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Ĉu aldoni serĉprovizanton?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Nuligi";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Ne eblis aldoni la serĉprovizanton.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Malsukcesa";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "Akcepti";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Serĉoj por sugestoj";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Sekura konekto";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Sendi komentojn";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Sendi raporton";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Ĉu sendi raporton pri paneo, tiel ke Mozilla povas solvi la problemon?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Nuligi";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Nur ligiloj HTTP kaj HTTPS povas esti dividitaj.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "Akcepti";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "La ligilon, kiun vi klopodas dividi, ne estas dividebla.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serifa";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Agordoj";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Viŝi privatajn datumojn";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Viŝi privatajn datumojn";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Viŝi privatajn datumojn";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Viŝi";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Hejmpaĝo";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Agordoj de hejmpaĝo";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "Se ne, montri en la ilaro";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "Montri emblemon de hejmpaĝo en menuo";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Viziti retpaĝon";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Nuna hejmpaĝo";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Uzi kopiitan ligilon";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Uzi nunan paĝon";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Uzi la normon";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Kiam vi malfermas novan langeton:";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Montri malplenan paĝon";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Montri viajn legosignojn";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Montri vian historion";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Montri vian hejmpaĝon";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Montri vian legoliston";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "Montri viajn plej vizititajn retejojn";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "Nova langeto";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Agordoj de nova langeto";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Farita";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Redakti";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Solvi problemojn";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "Dividi";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Dividi ligilon";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Nuligi";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Montri sugestojn de serĉilo";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Montri langetojn";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Montri rondiron";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Montri sugestojn de serĉilo";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Komenci seancon en Firefox";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Komenci seancon";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Komenci seancon por ricevi viajn langetojn, legosignojn kaj pasvortojn el viaj aliaj aparatoj.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Haltigi";
+
+/* Support section title */
+"Support" = "Helpo";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Glitigu dekstren aŭ maldekstren per tri fingroj por fermi la langeton.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Speguli nun";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Speguli viajn langetojn, legosignojn, pasvortojn kaj pli.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Speguli viajn langetojn, pasvortojn, kaj pli.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Via unua spegulado povas postuli iom da tempo";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Spegulado";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Spegulado…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Legosignoj";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Foraj klientoj";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Malsukcesa spegulado";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Historio";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Akreditiloj";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Spegulado ne disponeblas";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Spegulado ne estas konektita";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Spegulado havas problemojn spegulante %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Langetoj";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Langeto %1$@ el %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Langetoj %1$@ ĝis %2$@ el %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Pleto de langetoj";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Malfari";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d fermitaj langeto(j)";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Tiu ĉi paĝo ne povis esti montrita en legila vido.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Haveblas nova versio de Firefox Aurora. Tuŝetu Akcepti por iri al paĝo de elŝuto.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Estis problemo dum aliro al viaj langetoj en aliaj aparatoj. Provu denove post iom da tempo.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Okazis eraro dum konverto de paĝo";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Tio permesas al vi konservi la bildon en via filmila rulo";
+
+/* Opening an external app */
+"This will open in another application" = "Tio ĉi malfermiĝos en alia programo";
+
+/* History tableview section header */
+"Today" = "Hodiaŭ";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menuo";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "Hejmpaĝo";
+
+/* Panel accessibility label */
+"Top sites" = "Plej vizititaj";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Viaj plej vizititaj retejoj aperos ĉi tie.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Bonvenon al la plej vizititaj retejoj";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Forigi paĝon - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Ĝisdatigi";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Ĝisdatigi Firefox por konekti.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Uzi kompaktajn langetojn";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Nomo de uzanto";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Kontrolu vian retpoŝtan adreson.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versio %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Vidi";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Teksaĵa enhavo";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Bonvenon al via legolisto";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Nu, tio estas hontiga";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Vikipedio";
+
+/* Button to save the user's password */
+"Yes" = "Jes";
+
+/* History tableview section header */
+"Yesterday" = "Hieraŭ";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Vi ne havas langetojn malfermitajn en Firefox en viaj aliaj aparatoj.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Viaj rajtoj";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "komputilo";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ĵus";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "poŝaparato";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "antaŭ pli ol monato";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "antaŭ pli ol semajno";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "legita";
+
+/* Relative date for date in past week. */
+"this week" = "ĉi semajne";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "hodiaŭ je la %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ne legita";
+
+/* Relative date for yesterday. */
+"yesterday" = "hieraŭ";
+

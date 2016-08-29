@@ -1,0 +1,78 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "පැය 1 කට පසු";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "විනාඩි 1 කට පසු";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "විනාඩි 5කට පසු";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "විනාඩි 10කට පසු";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "විනාඩි 15කට පසු";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "මුරපදය වෙනස් කරන්න";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "රහස් කේතය යොදන්න";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "නව රහස්පදය යොදන්න";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "රහස්පදයක් යොදන්න";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "රහස්පදය යොදන්න";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "සැනින්";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "සාවද්‍ය රහස්පදයක්. යළි උත්සාහ කරන්න. (ඉතිරිව ඇති උත්සාහක අවස්තා: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "සාවද්‍ය රහස්පදයක්. යළි උත්සාහ කරන්න.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "උපරිම අවස්තා ගණන ඉක්ම විය. කරුණාකර පැයකට පසු යළි උත්සාහ කරන්න.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "උපරිම අවස්තා ගණන ඉක්ම විය. කරුණාකර යළි උත්සාහ කරන්න.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "නව රහස්පදය දැනට තිබෙන කේතයට වඩා වෙනස් විය යුතුම වේ.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "රහස්පදය";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "රහස්පද නොගැළපුණි. යළි උත්සාහ කරන්න.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "රහස්පදය යළි ඇතුළත් කරන්න";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "රහස්පදය අවශ්‍යයි";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "රහස්පදය ලබා දීම";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "ස්පර්ශ කේතය සහ රහස්පදය";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "රහස්පදය අක්‍රීය කරන්න";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "රහස්පදය සක්‍රීය කරන්න";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "ඔබේ රහස්පදය අක්‍රීය කරන්න.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "ස්පර්ෂක කේතය භාවිත කරන්න";
+

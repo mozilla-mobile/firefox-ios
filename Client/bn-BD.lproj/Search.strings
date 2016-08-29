@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "%@ অনুসন্ধান করুন";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "না";
+
+/* Label for search settings button. */
+"Search Settings" = "অনুসন্ধান সেটিং";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "%@ থেকে পরামর্শসমূহ অনুসন্ধান করুন";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "অনুসন্ধানের পরামর্শ চালু করবেন?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "হ্যাঁ";
+

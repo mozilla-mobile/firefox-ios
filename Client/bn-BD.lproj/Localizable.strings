@@ -1,0 +1,874 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ ইউজারনেম ও পাসওয়ার্ড অনুরোধ করেছে।";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ ব্যবহারকারীর নাম ও পাসওয়ার্ড চেয়েছে। সাইটটি জানিয়েছে : %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "পরিচিতি";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ট্যাব যোগ করুন";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "পঠনতালিকায় যোগ করুন";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ঠিক আছে";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "ওয়ালেট এ পাস দেওয়ার সময় ভুল হয়েছে। অনুগ্রহ করে একটু পরে আবার চেষ্টা করুন।";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "পাস যোগ করতে ব্যর্থ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "পঠনতালিকায় পাতা যুক্ত হয়েছে";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ঠিকানা ও অনুসন্ধান";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "তৃতীয়-পক্ষের কীবোর্ড সক্রিয় করুন";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "সর্বদাই পাঠান";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "প্রমাণীকরণ আবশ্যক";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "পিছনে";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "পপ-আপ উইন্ডো বন্ধ করুন";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "বুকমার্ক";
+
+/* Panel accessibility label */
+"Bookmarks" = "বুকমার্ক";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "আপনি যে বুকমার্কগুলো সংরক্ষন করেছেন তা এখানে দেখাবে";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "ফোল্ডার";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "অবস্থান";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "ফোল্ডারের নাম";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "নতুন ফোল্ডার";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "শিরোনাম";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "উজ্জ্বলতা";
+
+/* Alert Call Button */
+"Call" = "ফোন করুন";
+
+/* Label for Cancel button */
+"Cancel" = "বাতিল";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "থিমের রঙ পরিবর্তন করুন।";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ফন্টের ধরন পরিবর্তন করুন।";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "ব্যাক্তিগত ডাটা মুছে ফেলা হবে";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "বন্ধ করুন";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ট্যাব বন্ধ করুন";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ঠিকানা কপি করুন";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "ছবি কপি করুন";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "লিঙ্ক কপি করুন";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "পঠনতালিকায় পাতা যুক্ত করতে পারেনি। সম্ভবত এটি আগে থেকেই রয়েছে?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "পঠনতালিকায় পাতা যুক্ত করতে পারেনি";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "পাতা লোড করতে পারেনি।";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "অ্যাকাউন্ট তৈরি করুন";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "গাঢ়";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "ডিবাগ: Sync এর প্রমানিকরন ভুলে গেছে";
+
+/* Debug option */
+"Debug: require password" = "ডিবাগ: পাসওয়ার্ড প্রয়োজন";
+
+/* Debug option */
+"Debug: require upgrade" = "ডিবাগ: হালনাগাদ প্রয়োজন";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "টেক্সটের আকার কমানো";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "ডিফল্ট সার্চ ইঞ্জিন";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "অতিরিক্ত পেজ ডায়ালগ নিষ্ক্রিয় করুন";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "প্রদর্শনী সেটিং";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "আপনি কি %1$@ এর জন্য %2$@ তে পাসওয়ার্ড সংরক্ষণ করতে চান?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "আপনি কি %@ তে পাসওয়ার্ড সংরক্ষণ করতে চান?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "আপনি কি %1$@ এর জন্য %2$@ তে পাসওয়ার্ড হালনাগাদ করতে চান?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "আপনি কি %@ তে পাসওয়ার্ড হালনাগাদ করতে চান?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "প্রেরন করবেন না";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "সম্পন্ন";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "ইতিহাস খুলতে দুইবার ট্যাপ করুন ও ধরে থাকুন";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "না";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "হ্যাঁ";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "Firefox এই ফাইলটি ডাউনলোড বা দেখাতে পারছে না. আপনি কি অন্য অ্যাপ্লিকেশন এটি খুলতে চান?";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "Firefox ডাউনলোড";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "ডাউনলোডগুলো এখনও Firefox সমর্থন করে না।";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "সংযুক্ত হতে আপনার পাসওয়ার্ড প্রবেশ করুন।";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "উন্নত";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "সতর্কতাঃ এই ওয়েবসাইটে আপনার নিরাপদ সংযোগ নিশ্চিত করতে পারবো না।";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "ভুল কনফিগারেশন অথবা আক্রমণকারী দ্বারা গরমিল এর কারণে এটা হতে পারে। যদি আপনি সম্ভাব্য ঝুঁকি গ্রহণ করেন তাহলে এগিয়ে যান।";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ এর মালিক তাদের ওয়েবসাইটটি ত্রুটিপূর্ণভাবে কনফিগার করেছেন। আপনার তথ্য চুরি হয়ে যাওয়া থেকে রক্ষা করতে, Firefox এই ওয়েবসাইটটির সাথে যুক্ত হয়নি।";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "এই সংযোগটি অনির্ভরযোগ্য";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "ফিরে যাও";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "যেকোন ভাবে সাইটে ভিজিট কর";
+
+/* Tile title for Facebook */
+"Facebook" = "ফেসবুক";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "এই পরিবর্তন কার্যকর করতে Firefox পুনরায় চালু করতে হবে।";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox আপনার অ্যাকাউন্টের সাথে সিঙ্ক করা বন্ধ করবে, কিন্ত ডিভাইসে আপনার ব্রাউজিং ডেটা মুছে ফেলবে না।";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox আপনার ছবি ব্যবহার করতে চায়";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "ফরওয়ার্ড";
+
+/* General settings section title */
+"General" = "সাধারণ";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "আপনার অন্যান্য ডিভাইস থেকে খোলা ট্যাব, বুকমার্ক এবং পাসওয়ার্ড পান।";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "যাও";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "কপি করা URL এ যেতে চান?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "সহায়তা";
+
+/* Panel accessibility label */
+"History" = "ইতিহাস";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "আপনার সাম্প্রতিককালে ভিজিট করা ওয়েবসাইটগুলো এখানে দেখাবে।";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "অন্যান্য ডিভাইস থেকে আপনার ট্যাব এখানে দেখানো হবে।";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "আপনার অন্যান্য ডিভাইসে খোলা ট্যাবের তালিকা দেখতে সাইন ইন করুন।";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "ইতিহাস";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "সম্প্রতি বন্ধ হয়েছে";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ডিভাইস সংযুক্ত রয়েছে";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "সিঙ্ককৃত ডিভাইস";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "বাতিল";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "আপনি যেকোন সময় এটি সেটিং থেকে পরিবর্তন করতে পারেন";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "হোমপেজ সেট করুন";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "আপনি কি এই ওয়েবপেজটি আপনার হোম পেজ হিসেবে ব্যবহার করতে চান?";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "পিছনে";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "ট্যাব বন্ধ করুন";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "খুঁজুন";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "ফরওয়ার্ড";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "নতুন ব্যাক্তিগত ট্যাব";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "নতুন ট্যাব";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "পাতা রিলোড";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "লোকেশন বার নির্বাচন করুন";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "পরবর্তী ট্যাব দেখাও";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "পূর্ববর্তী ট্যাব দেখাও";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "টেক্সটের আকার বাড়ানো";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Tour Carousel পরিচিতি";
+
+/* History tableview section header */
+"Last month" = "গত মাসে";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "সর্বশেষ সিঙ্ক: %@";
+
+/* History tableview section header */
+"Last week" = "গত সপ্তাহে";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "লাইসেন্স";
+
+/* Light theme setting in Reading View settings */
+"Light" = "আলো";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "মূল পাতা লোড কর";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "কন্টেন্ট লোড হচ্ছে…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "লগ আউট";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "লগ আউট করবেন?";
+
+/* Authentication prompt log in button */
+"Log in" = "লগ ইন";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "লগইন";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "সংরক্ষণ করো না";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "%2$@ এর জন্য %1$@ লগইন সংরক্ষণ করা হবে?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@ এর জন্য পাসওয়ার্ড সংরক্ষণ করবেন কি?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "%2$@ এর জন্য %1$@ লগইন হালনাগাদ করা হবে?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "%@ এর জন্য পাসওয়ার্ড হালনাগাদ করা হবে?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "লগইন সংরক্ষণ";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "হালনাগাদ করুন";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "দেখে মনে হচ্ছে Firefox পূর্বে ক্র্যাশ করেছে। আপনি কি আপনার ট্যাবগুলো পুনরুদ্ধার করতে চান?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "পঠিত হিসেবে চিহ্নিত";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "অপঠিত হিসেবে চিহ্নিত";
+
+/* Label for the button, displayed in the menu, used to toggle night mode on or off */
+"Menu.NightModeAction.Title" = "রাত্রিকালীন মোড";
+
+/* Label for the button, displayed in the menu, used to turn night mode off */
+"Menu.NightModeTurnOffAction.Title" = "রাত্রীকালীন মোড বন্ধ";
+
+/* Label for the button, displayed in the menu, used to turn night mode on */
+"Menu.NightModeTurnOnAction.Title" = "রাত্রিকালীন মোড";
+
+/* Label for the button, displayed in the menu, used to toggle no image mode on or off */
+"Menu.NoImageModeAction.Title" = "কোন ইমেজ মোড নাই";
+
+/* Label for the button, displayed in the menu, used to turn no image mode off */
+"Menu.NoImageModeTurnOffAction.Title" = "ছবি দেখাও";
+
+/* Label for the button, displayed in the menu, used to turn no image mode on */
+"Menu.NoImageModeTurnOnAction.Title" = "ছবি আড়াল কর";
+
+/* Error for a missing remote error number */
+"Missing error" = "হাড়িয়ে যাওয়া ত্রুটি";
+
+/* Error for a missing remote error message */
+"Missing message" = "হাড়িয়ে যাওয়া বার্তা";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "নেভিগেশন টুলবার";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "নতুন ট্যাব: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "নতুন সংস্করণ বিদ্যমান";
+
+/* Restore Tabs Negative Action */
+"No" = "না";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "কোন ট্যাব নেই";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "এখন নয়";
+
+/* Button to not save the user's password */
+"Not now" = "এখন নয়";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "ঠিক আছে";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ঠিক আছে";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "ওহো! Firefox ক্রাশ করেছে";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "নতুন ট্যাবে খুলুন";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "সেটিং খুলুন";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "যখন এটি টাইটেল বারে প্রদর্শিত হবে তখন বুক আইকনে ক্লিক করে প্রবন্ধগুলো রিডার ভিউতে খুলুন।";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "খুলুন…";
+
+/* Opening an external URL */
+"Opening %@" = "%@ খোলা হচ্ছে";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "প্যানেল মনোনীতকারী";
+
+/* Password textbox in Authentication prompt */
+"Password" = "পাসওয়ার্ড";
+
+/* Paste the URL into the location bar */
+"Paste" = "পেস্ট করুন";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "পেস্ট কর ও যাও";
+
+/* Privacy section title */
+"Privacy" = "গোপনীয়তা";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "গোপনীয়তার নীতিমালা";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "দ্রুত-সার্চ ইঞ্জিন";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "পাঠযোগ্য প্রদর্শনী";
+
+/* Panel accessibility label */
+"Reading list" = "পঠনতালিকা";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "সম্প্রতি বন্ধ করা হয়েছে";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "পুনরায় লোড করুন";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "অপসারণ";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "পাঠতালিকা থেকে মুছুন";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "পাতা মুছে ফেলুন";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "ডেস্কটপ সাইটের অনুরোধ";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "মোবাইল সাইটের অনুরোধ";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "সান্স-সেরিফ";
+
+/* Context menu item for saving an image */
+"Save Image" = "ছবি সংরক্ষণ";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "লগইন সংরক্ষণ করুন";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "অনুসন্ধান";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ঠিকানা দিন অথবা অনুসন্ধান করুন";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "নতুন সার্চ ইঞ্জিনটি দ্রুত সার্চ বারে প্রদর্শিত হবে।";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "সার্চ ইঞ্জিন যোগ করা হয়েছে!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "অনুসন্ধান সেবাদানকারী যোগ করবেন?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "বাতিল";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "অনুসন্ধান সেবাদানকারী যোগ করা যাছে না।";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "ব্যর্থ হয়েছে";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ঠিক আছে";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "পরামর্শের জন্য অনুসন্ধান করুন";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "নিরাপদ সংযোগ";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "প্রতিক্রিয়া পাঠান";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "রিপোর্ট পাঠান";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "একটি ক্রাশ প্রতিবেদন পাঠান যাতে মজিলা সমস্যাটি ঠিক করতে পারে?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "বাতিল";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "শুধু HTTP এবং HTTPS লিঙ্কগুলো শেয়ার করা যাবে।";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ঠিক আছে";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "যে লিঙ্কটি আপনি শেয়ার করা চেষ্টা করেছেন তা শেয়ার করা যাবে না।";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "সেপিয়া";
+
+/* Font type setting in the reading view settings */
+"Serif" = "সেরিফ";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "সেটিং";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "ব্যক্তিগত ডাটা মুছে ফেলুন";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "ব্যাক্তিগত ডাটা মুছে ফেলুন";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "ব্যক্তিগত ডাটা মুছে ফেলুন";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "মুছে ফেলুন";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "হোমপেজ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "হোমপেজ সেটিং";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "অন্যথায় টুলবারে দেখাও";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "মেনুতে হোমপেজ আইকন দেখাও";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "কোন ওয়েবপেজে প্রবেশ করুন";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "বর্তমান হোমপেজ";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "কপি করা লিঙ্ক ব্যবহার করুন";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "বর্তমান পাতা ব্যবহার করুন";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "ডিফল্ট ব্যবহার করুন";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "যখন আপনি একটি নতুন ট্যাব খোলেন:";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "ফাঁকা পাতা দেখাও";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "আপনার বুকমার্ক দেখান";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "আপনার ইতিহাস দেখান";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "আপনার হোমপেজ দেখান";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "আপনার পঠন তালিকা দেখান";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "আপনার শীর্ষ সাইটগুলো প্রদর্শন করুন";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "নতুন ট্যাব";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "নতুন ট্যাব সেটিং";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "সম্পন্ন";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "সম্পাদনা";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "ট্রাবলশুট";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "শেয়ার";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "লিঙ্ক শেয়ার করুন";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "বাতিল";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "অনুসন্ধানের পরামর্শসমূহ দেখাও";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ট্যাব দেখাও";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "ট্যুর দেখাও";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "অনুসন্ধানের সাজেশন দেখাও";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Firefox এ সাইনইন করুন";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "সাইন ইন";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "সাইন ইন করে আপনার অন্যান্য ডিভাইস থেকে খোলা ট্যাব, বুকমার্ক এবং পাসওয়ার্ডগুলো পান।";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "থামাও";
+
+/* Support section title */
+"Support" = "সমর্থন";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ডান অথবা বাম তিনটি আঙ্গুল দিয়ে ট্যাব বন্ধ করতে সোয়াইপ করুন।";
+
+/* Sync Firefox Account */
+"Sync Now" = "এখনই সিঙ্ক করুন";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "আপনার ট্যাব, বুকমার্ক , পাসওয়ার্ডসহ আরও অনেক কিছু সিঙ্ক করুন।";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "আপনার ট্যাব, পাসওয়ার্ডসহ আরও অনেক কিছু সিঙ্ক করুন।";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "আপনার প্রথম সিঙ্ক সময় নিতে পারে";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "সিঙ্ক হচ্ছে";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "সিঙ্ক হচ্ছে…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "বুকমার্ক";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "রিমোট ক্লায়েন্ট";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "সিঙ্ক ব্যর্থ হয়েছে";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "ইতিহাস";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "লগইন";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "সিঙ্ক সম্ভব নয়";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "সিঙ্ক অফলাইন";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "ট্যাব";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "ট্যাব %2$@ এর %1$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "ট্যাব %3$@ এর %1$@ থেকে %2$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ট্যাব ট্রে";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "পূর্বাবস্থা";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d ট্যাব বন্ধ করা হয়েছে";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "পাতাটি পাঠক পরিদর্শনে দেখানো যাচ্ছে না।";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Firefox Aurora এর একটি নতুন সংস্করণ রয়েছে। পাতা ডাউনলোড করতে OK ট্যাপ করুন।";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "আপনার অন্যান্য ট্যাব থেকে ট্যাব ব্যবহারে সমস্যা হয়েছে। কিছুক্ষণ পরে আবারও চেষ্টা করুন।";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "পাতা রূপান্তরে একটি ত্রুটি ছিল";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "এইটা ক্যামেরা রোলে আপনার ছবি সংরক্ষণের সুযোগ দেয়।";
+
+/* Opening an external app */
+"This will open in another application" = "এটা অন্য অ্যাপলিকেশন খুলবে।";
+
+/* History tableview section header */
+"Today" = "আজ";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "মেনু";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "হোমপেজ";
+
+/* Panel accessibility label */
+"Top sites" = "শীর্ষ সাইটসমূহ";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "এখানে আপনার সর্বাধিক ভিজিট করা সাইটগুলো দেখাবে।";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "শীর্ষ সাইটগুলোতে স্বাগতম";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "%@ পাতাটি অপসারণ কর";
+
+/* Tile title for Twitter */
+"Twitter" = "টুইটার";
+
+/* Button to update the user's password */
+"Update" = "হালনাগাদ";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "সংযুক্ত হতে Firefox হালনাগাদ করুন।";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "কম্প্যাক্ট ট্যাব ব্যবহার করুন";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ইউজারনেম";
+
+/* Text message in the settings table view */
+"Verify your email address." = "আপনার ইমেইল ঠিকানা যাচাই করে দিন।";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "সংস্করণ %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "দেখাও";
+
+/* Accessibility label for the main web content view */
+"Web content" = "ওয়েব কন্টেন্ট";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "আপনার পঠন তালিকায় স্বাগতম";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "আমরা আন্তরিকভাবে দুঃখিত।";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "উইকিপিডিয়া";
+
+/* Button to save the user's password */
+"Yes" = "হ্যাঁ";
+
+/* History tableview section header */
+"Yesterday" = "গতকাল";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "আপনার অন্য ডিভাইসে Firefox এর কোন ট্যা খোলা নেই।";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "আপনার অধিকার";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "কম্পিউটার";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "এইমাত্র";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "মোবাইল ডিভাইস";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "এক মাসেরও বেশি আগে";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "এক সপ্তাহেরও বেশি আগে";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "পড়ুন";
+
+/* Relative date for date in past week. */
+"this week" = "এই সপ্তাহে";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "আজকে %@ টায়";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "অপঠিত";
+
+/* Relative date for yesterday. */
+"yesterday" = "গতকাল";
+

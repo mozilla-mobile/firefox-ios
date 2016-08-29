@@ -1,0 +1,12 @@
+/* Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet. */
+"Allow Firefox to use my Photos" = "Firefox কে আপনার ফটো ব্যাবহারের অনুমতি দিন";
+
+/* Pending feature; currently unused string! Accessibility label for back button to theme chooser */
+"Back to Themes" = "থিমে ফিরে আসুন";
+
+/* Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker */
+"Choose" = "পছন্দ";
+
+/* Pending feature; currently unused string! Accessibility label for settings row to enter theme settings */
+"Choose Theme" = "থিম পছন্দ করুন";
+

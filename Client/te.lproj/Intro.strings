@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "ట్యాబ్లను ఉపయోగించి ఒకే సమయంలో బహుళ వెబ్ పేజీలను బ్రౌజ్ చేయండి.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "ఎంచుకొండి";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "మీరు ఎక్కడ ఫైర్ఫాక్సు ఉపయోగిస్తున్నారో అక్కడ కనెక్ట్ చేయండి.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "అనుకూలపరచు";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "సులభంగా టాబ్లతో ఓపెన్ పేజీలు మధ్య మారండి.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "ఫైర్ఫాక్సు మరియు క్లౌడ్";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "పరిచయ స్లయిడ్ %2$@ లో %1$@ది";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "నిర్వహించు";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "మీ ఫైర్ఫాక్సు కేవలం మీ సెట్టింగ్స్ లో నచ్చిన విధంగానే వ్యక్తిగతీకరించండి.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "మీ డిఫాల్ట్ శోధన ఇంజన్ వ్యక్తిగతీకరించండి మరియు సెట్టింగులలో మరిన్ని.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "పంచుకోను";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "ఫైర్ఫాక్సుకు ప్రవేశించండి";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "బ్రౌజింగ్ ను ప్రారంభించండి";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "మీ పరికరాలను సింక్ చేయండి.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "నొక్కండి మరియు సులభంగా యాక్సెస్ చేయడం కోసం మీ డాక్ లోకి ఫైర్ఫాక్స్ చిహ్నం తరలించండి.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "సెట్టింగ్స్ బటన్ టాబ్లు ట్రే ప్రారంభంలో ఉంది.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "ట్యాబ్లను చూపించు బటన్ అడ్రస్ మరియు టెక్స్ట్ ఫీల్డ్ శోధన పక్కన ఉన్నది మరియు తెరిచిన ట్యాబ్ల యొక్క ప్రస్తుత సంఖ్య ప్రదర్శిస్తుంది.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "ఫైర్ఫాక్స్ నుండి ఇతర ఆప్స్ కి లింక్లను పంపడానికి షేర్ షీట్ ఉపయోగించండి.";
+

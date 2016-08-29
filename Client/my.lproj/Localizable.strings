@@ -1,0 +1,880 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ မှ သုံးဆွဲသူ အမည် နှင့် လျှို့ဝှက်စကားလုံး အားတောင်းခံနေသည်";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ မှ သုံးစွဲသူ နှင့် လျှို့ဝှက်စကားလုံး တောင်းခံနေသည်။ ဆိုဒ်မှ %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "ကခ";
+
+/* About settings section title */
+"About" = "အကြောင်း";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "တပ်ဗ်တစ်ခုဖွင့်";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "စာဖတ်စာရင်းသို့ ထည့်ပေးပါ";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ကောင်းပြီ";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "ငွေပေးချေမှုနည်းလမ်း ထည့်သွင်းရာတွင် အမှားတစ်ခု ဖြစ်ပေါ်ခဲ့သည်။ ကျေးဇူးပြု၍ နောင်တွင် ဆောင်ရွက်ကြည့်ပါ။";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "စကားဝှက်ခြင်း မအောင်မြင်ပါ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "သင့်စာဖတ်စာရင်းသို့ စာမျက်နှာအားထည့်ပြီး";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "လိပ်စာ နှင့် ရှာဖွေရေး";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "ကြားခံအဖွဲ့အစည်းမှ ထုတ်လုပ်သည့် ကီးဘုတ်များကို အသုံးပြုခွင့်ပေးပါ။";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "အမြဲ ပို့ပါ";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "စစ်ဆေးခြင်း လိုအပ်သည်";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "ရှေ့သို့";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ပွင့်ထွက်ဝင်းဒိုးများကိုပိတ်ဆို့ပါ";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "မှတ်သားချက်";
+
+/* Panel accessibility label */
+"Bookmarks" = "စာအမှတ်များ";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "သင်သိမ်းလိုက်သည့် စာမှတ်များကို ဒီနေရာမှာ ပြပါမည်။";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "ဖိုင်တွဲ";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "တည်နေရာ";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "ဖိုင်တွဲ အမည်";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "ဖိုင်တွဲ အသစ်";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "ခေါင်းစဉ်";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "အလင်းအမှောင်";
+
+/* Alert Call Button */
+"Call" = "ဖုန်းခေါ်";
+
+/* Label for Cancel button */
+"Cancel" = "နေတော့";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "ကာလာစတိုင်လ်များပြောင်း";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ဖေါင့်စတိုင်လ်ပြောင်း";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "တစ်ကိုယ်ရေသုံး အချက်အလက်များရှင်းပါ";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ပိတ်";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "တပ်ဗ်အားပိတ်နေသှ်";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "လိပ်စာအားကူးယူပါ";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "ပုံအားကူးပါ";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "လင်ခ့်အားကူး";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "စာဖတ်စရင်းသို့ စာမျက်နှာအား မထည့်နိုင်ပါ။ ရှိနေပြီးသားလည်း ဖြစ်နိုင်တယ်?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "စာဖတ်စာရင်းသို့ စာမျက်နှာအား မထည့်နိုင်ပါ";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "စာမျက်နှာအား မရယူနိုင်ပါ";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "အကောင့်ဖန်တီးပါ";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "အမှောင်";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Debug: forget Sync auth state";
+
+/* Debug option */
+"Debug: require password" = "Debug: require password";
+
+/* Debug option */
+"Debug: require upgrade" = "Debug: require upgrade";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Decrease text size";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Default Search Engine";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "စာမျက်နှာများ၏ အရန်ဒိုင်ယာလော့ဂ်ဝင်းဒိုးများကို ပိတ်ထားပါ";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "ပြသမှု အပြင်အဆင်များ";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "%1$@ အတွက် %2$@ တွင် စကားဝှက် သိမ်းမည်လား?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "%@ တွင်စကားဝှက်သိမ်းထားမည်လား?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "%2$@ ပေါ်ရှိ %1$@ ၏ စကားဝှက်အား ပြောင်းမလား?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "%@ တွင် စကားဝှက်အား ပြောင်းမလား?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "မပို့ပါနှင့်";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "ကောင်းပြီ";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "မှတ်တမ်းအားဖွင့်ရင် နှစ်ချက်နှိပ်ပြီး ဖိထားပါ";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "မဟုတ်";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "ဟုတ်";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "မီးမြေခွေးသှ် ယခုဖိုင်အားပြသရန် ဒေါင်းလုဒ်ရယူရာတွင် မအောင်မြင်ပါ။ တခြား အက်ပ်တစ်ခုတွင် ဖွင့်ကြည့့်မလား?";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "မီးမြေခွေး ဒေါင်းလုဒ်ဖိုင်များ";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "မီးမြေခွေးတွင် ဖိုင်များဆွဲယူခြင်းကို အထောက်အပံ့ မပေးသေးပါ။";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "ချိတ်ဆက်ရန် သင့်စကားဝှက်အားထည့်ပါ";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "အဆင့်မြင့်";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "သတိပေးခြင်း။ ။ဒီဝဘ်ဆိုက်ကို ချိတ်ဆက်ထားသည့် ဆက်ကြောင်းသည် လုံခြုံသည်ဟု ကျွန်တော်တို့ အတည်မပြုနိုင်ပါ။";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "၄င်းသည် မှားယွင်းစွာ ချိန်ညှိထားခြင်းကြောင့် သို့မဟုတ် တိုက်ခိုက်သူမှ စွက်ဖက်နှောင့်ယှက်နေခြင်းကြောင့် ဖြစ်နိုင်ပါသည်။ အကယ်၍ သင်သည် တစ်စုံတစ်ရာကြုံတွေ့မှုကို လက်ခံနိုင်ပါက ရှေ့သို့ ဆက်လက်ဆောင်ရွက်နိုင်ပါသည်။";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ ၏ ပိုင်ရှင်သည် သူတို့၏ ဒီဝဘ်ဆိုက်ကို သင့်လျော်မှန်ကန်စွာ ချိန်ညှိထားခြင်း မရှိပါ။ သင့်အချက်အလက်များ ခိုးယူခံရခြင်းမှ ကာကွယ်ရန် မီးမြေခွေးသည် ဒီဝဘ်ဆိုက်ကို မချိတ်ဆက်ပါ။";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "ဤဆက်သွယ်မှုသည် စိတ်ချယုံကြည်နိုင်ဖွယ် မရှိပါ။";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "နောက်သို့ သွားရန်";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "မည်သို့ပင်ဖြစ်စေ ဒီဝဘ်ဆိုက်ကို ကြည့်ရှုပါမည်။";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "ဒီပြောင်းလဲမှုကို သက်ရောက်မှုဖြစ်စေရန် မီးမြေခွေးကို ပိတ်ပြီးပြန်ဖွင့်ရန် လိုအပ်ပါသည်။";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "မီးမြေခွေးမှ သင့်အချက်အလက်များ ချိတ်ဆက်ထားခြင်းအား ရပ်တန့်ထားမည် ဖြစ်သော်လည်း ယခု ပစ္စည်းပေါ်ရှိ အင်တာနက်ကြည့် အချက်အလက်များအား ဖျက်ပစ်မည် မဟုတ်ပါ";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "မီးမြေခွေးမှ သင့် ဓာတ်ပုံများအား ထိတွေခွင့်ရယူရန် လိုအပ်နေသည်";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "လွှဲပြောင်းပို့ရန်";
+
+/* General settings section title */
+"General" = "ယေဘုယျ";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "အခြားကိရိယာများမှ သင်ဖွင့်ထားသည့်တပ်ဗ်များ၊ စာမှတ်များနှင့် စကားဝှက်များကို ရယူပါ။";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "သွားပါ";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "ကူးယူထားသည့် URL သို့ သွားမည်လား။";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "အကူအညီ";
+
+/* Panel accessibility label */
+"History" = "မှတ်တမ်း";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "လတ်တလော ကြည့်ရှုထားသည့် ဝဘ်ဆိုက်များကို ဒီမှာ ပြသပါမည်။";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "အခြားဖုန်းများမှ ဖွင့်ထားသော တပ်ဗ်များသည် ဒီနေရာတွင် ပေါ်နေမည်။";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "အခြားကိရိယာများတွင် ဖွင့်ထားသည့် တဗ်များကို ကြည့်ရန် ဝင်ရောက်ပါ။";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "မှတ်တမ်း";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "လတ်တလော ပိတ်ထားသည်များ";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "ကိရိယာ %d ခု ချိတ်ဆက်ထားသည်";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "တပြေးညီဖြစ်နေသာ ကိရိယာများ";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "မဆောင်ရွက်ပါ";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "မည်သည့်အချိန်တွင်မဆို အပြင်အဆင်များတွင် ပြောင်းလဲသတ်မှတ်နိုင်ပါသည်။";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "အဖွင့်စာမျက်နှာ သတ်မှတ်ရန်";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "ဒီဝဘ်စာမျက်နှာကို အဖွင့်စာမျက်နှာအဖြစ် သတ်မှတ်ချင်ပါသလား။";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "နောက်သို့";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "တဗ်ကို ပိတ်ရန်";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "ရှာပါ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "ရှေ့သို့";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "တစ်ကိုယ်ရေသုံး တပ်ဗ်အသစ်";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "တဗ်အသစ်";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "စာမျက်နှာကို ပြန်ဖွင့်ပါ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Location Bar ကို ရွေးပါ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "နောက်ထပ် တဗ်ကို ပြပါ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "ယခင် တဗ်ကို ပြပါ";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "စာအရွယ်အစား ကြီးပါ";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "လေ့လာမည်";
+
+/* History tableview section header */
+"Last month" = "နောက်ဆုံးလ";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "နောက်ဆုံး ချိတ်ဆက်ခဲ့ချိန် - %@";
+
+/* History tableview section header */
+"Last week" = "နောက်ဆုံးအပတ်";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "လိုင်စင်";
+
+/* Light theme setting in Reading View settings */
+"Light" = "ညာ";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "မူလစာမျက်နှာအားဖွင့်ပါ";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "ရယူနေသည်…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "ထွက်ပါ";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "ထွက်မည်လား?";
+
+/* Authentication prompt log in button */
+"Log in" = "ဝင်မည်လား";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "ဝင်ရောက်မှု အချက်အလက်များ";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "မသိမ်းပါနှင့်";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "%2$@? အတွက် ဝင်ရောက်မှု %1$@ ကို သိမ်းမည်လား။";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@ အတွက် စကားဝှက်ကို သိမ်းမည်လား။";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "%2$@ အတွက် ဝင်ရောက်မှု %1$@ ကို ပြောင်းလဲသိမ်းမည်လား။";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "%@ အတွက် စကားဝှက်ကို ပြောင်းလဲသိမ်းမည်လား။";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "ဝင်ရောက်မှုကို သိမ်းပါ";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "နောက်ဆုံးပေါ်အခြေအနေ";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ကြည့်ရတာ မီးမြေခွေး ရုတ်တရတ် ပိတ်သွားပုံရတယ်။ သင့် တပ်ဗ်များကို ပြန်ဖွင့်ချင်ပါသလား ?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "ဖတ်ပြီးပြီဟုသတ်မှတ်";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "မဖတ်ရသေးဘူးဟုမှတ်";
+
+/* Label for the button, displayed in the menu, used to toggle night mode on or off */
+"Menu.NightModeAction.Title" = "ညသုံးပုံစံ";
+
+/* Label for the button, displayed in the menu, used to turn night mode off */
+"Menu.NightModeTurnOffAction.Title" = "ညသုံးပုံစံပိတ်";
+
+/* Label for the button, displayed in the menu, used to turn night mode on */
+"Menu.NightModeTurnOnAction.Title" = "ညသုံးပုံစံ";
+
+/* Label for the button, displayed in the menu, used to toggle no image mode on or off */
+"Menu.NoImageModeAction.Title" = "ပုံမပါပုံစံ";
+
+/* Label for the button, displayed in the menu, used to turn no image mode off */
+"Menu.NoImageModeTurnOffAction.Title" = "ပုံများအားပြပါ";
+
+/* Label for the button, displayed in the menu, used to turn no image mode on */
+"Menu.NoImageModeTurnOnAction.Title" = "ပုံများအားဖျောက်ပါ";
+
+/* Error for a missing remote error number */
+"Missing error" = "ပျောက်နေသောပြသာနာ";
+
+/* Error for a missing remote error message */
+"Missing message" = "ပျောက်နေသော သတင်းစာတို";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "ကူးသန်းရန် ခလုတ်ဘား";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "တပ်ဗ်အသစ် - %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "ဗားရှင်းအသစ် ရှိနေပြီ";
+
+/* Restore Tabs Negative Action */
+"No" = "မဟုတ်";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "တပ်ဗ်မရှိ";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "ယခုမဟုတ်သေးဘူး";
+
+/* Button to not save the user's password */
+"Not now" = "ယခုမဟုတ်ဘူး";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "အိုက​ေ";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "အိုကေ";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "အလိုလေး။ မီးမြေခွေး ပျက်သွားပြီ။";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "တပ်ဗ်အသစ်တစ်ခုဖွင့်ပါ";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "အပြင်အဆင်အားဖွင့်";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ခေါင်းစီးဘားတွင် စာအုပ်အိုင်ကွန်လေး ပေါ်လာပါက ထိလိုက်ခြင်းအားဖြင့် စာဖတ်ပုံစံသို့ပြောင်းလဲသုံးပါ";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "…တွင် ဖွင့်ရန်";
+
+/* Opening an external URL */
+"Opening %@" = "%@ ကိုဖွင့်နေသည်";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "အကွက်ရွေးသူ";
+
+/* Password textbox in Authentication prompt */
+"Password" = "စကားဝှက်များ";
+
+/* Paste the URL into the location bar */
+"Paste" = "ပွားပါ";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "ကူး သို့ သွား";
+
+/* Privacy section title */
+"Privacy" = "လုံခြုံရေးဆိုင်ရာ";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "ကိုယ်ရေးကိုယ်တာပေါ်လစီ";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "အမြန်ရှာဖွေရေး အင်ဂျင်များ";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "စာဖတ်ပုံစံ";
+
+/* Panel accessibility label */
+"Reading list" = "စာဖတ်စာရင်း";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "လတ်တလော ပိတ်ထားသည်များ";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "ပြန်ဖွင့်ပါ";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "ဖယ်ပါ";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "စာဖတ်ဆဲစာရင်းမှ ဖျက်ပေးပါ";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "စာမျက်နှာအားဖယ်ပါ";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "ဒတ်စ်တောခ့်ဆိုက်ကို တောင်းပါ";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "မိုဘိုင်းလ်ဆိုက်ကို တောင်းပါ";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "ရုပ်ပုံ သိမ်း";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "ဝင်ရောက်မှုများကို သိမ်းရန်";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "သင့်စာမျက်နှာအား စာဖတ်ပုံစံ ထိန်းချုပ်ခုံမှ စာအုပ်အပေါင်း ခလုပ်အား နှိပ်ပြီး စာဖတ်စာရင်းသို့ထည့်ပါ";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "ရှာ";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ရှာဖွေ သို့ လိပ်စာတစ်ခုရိုက်ထည့်ပါ";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "ရှာဖွေရေးယန္တရားအသစ်သည် အမြန်ရှာဖွေရေး ဘားတွင် ပေါ်လာပါမည်။";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "ရှာဖွေရေးယန္တရား ထည့်သွင်းပြီးပြီ။";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "ရှာဖွေရေး ဝန်ဆောင်မှုကို ထည့်မည်လား။";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "မဆောင်ရွက်ပါ";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "ရှာဖွေရေးဝန်ဆောင်မှုကို မထည့်သွင်းနိုင်ပါ။";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "မအောင်မြင်ပါ";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ကောင်းပြီ";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "အကြံပေးချက်များရရှိရန် ရှာပါ";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "လုံခြုံသော ချိတ်ဆက်မှု";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "အကြံပေးချက်ပို့မည်";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "အစီရင်ခံစာကို ပေးပို့ပါ";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "မော်ဇီလာထံ အပျက်အစီးစာရင်း ပေးပို့မည်လား။ ထိုသို့ပေးပို့လျှင် မော်ဇီလာက ပြုပြင်မွမ်းနိုင်ပါသည်။";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "မဆောင်ရွက်ပါ";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "HTTP နှင့် HTTPS ချိတ်ဆက်များကိုသာ မျှဝေနိုင်ပါမည်။";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ကောင်းပြီ";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "သင် မျှဝေအသုံးပြုရန် ကြိုးစားနေသည့် ဒီလင့်ကို မမျှဝေနိုင်ပါ။";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "အပြင်အဆင်များ";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "တစ်ကိုယ်ရေသုံး အချက်အလက်များကို ရှင်းပါ";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "တစ်ကိုယ်ရေသုံး အချက်အလက်များကို ရှင်းပါ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "တစ်ကိုယ်ရေသုံး အချက်အလက်များကို ရှင်းပါ";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "ရှင်းလင်းပါ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "အဖွင့်စာမျက်နှာ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "အဖွင့်စာမျက်နှာ အပြင်အဆင်";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "ထိုသို့မဟုတ်ပါက toolbar ထဲတွင် ပြသပါ";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "အဖွင့်စာမျက်နှာ အိုင်ကွန် ကို မီနူးစာရင်းတွင် ပြသပါ";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "ဝဘ်စာမျက်နှာကို ရေးထည့်ပါ";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "လက်ရှိ အဖွင့်စာမျက်နှာ";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "ကူးယူထားသည့် လင့်ကို အသုံးပြုပါ";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "လက်ရှိ စာမျက်နှာကို အသုံးပြုပါ";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "မူလသတ်မှတ်ထားသည်ကို အသုံးပြုပါ";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "တပ်ဗ်အသစ်တစ်ခုအားဖွင့့်သောအခါ -";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "စာမျက်နှာ အလွတ် ‌ပြသပါ";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "သင်၏ သိမ်းဆည်းမှတ်သားများကို ပြပါ";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "သင်၏ မှတ်တမ်းအားပြပါ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "သင့့်် ပင်မစာမျက်နှာကိုပြပါ";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "သင့့်စာဖတ်စာရင်းအားပြပါ";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "သင့့်ထိပ်တန်းဝက်ဆိုဒ်များကိုပြပါ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "တဗ်အသစ်";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "တဗ်အသစ် အပြင်အဆင်များ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "ပြီးပြီ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "တည်းဖြတ်ရန်";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "ဖြေရှင်းဖော်ထုတ်ရန်";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "မျှဝေ";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "လင့်ခ်ကို မျှဝေရန်";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "မဆောင်ရွက်ပါ";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "ရှာဖွေရေး အကြံပြုချက်များကို ပြပါ";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "တပ်ဗ်များအားပြပါ";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "လေ့လာရေး";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "ရှာဖွေရေး အကြံပြုချက်များကို ဖေါ်ပြပါ";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "မီးမြေခွေးအကောင့်သို့ ဝင်ရောက်ပါ";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "ဝင်ပါ";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "အခြားကိရိယာများမှ သင့်တပ်ဗ်များ၊ စာမှတ်များနှင့် စကားဝှက်များကို ရယူရန် ဝင်ရောက်ပါ။";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "ရပ်";
+
+/* Support section title */
+"Support" = "အထောက်အပံ့";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "တပ်ဗ်အားပိတ်ရန် လက်သုံးချောင်းဖြင့် ဘယ် သို့ ညာသို့ ပွတ်ပါ";
+
+/* Sync Firefox Account */
+"Sync Now" = "ယခုချိတ်ဆက်ပါ";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "သင့် တပ်ဗ်များ၊ စကားဝှက်များ နှင့် စာအမှတ်များအား ချိတ်ဆက်သုံးပါ";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "သင့် တပ်ဗ်များ၊ စကားဝှက်များ နှင့် အခြားအရာများကို ချိတ်ဆက်သုံးပါ။";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "ပထမဆုံး ထပ်တူပြုပြိုင်တူဆောင်ရွက်မှုသည် အချိန်အနည်းငယ် ကြာနိုင်ပါသည်။";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "တစ်ပြေးညီဖြစ်စေရန် ဆောင်ရွက်နေသည်";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "တစ်ပြေးညီဖြစ်စေရန် ဆောင်ရွက်နေသည်…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "မှတ်သားချက်များ";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Remote Clients";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "တစ်ပြေးညီဆောင်ရွက်မှု မအောင်မြင်ပါ";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "မှတ်တမ်း";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "ဝင်ရောက်မှု အချက်အလက်များ";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "တစ်ပြေးညီဆောင်ရွက်မှုကို အသုံးမပြုနိုင်ပါ";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "တစ်ပြေးညီဆောင်ရွက်မှုသည် အော့ဖ်လိုင်း ဖြစ်နေသည်";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "%@ ကို တစ်ပြေးညီဖြစ်စေရန် ဆောင်ရွက်နေစဉ် ပြဿနာတစ်စုံတစ်ရာ ကြုံတွေ့သည်";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "တဗ်များ";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "တပ်ဗ် %2$@ ၏ %1$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "တပ်ဗ် %1$@ အား %3$@ ၏ %2$@ သို့";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "တပ်ဗ်လိုင်းများ";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Undo";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "တဗ် %d ခု ပိတ်လိုက်သည်";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "စာမျက်နှာအား စာဖတ်ပုံစံဖြင့် မဖွင့်နိုင်ပါ";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "မီးမြေခွေး Aurora အတွက် ဗားရှင်းအသစ်ရှိနေပြီ။ ဒေါင်းလုဒ်စာမျက်နှာသို့ သွားရန် အိုကေ ကို ထိပါ";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "သင့်အခြားဖုန်းများ မှ တပ်ဗ်များအား ရယူရာတွင် အခက်အခဲရှိသည်။ တခဏကြာလျှင် ပြန်ကြိုးစားကြည့်ပါ";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "စာမျက်နှာအားပြောင်းလဲရာတွင် အခက်အခဲရှိသည်";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "သင့် ကင်မရာ ဖိုဒိုအတွင်းသို့ ဓာတ်ပုံအား သိမ်းထားနိုင်ရင် ပြုလုပ်ပေးသည်";
+
+/* Opening an external app */
+"This will open in another application" = "အခြား အက်ပ်တစ်ခုတွင်သွား ပွင့်မည်";
+
+/* History tableview section header */
+"Today" = "ဒီနေ့";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "မီနူးစာရင်း";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "အဖွင့်စာမျက်နှာ";
+
+/* Panel accessibility label */
+"Top sites" = "ရေပန်းစား ဆိုက်များ";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "အကြည့်ရှုအများဆုံး ဝဘ်ဆိုက်များကို ဒီနေရာတွင် ပြသပါမည်။";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "ထိပ်တန်းအကြည့်များဆုံး ဆိုက်များက ကြိုဆိုပါသည်။";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "စာမျက်နှာကို ဖျက်ရန်။ ။%@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "မွမ်းမံချက်";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "ချိတ်ဆက်ရန် မီးမြေခွေးအားမွမ်းမံပါ";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "တပ်ဗ်အသေးစားကိုသုံးမည်";
+
+/* Username textbox in Authentication prompt */
+"Username" = "သုံးဆွဲသူ အမည်";
+
+/* Text message in the settings table view */
+"Verify your email address." = "သင့်အီးမေလ်းလိပ်စာအား အတည်ပြုပါ";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "ဗားရှင်း %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "ကြည့်ပါ";
+
+/* Accessibility label for the main web content view */
+"Web content" = "ဝတ်ဘ်စာကိုယ်";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "စာဖတ်စာရင်းမှ ကြိုဆိုပါတယ်";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "ဟုတ်ပြီ၊ ဒါဟာ ကတိကအောက်နိုင်တဲ့ အရာပဲ။";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "ဝီကီပီးဒီးယား";
+
+/* Button to save the user's password */
+"Yes" = "ကောင်းပြီ";
+
+/* History tableview section header */
+"Yesterday" = "မနေ့က";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "သင့်အခြား ပစ္စည်းများတွင် ဖွင့်ထားသော တဗ်များမရှိပါ";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "သင့်လုပ်ပိုင်ခွင့်များ";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ကွန်ပျူတာ";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ယခုလေးတင်";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "မိုဘိုင်း ပစ္စည်း";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "လွန်ခဲ့သော တစ်လကျော်က";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "လွန်ခဲ့သော တပတ်ကျော်က";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "ဖတ်";
+
+/* Relative date for date in past week. */
+"this week" = "ယခုအပတ်";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ယနေ့ %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "မဖတ်";
+
+/* Relative date for yesterday. */
+"yesterday" = "မနေ့က";
+

@@ -1,0 +1,13 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "పూర్తయింది";
+
+/* Share action title
+   Text selection menu item */
+"Find in Page" = "పేజీలో వెతకండి";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "తదుపరి పేజీలో ఫలితం";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "మునుపటి పేజీలో ఫలితం";
+

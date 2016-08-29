@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Elérhető eszközök:";
+
+/* Close button in top navigation bar */
+"Close" = "Bezárás";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Nyissa meg a Firefoxot, menjen a beállításokhoz, és jelentkezzen be a folytatáshoz.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Küldés";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Lap küldése";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Nincs bejelentkezve a Firefox fiókjába.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Nincs más összekapcsolt eszköze ezzel a Firefox fiókkal, amellyel szinkronizálhatna.";
+

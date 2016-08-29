@@ -1,0 +1,880 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "प्रयोगकर्ता नाम र पासवर्ड %@ द्वारा अनुरोध भइरहेको छ।";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "प्रयोगकर्ता नाम र पासवर्ड %1$@ द्वारा अनुरोध भइरहेको छ। साइट भन्छ: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "बारेमा";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ट्याब थप्नुहोस्";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "पढ्ने सूचीमा थप्नुहोस्";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ठिक छ";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "पासलाइ वालेटमा थप्ने क्रममा त्रुटि देखापर्यो। पछि फेरि प्रयास गर्नुहोला।";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "पास थप्न असफल";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "पढ्ने सूचीमा थपियो";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ठेगाना र खोजि";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "तेस्रो-पार्टी कीबोर्डहरुलाइ अनुमति दिने";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "सधैँ पठाउनुहोस्";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "प्रमाणीकरण आवश्यक";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "पछाडि";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "पप-अप सञ्झ्यालहरूलाई अवरुद्द गर्नुहोस्";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "पुस्तकचिनो";
+
+/* Panel accessibility label */
+"Bookmarks" = "पुस्तकचिनो";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "तपाईंले सुरक्षित गर्नुभएको पुस्तकचिनोहरू यहाँ देखिनेछन्।";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "फोल्डर";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "स्थान";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "फोल्डरको नाम";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "नयाँ फोल्डर";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "शीर्षक";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "युआरएल";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "चमक";
+
+/* Alert Call Button */
+"Call" = "कल गर्नुहोस्";
+
+/* Label for Cancel button */
+"Cancel" = "रद्द गर्नुहोस्";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "रंग पृष्टभुमि बदल्छ।";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "फन्ट शैली परिवर्नत गर्छ।";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "व्यक्तिगत डाटा हटाउनुहोस्";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "बन्द गर्नुहोस्";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ट्याब बन्द गरिँदै";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ठेगाना प्रतिलिपि गर्नुहोस्";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "तस्बिरको प्रतिलिपि बनाउनुहोस्";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "लिङ्कको प्रतिलिपि बनाउनुहोस्";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "पढाइ सूचीमा पृष्ठ थप्न सकिएन। शायद यो पहिले नै त्यहाँ छ कि?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "पढाइ सूचीमा पृष्ठ थप्न सकिएन";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "पृष्ठ लोड गर्न सकेन।";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "खाता खोल्नुहोस्";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "अँध्यारो";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "डिबग: आधिकारीक सिंक स्टेट भूल्ने";
+
+/* Debug option */
+"Debug: require password" = "डिबग: पासवर्ड आवश्यक";
+
+/* Debug option */
+"Debug: require upgrade" = "डिबग: उन्नयन आवश्यक";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "पाठ साइज घटाउनुहोस्";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "पूर्वनिर्धारित खोज इन्जिन";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "थप पृष्ठ संवाद बन्द गर्नुहोस्";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "प्रदर्शन सेटिङ";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "%1$@को लागि %2$@मा पासवर्ड सुरक्षित गर्न चाहनुहुन्छ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "तपाइको पासवर्ड %@मा सुरक्षित गर्न चाहनुहुन्छ?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "%1$@को लागि %2$@मा पासवर्ड अद्यावधिक गर्न चाहनुहुन्छ?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "तपाइको पासवर्ड %@मा अद्यावधिक गर्न चाहनुहुन्छ?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "नपठाउनुहोस्";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "पूरा भयो";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "इतिहास खोल्न दुई पटक टयाप् गरेर दबाइराख्नुहोस्";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "होइन";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "हो";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "Firefox ले यो फाइल डाउनलोड वा प्रदर्शन गर्न असमर्थ छ। तपाईं अर्को अनुप्रयोगमा यसलाई खोल्न चाहनुहुन्छ?";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "Firefox का डाउन्लोडहरु";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "डाउनलोडहरु अझै Firefox मा समर्थित छैन।";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "जडान गर्न तपाईँको पासवर्ड प्रविष्ट गर्नुहोस्।";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "आधुनिक";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "चेतावनी: यो वेबसाइटमा तपाइको जडान सुरक्षित छ भनेर हामी पुष्टि गर्न सक्दैनौं ।";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "यो एक गलत कन्फिगुरेसन वा एक आक्रमणकारीको छेडछाड हुन सक्छ। तपाईं सम्भावित जोखिम स्वीकार गरेर अघि बढ्नुहोस्।";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ को मालिकले अनुचित ढंगले आफ्नो वेबसाइट कन्फिगर गरेको छ। तपाइको जानकारी चोरी हुनबाट रक्षा गर्न, Firefox ले यो वेबसाइटमा जडान गरेको छैन।";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "यो जडान अविश्वासिलो छ";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "पछाडि जानुहोस्";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "कुनैपनि हालतमा साइट खोल्नुहोस्";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "यो परिवर्तन प्रभावकारी हुनको लागि Firefox पुन: खोल्न आवश्यक छ।";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox ले तपाईँको खातासँग समन्वयन गर्न रोक्नेछ, तर यो कम्प्युटरमा तपाईँको ब्राउजिङ डेटा मेटिने छैन।";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox ले तपाईँको तस्बिरहरुमा पहुँच बनाउन चाहन्छ";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "अगाडि";
+
+/* General settings section title */
+"General" = "साधारण";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "तपाईँको अन्य उपकरणहरूको खुला ट्याबहरू, पुस्तकचिनोहरू, र पासवर्डहरू प्राप्त गर्नुहोस्।";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "जानुहोस्";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "प्रतिलिपि URL मा जाने";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "मद्दत";
+
+/* Panel accessibility label */
+"History" = "इतिहास";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "तपाईँले हालै भ्रमण गर्नुभएको वेबसाइटहरू यहाँ देखिनेछन्।";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "तपाईँको अन्य उपकरणहरूको ट्याबहरू यहाँ देखाउनुहोस्।";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "तपाईँको अन्य उपकरणहरूको खुला ट्याबहरू हेर्न साइन इन गर्नुहोस्।";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "इतिहास";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "हालै बन्द गरिएको";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d उपकरण(हरू) जडान भएको छ";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "सिङ्क गरिएको उपकरणहरू";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "रद्द गर्नुहोस्";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "तपाईँले पछि पनि सेटिङहरूमा गएर यो परिवर्तन गर्न सक्नुहुन्छ";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "गृहपृष्ठ चयन गर्नुहोस्";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "तपाईं आफ्नो गृह पृष्ठमा यो वेब पेज प्रयोग गर्न चाहनुहुन्छ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "पछाडि";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "ट्याब बन्द गर्नुहोस्";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "फेला पार्नुहोस्";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "अगाडि";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "नयाँ निजी ट्याब";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "नयाँ ट्याब";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "पृष्ठ पुन: लोड गर्नुहोस्";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "स्थानपट्टी चयन गर्नुहोस्";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "अर्को ट्याब देखाउनुहोस्";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "अघिल्लो ट्याब देखाउनुहोस्";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "पाठ साइज बढाउनुहोस्";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "परिचित हुनुहोस्";
+
+/* History tableview section header */
+"Last month" = "गएको महिना";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "अन्तिम सिङ्क: %@";
+
+/* History tableview section header */
+"Last week" = "गएको हप्ता";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "इजाजतपत्रहरु";
+
+/* Light theme setting in Reading View settings */
+"Light" = "प्रकाश";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "मूल पृष्ठ लोड गर्नुहोस्";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "सामग्री लोड गरिदै…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "लगआउट";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "लग आउट गर्ने?";
+
+/* Authentication prompt log in button */
+"Log in" = "लगइन";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "लग-इनहरू";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "बचत नगर्नुहोस्";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "%2$@ को लागि %1$@ लग-इन बचत गर्न चहानुहुन्छ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@ का लागि पासवर्ड बचत गर्ने?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "%2$@ को लागि %1$@ लग-इन अद्यावधिक गर्न चहानुहुन्छ?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "%@का लागि पासवर्ड अद्यावधिक गर्ने?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "लग-इन सङ्ग्रहित गर्नुहोस्";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "अद्यावधिक गर्नुहोस्";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox पहिले क्रयास भएको जस्तो देखिन्छ। तपाईं आफ्नो ट्याबहरू पुनःस्थापना गर्न चाहनुहुन्छ?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "पढेको रूपमा चिन्ह लगाउनुहोस्";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "नपढेको रूपमा चिन्ह लगाउनुहोस्";
+
+/* Label for the button, displayed in the menu, used to toggle night mode on or off */
+"Menu.NightModeAction.Title" = "रात्रि मोड";
+
+/* Label for the button, displayed in the menu, used to turn night mode off */
+"Menu.NightModeTurnOffAction.Title" = "रात्रि मोड बन्द गर्नुहोस्";
+
+/* Label for the button, displayed in the menu, used to turn night mode on */
+"Menu.NightModeTurnOnAction.Title" = "रात्रि मोड";
+
+/* Label for the button, displayed in the menu, used to toggle no image mode on or off */
+"Menu.NoImageModeAction.Title" = "तस्बिर-विहीन मोड";
+
+/* Label for the button, displayed in the menu, used to turn no image mode off */
+"Menu.NoImageModeTurnOffAction.Title" = "तस्बिरहरू देखाउनुहोस्";
+
+/* Label for the button, displayed in the menu, used to turn no image mode on */
+"Menu.NoImageModeTurnOnAction.Title" = "तस्बिरहरू लुकाउनुहोस्";
+
+/* Error for a missing remote error number */
+"Missing error" = "छुटेको त्रुटि";
+
+/* Error for a missing remote error message */
+"Missing message" = "छुटेको सन्देश";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "नेभिगेसन उपकरणपट्टी";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "नयाँ ट्याब: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "नयाँ संस्करण उपलब्ध छ";
+
+/* Restore Tabs Negative Action */
+"No" = "होइन";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "कुनै ट्याबहरू हैन";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "अहिले होइन";
+
+/* Button to not save the user's password */
+"Not now" = "अहिले होइन";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "ठिक छ";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ठिक छ";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "ओहो! Firefox क्रयास भयो";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "नयाँ ट्याबमा खोल्नुहोस्";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "अरू सेटिङ्गहरु";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Reader View मा लेखहरू पढ्न शीर्षक बारमा रहेको पुस्तक चिनोमा थिच्नुहोस्।";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "…मा खोल्नुहोस्";
+
+/* Opening an external URL */
+"Opening %@" = "%@ खोल्दै";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "प्यानल चयनकर्ता";
+
+/* Password textbox in Authentication prompt */
+"Password" = "पासवर्ड";
+
+/* Paste the URL into the location bar */
+"Paste" = "टाँस्नुहोस्";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "टाँस्नुहोस् र जानुहोस्";
+
+/* Privacy section title */
+"Privacy" = "गोपनीयता";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "गोपनीयता निति";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "शिघ्र-खोज इन्जिनहरू";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Reader View";
+
+/* Panel accessibility label */
+"Reading list" = "पढ्ने सुची";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "हालै बन्द गरिएको";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "पुन: लोड गर्नुहोस्";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "हटाउनुहोस्";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "पढ्ने सूचीबाट हटाउनुहोस्";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "पृष्ठ हटाउनुहोस्";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "डेस्कटप साइट अनुरोध गर्नुहोस्";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "मोबाइल साइट अनुरोध गर्नुहोस्";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "सान-सेरिफ";
+
+/* Context menu item for saving an image */
+"Save Image" = "तस्विर सङ्ग्रह गर्नुहोस्";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "लग-इनहरू सङ्ग्रह गर्नुहोस्";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "पुस्तकमा भएको जोड चिन्ह मा क्लिक गरेर पृष्ठहरू पाठक सुचीमा सन्चीत गर्नुहोस्।";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "खोजी गर्नुहोस्";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "खोज्नुहोस वा ठेगाना प्रविष्ट गर्नुहोस्";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "नयाँ खोज इन्जिन छिटो खोज पट्टी मा प्रदर्शित हुनेछ।";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "खोजी इन्जिन थपियो!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "खोज प्रदायक थप्ने?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "रद्द गर्नुहोस्";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "खोज प्रदायक थप्न सकिएन।";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "असफल भयो";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ठिक छ";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "सुझावका लागि खोजीहरू";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "सुरक्षित जडान";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "प्रतिक्रिया पठाउनुहोस्";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "प्रतिवेदन पठाउनुहोस्";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Mozilla ले समस्या समाधान गरोस् भनेर क्रयास् रिपोट पठाउने?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "रद्द गर्नुहोस्";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "केवल HTTP र HTTPS लिङ्क मात्र साझेदारी गर्न सकिन्छ।";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ठिक छ";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "तपाईं साझेदारी गर्न खोजि रहनु भएको लिङ्क साझेदारी गर्न सकिँदैन।";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "सेरिफ";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "सेटिङ";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "व्यक्तिगत डाटा हटाउनुहोस्";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "व्यक्तिगत डाटा हटाउनुहोस्";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "व्यक्तिगत डाटा हटाउनुहोस्";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "खाली गर्नुहोस्";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "गृहपृष्ठ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "गृहपृष्ठको सेटिङ्गहरु";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "अन्यथा उपकरणपट्टीमा देखाउनुहोस्";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "गृहपृष्ठ चिह्न मेनुमा देखाउनुहोस्";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "एक वेब पेज प्रविष्ट गर्नुहोस्";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "हालको गृहपृष्ठ";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "प्रतिलिपि गरियो लिङ्क प्रयोग गर्नुहोस्";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "अहिलेको पृष्ठ प्रयोग गर्नुहोस्";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "पूर्वनिर्धारित प्रयोग गर्नुहोस्";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "जब तपाईं एक नयाँ ट्याब खोल्नु हुनेछ:";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "खाली पृष्ठ देखाउनुहोस्";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "तपाईँका पुस्तकचिनोहरू देखाउनुहोस्";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "तपाईंको इतिहास देखाउनुहोस्";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "तपाईंको गृहपृष्ठ देखाउनुहोस्";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "तपाईंको पढाइ सूची देखाउनुहोस्";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "तपाईंको शीर्ष साइटहरू देखाउनुहोस्";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "नयाँ ट्याब";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "नयाँ ट्याबका सेटिङ्गहरू";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "पूरा भयो";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "सम्पादन गर्नुहोस्";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "समस्या निवारण";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "साझेदारी";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "लिङ्क साझा गर्नुहोस्";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "रद्द गर्नुहोस्";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "खोजि सुझाबहरु देखाउनुहोस्";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ट्याबहरु देखाउनुहोस्";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "भ्रमण गर्नुहोस्";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "खोजि सुझाबहरु देखाउनुहोस्";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Firefox मा साइन इन गर्नुहोस्";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "साइन इन";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "तपाईँको अन्य उपकरणहरू बाट ट्याबहरू, पुस्तकचिनोहरू, र पासवर्डहरू प्राप्त गर्न साईन-ईन गर्नुहोस्।";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "रोक्नुहोस्";
+
+/* Support section title */
+"Support" = "सहयोग";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ट्याब बन्द गर्न तीन औंलाहरु दायाँ वा बाँया स्वाइप गर्नुहोस्।";
+
+/* Sync Firefox Account */
+"Sync Now" = "अहिले सिङ्क गर्नुहोस्";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "तपाईंको ट्याबहरू, पुस्तकचिनोहरू, पासवर्डहरू र अन्य कुरा सिङ्क गर्नुहोस्।";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "तपाईंको ट्याबहरू, पासवर्डहरू र अन्य कुरा सिङ्क गर्नुहोस्।";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "पहिलो पटक सिङ्क गर्नको लागि केहि बेर लाग्न सक्छ";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "सिङ्क गरिँदै";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "सिङ्क गरिँदै…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "पुस्तकचिनो";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "रिमोट ग्राहकहरू";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "सिङ्क गर्न सकिएन";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "इतिहास";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "लग-इनहरू";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "सिङ्क उपलब्ध छैन";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "सिङ्क अफलाइन छ";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "सिङ्क गर्दा %@ समस्या आयो";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "ट्याबहरू";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "%1$@ of %2$@ ट्याब";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "%3$@ ट्याबहरूको %1$@ देखि %2$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ट्याबहरूको ट्रे";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "पूर्व स्थितिमा फर्काउनुहोस्";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d ट्याबहरू बन्द गरियो";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "पाठक पृष्ठमा यो पृष्ठ प्रदर्शन गर्न सकिएन।";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Firefox Aurora को नयाँ सँस्करण उपलब्ध छ। डाउनलोड गर्नको लागि हुन्छमा थिच्नुहोस्।";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "तपाईंको अन्य उपकरणको ट्याबहरूमा पहुँच हुन सकेन। केही समय पछि पुन: प्रयास गर्नुहोला।";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "पृष्ठ परिवर्तन गर्दा त्रुटी आयो";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "यसले तपाईंको चित्रलाई क्यामरा रोलमा बचत गर्न अनुमति दिन्छ।";
+
+/* Opening an external app */
+"This will open in another application" = "यो अर्को अनुप्रयोगमा खुल्छ";
+
+/* History tableview section header */
+"Today" = "आज";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "मेनु";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "गृहपृष्ठ";
+
+/* Panel accessibility label */
+"Top sites" = "शिर्ष साइटहरु";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "तपाईंले बडी भ्रमण गर्न भएको साइटहरू यहाँ देखिनेछ।";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "शीर्ष साइटहरुमा तपाईंको स्वागत छ";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "%@ पृष्ठ हटाउनुहोस्";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "अद्यावधिक गर्नुहोस्";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Firefox लाई कनेक्टमा अद्यावधिक गर्नुहोस्।";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "संकुचित ट्याबहरू प्रयोग गर्नुहोस्";
+
+/* Username textbox in Authentication prompt */
+"Username" = "प्रयोगकर्ता नाम";
+
+/* Text message in the settings table view */
+"Verify your email address." = "तपाईँको इमेल ठेगाना प्रमाणित गर्नुहोस्।";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "संस्करण %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "हेर्नुहोस्";
+
+/* Accessibility label for the main web content view */
+"Web content" = "वेब सामग्री";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "तपाईंलाई तपाईंको पढ्ने सुचीमा स्वागत छ";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "यो लज्जादायी छ।";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "विकिपीडिया";
+
+/* Button to save the user's password */
+"Yes" = "हो";
+
+/* History tableview section header */
+"Yesterday" = "हिजो";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "तपाईंको अन्य उपकरणहरूको Firefox मा कुनै पनि ट्याबहरू खुला छैन।";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "तपाईँका अधिकारहरु";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "कम्प्युटर";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "अहिले भर्खरै";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "मोबाईल उपकरण";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "एक महिना बढी भन्दा पहिले";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "एक हप्ता बढी भन्दा पहिले";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "पढ्नुहोस्";
+
+/* Relative date for date in past week. */
+"this week" = "यो हप्ता";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "आज %@ मा";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "नपढिएका";
+
+/* Relative date for yesterday. */
+"yesterday" = "हिजो";
+

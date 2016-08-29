@@ -1,0 +1,74 @@
+Metadata-Version: 2.0
+Name: lxml
+Version: 3.6.4
+Summary: Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API.
+Home-page: http://lxml.de/
+Author: lxml dev team
+Author-email: lxml-dev@lxml.de
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Cython
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: C
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Text Processing :: Markup :: HTML
+Classifier: Topic :: Text Processing :: Markup :: XML
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides-Extra: cssselect
+Requires-Dist: cssselect (>=0.7); extra == 'cssselect'
+Provides-Extra: html5
+Requires-Dist: html5lib; extra == 'html5'
+Provides-Extra: htmlsoup
+Requires-Dist: BeautifulSoup4; extra == 'htmlsoup'
+Provides-Extra: source
+Requires-Dist: Cython (>=0.20); extra == 'source'
+
+lxml is a Pythonic, mature binding for the libxml2 and libxslt libraries.  It
+provides safe and convenient access to these libraries using the ElementTree
+API.
+
+It extends the ElementTree API significantly to offer support for XPath,
+RelaxNG, XML Schema, XSLT, C14N and much more.
+
+To contact the project, go to the `project home page
+<http://lxml.de/>`_ or see our bug tracker at
+https://launchpad.net/lxml
+
+In case you want to use the current in-development version of lxml,
+you can get it from the github repository at
+https://github.com/lxml/lxml .  Note that this requires Cython to
+build the sources, see the build instructions on the project home
+page.  To the same end, running ``easy_install lxml==dev`` will
+install lxml from
+https://github.com/lxml/lxml/tarball/master#egg=lxml-dev if you have
+an appropriate version of Cython installed.
+
+
+After an official release of a new stable series, bug fixes may become
+available at
+https://github.com/lxml/lxml/tree/lxml-3.6 .
+Running ``easy_install lxml==3.6bugfix`` will install
+the unreleased branch state from
+https://github.com/lxml/lxml/tarball/lxml-3.6#egg=lxml-3.6bugfix
+as soon as a maintenance branch has been established.  Note that this
+requires Cython to be installed at an appropriate version for the build.
+
+3.6.4 (2016-08-20)
+==================
+
+* GH#204, LP#1614693: build fix for MacOS-X.
+
+
+
+

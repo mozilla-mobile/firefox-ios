@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Peranti yang ada:";
+
+/* Close button in top navigation bar */
+"Close" = "Tutup";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Sila buka Firefox, pergi ke Tetapan dan log masuk untuk meneruskan.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Hantar";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Hantar Tab";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Anda belum log masuk ke Akaun Firefox anda.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Anda tidak mempunyai apa-apa peranti lain yang disambungkan ke Akaun Firefox ini yang telah disediakan untuk disegerakkan.";
+

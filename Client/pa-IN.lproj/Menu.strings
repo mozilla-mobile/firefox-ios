@@ -1,0 +1,51 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "ਬੁੱਕਮਾਰਕ ਜੋੜੋ";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "ਸਭ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
+
+/* Accessibility label describing the button that closes the menu when open */
+"Menu.CloseMenu.AccessibilityLabel" = "ਮੀਨੂ ਬੰਦ ਕਰੋ";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "ਸਫ਼ੇ ਵਿੱਚ ਲੱਭੋ";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "ਨਵਾਂ ਨਿੱਜੀ ਟੈਬ";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "ਨਵਾਂ ਟੈਬ";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel. */
+"Menu.OpenBookmarksAction.AccessibilityLabel" = "ਬੁੱਕਮਾਰਕ";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
+"Menu.OpenHistoryAction.AccessibilityLabel" = "ਅਤੀਤ";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "ਮੁੱਖ ਸਫ਼ਾ";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
+"Menu.OpenReadingListAction.AccessibilityLabel" = "ਪੜ੍ਹਨ ਸੂਚੀ";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "ਸੈਟਿੰਗਾਂ";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "ਚੋਟੀ ਦੀਆਂ ਸਾਈਟਾਂ";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "ਬੁੱਕਮਾਰਕ ਹਟਾਓ";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SendPageAction.Title" = "ਭੇਜੋ";
+
+/* Label for the button, displayed in the menu, used to set the homepage if none is currently set. */
+"Menu.SetHomePageAction.Title" = "ਮੁੱਖ-ਪੰਨੇ ਨੂੰ ਸੈੱਟ ਕਰੋ";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "ਡੈਸਕਟਾਪ ਸਾਈਟ ਮੰਗੋ";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "ਮੋਬਾਈਲ ਸਾਈਟ ਮੰਗੋ";
+
