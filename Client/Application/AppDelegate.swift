@@ -251,7 +251,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        print("registered!!! \(deviceToken.hexEncodedString)")
+        let APNsToken = deviceToken.hexEncodedString
+        let configuration = StagePushConfiguration()
+        let pushClient = PushClient(endpointURL: configuration.endpointURL)
+        pushClient.register(APNsToken).upon { result in
+            guard result.isSuccess else {
+                print("fail: \(result.failureValue!)")
+                return
+            }
+
+            let registration = result.successValue!
+            print("endpoint: \(registration.endpoint)")
+            print("secret: \(registration.secret)")
+            print("uaid: \(registration.uaid)")
+            print("channelID: \(registration.channelID)")
+        }
     }
 
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
