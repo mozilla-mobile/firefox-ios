@@ -138,3 +138,13 @@ public class HawkHelper {
         return extra.stringByReplacingOccurrencesOfString("\\", withString: "\\\\").stringByReplacingOccurrencesOfString("\n", withString: "\\n")
     }
 }
+
+extension NSMutableURLRequest {
+    func addAuthorizationHeader(forHKDFSHA256Key bytes: NSData) {
+        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
+        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
+        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
+        let hawkValue = hawkHelper.getAuthorizationValueFor(self)
+        setValue(hawkValue, forHTTPHeaderField: "Authorization")
+    }
+}
