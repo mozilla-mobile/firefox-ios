@@ -20,14 +20,6 @@ public struct FxALoginResponse {
     public let verified: Bool
     public let sessionToken: NSData
     public let keyFetchToken: NSData
-
-    init(remoteEmail: String, uid: String, verified: Bool, sessionToken: NSData, keyFetchToken: NSData) {
-        self.remoteEmail = remoteEmail
-        self.uid = uid
-        self.verified = verified
-        self.sessionToken = sessionToken
-        self.keyFetchToken = keyFetchToken
-    }
 }
 
 public struct FxAccountRemoteError {
@@ -45,37 +37,18 @@ public struct FxAccountRemoteError {
 public struct FxAKeysResponse {
     let kA: NSData
     let wrapkB: NSData
-
-    init(kA: NSData, wrapkB: NSData) {
-        self.kA = kA
-        self.wrapkB = wrapkB
-    }
 }
 
 public struct FxASignResponse {
-    public let certificate: String
-
-    init(certificate: String) {
-        self.certificate = certificate
-    }
+    let certificate: String
 }
 
 public struct FxAStatusResponse {
     let exists: Bool
-    let locked: Bool
-
-    init(exists: Bool, locked: Bool) {
-        self.exists = exists
-        self.locked = locked
-    }
 }
 
 public struct FxADevicesResponse {
     let devices: [FxADevice]
-
-    init(devices: [FxADevice]) {
-        self.devices = devices
-    }
 }
 
 // fxa-auth-server produces error details like:
@@ -240,12 +213,11 @@ public class FxAClient10 {
 
     private class func statusResponseFromJSON(json: JSON) -> FxAStatusResponse? {
         guard !json.isError,
-            let exists = json["exists"].asBool,
-            let locked = json["locked"].asBool else {
+            let exists = json["exists"].asBool else {
                 return nil
         }
 
-        return FxAStatusResponse(exists: exists, locked: locked)
+        return FxAStatusResponse(exists: exists)
     }
 
     private class func devicesResponseFromJSON(json: JSON) -> FxADevicesResponse? {
