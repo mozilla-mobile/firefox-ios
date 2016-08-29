@@ -275,27 +275,20 @@ class Tab: NSObject {
     var displayURL: NSURL? {
         if let url = url {
             if ReaderModeUtils.isReaderModeURL(url) {
-                return ReaderModeUtils.decodeURL(url)
+                return ReaderModeUtils.decodeURL(url)?.havingRemovedAuthorisationComponents()
             }
 
             if ErrorPageHelper.isErrorPageURL(url) {
                 let decodedURL = ErrorPageHelper.originalURLFromQuery(url)
                 if !AboutUtils.isAboutURL(decodedURL) {
-                    return decodedURL
+                    return decodedURL?.havingRemovedAuthorisationComponents()
                 } else {
                     return nil
                 }
             }
 
-            if let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) where (urlComponents.user != nil) || (urlComponents.password != nil) {
-                urlComponents.user = nil
-                urlComponents.password = nil
-                return urlComponents.URL
-            }
-
-
             if !AboutUtils.isAboutURL(url) {
-                return url
+                return url.havingRemovedAuthorisationComponents()
             }
         }
         return nil
