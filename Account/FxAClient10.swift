@@ -268,7 +268,6 @@ public class FxAClient10 {
     }()
 
     public func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Maybe<FxALoginResponse>> {
-        let deferred = Deferred<Maybe<FxALoginResponse>>()
         let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: FxAClient10.KW("authPW"), length: 32)
 
         let parameters = [
@@ -288,38 +287,10 @@ public class FxAClient10 {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.HTTPBody = JSON(parameters).toString(false).utf8EncodedData
 
-        alamofire.request(mutableURLRequest)
-                 .validate(contentType: ["application/json"])
-                 .responseJSON { (request, response, result) in
-
-                    // Don't cancel requests just because our Manager is deallocated.
-                    withExtendedLifetime(self.alamofire) {
-                        if let error = result.error as? NSError {
-                            deferred.fill(Maybe(failure: FxAClientError.Local(error)))
-                            return
-                        }
-
-                        if let data = result.value {
-                            let json = JSON(data)
-                            if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                                deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
-                                return
-                            }
-
-                            if let response = FxAClient10.loginResponseFromJSON(json) {
-                                deferred.fill(Maybe(success: response))
-                                return
-                            }
-                        }
-                        deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
-                    }
-        }
-        return deferred
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.loginResponseFromJSON)
     }
 
     public func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
-        let deferred = Deferred<Maybe<FxAKeysResponse>>()
-
         let URL = self.URL.URLByAppendingPathComponent("/account/keys")
         let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
@@ -331,35 +302,10 @@ public class FxAClient10 {
 
         let keyRequestKey = key.subdataWithRange(NSMakeRange(2 * KeyLength, KeyLength))
 
-        alamofire.request(mutableURLRequest)
-            .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, result) in
-                if let error = result.error as? NSError {
-                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
-                    return
-                }
-
-                if let data = result.value {
-                    let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
-                        return
-                    }
-
-                    if let response = FxAClient10.keysResponseFromJSON(keyRequestKey, json: json) {
-                        deferred.fill(Maybe(success: response))
-                        return
-                    }
-                }
-
-                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
-            }
-        return deferred
+        return makeRequest(mutableURLRequest) { FxAClient10.keysResponseFromJSON(keyRequestKey, json: $0) }
     }
 
     public func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
-        let deferred = Deferred<Maybe<FxASignResponse>>()
-
         let parameters = [
             "publicKey": publicKey.JSONRepresentation(),
             "duration": NSNumber(unsignedLongLong: OneDayInMilliseconds), // The maximum the server will allow.
@@ -377,71 +323,20 @@ public class FxAClient10 {
         let key = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
-        alamofire.request(mutableURLRequest)
-            .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, result) in
-                if let error = result.error as? NSError {
-                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
-                    return
-                }
-
-                if let data = result.value {
-                    let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
-                        return
-                    }
-
-                    if let response = FxAClient10.signResponseFromJSON(json) {
-                        deferred.fill(Maybe(success: response))
-                        return
-                    }
-                }
-
-                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
-        }
-        return deferred
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.signResponseFromJSON)
     }
 
     public func status(uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
-        let deferred = Deferred<Maybe<FxAStatusResponse>>()
         let statusURL = self.URL.URLByAppendingPathComponent("/account/status").withQueryParam("uid", value: uid)
         let mutableURLRequest = NSMutableURLRequest(URL: statusURL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        alamofire.request(mutableURLRequest)
-            .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, result) in
-                withExtendedLifetime(self.alamofire) {
-                    if let error = result.error as? NSError {
-                        deferred.fill(Maybe(failure: FxAClientError.Local(error)))
-                        return
-                    }
-
-                    if let data = result.value {
-                        let json = JSON(data)
-                        if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                            deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
-                            return
-                        }
-
-                        if let response = FxAClient10.statusResponseFromJSON(json) {
-                            deferred.fill(Maybe(success: response))
-                            return
-                        }
-                    }
-
-                    deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
-                }
-        }
-        return deferred
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.statusResponseFromJSON)
     }
 
     public func devices(sessionToken: NSData) -> Deferred<Maybe<FxADevicesResponse>> {
-        let deferred = Deferred<Maybe<FxADevicesResponse>>()
-
         let URL = self.URL.URLByAppendingPathComponent("/account/devices")
         let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
@@ -453,37 +348,10 @@ public class FxAClient10 {
         let key = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
-        alamofire.request(mutableURLRequest)
-            .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, result) in
-                withExtendedLifetime(self.alamofire) {
-                    if let error = result.error as? NSError {
-                        deferred.fill(Maybe(failure: FxAClientError.Local(error)))
-                        return
-                    }
-
-                    if let data = result.value {
-                        let json = JSON(data)
-                        if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                            deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
-                            return
-                        }
-
-                        if let response = FxAClient10.devicesResponseFromJSON(json) {
-                            deferred.fill(Maybe(success: response))
-                            return
-                        }
-                    }
-
-                    deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
-                }
-        }
-        return deferred
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.devicesResponseFromJSON)
     }
 
     public func registerOrUpdateDevice(sessionToken: NSData, device: FxADevice) -> Deferred<Maybe<FxADevice>> {
-        let deferred = Deferred<Maybe<FxADevice>>()
-
         let URL = self.URL.URLByAppendingPathComponent("/account/device")
         let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
@@ -496,7 +364,13 @@ public class FxAClient10 {
         let key = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
-        alamofire.request(mutableURLRequest)
+        return makeRequest(mutableURLRequest, responseHandler: FxADevice.fromJSON)
+    }
+
+    private func makeRequest<T>(request: NSMutableURLRequest, responseHandler: JSON -> T?) -> Deferred<Maybe<T>> {
+        let deferred = Deferred<Maybe<T>>()
+
+        alamofire.request(request)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, result) in
                 withExtendedLifetime(self.alamofire) {
@@ -512,8 +386,8 @@ public class FxAClient10 {
                             return
                         }
 
-                        if let responseDevice = FxADevice.fromJSON(json) {
-                            deferred.fill(Maybe(success: responseDevice))
+                        if let response = responseHandler(json) {
+                            deferred.fill(Maybe(success: response))
                             return
                         }
                     }
@@ -521,6 +395,7 @@ public class FxAClient10 {
                     deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
                 }
         }
+
         return deferred
     }
 }
