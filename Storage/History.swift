@@ -40,6 +40,13 @@ public protocol BrowserHistory {
 }
 
 /**
+ * An interface for accessing recommendation content from Storage
+ */
+public protocol HistoryRecommendations {
+    func getHighlights() -> Deferred<Maybe<Cursor<Site>>>
+}
+
+/**
  * The interface that history storage needs to provide in order to be
  * synced by a `HistorySynchronizer`.
  */

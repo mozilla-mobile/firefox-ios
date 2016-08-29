@@ -247,7 +247,7 @@ extension ActivityStreamPanel {
     }
 
     private func reloadRecentHistory() {
-        self.profile.history.getSitesByLastVisit(ASPanelUX.historySize).uponQueue(dispatch_get_main_queue()) { result in
+        self.profile.recommendations.getHighlights().uponQueue(dispatch_get_main_queue()) { result in
             self.history = result.successValue?.asArray() ?? self.history
             self.tableView.reloadData()
         }
