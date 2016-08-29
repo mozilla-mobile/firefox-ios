@@ -357,23 +357,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func syncOnDidEnterBackground(application application: UIApplication) {
-        // Short circuit and don't sync if we don't have a syncable account.
-        guard self.profile?.hasSyncableAccount() ?? false else {
+        guard let profile = self.profile else {
             return
         }
 
-        self.profile?.syncManager.applicationDidEnterBackground()
+        profile.syncManager.applicationDidEnterBackground()
 
         var taskId: UIBackgroundTaskIdentifier = 0
         taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
             log.warning("Running out of background time, but we have a profile shutdown pending.")
-            self.profile?.shutdown()
+            profile.shutdown()
             application.endBackgroundTask(taskId)
         }
 
-        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-        self.profile?.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
-            self.profile?.shutdown()
+        if profile.hasSyncableAccount() {
+            let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+            profile.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
+                profile.shutdown()
+                application.endBackgroundTask(taskId)
+            }
+        } else {
+            profile.shutdown()
             application.endBackgroundTask(taskId)
         }
     }
