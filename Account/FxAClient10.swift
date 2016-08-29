@@ -320,20 +320,16 @@ public class FxAClient10 {
     public func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         let deferred = Deferred<Maybe<FxAKeysResponse>>()
 
-        let salt: NSData = NSData()
-        let contextInfo: NSData = FxAClient10.KW("keyFetchToken")
-        let bytes = keyFetchToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
-        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
-        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
-        let keyRequestKey = bytes.subdataWithRange(NSMakeRange(2 * KeyLength, KeyLength))
-        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
-
         let URL = self.URL.URLByAppendingPathComponent("/account/keys")
         let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
-        let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
-        mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
+        let salt: NSData = NSData()
+        let contextInfo: NSData = FxAClient10.KW("keyFetchToken")
+        let key = keyFetchToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
+        mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
+
+        let keyRequestKey = key.subdataWithRange(NSMakeRange(2 * KeyLength, KeyLength))
 
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
@@ -369,13 +365,6 @@ public class FxAClient10 {
             "duration": NSNumber(unsignedLongLong: OneDayInMilliseconds), // The maximum the server will allow.
         ]
 
-        let salt: NSData = NSData()
-        let contextInfo: NSData = FxAClient10.KW("sessionToken")
-        let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
-        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
-        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
-        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
-
         let URL = self.URL.URLByAppendingPathComponent("/certificate/sign")
         let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
@@ -383,8 +372,10 @@ public class FxAClient10 {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.HTTPBody = JSON(parameters).toString(false).utf8EncodedData
 
-        let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
-        mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
+        let salt: NSData = NSData()
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")
+        let key = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
+        mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
@@ -451,21 +442,16 @@ public class FxAClient10 {
     public func devices(sessionToken: NSData) -> Deferred<Maybe<FxADevicesResponse>> {
         let deferred = Deferred<Maybe<FxADevicesResponse>>()
 
-        let salt: NSData = NSData()
-        let contextInfo: NSData = FxAClient10.KW("sessionToken")
-        let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
-        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
-        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
-        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
-
         let URL = self.URL.URLByAppendingPathComponent("/account/devices")
         let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
-        mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
+        let salt: NSData = NSData()
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")
+        let key = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
+        mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
@@ -497,12 +483,6 @@ public class FxAClient10 {
 
     public func registerOrUpdateDevice(sessionToken: NSData, device: FxADevice) -> Deferred<Maybe<FxADevice>> {
         let deferred = Deferred<Maybe<FxADevice>>()
-        let salt: NSData = NSData()
-        let contextInfo: NSData = FxAClient10.KW("sessionToken")
-        let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
-        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
-        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
-        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
 
         let URL = self.URL.URLByAppendingPathComponent("/account/device")
         let mutableURLRequest = NSMutableURLRequest(URL: URL)
@@ -511,8 +491,10 @@ public class FxAClient10 {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.HTTPBody = device.toJSON().toString(false).utf8EncodedData
 
-        let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
-        mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
+        let salt: NSData = NSData()
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")
+        let key = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
+        mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
