@@ -264,6 +264,18 @@ extension NSURL {
     public var schemeIsValid: Bool {
         return permanentURISchemes.contains(scheme)
     }
+
+    public func havingRemovedAuthorisationComponents() -> NSURL {
+        guard let urlComponents = NSURLComponents(URL: self, resolvingAgainstBaseURL: false) else {
+            return self
+        }
+        urlComponents.user = nil
+        urlComponents.password = nil
+        if let url = urlComponents.URL {
+            return url
+        }
+        return self
+    }
 }
 
 //MARK: Private Helpers

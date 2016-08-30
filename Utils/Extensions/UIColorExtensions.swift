@@ -28,4 +28,10 @@ extension UIColor {
         NSScanner(string: colorString).scanHexInt(&colorInt)
         self.init(rgb: (Int) (colorInt ?? 0xaaaaaa))
     }
+
+    public var alpha: CGFloat {
+        var alpha: CGFloat = 0
+        self.getWhite(nil, alpha: &alpha)
+        return alpha
+    }
 }

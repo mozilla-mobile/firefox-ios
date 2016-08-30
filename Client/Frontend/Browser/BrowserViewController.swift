@@ -29,7 +29,6 @@ private let ActionSheetTitleMaxLength = 120
 
 private struct BrowserViewControllerUX {
     private static let BackgroundColor = UIConstants.AppBackgroundColor
-    private static let ShowHeaderTapAreaHeight: CGFloat = 32
     private static let BookmarkStarAnimationDuration: Double = 0.5
     private static let BookmarkStarAnimationOffset: CGFloat = 80
 }
@@ -83,7 +82,6 @@ class BrowserViewController: UIViewController {
     var footer: UIView!
     var footerBackdrop: UIView!
     private var footerBackground: BlurWrapper?
-    private var topTouchArea: UIButton!
     let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
 
     // Backdrop used for displaying greyed background for private tabs
@@ -129,15 +127,16 @@ class BrowserViewController: UIViewController {
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 
-        displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
-
-        guard let displayedPopoverController = self.displayedPopoverController else {
-            return
+        displayedPopoverController?.dismissViewControllerAnimated(true) {
+            self.displayedPopoverController = nil
         }
 
         coordinator.animateAlongsideTransition(nil) { context in
-            self.updateDisplayedPopoverProperties?()
-            self.presentViewController(displayedPopoverController, animated: true, completion: nil)
+            self.scrollController.showToolbars(animated: false)
+            if let displayedPopoverController = self.displayedPopoverController {
+                self.updateDisplayedPopoverProperties?()
+                self.presentViewController(displayedPopoverController, animated: true, completion: nil)
+            }
         }
     }
 
@@ -177,9 +176,17 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
+    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
+        
+        if let mvc = menuViewController where showToolbar != (toolbar != nil) {
+            // Hide the menu, and then re-open it so that the menu is always the correct one for the given traits
+            mvc.dismissViewControllerAnimated(true, completion: nil)
+            coordinator?.animateAlongsideTransition(nil, completion: { _ in
+                self.tabToolbarDidPressMenu(self.navigationToolbar, button: self.navigationToolbar.menuButton)
+            })
+        }
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
@@ -251,12 +258,12 @@ class BrowserViewController: UIViewController {
         // During split screen launching on iPad, this callback gets fired before viewDidLoad gets a chance to
         // set things up. Make sure to only update the toolbar state if the view is ready for it.
         if isViewLoaded() {
-            updateToolbarStateForTraitCollection(newCollection)
+            updateToolbarStateForTraitCollection(newCollection, withTransitionCoordinator: coordinator)
         }
 
         displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
 
-        // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
+        // WKWebView looks like it has a bug where it doesn't invalidate its visible area when the user
         // performs a device rotation. Since scrolling calls
         // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
         // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
@@ -264,7 +271,6 @@ class BrowserViewController: UIViewController {
             let contentOffset = scrollView.contentOffset
             coordinator.animateAlongsideTransition({ context in
                 scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
-                self.scrollController.showToolbars(animated: false)
             }, completion: { context in
                 scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
             })
@@ -273,10 +279,6 @@ class BrowserViewController: UIViewController {
 
     func SELappDidEnterBackgroundNotification() {
         displayedPopoverController?.dismissViewControllerAnimated(false, completion: nil)
-    }
-
-    func SELtappedTopArea() {
-        scrollController.showToolbars(animated: true)
     }
 
     func SELappWillResignActiveNotification() {
@@ -289,6 +291,7 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
         urlBar.locationContainer.alpha = 0
+        topTabsViewController?.switchForegroundStatus(isInForeground: false)
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
     }
@@ -299,6 +302,7 @@ class BrowserViewController: UIViewController {
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
             self.webViewContainer.alpha = 1
             self.urlBar.locationContainer.alpha = 1
+            self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
             self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
             self.presentedViewController?.view.alpha = 1
             self.view.backgroundColor = UIColor.clearColor()
@@ -351,12 +355,6 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.backgroundColor = BrowserViewControllerUX.BackgroundColor
         view.addSubview(statusBarOverlay)
 
-        log.debug("BVC setting up top touch area…")
-        topTouchArea = UIButton()
-        topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), forControlEvents: UIControlEvents.TouchUpInside)
-        view.addSubview(topTouchArea)
-
         log.debug("BVC setting up URL bar…")
         // Setup the URL bar, wrapped in a view to get transparency effect
         urlBar = URLBarView()
@@ -366,6 +364,9 @@ class BrowserViewController: UIViewController {
         header = BlurWrapper(view: urlBarTopTabsContainer)
         urlBarTopTabsContainer.addSubview(urlBar)
         urlBarTopTabsContainer.addSubview(topTabsContainer)
+        let showURLBarGesture = UITapGestureRecognizer(target: self, action: #selector(didTapURLBar))
+        showURLBarGesture.cancelsTouchesInView = false
+        urlBar.addGestureRecognizer(showURLBarGesture)
         view.addSubview(header)
 
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
@@ -447,14 +448,18 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
-        log.debug("BVC viewDidLayoutSubviews…")
         super.viewDidLayoutSubviews()
         statusBarOverlay.snp_remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.topLayoutGuide.length)
         }
         self.appDidUpdateState(getCurrentAppState())
-        log.debug("BVC done.")
+    }
+    
+    func didTapURLBar(recogniser: UITapGestureRecognizer) {
+        if self.urlBar.transitionValue < 1.0 {
+            self.scrollController.showToolbars(animated: true)
+        }
     }
 
     func loadQueuedTabs() {
@@ -601,7 +606,7 @@ class BrowserViewController: UIViewController {
 
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
-        urlBar.updateAlphaForSubviews(1)
+        urlBar.transitionValue = 1.0
 
         [header,
             footer,
@@ -614,11 +619,6 @@ class BrowserViewController: UIViewController {
 
     override func updateViewConstraints() {
         super.updateViewConstraints()
-
-        topTouchArea.snp_remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
-        }
 
         readerModeBar?.snp_remakeConstraints { make in
             make.top.equalTo(self.header.snp_bottom).constraint
@@ -696,16 +696,21 @@ class BrowserViewController: UIViewController {
         homePanelIsInline = inline
 
         if homePanelController == nil {
-            homePanelController = HomePanelViewController()
-            homePanelController!.profile = profile
-            homePanelController!.delegate = self
-            homePanelController!.appStateDelegate = self
-            homePanelController!.url = tabManager.selectedTab?.displayURL
-            homePanelController!.view.alpha = 0
+            let homePanelController = HomePanelViewController()
+            homePanelController.profile = profile
+            homePanelController.delegate = self
+            homePanelController.appStateDelegate = self
+            homePanelController.url = tabManager.selectedTab?.displayURL
+            homePanelController.view.alpha = 0
+            self.homePanelController = homePanelController
 
-            addChildViewController(homePanelController!)
-            view.addSubview(homePanelController!.view)
-            homePanelController!.didMoveToParentViewController(self)
+            addChildViewController(homePanelController)
+            view.addSubview(homePanelController.view)
+            homePanelController.didMoveToParentViewController(self)
+        }
+        guard let homePanelController = self.homePanelController else {
+            assertionFailure("homePanelController is still nil after assignment.")
+            return
         }
 
         let panelNumber = tabManager.selectedTab?.url?.fragment
@@ -717,13 +722,13 @@ class BrowserViewController: UIViewController {
                 newSelectedButtonIndex = lastInt
             }
         }
-        homePanelController?.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
-        homePanelController?.isPrivateMode = tabTrayController?.privateMode ?? tabManager.selectedTab?.isPrivate ?? false
+        homePanelController.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
+        homePanelController.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
         UIView.animateWithDuration(0.2, animations: { () -> Void in
-            self.homePanelController!.view.alpha = 1
+            homePanelController.view.alpha = 1
         }, completion: { finished in
             if finished {
                 self.webViewContainer.accessibilityElementsHidden = true
@@ -1112,6 +1117,12 @@ class BrowserViewController: UIViewController {
         let controller = helper.createActivityViewController({ [unowned self] completed in
             // After dismissing, check to see if there were any prompts we queued up
             self.showQueuedAlertIfAvailable()
+
+            // Usually the popover delegate would handle nil'ing out the references we have to it
+            // on the BVC when displaying as a popover but the delegate method doesn't seem to be
+            // invoked on iOS 10. See Bug 1297768 for additional details.
+            self.displayedPopoverController = nil
+            self.updateDisplayedPopoverProperties = nil
 
             if completed {
                 // We don't know what share action the user has chosen so we simply always
@@ -1540,15 +1551,6 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         self.presentViewController(longPressAlertController, animated: true, completion: nil)
-    }
-
-    func urlBarDidPressScrollToTop(urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab {
-            // Only scroll to top if we are not showing the home view controller
-            if homePanelController == nil {
-                selectedTab.webView?.scrollView.setContentOffset(CGPointZero, animated: true)
-            }
-        }
     }
 
     func urlBarLocationAccessibilityActions(urlBar: URLBarView) -> [UIAccessibilityCustomAction]? {
