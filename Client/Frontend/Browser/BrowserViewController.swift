@@ -577,7 +577,7 @@ class BrowserViewController: UIViewController {
 
         if shouldShowWhatsNewTab() {
             if let whatsNewURL = SupportUtils.URLForTopic("new-ios") {
-                self.openURLInNewTab(whatsNewURL, isPrivileged: true)
+                self.openURLInNewTab(whatsNewURL, isPrivileged: false)
                 profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
             }
         }
@@ -1411,7 +1411,7 @@ extension BrowserViewController: MenuActionDelegate {
 
 extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(url: NSURL) {
-        self.openURLInNewTab(url, isPrivileged: true)
+        self.openURLInNewTab(url, isPrivileged: false)
     }
 }
 
