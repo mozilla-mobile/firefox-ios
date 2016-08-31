@@ -37,7 +37,7 @@ extension NSDate {
         return NSDate(timeIntervalSince1970: Double(microsecondTimestamp) / 1000000)
     }
 
-    public func toRelativeTimeString() -> String {
+    public func toRelativeTimeString(isConcise: Bool = false) -> String {
         let now = NSDate()
 
         let units: NSCalendarUnit = [NSCalendarUnit.Second, NSCalendarUnit.Minute, NSCalendarUnit.Day, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.Hour]
@@ -46,6 +46,56 @@ extension NSDate {
             fromDate: self,
             toDate: now,
             options: [])
+
+        if isConcise {
+            if components.year == 1 {
+                return NSLocalizedString("\(components.year) year ago", comment: "Concise date for date older than a year.")
+            }
+
+            if components.year > 0 {
+                return NSLocalizedString("\(components.year) years ago", comment: "Concise date for date older than a year.")
+            }
+
+            if components.month == 1 {
+                return NSLocalizedString("\(components.month) month ago", comment: "Concise date for date older than a month.")
+            }
+
+            if components.month > 1 {
+                return NSLocalizedString("\(components.month) months ago", comment: "Concise date for date older than a month.")
+            }
+
+            if components.weekOfYear == 1 {
+                return NSLocalizedString("\(components.weekOfYear) week ago", comment: "Concise date for date older than a week.")
+            }
+
+            if components.weekOfYear > 0 {
+                return NSLocalizedString("\(components.weekOfYear) weeks ago", comment: "Concise date for date older than a week.")
+            }
+
+            if components.day == 1 {
+                return String(format: NSLocalizedString("day ago", comment: "Relative date for yesterday."))
+            }
+
+            if components.day > 1 {
+                return NSLocalizedString("\(components.day) days ago", comment: "Concise date for date older than a day.")
+            }
+
+            if components.hour == 1 {
+                return NSLocalizedString("\(components.hour) hour ago", comment: "Concise date for date older than a hour.")
+            }
+
+            if components.hour > 0 {
+                return NSLocalizedString("\(components.hour) hours ago", comment: "Concise date for date older than a hour.")
+            }
+
+            if components.minute == 1 {
+                return NSLocalizedString("\(components.minute) min ago", comment: "Concise date for date older than a minute.")
+            }
+
+            if components.minute > 0 {
+                return NSLocalizedString("\(components.minute) mins ago", comment: "Concise date for date older than a minute.")
+            }
+        }
         
         if components.year > 0 {
             return String(format: NSDateFormatter.localizedStringFromDate(self, dateStyle: NSDateFormatterStyle.ShortStyle, timeStyle: NSDateFormatterStyle.ShortStyle))

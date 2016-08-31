@@ -65,7 +65,16 @@ class DynamicFontHelper: NSObject {
         return UIFont.systemFontOfSize(deviceFontSize)
     }
     var DeviceFontSmallBold: UIFont {
-        return UIFont.systemFontOfSize(deviceFontSize - 1, weight: UIFontWeightBold)
+        return UIFont.boldSystemFontOfSize(deviceFontSize - 1)
+    }
+    var DeviceFontMediumBold: UIFont {
+        return UIFont.boldSystemFontOfSize(deviceFontSize + 1)
+    }
+    var DeviceFontSmallActivityStream: UIFont {
+        return UIFont.systemFontOfSize(deviceFontSize - 2, weight: UIFontWeightMedium)
+    }
+    var DeviceFontDescriptionActivityStream: UIFont {
+        return UIFont.systemFontOfSize(deviceFontSize - 2, weight: UIFontWeightRegular)
     }
 
     /**
