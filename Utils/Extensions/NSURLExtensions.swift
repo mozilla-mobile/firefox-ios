@@ -206,6 +206,16 @@ extension NSURL {
         return self
     }
 
+    public func extractDomainName() -> String {
+        let urlString =  self.normalizedHost() ?? self.URLString
+        var arr = urlString.componentsSeparatedByString(".")
+        if (arr.count >= 2) {
+            arr.popLast()
+            return arr.joinWithSeparator(".")
+        }
+        return urlString
+    }
+
     public func normalizedHost() -> String? {
         // Use components.host instead of self.host since the former correctly preserves
         // brackets for IPv6 hosts, whereas the latter strips them.
