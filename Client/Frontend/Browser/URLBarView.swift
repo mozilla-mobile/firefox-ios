@@ -686,7 +686,10 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapLocation(tabLocationView: TabLocationView) {
-        let locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
+        var locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
+        if let host = locationView.url?.host {
+            locationText = locationView.url?.absoluteString.stringByReplacingOccurrencesOfString(host, withString: host.asciiHostToUTF8())
+        }
         enterOverlayMode(locationText, pasted: false)
     }
 
