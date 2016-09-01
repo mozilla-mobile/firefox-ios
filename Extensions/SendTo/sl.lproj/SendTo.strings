@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Naprave na voljo:";
+
+/* Close button in top navigation bar */
+"Close" = "Zapri";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Odprite Firefox, pojdite v Nastavitve in se prijavite za nadaljevanje.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Pošlji";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Pošlji zavihek";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Niste prijavljeni v vaš Firefox Račun.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "S tem Firefox Računom nimate povezanih drugih naprav na voljo za sinhronizacijo.";
+

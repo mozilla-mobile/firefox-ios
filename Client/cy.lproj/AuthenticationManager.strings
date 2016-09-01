@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Ar ôl 1 awr";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Ar ôl 1 munud";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Ar ôl 5 munud";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Ar ôl 10 munud";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Ar ôl 15 munud";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Newid Cyfringod";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Rhowch Gyfringod";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Rhowch cyfringod newydd";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Cynnig cyfringod";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Rhowch gyfringod";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Yn syth";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Cyfringod anghywir. Ceisiwch eto (Cynigion yn weddill: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Cyfringod anghywir. Ceisiwch eto.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Uchafswm y cynigion wedi ei gyrraedd. Ceisiwch eto ymhen awr.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Uchafswm y cynigion wedi ei gyrraedd. Ceisiwch eto yn hwyrach.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Rhaid i'r cyfringod fod yn wahanol i'r cod cyfredol.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Cyfringod";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Nid yw'r cyfringodau'n cydweddu. Ceisiwch eto.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Ailgynnig cyfringod";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Angen Cyfringod";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Gosod Cyfringod";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Enw Cyffwrdd a Chyfringod";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Diffodd y Cyfringod";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Cychwyn y Cyfringod";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Diffodd eich cyfringod.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Defnyddiwch Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Defnyddio eich ôl bys i gael mynediad at fewngofnodion nawr.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Defnyddi eich ôl bys i gael mynediad at Bori Preifat nawr.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Defnyddiwch eich ôl bys i analluogi Touch ID.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Defnyddiwch eich ôl bys i gael mynediad at eich cyfnod cyfringod angenrheidiol.";
+

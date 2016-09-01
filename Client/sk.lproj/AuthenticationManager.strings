@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Po 1 hodine";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Po 1 minúte";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Po 5 minútach";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Po 10 minútach";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Po 15 minútach";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Zmeniť prístupový kód";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Zadajte prístupový kód";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Zadajte nový prístupový kód";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Zadajte prístupový kód";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Zadajte prístupový kód";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Okamžite";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Nesprávny prístupový kód. Skúste to znova (Zostávajúce pokusy: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Nesprávny prístupový kód. Skúste to znovu.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Dosiahol sa maximálny počet pokusov. Skúste to znova za hodinu.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Dosiahol sa maximálny počet pokusov. Skúste to znova neskôr.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Nový prístupový kód musí byť iný ako ten existujúci.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Prístupový kód";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Prístupové kódy sa nezhodujú. Skúste to znova.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Znova zadajte prístupový kód";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Vyžadovať prístupový kód";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Nastaviť prístupový kód";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID a prístupový kód";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Vypnúť prístupový kód";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Zapnúť prístupový kód";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Vypnite váš prístupový kód.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Používať Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Použite odtlačok prsta a prejdete k svojim Prihláseniam.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Použite odtlačok prsta a prejdete do režimu Súkromné prehliadanie.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Použite odtlačok prsta na vypnutie Touch ID.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Použite odtlačok prsta na prístup ku konfigurácii požadovaného intervalu zadávania prístupového kódu.";
+

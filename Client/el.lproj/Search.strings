@@ -1,0 +1,9 @@
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "Όχι";
+
+/* Label for search settings button. */
+"Search Settings" = "Ρυθμίσεις αναζήτησης";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "Ναι";
+

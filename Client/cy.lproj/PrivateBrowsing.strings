@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Cau Tabiau Preifat";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Fydd Firefox ddim yn cofio unrhyw hanes na chwcis ond bydd nodau tudalen newydd yn cael eu cadw.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Dysgu Rhagor";
+
+/* Toggled OFF accessibility value */
+"Off" = "Diffodd";
+
+/* Toggled ON accessibility value */
+"On" = "Ymlaen";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Agor mewn Tab Preifat Newydd";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Pori Preifat";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Y Modd Preifat";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Difodd neu gychwyn y modd preifat";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Pan yn Gadael Pori Preifat";
+

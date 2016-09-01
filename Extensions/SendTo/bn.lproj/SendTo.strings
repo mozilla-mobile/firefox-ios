@@ -1,0 +1,15 @@
+/* Header for the list of devices table */
+"Available devices:" = "ব্যাবহারযোগ্য ডিভাইস:";
+
+/* Close button in top navigation bar */
+"Close" = "বন্ধ করুন";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "দয়া করে Firefox খুলুন, সেটিংসে যান এবং সাইন ইন করুন।";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "পাঠান";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "ট্যাবটি পাঠান";
+

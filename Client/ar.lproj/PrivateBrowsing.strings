@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "أغلق الألسنة الخاصة";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "لن يتذكر فيرفكس أي من التأريخ، أو الكعكات، و لكن ستُحفظ العلامات الجديدة.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "اطّلع على المزيد";
+
+/* Toggled OFF accessibility value */
+"Off" = "معطل";
+
+/* Toggled ON accessibility value */
+"On" = "مُشغل";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "افتح في لسان خاص";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "التصفح الخاص";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "الوضع الخاص";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "شغّل/أوقف الوضع الخاص";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "عند مغادرة التصفح الخاص";
+

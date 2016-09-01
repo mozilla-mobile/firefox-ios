@@ -1,0 +1,24 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "Προσθήκη στους Σελιδοδείκτες";
+
+/* Label for preview action on Tab Tray Tab to add current tab to Reading List */
+"Add to Reading List" = "Προσθήκη στη Λίστα Ανάγνωσης";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "Κλείσιμο Καρτέλας";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "Αντιγραφή URL";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "Άνοιγμα Τελευταίου Σελιδοδείκτη";
+
+/* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
+"Open Last Tab" = "Άνοιγμα Τελευταίας Καρτέλας";
+
+/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
+"Preview of %@" = "Προεπισκόπηση του %@";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "Αποστολή σε Συσκευή";
+

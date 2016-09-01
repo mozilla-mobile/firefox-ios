@@ -1,0 +1,9 @@
+/* Close button in top navigation bar */
+"Close" = "ಮುಚ್ಚು";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "ಕಳುಹಿಸು";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "ಟ್ಯಾಬ್ ಕಳುಹಿಸು";
+

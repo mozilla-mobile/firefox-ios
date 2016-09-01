@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "तपाईं यसलाई र यसका सामग्रीहरू हटाउने कुरामा निश्चित हुनुहुन्छ?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "रद्द गर्नुहोस्";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "मेट्नुहोस्";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "यो फोल्डर खाली छैन।";
+

@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "ඔබට එය සහ එහි අන්තර්ගතය මැකීමට අවශ්‍ය බව ඔබට විශ්වාස ද?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "අවලංගු කරන්න";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "මකන්න";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "මෙම බහලුම හිස් නොවේ.";
+

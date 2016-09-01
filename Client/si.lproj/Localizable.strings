@@ -1,0 +1,222 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Panel accessibility label */
+"Bookmarks" = "පිටුසළකුණු";
+
+/* Alert Call Button */
+"Call" = "අමතන්න";
+
+/* Label for Cancel button */
+"Cancel" = "අවලංගු කරන්න";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "වර්ණ තේමාව වෙනස් කරන්න";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "පුද්ගලික දත්ත මකන්න";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "වසන්න";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ටැබ් වසන්න";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ලිපිනය පිටපත් කරන්න";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "රූපය පිටපත් කරන්න";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "සබැඳිය පිටපත් කරන්න";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "පිටුව පූර්ණය කළ නොහැකි විය.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ගිණුමක් තනන්න";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "අඳුරු";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "පෙරනිමි සෙවුම් එළවුම";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "සංදර්ශක සිටුවම්";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "කළා";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "සංකීර්ණ";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* History tableview section header */
+"Last week" = "පසුගිය සතිය";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "බලපත්‍ර";
+
+/* Light theme setting in Reading View settings */
+"Light" = "එළිය";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "අන්තර්ගත පූරණය වේ...";
+
+/* Authentication prompt log in button */
+"Log in" = "පිවිසුම";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "පිවිසුම්";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "සුරැකි පිවිසුම්";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "යාවත්කාලීන කරන්න";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "කියවූ සේ ලකුණු කරන්න";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "නොකියවූ සේ ලකුණු කරන්න";
+
+/* Restore Tabs Negative Action */
+"No" = "නැත";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "හරි";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "හරි";
+
+/* Password textbox in Authentication prompt */
+"Password" = "මුරපදය";
+
+/* Paste the URL into the location bar */
+"Paste" = "අලවන්න";
+
+/* Privacy section title */
+"Privacy" = "පුද්ගලිකත්වය";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "පෞද්ගලිකත්ව ප්‍රතිපත්තිය";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "ක්ෂණික සෙවුම් යන්ත්‍ර";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "කයවුම් දසුන";
+
+/* Panel accessibility label */
+"Reading list" = "කියවීමේ ලැයිස්තුව";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "ප්‍රතිපූරණය";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "ඉවත් කරන්න";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "පිටුව ඉවත් කරන්න";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Context menu item for saving an image */
+"Save Image" = "රූපය සුරකින්න";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "සුරැකි පිවිසුම්";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "සොයන්න";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ලිපිනය ඇතුලත් කිරීම හෝ සොයන්න";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "අවලංගු කරන්න";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "සැකසුම්";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "පුද්ගලික දත්ත මකන්න";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "පුද්ගලික දත්ත මකන්න";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "පුද්ගලික දත්ත මකන්න";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "බෙදාගන්න";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "සබැඳිය බෙදාගන්න";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "අවලංගු කරන්න";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "සෙවුම් යෝජනා පෙන්වන්න";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ටැබ් පෙන්වන්න";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "නවතන්න";
+
+/* Support section title */
+"Support" = "සහාය";
+
+/* History tableview section header */
+"Today" = "අද";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "යාවත්කාලීන කරන්න";
+
+/* Username textbox in Authentication prompt */
+"Username" = "පරිශීලක නාමය";
+
+/* Text message in the settings table view */
+"Verify your email address." = "ඔබගේ ඉ-තැපැල් ලිපිනය තහවුරු කරන්න.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "නිකුතුව %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "දසුන";
+
+/* Accessibility label for the main web content view */
+"Web content" = "වෙබ් අන්තර්ගතය";
+

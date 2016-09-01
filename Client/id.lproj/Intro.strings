@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Jelajahi banyak laman web secara bersamaan dengan tab.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Pilih";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Sambungkan Firefox di mana saja Anda menggunakannya.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Ubahsuai";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Mudah berpindah di antara halaman terbuka dengan tab.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox dan awan";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Lembar presentasi perkenalan %1$@ dari %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Kelola";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Ubahsuai Firefox sesuka Anda lewat Setelan.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Ubahsuai mesin pencari baku dan hal lainnya sesuka Anda lewat Setelan.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Bagikan";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Masuk ke Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Mulai Menjelajah";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Sinkronkan Perangkat Anda.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Ketuk, tahan, dan seret ikon Firefox ke dock agar mudah diakses.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Tombol Setelan ada di awal Baki Tab.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Tombol Tampilkan tab ada di samping bidang teks Alamat dan Pencarian dan akan menampilkan jumlah tab yang terbuka.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Gunakan lembar berbagi untuk mengirimkan tautan dari aplikasi lain ke Firefox.";
+
