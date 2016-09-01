@@ -291,7 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func launchFromURL(params: LaunchParams) {
         let isPrivate = params.isPrivate ?? false
         if let newURL = params.url {
-            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
+            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
         } else {
             self.browserViewController.openBlankNewTabAndFocus(isPrivate: isPrivate)
         }
@@ -529,7 +529,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
         if let url = userActivity.webpageURL {
-            browserViewController.switchToTabForURLOrOpen(url)
+            browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
             return true
         }
         return false
@@ -538,7 +538,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func viewURLInNewTab(notification: UILocalNotification) {
         if let alertURL = notification.userInfo?[TabSendURLKey] as? String {
             if let urlToOpen = NSURL(string: alertURL) {
-                browserViewController.openURLInNewTab(urlToOpen)
+                browserViewController.openURLInNewTab(urlToOpen, isPrivileged: true)
             }
         }
     }

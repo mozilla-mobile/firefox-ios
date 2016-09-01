@@ -570,7 +570,7 @@ class BrowserViewController: UIViewController {
 
         if shouldShowWhatsNewTab() {
             if let whatsNewURL = SupportUtils.URLForTopic("new-ios") {
-                self.openURLInNewTab(whatsNewURL)
+                self.openURLInNewTab(whatsNewURL, isPrivileged: false)
                 profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
             }
         }
@@ -587,7 +587,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func showQueuedAlertIfAvailable() {
-        if var queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
+        if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
             alertController.delegate = self
             presentViewController(alertController, animated: true, completion: nil)
@@ -1027,22 +1027,22 @@ class BrowserViewController: UIViewController {
         self.tabTrayController = tabTrayController
     }
 
-    func switchToTabForURLOrOpen(url: NSURL, isPrivate: Bool = false) {
+    func switchToTabForURLOrOpen(url: NSURL, isPrivate: Bool = false, isPrivileged: Bool) {
         popToBVC()
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
-            openURLInNewTab(url, isPrivate: isPrivate)
+            openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: isPrivileged)
         }
     }
 
-    func openURLInNewTab(url: NSURL?, isPrivate: Bool = false) {
+    func openURLInNewTab(url: NSURL?, isPrivate: Bool = false, isPrivileged: Bool) {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
         }
         let request: NSURLRequest?
         if let url = url {
-            request = PrivilegedRequest(URL: url)
+            request = isPrivileged ? PrivilegedRequest(URL: url) : NSURLRequest(URL: url)
         } else {
             request = nil
         }
@@ -1056,7 +1056,7 @@ class BrowserViewController: UIViewController {
 
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
         popToBVC()
-        openURLInNewTab(nil, isPrivate: isPrivate)
+        openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
@@ -1336,14 +1336,14 @@ extension BrowserViewController: MenuActionDelegate {
             switch menuAction {
             case .OpenNewNormalTab:
                 if #available(iOS 9, *) {
-                    self.openURLInNewTab(nil, isPrivate: false)
+                    self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
                 } else {
                     self.tabManager.addTabAndSelect(nil)
                 }
             // this is a case that is only available in iOS9
             case .OpenNewPrivateTab:
                 if #available(iOS 9, *) {
-                    self.openURLInNewTab(nil, isPrivate: true)
+                    self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
                 }
             case .FindInPage:
                 self.updateFindInPageVisibility(visible: true)
@@ -1394,7 +1394,7 @@ extension BrowserViewController: MenuActionDelegate {
     private func openHomePanel(panel: HomePanelType, forAppState appState: AppState) {
         switch appState.ui {
         case .Tab(_):
-            self.openURLInNewTab(panel.localhostURL, isPrivate: appState.ui.isPrivate())
+            self.openURLInNewTab(panel.localhostURL, isPrivate: appState.ui.isPrivate(), isPrivileged: true)
         case .HomePanels(_):
             self.homePanelController?.selectedPanel = panel
         default: break
@@ -1405,7 +1405,7 @@ extension BrowserViewController: MenuActionDelegate {
 
 extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(url: NSURL) {
-        self.openURLInNewTab(url)
+        self.openURLInNewTab(url, isPrivileged: false)
     }
 }
 
@@ -1815,7 +1815,7 @@ extension BrowserViewController: TabDelegate {
         tab.addHelper(customSearchHelper, name: CustomSearchHelper.name())
 
         let openURL = {(url: NSURL) -> Void in
-            self.switchToTabForURLOrOpen(url)
+            self.switchToTabForURLOrOpen(url, isPrivileged: true)
         }
 
         let nightModeHelper = NightModeHelper(tab: tab)
