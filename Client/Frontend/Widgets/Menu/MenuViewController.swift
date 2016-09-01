@@ -170,6 +170,10 @@ class MenuViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.view.backgroundColor = popoverBackgroundColor
+
+        if presentationStyle == .Popover {
+            self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
+        }
     }
 
     private func reloadView() {
