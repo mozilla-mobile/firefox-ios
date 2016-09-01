@@ -38,7 +38,7 @@ extension String {
 
     private func encode(input: String) -> String {
         var output = ""
-        var d : Int = 0
+        var d: Int = 0
         var extendedChars = [Int]()
         for c in input.unicodeScalars {
             if Int(c.value) < initialN {
@@ -58,8 +58,8 @@ extension String {
         var n = initialN
         var delta = 0
         var bias = initialBias
-        var h : Int = 0
-        var b : Int = 0
+        var h: Int = 0
+        var b: Int = 0
 
         if d > 0 {
             h = output.unicodeScalars.count - 1
