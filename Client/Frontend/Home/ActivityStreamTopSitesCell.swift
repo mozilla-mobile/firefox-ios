@@ -194,7 +194,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         super.layoutSubviews()
         let layout = collectionView.collectionViewLayout as! HorizontalFlowLayout
 
-        pageControl.pageCount = layout.numberOfPages
+        pageControl.pageCount = layout.numberOfPages()
         pageControl.hidden = pageControl.pageCount <= 1
     }
 
@@ -218,12 +218,17 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     private var boundsSize = CGSize.zero
     private var insets = UIEdgeInsetsZero
     private let minimumInsets: CGFloat = 20
-    var numberOfPages = 0
 
     override func prepareLayout() {
         super.prepareLayout()
         cellCount = self.collectionView!.numberOfItemsInSection(0)
         boundsSize = self.collectionView!.bounds.size
+    }
+
+    func numberOfPages() -> Int {
+        let itemsPerPage = maxVerticalItemsCount() * maxHorizontalItemsCount()
+        // Sometimes itemsPerPage is 0. In this case just return 0. We dont want to try dividing by 0.
+        return itemsPerPage == 0 ? 0 : Int(ceil(Double(cellCount) / Double(itemsPerPage)))
     }
 
     override func collectionViewContentSize() -> CGSize {
@@ -245,13 +250,9 @@ class HorizontalFlowLayout: UICollectionViewLayout {
             itemSize.height = itemSize.width
         }
 
-        let itemsPerPage = verticalItemsCount * horizontalItemsCount
-
-        numberOfPages = Int(ceil(Double(cellCount) / Double(itemsPerPage)))
         insets = UIEdgeInsets(top: verticalInsets, left: horizontalInsets, bottom: verticalInsets, right: horizontalInsets)
-
         var size = contentSize
-        size.width = CGFloat(numberOfPages) * contentSize.width
+        size.width = CGFloat(numberOfPages()) * contentSize.width
         
         return size
     }
