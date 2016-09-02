@@ -39,11 +39,11 @@ public struct FxADevice {
         guard !json.isError,
             let id = json["id"].asString,
             let name = json["name"].asString,
-            let type = json["type"].asString,
-            let isCurrentDevice = json["isCurrentDevice"].asBool else {
+            let type = json["type"].asString else {
                 return nil
         }
 
+        let isCurrentDevice = json["isCurrentDevice"].asBool ?? false
         return FxADevice(name: name, id: id, type: type, isCurrentDevice: isCurrentDevice)
     }
 }

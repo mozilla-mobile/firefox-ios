@@ -360,7 +360,8 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
 
         // TODO: Error handling.
         let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
-        settings.profile.setAccount(account)
+        account.delegate = profile
+        profile.setAccount(account)
 
         // Reload the data to reflect the new Account immediately.
         settings.tableView.reloadData()
@@ -462,14 +463,6 @@ class SettingsTableViewController: UITableViewController {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
         if let account = self.profile.getAccount() {
             account.advance().upon { state in
-                if let marriedState = state as? MarriedState {
-                    FxADeviceRegistrator.registerOrUpdateDevice(account, state: marriedState) >>== { result in
-                        if (result == .Registered || result == .Updated) {
-                            self.profile.flushAccount()
-                        }
-                    }
-                }
-
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     self.tableView.reloadData()
                 }
