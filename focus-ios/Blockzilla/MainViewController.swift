@@ -56,7 +56,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         aboutButton.setTitle(NSLocalizedString("About", comment: "Button at top of app that goes to the About screen"), forState: UIControlState.Normal)
         aboutButton.setTitleColor(UIConstants.Colors.NavigationTitle, forState: UIControlState.Normal)
         aboutButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        aboutButton.addTarget(self, action: "aboutClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        aboutButton.addTarget(self, action: #selector(MainViewController.aboutClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         aboutButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         view.addSubview(aboutButton)
 
@@ -95,11 +95,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let toggle = blockerToggle.toggle
             toggle.onTintColor = UIConstants.Colors.FocusBlue
             toggle.tintColor = UIColor(rgb: 0x585E64)
-            toggle.addTarget(self, action: Selector("toggleSwitched:"), forControlEvents: UIControlEvents.ValueChanged)
+            toggle.addTarget(self, action: #selector(MainViewController.toggleSwitched(_:)), forControlEvents: UIControlEvents.ValueChanged)
             toggle.on = Settings.getBool(blockerToggle.key) ?? false
         }
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "applicationDidBecomeActive:", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
 
     override func viewWillAppear(animated: Bool) {

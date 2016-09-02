@@ -33,7 +33,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
         skipButton.setTitle(NSLocalizedString("Skip", comment: "Button at top of the last intro screen when the app is not enabled"), forState: UIControlState.Normal)
         skipButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
         skipButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        skipButton.addTarget(self, action: "skipClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        skipButton.addTarget(self, action: #selector(IntroViewController.skipClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         skipButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         skipButton.hidden = true
         view.addSubview(skipButton)
@@ -52,7 +52,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
         pageControl.pageIndicatorTintColor = UIConstants.Colors.DefaultFont.colorWithAlphaComponent(0.3)
         pageControl.currentPageIndicatorTintColor = UIConstants.Colors.DefaultFont
         pageControl.numberOfPages = introSlides.count
-        pageControl.addTarget(self, action: Selector("changePage:"), forControlEvents: UIControlEvents.ValueChanged)
+        pageControl.addTarget(self, action: #selector(IntroViewController.changePage(_:)), forControlEvents: UIControlEvents.ValueChanged)
         view.addSubview(pageControl)
 
         titleView.snp_makeConstraints { make in
@@ -88,7 +88,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
 
         updateEnabledState()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "applicationDidBecomeActive:", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
 
     private func updateEnabledState() {

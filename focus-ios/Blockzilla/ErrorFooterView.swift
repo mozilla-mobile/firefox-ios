@@ -41,7 +41,7 @@ class ErrorFooterView: UIView {
         settingsButton.setTitle(UIConstants.Strings.OpenSettings, forState: UIControlState.Normal)
         settingsButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
         settingsButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        settingsButton.addTarget(self, action: "settingsClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        settingsButton.addTarget(self, action: #selector(ErrorFooterView.settingsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         settingsButton.titleLabel?.font = UIConstants.Fonts.SmallerFontSemibold
         addSubview(settingsButton)
 

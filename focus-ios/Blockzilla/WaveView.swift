@@ -57,7 +57,7 @@ class WaveView: UIView {
 
         clipsToBounds = true
 
-        let displayLink = CADisplayLink(target: self, selector: "displayLink:")
+        let displayLink = CADisplayLink(target: self, selector: #selector(WaveView.displayLink(_:)))
         displayLink.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
     }
 

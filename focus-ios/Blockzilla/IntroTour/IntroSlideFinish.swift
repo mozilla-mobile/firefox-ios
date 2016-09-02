@@ -42,14 +42,14 @@ class IntroSlideFinish: UIView {
         getStartedButton.setTitle(NSLocalizedString("Get Started", comment: "Button to close the intro screen"), forState: UIControlState.Normal)
         getStartedButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
         getStartedButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        getStartedButton.addTarget(self, action: "getStartedClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        getStartedButton.addTarget(self, action: #selector(IntroSlideFinish.getStartedClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         getStartedButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         addSubview(getStartedButton)
 
         settingsButton.setTitle(UIConstants.Strings.OpenSettings, forState: UIControlState.Normal)
         settingsButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
         settingsButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        settingsButton.addTarget(self, action: "settingsClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        settingsButton.addTarget(self, action: #selector(IntroSlideFinish.settingsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         settingsButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         addSubview(settingsButton)
 

@@ -31,7 +31,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         doneButton.setTitle(NSLocalizedString("Done", comment: "Button at top of app that goes to the About screen"), forState: UIControlState.Normal)
         doneButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
         doneButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        doneButton.addTarget(self, action: "doneClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.addTarget(self, action: #selector(AboutViewController.doneClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         view.addSubview(doneButton)
 
@@ -215,7 +215,7 @@ private class AboutHeaderView: UIView {
         readMoreButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
         readMoreButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
         readMoreButton.titleLabel?.font = readMoreButton.titleLabel!.font.fontWithSize(14)
-        readMoreButton.addTarget(self, action: "clickedReadMore:", forControlEvents: UIControlEvents.TouchUpInside)
+        readMoreButton.addTarget(self, action: #selector(AboutHeaderView.clickedReadMore(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(readMoreButton)
 
         descriptionLabel3.font = descriptionLabel3.font.fontWithSize(14)

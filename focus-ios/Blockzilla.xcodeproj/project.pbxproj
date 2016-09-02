@@ -328,6 +328,7 @@
 					E4BF2DD21BACE8CA00DA9D68 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 43AQ936H96;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -337,6 +338,7 @@
 					E4BF2DEB1BACE92400DA9D68 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 43AQ936H96;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -542,6 +544,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 				VALID_ARCHS = arm64;
 			};
 			name = FocusDebug;
@@ -559,6 +562,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 2.3;
 				VALID_ARCHS = arm64;
 			};
 			name = FocusDebug;
@@ -620,6 +624,7 @@
 				PRODUCT_NAME = Focus;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
+				SWIFT_VERSION = 2.3;
 				VALID_ARCHS = arm64;
 			};
 			name = FocusRelease;
@@ -637,6 +642,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 2.3;
 				VALID_ARCHS = arm64;
 			};
 			name = FocusRelease;
@@ -744,6 +750,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 				VALID_ARCHS = arm64;
 			};
 			name = KlarDebug;
@@ -767,6 +774,7 @@
 				PRODUCT_NAME = Klar;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
+				SWIFT_VERSION = 2.3;
 				VALID_ARCHS = arm64;
 			};
 			name = KlarRelease;
@@ -784,6 +792,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 2.3;
 				VALID_ARCHS = arm64;
 			};
 			name = KlarDebug;
@@ -801,6 +810,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 2.3;
 				VALID_ARCHS = arm64;
 			};
 			name = KlarRelease;

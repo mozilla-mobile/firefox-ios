@@ -32,7 +32,7 @@ class IntroSlideHowTo: UIView {
         openSettingsButton.setTitle(UIConstants.Strings.OpenSettings, forState: UIControlState.Normal)
         openSettingsButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
         openSettingsButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        openSettingsButton.addTarget(self, action: "settingsClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        openSettingsButton.addTarget(self, action: #selector(IntroSlideHowTo.settingsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         openSettingsButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
 
         addSubview(openSettingsButton)
