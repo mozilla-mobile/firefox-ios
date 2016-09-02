@@ -24,6 +24,7 @@ struct URLBarViewUX {
     static let URLBarCurveOffsetLeft: CGFloat = -10
     // A larger offset is needed when viewing URL bar in overlay mode to get the corners right
     static let URLBarCurveOverlayOffset: CGFloat = 8
+    static let URLBarMinimumOffsetToAnimate: CGFloat = 30
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
     static let ProgressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
@@ -122,13 +123,17 @@ class URLBarView: UIView {
             if let text = self.locationView.urlTextField.text, font = self.locationView.urlTextField.font {
                 let urlTextWidth = min(NSString(string: text).boundingRectWithSize(self.locationView.urlTextField.bounds.size, options: .TruncatesLastVisibleLine, attributes: [NSFontAttributeName: font], context: nil).width, self.locationView.urlTextField.bounds.width)
                 let maxOffset = self.bounds.width / 2 - self.locationView.convertPoint(CGPoint(x: urlTextWidth / 2 + self.locationView.urlTextLeading, y: 0), toView: self).x
-                self.locationView.urlTextField.snp_updateConstraints { make in
-                    make.leading.equalTo(self.locationView.urlTextLeading + inverseState * maxOffset)
-                    make.trailing.equalTo(self.locationView.urlTextTrailing + inverseState * maxOffset)
+                // To prevent unnecessary changes to the trailing/leading constraints only animate when the changes will be significant
+                if maxOffset > URLBarViewUX.URLBarMinimumOffsetToAnimate {
+                    self.locationView.urlTextField.snp_updateConstraints { make in
+                        make.leading.equalTo(self.locationView.urlTextLeading + inverseState * maxOffset)
+                        make.trailing.equalTo(self.locationView.urlTextTrailing + inverseState * maxOffset)
+                    }
+                    self.locationView.lockImageView.snp_updateConstraints { make in
+                        make.leading.equalTo(inverseState * maxOffset)
+                    }
                 }
-                self.locationView.lockImageView.snp_updateConstraints { make in
-                    make.leading.equalTo(inverseState * maxOffset)
-                }
+
             }
 
             // Transparency
