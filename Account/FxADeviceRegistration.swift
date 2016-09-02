@@ -68,8 +68,10 @@ public class FxADeviceRegistration: NSObject, NSCoding {
 
 public class FxADeviceRegistrator {
     public static func registerOrUpdateDevice(account: FirefoxAccount, sessionToken: NSData, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
-        if let registration = account.deviceRegistration where registration.version == DeviceRegistrationVersion &&
-            // Re-register weekly as a sanity check.
+        // If we've already registered, the registration version is up-to-date, *and* we've (re-)registered
+        // within the last week, do nothing. We re-register weekly as a sanity check.
+        if let registration = account.deviceRegistration
+            where registration.version == DeviceRegistrationVersion &&
             NSDate.now() < registration.lastRegistered + OneWeekInMilliseconds {
                 return deferMaybe(FxADeviceRegistrationResult.AlreadyRegistered)
         }
@@ -161,7 +163,7 @@ public class FxADeviceRegistrator {
     private static func recoverFromUnknownDevice(account: FirefoxAccount) -> Deferred<Maybe<FxADeviceRegistration>> {
         // FxA did not recognize the device ID. Handle it by clearing the registration on the account data.
         // At next sync or next sign-in, registration is retried and should succeed.
-        log.warning("Unknown device ID. Clearing the local device data.");
+        log.warning("Unknown device ID. Clearing the local device data.")
         account.deviceRegistration = nil
         return deferMaybe(FxADeviceRegistratorError.UnknownDevice)
     }

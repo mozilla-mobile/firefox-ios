@@ -360,7 +360,6 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
 
         // TODO: Error handling.
         let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
-        account.delegate = profile
         profile.setAccount(account)
 
         // Reload the data to reflect the new Account immediately.
