@@ -22,6 +22,8 @@ struct URLBarViewUX {
     // offset from edge of tabs button
     static let URLBarCurveOffset: CGFloat = 14
     static let URLBarCurveOffsetLeft: CGFloat = -10
+    // A larger offset is needed when viewing URL bar in overlay mode to get the corners right
+    static let URLBarCurveOverlayOffset: CGFloat = 8
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
     static let ProgressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
@@ -106,8 +108,10 @@ class URLBarView: UIView {
                     make.trailing.equalTo(offsetForState)
                 }
             }
+            // When in overlay mode always hide
+            let curveShapeOffset = inOverlayMode ? offsetToHide + URLBarViewUX.URLBarCurveOverlayOffset : offsetForState
             self.curveShape.snp_updateConstraints { make in
-                self.rightBarConstraint = make.right.equalTo(self.defaultRightOffset + offsetForState).constraint
+                self.rightBarConstraint = make.right.equalTo(self.defaultRightOffset + curveShapeOffset).constraint
             }
             self.locationContainer.snp_updateConstraints { make in
                 let border = (UIConstants.ToolbarHeight - URLBarViewUX.LocationHeight) / 2
