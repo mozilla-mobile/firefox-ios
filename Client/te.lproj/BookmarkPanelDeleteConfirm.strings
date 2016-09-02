@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "మీరు ఖచ్చితంగా దీనిని మరియు దీని కంటెంట్స్ ని తొలగించాలనుకుంటున్నారా?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "రద్దుచేయి";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "తొలగించు";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "ఈ ఫోల్డర్ ఖాళీగా లేదు.";
+

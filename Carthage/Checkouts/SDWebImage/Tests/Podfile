@@ -1,0 +1,15 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+xcodeproj 'SDWebImage Tests'
+workspace '../SDWebImage'
+
+def import_pods
+  pod 'Expecta', '<=0.3.1'                    # A Matcher Framework for Objective-C/Cocoa
+  pod 'SDWebImage', :path => '../'
+end
+
+target :ios do
+  platform :ios, '5.0'
+  link_with 'Tests'
+  import_pods
+end

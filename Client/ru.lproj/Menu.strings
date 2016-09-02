@@ -1,0 +1,51 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "Добавить закладку";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "Закрыть все вкладки";
+
+/* Accessibility label describing the button that closes the menu when open */
+"Menu.CloseMenu.AccessibilityLabel" = "Закрыть меню";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "Найти на странице";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "Новая приватная вкладка";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "Новая вкладка";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel. */
+"Menu.OpenBookmarksAction.AccessibilityLabel" = "Закладки";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
+"Menu.OpenHistoryAction.AccessibilityLabel" = "История";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "Домой";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
+"Menu.OpenReadingListAction.AccessibilityLabel" = "Список для чтения";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "Параметры";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Топ сайтов";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "Удалить закладку";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SendPageAction.Title" = "Отправить";
+
+/* Label for the button, displayed in the menu, used to set the homepage if none is currently set. */
+"Menu.SetHomePageAction.Title" = "Установить домашнюю страницу";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "Запросить полную версию сайта";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "Запросить мобильную версию сайта";
+

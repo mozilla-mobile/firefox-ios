@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <scenes>
+        <!--View ControllertvOS-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewControllertvOS" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fzf-MQ-lCf" userLabel="Button Track Simple Event">
+                                <rect key="frame" x="200" y="11" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Track Simple Event"/>
+                                <connections>
+                                    <action selector="clickTrackSimpleEvent:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="6uR-RH-5l0"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xtq-UU-Y4K" userLabel="Button Track Revenue Event">
+                                <rect key="frame" x="200" y="119" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Track Revenue Event"/>
+                                <connections>
+                                    <action selector="clickTrackRevenueEvent:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="I4e-vQ-X5n"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LGY-9p-pC8" userLabel="Button Track Callback Event">
+                                <rect key="frame" x="200" y="227" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Track Callback Event"/>
+                                <connections>
+                                    <action selector="clickTrackCallbackEvent:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="TAA-y7-BLf"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="29h-TW-bHK" userLabel="Button Track Partner Event">
+                                <rect key="frame" x="200" y="335" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Track Partner Event"/>
+                                <connections>
+                                    <action selector="clickTrackPartnerEvent:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="X9h-IR-Si7"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lTa-Zh-VPE" userLabel="Button Enable Offline Mode">
+                                <rect key="frame" x="200" y="443" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Enable Offline Mode"/>
+                                <connections>
+                                    <action selector="clickEnableOfflineMode:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="WNU-dQ-fap"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ntm-dL-KxE" userLabel="Button Disable Offline Mode">
+                                <rect key="frame" x="200" y="551" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Disable Offline Mode"/>
+                                <connections>
+                                    <action selector="clickDisableOfflineMode:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="SCk-9y-Kfn"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iib-zh-P4h" userLabel="Button Enable SDK">
+                                <rect key="frame" x="200" y="659" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Enable SDK"/>
+                                <connections>
+                                    <action selector="clickEnableSdk:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="B5A-1r-sMk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lZs-XS-WCp" userLabel="Button Disable SDK">
+                                <rect key="frame" x="200" y="767" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Disable SDK"/>
+                                <connections>
+                                    <action selector="clickDisableSdk:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="s5O-Xi-XP0"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="774-de-8Rp" userLabel="Button Is SDK Enabled">
+                                <rect key="frame" x="200" y="875" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Is SDK Enabled?"/>
+                                <connections>
+                                    <action selector="clickIsSdkEnabled:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="AXb-em-B2l"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g6V-HC-vba" userLabel="Button Forget This Device">
+                                <rect key="frame" x="200" y="983" width="1520" height="86"/>
+                                <animations/>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Forget This Device"/>
+                                <connections>
+                                    <action selector="clickForgetThisDevice:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="16B-eF-uwn"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="fzf-MQ-lCf" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="200" id="0ol-zs-f4X" userLabel="Button Track Simple Event - Left"/>
+                            <constraint firstItem="fzf-MQ-lCf" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.1" id="3Rl-pC-jwZ" userLabel="Button Track Simple Event - Center Y"/>
+                            <constraint firstItem="g6V-HC-vba" firstAttribute="trailing" secondItem="774-de-8Rp" secondAttribute="trailing" id="5Om-HY-lFv" userLabel="Button Forget This Device - Right"/>
+                            <constraint firstItem="Ntm-dL-KxE" firstAttribute="trailing" secondItem="lTa-Zh-VPE" secondAttribute="trailing" id="5ht-fP-tL1" userLabel="Button Disable Offline Mode - Right"/>
+                            <constraint firstItem="Iib-zh-P4h" firstAttribute="trailing" secondItem="Ntm-dL-KxE" secondAttribute="trailing" id="6hJ-8X-Sev" userLabel="Button Enable SDK - Right"/>
+                            <constraint firstItem="lTa-Zh-VPE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.9" id="7RU-sQ-eqS" userLabel="Button Enable Offline Mode - Center Y"/>
+                            <constraint firstItem="774-de-8Rp" firstAttribute="leading" secondItem="lZs-XS-WCp" secondAttribute="leading" id="Cds-G1-7aY" userLabel="Button Is SDK Enabled - Left"/>
+                            <constraint firstItem="Iib-zh-P4h" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.3" id="DbL-87-WbV" userLabel="Button Enable SDK - Center Y"/>
+                            <constraint firstItem="LGY-9p-pC8" firstAttribute="trailing" secondItem="xtq-UU-Y4K" secondAttribute="trailing" id="FDI-B3-31m" userLabel="Button Track Callback Event - Right"/>
+                            <constraint firstItem="29h-TW-bHK" firstAttribute="trailing" secondItem="LGY-9p-pC8" secondAttribute="trailing" id="Ffw-lq-lTV" userLabel="Button Track Partner Event - Right"/>
+                            <constraint firstItem="Ntm-dL-KxE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.1" id="HIr-0h-n7n" userLabel="Button Disable Offline Mode - Center Y"/>
+                            <constraint firstItem="xtq-UU-Y4K" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.3" id="Jxu-us-iTw" userLabel="Button Track Revenue Event - Center Y"/>
+                            <constraint firstItem="lTa-Zh-VPE" firstAttribute="trailing" secondItem="29h-TW-bHK" secondAttribute="trailing" id="Kk5-gM-ypr" userLabel="Button Enable Offline Mode - Right"/>
+                            <constraint firstItem="lTa-Zh-VPE" firstAttribute="leading" secondItem="29h-TW-bHK" secondAttribute="leading" id="QAz-Jp-Dn2" userLabel="Button Enable Offline Mode - Left"/>
+                            <constraint firstItem="lZs-XS-WCp" firstAttribute="trailing" secondItem="Iib-zh-P4h" secondAttribute="trailing" id="Rdv-tR-UqA" userLabel="Button Disable SDK - Right"/>
+                            <constraint firstItem="LGY-9p-pC8" firstAttribute="leading" secondItem="xtq-UU-Y4K" secondAttribute="leading" id="Ssd-fi-hw6" userLabel="Button Track Callback Event - Left"/>
+                            <constraint firstItem="lZs-XS-WCp" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.5" id="YGc-OR-rYt" userLabel="Button Disable SDK - Center Y"/>
+                            <constraint firstItem="xtq-UU-Y4K" firstAttribute="leading" secondItem="fzf-MQ-lCf" secondAttribute="leading" id="YTt-Xh-Ehr" userLabel="Button Track Revenue Event - Left"/>
+                            <constraint firstItem="LGY-9p-pC8" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.5" id="d4H-Rr-BQk" userLabel="Button Track Callback Event - Center Y"/>
+                            <constraint firstItem="fzf-MQ-lCf" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" constant="-200" id="gwA-QV-aEe" userLabel="Button Track Simple Event - Right"/>
+                            <constraint firstItem="Iib-zh-P4h" firstAttribute="leading" secondItem="Ntm-dL-KxE" secondAttribute="leading" id="iyK-mx-I7X" userLabel="Button Enable SDK - Left"/>
+                            <constraint firstItem="774-de-8Rp" firstAttribute="trailing" secondItem="lZs-XS-WCp" secondAttribute="trailing" id="mpo-dM-F73" userLabel="Button Is SDK Enabled - Right"/>
+                            <constraint firstItem="xtq-UU-Y4K" firstAttribute="trailing" secondItem="fzf-MQ-lCf" secondAttribute="trailing" id="nYk-dS-zsU" userLabel="Button Track Revenue Event - Right"/>
+                            <constraint firstItem="g6V-HC-vba" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.9" id="npX-ug-Z7P" userLabel="Button Forget This Device - Center Y"/>
+                            <constraint firstItem="g6V-HC-vba" firstAttribute="leading" secondItem="774-de-8Rp" secondAttribute="leading" id="qAm-fo-clf" userLabel="Button Forget This Device - Left"/>
+                            <constraint firstItem="Ntm-dL-KxE" firstAttribute="leading" secondItem="lTa-Zh-VPE" secondAttribute="leading" id="s7P-nB-VZg" userLabel="Button Disable Offline Mode - Left"/>
+                            <constraint firstItem="29h-TW-bHK" firstAttribute="leading" secondItem="LGY-9p-pC8" secondAttribute="leading" id="urF-zc-TzE" userLabel="Button Track Partner Event - Left"/>
+                            <constraint firstItem="29h-TW-bHK" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.7" id="wpw-Mm-7FE" userLabel="Button Track Partner Event - Center Y"/>
+                            <constraint firstItem="774-de-8Rp" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.7" id="ycB-4t-4We" userLabel="Button Is SDK Enabled - Center Y"/>
+                            <constraint firstItem="lZs-XS-WCp" firstAttribute="leading" secondItem="Iib-zh-P4h" secondAttribute="leading" id="yzH-Ii-czK" userLabel="Button Disable SDK - Left"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btnDisableOfflineMode" destination="Ntm-dL-KxE" id="IkQ-GQ-SWX"/>
+                        <outlet property="btnDisableSdk" destination="lZs-XS-WCp" id="sSQ-fe-q5f"/>
+                        <outlet property="btnEnableOfflineMode" destination="lTa-Zh-VPE" id="zKd-Fi-C2k"/>
+                        <outlet property="btnEnableSdk" destination="Iib-zh-P4h" id="X1o-Po-vVa"/>
+                        <outlet property="btnForgetThisDevice" destination="g6V-HC-vba" id="y8Y-vf-kQg"/>
+                        <outlet property="btnIsSdkEnabled" destination="774-de-8Rp" id="Nrc-go-nvj"/>
+                        <outlet property="btnTrackCallbackEvent" destination="LGY-9p-pC8" id="6kT-0A-3vj"/>
+                        <outlet property="btnTrackPartnerEvent" destination="29h-TW-bHK" id="IPK-Hb-Y6f"/>
+                        <outlet property="btnTrackRevenueEvent" destination="xtq-UU-Y4K" id="4ea-Wk-UmC"/>
+                        <outlet property="btnTrackSimpleEvent" destination="fzf-MQ-lCf" id="9ti-B5-Od9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>

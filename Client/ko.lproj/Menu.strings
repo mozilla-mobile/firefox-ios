@@ -1,0 +1,51 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "즐겨찾기 추가";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "모든 탭 닫기";
+
+/* Accessibility label describing the button that closes the menu when open */
+"Menu.CloseMenu.AccessibilityLabel" = "메뉴 닫기";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "페이지에서 찾기";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "새 사생활 보호 탭";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "새 탭";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel. */
+"Menu.OpenBookmarksAction.AccessibilityLabel" = "즐겨찾기";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
+"Menu.OpenHistoryAction.AccessibilityLabel" = "방문목록";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "홈";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
+"Menu.OpenReadingListAction.AccessibilityLabel" = "읽기 목록";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "설정";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "상위 사이트";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "즐겨찾기 삭제";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SendPageAction.Title" = "보내기";
+
+/* Label for the button, displayed in the menu, used to set the homepage if none is currently set. */
+"Menu.SetHomePageAction.Title" = "홈페이지 설정";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "데스크톱 사이트 요청";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "모바일 사이트 요청";
+

@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Biztos benne?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Mégse";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Keresés törlése";
+
+/* Copy password text selection menu item */
+"Copy" = "Másolás";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Törlés";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "A kijelölés megszüntetése";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Belépés a keresési módba";
+
+/* Hide password text selection menu item */
+"Hide" = "Elrejtés";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "Legutóbbi módosítás: %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "Bejelentkezések";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "A bejelentkezések véglegesen eltávolításra kerülnek.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "A bejelentkezések eltávolításra kerülnek minden összekapcsolt eszközről.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Nincsenek bejelentkezések";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Megnyitás és kitöltése";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Felfedés";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Keresés";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Keresési beviteli mező";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Mind kijelölése";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "jelszó";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "felhasználónév";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "weboldal";
+

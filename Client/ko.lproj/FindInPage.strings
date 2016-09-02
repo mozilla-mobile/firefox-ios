@@ -1,0 +1,13 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "완료";
+
+/* Share action title
+   Text selection menu item */
+"Find in Page" = "페이지내 검색";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "다음 페이지 결과";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "이전 페이지 결과";
+

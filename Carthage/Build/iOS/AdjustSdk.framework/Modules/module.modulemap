@@ -1,0 +1,6 @@
+framework module AdjustSdk {
+  umbrella header "AdjustSdk.h"
+
+  export *
+  module * { export * }
+}

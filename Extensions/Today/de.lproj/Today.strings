@@ -1,0 +1,9 @@
+/* Go to link on clipboard */
+"TodayWidget.GoToCopiedLinkLabel" = "Link in der Zwischenablage aufrufen";
+
+/* New Private Tab button label */
+"TodayWidget.NewPrivateTabButtonLabel" = "Neuer Privater Tab";
+
+/* New Tab button label */
+"TodayWidget.NewTabButtonLabel" = "Neuer Tab";
+

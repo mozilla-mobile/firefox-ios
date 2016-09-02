@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "사생활 보호 탭 닫기";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox가 탐색기록이나 쿠키는 저장하지 않지만 새로 추가되는 즐겨찾기는 저장이 됩니다.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "자세히 보기";
+
+/* Toggled OFF accessibility value */
+"Off" = "끄기";
+
+/* Toggled ON accessibility value */
+"On" = "켜기";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "새 사생활 보호 탭 열기";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "사생활 보호 탐색";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "사생활 보호 모드";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "사생활 보호 모드를 켜거나 끔";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "사생활 보호 모드를 나갈때";
+
