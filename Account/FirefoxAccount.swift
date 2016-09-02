@@ -12,6 +12,10 @@ private let log = Logger.syncLogger
 // The version of the account schema we persist.
 let AccountSchemaVersion = 1
 
+public protocol FirefoxAccountDelegate: class {
+    func firefoxAccountDidUpdateRegistration(firefoxAccount: FirefoxAccount)
+}
+
 /// A FirefoxAccount mediates access to identity attached services.
 ///
 /// All data maintained as part of the account or its state should be
@@ -21,6 +25,8 @@ let AccountSchemaVersion = 1
 /// Non-sensitive but persistent data should be maintained outside of
 /// the account itself.
 public class FirefoxAccount {
+    public weak var delegate: FirefoxAccountDelegate?
+
     /// The email address identifying the account.  A Firefox Account is uniquely identified on a particular server
     /// (auth endpoint) by its email address.
     public let email: String
@@ -29,8 +35,7 @@ public class FirefoxAccount {
     /// particular server (auth endpoint) by its assigned uid.
     public let uid: String
 
-    public var fxaDeviceId: String?
-    public var deviceRegistrationVersion: Int
+    public var deviceRegistration: FxADeviceRegistration?
 
     public let configuration: FirefoxAccountConfiguration
 
@@ -49,15 +54,14 @@ public class FirefoxAccount {
         return stateCache.value!.actionNeeded
     }
 
-    public convenience init(configuration: FirefoxAccountConfiguration, email: String, uid: String, fxaDeviceId: String?, deviceRegistrationVersion: Int, stateKeyLabel: String, state: FxAState) {
-        self.init(configuration: configuration, email: email, uid: uid, fxaDeviceId: fxaDeviceId, deviceRegistrationVersion: deviceRegistrationVersion, stateCache: KeychainCache(branch: "account.state", label: stateKeyLabel, value: state))
+    public convenience init(configuration: FirefoxAccountConfiguration, email: String, uid: String, deviceRegistration: FxADeviceRegistration?, stateKeyLabel: String, state: FxAState) {
+        self.init(configuration: configuration, email: email, uid: uid, deviceRegistration: deviceRegistration, stateCache: KeychainCache(branch: "account.state", label: stateKeyLabel, value: state))
     }
 
-    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, fxaDeviceId: String?, deviceRegistrationVersion: Int, stateCache: KeychainCache<FxAState>) {
+    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, deviceRegistration: FxADeviceRegistration?, stateCache: KeychainCache<FxAState>) {
         self.email = email
         self.uid = uid
-        self.fxaDeviceId = fxaDeviceId
-        self.deviceRegistrationVersion = deviceRegistrationVersion
+        self.deviceRegistration = deviceRegistration
         self.configuration = configuration
         self.stateCache = stateCache
         self.stateCache.checkpoint()
@@ -76,19 +80,19 @@ public class FirefoxAccount {
 
         let verified = data["verified"].asBool ?? false
         return FirefoxAccount.fromConfigurationAndParameters(configuration,
-            email: email, uid: uid, fxaDeviceId: nil, deviceRegistrationVersion: 0, verified: verified,
+            email: email, uid: uid, deviceRegistration: nil, verified: verified,
             sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
     }
 
     public class func fromConfigurationAndLoginResponse(configuration: FirefoxAccountConfiguration,
             response: FxALoginResponse, unwrapkB: NSData) -> FirefoxAccount {
         return FirefoxAccount.fromConfigurationAndParameters(configuration,
-            email: response.remoteEmail, uid: response.uid, fxaDeviceId: nil, deviceRegistrationVersion: 0, verified: response.verified,
+            email: response.remoteEmail, uid: response.uid, deviceRegistration: nil, verified: response.verified,
             sessionToken: response.sessionToken, keyFetchToken: response.keyFetchToken, unwrapkB: unwrapkB)
     }
 
     private class func fromConfigurationAndParameters(configuration: FirefoxAccountConfiguration,
-            email: String, uid: String, fxaDeviceId: String?, deviceRegistrationVersion: Int, verified: Bool,
+            email: String, uid: String, deviceRegistration: FxADeviceRegistration?, verified: Bool,
             sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) -> FirefoxAccount {
         var state: FxAState! = nil
         if !verified {
@@ -111,8 +115,7 @@ public class FirefoxAccount {
             configuration: configuration,
             email: email,
             uid: uid,
-            fxaDeviceId: fxaDeviceId,
-            deviceRegistrationVersion: deviceRegistrationVersion,
+            deviceRegistration: deviceRegistration,
             stateKeyLabel: Bytes.generateGUID(),
             state: state
         )
@@ -124,8 +127,7 @@ public class FirefoxAccount {
         dict["version"] = AccountSchemaVersion
         dict["email"] = email
         dict["uid"] = uid
-        dict["fxaDeviceId"] = fxaDeviceId
-        dict["deviceRegistrationVersion"] = deviceRegistrationVersion
+        dict["deviceRegistration"] = deviceRegistration
         dict["configurationLabel"] = configuration.label.rawValue
         dict["stateKeyLabel"] = stateCache.label
         return dict
@@ -149,13 +151,12 @@ public class FirefoxAccount {
             configurationLabel = configurationLabel,
             email = dictionary["email"] as? String,
             uid = dictionary["uid"] as? String {
-                let fxaDeviceId = dictionary["fxaDeviceId"] as? String
-                let deviceRegistrationVersion = dictionary["deviceRegistrationVersion"] as? Int ?? 0
+                let deviceRegistration = dictionary["deviceRegistration"] as? FxADeviceRegistration
                 let stateCache = KeychainCache.fromBranch("account.state", withLabel: dictionary["stateKeyLabel"] as? String, withDefault: SeparatedState(), factory: stateFromJSON)
                 return FirefoxAccount(
                     configuration: configurationLabel.toConfiguration(),
                     email: email, uid: uid,
-                    fxaDeviceId: fxaDeviceId, deviceRegistrationVersion: deviceRegistrationVersion,
+                    deviceRegistration: deviceRegistration,
                     stateCache: stateCache)
         }
         return nil
@@ -181,13 +182,27 @@ public class FirefoxAccount {
         }
 
         // Alright, we haven't an advance() in progress.  Schedule a new deferred to chain from.
-        let client = FxAClient10(endpoint: configuration.authEndpointURL)
-        let stateMachine = FxALoginStateMachine(client: client)
-        let now = NSDate.now()
-        let deferred: Deferred<FxAState> = stateMachine.advanceFromState(stateCache.value!, now: now).map { newState in
-            self.stateCache.value = newState
-            return newState
+        let cachedState = stateCache.value!
+        var registration = succeed()
+        if let session = cachedState as? FxASessionState {
+            registration = FxADeviceRegistrator.registerOrUpdateDevice(self, sessionToken: session.sessionToken).bind { result in
+                if result.successValue != FxADeviceRegistrationResult.AlreadyRegistered {
+                    self.delegate?.firefoxAccountDidUpdateRegistration(self)
+                }
+                return succeed()
+            }
         }
+
+        let deferred: Deferred<FxAState> = registration.bind { _ in
+            let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+            let stateMachine = FxALoginStateMachine(client: client)
+            let now = NSDate.now()
+            return stateMachine.advanceFromState(cachedState, now: now).map { newState in
+                self.stateCache.value = newState
+                return newState
+            }
+        }
+
         advanceDeferred = deferred
         log.debug("no advance() in progress; setting and returning new shared deferred.")
         OSSpinLockUnlock(&advanceLock)
