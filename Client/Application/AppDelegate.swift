@@ -142,6 +142,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
+        NSNotificationCenter.defaultCenter().addObserverForName(NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
+            profile.flushAccount()
+        }
+
         // check to see if we started 'cos someone tapped on a notification.
         if let localNotification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
             viewURLInNewTab(localNotification)

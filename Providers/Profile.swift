@@ -167,6 +167,7 @@ protocol Profile: class {
     func getAccount() -> FirefoxAccount?
     func removeAccount()
     func setAccount(account: FirefoxAccount)
+    func flushAccount()
 
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
@@ -526,8 +527,9 @@ public class BrowserProfile: Profile {
     }
 
     func setAccount(account: FirefoxAccount) {
-        KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
         self.account = account
+
+        flushAccount()
 
         // register for notifications for the account
         registerForNotifications()
@@ -537,6 +539,12 @@ public class BrowserProfile: Profile {
         NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
 
         self.syncManager.onAddedAccount()
+    }
+
+    func flushAccount() {
+        if let account = account {
+            KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
+        }
     }
 
     func registerForNotifications() {
