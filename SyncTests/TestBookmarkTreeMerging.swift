@@ -102,7 +102,7 @@ class MockUploader {
         return TrivialBookmarkStorer(uploader: self.doUpload)
     }
 
-    func doUpload(recs: [Record<BookmarkBasePayload>], lastTimestamp: Timestamp?, onUpload: (POSTResult) -> DeferredTimestamp) -> DeferredTimestamp {
+    func doUpload(recs: [Record<BookmarkBasePayload>], lastTimestamp: Timestamp?, onUpload: (POSTResult, Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
         var success: [GUID] = []
         recs.forEach { rec in
             success.append(rec.id)
@@ -115,7 +115,7 @@ class MockUploader {
         }
 
         // Now pretend we did the upload.
-        return onUpload(POSTResult(modified: NSDate.now(), success: success, failed: [:]))
+        return onUpload(POSTResult(success: success, failed: [:]), NSDate.now())
     }
 }
 

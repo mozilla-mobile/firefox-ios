@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Storage
 import XCGLogger
+import Deferred
 
 private let log = Logger.syncLogger
 let PasswordsStorageVersion = 1
@@ -107,20 +108,18 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         }
     }
 
-    private func uploadModifiedLogins(logins: [Login], lastTimestamp: Timestamp, fromStorage storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> DeferredTimestamp {
-        return self.uploadRecords(logins.map(makeLoginRecord), by: 50, lastTimestamp: lastTimestamp, storageClient: storageClient) {
-            storage.markAsSynchronized($0.success, modified: $0.modified)
+    private func uploadChangedRecords<T>(deleted: Set<GUID>, modified: Set<GUID>, records: [Record<T>], lastTimestamp: Timestamp,
+                                      storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<T>) -> Success {
+
+        let onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp = { result, lastModified in
+            let uploaded = Set(result.success)
+            return storage.markAsDeleted(uploaded.intersect(deleted)) >>> { storage.markAsSynchronized(uploaded.intersect(modified), modified: lastModified ?? lastTimestamp) }
         }
-    }
 
-    private func uploadDeletedLogins(guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> DeferredTimestamp {
-
-        let records = guids.map(makeDeletedLoginRecord)
-
-        // Deletions are smaller, so upload 100 at a time.
-        return self.uploadRecords(records, by: 100, lastTimestamp: lastTimestamp, storageClient: storageClient) {
-            storage.markAsDeleted($0.success) >>> always($0.modified)
-        }
+        return uploadRecords(records,
+                             lastTimestamp: lastTimestamp,
+                             storageClient: storageClient,
+                             onUpload: onUpload) >>> succeed
     }
 
     // Find any records for which a local overlay exists. If we want to be really precise,
@@ -130,26 +129,29 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
     // We will already have reconciled any conflicts on download, so this upload phase should
     // be as simple as uploading any changed or deleted items.
     private func uploadOutgoingFromStorage(storage: SyncableLogins, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<LoginPayload>) -> Success {
-
-        let uploadDeleted: Timestamp -> DeferredTimestamp = { timestamp in
-            storage.getDeletedLoginsToUpload()
-                >>== { guids in
-                    return self.uploadDeletedLogins(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
+        let deleted: () -> Deferred<Maybe<(Set<GUID>, [Record<LoginPayload>])>> = {
+            return storage.getDeletedLoginsToUpload() >>== { guids in
+                let records = guids.map(makeDeletedLoginRecord)
+                return deferMaybe((Set(guids), records))
             }
         }
 
-        let uploadModified: Timestamp -> DeferredTimestamp = { timestamp in
-            storage.getModifiedLoginsToUpload()
-                >>== { logins in
-                    return self.uploadModifiedLogins(logins, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
+        let modified: () -> Deferred<Maybe<(Set<GUID>, [Record<LoginPayload>])>> = {
+            return storage.getModifiedLoginsToUpload() >>== { logins in
+                let guids = Set(logins.map { $0.guid })
+                let records = logins.map(makeLoginRecord)
+                return deferMaybe((guids, records))
             }
         }
 
-        return deferMaybe(lastTimestamp)
-            >>== uploadDeleted
-            >>== uploadModified
-            >>> effect({ log.debug("Done syncing.") })
-            >>> succeed
+        return accumulate([deleted, modified]) >>== { result in
+            let (deletedGUIDs, deletedRecords) = result[0]
+            let (modifiedGUIDs, modifiedRecords) = result[1]
+            let allRecords = deletedRecords + modifiedRecords
+
+            return self.uploadChangedRecords(deletedGUIDs, modified: modifiedGUIDs, records: allRecords,
+                                             lastTimestamp: lastTimestamp, storage: storage, withServer: storageClient)
+        }
     }
 
     public func synchronizeLocalLogins(logins: SyncableLogins, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
