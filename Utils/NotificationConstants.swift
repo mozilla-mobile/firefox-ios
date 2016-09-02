@@ -7,6 +7,8 @@ public let NotificationDataLoginDidChange = "Data:Login:DidChange"
 // add a property to allow the observation of firefox accounts
 public let NotificationFirefoxAccountChanged = "FirefoxAccountChangedNotification"
 
+public let NotificationFirefoxAccountDeviceRegistrationUpdated = "FirefoxAccountDeviceRegistrationUpdated"
+
 public let NotificationPrivateDataClearedHistory = "PrivateDataClearedHistoryNotification"
 
 // Fired when the user finishes navigating to a page and the location has changed

@@ -12,10 +12,6 @@ private let log = Logger.syncLogger
 // The version of the account schema we persist.
 let AccountSchemaVersion = 1
 
-public protocol FirefoxAccountDelegate: class {
-    func firefoxAccountDidUpdateRegistration(firefoxAccount: FirefoxAccount)
-}
-
 /// A FirefoxAccount mediates access to identity attached services.
 ///
 /// All data maintained as part of the account or its state should be
@@ -25,8 +21,6 @@ public protocol FirefoxAccountDelegate: class {
 /// Non-sensitive but persistent data should be maintained outside of
 /// the account itself.
 public class FirefoxAccount {
-    public weak var delegate: FirefoxAccountDelegate?
-
     /// The email address identifying the account.  A Firefox Account is uniquely identified on a particular server
     /// (auth endpoint) by its email address.
     public let email: String
@@ -184,10 +178,11 @@ public class FirefoxAccount {
         // Alright, we haven't an advance() in progress.  Schedule a new deferred to chain from.
         let cachedState = stateCache.value!
         var registration = succeed()
-        if let session = cachedState as? FxASessionState {
+        if let session = cachedState as? TokenState {
             registration = FxADeviceRegistrator.registerOrUpdateDevice(self, sessionToken: session.sessionToken).bind { result in
                 if result.successValue != FxADeviceRegistrationResult.AlreadyRegistered {
-                    self.delegate?.firefoxAccountDidUpdateRegistration(self)
+                    let notification = NSNotification(name: NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
                 }
                 return succeed()
             }

@@ -135,7 +135,7 @@ class BrowserProfileSyncDelegate: SyncDelegate {
 /**
  * A Profile manages access to the user's data.
  */
-protocol Profile: class, FirefoxAccountDelegate {
+protocol Profile: class {
     var bookmarks: protocol<BookmarksModelFactorySource, ShareToDestination, SyncableBookmarks, LocalItemSource, MirrorItemSource> { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
@@ -484,16 +484,10 @@ public class BrowserProfile: Profile {
 
     private lazy var account: FirefoxAccount? = {
         if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String: AnyObject] {
-            let account = FirefoxAccount.fromDictionary(dictionary)
-            account?.delegate = self
-            return account
+            return FirefoxAccount.fromDictionary(dictionary)
         }
         return nil
     }()
-
-    public func firefoxAccountDidUpdateRegistration(firefoxAccount: FirefoxAccount) {
-        flushAccount()
-    }
 
     func hasAccount() -> Bool {
         return account != nil

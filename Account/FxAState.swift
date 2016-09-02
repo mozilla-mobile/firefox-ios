@@ -156,7 +156,7 @@ public class SeparatedState: FxAState {
 }
 
 // Not an externally facing state!
-public class FxASessionState: FxAState {
+public class TokenState: FxAState {
     let sessionToken: NSData
 
     init(sessionToken: NSData) {
@@ -172,7 +172,7 @@ public class FxASessionState: FxAState {
 }
 
 // Not an externally facing state!
-public class ReadyForKeys: FxASessionState {
+public class ReadyForKeys: TokenState {
     let keyFetchToken: NSData
     let unwrapkB: NSData
 
@@ -231,7 +231,7 @@ public class EngagedAfterVerifiedState: ReadyForKeys {
 }
 
 // Not an externally facing state!
-public class TokenAndKeys: FxASessionState {
+public class TokenAndKeys: TokenState {
     public let kA: NSData
     public let kB: NSData
 
