@@ -14,6 +14,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
 
     private var pageControl: UIPageControl!
     private var scrollView: UIScrollView!
+    private var initialDetectionDone = false
     private let enabledDetector = BlockerEnabledDetector()
     private let finishSlide = IntroSlideFinish()
     private let skipButton = UIButton()
@@ -86,15 +87,22 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
             make.bottom.equalTo(self.view.snp_bottom).offset(-15)
         }
 
-        updateEnabledState()
-
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        // We can't do this in viewDidLoad since the VC presentation is still animating and
+        // the view isn't in the window yet, so the detection will fail.
+        if !initialDetectionDone {
+            initialDetectionDone = true
+            updateEnabledState()
+        }
     }
 
     private func updateEnabledState() {
         updateSkipButton()
         finishSlide.enabledState = IntroSlideFinish.EnabledState.Checking
-        enabledDetector.detectEnabled(view) { enabled in
+        enabledDetector.detectEnabled(self) { enabled in
             if enabled {
                 self.finishSlide.enabledState = IntroSlideFinish.EnabledState.Enabled
             } else {

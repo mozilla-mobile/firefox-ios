@@ -102,10 +102,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
 
-    override func viewWillAppear(animated: Bool) {
-        guard shouldUpdateEnabledWhenVisible else { return }
-
-        shouldUpdateEnabledWhenVisible = false
+    override func viewDidAppear(animated: Bool) {
         updateEnabledState()
     }
 
@@ -240,14 +237,18 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func aboutViewControllerDidPressIntro(aboutViewController: AboutViewController) {
+        dismissViewControllerAnimated(true, completion: nil)
         let introViewController = IntroViewController()
-        presentViewController(introViewController, animated: true, completion: nil)
+        self.presentViewController(introViewController, animated: true, completion: nil)
     }
 
     private func updateEnabledState() {
+        guard shouldUpdateEnabledWhenVisible && isViewLoaded() && view.window != nil && presentedViewController == nil else { return }
+        shouldUpdateEnabledWhenVisible = false
+
         toggles.forEach { $0.toggle.enabled = false }
 
-        enabledDetector.detectEnabled(view) { blocked in
+        enabledDetector.detectEnabled(self) { blocked in
             let onToggles = self.toggles.filter { blockerToggle in
                 blockerToggle.toggle.enabled = blocked
                 return blockerToggle.toggle.on
@@ -283,11 +284,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     @objc func applicationDidBecomeActive(sender: UIApplication) {
-        if isViewLoaded() && view.window != nil {
-            updateEnabledState()
-        } else {
-            shouldUpdateEnabledWhenVisible = true
-        }
+        shouldUpdateEnabledWhenVisible = true
+        updateEnabledState()
     }
 
     @objc func toggleSwitched(sender: UISwitch) {

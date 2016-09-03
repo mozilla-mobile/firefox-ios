@@ -7,6 +7,11 @@ import GCDWebServers
 import SafariServices
 import SnapKit
 
+// The alpha to use to hide SFSafariViewController's view.
+// Why 0.05 and not 0? Because if the alpha is lower than 0.05, the SFSVC
+// will refuse to load the URL. Setting view.hidden = true also doesn't work.
+private let HiddenViewAlpha: CGFloat = 0.05
+
 class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
     private let server = GCDWebServer()
 
@@ -33,7 +38,7 @@ class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
         server.startWithPort(0, bonjourName: nil)
     }
 
-    func detectEnabled(parentView: UIView, callback: Bool -> ()) {
+    func detectEnabled(parentVC: UIViewController, callback: Bool -> ()) {
         guard self.svc == nil && self.callback == nil else { return }
 
         blocked = true
@@ -42,7 +47,9 @@ class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
         let detectURL = NSURL(string: "http://localhost:\(server.port)/enabled-detector")!
         svc = SFSafariViewController(URL: detectURL)
         svc.delegate = self
-        parentView.addSubview(svc.view)
+
+        parentVC.presentViewController(svc, animated: false, completion: nil)
+        svc.view.alpha = HiddenViewAlpha
     }
 
     func safariViewController(controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
@@ -50,7 +57,7 @@ class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
         // was blocked, so set an arbitrary timeout.
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(100 * Double(NSEC_PER_MSEC)))
         dispatch_after(delayTime, dispatch_get_main_queue()) {
-            self.svc.view.removeFromSuperview()
+            controller.dismissViewControllerAnimated(false, completion: nil)
             self.svc = nil
             self.callback(self.blocked)
             self.callback = nil

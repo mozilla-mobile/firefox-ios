@@ -131,7 +131,6 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         switch indexPath.row {
         case 1:
-            dismissViewControllerAnimated(true, completion: nil)
             delegate?.aboutViewControllerDidPressIntro(self)
         case 2:
             let contentViewController = AboutContentViewController()
