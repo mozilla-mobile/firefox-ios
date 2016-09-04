@@ -75,6 +75,11 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ]
         }
 
+        generalSettings +=  [
+            BoolSetting(prefs: prefs, prefKey: "KeepToolbars", defaultValue: false,
+                titleText: NSLocalizedString("Keep Toolbars", comment: "Setting to prevent hiding toolbars"))
+        ]
+
         settings += [
             SettingSection(title: nil, children: [
                 // Without a Firefox Account:

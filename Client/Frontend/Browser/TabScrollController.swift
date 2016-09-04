@@ -8,6 +8,7 @@ import SnapKit
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
 class TabScrollingController: NSObject {
+    private var profile: Profile
     enum ScrollDirection {
         case Up
         case Down
@@ -87,7 +88,8 @@ class TabScrollingController: NSObject {
     private var scrollDirection: ScrollDirection = .Down
     private var toolbarState: ToolbarState = .Visible
 
-    override init() {
+    init(profile: Profile) {
+        self.profile = profile
         super.init()
     }
 

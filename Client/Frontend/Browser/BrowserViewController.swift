@@ -87,7 +87,7 @@ class BrowserViewController: UIViewController {
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
 
-    private var scrollController = TabScrollingController()
+    private var scrollController: TabScrollingController
 
     private var keyboardState: KeyboardState?
 
@@ -107,6 +107,7 @@ class BrowserViewController: UIViewController {
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
+        self.scrollController = TabScrollingController(profile: profile)
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         super.init(nibName: nil, bundle: nil)
         didInit()
