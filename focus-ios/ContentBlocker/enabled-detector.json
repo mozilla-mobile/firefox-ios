@@ -1,0 +1,4 @@
+[{
+  "action": { "type": "block" },
+  "trigger": { "url-filter": "^http://localhost:[0-9]+/enabled-detector\\?blocked=1$" }
+}]
