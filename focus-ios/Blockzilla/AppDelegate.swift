@@ -13,8 +13,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegat
         // If one of the toggles isn't enabled or disabled, this is the first launch. Load the list.
         if Settings.getBool(Settings.KeyBlockAds) == nil {
             Settings.registerDefaults()
-            reloadContentBlocker()
         }
+
+        reloadContentBlocker()
 
         LocalWebServer.sharedInstance.start()
 
