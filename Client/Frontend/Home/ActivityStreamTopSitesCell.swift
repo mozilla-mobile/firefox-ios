@@ -106,8 +106,8 @@ class TopSiteItemCell: UICollectionViewCell {
 
             // Get dominant colors using a scaled 25/25 image.
             img.getColors(CGSize(width: 25, height: 25)) { colors in
-                //In cases where the background is white. Force the background color to a different color
-                let colorArr = [colors.backgroundColor, colors.detailColor, colors.primaryColor].filter { !$0.isWhite }
+                //In cases where the background is black/white. Force the background color to a different color
+                let colorArr = [colors.backgroundColor, colors.detailColor, colors.primaryColor].filter { !$0.isBlackOrWhite }
                 self.contentView.backgroundColor = colorArr.isEmpty ? UIColor.lightGrayColor() : colorArr.first
             }
         }
