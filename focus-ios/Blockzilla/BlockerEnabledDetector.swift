@@ -9,19 +9,21 @@ import SnapKit
 
 typealias EnabledCallback = Bool -> ()
 
-class BlockerEnabledDetector {
-    static func detectEnabled(parentView: UIView, callback: EnabledCallback) {
+class BlockerEnabledDetector: NSObject {
+    private override init() {}
+
+    func detectEnabled(parentView: UIView, callback: EnabledCallback) {}
+
+    static func makeInstance() -> BlockerEnabledDetector {
         if #available(iOS 10.0, *) {
-            let detector = BlockerEnabledDetector10()
-            detector.detectEnabled(callback)
-        } else {
-            let detector = BlockerEnabledDetector9()
-            detector.detectEnabled(parentView, callback: callback)
+            return BlockerEnabledDetector10()
         }
+
+        return BlockerEnabledDetector9()
     }
 }
 
-private class BlockerEnabledDetector9: NSObject, SFSafariViewControllerDelegate {
+private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewControllerDelegate {
     private let server = GCDWebServer()
 
     private var svc: SFSafariViewController!
@@ -47,7 +49,7 @@ private class BlockerEnabledDetector9: NSObject, SFSafariViewControllerDelegate 
         server.startWithPort(0, bonjourName: nil)
     }
 
-    func detectEnabled(parentView: UIView, callback: EnabledCallback) {
+    override func detectEnabled(parentView: UIView, callback: EnabledCallback) {
         guard self.svc == nil && self.callback == nil else { return }
 
         blocked = true
@@ -77,8 +79,8 @@ private class BlockerEnabledDetector9: NSObject, SFSafariViewControllerDelegate 
 }
 
 @available(iOS 10.0, *)
-private class BlockerEnabledDetector10 {
-    func detectEnabled(callback: EnabledCallback) {
+private class BlockerEnabledDetector10: BlockerEnabledDetector {
+    override func detectEnabled(parentView: UIView, callback: EnabledCallback) {
         SFContentBlockerManager.getStateOfContentBlockerWithIdentifier(AppInfo.ContentBlockerBundleIdentifier) { state, error in
             dispatch_async(dispatch_get_main_queue()) {
                 guard let state = state else {

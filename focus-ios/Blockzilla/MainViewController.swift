@@ -21,6 +21,8 @@ protocol MainViewControllerDelegate: class {
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutViewControllerDelegate {
     weak var delegate: MainViewControllerDelegate?
 
+    private let detector = BlockerEnabledDetector.makeInstance()
+
     private let tableView = UITableView()
     private let headerView = MainHeaderView()
     private let errorFooterView = ErrorFooterView()
@@ -246,7 +248,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     private func updateEnabledState() {
         toggles.forEach { $0.toggle.enabled = false }
 
-        BlockerEnabledDetector.detectEnabled(view) { blocked in
+        detector.detectEnabled(view) { blocked in
             let onToggles = self.toggles.filter { blockerToggle in
                 blockerToggle.toggle.enabled = blocked
                 return blockerToggle.toggle.on

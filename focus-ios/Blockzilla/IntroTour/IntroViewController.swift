@@ -12,6 +12,8 @@ protocol IntroViewControllerDelegate: class {
 class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFinishDelegate {
     weak var delegate: IntroViewControllerDelegate?
 
+    private let detector = BlockerEnabledDetector.makeInstance()
+
     private var pageControl: UIPageControl!
     private var scrollView: UIScrollView!
     private let finishSlide = IntroSlideFinish()
@@ -92,7 +94,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
     private func updateEnabledState() {
         updateSkipButton()
         finishSlide.enabledState = IntroSlideFinish.EnabledState.Checking
-        BlockerEnabledDetector.detectEnabled(view) { enabled in
+        detector.detectEnabled(view) { enabled in
             if enabled {
                 self.finishSlide.enabledState = IntroSlideFinish.EnabledState.Enabled
             } else {
