@@ -7,12 +7,21 @@ import GCDWebServers
 import SafariServices
 import SnapKit
 
-// The alpha to use to hide SFSafariViewController's view.
-// Why 0.05 and not 0? Because if the alpha is lower than 0.05, the SFSVC
-// will refuse to load the URL. Setting view.hidden = true also doesn't work.
-private let HiddenViewAlpha: CGFloat = 0.05
+typealias EnabledCallback = Bool -> ()
 
-class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
+class BlockerEnabledDetector {
+    static func detectEnabled(parentView: UIView, callback: EnabledCallback) {
+        if #available(iOS 10.0, *) {
+            let detector = BlockerEnabledDetector10()
+            detector.detectEnabled(callback)
+        } else {
+            let detector = BlockerEnabledDetector9()
+            detector.detectEnabled(parentView, callback: callback)
+        }
+    }
+}
+
+private class BlockerEnabledDetector9: NSObject, SFSafariViewControllerDelegate {
     private let server = GCDWebServer()
 
     private var svc: SFSafariViewController!
@@ -38,7 +47,7 @@ class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
         server.startWithPort(0, bonjourName: nil)
     }
 
-    func detectEnabled(parentVC: UIViewController, callback: Bool -> ()) {
+    func detectEnabled(parentView: UIView, callback: EnabledCallback) {
         guard self.svc == nil && self.callback == nil else { return }
 
         blocked = true
@@ -47,17 +56,15 @@ class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
         let detectURL = NSURL(string: "http://localhost:\(server.port)/enabled-detector")!
         svc = SFSafariViewController(URL: detectURL)
         svc.delegate = self
-
-        parentVC.presentViewController(svc, animated: false, completion: nil)
-        svc.view.alpha = HiddenViewAlpha
+        parentView.addSubview(svc.view)
     }
 
-    func safariViewController(controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
+    @objc func safariViewController(controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
         // The trigger page loaded; now try loading the blocked page. We don't get any callback if the page
         // was blocked, so set an arbitrary timeout.
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(100 * Double(NSEC_PER_MSEC)))
         dispatch_after(delayTime, dispatch_get_main_queue()) {
-            controller.dismissViewControllerAnimated(false, completion: nil)
+            self.svc.view.removeFromSuperview()
             self.svc = nil
             self.callback(self.blocked)
             self.callback = nil
@@ -66,5 +73,22 @@ class BlockerEnabledDetector: NSObject, SFSafariViewControllerDelegate {
 
     deinit {
         server.stop()
+    }
+}
+
+@available(iOS 10.0, *)
+private class BlockerEnabledDetector10 {
+    func detectEnabled(callback: EnabledCallback) {
+        SFContentBlockerManager.getStateOfContentBlockerWithIdentifier(AppInfo.ContentBlockerBundleIdentifier) { state, error in
+            dispatch_async(dispatch_get_main_queue()) {
+                guard let state = state else {
+                    print("Detection error: \(error!.description)")
+                    callback(false)
+                    return
+                }
+
+                callback(state.enabled)
+            }
+        }
     }
 }

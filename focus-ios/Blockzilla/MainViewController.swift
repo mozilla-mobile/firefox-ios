@@ -22,8 +22,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     weak var delegate: MainViewControllerDelegate?
 
     private let tableView = UITableView()
-    private let enabledDetector = BlockerEnabledDetector()
-
     private let headerView = MainHeaderView()
     private let errorFooterView = ErrorFooterView()
     private var shouldUpdateEnabledWhenVisible = true
@@ -102,7 +100,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
+        guard shouldUpdateEnabledWhenVisible else { return }
+
+        shouldUpdateEnabledWhenVisible = false
         updateEnabledState()
     }
 
@@ -239,16 +240,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func aboutViewControllerDidPressIntro(aboutViewController: AboutViewController) {
         dismissViewControllerAnimated(true, completion: nil)
         let introViewController = IntroViewController()
-        self.presentViewController(introViewController, animated: true, completion: nil)
+        presentViewController(introViewController, animated: true, completion: nil)
     }
 
     private func updateEnabledState() {
-        guard shouldUpdateEnabledWhenVisible && isViewLoaded() && view.window != nil && presentedViewController == nil else { return }
-        shouldUpdateEnabledWhenVisible = false
-
         toggles.forEach { $0.toggle.enabled = false }
 
-        enabledDetector.detectEnabled(self) { blocked in
+        BlockerEnabledDetector.detectEnabled(view) { blocked in
             let onToggles = self.toggles.filter { blockerToggle in
                 blockerToggle.toggle.enabled = blocked
                 return blockerToggle.toggle.on
@@ -284,8 +282,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     @objc func applicationDidBecomeActive(sender: UIApplication) {
-        shouldUpdateEnabledWhenVisible = true
-        updateEnabledState()
+        if isViewLoaded() && view.window != nil {
+            updateEnabledState()
+        } else {
+            shouldUpdateEnabledWhenVisible = true
+        }
     }
 
     @objc func toggleSwitched(sender: UISwitch) {
