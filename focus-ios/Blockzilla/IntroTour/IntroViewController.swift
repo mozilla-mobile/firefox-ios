@@ -9,7 +9,7 @@ protocol IntroViewControllerDelegate: class {
     func introViewControllerWillDismiss(introViewController: IntroViewController)
 }
 
-class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFinishDelegate, IntroSlideHowToDelegate {
+class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFinishDelegate {
     weak var delegate: IntroViewControllerDelegate?
 
     private var pageControl: UIPageControl!
@@ -22,7 +22,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
 
         let welcomeSlide = IntroSlideWelcome()
         let howToSlide = IntroSlideHowTo()
-        howToSlide.delegate = self
         finishSlide.delegate = self
         let introSlides = [welcomeSlide, howToSlide, finishSlide]
 
@@ -141,16 +140,8 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
         skipButton.animateHidden(hidden, duration: 0.2)
     }
 
-    func introSlideHowToDidPressSettings(introSlideHowTo: IntroSlideHowTo) {
-        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
-    }
-
     func introSlideFinishDidPressGetStarted(introSlideFinish: IntroSlideFinish) {
         delegate?.introViewControllerWillDismiss(self)
         dismissViewControllerAnimated(true, completion: nil)
-    }
-
-    func introSlideFinishDidPressOpenSettings(introSlideFinish: IntroSlideFinish) {
-        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
     }
 }

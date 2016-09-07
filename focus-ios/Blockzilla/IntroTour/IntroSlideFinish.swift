@@ -6,7 +6,6 @@ import Foundation
 
 protocol IntroSlideFinishDelegate: class {
     func introSlideFinishDidPressGetStarted(introSlideFinish: IntroSlideFinish)
-    func introSlideFinishDidPressOpenSettings(introSlideFinish: IntroSlideFinish)
 }
 
 class IntroSlideFinish: UIView {
@@ -14,7 +13,6 @@ class IntroSlideFinish: UIView {
 
     private let enabledStateContainer = UIView()
     private let getStartedButton = UIButton()
-    private let settingsButton = UIButton()
     private let enabledStateView = EnabledStateView()
     private let checkingStateView = CheckingStateView()
     private let disabledStateView = DisabledStateView()
@@ -46,13 +44,6 @@ class IntroSlideFinish: UIView {
         getStartedButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         addSubview(getStartedButton)
 
-        settingsButton.setTitle(UIConstants.Strings.OpenSettings, forState: UIControlState.Normal)
-        settingsButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
-        settingsButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        settingsButton.addTarget(self, action: #selector(IntroSlideFinish.settingsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        settingsButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
-        addSubview(settingsButton)
-
         enabledStateContainer.snp_makeConstraints { make in
             make.edges.equalTo(self)
         }
@@ -72,10 +63,6 @@ class IntroSlideFinish: UIView {
         getStartedButton.snp_makeConstraints { make in
             make.centerX.equalTo(self)
             make.bottom.equalTo(self).offset(-70)
-        }
-
-        settingsButton.snp_makeConstraints { make in
-            make.center.equalTo(getStartedButton)
         }
 
         updateButtons()
@@ -104,7 +91,6 @@ class IntroSlideFinish: UIView {
     private func updateButtons() {
         let enabled = enabledState == EnabledState.Enabled
         getStartedButton.animateHidden(!enabled, duration: 0.3)
-        settingsButton.animateHidden(enabled, duration: 0.3)
     }
 
     private func showEnabledStateView(view: UIView) {
@@ -115,10 +101,6 @@ class IntroSlideFinish: UIView {
 
     @objc func getStartedClicked(sender: UIButton) {
         delegate?.introSlideFinishDidPressGetStarted(self)
-    }
-
-    @objc func settingsClicked(sender: UIButton) {
-        delegate?.introSlideFinishDidPressOpenSettings(self)
     }
 }
 

@@ -37,14 +37,6 @@ class ErrorFooterView: UIView {
         instructionsLabel2.font = UIConstants.Fonts.SmallerFont
         addSubview(instructionsLabel2)
 
-        let settingsButton = UIButton()
-        settingsButton.setTitle(UIConstants.Strings.OpenSettings, forState: UIControlState.Normal)
-        settingsButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
-        settingsButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        settingsButton.addTarget(self, action: #selector(ErrorFooterView.settingsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        settingsButton.titleLabel?.font = UIConstants.Fonts.SmallerFontSemibold
-        addSubview(settingsButton)
-
         upperBorder.snp_makeConstraints { make in
             make.height.equalTo(2)
             make.top.width.equalTo(self)
@@ -63,11 +55,6 @@ class ErrorFooterView: UIView {
         instructionsLabel2.snp_makeConstraints { make in
             make.top.equalTo(instructionsLabel1.snp_bottom)
             make.leading.trailing.equalTo(self)
-        }
-
-        settingsButton.snp_makeConstraints { make in
-            make.top.equalTo(instructionsLabel2.snp_bottom).offset(10)
-            make.centerX.equalTo(self)
             make.bottom.equalTo(self).offset(-10)
         }
     }

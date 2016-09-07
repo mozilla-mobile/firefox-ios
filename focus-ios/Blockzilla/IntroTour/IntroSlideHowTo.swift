@@ -4,13 +4,7 @@
 
 import Foundation
 
-protocol IntroSlideHowToDelegate: class {
-    func introSlideHowToDidPressSettings(introSlideHowTo: IntroSlideHowTo)
-}
-
 class IntroSlideHowTo: UIView {
-    weak var delegate: IntroSlideHowToDelegate?
-
     init() {
         super.init(frame: CGRectZero)
 
@@ -28,15 +22,6 @@ class IntroSlideHowTo: UIView {
         mustBeEnabledLabel.textColor = UIConstants.Colors.FocusOrange
         addSubview(mustBeEnabledLabel)
 
-        let openSettingsButton = UIButton()
-        openSettingsButton.setTitle(UIConstants.Strings.OpenSettings, forState: UIControlState.Normal)
-        openSettingsButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
-        openSettingsButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        openSettingsButton.addTarget(self, action: #selector(IntroSlideHowTo.settingsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        openSettingsButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
-
-        addSubview(openSettingsButton)
-
         instructionsContainer.snp_makeConstraints { make in
             make.top.equalTo(self)
             make.bottom.equalTo(mustBeEnabledLabel.snp_top)
@@ -48,22 +33,13 @@ class IntroSlideHowTo: UIView {
             make.width.equalTo(220)
         }
 
-        openSettingsButton.snp_makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.bottom.equalTo(self).offset(-70)
-        }
-
         mustBeEnabledLabel.snp_makeConstraints { make in
             make.leading.trailing.equalTo(self).inset(30)
-            make.bottom.equalTo(openSettingsButton.snp_top).offset(-30)
+            make.bottom.equalTo(self).offset(-70)
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc func settingsClicked(sender: UIButton) {
-        delegate?.introSlideHowToDidPressSettings(self)
     }
 }
