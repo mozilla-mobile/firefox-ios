@@ -15,7 +15,7 @@ struct TopTabsUX {
     static let TopTabsBackgroundShadowWidth: CGFloat = 35
     static let TabWidth: CGFloat = 180
     static let CollectionViewPadding: CGFloat = 15
-    static let FaderPading: CGFloat = 5
+    static let FaderPadding: CGFloat = 5
     static let BackgroundSeparatorLinePadding: CGFloat = 5
     static let TabTitleWidth: CGFloat = 110
     static let TabTitlePadding: CGFloat = 10
@@ -30,6 +30,15 @@ protocol TopTabsDelegate: class {
 
 protocol TopTabCellDelegate: class {
     func tabCellDidClose(cell: TopTabCell)
+}
+
+class ExtendedTabDragState: TabDragState {
+    var position: CGPoint
+    
+    override init(cell: TabCell, indexPath: NSIndexPath, offset: CGPoint, hasBegun: Bool) {
+        self.position = .zero
+        super.init(cell: cell, indexPath: indexPath, offset: offset, hasBegun: hasBegun)
+    }
 }
 
 class TopTabsViewController: UIViewController {
@@ -47,6 +56,7 @@ class TopTabsViewController: UIViewController {
         
         return collectionView
     }()
+    var dragState: ExtendedTabDragState?
     
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
@@ -70,6 +80,7 @@ class TopTabsViewController: UIViewController {
     private lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
         let delegate = TopTabsLayoutDelegate()
         delegate.tabSelectionDelegate = self
+        delegate.tabScrollDelegate = self
         return delegate
     }()
     
@@ -100,8 +111,8 @@ class TopTabsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
         collectionView.reloadData()
-        dispatch_async(dispatch_get_main_queue()) { 
-             self.scrollToCurrentTab(false, centerCell: true)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.scrollToCurrentTab(false, centerCell: true)
         }
     }
     
@@ -134,8 +145,8 @@ class TopTabsViewController: UIViewController {
         }
         topTabFader.snp_makeConstraints { make in
             make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateTab.snp_trailing).offset(-TopTabsUX.FaderPading)
-            make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.FaderPading)
+            make.leading.equalTo(privateTab.snp_trailing).offset(-TopTabsUX.FaderPadding)
+            make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.FaderPadding)
         }
         collectionView.snp_makeConstraints { make in
             make.top.bottom.equalTo(view)
@@ -149,6 +160,10 @@ class TopTabsViewController: UIViewController {
             applyTheme(currentTab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
         }
         updateTabCount(tabsToDisplay.count)
+        
+        if #available(iOS 9, *) {
+            self.view.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTab)))
+        }
     }
     
     func switchForegroundStatus(isInForeground reveal: Bool) {
@@ -199,8 +214,91 @@ class TopTabsViewController: UIViewController {
         delegate?.topTabsDidPressTabs()
     }
     
+    @available(iOS 9.0, *)
+    private func updateDraggedTabPosition(offsetPosition: CGPoint?) {
+        if let dragState = self.dragState {
+            if let offsetPosition = offsetPosition {
+                dragState.position = offsetPosition 
+            }
+            // When the tab is first picked up, it jumps slightly, and so needs to be corrected. I couldn't figure out what factors were causing this
+            // so it's hard-coded for now. None of the obvious solutions were quite right. Dragging is a delicate issue and it's hard to get perfect.
+            let cellSnapOffset: CGFloat = 29
+            let lockedXPosition = min(max(TopTabsUX.TopTabsBackgroundShadowWidth + TopTabsUX.TabWidth / 2, dragState.position.x - dragState.offset.x + self.collectionView.contentOffset.x - cellSnapOffset), collectionView.contentSize.width - TopTabsUX.TopTabsBackgroundShadowWidth - TopTabsUX.TabWidth / 2)
+            let dragPosition = CGPoint(x: lockedXPosition, y: self.collectionView.frame.height / 2)
+            self.collectionView.updateInteractiveMovementTargetPosition(dragPosition)
+        }
+    }
+    
+    private func endTabDragging(cancelled cancelled: Bool) -> Bool {
+        guard #available(iOS 9, *) else {
+            return false
+        }
+        if self.dragState != nil && self.dragState!.hasBegun {
+            self.dragState = nil
+            self.view.userInteractionEnabled = true
+            self.collectionView.performBatchUpdates({
+                cancelled ? self.collectionView.cancelInteractiveMovement() : self.collectionView.endInteractiveMovement()
+            }) { _ in
+                self.collectionView.reloadData()
+                for item in 0..<self.collectionView.numberOfItemsInSection(0) {
+                    guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TopTabCell else {
+                        continue
+                    }
+                    if !cell.isBeingArranged {
+                        continue
+                    }
+                    cell.isBeingArranged = false
+                }
+                self.scrollToCurrentTab()
+            }
+            return true
+        }
+        return false
+    }
+    
+    @available(iOS 9, *)
+    func didLongPressTab(gesture: UILongPressGestureRecognizer) {
+        switch gesture.state {
+        case .Began:
+            let pressPosition = gesture.locationInView(self.collectionView)
+            guard let indexPath = self.collectionView.indexPathForItemAtPoint(pressPosition) else {
+                break
+            }
+            for item in 0..<self.collectionView.numberOfItemsInSection(0) {
+                guard let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: item, inSection: 0)) as? TopTabCell else {
+                    continue
+                }
+                if item == indexPath.item {
+                    let cellPosition = cell.contentView.convertPoint(cell.bounds.center, toView: self.collectionView)
+                    self.dragState = ExtendedTabDragState(cell: cell, indexPath: indexPath, offset: CGPoint(x: pressPosition.x - cellPosition.x, y: pressPosition.y - cellPosition.y), hasBegun: false)
+                    self.didSelectTabAtIndex(indexPath.item)
+                    continue
+                }
+                cell.isBeingArranged = true
+            }
+            break
+        case .Changed:
+            if let dragState = self.dragState {
+                if !dragState.hasBegun {
+                    dragState.hasBegun = true
+                    self.view.userInteractionEnabled = false
+                    self.collectionView.beginInteractiveMovementForItemAtIndexPath(dragState.indexPath)
+                }
+                if let view = gesture.view {
+                    self.updateDraggedTabPosition(gesture.locationInView(view))
+                }
+            }
+        case .Ended, .Cancelled:
+            self.endTabDragging(cancelled: gesture.state == .Cancelled)
+        default:
+            break
+        }
+    }
+    
     func reloadFavicons() {
-        self.collectionView.reloadData()
+        if self.dragState == nil {
+            self.collectionView.reloadData()
+        }
     }
     
     func scrollToCurrentTab(animated: Bool = true, centerCell: Bool = false) {
@@ -212,7 +310,7 @@ class TopTabsViewController: UIViewController {
                 collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0), atScrollPosition: .CenteredHorizontally, animated: false)
             } else {
                 // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
-                let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
+                let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPadding), dy: 0)
                 collectionView.scrollRectToVisible(padFrame, animated: animated)
             }
         }
@@ -222,7 +320,7 @@ class TopTabsViewController: UIViewController {
 extension TopTabsViewController: Themeable {
     func applyTheme(themeName: String) {
         tabsButton.applyTheme(themeName)
-        isPrivate = (themeName == Theme.PrivateMode)
+        isPrivate = themeName == Theme.PrivateMode
     }
 }
 
@@ -240,7 +338,10 @@ extension TopTabsViewController: TopTabCellDelegate {
         if tabsToDisplay.count == 1 {
             tabManager.removeTab(tab)
             tabManager.selectTab(tabsToDisplay.first)
-            collectionView.reloadData()
+            // By ending tab dragging, we also reload the data, and avoid any issues with reloading while dragging
+            if !self.endTabDragging(cancelled: true) {
+                self.collectionView.reloadData()
+            }
         } else {
             var nextTab: Tab
             let currentIndex = indexPath.item
@@ -255,8 +356,8 @@ extension TopTabsViewController: TopTabCellDelegate {
             }
             self.collectionView.performBatchUpdates({
                 self.collectionView.deleteItemsAtIndexPaths([indexPath])
-                }, completion: { finished in
-                    self.collectionView.reloadData()
+            }, completion: { finished in
+                self.collectionView.reloadData()
             })
         }
     }
@@ -265,12 +366,18 @@ extension TopTabsViewController: TopTabCellDelegate {
 extension TopTabsViewController: UICollectionViewDataSource {
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let index = indexPath.item
+        // This should never happen. However, it can do when the integrity is corrupted when, for example, calling collectionView.reloadData()
+        // while the tabs are being reärranged. It's easier to catch this with an assertion rather than try to figure out why all these weird
+        // graphical bugs are happening (sometimes leading to a crash, sometimes not).
+        assert(index != -1)
         let tabCell = collectionView.dequeueReusableCellWithReuseIdentifier(TopTabCell.Identifier, forIndexPath: indexPath) as! TopTabCell
         tabCell.delegate = self
         
         let tab = tabsToDisplay[index]
         tabCell.style = tab.isPrivate ? .Dark : .Light
         tabCell.titleText.text = tab.displayTitle
+        
+        tabCell.isBeingArranged = self.dragState != nil
         
         if tab.displayTitle.isEmpty {
             if (tab.webView?.URL?.baseDomain()?.contains("localhost") ?? true) {
@@ -285,7 +392,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }
 
-        tabCell.selectedTab = (tab == tabManager.selectedTab)
+        tabCell.selectedTab = tab == tabManager.selectedTab
         
         if index > 0 && index < tabsToDisplay.count && tabsToDisplay[index] != tabManager.selectedTab && tabsToDisplay[index-1] != tabManager.selectedTab {
             tabCell.seperatorLine = true
@@ -306,12 +413,18 @@ extension TopTabsViewController: UICollectionViewDataSource {
                 tabCell.favicon.image = defaultFavicon
             }
         }
-        
+
         return tabCell
     }
     
     @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabsToDisplay.count
+    }
+    
+    @objc func collectionView(collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        let fromIndex = sourceIndexPath.item
+        let toIndex = destinationIndexPath.item
+        tabManager.moveTab(isPrivate: tabsToDisplay[fromIndex].isPrivate, fromIndex: fromIndex, toIndex: toIndex)
     }
 }
 
@@ -319,20 +432,37 @@ extension TopTabsViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(index: Int) {
         let tab = tabsToDisplay[index]
         tabManager.selectTab(tab)
-        collectionView.reloadData()
+        // By ending tab dragging, we also reload the data, and avoid any issues with reloading while dragging
+        if !self.endTabDragging(cancelled: true) {
+            self.collectionView.reloadData()
+        }
         collectionView.setNeedsDisplay()
         delegate?.topTabsDidChangeTab()
         scrollToCurrentTab()
     }
 }
 
+extension TopTabsViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if #available(iOS 9.0, *) {
+            if self.dragState != nil {
+                self.updateDraggedTabPosition(nil)
+            }
+        }
+    }
+}
+
 extension TopTabsViewController : WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        collectionView.reloadData()
+        if self.dragState == nil {
+            collectionView.reloadData()
+        }
     }
     
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        collectionView.reloadData()
+        if self.dragState == nil {
+            collectionView.reloadData()
+        }
     }
 }
 
@@ -349,7 +479,10 @@ extension TopTabsViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {}
     func tabManagerDidRestoreTabs(tabManager: TabManager) {}
     func tabManagerDidAddTabs(tabManager: TabManager) {
-        collectionView.reloadData()
+        // By ending tab dragging, we also reload the data, and avoid any issues with reloading while dragging
+        if !self.endTabDragging(cancelled: true) {
+            self.collectionView.reloadData()
+        }
     }
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {
         if let privateTab = lastPrivateTab where !tabManager.tabs.contains(privateTab) {

@@ -4,7 +4,7 @@
 
 import Foundation
 
-class TopTabCell: UICollectionViewCell {
+class TopTabCell: TabCell {
     enum Style {
         case Light
         case Dark
@@ -37,6 +37,14 @@ class TopTabCell: UICollectionViewCell {
                 titleText.textColor = UIColor.lightTextColor()
             }
             favicon.alpha = selectedTab ? 1.0 : 0.6
+        }
+    }
+    
+    override var isBeingArranged: Bool {
+        didSet {
+            if isBeingArranged != oldValue {
+                setNeedsDisplay()
+            }
         }
     }
     
@@ -116,7 +124,7 @@ class TopTabCell: UICollectionViewCell {
         switch style {
         case Style.Light:
             bezierView.fillColor = TopTabsUX.TopTabsBackgroundNormalColor
-            titleText.textColor = UIColor.darkTextColor()
+            titleText.textColor = selectedTab ? UIColor.darkTextColor() : UIColor.lightTextColor()
         case Style.Dark:
             bezierView.fillColor = TopTabsUX.TopTabsBackgroundPrivateColor
             titleText.textColor = UIColor.lightTextColor()
@@ -139,7 +147,7 @@ class TopTabCell: UICollectionViewCell {
     
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
-        guard seperatorLine else {
+        guard seperatorLine && !isBeingArranged else {
             return
         }
         let context = UIGraphicsGetCurrentContext()
