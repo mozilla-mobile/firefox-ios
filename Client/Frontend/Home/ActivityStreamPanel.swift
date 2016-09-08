@@ -10,6 +10,8 @@ import WebImage
 import XCGLogger
 
 private let log = Logger.browserLogger
+private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
+
 
 // MARK: -  Lifecycle
 struct ASPanelUX {
@@ -30,7 +32,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     private let profile: Profile
     private let topSitesManager = ASHorizontalScrollCellManager()
 
-    var topSites: [TopSiteItem] = []
+    var topSites: [Site] = []
     var history: [Site] = []
 
     init(profile: Profile) {
@@ -249,8 +251,21 @@ extension ActivityStreamPanel {
 
     private func reloadTopSites() {
         invalidateTopSites().uponQueue(dispatch_get_main_queue()) { result in
-            let sites = result.successValue ?? []
-            self.topSites = sites
+            let defaultSites = self.defaultTopSites()
+            let mySites = (result.successValue ?? [])
+
+            // Merge default topsites with a user's topsites.
+            let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
+                return NSURL(string: site.url)?.extractDomainName() ?? ""
+            })
+
+            // Favour topsites from defaultSites as they have better favicons.
+            let newSites = mergedSites.map { site -> Site in
+                let domain = NSURL(string: site.url)?.extractDomainName() ?? ""
+                return defaultSites.find { $0.title.lowercaseString == domain } ?? site
+            }
+
+            self.topSites = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
             self.topSitesManager.currentTraits = self.view.traitCollection
             self.topSitesManager.content = self.topSites
             self.topSitesManager.urlPressedHandler = { [unowned self] url in
@@ -266,11 +281,11 @@ extension ActivityStreamPanel {
         }
     }
 
-    private func invalidateTopSites() -> Deferred<Maybe<[TopSiteItem]>> {
+    private func invalidateTopSites() -> Deferred<Maybe<[Site]>> {
         let frecencyLimit = ASPanelUX.topSitesCacheSize
         return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { dirty in
             return self.profile.history.getTopSitesWithLimit(frecencyLimit) >>== { topSites in
-                return deferMaybe(topSites.flatMap(self.siteToItem))
+                return deferMaybe(topSites.asArray())
             }
         }
     }
@@ -279,20 +294,26 @@ extension ActivityStreamPanel {
         guard let host = siteURL.normalizedHost() else {
             return
         }
+        // if the default top sites contains the siteurl. also wipe it from default suggested sites.
+        if defaultTopSites().filter({$0.url != siteURL.absoluteString}).isEmpty == false {
+            deleteTileForSuggestedSite(siteURL.absoluteString)
+        }
         profile.history.removeHostFromTopSites(host).uponQueue(dispatch_get_main_queue()) { result in
             guard result.isSuccess else { return }
             self.reloadTopSites()
         }
     }
 
-    private func siteToItem(site: Site?) -> TopSiteItem? {
-        guard let site = site else {
-            return nil
-        }
-        guard let faviconURL = site.icon?.url else {
-            return TopSiteItem(urlTitle: site.tileURL.extractDomainName(), faviconURL: nil, siteURL: site.tileURL)
-        }
-        return TopSiteItem(urlTitle: site.tileURL.extractDomainName(), faviconURL: NSURL(string: faviconURL)!, siteURL: site.tileURL)
+    private func deleteTileForSuggestedSite(siteURL: String) {
+        var deletedSuggestedSites = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
+        deletedSuggestedSites.append(siteURL)
+        profile.prefs.setObject(deletedSuggestedSites, forKey: DefaultSuggestedSitesKey)
+    }
+
+    private func defaultTopSites() -> [Site] {
+        let suggested = SuggestedSites.asArray()
+        let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
+        return suggested.filter({deleted.indexOf($0.url) == .None})
     }
 }
 
