@@ -2027,6 +2027,9 @@ extension BrowserViewController: TabManagerDelegate {
                 readerModeCache = DiskReaderModeCache.sharedInstance
                 applyTheme(Theme.NormalMode)
             }
+            if let privateModeButton = topTabsViewController?.privateModeButton where previous != nil && previous?.isPrivate != tab.isPrivate {
+                privateModeButton.setSelected(tab.isPrivate, animated: true)
+            }
             ReaderModeHandlers.readerModeCache = readerModeCache
 
             scrollController.tab = selected
@@ -3349,8 +3352,8 @@ extension BrowserViewController: TopTabsDelegate {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         openBlankNewTabAndFocus(isPrivate: isPrivate)
     }
-    
-    func didTogglePrivateMode(cachedTab: Tab?) {
+
+    func topTabsDidPressPrivateModeButton(cachedTab: Tab?) {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }

@@ -32,7 +32,7 @@ class TopTabCell: UICollectionViewCell {
         didSet {
             bezierView.hidden = !selectedTab
             if style == Style.Light {
-                titleText.textColor = selectedTab ? UIColor.darkTextColor() : UIColor.lightTextColor()
+                titleText.textColor = UIColor.darkTextColor()
             } else {
                 titleText.textColor = UIColor.lightTextColor()
             }
@@ -66,7 +66,7 @@ class TopTabCell: UICollectionViewCell {
     
     private let bezierView: BezierView = {
         let bezierView = BezierView()
-        bezierView.fillColor = TopTabsUX.TopTabsBackgroundNormalColor
+        bezierView.fillColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
         return bezierView
     }()
     
@@ -212,9 +212,18 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
     private lazy var rightCurve = SingleCurveView(right: true)
     private lazy var leftCurve = SingleCurveView(right: false)
     
+    private var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive {
+        didSet {
+            centerBackground.backgroundColor = themeColor
+            for curve in [rightCurve, leftCurve] {
+                curve.themeColor = themeColor
+                curve.setNeedsDisplay()
+            }
+        }
+    }
+    
     lazy var centerBackground: UIView = {
         let centerBackground = UIView()
-        centerBackground.backgroundColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
         return centerBackground
     }()
     
@@ -251,8 +260,16 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.applyLayoutAttributes(layoutAttributes)
+        if let decorationAttributes = layoutAttributes as? TopTabsViewLayoutAttributes, themeColor = decorationAttributes.themeColor {
+            self.themeColor = themeColor
+        }
+    }
+    
     private class SingleCurveView: UIView {
         static let CurveWidth: CGFloat = 50
+        private var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
         var right: Bool = true
         init(right: Bool) {
             self.right = right
@@ -266,13 +283,25 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
         override func drawRect(rect: CGRect) {
             super.drawRect(rect)
             
-            let fillColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
-            
             let bezierPath = UIBezierPath.topTabsCurve(frame.width, height: frame.height, direction: right ? .Right : .Left)
             
-            fillColor.setFill()
+            self.themeColor.setFill()
             bezierPath.fill()
         }
+    }
+}
+
+class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
+    var themeColor: UIColor?
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        guard let object = object as? TopTabsViewLayoutAttributes else {
+            return false
+        }
+        if object.themeColor != self.themeColor {
+            return false
+        }
+        return super.isEqual(object)
     }
 }
 
