@@ -218,6 +218,18 @@ class SearchEngines {
         }
     }
 
+    // Return the region identifier to be used for the search engine selection.
+    class func regionIdentifierForSearchEngines() -> String {
+        let languageIdentifier = languageIdentifierForSearchEngines()
+        let components = languageIdentifier.componentsSeparatedByString("-")
+        if components.count == 2 {
+            return components[1]
+        } else if components.count == 3 {
+            return components[2]
+        }
+        // This shouldn't happen
+        return languageIdentifier
+    }
     /// Get all bundled (not custom) search engines, with the default search engine first,
     /// but the others in no particular order.
     class func getUnorderedBundledEngines() -> [OpenSearchEngine] {
@@ -238,14 +250,16 @@ class SearchEngines {
             return []
         }
 
-        let index = (searchDirectory as NSString).stringByAppendingPathComponent("list.txt")
+        let index = (searchDirectory as NSString).stringByAppendingPathComponent("list.json")
         let listFile = try? String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
         assert(listFile != nil, "Read the list of search engines")
 
-        let engineNames = listFile!
-            .stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
-            .componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
-
+        let engineJSON = SearchEnginesJSON(listFile!)
+        let region = regionIdentifierForSearchEngines();
+        var engineNames = engineJSON.visibleDefaultEngines(region)
+        if (engineNames.count == 0) {
+            engineNames = engineJSON.visibleDefaultEngines("default")
+        }
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
         for engineName in engineNames {
