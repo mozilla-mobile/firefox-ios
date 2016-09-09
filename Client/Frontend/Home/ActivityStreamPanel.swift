@@ -33,12 +33,16 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     private let topSitesManager = ASHorizontalScrollCellManager()
 
     var topSites: [Site] = []
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
+    }()
+
     var history: [Site] = []
 
     init(profile: Profile) {
         self.profile = profile
         super.init(style: .Grouped)
-
+//        view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
@@ -314,6 +318,40 @@ extension ActivityStreamPanel {
         let suggested = SuggestedSites.asArray()
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.indexOf($0.url) == .None})
+    }
+
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        if longPressGestureRecognizer.state == UIGestureRecognizerState.Began {
+            let touchPoint = longPressGestureRecognizer.locationInView(self.view)
+            if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
+                if Section(indexPath.section) == .History {
+                    presentContextMenu(history[indexPath.row])
+                }
+            }
+        }
+    }
+
+    private func presentContextMenu(site: Site) {
+        let bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
+            let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+            self.profile.bookmarks.shareItem(shareItem)
+            var userData = [QuickActions.TabURLKey: shareItem.url]
+            if let title = shareItem.title {
+                userData[QuickActions.TabTitleKey] = title
+            }
+            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+                withUserData: userData,
+                toApplication: UIApplication.sharedApplication())
+        })
+
+        let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
+            self.profile.history.removeHistoryForURL(site.url)
+        })
+
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: [bookmarkAction, deleteFromHistoryAction])
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 }
 
