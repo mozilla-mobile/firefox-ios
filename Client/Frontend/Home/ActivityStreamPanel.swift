@@ -178,8 +178,13 @@ extension ActivityStreamPanel {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(indexPath.section) {
         case .History:
-            let site = self.history[indexPath.row]
-            showSiteWithURLHandler(NSURL(string:site.url)!)
+//            let site = self.history[indexPath.row]
+//            showSiteWithURLHandler(NSURL(string:site.url)!)
+            let hi = BlurTableViewController()
+            hi.profile = profile
+            hi.site = history[indexPath.row]
+            hi.modalPresentationStyle = .OverCurrentContext
+            self.presentViewController(hi, animated: true, completion: nil)
         case .TopSites:
             return
         } 
