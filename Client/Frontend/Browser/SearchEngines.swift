@@ -250,15 +250,23 @@ class SearchEngines {
             return []
         }
 
-        let index = (searchDirectory as NSString).stringByAppendingPathComponent("list.json")
-        let listFile = try? String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
-        assert(listFile != nil, "Read the list of search engines")
-
-        let engineJSON = SearchEnginesJSON(listFile!)
-        let region = regionIdentifierForSearchEngines();
-        var engineNames = engineJSON.visibleDefaultEngines(region)
-        if (engineNames.count == 0) {
-            engineNames = engineJSON.visibleDefaultEngines("default")
+        var index = (searchDirectory as NSString).stringByAppendingPathComponent("list.json")
+        var listFile = try? String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
+        var engineNames = [String]()
+        if (listFile == nil) {
+            index = (searchDirectory as NSString).stringByAppendingPathComponent("list.txt")
+            listFile = try? String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
+            assert(listFile != nil, "Read the list of search engines")
+            engineNames = listFile!
+                .stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
+                .componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+        } else {
+            let engineJSON = SearchEnginesJSON(listFile!)
+            let region = regionIdentifierForSearchEngines();
+            engineNames = engineJSON.visibleDefaultEngines(region)
+            if (engineNames.count == 0) {
+                engineNames = engineJSON.visibleDefaultEngines("default")
+            }
         }
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
