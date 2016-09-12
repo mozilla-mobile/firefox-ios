@@ -16,10 +16,16 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
         return tapRecognizer
     }()
 
+    lazy var visualEffectView : UIVisualEffectView = {
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        visualEffectView.frame = self.view.bounds
+        visualEffectView.alpha = 0.90
+        return visualEffectView
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
-        visualEffectView.frame = view.bounds
+
         view.addSubview(visualEffectView)
 
         view.addGestureRecognizer(tapRecognizer)
@@ -84,6 +90,16 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
         switch indexPath.row {
             case 0:
                 cell.textLabel?.text = "SITE TITLE AND URL"
+                if let icon = site.icon {
+                    let url = icon.url
+                    cell.imageView?.layer.borderWidth = 0
+                    self.setImageWithURL(cell.imageView!, url: NSURL(string: url)!)
+                } else if let url = NSURL(string: site.url) {
+                    cell.imageView?.image = FaviconFetcher.getDefaultFavicon(url)
+                    cell.imageView!.layer.borderWidth = SimpleHighlightCellUX.BorderWidth
+                }
+                setImageWithURL(cell.imageView!, url: NSURL(string: site.url)!)
+                
                 return cell
             case 1:
                 cell.textLabel?.text = "bookmark"
@@ -95,28 +111,50 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 return cell
             case 2:
                 cell.textLabel?.text = "share"
+
+                let image = UIImage(named: "action_share")!.imageWithRenderingMode(.AlwaysTemplate)
+                cell.imageView?.image = image
+                cell.imageView?.tintColor = UIConstants.SystemBlueColor
                 return cell
             case 3:
                 cell.textLabel?.text = "dismiss"
+
+                let image = UIImage(named: "action_close")!.imageWithRenderingMode(.AlwaysTemplate)
+                cell.imageView?.image = image
+                cell.imageView?.tintColor = UIConstants.SystemBlueColor
                 return cell
             case 4:
                 cell.textLabel?.text = "delete"
+
+                let image = UIImage(named: "action_delete")!.imageWithRenderingMode(.AlwaysTemplate)
+                cell.imageView?.image = image
+                cell.imageView?.tintColor = UIConstants.SystemBlueColor
                 return cell
             default:
                 return cell
         }
     }
 
-    func isBookmarked(site: Site) -> Bool {
-        profile.bookmarks.modelFactory >>== { bookmark in
-            $0.isBookmarked(site.url)
-                .uponQueue(dispatch_get_main_queue()) {
-                    guard let isBookmarked = $0.successValue else {
-                        log.error("Error getting bookmark status: \($0.failureValue).")
-                        return false
-                    }
+    func setImageWithURL(imageView: UIImageView, url: NSURL) {
+        imageView.sd_setImageWithURL(url) { (img, err, type, url) -> Void in
+            guard let img = img else {
+                return
             }
+            imageView.image = img
         }
-        return true
+        imageView.layer.masksToBounds = true
     }
+
+//    func isBookmarked(site: Site) -> Bool {
+//        profile.bookmarks.modelFactory >>== { bookmark in
+//            $0.isBookmarked(site.url)
+//                .uponQueue(dispatch_get_main_queue()) {
+//                    guard let isBookmarked = $0.successValue else {
+//                        log.error("Error getting bookmark status: \($0.failureValue).")
+//                        return false
+//                    }
+//            }
+//        }
+//        return true
+//    }
 }
