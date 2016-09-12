@@ -29,69 +29,56 @@ private enum BookmarkSource {
 
 extension SQLiteHistory: HistoryRecommendations {
     public func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
-        let limit = 19
+        let limit = 20
         let microsecondsPerMinute: Timestamp = 60_000_000 // 1000 * 1000 * 60
-        let thirtyMinutesAgo = NSDate.nowMicroseconds() - 30 * microsecondsPerMinute
-        let threeDaysAgo = NSDate.nowMicroseconds() - (60 * microsecondsPerMinute) * 24 * 3
+        let now = NSDate.nowMicroseconds()
+        let thirtyMinutesAgo = now - 30 * microsecondsPerMinute
+        let threeDaysAgo = now - (60 * microsecondsPerMinute) * 24 * 3
         let bookmarkLimit = 1
         let historyLimit = limit - bookmarkLimit
 
-        let recentHistory = [
-            "SELECT *",
-            "FROM (",
-            "   SELECT \(TableHistory).id AS historyID, url, title, guid, sum(1) AS visitCount, max(\(TableVisits).date) AS visitDate",
-            "   FROM \(TableHistory)",
-            "   LEFT JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id",
-            "   WHERE title NOT NULL AND title != '' AND is_deleted = 0",
-            "   GROUP BY url",
-            "   ORDER BY visitDate DESC",
+        let highlightProjection = "historyID, url, title, guid, visitCount, visitDate, iconID, iconURL, iconType, iconDate, iconWidth"
+
+        let nonRecentHistory = [
+            "SELECT * FROM (",
+            "   SELECT \(TableHistory).id as historyID, url, title, guid, visitDate, (SELECT COUNT(1) FROM \(TableVisits) WHERE s = \(TableVisits).siteID) AS visitCount",
+            "   FROM (",
+            "       SELECT siteID AS s, max(date) AS visitDate",
+            "       FROM \(TableVisits)",
+            "       WHERE date < \(thirtyMinutesAgo)",
+            "       GROUP BY siteID",
+            "   )",
+            "   LEFT JOIN \(TableHistory) ON \(TableHistory).id = s",
+            "   WHERE visitCount <= 3 AND title NOT NULL AND title != ''",
             "   LIMIT \(historyLimit)",
-            ")",
-            "WHERE visitCount <= 3 AND visitDate < \(thirtyMinutesAgo)",
+            ")"
         ].joinWithSeparator(" ")
 
         let bookmarkHighlights = [
-            "SELECT historyID, url, title, guid, visitCount, visitDate",
-            "FROM (",
-            "   SELECT *",
+            "SELECT * FROM (",
+            "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS title, guid, NULL AS visitDate, (SELECT count(1) FROM visits WHERE \(TableVisits).siteID = \(TableHistory).id) as visitCount",
             "   FROM (",
-                    potentialHighlightsFromBookmarkSource(.Local),
-                    "UNION",
-                    potentialHighlightsFromBookmarkSource(.Mirror),
+            "       SELECT bmkUri",
+            "       FROM \(TableBookmarksMirror)",
+            "       WHERE \(TableBookmarksMirror).server_modified > \(threeDaysAgo)",
             "   )",
-            "   WHERE visitCount <= 3 AND modified > \(threeDaysAgo)",
-            "   ORDER BY modified DESC",
+            "   LEFT JOIN \(TableHistory) ON \(TableHistory).url = bmkUri",
+            "   WHERE visitCount >= 3 AND \(TableHistory).title NOT NULL and \(TableHistory).title != ''",
             "   LIMIT \(bookmarkLimit)",
             ")"
         ].joinWithSeparator(" ")
 
         let highlightsQuery = [
-            "SELECT DISTINCT historyID, url, title, guid, visitCount, visitDate, iconID, iconURL, iconType, iconDate, iconWidth",
+            "SELECT \(highlightProjection)",
             "FROM (",
                 bookmarkHighlights,
-                "UNION ALL",
-                recentHistory,
+                "UNION",
+                nonRecentHistory,
             ")",
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID",
             "GROUP BY url"
         ].joinWithSeparator(" ")
 
         return self.db.runQuery(highlightsQuery, args: nil, factory: SQLiteHistory.iconHistoryColumnFactory)
-    }
-
-    private func potentialHighlightsFromBookmarkSource(source: BookmarkSource) -> String {
-        return [
-            "SELECT \(TableHistory).id as historyId, bmkUri as url, \(source.tableName).title as title, \(TableHistory).guid as guid,",
-            "   sum(1) as visitCount, max(\(TableVisits).date) AS visitDate, \(source.tableName).\(source.modifiedColumn) as modified",
-            "FROM \(source.tableName)",
-            "LEFT JOIN history ON history.url = \(source.tableName).bmkUri",
-            "LEFT JOIN visits ON history.id = visits.siteID",
-            "WHERE \(source.tableName).title NOT NULL",
-            "AND \(source.tableName).title != ''",
-            "AND \(source.tableName).is_deleted = 0",
-            source == .Mirror ? "AND \(source.tableName).is_overridden = 0" : "",
-            "AND \(source.tableName).type = 1",
-            "GROUP BY history.url",
-        ].joinWithSeparator(" ")
     }
 }
