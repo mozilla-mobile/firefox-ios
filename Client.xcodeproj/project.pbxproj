@@ -652,6 +652,9 @@
 		E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */; };
 		E6F9659C1B2F5F800034B023 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = E6F9659B1B2F5F800034B023 /* effective_tld_names.dat */; };
 		E6F9659E1B2F63A20034B023 /* NSStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9659D1B2F63A20034B023 /* NSStringExtensions.swift */; };
+		E6FF6AC21D8705110070C294 /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC11D8705110070C294 /* MetadataParserHelper.swift */; };
+		E6FF6AC61D8708F70070C294 /* MetadataParser.js in Resources */ = {isa = PBXBuildFile; fileRef = E6FF6AC51D8708F70070C294 /* MetadataParser.js */; };
+		E6FF6AC81D8724020070C294 /* page-metadata-parser.bundle.js in Resources */ = {isa = PBXBuildFile; fileRef = E6FF6AC71D8724020070C294 /* page-metadata-parser.bundle.js */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
@@ -1724,6 +1727,9 @@
 		E6F9659B1B2F5F800034B023 /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = effective_tld_names.dat; path = ../effective_tld_names.dat; sourceTree = "<group>"; };
 		E6F9659D1B2F63A20034B023 /* NSStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStringExtensions.swift; sourceTree = "<group>"; };
 		E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FirefoxBeta.xcconfig; path = Configuration/FirefoxBeta.xcconfig; sourceTree = "<group>"; };
+		E6FF6AC11D8705110070C294 /* MetadataParserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataParserHelper.swift; sourceTree = "<group>"; };
+		E6FF6AC51D8708F70070C294 /* MetadataParser.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MetadataParser.js; sourceTree = "<group>"; };
+		E6FF6AC71D8724020070C294 /* page-metadata-parser.bundle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "page-metadata-parser.bundle.js"; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D81A090F8100AAB793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2732,6 +2738,7 @@
 				D3B6923E1B9F9A58004B87A4 /* FindInPageHelper.swift */,
 				A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */,
 				39DD030C1CD53E1900BC09B3 /* HomePageHelper.swift */,
+				E6FF6AC11D8705110070C294 /* MetadataParserHelper.swift */,
 				A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */,
 				D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */,
 				0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */,
@@ -3228,9 +3235,11 @@
 				0BF42D381A7C0E8900889E28 /* Favicons.js */,
 				D3B692401B9F9CC8004B87A4 /* FindInPage.js */,
 				0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */,
+				E6FF6AC51D8708F70070C294 /* MetadataParser.js */,
 				A91528D11D0E637600CD0425 /* NoImageModeHelper.js */,
 				A93067D81D0FE15E00C49C6E /* NightModeHelper.js */,
 				3BE7274D1CCFE8A30099189F /* CustomSearchHelper.js */,
+				E6FF6AC71D8724020070C294 /* page-metadata-parser.bundle.js */,
 				E47536FB1C85415E0022CC69 /* PrintHelper.js */,
 				39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */,
 				E49C0EB01B46109C009092BB /* WindowCloseHelper.js */,
@@ -4277,6 +4286,7 @@
 				7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */,
 				E4A961361AC052DE0069AD6F /* ReadabilityTabHelper.js in Resources */,
 				E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */,
+				E6FF6AC81D8724020070C294 /* page-metadata-parser.bundle.js in Resources */,
 				2F44FB2C1A9D5D8500FD20CC /* Home.xcassets in Resources */,
 				E4ECCD8D1AB091470005E717 /* Reader.xcassets in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
@@ -4289,6 +4299,7 @@
 				E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
 				E47536FC1C85415F0022CC69 /* PrintHelper.js in Resources */,
+				E6FF6AC61D8708F70070C294 /* MetadataParser.js in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
 				2F834D161A80629A006A0B7B /* FxASignIn.js in Resources */,
@@ -4870,6 +4881,7 @@
 				7BC68CC81CC152B70043562A /* MenuItemView.swift in Sources */,
 				E4252A0E1AF01AE40028C684 /* Swizzling.m in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
+				E6FF6AC21D8705110070C294 /* MetadataParserHelper.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
 				D3994A4A1C22813200E2A03C /* FindInPageActivity.swift in Sources */,
