@@ -16,25 +16,22 @@ class ResetOptionsTest: BaseTestCase {
 
     func testResetLaunchOptions() {
         let app = XCUIApplication()
-        let numberOfTopSites = app.collectionViews["Top Sites View"].cells.count
-
+        let topSites = app.tables["Top sites"].cells["TopSitesCell"]
+        let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
         // Vist a webpage to add it to TopSites
         loadWebPage("http://example.com")
+        app.buttons["TabToolbar.backButton"].tap()
 
         // I need to sleep before terminating to make sure the page loads and the domain is added to the topSites
         sleep(2)
         restart(app, reset: false)
 
         // Now check to make sure app was not reset
-        tabTrayButton(forApp: app).tap()
-        app.buttons["TabTrayController.addTabButton"].tap()
-        sleep(2)
-        XCTAssertTrue(app.collectionViews["Top Sites View"].cells.count == numberOfTopSites + 1, "A new site should have been added to the topSites")
-
-        restart(app, reset: true)
+        XCTAssertTrue(topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count == numberOfTopSites + 1, "A new site should have been added to the topSites")
 
         // Check to make sure topSites reset
-        XCTAssertTrue(app.collectionViews["Top Sites View"].cells.count == numberOfTopSites, "Only the default topSites should exist")
+        restart(app, reset: true)
+        XCTAssertTrue(topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count == numberOfTopSites, "Only the default topSites should exist")
     }
 
 
