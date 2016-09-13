@@ -84,8 +84,8 @@ extension AuroraAppDelegate: UIAlertViewDelegate {
     }
 
     private func fetchLatestAuroraVersion(completionHandler: NSString? -> Void) {
-        Alamofire.request(.GET, AuroraPropertyListURL).responsePropertyList(options: NSPropertyListReadOptions(), completionHandler: { (_, _, object) -> Void in
-            if let plist = object.value as? NSDictionary {
+        Alamofire.request(.GET, AuroraPropertyListURL).responsePropertyList(options: NSPropertyListReadOptions()) { response in
+            if let plist = response.result.value as? NSDictionary {
                 if let items = plist["items"] as? NSArray {
                     if let item = items[0] as? NSDictionary {
                         if let metadata = item["metadata"] as? NSDictionary {
@@ -98,7 +98,7 @@ extension AuroraAppDelegate: UIAlertViewDelegate {
                 }
             }
             completionHandler(nil)
-        })
+        }
     }
 
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {

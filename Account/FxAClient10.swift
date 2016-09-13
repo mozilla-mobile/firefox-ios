@@ -344,16 +344,16 @@ public class FxAClient10 {
 
         alamofire.request(request)
             .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, result) in
+            .responseJSON { response in
                 withExtendedLifetime(self.alamofire) {
-                    if let error = result.error as? NSError {
+                    if let error = response.result.error {
                         deferred.fill(Maybe(failure: FxAClientError.Local(error)))
                         return
                     }
 
-                    if let data = result.value {
+                    if let data = response.result.value {
                         let json = JSON(data)
-                        if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                        if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response.response!.statusCode) {
                             deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
                             return
                         }
