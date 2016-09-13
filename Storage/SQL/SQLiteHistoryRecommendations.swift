@@ -7,26 +7,6 @@ import Shared
 import XCGLogger
 import Deferred
 
-/// Small enum to help strength parameter requirements for potential bookmark highlights query below.
-private enum BookmarkSource {
-    case Mirror
-    case Local
-
-    var modifiedColumn: String  {
-        switch self {
-        case Mirror: return "server_modified"
-        case Local: return "local_modified"
-        }
-    }
-
-    var tableName: String {
-        switch self {
-        case Mirror: return TableBookmarksMirror
-        case Local: return TableBookmarksLocal
-        }
-    }
-}
-
 extension SQLiteHistory: HistoryRecommendations {
     public func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
         let limit = 20
