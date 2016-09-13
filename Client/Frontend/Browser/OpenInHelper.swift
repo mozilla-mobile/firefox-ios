@@ -104,7 +104,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
         }
         let passLibrary = PKPassLibrary()
         if passLibrary.containsPass(pass) {
-            UIApplication.sharedApplication().openURL(pass.passURL)
+            UIApplication.sharedApplication().openURL(pass.passURL!)
         } else {
             let addController = PKAddPassesViewController(pass: pass)
             UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(addController, animated: true, completion: nil)
@@ -121,7 +121,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     lazy var openInView: UIView? = getOpenInView(self)()
 
     lazy var documentDirectory: NSURL = {
-        return NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent("pdfs")
+        return NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent("pdfs")!
     }()
 
     private var filepath: NSURL?
@@ -180,9 +180,9 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
             let contentsOfFile = NSData(contentsOfURL: url)
             let fileManager = NSFileManager.defaultManager()
             do {
-                try fileManager.createDirectoryAtPath(documentDirectory.absoluteString, withIntermediateDirectories: true, attributes: nil)
-                if fileManager.createFileAtPath(filePath.absoluteString, contents: contentsOfFile, attributes: nil) {
-                    let openInURL = NSURL(fileURLWithPath: filePath.absoluteString)
+                try fileManager.createDirectoryAtPath(documentDirectory.absoluteString!, withIntermediateDirectories: true, attributes: nil)
+                if fileManager.createFileAtPath(filePath.absoluteString!, contents: contentsOfFile, attributes: nil) {
+                    let openInURL = NSURL(fileURLWithPath: filePath.absoluteString!)
                     createDocumentControllerForURL(openInURL)
                 } else {
                     log.error("Unable to create local version of PDF file at \(filePath)")

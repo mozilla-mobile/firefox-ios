@@ -142,7 +142,7 @@ class TopTabCell: UICollectionViewCell {
         guard seperatorLine else {
             return
         }
-        let context = UIGraphicsGetCurrentContext()
+        guard let context = UIGraphicsGetCurrentContext() else { return }
         CGContextSaveGState(context)
         CGContextSetLineCap(context, CGLineCap.Square)
         CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().colorWithAlphaComponent(0.2).CGColor)

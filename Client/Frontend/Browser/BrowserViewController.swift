@@ -824,8 +824,8 @@ class BrowserViewController: UIViewController {
     }
 
     func addBookmark(tabState: TabState) {
-        guard let url = tabState.url else { return }
-        let shareItem = ShareItem(url: url.absoluteString, title: tabState.title, favicon: tabState.favicon)
+        guard let url = tabState.url, absoluteString = url.absoluteString else { return }
+        let shareItem = ShareItem(url: absoluteString, title: tabState.title, favicon: tabState.favicon)
         profile.bookmarks.shareItem(shareItem)
         if #available(iOS 9, *) {
             var userData = [QuickActions.TabURLKey: shareItem.url]
@@ -866,9 +866,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func removeBookmark(tabState: TabState) {
-        guard let url = tabState.url else { return }
+        guard let url = tabState.url, absoluteString = url.absoluteString else { return }
         profile.bookmarks.modelFactory >>== {
-            $0.removeByURL(url.absoluteString)
+            $0.removeByURL(absoluteString)
                 .uponQueue(dispatch_get_main_queue()) { res in
                 if res.isSuccess {
                     if let tab = self.tabManager.getTabForURL(url) {
@@ -982,7 +982,7 @@ class BrowserViewController: UIViewController {
 
     private func isWhitelistedUrl(url: NSURL) -> Bool {
         for entry in WhiteListedUrls {
-            if let _ = url.absoluteString.rangeOfString(entry, options: .RegularExpressionSearch) {
+            if let _ = url.absoluteString?.rangeOfString(entry, options: .RegularExpressionSearch) {
                 return UIApplication.sharedApplication().canOpenURL(url)
             }
         }
@@ -1489,7 +1489,8 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLongPressReaderMode(urlBar: URLBarView) -> Bool {
         guard let tab = tabManager.selectedTab,
                url = tab.displayURL,
-               result = profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name)
+               absoluteString = url.absoluteString,
+               result = profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name)
             else {
                 UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed."))
                 return false
@@ -2233,7 +2234,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
 
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-            if let phoneNumber = url.resourceSpecifier.stringByRemovingPercentEncoding where !phoneNumber.isEmpty {
+            if let phoneNumber = url.resourceSpecifier?.stringByRemovingPercentEncoding where !phoneNumber.isEmpty {
                 let formatter = PhoneNumberFormatter()
                 let formattedPhoneNumber = formatter.formatPhoneNumber(phoneNumber)
                 let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
@@ -2440,7 +2441,7 @@ extension BrowserViewController: WKUIDelegate {
         // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not
         // get a reference to it which it can return from window.open() - this will end up as a
         // CFErrorHTTPBadURL being presented.
-        guard let scheme = navigationAction.request.URL?.scheme.lowercaseString where SchemesAllowedToOpenPopups.contains(scheme) else {
+        guard let scheme = navigationAction.request.URL?.scheme?.lowercaseString where SchemesAllowedToOpenPopups.contains(scheme) else {
             return nil
         }
 
@@ -2780,21 +2781,22 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 
         case .AddToReadingList:
             if let tab = tabManager.selectedTab,
-               let url = tab.url where ReaderModeUtils.isReaderModeURL(url) {
-                if let url = ReaderModeUtils.decodeURL(url) {
-                    profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
+               let rawURL = tab.url where ReaderModeUtils.isReaderModeURL(rawURL),
+               let url = ReaderModeUtils.decodeURL(rawURL),
+               let absoluteString = url.absoluteString {
+                    profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
                     readerModeBar.added = true
                     readerModeBar.unread = true
-                }
             }
 
         case .RemoveFromReadingList:
-            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
-                if let successValue = result.successValue, record = successValue {
+            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString,
+               let result = profile.readingList?.getRecordWithURL(url),
+               let successValue = result.successValue,
+               let record = successValue {
                     profile.readingList?.deleteRecord(record) // TODO Check result, can this fail?
                     readerModeBar.added = false
                     readerModeBar.unread = false
-                }
             }
         }
     }
@@ -3235,8 +3237,10 @@ class BlurWrapper: UIView {
             switch blurStyle {
             case .ExtraLight, .Light:
                 background.backgroundColor = TopTabsUX.TopTabsBackgroundNormalColor
-            case .Dark:
+            case .ExtraDark, .Dark:
                 background.backgroundColor = TopTabsUX.TopTabsBackgroundPrivateColor
+            default:
+                assertionFailure("Unsupported blur style")
             }
         }
     }

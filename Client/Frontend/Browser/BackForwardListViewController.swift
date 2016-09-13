@@ -82,17 +82,17 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         var urls: [String] = [String]()
         
         for page in backForwardList.forwardList.reverse() {
-            urls.append(page.URL.absoluteString)
+            urls.append(page.URL.absoluteString!)
             listData.append((page, .Forward))
         }
         
         if let currentPage = backForwardList.currentItem {
             currentRow = listData.count
-            urls.append(currentPage.URL.absoluteString)
+            urls.append(currentPage.URL.absoluteString!)
             listData.append((currentPage, .Current))
         }
         for page in backForwardList.backList.reverse() {
-            urls.append(page.URL.absoluteString)
+            urls.append(page.URL.absoluteString!)
             listData.append((page, .Backward))
         }
         
@@ -231,10 +231,10 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
        let cell = self.tableView.dequeueReusableCellWithIdentifier(BackForwardListCellIdentifier, forIndexPath: indexPath) as! BackForwardTableViewCell
         let item = listData[indexPath.item].item
         
-        if let site = sites[item.URL.absoluteString] {
+        if let site = sites[item.URL.absoluteString!] {
             cell.site = site
         } else {
-            cell.site = Site(url: item.initialURL.absoluteString, title: item.title ?? "")
+            cell.site = Site(url: item.initialURL.absoluteString!, title: item.title ?? "")
         }
         
         cell.isCurrentTab = (listData[indexPath.item].type == .Current)

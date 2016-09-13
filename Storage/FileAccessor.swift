@@ -91,8 +91,8 @@ public class FileAccessor {
                 continue
             }
 
-            let from = pathURL.URLByAppendingPathComponent(file, isDirectory: false).path!
-            let to = destURL.URLByAppendingPathComponent(file, isDirectory: false).path!
+            let from = pathURL.URLByAppendingPathComponent(file, isDirectory: false)!.path!
+            let to = destURL.URLByAppendingPathComponent(file, isDirectory: false)!.path!
             do {
                 try fileManager.copyItemAtPath(from, toPath: to)
             } catch {

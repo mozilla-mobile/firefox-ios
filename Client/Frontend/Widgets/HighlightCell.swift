@@ -179,7 +179,7 @@ class HighlightCell: UITableViewCell {
             }
             self.siteImage = img
         }
-        backgroundImage.sd_setImageWithURL(NSURL(string: "http://lorempixel.com/640/480/?r=" + String(random())))
+        backgroundImage.sd_setImageWithURL(NSURL(string: "http://lorempixel.com/640/480/?r=" + String(arc4random())))
         siteImageView.layer.masksToBounds = true
     }
 

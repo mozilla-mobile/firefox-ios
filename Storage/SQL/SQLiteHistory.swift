@@ -35,7 +35,8 @@ func failOrSucceed(err: NSError?, op: String) -> Success {
 private var ignoredSchemes = ["about"]
 
 public func isIgnoredURL(url: NSURL) -> Bool {
-    let scheme = url.scheme
+    guard let scheme = url.scheme else { return false }
+
     if let _ = ignoredSchemes.indexOf(scheme) {
         return true
     }

@@ -247,7 +247,7 @@ public class FxAClient10 {
             "authPW": authPW.base16EncodedStringWithOptions(NSDataBase16EncodingOptions.LowerCase),
         ]
 
-        var URL: NSURL = self.URL.URLByAppendingPathComponent("/account/login")
+        var URL: NSURL = self.URL.URLByAppendingPathComponent("/account/login")!
         if getKeys {
             let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)!
             components.query = "keys=true"
@@ -264,7 +264,7 @@ public class FxAClient10 {
 
     public func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         let URL = self.URL.URLByAppendingPathComponent("/account/keys")
-        let mutableURLRequest = NSMutableURLRequest(URL: URL)
+        let mutableURLRequest = NSMutableURLRequest(URL: URL!)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         let salt: NSData = NSData()
@@ -284,7 +284,7 @@ public class FxAClient10 {
         ]
 
         let URL = self.URL.URLByAppendingPathComponent("/certificate/sign")
-        let mutableURLRequest = NSMutableURLRequest(URL: URL)
+        let mutableURLRequest = NSMutableURLRequest(URL: URL!)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -299,7 +299,7 @@ public class FxAClient10 {
     }
 
     public func status(uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
-        let statusURL = self.URL.URLByAppendingPathComponent("/account/status").withQueryParam("uid", value: uid)
+        let statusURL = self.URL.URLByAppendingPathComponent("/account/status")!.withQueryParam("uid", value: uid)
         let mutableURLRequest = NSMutableURLRequest(URL: statusURL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
@@ -310,7 +310,7 @@ public class FxAClient10 {
 
     public func devices(sessionToken: NSData) -> Deferred<Maybe<FxADevicesResponse>> {
         let URL = self.URL.URLByAppendingPathComponent("/account/devices")
-        let mutableURLRequest = NSMutableURLRequest(URL: URL)
+        let mutableURLRequest = NSMutableURLRequest(URL: URL!)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -325,7 +325,7 @@ public class FxAClient10 {
 
     public func registerOrUpdateDevice(sessionToken: NSData, device: FxADevice) -> Deferred<Maybe<FxADevice>> {
         let URL = self.URL.URLByAppendingPathComponent("/account/device")
-        let mutableURLRequest = NSMutableURLRequest(URL: URL)
+        let mutableURLRequest = NSMutableURLRequest(URL: URL!)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")

@@ -171,13 +171,13 @@ class TestHistory: ProfileTest {
     private func runRandom(inout history: BrowserHistory, cmdIn: Int, cb: () -> Void) {
         var cmd = cmdIn
         if cmd < 0 {
-            cmd = Int(rand() % 5)
+            cmd = Int(arc4random() % 5)
         }
 
         switch cmd {
         case 0...1:
-            let url = "https://randomurl.com/\(rand() % 100)"
-            let title = "title \(rand() % 100)"
+            let url = "https://randomurl.com/\(arc4random() % 100)"
+            let title = "title \(arc4random() % 100)"
             addSite(history, url: url, title: title)
             cb()
         case 2...3:

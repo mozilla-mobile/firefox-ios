@@ -514,7 +514,7 @@ public class Sync15StorageClient {
     // Sync storage responds with a plain timestamp to a PUT, not with a JSON body.
     private func putResource<T>(path: String, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
         let url = self.serverURI.URLByAppendingPathComponent(path)
-        return self.putResource(url, body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: parser)
+        return self.putResource(url!, body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: parser)
     }
 
     private func putResource<T>(URL: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
@@ -606,7 +606,7 @@ public class Sync15StorageClient {
     // keys to fetch crypto/keys itself.  See uploadCryptoKeys.
     func clientForCollection<T: CleartextPayloadJSON>(collection: String, encrypter: RecordEncrypter<T>) -> Sync15CollectionClient<T> {
         let storage = self.serverURI.URLByAppendingPathComponent("storage", isDirectory: true)
-        return Sync15CollectionClient(client: self, serverURI: storage, collection: collection, encrypter: encrypter)
+        return Sync15CollectionClient(client: self, serverURI: storage!, collection: collection, encrypter: encrypter)
     }
 }
 
@@ -630,11 +630,11 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     public init(client: Sync15StorageClient, serverURI: NSURL, collection: String, encrypter: RecordEncrypter<T>) {
         self.client = client
         self.encrypter = encrypter
-        self.collectionURI = serverURI.URLByAppendingPathComponent(collection, isDirectory: false)
+        self.collectionURI = serverURI.URLByAppendingPathComponent(collection, isDirectory: false)!
     }
 
     private func uriForRecord(guid: String) -> NSURL {
-        return self.collectionURI.URLByAppendingPathComponent(guid)
+        return self.collectionURI.URLByAppendingPathComponent(guid)!
     }
 
     public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp) -> Sync15BatchClient<T> {

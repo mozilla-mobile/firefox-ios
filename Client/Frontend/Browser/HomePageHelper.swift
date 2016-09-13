@@ -24,7 +24,7 @@ class HomePageHelper {
         }
         set {
             if let url = newValue {
-                prefs.setString(url.absoluteString, forKey: HomePageConstants.HomePageURLPrefKey)
+                prefs.setString(url.absoluteString!, forKey: HomePageConstants.HomePageURLPrefKey)
             } else {
                 prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
             }

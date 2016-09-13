@@ -147,8 +147,9 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
                     }
 
                     if let type = iconType where !bestType.isPreferredTo(type),
-                        let iconUrl = NSURL(string: href, relativeToURL: url) {
-                            let icon = Favicon(url: iconUrl.absoluteString, date: NSDate(), type: type)
+                       let iconUrl = NSURL(string: href, relativeToURL: url),
+                       let absoluteString = iconUrl.absoluteString {
+                            let icon = Favicon(url: absoluteString, date: NSDate(), type: type)
                             // If we already have a list of Favicons going already, then add it…
                             if (type == bestType) {
                                 icons.append(icon)
@@ -161,8 +162,9 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
                 }
 
                 // If we haven't got any options icons, then use the default at the root of the domain.
-                if let url = NSURL(string: "/favicon.ico", relativeToURL: url) where icons.isEmpty {
-                    let icon = Favicon(url: url.absoluteString, date: NSDate(), type: .Guess)
+                if let url = NSURL(string: "/favicon.ico", relativeToURL: url) where icons.isEmpty,
+                   let absoluteString = url.absoluteString {
+                    let icon = Favicon(url: absoluteString, date: NSDate(), type: .Guess)
                     icons = [icon]
                 }
             }
@@ -174,7 +176,7 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
         let manager = SDWebImageManager.sharedManager()
-        let site = Site(url: siteUrl.absoluteString, title: "")
+        let site = Site(url: siteUrl.absoluteString!, title: "")
 
         var fav = Favicon(url: url, type: icon.type)
         if let url = url.asURL {
@@ -187,7 +189,7 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
                     }
                 },
                 completed: { (img, err, cacheType, success, url) -> Void in
-                fav = Favicon(url: url.absoluteString,
+                fav = Favicon(url: url.absoluteString!,
                     type: icon.type)
 
                 if let img = img {
@@ -228,7 +230,7 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
         faviconLabel.textColor = UIColor.grayColor()
         UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
         faviconLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        faviconImage = UIGraphicsGetImageFromCurrentImageContext()
+        faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
 
         characterToFaviconCache[faviconLetter] = faviconImage

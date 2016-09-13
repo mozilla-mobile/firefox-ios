@@ -247,7 +247,8 @@ extension NSURL {
         let httpSchemes = ["http", "https"]
         let dataSchemes = ["data"]
 
-        if let _ = httpSchemes.indexOf(scheme!) where includeDataURIs && dataSchemes.contains(scheme!) {
+        if let scheme = scheme,
+           _ = httpSchemes.indexOf(scheme) where includeDataURIs && dataSchemes.contains(scheme) {
             return true
         }
 
@@ -272,7 +273,8 @@ extension NSURL {
      This only accepts permanent schemes: historical and provisional schemes are not accepted.
      */
     public var schemeIsValid: Bool {
-        return permanentURISchemes.contains(scheme!)
+        guard let scheme = scheme else { return false }
+        return permanentURISchemes.contains(scheme)
     }
 
     public func havingRemovedAuthorisationComponents() -> NSURL {

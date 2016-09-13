@@ -25,7 +25,11 @@ class ShareExtensionHelper: NSObject {
         var activityItems = [AnyObject]()
 
         let printInfo = UIPrintInfo(dictionary: nil)
-        printInfo.jobName = selectedTab?.url?.absoluteString ?? selectedURL.absoluteString
+
+        let absoluteString = selectedTab?.url?.absoluteString ?? selectedURL.absoluteString
+        if let absoluteString = absoluteString {
+            printInfo.jobName = absoluteString
+        }
         printInfo.outputType = .General
         activityItems.append(printInfo)
 
