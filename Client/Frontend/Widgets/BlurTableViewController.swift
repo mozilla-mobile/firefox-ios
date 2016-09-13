@@ -30,10 +30,12 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         view.addGestureRecognizer(tapRecognizer)
 
-
         view.addSubview(tableView)
         tableView.snp_makeConstraints { make in
-            make.edges.equalTo(self.view).inset(80)
+            make.center.equalTo(self.view)
+            make.leading.equalTo(self.view).offset(20)
+            make.trailing.equalTo(self.view).inset(20)
+            make.height.equalTo(290)
         }
 
         tableView.delegate = self
@@ -45,6 +47,7 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.layer.cornerRadius = 10
         tableView.accessibilityIdentifier = "SiteTable"
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.registerClass(TwoLineTableViewCell.self, forCellReuseIdentifier: "TwoLineCell")
 
         if #available(iOS 9, *) {
             tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -82,14 +85,15 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+        let cell = indexPath.row == 0 ? tableView.dequeueReusableCellWithIdentifier("TwoLineCell", forIndexPath: indexPath) : tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsetsZero
         cell.layoutMargins = UIEdgeInsetsZero
 
         switch indexPath.row {
             case 0:
-                cell.textLabel?.text = "SITE TITLE AND URL"
+                cell.textLabel?.text = site.title
+                cell.detailTextLabel?.text = site.url
                 if let icon = site.icon {
                     let url = icon.url
                     cell.imageView?.layer.borderWidth = 0
@@ -98,7 +102,6 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
                     cell.imageView?.image = FaviconFetcher.getDefaultFavicon(url)
                     cell.imageView!.layer.borderWidth = SimpleHighlightCellUX.BorderWidth
                 }
-                setImageWithURL(cell.imageView!, url: NSURL(string: site.url)!)
                 
                 return cell
             case 1:

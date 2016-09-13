@@ -33,6 +33,10 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     private let topSitesManager = ASHorizontalScrollCellManager()
 
     var topSites: [Site] = []
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
+    }()
+
     var history: [Site] = []
 
     init(profile: Profile) {
@@ -59,6 +63,13 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if #available(iOS 9.0, *) {
+            if self.traitCollection.forceTouchCapability != .Available {
+                self.view.addGestureRecognizer(longPressRecognizer)
+            }
+            self.view.addGestureRecognizer(longPressRecognizer)
+        }
 
         tableView.registerClass(SimpleHighlightCell.self, forCellReuseIdentifier: "HistoryCell")
         tableView.registerClass(ASHorizontalScrollCell.self, forCellReuseIdentifier: "TopSiteCell")
@@ -178,13 +189,8 @@ extension ActivityStreamPanel {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(indexPath.section) {
         case .History:
-//            let site = self.history[indexPath.row]
-//            showSiteWithURLHandler(NSURL(string:site.url)!)
-            let hi = BlurTableViewController()
-            hi.profile = profile
-            hi.site = history[indexPath.row]
-            hi.modalPresentationStyle = .OverCurrentContext
-            self.presentViewController(hi, animated: true, completion: nil)
+            let site = self.history[indexPath.row]
+            showSiteWithURLHandler(NSURL(string:site.url)!)
         case .TopSites:
             return
         } 
@@ -319,6 +325,21 @@ extension ActivityStreamPanel {
         let suggested = SuggestedSites.asArray()
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.indexOf($0.url) == .None})
+    }
+
+    func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        if longPressGestureRecognizer.state == UIGestureRecognizerState.Began {
+            let touchPoint = longPressGestureRecognizer.locationInView(self.view)
+            if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
+                if indexPath.section == 1 {
+                    let hi = BlurTableViewController()
+                    hi.profile = profile
+                    hi.site = history[indexPath.row]
+                    hi.modalPresentationStyle = .OverCurrentContext
+                    self.presentViewController(hi, animated: true, completion: nil)
+                }
+            }
+        }
     }
 }
 
