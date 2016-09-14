@@ -20,7 +20,9 @@ struct TopSiteCellUX {
     static let TitleFont = DynamicFontHelper.defaultHelper.DefaultSmallFont
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 4
+    static let TitleOffset: CGFloat = 5
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
+    static let IconSize = CGSize(width: 32, height: 32)
 }
 
 /*
@@ -40,7 +42,7 @@ class TopSiteItemCell: UICollectionViewCell {
         titleLabel.textAlignment = .Center
         titleLabel.font = TopSiteCellUX.TitleFont
         titleLabel.textColor = TopSiteCellUX.TitleTextColor
-        titleLabel.backgroundColor = TopSiteCellUX.TitleBackgroundColor
+        titleLabel.backgroundColor = UIColor.clearColor()
         return titleLabel
     }()
 
@@ -62,17 +64,26 @@ class TopSiteItemCell: UICollectionViewCell {
 
         contentView.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
         contentView.layer.masksToBounds = true
+
+        let titleWrapper = UIView()
+        titleWrapper.backgroundColor = TopSiteCellUX.TitleBackgroundColor
+        titleWrapper.layer.masksToBounds = true
+        contentView.addSubview(titleWrapper)
+
         contentView.addSubview(titleLabel)
         contentView.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
         let titleHeight = Int(frame.height - (frame.height * TopSiteCellUX.TitleInsetPercent))
         titleLabel.snp_makeConstraints { make in
-            make.left.right.bottom.equalTo(self)
+            make.left.equalTo(self).offset(TopSiteCellUX.TitleOffset)
+            make.right.equalTo(self).offset(-TopSiteCellUX.TitleOffset)
             make.height.equalTo(titleHeight)
+            make.bottom.equalTo(self)
         }
+
         imageView.snp_makeConstraints { make in
-            make.size.equalTo(CGSize(width: self.frame.width/2, height: self.frame.height/2))
+            make.size.equalTo(TopSiteCellUX.IconSize)
             // Add an offset to the image to make it appear centered with the titleLabel
             make.center.equalTo(self.snp_center).offset(UIEdgeInsets(top: -CGFloat(titleHeight)/2, left: 0, bottom: 0, right: 0))
         }
@@ -80,6 +91,12 @@ class TopSiteItemCell: UICollectionViewCell {
         selectedOverlay.snp_makeConstraints { make in
             make.edges.equalTo(contentView)
         }
+
+        titleWrapper.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(self)
+            make.height.equalTo(titleHeight)
+        }
+
     }
 
     override func updateConstraints() {
@@ -132,7 +149,7 @@ class TopSiteItemCell: UICollectionViewCell {
 
 struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
-    static let TopSiteItemSize = CGSize(width: 100, height: 100)
+    static let TopSiteItemSize = CGSize(width: 99, height: 99)
     static let BackgroundColor = UIColor.whiteColor()
     static let PageControlRadius: CGFloat = 3
     static let PageControlSize = CGSize(width: 30, height: 15)
