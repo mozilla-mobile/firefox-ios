@@ -1,0 +1,687 @@
+{
+  "default": {
+    "visibleDefaultEngines": [
+      "amazondotcom", "google", "twitter", "wikipedia", "yahoo", "bing", "duckduckgo"
+    ]
+  },
+  "locales": {
+    "an": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "google", "twitter", "wikipedia-an", "yahoo-es"
+        ]
+      }
+    },
+    "as": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-in", "bing", "google", "wikipedia-as", "yahoo-in"
+        ]
+      }
+      
+    },
+    "az": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "azerdict", "bing", "duckduckgo", "google", "wikipedia-az"
+        ]
+      }
+    },
+    "be": {
+      "default": {
+        "visibleDefaultEngines": [
+          "be.wikipedia.org", "bing", "google", "tut.by", "yahoo", "yandex.by"
+        ]
+      },
+      "BY": {
+        "visibleDefaultEngines": [
+          "be.wikipedia.org", "bing", "google-nocodes", "tut.by", "yahoo", "yandex.by"
+        ]
+      },
+      "KZ": {
+        "visibleDefaultEngines": [
+          "be.wikipedia.org", "bing", "google-nocodes", "tut.by", "yahoo", "yandex.by"
+        ]
+      },
+      "RU": {
+        "visibleDefaultEngines": [
+          "be.wikipedia.org", "bing", "google-nocodes", "tut.by", "yahoo", "yandex.by"
+        ]
+      },
+      "TR": {
+        "visibleDefaultEngines": [
+          "be.wikipedia.org", "bing", "google-nocodes", "tut.by", "yahoo", "yandex.by"
+        ]
+      },
+      "UA": {
+        "visibleDefaultEngines": [
+          "be.wikipedia.org", "bing", "google-nocodes", "tut.by", "yahoo", "yandex.by"
+        ]
+      }
+    },
+    "bn-IN": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "bing", "google", "rediff", "wikipedia-bn", "yahoo-in"
+        ]
+      }
+    },
+    "br": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "google", "twitter", "wikipedia-br", "yahoo-france"
+        ]
+      }
+    },
+    "ca": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "twitter", "wikipedia-ca", "diec2"
+        ]
+      }
+    },
+    "cak": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "duckduckgo", "google", "wikipedia-es", "yahoo-espanol"
+        ]
+      }
+    },
+    "cs": {
+      "default": {
+        "visibleDefaultEngines": [
+          "duckduckgo", "google", "heureka-cz", "mapy-cz", "seznam-cz", "twitter", "wikipedia-cz"
+        ]
+      }
+    },
+    "cy": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-en-GB", "bing", "duckduckgo", "google", "wikipedia-cy", "yahoo-en-GB"
+        ]
+      }
+    },
+    "da": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-co-uk", "google", "twitter", "wikipedia-da"
+        ]
+      }
+    },
+    "de": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-de", "bing", "duckduckgo", "google", "qwant", "twitter", "wikipedia-de", "yahoo-de"
+        ]
+      }
+    },
+    "dsb": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-de", "bing", "google", "twitter", "wikipedia-dsb", "yahoo-de"
+        ]
+      }
+    },
+    "en-GB": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-en-GB", "bing", "duckduckgo", "google", "qwant", "twitter", "wikipedia", "yahoo-en-GB"
+        ]
+      }
+    },
+    "en-US": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "google", "twitter", "wikipedia", "yahoo", "bing", "duckduckgo"
+        ]
+      },
+      "US": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "google-nocodes", "twitter", "wikipedia", "yahoo", "bing", "duckduckgo"
+        ]
+      }
+    },
+    "en-ZA": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "twitter", "wikipedia"
+        ]
+      }
+    },
+    "eo": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google", "reta-vortaro", "twitter", "wikipedia-eo", "yahoo"
+        ]
+      }
+    },
+    "es-AR": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "mercadolibre-ar", "twitter", "wikipedia-es"
+        ]
+      }
+    },
+    "es-CL": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "drae", "google", "mercadolibre-cl", "twitter", "wikipedia-es", "yahoo-cl"
+        ]
+      }
+    },
+    "es-ES": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google", "twitter", "wikipedia-es", "yahoo-es"
+        ]
+      }
+    },
+    "es-MX": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "bing", "duckduckgo", "google", "mercadolibre-mx", "twitter", "wikipedia-es", "yahoo-mx"
+        ]
+      }
+    },
+    "et": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-co-uk", "google", "twitter", "wikipedia-et"
+        ]
+      }
+    },
+    "eu": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "elebila", "google", "wikipedia-eu", "yahoo-es"
+        ]
+      }
+    },
+    "ff": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-france", "bing", "google", "wikipedia-fr", "yahoo-france"
+        ]
+      }
+    },
+    "fi": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "twitter", "wikipedia-fi", "yahoo-fi", "amazondotcom"
+        ]
+      }
+    },
+    "fr": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google", "qwant", "twitter", "wikipedia-fr", "yahoo-france"
+        ]
+      }
+    },
+    "fy-NL": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "wikipedia-fy-NL", "bolcom-fy-NL"
+        ]
+      }
+    },
+    "ga-IE": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-en-GB", "google", "tearma", "twitter", "wikipedia-ga-IE"
+        ]
+      }
+    },
+    "gd": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "faclair-beag", "google", "wikipedia-gd", "yahoo-en-GB"
+        ]
+      }
+    },
+    "gl": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "bing", "google", "twitter", "wikipedia-gl", "yahoo-es"
+        ]
+      }
+    },
+    "gu-IN": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-in", "bing", "google", "wikipedia-gu", "yahoo-in"
+        ]
+      }
+    },
+    "hi-IN": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-in", "bing", "google", "twitter", "wikipedia-hi", "yahoo-in"
+        ]
+      }
+    },
+    "hr": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-en-GB", "bing", "duckduckgo", "google", "twitter", "wikipedia-hr", "yahoo"
+        ]
+      }
+    },
+    "hsb": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-de", "bing", "google", "twitter", "wikipedia-hsb", "yahoo-de"
+        ]
+      }
+    },
+    "hu": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "sztaki-en-hu", "vatera", "twitter", "wikipedia-hu"
+        ]
+      }
+    },
+    "hy-AM": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "bing", "google", "list-am", "wikipedia-hy-AM", "yahoo"
+        ]
+      }
+    },
+    "id": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "google", "twitter", "wikipedia-id", "yahoo-id"
+        ]
+      }
+    },
+    "is": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "bing", "google", "leit-is", "wikipedia-is", "yahoo"
+        ]
+      }
+    },
+    "it": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "twitter", "wikipedia-it"
+        ]
+      }
+    },
+    "ja": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-jp", "bing", "google", "twitter-ja", "wikipedia-ja", "yahoo-jp"
+        ]
+      }
+    },
+    "kk": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "google", "twitter", "wikipedia-kk", "yahoo", "yandex"
+        ]
+      },
+      "BY": {
+        "visibleDefaultEngines": [
+          "bing", "google-nocodes", "twitter", "wikipedia-kk", "yahoo", "yandex"
+        ]
+      },
+      "KZ": {
+        "visibleDefaultEngines": [
+          "bing", "google-nocodes", "twitter", "wikipedia-kk", "yahoo", "yandex"
+        ]
+      },
+      "RU": {
+        "visibleDefaultEngines": [
+          "bing", "google-nocodes", "twitter", "wikipedia-kk", "yahoo", "yandex"
+        ]
+      },
+      "TR": {
+        "visibleDefaultEngines": [
+          "bing", "google-nocodes", "twitter", "wikipedia-kk", "yahoo", "yandex"
+        ]
+      },
+      "UA": {
+        "visibleDefaultEngines": [
+          "bing", "google-nocodes", "twitter", "wikipedia-kk", "yahoo", "yandex"
+        ]
+      }
+    },
+    "kn": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-in", "bing", "google", "twitter", "wikipedia-kn", "wiktionary-kn", "yahoo-in"
+        ]
+      }
+    },
+    "ko": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "danawa-kr", "twitter", "daum-kr", "naver-kr"
+        ]
+      }
+    },
+    "lt": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "twitter", "wikipedia-lt"
+        ]
+      }
+    },
+    "lv": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "salidzinilv", "sslv", "twitter", "wikipedia-lv"
+        ]
+      }
+    },
+    "mai": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-in", "bing", "google", "twitter", "wikipedia-hi", "yahoo-in"
+        ]
+      }
+    },
+    "ml": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google", "twitter", "wikipedia-ml", "yahoo-in"
+        ]
+      }
+    },
+    "mr": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-in", "bing", "google", "rediff", "wikipedia-mr", "yahoo-in"
+        ]
+      }
+    },
+    "ms": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "bing", "google", "twitter", "wikipedia-ms", "yahoo"
+        ]
+      }
+    },
+    "my": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "bing", "google", "twitter", "wikipedia-my", "yahoo"
+        ]
+      }
+    },
+    "nb-NO": {
+      "default": {
+        "visibleDefaultEngines": [
+          "duckduckgo", "google", "gulesider-mobile-NO", "twitter", "wikipedia-NO"
+        ]
+      }
+    },
+    "nl": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "wikipedia-nl", "bolcom-nl"
+        ]
+      }
+    },
+    "nn-NO": {
+      "default": {
+        "visibleDefaultEngines": [
+          "duckduckgo", "google", "gulesider-mobile-NO", "twitter", "wikipedia-NN"
+        ]
+      }
+    },
+    "or": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-in", "bing", "google", "wikipedia-or", "wiktionary-or", "yahoo-in"
+        ]
+      }
+    },
+    "pa-IN": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "google", "wikipedia-pa", "yahoo-in"
+        ]
+      }
+    },
+    "pl": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google", "twitter", "wikipedia-pl"
+        ]
+      }
+    },
+    "pt-BR": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "google", "twitter", "wikipedia-br", "yahoo-br"
+        ]
+      }
+    },
+    "pt-PT": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "wikipedia-ptpt"
+        ]
+      }
+    },
+    "rm": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google", "leo_ende_de", "pledarigrond", "wikipedia-rm", "yahoo-ch"
+        ]
+      }
+    },
+    "ro": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "twitter", "wikipedia-ro"
+        ]
+      }
+    },
+    "ru": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "twitter", "wikipedia-ru", "yandex-ru"
+        ]
+      },
+      "BY": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-ru", "yandex-ru"
+        ]
+      },
+      "KZ": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-ru", "yandex-ru"
+        ]
+      },
+      "RU": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-ru", "yandex-ru"
+        ]
+      },
+      "TR": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-ru", "yandex-ru"
+        ]
+      },
+      "UA": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-ru", "yandex-ru"
+        ]
+      }
+    },
+    "sk": {
+      "default": {
+        "visibleDefaultEngines": [
+          "azet-sk", "google", "slovnik-sk", "twitter", "wikipedia-sk"
+        ]
+      }
+    },
+    "sl": {
+      "default": {
+        "visibleDefaultEngines": [
+          "ceneje", "google", "odpiralni", "twitter", "wikipedia-sl"
+        ]
+      }
+    },
+    "son": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-fr", "bing", "google", "twitter", "wikipedia-fr", "yahoo-france"
+        ]
+      }
+    },
+    "sq": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-en-GB", "bing", "google", "twitter", "wikipedia-sq", "yahoo"
+        ]
+      }
+    },
+    "sr": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google", "twitter", "wikipedia-sr", "yahoo"
+        ]
+      }
+    },
+    "sv-SE": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "prisjakt-sv-SE", "twitter", "wikipedia-sv-SE"
+        ]
+      }
+    },
+    "ta": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-in", "bing", "duckduckgo", "google", "wikipedia-ta", "wiktionary-ta", "yahoo-in"
+        ]
+      }
+    },
+    "te": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazon-in", "bing", "google", "wikipedia-te", "wiktionary-te", "yahoo-in"
+        ]
+      }
+    },
+    "th": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "twitter", "wikipedia-th"
+        ]
+      }
+    },
+    "tr": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "yandex-tr", "twitter", "wikipedia-tr"
+        ]
+      },
+      "BY": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "yandex-tr", "twitter", "wikipedia-tr"
+        ]
+      },
+      "KZ": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "yandex-tr", "twitter", "wikipedia-tr"
+        ]
+      },
+      "RU": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "yandex-tr", "twitter", "wikipedia-tr"
+        ]
+      },
+      "TR": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "yandex-tr", "twitter", "wikipedia-tr"
+        ]
+      },
+      "UA": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "yandex-tr", "twitter", "wikipedia-tr"
+        ]
+      }
+    },
+    "uk": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google", "twitter", "wikipedia-uk", "yandex-market"
+        ]
+      },
+      "BY": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-uk", "yandex-market"
+        ]
+      },
+      "KZ": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-uk", "yandex-market"
+        ]
+      },
+      "RU": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-uk", "yandex-market"
+        ]
+      },
+      "TR": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-uk", "yandex-market"
+        ]
+      },
+      "UA": {
+        "visibleDefaultEngines": [
+          "google-nocodes", "twitter", "wikipedia-uk", "yandex-market"
+        ]
+      }
+    },
+    "uz": {
+      "default": {
+        "visibleDefaultEngines": [
+          "amazondotcom", "bing", "google", "twitter", "wikipedia-uz", "yahoo"
+        ]
+      }
+    },
+    "xh": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "google", "twitter", "wikipedia", "yahoo"
+        ]
+      }
+    },
+    "zh-CN": {
+      "default": {
+        "visibleDefaultEngines": [
+          "baidu", "bing", "google", "taobao", "wikipedia-zh-CN"
+        ]
+      },
+      "CN": {
+        "visibleDefaultEngines": [
+          "baidu", "bing", "google-nocodes", "taobao", "wikipedia-zh-CN"
+        ]
+      }
+    },
+    "zh-TW": {
+      "default": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google", "wikipedia-zh-TW"
+        ]
+      },
+      "HK": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google-nocodes", "wikipedia-zh-TW"
+        ]
+      },
+      "TW": {
+        "visibleDefaultEngines": [
+          "bing", "duckduckgo", "google-nocodes", "wikipedia-zh-TW"
+        ]
+      }
+    }
+  }
+}
