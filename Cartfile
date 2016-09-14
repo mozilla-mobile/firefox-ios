@@ -7,7 +7,7 @@ github "rs/SDWebImage"              "3.7.4"
 github "SnapKit/SnapKit"            "0.18.0"
 github "drmohundro/SWXMLHash"       "2.1.0"
 github "thebnich/XCGLogger"         "trycatch"
-github "adjust/ios_sdk"             "v4.5.0"
+github "adjust/ios_sdk"             "v4.10.1"
 github "AgileBits/onepassword-extension" "add-framework-support"
 github "fluffyemily/SwiftKeychainWrapper" "extension-compatibility"					# default to latest tag
 github "iziz/libPhoneNumber-iOS"    "0.8.11"
