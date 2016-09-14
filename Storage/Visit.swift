@@ -7,7 +7,7 @@ import Shared
 
 // These are taken from the Places docs
 // http://mxr.mozilla.org/mozilla-central/source/toolkit/components/places/nsINavHistoryService.idl#1187
-@objc public enum VisitType : Int {
+@objc public enum VisitType: Int {
     case Unknown = 0
 
     /**

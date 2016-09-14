@@ -89,7 +89,7 @@ class Setting: NSObject {
 }
 
 // A setting in the sections panel. Contains a sublist of Settings
-class SettingSection : Setting {
+class SettingSection: Setting {
     private let children: [Setting]
 
     init(title: NSAttributedString? = nil, children: [Setting]) {
@@ -360,7 +360,7 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
 
         // TODO: Error handling.
         let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
-        settings.profile.setAccount(account)
+        profile.setAccount(account)
 
         // Reload the data to reflect the new Account immediately.
         settings.tableView.reloadData()
@@ -461,7 +461,7 @@ class SettingsTableViewController: UITableViewController {
     @objc private func SELrefresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
         if let account = self.profile.getAccount() {
-            account.advance().upon { _ in
+            account.advance().upon { state in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     self.tableView.reloadData()
                 }

@@ -5,11 +5,11 @@
 import UIKit
 
 extension NSMutableAttributedString {
-    public func colorSubstring(substring: String, withColor color: UIColor){
+    public func colorSubstring(substring: String, withColor color: UIColor) {
         self.attributeSubstring(substring, forAttribute: NSForegroundColorAttributeName, withValue: color)
     }
 
-    public func pitchSubstring(substring: String, withPitch pitch: Double){
+    public func pitchSubstring(substring: String, withPitch pitch: Double) {
         let pitchValue = NSNumber(double: pitch)
         self.attributeSubstring(substring, forAttribute: UIAccessibilitySpeechAttributePitch, withValue: pitchValue)
     }

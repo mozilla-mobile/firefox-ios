@@ -109,7 +109,7 @@ class MenuViewController: UIViewController {
                 make.top.left.right.equalTo(view)
             }
         case .Modal:
-            menuView.cornerRadius = CGSizeMake(5.0,5.0)
+            menuView.cornerRadius = CGSizeMake(5.0, 5.0)
             menuView.cornersToRound = [.TopLeft, .TopRight]
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the bottom of the toolbar
@@ -168,6 +168,10 @@ class MenuViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.view.backgroundColor = popoverBackgroundColor
+
+        if presentationStyle == .Popover {
+            self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
+        }
     }
 
     private func reloadView() {
@@ -244,7 +248,7 @@ extension MenuViewController: MenuItemDelegate {
         guard let labelText = label.text else {
             return 0
         }
-        let constraint = CGSizeMake(label.frame.width > 0 ? label.frame.width : menuConfig.minMenuRowHeight() - 20 , CGFloat.max)
+        let constraint = CGSizeMake(label.frame.width > 0 ? label.frame.width : menuConfig.minMenuRowHeight() - 20, CGFloat.max)
         let context = NSStringDrawingContext()
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = NSLineBreakMode.ByWordWrapping

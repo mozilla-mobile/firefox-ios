@@ -1,7 +1,7 @@
 import Foundation
 import SnapKit
 
-class Toolbar : UIView {
+class Toolbar: UIView {
     var drawTopBorder = false
     var drawBottomBorder = false
     var drawSeperators = false

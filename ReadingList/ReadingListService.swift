@@ -24,7 +24,7 @@ public class ReadingListService {
         return storage.deleteRecord(record)
     }
 
-    public func deleteAllRecords() -> Maybe<Void>{
+    public func deleteAllRecords() -> Maybe<Void> {
         return storage.deleteAllRecords()
     }
 

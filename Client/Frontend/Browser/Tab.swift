@@ -278,27 +278,20 @@ class Tab: NSObject {
     var displayURL: NSURL? {
         if let url = url {
             if ReaderModeUtils.isReaderModeURL(url) {
-                return ReaderModeUtils.decodeURL(url)
+                return ReaderModeUtils.decodeURL(url)?.havingRemovedAuthorisationComponents()
             }
 
             if ErrorPageHelper.isErrorPageURL(url) {
                 let decodedURL = ErrorPageHelper.originalURLFromQuery(url)
                 if !AboutUtils.isAboutURL(decodedURL) {
-                    return decodedURL
+                    return decodedURL?.havingRemovedAuthorisationComponents()
                 } else {
                     return nil
                 }
             }
 
-            if let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) where (urlComponents.user != nil) || (urlComponents.password != nil) {
-                urlComponents.user = nil
-                urlComponents.password = nil
-                return urlComponents.URL
-            }
-
-
             if !AboutUtils.isAboutURL(url) {
-                return url
+                return url.havingRemovedAuthorisationComponents()
             }
         }
         return nil
@@ -340,8 +333,7 @@ class Tab: NSObject {
         if #available(iOS 9.0, *) {
             let userAgent: String? = desktopSite ? UserAgent.desktopUserAgent() : nil
             if (userAgent ?? "") != webView?.customUserAgent,
-               let currentItem = webView?.backForwardList.currentItem
-            {
+               let currentItem = webView?.backForwardList.currentItem {
                 webView?.customUserAgent = userAgent
 
                 // Reload the initial URL to avoid UA specific redirection
@@ -473,12 +465,12 @@ class Tab: NSObject {
 
     func setNoImageMode(enabled: Bool = false, force: Bool) {
         if enabled || force {
-            webView?.evaluateJavaScript("__firefox__.setNoImageMode(\(enabled))", completionHandler: nil)
+            webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
         }
     }
 
     func setNightMode(enabled: Bool) {
-        webView?.evaluateJavaScript("__firefox__.setNightMode(\(enabled))", completionHandler: nil)
+        webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(enabled))", completionHandler: nil)
     }
 }
 

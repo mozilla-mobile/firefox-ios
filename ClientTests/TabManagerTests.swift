@@ -37,33 +37,6 @@ class TabManagerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testTabManagerStateDelegateImplStoresChangesInDB() {
-        let profile = TabManagerMockProfile()
-        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
-        XCTAssertNotNil(appDelegate)
-        appDelegate?.profile = profile
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-
-        // test that non-private tabs are saved to the db
-        // add some non-private tabs to the tab manager
-        for _ in 0..<3 {
-            let tab = Tab(configuration: configuration)
-            tab.url = NSURL(string: "http://yahoo.com")!
-            manager.configureTab(tab, request: NSURLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
-        }
-
-        appDelegate?.tabManagerWillStoreTabs(manager.normalTabs)
-
-        waitForCondition {
-            let storedTabs = profile.numberOfTabsStored
-            return storedTabs == 3
-        }
-
-        XCTAssertEqual(profile.numberOfTabsStored, 3, "Expected state delegate to have been called with 3 tabs, but called with \(profile.numberOfTabsStored)")
-    }
-
     func testTabManagerCallsTabManagerStateDelegateOnStoreChangesWithNormalTabs() {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)

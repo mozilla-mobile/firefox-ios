@@ -1094,38 +1094,31 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         history.clearHistory()
-            >>>
-            { history.addLocalVisit(siteVisit1) }
-            >>> checkSitesByFrecency
-            { (sites: Cursor) -> Success in
+            >>> { history.addLocalVisit(siteVisit1) }
+            >>> checkSitesByFrecency { (sites: Cursor) -> Success in
                 XCTAssertEqual(1, sites.count)
                 XCTAssertEqual(site1.title, sites[0]!.title)
                 XCTAssertEqual(site1.url, sites[0]!.url)
                 sites.close()
                 return succeed()
             }
-            >>>
-            { history.addLocalVisit(siteVisit2) }
-            >>> checkSitesByFrecency
-            { (sites: Cursor) -> Success in
+            >>> { history.addLocalVisit(siteVisit2) }
+            >>> checkSitesByFrecency { (sites: Cursor) -> Success in
                 XCTAssertEqual(1, sites.count)
                 XCTAssertEqual(site1Changed.title, sites[0]!.title)
                 XCTAssertEqual(site1Changed.url, sites[0]!.url)
                 sites.close()
                 return succeed()
             }
-            >>>
-            { history.addLocalVisit(siteVisit3) }
-            >>> checkSitesByFrecency
-            { (sites: Cursor) -> Success in
+            >>> { history.addLocalVisit(siteVisit3) }
+            >>> checkSitesByFrecency { (sites: Cursor) -> Success in
                 XCTAssertEqual(2, sites.count)
                 // They're in order of frecency.
                 XCTAssertEqual(site1Changed.title, sites[0]!.title)
                 XCTAssertEqual(site2.title, sites[1]!.title)
                 return succeed()
             }
-            >>> checkSitesByDate
-            { (sites: Cursor<Site>) -> Success in
+            >>> checkSitesByDate { (sites: Cursor<Site>) -> Success in
                 XCTAssertEqual(2, sites.count)
                 // They're in order of date last visited.
                 let first = sites[0]!
@@ -1135,8 +1128,7 @@ class TestSQLiteHistory: XCTestCase {
                 XCTAssertTrue(siteVisit3.date == first.latestVisit!.date)
                 return succeed()
             }
-            >>> checkSitesWithFilter("two")
-            { (sites: Cursor<Site>) -> Success in
+            >>> checkSitesWithFilter("two") { (sites: Cursor<Site>) -> Success in
                 XCTAssertEqual(1, sites.count)
                 let first = sites[0]!
                 XCTAssertEqual(site2.title, first.title)
@@ -1144,28 +1136,23 @@ class TestSQLiteHistory: XCTestCase {
             }
             >>>
             checkDeletedCount(0)
-            >>>
-            { history.removeHistoryForURL("http://url2/") }
+            >>> { history.removeHistoryForURL("http://url2/") }
             >>>
             checkDeletedCount(1)
-            >>> checkSitesByFrecency
-                { (sites: Cursor) -> Success in
+            >>> checkSitesByFrecency { (sites: Cursor) -> Success in
                     XCTAssertEqual(1, sites.count)
                     // They're in order of frecency.
                     XCTAssertEqual(site1Changed.title, sites[0]!.title)
                     return succeed()
             }
-            >>>
-            { history.clearHistory() }
+            >>> { history.clearHistory() }
             >>>
             checkDeletedCount(0)
-            >>> checkSitesByDate
-            { (sites: Cursor<Site>) -> Success in
+            >>> checkSitesByDate { (sites: Cursor<Site>) -> Success in
                 XCTAssertEqual(0, sites.count)
                 return succeed()
             }
-            >>> checkSitesByFrecency
-            { (sites: Cursor<Site>) -> Success in
+            >>> checkSitesByFrecency { (sites: Cursor<Site>) -> Success in
                 XCTAssertEqual(0, sites.count)
                 return succeed()
             }

@@ -80,7 +80,7 @@ public class RollingFileLogger: XCGLogger {
             if let oldestLogFilename = logFiles.first {
                 try NSFileManager.defaultManager().removeItemAtPath("\(logDirectoryPath!)/\(oldestLogFilename)")
             }
-        } catch _ as NSError{
+        } catch _ as NSError {
             error("Shouldn't get here")
             return
         }

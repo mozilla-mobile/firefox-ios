@@ -6,7 +6,7 @@ import UIKit
 import XCTest
 @testable import Shared
 
-class NSURLExtensionsTests : XCTestCase {
+class NSURLExtensionsTests: XCTestCase {
     func testRemovesHTTPFromURL() {
         let url = NSURL(string: "http://google.com")
         if let actual = url?.absoluteDisplayString() {

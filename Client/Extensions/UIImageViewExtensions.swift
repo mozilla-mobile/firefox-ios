@@ -18,7 +18,7 @@ public extension UIImageView {
 }
 
 
-public class ImageOperation : NSObject, SDWebImageOperation {
+public class ImageOperation: NSObject, SDWebImageOperation {
     public var cacheOperation: NSOperation?
 
     var cancelled: Bool {

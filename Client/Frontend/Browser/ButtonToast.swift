@@ -9,10 +9,10 @@ import SnapKit
 struct ButtonToastUX {
     static let ToastDismissAfter = 4.0
     static let ToastPadding = 15.0
-    static let ToastButtonPadding:CGFloat = 10.0
+    static let ToastButtonPadding: CGFloat = 10.0
     static let ToastDelay = 0.9
-    static let ToastButtonBorderRadius:CGFloat = 5
-    static let ToastButtonBorderWidth:CGFloat = 1
+    static let ToastButtonBorderRadius: CGFloat = 5
+    static let ToastButtonBorderWidth: CGFloat = 1
 }
 
 class ButtonToast: UIView {
@@ -31,7 +31,7 @@ class ButtonToast: UIView {
         return gestureRecognizer
     }()
     
-    init(labelText: String, buttonText:String, completion:(buttonPressed: Bool) -> Void) {
+    init(labelText: String, buttonText: String, completion:(buttonPressed: Bool) -> Void) {
         super.init(frame: CGRect.zero)
         completionHandler = completion
         

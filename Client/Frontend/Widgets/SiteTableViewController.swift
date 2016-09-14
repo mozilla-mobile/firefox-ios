@@ -15,7 +15,7 @@ struct SiteTableViewControllerUX {
     static let HeaderTextMargin = CGFloat(10)
 }
 
-class SiteTableViewHeader : UITableViewHeaderFooterView {
+class SiteTableViewHeader: UITableViewHeaderFooterView {
     // I can't get drawRect to play nicely with the glass background. As a fallback
     // we just use views for the top and bottom borders.
     let topBorder = UIView()

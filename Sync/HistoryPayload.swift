@@ -52,7 +52,7 @@ public class HistoryPayload: CleartextPayloadJSON {
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
         if let p = obj as? HistoryPayload {
             if !super.equalPayloads(p) {
-                return false;
+                return false
             }
 
             if p.deleted {

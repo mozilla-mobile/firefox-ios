@@ -46,7 +46,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
     }
 
-    private func uploadOurTabs(localTabs: RemoteClientsAndTabs, toServer tabsClient: Sync15CollectionClient<TabsPayload>) -> Success{
+    private func uploadOurTabs(localTabs: RemoteClientsAndTabs, toServer tabsClient: Sync15CollectionClient<TabsPayload>) -> Success {
         // check to see if our tabs have changed or we're in a fresh start
         let lastUploadTime: Timestamp? = (self.tabsRecordLastUpload == 0) ? nil : self.tabsRecordLastUpload
         let expired = lastUploadTime < (NSDate.now() - (OneMinuteInMilliseconds))

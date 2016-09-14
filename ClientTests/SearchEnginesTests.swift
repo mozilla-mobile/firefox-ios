@@ -40,7 +40,7 @@ class SearchEnginesTests: XCTestCase {
 
         engines.deleteCustomEngine(testEngine)
         let deleted = engines.orderedEngines.filter {$0 == testEngine}
-        XCTAssertEqual(deleted , [])
+        XCTAssertEqual(deleted, [])
     }
 
     func testDefaultEngine() {

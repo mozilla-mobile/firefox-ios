@@ -130,8 +130,7 @@ class TouchIDSetting: Setting {
         delegate: SettingsDelegate? = nil,
         enabled: Bool? = nil,
         touchIDSuccess: (() -> Void)? = nil,
-        touchIDFallback: (() -> Void)? = nil)
-    {
+        touchIDFallback: (() -> Void)? = nil) {
         self.touchIDSuccess = touchIDSuccess
         self.touchIDFallback = touchIDFallback
         self.navigationController = navigationController
@@ -141,6 +140,7 @@ class TouchIDSetting: Setting {
 
     override func onConfigureCell(cell: UITableViewCell) {
         super.onConfigureCell(cell)
+        cell.selectionStyle = .None
 
         // In order for us to recognize a tap gesture without toggling the switch,
         // the switch is wrapped in a UIView which has a tap gesture recognizer. This way

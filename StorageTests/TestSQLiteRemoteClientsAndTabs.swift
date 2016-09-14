@@ -93,10 +93,10 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
     public func deleteCommands() -> Success { return succeed() }
     public func deleteCommands(clientGUID: GUID) -> Success { return succeed() }
 
-    public func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>>  { return deferMaybe([GUID: [SyncCommand]]()) }
+    public func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>> { return deferMaybe([GUID: [SyncCommand]]()) }
 
-    public func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>  { return deferMaybe(0) }
-    public func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>  { return deferMaybe(0) }
+    public func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> { return deferMaybe(0) }
+    public func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> { return deferMaybe(0) }
 }
 
 func removeLocalClient(a: ClientAndTabs) -> Bool {

@@ -148,7 +148,7 @@ class TestError: MaybeErrorType {
 private let serialQueue = dispatch_queue_create("com.mozilla.test.serial", DISPATCH_QUEUE_SERIAL)
 private let concurrentQueue = dispatch_queue_create("com.mozilla.test.concurrent", DISPATCH_QUEUE_CONCURRENT)
 
-func delay(delay:Double, closure:()->()) {
+func delay(delay: Double, closure:()->()) {
     dispatch_after(
         dispatch_time(
             DISPATCH_TIME_NOW,

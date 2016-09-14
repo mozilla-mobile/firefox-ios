@@ -28,25 +28,25 @@ class TokenServerClientTests: LiveAccountTest {
         }
 
         // Sub-domains and path components.
-        XCTAssertEqual("http://sub.test.com", audienceFor("http://sub.test.com"));
-        XCTAssertEqual("http://test.com", audienceFor("http://test.com/"));
-        XCTAssertEqual("http://test.com", audienceFor("http://test.com/path/component"));
-        XCTAssertEqual("http://test.com", audienceFor("http://test.com/path/component/"));
+        XCTAssertEqual("http://sub.test.com", audienceFor("http://sub.test.com"))
+        XCTAssertEqual("http://test.com", audienceFor("http://test.com/"))
+        XCTAssertEqual("http://test.com", audienceFor("http://test.com/path/component"))
+        XCTAssertEqual("http://test.com", audienceFor("http://test.com/path/component/"))
 
         // No port and default port.
-        XCTAssertEqual("http://test.com", audienceFor("http://test.com"));
-        XCTAssertEqual("http://test.com:80", audienceFor("http://test.com:80"));
+        XCTAssertEqual("http://test.com", audienceFor("http://test.com"))
+        XCTAssertEqual("http://test.com:80", audienceFor("http://test.com:80"))
 
-        XCTAssertEqual("https://test.com", audienceFor("https://test.com"));
-        XCTAssertEqual("https://test.com:443", audienceFor("https://test.com:443"));
+        XCTAssertEqual("https://test.com", audienceFor("https://test.com"))
+        XCTAssertEqual("https://test.com:443", audienceFor("https://test.com:443"))
 
         // Ports that are the default ports for a different scheme.
-        XCTAssertEqual("https://test.com:80", audienceFor("https://test.com:80"));
-        XCTAssertEqual("http://test.com:443", audienceFor("http://test.com:443"));
+        XCTAssertEqual("https://test.com:80", audienceFor("https://test.com:80"))
+        XCTAssertEqual("http://test.com:443", audienceFor("http://test.com:443"))
 
         // Arbitrary ports.
-        XCTAssertEqual("http://test.com:8080", audienceFor("http://test.com:8080"));
-        XCTAssertEqual("https://test.com:4430", audienceFor("https://test.com:4430"));
+        XCTAssertEqual("http://test.com:8080", audienceFor("http://test.com:8080"))
+        XCTAssertEqual("https://test.com:4430", audienceFor("https://test.com:4430"))
     }
 
     func testTokenSuccess() {

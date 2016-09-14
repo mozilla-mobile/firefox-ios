@@ -227,9 +227,9 @@ class MenuTests: XCTestCase {
         appState.prefs.setBool(false, forKey: NoImageModePrefsKey.NoImageModeStatus)
 
         let browserConfiguration = AppMenuConfiguration(appState: appState)
-        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOnTitleString }
+        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOnLabel }
         XCTAssertNotNil(hideImageMenuItem)
-        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOffTitleString }
+        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOffLabel }
         XCTAssertNil(showImageMenuItem)
     }
 
@@ -239,9 +239,9 @@ class MenuTests: XCTestCase {
         appState.prefs.setBool(true, forKey: NoImageModePrefsKey.NoImageModeStatus)
 
         let browserConfiguration = AppMenuConfiguration(appState: appState)
-        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOnTitleString }
+        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOnLabel }
         XCTAssertNil(hideImageMenuItem)
-        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOffTitleString }
+        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOffLabel }
         XCTAssertNotNil(showImageMenuItem)
     }
 

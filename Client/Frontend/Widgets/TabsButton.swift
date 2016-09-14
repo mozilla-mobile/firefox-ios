@@ -143,6 +143,8 @@ class TabsButton: UIControl {
         button.accessibilityLabel = accessibilityLabel
         button.titleLabel.text = titleLabel.text
 
+        button.theme = theme
+
         // Copy all of the styable properties over to the new TabsButton
         button.titleLabel.font = titleLabel.font
         button.titleLabel.textColor = titleLabel.textColor
@@ -154,7 +156,7 @@ class TabsButton: UIControl {
         button.borderView.strokeWidth = borderView.strokeWidth
         button.borderView.color = borderView.color
         button.borderView.cornerRadius = borderView.cornerRadius
-        
+
         return button
     }
     
@@ -163,11 +165,11 @@ class TabsButton: UIControl {
         let infinity = "\u{221E}"
         let countToBe = (count < 100) ? count.description : infinity
         // only animate a tab count change if the tab count has actually changed
-        if currentCount != countToBe {
+        if currentCount != count.description || (clonedTabsButton?.titleLabel.text ?? count.description) != count.description {
             if let _ = self.clonedTabsButton {
                 self.clonedTabsButton?.layer.removeAllAnimations()
                 self.clonedTabsButton?.removeFromSuperview()
-                layer.removeAllAnimations()
+                insideButton.layer.removeAllAnimations()
             }
             
             // make a 'clone' of the tabs button
@@ -184,6 +186,7 @@ class TabsButton: UIControl {
             }
             
             newTabsButton.frame = self.frame
+            newTabsButton.insets = insets
             
             // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
             // a rotation around a non-origin point
@@ -207,18 +210,15 @@ class TabsButton: UIControl {
                 self.insideButton.layer.opacity = 0
             }
             
-            let completion: (Bool) -> Void = { finished in
-                // remove the clone and setup the actual tab button
+            let completion: (Bool) -> Void = { _ in
+                // Remove the clone and setup the actual tab button
                 newTabsButton.removeFromSuperview()
                 
                 self.insideButton.layer.opacity = 1
                 self.insideButton.layer.transform = CATransform3DIdentity
                 self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
-                
-                if finished {
-                    self.titleLabel.text = countToBe
-                    self.accessibilityValue = countToBe
-                }
+                self.titleLabel.text = countToBe
+                self.accessibilityValue = countToBe
             }
             
             if animated {
@@ -279,7 +279,7 @@ extension TabsButton {
         set { labelBackground.backgroundColor = newValue }
     }
 
-    dynamic var insets : UIEdgeInsets {
+    dynamic var insets: UIEdgeInsets {
         get { return buttonInsets }
         set {
             buttonInsets = newValue

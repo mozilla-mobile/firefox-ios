@@ -29,6 +29,8 @@ public class FirefoxAccount {
     /// particular server (auth endpoint) by its assigned uid.
     public let uid: String
 
+    public var deviceRegistration: FxADeviceRegistration?
+
     public let configuration: FirefoxAccountConfiguration
 
     private let stateCache: KeychainCache<FxAState>
@@ -46,13 +48,14 @@ public class FirefoxAccount {
         return stateCache.value!.actionNeeded
     }
 
-    public convenience init(configuration: FirefoxAccountConfiguration, email: String, uid: String, stateKeyLabel: String, state: FxAState) {
-        self.init(configuration: configuration, email: email, uid: uid, stateCache: KeychainCache(branch: "account.state", label: stateKeyLabel, value: state))
+    public convenience init(configuration: FirefoxAccountConfiguration, email: String, uid: String, deviceRegistration: FxADeviceRegistration?, stateKeyLabel: String, state: FxAState) {
+        self.init(configuration: configuration, email: email, uid: uid, deviceRegistration: deviceRegistration, stateCache: KeychainCache(branch: "account.state", label: stateKeyLabel, value: state))
     }
 
-    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, stateCache: KeychainCache<FxAState>) {
+    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, deviceRegistration: FxADeviceRegistration?, stateCache: KeychainCache<FxAState>) {
         self.email = email
         self.uid = uid
+        self.deviceRegistration = deviceRegistration
         self.configuration = configuration
         self.stateCache = stateCache
         self.stateCache.checkpoint()
@@ -68,22 +71,22 @@ public class FirefoxAccount {
             let unwrapkB = data["unwrapBKey"].asString?.hexDecodedData else {
                 return nil
         }
-        
+
         let verified = data["verified"].asBool ?? false
         return FirefoxAccount.fromConfigurationAndParameters(configuration,
-            email: email, uid: uid, verified: verified,
+            email: email, uid: uid, deviceRegistration: nil, verified: verified,
             sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
     }
 
     public class func fromConfigurationAndLoginResponse(configuration: FirefoxAccountConfiguration,
             response: FxALoginResponse, unwrapkB: NSData) -> FirefoxAccount {
         return FirefoxAccount.fromConfigurationAndParameters(configuration,
-            email: response.remoteEmail, uid: response.uid, verified: response.verified,
+            email: response.remoteEmail, uid: response.uid, deviceRegistration: nil, verified: response.verified,
             sessionToken: response.sessionToken, keyFetchToken: response.keyFetchToken, unwrapkB: unwrapkB)
     }
 
     private class func fromConfigurationAndParameters(configuration: FirefoxAccountConfiguration,
-            email: String, uid: String, verified: Bool,
+            email: String, uid: String, deviceRegistration: FxADeviceRegistration?, verified: Bool,
             sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) -> FirefoxAccount {
         var state: FxAState! = nil
         if !verified {
@@ -106,6 +109,7 @@ public class FirefoxAccount {
             configuration: configuration,
             email: email,
             uid: uid,
+            deviceRegistration: deviceRegistration,
             stateKeyLabel: Bytes.generateGUID(),
             state: state
         )
@@ -117,6 +121,7 @@ public class FirefoxAccount {
         dict["version"] = AccountSchemaVersion
         dict["email"] = email
         dict["uid"] = uid
+        dict["deviceRegistration"] = deviceRegistration
         dict["configurationLabel"] = configuration.label.rawValue
         dict["stateKeyLabel"] = stateCache.label
         return dict
@@ -140,10 +145,12 @@ public class FirefoxAccount {
             configurationLabel = configurationLabel,
             email = dictionary["email"] as? String,
             uid = dictionary["uid"] as? String {
+                let deviceRegistration = dictionary["deviceRegistration"] as? FxADeviceRegistration
                 let stateCache = KeychainCache.fromBranch("account.state", withLabel: dictionary["stateKeyLabel"] as? String, withDefault: SeparatedState(), factory: stateFromJSON)
                 return FirefoxAccount(
                     configuration: configurationLabel.toConfiguration(),
                     email: email, uid: uid,
+                    deviceRegistration: deviceRegistration,
                     stateCache: stateCache)
         }
         return nil
@@ -169,13 +176,28 @@ public class FirefoxAccount {
         }
 
         // Alright, we haven't an advance() in progress.  Schedule a new deferred to chain from.
-        let client = FxAClient10(endpoint: configuration.authEndpointURL)
-        let stateMachine = FxALoginStateMachine(client: client)
-        let now = NSDate.now()
-        let deferred: Deferred<FxAState> = stateMachine.advanceFromState(stateCache.value!, now: now).map { newState in
-            self.stateCache.value = newState
-            return newState
+        let cachedState = stateCache.value!
+        var registration = succeed()
+        if let session = cachedState as? TokenState {
+            registration = FxADeviceRegistrator.registerOrUpdateDevice(self, sessionToken: session.sessionToken).bind { result in
+                if result.successValue != FxADeviceRegistrationResult.AlreadyRegistered {
+                    let notification = NSNotification(name: NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                }
+                return succeed()
+            }
         }
+
+        let deferred: Deferred<FxAState> = registration.bind { _ in
+            let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+            let stateMachine = FxALoginStateMachine(client: client)
+            let now = NSDate.now()
+            return stateMachine.advanceFromState(cachedState, now: now).map { newState in
+                self.stateCache.value = newState
+                return newState
+            }
+        }
+
         advanceDeferred = deferred
         log.debug("no advance() in progress; setting and returning new shared deferred.")
         OSSpinLockUnlock(&advanceLock)

@@ -38,20 +38,34 @@ class TabScrollingController: NSObject {
 
     var footerBottomConstraint: Constraint?
     var headerTopConstraint: Constraint?
-    var toolbarsShowing: Bool { return headerTopOffset == 0 }
+    var toolbarsShowing: Bool { return self.urlBarState == 1.0 }
+    private var suppressToolbarHiding: Bool = false
 
-    private var headerTopOffset: CGFloat = 0 {
-        didSet {
-            headerTopConstraint?.updateOffset(headerTopOffset)
-            header?.superview?.setNeedsLayout()
+    private var minifiedHeaderTopOffset: CGFloat {
+        return URLBarViewUX.MinifiedURLBarHeight - (self.header?.bounds.height ?? 0)
+    }
+
+    private var urlBarState: CGFloat {
+        get {
+            return self.urlBar?.transitionValue ?? 0.0
+        }
+        set {
+            guard let urlBar = self.urlBar else {
+                return
+            }
+            urlBar.transitionValue = newValue
+            let inverseState = 1.0 - urlBar.transitionValue
+            self.headerTopConstraint?.updateOffset(inverseState * self.minifiedHeaderTopOffset)
+            self.footerBottomConstraint?.updateOffset(inverseState * self.bottomScrollHeight)
         }
     }
 
-    private var footerBottomOffset: CGFloat = 0 {
-        didSet {
-            footerBottomConstraint?.updateOffset(footerBottomOffset)
-            footer?.superview?.setNeedsLayout()
-        }
+    private var headerTopOffset: CGFloat {
+        return (1.0 - self.urlBarState) * self.minifiedHeaderTopOffset
+    }
+
+    private var footerBottomOffset: CGFloat {
+        return (1.0 - self.urlBarState) * self.bottomScrollHeight
     }
 
     private lazy var panGesture: UIPanGestureRecognizer = {
@@ -88,9 +102,7 @@ class TabScrollingController: NSObject {
         self.animateToolbarsWithOffsets(
             animated: animated,
             duration: actualDuration,
-            headerOffset: 0,
-            footerOffset: 0,
-            alpha: 1,
+            state: 1.0,
             completion: completion)
     }
 
@@ -105,9 +117,7 @@ class TabScrollingController: NSObject {
         self.animateToolbarsWithOffsets(
             animated: animated,
             duration: actualDuration,
-            headerOffset: -topScrollHeight,
-            footerOffset: bottomScrollHeight,
-            alpha: 0,
+            state: 0.0,
             completion: completion)
     }
 
@@ -142,11 +152,11 @@ private extension TabScrollingController {
 
             lastContentOffset = translation.y
             if checkRubberbandingForDelta(delta) && checkScrollHeightIsLargeEnoughForScrolling() {
-                if toolbarState != .Collapsed || contentOffset.y <= 0 {
+                if (toolbarState != .Collapsed || contentOffset.y <= 0) && contentOffset.y + scrollViewHeight < contentSize.height {
                     scrollWithDelta(delta)
                 }
 
-                if headerTopOffset == -topScrollHeight {
+                if headerTopOffset == minifiedHeaderTopOffset {
                     toolbarState = .Collapsed
                 } else if headerTopOffset == 0 {
                     toolbarState = .Visible
@@ -172,21 +182,16 @@ private extension TabScrollingController {
             return
         }
 
-        var updatedOffset = headerTopOffset - delta
-        headerTopOffset = clamp(updatedOffset, min: -topScrollHeight, max: 0)
+        let updatedOffset = self.headerTopOffset - delta
         if isHeaderDisplayedForGivenOffset(updatedOffset) {
             scrollView?.contentOffset = CGPoint(x: contentOffset.x, y: contentOffset.y - delta)
         }
 
-        updatedOffset = footerBottomOffset + delta
-        footerBottomOffset = clamp(updatedOffset, min: 0, max: bottomScrollHeight)
-
-        let alpha = 1 - abs(headerTopOffset / topScrollHeight)
-        urlBar?.updateAlphaForSubviews(alpha)
+        self.urlBarState = 1.0 - (clamp(updatedOffset, min: self.minifiedHeaderTopOffset, max: 0) / self.minifiedHeaderTopOffset)
     }
 
     func isHeaderDisplayedForGivenOffset(offset: CGFloat) -> Bool {
-        return offset > -topScrollHeight && offset < 0
+        return offset > minifiedHeaderTopOffset && offset < 0
     }
 
     func clamp(y: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
@@ -198,18 +203,14 @@ private extension TabScrollingController {
         return y
     }
 
-    func animateToolbarsWithOffsets(animated animated: Bool, duration: NSTimeInterval, headerOffset: CGFloat,
-        footerOffset: CGFloat, alpha: CGFloat, completion: ((finished: Bool) -> Void)?) {
-
+    func animateToolbarsWithOffsets(animated animated: Bool, duration: NSTimeInterval, state: CGFloat, completion: ((finished: Bool) -> Void)?) {
         let animation: () -> Void = {
-            self.headerTopOffset = headerOffset
-            self.footerBottomOffset = footerOffset
-            self.urlBar?.updateAlphaForSubviews(alpha)
+            self.urlBarState = state
             self.header?.superview?.layoutIfNeeded()
         }
 
         if animated {
-            UIView.animateWithDuration(duration, animations: animation, completion: completion)
+            UIView.animateWithDuration(duration, delay: 0, options: .AllowUserInteraction, animations: animation, completion: completion)
         } else {
             animation()
             completion?(finished: true)
@@ -229,6 +230,13 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if targetContentOffset.memory.y + scrollView.frame.size.height >= scrollView.contentSize.height {
+            suppressToolbarHiding = true
+            showToolbars(animated: true)
+        }
+    }
+
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if tabIsLoading() {
             return
@@ -237,10 +245,12 @@ extension TabScrollingController: UIScrollViewDelegate {
         if (decelerate || (toolbarState == .Animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .Up {
                 showToolbars(animated: true)
-            } else if scrollDirection == .Down {
+            } else if scrollDirection == .Down && !suppressToolbarHiding {
                 hideToolbars(animated: true)
             }
         }
+
+        suppressToolbarHiding = false
     }
 
     func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {

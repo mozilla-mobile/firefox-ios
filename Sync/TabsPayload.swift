@@ -102,11 +102,11 @@ public class TabsPayload: CleartextPayloadJSON {
 
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
         if !(obj is TabsPayload) {
-            return false;
+            return false
         }
 
         if !super.equalPayloads(obj) {
-            return false;
+            return false
         }
 
         let p = obj as! TabsPayload

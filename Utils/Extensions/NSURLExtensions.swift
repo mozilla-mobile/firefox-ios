@@ -139,7 +139,7 @@ extension NSURL {
     }
 
     public var origin: String? {
-        guard isWebPage(),
+        guard isWebPage(includeDataURIs: false),
               let hostPort = self.hostPort else {
             return nil
         }
@@ -206,6 +206,16 @@ extension NSURL {
         return self
     }
 
+    public func extractDomainName() -> String {
+        let urlString =  self.normalizedHost() ?? self.URLString
+        var arr = urlString.componentsSeparatedByString(".")
+        if (arr.count >= 2) {
+            arr.popLast()
+            return arr.joinWithSeparator(".")
+        }
+        return urlString
+    }
+
     public func normalizedHost() -> String? {
         // Use components.host instead of self.host since the former correctly preserves
         // brackets for IPv6 hosts, whereas the latter strips them.
@@ -233,10 +243,11 @@ extension NSURL {
         }
     }
 
-    public func isWebPage() -> Bool {
+    public func isWebPage(includeDataURIs includeDataURIs: Bool = true) -> Bool {
         let httpSchemes = ["http", "https"]
+        let dataSchemes = ["data"]
 
-        if let _ = httpSchemes.indexOf(scheme) {
+        if httpSchemes.contains(scheme) || includeDataURIs && dataSchemes.contains(scheme) {
             return true
         }
 
@@ -262,6 +273,18 @@ extension NSURL {
      */
     public var schemeIsValid: Bool {
         return permanentURISchemes.contains(scheme)
+    }
+
+    public func havingRemovedAuthorisationComponents() -> NSURL {
+        guard let urlComponents = NSURLComponents(URL: self, resolvingAgainstBaseURL: false) else {
+            return self
+        }
+        urlComponents.user = nil
+        urlComponents.password = nil
+        if let url = urlComponents.URL {
+            return url
+        }
+        return self
     }
 }
 
@@ -312,13 +335,13 @@ private extension NSURL {
             if let entry = etldEntries?[currentDomain] {
                 if entry.isWild && (previousDomain != nil) {
                     suffix = previousDomain
-                    break;
+                    break
                 } else if entry.isNormal || (nextDot == nil) {
                     suffix = currentDomain
-                    break;
+                    break
                 } else if entry.isException {
                     suffix = nextDot
-                    break;
+                    break
                 }
             }
 

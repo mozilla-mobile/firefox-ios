@@ -33,11 +33,11 @@ public class ClientPayload: CleartextPayloadJSON {
     
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
         if !(obj is ClientPayload) {
-            return false;
+            return false
         }
 
         if !super.equalPayloads(obj) {
-            return false;
+            return false
         }
 
         let p = obj as! ClientPayload
@@ -46,7 +46,7 @@ public class ClientPayload: CleartextPayloadJSON {
         }
         
         if p.clientType != self.clientType {
-            return false;
+            return false
         }
 
         return true

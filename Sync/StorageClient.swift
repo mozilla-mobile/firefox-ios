@@ -232,18 +232,29 @@ public struct StorageResponse<T> {
     }
 }
 
+public typealias BatchToken = String
+
+public typealias ByteCount = Int
+
 public struct POSTResult {
-    public let modified: Timestamp
     public let success: [GUID]
     public let failed: [GUID: String]
+    public let batchToken: BatchToken?
+
+    public init(success: [GUID], failed: [GUID: String], batchToken: BatchToken? = nil) {
+        self.success = success
+        self.failed = failed
+        self.batchToken = batchToken
+    }
 
     public static func fromJSON(json: JSON) -> POSTResult? {
         if json.isError {
             return nil
         }
 
-        if let mDecimalSeconds = json["modified"].asDouble,
-           let s = json["success"].asArray,
+        let batchToken = json["batch"].asString
+
+        if let s = json["success"].asArray,
            let f = json["failed"].asDictionary {
             var failed = false
             let asStringOrFail: JSON -> String = { $0.asString ?? { failed = true; return "" }() }
@@ -257,8 +268,7 @@ public struct POSTResult {
             if failed {
                 return nil
             }
-            let msec = Timestamp(1000 * mDecimalSeconds)
-            return POSTResult(modified: msec, success: successGUIDs, failed: failedGUIDs)
+            return POSTResult(success: successGUIDs, failed: failedGUIDs, batchToken: batchToken)
         }
         return nil
     }
@@ -605,6 +615,12 @@ public class Sync15StorageClient {
     }
 }
 
+private let DefaultInfoConfiguration = InfoConfiguration(maxRequestBytes: 1_048_576,
+                                                         maxPostRecords: 100,
+                                                         maxPostBytes: 1_048_576,
+                                                         maxTotalRecords: 10_000,
+                                                         maxTotalBytes: 104_857_600)
+
 /**
  * We'd love to nest this in the overall storage client, but Swift
  * forbids the nesting of a generic class inside another class.
@@ -614,8 +630,9 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     private let encrypter: RecordEncrypter<T>
     private let collectionURI: NSURL
     private let collectionQueue = dispatch_queue_create("com.mozilla.sync.collectionclient", DISPATCH_QUEUE_SERIAL)
+    private let infoConfig = DefaultInfoConfiguration
 
-    init(client: Sync15StorageClient, serverURI: NSURL, collection: String, encrypter: RecordEncrypter<T>) {
+    public init(client: Sync15StorageClient, serverURI: NSURL, collection: String, encrypter: RecordEncrypter<T>) {
         self.client = client
         self.encrypter = encrypter
         self.collectionURI = serverURI.URLByAppendingPathComponent(collection, isDirectory: false)
@@ -625,19 +642,34 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return self.collectionURI.URLByAppendingPathComponent(guid)
     }
 
+    public func newBatch(ifUnmodifiedSince ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp) -> Sync15BatchClient<T> {
+        return Sync15BatchClient(config: infoConfig,
+                                 ifUnmodifiedSince: ifUnmodifiedSince,
+                                 serializeRecord: self.serializeRecord,
+                                 uploader: self.post,
+                                 onCollectionUploaded: onCollectionUploaded)
+    }
+
     // Exposed so we can batch by size.
     public func serializeRecord(record: Record<T>) -> String? {
         return self.encrypter.serializer(record)?.toString(false)
     }
 
-    public func post(lines: [String], ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
+    public func post(lines: [String], ifUnmodifiedSince: Timestamp?, queryParams: [NSURLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
         let deferred = Deferred<Maybe<StorageResponse<POSTResult>>>(defaultQueue: client.resultQueue)
 
         if self.client.checkBackoff(deferred) {
             return deferred
         }
 
-        let req = client.requestPOST(self.collectionURI, body: lines, ifUnmodifiedSince: nil)
+        let requestURI: NSURL
+        if let queryParams = queryParams {
+            requestURI = self.collectionURI.withQueryParams(queryParams)
+        } else {
+            requestURI = self.collectionURI
+        }
+
+        let req = client.requestPOST(requestURI, body: lines, ifUnmodifiedSince: ifUnmodifiedSince)
         req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, result) in
             if let json: JSON = result.value as? JSON,
                let result = POSTResult.fromJSON(json) {
@@ -653,12 +685,11 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return deferred
     }
 
-    public func post(records: [Record<T>], ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
-
+    public func post(records: [Record<T>], ifUnmodifiedSince: Timestamp?, queryParams: [NSURLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
         // TODO: charset
         // TODO: if any of these fail, we should do _something_. Right now we just ignore them.
         let lines = optFilter(records.map(self.serializeRecord))
-        return self.post(lines, ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.post(lines, ifUnmodifiedSince: ifUnmodifiedSince, queryParams: queryParams)
     }
 
     public func put(record: Record<T>, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {

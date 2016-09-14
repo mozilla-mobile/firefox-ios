@@ -16,7 +16,7 @@ protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab)
     func tabManagerDidRestoreTabs(tabManager: TabManager)
     func tabManagerDidAddTabs(tabManager: TabManager)
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?)
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?)
 }
 
 protocol TabManagerStateDelegate: class {
@@ -25,7 +25,7 @@ protocol TabManagerStateDelegate: class {
 
 // We can't use a WeakList here because this is a protocol.
 class WeakTabManagerDelegate {
-    weak var value : TabManagerDelegate?
+    weak var value: TabManagerDelegate?
 
     init (value: TabManagerDelegate) {
         self.value = value
@@ -37,7 +37,7 @@ class WeakTabManagerDelegate {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class TabManager : NSObject {
+class TabManager: NSObject {
     private var delegates = [WeakTabManagerDelegate]()
     weak var stateDelegate: TabManagerStateDelegate?
 
@@ -270,6 +270,24 @@ class TabManager : NSObject {
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
+    
+    func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
+        assert(NSThread.isMainThread())
+        
+        let currentTabs = privateMode ? privateTabs : normalTabs
+        let fromIndex = tabs.indexOf(currentTabs[visibleFromIndex]) ?? tabs.count - 1
+        let toIndex = tabs.indexOf(currentTabs[visibleToIndex]) ?? tabs.count - 1
+        
+        let previouslySelectedTab = selectedTab
+        
+        tabs.insert(tabs.removeAtIndex(fromIndex), atIndex: toIndex)
+        
+        if let previouslySelectedTab = previouslySelectedTab, previousSelectedIndex = tabs.indexOf(previouslySelectedTab) {
+            _selectedIndex = previousSelectedIndex
+        }
+        
+        storeChanges()
+    }
 
     func configureTab(tab: Tab, request: NSURLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool) {
         assert(NSThread.isMainThread())
@@ -336,13 +354,14 @@ class TabManager : NSObject {
         assert(NSThread.isMainThread())
         // If the removed tab was selected, find the new tab to select.
         if tab === selectedTab {
-            if let index = getIndex(tab) {
-                if index + 1 < count {
-                    selectTab(tabs[index + 1])
+            let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
+            if let index = viableTabs.indexOf(tab) {
+                if index + 1 < viableTabs.count {
+                    selectTab(viableTabs[index + 1])
                 } else if index - 1 >= 0 {
-                    selectTab(tabs[index - 1])
+                    selectTab(viableTabs[index - 1])
                 } else {
-                    assert(count == 1, "Removing last tab")
+                    assert(viableTabs.count == 1, "Removing last tab")
                     selectTab(nil)
                 }
             }
@@ -377,12 +396,17 @@ class TabManager : NSObject {
         }
 
         // Make sure we never reach 0 normal tabs
-        if !tab.isPrivate && normalTabs.count == 0 {
-            addTab()
+        let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
+        if viableTabs.count == 0 {
+            if !tab.isPrivate {
+                addTab()
+            } else {
+                selectTab(tabs.last)
+            }
         }
 
         if flushToDisk {
-        	storeChanges()
+            storeChanges()
         }
     }
 
@@ -407,8 +431,7 @@ class TabManager : NSObject {
                 let removed = tabsCopy.removeAtIndex(selectedIndex)
                 removeTabs(tabsCopy)
                 removeTab(removed)
-            }
-            else {
+            } else {
                 removeTabs(tabsCopy)
             }
         }
@@ -416,7 +439,7 @@ class TabManager : NSObject {
             tab.hideContent()
         }
         var toast: ButtonToast?
-        if let numberOfTabs = tempTabs?.count where numberOfTabs > 0  {
+        if let numberOfTabs = tempTabs?.count where numberOfTabs > 0 {
             toast = ButtonToast(labelText: String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, completion: { buttonPressed in
                 if (buttonPressed) {
                     self.undoCloseTabs()
@@ -627,8 +650,7 @@ extension TabManager {
                 savedTabs.append(savedTab)
 
                 if let screenshot = tab.screenshot,
-                   let screenshotUUID = tab.screenshotUUID
-                {
+                   let screenshotUUID = tab.screenshotUUID {
                     savedUUIDs.insert(screenshotUUID.UUIDString)
                     imageStore?.put(screenshotUUID.UUIDString, image: screenshot)
                 }
@@ -822,7 +844,7 @@ extension TabManager {
 }
 
 // WKNavigationDelegates must implement NSObjectProtocol
-class TabManagerNavDelegate : NSObject, WKNavigationDelegate {
+class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     private var delegates = WeakList<WKNavigationDelegate>()
 
     func insert(delegate: WKNavigationDelegate) {

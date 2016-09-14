@@ -166,9 +166,9 @@ public class BrowserTable: Table {
         let status = SyncStatus.New.rawValue
 
         let localArgs: Args = [
-            BookmarkRoots.RootID,    BookmarkRoots.RootGUID,          type, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.MobileID,  BookmarkRoots.MobileFolderGUID,  type, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.MenuID,    BookmarkRoots.MenuFolderGUID,    type, BookmarkRoots.RootGUID, status, now,
+            BookmarkRoots.RootID, BookmarkRoots.RootGUID, type, BookmarkRoots.RootGUID, status, now,
+            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, BookmarkRoots.RootGUID, status, now,
+            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, BookmarkRoots.RootGUID, status, now,
             BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, BookmarkRoots.RootGUID, status, now,
             BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, BookmarkRoots.RootGUID, status, now,
         ]
@@ -586,7 +586,7 @@ public class BrowserTable: Table {
             return drop(db) && create(db)
         }
 
-        if from < 5 && to >= 5  {
+        if from < 5 && to >= 5 {
             if !self.run(db, sql: self.queueTableCreate) {
                 return false
             }

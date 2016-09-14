@@ -25,17 +25,17 @@ infix operator >>> { associativity left precedence 150 }
 public func >>> <T, U>(x: Deferred<Maybe<T>>, f: () -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
     return x.bind { res in
         if res.isSuccess {
-            return f();
+            return f()
         }
         return deferMaybe(res.failureValue!)
     }
 }
 
 // Another termination case.
-public func >>> <T>(x: Deferred<Maybe<T>>, f: () -> ())  {
+public func >>> <T>(x: Deferred<Maybe<T>>, f: () -> ()) {
     return x.upon { res in
         if res.isSuccess {
-            f();
+            f()
         }
     }
 }

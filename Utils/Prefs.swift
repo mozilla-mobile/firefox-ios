@@ -47,7 +47,7 @@ public protocol Prefs {
     func clearAll()
 }
 
-public class MockProfilePrefs : Prefs {
+public class MockProfilePrefs: Prefs {
     let prefix: String
 
     public func getBranchPrefix() -> String {

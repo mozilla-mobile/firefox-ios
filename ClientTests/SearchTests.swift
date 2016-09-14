@@ -28,19 +28,25 @@ class SearchTests: XCTestCase {
         checkValidURL("http://www.mozilla.org", afterFixup: "http://www.mozilla.org")
         checkValidURL("about:", afterFixup: "about:")
         checkValidURL("about:config", afterFixup: "about:config")
+        checkValidURL("about: config", afterFixup: "about:%20config")
         checkValidURL("file:///f/o/o", afterFixup: "file:///f/o/o")
         checkValidURL("ftp://ftp.mozilla.org", afterFixup: "ftp://ftp.mozilla.org")
         checkValidURL("foo.bar", afterFixup: "http://foo.bar")
         checkValidURL(" foo.bar ", afterFixup: "http://foo.bar")
         checkValidURL("1.2.3", afterFixup: "http://1.2.3")
+        checkValidURL("http://创业咖啡.中国/", afterFixup: "http://xn--vhq70hq9bhxa.xn--fiqs8s/")
+        checkValidURL("创业咖啡.中国", afterFixup: "http://xn--vhq70hq9bhxa.xn--fiqs8s")
+        checkValidURL(" 创业咖啡.中国 ", afterFixup: "http://xn--vhq70hq9bhxa.xn--fiqs8s")
 
         // Check invalid URLs. These are passed along to the default search engine.
         checkInvalidURL("foobar")
         checkInvalidURL("foo bar")
         checkInvalidURL("mozilla. org")
-        checkInvalidURL("about: config")
         checkInvalidURL("123")
         checkInvalidURL("a/b")
+        checkInvalidURL("创业咖啡")
+        checkInvalidURL("创业咖啡 中国")
+        checkInvalidURL("创业咖啡. 中国")
     }
 
     private func checkValidURL(beforeFixup: String, afterFixup: String) {

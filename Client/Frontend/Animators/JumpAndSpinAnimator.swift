@@ -24,7 +24,7 @@ class JumpAndSpinAnimator: Animatable {
             rotation.cumulative = true
             rotation.duration = self.AnimationDuration + 0.075
             rotation.repeatCount = 1.0
-            rotation.timingFunction = CAMediaTimingFunction(controlPoints: 0.32, 0.70 ,0.18 ,1.00)
+            rotation.timingFunction = CAMediaTimingFunction(controlPoints: 0.32, 0.70, 0.18, 1.00)
             viewToAnimate.layer.addAnimation(rotation, forKey: "rotateStar")
             }, completion: { finished in
                 UIView.animateWithDuration(self.AnimationDuration, delay: 0.15, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: { () -> Void in

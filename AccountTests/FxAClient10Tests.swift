@@ -70,7 +70,7 @@ class FxAClient10Tests: LiveAccountTest {
         withVerifiedAccount { emailUTF8, _ in
             let e = self.expectationWithDescription("")
 
-            let badPassword = FxAClient10.quickStretchPW(emailUTF8, password: "BAD PASSWORD".utf8EncodedData!)
+            let badPassword = FxAClient10.quickStretchPW(emailUTF8, password: "BAD PASSWORD".utf8EncodedData)
 
             let client = FxAClient10()
             let result = client.login(emailUTF8, quickStretchedPW: badPassword, getKeys: true)

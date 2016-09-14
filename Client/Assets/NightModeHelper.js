@@ -2,43 +2,50 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
+ (function() {
+  "use strict";
+
   if (!window.__firefox__) {
     window.__firefox__ = {};
   }
-  var isEnabled = false;
 
-  function initializeStyleSheet (enabled) {
-    var night_css_id = "iBrowser_night_css";
-    var night_css = ':not(body){color: #C8C8C8 !important; background-color:transparent !important;}body{-webkit-filter:brightness(.5) !important; background-color:#202020 !important;}';
-    var newCss = document.getElementById(night_css_id);
-    if (enabled) {
-        if (!newCss) {
-            var cssStyle = document.createElement('style');
-            cssStyle.type = 'text/css';
-            cssStyle.id = night_css_id;
-                if (cssStyle.styleSheet) {
-                    cssStyle.styleSheet.cssText = night_css;
-                } else {
-                    cssStyle.appendChild(document.createTextNode(night_css));
-                }
-            document.documentElement.appendChild(cssStyle);
-        } else {
-            newCss.innerHTML = night_css;
-        }
+  window.__firefox__.NightMode = {
+    enabled: false,
+    setEnabled: null
+  };
+
+  var className = "__firefox__NightMode";
+
+  function initializeStyleSheet () {
+    var nightCSS = ":not(body){color: #C8C8C8 !important; background-color:transparent !important;}body{-webkit-filter:brightness(.5) !important; background-color:#202020 !important;}";
+    var newCss = document.getElementById(className);
+    if (!newCss) {
+      var cssStyle = document.createElement("style");
+      cssStyle.type = "text/css";
+      cssStyle.id = className;
+      cssStyle.appendChild(document.createTextNode(nightCSS));
+      document.documentElement.appendChild(cssStyle);
     } else {
-        if (newCss) {
-            newCss.innerHTML = "";
-        }
+      newCss.innerHTML = nightCSS;
     }
   }
 
-  window.__firefox__.setNightMode = function (enabled) {
-    isEnabled = enabled;
-    initializeStyleSheet(enabled);
+  window.__firefox__.NightMode.setEnabled = function (enabled) {
+    if (enabled === window.__firefox__.NightMode.enabled) {
+      return;
+    }
+    window.__firefox__.NightMode.enabled = enabled;
+    if (enabled) {
+      initializeStyleSheet();
+    } else {
+      var style = document.getElementById(className);
+      if (style) {
+        style.remove();
+      }
+    }
   }
 
- window.addEventListener("DOMContentLoaded", function (event) {
-    __firefox__.setNightMode(isEnabled);
+  window.addEventListener("DOMContentLoaded", function (event) {
+    window.__firefox__.NightMode.setEnabled(window.__firefox__.NightMode.enabled);
   });
-})();
+ })();

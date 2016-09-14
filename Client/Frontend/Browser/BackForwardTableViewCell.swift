@@ -10,11 +10,11 @@ class BackForwardTableViewCell: UITableViewCell {
     struct BackForwardViewCellUX {
         static let bgColor = UIColor(colorLiteralRed: 0.7, green: 0.7, blue: 0.7, alpha: 1)
         static let faviconWidth = 20
-        static let faviconPadding:CGFloat = 20
+        static let faviconPadding: CGFloat = 20
         static let labelPadding = 20
         static let borderSmall = 2
         static let borderBold = 5
-        static let fontSize:CGFloat = 12.0
+        static let fontSize: CGFloat = 12.0
     }
     
     lazy var faviconView: UIImageView = {
@@ -39,7 +39,7 @@ class BackForwardTableViewCell: UITableViewCell {
     var connectingForwards = true
     var connectingBackwards = true
     
-    var isCurrentTab = false  {
+    var isCurrentTab = false {
         didSet {
             if(isCurrentTab) {
                 label.font = UIFont(name:"HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
@@ -65,7 +65,7 @@ class BackForwardTableViewCell: UITableViewCell {
         }
     }
     
-    var isPrivate = false  {
+    var isPrivate = false {
         didSet {
             label.textColor = isPrivate ? UIColor.whiteColor() : UIColor.blackColor()
         }
@@ -107,7 +107,7 @@ class BackForwardTableViewCell: UITableViewCell {
     
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
-        let context = UIGraphicsGetCurrentContext();
+        let context = UIGraphicsGetCurrentContext()
         
         var startPoint = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
                                      rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
@@ -133,8 +133,7 @@ class BackForwardTableViewCell: UITableViewCell {
     override func setHighlighted(highlighted: Bool, animated: Bool) {
         if (highlighted) {
             self.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.1)
-        }
-        else {
+        } else {
             self.backgroundColor = UIColor.clearColor()
         }
     }

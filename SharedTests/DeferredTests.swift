@@ -23,7 +23,7 @@ class DeferredTests: XCTestCase {
             XCTAssertNil(error, "\(error)")
         }
 
-        XCTAssertEqual(5, d.peek()!, "Value is filled.");
+        XCTAssertEqual(5, d.peek()!, "Value is filled.")
     }
 
     func testMultipleUponBlocks() {

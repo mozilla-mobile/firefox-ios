@@ -110,11 +110,19 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
         }
     }
 
+    // Sync Object Format (Version 1) for Form Factors: http://docs.services.mozilla.com/sync/objectformats.html#id2
+    private enum SyncFormFactorFormat: String {
+        case phone = "phone"
+        case tablet = "tablet"
+    }
+
     public func getOurClientRecord() -> Record<ClientPayload> {
         let guid = self.scratchpad.clientGUID
+        let formfactor = formFactorString()
+        
         let json = JSON([
             "id": guid,
-            "version": "0.1",    // TODO
+            "version": AppInfo.appVersion,
             "protocols": ["1.5"],
             "name": self.scratchpad.clientName,
             "os": "iOS",
@@ -123,13 +131,26 @@ public class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synch
             "appPackage": NSBundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
-
-            // Do better here: Bug 1157518.
-            "formfactor": DeviceInfo.isSimulator() ? "simulator" : "phone",
-            ])
+            "formfactor": formfactor])
 
         let payload = ClientPayload(json)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
+    }
+
+    private func formFactorString() -> String {
+        let userInterfaceIdiom = UIDevice.currentDevice().userInterfaceIdiom
+        var formfactor: String
+        
+        switch userInterfaceIdiom {
+        case .Phone:
+            formfactor = SyncFormFactorFormat.phone.rawValue
+        case .Pad:
+            formfactor = SyncFormFactorFormat.tablet.rawValue
+        default:
+            formfactor = SyncFormFactorFormat.phone.rawValue
+        }
+        
+        return formfactor
     }
 
     private func clientRecordToLocalClientEntry(record: Record<ClientPayload>) -> RemoteClient {

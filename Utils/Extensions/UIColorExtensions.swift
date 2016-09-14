@@ -9,7 +9,7 @@ private struct Color {
     var red: CGFloat
     var green: CGFloat
     var blue: CGFloat
-};
+}
 
 extension UIColor {
     /**
@@ -27,5 +27,11 @@ extension UIColor {
         var colorInt: UInt32 = 0
         NSScanner(string: colorString).scanHexInt(&colorInt)
         self.init(rgb: (Int) (colorInt ?? 0xaaaaaa))
+    }
+
+    public var alpha: CGFloat {
+        var alpha: CGFloat = 0
+        self.getWhite(nil, alpha: &alpha)
+        return alpha
     }
 }

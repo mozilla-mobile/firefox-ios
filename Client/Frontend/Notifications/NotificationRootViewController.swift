@@ -137,7 +137,7 @@ extension NotificationRootViewController {
             userInfo: nil,
             repeats: false
         )
-        NSRunLoop.mainRunLoop().addTimer(timer,forMode: NSRunLoopCommonModes)
+        NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
         notificationTimer = timer
     }
 

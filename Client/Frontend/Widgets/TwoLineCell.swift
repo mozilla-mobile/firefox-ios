@@ -238,7 +238,7 @@ private class TwoLineCellHelper {
     }
 
     func layoutSubviews() {
-        guard let container = self.container else{
+        guard let container = self.container else {
             return
         }
         let height = container.frame.height

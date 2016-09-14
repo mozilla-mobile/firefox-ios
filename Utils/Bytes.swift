@@ -16,7 +16,7 @@ public class Bytes {
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         let result: Int32 = SecRandomCopyBytes(kSecRandomDefault, len, bytes)
 
-        assert(result == 0, "Random byte generation failed.");
+        assert(result == 0, "Random byte generation failed.")
         return data
     }
 

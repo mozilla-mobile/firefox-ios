@@ -12,8 +12,7 @@ import SnapKit
 /// InstructionsVC or the ClientPicker VC.
 
 @objc(ActionViewController)
-class ActionViewController: UIViewController, ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate
-{
+class ActionViewController: UIViewController, ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
     private lazy var profile: Profile = { return BrowserProfile(localName: "profile", app: nil) }()
     private var sharedItem: ShareItem?
 

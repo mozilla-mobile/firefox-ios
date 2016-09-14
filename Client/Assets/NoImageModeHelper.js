@@ -1,72 +1,72 @@
-
 /* This Source Code Form is subject to the terms of the Mozilla Public
- + * License, v. 2.0. If a copy of the MPL was not distributed with this
- + * file, You can obtain one at http:mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
+ (function() {
+  "use strict";
+
   if (!window.__firefox__) {
     window.__firefox__ = {};
   }
-  var observers = [];
-  var isEnabled = false;
+
+  window.__firefox__.NoImageMode = {
+    enabled: false,
+    setEnabled: null
+  };
+
+  var className = "__firefox__NoImageMode";
+  var observer = null;
 
   function initializeStyleSheet () {
-    var no_image_css_id = "iBrowser_no_image_css";
-    var no_image_css = '*{background-image:none !important;}img,iframe{visibility:hidden !important;}';
-    var newCss = document.getElementById(no_image_css_id);
-    if(newCss == undefined){
-        var cssStyle = document.createElement('style');
-        cssStyle.type = 'text/css';
-        cssStyle.id = no_image_css_id;
-        if (cssStyle.styleSheet) {
-            cssStyle.styleSheet.cssText = no_image_css;
-        } else {
-            cssStyle.appendChild(document.createTextNode(no_image_css));
-        }
-        document.documentElement.appendChild(cssStyle);
+    var noImageCSS = "*{background-image:none !important;}img,iframe{visibility:hidden !important;}";
+    var newCss = document.getElementById(className);
+    if (!newCss) {
+      var cssStyle = document.createElement("style");
+      cssStyle.type = "text/css";
+      cssStyle.id = className;
+      cssStyle.appendChild(document.createTextNode(noImageCSS));
+      document.documentElement.appendChild(cssStyle);
     } else {
-        newCss.innerHTML = no_image_css;
+      newCss.innerHTML = noImageCSS;
     }
   }
 
-  function blockImages (elem, enabled) {
-    var imgs = document.getElementsByTagName("IMG");
-    while (imgs.length > 0) {
-        var parent = imgs[0].parentNode;
-        parent.removeChild(imgs[0]);
+  window.__firefox__.NoImageMode.setEnabled = function (enabled) {
+    if (enabled === window.__firefox__.NoImageMode.enabled) {
+      return;
     }
-  }
-
-  function watchForImages (elem, enabled) {
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            blockImages(mutation.addedNodes, enabled);
-        });
-    });
-    // configuration of the observer:
-    var config = { childList: true, subtree: true };
-    // pass in the target node, as well as the observer options
-    observer.observe(target, config);
-    observers.push(observer);
-  }
-
-  window.__firefox__.setNoImageMode = function (enabled) {
-    isEnabled = enabled;
-    for (var i=0; i<observers.length; i++) {
-        var observer = observers.shift();
-        observer.disconnect();
-    }
+    window.__firefox__.NoImageMode.enabled = enabled;
     if (enabled) {
-        initializeStyleSheet();
-        var bodys = document.getElementsByTagName("body");
-        for (var i=0; i<bodys.length; i++) {
-            blockImages(bodys[i], isEnabled);
-            watchForImages(bodys[i], isEnabled);
-        }
+      initializeStyleSheet();
+
+      // Remove existing images on the page
+      var images = document.body.getElementsByTagName("img");
+      while (images.length > 0) {
+        images[0].remove();
+      }
+      // Remove any images that are added to the page later
+      observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          for (var i = 0; i < mutation.addedNodes.length; ++ i) {
+            if (mutation.addedNodes[i] instanceof HTMLImageElement) {
+              mutation.addedNodes[i].remove();
+            }
+          }
+        });
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    } else {
+      // It would be useful to also revert the changes we've made, rather than just to prevent any more images from being loaded
+      var style = document.getElementById(className);
+      if (style) {
+        style.remove();
+      }
+      observer.disconnect();
+      observer = null;
     }
   }
 
-  window.addListener("DOMContentLoaded", function (event) {
-    setNoImageMode(isEnabled);
+  window.addEventListener("DOMContentLoaded", function (event) {
+    window.__firefox__.NoImageMode.setEnabled(window.__firefox__.NoImageMode.enabled);
   });
 })();

@@ -10,7 +10,9 @@ struct TopTabsUX {
     static let TopTabsViewHeight: CGFloat = 40
     static let TopTabsBackgroundNormalColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
     static let TopTabsBackgroundPrivateColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1)
-    static let TopTabsBackgroundNormalColorInactive = UIColor(red: 53/255, green: 53/255, blue: 53/255, alpha: 1)
+    static let TopTabsBackgroundNormalColorInactive = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1)
+    static let TopTabsBackgroundPrivateColorInactive = UIColor(red: 53/255, green: 53/255, blue: 53/255, alpha: 1)
+    static let PrivateModeToolbarTintColor = UIColor(red: 124 / 255, green: 124 / 255, blue: 124 / 255, alpha: 1)
     static let TopTabsBackgroundPadding: CGFloat = 35
     static let TopTabsBackgroundShadowWidth: CGFloat = 35
     static let TabWidth: CGFloat = 180
@@ -24,7 +26,7 @@ struct TopTabsUX {
 protocol TopTabsDelegate: class {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab()
-    func topTabsDidPressPrivateTab()
+    func topTabsDidPressPrivateModeButton(cachedTab: Tab?)
     func topTabsDidChangeTab()
 }
 
@@ -43,13 +45,15 @@ class TopTabsViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
         collectionView.clipsToBounds = false
+        collectionView.accessibilityIdentifier = "Top Tabs View"
         
         return collectionView
     }()
     
     private lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTapped), forControlEvents: UIControlEvents.TouchUpInside)
+        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), forControlEvents: UIControlEvents.TouchUpInside)
+        tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
     
@@ -59,10 +63,11 @@ class TopTabsViewController: UIViewController {
         return newTab
     }()
     
-    private lazy var privateTab: UIButton = {
-        let privateTab = UIButton.privateModeButton()
-        privateTab.addTarget(self, action: #selector(TopTabsViewController.privateTabTapped), forControlEvents: UIControlEvents.TouchUpInside)
-        return privateTab
+    lazy var privateModeButton: PrivateModeButton = {
+        let privateModeButton = PrivateModeButton()
+        privateModeButton.light = true
+        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), forControlEvents: UIControlEvents.TouchUpInside)
+        return privateModeButton
     }()
     
     private lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
@@ -70,6 +75,9 @@ class TopTabsViewController: UIViewController {
         delegate.tabSelectionDelegate = self
         return delegate
     }()
+    
+    private weak var lastNormalTab: Tab?
+    private weak var lastPrivateTab: Tab?
     
     private var tabsToDisplay: [Tab] {
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
@@ -95,7 +103,9 @@ class TopTabsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
         collectionView.reloadData()
-        self.scrollToCurrentTab(false)
+        dispatch_async(dispatch_get_main_queue()) { 
+             self.scrollToCurrentTab(false, centerCell: true)
+        }
     }
     
     override func viewDidLoad() {
@@ -106,7 +116,7 @@ class TopTabsViewController: UIViewController {
         
         view.addSubview(tabsButton)
         view.addSubview(newTab)
-        view.addSubview(privateTab)
+        view.addSubview(privateModeButton)
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
         
@@ -120,32 +130,46 @@ class TopTabsViewController: UIViewController {
             make.trailing.equalTo(newTab.snp_leading)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
-        privateTab.snp_makeConstraints { make in
+        privateModeButton.snp_makeConstraints { make in
             make.centerY.equalTo(view)
             make.leading.equalTo(view)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
         topTabFader.snp_makeConstraints { make in
             make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateTab.snp_trailing).offset(-TopTabsUX.FaderPading)
+            make.leading.equalTo(privateModeButton.snp_trailing).offset(-TopTabsUX.FaderPading)
             make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.FaderPading)
         }
         collectionView.snp_makeConstraints { make in
             make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateTab.snp_trailing).offset(-TopTabsUX.CollectionViewPadding)
+            make.leading.equalTo(privateModeButton.snp_trailing).offset(-TopTabsUX.CollectionViewPadding)
             make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.CollectionViewPadding)
         }
         
         view.backgroundColor = UIColor.blackColor()
-        updateTabCount(tabsToDisplay.count)
         tabsButton.applyTheme(Theme.NormalMode)
+        if let currentTab = tabManager.selectedTab {
+            applyTheme(currentTab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+        }
+        updateTabCount(tabsToDisplay.count)
+    }
+    
+    func switchForegroundStatus(isInForeground reveal: Bool) {
+        // Called when the app leaves the foreground to make sure no information is inadvertently revealed
+        if let cells = self.collectionView.visibleCells() as? [TopTabCell] {
+            let alpha: CGFloat = reveal ? 1 : 0
+            for cell in cells {
+                cell.titleText.alpha = alpha
+                cell.favicon.alpha = alpha
+            }
+        }
     }
     
     func updateTabCount(count: Int, animated: Bool = true) {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
     
-    func tabsTapped() {
+    func tabsTrayTapped() {
         delegate?.topTabsDidPressTabs()
     }
     
@@ -168,10 +192,11 @@ class TopTabsViewController: UIViewController {
         })
     }
     
-    func privateTabTapped() {
-        delegate?.topTabsDidPressPrivateTab()
+    func togglePrivateModeTapped() {
+        delegate?.topTabsDidPressPrivateModeButton(isPrivate ? lastNormalTab : lastPrivateTab)
+        self.privateModeButton.setSelected(isPrivate, animated: true)
         self.collectionView.reloadData()
-        scrollToCurrentTab(false)
+        self.scrollToCurrentTab(false, centerCell: true)
     }
     
     func closeTab() {
@@ -182,14 +207,18 @@ class TopTabsViewController: UIViewController {
         self.collectionView.reloadData()
     }
     
-    func scrollToCurrentTab(animated: Bool = true) {
+    func scrollToCurrentTab(animated: Bool = true, centerCell: Bool = false) {
         guard let currentTab = tabManager.selectedTab, let index = tabsToDisplay.indexOf(currentTab) where !collectionView.frame.isEmpty else {
             return
         }
         if let frame = collectionView.layoutAttributesForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0))?.frame {
-            // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
-            let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
-            collectionView.scrollRectToVisible(padFrame, animated: true)
+            if centerCell {
+                collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0), atScrollPosition: .CenteredHorizontally, animated: false)
+            } else {
+                // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
+                let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
+                collectionView.scrollRectToVisible(padFrame, animated: animated)
+            }
         }
     }
 }
@@ -198,6 +227,15 @@ extension TopTabsViewController: Themeable {
     func applyTheme(themeName: String) {
         tabsButton.applyTheme(themeName)
         isPrivate = (themeName == Theme.PrivateMode)
+        privateModeButton.styleForMode(privateMode: isPrivate)
+        newTab.tintColor = isPrivate ? UIConstants.PrivateModePurple : UIColor.whiteColor()
+        if let layout = collectionView.collectionViewLayout as? TopTabsViewLayout {
+            if isPrivate {
+                layout.themeColor = TopTabsUX.TopTabsBackgroundPrivateColorInactive
+            } else {
+                layout.themeColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
+            }
+        }
     }
 }
 
@@ -216,14 +254,12 @@ extension TopTabsViewController: TopTabCellDelegate {
             tabManager.removeTab(tab)
             tabManager.selectTab(tabsToDisplay.first)
             collectionView.reloadData()
-        }
-        else {
+        } else {
             var nextTab: Tab
             let currentIndex = indexPath.item
             if tabsToDisplay.count-1 > currentIndex {
                 nextTab = tabsToDisplay[currentIndex+1]
-            }
-            else {
+            } else {
                 nextTab = tabsToDisplay[currentIndex-1]
             }
             tabManager.removeTab(tab)
@@ -250,24 +286,23 @@ extension TopTabsViewController: UICollectionViewDataSource {
         tabCell.titleText.text = tab.displayTitle
         
         if tab.displayTitle.isEmpty {
-            if (tab.url?.baseDomain()?.contains("localhost") ?? true) {
+            if (tab.webView?.URL?.baseDomain()?.contains("localhost") ?? true) {
                 tabCell.titleText.text = AppMenuConfiguration.NewTabTitleString
-            }
-            else {
-                tabCell.titleText.text = tab.displayURL?.absoluteString
+            } else {
+                tabCell.titleText.text = tab.webView?.URL?.absoluteDisplayString()
             }
             tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
-        }
-        else {
+            tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tabCell.titleText.text ?? "")
+        } else {
             tabCell.accessibilityLabel = tab.displayTitle
+            tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }
 
         tabCell.selectedTab = (tab == tabManager.selectedTab)
         
         if index > 0 && index < tabsToDisplay.count && tabsToDisplay[index] != tabManager.selectedTab && tabsToDisplay[index-1] != tabManager.selectedTab {
             tabCell.seperatorLine = true
-        }
-        else {
+        } else {
             tabCell.seperatorLine = false
         }
         
@@ -308,10 +343,20 @@ extension TopTabsViewController : WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         collectionView.reloadData()
     }
+    
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        collectionView.reloadData()
+    }
 }
 
 extension TopTabsViewController: TabManagerDelegate {
-    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {}
+    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+        if selected?.isPrivate ?? false {
+            lastPrivateTab = selected
+        } else {
+            lastNormalTab = selected
+        }
+    }
     func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {}
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {}
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {}
@@ -319,5 +364,12 @@ extension TopTabsViewController: TabManagerDelegate {
     func tabManagerDidAddTabs(tabManager: TabManager) {
         collectionView.reloadData()
     }
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast:ButtonToast?) {}
+    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {
+        if let privateTab = lastPrivateTab where !tabManager.tabs.contains(privateTab) {
+            lastPrivateTab = nil
+        }
+        if let normalTab = lastNormalTab where !tabManager.tabs.contains(normalTab) {
+            lastNormalTab = nil
+        }
+    }
 }

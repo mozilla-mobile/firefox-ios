@@ -90,7 +90,7 @@ class QuickActions: NSObject {
 
     func removeDynamicApplicationShortcutItemOfType(type: ShortcutType, fromApplication application: UIApplication) {
         guard var dynamicShortcutItems = application.shortcutItems,
-            let index = (dynamicShortcutItems.indexOf{ $0.type == type.type }) else { return }
+            let index = (dynamicShortcutItems.indexOf { $0.type == type.type }) else { return }
 
         dynamicShortcutItems.removeAtIndex(index)
         application.shortcutItems = dynamicShortcutItems
@@ -136,6 +136,6 @@ class QuickActions: NSObject {
         // find out if bookmarked URL is currently open
         // if so, open to that tab,
         // otherwise, create a new tab with the bookmarked URL
-        bvc.switchToTabForURLOrOpen(urlToOpen)
+        bvc.switchToTabForURLOrOpen(urlToOpen, isPrivileged: true)
     }
 }

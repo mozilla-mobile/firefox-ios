@@ -209,7 +209,7 @@ protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
 }
 
-let ReaderModeNamespace = "_firefox_ReaderMode"
+let ReaderModeNamespace = "window.__firefox__.reader"
 
 class ReaderMode: TabHelper {
     var delegate: ReaderModeDelegate?
@@ -257,11 +257,14 @@ class ReaderMode: TabHelper {
 
     private func handleReaderModeStateChange(state: ReaderModeState) {
         self.state = state
-        delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab!)
+        guard let tab = tab else {
+            return
+        }
+        delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let msg = message.body as? Dictionary<String,String> {
+        if let msg = message.body as? Dictionary<String, String> {
             if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
                 switch messageType {
                     case .PageEvent:
@@ -282,7 +285,7 @@ class ReaderMode: TabHelper {
     var style: ReaderModeStyle = DefaultReaderModeStyle {
         didSet {
             if state == ReaderModeState.Active {
-                tab!.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: {
+                tab?.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: {
                     (object, error) -> Void in
                     return
                 })

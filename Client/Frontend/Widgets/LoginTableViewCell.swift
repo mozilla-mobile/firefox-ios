@@ -189,7 +189,7 @@ class LoginTableViewCell: UITableViewCell {
             origin: CGPointZero,
             size: CGSize(width: LoginTableViewCellUX.indentWidth, height: frame.height))
 
-        if !showingIndent{
+        if !showingIndent {
             indentFrame.origin.x = -LoginTableViewCellUX.indentWidth
         }
 

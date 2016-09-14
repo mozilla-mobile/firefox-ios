@@ -48,6 +48,7 @@ class TopSitesPanel: UIViewController {
         didSet {
             if editingThumbnails != oldValue {
                 dataSource.editingThumbnails = editingThumbnails
+                collection?.allowsSelection = !editingThumbnails
 
                 if editingThumbnails {
                     homePanelDelegate?.homePanelWillEnterEditingMode?(self)
@@ -104,6 +105,12 @@ class TopSitesPanel: UIViewController {
         self.dataSource.collectionView = self.collection
         self.profile.history.setTopSitesCacheSize(Int32(maxFrecencyLimit))
         self.refreshTopSites(maxFrecencyLimit)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        layout.invalidateLayout()
+        collection?.reloadData()
     }
 
     deinit {
@@ -414,11 +421,11 @@ class TopSitesLayout: UICollectionViewLayout {
         } else {
             // Portrait iPad
             if size.height > size.width {
-                return 4;
+                return 4
             }
             // Landscape iPad
             else {
-                return 5;
+                return 5
             }
         }
     }
@@ -480,7 +487,7 @@ class TopSitesLayout: UICollectionViewLayout {
         return CGSize(width: width, height: topSectionHeight + bottomSectionHeight)
     }
 
-    private var layoutAttributes:[UICollectionViewLayoutAttributes]?
+    private var layoutAttributes: [UICollectionViewLayoutAttributes]?
 
     override func prepareLayout() {
         var layoutAttributes = [UICollectionViewLayoutAttributes]()

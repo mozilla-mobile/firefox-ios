@@ -139,6 +139,20 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     // Dispatch webkit messages originating from our child webview.
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        // Make sure we're communicating with a trusted page. That is, ensure the origin of the
+        // message is the same as the origin of the URL we initially loaded in this web view.
+        // Note that this exploit wouldn't be possible if we were using WebChannels; see
+        // https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/WebChannel.jsm
+        if #available(iOS 9.0, *) {
+            let origin = message.frameInfo.securityOrigin
+            guard origin.`protocol` == url.scheme && origin.host == url.host && origin.port == (url.port ?? 0) else {
+                print("Ignoring message - \(origin) does not match expected origin \(url.origin)")
+                return
+            }
+        } else {
+            guard url.origin == message.frameInfo.request.URL?.origin else { return }
+        }
+
         if (message.name == "accountsCommandHandler") {
             let body = JSON(message.body)
             let detail = body["detail"]

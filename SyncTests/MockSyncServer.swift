@@ -191,7 +191,7 @@ class MockSyncServer {
             response.setValue("\(records)", forAdditionalHeader: "X-Weave-Records")
         }
 
-        return response;
+        return response
     }
 
     func storeRecords(records: [EnvelopeJSON], inCollection collection: String, now: Timestamp? = nil) {

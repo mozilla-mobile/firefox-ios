@@ -429,7 +429,7 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     }
 }
 
-private class BookmarkFolderTableViewHeader : UITableViewHeaderFooterView {
+private class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
     var delegate: BookmarkFolderTableViewHeaderDelegate?
 
     lazy var titleLabel: UILabel = {

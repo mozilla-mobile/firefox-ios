@@ -530,13 +530,8 @@ public class SQLiteLogins: BrowserLogins {
     public func removeLoginByGUID(guid: GUID) -> Success {
         return removeLoginsWithGUIDs([guid])
     }
-
-    public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
-        if guids.isEmpty {
-            return succeed()
-        }
-
-        let nowMillis = NSDate.now()
+    
+    private func getDeletionStatementsForGUIDs(guids: ArraySlice<GUID>, nowMillis: Timestamp) -> [(sql: String, args: Args?)] {
         let inClause = BrowserDB.varlist(guids.count)
 
         // Immediately delete anything that's marked as new -- i.e., it's never reached
@@ -555,7 +550,7 @@ public class SQLiteLogins: BrowserLogins {
         ", username = ''" +
         " WHERE guid IN \(inClause)"
 
-       let markMirrorAsOverridden =
+        let markMirrorAsOverridden =
         "UPDATE \(TableLoginsMirror) SET " +
             "is_overridden = 1 " +
             "WHERE guid IN \(inClause)"
@@ -566,12 +561,19 @@ public class SQLiteLogins: BrowserLogins {
         "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
 
         let args: Args = guids.map { $0 as AnyObject }
-        return self.db.run([
+        return [
             (delete, args),
             (update, args),
             (markMirrorAsOverridden, args),
             (insert, args)
-        ]) >>> effect(self.notifyLoginDidChange)
+        ]
+    }
+
+    public func removeLoginsWithGUIDs(guids: [GUID]) -> Success {
+        let timestamp = NSDate.now()
+        return db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap {
+            self.getDeletionStatementsForGUIDs($0, nowMillis: timestamp)
+        }) >>> effect(self.notifyLoginDidChange)
     }
 
     public func removeAll() -> Success {
@@ -919,7 +921,7 @@ extension SQLiteLogins: SyncableLogins {
     /**
      * Chains through the provided timestamp.
      */
-    public func markAsSynchronized(guids: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>> {
+    public func markAsSynchronized<T: CollectionType where T.Generator.Element == GUID>(guids: T, modified: Timestamp) -> Deferred<Maybe<Timestamp>> {
         // Update the mirror from the local record that we just uploaded.
         // sqlite doesn't support UPDATE FROM, so instead of running 10 subqueries * n GUIDs,
         // we issue a single DELETE and a single INSERT on the mirror, then throw away the
@@ -953,7 +955,7 @@ extension SQLiteLogins: SyncableLogins {
          >>> always(modified)
     }
 
-    public func markAsDeleted(guids: [GUID]) -> Success {
+    public func markAsDeleted<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
         log.debug("Marking \(guids.count) GUIDs as deleted.")
 
         let args: Args = guids.map { $0 as AnyObject }

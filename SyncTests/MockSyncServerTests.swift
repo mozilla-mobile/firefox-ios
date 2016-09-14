@@ -62,7 +62,7 @@ class MockSyncServerTests: XCTestCase {
         server.storeRecords([MockSyncServer.makeValidEnvelope(Bytes.generateGUID(), modified: 0)], inCollection: "bookmarks", now: 1326251111000)
         server.storeRecords([], inCollection: "tabs", now: 1326252222500)
         server.storeRecords([MockSyncServer.makeValidEnvelope(Bytes.generateGUID(), modified: 0)], inCollection: "bookmarks", now: 1326252222000)
-        server.storeRecords([MockSyncServer.makeValidEnvelope(Bytes.generateGUID(), modified: 0)], inCollection: "clients",   now: 1326253333000)
+        server.storeRecords([MockSyncServer.makeValidEnvelope(Bytes.generateGUID(), modified: 0)], inCollection: "clients", now: 1326253333000)
 
         let expectation = self.expectationWithDescription("Waiting for result.")
         let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
@@ -137,7 +137,7 @@ class MockSyncServerTests: XCTestCase {
     func testWipeStorage() {
         server.storeRecords([MockSyncServer.makeValidEnvelope("a", modified: 0)], inCollection: "bookmarks", now: 1326251111000)
         server.storeRecords([MockSyncServer.makeValidEnvelope("b", modified: 0)], inCollection: "bookmarks", now: 1326252222000)
-        server.storeRecords([MockSyncServer.makeValidEnvelope("c", modified: 0)], inCollection: "clients",   now: 1326253333000)
+        server.storeRecords([MockSyncServer.makeValidEnvelope("c", modified: 0)], inCollection: "clients", now: 1326253333000)
         server.storeRecords([], inCollection: "tabs")
 
         // For now, only testing wiping the storage root, which is the only thing we use in practice.
