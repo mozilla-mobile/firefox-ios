@@ -6,7 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch
 -----------
 
-This branch is for mainline development that will eventually ship as v5.0.
+This branch is for mainline development that will eventually ship as v6.0.
 
 See the __v5.x__ branch if you're doing stabilization work for v5.0. If you are interested in fixing a bug on the __v5.x__ stabilization branch, take a look at the list of open bugs that are marked as [tracking 5.0](https://wiki.mozilla.org/Mobile/Triage/iOS#iOS_Tracking_5.0.2B).
 
