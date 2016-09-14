@@ -25,7 +25,6 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.addSubview(visualEffectView)
 
         view.addGestureRecognizer(tapRecognizer)
@@ -33,10 +32,17 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
         view.addSubview(tableView)
         tableView.snp_makeConstraints { make in
             make.center.equalTo(self.view)
-            make.leading.equalTo(self.view).offset(20)
-            make.trailing.equalTo(self.view).inset(20)
-            make.height.equalTo(290)
+            make.width.equalTo(290)
+            make.height.equalTo(279)
         }
+
+        let shadowLayer = CALayer()
+        shadowLayer.shadowColor = UIColor.darkGrayColor().CGColor
+        shadowLayer.shadowPath = UIBezierPath(roundedRect: tableView.bounds, cornerRadius: tableView.layer.cornerRadius).CGPath
+        shadowLayer.shadowOffset = CGSize(width: 10, height: 10)
+        shadowLayer.shadowOpacity = 0.8
+        shadowLayer.shadowRadius = 2
+        view.layer.addSublayer(shadowLayer)
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -46,7 +52,7 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.separatorColor = UIConstants.SeparatorColor
         tableView.layer.cornerRadius = 10
         tableView.accessibilityIdentifier = "SiteTable"
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.registerClass(BlurTableViewCell.self, forCellReuseIdentifier: "BlurTableViewCell")
         tableView.registerClass(TwoLineTableViewCell.self, forCellReuseIdentifier: "TwoLineCell")
 
         if #available(iOS 9, *) {
@@ -81,11 +87,11 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return SiteTableViewControllerUX.RowHeight
+        return 56
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = indexPath.row == 0 ? tableView.dequeueReusableCellWithIdentifier("TwoLineCell", forIndexPath: indexPath) : tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("TwoLineCell", forIndexPath: indexPath)
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsetsZero
         cell.layoutMargins = UIEdgeInsetsZero
@@ -105,33 +111,29 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 return cell
             case 1:
-                cell.textLabel?.text = "bookmark"
-                cell.textLabel?.textColor = UIConstants.SystemBlueColor
+                let cell = tableView.dequeueReusableCellWithIdentifier("BlurTableViewCell", forIndexPath: indexPath) as! BlurTableViewCell
 
-                let image = UIImage(named: "action_bookmark")!.imageWithRenderingMode(.AlwaysTemplate)
-                cell.imageView?.image = image
-                cell.imageView?.tintColor = UIConstants.SystemBlueColor
+                // if isBookmarked then do . . .
+                let string = NSLocalizedString("Bookmark", comment: "Context Menu Action for Activity Stream")
+                cell.configureCell(string, imageString: "action_bookmark")
                 return cell
             case 2:
-                cell.textLabel?.text = "share"
+                let cell = tableView.dequeueReusableCellWithIdentifier("BlurTableViewCell", forIndexPath: indexPath) as! BlurTableViewCell
+                let string = NSLocalizedString("Share", comment: "Context Menu Action for Activity Stream")
 
-                let image = UIImage(named: "action_share")!.imageWithRenderingMode(.AlwaysTemplate)
-                cell.imageView?.image = image
-                cell.imageView?.tintColor = UIConstants.SystemBlueColor
+                cell.configureCell(string, imageString: "action_share")
                 return cell
             case 3:
-                cell.textLabel?.text = "dismiss"
+                let cell = tableView.dequeueReusableCellWithIdentifier("BlurTableViewCell", forIndexPath: indexPath) as! BlurTableViewCell
+                let string = NSLocalizedString("Dismiss", comment: "Context Menu Action for Activity Stream")
 
-                let image = UIImage(named: "action_close")!.imageWithRenderingMode(.AlwaysTemplate)
-                cell.imageView?.image = image
-                cell.imageView?.tintColor = UIConstants.SystemBlueColor
+                cell.configureCell(string, imageString: "action_close")
                 return cell
             case 4:
-                cell.textLabel?.text = "delete"
+                let cell = tableView.dequeueReusableCellWithIdentifier("BlurTableViewCell", forIndexPath: indexPath) as! BlurTableViewCell
+                let string = NSLocalizedString("Delete", comment: "Context Menu Action for Activity Stream")
 
-                let image = UIImage(named: "action_delete")!.imageWithRenderingMode(.AlwaysTemplate)
-                cell.imageView?.image = image
-                cell.imageView?.tintColor = UIConstants.SystemBlueColor
+                cell.configureCell(string, imageString: "action_delete")
                 return cell
             default:
                 return cell

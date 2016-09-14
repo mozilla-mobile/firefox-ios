@@ -332,14 +332,19 @@ extension ActivityStreamPanel {
             let touchPoint = longPressGestureRecognizer.locationInView(self.view)
             if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
                 if indexPath.section == 1 {
-                    let hi = BlurTableViewController()
-                    hi.profile = profile
-                    hi.site = history[indexPath.row]
-                    hi.modalPresentationStyle = .OverCurrentContext
-                    self.presentViewController(hi, animated: true, completion: nil)
+                    presentContextMenu(history[indexPath.row])
                 }
             }
         }
+    }
+
+    private func presentContextMenu(site: Site) {
+        let contextMenu = BlurTableViewController()
+        contextMenu.profile = profile
+        contextMenu.site = site
+        contextMenu.modalPresentationStyle = .OverCurrentContext
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 }
 
