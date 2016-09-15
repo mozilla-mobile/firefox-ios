@@ -26,6 +26,8 @@ public class SearchEnginesJSON {
                     // another possible locale gets us more specific
                 } else {
                     engineNames = regions[region]!["visibleDefaultEngines"].asArray
+                    // This match was very specific, so we should always use it
+                    break;
                 }
             }
         }
