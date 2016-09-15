@@ -32,7 +32,7 @@ public func >>> <T, U>(x: Deferred<Maybe<T>>, f: () -> Deferred<Maybe<U>>) -> De
 }
 
 // Another termination case.
-public func >>> <T>(x: Deferred<Maybe<T>>, f: () -> ()) {
+public func >>> <T>(x: Deferred<Maybe<T>>, f: () -> ())  {
     return x.upon { res in
         if res.isSuccess {
             f()
@@ -55,7 +55,7 @@ public func deferMaybe<T>(e: MaybeErrorType) -> Deferred<Maybe<T>> {
     return Deferred(value: Maybe(failure: e))
 }
 
-public typealias Success = Deferred<Maybe<()>>
+public typealias Success = Deferred<Maybe<Void>>
 
 public func succeed() -> Success {
     return deferMaybe(())
