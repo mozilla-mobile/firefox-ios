@@ -41,10 +41,21 @@ class MetadataParserHelper: TabHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let metadata = message.body as? [String: AnyObject] else {
+        guard let dict = message.body as? [String: AnyObject],
+              let url = (dict["url"] as? String)?.asURL else {
             return
         }
 
-        print("some metadatas: \(metadata)")
+        // Pull out what we need and pass to a notification
+        var userInfo = [String: AnyObject]()
+        userInfo["isPrivate"] = tab?.isPrivate ?? true
+        userInfo["metadata_url"] = url
+        userInfo["metadata_title"] = dict["title"] as? String
+        userInfo["metadata_description"] = dict["description"] as? String
+        userInfo["metadata_image_url"] = (dict["image_url"] as? String)?.asURL
+        userInfo["metadata_type"] = dict["type"] as? String
+        userInfo["metadata_icon_url"] = (dict["icon_url"] as? String)?.asURL
+
+        NSNotificationCenter.defaultCenter().postNotificationName(NotificationOnPageMetadataFetched, object: nil, userInfo: userInfo)
     }
 }
