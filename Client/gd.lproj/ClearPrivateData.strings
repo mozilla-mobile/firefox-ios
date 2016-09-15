@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "A bheil thu cinnteach gu bheil thu airson an dàta air fad agad fhalamhachadh? Dùinidh seo gach taba fosgailte cuideachd.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "An eachdraidh brabhsaidh";
+
+/* Settings item for clearing the cache */
+"Cache" = "An tasgadan";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Sguir dheth";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Falamhaich";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Falamhaich a h-uile rud";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Falamhaich an dàta prìobhaideach";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Briosgaidean";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Dàta làraichean-lìn far loidhne";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Clàraidhean a-steach sàbhailte";
+

@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "모든 데이터를 삭제하시겠습니까? 열려있는 탭도 모두 닫힙니다.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "탐색 기록";
+
+/* Settings item for clearing the cache */
+"Cache" = "캐시";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "취소";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "삭제";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "모두 삭제";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "개인 정보 삭제Clear Private Data";
+
+/* Settings item for clearing cookies */
+"Cookies" = "쿠키";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "오프라인 웹사이트 정보";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "저장된 로그인 정보";
+

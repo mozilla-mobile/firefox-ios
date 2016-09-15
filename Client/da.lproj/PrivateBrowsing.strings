@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Luk private faneblade";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox gemmer ikke din historik eller cookies, men nye bogmærker vil blive gemt.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Læs mere";
+
+/* Toggled OFF accessibility value */
+"Off" = "Deaktiveret";
+
+/* Toggled ON accessibility value */
+"On" = "Aktiveret";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Åbn i nyt privat faneblad";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Privat browsing";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Privat tilstand";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Slår privat tilstand til eller fra";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Når jeg forlader privat browsing";
+

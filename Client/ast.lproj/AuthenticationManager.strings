@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Dempués d'una hora";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Dempués d'un minutu";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Dempués de 5 minutos";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Dempués de 10 minutos";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Dempués de 15 minutos";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Camudar códigu de pasu";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Introducir códigu de pasu";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Introducir un códigu de pasu nuevu";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Introducir un códigu de pasu";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Introducir códigu de pasu";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Nel intre";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Códigu de pasu incorreutu. Volvi tentalo (Intentos que queden: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Códigu de pasu incorreutu. Volvi tentalo.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Algamáronse los intentos máximos. Volvi tentalo nuna hora, por favor.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Algamáronse los intentos máximos. Volvi tentalo, por favor.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "El códigu de pasu nuevu ha ser diferente del esistente.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Códigu de pasu";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Los códigos de pasu nun concasen. Volvi tentalo.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Reintroducir contraseña";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Riquir códigu de pasu";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Afitar códigu de pasu";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID y códigu de pasu";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Desactivar códigu de pasu";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Activar códigu de pasu";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Desactiva'l to códigu de pasu.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Usar Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Usa la to buelga p'acceder a los tos anicios de sesión agora.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Usa la to buelga p'acceder a Restolar en privao agora.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Usa la to buelga pa deshabilitar Touch ID.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Usa la to buelga p'acceder a configurar el to intervalu de códigu de pasu riquíu.";
+

@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "താങ്കളുടെ എല്ലാ വിവരങ്ങളും മായ്ക്കണം എന്നുറപ്പാണോ? തുറന്നിരിക്കുന്ന ടാബുകളും അടയും.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "ബ്രൌസ് ചെയ്ത നാള്‍വഴി";
+
+/* Settings item for clearing the cache */
+"Cache" = "കാഷ്";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "റദ്ദാക്കുക";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "മായ്ക്കൂ";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "എല്ലാം മായ്ക്കൂ";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "സ്വകാര്യവിവരങ്ങള്‍ നീക്കം ചെയ്യുക";
+
+/* Settings item for clearing cookies */
+"Cookies" = "കുക്കികള്‍";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ഓഫ്‌ലൈന്‍ ആയ വെബ്സൈറ്റ് വിവരങ്ങള്‍";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "ശേഖരിച്ചിട്ടുള്ള പ്രവേശനങ്ങള്‍";
+

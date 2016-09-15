@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Binne jo wis?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Annulearje";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Sykfjild wiskje";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopiearje";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Fuortsmite";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Alle deselektearje";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Sykmoadus iepenje";
+
+/* Hide password text selection menu item */
+"Hide" = "Ferstopje";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "Lêst wizige: %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "Oanmeldingen";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Oanmeldingen sille definityf fuortsmiten wurde.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Oanmeldingen sille fan alle keppele apparaten fuortsmiten wurde.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Gjin oanmeldingen fûn";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Iepenje & ynfolje";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Werjaan";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Sykje";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Sykynfierfjild";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Alle selektearje";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "wachtwurd";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "brûkersnamme";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "website";
+

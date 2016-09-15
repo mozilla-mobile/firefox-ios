@@ -1,0 +1,51 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "ଟ୍ୟାବ ବ୍ୟବହାର କରି ଏକାଧିକ ୱେବ ପୃଷ୍ଠା ଏକାସଙ୍ଗେ ଦେଖନ୍ତୁ ।";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "ବାଛନ୍ତୁ";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Firefox ଯେଉଁଠି ହେଉ ଦେଖିବା ମାତ୍ରେ ବ୍ୟହାର କରନ୍ତୁ ।";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "ଇଚ୍ଛା ମୁତାବକ ବ୍ୟବହାର କରନ୍ତୁ";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "ଟ୍ୟାବ ବ୍ୟବହାର କରି ପୃଷ୍ଠାରୁ ପୃଷ୍ଠାକୁ ଯାଆନ୍ତୁ ।";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox ଓ କ୍ଲାଉଡ଼";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "%2$@ ର %1$@ ତମ ପ୍ରାରମ୍ଭିକ ସ୍ଲାଇଡ଼";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "ସଜାନ୍ତୁ";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "ସଜାଣିରେ ନିଜ ପସନ୍ଦ ମୁତାବକ ନିଜ Firefoxକୁ ସଜାନ୍ତୁ ।";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "ସଜାଣିରେ ନିଜ ନିୟମିତ ସର୍ଚ ଇଞ୍ଜିନ ଓ ବାକି ଅନେକ ଜିନିଷ ପସନ୍ଦ ମୁତାବକ ସଜାନ୍ତୁ ।";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "ବିତରଣ";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Firefoxରେ ସାଇନ ଇନ କରନ୍ତୁ";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "ବ୍ରାଉଜିଂ ଆରମ୍ଭ କରନ୍ତୁ";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "ଛୁଅନ୍ତୁ, କିଛି ସମୟ ଧରିରଖି Firefox ଆଇକନଟିକୁ ନିଜ ଡକକୁ ଘୁଞ୍ଚାଇଦେଲେ ସହଜରେ ବ୍ୟବହାର କରିପାରିବେ ।";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "ଟ୍ୟାବ ପଟିରେ ସବା ଆରମ୍ଭରେ ଥିବା Settings ବଟନ ରହିଛି ।";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Address ଓ Search ଘର ପାଖେ ଥିବା Show Tabs ବଟନଟି ଏବେ ଖୋଲାଥିବା ଟ୍ୟାବଗୁଡ଼ିକର ସଂଖ୍ୟା ଦେଖାଇଥାଏ ।";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "ସେଆର ପୃଷ୍ଠା ବ୍ୟବହାର କରି ଅନ୍ୟ ଆପରୁ Firefoxକୁ ଲିଙ୍କ ପଠାନ୍ତୁ ।";
+

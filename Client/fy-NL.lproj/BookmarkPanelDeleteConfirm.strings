@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "Binne jo wis dat jo dizze en de ynhâld derfan fuortsmite wolle?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "Annulearje";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "Fuortsmite";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "Dizze map is net leech.";
+

@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "Weet u zeker dat u deze en de inhoud ervan wilt verwijderen?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "Annuleren";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "Verwijderen";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "Deze map is niet leeg.";
+

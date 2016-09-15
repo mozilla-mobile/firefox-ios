@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "Sur oc'h e fell deoc'h dilemel ar teuliad hag e endalc'had?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "Nullañ";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "Dilemel";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "N'eo ket goulo an teuliad.";
+

@@ -1,0 +1,39 @@
+/* Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet. */
+"Allow Firefox to use my Photos" = "Sireg Firefox akken ad iseqdec tilawin inu";
+
+/* Pending feature; currently unused string! Accessibility label for back button to theme chooser */
+"Back to Themes" = "Uɣal ɣer isental";
+
+/* Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker */
+"Choose" = "Fren";
+
+/* Pending feature; currently unused string! Accessibility label for settings row to enter theme settings */
+"Choose Theme" = "Fren asentel";
+
+/* Pending feature; currently unused string! Accessibility label for themes subheader */
+"Default Themes" = "Isental imezwar";
+
+/* Pending feature; currently unused string! Accessibility label for photo viewer */
+"My Photos" = "Tiwlafin inu";
+
+/* Pending feature; currently unused string! Sub header for photo options in theme chooser */
+"Photos" = "Tiwlafin";
+
+/* Pending feature; currently unused string! Button to show preview of selected theme */
+"Preview" = "Taskant";
+
+/* Pending feature; currently unused string! Accessibility label for theme preview button */
+"Preview Theme" = "Taskant n usentel";
+
+/* Pending feature; currently unused string! Button to set selected theme as current theme */
+"Set" = "Sbadu";
+
+/* Pending feature; currently unused string! Accessibility label for set theme button */
+"Set Theme" = "Sbadu asentel";
+
+/* Pending feature; currently unused string! Settings row to enter theme settings */
+"Theme" = "Asentel";
+
+/* Pending feature; currently unused string! sub header for theme options in theme chooser */
+"Themes" = "Isental";
+

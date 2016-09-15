@@ -1,0 +1,16 @@
+/* The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android. */
+"Bookmarks Menu" = "Bókarmerkja valmynd";
+
+/* The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android. */
+"Bookmarks Toolbar" = "Bókarmerkja tækjaslá";
+
+/* The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android. */
+"Mobile Bookmarks" = "Ferða bókarmerki";
+
+/* The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android. */
+"Unsorted Bookmarks" = "Óröðuð bókarmerki";
+
+/* The default name for bookmark folders without titles.
+   The default name for bookmark nodes without titles. */
+"Untitled" = "Ónefnt";
+

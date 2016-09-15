@@ -1,0 +1,9 @@
+/* Go to link on clipboard */
+"TodayWidget.GoToCopiedLinkLabel" = "Kopyalanan bağlantıya git";
+
+/* New Private Tab button label */
+"TodayWidget.NewPrivateTabButtonLabel" = "Yeni gizli sekme";
+
+/* New Tab button label */
+"TodayWidget.NewTabButtonLabel" = "Yeni sekme";
+

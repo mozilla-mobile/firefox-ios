@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "మీరు నిశ్చయంగా వున్నారా?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "రద్దుచేయి";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "శోధనను క్లియర్ చేయి";
+
+/* Copy password text selection menu item */
+"Copy" = "కాపీ";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "తొలగించు";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "అన్ని ఎంపికలను తీసివేయి";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "శోధన మోడ్ కి ఎంటర్";
+
+/* Hide password text selection menu item */
+"Hide" = "దాచు";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "చివరి సవరణ %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "లాగిన్ లు";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "లాగిన్ లు శాశ్వతంగా తొలగించబడుతుంది.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "లాగిన్ లు కనెక్ట్ అయ్యున్న అన్ని పరికరాల నుండి తొలగించబడుతుంది.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "ఏ లాగిన్ లు దొరకలేదు";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "తెరచి & పూరించుము";
+
+/* Reveal password text selection menu item */
+"Reveal" = "బహిరంగపరచు";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "శోధన";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "శోధన ఇన్పుట్ ఫీల్డ్";
+
+/* Label for the button used to select all logins. */
+"Select All" = "అన్నిటిని ఎంపికచేయుము";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "పాస్వర్డ్";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "యూజర్‌పేరు";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "వెబ్‌సైట్";
+

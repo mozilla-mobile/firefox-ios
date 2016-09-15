@@ -1,0 +1,36 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Na 1 uur";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Na 1 minuut";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Na 5 minute";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Na 10 minute";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Na 15 minute";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Verander wagkode";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Voer wagkode in";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Voer wagkode in";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Onmiddellik";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Wagkode";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Vereis wagkode";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Stel wagkode";
+

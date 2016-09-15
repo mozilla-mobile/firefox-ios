@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Pieejamās ierīces:";
+
+/* Close button in top navigation bar */
+"Close" = "Aizvērt";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Lūdzu atveriet Firefox, dodieties uz Iestatījumiem un ieejiet lai turpinātu.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Nosūtīt";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Sūtīt cilni";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Jūs neesat iegājis savā Firefox Kontā.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Jūsu Firefox kontam nav pievienota neviena cita ierīce.";
+

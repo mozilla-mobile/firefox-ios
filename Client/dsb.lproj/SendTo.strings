@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "K dispoziciji stojece rědy:";
+
+/* Close button in top navigation bar */
+"Close" = "Zacyniś";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Pšosym wócyńśo Firefox, źiśo k nastajenjam a pśizjawśo se, aby pókšacował.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Pósłaś";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Rejtark pósłaś";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Njejsćo pla swójogo konta Firefox pśizjawjony.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Njejsu žedne druge rědy z toś tym kontom Firefox zwězane, kótarež by se dali synchronizěrowaś.";
+
