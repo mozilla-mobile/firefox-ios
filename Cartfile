@@ -1,13 +1,16 @@
-github "Alamofire/Alamofire"      	"2.0.2"
-github "mozilla/Deferred"           "2.0.1"           # Making Deferred extensible in swift 2.0
-github "swisspol/GCDWebServer"		"3.3.2"			     
-github "kif-framework/KIF"          "v3.3.2"
-github "mozilla/readability"        "master"
-github "rs/SDWebImage"              "3.7.4"           
-github "SnapKit/SnapKit"            "0.18.0"
-github "drmohundro/SWXMLHash"       "2.1.0"
-github "thebnich/XCGLogger"         "trycatch"
-github "adjust/ios_sdk"             "v4.10.1"
-github "AgileBits/onepassword-extension" "add-framework-support"
-github "fluffyemily/SwiftKeychainWrapper" "extension-compatibility"					# default to latest tag
-github "iziz/libPhoneNumber-iOS"    "0.8.11"
+github "Alamofire/Alamofire"                "3.5.0"
+github "sleroux/Deferred"                   "Swift2.3"
+github "SnapKit/SnapKit"                    "0.22.0"
+github "drmohundro/SWXMLHash"               "2.5.1"
+
+github "rs/SDWebImage"                      "3.7.4"
+github "swisspol/GCDWebServer"              "3.3.2"
+github "kif-framework/KIF"                  "v3.3.2"
+github "adjust/ios_sdk"                     "v4.10.1"
+github "AgileBits/onepassword-extension"    "add-framework-support"
+github "iziz/libPhoneNumber-iOS"            "0.8.11"
+
+github "mozilla/readability"                "master"
+
+github "jrendel/SwiftKeychainWrapper"       "Swift2.3"
+github "thebnich/XCGLogger"                 "trycatch"
