@@ -339,9 +339,11 @@ extension ActivityStreamPanel {
     }
 
     private func presentContextMenu(site: Site) {
+        let browserActions = BrowserActions(profile: profile)
         let contextMenu = BlurTableViewController()
         contextMenu.profile = profile
         contextMenu.site = site
+        contextMenu.browserActions = browserActions
         contextMenu.modalPresentationStyle = .OverCurrentContext
         contextMenu.modalTransitionStyle = .CrossDissolve
         self.presentViewController(contextMenu, animated: true, completion: nil)

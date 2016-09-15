@@ -5,14 +5,30 @@
 import Foundation
 import Storage
 
+import Photos
+import UIKit
+import WebKit
+import Shared
+import Storage
+import SnapKit
+import XCGLogger
+import Alamofire
+import Account
+import ReadingList
+import MobileCoreServices
+import WebImage
+
 class BlurTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var profile: Profile!
     var site: Site!
+    var ugh: Bool = false
+    var browserActions: BrowserActions!
     var tableView = UITableView()
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(BlurTableViewController.dismiss(_:)))
         tapRecognizer.numberOfTapsRequired = 1
+        tapRecognizer.cancelsTouchesInView = false
         return tapRecognizer
     }()
 
@@ -90,6 +106,26 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
         return 56
     }
 
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        switch indexPath.row {
+        case 1:
+            if !ugh {
+                browserActions.addBookmark(site)
+            } else {
+                browserActions.removeBookmark(site)
+            }
+
+//        case 2:
+////            browserActions
+//        case 3:
+////            browserActions
+//        case 4:
+//            browserActions
+        default:
+            return
+        }
+    }
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TwoLineCell", forIndexPath: indexPath)
         cell.preservesSuperviewLayoutMargins = false
@@ -114,8 +150,26 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let cell = tableView.dequeueReusableCellWithIdentifier("BlurTableViewCell", forIndexPath: indexPath) as! BlurTableViewCell
 
                 // if isBookmarked then do . . .
-                let string = NSLocalizedString("Bookmark", comment: "Context Menu Action for Activity Stream")
-                cell.configureCell(string, imageString: "action_bookmark")
+                isBookmarked(site)
+
+                let seconds = 0.05
+                let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+                let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+
+                dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+                    
+                    // here code perfomed with delay
+                    if self.ugh {
+                        let string = NSLocalizedString("Remove Bookmark", comment: "Context Menu Action for Activity Stream")
+                        cell.configureCell(string, imageString: "action_bookmark")
+                    } else {
+                        let string = NSLocalizedString("Bookmark", comment: "Context Menu Action for Activity Stream")
+                        cell.configureCell(string, imageString: "action_bookmark")
+                    }
+                    
+                })
+
+
                 return cell
             case 2:
                 let cell = tableView.dequeueReusableCellWithIdentifier("BlurTableViewCell", forIndexPath: indexPath) as! BlurTableViewCell
@@ -131,7 +185,7 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 return cell
             case 4:
                 let cell = tableView.dequeueReusableCellWithIdentifier("BlurTableViewCell", forIndexPath: indexPath) as! BlurTableViewCell
-                let string = NSLocalizedString("Delete", comment: "Context Menu Action for Activity Stream")
+                let string = NSLocalizedString("Delete from History", comment: "Context Menu Action for Activity Stream")
 
                 cell.configureCell(string, imageString: "action_delete")
                 return cell
@@ -150,16 +204,14 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
         imageView.layer.masksToBounds = true
     }
 
-//    func isBookmarked(site: Site) -> Bool {
-//        profile.bookmarks.modelFactory >>== { bookmark in
-//            $0.isBookmarked(site.url)
-//                .uponQueue(dispatch_get_main_queue()) {
-//                    guard let isBookmarked = $0.successValue else {
-//                        log.error("Error getting bookmark status: \($0.failureValue).")
-//                        return false
-//                    }
-//            }
-//        }
-//        return true
-//    }
+    func isBookmarked(site: Site) {
+        profile.bookmarks.modelFactory >>== {
+            $0.isBookmarked(site.url).uponQueue(dispatch_get_main_queue()) {
+                guard let isBookmarked = $0.successValue else {
+                    return
+                }
+                self.ugh = isBookmarked
+            }
+        }
+    }
 }
