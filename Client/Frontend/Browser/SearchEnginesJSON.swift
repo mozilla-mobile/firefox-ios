@@ -18,15 +18,18 @@ public class SearchEnginesJSON {
 
     public func visibleDefaultEngines(possibilities: [String], region: String) -> [String] {
         var engineNames: [JSON]? = nil
-        for possibility in possibilities {
-            if (json["locales"][possibility].asDictionary != nil) {
-                engineNames = json["locales"][possibility][region]["visibleDefaultEngines"].asArray
-                if (engineNames == nil) {
-                    engineNames = json["locales"][possibility]["default"]["visibleDefaultEngines"].asArray
+        for possibleLocale in possibilities {
+            if let regions = json["locales"][possibleLocale].asDictionary {
+                if regions[region] == nil {
+                    engineNames = regions["default"]!["visibleDefaultEngines"].asArray
+                    // We keep looping through just in case
+                    // another possible locale gets us more specific
+                } else {
+                    engineNames = regions[region]!["visibleDefaultEngines"].asArray
                 }
             }
         }
-        if (engineNames == nil) {
+        if engineNames == nil {
             engineNames = json["default"]["visibleDefaultEngines"].asArray
         }
         return jsonsToStrings(engineNames)!

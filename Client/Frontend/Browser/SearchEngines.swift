@@ -258,11 +258,11 @@ class SearchEngines {
         }
 
         let index = (pluginBasePath as NSString).stringByAppendingPathComponent("list.json")
-        let listFile = try? String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
-        let engineJSON = SearchEnginesJSON(listFile!)
+        let listFile = try! String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
+        let engineJSON = SearchEnginesJSON(listFile)
 
         let possibilities = possibilitiesForLanguageIdentifier(languageIdentifier)
-        let region = regionIdentifierForSearchEngines();
+        let region = regionIdentifierForSearchEngines()
         let engineNames = engineJSON.visibleDefaultEngines(possibilities, region: region)
         assert(engineNames.count > 0, "No search engines")
 
