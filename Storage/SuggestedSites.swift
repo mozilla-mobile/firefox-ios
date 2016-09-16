@@ -2,11 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import XCGLogger
 import UIKit
 import Shared
 
-private let log = XCGLogger.defaultInstance()
 
 public class SuggestedSite: Site {
     public let wordmark: Favicon
@@ -23,6 +21,10 @@ public class SuggestedSite: Site {
         self.wordmark = Favicon(url: data.imageUrl, date: NSDate(), type: .Icon)
         super.init(url: data.url, title: data.title, bookmarked: nil)
         self.icon = Favicon(url: data.faviconUrl, date: NSDate(), type: .Icon)
+    }
+
+    public var faviconImagePath: String? {
+        return wordmark.url.stringByReplacingOccurrencesOfString("asset://suggestedsites", withString: "as")
     }
 }
 
