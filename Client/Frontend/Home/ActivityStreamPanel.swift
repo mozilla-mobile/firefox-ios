@@ -253,7 +253,7 @@ extension ActivityStreamPanel {
         }
     }
 
-    private func reloadRecentHistory() {
+    func reloadRecentHistory() {
         self.profile.history.getSitesByLastVisit(ASPanelUX.historySize).uponQueue(dispatch_get_main_queue()) { result in
             self.history = result.successValue?.asArray() ?? self.history
             self.tableView.reloadData()
@@ -343,6 +343,7 @@ extension ActivityStreamPanel {
         let contextMenu = BlurTableViewController()
         contextMenu.profile = profile
         contextMenu.site = site
+        contextMenu.asp = self
         contextMenu.browserActions = browserActions
         contextMenu.modalPresentationStyle = .OverCurrentContext
         contextMenu.modalTransitionStyle = .CrossDissolve

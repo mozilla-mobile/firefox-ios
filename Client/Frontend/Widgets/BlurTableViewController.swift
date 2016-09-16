@@ -21,6 +21,7 @@ import WebImage
 class BlurTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var profile: Profile!
     var site: Site!
+    weak var asp: ActivityStreamPanel!
     var ugh: Bool = false
     var browserActions: BrowserActions!
     var tableView = UITableView()
@@ -49,16 +50,8 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.snp_makeConstraints { make in
             make.center.equalTo(self.view)
             make.width.equalTo(290)
-            make.height.equalTo(279)
+            make.height.equalTo(297)
         }
-
-        let shadowLayer = CALayer()
-        shadowLayer.shadowColor = UIColor.darkGrayColor().CGColor
-        shadowLayer.shadowPath = UIBezierPath(roundedRect: tableView.bounds, cornerRadius: tableView.layer.cornerRadius).CGPath
-        shadowLayer.shadowOffset = CGSize(width: 10, height: 10)
-        shadowLayer.shadowOpacity = 0.8
-        shadowLayer.shadowRadius = 2
-        view.layer.addSublayer(shadowLayer)
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -69,7 +62,7 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.layer.cornerRadius = 10
         tableView.accessibilityIdentifier = "SiteTable"
         tableView.registerClass(BlurTableViewCell.self, forCellReuseIdentifier: "BlurTableViewCell")
-        tableView.registerClass(TwoLineTableViewCell.self, forCellReuseIdentifier: "TwoLineCell")
+        tableView.registerClass(BlurTableViewHeaderCell.self, forCellReuseIdentifier: "BlurTableViewHeaderCell")
 
         if #available(iOS 9, *) {
             tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -77,6 +70,18 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
+
+        let shadowLayer = CALayer()
+        shadowLayer.backgroundColor = UIColor.blackColor().CGColor
+        shadowLayer.shadowColor = UIColor.darkGrayColor().CGColor
+        shadowLayer.shadowOffset = CGSizeMake(0, 3)
+        shadowLayer.shadowRadius = 5.0
+        shadowLayer.shadowOpacity = 0.8
+        shadowLayer.cornerRadius = 10
+        shadowLayer.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y, tableView.frame.size.width, tableView.frame.size.height)
+
+        view.layer.addSublayer(shadowLayer)
+        view.layer.addSublayer(tableView.layer)
     }
 
     func dismiss(gestureRecognizer: UIGestureRecognizer) {
@@ -103,7 +108,7 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 56
+        return indexPath.row == 0 ? 74 : 56
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -119,32 +124,24 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
 ////            browserActions
 //        case 3:
 ////            browserActions
-//        case 4:
-//            browserActions
+        case 4:
+            self.profile.history.removeHistoryForURL(site.url)
+            self.asp.reloadRecentHistory()
+            self.asp.tableView.reloadData()
         default:
             return
         }
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TwoLineCell", forIndexPath: indexPath)
-        cell.preservesSuperviewLayoutMargins = false
-        cell.separatorInset = UIEdgeInsetsZero
-        cell.layoutMargins = UIEdgeInsetsZero
 
         switch indexPath.row {
             case 0:
-                cell.textLabel?.text = site.title
-                cell.detailTextLabel?.text = site.url
-                if let icon = site.icon {
-                    let url = icon.url
-                    cell.imageView?.layer.borderWidth = 0
-                    self.setImageWithURL(cell.imageView!, url: NSURL(string: url)!)
-                } else if let url = NSURL(string: site.url) {
-                    cell.imageView?.image = FaviconFetcher.getDefaultFavicon(url)
-                    cell.imageView!.layer.borderWidth = SimpleHighlightCellUX.BorderWidth
-                }
-                
+                let cell = tableView.dequeueReusableCellWithIdentifier("BlurTableViewHeaderCell", forIndexPath: indexPath) as! BlurTableViewHeaderCell
+                cell.preservesSuperviewLayoutMargins = false
+                cell.separatorInset = UIEdgeInsetsZero
+                cell.layoutMargins = UIEdgeInsetsZero
+                cell.configureWithSite(site)
                 return cell
             case 1:
                 let cell = tableView.dequeueReusableCellWithIdentifier("BlurTableViewCell", forIndexPath: indexPath) as! BlurTableViewCell
@@ -190,7 +187,7 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 cell.configureCell(string, imageString: "action_delete")
                 return cell
             default:
-                return cell
+                return tableView.dequeueReusableCellWithIdentifier("BlurTableViewCell")!
         }
     }
 
@@ -213,5 +210,57 @@ class BlurTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 self.ugh = isBookmarked
             }
         }
+    }
+}
+
+class BlurTableViewHeaderCell: SimpleHighlightCell {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.mainScreen().scale
+
+        isAccessibilityElement = true
+
+        descriptionLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 1
+
+        contentView.addSubview(siteImageView)
+        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(titleLabel)
+
+        siteImageView.snp_remakeConstraints { make in
+            make.centerY.equalTo(contentView)
+            make.leading.equalTo(contentView).offset(12)
+            make.size.equalTo(SimpleHighlightCellUX.SiteImageViewSize)
+        }
+
+        titleLabel.snp_remakeConstraints { make in
+            make.leading.equalTo(siteImageView.snp_trailing).offset(SimpleHighlightCellUX.CellTopBottomOffset)
+            make.trailing.equalTo(contentView).inset(12)
+//            make.top.equalTo(siteImageView).offset(SimpleHighlightCellUX.CellTopBottomOffset)
+        }
+
+        descriptionLabel.snp_remakeConstraints { make in
+            make.leading.equalTo(titleLabel)
+            make.bottom.equalTo(siteImageView).inset(10)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func configureWithSite(site: Site) {
+        if let icon = site.icon {
+            let url = icon.url
+            self.siteImageView.layer.borderWidth = 0
+            self.setImageWithURL(NSURL(string: url)!)
+        } else if let url = NSURL(string: site.url) {
+            self.siteImage = FaviconFetcher.getDefaultFavicon(url)
+            self.siteImageView.layer.borderWidth = SimpleHighlightCellUX.BorderWidth
+        }
+        self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
+        self.descriptionLabel.text = site.tileURL.baseDomain()
     }
 }
