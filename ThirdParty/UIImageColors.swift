@@ -91,7 +91,7 @@ extension UIImage {
         self.drawInRect(CGRectMake(0, 0, newSize.width, newSize.height))
         let result = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return result
+        return result!
     }
 
     public func getColors(completionHandler: (UIImageColors) -> Void) {
@@ -105,7 +105,7 @@ extension UIImage {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             var result = UIImageColors()
 
-            let cgImage = self.resize(scaleDownSize).CGImage
+            let cgImage = self.resize(scaleDownSize).CGImage!
             let width = CGImageGetWidth(cgImage)
             let height = CGImageGetHeight(cgImage)
 
@@ -129,7 +129,7 @@ extension UIImage {
             let colorSpace = CGColorSpaceCreateDeviceRGB()
             let raw = malloc(bytesPerRow * height)
             let bitmapInfo = CGImageAlphaInfo.PremultipliedFirst.rawValue
-            let ctx = CGBitmapContextCreate(raw, width, height, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo)
+            let ctx = CGBitmapContextCreate(raw, width, height, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo)!
             CGContextClearRect(ctx, CGRectMake(0, 0, CGFloat(width), CGFloat(height)))
             CGContextDrawImage(ctx, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), cgImage)
             let data = UnsafePointer<UInt8>(CGBitmapContextGetData(ctx))

@@ -61,7 +61,7 @@ class FaviconManager: TabHelper {
         let options = tab.isPrivate ?
             [SDWebImageOptions.LowPriority, SDWebImageOptions.CacheMemoryOnly] : [SDWebImageOptions.LowPriority]
         let url = currentURL.absoluteString
-        let site = Site(url: url, title: "")
+        let site = Site(url: url!, title: "")
         var fetch: SDWebImageOperation?
         fetch = manager.downloadImageWithURL(iconUrl,
                                      options: SDWebImageOptions(options),
@@ -71,7 +71,7 @@ class FaviconManager: TabHelper {
                                         }
                                      },
                                      completed: { (img, err, cacheType, success, url) -> Void in
-                                        let fav = Favicon(url: url.absoluteString,
+                                        let fav = Favicon(url: url.absoluteString!,
                                             date: NSDate(),
                                             type: icon.type)
                                         

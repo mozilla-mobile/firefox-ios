@@ -233,7 +233,7 @@ class TabLocationView: UIView {
         } else {
             // If we're unable to highlight the domain, just use the URL as is.
             if let host = url?.host {
-                urlTextField.text = url?.absoluteString.stringByReplacingOccurrencesOfString(host, withString: host.asciiHostToUTF8())
+                urlTextField.text = url?.absoluteString?.stringByReplacingOccurrencesOfString(host, withString: host.asciiHostToUTF8())
             } else {
                 urlTextField.text = url?.absoluteString
             }

@@ -572,13 +572,12 @@ class TabTrayController: UIViewController {
         let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
 
         let fromView: UIView
-        if privateTabsAreEmpty() {
-            fromView = emptyPrivateTabsView
-        } else {
-            let snapshot = collectionView.snapshotViewAfterScreenUpdates(false)
+        if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotViewAfterScreenUpdates(false) {
             snapshot.frame = collectionView.frame
             view.insertSubview(snapshot, aboveSubview: collectionView)
             fromView = snapshot
+        } else {
+            fromView = emptyPrivateTabsView
         }
 
         privateMode = !privateMode
@@ -593,17 +592,16 @@ class TabTrayController: UIViewController {
         collectionView.layoutSubviews()
 
         let toView: UIView
-        if privateTabsAreEmpty() {
-            emptyPrivateTabsView.hidden = false
-            toView = emptyPrivateTabsView
-        } else {
+        if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(!exitingPrivateMode) {
             emptyPrivateTabsView.hidden = true
             //when exiting private mode don't screenshot the collectionview (causes the UI to hang)
-            let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(!exitingPrivateMode)
             newSnapshot.frame = collectionView.frame
             view.insertSubview(newSnapshot, aboveSubview: fromView)
             collectionView.alpha = 0
             toView = newSnapshot
+        } else {
+            emptyPrivateTabsView.hidden = false
+            toView = emptyPrivateTabsView
         }
         toView.alpha = 0
         toView.transform = scaleDownTransform

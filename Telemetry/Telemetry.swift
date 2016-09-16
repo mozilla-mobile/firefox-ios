@@ -50,7 +50,7 @@ public class Telemetry {
 
         let path = "/submit/telemetry/\(docID)/\(docType)/\(AppName)/\(appVersion)/\(channel)/\(buildID)"
         let url = ServerURL.URLByAppendingPathComponent(path)
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(URL: url!)
 
         log.debug("Ping URL: \(url)")
         log.debug("Ping payload: \(payload)")
