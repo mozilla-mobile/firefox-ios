@@ -61,7 +61,8 @@ class TopSiteItemCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        isAccessibilityElement = true
+        accessibilityIdentifier = "TopSite"
         contentView.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
         contentView.layer.masksToBounds = true
 
@@ -137,6 +138,7 @@ class TopSiteItemCell: UICollectionViewCell {
 
     func configureWithTopSiteItem(site: TopSiteItem) {
         titleLabel.text = site.urlTitle
+        accessibilityValue = site.urlTitle
         guard let favURL = site.faviconURL else {
             contentView.backgroundColor = UIColor.lightGrayColor()
             imageView.image = FaviconFetcher.getDefaultFavicon(site.siteURL)
@@ -168,6 +170,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         collectionView.registerClass(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
         collectionView.backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isAccessibilityElement = false
         collectionView.pagingEnabled = true
         return collectionView
     }()
@@ -204,6 +207,8 @@ class ASHorizontalScrollCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        isAccessibilityElement = false
+        accessibilityIdentifier = "TopSitesCell"
         backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
         contentView.addSubview(collectionView)
         contentView.addSubview(pageControl)
