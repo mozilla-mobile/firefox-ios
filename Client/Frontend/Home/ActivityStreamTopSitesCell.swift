@@ -4,7 +4,7 @@ import WebImage
 import Storage
 
 struct TopSiteCellUX {
-    static let TitleInsetPercent: CGFloat = 0.66
+    static let TitleHeight: CGFloat = 32
     static let TitleBackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.7)
     static let TitleTextColor = UIColor.blackColor()
     static let TitleFont = DynamicFontHelper.defaultHelper.DefaultSmallFont
@@ -13,11 +13,13 @@ struct TopSiteCellUX {
     static let TitleOffset: CGFloat = 5
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let IconSize = CGSize(width: 32, height: 32)
+    static let BorderColor = UIColor(white: 0, alpha: 0.1)
+    static let BorderWidth: CGFloat = 0.5
 }
 
 /*
  *  The TopSite cell that appears in the ASHorizontalScrollView.
-*/
+ */
 class TopSiteItemCell: UICollectionViewCell {
 
     lazy private var imageView: UIImageView = {
@@ -43,6 +45,12 @@ class TopSiteItemCell: UICollectionViewCell {
         return selectedOverlay
     }()
 
+    lazy var titleBorder: CALayer = {
+        let border = CALayer()
+        border.backgroundColor = TopSiteCellUX.BorderColor.CGColor
+        return border
+    }()
+
     override var selected: Bool {
         didSet {
             self.selectedOverlay.hidden = !selected
@@ -56,6 +64,9 @@ class TopSiteItemCell: UICollectionViewCell {
         contentView.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
         contentView.layer.masksToBounds = true
 
+        contentView.layer.borderWidth = TopSiteCellUX.BorderWidth
+        contentView.layer.borderColor = TopSiteCellUX.BorderColor.CGColor
+
         let titleWrapper = UIView()
         titleWrapper.backgroundColor = TopSiteCellUX.TitleBackgroundColor
         titleWrapper.layer.masksToBounds = true
@@ -65,18 +76,17 @@ class TopSiteItemCell: UICollectionViewCell {
         contentView.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
-        let titleHeight = Int(frame.height - (frame.height * TopSiteCellUX.TitleInsetPercent))
         titleLabel.snp_makeConstraints { make in
             make.left.equalTo(self).offset(TopSiteCellUX.TitleOffset)
             make.right.equalTo(self).offset(-TopSiteCellUX.TitleOffset)
-            make.height.equalTo(titleHeight)
+            make.height.equalTo(TopSiteCellUX.TitleHeight)
             make.bottom.equalTo(self)
         }
 
         imageView.snp_makeConstraints { make in
             make.size.equalTo(TopSiteCellUX.IconSize)
             // Add an offset to the image to make it appear centered with the titleLabel
-            make.center.equalTo(self.snp_center).offset(UIEdgeInsets(top: -CGFloat(titleHeight)/2, left: 0, bottom: 0, right: 0))
+            make.center.equalTo(self.snp_center).offset(UIEdgeInsets(top: -TopSiteCellUX.TitleHeight/2, left: 0, bottom: 0, right: 0))
         }
 
         selectedOverlay.snp_makeConstraints { make in
@@ -85,17 +95,18 @@ class TopSiteItemCell: UICollectionViewCell {
 
         titleWrapper.snp_makeConstraints { make in
             make.left.right.bottom.equalTo(self)
-            make.height.equalTo(titleHeight)
+            make.height.equalTo(TopSiteCellUX.TitleHeight)
         }
+
+        // The titleBorder must appear ABOVE the titleLabel. Meaning it must be 0.5 pixels above of the titleWrapper frame.
+        titleBorder.frame = CGRectMake(0, CGRectGetHeight(self.frame) - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, CGRectGetWidth(self.frame), TopSiteCellUX.BorderWidth)
+        self.contentView.layer.addSublayer(titleBorder)
 
     }
 
-    override func updateConstraints() {
-        let height = Int(frame.height - (frame.height * TopSiteCellUX.TitleInsetPercent))
-        titleLabel.snp_updateConstraints { make in
-            make.height.equalTo(height)
-        }
-        super.updateConstraints()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        titleBorder.frame = CGRectMake(0, frame.height - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, frame.width, TopSiteCellUX.BorderWidth)
     }
 
     required init?(coder aDecoder: NSCoder) {
