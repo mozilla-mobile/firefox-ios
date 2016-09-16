@@ -291,12 +291,12 @@ extension ActivityStreamPanel {
     }
 
     private func hideURLFromTopSites(siteURL: NSURL) {
-        guard let host = siteURL.normalizedHost() else {
+        guard let host = siteURL.normalizedHost(), let url = siteURL.absoluteString else {
             return
         }
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.
-        if defaultTopSites().filter({$0.url != siteURL.absoluteString}).isEmpty == false {
-            deleteTileForSuggestedSite(siteURL.absoluteString)
+        if defaultTopSites().filter({$0.url != url}).isEmpty == false {
+            deleteTileForSuggestedSite(url)
         }
         profile.history.removeHostFromTopSites(host).uponQueue(dispatch_get_main_queue()) { result in
             guard result.isSuccess else { return }
