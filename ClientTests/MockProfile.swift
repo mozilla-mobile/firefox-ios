@@ -179,10 +179,6 @@ public class MockProfile: Profile {
         self.syncManager.onRemovedAccount(old)
     }
 
-    func flushAccount() {
-
-    }
-
     func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         return deferMaybe([])
     }
