@@ -117,7 +117,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             }
             var menuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
-            if let errorPageUrl = tabState.url where ErrorPageHelper.isErrorPageURL(errorPageUrl) {
+            if let url = tabState.url where !url.isWebPage(includeDataURIs: true) || url.isLocal {
                 menuItem.isDisabled = true
             }
             menuItems.append(menuItem)
