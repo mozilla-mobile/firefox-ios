@@ -275,7 +275,11 @@ class SearchEngines {
             if !NSFileManager.defaultManager().fileExistsAtPath(fullPath) {
                 fullPath = fallbackDirectory.stringByAppendingPathComponent("\(engineName).xml")
             }
-            assert(NSFileManager.defaultManager().fileExistsAtPath(fullPath), "\(fullPath) exists")
+            // If a search engine doesn't exist, just ignore it. We might have entries in
+            // list.json where the files don't exist yet.
+            if (!NSFileManager.defaultManager().fileExistsAtPath(fullPath)) {
+                continue
+            }
 
             let engine = parser.parse(fullPath, engineID: engineName)
             assert(engine != nil, "Engine at \(fullPath) successfully parsed")

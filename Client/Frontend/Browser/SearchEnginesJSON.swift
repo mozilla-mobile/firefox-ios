@@ -22,13 +22,10 @@ public class SearchEnginesJSON {
             if let regions = json["locales"][possibleLocale].asDictionary {
                 if regions[region] == nil {
                     engineNames = regions["default"]!["visibleDefaultEngines"].asArray
-                    // We keep looping through just in case
-                    // another possible locale gets us more specific
                 } else {
                     engineNames = regions[region]!["visibleDefaultEngines"].asArray
-                    // This match was very specific, so we should always use it
-                    break;
                 }
+                break;
             }
         }
         if engineNames == nil {
