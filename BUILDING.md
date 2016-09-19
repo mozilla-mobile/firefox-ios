@@ -51,21 +51,24 @@ Run on the Simulator
 * Open `Client.xcodeproj` and make sure you have the *Fennec* scheme and a simulated device selected. The app should run on any simulator. We just have not tested very well on the *Resizable iPad* and *Resizable iPhone* simulators.
 * Select *Product -> Run* and the application should build and run on the selected simulator.
 
-Run on a Device with Xcode 7 and a Free Developer Account
+Run on a Device with Xcode 7/8 and a Free Developer Account
 ---------------
 
-> Only follow these instructions if you are using the new free personal developer accounts that Apple enabled with Xcode 7.
+> Only follow these instructions if you are using the new free personal developer accounts that Apple enabled with Xcode 7/8.
 
 Since the bundle identifier we use for Firefox is tied to our developer account, you'll need to generate your own identifier and update the existing configuration.
 
 1. Open Client/Configuration/Fennec.xcconfig
-2. Change MOZ_BUNDLE_ID to your own bundle identifier.
-3. Navigate to each of the application targets (Client/SendTo/ShareTo/ViewLater) and for each one:
+2. Change MOZ_BUNDLE_ID to your own bundle identifier. Just think of something unique: e.g., com.your_github_id.Fennec
+3. Open the project editor in Xcode.
+4. Xcode 8 only: For the 'Client' target, in the 'Capabilities' section, turn off the 'Wallet' capability. Cancel the prompts that appear. Make sure the change appears in the file 'Client.xcodeproj/project.pbxproj'. This step is necessary before the next step because, Xcode 8 seems to be not listing the 'Wallet' capability the moment the personal development account is selected in the next step. Hence, it wouldn't be possible to disable the capability after making that change.
+5. Navigate to each of the application targets (Client/SendTo/ShareTo/ViewLater) and for each one:
   1. select your personal development account
   2. remove the code signing entitlements (Do this by disabling all the capabilities from the "Capabilities" section)
 
 If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 
+**Xcode 8 handles the signing process automatically, so this fix applies only for Xcode 7:**
 Now when you run the app for the first time on your device, Xcode will tell you that it does not have a provisioning profile for the four application components and it will specifically mention a bundle identifier that contains your unique reverse domain.
 
 For each component it complains about, select *Fix This* to let Xcode resolve this. You may have to go through this process a couple of times. It is buggy. But then the app should properly build and run.
