@@ -135,6 +135,7 @@ class TopSiteItemCell: UICollectionViewCell {
 
     func configureWithTopSiteItem(site: Site) {
         titleLabel.text = site.tileURL.extractDomainName()
+        accessibilityLabel = titleLabel.text
         if let suggestedSite = site as? SuggestedSite {
             let img = UIImage(named: suggestedSite.faviconImagePath!)
             imageView.image = img
@@ -184,7 +185,11 @@ class ASHorizontalScrollCell: UITableViewCell {
         let pageControl = FilledPageControl()
         pageControl.tintColor = UIColor.grayColor()
         pageControl.indicatorRadius = ASHorizontalScrollCellUX.PageControlRadius
-        pageControl.userInteractionEnabled = false
+        pageControl.userInteractionEnabled = true
+        pageControl.isAccessibilityElement = true
+        pageControl.accessibilityIdentifier = "pageControl"
+        pageControl.accessibilityLabel = Strings.ASPageControlButton
+        pageControl.accessibilityTraits = UIAccessibilityTraitButton
         return pageControl
     }()
 
@@ -193,6 +198,12 @@ class ASHorizontalScrollCell: UITableViewCell {
         press.minimumPressDuration = 0.5
         press.delegate = self
         press.delaysTouchesBegan = true
+        return press
+    }()
+
+    lazy private var pageControlPress: UITapGestureRecognizer = {
+        let press = UITapGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handlePageTap(_:)))
+        press.delegate = self
         return press
     }()
 
@@ -219,6 +230,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         contentView.addSubview(pageControl)
         self.selectionStyle = UITableViewCellSelectionStyle.None
         collectionView.addGestureRecognizer(self.longPress)
+        pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp_makeConstraints { make in
             make.edges.equalTo(contentView).offset(UIEdgeInsets(top: 0, left: 0, bottom: ASHorizontalScrollCellUX.PageControlOffset, right: 0))
@@ -241,6 +253,20 @@ class ASHorizontalScrollCell: UITableViewCell {
 
     func currentPageChanged(currentPage: CGFloat) {
         pageControl.progress = currentPage
+    }
+
+    func handlePageTap(gesture: UITapGestureRecognizer) {
+        guard pageControl.pageCount > 1 else {
+            return
+        }
+
+        if pageControl.pageCount > pageControl.currentPage + 1 {
+            pageControl.progress = CGFloat(pageControl.currentPage + 1)
+        } else {
+            pageControl.progress = CGFloat(pageControl.currentPage - 1)
+        }
+        let swipeCoordinate = CGFloat(pageControl.currentPage) * self.collectionView.frame.size.width
+        self.collectionView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
     }
 
     func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
@@ -459,10 +485,10 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
         let alertController = UIAlertController(title: contentItem.url, message: nil, preferredStyle: .ActionSheet)
 
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Strings.ASRemoveButton, style: .Cancel, handler: nil)
         alertController.addAction(cancelAction)
 
-        let deleteAction = UIAlertAction(title: NSLocalizedString("Remove", comment: "Label for Remove button"), style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
+        let deleteAction = UIAlertAction(title: Strings.ASCancelButton, style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
             self.collectionView(collectionView, deleteItemAtIndexPath: indexPath)
         })
         alertController.addAction(deleteAction)
