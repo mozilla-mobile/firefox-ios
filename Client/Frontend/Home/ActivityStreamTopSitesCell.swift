@@ -123,7 +123,7 @@ class TopSiteItemCell: UICollectionViewCell {
     private func setImageWithURL(url: NSURL) {
         imageView.sd_setImageWithURL(url) { [unowned self] (img, err, type, url) -> Void in
             guard let img = img else {
-                self.contentView.backgroundColor = UIColor.lightGrayColor()
+                self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(url)
                 self.imageView.image = FaviconFetcher.getDefaultFavicon(url)
                 return
             }
@@ -143,8 +143,9 @@ class TopSiteItemCell: UICollectionViewCell {
             contentView.backgroundColor = suggestedSite.backgroundColor.isBlackOrWhite ? UIColor.whiteColor() : suggestedSite.backgroundColor
         } else {
             guard let url = site.icon?.url, favURL = NSURL(string:url) else {
-                contentView.backgroundColor = UIColor.lightGrayColor()
-                imageView.image = FaviconFetcher.getDefaultFavicon(site.tileURL)
+                let siteURL = NSURL(string: site.url)!
+                self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(siteURL)
+                self.imageView.image = FaviconFetcher.getDefaultFavicon(siteURL)
                 return
             }
             setImageWithURL(favURL)
