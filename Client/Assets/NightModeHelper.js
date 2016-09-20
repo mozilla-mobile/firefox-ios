@@ -17,7 +17,7 @@
   var className = "__firefox__NightMode";
 
   function initializeStyleSheet () {
-    var nightCSS = ":not(body){color: #C8C8C8 !important; background-color:transparent !important;}body{-webkit-filter:brightness(.5) !important; background-color:#202020 !important;}";
+    var nightCSS = 'html{-webkit-filter:brightness(50%) contrast(200%) !important;}';
     var newCss = document.getElementById(className);
     if (!newCss) {
       var cssStyle = document.createElement("style");
