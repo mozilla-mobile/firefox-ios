@@ -33,6 +33,10 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     private let topSitesManager = ASHorizontalScrollCellManager()
 
     var topSites: [Site] = []
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
+    }()
+
     var history: [Site] = []
 
     init(profile: Profile) {
@@ -59,6 +63,13 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if #available(iOS 9.0, *) {
+            if self.traitCollection.forceTouchCapability != .Available {
+                self.view.addGestureRecognizer(longPressRecognizer)
+            }
+            self.view.addGestureRecognizer(longPressRecognizer)
+        }
 
         tableView.registerClass(SimpleHighlightCell.self, forCellReuseIdentifier: "HistoryCell")
         tableView.registerClass(ASHorizontalScrollCell.self, forCellReuseIdentifier: "TopSiteCell")
@@ -242,7 +253,7 @@ extension ActivityStreamPanel {
         }
     }
 
-    private func reloadRecentHistory() {
+    func reloadRecentHistory() {
         self.profile.history.getSitesByLastVisit(ASPanelUX.historySize).uponQueue(dispatch_get_main_queue()) { result in
             self.history = result.successValue?.asArray() ?? self.history
             self.tableView.reloadData()
@@ -314,6 +325,29 @@ extension ActivityStreamPanel {
         let suggested = SuggestedSites.asArray()
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.indexOf($0.url) == .None})
+    }
+
+    func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        if longPressGestureRecognizer.state == UIGestureRecognizerState.Began {
+            let touchPoint = longPressGestureRecognizer.locationInView(self.view)
+            if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
+                if indexPath.section == 1 {
+                    presentContextMenu(history[indexPath.row])
+                }
+            }
+        }
+    }
+
+    private func presentContextMenu(site: Site) {
+        let browserActions = BrowserActions(profile: profile)
+        let contextMenu = BlurTableViewController()
+        contextMenu.profile = profile
+        contextMenu.site = site
+        contextMenu.asp = self
+        contextMenu.browserActions = browserActions
+        contextMenu.modalPresentationStyle = .OverCurrentContext
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 }
 
