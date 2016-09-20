@@ -134,8 +134,8 @@ private func titleForJavaScriptPanelInitiatedByFrame(frame: WKFrameInfo) -> Stri
             title += ":\(frame.securityOrigin.port)"
         }
     } else {
-        if let url = frame.request.URL {
-            title = "\(url.scheme)://\(url.hostPort))"
+        if let url = frame.request.URL, scheme = url.scheme {
+            title = "\(scheme)://\(url.hostPort))"
         }
     }
     return title
