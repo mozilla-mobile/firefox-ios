@@ -142,8 +142,8 @@ class TopSiteItemCell: UICollectionViewCell {
             // Once we remove the old TopSitesPanel we can change the values of amazon/wikipedia to be white instead of black.
             contentView.backgroundColor = suggestedSite.backgroundColor.isBlackOrWhite ? UIColor.whiteColor() : suggestedSite.backgroundColor
         } else {
-            guard let url = site.icon?.url, favURL = NSURL(string:url) else {
-                let siteURL = NSURL(string: site.url)!
+            guard let url = site.icon?.url, favURL = url.asURL else {
+                let siteURL = site.url.asURL!
                 self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(siteURL)
                 self.imageView.image = FaviconFetcher.getDefaultFavicon(siteURL)
                 return
@@ -442,7 +442,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let contentItem = content[indexPath.row]
-        guard let url = NSURL(string: contentItem.url) else {
+        guard let url = contentItem.url.asURL else {
             return
         }
         urlPressedHandler?(url)
