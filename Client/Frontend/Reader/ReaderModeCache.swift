@@ -123,7 +123,7 @@ class DiskReaderModeCache: ReaderModeCache {
         if !paths.isEmpty, let hashedPath = hashedPathForURL(url) {
             let cacheDirectoryURL = NSURL(fileURLWithPath: NSString.pathWithComponents([paths[0], "ReaderView", hashedPath]))
             if let cacheDirectoryPath = cacheDirectoryURL.path,
-                   contentFilePath = cacheDirectoryURL.URLByAppendingPathComponent("content.json").path {
+                   contentFilePath = cacheDirectoryURL.URLByAppendingPathComponent("content.json")!.path {
                 return (cacheDirectoryPath, contentFilePath)
             }
         }
@@ -138,7 +138,7 @@ class DiskReaderModeCache: ReaderModeCache {
     }
 
     private func hashForURL(url: NSURL) -> NSString? {
-        guard let data = url.absoluteString.dataUsingEncoding(NSUTF8StringEncoding) else { return nil }
+        guard let data = url.absoluteString!.dataUsingEncoding(NSUTF8StringEncoding) else { return nil }
 
         return data.sha1.hexEncodedString
     }

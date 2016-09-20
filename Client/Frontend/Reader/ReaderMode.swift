@@ -257,7 +257,10 @@ class ReaderMode: TabHelper {
 
     private func handleReaderModeStateChange(state: ReaderModeState) {
         self.state = state
-        delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab!)
+        guard let tab = tab else {
+            return
+        }
+        delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
@@ -282,7 +285,7 @@ class ReaderMode: TabHelper {
     var style: ReaderModeStyle = DefaultReaderModeStyle {
         didSet {
             if state == ReaderModeState.Active {
-                tab!.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: {
+                tab?.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: {
                     (object, error) -> Void in
                     return
                 })

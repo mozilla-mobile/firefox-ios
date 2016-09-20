@@ -107,7 +107,7 @@ class ReaderModeBarView: UIView {
 
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
-        let context = UIGraphicsGetCurrentContext()
+        guard let context = UIGraphicsGetCurrentContext() else { return }
         CGContextSetLineWidth(context, 0.5)
         CGContextSetRGBStrokeColor(context, 0.1, 0.1, 0.1, 1.0)
         CGContextSetStrokeColorWithColor(context, UIColor.grayColor().CGColor)

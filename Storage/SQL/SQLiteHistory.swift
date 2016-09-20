@@ -35,7 +35,8 @@ func failOrSucceed(err: NSError?, op: String) -> Success {
 private var ignoredSchemes = ["about"]
 
 public func isIgnoredURL(url: NSURL) -> Bool {
-    let scheme = url.scheme
+    guard let scheme = url.scheme else { return false }
+
     if let _ = ignoredSchemes.indexOf(scheme) {
         return true
     }
@@ -124,10 +125,14 @@ private let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frece
 extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(site: Site) -> Success {
         if let host = site.url.asURL?.normalizedHost() {
-            return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
-                >>> { return self.refreshTopSitesCache() }
+            return self.removeHostFromTopSites(host)
         }
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
+    }
+
+    public func removeHostFromTopSites(host: String) -> Success {
+        return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
+            >>> { return self.refreshTopSitesCache() }
     }
 
     public func removeHistoryForURL(url: String) -> Success {

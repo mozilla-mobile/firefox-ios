@@ -289,7 +289,7 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
                 return nil
         }
 
-        let login = Login(hostname: getPasswordOrigin(url.absoluteString)!, username: username, password: password)
+        let login = Login(hostname: getPasswordOrigin(url.absoluteString!)!, username: username, password: password)
 
         if let formSubmit = script["formSubmitURL"] as? String {
             login.formSubmitURL = formSubmit
@@ -308,7 +308,7 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
 
     private class func getPasswordOrigin(uriString: String, allowJS: Bool = false) -> String? {
         var realm: String? = nil
-        if let uri = NSURL(string: uriString) where !uri.scheme.isEmpty {
+        if let uri = NSURL(string: uriString) where !(uri.scheme?.isEmpty ?? true) {
             if allowJS && uri.scheme == "javascript" {
                 return "javascript:"
             }
@@ -598,8 +598,8 @@ public protocol SyncableLogins: AccountRemovalDelegate {
     /**
      * Chains through the provided timestamp.
      */
-    func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
-    func markAsDeleted(guids: [GUID]) -> Success
+    func markAsSynchronized<T: CollectionType where T.Generator.Element == GUID>(_: T, modified: Timestamp) -> Deferred<Maybe<Timestamp>>
+    func markAsDeleted<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success
 
     /**
      * For inspecting whether we're an active participant in login sync.

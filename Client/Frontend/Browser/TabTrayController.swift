@@ -572,13 +572,12 @@ class TabTrayController: UIViewController {
         let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
 
         let fromView: UIView
-        if privateTabsAreEmpty() {
-            fromView = emptyPrivateTabsView
-        } else {
-            let snapshot = collectionView.snapshotViewAfterScreenUpdates(false)
+        if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotViewAfterScreenUpdates(false) {
             snapshot.frame = collectionView.frame
             view.insertSubview(snapshot, aboveSubview: collectionView)
             fromView = snapshot
+        } else {
+            fromView = emptyPrivateTabsView
         }
 
         privateMode = !privateMode
@@ -593,17 +592,16 @@ class TabTrayController: UIViewController {
         collectionView.layoutSubviews()
 
         let toView: UIView
-        if privateTabsAreEmpty() {
-            emptyPrivateTabsView.hidden = false
-            toView = emptyPrivateTabsView
-        } else {
+        if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(!exitingPrivateMode) {
             emptyPrivateTabsView.hidden = true
             //when exiting private mode don't screenshot the collectionview (causes the UI to hang)
-            let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(!exitingPrivateMode)
             newSnapshot.frame = collectionView.frame
             view.insertSubview(newSnapshot, aboveSubview: fromView)
             collectionView.alpha = 0
             toView = newSnapshot
+        } else {
+            emptyPrivateTabsView.hidden = false
+            toView = emptyPrivateTabsView
         }
         toView.alpha = 0
         toView.transform = scaleDownTransform
@@ -1245,13 +1243,7 @@ class TrayToolbar: UIView {
         return button
     }()
 
-    lazy var maskButton: ToggleButton = {
-        let button = ToggleButton()
-        button.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
-        button.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
-        return button
-    }()
-
+    lazy var maskButton: PrivateModeButton = PrivateModeButton()
     private let sideOffset: CGFloat = 32
 
     private override init(frame: CGRect) {
@@ -1302,16 +1294,7 @@ class TrayToolbar: UIView {
         } else {
             settingsButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
         }
-        maskButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
         backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : .whiteColor()
-        updateMaskButtonState(isPrivate: isPrivate)
-    }
-
-    private func updateMaskButtonState(isPrivate isPrivate: Bool) {
-        let maskImage = UIImage(named: "smallPrivateMask")?.imageWithRenderingMode(.AlwaysTemplate)
-        maskButton.imageView?.tintColor = isPrivate ? .whiteColor() : UIConstants.PrivateModeToolbarTintColor
-        maskButton.setImage(maskImage, forState: .Normal)
-        maskButton.selected = isPrivate
-        maskButton.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+        maskButton.styleForMode(privateMode: isPrivate)
     }
 }

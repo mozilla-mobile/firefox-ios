@@ -107,7 +107,7 @@ class BackForwardTableViewCell: UITableViewCell {
     
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
-        let context = UIGraphicsGetCurrentContext()
+        guard let context = UIGraphicsGetCurrentContext() else { return }
         
         var startPoint = CGPointMake(rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
                                      rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))

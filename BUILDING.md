@@ -62,7 +62,7 @@ Since the bundle identifier we use for Firefox is tied to our developer account,
 2. Change MOZ_BUNDLE_ID to your own bundle identifier.
 3. Navigate to each of the application targets (Client/SendTo/ShareTo/ViewLater) and for each one:
   1. select your personal development account
-  2. remove the code signing entitlements
+  2. remove the code signing entitlements (Do this by disabling all the capabilities from the "Capabilities" section)
 
 If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 

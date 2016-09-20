@@ -75,7 +75,7 @@ extension MenuPresentationAnimator {
 
     private func animateWithMenu(menuController: MenuViewController, baseController: UIViewController, viewsToAnimateLeft: [UIView]?, viewsToAnimateRight: [UIView]?, sourceView: UIView?, withTransitionContext transitionContext: UIViewControllerContextTransitioning) {
 
-        guard let container = transitionContext.containerView() else { return }
+        let container = transitionContext.containerView()
 
         let menuView = menuController.view
         menuView.frame = container.bounds
@@ -97,13 +97,13 @@ extension MenuPresentationAnimator {
 
         let menuViewSnapshot: UIView
         if presenting {
-            menuViewSnapshot = menuView.snapshotViewAfterScreenUpdates(true)
+            menuViewSnapshot = menuView.snapshotViewAfterScreenUpdates(true)!
             menuViewSnapshot.frame = minimisedFrame
             menuViewSnapshot.alpha = 0
             menuView.backgroundColor = menuView.backgroundColor?.colorWithAlphaComponent(0.0)
             menuView.addSubview(menuViewSnapshot)
         } else {
-            menuViewSnapshot = menuView.snapshotViewAfterScreenUpdates(false)
+            menuViewSnapshot = menuView.snapshotViewAfterScreenUpdates(false)!
             menuViewSnapshot.frame = menuView.frame
             container.insertSubview(menuViewSnapshot, aboveSubview: menuView)
             menuView.hidden = true

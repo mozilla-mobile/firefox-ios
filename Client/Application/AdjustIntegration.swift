@@ -95,7 +95,7 @@ class AdjustIntegration: NSObject {
 
     private func getAttributionPath() throws -> String {
         guard let url = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first,
-                path = url.URLByAppendingPathComponent(AdjustAttributionFileName).path else {
+                path = url.URLByAppendingPathComponent(AdjustAttributionFileName)!.path else {
             throw NSError(domain: AdjustIntegrationErrorDomain, code: -1,
                 userInfo: [NSLocalizedDescriptionKey: "Could not build \(AdjustAttributionFileName) path"])
         }

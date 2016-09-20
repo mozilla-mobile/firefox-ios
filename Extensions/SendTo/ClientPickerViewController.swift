@@ -115,6 +115,10 @@ class ClientPickerViewController: UITableViewController {
         return cell
     }
 
+    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+         return indexPath.section != 0
+    }
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if clients.count > 0 && indexPath.section == 1 {
             tableView.deselectRowAtIndexPath(indexPath, animated: true)

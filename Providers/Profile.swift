@@ -78,7 +78,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
     }
 
     func displaySentTabForURL(URL: NSURL, title: String) {
-        let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
+        let item = ShareItem(url: URL.absoluteString!, title: title, favicon: nil)
         self.profile.queue.addToQueue(item)
     }
 }
@@ -121,8 +121,8 @@ class BrowserProfileSyncDelegate: SyncDelegate {
                 let notification = UILocalNotification()
                 notification.fireDate = NSDate()
                 notification.timeZone = NSTimeZone.defaultTimeZone()
-                notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString)
-                notification.userInfo = [TabSendURLKey: URL.absoluteString, TabSendTitleKey: title]
+                notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString!)
+                notification.userInfo = [TabSendURLKey: URL.absoluteString!, TabSendTitleKey: title]
                 notification.alertAction = nil
                 notification.category = TabSendCategory
 
@@ -167,6 +167,7 @@ protocol Profile: class {
     func getAccount() -> FirefoxAccount?
     func removeAccount()
     func setAccount(account: FirefoxAccount)
+    func flushAccount()
 
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
@@ -210,6 +211,7 @@ public class BrowserProfile: Profile {
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onLocationChange(_:)), name: NotificationOnLocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPageMetadataFetched(_:)), name: NotificationOnPageMetadataFetched, object: nil)
         notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onProfileDidFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPrivateDataClearedHistory(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
 
@@ -279,7 +281,7 @@ public class BrowserProfile: Profile {
             // Only record local vists if the change notification originated from a non-private tab
             if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
                 // We don't record a visit if no type was specified -- that means "ignore me".
-                let site = Site(url: url.absoluteString, title: title as String)
+                let site = Site(url: url.absoluteString!, title: title as String)
                 let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
                 history.addLocalVisit(visit)
             }
@@ -288,6 +290,34 @@ public class BrowserProfile: Profile {
         } else {
             log.debug("Ignoring navigation.")
         }
+    }
+
+    @objc
+    func onPageMetadataFetched(notification: NSNotification) {
+        let isPrivate = notification.userInfo?["isPrivate"] as? Bool ?? true
+        guard !isPrivate else {
+            log.debug("Private mode - Ignoring page metadata.")
+            return
+        }
+
+        if let metadata = metadataFromNotification(notification) {
+            // TODO: Store metadata content into database.
+        }
+    }
+
+    private func metadataFromNotification(notification: NSNotification) -> PageMetadata? {
+        guard let url = notification.userInfo?["metadata_url"] as? NSURL else {
+            return nil
+        }
+
+        return PageMetadata(
+            url: url,
+            title: notification.userInfo?["metadata_title"] as? String,
+            description: notification.userInfo?["metadata_description"] as? String,
+            imageURL: notification.userInfo?["metadata_image_url"] as? NSURL,
+            type: notification.userInfo?["metadata_type"] as? String,
+            iconURL: notification.userInfo?["metadata_icon_url"] as? NSURL
+        )
     }
 
     // These selectors run on which ever thread sent the notifications (not the main thread)
@@ -306,6 +336,7 @@ public class BrowserProfile: Profile {
         log.debug("Deiniting profile \(self.localName).")
         self.syncManager.endTimedSyncs()
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationOnLocationChange, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationOnPageMetadataFetched, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
@@ -526,8 +557,9 @@ public class BrowserProfile: Profile {
     }
 
     func setAccount(account: FirefoxAccount) {
-        KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
         self.account = account
+
+        flushAccount()
 
         // register for notifications for the account
         registerForNotifications()
@@ -537,6 +569,12 @@ public class BrowserProfile: Profile {
         NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
 
         self.syncManager.onAddedAccount()
+    }
+
+    func flushAccount() {
+        if let account = account {
+            KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
+        }
     }
 
     func registerForNotifications() {

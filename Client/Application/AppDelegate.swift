@@ -138,8 +138,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
+                profile.readingList?.createRecordWithURL(url.absoluteString!, title: title, addedBy: UIDevice.currentDevice().name)
             }
+        }
+
+        NSNotificationCenter.defaultCenter().addObserverForName(NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
+            profile.flushAccount()
         }
 
         // check to see if we started 'cos someone tapped on a notification.
@@ -291,7 +295,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func launchFromURL(params: LaunchParams) {
         let isPrivate = params.isPrivate ?? false
         if let newURL = params.url {
-            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
+            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
         } else {
             self.browserViewController.openBlankNewTabAndFocus(isPrivate: isPrivate)
         }
@@ -357,23 +361,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func syncOnDidEnterBackground(application application: UIApplication) {
-        // Short circuit and don't sync if we don't have a syncable account.
-        guard self.profile?.hasSyncableAccount() ?? false else {
+        guard let profile = self.profile else {
             return
         }
 
-        self.profile?.syncManager.applicationDidEnterBackground()
+        profile.syncManager.applicationDidEnterBackground()
 
         var taskId: UIBackgroundTaskIdentifier = 0
         taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
             log.warning("Running out of background time, but we have a profile shutdown pending.")
-            self.profile?.shutdown()
+            profile.shutdown()
             application.endBackgroundTask(taskId)
         }
 
-        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-        self.profile?.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
-            self.profile?.shutdown()
+        if profile.hasSyncableAccount() {
+            let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+            profile.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
+                profile.shutdown()
+                application.endBackgroundTask(taskId)
+            }
+        } else {
+            profile.shutdown()
             application.endBackgroundTask(taskId)
         }
     }
@@ -525,7 +533,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
         if let url = userActivity.webpageURL {
-            browserViewController.switchToTabForURLOrOpen(url)
+            browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
             return true
         }
         return false
@@ -534,7 +542,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func viewURLInNewTab(notification: UILocalNotification) {
         if let alertURL = notification.userInfo?[TabSendURLKey] as? String {
             if let urlToOpen = NSURL(string: alertURL) {
-                browserViewController.openURLInNewTab(urlToOpen)
+                browserViewController.openURLInNewTab(urlToOpen, isPrivileged: true)
             }
         }
     }
