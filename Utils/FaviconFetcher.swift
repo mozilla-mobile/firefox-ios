@@ -236,5 +236,15 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
         characterToFaviconCache[faviconLetter] = faviconImage
         return faviconImage
     }
+
+    // Returns a color based on the url's hash
+    class func getDefaultColor(url: NSURL) -> UIColor {
+        guard let hash = url.baseDomain()?.hashValue else {
+            return UIColor.grayColor()
+        }
+        let index = abs(hash) % (UIConstants.DefaultColorStrings.count - 1)
+        let colorHex = UIConstants.DefaultColorStrings[index]
+        return UIColor(colorString: colorHex)
+    }
 }
 
