@@ -200,6 +200,23 @@ public struct AppConstants {
         #endif
     }()
 
+    /// Toggles the ability to reorder tabs in the tab tray
+    public static let MOZ_REORDER_TAB_TRAY: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return false
+        #elseif MOZ_CHANNEL_FENNEC
+            return false
+        #elseif MOZ_CHANNEL_AURORA
+            return false
+        #else
+            return false
+        #endif
+    }()
+
     ///  Enables/disables the activity stream for iPhone
     public static let MOZ_AS_PANEL: Bool = {
         #if MOZ_CHANNEL_RELEASE
