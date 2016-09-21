@@ -49,7 +49,7 @@ class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
     }
 
     private func removePasscode() {
-        KeychainWrapper.setAuthenticationInfo(nil)
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(nil)
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.postNotificationName(NotificationPasscodeDidRemove, object: nil)
     }

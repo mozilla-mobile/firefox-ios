@@ -38,7 +38,7 @@ class SensitiveViewController: UIViewController {
         }
 
         presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
-        guard let authInfo = KeychainWrapper.authenticationInfo() where authInfo.requiresValidation() else {
+        guard let authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() where authInfo.requiresValidation() else {
             removeBackgroundedBlur()
             return
         }

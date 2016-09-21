@@ -408,7 +408,7 @@ public class Scratchpad {
         if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
             b.keyLabel = keyLabel
             if let ckTS = prefs.unsignedLongForKey(PrefKeysTS) {
-                if let keys = KeychainWrapper.stringForKey("keys." + keyLabel) {
+                if let keys = KeychainWrapper.defaultKeychainWrapper().stringForKey("keys." + keyLabel) {
                     // We serialize as JSON.
                     let keys = Keys(payload: KeysPayload(keys))
                     if keys.valid {
@@ -454,7 +454,7 @@ public class Scratchpad {
     public class func clearFromPrefs(prefs: Prefs) {
         if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
             log.debug("Removing saved key from keychain.")
-            KeychainWrapper.removeObjectForKey(keyLabel)
+            KeychainWrapper.defaultKeychainWrapper().removeObjectForKey(keyLabel)
         } else {
             log.debug("No key label; nothing to remove from keychain.")
         }
@@ -504,10 +504,10 @@ public class Scratchpad {
             prefs.setLong(keys.timestamp, forKey: PrefKeysTS)
 
             // TODO: I could have sworn that we could specify kSecAttrAccessibleAfterFirstUnlock here.
-            KeychainWrapper.setString(payload, forKey: label)
+            KeychainWrapper.defaultKeychainWrapper().setString(payload, forKey: label)
         } else {
             log.debug("Removing keys from Keychain.")
-            KeychainWrapper.removeObjectForKey(self.keyLabel)
+            KeychainWrapper.defaultKeychainWrapper().removeObjectForKey(self.keyLabel)
         }
 
         prefs.setString(clientName, forKey: PrefClientName)
