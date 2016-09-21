@@ -217,6 +217,24 @@ public struct AppConstants {
         #endif
     }()
 
+    /// Enables the injection of the experimental page-metadata-parser into the WKWebView for
+    /// extracting metadata content from web pages
+    public static let MOZ_CONTENT_METADATA_PARSING: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return false
+        #elseif MOZ_CHANNEL_FENNEC
+            return false
+        #elseif MOZ_CHANNEL_AURORA
+            return false
+        #else
+            return false
+        #endif
+    }()
+
     ///  Enables/disables the activity stream for iPhone
     public static let MOZ_AS_PANEL: Bool = {
         #if MOZ_CHANNEL_RELEASE

@@ -972,7 +972,10 @@ class BrowserViewController: UIViewController {
 
     private func runScriptsOnWebView(webView: WKWebView) {
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler: nil)
-        webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
+
+        if AppConstants.MOZ_CONTENT_METADATA_PARSING {
+            webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
+        }
     }
 
     private func updateUIForReaderHomeStateForTab(tab: Tab) {
@@ -1806,8 +1809,10 @@ extension BrowserViewController: TabDelegate {
 
         tab.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())
 
-        let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
-        tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
+        if AppConstants.MOZ_CONTENT_METADATA_PARSING {
+            let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
+            tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
+        }
     }
 
     func tab(tab: Tab, willDeleteWebView webView: WKWebView) {
