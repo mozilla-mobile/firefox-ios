@@ -63,23 +63,6 @@ public struct AppConstants {
         #endif
     }()
 
-    
-    ///  Enables/disables the back/forward list from long pressing the back/forward button
-    public static let MOZ_BACK_FORWARD_LIST: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
-            return true
-        #else
-            return true
-        #endif
-    }()
 
     ///  Enables/disables the undo toast for the delete all tabs
     public static let MOZ_UNDO_DELETE_TABS_TOAST: Bool = {
