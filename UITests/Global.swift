@@ -499,13 +499,13 @@ class DynamicFontUtils {
 
 class PasscodeUtils {
     static func resetPasscode() {
-        KeychainWrapper.setAuthenticationInfo(nil)
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(nil)
     }
 
     static func setPasscode(code: String, interval: PasscodeInterval) {
         let info = AuthenticationKeychainInfo(passcode: code)
         info.updateRequiredPasscodeInterval(interval)
-        KeychainWrapper.setAuthenticationInfo(info)
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(info)
     }
 
     static func enterPasscode(tester: KIFUITestActor, digits: String) {
