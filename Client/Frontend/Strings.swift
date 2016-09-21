@@ -36,6 +36,13 @@ extension Strings {
     public static let TopSitesRemoveButtonAccessibilityLabel = NSLocalizedString("TopSites.RemovePage.Button", value: "Remove page - %@", comment: "Button shown in editing mode to remove this site from the top sites panel.")
 }
 
+// Activity Stream.
+extension Strings {
+    public static let ASPageControlButton = NSLocalizedString("AS.PageControl.Button", comment: "The page control button that lets you switch between pages in top sites")
+    public static let ASRemoveButton = NSLocalizedString("AS.Delete.Button", value: "Delete", comment: "Button shown in editing mode to remove this site from the top sites panel.")
+    public static let ASCancelButton = NSLocalizedString("AS.Cancel.Button", value: "Cancel", comment: "Button shown to cancel editing of top site.")
+}
+
 // Settings.
 extension Strings {
     public static let SettingsClearPrivateDataClearButton = NSLocalizedString("Settings.ClearPrivateData.Clear.Button", value: "Clear Private Data", comment: "Button in settings that clears private data for the selected items.")
