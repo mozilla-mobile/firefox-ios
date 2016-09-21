@@ -210,43 +210,33 @@ extension KIFUITestActor {
     public func deleteCharacterFromFirstResponser() {
         enterTextIntoCurrentFirstResponder("\u{0008}")
     }
+
+    public func scrollViewWithAccessibilityIdentifier(scrollView: String, toViewWithAccessibilityLabel label: String) -> UIView? {
+        var totalScrollFraction: CGFloat = 0
+        let scrollIncrement: CGFloat = 0.05
+        var foundView: UIView? = nil
+        while foundView == nil && totalScrollFraction < 1.0 {
+            scrollViewWithAccessibilityIdentifier(scrollView, byFractionOfSizeHorizontal: -scrollIncrement, vertical: -scrollIncrement)
+            if viewExistsWithLabel(label) {
+                foundView = waitForViewWithAccessibilityLabel(label)
+            }
+            totalScrollFraction += scrollIncrement
+        }
+
+        return foundView
+    }
 }
 
 class BrowserUtils {
     /// Close all tabs to restore the browser to startup state.
     class func resetToAboutHome(tester: KIFUITestActor) {
-        do {
-            try tester.tryFindingTappableViewWithAccessibilityLabel("Cancel")
+        MenuUtils.closeMenuIfOpen(tester)
+        if let _ = try? tester.tryFindingViewWithAccessibilityLabel("Cancel") {
             tester.tapViewWithAccessibilityLabel("Cancel")
-        } catch _ {
         }
+        AppUtils.resetTabs()
         tester.tapViewWithAccessibilityLabel("Show Tabs")
         let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
-
-        // Clear all private tabs if we're running iOS 9
-        if #available(iOS 9, *) {
-            // Switch to Private Mode if we're not in it already.
-            do {
-                try tester.tryFindingTappableViewWithAccessibilityLabel("Private Mode", value: "Off", traits: UIAccessibilityTraitButton)
-                tester.tapViewWithAccessibilityLabel("Private Mode")
-            } catch _ {}
-
-            while tabsView.numberOfItemsInSection(0) > 0 {
-                let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-                tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
-                tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
-            }
-            tester.tapViewWithAccessibilityLabel("Private Mode")
-        }
-
-        while tabsView.numberOfItemsInSection(0) > 1 {
-            let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-            tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
-            tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
-        }
-
-        // When the last tab is closed, the tabs tray will automatically be closed
-        // since a new about:home tab will be selected.
         if let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) {
             tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
             tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
@@ -272,22 +262,7 @@ class BrowserUtils {
 
     class func clearHistoryItems(tester: KIFUITestActor, numberOfTests: Int = -1) {
         resetToAboutHome(tester)
-        tester.tapViewWithAccessibilityLabel("History")
-
-        let historyTable = tester.waitForViewWithAccessibilityIdentifier("History List") as! UITableView
-        var index = 0
-        for _ in 0 ..< historyTable.numberOfSections {
-            for _ in 0 ..< historyTable.numberOfRowsInSection(0) {
-                clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
-                if numberOfTests > -1 {
-                    index += 1
-                    if index == numberOfTests {
-                        return
-                    }
-                }
-            }
-        }
-        tester.tapViewWithAccessibilityLabel("Top sites")
+        AppUtils.clearData()
     }
 
     class func ensureAutocompletionResult(tester: KIFUITestActor, textField: UITextField, prefix: String, completion: String) {
@@ -406,9 +381,7 @@ class SimplePageServer {
 
 class SearchUtils {
     static func navigateToSearchSettings(tester: KIFUITestActor, engine: String = "Yahoo") {
-        tester.tapViewWithAccessibilityLabel("Menu")
-        tester.waitForAnimationsToFinish()
-        tester.tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester)
         tester.waitForViewWithAccessibilityLabel("Settings")
         tester.tapViewWithAccessibilityLabel("Search, \(engine)")
         tester.waitForViewWithAccessibilityIdentifier("Search")
@@ -492,8 +465,11 @@ class DynamicFontUtils {
 
     static func restoreDynamicFontSize(tester: KIFUITestActor) {
         let value = UIContentSizeCategoryMedium
-        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
-        tester.waitForTimeInterval(0.3)
+        let currentValue = UIApplication.sharedApplication().valueForKey("preferredContentSizeCategory") as? String
+        if value != currentValue {
+            UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
+            tester.waitForTimeInterval(0.3)
+        }
     }
 }
 
@@ -519,8 +495,7 @@ class PasscodeUtils {
 class HomePageUtils {
     static func navigateToHomePageSettings(tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapViewWithAccessibilityLabel("Menu")
-        tester.tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester)
         tester.tapViewWithAccessibilityIdentifier("HomePageSetting")
     }
 
@@ -536,5 +511,72 @@ class HomePageUtils {
     static func navigateFromHomePageSettings(tester: KIFUITestActor) {
         tester.tapViewWithAccessibilityLabel("Settings")
         tester.tapViewWithAccessibilityLabel("Done")
+    }
+}
+
+class MenuUtils {
+    static func openSettings(tester: KIFUITestActor) {
+        tester.tapViewWithAccessibilityLabel("Menu")
+        tester.waitForAnimationsToFinish()
+        if let _ = try? tester.tryFindingViewWithAccessibilityLabel("Settings") {
+            tester.tapViewWithAccessibilityLabel("Settings")
+        } else {
+            return XCTFail("Unable to find settings in menu")
+        }
+    }
+
+    static func closeMenuIfOpen(tester: KIFUITestActor) {
+        guard let _ = try? tester.tryFindingViewWithAccessibilityLabel("Close Menu") else { return }
+        tester.tapViewWithAccessibilityLabel("Close Menu")
+    }
+}
+
+class AppUtils {
+    private static func getAppDelegate() -> AppDelegate {
+        return UIApplication.sharedApplication().delegate as! AppDelegate
+    }
+
+    private static func getProfile() -> BrowserProfile {
+        return getAppDelegate().profile as! BrowserProfile
+    }
+
+    private static func getTabManager() -> TabManager {
+        return getAppDelegate().browserViewController.tabManager
+    }
+
+    static func resetTabs() {
+        // get the application tab manager and close all tabs
+        let tabManager = getTabManager()
+        let lastNormalTab: Tab?
+        if let selectedTab = tabManager.selectedTab {
+            if selectedTab.isPrivate {
+                lastNormalTab = tabManager.normalTabs.first
+            } else {
+                lastNormalTab = selectedTab
+            }
+        } else {
+            lastNormalTab = nil
+        }
+
+        let otherTabs = tabManager.tabs.filter {
+            $0 != lastNormalTab
+        }
+        tabManager.removeTabs(otherTabs)
+    }
+
+    static func clearData() {
+        // clear private data
+        let tabManager = getTabManager()
+        let dataToClear: [Clearable] = [
+            HistoryClearable(profile: getProfile()),
+            CacheClearable(tabManager: tabManager),
+            CookiesClearable(tabManager: tabManager),
+            SiteDataClearable(tabManager: tabManager),
+        ]
+
+        dataToClear.forEach { clearable in
+            print("Clearing \(clearable).")
+            clearable.clear()
+        }
     }
 }

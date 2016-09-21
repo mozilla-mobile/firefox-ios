@@ -174,6 +174,8 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
             if self.profile.hasSyncableAccount() {
                 resyncHistory()
+            } else {
+                self.reloadData()
             }
             break
         case NotificationDynamicFontChanged:
@@ -616,6 +618,10 @@ class SyncedTabsButton: UIButton {
         }
 
         updateConstraints()
+
+        self.isAccessibilityElement = true
+        self.accessibilityIdentifier = "HomePanel.History.SyncedTabsButton"
+        self.accessibilityLabel = self.title.text
     }
 
     private func createBorderView() -> UIView {

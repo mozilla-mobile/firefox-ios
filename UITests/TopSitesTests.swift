@@ -33,8 +33,7 @@ class TopSitesTests: KIFTestCase {
     // Quick way to clear out all our history items
     private func clearPrivateDataFromHome() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Clear Private Data")
         tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
         tester().tapViewWithAccessibilityLabel("OK")
@@ -63,7 +62,7 @@ class TopSitesTests: KIFTestCase {
 
     func testRemovingSite() {
         // Switch to the Bookmarks panel so we can later reload Top Sites.
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.Bookmarks")
 
         // Load a set of dummy domains.
         for i in 1...10 {
@@ -71,7 +70,7 @@ class TopSitesTests: KIFTestCase {
         }
 
         // Switch back to the Top Sites panel.
-        tester().tapViewWithAccessibilityLabel("Top sites")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.TopSites")
 
         // Remove the first site and verify that all other sites shift to replace it.
         let collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
@@ -94,8 +93,8 @@ class TopSitesTests: KIFTestCase {
 
     func testRemovingSuggestedSites() {
         // Switch to the Bookmarks panel so we can later reload Top Sites.
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-        tester().tapViewWithAccessibilityLabel("Top sites")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.Bookmarks")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.TopSites")
 
         var collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
         let firstCell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
@@ -134,8 +133,8 @@ class TopSitesTests: KIFTestCase {
         // Verify that empty state no longer appears
         BrowserUtils.addHistoryEntry("", url: NSURL(string: "https://mozilla.org")!)
 
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-        tester().tapViewWithAccessibilityLabel("Top sites")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.Bookmarks")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.TopSites")
 
         collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
         XCTAssertEqual(collection.visibleCells().count, 1)
@@ -145,6 +144,6 @@ class TopSitesTests: KIFTestCase {
     override func tearDown() {
         DynamicFontUtils.restoreDynamicFontSize(tester())
         BrowserUtils.resetToAboutHome(tester())
-        clearPrivateDataFromHome()
+        AppUtils.clearData()
     }
 }

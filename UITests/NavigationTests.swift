@@ -72,7 +72,8 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
-        tester().tapViewWithAccessibilityLabel("Synced tabs")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
+        tester().tapViewWithAccessibilityLabel("Synced devices")
         tester().tapViewWithAccessibilityLabel("Sign in")
         tester().waitForViewWithAccessibilityLabel("Web content")
         tester().tapViewWithAccessibilityLabel("Cancel")
@@ -81,9 +82,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
     func testTapSignInShowsFxAFromTour() {
         // Launch the tour from the settings
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().waitForAnimationsToFinish()
         tester().tapViewWithAccessibilityLabel("Show Tour")
         tester().waitForAnimationsToFinish()
@@ -100,9 +99,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
     func testTapSigninShowsFxAFromSettings() {
         // Navigation to the settings to select the signin option
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().waitForAnimationsToFinish()
         tester().tapViewWithAccessibilityLabel("Sign In to Firefox")
         tester().waitForViewWithAccessibilityLabel("Web content")

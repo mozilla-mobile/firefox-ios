@@ -26,12 +26,15 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
+        if let _ = try? tester().tryFindingViewWithAccessibilityLabel("Settings") {
+            closeClearPrivateDataDialog()
+
+        }
         BrowserUtils.clearHistoryItems(tester())
     }
 
     private func openClearPrivateDataDialog() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
+        MenuUtils.openSettings(tester())
         tester().tapViewWithAccessibilityLabel("Clear Private Data")
     }
 
@@ -116,8 +119,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let urls = visitSites(noOfSites: 2)
         let domains = Set<String>(urls.map { $0.domain })
 
-        tester().tapViewWithAccessibilityLabel("Top sites")
-
         // Only one will be found -- we collapse by domain.
         anyDomainsExistOnTopSites(domains)
 
@@ -139,7 +140,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func testClearsHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
 
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
         let url1 = "\(urls[0].title), \(urls[0].url)"
         let url2 = "\(urls[1].title), \(urls[1].url)"
         XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to have history row \(url1)")
@@ -147,7 +148,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         clearPrivateData([Clearable.History])
 
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
         XCTAssertFalse(tester().viewExistsWithLabel(url1), "Expected to have removed history row \(url1)")
         XCTAssertFalse(tester().viewExistsWithLabel(url2), "Expected to have removed history row \(url2)")
     }
@@ -155,7 +156,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func testDisabledHistoryDoesNotClearHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
 
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.History")
         let url1 = "\(urls[0].title), \(urls[0].url)"
         let url2 = "\(urls[1].title), \(urls[1].url)"
         XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to have history row \(url1)")

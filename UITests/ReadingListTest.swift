@@ -36,7 +36,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
 
         // Tap to open it
         tester().tapViewWithAccessibilityLabel("Readable page, unread, localhost")
@@ -47,7 +47,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it no longer appears in the reading list home panel
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Readable page, unread, localhost")
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
@@ -64,7 +64,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Add to Reading List")
 
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
 
         let cell = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "ReadingTable")
 
@@ -98,7 +98,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel and make sure it marked as unread
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
         tester().waitForViewWithAccessibilityLabel("Readable page, unread, localhost")
 
         // Tap to open it
@@ -107,7 +107,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Go back to the reading list panel
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.ReadingList")
 
         // Make sure the article is marked as read
         let labelString = NSMutableAttributedString(string: "Readable page, read, localhost")

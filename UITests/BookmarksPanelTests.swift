@@ -33,7 +33,7 @@ class BookmarksPanelTests: KIFTestCase {
 
         XCTAssertTrue(bookmarks.applyRecords(recordsA).value.isSuccess)
 
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
+        tester().tapViewWithAccessibilityIdentifier("HomePanels.Bookmarks")
         tester().tapViewWithAccessibilityLabel("Desktop Bookmarks")
         tester().tapViewWithAccessibilityLabel("Bookmarks Toolbar")
         tester().waitForViewWithAccessibilityLabel("AAA")

@@ -19,7 +19,7 @@ enum NotificationDuration: NSTimeInterval {
 class NotificationRootViewController: UIViewController {
     var showingNotification: Bool { return notificationTimer != nil }
 
-    private var rootViewController: UIViewController
+    var rootViewController: UIViewController
 
     private let notificationCenter = NSNotificationCenter.defaultCenter()
     private(set) var statusBarHidden = false
