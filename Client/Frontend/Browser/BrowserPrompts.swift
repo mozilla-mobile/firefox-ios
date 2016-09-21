@@ -127,16 +127,9 @@ struct TextInputAlert: JSAlertInfo {
 /// and on iOS 8 we will fall back to the request URL. If the request URL is nil, which happens for JavaScript pages,
 /// we fall back to "JavaScript" as a title.
 private func titleForJavaScriptPanelInitiatedByFrame(frame: WKFrameInfo) -> String {
-    var title: String = "JavaScript"
-    if #available(iOS 9, *) {
-        title = "\(frame.securityOrigin.`protocol`)://\(frame.securityOrigin.host)"
-        if frame.securityOrigin.port != 0 {
-            title += ":\(frame.securityOrigin.port)"
-        }
-    } else {
-        if let url = frame.request.URL, scheme = url.scheme {
-            title = "\(scheme)://\(url.hostPort))"
-        }
+    var title = "\(frame.securityOrigin.`protocol`)://\(frame.securityOrigin.host)"
+    if frame.securityOrigin.port != 0 {
+        title += ":\(frame.securityOrigin.port)"
     }
     return title
 }

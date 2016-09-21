@@ -8,7 +8,6 @@ import Storage
 import ReadingList
 import WebKit
 
-@available(iOS 9.0, *)
 protocol TabPeekDelegate: class {
     func tabPeekDidAddBookmark(tab: Tab)
     func tabPeekDidAddToReadingList(tab: Tab) -> ReadingListClientRecord?
@@ -16,7 +15,6 @@ protocol TabPeekDelegate: class {
     func tabPeekDidCloseTab(tab: Tab)
 }
 
-@available(iOS 9.0, *)
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     private static let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")

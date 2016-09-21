@@ -62,15 +62,14 @@ class SpotlightHelper: NSObject {
         }
 
         activity.title = pageContent["title"]
-        if #available(iOS 9, *) {
-            if !(tab?.isPrivate ?? true) {
-                let attrs = CSSearchableItemAttributeSet(itemContentType: kUTTypeHTML as String)
-                attrs.contentDescription = pageContent["description"]
-                attrs.contentURL = url
-                activity.contentAttributeSet = attrs
-                activity.eligibleForSearch = true
 
-            }
+        if !(tab?.isPrivate ?? true) {
+            let attrs = CSSearchableItemAttributeSet(itemContentType: kUTTypeHTML as String)
+            attrs.contentDescription = pageContent["description"]
+            attrs.contentURL = url
+            activity.contentAttributeSet = attrs
+            activity.eligibleForSearch = true
+
         }
 
         // We can't be certain that the favicon isn't already available.
@@ -89,11 +88,10 @@ class SpotlightHelper: NSObject {
             return
         }
 
-        if #available(iOS 9.0, *) {
-            if let image = image {
-                activity?.contentAttributeSet?.thumbnailData = UIImagePNGRepresentation(image)
-            }
+        if let image = image {
+            activity?.contentAttributeSet?.thumbnailData = UIImagePNGRepresentation(image)
         }
+
         urlForThumbnail = nil
         thumbnailImage = nil
 
