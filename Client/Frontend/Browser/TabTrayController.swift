@@ -275,12 +275,7 @@ class TabTrayController: UIViewController {
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
-
-        if AppConstants.MOZ_MENU {
-            toolbar.menuButton.addTarget(self, action: #selector(TabTrayController.didTapMenu), forControlEvents: .TouchUpInside)
-        } else {
-            toolbar.settingsButton.addTarget(self, action: #selector(TabTrayController.SELdidClickSettingsItem), forControlEvents: .TouchUpInside)
-        }
+        toolbar.menuButton.addTarget(self, action: #selector(TabTrayController.didTapMenu), forControlEvents: .TouchUpInside)
 
         if #available(iOS 9, *) {
             toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), forControlEvents: .TouchUpInside)
@@ -1252,13 +1247,8 @@ class TrayToolbar: UIView {
         addSubview(addTabButton)
 
         var buttonToCenter: UIButton?
-        if AppConstants.MOZ_MENU {
-            addSubview(menuButton)
-            buttonToCenter = menuButton
-        } else {
-            addSubview(settingsButton)
-            buttonToCenter = settingsButton
-        }
+        addSubview(menuButton)
+        buttonToCenter = menuButton
 
         buttonToCenter?.snp_makeConstraints { make in
             make.center.equalTo(self)
@@ -1289,11 +1279,7 @@ class TrayToolbar: UIView {
 
     private func styleToolbar(isPrivate isPrivate: Bool) {
         addTabButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
-        if AppConstants.MOZ_MENU {
-            menuButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
-        } else {
-            settingsButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
-        }
+        menuButton.tintColor = isPrivate ? .whiteColor() : .darkGrayColor()
         backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : .whiteColor()
         maskButton.styleForMode(privateMode: isPrivate)
     }
