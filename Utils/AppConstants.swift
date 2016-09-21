@@ -154,7 +154,7 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -171,7 +171,7 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -188,7 +188,7 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -207,13 +207,13 @@ public struct AppConstants {
         #elseif MOZ_CHANNEL_BETA
             return false
         #elseif MOZ_CHANNEL_NIGHTLY
-            return false
+            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return false
+            return true
         #elseif MOZ_CHANNEL_AURORA
-            return false
+            return true
         #else
-            return false
+            return true
         #endif
     }()
 
@@ -240,7 +240,7 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
             return true
         #elseif MOZ_CHANNEL_FENNEC
