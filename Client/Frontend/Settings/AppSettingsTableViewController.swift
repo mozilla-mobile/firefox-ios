@@ -41,11 +41,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
         }
 
         let prefs = profile.prefs
-        var generalSettings: [Setting] = [SearchSetting(settings: self)]
-        if AppConstants.MOZ_NEW_TAB_CHOICES {
-            generalSettings += [NewTabPageSetting(settings: self)]
-        }
-        generalSettings += [
+        var generalSettings: [Setting] = [
+            SearchSetting(settings: self),
+            NewTabPageSetting(settings: self),
             HomePageSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                 titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
