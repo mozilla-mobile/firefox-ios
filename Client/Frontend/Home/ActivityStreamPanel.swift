@@ -30,8 +30,9 @@ struct ASPanelUX {
 class ActivityStreamPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     private let profile: Profile
-    private let topSitesManager = ASHorizontalScrollCellManager()
     private var onyxSession: OnyxSession?
+    private let topSitesManager: ASHorizontalScrollCellManager// = ASHorizontalScrollCellManager()
+    private let tabManager: TabManager
 
     var topSites: [Site] = []
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -40,8 +41,10 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
 
     var highlights: [Site] = []
 
-    init(profile: Profile) {
+    init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
+        self.tabManager = tabManager
+        topSitesManager = ASHorizontalScrollCellManager(tabManager: tabManager)
         super.init(style: .Grouped)
         view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))

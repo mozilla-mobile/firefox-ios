@@ -68,6 +68,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     var url: NSURL?
     weak var delegate: HomePanelViewControllerDelegate?
     weak var appStateDelegate: AppStateDelegate?
+    private var tabManager: TabManager
 
     private var buttonContainerView: UIView!
     private var buttonContainerBottomBorderView: UIView!
@@ -76,6 +77,15 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     private var finishEditingButton: UIButton?
     private var editingPanel: HomePanel?
+    
+    init(tabManager: TabManager) {
+        self.tabManager = tabManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     var isPrivateMode: Bool = false {
         didSet {
@@ -176,7 +186,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 }
 
                 if index < panels.count {
-                    let panel = self.panels[index].makeViewController(profile: profile)
+                    let panel = self.panels[index].makeViewController(profile: profile, tabManager: tabManager)
                     let accessibilityLabel = self.panels[index].accessibilityLabel
                     if let panelController = panel as? UINavigationController,
                         let rootPanel = panelController.viewControllers.first {
