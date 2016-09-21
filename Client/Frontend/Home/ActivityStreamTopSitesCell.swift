@@ -431,10 +431,15 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     var pageChangedHandler: ((CGFloat) -> Void)?
     var presentActionMenuHandler: ((UIAlertController) -> Void)?
     var deleteItemHandler: ((NSURL, NSIndexPath) -> Void)?
+    private let tabManager: TabManager
 
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
     var currentTraits: UITraitCollection?
 
+    init(tabManager: TabManager) {
+        self.tabManager = tabManager
+    }
+    
     // Size classes define how many items to show per row/column.
     func numberOfVerticalItems() -> Int {
         guard let traits = currentTraits else {
@@ -491,7 +496,25 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         let cancelAction = UIAlertAction(title: Strings.ASCancelButton, style: .Cancel, handler: nil)
         alertController.addAction(cancelAction)
 
-        let deleteAction = UIAlertAction(title: Strings.ASRemoveButton, style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
+        let openNewTabAction = UIAlertAction(title:NSLocalizedString("Open in New Tab", comment: "Label for \"Open in New Tab\" button"), style: .Default) { (action: UIAlertAction) in
+            guard let url = NSURL(string: contentItem.url) else {
+                return
+            }
+            self.tabManager.addTab(NSURLRequest(URL: url), afterTab: self.tabManager.selectedTab)
+         }
+        alertController.addAction(openNewTabAction)
+        
+        if #available(iOS 9, *) {
+            let openNewPrivateTabAction = UIAlertAction(title:NSLocalizedString("Open in New Private Tab", comment: "Label for \"Open in New Private Tab\" button"), style: .Default) { (action: UIAlertAction) in
+                guard let url = NSURL(string: contentItem.url) else {
+                    return
+                }
+                self.tabManager.addTab(NSURLRequest(URL: url), afterTab: self.tabManager.selectedTab, isPrivate: true)
+            }
+            alertController.addAction(openNewPrivateTabAction)
+        }
+
+        let deleteAction = UIAlertAction(title: NSLocalizedString("Remove", comment: "Label for Remove button"), style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
             self.collectionView(collectionView, deleteItemAtIndexPath: indexPath)
         })
         alertController.addAction(deleteAction)

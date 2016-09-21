@@ -709,7 +709,7 @@ class BrowserViewController: UIViewController {
         homePanelIsInline = inline
 
         if homePanelController == nil {
-            let homePanelController = HomePanelViewController()
+            let homePanelController = HomePanelViewController(tabManager: self.tabManager)
             homePanelController.profile = profile
             homePanelController.delegate = self
             homePanelController.appStateDelegate = self

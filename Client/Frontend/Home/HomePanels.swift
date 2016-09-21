@@ -10,7 +10,7 @@ import Shared
  * Data for identifying and constructing a HomePanel.
  */
 struct HomePanelDescriptor {
-    let makeViewController: (profile: Profile) -> UIViewController
+    let makeViewController: (profile: Profile, tabManager: TabManager) -> UIViewController
     let imageName: String
     let accessibilityLabel: String
     let accessibilityIdentifier: String
@@ -19,9 +19,9 @@ struct HomePanelDescriptor {
 class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
-            makeViewController: { profile in
+            makeViewController: { profile, tabManager in
                 if UIDevice.currentDevice().userInterfaceIdiom != .Pad && AppConstants.MOZ_AS_PANEL {
-                    return ActivityStreamPanel(profile: profile)
+                    return ActivityStreamPanel(profile: profile, tabManager: tabManager)
                 } else {
                     return TopSitesPanel(profile: profile)
                 }
@@ -31,7 +31,7 @@ class HomePanels {
             accessibilityIdentifier: "HomePanels.TopSites"),
 
         HomePanelDescriptor(
-            makeViewController: { profile in
+            makeViewController: { profile, tabManager in
                 let bookmarks = BookmarksPanel()
                 bookmarks.profile = profile
                 let controller = UINavigationController(rootViewController: bookmarks)
@@ -48,7 +48,7 @@ class HomePanels {
             accessibilityIdentifier: "HomePanels.Bookmarks"),
 
         HomePanelDescriptor(
-            makeViewController: { profile in
+            makeViewController: { profile, tabManager in
                 let history = HistoryPanel()
                 history.profile = profile
                 let controller = UINavigationController(rootViewController: history)
@@ -61,7 +61,7 @@ class HomePanels {
             accessibilityIdentifier: "HomePanels.History"),
 
         HomePanelDescriptor(
-            makeViewController: { profile in
+            makeViewController: { profile, tabManager in
                 let controller = ReadingListPanel()
                 controller.profile = profile
                 return controller
