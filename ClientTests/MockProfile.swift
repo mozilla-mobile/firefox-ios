@@ -103,6 +103,10 @@ public class MockProfile: Profile {
         return self.places
     }
 
+    lazy var isChinaEdition: Bool = {
+        return NSLocale.currentLocale().localeIdentifier == "zh_CN"
+    }()
+
     lazy var syncManager: SyncManager = {
         return MockSyncManager()
     }()
