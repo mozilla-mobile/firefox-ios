@@ -183,6 +183,8 @@ protocol Profile: class {
 
 public class BrowserProfile: Profile {
     private let name: String
+    private let keychain: KeychainWrapper
+
     internal let files: FileAccessor
 
     weak private var app: UIApplication?
@@ -201,6 +203,13 @@ public class BrowserProfile: Profile {
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
+
+        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
+            self.keychain = KeychainWrapper(serviceName: baseBundleIdentifier)
+        } else {
+            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
+            self.keychain = KeychainWrapper.defaultKeychainWrapper()
+        }
         
         if clear {
             do {
@@ -216,12 +225,6 @@ public class BrowserProfile: Profile {
         notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onProfileDidFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPrivateDataClearedHistory(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
 
-
-        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
-            KeychainWrapper.serviceName = baseBundleIdentifier
-        } else {
-            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
-        }
 
         // If the profile dir doesn't exist yet, this is first run (for this profile).
         if !files.exists("") {
@@ -475,13 +478,13 @@ public class BrowserProfile: Profile {
             static var instance: String!
         }
         dispatch_once(&Singleton.token) {
-            if KeychainWrapper.hasValueForKey(key) {
-                let value = KeychainWrapper.stringForKey(key)
+            if self.keychain.hasValueForKey(key) {
+                let value = self.keychain.stringForKey(key)
                 Singleton.instance = value
             } else {
                 let Length: UInt = 256
                 let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-                KeychainWrapper.setString(secret, forKey: key)
+                self.keychain.setString(secret, forKey: key)
                 Singleton.instance = secret
             }
         }
@@ -513,7 +516,7 @@ public class BrowserProfile: Profile {
     }
 
     private lazy var account: FirefoxAccount? = {
-        if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String: AnyObject] {
+        if let dictionary = self.keychain.objectForKey(self.name + ".account") as? [String: AnyObject] {
             return FirefoxAccount.fromDictionary(dictionary)
         }
         return nil
@@ -533,11 +536,11 @@ public class BrowserProfile: Profile {
 
     func removeAccountMetadata() {
         self.prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-        KeychainWrapper.removeObjectForKey(self.name + ".account")
+        self.keychain.removeObjectForKey(self.name + ".account")
     }
 
     func removeExistingAuthenticationInfo() {
-        KeychainWrapper.setAuthenticationInfo(nil)
+        self.keychain.setAuthenticationInfo(nil)
     }
 
     func removeAccount() {
@@ -573,7 +576,7 @@ public class BrowserProfile: Profile {
 
     func flushAccount() {
         if let account = account {
-            KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
+            self.keychain.setObject(account.asDictionary(), forKey: name + ".account")
         }
     }
 

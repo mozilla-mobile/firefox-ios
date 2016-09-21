@@ -56,7 +56,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
     func passcodeInputView(inputView: PasscodeInputView, didFinishEnteringCode code: String) {
         if let passcode = authenticationInfo?.passcode where passcode == code {
             authenticationInfo?.recordValidation()
-            KeychainWrapper.setAuthenticationInfo(authenticationInfo)
+            KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authenticationInfo)
             delegate?.passcodeValidationDidSucceed()
         } else {
             passcodePane.shakePasscode()
@@ -64,7 +64,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
             passcodePane.codeInputView.resetCode()
 
             // Store mutations on authentication info object
-            KeychainWrapper.setAuthenticationInfo(authenticationInfo)
+            KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authenticationInfo)
         }
     }
 }
