@@ -317,25 +317,6 @@ public class BrowserProfile: Profile {
             log.debug("Private mode - Ignoring page metadata.")
             return
         }
-
-        if let metadata = metadataFromNotification(notification) {
-            // TODO: Store metadata content into database.
-        }
-    }
-
-    private func metadataFromNotification(notification: NSNotification) -> PageMetadata? {
-        guard let url = notification.userInfo?["metadata_url"] as? NSURL else {
-            return nil
-        }
-
-        return PageMetadata(
-            url: url,
-            title: notification.userInfo?["metadata_title"] as? String,
-            description: notification.userInfo?["metadata_description"] as? String,
-            imageURL: notification.userInfo?["metadata_image_url"] as? NSURL,
-            type: notification.userInfo?["metadata_type"] as? String,
-            iconURL: notification.userInfo?["metadata_icon_url"] as? NSURL
-        )
     }
 
     // These selectors run on which ever thread sent the notifications (not the main thread)
