@@ -179,8 +179,9 @@ class BrowserViewController: UIViewController {
     private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
-        
-        if let mvc = menuViewController where showToolbar != (toolbar != nil) {
+
+        if UI_USER_INTERFACE_IDIOM() == .Pad,
+            let mvc = menuViewController where showToolbar != (toolbar != nil) {
             // Hide the menu, and then re-open it so that the menu is always the correct one for the given traits
             mvc.dismissViewControllerAnimated(true, completion: nil)
             coordinator?.animateAlongsideTransition(nil, completion: { _ in
