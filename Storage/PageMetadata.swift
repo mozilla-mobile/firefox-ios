@@ -4,20 +4,37 @@
 
 import Foundation
 
+/*
+ * Value types representing a page's metadata and associated images
+ */
 public struct PageMetadata {
-    public let url: NSURL
+    public let id: Int
+    public let siteURL: String
     public let title: String?
     public let description: String?
-    public let imageURL: NSURL?
     public let type: String?
-    public let iconURL: NSURL?
+    public let images: [PageMetadataImage]
 
-    public init(url: NSURL, title: String?, description: String?, imageURL: NSURL?, type: String?, iconURL: NSURL?) {
-        self.url = url
+    public init(id: Int, siteURL: String, title: String?, description: String?, type: String?, images: [PageMetadataImage] = []) {
+        self.id = id
+        self.siteURL = siteURL
         self.title = title
         self.description = description
-        self.imageURL = imageURL
         self.type = type
-        self.iconURL = iconURL
+        self.images = images
     }
+}
+
+public enum MetadataImageType: Int {
+    case Favicon = 1
+    case RichFavicon = 2
+    case Preview = 3
+}
+
+public struct PageMetadataImage {
+    public let imageURL: String
+    public let type: MetadataImageType
+    public let height: Int
+    public let width: Int
+    public let color: String
 }

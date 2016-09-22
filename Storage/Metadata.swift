@@ -1,9 +1,11 @@
-//
-//  SiteMetadata.swift
-//  Client
-//
-//  Created by Steph Leroux on 2016-09-22.
-//  Copyright © 2016 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Deferred
+import Shared
+
+public protocol Metadata {
+    func metadataForSites(sites: [Site]) -> Deferred<Maybe<[PageMetadata]>>
+}
