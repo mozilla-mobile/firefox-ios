@@ -828,15 +828,13 @@ class BrowserViewController: UIViewController {
         guard let url = tabState.url, absoluteString = url.absoluteString else { return }
         let shareItem = ShareItem(url: absoluteString, title: tabState.title, favicon: tabState.favicon)
         profile.bookmarks.shareItem(shareItem)
-        if #available(iOS 9, *) {
-            var userData = [QuickActions.TabURLKey: shareItem.url]
-            if let title = shareItem.title {
-                userData[QuickActions.TabTitleKey] = title
-            }
-            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
-                withUserData: userData,
-                toApplication: UIApplication.sharedApplication())
+        var userData = [QuickActions.TabURLKey: shareItem.url]
+        if let title = shareItem.title {
+            userData[QuickActions.TabTitleKey] = title
         }
+        QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+            withUserData: userData,
+            toApplication: UIApplication.sharedApplication())
         if let tab = tabManager.getTabForURL(url) {
             tab.isBookmarked = true
         }
@@ -1018,7 +1016,6 @@ class BrowserViewController: UIViewController {
     }
     // Mark: Opening New Tabs
 
-    @available(iOS 9, *)
     func switchToPrivacyMode(isPrivate isPrivate: Bool ) {
         applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
 
@@ -1048,12 +1045,9 @@ class BrowserViewController: UIViewController {
         } else {
             request = nil
         }
-        if #available(iOS 9, *) {
-            switchToPrivacyMode(isPrivate: isPrivate)
-            tabManager.addTabAndSelect(request, isPrivate: isPrivate)
-        } else {
-            tabManager.addTabAndSelect(request)
-        }
+
+        switchToPrivacyMode(isPrivate: isPrivate)
+        tabManager.addTabAndSelect(request, isPrivate: isPrivate)
     }
 
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
@@ -1077,10 +1071,6 @@ class BrowserViewController: UIViewController {
     // Mark: User Agent Spoofing
 
     private func resetSpoofedUserAgentIfRequired(webView: WKWebView, newURL: NSURL) {
-        guard #available(iOS 9.0, *) else {
-            return
-        }
-
         // Reset the UA when a different domain is being loaded
         if webView.URL?.host != newURL.host {
             webView.customUserAgent = nil
@@ -1088,10 +1078,6 @@ class BrowserViewController: UIViewController {
     }
 
     private func restoreSpoofedUserAgentIfRequired(webView: WKWebView, newRequest: NSURLRequest) {
-        guard #available(iOS 9.0, *) else {
-            return
-        }
-
         // Restore any non-default UA from the request's header
         let ua = newRequest.valueForHTTPHeaderField("User-Agent")
         webView.customUserAgent = ua != UserAgent.defaultUserAgent() ? ua : nil
@@ -1105,13 +1091,11 @@ class BrowserViewController: UIViewController {
         }
         activities.append(findInPageActivity)
 
-        if #available(iOS 9.0, *) {
-            if let tab = tab where (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active {
-                let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: tab.desktopSite) { [unowned tab] in
-                    tab.toggleDesktopSite()
-                }
-                activities.append(requestDesktopSiteActivity)
+        if let tab = tab where (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active {
+            let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: tab.desktopSite) { [unowned tab] in
+                tab.toggleDesktopSite()
             }
+            activities.append(requestDesktopSiteActivity)
         }
 
         let helper = ShareExtensionHelper(url: url, tab: tab, activities: activities)
@@ -1262,34 +1246,19 @@ class BrowserViewController: UIViewController {
     }
 
     override var keyCommands: [UIKeyCommand]? {
-        if #available(iOS 9.0, *) {
-            return [
-                UIKeyCommand(input: "r", modifierFlags: .Command, action: #selector(BrowserViewController.reloadTab), discoverabilityTitle: Strings.ReloadPageTitle),
-                UIKeyCommand(input: "[", modifierFlags: .Command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: Strings.BackTitle),
-                UIKeyCommand(input: "]", modifierFlags: .Command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: Strings.ForwardTitle),
+        return [
+            UIKeyCommand(input: "r", modifierFlags: .Command, action: #selector(BrowserViewController.reloadTab), discoverabilityTitle: Strings.ReloadPageTitle),
+            UIKeyCommand(input: "[", modifierFlags: .Command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: Strings.BackTitle),
+            UIKeyCommand(input: "]", modifierFlags: .Command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: Strings.ForwardTitle),
 
-                UIKeyCommand(input: "f", modifierFlags: .Command, action: #selector(BrowserViewController.findOnPage), discoverabilityTitle: Strings.FindTitle),
-                UIKeyCommand(input: "l", modifierFlags: .Command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: Strings.SelectLocationBarTitle),
-                UIKeyCommand(input: "t", modifierFlags: .Command, action: #selector(BrowserViewController.newTab), discoverabilityTitle: Strings.NewTabTitle),
-                UIKeyCommand(input: "p", modifierFlags: [.Command, .Shift], action: #selector(BrowserViewController.newPrivateTab), discoverabilityTitle: Strings.NewPrivateTabTitle),
-                UIKeyCommand(input: "w", modifierFlags: .Command, action: #selector(BrowserViewController.closeTab), discoverabilityTitle: Strings.CloseTabTitle),
-                UIKeyCommand(input: "\t", modifierFlags: .Control, action: #selector(BrowserViewController.nextTab), discoverabilityTitle: Strings.ShowNextTabTitle),
-                UIKeyCommand(input: "\t", modifierFlags: [.Control, .Shift], action: #selector(BrowserViewController.previousTab), discoverabilityTitle: Strings.ShowPreviousTabTitle),
-            ]
-        } else {
-            // Fallback on earlier versions
-            return [
-                UIKeyCommand(input: "r", modifierFlags: .Command, action: #selector(BrowserViewController.reloadTab)),
-                UIKeyCommand(input: "[", modifierFlags: .Command, action: #selector(BrowserViewController.goBack)),
-                UIKeyCommand(input: "f", modifierFlags: .Command, action: #selector(BrowserViewController.findOnPage)),
-                UIKeyCommand(input: "l", modifierFlags: .Command, action: #selector(BrowserViewController.selectLocationBar)),
-                UIKeyCommand(input: "t", modifierFlags: .Command, action: #selector(BrowserViewController.newTab)),
-                UIKeyCommand(input: "p", modifierFlags: [.Command, .Shift], action: #selector(BrowserViewController.newPrivateTab)),
-                UIKeyCommand(input: "w", modifierFlags: .Command, action: #selector(BrowserViewController.closeTab)),
-                UIKeyCommand(input: "\t", modifierFlags: .Control, action: #selector(BrowserViewController.nextTab)),
-                UIKeyCommand(input: "\t", modifierFlags: [.Control, .Shift], action: #selector(BrowserViewController.previousTab))
-            ]
-        }
+            UIKeyCommand(input: "f", modifierFlags: .Command, action: #selector(BrowserViewController.findOnPage), discoverabilityTitle: Strings.FindTitle),
+            UIKeyCommand(input: "l", modifierFlags: .Command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: Strings.SelectLocationBarTitle),
+            UIKeyCommand(input: "t", modifierFlags: .Command, action: #selector(BrowserViewController.newTab), discoverabilityTitle: Strings.NewTabTitle),
+            UIKeyCommand(input: "p", modifierFlags: [.Command, .Shift], action: #selector(BrowserViewController.newPrivateTab), discoverabilityTitle: Strings.NewPrivateTabTitle),
+            UIKeyCommand(input: "w", modifierFlags: .Command, action: #selector(BrowserViewController.closeTab), discoverabilityTitle: Strings.CloseTabTitle),
+            UIKeyCommand(input: "\t", modifierFlags: .Control, action: #selector(BrowserViewController.nextTab), discoverabilityTitle: Strings.ShowNextTabTitle),
+            UIKeyCommand(input: "\t", modifierFlags: [.Control, .Shift], action: #selector(BrowserViewController.previousTab), discoverabilityTitle: Strings.ShowPreviousTabTitle),
+        ]
     }
 
     private func getCurrentAppState() -> AppState {
@@ -1337,23 +1306,15 @@ extension BrowserViewController: MenuActionDelegate {
         if let menuAction = AppMenuAction(rawValue: action.action) {
             switch menuAction {
             case .OpenNewNormalTab:
-                if #available(iOS 9, *) {
-                    self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
-                } else {
-                    self.tabManager.addTabAndSelect(nil)
-                }
+                self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
             // this is a case that is only available in iOS9
             case .OpenNewPrivateTab:
-                if #available(iOS 9, *) {
-                    self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
-                }
+                self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
             case .FindInPage:
                 self.updateFindInPageVisibility(visible: true)
             case .ToggleBrowsingMode:
-                if #available(iOS 9, *) {
-                    guard let tab = tabManager.selectedTab else { break }
-                    tab.toggleDesktopSite()
-                }
+                guard let tab = tabManager.selectedTab else { break }
+                tab.toggleDesktopSite()
             case .ToggleBookmarkStatus:
                 switch appState.ui {
                 case .Tab(let tabState):
@@ -1614,9 +1575,6 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     func tabToolbarDidLongPressReload(tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard #available(iOS 9.0, *) else {
-            return
-        }
 
         guard let tab = tabManager.selectedTab where tab.webView?.URL != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active else {
             return
@@ -1798,11 +1756,9 @@ extension BrowserViewController: TabDelegate {
         let errorHelper = ErrorPageHelper()
         tab.addHelper(errorHelper, name: ErrorPageHelper.name())
 
-        if #available(iOS 9, *) {} else {
-            let windowCloseHelper = WindowCloseHelper(tab: tab)
-            windowCloseHelper.delegate = self
-            tab.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
-        }
+        let windowCloseHelper = WindowCloseHelper(tab: tab)
+        windowCloseHelper.delegate = self
+        tab.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
 
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
@@ -2376,9 +2332,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // Remember whether or not a desktop site was requested
-        if #available(iOS 9.0, *) {
-            tab.desktopSite = webView.customUserAgent?.isEmpty == false
-        }
+        tab.desktopSite = webView.customUserAgent?.isEmpty == false
     }
 
     private func addViewForOpenInHelper(openInHelper: OpenInHelper) {
@@ -2435,12 +2389,7 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         // If the page uses window.open() or target="_blank", open the page in a new tab.
-        let newTab: Tab
-        if #available(iOS 9, *) {
-            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterTab: parentTab, isPrivate: parentTab.isPrivate)
-        } else {
-            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterTab: parentTab)
-        }
+        let newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterTab: parentTab, isPrivate: parentTab.isPrivate)
         tabManager.selectTab(newTab)
 
         // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not
@@ -2552,8 +2501,7 @@ extension BrowserViewController: WKUIDelegate {
         openInHelper.open()
         decisionHandler(WKNavigationResponsePolicy.Cancel)
     }
-    
-    @available(iOS 9, *)
+
     func webViewDidClose(webView: WKWebView) {
         if let tab = tabManager[webView] {
             self.tabManager.removeTab(tab)
@@ -2921,15 +2869,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 actionSheetController.addAction(openNewTabAction)
             }
 
-            if #available(iOS 9, *) {
-                let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
-                let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
-                    self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)
-                    })
-                }
-                actionSheetController.addAction(openNewPrivateTabAction)
+            let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
+            let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
+                self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
+                    self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)
+                })
             }
+            actionSheetController.addAction(openNewPrivateTabAction)
 
             let copyTitle = NSLocalizedString("Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
             let copyAction = UIAlertAction(title: copyTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) -> Void in
@@ -3077,15 +3023,13 @@ extension BrowserViewController {
      on the iPad where it does not exist. However this only works on iOS9
      **/
     func addCustomSearchButtonToInputAssistant(webContentView: UIView) {
-        if #available(iOS 9.0, *) {
-            guard customSearchBarButton == nil else {
-                return //The searchButton is already on the keyboard
-            }
-            let inputAssistant = webContentView.inputAssistantItem
-            let item = UIBarButtonItem(customView: customSearchEngineButton)
-            customSearchBarButton = item
-            inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
+        guard customSearchBarButton == nil else {
+            return //The searchButton is already on the keyboard
         }
+        let inputAssistant = webContentView.inputAssistantItem
+        let item = UIBarButtonItem(customView: customSearchEngineButton)
+        customSearchBarButton = item
+        inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
     }
 
     func addCustomSearchEngineForFocusedElement() {
@@ -3163,11 +3107,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
         keyboardState = nil
         updateViewConstraints()
         //If the searchEngineButton exists remove it form the keyboard
-        if #available(iOS 9.0, *) {
-            if let buttonGroup = customSearchBarButton?.buttonGroup {
-                buttonGroup.barButtonItems = buttonGroup.barButtonItems.filter { $0 != customSearchBarButton }
-                customSearchBarButton = nil
-            }
+        if let buttonGroup = customSearchBarButton?.buttonGroup {
+            buttonGroup.barButtonItems = buttonGroup.barButtonItems.filter { $0 != customSearchBarButton }
+            customSearchBarButton = nil
         }
 
         if self.customSearchEngineButton.superview != nil {

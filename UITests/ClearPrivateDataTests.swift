@@ -197,7 +197,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertNil(cookies.sessionStorage)
     }
 
-    @available(iOS 9.0, *)
     func testClearsCache() {
         let cachedServer = CachedPageServer()
         let cacheRoot = cachedServer.start()

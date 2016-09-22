@@ -63,10 +63,8 @@ class FindInPageBar: UIView {
         searchText.font = FindInPageUX.SearchTextFont
         searchText.autocapitalizationType = UITextAutocapitalizationType.None
         searchText.autocorrectionType = UITextAutocorrectionType.No
-        if #available(iOS 9.0, *) {
-            searchText.inputAssistantItem.leadingBarButtonGroups = []
-            searchText.inputAssistantItem.trailingBarButtonGroups = []
-        }
+        searchText.inputAssistantItem.leadingBarButtonGroups = []
+        searchText.inputAssistantItem.trailingBarButtonGroups = []
         searchText.enablesReturnKeyAutomatically = true
         searchText.returnKeyType = .Search
         addSubview(searchText)
