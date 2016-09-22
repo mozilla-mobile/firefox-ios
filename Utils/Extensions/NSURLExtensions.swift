@@ -244,15 +244,13 @@ extension NSURL {
     }
 
     public func isWebPage(includeDataURIs includeDataURIs: Bool = true) -> Bool {
+        guard let scheme = self.scheme else {
+            return false
+        }
         let httpSchemes = ["http", "https"]
         let dataSchemes = ["data"]
 
-        if let scheme = scheme,
-           _ = httpSchemes.indexOf(scheme) where includeDataURIs && dataSchemes.contains(scheme) {
-            return true
-        }
-
-        return false
+        return httpSchemes.indexOf(scheme) != nil || (includeDataURIs && dataSchemes.contains(scheme))
     }
 
     public var isLocal: Bool {
