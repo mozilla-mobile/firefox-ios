@@ -42,7 +42,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     init(profile: Profile) {
         self.profile = profile
         super.init(style: .Grouped)
-//        view.addGestureRecognizer(longPressRecognizer)
+        view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
@@ -331,18 +331,42 @@ extension ActivityStreamPanel {
         }
     }
 
-    private func presentContextMenu(site: Site) {
-        let bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
-            let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
-            self.profile.bookmarks.shareItem(shareItem)
-            var userData = [QuickActions.TabURLKey: shareItem.url]
-            if let title = shareItem.title {
-                userData[QuickActions.TabTitleKey] = title
+    // Temporary function to check site's bookmark status until site.bookmarked functionality is built in
+    func isSiteBookmarked(site: Site) -> Deferred<Maybe<Bool>> {
+        profile.bookmarks.modelFactory >>== {
+            dispatch_async(dispatch_get_main_queue()) {
+                return $0.isBookmarked(site.url)
             }
-            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
-                withUserData: userData,
-                toApplication: UIApplication.sharedApplication())
-        })
+        }
+        return Deferred()
+    }
+
+    private func presentContextMenu(site: Site) {
+        var bookmarkAction: ActionOverlayTableViewAction
+        var isBookmarked: Bool?
+        dispatch_async(dispatch_get_main_queue()) {
+            isBookmarked = self.isSiteBookmarked(site).value.successValue
+        }
+        if let isBookmarked = isBookmarked where isBookmarked == true {
+            bookmarkAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
+                self.profile.bookmarks.modelFactory >>== {
+                    $0.removeByURL(site.url).uponQueue(dispatch_get_main_queue()) { _ in
+                    }
+                }
+            })
+        } else {
+            bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
+                let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+                self.profile.bookmarks.shareItem(shareItem)
+                var userData = [QuickActions.TabURLKey: shareItem.url]
+                if let title = shareItem.title {
+                    userData[QuickActions.TabTitleKey] = title
+                }
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+                    withUserData: userData,
+                    toApplication: UIApplication.sharedApplication())
+            })
+        }
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.profile.history.removeHistoryForURL(site.url)
