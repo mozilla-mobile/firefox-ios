@@ -380,6 +380,10 @@ extension BrowserDB {
     public func forceClose() {
         db.forceClose()
     }
+
+    public func reopenIfClosed() {
+        db.reopenIfClosed()
+    }
 }
 
 extension BrowserDB: Changeable {
