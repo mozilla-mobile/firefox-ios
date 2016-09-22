@@ -265,6 +265,9 @@
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		6BB2FD981B017DAB001A189B /* AuralProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB2FD971B017DAB001A189B /* AuralProgressBar.swift */; };
 		6BE4ACF91B0657180092AEBE /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE4ACF81B0657180092AEBE /* Accessibility.swift */; };
+		741258A61D90B43E0064FC2A /* ActionOverlayTableViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741258A51D90B43E0064FC2A /* ActionOverlayTableViewAction.swift */; };
+		7416486A1D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741648691D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift */; };
+		742A56391D80B54A00BDB803 /* ActionOverlayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742A56381D80B54A00BDB803 /* ActionOverlayTableViewController.swift */; };
 		744501E31D6277C800BCD523 /* HighlightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744501E21D6277C800BCD523 /* HighlightCell.swift */; };
 		744501F21D6277DD00BCD523 /* SimpleHighlightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744501F11D6277DD00BCD523 /* SimpleHighlightCell.swift */; };
 		744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B0FFD1B4F172E00100422 /* ToolbarTests.swift */; };
@@ -1364,6 +1367,9 @@
 		59A68CCB63E2A565CB03F832 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		6BB2FD971B017DAB001A189B /* AuralProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuralProgressBar.swift; sourceTree = "<group>"; };
 		6BE4ACF81B0657180092AEBE /* Accessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
+		741258A51D90B43E0064FC2A /* ActionOverlayTableViewAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionOverlayTableViewAction.swift; sourceTree = "<group>"; };
+		741648691D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionOverlayTableViewCell.swift; sourceTree = "<group>"; };
+		742A56381D80B54A00BDB803 /* ActionOverlayTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionOverlayTableViewController.swift; sourceTree = "<group>"; };
 		744501E21D6277C800BCD523 /* HighlightCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighlightCell.swift; sourceTree = "<group>"; };
 		744501F11D6277DD00BCD523 /* SimpleHighlightCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleHighlightCell.swift; sourceTree = "<group>"; };
 		744B0FFD1B4F172E00100422 /* ToolbarTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTests.swift; sourceTree = "<group>"; };
@@ -2649,6 +2655,9 @@
 				745DAB3E1CDAB09E00D44181 /* HistoryBackButton.swift */,
 				744501E21D6277C800BCD523 /* HighlightCell.swift */,
 				744501F11D6277DD00BCD523 /* SimpleHighlightCell.swift */,
+				742A56381D80B54A00BDB803 /* ActionOverlayTableViewController.swift */,
+				741648691D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift */,
+				741258A51D90B43E0064FC2A /* ActionOverlayTableViewAction.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -4870,6 +4879,7 @@
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
+				742A56391D80B54A00BDB803 /* ActionOverlayTableViewController.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
@@ -4925,6 +4935,7 @@
 				7BC68D241CC153630043562A /* AppMenuToolbarItem.swift in Sources */,
 				D3C03E471C3C7C1500A07D5C /* MenuHelper.swift in Sources */,
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,
+				7416486A1D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				E4ECD0881B70FD4F00B90D22 /* WindowCloseHelper.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
@@ -4939,6 +4950,7 @@
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				D39949F51C22461A00E2A03C /* RequestDesktopSiteActivity.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
+				741258A61D90B43E0064FC2A /* ActionOverlayTableViewAction.swift in Sources */,
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				7BC68D091CC153020043562A /* RoundedToolbar.swift in Sources */,
