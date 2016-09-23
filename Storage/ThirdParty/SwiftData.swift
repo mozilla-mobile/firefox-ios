@@ -64,6 +64,11 @@ public class SwiftData {
     private var key: String? = nil
     private var prevKey: String? = nil
 
+    /// A simple state flag to track whether we should accept new connection requests.
+    /// If a connection request is made while the database is closed, a
+    /// FailedSQLiteDBConnection will be returned.
+    private var closed = false
+
     init(filename: String, key: String? = nil, prevKey: String? = nil) {
         self.filename = filename
         self.sharedConnectionQueue = dispatch_queue_create("SwiftData queue: \(filename)", DISPATCH_QUEUE_SERIAL)
@@ -79,6 +84,11 @@ public class SwiftData {
         var connection: ConcreteSQLiteDBConnection?
 
         dispatch_sync(sharedConnectionQueue) {
+            if self.closed {
+                log.warning(">>> Database is closed for \(self.filename)")
+                return
+            }
+
             if self.sharedConnection == nil {
                 log.debug(">>> Creating shared SQLiteDBConnection for \(self.filename) on thread \(NSThread.currentThread()).")
                 self.sharedConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.ReadWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey)
@@ -172,10 +182,21 @@ public class SwiftData {
         }
     }
 
-    // Don't use this unless you know what you're doing. The deinitializer
-    // should be used to achieve refcounting semantics.
+    /// Don't use this unless you know what you're doing. The deinitializer
+    /// should be used to achieve refcounting semantics.
     func forceClose() {
-        self.sharedConnection = nil
+        dispatch_sync(sharedConnectionQueue) {
+            self.closed = true
+            self.sharedConnection = nil
+        }
+    }
+
+    /// Reopens a database that had previously been force-closed.
+    /// Does nothing if this database is already open.
+    func reopenIfClosed() {
+        dispatch_sync(sharedConnectionQueue) {
+            self.closed = false
+        }
     }
 
     public enum Flags {
