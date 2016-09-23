@@ -135,3 +135,60 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         XCTAssertEqual(highlights[0]!.title, "A Bookmark")
     }
 }
+
+class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
+    func testRecommendationPref() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let bookmarks = SQLiteBookmarkBufferStorage(db: db)
+
+        let count = 500
+
+        history.clearHistory().value
+        populateForRecommendationCalculations(history, bookmarks: bookmarks, historyCount: count, bookmarkCount: count)
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+            for _ in 0...5 {
+                history.getHighlights().value
+            }
+            self.stopMeasuring()
+        }
+    }
+}
+
+private func populateForRecommendationCalculations(history: SQLiteHistory, bookmarks: SQLiteBookmarkBufferStorage, historyCount: Int, bookmarkCount: Int) {
+    let baseMillis: UInt64 = baseInstantInMillis - 20000
+
+    for i in 0..<historyCount {
+        let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
+        site.guid = "abc\(i)def"
+
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).value
+
+        for j in 0...20 {
+            let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
+            addVisitForSite(site, intoHistory: history, from: .Local, atTime: visitTime)
+            addVisitForSite(site, intoHistory: history, from: .Remote, atTime: visitTime)
+        }
+    }
+
+    let bookmarkItems: [BookmarkMirrorItem] = (0..<bookmarkCount).map { i in
+        let modifiedTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i))
+        let bookmarkSite = Site(url: "http://bookmark-\(i)/", title: "\(i) Bookmark")
+        bookmarkSite.guid = "bookmark-\(i)"
+        
+        addVisitForSite(bookmarkSite, intoHistory: history, from: .Local, atTime: modifiedTime)
+        addVisitForSite(bookmarkSite, intoHistory: history, from: .Remote, atTime: modifiedTime)
+        addVisitForSite(bookmarkSite, intoHistory: history, from: .Local, atTime: modifiedTime)
+        addVisitForSite(bookmarkSite, intoHistory: history, from: .Remote, atTime: modifiedTime)
+        
+        return BookmarkMirrorItem.bookmark("http://bookmark-\(i)/", modified: modifiedTime, hasDupe: false,
+                                            parentID: BookmarkRoots.MenuFolderGUID,
+                                            parentName: "Menu Bookmarks",
+                                            title: "\(i) Bookmark", description: nil,
+                                            URI: "http://bookmark-\(i)/", tags: "", keyword: nil)
+    }
+
+    bookmarks.applyRecords(bookmarkItems).succeeded()
+}
