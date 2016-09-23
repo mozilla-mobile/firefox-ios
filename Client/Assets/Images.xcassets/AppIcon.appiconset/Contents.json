@@ -237,9 +237,8 @@
       "scale" : "1x"
     },
     {
-      "size" : "512x512",
       "idiom" : "mac",
-      "filename" : "iTunesArtwork@2x.png",
+      "size" : "512x512",
       "scale" : "2x"
     }
   ],
