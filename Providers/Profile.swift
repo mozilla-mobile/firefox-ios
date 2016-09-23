@@ -152,6 +152,7 @@ protocol Profile: class {
 
     func reopen()
     func shutdown()
+    func reopen()
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.

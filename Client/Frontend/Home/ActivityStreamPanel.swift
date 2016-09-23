@@ -324,7 +324,7 @@ extension ActivityStreamPanel {
         if longPressGestureRecognizer.state == UIGestureRecognizerState.Began {
             let touchPoint = longPressGestureRecognizer.locationInView(self.view)
             if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
-                if Section(indexPath.section) == .History {
+                if Section(indexPath.section) == .Highlights {
                     presentContextMenu(history[indexPath.row])
                 }
             }

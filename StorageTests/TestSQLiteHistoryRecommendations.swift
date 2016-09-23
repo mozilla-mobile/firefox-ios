@@ -134,38 +134,4 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A Bookmark")
     }
-
-    func testBookmarkHistoryHiglightOverlap() {
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
-        let bookmarks = SQLiteBookmarkBufferStorage(db: db)
-
-        let startTime = NSDate.nowMicroseconds()
-        let oneHourAgo = startTime - oneHourInMicroseconds
-
-        let bookmarkA = BookmarkMirrorItem.bookmark("A", modified: oneHourAgo, hasDupe: false,
-                                                    parentID: BookmarkRoots.MenuFolderGUID,
-                                                    parentName: "Menu Bookmarks",
-                                                    title: "A Bookmark", description: nil,
-                                                    URI: "http://bookmarkA/", tags: "", keyword: nil)
-
-        let bookmarkSiteA = Site(url: "http://bookmarkA/", title: "A Bookmark")
-        let bookmarkVisitA1 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo, type: .Bookmark)
-        let bookmarkVisitA2 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo + 1000, type: .Bookmark)
-        let bookmarkVisitA3 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo + 2000, type: .Bookmark)
-
-        bookmarks.applyRecords([bookmarkA]).succeeded()
-        history.clearHistory().succeeded()
-        history.addLocalVisit(bookmarkVisitA1).succeeded()
-        history.addLocalVisit(bookmarkVisitA2).succeeded()
-        history.addLocalVisit(bookmarkVisitA3).succeeded()
-
-        let highlights = history.getHighlights().value.successValue!
-        XCTAssertEqual(highlights.count, 1)
-        XCTAssertEqual(highlights[0]!.title, "A Bookmark")
-
-        let latestVisit = highlights[0]!.latestVisit!
-        XCTAssertEqual(latestVisit.date, oneHourAgo + 2000)
-    }
 }

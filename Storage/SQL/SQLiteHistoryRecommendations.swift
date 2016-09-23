@@ -18,12 +18,12 @@ extension SQLiteHistory: HistoryRecommendations {
         let thirtyMinutesAgo = NSNumber(unsignedLongLong: now - 30 * microsecondsPerMinute)
         let threeDaysAgo = NSNumber(unsignedLongLong: now - (60 * microsecondsPerMinute) * 24 * 3)
 
-        let siteProjection = "historyID, url, title, guid, visitCount, visitDate"
+        let siteProjection = "historyID, url, title, guid, visitCount, visitDate, isBookmarked"
         let nonRecentHistory =
             "SELECT \(siteProjection) FROM (" +
             "   SELECT \(TableHistory).id as historyID, url, title, guid, visitDate," +
             "       (SELECT COUNT(1) FROM \(TableVisits) WHERE s = \(TableVisits).siteID) AS visitCount," +
-            "       (SELECT COUNT(1) FROM \(ViewBookmarksLocalOnMirror) WHERE \(ViewBookmarksLocalOnMirror).bmkUri == url) AS bookmarked" +
+            "       (SELECT COUNT(1) FROM \(ViewBookmarksLocalOnMirror) WHERE \(ViewBookmarksLocalOnMirror).bmkUri == url) AS isBookmarked" +
             "   FROM (" +
             "       SELECT siteID AS s, max(date) AS visitDate" +
             "       FROM \(TableVisits)" +
@@ -31,13 +31,13 @@ extension SQLiteHistory: HistoryRecommendations {
             "       GROUP BY siteID" +
             "   )" +
             "   LEFT JOIN \(TableHistory) ON \(TableHistory).id = s" +
-            "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND bookmarked == 0" +
+            "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND isBookmarked == 0" +
             "   LIMIT \(historyLimit)" +
             ")"
 
         let bookmarkHighlights =
             "SELECT \(siteProjection) FROM (" +
-            "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS title, guid, NULL AS visitDate, (SELECT count(1) FROM visits WHERE \(TableVisits).siteID = \(TableHistory).id) as visitCount" +
+            "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS title, guid, NULL AS visitDate, (SELECT count(1) FROM visits WHERE \(TableVisits).siteID = \(TableHistory).id) as visitCount, 1 AS isBookmarked" +
             "   FROM (" +
             "       SELECT bmkUri" +
             "       FROM \(ViewBookmarksLocalOnMirror)" +
@@ -50,7 +50,7 @@ extension SQLiteHistory: HistoryRecommendations {
 
         let highlightsQuery =
             "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth " +
-            "FROM ( \(nonRecentHistory) UNION \(bookmarkHighlights) ) " +
+            "FROM ( \(nonRecentHistory) UNION ALL \(bookmarkHighlights) ) " +
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
             "GROUP BY url"
 
