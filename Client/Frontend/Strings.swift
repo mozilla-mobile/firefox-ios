@@ -41,6 +41,7 @@ extension Strings {
     public static let ASPageControlButton = NSLocalizedString("AS.PageControl.Button", comment: "The page control button that lets you switch between pages in top sites")
     public static let ASRemoveButton = NSLocalizedString("AS.Delete.Button", value: "Delete", comment: "Button shown in editing mode to remove this site from the top sites panel.")
     public static let ASCancelButton = NSLocalizedString("AS.Cancel.Button", value: "Cancel", comment: "Button shown to cancel editing of top site.")
+    public static let ASHighlightsTitle =  NSLocalizedString("AS.Highlights.SectionTitle", value: "Highlights", comment: "Section title label for Highlights")
 }
 
 // Settings.

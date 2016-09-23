@@ -102,7 +102,7 @@ extension ActivityStreamPanel {
 
         var title: String? {
             switch self {
-            case .Highlights: return NSLocalizedString("activitystream.highlights.label", value: "Highlights", comment: "Section title label for Highlights")
+            case .Highlights: return Strings.ASHighlightsTitle
             case .TopSites: return nil
             }
         }
