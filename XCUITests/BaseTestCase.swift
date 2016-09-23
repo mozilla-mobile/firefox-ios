@@ -10,7 +10,7 @@ class BaseTestCase: XCTestCase {
         super.setUp()
         continueAfterFailure = false
         let app = XCUIApplication()
-        restart(app, reset: true)
+        restart(app)
     }
 
     override func tearDown() {
