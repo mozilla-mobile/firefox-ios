@@ -331,17 +331,26 @@ extension ActivityStreamPanel {
     }
 
     private func presentContextMenu(site: Site) {
-        let bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
-            let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
-            self.profile.bookmarks.shareItem(shareItem)
-            var userData = [QuickActions.TabURLKey: shareItem.url]
-            if let title = shareItem.title {
-                userData[QuickActions.TabTitleKey] = title
-            }
-            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
-                withUserData: userData,
-                toApplication: UIApplication.sharedApplication())
-        })
+        var bookmarkAction: ActionOverlayTableViewAction
+        if let bookmarked = site.bookmarked where bookmarked {
+            bookmarkAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
+                self.profile.bookmarks.modelFactory >>== {
+                    $0.removeByURL(site.url).uponQueue(dispatch_get_main_queue()) { _ in }
+                }
+            })
+        } else {
+            bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
+                let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+                self.profile.bookmarks.shareItem(shareItem)
+                var userData = [QuickActions.TabURLKey: shareItem.url]
+                if let title = shareItem.title {
+                    userData[QuickActions.TabTitleKey] = title
+                }
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+                    withUserData: userData,
+                    toApplication: UIApplication.sharedApplication())
+            })
+        }
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.profile.history.removeHistoryForURL(site.url)
