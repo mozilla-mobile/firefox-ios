@@ -393,6 +393,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.updateAuthenticationInfo()
 
         resetForegroundStartTime()
+
+        profile?.reopen()
     }
 
     private func resetForegroundStartTime() {
