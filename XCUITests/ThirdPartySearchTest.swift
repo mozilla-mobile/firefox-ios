@@ -13,7 +13,7 @@ class ThirdPartySearchTest: BaseTestCase {
     override func tearDown() {
         super.tearDown()
     }
-    
+
     private func dismissKeyboardAssistant(forApp app: XCUIApplication) {
         if app.buttons["Done"].exists {
             // iPhone
@@ -30,9 +30,9 @@ class ThirdPartySearchTest: BaseTestCase {
         // Visit MDN to add a custom search engine
         loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
 
-        app.webViews.textFields.elementBoundByIndex(0).tap()
+        app.webViews.searchFields.elementBoundByIndex(0).tap()
         app.buttons["AddSearch"].tap()
-        app.alerts["Add Search Provider?"].collectionViews.buttons["OK"].tap()
+        app.alerts["Add Search Provider?"].buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].enabled)
         dismissKeyboardAssistant(forApp: app)
 
@@ -54,9 +54,9 @@ class ThirdPartySearchTest: BaseTestCase {
         // Visit MDN to add a custom search engine
         loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
 
-        app.webViews.textFields.elementBoundByIndex(0).tap()
+        app.webViews.searchFields.elementBoundByIndex(0).tap()
         app.buttons["AddSearch"].tap()
-        app.alerts["Add Search Provider?"].collectionViews.buttons["OK"].tap()
+        app.alerts["Add Search Provider?"].buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].enabled)
         dismissKeyboardAssistant(forApp: app)
 
@@ -87,9 +87,9 @@ class ThirdPartySearchTest: BaseTestCase {
         // Visit MDN to add a custom search engine
         loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
 
-        app.webViews.textFields.elementBoundByIndex(0).tap()
+        app.webViews.searchFields.elementBoundByIndex(0).tap()
         app.buttons["AddSearch"].tap()
-        app.alerts["Add Search Provider?"].collectionViews.buttons["OK"].tap()
+        app.alerts["Add Search Provider?"].buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].enabled)
         dismissKeyboardAssistant(forApp: app)
 
@@ -116,13 +116,11 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Search"].buttons["Settings"].tap()
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
 
-        restart(app, reset: false)
-
         // Perform a search to check
         app.textFields["url"].tap()
         app.typeText("window")
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
-
+        
     }
-
+    
 }

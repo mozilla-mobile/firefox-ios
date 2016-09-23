@@ -17,12 +17,10 @@ class BaseTestCase: XCTestCase {
         super.tearDown()
     }
 
-    func restart(app: XCUIApplication, reset: Bool) {
+    func restart(app: XCUIApplication) {
         app.terminate()
         app.launchArguments.append("FIREFOX_TESTS")
-        if reset {
-            app.launchArguments.append("RESET_FIREFOX")
-        }
+        app.launchArguments.append("RESET_FIREFOX")
         app.launch()
         sleep(1)
     }
