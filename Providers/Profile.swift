@@ -150,7 +150,6 @@ protocol Profile: class {
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
-    func reopen()
     func shutdown()
     func reopen()
 
