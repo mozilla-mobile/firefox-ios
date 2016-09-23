@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "Căutare %@";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "Nu";
+
+/* Label for search settings button. */
+"Search Settings" = "Setări de căutare";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "Sugestii de căutare de la %@";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "Pornești sugestiile de căutare?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "Da";
+

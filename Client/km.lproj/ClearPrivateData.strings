@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "តើ​អ្នក​ពិត​ជា​ចង់​សម្អាត​ទិន្នន័យ​របស់​អ្នក​ទាំងអស់​មែន​ទេ? វា​នឹង​បិទ​ផ្ទាំង​ដែល​បើក​ទាំងអស់​ផង​ដែរ។";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "​ប្រវត្តិ​រក​មើល";
+
+/* Settings item for clearing the cache */
+"Cache" = "​ឃ្លាំង​សម្ងាត់";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "បោះបង់ចោល";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "សម្អាត";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "សម្អាត​អ្វី​គ្រប់យ៉ាង";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "សម្អាត​ទិន្នន័យ​ឯកជន";
+
+/* Settings item for clearing cookies */
+"Cookies" = "​ខូគី";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ទិន្នន័យ​វេបសាយ​​ក្រៅ​បណ្ដាញ";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "ការ​ចូល​បាន​រក្សាទុក";
+

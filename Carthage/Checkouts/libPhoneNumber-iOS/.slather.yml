@@ -1,0 +1,14 @@
+ci_service: travis_ci
+coverage_service: coveralls
+xcodeproj: libPhoneNumber.xcodeproj
+ignore:
+ - libPhoneNumber/AppDelegate.m 
+ - libPhoneNumber/main.m
+ - libPhoneNumber/NBPhoneMetaDataGenerator.m
+ - libPhoneNumber/NBMetadataCore.m
+ - libPhoneNumber/NBMetadataCoreMapper.m
+ - libPhoneNumber/NBPhoneMetaData.m
+ - libPhoneNumber/NBPhoneNumberDesc.m
+ - libPhoneNumber/NBMetadataHelper.m
+ - libPhoneNumber/NBNumberFormat.m
+ - libPhoneNumber/NBPhoneNumber.m

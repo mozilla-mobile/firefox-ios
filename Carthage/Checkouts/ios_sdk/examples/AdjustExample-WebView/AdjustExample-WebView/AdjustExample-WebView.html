@@ -1,0 +1,186 @@
+<!doctype html>
+<html><head>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<style type='text/css'>
+		html { font-family:Helvetica; color:#222; }
+		h1 { color:steelblue; font-size:24px; margin-top:24px; }
+		button { margin:0 3px 10px; font-size:12px; }
+		.logLine { border-bottom:1px solid #ccc; padding:4px 2px; font-family:courier; font-size:11px; }
+	</style>
+</head><body>
+	<h1>Adjust Web View Demo</h1>
+    <script type="text/javascript" src="adjust.js"></script>
+    <script type="text/javascript" src="adjust_event.js"></script>
+    <script type="text/javascript" src="adjust_config.js"></script>
+	<script>
+	window.onerror = function(err) { }
+
+    function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) {
+            return callback(WebViewJavascriptBridge);
+        }
+
+        if (window.WVJBCallbacks) {
+            return window.WVJBCallbacks.push(callback);
+        }
+
+        window.WVJBCallbacks = [callback];
+
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+
+    setupWebViewJavascriptBridge(function(bridge) {
+		bridge.registerHandler('adjust_deeplink', function(data, responseCallback) {
+			alert('Deeplink:\n' + data)
+		})
+
+        var adjustConfig = new AdjustConfig(bridge, '{YourAppToken}', AdjustConfig.EnvironmentSandbox)
+        adjustConfig.setLogLevel(AdjustConfig.LogLevelVerbose)
+        adjustConfig.setOpenDeferredDeeplink(true)     // Just for test, is true by default.
+
+        adjustConfig.setAttributionCallback(function(attribution) {
+            alert('Tracker token = ' + attribution.trackerToken + '\n' +
+                  'Tracker name = ' + attribution.trackerName + '\n' +
+                  'Network = ' + attribution.network + '\n' +
+                  'Campaign = ' + attribution.campaign + '\n' +
+                  'Adgroup = ' + attribution.adgroup + '\n' +
+                  'Creative = ' + attribution.creative + '\n' +
+                  'Click label = ' + attribution.clickLabel)
+        })
+        adjustConfig.setEventSuccessCallback(function(eventSuccess) {
+            alert('Message = ' + eventSuccess.message + '\n' +
+                  'Timestamp = ' + eventSuccess.timestamp + '\n' +
+                  'Adid = ' + eventSuccess.adid + '\n' +
+                  'Event token = ' + eventSuccess.eventToken)
+        })
+        adjustConfig.setEventFailureCallback(function(eventFailure) {
+            alert('Message = ' + eventFailure.message + '\n' +
+                  'Timestamp = ' + eventFailure.timestamp + '\n' +
+                  'Adid = ' + eventFailure.adid + '\n' +
+                  'Event token = ' + eventFailure.eventToken + '\n' +
+                  'Will retry = ' + eventFailure.willRetry)
+        })
+        adjustConfig.setSessionSuccessCallback(function(sessionSuccess) {
+            alert('Message = ' + sessionSuccess.message + '\n' +
+                  'Timestamp = ' + sessionSuccess.timestamp + '\n' +
+                  'Adid = ' + sessionSuccess.adid)
+        })
+        adjustConfig.setSessionFailureCallback(function(sessionFailure) {
+            alert('Message = ' + sessionFailure.message + '\n' +
+                  'Timestamp = ' + sessionFailure.timestamp + '\n' +
+                  'Adid = ' + sessionFailure.adid + '\n' +
+                  'Will retry = ' + sessionFailure.willRetry)
+        })
+        adjustConfig.setDeferredDeeplinkCallback(function(deferredDeeplink) {
+            alert('Deferred deeplink:\n' + deferredDeeplink)
+        })
+
+        Adjust.appDidLaunch(adjustConfig)
+
+        var btnTrackSimpleEvent = document.getElementById('btnTrackSimpleEvent')
+        btnTrackSimpleEvent.onclick = function(e) {
+            e.preventDefault()
+
+            var adjustEvent = new AdjustEvent('{YourEventToken}')
+            Adjust.trackEvent(adjustEvent)
+        }
+
+        var btnTrackRevenueEvent = document.getElementById('btnTrackRevenueEvent')
+        btnTrackRevenueEvent.onclick = function(e) {
+            e.preventDefault()
+
+            var adjustEvent = new AdjustEvent('{YourAppToken}')
+            adjustEvent.setRevenue(0.01, 'EUR')
+            Adjust.trackEvent(adjustEvent)
+        }
+
+        var btnTrackCallbackEvent = document.getElementById('btnTrackCallbackEvent')
+
+        btnTrackCallbackEvent.onclick = function(e) {
+
+            e.preventDefault()
+
+            var adjustEvent = new AdjustEvent('{YourAppToken}')
+            adjustEvent.addCallbackParameter('key', 'value')
+            adjustEvent.addCallbackParameter('x', 'y')
+            adjustEvent.addCallbackParameter('key', 'lock')
+            Adjust.trackEvent(adjustEvent)
+        }
+
+        var btnTrackPartnerEvent = document.getElementById('btnTrackPartnerEvent')
+        btnTrackPartnerEvent.onclick = function(e) {
+            e.preventDefault()
+
+            var adjustEvent = new AdjustEvent('{YourAppToken}')
+            adjustEvent.addPartnerParameter('foo', 'bar')
+            adjustEvent.addPartnerParameter('x', 'y')
+            adjustEvent.addPartnerParameter('foo', 'foot')
+            adjustEvent.addPartnerParameter('x', 'z')
+            Adjust.trackEvent(adjustEvent);
+        }
+
+        var btnEnableOfflineMode = document.getElementById('btnEnableOfflineMode')
+        btnEnableOfflineMode.onclick = function(e) {
+            e.preventDefault()
+
+            Adjust.setOfflineMode(true)
+        }
+
+        var btnDisableOfflineMode = document.getElementById('btnDisableOfflineMode')
+        btnDisableOfflineMode.onclick = function(e) {
+            e.preventDefault()
+
+            Adjust.setOfflineMode(false)
+        }
+
+        var btnEnableSdk = document.getElementById('btnEnableSdk')
+        btnEnableSdk.onclick = function(e) {
+            e.preventDefault()
+
+            Adjust.setEnabled(true)
+        }
+
+        var btnDisableSdk = document.getElementById('btnDisableSdk')
+        btnDisableSdk.onclick = function(e) {
+            e.preventDefault()
+
+            Adjust.setEnabled(false)
+        }
+
+        var btnIsSdkEnabled = document.getElementById('btnIsSdkEnabled')
+        btnIsSdkEnabled.onclick = function(e) {
+            e.preventDefault()
+
+            Adjust.isEnabled(function(isEnabled) {
+                alert('Is SDK enabled? ' + isEnabled)
+            })
+        }
+
+        var btnGetIdfa = document.getElementById('btnGetIdfa')
+        btnGetIdfa.onclick = function(e) {
+            e.preventDefault()
+
+            Adjust.getIdfa(function(idfa) {
+                alert('IDFA\n' + idfa)
+            })
+        }
+	})
+	</script>
+	<div id='buttons'></div>
+        <button id='btnTrackSimpleEvent'>Track Simple event</button>
+        <button id='btnTrackRevenueEvent'>Track Revenue event</button>
+        <button id='btnTrackCallbackEvent'>Track Callback event</button>
+        <button id='btnTrackPartnerEvent'>Track Partner event</button>
+        <button id='btnEnableOfflineMode'>Enable Offline mode</button>
+        <button id='btnDisableOfflineMode'>Disable Offline mode</button>
+        <button id='btnEnableSdk'>Enable SDK</button>
+        <button id='btnDisableSdk'>Disable SDK</button>
+        <button id='btnIsSdkEnabled'>Is SDK Enabled?</button>
+        <button id='btnGetIdfa'>Get IDFA</button>
+    <div id='log'></div>
+</body></html>

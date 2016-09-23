@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Zavrieť súkromné karty";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox si nebude pamätať históriu prehliadania či cookies, ale nové záložky ostanú zachované.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Ďalšie informácie";
+
+/* Toggled OFF accessibility value */
+"Off" = "Vypnuté";
+
+/* Toggled ON accessibility value */
+"On" = "Zapnuté";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Otvoriť na novej súkromnej karte";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Súkromné prehliadanie";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Režim Súkromné prehliadanie";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Zapína a vypína režim Súkromné prehliadanie";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Pri opustení režimu Súkromné prehliadanie";
+

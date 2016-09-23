@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "Bu dizini ve tüm içeriğini silmek istediğinizden emin misiniz?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "İptal";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "Sil";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "Bu klasör boş değil.";
+

@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "사용 가능한 장치:";
+
+/* Close button in top navigation bar */
+"Close" = "닫기";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "계속하기 위해서 Firefox를 열고 설정에가서 로그인 하세요.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "보내기";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "탭 보내기";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Firefox Account에 로그인하지 않았습니다.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "이 Firefox Account와 동기화된 다른 기기가 없습니다.";
+

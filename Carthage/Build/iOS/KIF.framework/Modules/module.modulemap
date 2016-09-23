@@ -1,0 +1,6 @@
+framework module KIF {
+  umbrella header "KIF.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,39 @@
+/* Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet. */
+"Allow Firefox to use my Photos" = "ఫైర్ఫాక్స్ నా ఫోటోలు ఉపయోగించడానికి అనుమతించు";
+
+/* Pending feature; currently unused string! Accessibility label for back button to theme chooser */
+"Back to Themes" = "తిరిగి థీములకి";
+
+/* Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker */
+"Choose" = "ఎంచుకొండి";
+
+/* Pending feature; currently unused string! Accessibility label for settings row to enter theme settings */
+"Choose Theme" = "ధీముని ఎంపిక చెయ్యి";
+
+/* Pending feature; currently unused string! Accessibility label for themes subheader */
+"Default Themes" = "డీఫాల్ట్ థీములు";
+
+/* Pending feature; currently unused string! Accessibility label for photo viewer */
+"My Photos" = "నా ఫోటోలు";
+
+/* Pending feature; currently unused string! Sub header for photo options in theme chooser */
+"Photos" = "చిత్రాలు";
+
+/* Pending feature; currently unused string! Button to show preview of selected theme */
+"Preview" = "ముందస్తు వీక్షణం";
+
+/* Pending feature; currently unused string! Accessibility label for theme preview button */
+"Preview Theme" = "థీము ప్రివ్యూ";
+
+/* Pending feature; currently unused string! Button to set selected theme as current theme */
+"Set" = "సెట్";
+
+/* Pending feature; currently unused string! Accessibility label for set theme button */
+"Set Theme" = "థీము సెట్ చేయ్యి";
+
+/* Pending feature; currently unused string! Settings row to enter theme settings */
+"Theme" = "థీమ్";
+
+/* Pending feature; currently unused string! sub header for theme options in theme chooser */
+"Themes" = "థీములు";
+
