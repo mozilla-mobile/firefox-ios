@@ -62,7 +62,7 @@ class ClientTests: XCTestCase {
         [ "localhost",
             "",
             "127.0.0.1",
-            ].forEach { XCTAssert(hostIsValid($0),  "\($0) host should be valid.") }
+            ].forEach { XCTAssert(hostIsValid($0), "\($0) host should be valid.") }
 
         // Disallowed local hosts. WKWebView will direct them to our server, but the server
         // should reject them.

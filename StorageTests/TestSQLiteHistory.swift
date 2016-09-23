@@ -1331,49 +1331,6 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
     }
 }
 
-
-
-class TestSQLiteHistoryFrecencyPerf: XCTestCase {
-    func testFrecencyPerf() {
-        let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
-
-        let count = 500
-
-        history.clearHistory().value
-        populateHistoryForFrecencyCalculations(history, siteCount: count)
-
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            for _ in 0...5 {
-                history.getSitesByFrecencyWithHistoryLimit(10, includeIcon: false).value
-            }
-            self.stopMeasuring()
-        }
-    }
-}
-
-class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
-    func testCachePerf() {
-        let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
-
-        let count = 500
-
-        history.clearHistory().value
-        populateHistoryForFrecencyCalculations(history, siteCount: count)
-
-        history.setTopSitesNeedsInvalidation()
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            history.updateTopSitesCacheIfInvalidated().value
-            self.stopMeasuring()
-        }
-    }
-}
-
 class TestSQLiteHistoryFilterSplitting: XCTestCase {
     let history: SQLiteHistory = {
         let files = MockFiles()
