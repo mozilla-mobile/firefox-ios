@@ -1427,7 +1427,7 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
 
 // MARK - Private Test Helper Methods
 
-private enum VisitOrigin {
+enum VisitOrigin {
     case Local
     case Remote
 }
@@ -1448,7 +1448,7 @@ private func populateHistoryForFrecencyCalculations(history: SQLiteHistory, site
     }
 }
 
-private func addVisitForSite(site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
+func addVisitForSite(site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
     let visit = SiteVisit(site: site, date: atTime, type: VisitType.Link)
     switch from {
     case .Local:

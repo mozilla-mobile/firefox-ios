@@ -143,14 +143,15 @@ protocol Profile: class {
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> { get }
+    var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
     var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
-    func reopen()
     func shutdown()
+    func reopen()
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
@@ -388,7 +389,7 @@ public class BrowserProfile: Profile {
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage> = {
+    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage, HistoryRecommendations> = {
         return SQLiteHistory(db: self.db, prefs: self.prefs)!
     }()
 
@@ -397,6 +398,10 @@ public class BrowserProfile: Profile {
     }
 
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
+        return self.places
+    }
+
+    var recommendations: HistoryRecommendations {
         return self.places
     }
 

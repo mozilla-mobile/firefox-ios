@@ -96,27 +96,27 @@ extension ActivityStreamPanel {
 
     enum Section: Int {
         case TopSites
-        case History
+        case Highlights
 
         static let count = 2
 
         var title: String? {
             switch self {
-            case .History: return "Recent Activity"
+            case .Highlights: return Strings.ASHighlightsTitle
             case .TopSites: return nil
             }
         }
 
         var headerHeight: CGFloat {
             switch self {
-            case .History: return 40
+            case .Highlights: return 40
             case .TopSites: return 0
             }
         }
 
         func cellHeight(traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
-            case .History: return UITableViewAutomaticDimension
+            case .Highlights: return UITableViewAutomaticDimension
             case .TopSites:
                 if traits.horizontalSizeClass == .Compact && traits.verticalSizeClass == .Regular {
                     return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio)) + ASPanelUX.PageControlOffsetSize
@@ -128,9 +128,9 @@ extension ActivityStreamPanel {
 
         var headerView: UIView? {
             switch self {
-            case .History:
+            case .Highlights:
                 let view = ASHeaderView()
-                view.title = "Recent Activity"
+                view.title = title
                 return view
             case .TopSites:
                 return nil
@@ -140,7 +140,7 @@ extension ActivityStreamPanel {
         var cellIdentifier: String {
             switch self {
             case .TopSites: return "TopSiteCell"
-            case .History: return "HistoryCell"
+            case .Highlights: return "HistoryCell"
             }
         }
 
@@ -181,7 +181,7 @@ extension ActivityStreamPanel {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(indexPath.section) {
-        case .History:
+        case .Highlights:
             let site = self.history[indexPath.row]
             showSiteWithURLHandler(NSURL(string:site.url)!)
         case .TopSites:
@@ -202,7 +202,7 @@ extension ActivityStreamPanel {
         switch Section(section) {
             case .TopSites:
                 return topSitesManager.content.isEmpty ? 0 : 1
-            case .History:
+            case .Highlights:
                  return self.history.count
         }
     }
@@ -214,7 +214,7 @@ extension ActivityStreamPanel {
         switch Section(indexPath.section) {
         case .TopSites:
             return configureTopSitesCell(cell, forIndexPath: indexPath)
-        case .History:
+        case .Highlights:
             return configureHistoryItemCell(cell, forIndexPath: indexPath)
         }
     }
@@ -247,7 +247,7 @@ extension ActivityStreamPanel {
     }
 
     private func reloadRecentHistory() {
-        self.profile.history.getSitesByLastVisit(ASPanelUX.historySize).uponQueue(dispatch_get_main_queue()) { result in
+        self.profile.recommendations.getHighlights().uponQueue(dispatch_get_main_queue()) { result in
             self.history = result.successValue?.asArray() ?? self.history
             self.tableView.reloadData()
         }
@@ -324,7 +324,7 @@ extension ActivityStreamPanel {
         if longPressGestureRecognizer.state == UIGestureRecognizerState.Began {
             let touchPoint = longPressGestureRecognizer.locationInView(self.view)
             if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
-                if Section(indexPath.section) == .History {
+                if Section(indexPath.section) == .Highlights {
                     presentContextMenu(history[indexPath.row])
                 }
             }
@@ -373,7 +373,7 @@ class ASHeaderView: UIView {
         return titleLabel
     }()
 
-    var title: String = "" {
+    var title: String? {
         willSet(newTitle) {
             titleLabel.text = newTitle
         }
