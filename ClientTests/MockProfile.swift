@@ -74,6 +74,9 @@ public class MockProfile: Profile {
         return name
     }
 
+    func reopen() {
+    }
+
     func shutdown() {
     }
 
