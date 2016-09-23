@@ -264,6 +264,18 @@ public class BrowserProfile: Profile {
         self.init(localName: localName, app: nil)
     }
 
+    func reopen() {
+        log.debug("Reopening profile.")
+
+        if dbCreated {
+            db.reopenIfClosed()
+        }
+
+        if loginsDBCreated {
+            loginsDB.reopenIfClosed()
+        }
+    }
+
     func shutdown() {
         log.debug("Shutting down profile.")
 
