@@ -120,7 +120,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.textFields["url"].tap()
         app.typeText("window")
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
-        
+
     }
-    
+
 }

@@ -253,6 +253,9 @@ class ASHorizontalScrollCell: UITableViewCell {
 
     func currentPageChanged(currentPage: CGFloat) {
         pageControl.progress = currentPage
+        if currentPage == floor(currentPage) {
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+        }
     }
 
     func handlePageTap(gesture: UITapGestureRecognizer) {
@@ -485,10 +488,10 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
         let alertController = UIAlertController(title: contentItem.url, message: nil, preferredStyle: .ActionSheet)
 
-        let cancelAction = UIAlertAction(title: Strings.ASRemoveButton, style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Strings.ASCancelButton, style: .Cancel, handler: nil)
         alertController.addAction(cancelAction)
 
-        let deleteAction = UIAlertAction(title: Strings.ASCancelButton, style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
+        let deleteAction = UIAlertAction(title: Strings.ASRemoveButton, style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
             self.collectionView(collectionView, deleteItemAtIndexPath: indexPath)
         })
         alertController.addAction(deleteAction)
