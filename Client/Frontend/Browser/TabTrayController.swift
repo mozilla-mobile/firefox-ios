@@ -78,6 +78,7 @@ class TabCell: UICollectionViewCell {
 
     var title: UIVisualEffectView!
     var animator: SwipeAnimator!
+
     var isBeingArranged: Bool = false {
         didSet {
             if isBeingArranged {
@@ -373,7 +374,10 @@ class TabTrayController: UIViewController {
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
         collectionView.registerClass(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
-        collectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTab)))
+
+        if AppConstants.MOZ_REORDER_TAB_TRAY {
+            collectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTab)))
+        }
 
         view.addSubview(collectionView)
         view.addSubview(toolbar)
@@ -430,7 +434,9 @@ class TabTrayController: UIViewController {
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 
-        self.cancelExistingGestures()
+        if AppConstants.MOZ_REORDER_TAB_TRAY {
+            self.cancelExistingGestures()
+        }
 
         coordinator.animateAlongsideTransition({ _ in
             self.collectionView.collectionViewLayout.invalidateLayout()
@@ -493,7 +499,9 @@ class TabTrayController: UIViewController {
         mvc.menuTransitionDelegate = MenuPresentationAnimator()
         mvc.modalPresentationStyle = .OverCurrentContext
         mvc.fixedWidth = TabTrayControllerUX.MenuFixedWidth
-        self.cancelExistingGestures()
+        if AppConstants.MOZ_REORDER_TAB_TRAY {
+            self.cancelExistingGestures()
+        }
         self.presentViewController(mvc, animated: true, completion: nil)
     }
 
@@ -871,7 +879,9 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
             tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
         }
 
-        tabCell.isBeingArranged = self.isRearrangingTabs
+        if AppConstants.MOZ_REORDER_TAB_TRAY {
+            tabCell.isBeingArranged = self.isRearrangingTabs
+        }
 
         tabCell.isAccessibilityElement = true
         tabCell.accessibilityHint = NSLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
