@@ -12,7 +12,6 @@ import XCGLogger
 private let log = Logger.browserLogger
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
-
 // MARK: -  Lifecycle
 struct ASPanelUX {
     static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
@@ -42,7 +41,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     init(profile: Profile) {
         self.profile = profile
         super.init(style: .Grouped)
-//        view.addGestureRecognizer(longPressRecognizer)
+        view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
@@ -348,7 +347,15 @@ extension ActivityStreamPanel {
             self.profile.history.removeHistoryForURL(site.url)
         })
 
-        let contextMenu = ActionOverlayTableViewController(site: site, actions: [bookmarkAction, deleteFromHistoryAction])
+        let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
+            if let url = NSURL(string: site.url) {
+                let helper = ShareExtensionHelper(url: url, tab: nil, activities: [])
+                let controller = helper.createActivityViewController({ _ in })
+                self.presentViewController(controller, animated: true, completion: nil)
+            }
+        })
+
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: [bookmarkAction, deleteFromHistoryAction, shareAction])
         contextMenu.modalPresentationStyle = .OverFullScreen
         contextMenu.modalTransitionStyle = .CrossDissolve
         self.presentViewController(contextMenu, animated: true, completion: nil)
