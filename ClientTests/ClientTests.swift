@@ -8,6 +8,7 @@ import XCTest
 import Shared
 import Storage
 import WebKit
+import Alamofire
 
 class ClientTests: XCTestCase {
 
@@ -56,28 +57,34 @@ class ClientTests: XCTestCase {
     /// Our local server should only accept whitelisted hosts (localhost and 127.0.0.1).
     /// All other localhost equivalents should return 403.
     func testDisallowLocalhostAliases() {
-        // Allowed local hosts. The first two are equivalent since iOS forwards an 
+        // Allowed local hosts. The first two are equivalent since iOS forwards an
         // empty host to localhost.
         [ "localhost",
-          "",
-          "127.0.0.1",
-        ].forEach { XCTAssert(hostIsValid($0)) }
+            "",
+            "127.0.0.1",
+            ].forEach { XCTAssert(hostIsValid($0),  "\($0) host should be valid.") }
 
         // Disallowed local hosts. WKWebView will direct them to our server, but the server
         // should reject them.
         [ "[::1]",
-          "2130706433",
-          "0",
-          "127.00.00.01",
-          "017700000001",
-          "0x7f.0x0.0x0.0x1",
-        ].forEach { XCTAssertFalse(hostIsValid($0)) }
+            "2130706433",
+            "0",
+            "127.00.00.01",
+            "017700000001",
+            "0x7f.0x0.0x0.0x1"
+            ].forEach { XCTAssertFalse(hostIsValid($0), "\($0) host should not be valid.") }
     }
 
     private func hostIsValid(host: String) -> Bool {
+        let expectation = expectationWithDescription("Validate host for \(host)")
         let request = NSURLRequest(URL: NSURL(string: "http://\(host):6571/about/license")!)
-        var response: NSURLResponse?
-        try! NSURLConnection.sendSynchronousRequest(request, returningResponse: &response)
-        return (response as! NSHTTPURLResponse).statusCode == 200
+        var response: NSHTTPURLResponse?
+        Alamofire.request(request).response { (req, res, data, error) -> Void in
+            response = res
+            expectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(100, handler: nil)
+        return response?.statusCode == 200
     }
+
 }
