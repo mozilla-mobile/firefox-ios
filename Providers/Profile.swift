@@ -149,6 +149,7 @@ protocol Profile: class {
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
+    func reopen()
     func shutdown()
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
