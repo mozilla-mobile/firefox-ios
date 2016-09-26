@@ -156,7 +156,7 @@ class TabsButton: UIControl {
         button.borderView.strokeWidth = borderView.strokeWidth
         button.borderView.color = borderView.color
         button.borderView.cornerRadius = borderView.cornerRadius
-        
+
         return button
     }
     
@@ -210,15 +210,13 @@ class TabsButton: UIControl {
                 self.insideButton.layer.opacity = 0
             }
             
-            let completion: (Bool) -> Void = { finished in
-                if finished {
-                    // remove the clone and setup the actual tab button
-                    newTabsButton.removeFromSuperview()
-                    
-                    self.insideButton.layer.opacity = 1
-                    self.insideButton.layer.transform = CATransform3DIdentity
-                    self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
-                }
+            let completion: (Bool) -> Void = { _ in
+                // Remove the clone and setup the actual tab button
+                newTabsButton.removeFromSuperview()
+                
+                self.insideButton.layer.opacity = 1
+                self.insideButton.layer.transform = CATransform3DIdentity
+                self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
                 self.titleLabel.text = countToBe
                 self.accessibilityValue = countToBe
             }

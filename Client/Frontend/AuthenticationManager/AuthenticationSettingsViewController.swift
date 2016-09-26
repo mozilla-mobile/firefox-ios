@@ -65,7 +65,7 @@ class RequirePasscodeSetting: Setting {
 
     override var status: NSAttributedString {
         // Only show the interval if we are enabled and have an interval set.
-        let authenticationInterval = KeychainWrapper.authenticationInfo()
+        let authenticationInterval = KeychainWrapper.defaultKeychainWrapper().authenticationInfo()
         if let interval = authenticationInterval?.requiredPasscodeInterval where enabled {
             return NSAttributedString.disabledTableRowTitle(interval.settingTitle)
         }
@@ -82,7 +82,7 @@ class RequirePasscodeSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
-        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+        guard let authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() else {
             navigateToRequireInterval()
             return
         }
@@ -134,7 +134,7 @@ class TouchIDSetting: Setting {
         self.touchIDSuccess = touchIDSuccess
         self.touchIDFallback = touchIDFallback
         self.navigationController = navigationController
-        self.authInfo = KeychainWrapper.authenticationInfo()
+        self.authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo()
         super.init(title: title, delegate: delegate, enabled: enabled)
     }
 
@@ -181,7 +181,7 @@ class TouchIDSetting: Setting {
 
     func toggleTouchID(enabled enabled: Bool) {
         authInfo?.useTouchID = enabled
-        KeychainWrapper.setAuthenticationInfo(authInfo)
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authInfo)
         switchControl?.setOn(enabled, animated: true)
     }
 }
@@ -207,7 +207,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     }
 
     override func generateSettings() -> [SettingSection] {
-        if let _ = KeychainWrapper.authenticationInfo() {
+        if let _ = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() {
             return passcodeEnabledSettings()
         } else {
             return passcodeDisabledSettings()

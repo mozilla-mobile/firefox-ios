@@ -44,10 +44,10 @@ extension UIImage {
         let context = UIGraphicsGetCurrentContext()
         let rect = CGRect(origin: CGPointZero, size: size)
         color.setFill()
-        CGContextFillRect(context, rect)
+        CGContextFillRect(context!, rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return image
+        return image!
     }
 
     public func createScaled(size: CGSize) -> UIImage {
@@ -55,7 +55,7 @@ extension UIImage {
         drawInRect(CGRect(origin: CGPoint(x: 0, y: 0), size: size))
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return scaledImage
+        return scaledImage!
     }
 
     public static func templateImageNamed(name: String) -> UIImage? {

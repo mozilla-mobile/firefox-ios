@@ -156,21 +156,34 @@ public class SeparatedState: FxAState {
 }
 
 // Not an externally facing state!
-public class ReadyForKeys: FxAState {
+public class TokenState: FxAState {
     let sessionToken: NSData
-    let keyFetchToken: NSData
-    let unwrapkB: NSData
 
-    init(sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) {
+    init(sessionToken: NSData) {
         self.sessionToken = sessionToken
-        self.keyFetchToken = keyFetchToken
-        self.unwrapkB = unwrapkB
         super.init()
     }
 
     public override func asJSON() -> JSON {
         var d: [String: JSON] = super.asJSON().asDictionary!
         d["sessionToken"] = JSON(sessionToken.hexEncodedString)
+        return JSON(d)
+    }
+}
+
+// Not an externally facing state!
+public class ReadyForKeys: TokenState {
+    let keyFetchToken: NSData
+    let unwrapkB: NSData
+
+    init(sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) {
+        self.keyFetchToken = keyFetchToken
+        self.unwrapkB = unwrapkB
+        super.init(sessionToken: sessionToken)
+    }
+
+    public override func asJSON() -> JSON {
+        var d: [String: JSON] = super.asJSON().asDictionary!
         d["keyFetchToken"] = JSON(keyFetchToken.hexEncodedString)
         d["unwrapkB"] = JSON(unwrapkB.hexEncodedString)
         return JSON(d)
@@ -218,21 +231,18 @@ public class EngagedAfterVerifiedState: ReadyForKeys {
 }
 
 // Not an externally facing state!
-public class TokenAndKeys: FxAState {
-    let sessionToken: NSData
+public class TokenAndKeys: TokenState {
     public let kA: NSData
     public let kB: NSData
 
     init(sessionToken: NSData, kA: NSData, kB: NSData) {
-        self.sessionToken = sessionToken
         self.kA = kA
         self.kB = kB
-        super.init()
+        super.init(sessionToken: sessionToken)
     }
 
     public override func asJSON() -> JSON {
         var d = super.asJSON().asDictionary!
-        d["sessionToken"] = JSON(sessionToken.hexEncodedString)
         d["kA"] = JSON(kA.hexEncodedString)
         d["kB"] = JSON(kB.hexEncodedString)
         return JSON(d)

@@ -7,10 +7,15 @@ public let NotificationDataLoginDidChange = "Data:Login:DidChange"
 // add a property to allow the observation of firefox accounts
 public let NotificationFirefoxAccountChanged = "FirefoxAccountChangedNotification"
 
+public let NotificationFirefoxAccountDeviceRegistrationUpdated = "FirefoxAccountDeviceRegistrationUpdated"
+
 public let NotificationPrivateDataClearedHistory = "PrivateDataClearedHistoryNotification"
 
 // Fired when the user finishes navigating to a page and the location has changed
 public let NotificationOnLocationChange = "OnLocationChange"
+
+// Fired when a the page metadata extraction script has completed and is being passed back to the native client
+public let NotificationOnPageMetadataFetched = "OnPageMetadataFetched"
 
 // Fired when the login synchronizer has finished applying remote changes
 public let NotificationDataRemoteLoginChangesWereApplied = "NotificationDataRemoteLoginChangesWereApplied"

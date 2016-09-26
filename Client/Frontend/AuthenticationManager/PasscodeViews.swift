@@ -92,12 +92,13 @@ class PasscodeInputView: UIView, UIKeyInput {
     override func drawRect(rect: CGRect) {
         let circleSize = CGSize(width: 14, height: 14)
 
-        (0..<passcodeSize).forEach { index in
-            let context = UIGraphicsGetCurrentContext()
-            CGContextSetLineWidth(context, 1)
-            CGContextSetStrokeColorWithColor(context, UIConstants.PasscodeDotColor.CGColor)
-            CGContextSetFillColorWithColor(context, UIConstants.PasscodeDotColor.CGColor)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
 
+        CGContextSetLineWidth(context, 1)
+        CGContextSetStrokeColorWithColor(context, UIConstants.PasscodeDotColor.CGColor)
+        CGContextSetFillColorWithColor(context, UIConstants.PasscodeDotColor.CGColor)
+
+        (0..<passcodeSize).forEach { index in
             let offset = floor(rect.width / CGFloat(passcodeSize))
             var circleRect = CGRect(origin: CGPointZero, size: circleSize)
             circleRect.center = CGPoint(x: (offset * CGFloat(index + 1))  - offset / 2, y: rect.height / 2)

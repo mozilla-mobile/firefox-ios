@@ -140,7 +140,8 @@ extension NSURL {
 
     public var origin: String? {
         guard isWebPage(includeDataURIs: false),
-              let hostPort = self.hostPort else {
+              let hostPort = self.hostPort,
+              let scheme = scheme else {
             return nil
         }
 
@@ -157,12 +158,12 @@ extension NSURL {
     public func absoluteDisplayString() -> String? {
         var urlString = self.absoluteString
         // For http URLs, get rid of the trailing slash if the path is empty or '/'
-        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/" || self.path == nil) && urlString.endsWith("/") {
-            urlString = urlString.substringToIndex(urlString.endIndex.advancedBy(-1))
+        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/" || self.path == nil) && urlString!.endsWith("/") {
+            urlString = urlString!.substringToIndex(urlString!.endIndex.advancedBy(-1))
         }
         // If it's basic http, strip out the string but leave anything else in
-        if urlString.hasPrefix("http://") ?? false {
-            return urlString.substringFromIndex(urlString.startIndex.advancedBy(7))
+        if urlString!.hasPrefix("http://") ?? false {
+            return urlString!.substringFromIndex(urlString!.startIndex.advancedBy(7))
         } else {
             return urlString
         }
@@ -206,6 +207,16 @@ extension NSURL {
         return self
     }
 
+    public func extractDomainName() -> String {
+        let urlString =  self.normalizedHost() ?? self.URLString
+        var arr = urlString.componentsSeparatedByString(".")
+        if (arr.count >= 2) {
+            arr.popLast()
+            return arr.joinWithSeparator(".")
+        }
+        return urlString
+    }
+
     public func normalizedHost() -> String? {
         // Use components.host instead of self.host since the former correctly preserves
         // brackets for IPv6 hosts, whereas the latter strips them.
@@ -237,7 +248,7 @@ extension NSURL {
         let httpSchemes = ["http", "https"]
         let dataSchemes = ["data"]
 
-        if httpSchemes.contains(scheme) || includeDataURIs && dataSchemes.contains(scheme) {
+        if let scheme = scheme where httpSchemes.contains(scheme) || (includeDataURIs && dataSchemes.contains(scheme)) {
             return true
         }
 
@@ -262,7 +273,20 @@ extension NSURL {
      This only accepts permanent schemes: historical and provisional schemes are not accepted.
      */
     public var schemeIsValid: Bool {
+        guard let scheme = scheme else { return false }
         return permanentURISchemes.contains(scheme)
+    }
+
+    public func havingRemovedAuthorisationComponents() -> NSURL {
+        guard let urlComponents = NSURLComponents(URL: self, resolvingAgainstBaseURL: false) else {
+            return self
+        }
+        urlComponents.user = nil
+        urlComponents.password = nil
+        if let url = urlComponents.URL {
+            return url
+        }
+        return self
     }
 }
 

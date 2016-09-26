@@ -26,10 +26,10 @@ class MenuItemImageView: UIImageView {
     }
 
     override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
+        guard let image = image?.CGImage, context = UIGraphicsGetCurrentContext() else { return }
         CGContextSaveGState(context)
 
-        CGContextDrawImage(context, rect, image?.CGImage)
+        CGContextDrawImage(context, rect, image)
 
         CGContextSetBlendMode(context, .Multiply)
         CGContextSetFillColor(context, CGColorGetComponents(overlayColor.CGColor))

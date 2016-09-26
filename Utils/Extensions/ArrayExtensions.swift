@@ -28,6 +28,27 @@ public extension Array {
         }
         return false
     }
+
+    // Performs a union operator using the result of f(Element) as the value to base uniqueness on.
+    func union<T: Hashable>(arr: [Element], f: ((Element) -> T)) -> [Element] {
+        let result = self + arr
+        return result.unique(f)
+    }
+
+    // Returns unique values in an array using the result of f()
+    func unique<T: Hashable>(f: ((Element) -> T)) -> [Element] {
+        var map: [T: Element] = [T: Element]()
+        return self.flatMap { a in
+            let t = f(a)
+            if map[t] == nil {
+                map[t] = a
+                return a
+            } else {
+                return nil
+            }
+        }
+    }
+
 }
 
 public extension SequenceType {

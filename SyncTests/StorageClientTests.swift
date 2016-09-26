@@ -40,7 +40,6 @@ class StorageClientTests: XCTestCase {
     func testPOSTResult() {
         // Pulled straight from <http://docs.services.mozilla.com/storage/apis-1.5.html>.
         let r = "{" +
-            "\"modified\": 1233702554.25," +
             "\"success\": [\"GXS58IDC_12\", \"GXS58IDC_13\", \"GXS58IDC_15\"," +
             "\"GXS58IDC_16\", \"GXS58IDC_18\", \"GXS58IDC_19\"]," +
             "\"failed\": {\"GXS58IDC_11\": \"invalid ttl\"," +
@@ -49,7 +48,6 @@ class StorageClientTests: XCTestCase {
 
         let p = POSTResult.fromJSON(JSON.parse(r))
         XCTAssertTrue(p != nil)
-        XCTAssertEqual(p!.modified, 1233702554250)
         XCTAssertEqual(p!.success[0], "GXS58IDC_12")
         XCTAssertEqual(p!.failed["GXS58IDC_14"]!, "invalid sortindex")
 
@@ -116,7 +114,7 @@ class StorageClientTests: XCTestCase {
 
         let storageClient = Sync15StorageClient(serverURI: "http://example.com/".asURL!, authorizer: identity, workQueue: dispatch_get_main_queue(), resultQueue: dispatch_get_main_queue(), backoff: MockBackoffStorage())
         let collectionClient = storageClient.clientForCollection("foo", encrypter: RecordEncrypter<CleartextPayloadJSON>(serializer: massivify, factory: { CleartextPayloadJSON($0) }))
-        let result = synchronizer.uploadRecordsInChunks([rA], lastTimestamp: NSDate.now(), storageClient: collectionClient, onUpload: { _ in deferMaybe(NSDate.now()) })
+        let result = synchronizer.uploadRecords([rA], lastTimestamp: NSDate.now(), storageClient: collectionClient, onUpload: { _ in deferMaybe(NSDate.now()) })
 
         XCTAssertTrue(result.value.failureValue is RecordTooLargeError)
     }

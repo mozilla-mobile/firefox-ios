@@ -138,8 +138,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
+                profile.readingList?.createRecordWithURL(url.absoluteString!, title: title, addedBy: UIDevice.currentDevice().name)
             }
+        }
+
+        NSNotificationCenter.defaultCenter().addObserverForName(NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
+            profile.flushAccount()
         }
 
         // check to see if we started 'cos someone tapped on a notification.
@@ -224,15 +228,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Logger.browserLogger.deleteOldLogsDownToSizeLimit()
         }
 
+        // If a shortcut was launched, display its information and take the appropriate action
+        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
 
-        if #available(iOS 9, *) {
-            // If a shortcut was launched, display its information and take the appropriate action
-            if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
-
-                QuickActions.sharedInstance.launchedShortcutItem = shortcutItem
-                // This will block "performActionForShortcutItem:completionHandler" from being called.
-                shouldPerformAdditionalDelegateHandling = false
-            }
+            QuickActions.sharedInstance.launchedShortcutItem = shortcutItem
+            // This will block "performActionForShortcutItem:completionHandler" from being called.
+            shouldPerformAdditionalDelegateHandling = false
         }
 
         log.debug("Done with applicationDidFinishLaunching.")
@@ -291,7 +292,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func launchFromURL(params: LaunchParams) {
         let isPrivate = params.isPrivate ?? false
         if let newURL = params.url {
-            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
+            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
         } else {
             self.browserViewController.openBlankNewTabAndFocus(isPrivate: isPrivate)
         }
@@ -320,20 +321,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.browserViewController.loadQueuedTabs()
 
         // handle quick actions is available
-        if #available(iOS 9, *) {
-            let quickActions = QuickActions.sharedInstance
-            if let shortcut = quickActions.launchedShortcutItem {
-                // dispatch asynchronously so that BVC is all set up for handling new tabs
-                // when we try and open them
-                quickActions.handleShortCutItem(shortcut, withBrowserViewController: browserViewController)
-                quickActions.launchedShortcutItem = nil
-            }
-
-            // we've removed the Last Tab option, so we should remove any quick actions that we already have that are last tabs
-            // we do this after we've handled any quick actions that have been used to open the app so that we don't b0rk if
-            // the user has opened the app for the first time after upgrade with a Last Tab quick action
-            QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(ShortcutType.OpenLastTab, fromApplication: application)
+        let quickActions = QuickActions.sharedInstance
+        if let shortcut = quickActions.launchedShortcutItem {
+            // dispatch asynchronously so that BVC is all set up for handling new tabs
+            // when we try and open them
+            quickActions.handleShortCutItem(shortcut, withBrowserViewController: browserViewController)
+            quickActions.launchedShortcutItem = nil
         }
+
+        // we've removed the Last Tab option, so we should remove any quick actions that we already have that are last tabs
+        // we do this after we've handled any quick actions that have been used to open the app so that we don't b0rk if
+        // the user has opened the app for the first time after upgrade with a Last Tab quick action
+        QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(ShortcutType.OpenLastTab, fromApplication: application)
 
         // Check if we have a URL from an external app or extension waiting to launch,
         // then launch it on the main thread.
@@ -357,23 +356,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func syncOnDidEnterBackground(application application: UIApplication) {
-        // Short circuit and don't sync if we don't have a syncable account.
-        guard self.profile?.hasSyncableAccount() ?? false else {
+        guard let profile = self.profile else {
             return
         }
 
-        self.profile?.syncManager.applicationDidEnterBackground()
+        profile.syncManager.applicationDidEnterBackground()
 
         var taskId: UIBackgroundTaskIdentifier = 0
         taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
             log.warning("Running out of background time, but we have a profile shutdown pending.")
-            self.profile?.shutdown()
+            profile.shutdown()
             application.endBackgroundTask(taskId)
         }
 
-        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-        self.profile?.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
-            self.profile?.shutdown()
+        if profile.hasSyncableAccount() {
+            let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+            profile.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
+                profile.shutdown()
+                application.endBackgroundTask(taskId)
+            }
+        } else {
+            profile.shutdown()
             application.endBackgroundTask(taskId)
         }
     }
@@ -389,6 +392,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.updateAuthenticationInfo()
 
         resetForegroundStartTime()
+
+        profile?.reopen()
     }
 
     private func resetForegroundStartTime() {
@@ -419,10 +424,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func updateAuthenticationInfo() {
-        if let authInfo = KeychainWrapper.authenticationInfo() {
+        if let authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() {
             if !LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
                 authInfo.useTouchID = false
-                KeychainWrapper.setAuthenticationInfo(authInfo)
+                KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authInfo)
             }
         }
     }
@@ -525,7 +530,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
         if let url = userActivity.webpageURL {
-            browserViewController.switchToTabForURLOrOpen(url)
+            browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
             return true
         }
         return false
@@ -534,7 +539,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func viewURLInNewTab(notification: UILocalNotification) {
         if let alertURL = notification.userInfo?[TabSendURLKey] as? String {
             if let urlToOpen = NSURL(string: alertURL) {
-                browserViewController.openURLInNewTab(urlToOpen)
+                browserViewController.openURLInNewTab(urlToOpen, isPrivileged: true)
             }
         }
     }
@@ -545,11 +550,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: alertURL), title: title, favicon: nil)
                 browserViewController.addBookmark(tabState)
 
-                if #available(iOS 9, *) {
-                    let userData = [QuickActions.TabURLKey: alertURL,
-                        QuickActions.TabTitleKey: title]
-                    QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark, withUserData: userData, toApplication: UIApplication.sharedApplication())
-                }
+                let userData = [QuickActions.TabURLKey: alertURL,
+                    QuickActions.TabTitleKey: title]
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark, withUserData: userData, toApplication: UIApplication.sharedApplication())
         }
     }
 
@@ -562,7 +565,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    @available(iOS 9.0, *)
     func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: Bool -> Void) {
         let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
 

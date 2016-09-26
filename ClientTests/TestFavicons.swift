@@ -1,12 +1,11 @@
 import Foundation
 import XCTest
 import Storage
+import WebImage
+@testable import Client
+import Shared
 
 class TestFavicons: ProfileTest {
-
-    private func innerAddIcon(favicons: Favicons, url: String, callback: (success: Bool) -> Void) {
-        // Add an entry
-    }
 
     private func addSite(favicons: Favicons, url: String, s: Bool = true) {
         let expectation = self.expectationWithDescription("Wait for history")
@@ -17,6 +16,31 @@ class TestFavicons: ProfileTest {
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(100, handler: nil)
+    }
+
+    func testFaviconFetcherParse() {
+        let expectation = self.expectationWithDescription("Wait for Favicons to be fetched")
+
+        let profile = MockProfile()
+        // I want a site that also has an iOS app so I can get "apple-touch-icon-precomposed" icons as well
+        let url = NSURL(string: "https://instagram.com")
+        FaviconFetcher.getForURL(url!, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
+            guard let favicons = result.successValue where favicons.count > 0, let url = favicons.first?.url.asURL else {
+                XCTFail("Favicons were not found.")
+                return expectation.fulfill()
+            }
+            XCTAssertGreaterThan(favicons.count, 1, "Instagram should have more than one Favicon.")
+            SDWebImageManager.sharedManager().downloadImageWithURL(url, options: SDWebImageOptions.RetryFailed, progress: nil, completed: { (img, err, cache, finished, url) in
+                guard let image: UIImage = img else {
+                    XCTFail("Not a valid URL provided for a favicon.")
+                    return expectation.fulfill()
+                }
+                XCTAssertNotEqual(image.size, CGSize(width: 0, height: 0))
+                expectation.fulfill()
+            })
+
+        }
+        self.waitForExpectationsWithTimeout(3000, handler: nil)
     }
 
     // TODO: uncomment.

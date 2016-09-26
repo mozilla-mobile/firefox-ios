@@ -21,6 +21,7 @@ disabled_rules: # rule identifiers to exclude from running
   - leading_whitespace
   - operator_whitespace
   - file_length
+  - mark
 opt_in_rules: # some rules are only opt-in
   - closing_brace
   - opening_brace

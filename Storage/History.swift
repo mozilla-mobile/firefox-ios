@@ -23,6 +23,7 @@ public protocol BrowserHistory {
     func clearHistory() -> Success
     func removeHistoryForURL(url: String) -> Success
     func removeSiteFromTopSites(site: Site) -> Success
+    func removeHostFromTopSites(host: String) -> Success
 
     func getSitesByFrecencyWithHistoryLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func getSitesByFrecencyWithHistoryLimit(limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
@@ -36,6 +37,13 @@ public protocol BrowserHistory {
     func clearTopSitesCache() -> Success
     func refreshTopSitesCache() -> Success
     func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>>
+}
+
+/**
+ * An interface for accessing recommendation content from Storage
+ */
+public protocol HistoryRecommendations {
+    func getHighlights() -> Deferred<Maybe<Cursor<Site>>>
 }
 
 /**

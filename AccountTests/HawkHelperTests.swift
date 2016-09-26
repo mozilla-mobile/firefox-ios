@@ -21,7 +21,7 @@ class HawkHelperTests: XCTestCase {
         "\n" +
         "some-app-ext-data\n"
 
-        let expected = HawkHelper.getSignatureFor(input.utf8EncodedData!, key: "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn".utf8EncodedData!)
+        let expected = HawkHelper.getSignatureFor(input.utf8EncodedData, key: "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn".utf8EncodedData)
         XCTAssertEqual("6R4rV5iE+NPoym+WwjeHzjAGXUtLNIxmo1vpMofpLAE=", expected)
     }
 
@@ -45,7 +45,7 @@ class HawkHelperTests: XCTestCase {
 
     func testSpecWithoutPayloadExample() {
         let helper = HawkHelper(id: "dh37fgj492je",
-            key: "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn".utf8EncodedData!)
+            key: "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn".utf8EncodedData)
         let req = Alamofire.request(.GET, NSURL(string: "http://example.com:8000/resource/1?b=1&a=2")!)
         let timestamp = Int64(1353832234)
         let nonce = "j4h3g2"
@@ -57,7 +57,7 @@ class HawkHelperTests: XCTestCase {
 
     func testSpecWithPayloadExample() {
         let helper = HawkHelper(id: "dh37fgj492je",
-            key: "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn".utf8EncodedData!)
+            key: "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn".utf8EncodedData)
         let body = "Thank you for flying Hawk"
         let req = Alamofire.request(.POST, NSURL(string: "http://example.com:8000/resource/1?b=1&a=2")!,
             parameters: [:], encoding: .Custom({ convertible, params in

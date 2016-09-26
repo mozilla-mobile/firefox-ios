@@ -22,6 +22,9 @@ struct URLBarViewUX {
     // offset from edge of tabs button
     static let URLBarCurveOffset: CGFloat = 14
     static let URLBarCurveOffsetLeft: CGFloat = -10
+    // A larger offset is needed when viewing URL bar in overlay mode to get the corners right
+    static let URLBarCurveOverlayOffset: CGFloat = 8
+    static let URLBarMinimumOffsetToAnimate: CGFloat = 30
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
     static let ProgressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
@@ -647,7 +650,10 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapLocation(tabLocationView: TabLocationView) {
-        let locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
+        var locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
+        if let host = locationView.url?.host {
+            locationText = locationView.url?.absoluteString?.stringByReplacingOccurrencesOfString(host, withString: host.asciiHostToUTF8())
+        }
         enterOverlayMode(locationText, pasted: false)
     }
 
@@ -827,7 +833,7 @@ private class CurveView: UIView {
     }
 
     override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
+        guard let context = UIGraphicsGetCurrentContext() else { return }
         CGContextSaveGState(context)
         CGContextClearRect(context, rect)
         CGContextSetFillColorWithColor(context, URLBarViewUX.backgroundColorWithAlpha(1).CGColor)
@@ -902,7 +908,7 @@ class ToolbarTextField: AutocompleteTextField {
         let size = image.size
 
         UIGraphicsBeginImageContextWithOptions(size, false, 2)
-        let context = UIGraphicsGetCurrentContext()
+        let context = UIGraphicsGetCurrentContext()!
         image.drawAtPoint(CGPointZero, blendMode: CGBlendMode.Normal, alpha: 1.0)
 
         CGContextSetFillColorWithColor(context, color.CGColor)
@@ -914,8 +920,8 @@ class ToolbarTextField: AutocompleteTextField {
             CGPointZero.y,
             image.size.width,
             image.size.height)
-        CGContextFillRect(UIGraphicsGetCurrentContext(), rect)
-        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
+        CGContextFillRect(context, rect)
+        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
         return tintedImage

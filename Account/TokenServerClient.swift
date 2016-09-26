@@ -87,9 +87,9 @@ public class TokenServerClient {
 
     public class func getAudienceForURL(URL: NSURL) -> String {
         if let port = URL.port {
-            return "\(URL.scheme)://\(URL.host!):\(port)"
+            return "\(URL.scheme!)://\(URL.host!):\(port)"
         } else {
-            return "\(URL.scheme)://\(URL.host!)"
+            return "\(URL.scheme!)://\(URL.host!)"
         }
     }
 
@@ -147,20 +147,20 @@ public class TokenServerClient {
 
         alamofire.request(mutableURLRequest)
                  .validate(contentType: ["application/json"])
-                 .responseJSON { (_, response, result) in
+                 .responseJSON { response in
 
                     // Don't cancel requests just because our Manager is deallocated.
                     withExtendedLifetime(self.alamofire) {
-                        if let error = result.error as? NSError {
+                        if let error = response.result.error {
                             deferred.fill(Maybe(failure: TokenServerError.Local(error)))
                             return
                         }
 
-                        if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                        if let data: AnyObject = response.result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
                             let json = JSON(data)
-                            let remoteTimestampHeader = response?.allHeaderFields["x-timestamp"] as? String
+                            let remoteTimestampHeader = response.response?.allHeaderFields["x-timestamp"] as? String
 
-                            if let remoteError = TokenServerClient.remoteErrorFromJSON(json, statusCode: response!.statusCode,
+                            if let remoteError = TokenServerClient.remoteErrorFromJSON(json, statusCode: response.response!.statusCode,
                                 remoteTimestampHeader: remoteTimestampHeader) {
                                     deferred.fill(Maybe(failure: remoteError))
                                     return

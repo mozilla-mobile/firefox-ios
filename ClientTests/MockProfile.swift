@@ -74,6 +74,9 @@ public class MockProfile: Profile {
         return name
     }
 
+    func reopen() {
+    }
+
     func shutdown() {
     }
 
@@ -102,6 +105,10 @@ public class MockProfile: Profile {
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
         return self.places
     }
+
+    lazy var isChinaEdition: Bool = {
+        return NSLocale.currentLocale().localeIdentifier == "zh_CN"
+    }()
 
     lazy var syncManager: SyncManager = {
         return MockSyncManager()
@@ -170,6 +177,8 @@ public class MockProfile: Profile {
         self.account = account
         self.syncManager.onAddedAccount()
     }
+
+    func flushAccount() {}
 
     func removeAccount() {
         let old = self.account

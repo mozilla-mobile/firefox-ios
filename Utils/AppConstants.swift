@@ -34,7 +34,7 @@ public struct AppConstants {
     }()
 
     /// Whether we just mirror (false) or actively merge and upload (true).
-    public static let shouldMergeBookmarks = true
+    public static let shouldMergeBookmarks = false
 
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
@@ -154,7 +154,7 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -171,7 +171,7 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -188,7 +188,59 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_NIGHTLY
             return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    /// Toggles the ability to reorder tabs in the tab tray
+    public static let MOZ_REORDER_TAB_TRAY: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    /// Enables the injection of the experimental page-metadata-parser into the WKWebView for
+    /// extracting metadata content from web pages
+    public static let MOZ_CONTENT_METADATA_PARSING: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return false
+        #elseif MOZ_CHANNEL_FENNEC
+            return false
+        #elseif MOZ_CHANNEL_AURORA
+            return false
+        #else
+            return false
+        #endif
+    }()
+
+    ///  Enables/disables the activity stream for iPhone
+    public static let MOZ_AS_PANEL: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
             return true
         #elseif MOZ_CHANNEL_FENNEC

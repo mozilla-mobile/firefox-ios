@@ -100,7 +100,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 16    // Bug 1185038.
+    static let DefaultVersion = 17    // Bug 1298918.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -347,10 +347,12 @@ public class BrowserTable: Table {
 
     private let localBookmarksView =
     "CREATE VIEW \(ViewBookmarksLocalOnMirror) AS " +
-    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, 0 AS is_overridden " +
+    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri," +
+    "   siteUri, pos, title, description, bmkUri, folderName, faviconID, NULL AS local_modified, server_modified, 0 AS is_overridden " +
     "FROM \(TableBookmarksMirror) WHERE is_overridden IS NOT 1 " +
     "UNION ALL " +
-    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, 1 AS is_overridden " +
+    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID," +
+    "   local_modified, NULL AS server_modified, 1 AS is_overridden " +
     "FROM \(TableBookmarksLocal) WHERE is_deleted IS NOT 1"
 
     // TODO: phrase this without the subselect…
@@ -757,6 +759,15 @@ public class BrowserTable: Table {
                 historyVisitsView,
                 awesomebarBookmarksView,
                 awesomebarBookmarksWithIconsView]) {
+                return false
+            }
+        }
+
+        if from < 17 && to >= 17 {
+            if !self.run(db, queries: [
+                // Adds the local_modified, server_modified times to the local bookmarks view
+                "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
+                self.localBookmarksView]) {
                 return false
             }
         }

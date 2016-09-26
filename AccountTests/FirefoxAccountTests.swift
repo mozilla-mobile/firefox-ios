@@ -20,12 +20,14 @@ class FirefoxAccountTests: XCTestCase {
             "configurationLabel": FirefoxAccountConfigurationLabel.Production.rawValue,
             "email": "testtest@test.com",
             "uid": "uid",
+            "deviceRegistration": FxADeviceRegistration(id: "bogus-device", version: 0, lastRegistered: NSDate.now())
         ]
 
         let account1 = FirefoxAccount(
                 configuration: FirefoxAccountConfigurationLabel.Production.toConfiguration(),
                 email: d["email"] as! String,
                 uid: d["uid"] as! String,
+                deviceRegistration: (d["deviceRegistration"] as! FxADeviceRegistration),
                 stateKeyLabel: Bytes.generateGUID(),
                 state: SeparatedState())
         let d1 = account1.asDictionary()

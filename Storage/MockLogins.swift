@@ -142,8 +142,8 @@ public class MockLogins: BrowserLogins, SyncableLogins {
     // TODO
     public func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success { return succeed() }
     public func applyChangedLogin(upstream: ServerLogin) -> Success { return succeed() }
-    public func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>> { return deferMaybe(0) }
-    public func markAsDeleted(guids: [GUID]) -> Success { return succeed() }
+    public func markAsSynchronized<T: CollectionType where T.Generator.Element == GUID>(_: T, modified: Timestamp) -> Deferred<Maybe<Timestamp>> { return deferMaybe(0) }
+    public func markAsDeleted<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success { return succeed() }
     public func onRemovedAccount() -> Success { return succeed() }
 }
 

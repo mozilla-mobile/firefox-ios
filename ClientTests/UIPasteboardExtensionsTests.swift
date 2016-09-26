@@ -40,7 +40,7 @@ class UIPasteboardExtensionsTests: XCTestCase {
     private func verifyPasteboard(expectedURL expectedURL: NSURL, expectedImageTypeKey: CFString) {
         XCTAssertEqual(pasteboard.items.count, 1)
         XCTAssertEqual(pasteboard.items[0].count, 2)
-        XCTAssertEqual(pasteboard.items[0][kUTTypeURL as String], expectedURL)
+        XCTAssertEqual(pasteboard.items[0][kUTTypeURL as String] as? NSURL, expectedURL)
         XCTAssertNotNil(pasteboard.items[0][expectedImageTypeKey as String])
     }
 

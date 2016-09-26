@@ -1331,49 +1331,6 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
     }
 }
 
-
-
-class TestSQLiteHistoryFrecencyPerf: XCTestCase {
-    func testFrecencyPerf() {
-        let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
-
-        let count = 500
-
-        history.clearHistory().value
-        populateHistoryForFrecencyCalculations(history, siteCount: count)
-
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            for _ in 0...5 {
-                history.getSitesByFrecencyWithHistoryLimit(10, includeIcon: false).value
-            }
-            self.stopMeasuring()
-        }
-    }
-}
-
-class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
-    func testCachePerf() {
-        let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
-
-        let count = 500
-
-        history.clearHistory().value
-        populateHistoryForFrecencyCalculations(history, siteCount: count)
-
-        history.setTopSitesNeedsInvalidation()
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            history.updateTopSitesCacheIfInvalidated().value
-            self.stopMeasuring()
-        }
-    }
-}
-
 class TestSQLiteHistoryFilterSplitting: XCTestCase {
     let history: SQLiteHistory = {
         let files = MockFiles()
@@ -1427,7 +1384,7 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
 
 // MARK - Private Test Helper Methods
 
-private enum VisitOrigin {
+enum VisitOrigin {
     case Local
     case Remote
 }
@@ -1448,7 +1405,7 @@ private func populateHistoryForFrecencyCalculations(history: SQLiteHistory, site
     }
 }
 
-private func addVisitForSite(site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
+func addVisitForSite(site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
     let visit = SiteVisit(site: site, date: atTime, type: VisitType.Link)
     switch from {
     case .Local:

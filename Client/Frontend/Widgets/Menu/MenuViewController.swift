@@ -168,6 +168,10 @@ class MenuViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.view.backgroundColor = popoverBackgroundColor
+
+        if presentationStyle == .Popover {
+            self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
+        }
     }
 
     private func reloadView() {
@@ -244,9 +248,7 @@ extension MenuViewController: MenuItemDelegate {
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = NSLineBreakMode.ByWordWrapping
         paragraph.alignment = .Center
-        if #available(iOS 9.0, *) {
-            paragraph.allowsDefaultTighteningForTruncation = true
-        }
+        paragraph.allowsDefaultTighteningForTruncation = true
         let boundingBox = NSString(string: labelText).boundingRectWithSize(constraint, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: label.font, NSParagraphStyleAttributeName: paragraph], context: context).size
         return ceil(boundingBox.height)
     }

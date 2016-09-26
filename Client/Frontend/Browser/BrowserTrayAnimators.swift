@@ -20,7 +20,7 @@ class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
 private extension TrayToBrowserAnimator {
     func transitionFromTray(tabTray: TabTrayController, toBrowser bvc: BrowserViewController, usingContext transitionContext: UIViewControllerContextTransitioning) {
-        guard let container = transitionContext.containerView() else { return }
+        let container = transitionContext.containerView()
         guard let selectedTab = bvc.tabManager.selectedTab else { return }
 
         let tabManager = bvc.tabManager
@@ -36,7 +36,7 @@ private extension TrayToBrowserAnimator {
         bvc.webViewContainerBackdrop.hidden = true
 
         // Take a snapshot of the collection view that we can scale/fade out. We don't need to wait for screen updates since it's already rendered on the screen
-        let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(false)
+        let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(false)!
         tabTray.collectionView.alpha = 0
         tabCollectionViewSnapshot.frame = tabTray.collectionView.frame
         container.insertSubview(tabCollectionViewSnapshot, atIndex: 0)
@@ -106,7 +106,7 @@ class BrowserToTrayAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 private extension BrowserToTrayAnimator {
     func transitionFromBrowser(bvc: BrowserViewController, toTabTray tabTray: TabTrayController, usingContext transitionContext: UIViewControllerContextTransitioning) {
 
-        guard let container = transitionContext.containerView() else { return }
+        let container = transitionContext.containerView()
         guard let selectedTab = bvc.tabManager.selectedTab else { return }
 
         let tabManager = bvc.tabManager
@@ -130,7 +130,7 @@ private extension BrowserToTrayAnimator {
         cell.innerStroke.hidden = true
 
         // Take a snapshot of the collection view to perform the scaling/alpha effect
-        let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(true)
+        let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(true)!
         tabCollectionViewSnapshot.frame = tabTray.collectionView.frame
         tabCollectionViewSnapshot.transform = CGAffineTransformMakeScale(0.9, 0.9)
         tabCollectionViewSnapshot.alpha = 0
