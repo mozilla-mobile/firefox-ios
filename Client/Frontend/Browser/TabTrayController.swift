@@ -630,7 +630,7 @@ class TabTrayController: UIViewController {
     }
 
     private func openNewTab(request: NSURLRequest? = nil) {
-        toolbar.addTabButton.userInteractionEnabled = false
+        toolbar.userInteractionEnabled = false
 
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
@@ -638,8 +638,8 @@ class TabTrayController: UIViewController {
             let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
             self.tabManager.selectTab(tab)
         }, completion: { finished in
+            self.toolbar.userInteractionEnabled = true
             if finished {
-                self.toolbar.addTabButton.userInteractionEnabled = true
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
