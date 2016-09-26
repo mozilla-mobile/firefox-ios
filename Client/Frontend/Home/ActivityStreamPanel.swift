@@ -38,7 +38,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
     }()
 
-    var history: [Site] = []
+    var highlights: [Site] = []
 
     init(profile: Profile) {
         self.profile = profile
@@ -197,8 +197,7 @@ extension ActivityStreamPanel {
         switch Section(indexPath.section) {
         case .Highlights:
             ASOnyxPing.reportTapEvent(actionPosition: indexPath.item, source: .highlights)
-
-            let site = self.history[indexPath.row]
+            let site = self.highlights[indexPath.row]
             showSiteWithURLHandler(NSURL(string:site.url)!)
         case .TopSites:
             return
@@ -218,7 +217,7 @@ extension ActivityStreamPanel {
             case .TopSites:
                 return topSitesManager.content.isEmpty ? 0 : 1
             case .Highlights:
-                 return self.history.count
+                 return self.highlights.count
         }
     }
 
@@ -242,7 +241,7 @@ extension ActivityStreamPanel {
 
     func configureHistoryItemCell(cell: UITableViewCell, forIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let simpleHighlightCell = cell as! SimpleHighlightCell
-        let site = history[indexPath.row]
+        let site = highlights[indexPath.row]
         simpleHighlightCell.configureWithSite(site)
         return simpleHighlightCell
     }
@@ -263,7 +262,7 @@ extension ActivityStreamPanel {
 
     private func reloadRecentHistory() {
         fetchHighlights().uponQueue(dispatch_get_main_queue()) { result in
-            self.history = result.successValue?.asArray() ?? self.history
+            self.highlights = result.successValue?.asArray() ?? self.highlights
             self.tableView.reloadData()
         }
     }
@@ -347,7 +346,7 @@ extension ActivityStreamPanel {
             let touchPoint = longPressGestureRecognizer.locationInView(self.view)
             if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
                 if Section(indexPath.section) == .Highlights {
-                    presentContextMenu(history[indexPath.row], indexPath: indexPath)
+                    presentContextMenu(highlights[indexPath.row], indexPath: indexPath)
                 }
             }
         }
