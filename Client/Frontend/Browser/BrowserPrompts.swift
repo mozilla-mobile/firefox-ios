@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
+import ShimWK
 
 @objc protocol JSPromptAlertControllerDelegate: class {
     func promptAlertControllerDidDismiss(alertController: JSPromptAlertController)
@@ -11,7 +11,7 @@ import WebKit
 
 /// A simple version of UIAlertController that attaches a delegate to the viewDidDisappear method
 /// to allow forwarding the event. The reason this is needed for prompts from Javascript is we
-/// need to invoke the completionHandler passed to us from the WKWebView delegate or else
+/// need to invoke the completionHandler passed to us from the ShimWKWebView delegate or else
 /// a runtime exception is thrown.
 class JSPromptAlertController: UIAlertController {
     var alertInfo: JSAlertInfo?
@@ -38,7 +38,7 @@ protocol JSAlertInfo {
 
 struct MessageAlert: JSAlertInfo {
     let message: String
-    let frame: WKFrameInfo
+    let frame: ShimWKFrameInfo
     let completionHandler: () -> Void
 
     func alertController() -> JSPromptAlertController {
@@ -59,10 +59,10 @@ struct MessageAlert: JSAlertInfo {
 
 struct ConfirmPanelAlert: JSAlertInfo {
     let message: String
-    let frame: WKFrameInfo
+    let frame: ShimWKFrameInfo
     let completionHandler: (Bool) -> Void
 
-    init(message: String, frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
+    init(message: String, frame: ShimWKFrameInfo, completionHandler: (Bool) -> Void) {
         self.message = message
         self.frame = frame
         self.completionHandler = completionHandler
@@ -88,13 +88,13 @@ struct ConfirmPanelAlert: JSAlertInfo {
 
 struct TextInputAlert: JSAlertInfo {
     let message: String
-    let frame: WKFrameInfo
+    let frame: ShimWKFrameInfo
     let completionHandler: (String?) -> Void
     let defaultText: String?
 
     var input: UITextField!
 
-    init(message: String, frame: WKFrameInfo, completionHandler: (String?) -> Void, defaultText: String?) {
+    init(message: String, frame: ShimWKFrameInfo, completionHandler: (String?) -> Void, defaultText: String?) {
         self.message = message
         self.frame = frame
         self.completionHandler = completionHandler
@@ -123,10 +123,10 @@ struct TextInputAlert: JSAlertInfo {
     }
 }
 
-/// Show a title for a JavaScript Panel (alert) based on the WKFrameInfo. On iOS9 we will use the new securityOrigin
+/// Show a title for a JavaScript Panel (alert) based on the ShimWKFrameInfo. On iOS9 we will use the new securityOrigin
 /// and on iOS 8 we will fall back to the request URL. If the request URL is nil, which happens for JavaScript pages,
 /// we fall back to "JavaScript" as a title.
-private func titleForJavaScriptPanelInitiatedByFrame(frame: WKFrameInfo) -> String {
+private func titleForJavaScriptPanelInitiatedByFrame(frame: ShimWKFrameInfo) -> String {
     var title = "\(frame.securityOrigin.`protocol`)://\(frame.securityOrigin.host)"
     if frame.securityOrigin.port != 0 {
         title += ":\(frame.securityOrigin.port)"

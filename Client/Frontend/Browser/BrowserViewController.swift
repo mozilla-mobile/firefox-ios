@@ -15,6 +15,7 @@ import Account
 import ReadingList
 import MobileCoreServices
 import WebImage
+import ShimWK
 
 private let log = Logger.browserLogger
 
@@ -97,8 +98,8 @@ class BrowserViewController: UIViewController {
 
     // Tracking navigation items to record history types.
     // TODO: weak references?
-    var ignoredNavigation = Set<WKNavigation>()
-    var typedNavigation = [WKNavigation: VisitType]()
+    var ignoredNavigation = Set<ShimWKNavigation>()
+    var typedNavigation = [ShimWKNavigation: VisitType]()
     var navigationToolbar: TabToolbarProtocol {
         return toolbar ?? urlBar
     }
@@ -924,7 +925,7 @@ class BrowserViewController: UIViewController {
     }
 
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        let webView = object as! WKWebView
+        let webView = object as! ShimWKWebView
         guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath)"); return }
         switch path {
         case KVOEstimatedProgress:
@@ -970,7 +971,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func runScriptsOnWebView(webView: WKWebView) {
+    private func runScriptsOnWebView(webView: ShimWKWebView) {
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler: nil)
 
         if AppConstants.MOZ_CONTENT_METADATA_PARSING {
@@ -1085,14 +1086,14 @@ class BrowserViewController: UIViewController {
 
     // Mark: User Agent Spoofing
 
-    private func resetSpoofedUserAgentIfRequired(webView: WKWebView, newURL: NSURL) {
+    private func resetSpoofedUserAgentIfRequired(webView: ShimWKWebView, newURL: NSURL) {
         // Reset the UA when a different domain is being loaded
         if webView.URL?.host != newURL.host {
             webView.customUserAgent = nil
         }
     }
 
-    private func restoreSpoofedUserAgentIfRequired(webView: WKWebView, newRequest: NSURLRequest) {
+    private func restoreSpoofedUserAgentIfRequired(webView: ShimWKWebView, newRequest: NSURLRequest) {
         // Restore any non-default UA from the request's header
         let ua = newRequest.valueForHTTPHeaderField("User-Agent")
         webView.customUserAgent = ua != UserAgent.defaultUserAgent() ? ua : nil
@@ -1194,7 +1195,7 @@ class BrowserViewController: UIViewController {
 
     override func becomeFirstResponder() -> Bool {
         // Make the web view the first responder so that it can show the selection menu.
-        return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
+        return tabManager.selectedTab?.webView?.view.becomeFirstResponder() ?? false
     }
 
     func reloadTab() {
@@ -1400,18 +1401,18 @@ extension BrowserViewController: PresentingModalViewControllerDelegate {
  * TODO: this should be expanded to track various visit types; see Bug 1166084.
  */
 extension BrowserViewController {
-    func ignoreNavigationInTab(tab: Tab, navigation: WKNavigation) {
+    func ignoreNavigationInTab(tab: Tab, navigation: ShimWKNavigation) {
         self.ignoredNavigation.insert(navigation)
     }
 
-    func recordNavigationInTab(tab: Tab, navigation: WKNavigation, visitType: VisitType) {
+    func recordNavigationInTab(tab: Tab, navigation: ShimWKNavigation, visitType: VisitType) {
         self.typedNavigation[navigation] = visitType
     }
 
     /**
      * Untrack and do the right thing.
      */
-    func getVisitTypeForTab(tab: Tab, navigation: WKNavigation?) -> VisitType? {
+    func getVisitTypeForTab(tab: Tab, navigation: ShimWKNavigation?) -> VisitType? {
         guard let navigation = navigation else {
             // See https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/Cocoa/NavigationState.mm#L390
             return VisitType.Link
@@ -1746,8 +1747,8 @@ extension BrowserViewController: WindowCloseHelperDelegate {
 
 extension BrowserViewController: TabDelegate {
 
-    func tab(tab: Tab, didCreateWebView webView: WKWebView) {
-        webView.frame = webViewContainer.frame
+    func tab(tab: Tab, didCreateWebView webView: ShimWKWebView) {
+        webView.view.frame = webViewContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared
         // in willDeleteWebView below!
         webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .New, context: nil)
@@ -1815,7 +1816,7 @@ extension BrowserViewController: TabDelegate {
         }
     }
 
-    func tab(tab: Tab, willDeleteWebView webView: WKWebView) {
+    func tab(tab: Tab, willDeleteWebView webView: ShimWKWebView) {
         tab.cancelQueuedAlerts()
 
         webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
@@ -1827,7 +1828,7 @@ extension BrowserViewController: TabDelegate {
 
         webView.UIDelegate = nil
         webView.scrollView.delegate = nil
-        webView.removeFromSuperview()
+        webView.view.removeFromSuperview()
     }
 
     private func findSnackbar(barToFind: SnackBar) -> Int? {
@@ -1996,7 +1997,7 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
-        if let wv = previous?.webView {
+        if let wv = previous?.webView?.view {
             removeOpenInView()
             wv.endEditing(true)
             wv.accessibilityLabel = nil
@@ -2021,14 +2022,14 @@ extension BrowserViewController: TabManagerDelegate {
             ReaderModeHandlers.readerModeCache = readerModeCache
 
             scrollController.tab = selected
-            webViewContainer.addSubview(webView)
-            webView.snp_makeConstraints { make in
+            webViewContainer.addSubview(webView.view)
+            webView.view.snp_makeConstraints { make in
                 make.top.equalTo(webViewContainerToolbar.snp_bottom)
                 make.left.right.bottom.equalTo(self.webViewContainer)
             }
-            webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
-            webView.accessibilityIdentifier = "contentView"
-            webView.accessibilityElementsHidden = false
+            webView.view.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+            webView.view.accessibilityIdentifier = "contentView"
+            webView.view.accessibilityElementsHidden = false
 
             if let url = webView.URL?.absoluteString {
                 // Don't bother fetching bookmark state for about/sessionrestore and about/home.
@@ -2149,8 +2150,8 @@ extension BrowserViewController: TabManagerDelegate {
     }
 }
 
-extension BrowserViewController: WKNavigationDelegate {
-    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+extension BrowserViewController: ShimWKNavigationDelegate {
+    func webView(webView: ShimWKWebView, didStartProvisionalNavigation navigation: ShimWKNavigation!) {
         if tabManager.selectedTab?.webView !== webView {
             return
         }
@@ -2199,21 +2200,21 @@ extension BrowserViewController: WKNavigationDelegate {
     // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
     // method.
 
-    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+    func webView(webView: ShimWKWebView, decidePolicyForNavigationAction navigationAction: ShimWKNavigationAction, decisionHandler: (ShimWKNavigationActionPolicy) -> Void) {
         guard let url = navigationAction.request.URL else {
-            decisionHandler(WKNavigationActionPolicy.Cancel)
+            decisionHandler(ShimWKNavigationActionPolicy.Cancel)
             return
         }
 
         // Fixes 1261457 - Rich text editor fails because requests to about:blank are blocked
         if url.scheme == "about" && url.resourceSpecifier == "blank" {
-            decisionHandler(WKNavigationActionPolicy.Allow)
+            decisionHandler(ShimWKNavigationActionPolicy.Allow)
             return
         }
 
         if !navigationAction.isAllowed && navigationAction.navigationType != .BackForward {
             log.warning("Denying unprivileged request: \(navigationAction.request)")
-            decisionHandler(WKNavigationActionPolicy.Cancel)
+            decisionHandler(ShimWKNavigationActionPolicy.Cancel)
             return
         }
 
@@ -2231,7 +2232,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 }))
                 presentViewController(alert, animated: true, completion: nil)
             }
-            decisionHandler(WKNavigationActionPolicy.Cancel)
+            decisionHandler(ShimWKNavigationActionPolicy.Cancel)
             return
         }
 
@@ -2241,11 +2242,11 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if isAppleMapsURL(url) || isStoreURL(url) {
             UIApplication.sharedApplication().openURL(url)
-            decisionHandler(WKNavigationActionPolicy.Cancel)
+            decisionHandler(ShimWKNavigationActionPolicy.Cancel)
             return
         }
 
-        // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
+        // This is the normal case, opening a http or https url, which we handle by loading them in this ShimWKWebView. We
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
         if url.scheme == "http" || url.scheme == "https" || url.scheme == "data" {
@@ -2254,7 +2255,7 @@ extension BrowserViewController: WKNavigationDelegate {
             } else if navigationAction.navigationType == .BackForward {
                 restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
             }
-            decisionHandler(WKNavigationActionPolicy.Allow)
+            decisionHandler(ShimWKNavigationActionPolicy.Allow)
             return
         }
 
@@ -2268,10 +2269,10 @@ extension BrowserViewController: WKNavigationDelegate {
             alert.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }
-        decisionHandler(WKNavigationActionPolicy.Cancel)
+        decisionHandler(ShimWKNavigationActionPolicy.Cancel)
     }
 
-    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+    func webView(webView: ShimWKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
 
         // If this is a certificate challenge, see if the certificate has previously been
         // accepted by the user.
@@ -2304,7 +2305,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didCommitNavigation navigation: ShimWKNavigation!) {
         guard let tab = tabManager[webView] else { return }
 
         tab.url = webView.URL
@@ -2315,7 +2316,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didFinishNavigation navigation: ShimWKNavigation!) {
         let tab: Tab! = tabManager[webView]
         tabManager.expireSnackbars()
 
@@ -2346,12 +2347,12 @@ extension BrowserViewController: WKNavigationDelegate {
             // To Screenshot a tab that is hidden we must add the webView,
             // then wait enough time for the webview to render.
             if let webView =  tab.webView {
-                view.insertSubview(webView, atIndex: 0)
+                view.insertSubview(webView.view, atIndex: 0)
                 let time = dispatch_time(DISPATCH_TIME_NOW, Int64(500 * NSEC_PER_MSEC))
                 dispatch_after(time, dispatch_get_main_queue()) {
                     self.screenshotHelper.takeScreenshot(tab)
-                    if webView.superview == self.view {
-                        webView.removeFromSuperview()
+                    if webView.view.superview == self.view {
+                        webView.view.removeFromSuperview()
                     }
                 }
             }
@@ -2385,7 +2386,7 @@ extension BrowserViewController: WKNavigationDelegate {
         self.openInHelper = nil
     }
 
-    private func postLocationChangeNotificationForTab(tab: Tab, navigation: WKNavigation?) {
+    private func postLocationChangeNotificationForTab(tab: Tab, navigation: ShimWKNavigation?) {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         var info = [NSObject: AnyObject]()
         info["url"] = tab.displayURL
@@ -2401,8 +2402,8 @@ extension BrowserViewController: WKNavigationDelegate {
 /// List of schemes that are allowed to open a popup window
 private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data"]
 
-extension BrowserViewController: WKUIDelegate {
-    func webView(webView: WKWebView, createWebViewWithConfiguration configuration: WKWebViewConfiguration, forNavigationAction navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+extension BrowserViewController: ShimWKUIDelegate {
+    func webView(webView: ShimWKWebView, createWebViewWithConfiguration configuration: ShimWKWebViewConfiguration, forNavigationAction navigationAction: ShimWKNavigationAction, windowFeatures: ShimWKWindowFeatures) -> ShimWKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
 
         if !navigationAction.isAllowed {
@@ -2428,12 +2429,12 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
-    private func canDisplayJSAlertForWebView(webView: WKWebView) -> Bool {
+    private func canDisplayJSAlertForWebView(webView: ShimWKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
         return (tabManager.selectedTab?.webView == webView ?? false) && (self.presentedViewController == nil)
     }
 
-    func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
+    func webView(webView: ShimWKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: ShimWKFrameInfo, completionHandler: () -> Void) {
         let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
         if canDisplayJSAlertForWebView(webView) {
             presentViewController(messageAlert.alertController(), animated: true, completion: nil)
@@ -2446,7 +2447,7 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
+    func webView(webView: ShimWKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: ShimWKFrameInfo, completionHandler: (Bool) -> Void) {
         let confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
         if canDisplayJSAlertForWebView(webView) {
             presentViewController(confirmAlert.alertController(), animated: true, completion: nil)
@@ -2457,7 +2458,7 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String?) -> Void) {
+    func webView(webView: ShimWKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: ShimWKFrameInfo, completionHandler: (String?) -> Void) {
         let textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
         if canDisplayJSAlertForWebView(webView) {
             presentViewController(textInputAlert.alertController(), animated: true, completion: nil)
@@ -2469,7 +2470,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     /// Invoked when an error occurs while starting to load data for the main frame.
-    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
+    func webView(webView: ShimWKWebView, didFailProvisionalNavigation navigation: ShimWKNavigation!, withError error: NSError) {
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
         // will be that we switch to the external app, for example the app store, while keeping the
@@ -2494,7 +2495,7 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    private func checkIfWebContentProcessHasCrashed(webView: WKWebView, error: NSError) -> Bool {
+    private func checkIfWebContentProcessHasCrashed(webView: ShimWKWebView, error: NSError) -> Bool {
         if error.code == WKErrorCode.WebContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
             log.debug("WebContent process has crashed. Trying to reloadFromOrigin to restart it.")
             webView.reloadFromOrigin()
@@ -2504,20 +2505,20 @@ extension BrowserViewController: WKUIDelegate {
         return false
     }
 
-    func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
+    func webView(webView: ShimWKWebView, decidePolicyForNavigationResponse navigationResponse: ShimWKNavigationResponse, decisionHandler: (ShimWKNavigationResponsePolicy) -> Void) {
         let helperForURL = OpenIn.helperForResponse(navigationResponse.response)
         if navigationResponse.canShowMIMEType {
             if let openInHelper = helperForURL {
                 addViewForOpenInHelper(openInHelper)
             }
-            decisionHandler(WKNavigationResponsePolicy.Allow)
+            decisionHandler(ShimWKNavigationResponsePolicy.Allow)
             return
         }
 
         guard var openInHelper = helperForURL else {
             let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
             ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.URL!, inWebView: webView)
-            return decisionHandler(WKNavigationResponsePolicy.Allow)
+            return decisionHandler(ShimWKNavigationResponsePolicy.Allow)
         }
         
         if openInHelper.openInView == nil {
@@ -2525,10 +2526,10 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         openInHelper.open()
-        decisionHandler(WKNavigationResponsePolicy.Cancel)
+        decisionHandler(ShimWKNavigationResponsePolicy.Cancel)
     }
 
-    func webViewDidClose(webView: WKWebView) {
+    func webViewDidClose(webView: ShimWKWebView) {
         if let tab = tabManager[webView] {
             self.tabManager.removeTab(tab)
         }
@@ -3000,7 +3001,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 **/
 extension BrowserViewController {
 
-    func addCustomSearchButtonToWebView(webView: WKWebView) {
+    func addCustomSearchButtonToWebView(webView: ShimWKWebView) {
         //check if the search engine has already been added.
         let domain = webView.URL?.domainURL().host
         let matches = self.profile.searchEngines.orderedEngines.filter {$0.shortName == domain}
@@ -3013,12 +3014,12 @@ extension BrowserViewController {
         }
 
         /*
-         This is how we access hidden views in the WKContentView
+         This is how we access hidden views in the ShimWKContentView
          Using the public headers we can find the keyboard accessoryView which is not usually available.
-         Specific values here are from the WKContentView headers.
-         https://github.com/JaviSoto/iOS9-Runtime-Headers/blob/master/Frameworks/WebKit.framework/WKContentView.h
+         Specific values here are from the ShimWKContentView headers.
+         https://github.com/JaviSoto/iOS9-Runtime-Headers/blob/master/Frameworks/WebKit.framework/ShimWKContentView.h
         */
-        guard let webContentView = UIView.findSubViewWithFirstResponder(webView) else {
+        guard let webContentView = UIView.findSubViewWithFirstResponder(webView.view) else {
             /*
              In some cases the URL bar can trigger the keyboard notification. In that case the webview isnt the first responder
              and a search button should not be added.
@@ -3308,9 +3309,9 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
     }
 }
 
-private extension WKNavigationAction {
+private extension ShimWKNavigationAction {
     /// Allow local requests only if the request is privileged.
-    private var isAllowed: Bool {
+    var isAllowed: Bool {
         guard let url = request.URL else {
             return true
         }

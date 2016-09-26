@@ -3,9 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
 import Storage
 import Shared
+import ShimWK
 
 private let log = Logger.browserLogger
 
@@ -36,7 +36,7 @@ class WeakTabManagerDelegate {
     }
 }
 
-// TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
+// TabManager must extend NSObjectProtocol in order to implement ShimWKNavigationDelegate
 class TabManager: NSObject {
     private var delegates = [WeakTabManagerDelegate]()
     weak var stateDelegate: TabManagerStateDelegate?
@@ -62,20 +62,20 @@ class TabManager: NSObject {
     private let navDelegate: TabManagerNavDelegate
     private(set) var isRestoring = false
 
-    // A WKWebViewConfiguration used for normal tabs
-    lazy private var configuration: WKWebViewConfiguration = {
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
+    // A ShimWKWebViewConfiguration used for normal tabs
+    lazy private var configuration: ShimWKWebViewConfiguration = {
+        let configuration = ShimWKWebViewConfiguration()
+        configuration.processPool = ShimWKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
         return configuration
     }()
 
     // A WKWebViewConfiguration used for private mode tabs
-    lazy private var privateConfiguration: WKWebViewConfiguration = {
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
+    lazy private var privateConfiguration: ShimWKWebViewConfiguration = {
+        let configuration = ShimWKWebViewConfiguration()
+        configuration.processPool = ShimWKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
-        configuration.websiteDataStore = WKWebsiteDataStore.nonPersistentDataStore()
+        configuration.websiteDataStore = ShimWKWebsiteDataStore.nonPersistent()
         return configuration
     }()
 
@@ -113,7 +113,7 @@ class TabManager: NSObject {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
-    func addNavigationDelegate(delegate: WKNavigationDelegate) {
+    func addNavigationDelegate(delegate: ShimWKNavigationDelegate) {
         assert(NSThread.isMainThread())
 
         self.navDelegate.insert(delegate)
@@ -143,7 +143,7 @@ class TabManager: NSObject {
         return tabs[index]
     }
 
-    subscript(webView: WKWebView) -> Tab? {
+    subscript(webView: ShimWKWebView) -> Tab? {
         assert(NSThread.isMainThread())
 
         for tab in tabs {
@@ -199,24 +199,24 @@ class TabManager: NSObject {
         }
     }
 
-    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
+    func addTab(request: NSURLRequest! = nil, configuration: ShimWKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
         return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
-    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
+    func addTabAndSelect(request: NSURLRequest! = nil, configuration: ShimWKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
         let tab = addTab(request, configuration: configuration, afterTab: afterTab, isPrivate: isPrivate)
         selectTab(tab)
         return tab
     }
 
-    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
+    func addTabAndSelect(request: NSURLRequest! = nil, configuration: ShimWKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
         let tab = addTab(request, configuration: configuration, afterTab: afterTab)
         selectTab(tab)
         return tab
     }
 
     // This method is duplicated to hide the flushToDisk option from consumers.
-    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
+    func addTab(request: NSURLRequest! = nil, configuration: ShimWKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
         return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false)
     }
 
@@ -244,18 +244,18 @@ class TabManager: NSObject {
         }
     }
 
-    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Tab {
+    private func addTab(request: NSURLRequest? = nil, configuration: ShimWKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Tab {
         assert(NSThread.isMainThread())
 
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
-        let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
+        let configuration: ShimWKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
 
         let tab = Tab(configuration: configuration, isPrivate: isPrivate)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
 
-    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool) -> Tab {
+    private func addTab(request: NSURLRequest? = nil, configuration: ShimWKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool) -> Tab {
         assert(NSThread.isMainThread())
 
         let tab = Tab(configuration: configuration ?? self.configuration)
@@ -522,7 +522,7 @@ class TabManager: NSObject {
     func resetProcessPool() {
         assert(NSThread.isMainThread())
 
-        configuration.processPool = WKProcessPool()
+        configuration.processPool = ShimWKProcessPool()
     }
 }
 
@@ -567,7 +567,7 @@ extension TabManager {
             super.init()
 
             if tab.sessionData == nil {
-                let currentItem: WKBackForwardListItem! = tab.webView?.backForwardList.currentItem
+                let currentItem: ShimWKBackForwardListItem! = tab.webView?.backForwardList.currentItem
 
                 // Freshly created web views won't have any history entries at all.
                 // If we have no history, abort.
@@ -763,12 +763,12 @@ extension TabManager {
     }
 }
 
-extension TabManager : WKNavigationDelegate {
-    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+extension TabManager : ShimWKNavigationDelegate {
+    func webView(webView: ShimWKWebView, didStartProvisionalNavigation navigation: ShimWKNavigation!) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
     }
 
-    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didCommitNavigation navigation: ShimWKNavigation!) {
         let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
         let tab = self[webView]
         tab?.setNoImageMode(isNoImageMode, force: false)
@@ -776,7 +776,7 @@ extension TabManager : WKNavigationDelegate {
         tab?.setNightMode(isNightMode)
     }
 
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didFinishNavigation navigation: ShimWKNavigation!) {
         hideNetworkActivitySpinner()
         // only store changes if this is not an error page
         // as we current handle tab restore as error page redirects then this ensures that we don't
@@ -788,7 +788,7 @@ extension TabManager : WKNavigationDelegate {
         }
     }
 
-    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+    func webView(webView: ShimWKWebView, didFailNavigation navigation: ShimWKNavigation!, withError error: NSError) {
         hideNetworkActivitySpinner()
     }
 
@@ -804,10 +804,10 @@ extension TabManager : WKNavigationDelegate {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }
 
-    /// Called when the WKWebView's content process has gone away. If this happens for the currently selected tab
+    /// Called when the ShimWKWebView's content process has gone away. If this happens for the currently selected tab
     /// then we immediately reload it.
 
-    func webViewWebContentProcessDidTerminate(webView: WKWebView) {
+    func webViewWebContentProcessDidTerminate(webView: ShimWKWebView) {
         if let tab = selectedTab where tab.webView == webView {
             webView.reload()
         }
@@ -828,44 +828,44 @@ extension TabManager {
     }
 }
 
-// WKNavigationDelegates must implement NSObjectProtocol
-class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
-    private var delegates = WeakList<WKNavigationDelegate>()
+// ShimWKNavigationDelegates must implement NSObjectProtocol
+class TabManagerNavDelegate: NSObject, ShimWKNavigationDelegate {
+    private var delegates = WeakList<ShimWKNavigationDelegate>()
 
-    func insert(delegate: WKNavigationDelegate) {
+    func insert(delegate: ShimWKNavigationDelegate) {
         delegates.insert(delegate)
     }
 
-    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didCommitNavigation navigation: ShimWKNavigation!) {
         for delegate in delegates {
             delegate.webView?(webView, didCommitNavigation: navigation)
         }
     }
 
-    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+    func webView(webView: ShimWKWebView, didFailNavigation navigation: ShimWKNavigation!, withError error: NSError) {
         for delegate in delegates {
             delegate.webView?(webView, didFailNavigation: navigation, withError: error)
         }
     }
 
-    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!,
+    func webView(webView: ShimWKWebView, didFailProvisionalNavigation navigation: ShimWKNavigation!,
         withError error: NSError) {
             for delegate in delegates {
                 delegate.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
             }
     }
 
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didFinishNavigation navigation: ShimWKNavigation!) {
         for delegate in delegates {
             delegate.webView?(webView, didFinishNavigation: navigation)
         }
     }
 
-    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
+    func webView(webView: ShimWKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
         completionHandler: (NSURLSessionAuthChallengeDisposition,
         NSURLCredential?) -> Void) {
             let authenticatingDelegates = delegates.filter {
-                $0.respondsToSelector(#selector(WKNavigationDelegate.webView(_:didReceiveAuthenticationChallenge:completionHandler:)))
+                $0.respondsToSelector(#selector(ShimWKNavigationDelegate.webView(_:didReceiveAuthenticationChallenge:completionHandler:)))
             }
 
             guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {
@@ -877,21 +877,21 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
             }
     }
 
-    func webView(webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: ShimWKNavigation!) {
         for delegate in delegates {
             delegate.webView?(webView, didReceiveServerRedirectForProvisionalNavigation: navigation)
         }
     }
 
-    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didStartProvisionalNavigation navigation: ShimWKNavigation!) {
         for delegate in delegates {
             delegate.webView?(webView, didStartProvisionalNavigation: navigation)
         }
     }
 
-    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction,
-        decisionHandler: (WKNavigationActionPolicy) -> Void) {
-            var res = WKNavigationActionPolicy.Allow
+    func webView(webView: ShimWKWebView, decidePolicyForNavigationAction navigationAction: ShimWKNavigationAction,
+        decisionHandler: (ShimWKNavigationActionPolicy) -> Void) {
+            var res = ShimWKNavigationActionPolicy.Allow
             for delegate in delegates {
                 delegate.webView?(webView, decidePolicyForNavigationAction: navigationAction, decisionHandler: { policy in
                     if policy == .Cancel {
@@ -903,9 +903,9 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
             decisionHandler(res)
     }
 
-    func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse,
-        decisionHandler: (WKNavigationResponsePolicy) -> Void) {
-            var res = WKNavigationResponsePolicy.Allow
+    func webView(webView: ShimWKWebView, decidePolicyForNavigationResponse navigationResponse: ShimWKNavigationResponse,
+        decisionHandler: (ShimWKNavigationResponsePolicy) -> Void) {
+            var res = ShimWKNavigationResponsePolicy.Allow
             for delegate in delegates {
                 delegate.webView?(webView, decidePolicyForNavigationResponse: navigationResponse, decisionHandler: { policy in
                     if policy == .Cancel {

@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
+import ShimWK
 
 class SecurityTests: KIFTestCase {
     private var webRoot: String!
@@ -17,7 +17,7 @@ class SecurityTests: KIFTestCase {
         let testURL = "\(webRoot)/localhostLoad.html"
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(testURL)\n")
-        tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        tester().waitForViewWithAccessibilityLabel("Web content") as! ShimWKWebView
         tester().waitForWebViewElementWithAccessibilityLabel("Session exploit")
     }
 
@@ -28,7 +28,7 @@ class SecurityTests: KIFTestCase {
         tester().waitForTimeInterval(1)
 
         // Make sure the URL doesn't change.
-        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! ShimWKWebView
         XCTAssertEqual(webView.URL!.path, "/localhostLoad.html")
 
         // Also make sure the XSS alert doesn't appear.
@@ -53,7 +53,7 @@ class SecurityTests: KIFTestCase {
     func testWindowExploit() {
         tester().tapWebViewElementWithAccessibilityLabel("New tab exploit")
         tester().waitForTimeInterval(1)
-        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! ShimWKWebView
 
         // Make sure the URL doesn't change.
         XCTAssertEqual(webView.URL!.path, "/errors/error.html")

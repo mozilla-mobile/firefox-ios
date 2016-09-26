@@ -3,14 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
+import ShimWK
 
 class LocalRequestHelper: TabHelper {
     func scriptMessageHandlerName() -> String? {
         return "localRequestHelper"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         guard message.frameInfo.request.URL?.isLocal ?? false else { return }
 
         let params = message.body as! [String: String]

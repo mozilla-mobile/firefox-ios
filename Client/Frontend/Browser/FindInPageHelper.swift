@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import WebKit
+import ShimWK
 
 protocol FindInPageHelperDelegate: class {
     func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int)
@@ -23,7 +23,7 @@ class FindInPageHelper: TabHelper {
         self.tab = tab
 
         if let path = NSBundle.mainBundle().pathForResource("FindInPage", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+            let userScript = ShimWKUserScript(source: source, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
@@ -32,7 +32,7 @@ class FindInPageHelper: TabHelper {
         return "findInPageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         let data = message.body as! [String: Int]
 
         if let currentResult = data["currentResult"] {

@@ -3,18 +3,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
 import Storage
 import Shared
-
+import WebKit
 import XCGLogger
+import ShimWK
 
 private let log = Logger.browserLogger
 
 protocol TabHelper {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage)
 }
 
 @objc
@@ -22,8 +22,8 @@ protocol TabDelegate {
     func tab(tab: Tab, didAddSnackbar bar: SnackBar)
     func tab(tab: Tab, didRemoveSnackbar bar: SnackBar)
     func tab(tab: Tab, didSelectFindInPageForSelection selection: String)
-    optional func tab(tab: Tab, didCreateWebView webView: WKWebView)
-    optional func tab(tab: Tab, willDeleteWebView webView: WKWebView)
+    optional func tab(tab: Tab, didCreateWebView webView: ShimWKWebView)
+    optional func tab(tab: Tab, willDeleteWebView webView: ShimWKWebView)
 }
 
 struct TabState {
@@ -53,7 +53,7 @@ class Tab: NSObject {
         return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url, title: displayTitle, favicon: displayFavicon)
     }
 
-    var webView: WKWebView? = nil
+    var webView: ShimWKWebView? = nil
     var tabDelegate: TabDelegate? = nil
     weak var appStateDelegate: AppStateDelegate?
     var bars = [SnackBar]()
@@ -91,17 +91,17 @@ class Tab: NSObject {
     var parent: Tab? = nil
 
     private var helperManager: HelperManager? = nil
-    private var configuration: WKWebViewConfiguration? = nil
+    private var configuration: ShimWKWebViewConfiguration? = nil
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
 
-    init(configuration: WKWebViewConfiguration) {
+    init(configuration: ShimWKWebViewConfiguration) {
         self.configuration = configuration
     }
 
-    init(configuration: WKWebViewConfiguration, isPrivate: Bool) {
+    init(configuration: ShimWKWebViewConfiguration, isPrivate: Bool) {
         self.configuration = configuration
         super.init()
         self.isPrivate = isPrivate
@@ -119,7 +119,7 @@ class Tab: NSObject {
         } else if let sessionData = tab.sessionData where !sessionData.urls.isEmpty {
             let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reverse())
             if let displayURL = history.first {
-                return RemoteTab(clientGUID: nil,
+              return RemoteTab(clientGUID: nil,
                     URL: displayURL,
                     title: tab.displayTitle,
                     history: history,
@@ -136,7 +136,7 @@ class Tab: NSObject {
         self.appStateDelegate?.appDidUpdateState(state)
     }
 
-    weak var navigationDelegate: WKNavigationDelegate? {
+    weak var navigationDelegate: ShimWKNavigationDelegate? {
         didSet {
             if let webView = webView {
                 webView.navigationDelegate = navigationDelegate
@@ -147,16 +147,19 @@ class Tab: NSObject {
     func createWebview() {
         if webView == nil {
             assert(configuration != nil, "Create webview can only be called once")
-            configuration!.userContentController = WKUserContentController()
-            configuration!.preferences = WKPreferences()
+            configuration!.userContentController = ShimWKUserContentController()
+            configuration!.preferences = ShimWKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
-            let webView = TabWebView(frame: CGRectZero, configuration: configuration!)
-            webView.delegate = self
+            let webView = ShimWKWebView(configuration: configuration!, makeInnerWKWebView: { configuration in
+                let webView = TabWebView(frame: CGRectZero, configuration: configuration)
+                webView.delegate = self
+                return webView
+            })
             configuration = nil
 
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.allowsBackForwardNavigationGestures = true
-            webView.backgroundColor = UIColor.lightGrayColor()
+            webView.view.backgroundColor = UIColor.lightGrayColor()
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
@@ -172,7 +175,7 @@ class Tab: NSObject {
         }
     }
 
-    func restore(webView: WKWebView) {
+    func restore(webView: ShimWKWebView) {
         if let sessionData = self.sessionData {
             // If the tab has session data, load the last selected URL.
             // We don't try to restore full session history due to bug 1238006.
@@ -218,16 +221,16 @@ class Tab: NSObject {
         return webView?.estimatedProgress ?? 0
     }
 
-    var backList: [WKBackForwardListItem]? {
+    var backList: [ShimWKBackForwardListItem]? {
         return webView?.backForwardList.backList
     }
 
-    var forwardList: [WKBackForwardListItem]? {
+    var forwardList: [ShimWKBackForwardListItem]? {
         return webView?.backForwardList.forwardList
     }
 
     var historyList: [NSURL] {
-        func listToUrl(item: WKBackForwardListItem) -> NSURL { return item.URL }
+        func listToUrl(item: ShimWKBackForwardListItem) -> NSURL { return item.URL }
         var tabs = self.backList?.map(listToUrl) ?? [NSURL]()
         tabs.append(self.url!)
         return tabs
@@ -308,11 +311,11 @@ class Tab: NSObject {
         webView?.goForward()
     }
 
-    func goToBackForwardListItem(item: WKBackForwardListItem) {
+    func goToBackForwardListItem(item: ShimWKBackForwardListItem) {
         webView?.goToBackForwardListItem(item)
     }
 
-    func loadRequest(request: NSURLRequest) -> WKNavigation? {
+    func loadRequest(request: NSURLRequest) -> ShimWKNavigation? {
         if let webView = webView {
             lastRequest = request
             return webView.loadRequest(request)
@@ -355,24 +358,24 @@ class Tab: NSObject {
     }
 
     func hideContent(animated: Bool = false) {
-        webView?.userInteractionEnabled = false
+        webView?.view.userInteractionEnabled = false
         if animated {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.webView?.alpha = 0.0
+                self.webView?.view.alpha = 0.0
             })
         } else {
-            webView?.alpha = 0.0
+            webView?.view.alpha = 0.0
         }
     }
 
     func showContent(animated: Bool = false) {
-        webView?.userInteractionEnabled = true
+        webView?.view.userInteractionEnabled = true
         if animated {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.webView?.alpha = 1.0
+                self.webView?.view.alpha = 1.0
             })
         } else {
-            webView?.alpha = 1.0
+            webView?.view.alpha = 1.0
         }
     }
 
@@ -436,7 +439,7 @@ class Tab: NSObject {
     }
 
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        guard let webView = object as? WKWebView where webView == self.webView,
+        guard let webView = object as? ShimWKWebView where webView == self.webView,
             let path = keyPath where path == "URL" else {
             return assertionFailure("Unhandled KVO key: \(keyPath)")
         }
@@ -472,15 +475,15 @@ extension Tab: TabWebViewDelegate {
     }
 }
 
-private class HelperManager: NSObject, WKScriptMessageHandler {
+private class HelperManager: NSObject, ShimWKScriptMessageHandler {
     private var helpers = [String: TabHelper]()
-    private weak var webView: WKWebView?
+    private weak var webView: ShimWKWebView?
 
-    init(webView: WKWebView) {
+    init(webView: ShimWKWebView) {
         self.webView = webView
     }
 
-    @objc func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         for helper in helpers.values {
             if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
                 if scriptMessageHandlerName == message.name {

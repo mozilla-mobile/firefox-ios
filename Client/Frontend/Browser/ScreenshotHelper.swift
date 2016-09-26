@@ -26,7 +26,7 @@ class ScreenshotHelper {
                 }
             } else {
                 let offset = CGPointMake(0, -(tab.webView?.scrollView.contentInset.top ?? 0))
-                screenshot = tab.webView?.screenshot(offset: offset, quality: UIConstants.ActiveScreenshotQuality)
+                screenshot = tab.webView?.view.screenshot(offset: offset, quality: UIConstants.ActiveScreenshotQuality)
             }
         }
 

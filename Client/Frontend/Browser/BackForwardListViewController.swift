@@ -3,9 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import WebKit
 import Storage
 import SnapKit
+import ShimWK
 
 class BackForwardListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
     
@@ -52,7 +52,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     var tabManager: TabManager!
     weak var bvc: BrowserViewController?
-    var listData = [(item:WKBackForwardListItem, type:BackForwardType)]()
+    var listData = [(item: ShimWKBackForwardListItem, type:BackForwardType)]()
     
     var tableHeight: CGFloat {
         get {
@@ -69,7 +69,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     var snappedToBottom: Bool = true
     
-    init(profile: Profile, backForwardList: WKBackForwardList, isPrivate: Bool) {
+    init(profile: Profile, backForwardList: ShimWKBackForwardList, isPrivate: Bool) {
         self.profile = profile
         self.isPrivate = isPrivate
         super.init(nibName: nil, bundle: nil)
@@ -77,7 +77,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         loadSites(backForwardList)
     }
     
-    func loadSites(backForwardList: WKBackForwardList) {
+    func loadSites(backForwardList: ShimWKBackForwardList) {
         let sql = profile.favicons as! SQLiteHistory
         var urls: [String] = [String]()
         

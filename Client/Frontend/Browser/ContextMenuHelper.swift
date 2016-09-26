@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import WebKit
+import ShimWK
 
 protocol ContextMenuHelperDelegate: class {
     func contextMenuHelper(contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UILongPressGestureRecognizer)
@@ -36,19 +36,19 @@ class ContextMenuHelper: NSObject, TabHelper, UIGestureRecognizerDelegate {
 
         let path = NSBundle.mainBundle().pathForResource("ContextMenu", ofType: "js")!
         let source = try! NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String
-        let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
+        let userScript = ShimWKUserScript(source: source, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
         tab.webView!.configuration.userContentController.addUserScript(userScript)
 
         // Add a gesture recognizer that disables the built-in context menu gesture recognizer.
         gestureRecognizer.delegate = self
-        tab.webView!.addGestureRecognizer(gestureRecognizer)
+        tab.webView!.view.addGestureRecognizer(gestureRecognizer)
     }
 
     func scriptMessageHandlerName() -> String? {
         return "contextMenuMessageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         if !showCustomContextMenu {
             return
         }
@@ -91,7 +91,7 @@ class ContextMenuHelper: NSObject, TabHelper, UIGestureRecognizerDelegate {
         }
 
         // Hack to detect the built-in context menu gesture recognizer.
-        return otherGestureRecognizer is UILongPressGestureRecognizer && otherGestureRecognizer.delegate?.description.rangeOfString("WKContentView") != nil
+        return otherGestureRecognizer is UILongPressGestureRecognizer && otherGestureRecognizer.delegate?.description.rangeOfString("ShimWKContentView") != nil
     }
 
     func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
