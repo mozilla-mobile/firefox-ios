@@ -163,11 +163,6 @@ class TabCell: UICollectionViewCell {
 
         titleText.backgroundColor = UIColor.clearColor()
 
-        title.layer.shadowColor = UIColor.blackColor().CGColor
-        title.layer.shadowOpacity = 0.2
-        title.layer.shadowOffset = CGSize(width: 0, height: 0.5)
-        title.layer.shadowRadius = 0
-
         title.addSubview(self.closeButton)
         title.addSubview(self.titleText)
         title.addSubview(self.favicon)
