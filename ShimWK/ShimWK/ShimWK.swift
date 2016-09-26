@@ -5,8 +5,8 @@
 import Foundation
 import WebKit
 
-// TODO: Set this to a factory implementation that internally wraps WKWebView or UIWebView.
-let factory: ShimWKFactory! = nil
+// TODO: Eventually add methods to swap the factory, which will allow us to use UIWebView.
+let factory: ShimWKFactory = WKShimWKFactory()
 
 protocol ShimWKFactory {
     func wrapWKProcessPool() -> ShimWKProcessPoolImpl
@@ -72,7 +72,12 @@ public class ShimWKWebView: NSObject, ShimWKWebViewImpl {
     public init(configuration: ShimWKWebViewConfiguration, makeInnerWKWebView: (WKWebViewConfiguration -> WKWebView)? = nil, makeInnerUIWebView: (() -> UIWebView)? = nil) {
         super.init()
 
-        // TODO: Pass the make closure to the corresponding factory instances.
+        if let factory = factory as? WKShimWKFactory {
+            _impl = factory.wrapWKWebView(self, configuration: configuration, makeInnerWKWebView: makeInnerWKWebView)
+        } else {
+            // TODO: Support UIShimWKFactory.
+            _impl = factory.wrapWKWebView(self, frame: CGRectZero, configuration: configuration)
+        }
     }
 
     /*! @abstract The web view's navigation delegate. */

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D38670F81D95DFC400684975 /* ShimWK.h in Headers */ = {isa = PBXBuildFile; fileRef = D38670F61D95DFC400684975 /* ShimWK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D386711A1D95E04400684975 /* ShimWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38671191D95E04400684975 /* ShimWK.swift */; };
+		D399C42A1D99B66400B977F5 /* WKShimWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = D399C4291D99B66400B977F5 /* WKShimWK.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -16,6 +17,7 @@
 		D38670F61D95DFC400684975 /* ShimWK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShimWK.h; sourceTree = "<group>"; };
 		D38670F71D95DFC400684975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D38671191D95E04400684975 /* ShimWK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShimWK.swift; sourceTree = "<group>"; };
+		D399C4291D99B66400B977F5 /* WKShimWK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WKShimWK.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,9 +50,10 @@
 		D38670F51D95DFC400684975 /* ShimWK */ = {
 			isa = PBXGroup;
 			children = (
-				D38671191D95E04400684975 /* ShimWK.swift */,
 				D38670F61D95DFC400684975 /* ShimWK.h */,
 				D38670F71D95DFC400684975 /* Info.plist */,
+				D38671191D95E04400684975 /* ShimWK.swift */,
+				D399C4291D99B66400B977F5 /* WKShimWK.swift */,
 			);
 			path = ShimWK;
 			sourceTree = "<group>";
@@ -136,6 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D399C42A1D99B66400B977F5 /* WKShimWK.swift in Sources */,
 				D386711A1D95E04400684975 /* ShimWK.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
