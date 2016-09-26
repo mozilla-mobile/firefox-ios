@@ -1,4 +1,4 @@
-Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios)
+Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=57bf25c0f096bc01001e21e0&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/57bf25c0f096bc01001e21e0/build/latest) [![Build Status](https://travis-ci.org/mozilla-mobile/firefox-ios.svg?branch=master)](https://travis-ci.org/mozilla-mobile/firefox-ios)
 ===============
 
 Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
