@@ -50,6 +50,16 @@ public enum Direction {
     }
 }
 
+class NoSuchSearchKeywordError: MaybeErrorType {
+    let keyword: String
+    init(keyword: String) {
+        self.keyword = keyword
+    }
+    var description: String {
+        return "No such search keyword: \(keyword)."
+    }
+}
+
 public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     private let bookmarks: SQLiteBookmarks
     private let direction: Direction
@@ -139,6 +149,23 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
         return self.bookmarks.isBookmarked(url, direction: self.direction)
     }
 
+    public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
+        let sql = "SELECT bmkUri FROM \(TableBookmarksBuffer) WHERE " +
+            " keyword = ?"
+        let args: Args = [keyword]
+
+        return self.bookmarks.db.runQuery(sql, args: args, factory: { $0["bmkUri"] as! String })
+            >>== { cursor in
+                if cursor.status == .Success {
+                    if let str = cursor[0] {
+                        return deferMaybe(str)
+                    }
+                }
+
+                return deferMaybe(NoSuchSearchKeywordError(keyword: keyword))
+        }
+    }
+    
     public func removeByURL(url: String) -> Success {
         if self.direction == Direction.Buffer {
             return deferMaybe(DatabaseError(description: "Refusing to remove URL from buffer in model."))
@@ -815,6 +842,10 @@ public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
     public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
         // We don't include buffer items in this check, because we can't un-star them!
         return self.localFactory.isBookmarked(url)
+    }
+    
+    public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
+        return self.bufferFactory.getURLForKeywordSearch(keyword)
     }
 
     public func removeByGUID(guid: GUID) -> Success {

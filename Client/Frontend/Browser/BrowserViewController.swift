@@ -1541,6 +1541,41 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
+        let trimmedText = text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        
+        guard trimmedText.contains(" ") else {
+            submitText(text)
+            return
+        }
+
+        profile.bookmarks.modelFactory >>== { // should do something like weak tab in case the user performs other actions while all this is happening // [weak text]
+            
+            let possibleKeywordQuerySeparatorSpace = trimmedText.characters.indexOf(" ")!
+            let possibleKeyword = trimmedText.substringToIndex(possibleKeywordQuerySeparatorSpace)
+            let possibleQuery = trimmedText.substringFromIndex(possibleKeywordQuerySeparatorSpace.successor())
+            
+            $0.getURLForKeywordSearch(possibleKeyword)
+            .uponQueue(dispatch_get_main_queue()) {
+                // sometimes this list is being hit twice
+                if let urlString = $0.successValue {
+                    let engine = self.profile.searchEngines.defaultEngine
+
+                    guard let url = engine.searchURLForQuery(possibleQuery, searchTemplate: urlString) else {
+                            log.error("Error handling keyword search entry: \"\(text)\".")
+                            return
+                    }
+
+                    Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
+                    
+                    self.finishEditingAndSubmit(url, visitType: VisitType.Typed)
+                } else {
+                    self.submitText(text)
+                }
+            }
+        }
+    }
+    
+    private func submitText(text: String) {
         let engine = profile.searchEngines.defaultEngine
         let url: NSURL
 

@@ -23,6 +23,7 @@ class OpenSearchEngine: NSObject, NSCoding {
 
     private let SearchTermComponent = "{searchTerms}"
     private let LocaleTermComponent = "{moz:locale}"
+    private let KeywordSearchTermComponent = "%s"
 
     private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
 
@@ -63,7 +64,8 @@ class OpenSearchEngine: NSObject, NSCoding {
     /**
      * Returns the search URL for the given query.
      */
-    func searchURLForQuery(query: String) -> NSURL? {
+    func searchURLForQuery(query: String, searchTemplate: String? = nil) -> NSURL? {
+        let searchTemplate = searchTemplate ?? self.searchTemplate
         return getURLFromTemplate(searchTemplate, query: query)
     }
 
@@ -132,6 +134,7 @@ class OpenSearchEngine: NSObject, NSCoding {
                 let localeString = NSLocale.currentLocale().localeIdentifier
                 let urlString = encodedSearchTemplate
                     .stringByReplacingOccurrencesOfString(SearchTermComponent, withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                    .stringByReplacingOccurrencesOfString(KeywordSearchTermComponent, withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
                     .stringByReplacingOccurrencesOfString(LocaleTermComponent, withString: localeString, options: NSStringCompareOptions.LiteralSearch, range: nil)
                 return NSURL(string: urlString)
             }
