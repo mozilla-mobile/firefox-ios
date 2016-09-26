@@ -1548,15 +1548,13 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
-        profile.bookmarks.modelFactory >>== { // should do something like weak tab in case the user performs other actions while all this is happening // [weak text]
-            
+        profile.bookmarks.modelFactory >>== {
             let possibleKeywordQuerySeparatorSpace = trimmedText.characters.indexOf(" ")!
             let possibleKeyword = trimmedText.substringToIndex(possibleKeywordQuerySeparatorSpace)
             let possibleQuery = trimmedText.substringFromIndex(possibleKeywordQuerySeparatorSpace.successor())
             
             $0.getURLForKeywordSearch(possibleKeyword)
             .uponQueue(dispatch_get_main_queue()) {
-                // sometimes this list is being hit twice
                 if let urlString = $0.successValue {
                     let engine = self.profile.searchEngines.defaultEngine
 
