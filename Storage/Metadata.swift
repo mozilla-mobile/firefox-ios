@@ -8,4 +8,6 @@ import Shared
 
 public protocol Metadata {
     func metadataForSites(sites: [Site]) -> Deferred<Maybe<[PageMetadata]>>
+    func metadataForURLs(urls: [NSURL]) -> Deferred<Maybe<[PageMetadata]>>
+    func storeMetadata(metadata: PageMetadata, forPageURL: NSURL) -> Success
 }

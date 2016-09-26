@@ -110,6 +110,10 @@ public class MockProfile: Profile {
         return self.places
     }
 
+    lazy var metadata: Metadata = {
+        return SQLitePageMetadata(db: self.db)
+    }()
+
     lazy var isChinaEdition: Bool = {
         return NSLocale.currentLocale().localeIdentifier == "zh_CN"
     }()

@@ -25,7 +25,12 @@ extension SQLitePageMetadata: Metadata {
     //       object returned from the SDRow factory, there's some hackery to assign the images to the
     //       metadata object (see extension defined below).
     public func metadataForSites(sites: [Site]) -> Deferred<Maybe<[PageMetadata]>> {
-        let cacheKeys = sites.flatMap(cacheKeyForSite)
+        let urls = sites.flatMap { $0.url.asURL }
+        return metadataForURLs(urls)
+    }
+
+    public func metadataForURLs(urls: [NSURL]) -> Deferred<Maybe<[PageMetadata]>> {
+        let cacheKeys = urls.flatMap({ cacheKeyForURL($0) })
 
         let args: Args = cacheKeys
         let query =
@@ -46,6 +51,22 @@ extension SQLitePageMetadata: Metadata {
         }
     }
 
+    public func storeMetadata(metadata: PageMetadata, forPageURL pageURL: NSURL) -> Success {
+        guard let cacheKey = cacheKeyForURL(pageURL) else {
+            return succeed()
+        }
+
+        let args: Args = [cacheKey, metadata.siteURL, metadata.title, metadata.type, metadata.description, nil, nil]
+
+        let insert =
+        "INSERT INTO page_metadata " +
+        "(cache_key, site_url, title, type, description, media_url, expired_at) " +
+        "VALUES " +
+        "\(BrowserDB.varlist(args.count))"
+
+        return self.db.run(insert, withArgs: args)
+    }
+
     private func imagesForMetadata(metadata: PageMetadata) -> Deferred<Maybe<Cursor<PageMetadataImage>>> {
         let args: Args = [metadata.id]
         let query =
@@ -60,14 +81,17 @@ extension SQLitePageMetadata: Metadata {
 
     // A cache key is a conveninent, readable identifier for a site in the metadata database which helps 
     // with deduping entries for the same page.
-    private func cacheKeyForSite(site: Site) -> CacheKey? {
-        guard let url = site.url.asURL else {
-            return nil
-        }
-
+    private func cacheKeyForURL(url: NSURL) -> CacheKey? {
         var key = url.normalizedHost() ?? ""
         key = key + (url.path ?? "") + (url.query ?? "")
         return key
+    }
+
+    private func cacheKeyForURL(urlString: String) -> CacheKey? {
+        guard let url = urlString.asURL else {
+            return nil
+        }
+        return cacheKeyForURL(url)
     }
 
     private class func pageMetadataFactory(row: SDRow) -> PageMetadata {

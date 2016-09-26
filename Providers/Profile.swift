@@ -143,6 +143,7 @@ protocol Profile: class {
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> { get }
+    var metadata: Metadata { get }
     var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
@@ -317,6 +318,15 @@ public class BrowserProfile: Profile {
             log.debug("Private mode - Ignoring page metadata.")
             return
         }
+
+        guard let metadataDict = notification.userInfo?["metadata"] as? [String: AnyObject],
+              let pageURL = (metadataDict["url"] as? String)?.asURL,
+              let pageMetadata = PageMetadata.fromDictionary(metadataDict) else {
+            log.debug("Metadata notification doesn't contain any metadata!")
+            return
+        }
+
+        self.metadata.storeMetadata(pageMetadata, forPageURL: pageURL)
     }
 
     // These selectors run on which ever thread sent the notifications (not the main thread)
@@ -381,6 +391,10 @@ public class BrowserProfile: Profile {
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
         return self.places
     }
+
+    lazy var metadata: Metadata = {
+        return SQLitePageMetadata(db: self.db)
+    }()
 
     var recommendations: HistoryRecommendations {
         return self.places
