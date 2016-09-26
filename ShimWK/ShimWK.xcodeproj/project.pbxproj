@@ -10,6 +10,7 @@
 		D38670F81D95DFC400684975 /* ShimWK.h in Headers */ = {isa = PBXBuildFile; fileRef = D38670F61D95DFC400684975 /* ShimWK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D386711A1D95E04400684975 /* ShimWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38671191D95E04400684975 /* ShimWK.swift */; };
 		D399C42A1D99B66400B977F5 /* WKShimWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = D399C4291D99B66400B977F5 /* WKShimWK.swift */; };
+		D399C4321D99BA5600B977F5 /* UIShimWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = D399C4311D99BA5600B977F5 /* UIShimWK.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +19,7 @@
 		D38670F71D95DFC400684975 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D38671191D95E04400684975 /* ShimWK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShimWK.swift; sourceTree = "<group>"; };
 		D399C4291D99B66400B977F5 /* WKShimWK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WKShimWK.swift; sourceTree = "<group>"; };
+		D399C4311D99BA5600B977F5 /* UIShimWK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShimWK.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,8 +36,8 @@
 		D38670E91D95DFC400684975 = {
 			isa = PBXGroup;
 			children = (
-				D38670F51D95DFC400684975 /* ShimWK */,
 				D38670F41D95DFC400684975 /* Products */,
+				D38670F51D95DFC400684975 /* ShimWK */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,6 +56,7 @@
 				D38670F71D95DFC400684975 /* Info.plist */,
 				D38671191D95E04400684975 /* ShimWK.swift */,
 				D399C4291D99B66400B977F5 /* WKShimWK.swift */,
+				D399C4311D99BA5600B977F5 /* UIShimWK.swift */,
 			);
 			path = ShimWK;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D399C42A1D99B66400B977F5 /* WKShimWK.swift in Sources */,
+				D399C4321D99BA5600B977F5 /* UIShimWK.swift in Sources */,
 				D386711A1D95E04400684975 /* ShimWK.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

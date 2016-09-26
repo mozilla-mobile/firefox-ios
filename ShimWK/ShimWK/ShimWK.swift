@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 // TODO: Eventually add methods to swap the factory, which will allow us to use UIWebView.
-let factory: ShimWKFactory = WKShimWKFactory()
+let factory: ShimWKFactory = UIShimWKFactory()
 
 protocol ShimWKFactory {
     func wrapWKProcessPool() -> ShimWKProcessPoolImpl
