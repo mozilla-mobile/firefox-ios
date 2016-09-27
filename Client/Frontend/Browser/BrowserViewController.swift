@@ -1548,13 +1548,11 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
-        profile.bookmarks.modelFactory >>== {
-            let possibleKeywordQuerySeparatorSpace = trimmedText.characters.indexOf(" ")!
-            let possibleKeyword = trimmedText.substringToIndex(possibleKeywordQuerySeparatorSpace)
-            let possibleQuery = trimmedText.substringFromIndex(possibleKeywordQuerySeparatorSpace.successor())
-            
-            $0.getURLForKeywordSearch(possibleKeyword)
-            .uponQueue(dispatch_get_main_queue()) {
+        let possibleKeywordQuerySeparatorSpace = trimmedText.characters.indexOf(" ")!
+        let possibleKeyword = trimmedText.substringToIndex(possibleKeywordQuerySeparatorSpace)
+        let possibleQuery = trimmedText.substringFromIndex(possibleKeywordQuerySeparatorSpace.successor())
+        
+        profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(dispatch_get_main_queue()) {
                 if let urlString = $0.successValue {
                     let engine = self.profile.searchEngines.defaultEngine
 
@@ -1569,7 +1567,6 @@ extension BrowserViewController: URLBarDelegate {
                 } else {
                     self.submitText(text)
                 }
-            }
         }
     }
     

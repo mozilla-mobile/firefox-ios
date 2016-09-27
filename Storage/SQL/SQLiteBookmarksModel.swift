@@ -60,7 +60,11 @@ class NoSuchSearchKeywordError: MaybeErrorType {
     }
 }
 
-public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
+public protocol KeywordSearchSource {
+    func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>>
+}
+
+public class SQLiteBookmarksModelFactory: BookmarksModelFactory, KeywordSearchSource {
     private let bookmarks: SQLiteBookmarks
     private let direction: Direction
 
@@ -788,7 +792,7 @@ extension SQLiteBookmarks {
 
 // It's a factory where the root contains Desktop Bookmarks from the buffer, and
 // mobile bookmarks from local.
-public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
+public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory, KeywordSearchSource {
     let localFactory: SQLiteBookmarksModelFactory
     let bufferFactory: SQLiteBookmarksModelFactory
 
@@ -847,7 +851,7 @@ public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
     public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
         return self.bufferFactory.getURLForKeywordSearch(keyword)
     }
-
+    
     public func removeByGUID(guid: GUID) -> Success {
         return self.localFactory.removeByGUID(guid)
     }
@@ -857,7 +861,7 @@ public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
     }
 }
 
-public class MergedSQLiteBookmarks: BookmarksModelFactorySource {
+public class MergedSQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     let local: SQLiteBookmarks
     let buffer: SQLiteBookmarkBufferStorage
 
@@ -878,5 +882,11 @@ public class MergedSQLiteBookmarks: BookmarksModelFactorySource {
     public init(db: BrowserDB) {
         self.local = SQLiteBookmarks(db: db)
         self.buffer = SQLiteBookmarkBufferStorage(db: db)
+    }
+
+    public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
+        return modelFactory >>== {
+            return ($0 as! KeywordSearchSource).getURLForKeywordSearch(keyword)
+        }
     }
 }
