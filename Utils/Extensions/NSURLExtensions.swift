@@ -140,7 +140,8 @@ extension NSURL {
 
     public var origin: String? {
         guard isWebPage(includeDataURIs: false),
-              let hostPort = self.hostPort else {
+              let hostPort = self.hostPort,
+              let scheme = scheme else {
             return nil
         }
 
@@ -247,8 +248,7 @@ extension NSURL {
         let httpSchemes = ["http", "https"]
         let dataSchemes = ["data"]
 
-        if let scheme = scheme,
-           _ = httpSchemes.indexOf(scheme) where includeDataURIs && dataSchemes.contains(scheme) {
+        if let scheme = scheme where httpSchemes.contains(scheme) || (includeDataURIs && dataSchemes.contains(scheme)) {
             return true
         }
 

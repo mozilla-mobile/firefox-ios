@@ -52,7 +52,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.authenticationInfo = KeychainWrapper.authenticationInfo()
+        self.authenticationInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo()
         tableView.reloadData()
     }
 
@@ -71,7 +71,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         authenticationInfo?.updateRequiredPasscodeInterval(intervalOptions[indexPath.row])
-        KeychainWrapper.setAuthenticationInfo(authenticationInfo)
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authenticationInfo)
         tableView.reloadData()
     }
 }

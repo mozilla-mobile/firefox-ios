@@ -4,7 +4,6 @@
 
 import Foundation
 
-@available(iOS 9, *)
 class RequestDesktopSiteActivity: UIActivity {
     private let requestMobileSite: Bool
     private let callback: () -> ()

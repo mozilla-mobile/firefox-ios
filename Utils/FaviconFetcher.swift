@@ -8,7 +8,7 @@ import Alamofire
 import XCGLogger
 import Deferred
 import WebImage
-
+import Fuzi
 
 private let log = Logger.browserLogger
 private let queue = dispatch_queue_create("FaviconFetcher", DISPATCH_QUEUE_CONCURRENT)
@@ -43,7 +43,7 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
         }
 
         let deferred = Deferred<Maybe<[Favicon]>>()
-        
+
         var oldIcons: [Favicon] = oldIcons
 
         dispatch_async(queue) { _ in
@@ -99,74 +99,75 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
         return deferred
     }
 
+
+
     // Loads and parses an html document and tries to find any known favicon-type tags for the page
     private func parseHTMLForFavicons(url: NSURL) -> Deferred<Maybe<[Favicon]>> {
         return fetchDataForURL(url).bind({ result -> Deferred<Maybe<[Favicon]>> in
             var icons = [Favicon]()
+            guard let data = result.successValue where result.isSuccess,
+                let root = try? HTMLDocument(data: data) else {
+                    return deferMaybe([])
+            }
+            var reloadUrl: NSURL? = nil
+            for meta in root.xpath("//head/meta") {
+                if let refresh = meta["http-equiv"] where refresh == "Refresh",
+                    let content = meta["content"],
+                    let index = content.rangeOfString("URL="),
+                    let url = NSURL(string: content.substringFromIndex(index.startIndex.advancedBy(4))) {
+                    reloadUrl = url
+                }
+            }
 
-            if let data = result.successValue where result.isSuccess,
-               let element = RXMLElement(fromHTMLData: data) where element.isValid {
-                var reloadUrl: NSURL? = nil
-                element.iterate("head.meta") { meta in
-                    if let refresh = meta.attribute("http-equiv") where refresh == "Refresh",
-                        let content = meta.attribute("content"),
-                        let index = content.rangeOfString("URL="),
-                        let url = NSURL(string: content.substringFromIndex(index.startIndex.advancedBy(4))) {
-                            reloadUrl = url
+            if let url = reloadUrl {
+                return self.parseHTMLForFavicons(url)
+            }
+
+            var bestType = IconType.NoneFound
+            for link in root.xpath("//head//link[contains(@rel, 'icon')]") {
+                var iconType: IconType? = nil
+                if let rel = link["rel"] {
+                    switch (rel) {
+                    case "shortcut icon":
+                        iconType = .Icon
+                    case "icon":
+                        iconType = .Icon
+                    case "apple-touch-icon":
+                        iconType = .AppleIcon
+                    case "apple-touch-icon-precomposed":
+                        iconType = .AppleIconPrecomposed
+                    default:
+                        iconType = nil
                     }
                 }
 
-                if let url = reloadUrl {
-                    return self.parseHTMLForFavicons(url)
+                guard let href = link["href"] where iconType != nil else {
+                    continue //Skip the rest of the loop. But don't stop the loop
                 }
 
-                var bestType = IconType.NoneFound
-                element.iterateWithRootXPath("//head//link[contains(@rel, 'icon')]") { link in
-                    var iconType: IconType? = nil
-                    if let rel = link.attribute("rel") {
-                        switch (rel) {
-                            case "shortcut icon":
-                                iconType = .Icon
-                            case "icon":
-                                iconType = .Icon
-                            case "apple-touch-icon":
-                                iconType = .AppleIcon
-                            case "apple-touch-icon-precomposed":
-                                iconType = .AppleIconPrecomposed
-                            default:
-                                iconType = nil
-                        }
-                    }
+                if (href.endsWith(".ico")) {
+                    iconType = .Guess
+                }
 
-                    guard let href = link.attribute("href") where iconType != nil else {
-                        return
-                    }
-
-                    if (href.endsWith(".ico")) {
-                        iconType = .Guess
-                    }
-
-                    if let type = iconType where !bestType.isPreferredTo(type),
-                       let iconUrl = NSURL(string: href, relativeToURL: url),
-                       let absoluteString = iconUrl.absoluteString {
-                            let icon = Favicon(url: absoluteString, date: NSDate(), type: type)
-                            // If we already have a list of Favicons going already, then add it…
-                            if (type == bestType) {
-                                icons.append(icon)
-                            } else {
-                                // otherwise, this is the first in a new best yet type.
-                                icons = [icon]
-                                bestType = type
-                            }
+                if let type = iconType where !bestType.isPreferredTo(type), let iconUrl = NSURL(string: href, relativeToURL: url), let absoluteString = iconUrl.absoluteString {
+                    let icon = Favicon(url: absoluteString, date: NSDate(), type: type)
+                    // If we already have a list of Favicons going already, then add it…
+                    if (type == bestType) {
+                        icons.append(icon)
+                    } else {
+                        // otherwise, this is the first in a new best yet type.
+                        icons = [icon]
+                        bestType = type
                     }
                 }
+
 
                 // If we haven't got any options icons, then use the default at the root of the domain.
-                if let url = NSURL(string: "/favicon.ico", relativeToURL: url) where icons.isEmpty,
-                   let absoluteString = url.absoluteString {
+                if let url = NSURL(string: "/favicon.ico", relativeToURL: url) where icons.isEmpty, let absoluteString = url.absoluteString {
                     let icon = Favicon(url: absoluteString, date: NSDate(), type: .Guess)
                     icons = [icon]
                 }
+
             }
             return deferMaybe(icons)
         })
@@ -236,5 +237,14 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
         characterToFaviconCache[faviconLetter] = faviconImage
         return faviconImage
     }
-}
 
+    // Returns a color based on the url's hash
+    class func getDefaultColor(url: NSURL) -> UIColor {
+        guard let hash = url.baseDomain()?.hashValue else {
+            return UIColor.grayColor()
+        }
+        let index = abs(hash) % (UIConstants.DefaultColorStrings.count - 1)
+        let colorHex = UIConstants.DefaultColorStrings[index]
+        return UIColor(colorString: colorHex)
+    }
+}

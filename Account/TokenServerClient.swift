@@ -87,9 +87,9 @@ public class TokenServerClient {
 
     public class func getAudienceForURL(URL: NSURL) -> String {
         if let port = URL.port {
-            return "\(URL.scheme)://\(URL.host!):\(port)"
+            return "\(URL.scheme!)://\(URL.host!):\(port)"
         } else {
-            return "\(URL.scheme)://\(URL.host!)"
+            return "\(URL.scheme!)://\(URL.host!)"
         }
     }
 

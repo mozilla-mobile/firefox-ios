@@ -19,9 +19,7 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
         menuTitleLabel.numberOfLines = 0
         menuTitleLabel.textAlignment = NSTextAlignment.Center
         menuTitleLabel.minimumScaleFactor = 0.15
-        if #available(iOS 9, *) {
-            menuTitleLabel.allowsDefaultTighteningForTruncation = true
-        }
+        menuTitleLabel.allowsDefaultTighteningForTruncation = true
         return menuTitleLabel
     }()
 

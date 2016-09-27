@@ -86,7 +86,7 @@ class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
 
     private func changePasscodeToCode(code: String) {
         authenticationInfo?.updatePasscode(code)
-        KeychainWrapper.setAuthenticationInfo(authenticationInfo)
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authenticationInfo)
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.postNotificationName(NotificationPasscodeDidChange, object: nil)
     }

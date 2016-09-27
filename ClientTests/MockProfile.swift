@@ -74,6 +74,9 @@ public class MockProfile: Profile {
         return name
     }
 
+    func reopen() {
+    }
+
     func shutdown() {
     }
 
@@ -87,7 +90,7 @@ public class MockProfile: Profile {
      * Favicons, history, and bookmarks are all stored in one intermeshed
      * collection of tables.
      */
-    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage> = {
+    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage, HistoryRecommendations> = {
         return SQLiteHistory(db: self.db, prefs: MockProfilePrefs())!
     }()
 
@@ -102,6 +105,14 @@ public class MockProfile: Profile {
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
         return self.places
     }
+
+    var recommendations: HistoryRecommendations {
+        return self.places
+    }
+
+    lazy var isChinaEdition: Bool = {
+        return NSLocale.currentLocale().localeIdentifier == "zh_CN"
+    }()
 
     lazy var syncManager: SyncManager = {
         return MockSyncManager()

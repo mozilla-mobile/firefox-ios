@@ -586,7 +586,7 @@ class LoginsSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
-        guard let authInfo = KeychainWrapper.authenticationInfo() else {
+        guard let authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() else {
             settings?.navigateToLoginsList()
             return
         }

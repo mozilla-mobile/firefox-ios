@@ -12,7 +12,6 @@ import XCGLogger
 private let log = Logger.browserLogger
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
-
 // MARK: -  Lifecycle
 struct ASPanelUX {
     static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
@@ -33,12 +32,16 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     private let topSitesManager = ASHorizontalScrollCellManager()
 
     var topSites: [Site] = []
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
+    }()
+
     var history: [Site] = []
 
     init(profile: Profile) {
         self.profile = profile
         super.init(style: .Grouped)
-
+        view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
@@ -92,27 +95,27 @@ extension ActivityStreamPanel {
 
     enum Section: Int {
         case TopSites
-        case History
+        case Highlights
 
         static let count = 2
 
         var title: String? {
             switch self {
-            case .History: return "Recent Activity"
+            case .Highlights: return Strings.ASHighlightsTitle
             case .TopSites: return nil
             }
         }
 
         var headerHeight: CGFloat {
             switch self {
-            case .History: return 40
+            case .Highlights: return 40
             case .TopSites: return 0
             }
         }
 
         func cellHeight(traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
-            case .History: return UITableViewAutomaticDimension
+            case .Highlights: return UITableViewAutomaticDimension
             case .TopSites:
                 if traits.horizontalSizeClass == .Compact && traits.verticalSizeClass == .Regular {
                     return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio)) + ASPanelUX.PageControlOffsetSize
@@ -124,9 +127,9 @@ extension ActivityStreamPanel {
 
         var headerView: UIView? {
             switch self {
-            case .History:
+            case .Highlights:
                 let view = ASHeaderView()
-                view.title = "Recent Activity"
+                view.title = title
                 return view
             case .TopSites:
                 return nil
@@ -136,7 +139,7 @@ extension ActivityStreamPanel {
         var cellIdentifier: String {
             switch self {
             case .TopSites: return "TopSiteCell"
-            case .History: return "HistoryCell"
+            case .Highlights: return "HistoryCell"
             }
         }
 
@@ -177,7 +180,7 @@ extension ActivityStreamPanel {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(indexPath.section) {
-        case .History:
+        case .Highlights:
             let site = self.history[indexPath.row]
             showSiteWithURLHandler(NSURL(string:site.url)!)
         case .TopSites:
@@ -198,7 +201,7 @@ extension ActivityStreamPanel {
         switch Section(section) {
             case .TopSites:
                 return topSitesManager.content.isEmpty ? 0 : 1
-            case .History:
+            case .Highlights:
                  return self.history.count
         }
     }
@@ -210,7 +213,7 @@ extension ActivityStreamPanel {
         switch Section(indexPath.section) {
         case .TopSites:
             return configureTopSitesCell(cell, forIndexPath: indexPath)
-        case .History:
+        case .Highlights:
             return configureHistoryItemCell(cell, forIndexPath: indexPath)
         }
     }
@@ -243,7 +246,7 @@ extension ActivityStreamPanel {
     }
 
     private func reloadRecentHistory() {
-        self.profile.history.getSitesByLastVisit(ASPanelUX.historySize).uponQueue(dispatch_get_main_queue()) { result in
+        self.profile.recommendations.getHighlights().uponQueue(dispatch_get_main_queue()) { result in
             self.history = result.successValue?.asArray() ?? self.history
             self.tableView.reloadData()
         }
@@ -315,6 +318,48 @@ extension ActivityStreamPanel {
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.indexOf($0.url) == .None})
     }
+
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        if longPressGestureRecognizer.state == UIGestureRecognizerState.Began {
+            let touchPoint = longPressGestureRecognizer.locationInView(self.view)
+            if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
+                if Section(indexPath.section) == .Highlights {
+                    presentContextMenu(history[indexPath.row])
+                }
+            }
+        }
+    }
+
+    private func presentContextMenu(site: Site) {
+        let bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
+            let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+            self.profile.bookmarks.shareItem(shareItem)
+            var userData = [QuickActions.TabURLKey: shareItem.url]
+            if let title = shareItem.title {
+                userData[QuickActions.TabTitleKey] = title
+            }
+            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+                withUserData: userData,
+                toApplication: UIApplication.sharedApplication())
+        })
+
+        let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
+            self.profile.history.removeHistoryForURL(site.url)
+        })
+
+        let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
+            if let url = NSURL(string: site.url) {
+                let helper = ShareExtensionHelper(url: url, tab: nil, activities: [])
+                let controller = helper.createActivityViewController({ _ in })
+                self.presentViewController(controller, animated: true, completion: nil)
+            }
+        })
+
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: [bookmarkAction, deleteFromHistoryAction, shareAction])
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
+    }
 }
 
 // MARK: - Section Header View
@@ -335,7 +380,7 @@ class ASHeaderView: UIView {
         return titleLabel
     }()
 
-    var title: String = "" {
+    var title: String? {
         willSet(newTitle) {
             titleLabel.text = newTitle
         }

@@ -182,11 +182,13 @@ class TopTabsViewController: UIViewController {
             }
         }
         delegate?.topTabsDidPressNewTab()
+        self.privateModeButton.enabled = false
         collectionView.performBatchUpdates({ _ in
             let count = self.collectionView.numberOfItemsInSection(0)
             self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: count, inSection: 0)])
             }, completion: { finished in
                 if finished {
+                    self.privateModeButton.enabled = true
                     self.scrollToCurrentTab()
                 }
         })

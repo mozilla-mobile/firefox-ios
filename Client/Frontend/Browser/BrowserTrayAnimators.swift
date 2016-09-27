@@ -54,7 +54,6 @@ private extension TrayToBrowserAnimator {
 
 
         let finalFrame = calculateExpandedCellFrameFromBVC(bvc)
-        bvc.urlBar.alpha = 1
         bvc.footer.alpha = shouldDisplayFooterForBVC(bvc) ? 1 : 0
         bvc.urlBar.isTransitioning = true
 
@@ -166,7 +165,8 @@ private extension BrowserToTrayAnimator {
                 cell.layoutIfNeeded()
 
                 transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
-                bvc.urlBar.alpha = 0
+
+                bvc.urlBar.updateAlphaForSubviews(0)
                 bvc.footer.alpha = 0
                 tabCollectionViewSnapshot.alpha = 1
 

@@ -223,21 +223,19 @@ class BrowserUtils {
         tester.tapViewWithAccessibilityLabel("Show Tabs")
         let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
 
-        // Clear all private tabs if we're running iOS 9
-        if #available(iOS 9, *) {
-            // Switch to Private Mode if we're not in it already.
-            do {
-                try tester.tryFindingTappableViewWithAccessibilityLabel("Private Mode", value: "Off", traits: UIAccessibilityTraitButton)
-                tester.tapViewWithAccessibilityLabel("Private Mode")
-            } catch _ {}
-
-            while tabsView.numberOfItemsInSection(0) > 0 {
-                let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-                tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
-                tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
-            }
+        // Switch to Private Mode if we're not in it already.
+        do {
+            try tester.tryFindingTappableViewWithAccessibilityLabel("Private Mode", value: "Off", traits: UIAccessibilityTraitButton)
             tester.tapViewWithAccessibilityLabel("Private Mode")
+        } catch _ {}
+
+        // Clear all private tabs.
+        while tabsView.numberOfItemsInSection(0) > 0 {
+            let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+            tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
+            tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
         }
+        tester.tapViewWithAccessibilityLabel("Private Mode")
 
         while tabsView.numberOfItemsInSection(0) > 1 {
             let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
@@ -499,13 +497,13 @@ class DynamicFontUtils {
 
 class PasscodeUtils {
     static func resetPasscode() {
-        KeychainWrapper.setAuthenticationInfo(nil)
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(nil)
     }
 
     static func setPasscode(code: String, interval: PasscodeInterval) {
         let info = AuthenticationKeychainInfo(passcode: code)
         info.updateRequiredPasscodeInterval(interval)
-        KeychainWrapper.setAuthenticationInfo(info)
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(info)
     }
 
     static func enterPasscode(tester: KIFUITestActor, digits: String) {
