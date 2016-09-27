@@ -24,7 +24,7 @@ public func titleForSpecialGUID(guid: GUID) -> String? {
 
 extension SQLiteBookmarks: ShareToDestination {
     public func addToMobileBookmarks(url: NSURL, title: String, favicon: Favicon?) -> Success {
-        return isBookmarked(url.absoluteString, direction: Direction.Local)
+        return isBookmarked(String(url), direction: Direction.Local)
             >>== { yes in
                 guard !yes else { return succeed() }
                 return self.insertBookmark(url, title: title, favicon: favicon,
