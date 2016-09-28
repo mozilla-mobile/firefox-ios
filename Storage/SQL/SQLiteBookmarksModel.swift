@@ -50,21 +50,11 @@ public enum Direction {
     }
 }
 
-class NoSuchSearchKeywordError: MaybeErrorType {
-    let keyword: String
-    init(keyword: String) {
-        self.keyword = keyword
-    }
-    var description: String {
-        return "No such search keyword: \(keyword)."
-    }
-}
-
 public protocol KeywordSearchSource {
     func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>>
 }
 
-public class SQLiteBookmarksModelFactory: BookmarksModelFactory, KeywordSearchSource {
+public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     private let bookmarks: SQLiteBookmarks
     private let direction: Direction
 
@@ -153,23 +143,6 @@ public class SQLiteBookmarksModelFactory: BookmarksModelFactory, KeywordSearchSo
         return self.bookmarks.isBookmarked(url, direction: self.direction)
     }
 
-    public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
-        let sql = "SELECT bmkUri FROM \(TableBookmarksBuffer) WHERE " +
-            " keyword = ?"
-        let args: Args = [keyword]
-
-        return self.bookmarks.db.runQuery(sql, args: args, factory: { $0["bmkUri"] as! String })
-            >>== { cursor in
-                if cursor.status == .Success {
-                    if let str = cursor[0] {
-                        return deferMaybe(str)
-                    }
-                }
-
-                return deferMaybe(NoSuchSearchKeywordError(keyword: keyword))
-        }
-    }
-    
     public func removeByURL(url: String) -> Success {
         if self.direction == Direction.Buffer {
             return deferMaybe(DatabaseError(description: "Refusing to remove URL from buffer in model."))
@@ -792,7 +765,7 @@ extension SQLiteBookmarks {
 
 // It's a factory where the root contains Desktop Bookmarks from the buffer, and
 // mobile bookmarks from local.
-public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory, KeywordSearchSource {
+public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
     let localFactory: SQLiteBookmarksModelFactory
     let bufferFactory: SQLiteBookmarksModelFactory
 
@@ -848,10 +821,6 @@ public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory, Keywo
         return self.localFactory.isBookmarked(url)
     }
     
-    public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
-        return self.bufferFactory.getURLForKeywordSearch(keyword)
-    }
-    
     public func removeByGUID(guid: GUID) -> Success {
         return self.localFactory.removeByGUID(guid)
     }
@@ -885,8 +854,6 @@ public class MergedSQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSo
     }
 
     public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
-        return modelFactory >>== {
-            return ($0 as! KeywordSearchSource).getURLForKeywordSearch(keyword)
-        }
+        return self.local.getURLForKeywordSearch(keyword)
     }
 }

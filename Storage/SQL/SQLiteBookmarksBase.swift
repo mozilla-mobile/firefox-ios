@@ -8,7 +8,17 @@ import Shared
 
 private let log = Logger.syncLogger
 
-public class SQLiteBookmarks: BookmarksModelFactorySource {
+class NoSuchSearchKeywordError: MaybeErrorType {
+    let keyword: String
+    init(keyword: String) {
+        self.keyword = keyword
+    }
+    var description: String {
+        return "No such search keyword: \(keyword)."
+    }
+}
+
+public class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
 
@@ -34,5 +44,22 @@ public class SQLiteBookmarks: BookmarksModelFactorySource {
         let args: Args = [url, url]
         
         return self.db.queryReturnsResults(sql, args: args)
+    }
+
+    public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
+        let sql = "SELECT bmkUri FROM \(TableBookmarksBuffer) WHERE " +
+        " keyword = ?"
+        let args: Args = [keyword]
+        
+        return self.db.runQuery(sql, args: args, factory: { $0["bmkUri"] as! String })
+            >>== { cursor in
+                if cursor.status == .Success {
+                    if let str = cursor[0] {
+                        return deferMaybe(str)
+                    }
+                }
+                
+                return deferMaybe(NoSuchSearchKeywordError(keyword: keyword))
+        }
     }
 }
