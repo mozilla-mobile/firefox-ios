@@ -387,6 +387,8 @@
 		D31EC05F1CC57ED80096F4AB /* localhostLoad.html in Resources */ = {isa = PBXBuildFile; fileRef = D31EC05E1CC57ED80096F4AB /* localhostLoad.html */; };
 		D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */; };
 		D32109941B8CFD62006D5B74 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
+		D326EACD1D9C5B0A0050FA4E /* ShimWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38671091D95DFC500684975 /* ShimWK.framework */; };
+		D326EACE1D9C5B0A0050FA4E /* ShimWK.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D38671091D95DFC500684975 /* ShimWK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D328175B1BD07BA900185845 /* NSCharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32817591BD07B6F00185845 /* NSCharacterSetExtensions.swift */; };
 		D32A350E1D6530D80066DAE9 /* FxADevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32A350D1D6530D80066DAE9 /* FxADevice.swift */; };
 		D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */; };
@@ -407,7 +409,6 @@
 		D37DE2C71CA356D800A5EC69 /* CertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE2C61CA356D800A5EC69 /* CertTests.swift */; };
 		D37DE2CA1CA356F900A5EC69 /* testcert1.pem in Resources */ = {isa = PBXBuildFile; fileRef = D37DE2C81CA356F900A5EC69 /* testcert1.pem */; };
 		D37DE2CB1CA356F900A5EC69 /* testcert2.pem in Resources */ = {isa = PBXBuildFile; fileRef = D37DE2C91CA356F900A5EC69 /* testcert2.pem */; };
-		D386711B1D95E11500684975 /* ShimWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38671091D95DFC500684975 /* ShimWK.framework */; };
 		D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */; };
 		D38A1BF01A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */; };
 		D38A1BF11A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */; };
@@ -980,6 +981,13 @@
 			remoteGlobalIDString = 9CC9673B1AD4B1B600576D13;
 			remoteInfo = KIFFramework;
 		};
+		D326EACF1D9C5B0A0050FA4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D38670FE1D95DFC400684975 /* ShimWK.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D38670F21D95DFC400684975;
+			remoteInfo = ShimWK;
+		};
 		D38671081D95DFC500684975 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D38670FE1D95DFC400684975 /* ShimWK.xcodeproj */;
@@ -1111,6 +1119,7 @@
 				E60138671C89EB8300DF9756 /* Account.framework in Copy Frameworks */,
 				E60138661C89EB7D00DF9756 /* Storage.framework in Copy Frameworks */,
 				E60138651C89EB7600DF9756 /* Shared.framework in Copy Frameworks */,
+				D326EACE1D9C5B0A0050FA4E /* ShimWK.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1815,7 +1824,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D386711B1D95E11500684975 /* ShimWK.framework in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				E6B6DCA21CD3D370009CF713 /* CrashReporter.framework in Frameworks */,
 				A862970A1C9EE1020000B594 /* libPhoneNumber.framework in Frameworks */,
@@ -1831,6 +1839,7 @@
 				E4B334881BBF23F3004E2BFF /* iAd.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C031B90A466005ABB0D /* libstdc++.6.0.9.tbd in Frameworks */,
+				D326EACD1D9C5B0A0050FA4E /* ShimWK.framework in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
 				2FCAE2311ABB51F800877008 /* Storage.framework in Frameworks */,
@@ -3852,6 +3861,7 @@
 				E4D5672E1ADECE2800F1EFE7 /* PBXTargetDependency */,
 				E4BA8A341B4B0A1700BC2E95 /* PBXTargetDependency */,
 				390527551C874D35007E0BB7 /* PBXTargetDependency */,
+				D326EAD01D9C5B0A0050FA4E /* PBXTargetDependency */,
 			);
 			name = Client;
 			productName = Client;
@@ -5297,6 +5307,11 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 7BEB645C1C7346100092C02E /* PBXContainerItemProxy */;
 		};
+		D326EAD01D9C5B0A0050FA4E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ShimWK;
+			targetProxy = D326EACF1D9C5B0A0050FA4E /* PBXContainerItemProxy */;
+		};
 		D39FA1661A83E0EC00EE869C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
@@ -6340,6 +6355,7 @@
 		E421F28C1A8D2BF300971276 /* FirefoxNightly */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Nightly;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -6359,6 +6375,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -6505,6 +6522,7 @@
 		E448FC9E1AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -6524,6 +6542,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -7205,6 +7224,7 @@
 		E682F5211C89E71000ECB6B2 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -7224,6 +7244,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -7683,6 +7704,7 @@
 		E6FCC42A1C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -7702,6 +7724,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -8118,6 +8141,7 @@
 		F84B21DE1A090F8100AAB793 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -8137,6 +8161,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
