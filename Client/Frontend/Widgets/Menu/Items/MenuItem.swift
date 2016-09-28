@@ -9,6 +9,7 @@ protocol MenuItem {
     var action: MenuAction { get }
     var secondaryAction: MenuAction? { get }
     var animation: Animatable? { get }
+    var isDisabled: Bool { set get }
     func iconForState(appState: AppState) -> UIImage?
     func selectedIconForState(appState: AppState) -> UIImage?
 }

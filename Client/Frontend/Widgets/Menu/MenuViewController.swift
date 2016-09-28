@@ -224,6 +224,11 @@ extension MenuViewController: MenuItemDelegate {
         }
         performMenuAction(action, withAnimation: animation, onView: menuItemCell.menuImageView)
     }
+    
+    func menuView(menuView: MenuView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
+        return !menuItem.isDisabled
+    }
 
     func heightForRowsInMenuView(menuView: MenuView) -> CGFloat {
         // loop through the labels for the menu items and calculate the largest
@@ -284,10 +289,18 @@ extension MenuViewController: MenuItemDataSource {
         cell.menuTitleLabel.text = menuItem.title
         cell.accessibilityLabel = menuItem.title
         cell.menuTitleLabel.font = menuConfig.menuFont()
-        cell.menuTitleLabel.textColor = menuConfig.menuTintColor()
-        if let icon = menuItem.iconForState(appState) {
+        
+        let icon = menuItem.iconForState(appState)
+        if menuItem.isDisabled {
+            cell.menuTitleLabel.textColor = menuConfig.disabledItemTintColor()
+            
+            cell.menuImageView.image = icon?.imageWithRenderingMode(.AlwaysTemplate)
+            cell.menuImageView.tintColor = menuConfig.disabledItemTintColor()
+        } else {
+            cell.menuTitleLabel.textColor = menuConfig.menuTintColor()
             cell.menuImageView.image = icon
         }
+
         return cell
     }
 }

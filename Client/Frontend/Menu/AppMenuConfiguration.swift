@@ -81,6 +81,10 @@ struct AppMenuConfiguration: MenuConfiguration {
     func selectedItemTintColor() -> UIColor {
         return UIConstants.MenuSelectedItemTintColor
     }
+    
+    func disabledItemTintColor() -> UIColor {
+        return UIConstants.MenuDisabledItemTintColor
+    }
 
     private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
         switch appState.ui {
@@ -108,7 +112,11 @@ struct AppMenuConfiguration: MenuConfiguration {
             }
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
-            menuItems.append(tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem)
+            var menuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
+            if let url = tabState.url where !url.isWebPage(includeDataURIs: true) || url.isLocal {
+                menuItem.isDisabled = true
+            }
+            menuItems.append(menuItem)
             if NoImageModeHelper.isNoImageModeAvailable(appState) {
                 if NoImageModeHelper.isNoImageModeActivated(appState) {
                     menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)
