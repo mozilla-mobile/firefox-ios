@@ -87,6 +87,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)
 
+        NSURLProtocol.registerClass(ContentBlocker)
+
         if !DebugSettingsBundleOptions.disableLocalWebServer {
             log.debug("Starting web server…")
             // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
