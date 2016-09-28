@@ -233,7 +233,7 @@ public class ShimWKWebView: NSObject, ShimWKWebViewImpl {
      using cache-validating conditionals if possible.
      @result A new navigation representing the reload.
      */
-    public func reloadFromOrigin() -> ShimWKNavigation?  {
+    public func reloadFromOrigin() -> ShimWKNavigation? {
         return _impl.reloadFromOrigin()
     }
 
@@ -243,7 +243,7 @@ public class ShimWKWebView: NSObject, ShimWKWebViewImpl {
         _impl.stopLoading()
     }
 
-    public func goToBackForwardListItem(item: ShimWKBackForwardListItem) -> ShimWKNavigation?  {
+    public func goToBackForwardListItem(item: ShimWKBackForwardListItem) -> ShimWKNavigation? {
         return _impl.goToBackForwardListItem(item)
     }
 
@@ -251,7 +251,7 @@ public class ShimWKWebView: NSObject, ShimWKWebViewImpl {
      @result A new navigation to the requested item, or nil if there is no back
      item in the back-forward list.
      */
-    public func goBack() -> ShimWKNavigation?  {
+    public func goBack() -> ShimWKNavigation? {
         return _impl.goBack()
     }
 
@@ -259,7 +259,7 @@ public class ShimWKWebView: NSObject, ShimWKWebViewImpl {
      @result A new navigation to the requested item, or nil if there is no
      forward item in the back-forward list.
      */
-    public func goForward() -> ShimWKNavigation?  {
+    public func goForward() -> ShimWKNavigation? {
         return _impl.goForward()
     }
 }
