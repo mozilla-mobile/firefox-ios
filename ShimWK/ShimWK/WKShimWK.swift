@@ -85,8 +85,8 @@ private class WKShimWKWebView: NSObject, ShimWKWebViewImpl {
         guard let path = keyPath else { return }
 
         switch path {
-        case KVOURL: wrapper?.URL = change![NSKeyValueChangeNewKey] as! NSURL?
-        case KVOTitle: wrapper?.title = change![NSKeyValueChangeNewKey] as! String?
+        case KVOURL: wrapper?.URL = change![NSKeyValueChangeNewKey] as? NSURL
+        case KVOTitle: wrapper?.title = change![NSKeyValueChangeNewKey] as? String
         case KVOLoading: wrapper?.loading = change![NSKeyValueChangeNewKey] as! Bool
         case KVOCanGoBack: wrapper?.canGoBack = change![NSKeyValueChangeNewKey] as! Bool
         case KVOCanGoForward: wrapper?.canGoForward = change![NSKeyValueChangeNewKey] as! Bool
