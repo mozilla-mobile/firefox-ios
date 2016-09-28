@@ -56,8 +56,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         ]
 
         let accountChinaSyncSetting: [Setting]
-        let locale = NSLocale.currentLocale()
-        if locale.localeIdentifier != "zh_CN" {
+        if !profile.isChinaEdition {
             accountChinaSyncSetting = []
         } else {
             accountChinaSyncSetting = [
@@ -96,15 +95,13 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         privacySettings.append(ClearPrivateDataSetting(settings: self))
 
-        if #available(iOS 9, *) {
-            privacySettings += [
-                BoolSetting(prefs: prefs,
-                    prefKey: "settings.closePrivateTabs",
-                    defaultValue: false,
-                    titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
-                    statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
-            ]
-        }
+        privacySettings += [
+            BoolSetting(prefs: prefs,
+                prefKey: "settings.closePrivateTabs",
+                defaultValue: false,
+                titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
+                statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
+        ]
 
         privacySettings += [
             PrivacyPolicySetting()

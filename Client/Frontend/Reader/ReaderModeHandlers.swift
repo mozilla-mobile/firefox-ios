@@ -58,7 +58,7 @@ struct ReaderModeHandlers {
                         if let readerViewLoadingPath = NSBundle.mainBundle().pathForResource("ReaderViewLoading", ofType: "html") {
                             do {
                                 let readerViewLoading = try NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: NSUTF8StringEncoding)
-                                readerViewLoading.replaceOccurrencesOfString("%ORIGINAL-URL%", withString: url.absoluteString,
+                                readerViewLoading.replaceOccurrencesOfString("%ORIGINAL-URL%", withString: url.absoluteString!,
                                     options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
                                 readerViewLoading.replaceOccurrencesOfString("%LOADING-TEXT%", withString: NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app."),
                                     options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))

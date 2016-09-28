@@ -2,11 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import XCGLogger
 import UIKit
 import Shared
 
-private let log = XCGLogger.defaultInstance()
 
 public class SuggestedSite: Site {
     public let wordmark: Favicon
@@ -24,6 +22,10 @@ public class SuggestedSite: Site {
         super.init(url: data.url, title: data.title, bookmarked: nil)
         self.icon = Favicon(url: data.faviconUrl, date: NSDate(), type: .Icon)
     }
+
+    public var faviconImagePath: String? {
+        return wordmark.url.stringByReplacingOccurrencesOfString("asset://suggestedsites", withString: "as")
+    }
 }
 
 public let SuggestedSites: SuggestedSitesCursor = SuggestedSitesCursor()
@@ -33,7 +35,13 @@ public class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
         let locale = NSLocale.currentLocale()
         let sites = DefaultSuggestedSites.sites[locale.localeIdentifier] ??
                     DefaultSuggestedSites.sites["default"]! as Array<SuggestedSiteData>
-        let tiles = sites.map({data in SuggestedSite(data: data)})
+        let tiles = sites.map({ data -> SuggestedSite in
+            var site = data
+            if let domainMap = DefaultSuggestedSites.urlMap[data.url], let localizedURL = domainMap[locale.localeIdentifier] {
+                site.url = localizedURL
+            }
+            return SuggestedSite(data: site)
+        })
         super.init(data: tiles, status: .Success, statusMessage: "Loaded")
     }
 }

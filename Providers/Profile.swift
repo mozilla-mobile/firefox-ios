@@ -78,7 +78,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
     }
 
     func displaySentTabForURL(URL: NSURL, title: String) {
-        let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
+        let item = ShareItem(url: URL.absoluteString!, title: title, favicon: nil)
         self.profile.queue.addToQueue(item)
     }
 }
@@ -121,8 +121,8 @@ class BrowserProfileSyncDelegate: SyncDelegate {
                 let notification = UILocalNotification()
                 notification.fireDate = NSDate()
                 notification.timeZone = NSTimeZone.defaultTimeZone()
-                notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString)
-                notification.userInfo = [TabSendURLKey: URL.absoluteString, TabSendTitleKey: title]
+                notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString!)
+                notification.userInfo = [TabSendURLKey: URL.absoluteString!, TabSendTitleKey: title]
                 notification.alertAction = nil
                 notification.category = TabSendCategory
 
@@ -143,6 +143,7 @@ protocol Profile: class {
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> { get }
+    var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
     var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
@@ -150,6 +151,7 @@ protocol Profile: class {
     var recentlyClosedTabs: ClosedTabsStore { get }
 
     func shutdown()
+    func reopen()
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
@@ -178,10 +180,13 @@ protocol Profile: class {
     func sendItems(items: [ShareItem], toClients clients: [RemoteClient])
 
     var syncManager: SyncManager { get }
+    var isChinaEdition: Bool { get }
 }
 
 public class BrowserProfile: Profile {
     private let name: String
+    private let keychain: KeychainWrapper
+
     internal let files: FileAccessor
 
     weak private var app: UIApplication?
@@ -200,6 +205,13 @@ public class BrowserProfile: Profile {
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
+
+        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
+            self.keychain = KeychainWrapper(serviceName: baseBundleIdentifier)
+        } else {
+            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
+            self.keychain = KeychainWrapper.defaultKeychainWrapper()
+        }
         
         if clear {
             do {
@@ -211,15 +223,10 @@ public class BrowserProfile: Profile {
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onLocationChange(_:)), name: NotificationOnLocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPageMetadataFetched(_:)), name: NotificationOnPageMetadataFetched, object: nil)
         notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onProfileDidFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPrivateDataClearedHistory(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
 
-
-        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
-            KeychainWrapper.serviceName = baseBundleIdentifier
-        } else {
-            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
-        }
 
         // If the profile dir doesn't exist yet, this is first run (for this profile).
         if !files.exists("") {
@@ -259,6 +266,18 @@ public class BrowserProfile: Profile {
         self.init(localName: localName, app: nil)
     }
 
+    func reopen() {
+        log.debug("Reopening profile.")
+
+        if dbCreated {
+            db.reopenIfClosed()
+        }
+
+        if loginsDBCreated {
+            loginsDB.reopenIfClosed()
+        }
+    }
+
     func shutdown() {
         log.debug("Shutting down profile.")
 
@@ -280,7 +299,7 @@ public class BrowserProfile: Profile {
             // Only record local vists if the change notification originated from a non-private tab
             if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
                 // We don't record a visit if no type was specified -- that means "ignore me".
-                let site = Site(url: url.absoluteString, title: title as String)
+                let site = Site(url: url.absoluteString!, title: title as String)
                 let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
                 history.addLocalVisit(visit)
             }
@@ -289,6 +308,34 @@ public class BrowserProfile: Profile {
         } else {
             log.debug("Ignoring navigation.")
         }
+    }
+
+    @objc
+    func onPageMetadataFetched(notification: NSNotification) {
+        let isPrivate = notification.userInfo?["isPrivate"] as? Bool ?? true
+        guard !isPrivate else {
+            log.debug("Private mode - Ignoring page metadata.")
+            return
+        }
+
+        if let metadata = metadataFromNotification(notification) {
+            // TODO: Store metadata content into database.
+        }
+    }
+
+    private func metadataFromNotification(notification: NSNotification) -> PageMetadata? {
+        guard let url = notification.userInfo?["metadata_url"] as? NSURL else {
+            return nil
+        }
+
+        return PageMetadata(
+            url: url,
+            title: notification.userInfo?["metadata_title"] as? String,
+            description: notification.userInfo?["metadata_description"] as? String,
+            imageURL: notification.userInfo?["metadata_image_url"] as? NSURL,
+            type: notification.userInfo?["metadata_type"] as? String,
+            iconURL: notification.userInfo?["metadata_icon_url"] as? NSURL
+        )
     }
 
     // These selectors run on which ever thread sent the notifications (not the main thread)
@@ -307,6 +354,7 @@ public class BrowserProfile: Profile {
         log.debug("Deiniting profile \(self.localName).")
         self.syncManager.endTimedSyncs()
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationOnLocationChange, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationOnPageMetadataFetched, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
@@ -341,7 +389,7 @@ public class BrowserProfile: Profile {
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage> = {
+    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage, HistoryRecommendations> = {
         return SQLiteHistory(db: self.db, prefs: self.prefs)!
     }()
 
@@ -350,6 +398,10 @@ public class BrowserProfile: Profile {
     }
 
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
+        return self.places
+    }
+
+    var recommendations: HistoryRecommendations {
         return self.places
     }
 
@@ -444,13 +496,13 @@ public class BrowserProfile: Profile {
             static var instance: String!
         }
         dispatch_once(&Singleton.token) {
-            if KeychainWrapper.hasValueForKey(key) {
-                let value = KeychainWrapper.stringForKey(key)
+            if self.keychain.hasValueForKey(key) {
+                let value = self.keychain.stringForKey(key)
                 Singleton.instance = value
             } else {
                 let Length: UInt = 256
                 let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-                KeychainWrapper.setString(secret, forKey: key)
+                self.keychain.setString(secret, forKey: key)
                 Singleton.instance = secret
             }
         }
@@ -470,20 +522,19 @@ public class BrowserProfile: Profile {
         return Singleton.instance
     }()
 
-    var isChinaEdition: Bool {
-        let locale = NSLocale.currentLocale()
-        return prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN")
-    }
+    lazy var isChinaEdition: Bool = {
+        return NSLocale.currentLocale().localeIdentifier == "zh_CN"
+    }()
 
     var accountConfiguration: FirefoxAccountConfiguration {
-        if isChinaEdition {
+        if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()
     }
 
     private lazy var account: FirefoxAccount? = {
-        if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String: AnyObject] {
+        if let dictionary = self.keychain.objectForKey(self.name + ".account") as? [String: AnyObject] {
             return FirefoxAccount.fromDictionary(dictionary)
         }
         return nil
@@ -503,11 +554,11 @@ public class BrowserProfile: Profile {
 
     func removeAccountMetadata() {
         self.prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-        KeychainWrapper.removeObjectForKey(self.name + ".account")
+        self.keychain.removeObjectForKey(self.name + ".account")
     }
 
     func removeExistingAuthenticationInfo() {
-        KeychainWrapper.setAuthenticationInfo(nil)
+        self.keychain.setAuthenticationInfo(nil)
     }
 
     func removeAccount() {
@@ -543,7 +594,7 @@ public class BrowserProfile: Profile {
 
     func flushAccount() {
         if let account = account {
-            KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
+            self.keychain.setObject(account.asDictionary(), forKey: name + ".account")
         }
     }
 

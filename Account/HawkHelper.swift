@@ -85,7 +85,7 @@ public class HawkHelper {
         if let port = url.port {
             append(port.stringValue)
         } else {
-            if url.scheme.lowercaseString == "https" {
+            if url.scheme?.lowercaseString == "https" {
                 append("443")
             } else {
                 append("80")

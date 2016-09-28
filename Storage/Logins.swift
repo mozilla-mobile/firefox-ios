@@ -289,7 +289,7 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
                 return nil
         }
 
-        let login = Login(hostname: getPasswordOrigin(url.absoluteString)!, username: username, password: password)
+        let login = Login(hostname: getPasswordOrigin(url.absoluteString!)!, username: username, password: password)
 
         if let formSubmit = script["formSubmitURL"] as? String {
             login.formSubmitURL = formSubmit
@@ -308,12 +308,13 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
 
     private class func getPasswordOrigin(uriString: String, allowJS: Bool = false) -> String? {
         var realm: String? = nil
-        if let uri = NSURL(string: uriString) where !uri.scheme.isEmpty {
-            if allowJS && uri.scheme == "javascript" {
+        if let uri = NSURL(string: uriString),
+            scheme = uri.scheme where !scheme.isEmpty {
+            if allowJS && scheme == "javascript" {
                 return "javascript:"
             }
 
-            realm = "\(uri.scheme)://\(uri.host!)"
+            realm = "\(scheme)://\(uri.host!)"
 
             // If the URI explicitly specified a port, only include it when
             // it's not the default. (We never want "http://foo.com:80")

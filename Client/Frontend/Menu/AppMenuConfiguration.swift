@@ -101,9 +101,7 @@ struct AppMenuConfiguration: MenuConfiguration {
         switch appState.ui {
         case .Tab(let tabState):
             menuItems.append(AppMenuConfiguration.FindInPageMenuItem)
-            if #available(iOS 9, *) {
-                menuItems.append(tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem)
-            }
+            menuItems.append(tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem)
 
             if !HomePageAccessors.isButtonInMenu(appState) {
                 menuItems.append(AppMenuConfiguration.SharePageMenuItem)
@@ -113,9 +111,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 menuItems.append(AppMenuConfiguration.SetHomePageMenuItem)
             }
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
-            if #available(iOS 9, *) {
-                menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
-            }
+            menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             var menuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
             if let url = tabState.url where !url.isWebPage(includeDataURIs: true) || url.isLocal {
                 menuItem.isDisabled = true
@@ -138,9 +134,7 @@ struct AppMenuConfiguration: MenuConfiguration {
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .HomePanels, .Loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
-            if #available(iOS 9, *) {
-                menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
-            }
+            menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
                 menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             }
@@ -161,9 +155,7 @@ struct AppMenuConfiguration: MenuConfiguration {
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .TabTray:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
-            if #available(iOS 9, *) {
-                menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
-            }
+            menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             menuItems.append(AppMenuConfiguration.CloseAllTabsMenuItem)
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         }
@@ -194,7 +186,6 @@ extension AppMenuConfiguration {
         return AppMenuItem(title: NewTabTitleString, action: MenuAction(action: AppMenuAction.OpenNewNormalTab.rawValue), icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
     }
 
-    @available(iOS 9, *)
     private static var NewPrivateTabMenuItem: MenuItem {
         return AppMenuItem(title: NewPrivateTabTitleString, action:  MenuAction(action: AppMenuAction.OpenNewPrivateTab.rawValue), icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
     }
@@ -211,12 +202,10 @@ extension AppMenuConfiguration {
         return AppMenuItem(title: FindInPageTitleString, action:  MenuAction(action: AppMenuAction.FindInPage.rawValue), icon: "menu-FindInPage", privateModeIcon: "menu-FindInPage-pbm")
     }
 
-    @available(iOS 9, *)
     private static var RequestDesktopMenuItem: MenuItem {
         return AppMenuItem(title: ViewDesktopSiteTitleString, action:  MenuAction(action: AppMenuAction.ToggleBrowsingMode.rawValue), icon: "menu-RequestDesktopSite", privateModeIcon: "menu-RequestDesktopSite-pbm")
     }
 
-    @available(iOS 9, *)
     private static var RequestMobileMenuItem: MenuItem {
         return AppMenuItem(title: ViewMobileSiteTitleString, action:  MenuAction(action: AppMenuAction.ToggleBrowsingMode.rawValue), icon: "menu-ViewMobile", privateModeIcon: "menu-ViewMobile-pbm")
     }

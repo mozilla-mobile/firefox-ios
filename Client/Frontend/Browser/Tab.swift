@@ -39,11 +39,7 @@ class Tab: NSObject {
     private var _isPrivate: Bool = false
     internal private(set) var isPrivate: Bool {
         get {
-            if #available(iOS 9, *) {
-                return _isPrivate
-            } else {
-                return false
-            }
+            return _isPrivate
         }
         set {
             if _isPrivate != newValue {
@@ -105,7 +101,6 @@ class Tab: NSObject {
         self.configuration = configuration
     }
 
-    @available(iOS 9, *)
     init(configuration: WKWebViewConfiguration, isPrivate: Bool) {
         self.configuration = configuration
         super.init()
@@ -330,16 +325,14 @@ class Tab: NSObject {
     }
 
     func reload() {
-        if #available(iOS 9.0, *) {
-            let userAgent: String? = desktopSite ? UserAgent.desktopUserAgent() : nil
-            if (userAgent ?? "") != webView?.customUserAgent,
-               let currentItem = webView?.backForwardList.currentItem {
-                webView?.customUserAgent = userAgent
+        let userAgent: String? = desktopSite ? UserAgent.desktopUserAgent() : nil
+        if (userAgent ?? "") != webView?.customUserAgent,
+           let currentItem = webView?.backForwardList.currentItem {
+            webView?.customUserAgent = userAgent
 
-                // Reload the initial URL to avoid UA specific redirection
-                loadRequest(PrivilegedRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 60))
-                return
-            }
+            // Reload the initial URL to avoid UA specific redirection
+            loadRequest(PrivilegedRequest(URL: currentItem.initialURL, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 60))
+            return
         }
 
         if let _ = webView?.reloadFromOrigin() {
@@ -420,7 +413,6 @@ class Tab: NSObject {
         }
     }
 
-    @available(iOS 9, *)
     func toggleDesktopSite() {
         desktopSite = !desktopSite
         reload()

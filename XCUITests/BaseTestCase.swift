@@ -10,19 +10,17 @@ class BaseTestCase: XCTestCase {
         super.setUp()
         continueAfterFailure = false
         let app = XCUIApplication()
-        restart(app, reset: true)
+        restart(app)
     }
 
     override func tearDown() {
         super.tearDown()
     }
 
-    func restart(app: XCUIApplication, reset: Bool) {
+    func restart(app: XCUIApplication) {
         app.terminate()
         app.launchArguments.append("FIREFOX_TESTS")
-        if reset {
-            app.launchArguments.append("RESET_FIREFOX")
-        }
+        app.launchArguments.append("RESET_FIREFOX")
         app.launch()
         sleep(1)
     }

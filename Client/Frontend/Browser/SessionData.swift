@@ -15,7 +15,7 @@ class SessionData: NSObject, NSCoding {
         return [
             "currentPage": String(self.currentPage),
             "lastUsedTime": String(self.lastUsedTime),
-            "urls": urls.map { $0.absoluteString }
+            "urls": urls.map { $0.absoluteString! }
         ]
     }
 

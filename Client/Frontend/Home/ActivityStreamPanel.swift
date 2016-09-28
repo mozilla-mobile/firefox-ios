@@ -10,6 +10,7 @@ import WebImage
 import XCGLogger
 
 private let log = Logger.browserLogger
+private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 // MARK: -  Lifecycle
 struct ASPanelUX {
@@ -30,13 +31,17 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     private let profile: Profile
     private let topSitesManager = ASHorizontalScrollCellManager()
 
-    var topSites: [TopSiteItem] = []
+    var topSites: [Site] = []
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
+    }()
+
     var history: [Site] = []
 
     init(profile: Profile) {
         self.profile = profile
         super.init(style: .Grouped)
-
+        view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
@@ -90,27 +95,27 @@ extension ActivityStreamPanel {
 
     enum Section: Int {
         case TopSites
-        case History
+        case Highlights
 
         static let count = 2
 
         var title: String? {
             switch self {
-            case .History: return "Recent Activity"
+            case .Highlights: return Strings.ASHighlightsTitle
             case .TopSites: return nil
             }
         }
 
         var headerHeight: CGFloat {
             switch self {
-            case .History: return 40
+            case .Highlights: return 40
             case .TopSites: return 0
             }
         }
 
         func cellHeight(traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
-            case .History: return UITableViewAutomaticDimension
+            case .Highlights: return UITableViewAutomaticDimension
             case .TopSites:
                 if traits.horizontalSizeClass == .Compact && traits.verticalSizeClass == .Regular {
                     return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio)) + ASPanelUX.PageControlOffsetSize
@@ -122,9 +127,9 @@ extension ActivityStreamPanel {
 
         var headerView: UIView? {
             switch self {
-            case .History:
+            case .Highlights:
                 let view = ASHeaderView()
-                view.title = "Recent Activity"
+                view.title = title
                 return view
             case .TopSites:
                 return nil
@@ -134,7 +139,7 @@ extension ActivityStreamPanel {
         var cellIdentifier: String {
             switch self {
             case .TopSites: return "TopSiteCell"
-            case .History: return "HistoryCell"
+            case .Highlights: return "HistoryCell"
             }
         }
 
@@ -175,7 +180,7 @@ extension ActivityStreamPanel {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(indexPath.section) {
-        case .History:
+        case .Highlights:
             let site = self.history[indexPath.row]
             showSiteWithURLHandler(NSURL(string:site.url)!)
         case .TopSites:
@@ -196,7 +201,7 @@ extension ActivityStreamPanel {
         switch Section(section) {
             case .TopSites:
                 return topSitesManager.content.isEmpty ? 0 : 1
-            case .History:
+            case .Highlights:
                  return self.history.count
         }
     }
@@ -208,7 +213,7 @@ extension ActivityStreamPanel {
         switch Section(indexPath.section) {
         case .TopSites:
             return configureTopSitesCell(cell, forIndexPath: indexPath)
-        case .History:
+        case .Highlights:
             return configureHistoryItemCell(cell, forIndexPath: indexPath)
         }
     }
@@ -241,7 +246,7 @@ extension ActivityStreamPanel {
     }
 
     private func reloadRecentHistory() {
-        self.profile.history.getSitesByLastVisit(ASPanelUX.historySize).uponQueue(dispatch_get_main_queue()) { result in
+        self.profile.recommendations.getHighlights().uponQueue(dispatch_get_main_queue()) { result in
             self.history = result.successValue?.asArray() ?? self.history
             self.tableView.reloadData()
         }
@@ -249,8 +254,21 @@ extension ActivityStreamPanel {
 
     private func reloadTopSites() {
         invalidateTopSites().uponQueue(dispatch_get_main_queue()) { result in
-            let sites = result.successValue ?? []
-            self.topSites = sites
+            let defaultSites = self.defaultTopSites()
+            let mySites = (result.successValue ?? [])
+
+            // Merge default topsites with a user's topsites.
+            let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
+                return NSURL(string: site.url)?.extractDomainName() ?? ""
+            })
+
+            // Favour topsites from defaultSites as they have better favicons.
+            let newSites = mergedSites.map { site -> Site in
+                let domain = NSURL(string: site.url)?.extractDomainName() ?? ""
+                return defaultSites.find { $0.title.lowercaseString == domain } ?? site
+            }
+
+            self.topSites = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
             self.topSitesManager.currentTraits = self.view.traitCollection
             self.topSitesManager.content = self.topSites
             self.topSitesManager.urlPressedHandler = { [unowned self] url in
@@ -266,18 +284,22 @@ extension ActivityStreamPanel {
         }
     }
 
-    private func invalidateTopSites() -> Deferred<Maybe<[TopSiteItem]>> {
+    private func invalidateTopSites() -> Deferred<Maybe<[Site]>> {
         let frecencyLimit = ASPanelUX.topSitesCacheSize
         return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { dirty in
             return self.profile.history.getTopSitesWithLimit(frecencyLimit) >>== { topSites in
-                return deferMaybe(topSites.flatMap(self.siteToItem))
+                return deferMaybe(topSites.asArray())
             }
         }
     }
 
     private func hideURLFromTopSites(siteURL: NSURL) {
-        guard let host = siteURL.normalizedHost() else {
+        guard let host = siteURL.normalizedHost(), let url = siteURL.absoluteString else {
             return
+        }
+        // if the default top sites contains the siteurl. also wipe it from default suggested sites.
+        if defaultTopSites().filter({$0.url != url}).isEmpty == false {
+            deleteTileForSuggestedSite(url)
         }
         profile.history.removeHostFromTopSites(host).uponQueue(dispatch_get_main_queue()) { result in
             guard result.isSuccess else { return }
@@ -285,14 +307,58 @@ extension ActivityStreamPanel {
         }
     }
 
-    private func siteToItem(site: Site?) -> TopSiteItem? {
-        guard let site = site else {
-            return nil
+    private func deleteTileForSuggestedSite(siteURL: String) {
+        var deletedSuggestedSites = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
+        deletedSuggestedSites.append(siteURL)
+        profile.prefs.setObject(deletedSuggestedSites, forKey: DefaultSuggestedSitesKey)
+    }
+
+    private func defaultTopSites() -> [Site] {
+        let suggested = SuggestedSites.asArray()
+        let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
+        return suggested.filter({deleted.indexOf($0.url) == .None})
+    }
+
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        if longPressGestureRecognizer.state == UIGestureRecognizerState.Began {
+            let touchPoint = longPressGestureRecognizer.locationInView(self.view)
+            if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
+                if Section(indexPath.section) == .Highlights {
+                    presentContextMenu(history[indexPath.row])
+                }
+            }
         }
-        guard let faviconURL = site.icon?.url else {
-            return TopSiteItem(urlTitle: site.tileURL.extractDomainName(), faviconURL: nil, siteURL: site.tileURL)
-        }
-        return TopSiteItem(urlTitle: site.tileURL.extractDomainName(), faviconURL: NSURL(string: faviconURL)!, siteURL: site.tileURL)
+    }
+
+    private func presentContextMenu(site: Site) {
+        let bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
+            let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+            self.profile.bookmarks.shareItem(shareItem)
+            var userData = [QuickActions.TabURLKey: shareItem.url]
+            if let title = shareItem.title {
+                userData[QuickActions.TabTitleKey] = title
+            }
+            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+                withUserData: userData,
+                toApplication: UIApplication.sharedApplication())
+        })
+
+        let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
+            self.profile.history.removeHistoryForURL(site.url)
+        })
+
+        let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
+            if let url = NSURL(string: site.url) {
+                let helper = ShareExtensionHelper(url: url, tab: nil, activities: [])
+                let controller = helper.createActivityViewController({ _ in })
+                self.presentViewController(controller, animated: true, completion: nil)
+            }
+        })
+
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: [bookmarkAction, deleteFromHistoryAction, shareAction])
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 }
 
@@ -314,7 +380,7 @@ class ASHeaderView: UIView {
         return titleLabel
     }()
 
-    var title: String = "" {
+    var title: String? {
         willSet(newTitle) {
             titleLabel.text = newTitle
         }

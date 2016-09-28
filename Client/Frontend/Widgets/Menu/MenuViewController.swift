@@ -253,9 +253,7 @@ extension MenuViewController: MenuItemDelegate {
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = NSLineBreakMode.ByWordWrapping
         paragraph.alignment = .Center
-        if #available(iOS 9.0, *) {
-            paragraph.allowsDefaultTighteningForTruncation = true
-        }
+        paragraph.allowsDefaultTighteningForTruncation = true
         let boundingBox = NSString(string: labelText).boundingRectWithSize(constraint, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: label.font, NSParagraphStyleAttributeName: paragraph], context: context).size
         return ceil(boundingBox.height)
     }

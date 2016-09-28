@@ -61,7 +61,7 @@ class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputVi
     }
 
     private func createPasscodeWithCode(code: String) {
-        KeychainWrapper.setAuthenticationInfo(AuthenticationKeychainInfo(passcode: code))
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(AuthenticationKeychainInfo(passcode: code))
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.postNotificationName(NotificationPasscodeDidCreate, object: nil)
     }

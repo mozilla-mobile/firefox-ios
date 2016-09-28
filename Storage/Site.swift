@@ -85,4 +85,6 @@ public class Site: Identifiable {
         self.title = title
         self.bookmarked = bookmarked
     }
+
 }
+

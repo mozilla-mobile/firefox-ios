@@ -55,7 +55,7 @@ public extension Logger {
         if let logFileURL = urlForLogNamed(name) {
             let fileDestination = XCGFileLogDestination(
                 owner: log,
-                writeToFile: logFileURL.absoluteString,
+                writeToFile: logFileURL.absoluteString!,
                 identifier: "com.mozilla.firefox.filelogger.\(name)"
             )
             log.addLogDestination(fileDestination)
@@ -90,7 +90,7 @@ public extension Logger {
         } catch _ {
         }
 
-        return filenamesAndURLs.map { ($0, NSData(contentsOfFile: $1.absoluteString)) }
+        return filenamesAndURLs.map { ($0, NSData(contentsOfFile: $1.absoluteString!)) }
     }
 }
 

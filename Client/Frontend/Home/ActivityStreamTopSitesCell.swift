@@ -1,31 +1,25 @@
 import Foundation
 import Shared
 import WebImage
-
-struct TopSiteItem {
-    let urlTitle: String
-    let faviconURL: NSURL?
-    let siteURL: NSURL
-}
-
-extension TopSiteItem: Equatable {}
-func ==(lhs: TopSiteItem, rhs: TopSiteItem) -> Bool {
-    return lhs.urlTitle == rhs.urlTitle && lhs.faviconURL == rhs.faviconURL && lhs.siteURL == rhs.siteURL
-}
+import Storage
 
 struct TopSiteCellUX {
-    static let TitleInsetPercent: CGFloat = 0.66
+    static let TitleHeight: CGFloat = 32
     static let TitleBackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.7)
     static let TitleTextColor = UIColor.blackColor()
     static let TitleFont = DynamicFontHelper.defaultHelper.DefaultSmallFont
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 4
+    static let TitleOffset: CGFloat = 5
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
+    static let IconSize = CGSize(width: 32, height: 32)
+    static let BorderColor = UIColor(white: 0, alpha: 0.1)
+    static let BorderWidth: CGFloat = 0.5
 }
 
 /*
  *  The TopSite cell that appears in the ASHorizontalScrollView.
-*/
+ */
 class TopSiteItemCell: UICollectionViewCell {
 
     lazy private var imageView: UIImageView = {
@@ -40,7 +34,7 @@ class TopSiteItemCell: UICollectionViewCell {
         titleLabel.textAlignment = .Center
         titleLabel.font = TopSiteCellUX.TitleFont
         titleLabel.textColor = TopSiteCellUX.TitleTextColor
-        titleLabel.backgroundColor = TopSiteCellUX.TitleBackgroundColor
+        titleLabel.backgroundColor = UIColor.clearColor()
         return titleLabel
     }()
 
@@ -51,6 +45,12 @@ class TopSiteItemCell: UICollectionViewCell {
         return selectedOverlay
     }()
 
+    lazy var titleBorder: CALayer = {
+        let border = CALayer()
+        border.backgroundColor = TopSiteCellUX.BorderColor.CGColor
+        return border
+    }()
+
     override var selected: Bool {
         didSet {
             self.selectedOverlay.hidden = !selected
@@ -59,35 +59,54 @@ class TopSiteItemCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        isAccessibilityElement = true
+        accessibilityIdentifier = "TopSite"
         contentView.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
         contentView.layer.masksToBounds = true
+
+        contentView.layer.borderWidth = TopSiteCellUX.BorderWidth
+        contentView.layer.borderColor = TopSiteCellUX.BorderColor.CGColor
+
+        let titleWrapper = UIView()
+        titleWrapper.backgroundColor = TopSiteCellUX.TitleBackgroundColor
+        titleWrapper.layer.masksToBounds = true
+        contentView.addSubview(titleWrapper)
+
         contentView.addSubview(titleLabel)
         contentView.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
-        let titleHeight = Int(frame.height - (frame.height * TopSiteCellUX.TitleInsetPercent))
         titleLabel.snp_makeConstraints { make in
-            make.left.right.bottom.equalTo(self)
-            make.height.equalTo(titleHeight)
+            make.left.equalTo(self).offset(TopSiteCellUX.TitleOffset)
+            make.right.equalTo(self).offset(-TopSiteCellUX.TitleOffset)
+            make.height.equalTo(TopSiteCellUX.TitleHeight)
+            make.bottom.equalTo(self)
         }
+
         imageView.snp_makeConstraints { make in
-            make.size.equalTo(CGSize(width: self.frame.width/2, height: self.frame.height/2))
+            make.size.equalTo(TopSiteCellUX.IconSize)
             // Add an offset to the image to make it appear centered with the titleLabel
-            make.center.equalTo(self.snp_center).offset(UIEdgeInsets(top: -CGFloat(titleHeight)/2, left: 0, bottom: 0, right: 0))
+            make.center.equalTo(self.snp_center).offset(UIEdgeInsets(top: -TopSiteCellUX.TitleHeight/2, left: 0, bottom: 0, right: 0))
         }
 
         selectedOverlay.snp_makeConstraints { make in
             make.edges.equalTo(contentView)
         }
+
+        titleWrapper.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(self)
+            make.height.equalTo(TopSiteCellUX.TitleHeight)
+        }
+
+        // The titleBorder must appear ABOVE the titleLabel. Meaning it must be 0.5 pixels above of the titleWrapper frame.
+        titleBorder.frame = CGRectMake(0, CGRectGetHeight(self.frame) - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, CGRectGetWidth(self.frame), TopSiteCellUX.BorderWidth)
+        self.contentView.layer.addSublayer(titleBorder)
+
     }
 
-    override func updateConstraints() {
-        let height = Int(frame.height - (frame.height * TopSiteCellUX.TitleInsetPercent))
-        titleLabel.snp_updateConstraints { make in
-            make.height.equalTo(height)
-        }
-        super.updateConstraints()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        titleBorder.frame = CGRectMake(0, frame.height - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, frame.width, TopSiteCellUX.BorderWidth)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -104,35 +123,41 @@ class TopSiteItemCell: UICollectionViewCell {
     private func setImageWithURL(url: NSURL) {
         imageView.sd_setImageWithURL(url) { [unowned self] (img, err, type, url) -> Void in
             guard let img = img else {
-                self.contentView.backgroundColor = UIColor.lightGrayColor()
+                self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(url)
                 self.imageView.image = FaviconFetcher.getDefaultFavicon(url)
                 return
             }
-
-            // Get dominant colors using a scaled 25/25 image.
             img.getColors(CGSize(width: 25, height: 25)) { colors in
-                //In cases where the background is black/white. Force the background color to a different color
-                let colorArr = [colors.backgroundColor, colors.detailColor, colors.primaryColor].filter { !$0.isBlackOrWhite }
-                self.contentView.backgroundColor = colorArr.isEmpty ? UIColor.lightGrayColor() : colorArr.first
+                self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGrayColor()
             }
         }
     }
 
-    func configureWithTopSiteItem(site: TopSiteItem) {
-        titleLabel.text = site.urlTitle
-        guard let favURL = site.faviconURL else {
-            contentView.backgroundColor = UIColor.lightGrayColor()
-            imageView.image = FaviconFetcher.getDefaultFavicon(site.siteURL)
-            return
+    func configureWithTopSiteItem(site: Site) {
+        titleLabel.text = site.tileURL.extractDomainName()
+        accessibilityLabel = titleLabel.text
+        if let suggestedSite = site as? SuggestedSite {
+            let img = UIImage(named: suggestedSite.faviconImagePath!)
+            imageView.image = img
+            // This is a temporary hack to make amazon/wikipedia have white backrounds instead of their default blacks
+            // Once we remove the old TopSitesPanel we can change the values of amazon/wikipedia to be white instead of black.
+            contentView.backgroundColor = suggestedSite.backgroundColor.isBlackOrWhite ? UIColor.whiteColor() : suggestedSite.backgroundColor
+        } else {
+            guard let url = site.icon?.url, favURL = url.asURL else {
+                let siteURL = site.url.asURL!
+                self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(siteURL)
+                self.imageView.image = FaviconFetcher.getDefaultFavicon(siteURL)
+                return
+            }
+            setImageWithURL(favURL)
         }
-        setImageWithURL(favURL)
     }
 
 }
 
 struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
-    static let TopSiteItemSize = CGSize(width: 100, height: 100)
+    static let TopSiteItemSize = CGSize(width: 99, height: 99)
     static let BackgroundColor = UIColor.whiteColor()
     static let PageControlRadius: CGFloat = 3
     static let PageControlSize = CGSize(width: 30, height: 15)
@@ -151,6 +176,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         collectionView.registerClass(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
         collectionView.backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isAccessibilityElement = false
         collectionView.pagingEnabled = true
         return collectionView
     }()
@@ -159,7 +185,11 @@ class ASHorizontalScrollCell: UITableViewCell {
         let pageControl = FilledPageControl()
         pageControl.tintColor = UIColor.grayColor()
         pageControl.indicatorRadius = ASHorizontalScrollCellUX.PageControlRadius
-        pageControl.userInteractionEnabled = false
+        pageControl.userInteractionEnabled = true
+        pageControl.isAccessibilityElement = true
+        pageControl.accessibilityIdentifier = "pageControl"
+        pageControl.accessibilityLabel = Strings.ASPageControlButton
+        pageControl.accessibilityTraits = UIAccessibilityTraitButton
         return pageControl
     }()
 
@@ -168,6 +198,12 @@ class ASHorizontalScrollCell: UITableViewCell {
         press.minimumPressDuration = 0.5
         press.delegate = self
         press.delaysTouchesBegan = true
+        return press
+    }()
+
+    lazy private var pageControlPress: UITapGestureRecognizer = {
+        let press = UITapGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handlePageTap(_:)))
+        press.delegate = self
         return press
     }()
 
@@ -187,11 +223,14 @@ class ASHorizontalScrollCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        isAccessibilityElement = false
+        accessibilityIdentifier = "TopSitesCell"
         backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
         contentView.addSubview(collectionView)
         contentView.addSubview(pageControl)
         self.selectionStyle = UITableViewCellSelectionStyle.None
         collectionView.addGestureRecognizer(self.longPress)
+        pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp_makeConstraints { make in
             make.edges.equalTo(contentView).offset(UIEdgeInsets(top: 0, left: 0, bottom: ASHorizontalScrollCellUX.PageControlOffset, right: 0))
@@ -202,7 +241,6 @@ class ASHorizontalScrollCell: UITableViewCell {
             make.top.equalTo(collectionView.snp_bottom)
             make.centerX.equalTo(self.snp_centerX)
         }
-
     }
 
     override func layoutSubviews() {
@@ -215,6 +253,23 @@ class ASHorizontalScrollCell: UITableViewCell {
 
     func currentPageChanged(currentPage: CGFloat) {
         pageControl.progress = currentPage
+        if currentPage == floor(currentPage) {
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+        }
+    }
+
+    func handlePageTap(gesture: UITapGestureRecognizer) {
+        guard pageControl.pageCount > 1 else {
+            return
+        }
+
+        if pageControl.pageCount > pageControl.currentPage + 1 {
+            pageControl.progress = CGFloat(pageControl.currentPage + 1)
+        } else {
+            pageControl.progress = CGFloat(pageControl.currentPage - 1)
+        }
+        let swipeCoordinate = CGFloat(pageControl.currentPage) * self.collectionView.frame.size.width
+        self.collectionView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
     }
 
     func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
@@ -370,7 +425,7 @@ protocol ASHorizontalLayoutDelegate {
 
 class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, ASHorizontalLayoutDelegate {
 
-    var content: [TopSiteItem] = []
+    var content: [Site] = []
 
     var urlPressedHandler: ((NSURL) -> Void)?
     var pageChangedHandler: ((CGFloat) -> Void)?
@@ -416,7 +471,10 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let contentItem = content[indexPath.row]
-        urlPressedHandler?(contentItem.siteURL)
+        guard let url = contentItem.url.asURL else {
+            return
+        }
+        urlPressedHandler?(url)
     }
 
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -428,12 +486,12 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         //Show a context menu with options for the topsite
         let contentItem = content[indexPath.row]
 
-        let alertController = UIAlertController(title: contentItem.siteURL.absoluteString, message: nil, preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: contentItem.url, message: nil, preferredStyle: .ActionSheet)
 
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Strings.ASCancelButton, style: .Cancel, handler: nil)
         alertController.addAction(cancelAction)
 
-        let deleteAction = UIAlertAction(title: NSLocalizedString("Remove", comment: "Label for Remove button"), style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
+        let deleteAction = UIAlertAction(title: Strings.ASRemoveButton, style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
             self.collectionView(collectionView, deleteItemAtIndexPath: indexPath)
         })
         alertController.addAction(deleteAction)
@@ -443,7 +501,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     func collectionView(collectionView: UICollectionView, deleteItemAtIndexPath indexPath: NSIndexPath) {
         let contentItem = self.content[indexPath.row]
-        self.deleteItemHandler?(contentItem.siteURL)
+        self.deleteItemHandler?(contentItem.tileURL)
     }
 
 }

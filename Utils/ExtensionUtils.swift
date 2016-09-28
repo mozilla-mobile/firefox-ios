@@ -34,7 +34,7 @@ public struct ExtensionUtils {
                         }
 
                         let title = inputItem.attributedContentText?.string
-                        completionHandler(ShareItem(url: url.absoluteString, title: title, favicon: nil), nil)
+                        completionHandler(ShareItem(url: url.absoluteString!, title: title, favicon: nil), nil)
                     }
 
                     return

@@ -1,10 +1,6 @@
-//
-//  QuickActions.swift
-//  Client
-//
-//  Created by Emily Toop on 11/20/15.
-//  Copyright © 2015 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Storage
@@ -12,7 +8,6 @@ import Storage
 import Shared
 import XCGLogger
 
-@available(iOS 9, *)
 enum ShortcutType: String {
     case NewTab
     case NewPrivateTab
@@ -30,12 +25,10 @@ enum ShortcutType: String {
     }
 }
 
-@available(iOS 9, *)
 protocol QuickActionHandlerDelegate {
     func handleShortCutItemType(type: ShortcutType, userData: [String: NSSecureCoding]?)
 }
 
-@available(iOS 9, *)
 class QuickActions: NSObject {
 
     private let log = Logger.browserLogger

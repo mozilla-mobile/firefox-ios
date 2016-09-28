@@ -1,4 +1,4 @@
-Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios)
+Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=57bf25c0f096bc01001e21e0&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/57bf25c0f096bc01001e21e0/build/latest) [![Build Status](https://travis-ci.org/mozilla-mobile/firefox-ios.svg?branch=master)](https://travis-ci.org/mozilla-mobile/firefox-ios)
 ===============
 
 Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
@@ -6,11 +6,9 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch
 -----------
 
-This branch is for mainline development that will eventually ship as v5.0.
+This branch is for mainline development that will eventually ship as v6.0.
 
-See the __v5.x__ branch if you're doing stabilization work for v5.0. If you are interested in fixing a bug on the __v5.x__ stabilization branch, take a look at the list of open bugs that are marked as [tracking 5.0](https://wiki.mozilla.org/Mobile/Triage/iOS#iOS_Tracking_5.0.2B).
-
-This branch works with Xcode 7.3.1, and supports iOS 8.2 and 9.x. Although you can only run and debug from Xcode on a 9.2.1 device.
+This branch works with Xcode 8, and supports iOS 8.2 (soon to be deprecated) and 9.x and 10.
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -35,7 +33,7 @@ https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScroll
 Building the code
 -----------------
 
-> __As of March 28, 2016, this project requires Xcode 7.3.__
+> __As of Sept. 16, 2016, this project requires Xcode 8.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage
@@ -48,7 +46,7 @@ Building the code
 1. Clone the repository:
 
   ```shell
-  git clone https://github.com/mozilla/firefox-ios
+  git clone https://github.com/mozilla-mobile/firefox-ios
   ```
 
 1. Pull in the project dependencies:
@@ -82,6 +80,7 @@ It is possible to use [App Code](https://www.jetbrains.com/objc/download/) inste
 ### Swift style
 * Swift code should generally follow the conventions listed at https://github.com/raywenderlich/swift-style-guide.
   * Exception: we use 4-space indentation instead of 2.
+* There is also a swiftlint config which covers a small subset of the style guide. Run [swiftlint] or view your PR in Travis to see issues with styling.
 
 ### Whitespace
 * New code should not contain any trailing whitespace.
