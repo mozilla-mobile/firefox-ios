@@ -8,7 +8,7 @@ This branch
 
 This branch is for mainline development that will eventually ship as v6.0.
 
-This branch works with Xcode 8, and supports iOS 8.2 (soon to be deprecated) and 9.x and 10.
+This branch works with Xcode 8, and supports iOS 9.x and 10.
 
 Please make sure you aim your pull requests in the right direction.
 
