@@ -692,6 +692,20 @@
 			remoteGlobalIDString = D2AAC045055464E500DB518D;
 			remoteInfo = sqlcipher;
 		};
+		0BFCCF091D9EB3AC00E61A56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FAB89FFC1CAC546900C6DFC1;
+			remoteInfo = KIFFrameworkConsumer;
+		};
+		0BFCCF0B1D9EB3AC00E61A56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FAB8A0141CAC546A00C6DFC1;
+			remoteInfo = KIFFrameworkConsumerTests;
+		};
 		2827316A1ABC9BE700AA1954 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -2636,6 +2650,8 @@
 				D30EBB661C75503800105AE9 /* Test Host.app */,
 				D30EBB681C75503800105AE9 /* KIF Tests - XCTest.xctest */,
 				D30EBB6A1C75503800105AE9 /* KIF.framework */,
+				0BFCCF0A1D9EB3AC00E61A56 /* KIFFrameworkConsumer.app */,
+				0BFCCF0C1D9EB3AC00E61A56 /* KIFFrameworkConsumerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3940,6 +3956,7 @@
 					};
 					390527491C874D35007E0BB7 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					3B43E3CF1D95C48D00BBA9DB = {
@@ -4012,6 +4029,7 @@
 					};
 					F84B22481A0920C600AAB793 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -4099,6 +4117,20 @@
 			fileType = archive.ar;
 			path = libsqlcipher.a;
 			remoteRef = 0B742CCB1B32491400EE9264 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0BFCCF0A1D9EB3AC00E61A56 /* KIFFrameworkConsumer.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = KIFFrameworkConsumer.app;
+			remoteRef = 0BFCCF091D9EB3AC00E61A56 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0BFCCF0C1D9EB3AC00E61A56 /* KIFFrameworkConsumerTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = KIFFrameworkConsumerTests.xctest;
+			remoteRef = 0BFCCF0B1D9EB3AC00E61A56 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		28CE83D01A1D1D5100576538 /* FxA.framework */ = {
@@ -5660,6 +5692,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/Today/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -5676,6 +5709,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/Today/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -5692,6 +5726,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/Today/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -5708,6 +5743,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/Today/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -5724,6 +5760,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/Today/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -6359,6 +6396,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6530,6 +6568,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7228,6 +7267,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7724,6 +7764,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8137,6 +8178,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/ShareTo/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
