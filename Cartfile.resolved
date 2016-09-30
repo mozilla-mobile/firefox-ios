@@ -1,7 +1,7 @@
 github "Alamofire/Alamofire" "3.5.0"
 github "sleroux/Deferred" "7d3d3230133db71544e60dfa7fa3d095361398db"
 github "swisspol/GCDWebServer" "3.3.2"
-github "kif-framework/KIF" "v3.5.1"
+github "kif-framework/KIF" "v3.3.2"
 github "rs/SDWebImage" "3.7.4"
 github "SnapKit/SnapKit" "0.22.0"
 github "jrendel/SwiftKeychainWrapper" "701a27dfc4502645122f8db5e7be4479e85e831c"
