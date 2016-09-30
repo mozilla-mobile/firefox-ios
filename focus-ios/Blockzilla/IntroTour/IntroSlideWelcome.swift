@@ -10,7 +10,7 @@ class IntroSlideWelcome: UIView {
 
         let welcomeLabel = UILabel()
         welcomeLabel.text = NSLocalizedString("Welcome", comment: "Text displayed under the wave on the first intro slide at launch")
-        welcomeLabel.textColor = UIConstants.Colors.FocusOrange
+        welcomeLabel.textColor = UIConstants.colors.focusOrange
         addSubview(welcomeLabel)
 
         let waveView = WaveView()
@@ -20,7 +20,7 @@ class IntroSlideWelcome: UIView {
         let descriptionLabel = UILabel()
         let descriptionText = NSLocalizedString("%@ helps you improve the privacy and performance of your mobile browsing experience. You control what types of page content are allowed.", comment: "Description text shown on the welcome slide of the tour")
         descriptionLabel.text = String(format: descriptionText, AppInfo.ProductName)
-        descriptionLabel.textColor = UIConstants.Colors.DefaultFont
+        descriptionLabel.textColor = UIConstants.colors.defaultFont
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = NSTextAlignment.center
         addSubview(descriptionLabel)

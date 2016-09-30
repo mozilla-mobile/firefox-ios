@@ -15,8 +15,8 @@ class WaveHeaderView: UIView {
         addSubview(waveView)
 
         let descriptionLabel = UILabel()
-        descriptionLabel.text = UIConstants.Strings.AppDescription
-        descriptionLabel.textColor = UIConstants.Colors.DefaultFont
+        descriptionLabel.text = UIConstants.strings.appDescription
+        descriptionLabel.textColor = UIConstants.colors.defaultFont
         descriptionLabel.font = descriptionLabel.font.withSize(14)
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = NSTextAlignment.center

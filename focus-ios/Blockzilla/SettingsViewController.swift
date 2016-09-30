@@ -14,11 +14,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     fileprivate var shouldUpdateSafariEnabledWhenVisible = true
 
     fileprivate let toggles = [
-        BlockerToggle(label: UIConstants.Strings.LabelBlockAds, key: Settings.KeyBlockAds),
-        BlockerToggle(label: UIConstants.Strings.LabelBlockAnalytics, key: Settings.KeyBlockAnalytics),
-        BlockerToggle(label: UIConstants.Strings.LabelBlockSocial, key: Settings.KeyBlockSocial),
-        BlockerToggle(label: UIConstants.Strings.LabelBlockOther, key: Settings.KeyBlockOther, subtitle: UIConstants.Strings.SubtitleBlockOther),
-        BlockerToggle(label: UIConstants.Strings.LabelBlockFonts, key: Settings.KeyBlockFonts),
+        BlockerToggle(label: UIConstants.strings.labelBlockAds, key: Settings.keyBlockAds),
+        BlockerToggle(label: UIConstants.strings.labelBlockAnalytics, key: Settings.keyBlockAnalytics),
+        BlockerToggle(label: UIConstants.strings.labelBlockSocial, key: Settings.keyBlockSocial),
+        BlockerToggle(label: UIConstants.strings.labelBlockOther, key: Settings.keyBlockOther, subtitle: UIConstants.strings.subtitleBlockOther),
+        BlockerToggle(label: UIConstants.strings.labelBlockFonts, key: Settings.keyBlockFonts),
     ]
 
     /// Used to calculate cell heights.
@@ -29,7 +29,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }()
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.Colors.Background
+        view.backgroundColor = UIConstants.colors.background
 
         let titleView = TitleView()
         view.addSubview(titleView)
@@ -38,10 +38,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         let aboutButton = UIButton()
         aboutButton.setTitle(NSLocalizedString("About", comment: "Button at top of app that goes to the About screen"), for: UIControlState())
-        aboutButton.setTitleColor(UIConstants.Colors.NavigationTitle, for: UIControlState())
-        aboutButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
+        aboutButton.setTitleColor(UIConstants.colors.navigationTitle, for: UIControlState())
+        aboutButton.setTitleColor(UIConstants.colors.buttonHighlightedColor, for: UIControlState.highlighted)
         aboutButton.addTarget(self, action: #selector(SettingsViewController.aboutClicked(_:)), for: UIControlEvents.touchUpInside)
-        aboutButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
+        aboutButton.titleLabel?.font = UIConstants.fonts.defaultFontSemibold
         view.addSubview(aboutButton)
 
         titleView.snp.makeConstraints { make in
@@ -61,7 +61,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.Colors.Background
+        tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIColor(rgb: 0x333333)
         tableView.allowsSelection = false
@@ -72,7 +72,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         toggles.forEach { blockerToggle in
             let toggle = blockerToggle.toggle
-            toggle.onTintColor = UIConstants.Colors.FocusBlue
+            toggle.onTintColor = UIConstants.colors.focusBlue
             toggle.tintColor = UIColor(rgb: 0x585E64)
             toggle.addTarget(self, action: #selector(SettingsViewController.toggleSwitched(_:)), for: UIControlEvents.valueChanged)
             toggle.isOn = Settings.getBool(blockerToggle.key) ?? false
@@ -122,10 +122,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             break
         }
 
-        cell.backgroundColor = UIConstants.Colors.Background
-        cell.textLabel?.textColor = UIConstants.Colors.DefaultFont
+        cell.backgroundColor = UIConstants.colors.background
+        cell.textLabel?.textColor = UIConstants.colors.defaultFont
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.detailTextLabel?.textColor = UIConstants.Colors.NavigationTitle
+        cell.detailTextLabel?.textColor = UIConstants.colors.navigationTitle
 
         return cell
     }
@@ -193,12 +193,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.Colors.Background
+        cell.backgroundColor = UIConstants.colors.background
 
         let label = UILabel()
         label.text = labelText
-        label.textColor = UIConstants.Colors.TableSectionHeader
-        label.font = UIConstants.Fonts.TableSectionHeader
+        label.textColor = UIConstants.colors.tableSectionHeader
+        label.font = UIConstants.fonts.tableSectionHeader
         cell.contentView.addSubview(label)
 
         label.snp.makeConstraints { make in
@@ -263,7 +263,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             headerView.waveView.active = !toggles.filter { $0.toggle.isOn }.isEmpty
         }
 
-        if toggle.key == Settings.KeyBlockOther && sender.isOn {
+        if toggle.key == Settings.keyBlockOther && sender.isOn {
             let message = NSLocalizedString("Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
             let yes = NSLocalizedString("I Understand", comment: "Button label for accepting Content blocker alert")
             let no = NSLocalizedString("No, Thanks", comment: "Button label for declining Content blocker alert")

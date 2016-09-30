@@ -10,7 +10,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // If one of the toggles isn't enabled or disabled, this is the first launch. Load the list.
-        if Settings.getBool(Settings.KeyBlockAds) == nil {
+        if Settings.getBool(Settings.keyBlockAds) == nil {
             Settings.registerDefaults()
         }
 
@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     fileprivate func displaySplashAnimation() {
         let splashView = UIView(frame: (window?.frame)!)
-        splashView.backgroundColor = UIConstants.Colors.Background
+        splashView.backgroundColor = UIConstants.colors.background
         let logoImage = UIImageView(image: UIImage(named: "Icon"))
         splashView.addSubview(logoImage)
         logoImage.snp.makeConstraints { make in

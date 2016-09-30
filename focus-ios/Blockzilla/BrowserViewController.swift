@@ -6,11 +6,11 @@ import Foundation
 
 class BrowserViewController: UIViewController {
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.Colors.Background
+        view.backgroundColor = UIConstants.colors.background
 
         let settingsButton = UIButton()
         settingsButton.addTarget(self, action: #selector(settingsClicked), for: .touchUpInside)
-        settingsButton.setTitle(UIConstants.Strings.LabelOpenSettings, for: .normal)
+        settingsButton.setTitle(UIConstants.strings.labelOpenSettings, for: .normal)
         view.addSubview(settingsButton)
         settingsButton.snp.makeConstraints { make in
             make.center.equalTo(self.view)

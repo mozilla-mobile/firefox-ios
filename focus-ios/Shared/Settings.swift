@@ -5,23 +5,23 @@
 import Foundation
 
 struct Settings {
-    static let KeyBlockAds = "BlockAds"
-    static let KeyBlockAnalytics = "BlockAnalytics"
-    static let KeyBlockSocial = "BlockSocial"
-    static let KeyBlockOther = "BlockOther"
-    static let KeyBlockFonts = "BlockFonts"
+    static let keyBlockAds = "BlockAds"
+    static let keyBlockAnalytics = "BlockAnalytics"
+    static let keyBlockSocial = "BlockSocial"
+    static let keyBlockOther = "BlockOther"
+    static let keyBlockFonts = "BlockFonts"
 
     // No longer used, but will be set to true in existing users' settings.
-    static let KeyIntroDone = "IntroDone"
+    static let keyIntroDone = "IntroDone"
 
     fileprivate static let defaults = UserDefaults(suiteName: AppInfo.SharedContainerIdentifier)!
 
     static func registerDefaults() {
-        set(true, forKey: KeyBlockAds)
-        set(true, forKey: KeyBlockAnalytics)
-        set(true, forKey: KeyBlockSocial)
-        set(false, forKey: KeyBlockOther)
-        set(false, forKey: KeyBlockFonts)
+        set(true, forKey: keyBlockAds)
+        set(true, forKey: keyBlockAnalytics)
+        set(true, forKey: keyBlockSocial)
+        set(false, forKey: keyBlockOther)
+        set(false, forKey: keyBlockFonts)
     }
 
     static func getBool(_ name: String) -> Bool? {
