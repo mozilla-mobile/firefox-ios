@@ -25,6 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
 
+        URLProtocol.registerClass(ContentBlocker.self)
+
         displaySplashAnimation()
 
         return true

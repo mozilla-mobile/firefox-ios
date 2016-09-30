@@ -41,6 +41,12 @@
 		D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */; };
 		D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */; };
 		D3E2C8F81D9F129500DEBE3D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C8F71D9F129500DEBE3D /* Utils.swift */; };
+		D3E2C8FA1D9F170200DEBE3D /* ContentBlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C8F91D9F170200DEBE3D /* ContentBlocker.swift */; };
+		D3E2C8FB1D9F17AC00DEBE3D /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = D328171E1BD0689800185845 /* disconnect-advertising.json */; };
+		D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = D328171F1BD0689800185845 /* disconnect-analytics.json */; };
+		D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817201BD0689800185845 /* disconnect-content.json */; };
+		D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817211BD0689800185845 /* disconnect-social.json */; };
+		D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */; };
 		E43A10781C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E43A10791C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */; };
@@ -125,6 +131,7 @@
 		D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		D3E2C8F71D9F129500DEBE3D /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		D3E2C8F91D9F170200DEBE3D /* ContentBlocker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlocker.swift; sourceTree = "<group>"; };
 		E43A10771C42BBE400FE695B /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Klar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -211,11 +218,24 @@
 			path = LocalWebServer;
 			sourceTree = "<group>";
 		};
+		D3E2C9001D9F17C600DEBE3D /* Blocklists */ = {
+			isa = PBXGroup;
+			children = (
+				D328171E1BD0689800185845 /* disconnect-advertising.json */,
+				D328171F1BD0689800185845 /* disconnect-analytics.json */,
+				D32817201BD0689800185845 /* disconnect-content.json */,
+				D32817211BD0689800185845 /* disconnect-social.json */,
+				D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */,
+			);
+			name = Blocklists;
+			sourceTree = "<group>";
+		};
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
 				D38D693B1C471A98003EF211 /* GCDWebServers.framework */,
 				D38D693C1C471A98003EF211 /* SnapKit.framework */,
+				D3E2C9001D9F17C600DEBE3D /* Blocklists */,
 				E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */,
 				E4BF2DED1BACE92400DA9D68 /* ContentBlocker */,
 				E4BF2DD41BACE8CA00DA9D68 /* Products */,
@@ -245,6 +265,7 @@
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
+				D3E2C8F91D9F170200DEBE3D /* ContentBlocker.swift */,
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
 				D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */,
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
@@ -265,12 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				E4BF2DFB1BACEF1B00DA9D68 /* ContentBlocker.entitlements */,
-				D328171E1BD0689800185845 /* disconnect-advertising.json */,
-				D328171F1BD0689800185845 /* disconnect-analytics.json */,
-				D32817201BD0689800185845 /* disconnect-content.json */,
-				D32817211BD0689800185845 /* disconnect-social.json */,
 				D3BBC9EC1D7F81CB00D1751B /* enabled-detector.json */,
-				D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */,
 				E4BF2DF21BACE92400DA9D68 /* Info.plist */,
 				E4BF2DF01BACE92400DA9D68 /* ActionRequestHandler.swift */,
 			);
@@ -378,11 +394,16 @@
 				E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */,
 				6616A36F1BD17EFA00C7E493 /* style.css in Resources */,
 				D37DE54F1BCDB8D500906364 /* IntroAssets.xcassets in Resources */,
+				D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */,
 				D3B3232D1BD16A0F00B0EEE4 /* gpl.html in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
+				D3E2C8FB1D9F17AC00DEBE3D /* disconnect-advertising.json in Resources */,
 				D362D2AB1C4EAF940041980A /* rights-Focus.html in Resources */,
+				D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */,
+				D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */,
 				E4BF2E141BAE324400DA9D68 /* LaunchScreen.storyboard in Resources */,
 				D3BFCB5B1BD15CD000AD22D1 /* rights-Klar.html in Resources */,
+				D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +459,7 @@
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
+				D3E2C8FA1D9F170200DEBE3D /* ContentBlocker.swift in Sources */,
 				D37DE54B1BCDB84600906364 /* IntroSlideHowTo.swift in Sources */,
 				D392887D1BC5E4510016A9A0 /* WaveHeaderView.swift in Sources */,
 				D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */,

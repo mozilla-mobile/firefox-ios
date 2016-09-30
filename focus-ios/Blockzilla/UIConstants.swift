@@ -21,6 +21,10 @@ struct UIConstants {
         static let focusViolet = UIColor(rgb: 0x95368C)
         static let navigationTitle = UIColor(rgb: 0x61666D)
         static let tableSectionHeader = UIColor(rgb: 0x61666D)
+        static let urlBarBackground = UIColor(rgb: 0x663388)
+        static let urlTextBackground = UIColor(rgb: 0xffffff, alpha: 0.5)
+        static let urlTextFont = UIColor.white
+        static let urlTextPlaceholder = UIColor(rgb: 0xffffff, alpha: 0.8)
     }
 
     struct fonts {
@@ -30,11 +34,13 @@ struct UIConstants {
         static let smallerFont = UIFont.systemFont(ofSize: 14)
         static let smallerFontSemibold = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)
+        static let urlTextFont = UIFont.systemFont(ofSize: 12)
     }
 
     struct layout {
         static let navigationDoneOffset: Float = -10
-        static let urlTextCornerRadius: CGFloat = 1.5
+        static let urlTextCornerRadius: CGFloat = 2
+        static let urlBarInset: CGFloat = 5
     }
 
     struct strings {
@@ -48,5 +54,6 @@ struct UIConstants {
         static let labelBlockFonts = NSLocalizedString("Block Web fonts", comment: "Label for toggle on main screen")
         static let labelOpenSettings = NSLocalizedString("Open Settings", comment: "Button label to open settings screen")
         static let subtitleBlockOther = NSLocalizedString("May break some videos and Web pages", comment: "Label for toggle on main screen")
+        static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
     }
 }
