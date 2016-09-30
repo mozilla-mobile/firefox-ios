@@ -10,6 +10,8 @@ struct Settings {
     static let KeyBlockSocial = "BlockSocial"
     static let KeyBlockOther = "BlockOther"
     static let KeyBlockFonts = "BlockFonts"
+
+    // No longer used, but will be set to true in existing users' settings.
     static let KeyIntroDone = "IntroDone"
 
     fileprivate static let defaults = UserDefaults(suiteName: AppInfo.SharedContainerIdentifier)!

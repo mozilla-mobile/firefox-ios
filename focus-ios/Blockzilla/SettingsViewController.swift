@@ -6,34 +6,19 @@ import Foundation
 import SnapKit
 import UIKit
 
-private let LabelBlockAds = NSLocalizedString("Block ad trackers", comment: "Label for toggle on main screen")
-private let LabelBlockAnalytics = NSLocalizedString("Block analytics trackers", comment: "Label for toggle on main screen")
-private let LabelBlockSocial = NSLocalizedString("Block social trackers", comment: "Label for toggle on main screen")
-private let LabelBlockOther = NSLocalizedString("Block other content trackers", comment: "Label for toggle on main screen")
-private let LabelBlockFonts = NSLocalizedString("Block Web fonts", comment: "Label for toggle on main screen")
-
-private let SubtitleBlockOther = NSLocalizedString("May break some videos and Web pages", comment: "Label for toggle on main screen")
-
-protocol MainViewControllerDelegate: class {
-    func mainViewControllerDidToggleList(_ mainViewController: MainViewController)
-}
-
-class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutViewControllerDelegate {
-    weak var delegate: MainViewControllerDelegate?
-
+class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutViewControllerDelegate {
     fileprivate let detector = BlockerEnabledDetector.makeInstance()
 
     fileprivate let tableView = UITableView()
-    fileprivate let headerView = MainHeaderView()
-    fileprivate let errorFooterView = ErrorFooterView()
-    fileprivate var shouldUpdateEnabledWhenVisible = true
+    fileprivate let headerView = WaveHeaderView()
+    fileprivate var shouldUpdateSafariEnabledWhenVisible = true
 
     fileprivate let toggles = [
-        BlockerToggle(label: LabelBlockAds, key: Settings.KeyBlockAds),
-        BlockerToggle(label: LabelBlockAnalytics, key: Settings.KeyBlockAnalytics),
-        BlockerToggle(label: LabelBlockSocial, key: Settings.KeyBlockSocial),
-        BlockerToggle(label: LabelBlockOther, key: Settings.KeyBlockOther, subtitle: SubtitleBlockOther),
-        BlockerToggle(label: LabelBlockFonts, key: Settings.KeyBlockFonts),
+        BlockerToggle(label: UIConstants.Strings.LabelBlockAds, key: Settings.KeyBlockAds),
+        BlockerToggle(label: UIConstants.Strings.LabelBlockAnalytics, key: Settings.KeyBlockAnalytics),
+        BlockerToggle(label: UIConstants.Strings.LabelBlockSocial, key: Settings.KeyBlockSocial),
+        BlockerToggle(label: UIConstants.Strings.LabelBlockOther, key: Settings.KeyBlockOther, subtitle: UIConstants.Strings.SubtitleBlockOther),
+        BlockerToggle(label: UIConstants.Strings.LabelBlockFonts, key: Settings.KeyBlockFonts),
     ]
 
     /// Used to calculate cell heights.
@@ -50,13 +35,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.addSubview(titleView)
 
         view.addSubview(tableView)
-        view.addSubview(errorFooterView)
 
         let aboutButton = UIButton()
         aboutButton.setTitle(NSLocalizedString("About", comment: "Button at top of app that goes to the About screen"), for: UIControlState())
         aboutButton.setTitleColor(UIConstants.Colors.NavigationTitle, for: UIControlState())
         aboutButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
-        aboutButton.addTarget(self, action: #selector(MainViewController.aboutClicked(_:)), for: UIControlEvents.touchUpInside)
+        aboutButton.addTarget(self, action: #selector(SettingsViewController.aboutClicked(_:)), for: UIControlEvents.touchUpInside)
         aboutButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         view.addSubview(aboutButton)
 
@@ -75,11 +59,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             make.leading.equalTo(self.view).offset(10)
         }
 
-        errorFooterView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self.view)
-            make.top.equalTo(self.view.snp.bottom)
-        }
-
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = UIConstants.Colors.Background
@@ -95,18 +74,20 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let toggle = blockerToggle.toggle
             toggle.onTintColor = UIConstants.Colors.FocusBlue
             toggle.tintColor = UIColor(rgb: 0x585E64)
-            toggle.addTarget(self, action: #selector(MainViewController.toggleSwitched(_:)), for: UIControlEvents.valueChanged)
+            toggle.addTarget(self, action: #selector(SettingsViewController.toggleSwitched(_:)), for: UIControlEvents.valueChanged)
             toggle.isOn = Settings.getBool(blockerToggle.key) ?? false
         }
+
+        headerView.waveView.active = !toggles.filter { $0.toggle.isOn }.isEmpty
 
         NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        guard shouldUpdateEnabledWhenVisible else { return }
+        guard shouldUpdateSafariEnabledWhenVisible else { return }
 
-        shouldUpdateEnabledWhenVisible = false
-        updateEnabledState()
+        shouldUpdateSafariEnabledWhenVisible = false
+        updateSafariEnabledState()
     }
 
     override var preferredStatusBarStyle : UIStatusBarStyle {
@@ -172,7 +153,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             return heightForCustomCellWithView(headerView)
         }
 
-        // We have to manually calculate the cell height since UITableViewCell don't correctly
+        // We have to manually calculate the cell height since UITableViewCell doesn't correctly
         // layout multiline detailTextLabels.
         let toggle = toggleForIndexPath(indexPath)
         let tableWidth = tableView.frame.width
@@ -245,26 +226,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         present(introViewController, animated: true, completion: nil)
     }
 
-    fileprivate func updateEnabledState() {
-        toggles.forEach { $0.toggle.isEnabled = false }
-
-        detector.detectEnabled(view) { blocked in
-            let onToggles = self.toggles.filter { blockerToggle in
-                blockerToggle.toggle.isEnabled = blocked
-                return blockerToggle.toggle.isOn
-            }
-            self.headerView.waveView.active = blocked && !onToggles.isEmpty
-
-            UIView.setAnimationBeginsFromCurrentState(true)
-            UIView.transition(with: self.errorFooterView, duration: 0.3, options: UIViewAnimationOptions.curveEaseOut, animations: {
-                self.errorFooterView.snp.remakeConstraints { make in
-                    let constraintPosition = blocked ? make.top : make.bottom
-                    make.leading.trailing.equalTo(self.view)
-                    constraintPosition.equalTo(self.view.snp.bottom)
-                }
-                self.errorFooterView.layoutIfNeeded()
-            }, completion: nil)
-        }
+    fileprivate func updateSafariEnabledState() {
+        // TODO
     }
 
     fileprivate func heightForCustomCellWithView(_ view: UIView) -> CGFloat {
@@ -285,9 +248,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     @objc func applicationDidBecomeActive(_ sender: UIApplication) {
         if isViewLoaded && view.window != nil {
-            updateEnabledState()
+            updateSafariEnabledState()
         } else {
-            shouldUpdateEnabledWhenVisible = true
+            shouldUpdateSafariEnabledWhenVisible = true
         }
     }
 
@@ -296,7 +259,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         func updateSetting() {
             Settings.set(sender.isOn, forKey: toggle.key)
-            delegate?.mainViewControllerDidToggleList(self)
+            Utils.reloadContentBlocker()
             headerView.waveView.active = !toggles.filter { $0.toggle.isOn }.isEmpty
         }
 

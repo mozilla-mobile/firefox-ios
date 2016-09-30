@@ -6,7 +6,7 @@ import Foundation
 import SnapKit
 import UIKit
 
-class MainHeaderView: UIView {
+class WaveHeaderView: UIView {
     let waveView = WaveView()
 
     init() {

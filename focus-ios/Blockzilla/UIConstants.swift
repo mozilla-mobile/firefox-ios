@@ -40,5 +40,12 @@ struct UIConstants {
         static let AppDescription = String(format: NSLocalizedString("%@ improves privacy and may boost page load speed and lower your mobile data usage.", comment: "Label displayed above toggles"), AppInfo.ProductName)
         static let NotEnabledError = String(format: NSLocalizedString("%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.ProductName)
         static let OpenSettings = NSLocalizedString("Open Settings", comment: "Button to open the system Settings, shown in the intro and main app when disabled")
+        static let LabelBlockAds = NSLocalizedString("Block ad trackers", comment: "Label for toggle on main screen")
+        static let LabelBlockAnalytics = NSLocalizedString("Block analytics trackers", comment: "Label for toggle on main screen")
+        static let LabelBlockSocial = NSLocalizedString("Block social trackers", comment: "Label for toggle on main screen")
+        static let LabelBlockOther = NSLocalizedString("Block other content trackers", comment: "Label for toggle on main screen")
+        static let LabelBlockFonts = NSLocalizedString("Block Web fonts", comment: "Label for toggle on main screen")
+        static let LabelOpenSettings = NSLocalizedString("Open Settings", comment: "Button label to open settings screen")
+        static let SubtitleBlockOther = NSLocalizedString("May break some videos and Web pages", comment: "Label for toggle on main screen")
     }
 }

@@ -2,11 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import SafariServices
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegate, IntroViewControllerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -15,35 +14,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegat
             Settings.registerDefaults()
         }
 
-        reloadContentBlocker()
+        Utils.reloadContentBlocker()
 
         LocalWebServer.sharedInstance.start()
 
         window = UIWindow(frame: UIScreen.main.bounds)
-        let mainViewController = MainViewController()
-        mainViewController.delegate = self
-        let rootViewController = UINavigationController(rootViewController: mainViewController)
+        let browserViewController = BrowserViewController()
+        let rootViewController = UINavigationController(rootViewController: browserViewController)
         rootViewController.isNavigationBarHidden = true
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
 
-        if !(Settings.getBool(Settings.KeyIntroDone) ?? false) {
-            let introViewController = IntroViewController()
-            introViewController.delegate = self
-            rootViewController.present(introViewController, animated: true, completion: nil)
-        }
-
         displaySplashAnimation()
 
         return true
-    }
-
-    func introViewControllerWillDismiss(_ introViewController: IntroViewController) {
-        Settings.set(true, forKey: Settings.KeyIntroDone)
-    }
-
-    func mainViewControllerDidToggleList(_ mainViewController: MainViewController) {
-        reloadContentBlocker()
     }
 
     fileprivate func displaySplashAnimation() {
@@ -69,14 +53,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegat
                 })
         })
 
-    }
-
-    fileprivate func reloadContentBlocker() {
-        let identifier = AppInfo.ContentBlockerBundleIdentifier
-        SFContentBlockerManager.reloadContentBlocker(withIdentifier: identifier) { error in
-            if let error = error {
-                NSLog("Failed to reload \(identifier): \(error.localizedDescription)")
-            }
-        }
     }
 }
