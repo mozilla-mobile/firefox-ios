@@ -8,8 +8,8 @@ import UIKit
 import WebKit
 
 class AboutContentViewController: UIViewController, WKNavigationDelegate {
-    var url: NSURL!
-    private var webView: WKWebView!
+    var url: URL!
+    fileprivate var webView: WKWebView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,27 +20,27 @@ class AboutContentViewController: UIViewController, WKNavigationDelegate {
         webView.alpha = 0
         view.addSubview(webView)
 
-        webView.snp_remakeConstraints { make in
+        webView.snp.remakeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
         webView.navigationDelegate = self
-        webView.loadRequest(NSURLRequest(URL: url))
+        webView.load(URLRequest(url: url))
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
         super.viewWillAppear(animated)
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
 
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         // Add a small delay to allow the stylesheets to load and avoid flicker.
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(200 * Double(NSEC_PER_MSEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
+        let delayTime = DispatchTime.now() + Double(Int64(200 * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: delayTime) {
             webView.animateHidden(false, duration: 0.3)
         }
     }

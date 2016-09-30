@@ -10,9 +10,9 @@ private let LocalResources = ["rights-Focus", "rights-Klar", "licenses", "gpl"]
 class LocalWebServer {
     static let sharedInstance = LocalWebServer(port: 6573)
 
-    private let server = GCDWebServer()
-    private let port: UInt
-    private let base: String
+    fileprivate let server = GCDWebServer()
+    fileprivate let port: UInt
+    fileprivate let base: String
 
     init(port: UInt) {
         self.port = port
@@ -21,17 +21,17 @@ class LocalWebServer {
 
     func start() {
         LocalResources.forEach { resource in
-            let path = NSBundle.mainBundle().pathForResource(resource, ofType: "html")
-            server.addGETHandlerForPath("/\(resource).html", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+            let path = Bundle.main.path(forResource: resource, ofType: "html")
+            server?.addGETHandler(forPath: "/\(resource).html", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
         }
 
-        let stylesPath = NSBundle.mainBundle().pathForResource("style", ofType: "css")
-        server.addGETHandlerForPath("/style.css", filePath: stylesPath, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+        let stylesPath = Bundle.main.path(forResource: "style", ofType: "css")
+        server?.addGETHandler(forPath: "/style.css", filePath: stylesPath, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
 
-        server.startWithPort(port, bonjourName: nil)
+        server?.start(withPort: port, bonjourName: nil)
     }
 
-    func URLForPath(path: String) -> NSURL! {
-        return NSURL(string: "\(base)\(path)")
+    func URLForPath(_ path: String) -> URL! {
+        return URL(string: "\(base)\(path)")
     }
 }

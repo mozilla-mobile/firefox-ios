@@ -5,62 +5,62 @@
 import Foundation
 
 protocol IntroSlideFinishDelegate: class {
-    func introSlideFinishDidPressGetStarted(introSlideFinish: IntroSlideFinish)
+    func introSlideFinishDidPressGetStarted(_ introSlideFinish: IntroSlideFinish)
 }
 
 class IntroSlideFinish: UIView {
     weak var delegate: IntroSlideFinishDelegate?
 
-    private let enabledStateContainer = UIView()
-    private let getStartedButton = UIButton()
-    private let enabledStateView = EnabledStateView()
-    private let checkingStateView = CheckingStateView()
-    private let disabledStateView = DisabledStateView()
+    fileprivate let enabledStateContainer = UIView()
+    fileprivate let getStartedButton = UIButton()
+    fileprivate let enabledStateView = EnabledStateView()
+    fileprivate let checkingStateView = CheckingStateView()
+    fileprivate let disabledStateView = DisabledStateView()
 
     enum EnabledState {
-        case Enabled
-        case Disabled
-        case Checking
+        case enabled
+        case disabled
+        case checking
     }
 
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         addSubview(enabledStateContainer)
 
-        enabledStateView.hidden = true
+        enabledStateView.isHidden = true
         enabledStateContainer.addSubview(enabledStateView)
 
-        checkingStateView.hidden = true
+        checkingStateView.isHidden = true
         enabledStateContainer.addSubview(checkingStateView)
 
-        disabledStateView.hidden = true
+        disabledStateView.isHidden = true
         enabledStateContainer.addSubview(disabledStateView)
 
-        getStartedButton.setTitle(NSLocalizedString("Get Started", comment: "Button to close the intro screen"), forState: UIControlState.Normal)
-        getStartedButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
-        getStartedButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        getStartedButton.addTarget(self, action: #selector(IntroSlideFinish.getStartedClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        getStartedButton.setTitle(NSLocalizedString("Get Started", comment: "Button to close the intro screen"), for: UIControlState())
+        getStartedButton.setTitleColor(UIConstants.Colors.FocusBlue, for: UIControlState())
+        getStartedButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
+        getStartedButton.addTarget(self, action: #selector(IntroSlideFinish.getStartedClicked(_:)), for: UIControlEvents.touchUpInside)
         getStartedButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         addSubview(getStartedButton)
 
-        enabledStateContainer.snp_makeConstraints { make in
+        enabledStateContainer.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
 
-        enabledStateView.snp_makeConstraints { make in
+        enabledStateView.snp.makeConstraints { make in
             make.edges.equalTo(enabledStateContainer)
         }
 
-        checkingStateView.snp_makeConstraints { make in
+        checkingStateView.snp.makeConstraints { make in
             make.edges.equalTo(enabledStateContainer)
         }
 
-        disabledStateView.snp_makeConstraints { make in
+        disabledStateView.snp.makeConstraints { make in
             make.edges.equalTo(enabledStateContainer)
         }
 
-        getStartedButton.snp_makeConstraints { make in
+        getStartedButton.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.bottom.equalTo(self).offset(-70)
         }
@@ -73,40 +73,40 @@ class IntroSlideFinish: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var enabledState = EnabledState.Checking {
+    var enabledState = EnabledState.checking {
         didSet {
             updateButtons()
 
             switch enabledState {
-            case EnabledState.Enabled:
+            case EnabledState.enabled:
                 showEnabledStateView(enabledStateView)
-            case EnabledState.Disabled:
+            case EnabledState.disabled:
                 showEnabledStateView(disabledStateView)
-            case EnabledState.Checking:
+            case EnabledState.checking:
                 showEnabledStateView(checkingStateView)
             }
         }
     }
 
-    private func updateButtons() {
-        let enabled = enabledState == EnabledState.Enabled
+    fileprivate func updateButtons() {
+        let enabled = enabledState == EnabledState.enabled
         getStartedButton.animateHidden(!enabled, duration: 0.3)
     }
 
-    private func showEnabledStateView(view: UIView) {
+    fileprivate func showEnabledStateView(_ view: UIView) {
         enabledStateContainer.subviews.forEach { v in
             v.animateHidden(v != view, duration: 0.3)
         }
     }
 
-    @objc func getStartedClicked(sender: UIButton) {
+    @objc func getStartedClicked(_ sender: UIButton) {
         delegate?.introSlideFinishDidPressGetStarted(self)
     }
 }
 
 private class EnabledStateView: UIView {
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         let label = UILabel()
         let enabledText = NSLocalizedString("%@ is enabled!", comment: "Text displayed at the final step of the intro screen")
@@ -117,13 +117,13 @@ private class EnabledStateView: UIView {
         let image = UIImageView(image: UIImage(named: "enabled-yes"))
         addSubview(image)
 
-        label.snp_makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.center.equalTo(self)
         }
 
-        image.snp_makeConstraints { make in
+        image.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.baseline.equalTo(label.snp_top).offset(-30)
+            make.lastBaseline.equalTo(label.snp.top).offset(-30)
             make.height.width.equalTo(650/7)
         }
     }
@@ -136,12 +136,12 @@ private class EnabledStateView: UIView {
 
 private class DisabledStateView: UIView {
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         let label = UILabel()
         label.text = UIConstants.Strings.NotEnabledError
         label.textColor = UIConstants.Colors.FocusRed
-        label.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
+        label.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
         addSubview(label)
 
         let instructionsView = InstructionsView()
@@ -150,22 +150,22 @@ private class DisabledStateView: UIView {
         let image = UIImageView(image: UIImage(named: "enabled-no"))
         addSubview(image)
 
-        instructionsView.snp_makeConstraints { make in
+        instructionsView.snp.makeConstraints { make in
             make.center.equalTo(self)
             make.width.equalTo(220)
         }
 
-        label.snp_makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.bottom.equalTo(instructionsView.snp_top).offset(-50)
+            make.bottom.equalTo(instructionsView.snp.top).offset(-50)
         }
 
-        image.snp_makeConstraints { make in
+        image.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.greaterThanOrEqualTo(self).offset(20)
-            make.bottom.lessThanOrEqualTo(label.snp_top).offset(-20)
+            make.bottom.lessThanOrEqualTo(label.snp.top).offset(-20)
             make.size.lessThanOrEqualTo(650/7)
-            make.width.equalTo(image.snp_height)
+            make.width.equalTo(image.snp.height)
         }
     }
 
@@ -176,7 +176,7 @@ private class DisabledStateView: UIView {
 
 private class CheckingStateView: UIView {
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         let indicator = UIActivityIndicatorView()
         indicator.startAnimating()
@@ -190,19 +190,19 @@ private class CheckingStateView: UIView {
         let instructionsView = InstructionsView()
         addSubview(instructionsView)
 
-        instructionsView.snp_makeConstraints { make in
+        instructionsView.snp.makeConstraints { make in
             make.center.equalTo(self)
             make.width.equalTo(220)
         }
 
-        label.snp_makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.bottom.equalTo(instructionsView.snp_top).offset(-50)
+            make.bottom.equalTo(instructionsView.snp.top).offset(-50)
         }
 
-        indicator.snp_makeConstraints { make in
+        indicator.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.bottom.equalTo(label.snp_top).offset(-20)
+            make.bottom.equalTo(label.snp.top).offset(-20)
         }
     }
 

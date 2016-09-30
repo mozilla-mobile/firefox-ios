@@ -6,15 +6,15 @@ import Foundation
 import UIKit
 
 protocol AboutViewControllerDelegate: class {
-    func aboutViewControllerDidPressIntro(aboutViewController: AboutViewController)
+    func aboutViewControllerDidPressIntro(_ aboutViewController: AboutViewController)
 }
 
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
     weak var delegate: AboutViewControllerDelegate?
 
-    private let tableView = UITableView()
-    private let headerView = AboutHeaderView()
-    private let supportPath = (AppInfo.ProductName == "Focus") ? "en-US/kb/focus" : "products/klar"
+    fileprivate let tableView = UITableView()
+    fileprivate let headerView = AboutHeaderView()
+    fileprivate let supportPath = (AppInfo.ProductName == "Focus") ? "en-US/kb/focus" : "products/klar"
 
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.Colors.Background
@@ -28,65 +28,65 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         view.addSubview(aboutLabel)
 
         let doneButton = UIButton()
-        doneButton.setTitle(NSLocalizedString("Done", comment: "Button at top of app that goes to the About screen"), forState: UIControlState.Normal)
-        doneButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
-        doneButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        doneButton.addTarget(self, action: #selector(AboutViewController.doneClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.setTitle(NSLocalizedString("Done", comment: "Button at top of app that goes to the About screen"), for: UIControlState())
+        doneButton.setTitleColor(UIConstants.Colors.FocusBlue, for: UIControlState())
+        doneButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
+        doneButton.addTarget(self, action: #selector(AboutViewController.doneClicked(_:)), for: UIControlEvents.touchUpInside)
         doneButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         view.addSubview(doneButton)
 
         view.addSubview(tableView)
 
-        aboutLabel.snp_makeConstraints { make in
+        aboutLabel.snp.makeConstraints { make in
             make.top.equalTo(self.view).offset(30)
             make.centerX.equalTo(self.view)
         }
 
-        doneButton.snp_makeConstraints { make in
+        doneButton.snp.makeConstraints { make in
             make.centerY.equalTo(aboutLabel)
             make.trailing.equalTo(self.view).offset(UIConstants.Layout.NavigationDoneOffset)
         }
         
-        tableView.snp_makeConstraints { make in
-            make.top.equalTo(aboutLabel.snp_bottom)
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(aboutLabel.snp.bottom)
             make.leading.trailing.bottom.equalTo(self.view)
         }
 
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = UIConstants.Colors.Background
-        tableView.layoutMargins = UIEdgeInsetsZero
+        tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIColor(rgb: 0x333333)
         tableView.estimatedRowHeight = 44
 
         // Don't show trailing rows.
-        tableView.tableFooterView = UIView(frame: CGRectZero)
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: true)
         super.viewWillAppear(animated)
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             cell.contentView.addSubview(headerView)
-            headerView.snp_makeConstraints { make in
+            headerView.snp.makeConstraints { make in
                 make.edges.equalTo(cell)
             }
         case 1:
             cell.textLabel?.text = NSLocalizedString("Setup Instructions", comment: "Label in About screen")
-            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         case 2:
             cell.textLabel?.text = NSLocalizedString("Help", comment: "Label in About screen")
         case 3:
@@ -102,20 +102,20 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.selectedBackgroundView = cellBG
         
         cell.textLabel?.textColor = UIConstants.Colors.DefaultFont
-        cell.layoutMargins = UIEdgeInsetsZero
-        cell.separatorInset = UIEdgeInsetsZero
+        cell.layoutMargins = UIEdgeInsets.zero
+        cell.separatorInset = UIEdgeInsets.zero
 
         return cell
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.row {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             // We ask for the height before we do a layout pass, so manually trigger a layout here
             // so we can calculate the view's height.
             headerView.layoutIfNeeded()
 
-            return headerView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+            return headerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
         default:
             break
         }
@@ -123,18 +123,18 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         return 44
     }
 
-    func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return indexPath.row != 0
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return (indexPath as NSIndexPath).row != 0
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
         case 1:
             delegate?.aboutViewControllerDidPressIntro(self)
         case 2:
             let contentViewController = AboutContentViewController()
-            contentViewController.url = NSURL(string: "https://support.mozilla.org/\(supportPath)")
+            contentViewController.url = URL(string: "https://support.mozilla.org/\(supportPath)")
             navigationController?.pushViewController(contentViewController, animated: true)
         case 3:
             let contentViewController = AboutContentViewController()
@@ -144,41 +144,41 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             break
         }
 
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 
-    @objc func doneClicked(sender: UIButton) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @objc func doneClicked(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
     }
 
-    private func aboutHeaderViewDidPressReadMore(aboutHeaderView: AboutHeaderView) {
+    fileprivate func aboutHeaderViewDidPressReadMore(_ aboutHeaderView: AboutHeaderView) {
         let contentViewController = AboutContentViewController()
-        contentViewController.url = NSURL(string: "https://www.mozilla.org/\(AppInfo.LanguageCode)/about/manifesto/")
+        contentViewController.url = URL(string: "https://www.mozilla.org/\(AppInfo.LanguageCode)/about/manifesto/")
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 }
 
 class AboutNavigationController: UINavigationController {
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
 
     override func viewDidLoad() {
         navigationBar.barTintColor = UIConstants.Colors.Background
-        navigationBar.translucent = false
+        navigationBar.isTranslucent = false
         navigationBar.tintColor = UIConstants.Colors.FocusBlue
     }
 }
 
 private protocol AboutHeaderViewDelegate: class {
-    func aboutHeaderViewDidPressReadMore(aboutHeaderView: AboutHeaderView)
+    func aboutHeaderViewDidPressReadMore(_ aboutHeaderView: AboutHeaderView)
 }
 
 private class AboutHeaderView: UIView {
     weak var delegate: AboutHeaderViewDelegate?
 
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         let logo = UIImageView(image: UIImage(named: "\(AppInfo.ProductName)Logo"))
         addSubview(logo)
@@ -187,76 +187,76 @@ private class AboutHeaderView: UIView {
         let descriptionLabel1Text = NSLocalizedString("%@ puts you in control and brings added privacy and performance to your mobile browsing experience.", comment: "About copy on the about page")
         descriptionLabel1.text = String(format: descriptionLabel1Text, AppInfo.ProductName)
         descriptionLabel1.textColor = UIConstants.Colors.DefaultFont
-        descriptionLabel1.font = descriptionLabel1.font.fontWithSize(14)
+        descriptionLabel1.font = descriptionLabel1.font.withSize(14)
         descriptionLabel1.numberOfLines = 0
-        descriptionLabel1.textAlignment = NSTextAlignment.Center
+        descriptionLabel1.textAlignment = NSTextAlignment.center
         addSubview(descriptionLabel1)
 
         let descriptionLabel2 = UILabel()
         let descriptionLabel2Text = NSLocalizedString("%@ is produced by Mozilla, the people behind the Firefox Web browser.", comment: "About copy on the about page")
         descriptionLabel2.text = String(format: descriptionLabel2Text, AppInfo.ProductName)
         descriptionLabel2.textColor = UIConstants.Colors.DefaultFont
-        descriptionLabel2.font = descriptionLabel2.font.fontWithSize(14)
+        descriptionLabel2.font = descriptionLabel2.font.withSize(14)
         descriptionLabel2.numberOfLines = 0
-        descriptionLabel2.textAlignment = NSTextAlignment.Center
+        descriptionLabel2.textAlignment = NSTextAlignment.center
         addSubview(descriptionLabel2)
 
         let descriptionLabel3 = UILabel()
         descriptionLabel3.text = NSLocalizedString("Our mission is to foster a healthy, open Internet.", comment: "About copy on the about page")
         descriptionLabel3.textColor = UIConstants.Colors.DefaultFont
-        descriptionLabel3.font = descriptionLabel3.font.fontWithSize(14)
+        descriptionLabel3.font = descriptionLabel3.font.withSize(14)
         descriptionLabel3.numberOfLines = 0
-        descriptionLabel3.textAlignment = NSTextAlignment.Center
+        descriptionLabel3.textAlignment = NSTextAlignment.center
         addSubview(descriptionLabel3)
 
         let readMoreButton = UIButton()
-        readMoreButton.setTitle(NSLocalizedString("Read more.", comment: "Button on the about page"), forState: UIControlState.Normal)
-        readMoreButton.setTitleColor(UIConstants.Colors.FocusBlue, forState: UIControlState.Normal)
-        readMoreButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        readMoreButton.titleLabel?.font = readMoreButton.titleLabel!.font.fontWithSize(14)
-        readMoreButton.addTarget(self, action: #selector(AboutHeaderView.clickedReadMore(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        readMoreButton.setTitle(NSLocalizedString("Read more.", comment: "Button on the about page"), for: UIControlState())
+        readMoreButton.setTitleColor(UIConstants.Colors.FocusBlue, for: UIControlState())
+        readMoreButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
+        readMoreButton.titleLabel?.font = readMoreButton.titleLabel!.font.withSize(14)
+        readMoreButton.addTarget(self, action: #selector(AboutHeaderView.clickedReadMore(_:)), for: UIControlEvents.touchUpInside)
         addSubview(readMoreButton)
 
-        descriptionLabel3.font = descriptionLabel3.font.fontWithSize(14)
+        descriptionLabel3.font = descriptionLabel3.font.withSize(14)
         descriptionLabel3.numberOfLines = 0
-        descriptionLabel3.textAlignment = NSTextAlignment.Center
+        descriptionLabel3.textAlignment = NSTextAlignment.center
         addSubview(descriptionLabel3)
 
         translatesAutoresizingMaskIntoConstraints = false
 
-        logo.snp_makeConstraints { make in
+        logo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(self).offset(50)
             make.width.equalTo(275)
             make.height.equalTo(84)
         }
 
-        descriptionLabel1.snp_makeConstraints { make in
+        descriptionLabel1.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self).inset(30)
 
             // Priority hack is needed to avoid conflicting constraints with the cell height.
             // See http://stackoverflow.com/a/25795758
-            make.top.equalTo(logo.snp_bottom).offset(50).priority(999)
+            make.top.equalTo(logo.snp.bottom).offset(50).priority(999)
         }
 
-        descriptionLabel2.snp_makeConstraints { make in
+        descriptionLabel2.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self).inset(30)
-            make.top.equalTo(descriptionLabel1.snp_bottom).offset(15)
+            make.top.equalTo(descriptionLabel1.snp.bottom).offset(15)
         }
 
-        descriptionLabel3.snp_makeConstraints { make in
+        descriptionLabel3.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self).inset(30)
-            make.top.equalTo(descriptionLabel2.snp_bottom).offset(15)
+            make.top.equalTo(descriptionLabel2.snp.bottom).offset(15)
         }
 
-        readMoreButton.snp_makeConstraints { make in
+        readMoreButton.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(descriptionLabel3.snp_bottom).offset(-7)
+            make.top.equalTo(descriptionLabel3.snp.bottom).offset(-7)
             make.bottom.equalTo(self).inset(50)
         }
     }
 
-    @objc func clickedReadMore(sender: UIButton) {
+    @objc func clickedReadMore(_ sender: UIButton) {
         delegate?.aboutHeaderViewDidPressReadMore(self)
     }
 

@@ -10,32 +10,32 @@ class MainHeaderView: UIView {
     let waveView = WaveView()
 
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         addSubview(waveView)
 
         let descriptionLabel = UILabel()
         descriptionLabel.text = UIConstants.Strings.AppDescription
         descriptionLabel.textColor = UIConstants.Colors.DefaultFont
-        descriptionLabel.font = descriptionLabel.font.fontWithSize(14)
+        descriptionLabel.font = descriptionLabel.font.withSize(14)
         descriptionLabel.numberOfLines = 0
-        descriptionLabel.textAlignment = NSTextAlignment.Center
+        descriptionLabel.textAlignment = NSTextAlignment.center
         addSubview(descriptionLabel)
 
         translatesAutoresizingMaskIntoConstraints = false
 
-        waveView.snp_makeConstraints { make in
+        waveView.snp.makeConstraints { make in
             make.top.equalTo(self).offset(10)
             make.leading.trailing.equalTo(self)
             make.height.equalTo(200)
         }
 
-        descriptionLabel.snp_makeConstraints { make in
+        descriptionLabel.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self).inset(30)
 
             // Priority hack is needed to avoid conflicting constraints with the cell height.
             // See http://stackoverflow.com/a/25795758
-            make.top.equalTo(waveView.snp_bottom).offset(20).priority(999)
+            make.top.equalTo(waveView.snp.bottom).offset(20).priority(999)
             make.bottom.equalTo(self).inset(30).priority(999)
         }
     }

@@ -15,20 +15,20 @@ private let LabelBlockFonts = NSLocalizedString("Block Web fonts", comment: "Lab
 private let SubtitleBlockOther = NSLocalizedString("May break some videos and Web pages", comment: "Label for toggle on main screen")
 
 protocol MainViewControllerDelegate: class {
-    func mainViewControllerDidToggleList(mainViewController: MainViewController)
+    func mainViewControllerDidToggleList(_ mainViewController: MainViewController)
 }
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutViewControllerDelegate {
     weak var delegate: MainViewControllerDelegate?
 
-    private let detector = BlockerEnabledDetector.makeInstance()
+    fileprivate let detector = BlockerEnabledDetector.makeInstance()
 
-    private let tableView = UITableView()
-    private let headerView = MainHeaderView()
-    private let errorFooterView = ErrorFooterView()
-    private var shouldUpdateEnabledWhenVisible = true
+    fileprivate let tableView = UITableView()
+    fileprivate let headerView = MainHeaderView()
+    fileprivate let errorFooterView = ErrorFooterView()
+    fileprivate var shouldUpdateEnabledWhenVisible = true
 
-    private let toggles = [
+    fileprivate let toggles = [
         BlockerToggle(label: LabelBlockAds, key: Settings.KeyBlockAds),
         BlockerToggle(label: LabelBlockAnalytics, key: Settings.KeyBlockAnalytics),
         BlockerToggle(label: LabelBlockSocial, key: Settings.KeyBlockSocial),
@@ -37,8 +37,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     ]
 
     /// Used to calculate cell heights.
-    private lazy var dummyToggleCell: UITableViewCell = {
-        let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "dummyCell")
+    fileprivate lazy var dummyToggleCell: UITableViewCell = {
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
         cell.accessoryView = PaddedSwitch(switchView: UISwitch())
         return cell
     }()
@@ -53,37 +53,37 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.addSubview(errorFooterView)
 
         let aboutButton = UIButton()
-        aboutButton.setTitle(NSLocalizedString("About", comment: "Button at top of app that goes to the About screen"), forState: UIControlState.Normal)
-        aboutButton.setTitleColor(UIConstants.Colors.NavigationTitle, forState: UIControlState.Normal)
-        aboutButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, forState: UIControlState.Highlighted)
-        aboutButton.addTarget(self, action: #selector(MainViewController.aboutClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        aboutButton.setTitle(NSLocalizedString("About", comment: "Button at top of app that goes to the About screen"), for: UIControlState())
+        aboutButton.setTitleColor(UIConstants.Colors.NavigationTitle, for: UIControlState())
+        aboutButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
+        aboutButton.addTarget(self, action: #selector(MainViewController.aboutClicked(_:)), for: UIControlEvents.touchUpInside)
         aboutButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
         view.addSubview(aboutButton)
 
-        titleView.snp_makeConstraints { make in
+        titleView.snp.makeConstraints { make in
             make.top.equalTo(self.view).offset(20)
             make.centerX.equalTo(self.view)
         }
 
-        tableView.snp_makeConstraints { make in
-            make.top.equalTo(titleView.snp_bottom)
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(titleView.snp.bottom)
             make.leading.trailing.bottom.equalTo(self.view)
         }
 
-        aboutButton.snp_makeConstraints { make in
+        aboutButton.snp.makeConstraints { make in
             make.centerY.equalTo(titleView)
             make.leading.equalTo(self.view).offset(10)
         }
 
-        errorFooterView.snp_makeConstraints { make in
+        errorFooterView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view)
-            make.top.equalTo(self.view.snp_bottom)
+            make.top.equalTo(self.view.snp.bottom)
         }
 
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = UIConstants.Colors.Background
-        tableView.layoutMargins = UIEdgeInsetsZero
+        tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIColor(rgb: 0x333333)
         tableView.allowsSelection = false
         tableView.estimatedRowHeight = 44
@@ -95,38 +95,38 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let toggle = blockerToggle.toggle
             toggle.onTintColor = UIConstants.Colors.FocusBlue
             toggle.tintColor = UIColor(rgb: 0x585E64)
-            toggle.addTarget(self, action: #selector(MainViewController.toggleSwitched(_:)), forControlEvents: UIControlEvents.ValueChanged)
-            toggle.on = Settings.getBool(blockerToggle.key) ?? false
+            toggle.addTarget(self, action: #selector(MainViewController.toggleSwitched(_:)), for: UIControlEvents.valueChanged)
+            toggle.isOn = Settings.getBool(blockerToggle.key) ?? false
         }
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         guard shouldUpdateEnabledWhenVisible else { return }
 
         shouldUpdateEnabledWhenVisible = false
         updateEnabledState()
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
 
-    private func toggleForIndexPath(indexPath: NSIndexPath) -> BlockerToggle {
-        var index = indexPath.row
-        for i in 1..<indexPath.section {
-            index += tableView.numberOfRowsInSection(i)
+    fileprivate func toggleForIndexPath(_ indexPath: IndexPath) -> BlockerToggle {
+        var index = (indexPath as NSIndexPath).row
+        for i in 1..<(indexPath as NSIndexPath).section {
+            index += tableView.numberOfRows(inSection: i)
         }
         return toggles[index]
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "toggleCell")
-        switch indexPath.section {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
+        switch (indexPath as NSIndexPath).section {
         case 0:
             cell.contentView.addSubview(headerView)
-            headerView.snp_makeConstraints { make in
+            headerView.snp.makeConstraints { make in
                 make.edges.equalTo(cell)
             }
         case 1: fallthrough
@@ -143,13 +143,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         cell.backgroundColor = UIConstants.Colors.Background
         cell.textLabel?.textColor = UIConstants.Colors.DefaultFont
-        cell.layoutMargins = UIEdgeInsetsZero
+        cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = UIConstants.Colors.NavigationTitle
 
         return cell
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return 1
@@ -163,12 +163,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 0 {
             return heightForCustomCellWithView(headerView)
         }
 
@@ -188,14 +188,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return height + 22
     }
 
-    private func heightForLabel(label: UILabel, width: CGFloat, text: String) -> CGFloat {
-        let size = CGSizeMake(width, CGFloat.max)
-        let attrs = [NSFontAttributeName: label.font]
-        let boundingRect = NSString(string: text).boundingRectWithSize(size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attrs, context: nil)
+    fileprivate func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
+        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+        let attrs: [String: Any] = [NSFontAttributeName: label.font]
+        let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }
 
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let labelText: String
 
         switch section {
@@ -220,7 +220,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         label.font = UIConstants.Fonts.TableSectionHeader
         cell.contentView.addSubview(label)
 
-        label.snp_makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.leading.trailing.equalTo(cell.textLabel!)
             make.centerY.equalTo(cell.textLabel!).offset(10)
         }
@@ -228,7 +228,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return cell
     }
 
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 1:
             fallthrough
@@ -239,82 +239,82 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
 
-    func aboutViewControllerDidPressIntro(aboutViewController: AboutViewController) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func aboutViewControllerDidPressIntro(_ aboutViewController: AboutViewController) {
+        dismiss(animated: true, completion: nil)
         let introViewController = IntroViewController()
-        presentViewController(introViewController, animated: true, completion: nil)
+        present(introViewController, animated: true, completion: nil)
     }
 
-    private func updateEnabledState() {
-        toggles.forEach { $0.toggle.enabled = false }
+    fileprivate func updateEnabledState() {
+        toggles.forEach { $0.toggle.isEnabled = false }
 
         detector.detectEnabled(view) { blocked in
             let onToggles = self.toggles.filter { blockerToggle in
-                blockerToggle.toggle.enabled = blocked
-                return blockerToggle.toggle.on
+                blockerToggle.toggle.isEnabled = blocked
+                return blockerToggle.toggle.isOn
             }
             self.headerView.waveView.active = blocked && !onToggles.isEmpty
 
             UIView.setAnimationBeginsFromCurrentState(true)
-            UIView.transitionWithView(self.errorFooterView, duration: 0.3, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-                self.errorFooterView.snp_remakeConstraints { make in
+            UIView.transition(with: self.errorFooterView, duration: 0.3, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                self.errorFooterView.snp.remakeConstraints { make in
                     let constraintPosition = blocked ? make.top : make.bottom
                     make.leading.trailing.equalTo(self.view)
-                    constraintPosition.equalTo(self.view.snp_bottom)
+                    constraintPosition.equalTo(self.view.snp.bottom)
                 }
                 self.errorFooterView.layoutIfNeeded()
             }, completion: nil)
         }
     }
 
-    private func heightForCustomCellWithView(view: UIView) -> CGFloat {
+    fileprivate func heightForCustomCellWithView(_ view: UIView) -> CGFloat {
         // We ask for the height before we do a layout pass, so manually trigger a layout here
         // so we can calculate the view's height.
         view.layoutIfNeeded()
 
-        return view.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+        return view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
     }
 
-    @objc func aboutClicked(sender: UIButton) {
+    @objc func aboutClicked(_ sender: UIButton) {
         let aboutViewController = AboutViewController()
         aboutViewController.delegate = self
         let navController = AboutNavigationController(rootViewController: aboutViewController)
-        navController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
-        presentViewController(navController, animated: true, completion: nil)
+        navController.modalPresentationStyle = UIModalPresentationStyle.formSheet
+        present(navController, animated: true, completion: nil)
     }
 
-    @objc func applicationDidBecomeActive(sender: UIApplication) {
-        if isViewLoaded() && view.window != nil {
+    @objc func applicationDidBecomeActive(_ sender: UIApplication) {
+        if isViewLoaded && view.window != nil {
             updateEnabledState()
         } else {
             shouldUpdateEnabledWhenVisible = true
         }
     }
 
-    @objc func toggleSwitched(sender: UISwitch) {
+    @objc func toggleSwitched(_ sender: UISwitch) {
         let toggle = toggles.filter { $0.toggle == sender }.first!
 
         func updateSetting() {
-            Settings.set(sender.on, forKey: toggle.key)
+            Settings.set(sender.isOn, forKey: toggle.key)
             delegate?.mainViewControllerDidToggleList(self)
-            headerView.waveView.active = !toggles.filter { $0.toggle.on }.isEmpty
+            headerView.waveView.active = !toggles.filter { $0.toggle.isOn }.isEmpty
         }
 
-        if toggle.key == Settings.KeyBlockOther && sender.on {
+        if toggle.key == Settings.KeyBlockOther && sender.isOn {
             let message = NSLocalizedString("Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
             let yes = NSLocalizedString("I Understand", comment: "Button label for accepting Content blocker alert")
             let no = NSLocalizedString("No, Thanks", comment: "Button label for declining Content blocker alert")
-            let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.ActionSheet)
-            alertController.addAction(UIAlertAction(title: yes, style: UIAlertActionStyle.Destructive) { _ in
+            let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
+            alertController.addAction(UIAlertAction(title: yes, style: UIAlertActionStyle.destructive) { _ in
                 updateSetting()
             })
-            alertController.addAction(UIAlertAction(title: no, style: UIAlertActionStyle.Default) { _ in
-                sender.on = false
+            alertController.addAction(UIAlertAction(title: no, style: UIAlertActionStyle.default) { _ in
+                sender.isOn = false
                 updateSetting()
             })
             alertController.popoverPresentationController?.sourceView = sender
             alertController.popoverPresentationController?.sourceRect = sender.bounds
-            presentViewController(alertController, animated: true, completion: nil)
+            present(alertController, animated: true, completion: nil)
         } else {
             updateSetting()
         }
@@ -322,15 +322,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 }
 
 private class PaddedSwitch: UIView {
-    private static let Padding: CGFloat = 8
+    fileprivate static let Padding: CGFloat = 8
 
     init(switchView: UISwitch) {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         addSubview(switchView)
 
-        frame.size = CGSizeMake(switchView.frame.width + PaddedSwitch.Padding, switchView.frame.height)
-        switchView.frame.origin = CGPointMake(PaddedSwitch.Padding, 0)
+        frame.size = CGSize(width: switchView.frame.width + PaddedSwitch.Padding, height: switchView.frame.height)
+        switchView.frame.origin = CGPoint(x: PaddedSwitch.Padding, y: 0)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -341,7 +341,7 @@ private class PaddedSwitch: UIView {
 private class TableFooterView: UIView {
     lazy var logo: UIImageView = {
         var image =  UIImageView(image: UIImage(named: "FooterLogo"))
-        image.contentMode = UIViewContentMode.Center
+        image.contentMode = UIViewContentMode.center
         return image
     }()
 

@@ -9,8 +9,8 @@ private let ActiveInactiveTransitionStep: CGFloat = 0.05
 private let ColorTransitionStep: Float = 0.002
 private let PrimaryWaveActiveColors = [UIConstants.Colors.FocusOrange, UIConstants.Colors.FocusRed, UIConstants.Colors.FocusViolet, UIConstants.Colors.FocusLightBlue, UIConstants.Colors.FocusViolet, UIConstants.Colors.FocusRed]
 private let PrimaryWaveColorCount = PrimaryWaveActiveColors.count
-private let PrimaryWaveInactiveColor = UIColor.grayColor()
-private let SecondaryWaveColor = UIColor.grayColor()
+private let PrimaryWaveInactiveColor = UIColor.gray
+private let SecondaryWaveColor = UIColor.gray
 private let WaveLevel: CGFloat = 0.8
 private let PrimaryWaveFrequency: CGFloat = 1.2
 private let SecondaryWaveFrequency: CGFloat = 0.8
@@ -19,38 +19,38 @@ private let BaseDeviceRatio: CGFloat = 1.875
 class WaveView: UIView {
     var active = false
 
-    private let frontWaveView = SCSiriWaveformView()
-    private let backWaveView = SCSiriWaveformView()
-    private var waveLevel: CGFloat = 0
-    private var colorLerp: Float = 0
+    fileprivate let frontWaveView = SCSiriWaveformView()
+    fileprivate let backWaveView = SCSiriWaveformView()
+    fileprivate var waveLevel: CGFloat = 0
+    fileprivate var colorLerp: Float = 0
 
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         backWaveView.backgroundColor = UIConstants.Colors.Background
         backWaveView.phaseShift = -0.022
         backWaveView.primaryWaveLineWidth = 0.5
         backWaveView.primaryWaveColor = PrimaryWaveInactiveColor
         backWaveView.secondaryWaveLineWidth = 0.5
-        backWaveView.secondaryWaveColor = UIColor.darkGrayColor()
-        backWaveView.updateWithLevel(0)
+        backWaveView.secondaryWaveColor = UIColor.darkGray
+        backWaveView.update(withLevel: 0)
         addSubview(backWaveView)
 
-        frontWaveView.backgroundColor = UIColor.clearColor()
+        frontWaveView.backgroundColor = UIColor.clear
         frontWaveView.phaseShift = -0.02
         frontWaveView.primaryWaveLineWidth = 2
         frontWaveView.primaryWaveColor = PrimaryWaveInactiveColor
         frontWaveView.secondaryWaveLineWidth = 0.5
         frontWaveView.secondaryWaveColor = SecondaryWaveColor
-        frontWaveView.updateWithLevel(0)
+        frontWaveView.update(withLevel: 0)
         addSubview(frontWaveView)
 
-        frontWaveView.snp_makeConstraints { make in
+        frontWaveView.snp.makeConstraints { make in
             make.top.bottom.equalTo(self)
             make.leading.trailing.equalTo(self).inset(-40)
         }
 
-        backWaveView.snp_makeConstraints { make in
+        backWaveView.snp.makeConstraints { make in
             make.top.bottom.equalTo(self)
             make.leading.trailing.equalTo(self).inset(-15)
         }
@@ -58,15 +58,15 @@ class WaveView: UIView {
         clipsToBounds = true
 
         let displayLink = CADisplayLink(target: self, selector: #selector(WaveView.displayLink(_:)))
-        displayLink.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+        displayLink.add(to: RunLoop.current, forMode: RunLoopMode.commonModes)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc func displayLink(sender: CADisplayLink) {
-        colorLerp = (colorLerp + ColorTransitionStep) % Float(PrimaryWaveColorCount)
+    @objc func displayLink(_ sender: CADisplayLink) {
+        colorLerp = (colorLerp + ColorTransitionStep).truncatingRemainder(dividingBy: Float(PrimaryWaveColorCount))
         let colorIndex = Int(colorLerp)
         let lerp = CGFloat(colorLerp - Float(colorIndex))
         let fromColor = PrimaryWaveActiveColors[colorIndex]
@@ -83,8 +83,8 @@ class WaveView: UIView {
             frontWaveView.primaryWaveColor = currentColor
         }
 
-        backWaveView.updateWithLevel(waveLevel - 0.1)
-        frontWaveView.updateWithLevel(waveLevel)
+        backWaveView.update(withLevel: waveLevel - 0.1)
+        frontWaveView.update(withLevel: waveLevel)
     }
 
     override func layoutSubviews() {

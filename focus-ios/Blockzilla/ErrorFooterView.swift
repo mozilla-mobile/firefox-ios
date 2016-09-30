@@ -7,9 +7,9 @@ import UIKit
 
 class ErrorFooterView: UIView {
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
-        backgroundColor = UIColor.blackColor()
+        backgroundColor = UIColor.black
 
         let upperBorder = UIView()
         upperBorder.backgroundColor = UIConstants.Colors.FocusRed
@@ -18,7 +18,7 @@ class ErrorFooterView: UIView {
         let notEnabledLabel = UILabel()
         notEnabledLabel.text = UIConstants.Strings.NotEnabledError
         notEnabledLabel.textColor = UIConstants.Colors.FocusRed
-        notEnabledLabel.textAlignment = NSTextAlignment.Center
+        notEnabledLabel.textAlignment = NSTextAlignment.center
         notEnabledLabel.font = UIConstants.Fonts.SmallerFont
         addSubview(notEnabledLabel)
 
@@ -33,27 +33,27 @@ class ErrorFooterView: UIView {
         instructionsLabel2.text = NSLocalizedString("Settings → Safari → Content Blockers", comment: "Instructions shown in main app when disabled in system settings")
         instructionsLabel2.textColor = UIConstants.Colors.DefaultFont
         instructionsLabel2.numberOfLines = 0
-        instructionsLabel2.textAlignment = NSTextAlignment.Center
+        instructionsLabel2.textAlignment = NSTextAlignment.center
         instructionsLabel2.font = UIConstants.Fonts.SmallerFont
         addSubview(instructionsLabel2)
 
-        upperBorder.snp_makeConstraints { make in
+        upperBorder.snp.makeConstraints { make in
             make.height.equalTo(2)
             make.top.width.equalTo(self)
         }
 
-        notEnabledLabel.snp_makeConstraints { make in
+        notEnabledLabel.snp.makeConstraints { make in
             make.top.equalTo(self).offset(10)
             make.leading.trailing.equalTo(self)
         }
 
-        instructionsLabel1.snp_makeConstraints { make in
-            make.top.equalTo(notEnabledLabel.snp_bottom).offset(10)
+        instructionsLabel1.snp.makeConstraints { make in
+            make.top.equalTo(notEnabledLabel.snp.bottom).offset(10)
             make.centerX.equalTo(self)
         }
 
-        instructionsLabel2.snp_makeConstraints { make in
-            make.top.equalTo(instructionsLabel1.snp_bottom)
+        instructionsLabel2.snp.makeConstraints { make in
+            make.top.equalTo(instructionsLabel1.snp.bottom)
             make.leading.trailing.equalTo(self)
             make.bottom.equalTo(self).offset(-10)
         }
@@ -63,7 +63,7 @@ class ErrorFooterView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc func settingsClicked(sender: UIButton) {
-        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+    @objc func settingsClicked(_ sender: UIButton) {
+        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
     }
 }

@@ -1,2 +1,2 @@
-github "swisspol/GCDWebServer"
-github "SnapKit/SnapKit"
+github "swisspol/GCDWebServer" ~> 3.3.3
+github "SnapKit/SnapKit"       ~> 3.0.1

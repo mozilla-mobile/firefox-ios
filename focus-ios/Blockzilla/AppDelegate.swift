@@ -9,7 +9,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegate, IntroViewControllerDelegate {
     var window: UIWindow?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // If one of the toggles isn't enabled or disabled, this is the first launch. Load the list.
         if Settings.getBool(Settings.KeyBlockAds) == nil {
             Settings.registerDefaults()
@@ -19,18 +19,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegat
 
         LocalWebServer.sharedInstance.start()
 
-        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window = UIWindow(frame: UIScreen.main.bounds)
         let mainViewController = MainViewController()
         mainViewController.delegate = self
         let rootViewController = UINavigationController(rootViewController: mainViewController)
-        rootViewController.navigationBarHidden = true
+        rootViewController.isNavigationBarHidden = true
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
 
         if !(Settings.getBool(Settings.KeyIntroDone) ?? false) {
             let introViewController = IntroViewController()
             introViewController.delegate = self
-            rootViewController.presentViewController(introViewController, animated: true, completion: nil)
+            rootViewController.present(introViewController, animated: true, completion: nil)
         }
 
         displaySplashAnimation()
@@ -38,30 +38,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegat
         return true
     }
 
-    func introViewControllerWillDismiss(introViewController: IntroViewController) {
+    func introViewControllerWillDismiss(_ introViewController: IntroViewController) {
         Settings.set(true, forKey: Settings.KeyIntroDone)
     }
 
-    func mainViewControllerDidToggleList(mainViewController: MainViewController) {
+    func mainViewControllerDidToggleList(_ mainViewController: MainViewController) {
         reloadContentBlocker()
     }
 
-    private func displaySplashAnimation() {
+    fileprivate func displaySplashAnimation() {
         let splashView = UIView(frame: (window?.frame)!)
         splashView.backgroundColor = UIConstants.Colors.Background
         let logoImage = UIImageView(image: UIImage(named: "Icon"))
         splashView.addSubview(logoImage)
-        logoImage.snp_makeConstraints { make in
+        logoImage.snp.makeConstraints { make in
             make.center.equalTo(splashView)
         }
 
         window?.addSubview(splashView)
 
         let animationDuration = 0.25
-        UIView.animateWithDuration(animationDuration, delay: 0.0, options: .CurveEaseInOut, animations: {
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
             logoImage.layer.transform = CATransform3DMakeScale(0.8, 0.8, 1.0)
             }, completion: { success in
-                UIView.animateWithDuration(animationDuration, delay: 0.0, options: .CurveEaseInOut, animations: {
+                UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
                     splashView.alpha = 0
                     logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
                     }, completion: { success in
@@ -71,11 +71,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MainViewControllerDelegat
 
     }
 
-    private func reloadContentBlocker() {
+    fileprivate func reloadContentBlocker() {
         let identifier = AppInfo.ContentBlockerBundleIdentifier
-        SFContentBlockerManager.reloadContentBlockerWithIdentifier(identifier) { error in
+        SFContentBlockerManager.reloadContentBlocker(withIdentifier: identifier) { error in
             if let error = error {
-                NSLog("Failed to reload \(identifier): \(error.description)")
+                NSLog("Failed to reload \(identifier): \(error.localizedDescription)")
             }
         }
     }

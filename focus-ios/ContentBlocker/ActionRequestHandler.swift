@@ -6,42 +6,42 @@ import UIKit
 import MobileCoreServices
 
 class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
-    func beginRequestWithExtensionContext(context: NSExtensionContext) {
+    func beginRequest(with context: NSExtensionContext) {
         // NSItemProvider apparently doesn't support multiple attachments as a way to load multiple blocking lists.
         // As a workaround, we load each list into memory, then merge them into a single attachment.
         var mergedList = itemsFromFile("enabled-detector")
 
         if Settings.getBool(Settings.KeyBlockAds) ?? false {
-            mergedList.appendContentsOf(itemsFromFile("disconnect-advertising"))
+            mergedList.append(contentsOf: itemsFromFile("disconnect-advertising"))
         }
 
         if Settings.getBool(Settings.KeyBlockAnalytics) ?? false {
-            mergedList.appendContentsOf(itemsFromFile("disconnect-analytics"))
+            mergedList.append(contentsOf: itemsFromFile("disconnect-analytics"))
         }
 
         if Settings.getBool(Settings.KeyBlockSocial) ?? false {
-            mergedList.appendContentsOf(itemsFromFile("disconnect-social"))
+            mergedList.append(contentsOf: itemsFromFile("disconnect-social"))
         }
 
         if Settings.getBool(Settings.KeyBlockOther) ?? false {
-            mergedList.appendContentsOf(itemsFromFile("disconnect-content"))
+            mergedList.append(contentsOf: itemsFromFile("disconnect-content"))
         }
 
         if Settings.getBool(Settings.KeyBlockFonts) ?? false {
-            mergedList.appendContentsOf(itemsFromFile("web-fonts"))
+            mergedList.append(contentsOf: itemsFromFile("web-fonts"))
         }
 
-        let mergedListJSON = try! NSJSONSerialization.dataWithJSONObject(mergedList, options: NSJSONWritingOptions(rawValue: 0))
-        let attachment = NSItemProvider(item: mergedListJSON, typeIdentifier: kUTTypeJSON as String)
+        let mergedListJSON = try! JSONSerialization.data(withJSONObject: mergedList, options: JSONSerialization.WritingOptions(rawValue: 0))
+        let attachment = NSItemProvider(item: mergedListJSON as NSSecureCoding?, typeIdentifier: kUTTypeJSON as String)
         let item = NSExtensionItem()
         item.attachments = [attachment]
-        context.completeRequestReturningItems([item], completionHandler: nil)
+        context.completeRequest(returningItems: [item], completionHandler: nil)
     }
 
     /// Gets the dictionary form of the tracking list with the specified file name.
-    private func itemsFromFile(name: String) -> [NSDictionary] {
-        let url = NSBundle.mainBundle().URLForResource(name, withExtension: "json")
-        let data = NSData(contentsOfURL: url!)
-        return try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as! [NSDictionary]
+    fileprivate func itemsFromFile(_ name: String) -> [NSDictionary] {
+        let url = Bundle.main.url(forResource: name, withExtension: "json")
+        let data = try? Data(contentsOf: url!)
+        return try! JSONSerialization.jsonObject(with: data!, options: []) as! [NSDictionary]
     }
 }

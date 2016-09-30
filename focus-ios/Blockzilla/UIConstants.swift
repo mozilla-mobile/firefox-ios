@@ -24,12 +24,12 @@ struct UIConstants {
     }
 
     struct Fonts {
-        static let DefaultFont = UIFont.systemFontOfSize(16)
-        static let DefaultFontSemibold = UIFont.systemFontOfSize(16, weight: UIFontWeightSemibold)
-        static let DefaultFontMedium = UIFont.systemFontOfSize(16, weight: UIFontWeightMedium)
-        static let SmallerFont = UIFont.systemFontOfSize(14)
-        static let SmallerFontSemibold = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
-        static let TableSectionHeader = UIFont.systemFontOfSize(12, weight: UIFontWeightSemibold)
+        static let DefaultFont = UIFont.systemFont(ofSize: 16)
+        static let DefaultFontSemibold = UIFont.systemFont(ofSize: 16, weight: UIFontWeightSemibold)
+        static let DefaultFontMedium = UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
+        static let SmallerFont = UIFont.systemFont(ofSize: 14)
+        static let SmallerFontSemibold = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        static let TableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)
     }
 
     struct Layout {

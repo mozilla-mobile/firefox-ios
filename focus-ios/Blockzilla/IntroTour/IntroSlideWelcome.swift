@@ -6,7 +6,7 @@ import Foundation
 
 class IntroSlideWelcome: UIView {
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         let welcomeLabel = UILabel()
         welcomeLabel.text = NSLocalizedString("Welcome", comment: "Text displayed under the wave on the first intro slide at launch")
@@ -22,21 +22,21 @@ class IntroSlideWelcome: UIView {
         descriptionLabel.text = String(format: descriptionText, AppInfo.ProductName)
         descriptionLabel.textColor = UIConstants.Colors.DefaultFont
         descriptionLabel.numberOfLines = 0
-        descriptionLabel.textAlignment = NSTextAlignment.Center
+        descriptionLabel.textAlignment = NSTextAlignment.center
         addSubview(descriptionLabel)
 
-        waveView.snp_makeConstraints { make in
+        waveView.snp.makeConstraints { make in
             make.top.equalTo(self).offset(50)
             make.leading.trailing.equalTo(self)
             make.height.equalTo(200)
         }
 
-        welcomeLabel.snp_makeConstraints { make in
+        welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.bottom.equalTo(descriptionLabel.snp_top).offset(-20)
+            make.bottom.equalTo(descriptionLabel.snp.top).offset(-20)
         }
 
-        descriptionLabel.snp_makeConstraints { make in
+        descriptionLabel.snp.makeConstraints { make in
             make.bottom.equalTo(self).offset(-100)
             make.leading.trailing.equalTo(self).inset(30)
         }

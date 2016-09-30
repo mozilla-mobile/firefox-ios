@@ -6,7 +6,7 @@ import Foundation
 
 class IntroSlideHowTo: UIView {
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         let instructionsContainer = UIView()
         addSubview(instructionsContainer)
@@ -18,22 +18,22 @@ class IntroSlideHowTo: UIView {
         let mustBeEnabledText = NSLocalizedString("%@ must be enabled in Settings to work.", comment: "Notice label show on second introduction screen")
         mustBeEnabledLabel.text = String(format: mustBeEnabledText, AppInfo.ProductName)
         mustBeEnabledLabel.numberOfLines = 0
-        mustBeEnabledLabel.textAlignment = NSTextAlignment.Center
+        mustBeEnabledLabel.textAlignment = NSTextAlignment.center
         mustBeEnabledLabel.textColor = UIConstants.Colors.FocusOrange
         addSubview(mustBeEnabledLabel)
 
-        instructionsContainer.snp_makeConstraints { make in
+        instructionsContainer.snp.makeConstraints { make in
             make.top.equalTo(self)
-            make.bottom.equalTo(mustBeEnabledLabel.snp_top)
+            make.bottom.equalTo(mustBeEnabledLabel.snp.top)
             make.leading.trailing.equalTo(self)
         }
 
-        instructionsView.snp_makeConstraints { make in
+        instructionsView.snp.makeConstraints { make in
             make.center.equalTo(instructionsContainer)
             make.width.equalTo(220)
         }
 
-        mustBeEnabledLabel.snp_makeConstraints { make in
+        mustBeEnabledLabel.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self).inset(30)
             make.bottom.equalTo(self).offset(-70)
         }

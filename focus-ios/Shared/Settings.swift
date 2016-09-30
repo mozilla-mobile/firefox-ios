@@ -12,7 +12,7 @@ struct Settings {
     static let KeyBlockFonts = "BlockFonts"
     static let KeyIntroDone = "IntroDone"
 
-    private static let defaults = NSUserDefaults(suiteName: AppInfo.SharedContainerIdentifier)!
+    fileprivate static let defaults = UserDefaults(suiteName: AppInfo.SharedContainerIdentifier)!
 
     static func registerDefaults() {
         set(true, forKey: KeyBlockAds)
@@ -22,12 +22,12 @@ struct Settings {
         set(false, forKey: KeyBlockFonts)
     }
 
-    static func getBool(name: String) -> Bool? {
-        return defaults.objectForKey(name) as? Bool
+    static func getBool(_ name: String) -> Bool? {
+        return defaults.object(forKey: name) as? Bool
     }
 
-    static func set(value: Bool, forKey key: String) {
-        defaults.setBool(value, forKey: key)
+    static func set(_ value: Bool, forKey key: String) {
+        defaults.set(value, forKey: key)
         defaults.synchronize()
     }
 }

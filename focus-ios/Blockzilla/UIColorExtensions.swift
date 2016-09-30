@@ -23,7 +23,7 @@ extension UIColor {
             alpha: 1)
     }
 
-    func lerp(toColor toColor: UIColor, step: CGFloat) -> UIColor {
+    func lerp(toColor: UIColor, step: CGFloat) -> UIColor {
         var fromR: CGFloat = 0
         var fromG: CGFloat = 0
         var fromB: CGFloat = 0

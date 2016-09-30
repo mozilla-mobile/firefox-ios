@@ -6,7 +6,7 @@ import Foundation
 
 class InstructionsView: UIView {
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         let settingsText = NSLocalizedString("Open Settings App", comment: "Label for instructions to enable shown on the second introduction screen")
         let safariText = NSLocalizedString("Tap Safari, then select Content Blockers", comment: "Label for instructions to enable shown on the second introduction screen")
@@ -22,18 +22,18 @@ class InstructionsView: UIView {
 
         let instructionOffset = 50
 
-        settingsInstruction.snp_makeConstraints { make in
+        settingsInstruction.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(self)
         }
 
-        safariInstruction.snp_makeConstraints { make in
+        safariInstruction.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(settingsInstruction.snp_bottom).offset(instructionOffset)
+            make.top.equalTo(settingsInstruction.snp.bottom).offset(instructionOffset)
         }
 
-        enableInstruction.snp_makeConstraints { make in
+        enableInstruction.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(self)
-            make.top.equalTo(safariInstruction.snp_bottom).offset(instructionOffset)
+            make.top.equalTo(safariInstruction.snp.bottom).offset(instructionOffset)
         }
     }
 
@@ -44,7 +44,7 @@ class InstructionsView: UIView {
 
 private class InstructionView: UIView {
     init(text: String, image: UIImage) {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         let imageView = UIImageView()
         imageView.image = image
@@ -55,17 +55,17 @@ private class InstructionView: UIView {
         label.textColor = UIConstants.Colors.DefaultFont
         label.numberOfLines = 0
         label.font = UIConstants.Fonts.DefaultFontMedium
-        label.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
+        label.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
         addSubview(label)
 
-        imageView.snp_makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.leading.centerY.equalTo(self)
             make.width.equalTo(image.size.width)
             make.height.equalTo(image.size.height)
         }
 
-        label.snp_makeConstraints { make in
-            make.leading.equalTo(imageView.snp_trailing).offset(30)
+        label.snp.makeConstraints { make in
+            make.leading.equalTo(imageView.snp.trailing).offset(30)
             make.trailing.top.bottom.equalTo(self)
         }
     }

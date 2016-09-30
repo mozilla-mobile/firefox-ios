@@ -6,7 +6,7 @@ import Foundation
 
 class TitleView: UIView {
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         let logo = UIImage(named: "\(AppInfo.ProductName)HeaderLogo")!
         let logoView = UIImageView(image: logo)
@@ -14,7 +14,7 @@ class TitleView: UIView {
 
         translatesAutoresizingMaskIntoConstraints = false
 
-        logoView.snp_makeConstraints { make in
+        logoView.snp.makeConstraints { make in
             make.bottom.equalTo(self).inset(5)
             make.top.equalTo(self).inset(10)
             make.centerX.equalTo(self)
