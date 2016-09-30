@@ -118,7 +118,7 @@ public class DefaultSuggestedSites {
                 title: "淘宝"
             ),
             SuggestedSiteData(
-                url: "http://m.jd.com/?cu=true&utm_source=c.duomai.com&utm_medium=tuiguang&utm_campaign=t_16282_51222087&utm_term=163a0d0b6b124b7b84e6e936be97a1ad",
+                url: "http://union.click.jd.com/jdc?e=0&p=AyIHVCtaJQMiQwpDBUoyS0IQWlALHE4YDk5ER1xONwdJKVxASgI%2BeDkWfGJ6HEAOUmkbcjUXVyUBEQZRG1IXARQ3VhhaEQETBVweayVkbzcedVolBxIEUBxdFAoQN1UeXRQLGwFXHlsUABs3UisnS0lKWghLWBQCFzdlK2s%3D&t=W1dCFBBFC14NXAAECUte",
                 bgColor: "0xc71622",
                 imageUrl: "asset://suggestedsites_jd",
                 faviconUrl: "asset://jdLogo",
