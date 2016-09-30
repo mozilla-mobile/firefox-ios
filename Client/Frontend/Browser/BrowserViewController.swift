@@ -775,8 +775,7 @@ class BrowserViewController: UIViewController {
     private func updateInContentHomePanel(url: NSURL?) {
         if !urlBar.inOverlayMode {
             if AboutUtils.isAboutHomeURL(url) {
-                let showInline = AppConstants.MOZ_MENU || ((tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
-                showHomePanelController(inline: showInline)
+                showHomePanelController(inline: true)
             } else {
                 hideHomePanelController()
             }
@@ -850,15 +849,6 @@ class BrowserViewController: UIViewController {
         if let tab = tabManager.getTabForURL(url) {
             tab.isBookmarked = true
         }
-
-        if !AppConstants.MOZ_MENU {
-            // Dispatch to the main thread to update the UI
-            dispatch_async(dispatch_get_main_queue()) { _ in
-                self.animateBookmarkStar()
-                self.toolbar?.updateBookmarkStatus(true)
-                self.urlBar.updateBookmarkStatus(true)
-            }
-        }
     }
 
     private func animateBookmarkStar() {
@@ -885,10 +875,6 @@ class BrowserViewController: UIViewController {
                     if let tab = self.tabManager.getTabForURL(url) {
                         tab.isBookmarked = false
                     }
-                    if !AppConstants.MOZ_MENU {
-                        self.toolbar?.updateBookmarkStatus(false)
-                        self.urlBar.updateBookmarkStatus(false)
-                    }
                 }
             }
         }
@@ -901,10 +887,6 @@ class BrowserViewController: UIViewController {
                     if let added = userInfo["added"] {
                         if let tab = self.tabManager.getTabForURL(urlBar.currentURL!) {
                             tab.isBookmarked = false
-                        }
-                        if !AppConstants.MOZ_MENU {
-                            self.toolbar?.updateBookmarkStatus(added)
-                            self.urlBar.updateBookmarkStatus(added)
                         }
                     }
                 }
@@ -1023,9 +1005,6 @@ class BrowserViewController: UIViewController {
                     return
                 }
                 tab?.isBookmarked = bookmarked
-                if !AppConstants.MOZ_MENU {
-                    self.navigationToolbar.updateBookmarkStatus(bookmarked)
-                }
             }
         }
     }
@@ -1308,9 +1287,7 @@ class BrowserViewController: UIViewController {
 extension BrowserViewController: AppStateDelegate {
 
     func appDidUpdateState(appState: AppState) {
-        if AppConstants.MOZ_MENU {
-            menuViewController?.appState = appState
-        }
+        menuViewController?.appState = appState
         toolbar?.appDidUpdateState(appState)
         urlBar?.appDidUpdateState(appState)
     }
@@ -1697,9 +1674,6 @@ extension BrowserViewController: TabToolbarDelegate {
     }
     
     func showBackForwardList() {
-        guard AppConstants.MOZ_BACK_FORWARD_LIST else {
-            return
-        }
         if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
             let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             backForwardViewController.tabManager = tabManager
@@ -2044,12 +2018,6 @@ extension BrowserViewController: TabManagerDelegate {
                             }
 
                             tab?.isBookmarked = isBookmarked
-
-
-                            if !AppConstants.MOZ_MENU {
-                                self.toolbar?.updateBookmarkStatus(isBookmarked)
-                                self.urlBar.updateBookmarkStatus(isBookmarked)
-                            }
                         }
                     }
                 }

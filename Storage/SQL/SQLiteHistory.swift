@@ -560,11 +560,11 @@ extension SQLiteHistory: BrowserHistory {
         "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
         "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id "
 
-        if includeBookmarks && AppConstants.MOZ_AWESOMEBAR_DUPES {
+        if includeBookmarks {
             ungroupedSQL.appendContentsOf("LEFT JOIN \(ViewAllBookmarks) on \(ViewAllBookmarks).url = \(TableHistory).url ")
         }
         ungroupedSQL.appendContentsOf(whereClause.stringByReplacingOccurrencesOfString("url", withString: "\(TableHistory).url").stringByReplacingOccurrencesOfString("title", withString: "\(TableHistory).title"))
-        if includeBookmarks && AppConstants.MOZ_AWESOMEBAR_DUPES {
+        if includeBookmarks {
             ungroupedSQL.appendContentsOf(" AND \(ViewAllBookmarks).url IS NULL")
         }
         ungroupedSQL.appendContentsOf(" GROUP BY historyID")
@@ -629,7 +629,7 @@ extension SQLiteHistory: BrowserHistory {
                 "1 AS is_bookmarked",
                 "FROM", ViewAwesomebarBookmarksWithIcons,
                 whereClause,                  // The columns match, so we can reuse this.
-                AppConstants.MOZ_AWESOMEBAR_DUPES ? "GROUP BY url" : "",
+                "GROUP BY url",
                 "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
             ].joinWithSeparator(" ")
 
