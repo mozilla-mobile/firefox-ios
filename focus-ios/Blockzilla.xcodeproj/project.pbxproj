@@ -47,6 +47,7 @@
 		D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817201BD0689800185845 /* disconnect-content.json */; };
 		D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817211BD0689800185845 /* disconnect-social.json */; };
 		D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */; };
+		D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */; };
 		E43A10781C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E43A10791C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */; };
@@ -132,6 +133,7 @@
 		D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		D3E2C8F71D9F129500DEBE3D /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		D3E2C8F91D9F170200DEBE3D /* ContentBlocker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlocker.swift; sourceTree = "<group>"; };
+		D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBar.swift; sourceTree = "<group>"; };
 		E43A10771C42BBE400FE695B /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Klar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
+				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
 				D3E2C8F71D9F129500DEBE3D /* Utils.swift */,
 				D392887C1BC5E4510016A9A0 /* WaveHeaderView.swift */,
 				D37DE55C1BCDBD6100906364 /* WaveView.swift */,
@@ -461,6 +464,7 @@
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* ContentBlocker.swift in Sources */,
 				D37DE54B1BCDB84600906364 /* IntroSlideHowTo.swift in Sources */,
+				D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */,
 				D392887D1BC5E4510016A9A0 /* WaveHeaderView.swift in Sources */,
 				D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */,
 				D37DE5471BCDB80B00906364 /* InstructionsView.swift in Sources */,

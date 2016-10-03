@@ -6,36 +6,26 @@ import Foundation
 import UIKit
 import SnapKit
 
-class BrowserViewController: UIViewController, UITextFieldDelegate {
+class BrowserViewController: UIViewController {
     let webView = UIWebView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIConstants.colors.background
+        let urlBarContainer = UIView()
+        urlBarContainer.backgroundColor = UIConstants.colors.urlBarBackground
 
-        let urlBar = UIView()
-        urlBar.backgroundColor = UIConstants.colors.urlBarBackground
+        let urlBar = URLBar(frame: CGRect.zero)
 
-        view.addSubview(urlBar)
-        urlBar.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(view)
+        view.addSubview(urlBarContainer)
+        urlBarContainer.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(self.view)
         }
 
-        let urlText = URLTextField()
-        urlText.font = UIConstants.fonts.urlTextFont
-        urlText.textColor = UIConstants.colors.urlTextFont
-        urlText.layer.cornerRadius = UIConstants.layout.urlTextCornerRadius
-        urlText.backgroundColor = UIConstants.colors.urlTextBackground
-        urlText.placeholder = UIConstants.strings.urlTextPlaceholder
-        urlText.keyboardType = .webSearch
-        urlText.autocapitalizationType = .none
-        urlText.delegate = self
-
-        urlBar.addSubview(urlText)
-        urlText.snp.makeConstraints { make in
-            make.top.equalTo(topLayoutGuide.snp.bottom).inset(-UIConstants.layout.urlBarInset)
-            make.leading.trailing.bottom.equalTo(urlBar).inset(UIConstants.layout.urlBarInset)
+        urlBarContainer.addSubview(urlBar)
+        urlBar.snp.makeConstraints { make in
+            make.top.equalTo(topLayoutGuide.snp.bottom)
+            make.leading.trailing.bottom.equalTo(urlBarContainer)
         }
 
         view.addSubview(webView)
@@ -44,25 +34,11 @@ class BrowserViewController: UIViewController, UITextFieldDelegate {
             make.leading.trailing.bottom.equalTo(view)
         }
 
-        webView.loadRequest(URLRequest(url: URL(string: "https://www.google.com")!))
-
-//        let settingsButton = UIButton()
-//        settingsButton.addTarget(self, action: #selector(settingsClicked), for: .touchUpInside)
-//        settingsButton.setTitle(UIConstants.Strings.LabelOpenSettings, for: .normal)
-//        view.addSubview(settingsButton)
-//        settingsButton.snp.makeConstraints { make in
-//            make.center.equalTo(self.view)
-//        }
+        urlBar.delegate = self
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
-    }
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        let url = "http://" + textField.text!
-        webView.loadRequest(URLRequest(url: URL(string: url)!))
-        return true
     }
 
     func settingsClicked() {
@@ -71,18 +47,9 @@ class BrowserViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-private class URLTextField: UITextField {
-    override var placeholder: String? {
-        didSet {
-            attributedPlaceholder = NSAttributedString(string: placeholder!, attributes: [NSForegroundColorAttributeName: UIConstants.colors.urlTextPlaceholder])
-        }
-    }
-
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: 8, dy: 8)
-    }
-
-    override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: 8, dy: 8)
+extension BrowserViewController: URLBarDelegate {
+    func urlBar(urlBar: URLBar, didSubmitText text: String) {
+        let url = "http://" + text
+        webView.loadRequest(URLRequest(url: URL(string: url)!))
     }
 }
