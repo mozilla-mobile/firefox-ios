@@ -49,7 +49,11 @@ class BrowserViewController: UIViewController {
 
 extension BrowserViewController: URLBarDelegate {
     func urlBar(urlBar: URLBar, didSubmitText text: String) {
-        let url = "http://" + text
-        webView.loadRequest(URLRequest(url: URL(string: url)!))
+        guard let url = URIFixup.getURL(entry: text) else {
+            print("Search not yet supported.")
+            return
+        }
+
+        webView.loadRequest(URLRequest(url: url))
     }
 }

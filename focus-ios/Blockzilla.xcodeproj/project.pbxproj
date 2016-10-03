@@ -49,6 +49,8 @@
 		D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */; };
 		D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */; };
 		D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C9681DA3024800DEBE3D /* InsetButton.swift */; };
+		D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */; };
+		D3E2C96D1DA3077400DEBE3D /* NSCharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96C1DA3077400DEBE3D /* NSCharacterSetExtensions.swift */; };
 		E43A10781C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E43A10791C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */; };
@@ -136,6 +138,8 @@
 		D3E2C8F91D9F170200DEBE3D /* ContentBlocker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlocker.swift; sourceTree = "<group>"; };
 		D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBar.swift; sourceTree = "<group>"; };
 		D3E2C9681DA3024800DEBE3D /* InsetButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsetButton.swift; sourceTree = "<group>"; };
+		D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
+		D3E2C96C1DA3077400DEBE3D /* NSCharacterSetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCharacterSetExtensions.swift; sourceTree = "<group>"; };
 		E43A10771C42BBE400FE695B /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Klar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -270,11 +274,14 @@
 				D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E2C8F91D9F170200DEBE3D /* ContentBlocker.swift */,
+				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
+				D3E2C96C1DA3077400DEBE3D /* NSCharacterSetExtensions.swift */,
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
 				D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */,
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
+				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
 				D3E2C8F71D9F129500DEBE3D /* Utils.swift */,
 				D392887C1BC5E4510016A9A0 /* WaveHeaderView.swift */,
@@ -283,7 +290,6 @@
 				D37DE5431BCDB7EF00906364 /* IntroTour */,
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
 				D3BFCB3D1BD14F4E00AD22D1 /* LocalWebServer */,
-				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
@@ -473,9 +479,11 @@
 				D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */,
 				D37DE5471BCDB80B00906364 /* InstructionsView.swift in Sources */,
 				D32F71D31BCEF67C006D44FC /* UIViewExtensions.swift in Sources */,
+				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */,
 				D37DE54D1BCDB86100906364 /* IntroSlideFinish.swift in Sources */,
 				D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */,
+				D3E2C96D1DA3077400DEBE3D /* NSCharacterSetExtensions.swift in Sources */,
 				E43A10781C42BBE400FE695B /* AppInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
