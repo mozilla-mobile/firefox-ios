@@ -7,7 +7,8 @@ import UIKit
 import SnapKit
 
 class BrowserViewController: UIViewController {
-    let webView = UIWebView()
+    fileprivate let webView = UIWebView()
+    fileprivate let browserToolbar = BrowserToolbar(frame: CGRect.zero)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,6 +17,10 @@ class BrowserViewController: UIViewController {
         urlBarContainer.backgroundColor = UIConstants.colors.urlBarBackground
 
         let urlBar = URLBar(frame: CGRect.zero)
+        urlBar.delegate = self
+
+        browserToolbar.delegate = self
+        webView.delegate = self
 
         view.addSubview(urlBarContainer)
         urlBarContainer.snp.makeConstraints { make in
@@ -34,7 +39,11 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.bottom.equalTo(view)
         }
 
-        urlBar.delegate = self
+        view.addSubview(browserToolbar)
+        browserToolbar.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalTo(view)
+            make.height.equalTo(UIConstants.layout.browserToolbarHeight)
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -50,10 +59,52 @@ class BrowserViewController: UIViewController {
 extension BrowserViewController: URLBarDelegate {
     func urlBar(urlBar: URLBar, didSubmitText text: String) {
         guard let url = URIFixup.getURL(entry: text) else {
-            print("Search not yet supported.")
+            print("TODO: Search not yet supported.")
             return
         }
 
         webView.loadRequest(URLRequest(url: url))
+    }
+}
+
+extension BrowserViewController: BrowserToolbarDelegate {
+    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar) {
+        webView.goBack()
+    }
+
+    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar) {
+        webView.goForward()
+    }
+
+    func browserToolbarDidPressReload(browserToolbar: BrowserToolbar) {
+        webView.reload()
+    }
+
+    func browserToolbarDidPressStop(browserToolbar: BrowserToolbar) {
+        webView.stopLoading()
+    }
+
+    func browserToolbarDidPressSend(browserToolbar: BrowserToolbar) {
+        print("TODO: Sending not yet supported.")
+    }
+}
+
+extension BrowserViewController: UIWebViewDelegate {
+    func webViewDidStartLoad(_ webView: UIWebView) {
+        browserToolbar.isLoading = true
+    }
+
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        browserToolbar.isLoading = false
+        updateToolbar()
+    }
+
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+        updateToolbar()
+    }
+
+    private func updateToolbar() {
+        browserToolbar.canGoBack = webView.canGoBack
+        browserToolbar.canGoForward = webView.canGoForward
     }
 }
