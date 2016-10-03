@@ -181,6 +181,9 @@ extension ActivityStreamPanel {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(indexPath.section) {
         case .Highlights:
+            let eventPing = ASOnyxPing.buildEventPing(.click, page: .newTab, source: .highlights,
+                                                      actionPosition: indexPath.row)
+            OnyxTelemetry.sharedClient.sendPing(eventPing, toEndpoint: .activityStream)
             let site = self.history[indexPath.row]
             showSiteWithURLHandler(NSURL(string:site.url)!)
         case .TopSites:
@@ -274,13 +277,19 @@ extension ActivityStreamPanel {
             self.topSites = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
             self.topSitesManager.currentTraits = self.view.traitCollection
             self.topSitesManager.content = self.topSites
-            self.topSitesManager.urlPressedHandler = { [unowned self] url in
+            self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
+                let eventPing = ASOnyxPing.buildEventPing(.click, page: .newTab, source: .topSites,
+                                                          actionPosition: indexPath.item)
+                OnyxTelemetry.sharedClient.sendPing(eventPing, toEndpoint: .activityStream)
                 self.showSiteWithURLHandler(url)
             }
             self.topSitesManager.presentActionMenuHandler = { [unowned self] alert in
                 self.presentActionMenuHandler(alert)
             }
-            self.topSitesManager.deleteItemHandler = { [unowned self] url in
+            self.topSitesManager.deleteItemHandler = { [unowned self] url, indexPath in
+                let eventPing = ASOnyxPing.buildEventPing(.delete, page: .newTab, source: .topSites,
+                                          actionPosition: indexPath.item)
+                OnyxTelemetry.sharedClient.sendPing(eventPing, toEndpoint: .activityStream)
                 self.hideURLFromTopSites(url)
             }
             self.tableView.reloadData()
@@ -313,6 +322,7 @@ extension ActivityStreamPanel {
     private func deleteTileForSuggestedSite(siteURL: String) {
         var deletedSuggestedSites = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         deletedSuggestedSites.append(siteURL)
+
         profile.prefs.setObject(deletedSuggestedSites, forKey: DefaultSuggestedSitesKey)
     }
 
@@ -347,13 +357,20 @@ extension ActivityStreamPanel {
         })
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
+            let eventPing = ASOnyxPing.buildEventPing(.delete, page: .newTab, source: .highlights,
+                          actionPosition: indexPath.row)
+            OnyxTelemetry.sharedClient.sendPing(eventPing, toEndpoint: .activityStream)
             self.profile.history.removeHistoryForURL(site.url)
         })
 
         let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
             if let url = NSURL(string: site.url) {
                 let helper = ShareExtensionHelper(url: url, tab: nil, activities: [])
-                let controller = helper.createActivityViewController({ _ in })
+                let controller = helper.createActivityViewController { completed, activityType in
+                    let eventPing = ASOnyxPing.buildEventPing(.share, page: .newTab, source: .highlights,
+                        actionPosition: indexPath.row, provider: activityType)
+                    OnyxTelemetry.sharedClient.sendPing(eventPing, toEndpoint: .activityStream)
+                }
                 self.presentViewController(controller, animated: true, completion: nil)
             }
         })

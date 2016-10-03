@@ -9,6 +9,7 @@ github "adjust/ios_sdk"                     "v4.10.1"
 github "AgileBits/onepassword-extension"    "add-framework-support"
 github "iziz/libPhoneNumber-iOS"            "0.8.11"
 
+github "mozilla-mobile/onyx_ios"            "0.0.1"
 github "mozilla/readability"                "master"
 
 github "jrendel/SwiftKeychainWrapper"       "Swift2.3"
