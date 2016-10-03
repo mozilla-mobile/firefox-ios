@@ -48,6 +48,7 @@
 		D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817211BD0689800185845 /* disconnect-social.json */; };
 		D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */; };
 		D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */; };
+		D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C9681DA3024800DEBE3D /* InsetButton.swift */; };
 		E43A10781C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E43A10791C42BBE400FE695B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A10771C42BBE400FE695B /* AppInfo.swift */; };
 		E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */; };
@@ -134,6 +135,7 @@
 		D3E2C8F71D9F129500DEBE3D /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		D3E2C8F91D9F170200DEBE3D /* ContentBlocker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlocker.swift; sourceTree = "<group>"; };
 		D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBar.swift; sourceTree = "<group>"; };
+		D3E2C9681DA3024800DEBE3D /* InsetButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsetButton.swift; sourceTree = "<group>"; };
 		E43A10771C42BBE400FE695B /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Klar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				D37DE5431BCDB7EF00906364 /* IntroTour */,
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
 				D3BFCB3D1BD14F4E00AD22D1 /* LocalWebServer */,
+				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
@@ -460,6 +463,7 @@
 				D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */,
 				D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */,
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
+				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* ContentBlocker.swift in Sources */,

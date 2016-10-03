@@ -54,6 +54,7 @@ struct UIConstants {
         static let labelBlockFonts = NSLocalizedString("Block Web fonts", comment: "Label for toggle on main screen")
         static let labelOpenSettings = NSLocalizedString("Open Settings", comment: "Button label to open settings screen")
         static let subtitleBlockOther = NSLocalizedString("May break some videos and Web pages", comment: "Label for toggle on main screen")
+        static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
     }
 }
