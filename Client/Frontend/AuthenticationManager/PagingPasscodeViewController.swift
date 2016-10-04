@@ -36,6 +36,9 @@ class PagingPasscodeViewController: BasePasscodeViewController {
         }
         pager.contentSize = CGSize(width: CGFloat(panes.count) * pager.frame.width, height: pager.frame.height)
         scrollToPaneAtIndex(currentPaneIndex)
+        if self.authenticationInfo?.isLocked() ?? false {
+            return
+        }
         panes[currentPaneIndex].codeInputView.becomeFirstResponder()
     }
 
