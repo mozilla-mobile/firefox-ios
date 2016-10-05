@@ -14,8 +14,7 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let urlBarContainer = UIView()
-        urlBarContainer.backgroundColor = UIConstants.colors.urlBarBackground
+        let urlBarContainer = URLBarContainer()
         view.addSubview(urlBarContainer)
 
         let urlBar = URLBar(frame: CGRect.zero)

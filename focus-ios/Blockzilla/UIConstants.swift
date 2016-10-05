@@ -24,7 +24,8 @@ struct UIConstants {
         static let tableSectionHeader = UIColor(rgb: 0x61666D)
         static let toolbarButtonNormal = UIColor.darkGray
         static let toolbarBackground = UIColor(rgb: 0xEEEEEE)
-        static let urlBarBackground = UIColor(rgb: 0x663388)
+        static let urlBarBackgroundLeft = UIColor(rgb: 0x9c62a7)
+        static let urlBarBackgroundRight = UIColor(rgb: 0x2f2a8d)
         static let urlTextBackground = UIColor(rgb: 0xffffff, alpha: 0.5)
         static let urlTextFont = UIColor.white
         static let urlTextPlaceholder = UIColor(rgb: 0xffffff, alpha: 0.8)
@@ -41,7 +42,7 @@ struct UIConstants {
     }
 
     struct layout {
-        static let browserToolbarHeight = 48
+        static let browserToolbarHeight = 44
         static let navigationDoneOffset: Float = -10
         static let urlTextCornerRadius: CGFloat = 1.5
         static let urlBarInset: CGFloat = 5
