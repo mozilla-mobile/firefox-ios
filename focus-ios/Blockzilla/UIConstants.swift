@@ -46,6 +46,7 @@ struct UIConstants {
         static let navigationDoneOffset: Float = -10
         static let urlTextCornerRadius: CGFloat = 1.5
         static let urlBarInset: CGFloat = 5
+        static let urlBarMargin: CGFloat = 8
     }
 
     struct strings {

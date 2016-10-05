@@ -20,8 +20,8 @@ class BrowserToolbar: UIView {
     private let stopReloadButton = UIButton()
     private let sendButton = UIButton()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(frame: CGRect.zero)
 
         backgroundColor = UIConstants.colors.toolbarBackground
 

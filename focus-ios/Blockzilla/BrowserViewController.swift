@@ -8,7 +8,8 @@ import SnapKit
 
 class BrowserViewController: UIViewController {
     fileprivate let browser = Browser()
-    fileprivate let browserToolbar = BrowserToolbar(frame: CGRect.zero)
+    fileprivate let urlBar = URLBar()
+    fileprivate let browserToolbar = BrowserToolbar()
     fileprivate let progressBar = UIProgressView(progressViewStyle: .bar)
 
     override func viewDidLoad() {
@@ -17,7 +18,6 @@ class BrowserViewController: UIViewController {
         let urlBarContainer = URLBarContainer()
         view.addSubview(urlBarContainer)
 
-        let urlBar = URLBar(frame: CGRect.zero)
         urlBarContainer.addSubview(urlBar)
         urlBar.delegate = self
 
@@ -74,6 +74,10 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         browser.loadRequest(URLRequest(url: url))
+    }
+
+    func urlBarDidCancel(urlBar: URLBar) {
+        urlBar.text = browser.url?.absoluteString
     }
 }
 
@@ -132,5 +136,9 @@ extension BrowserViewController: BrowserDelegate {
         if estimatedProgress == 1 {
             progressBar.animateHidden(true, duration: 0.3)
         }
+    }
+
+    func browser(_ browser: Browser, didUpdateURL url: URL?) {
+        urlBar.text = url?.absoluteString
     }
 }

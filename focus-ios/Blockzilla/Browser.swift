@@ -11,6 +11,7 @@ protocol BrowserDelegate: class {
     func browser(_ browser: Browser, didUpdateCanGoBack canGoBack: Bool)
     func browser(_ browser: Browser, didUpdateCanGoForward canGoForward: Bool)
     func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float)
+    func browser(_ browser: Browser, didUpdateURL url: URL?)
 }
 
 class Browser: NSObject {
@@ -65,6 +66,12 @@ class Browser: NSObject {
         }
     }
 
+    fileprivate(set) var url: URL? = nil {
+        didSet {
+            delegate?.browser(self, didUpdateURL: url)
+        }
+    }
+
     var view: UIView {
         return webView
     }
@@ -85,6 +92,10 @@ extension Browser: UIWebViewDelegate {
     }
 
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if request.mainDocumentURL != url {
+            url = request.mainDocumentURL
+        }
+
         updateBackForwardStates(webView)
 
         if request.mainDocumentURL == request.url, !isLoading {

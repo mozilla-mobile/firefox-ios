@@ -7,17 +7,18 @@ import SnapKit
 
 protocol URLBarDelegate: class {
     func urlBar(urlBar: URLBar, didSubmitText text: String)
+    func urlBarDidCancel(urlBar: URLBar)
 }
 
-class URLBar: UIView, UITextFieldDelegate {
+class URLBar: UIView {
     weak var delegate: URLBarDelegate?
 
     private let urlText = URLTextField()
     private let cancelButton = InsetButton()
-    private var cancelButtonWidthConstraint: Constraint!
+    fileprivate var cancelButtonWidthConstraint: Constraint!
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(frame: CGRect.zero)
 
         urlText.font = UIConstants.fonts.urlTextFont
         urlText.textColor = UIConstants.colors.urlTextFont
@@ -26,6 +27,7 @@ class URLBar: UIView, UITextFieldDelegate {
         urlText.placeholder = UIConstants.strings.urlTextPlaceholder
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
+        urlText.autocorrectionType = .no
         urlText.delegate = self
 
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
@@ -52,12 +54,26 @@ class URLBar: UIView, UITextFieldDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func didCancel() {
-        urlText.resignFirstResponder()
+    var text: String? {
+        get {
+            return urlText.text
+        }
+
+        set {
+            urlText.text = newValue
+        }
     }
 
+    @objc private func didCancel() {
+        urlText.resignFirstResponder()
+        delegate?.urlBarDidCancel(urlBar: self)
+    }
+}
+
+extension URLBar: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         cancelButtonWidthConstraint.deactivate()
+        textField.selectAll(nil)
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -69,7 +85,6 @@ class URLBar: UIView, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-
 }
 
 private class URLTextField: UITextField {
@@ -80,10 +95,10 @@ private class URLTextField: UITextField {
     }
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: 8, dy: 8)
+        return bounds.insetBy(dx: UIConstants.layout.urlBarMargin, dy: UIConstants.layout.urlBarMargin)
     }
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: 8, dy: 8)
+        return bounds.insetBy(dx: UIConstants.layout.urlBarMargin, dy: UIConstants.layout.urlBarMargin)
     }
 }
