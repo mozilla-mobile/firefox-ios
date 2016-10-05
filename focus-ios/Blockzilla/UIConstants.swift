@@ -20,6 +20,7 @@ struct UIConstants {
         static let focusRed = UIColor(rgb: 0xE63D2F)
         static let focusViolet = UIColor(rgb: 0x95368C)
         static let navigationTitle = UIColor(rgb: 0x61666D)
+        static let progressBar = UIColor(rgb: 0xff9500)
         static let tableSectionHeader = UIColor(rgb: 0x61666D)
         static let toolbarButtonNormal = UIColor.darkGray
         static let toolbarBackground = UIColor(rgb: 0xEEEEEE)

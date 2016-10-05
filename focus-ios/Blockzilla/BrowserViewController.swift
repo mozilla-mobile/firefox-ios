@@ -7,39 +7,50 @@ import UIKit
 import SnapKit
 
 class BrowserViewController: UIViewController {
-    fileprivate let webView = UIWebView()
+    fileprivate let browser = Browser()
     fileprivate let browserToolbar = BrowserToolbar(frame: CGRect.zero)
+    fileprivate let progressBar = UIProgressView(progressViewStyle: .bar)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let urlBarContainer = UIView()
         urlBarContainer.backgroundColor = UIConstants.colors.urlBarBackground
+        view.addSubview(urlBarContainer)
 
         let urlBar = URLBar(frame: CGRect.zero)
+        urlBarContainer.addSubview(urlBar)
         urlBar.delegate = self
 
-        browserToolbar.delegate = self
-        webView.delegate = self
+        view.addSubview(browser.view)
+        browser.delegate = self
 
-        view.addSubview(urlBarContainer)
+        view.addSubview(progressBar)
+        progressBar.progressTintColor = UIConstants.colors.progressBar
+
+        view.addSubview(browserToolbar)
+        browserToolbar.delegate = self
+
         urlBarContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(self.view)
         }
 
-        urlBarContainer.addSubview(urlBar)
         urlBar.snp.makeConstraints { make in
             make.top.equalTo(topLayoutGuide.snp.bottom)
             make.leading.trailing.bottom.equalTo(urlBarContainer)
         }
 
-        view.addSubview(webView)
-        webView.snp.makeConstraints { make in
+        progressBar.snp.makeConstraints { make in
+            make.centerY.equalTo(urlBarContainer.snp.bottom)
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(1)
+        }
+
+        browser.view.snp.makeConstraints { make in
             make.top.equalTo(urlBar.snp.bottom)
             make.leading.trailing.bottom.equalTo(view)
         }
 
-        view.addSubview(browserToolbar)
         browserToolbar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(view)
             make.height.equalTo(UIConstants.layout.browserToolbarHeight)
@@ -63,25 +74,25 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
-        webView.loadRequest(URLRequest(url: url))
+        browser.loadRequest(URLRequest(url: url))
     }
 }
 
 extension BrowserViewController: BrowserToolbarDelegate {
     func browserToolbarDidPressBack(browserToolbar: BrowserToolbar) {
-        webView.goBack()
+        browser.goBack()
     }
 
     func browserToolbarDidPressForward(browserToolbar: BrowserToolbar) {
-        webView.goForward()
+        browser.goForward()
     }
 
     func browserToolbarDidPressReload(browserToolbar: BrowserToolbar) {
-        webView.reload()
+        browser.reload()
     }
 
     func browserToolbarDidPressStop(browserToolbar: BrowserToolbar) {
-        webView.stopLoading()
+        browser.stop()
     }
 
     func browserToolbarDidPressSend(browserToolbar: BrowserToolbar) {
@@ -89,22 +100,38 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 }
 
-extension BrowserViewController: UIWebViewDelegate {
-    func webViewDidStartLoad(_ webView: UIWebView) {
+extension BrowserViewController: BrowserDelegate {
+    func browserDidStartNavigation(_ browser: Browser) {
         browserToolbar.isLoading = true
     }
 
-    func webViewDidFinishLoad(_ webView: UIWebView) {
+    func browserDidFinishNavigation(_ browser: Browser) {
         browserToolbar.isLoading = false
-        updateToolbar()
     }
 
-    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
-        updateToolbar()
+    func browser(_ browser: Browser, didFailNavigationWithError error: Error) {
+        browserToolbar.isLoading = false
     }
 
-    private func updateToolbar() {
-        browserToolbar.canGoBack = webView.canGoBack
-        browserToolbar.canGoForward = webView.canGoForward
+    func browser(_ browser: Browser, didUpdateCanGoBack canGoBack: Bool) {
+        browserToolbar.canGoBack = canGoBack
+    }
+
+    func browser(_ browser: Browser, didUpdateCanGoForward canGoForward: Bool) {
+        browserToolbar.canGoForward = canGoForward
+    }
+
+    func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float) {
+        if estimatedProgress == 0 {
+            progressBar.progress = 0
+            progressBar.animateHidden(false, duration: 0.3)
+            return
+        }
+
+        progressBar.setProgress(estimatedProgress, animated: true)
+
+        if estimatedProgress == 1 {
+            progressBar.animateHidden(true, duration: 0.3)
+        }
     }
 }
