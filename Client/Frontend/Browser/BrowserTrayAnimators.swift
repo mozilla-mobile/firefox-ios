@@ -34,6 +34,9 @@ private extension TrayToBrowserAnimator {
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.hidden = true
         bvc.webViewContainerBackdrop.hidden = true
+        if let url = selectedTab.url where ReaderModeUtils.isReaderModeURL(url) == false {
+            bvc.hideReaderModeBar(animated: false)
+        }
 
         // Take a snapshot of the collection view that we can scale/fade out. We don't need to wait for screen updates since it's already rendered on the screen
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(false)!
