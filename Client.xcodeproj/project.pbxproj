@@ -6559,7 +6559,7 @@
 		};
 		E682F5201C89E71000ECB6B2 /* FirefoxNightly */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E682F53C1C89E72600ECB6B2 /* FennecAurora.xcconfig */;
+			baseConfigurationReference = E60961881B62B8BE00DD640F /* FirefoxNightly.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = NO;
@@ -6604,13 +6604,13 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MOZ_INTERNAL_URL_SCHEME = "fennec-aurora";
+				MOZ_INTERNAL_URL_SCHEME = "firefox-nightly";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
 				);
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_AURORA";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_NIGHTLY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
