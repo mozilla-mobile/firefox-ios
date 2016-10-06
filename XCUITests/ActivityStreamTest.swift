@@ -18,7 +18,7 @@ class ActivityStreamTest: BaseTestCase {
         let app = XCUIApplication()
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
         let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
-        XCTAssertEqual(numberOfTopSites,5, "There should be a total of 5 default Top Sites.")
+        XCTAssertEqual(numberOfTopSites, 5, "There should be a total of 5 default Top Sites.")
     }
 
     func testActivityStreamAdd() {
