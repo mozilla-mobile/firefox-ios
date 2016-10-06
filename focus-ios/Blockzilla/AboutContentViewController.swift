@@ -14,7 +14,7 @@ class AboutContentViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIConstants.Colors.Background
+        view.backgroundColor = UIConstants.colors.background
 
         webView = WKWebView()
         webView.alpha = 0

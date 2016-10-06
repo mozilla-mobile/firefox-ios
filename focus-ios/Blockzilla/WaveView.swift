@@ -7,7 +7,7 @@ import UIKit
 
 private let ActiveInactiveTransitionStep: CGFloat = 0.05
 private let ColorTransitionStep: Float = 0.002
-private let PrimaryWaveActiveColors = [UIConstants.Colors.FocusOrange, UIConstants.Colors.FocusRed, UIConstants.Colors.FocusViolet, UIConstants.Colors.FocusLightBlue, UIConstants.Colors.FocusViolet, UIConstants.Colors.FocusRed]
+private let PrimaryWaveActiveColors = [UIConstants.colors.focusOrange, UIConstants.colors.focusRed, UIConstants.colors.focusViolet, UIConstants.colors.focusLightBlue, UIConstants.colors.focusViolet, UIConstants.colors.focusRed]
 private let PrimaryWaveColorCount = PrimaryWaveActiveColors.count
 private let PrimaryWaveInactiveColor = UIColor.gray
 private let SecondaryWaveColor = UIColor.gray
@@ -27,7 +27,7 @@ class WaveView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        backWaveView.backgroundColor = UIConstants.Colors.Background
+        backWaveView.backgroundColor = UIConstants.colors.background
         backWaveView.phaseShift = -0.022
         backWaveView.primaryWaveLineWidth = 0.5
         backWaveView.primaryWaveColor = PrimaryWaveInactiveColor

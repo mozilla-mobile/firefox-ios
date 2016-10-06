@@ -19,7 +19,7 @@ class IntroSlideHowTo: UIView {
         mustBeEnabledLabel.text = String(format: mustBeEnabledText, AppInfo.ProductName)
         mustBeEnabledLabel.numberOfLines = 0
         mustBeEnabledLabel.textAlignment = NSTextAlignment.center
-        mustBeEnabledLabel.textColor = UIConstants.Colors.FocusOrange
+        mustBeEnabledLabel.textColor = UIConstants.colors.focusOrange
         addSubview(mustBeEnabledLabel)
 
         instructionsContainer.snp.makeConstraints { make in

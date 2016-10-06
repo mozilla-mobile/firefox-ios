@@ -17,22 +17,22 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     fileprivate let supportPath = (AppInfo.ProductName == "Focus") ? "en-US/kb/focus" : "products/klar"
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.Colors.Background
+        view.backgroundColor = UIConstants.colors.background
 
         headerView.delegate = self
 
         let aboutLabel = UILabel()
         aboutLabel.text = NSLocalizedString("About", comment: "Title for the About screen")
-        aboutLabel.textColor = UIConstants.Colors.NavigationTitle
-        aboutLabel.font = UIConstants.Fonts.DefaultFontMedium
+        aboutLabel.textColor = UIConstants.colors.navigationTitle
+        aboutLabel.font = UIConstants.fonts.defaultFontMedium
         view.addSubview(aboutLabel)
 
         let doneButton = UIButton()
         doneButton.setTitle(NSLocalizedString("Done", comment: "Button at top of app that goes to the About screen"), for: UIControlState())
-        doneButton.setTitleColor(UIConstants.Colors.FocusBlue, for: UIControlState())
-        doneButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
+        doneButton.setTitleColor(UIConstants.colors.focusBlue, for: UIControlState())
+        doneButton.setTitleColor(UIConstants.colors.buttonHighlightedColor, for: UIControlState.highlighted)
         doneButton.addTarget(self, action: #selector(AboutViewController.doneClicked(_:)), for: UIControlEvents.touchUpInside)
-        doneButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
+        doneButton.titleLabel?.font = UIConstants.fonts.defaultFontSemibold
         view.addSubview(doneButton)
 
         view.addSubview(tableView)
@@ -44,7 +44,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         doneButton.snp.makeConstraints { make in
             make.centerY.equalTo(aboutLabel)
-            make.trailing.equalTo(self.view).offset(UIConstants.Layout.NavigationDoneOffset)
+            make.trailing.equalTo(self.view).offset(UIConstants.layout.navigationDoneOffset)
         }
         
         tableView.snp.makeConstraints { make in
@@ -54,7 +54,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.Colors.Background
+        tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIColor(rgb: 0x333333)
         tableView.estimatedRowHeight = 44
@@ -95,13 +95,13 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             break
         }
 
-        cell.backgroundColor = UIConstants.Colors.Background
+        cell.backgroundColor = UIConstants.colors.background
 
         let cellBG = UIView()
-        cellBG.backgroundColor = UIConstants.Colors.CellSelected
+        cellBG.backgroundColor = UIConstants.colors.cellSelected
         cell.selectedBackgroundView = cellBG
         
-        cell.textLabel?.textColor = UIConstants.Colors.DefaultFont
+        cell.textLabel?.textColor = UIConstants.colors.defaultFont
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsets.zero
 
@@ -164,9 +164,9 @@ class AboutNavigationController: UINavigationController {
     }
 
     override func viewDidLoad() {
-        navigationBar.barTintColor = UIConstants.Colors.Background
+        navigationBar.barTintColor = UIConstants.colors.background
         navigationBar.isTranslucent = false
-        navigationBar.tintColor = UIConstants.Colors.FocusBlue
+        navigationBar.tintColor = UIConstants.colors.focusBlue
     }
 }
 
@@ -186,7 +186,7 @@ private class AboutHeaderView: UIView {
         let descriptionLabel1 = UILabel()
         let descriptionLabel1Text = NSLocalizedString("%@ puts you in control and brings added privacy and performance to your mobile browsing experience.", comment: "About copy on the about page")
         descriptionLabel1.text = String(format: descriptionLabel1Text, AppInfo.ProductName)
-        descriptionLabel1.textColor = UIConstants.Colors.DefaultFont
+        descriptionLabel1.textColor = UIConstants.colors.defaultFont
         descriptionLabel1.font = descriptionLabel1.font.withSize(14)
         descriptionLabel1.numberOfLines = 0
         descriptionLabel1.textAlignment = NSTextAlignment.center
@@ -195,7 +195,7 @@ private class AboutHeaderView: UIView {
         let descriptionLabel2 = UILabel()
         let descriptionLabel2Text = NSLocalizedString("%@ is produced by Mozilla, the people behind the Firefox Web browser.", comment: "About copy on the about page")
         descriptionLabel2.text = String(format: descriptionLabel2Text, AppInfo.ProductName)
-        descriptionLabel2.textColor = UIConstants.Colors.DefaultFont
+        descriptionLabel2.textColor = UIConstants.colors.defaultFont
         descriptionLabel2.font = descriptionLabel2.font.withSize(14)
         descriptionLabel2.numberOfLines = 0
         descriptionLabel2.textAlignment = NSTextAlignment.center
@@ -203,7 +203,7 @@ private class AboutHeaderView: UIView {
 
         let descriptionLabel3 = UILabel()
         descriptionLabel3.text = NSLocalizedString("Our mission is to foster a healthy, open Internet.", comment: "About copy on the about page")
-        descriptionLabel3.textColor = UIConstants.Colors.DefaultFont
+        descriptionLabel3.textColor = UIConstants.colors.defaultFont
         descriptionLabel3.font = descriptionLabel3.font.withSize(14)
         descriptionLabel3.numberOfLines = 0
         descriptionLabel3.textAlignment = NSTextAlignment.center
@@ -211,8 +211,8 @@ private class AboutHeaderView: UIView {
 
         let readMoreButton = UIButton()
         readMoreButton.setTitle(NSLocalizedString("Read more.", comment: "Button on the about page"), for: UIControlState())
-        readMoreButton.setTitleColor(UIConstants.Colors.FocusBlue, for: UIControlState())
-        readMoreButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
+        readMoreButton.setTitleColor(UIConstants.colors.focusBlue, for: UIControlState())
+        readMoreButton.setTitleColor(UIConstants.colors.buttonHighlightedColor, for: UIControlState.highlighted)
         readMoreButton.titleLabel?.font = readMoreButton.titleLabel!.font.withSize(14)
         readMoreButton.addTarget(self, action: #selector(AboutHeaderView.clickedReadMore(_:)), for: UIControlEvents.touchUpInside)
         addSubview(readMoreButton)

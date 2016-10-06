@@ -20,7 +20,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
     fileprivate let skipButton = UIButton()
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.Colors.Background
+        view.backgroundColor = UIConstants.colors.background
 
         let welcomeSlide = IntroSlideWelcome()
         let howToSlide = IntroSlideHowTo()
@@ -31,10 +31,10 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
         view.addSubview(titleView)
 
         skipButton.setTitle(NSLocalizedString("Skip", comment: "Button at top of the last intro screen when the app is not enabled"), for: UIControlState())
-        skipButton.setTitleColor(UIConstants.Colors.FocusBlue, for: UIControlState())
-        skipButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
+        skipButton.setTitleColor(UIConstants.colors.focusBlue, for: UIControlState())
+        skipButton.setTitleColor(UIConstants.colors.buttonHighlightedColor, for: UIControlState.highlighted)
         skipButton.addTarget(self, action: #selector(IntroViewController.skipClicked(_:)), for: UIControlEvents.touchUpInside)
-        skipButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
+        skipButton.titleLabel?.font = UIConstants.fonts.defaultFontSemibold
         skipButton.isHidden = true
         view.addSubview(skipButton)
 
@@ -49,8 +49,8 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
         scrollView.addSubview(slideStack)
 
         pageControl = UIPageControl()
-        pageControl.pageIndicatorTintColor = UIConstants.Colors.DefaultFont.withAlphaComponent(0.3)
-        pageControl.currentPageIndicatorTintColor = UIConstants.Colors.DefaultFont
+        pageControl.pageIndicatorTintColor = UIConstants.colors.defaultFont.withAlphaComponent(0.3)
+        pageControl.currentPageIndicatorTintColor = UIConstants.colors.defaultFont
         pageControl.numberOfPages = introSlides.count
         pageControl.addTarget(self, action: #selector(IntroViewController.changePage(_:)), for: UIControlEvents.valueChanged)
         view.addSubview(pageControl)
@@ -62,7 +62,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
 
         skipButton.snp.makeConstraints { make in
             make.centerY.equalTo(titleView)
-            make.trailing.equalTo(self.view).offset(UIConstants.Layout.NavigationDoneOffset)
+            make.trailing.equalTo(self.view).offset(UIConstants.layout.navigationDoneOffset)
         }
 
         scrollView.snp.makeConstraints { make in

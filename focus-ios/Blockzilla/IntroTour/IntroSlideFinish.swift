@@ -38,10 +38,10 @@ class IntroSlideFinish: UIView {
         enabledStateContainer.addSubview(disabledStateView)
 
         getStartedButton.setTitle(NSLocalizedString("Get Started", comment: "Button to close the intro screen"), for: UIControlState())
-        getStartedButton.setTitleColor(UIConstants.Colors.FocusBlue, for: UIControlState())
-        getStartedButton.setTitleColor(UIConstants.Colors.ButtonHighlightedColor, for: UIControlState.highlighted)
+        getStartedButton.setTitleColor(UIConstants.colors.focusBlue, for: UIControlState())
+        getStartedButton.setTitleColor(UIConstants.colors.buttonHighlightedColor, for: UIControlState.highlighted)
         getStartedButton.addTarget(self, action: #selector(IntroSlideFinish.getStartedClicked(_:)), for: UIControlEvents.touchUpInside)
-        getStartedButton.titleLabel?.font = UIConstants.Fonts.DefaultFontSemibold
+        getStartedButton.titleLabel?.font = UIConstants.fonts.defaultFontSemibold
         addSubview(getStartedButton)
 
         enabledStateContainer.snp.makeConstraints { make in
@@ -111,7 +111,7 @@ private class EnabledStateView: UIView {
         let label = UILabel()
         let enabledText = NSLocalizedString("%@ is enabled!", comment: "Text displayed at the final step of the intro screen")
         label.text = String(format: enabledText, AppInfo.ProductName)
-        label.textColor = UIConstants.Colors.FocusGreen
+        label.textColor = UIConstants.colors.focusGreen
         addSubview(label)
 
         let image = UIImageView(image: UIImage(named: "enabled-yes"))
@@ -139,8 +139,8 @@ private class DisabledStateView: UIView {
         super.init(frame: CGRect.zero)
 
         let label = UILabel()
-        label.text = UIConstants.Strings.NotEnabledError
-        label.textColor = UIConstants.Colors.FocusRed
+        label.text = UIConstants.strings.notEnabledError
+        label.textColor = UIConstants.colors.focusRed
         label.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
         addSubview(label)
 
@@ -184,7 +184,7 @@ private class CheckingStateView: UIView {
 
         let label = UILabel()
         label.text = NSLocalizedString("Checking installation…", comment: "Text displayed at the final step of the intro screen")
-        label.textColor = UIConstants.Colors.FocusOrange
+        label.textColor = UIConstants.colors.focusOrange
         addSubview(label)
 
         let instructionsView = InstructionsView()

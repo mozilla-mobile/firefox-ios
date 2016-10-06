@@ -10,8 +10,13 @@ extension UIView {
         UIView.setAnimationBeginsFromCurrentState(true)
         UIView.transition(with: self, duration: duration, options: UIViewAnimationOptions.curveLinear, animations: {
             self.alpha = hidden ? 0 : 1
-        }, completion: { _ in
-            self.isHidden = hidden
+        }, completion: { finished in
+            // Only update the hidden state if the animation finished.
+            // Otherwise, a new animation may have started on top of this one, in which case
+            // that animation will set the final state.
+            if finished {
+                self.isHidden = hidden
+            }
         })
     }
 }
