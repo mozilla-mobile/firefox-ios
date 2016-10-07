@@ -20,6 +20,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(urlBarContainer)
 
         urlBarContainer.addSubview(urlBar)
+        urlBar.focus()
         urlBar.delegate = self
 
         view.addSubview(browser.view)

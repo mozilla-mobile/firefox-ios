@@ -68,6 +68,10 @@ class URLBar: UIView {
         urlText.resignFirstResponder()
         delegate?.urlBarDidCancel(urlBar: self)
     }
+
+    func focus() {
+        urlText.becomeFirstResponder()
+    }
 }
 
 extension URLBar: UITextFieldDelegate {
