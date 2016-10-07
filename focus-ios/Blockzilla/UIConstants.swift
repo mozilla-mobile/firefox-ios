@@ -26,7 +26,7 @@ struct UIConstants {
         static let toolbarBackground = UIColor(rgb: 0xEEEEEE)
         static let urlBarBackgroundLeft = UIColor(rgb: 0x9c62a7)
         static let urlBarBackgroundRight = UIColor(rgb: 0x2f2a8d)
-        static let urlTextBackground = UIColor(rgb: 0xffffff, alpha: 0.5)
+        static let urlTextBackground = UIColor(rgb: 0xffffff, alpha: 0.44)
         static let urlTextFont = UIColor.white
         static let urlTextPlaceholder = UIColor(rgb: 0xffffff, alpha: 0.8)
     }
@@ -38,15 +38,16 @@ struct UIConstants {
         static let smallerFont = UIFont.systemFont(ofSize: 14)
         static let smallerFontSemibold = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)
-        static let urlTextFont = UIFont.systemFont(ofSize: 12)
+        static let urlTextFont = UIFont.systemFont(ofSize: 14)
     }
 
     struct layout {
         static let browserToolbarHeight = 44
         static let navigationDoneOffset: Float = -10
         static let urlTextCornerRadius: CGFloat = 1.5
-        static let urlBarInset: CGFloat = 5
         static let urlBarMargin: CGFloat = 8
+        static let urlBarHeightInset: CGFloat = 12
+        static let urlBarWidthInset: CGFloat = 8
     }
 
     struct strings {

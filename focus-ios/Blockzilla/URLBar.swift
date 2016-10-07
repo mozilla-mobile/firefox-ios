@@ -37,8 +37,8 @@ class URLBar: UIView {
 
         addSubview(urlText)
         urlText.snp.makeConstraints { make in
-            make.top.leading.bottom.equalTo(self).inset(UIConstants.layout.urlBarInset)
-            make.trailing.lessThanOrEqualTo(self).inset(UIConstants.layout.urlBarInset)
+            make.top.leading.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
+            make.trailing.lessThanOrEqualTo(self).inset(UIConstants.layout.urlBarMargin)
         }
 
         addSubview(cancelButton)
@@ -95,10 +95,10 @@ private class URLTextField: UITextField {
     }
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: UIConstants.layout.urlBarMargin, dy: UIConstants.layout.urlBarMargin)
+        return bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarHeightInset)
     }
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: UIConstants.layout.urlBarMargin, dy: UIConstants.layout.urlBarMargin)
+        return bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarHeightInset)
     }
 }
