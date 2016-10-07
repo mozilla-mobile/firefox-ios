@@ -11,6 +11,7 @@ class BrowserViewController: UIViewController {
     fileprivate let urlBar = URLBar()
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate let progressBar = UIProgressView(progressViewStyle: .bar)
+    fileprivate var homeView: HomeView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,11 @@ class BrowserViewController: UIViewController {
 
         view.addSubview(browserToolbar)
         browserToolbar.delegate = self
+
+        let homeView = HomeView()
+        self.homeView = homeView
+        view.addSubview(homeView)
+        homeView.delegate = self
 
         urlBarContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(self.view)
@@ -53,6 +59,10 @@ class BrowserViewController: UIViewController {
         browserToolbar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(view)
             make.height.equalTo(UIConstants.layout.browserToolbarHeight)
+        }
+
+        homeView.snp.makeConstraints { make in
+            make.edges.equalTo(browser.view)
         }
     }
 
@@ -106,6 +116,12 @@ extension BrowserViewController: BrowserToolbarDelegate {
 extension BrowserViewController: BrowserDelegate {
     func browserDidStartNavigation(_ browser: Browser) {
         browserToolbar.isLoading = true
+
+        // Remove the initial view once we start navigating.
+        if let homeView = homeView {
+            homeView.removeFromSuperview()
+            self.homeView = nil
+        }
     }
 
     func browserDidFinishNavigation(_ browser: Browser) {
@@ -140,5 +156,12 @@ extension BrowserViewController: BrowserDelegate {
 
     func browser(_ browser: Browser, didUpdateURL url: URL?) {
         urlBar.text = url?.absoluteString
+    }
+}
+
+extension BrowserViewController: HomeViewDelegate {
+    func homeViewDidPressSettings(homeView: HomeView) {
+        let settingsViewController = SettingsViewController()
+        present(settingsViewController, animated: true, completion: nil)
     }
 }
