@@ -594,7 +594,7 @@
 				);
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.enterprise;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Focus.enterprise";
 				PRODUCT_NAME = Focus;
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -608,7 +608,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlockzillaEnterprise.entitlements;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.enterprise.ContentBlocker;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Focus.enterprise.ContentBlocker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = arm64;
@@ -676,7 +676,7 @@
 				);
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Focus";
 				PRODUCT_NAME = Focus;
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -690,7 +690,7 @@
 				CODE_SIGN_ENTITLEMENTS = Blockzilla.entitlements;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ContentBlocker;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Focus.ContentBlocker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = arm64;
@@ -752,7 +752,7 @@
 				);
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Focus";
 				PRODUCT_NAME = Focus;
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -766,7 +766,7 @@
 				CODE_SIGN_ENTITLEMENTS = Blockzilla.entitlements;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ContentBlocker;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Focus.ContentBlocker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = arm64;
@@ -877,7 +877,7 @@
 				);
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Klar";
 				PRODUCT_NAME = Klar;
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -897,7 +897,7 @@
 				);
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Klar";
 				PRODUCT_NAME = Klar;
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -911,7 +911,7 @@
 				CODE_SIGN_ENTITLEMENTS = Blockzilla.entitlements;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ContentBlocker;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Klar.ContentBlocker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = arm64;
@@ -924,7 +924,7 @@
 				CODE_SIGN_ENTITLEMENTS = Blockzilla.entitlements;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ContentBlocker;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Klar.ContentBlocker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = arm64;
