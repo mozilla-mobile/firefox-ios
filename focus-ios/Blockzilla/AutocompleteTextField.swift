@@ -11,8 +11,8 @@ import UIKit
 protocol AutocompleteTextFieldDelegate: class {
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String)
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
-    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
-    func autocompleteTextFieldDidEndEditing(_ autocompleteTextField: AutocompleteTextField)
+    func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
+    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
 }
 
 class AutocompleteTextField: UITextField, UITextFieldDelegate {
@@ -149,17 +149,13 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         removeCompletion()
     }
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        autocompleteDelegate?.autocompleteTextFieldDidBeginEditing(self)
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        autocompleteDelegate?.autocompleteTextFieldDidEndEditing(self)
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return autocompleteDelegate?.autocompleteTextFieldShouldBeginEditing(self) ?? true
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         applyCompletion()
-        return true
+        return autocompleteDelegate?.autocompleteTextFieldShouldEndEditing(self) ?? true
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

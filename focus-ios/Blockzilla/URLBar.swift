@@ -14,7 +14,7 @@ class URLBar: UIView {
     weak var delegate: URLBarDelegate?
 
     private let urlText = URLTextField()
-    private let cancelButton = InsetButton()
+    fileprivate let cancelButton = InsetButton()
     fileprivate var cancelButtonWidthConstraint: Constraint!
 
     init() {
@@ -75,13 +75,28 @@ class URLBar: UIView {
 }
 
 extension URLBar: AutocompleteTextFieldDelegate {
-    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField) {
-        cancelButtonWidthConstraint.deactivate()
+    func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        self.layoutIfNeeded()
+        UIView.animate(withDuration: 0.3) {
+            self.cancelButton.alpha = 1
+            self.cancelButtonWidthConstraint.deactivate()
+            self.layoutIfNeeded()
+        }
+
         autocompleteTextField.highlightAll()
+
+        return true
     }
 
-    func autocompleteTextFieldDidEndEditing(_ autocompleteTextField: AutocompleteTextField) {
-        cancelButtonWidthConstraint.activate()
+    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        self.layoutIfNeeded()
+        UIView.animate(withDuration: 0.3) {
+            self.cancelButton.alpha = 0
+            self.cancelButtonWidthConstraint.activate()
+            self.layoutIfNeeded()
+        }
+
+        return true
     }
 
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
