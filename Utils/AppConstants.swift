@@ -45,22 +45,6 @@ public struct AppConstants {
         #endif
     }()
 
-    /// Enables/disables the new Menu functionality
-    public static let MOZ_MENU: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
-            return true
-        #else
-            return true
-        #endif
-    }()
 
     ///  Enables/disables the notification bar that appears on the status bar area
     public static let MOZ_STATUS_BAR_NOTIFICATION: Bool = {
@@ -79,76 +63,7 @@ public struct AppConstants {
         #endif
     }()
 
-
-
-    /// Enables/disables the de-duplication of awesomebar seach results functionality
-    public static let MOZ_AWESOMEBAR_DUPES: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    ///  Enables/disables the back/forward list from long pressing the back/forward button
-    public static let MOZ_BACK_FORWARD_LIST: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    ///  Enables/disables the undo toast for the delete all tabs
-    public static let MOZ_UNDO_DELETE_TABS_TOAST: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    /// Enables/disables the choice of new tab behavior.
-    public static let MOZ_NEW_TAB_CHOICES: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
-            return true
-        #else
-            return true
-        #endif
-    }()
-
+    
     /// Enables/disables the availability of No Image Mode.
     public static let MOZ_NO_IMAGE_MODE: Bool = {
         #if MOZ_CHANNEL_RELEASE

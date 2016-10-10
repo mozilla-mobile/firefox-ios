@@ -1,4 +1,4 @@
-Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=57bf25c0f096bc01001e21e0&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/57bf25c0f096bc01001e21e0/build/latest) [![Build Status](https://travis-ci.org/mozilla-mobile/firefox-ios.svg?branch=master)](https://travis-ci.org/mozilla-mobile/firefox-ios)
+Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=57bf25c0f096bc01001e21e0&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/57bf25c0f096bc01001e21e0/build/latest)
 ===============
 
 Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
@@ -80,7 +80,6 @@ It is possible to use [App Code](https://www.jetbrains.com/objc/download/) inste
 ### Swift style
 * Swift code should generally follow the conventions listed at https://github.com/raywenderlich/swift-style-guide.
   * Exception: we use 4-space indentation instead of 2.
-* There is also a swiftlint config which covers a small subset of the style guide. Run [swiftlint] or view your PR in Travis to see issues with styling.
 
 ### Whitespace
 * New code should not contain any trailing whitespace.

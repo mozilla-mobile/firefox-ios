@@ -66,19 +66,14 @@ class HomePageSettingsViewController: SettingsTableViewController {
 
         var settings: [SettingSection] = [
             SettingSection(title: NSAttributedString(string: Strings.SettingsHomePageURLSectionTitle), children: basicSettings),
-            ]
-
-        if AppConstants.MOZ_MENU {
-            settings += [
-                SettingSection(children: [
-                    BoolSetting(prefs: prefs,
-                        prefKey: HomePageConstants.HomePageButtonIsInMenuPrefKey,
-                        defaultValue: true,
-                        titleText: Strings.SettingsHomePageUIPositionTitle,
-                        statusText: Strings.SettingsHomePageUIPositionSubtitle),
-                    ]),
-                ]
-        }
+            SettingSection(children: [
+                BoolSetting(prefs: prefs,
+                    prefKey: HomePageConstants.HomePageButtonIsInMenuPrefKey,
+                    defaultValue: true,
+                    titleText: Strings.SettingsHomePageUIPositionTitle,
+                    statusText: Strings.SettingsHomePageUIPositionSubtitle),
+            ])
+        ]
 
         return settings
     }

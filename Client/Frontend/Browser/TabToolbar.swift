@@ -116,21 +116,10 @@ public class TabToolbarHelper: NSObject {
         toolbar.homePageButton.accessibilityLabel = NSLocalizedString("Toolbar.OpenHomePage.AccessibilityLabel", value: "Homepage", comment: "Accessibility Label for the tab toolbar Homepage button")
         toolbar.homePageButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickHomePage), forControlEvents: UIControlEvents.TouchUpInside)
 
-        if AppConstants.MOZ_MENU {
-            toolbar.menuButton.contentMode = UIViewContentMode.Center
-            toolbar.menuButton.setImage(UIImage.templateImageNamed("bottomNav-menu"), forState: .Normal)
-            toolbar.menuButton.accessibilityLabel = AppMenuConfiguration.MenuButtonAccessibilityLabel
-            toolbar.menuButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickMenu), forControlEvents: UIControlEvents.TouchUpInside)
-        } else {
-            toolbar.bookmarkButton.contentMode = UIViewContentMode.Center
-            toolbar.bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
-            toolbar.bookmarkButton.setImage(UIImage(named: "bookmarked"), forState: UIControlState.Selected)
-            toolbar.bookmarkButton.setImage(UIImage(named: "bookmarkHighlighted"), forState: UIControlState.Highlighted)
-            toolbar.bookmarkButton.accessibilityLabel = NSLocalizedString("Bookmark", comment: "Accessibility Label for the tab toolbar Bookmark button")
-            let longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: #selector(TabToolbarHelper.SELdidLongPressBookmark(_:)))
-            toolbar.bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
-            toolbar.bookmarkButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickBookmark), forControlEvents: UIControlEvents.TouchUpInside)
-        }
+        toolbar.menuButton.contentMode = UIViewContentMode.Center
+        toolbar.menuButton.setImage(UIImage.templateImageNamed("bottomNav-menu"), forState: .Normal)
+        toolbar.menuButton.accessibilityLabel = AppMenuConfiguration.MenuButtonAccessibilityLabel
+        toolbar.menuButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickMenu), forControlEvents: UIControlEvents.TouchUpInside)
 
         setTintColor(buttonTintColor, forButtons: toolbar.actionButtons)
     }
@@ -240,21 +229,13 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
         menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
         homePageButton = UIButton()
         menuButton.accessibilityIdentifier = "TabToolbar.homePageButton"
-        if AppConstants.MOZ_MENU {
-            actionButtons = [backButton, forwardButton, menuButton, stopReloadButton, shareButton, homePageButton]
-        } else {
-            actionButtons = [backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton]
-        }
+        actionButtons = [backButton, forwardButton, menuButton, stopReloadButton, shareButton, homePageButton]
 
         super.init(frame: frame)
 
         self.helper = TabToolbarHelper(toolbar: self)
 
-        if AppConstants.MOZ_MENU {
-            addButtons(backButton, forwardButton, menuButton, stopReloadButton, shareButton, homePageButton)
-        } else {
-            addButtons(backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton)
-        }
+        addButtons(backButton, forwardButton, menuButton, stopReloadButton, shareButton, homePageButton)
 
         accessibilityNavigationStyle = .Combined
         accessibilityLabel = NSLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
@@ -281,9 +262,6 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
     }
 
     func updatePageStatus(isWebPage isWebPage: Bool) {
-        if !AppConstants.MOZ_MENU {
-            bookmarkButton.enabled = isWebPage
-        }
         stopReloadButton.enabled = isWebPage
         shareButton.enabled = isWebPage
     }

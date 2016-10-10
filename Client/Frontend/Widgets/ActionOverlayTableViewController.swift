@@ -17,7 +17,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         return tapRecognizer
     }()
 
-    lazy var visualEffectView : UIVisualEffectView = {
+    lazy var visualEffectView: UIVisualEffectView = {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         visualEffectView.frame = self.view.bounds
         visualEffectView.alpha = 0.90
