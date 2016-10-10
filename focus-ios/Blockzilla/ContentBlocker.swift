@@ -17,7 +17,10 @@ class ContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelegate {
     }
 
     override func startLoading() {
-        guard let url = request.url, !ContentBlocker.blockList.isBlocked(url) else {
+        let url = request.url!
+        guard !ContentBlocker.blockList.isBlocked(url) else {
+            let response = URLResponse(url: url, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
             client?.urlProtocolDidFinishLoading(self)
             return
         }
@@ -26,7 +29,6 @@ class ContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelegate {
         let session = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
         dataTask = session.dataTask(with: request)
         dataTask?.resume()
-
     }
 
     override func stopLoading() {
