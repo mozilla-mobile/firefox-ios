@@ -31,32 +31,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.colors.background
 
-        let titleView = TitleView()
-        view.addSubview(titleView)
+        title = UIConstants.strings.settingsTitle
+
+        let navigationBar = navigationController!.navigationBar
+        navigationBar.isTranslucent = false
+        navigationBar.barTintColor = UIConstants.colors.background
+        navigationBar.tintColor = UIConstants.colors.navigationButton
+        navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIConstants.colors.navigationTitle]
+
+        let aboutTitle = NSLocalizedString("About", comment: "Button at top of app that goes to the About screen")
+        let aboutButton = UIBarButtonItem(title: aboutTitle, style: .plain, target: self, action: #selector(aboutClicked))
+        navigationItem.rightBarButtonItem = aboutButton
 
         view.addSubview(tableView)
-
-        let aboutButton = UIButton()
-        aboutButton.setTitle(NSLocalizedString("About", comment: "Button at top of app that goes to the About screen"), for: UIControlState())
-        aboutButton.setTitleColor(UIConstants.colors.navigationTitle, for: UIControlState())
-        aboutButton.setTitleColor(UIConstants.colors.buttonHighlight, for: UIControlState.highlighted)
-        aboutButton.addTarget(self, action: #selector(SettingsViewController.aboutClicked(_:)), for: UIControlEvents.touchUpInside)
-        aboutButton.titleLabel?.font = UIConstants.fonts.defaultFontSemibold
-        view.addSubview(aboutButton)
-
-        titleView.snp.makeConstraints { make in
-            make.top.equalTo(self.view).offset(20)
-            make.centerX.equalTo(self.view)
-        }
-
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(titleView.snp.bottom)
-            make.leading.trailing.bottom.equalTo(self.view)
-        }
-
-        aboutButton.snp.makeConstraints { make in
-            make.centerY.equalTo(titleView)
-            make.leading.equalTo(self.view).offset(10)
+            make.edges.equalTo(self.view)
         }
 
         tableView.dataSource = self
@@ -83,15 +72,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        guard shouldUpdateSafariEnabledWhenVisible else { return }
-
-        shouldUpdateSafariEnabledWhenVisible = false
-        updateSafariEnabledState()
-    }
-
-    override var preferredStatusBarStyle : UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 
     fileprivate func toggleForIndexPath(_ indexPath: IndexPath) -> BlockerToggle {
@@ -241,9 +223,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @objc func aboutClicked(_ sender: UIButton) {
         let aboutViewController = AboutViewController()
         aboutViewController.delegate = self
-        let navController = AboutNavigationController(rootViewController: aboutViewController)
-        navController.modalPresentationStyle = UIModalPresentationStyle.formSheet
-        present(navController, animated: true, completion: nil)
+        navigationController!.pushViewController(aboutViewController, animated: true)
     }
 
     @objc func applicationDidBecomeActive(_ sender: UIApplication) {

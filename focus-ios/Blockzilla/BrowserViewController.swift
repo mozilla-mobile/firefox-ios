@@ -74,9 +74,9 @@ class BrowserViewController: UIViewController {
         return .lightContent
     }
 
-    func settingsClicked() {
-        let settingsViewController = SettingsViewController()
-        present(settingsViewController, animated: true, completion: nil)
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+        super.viewWillAppear(animated)
     }
 }
 
@@ -166,6 +166,7 @@ extension BrowserViewController: BrowserDelegate {
 extension BrowserViewController: HomeViewDelegate {
     func homeViewDidPressSettings(homeView: HomeView) {
         let settingsViewController = SettingsViewController()
-        present(settingsViewController, animated: true, completion: nil)
+        navigationController!.pushViewController(settingsViewController, animated: true)
+        navigationController!.setNavigationBarHidden(false, animated: true)
     }
 }

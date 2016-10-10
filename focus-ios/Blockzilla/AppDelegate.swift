@@ -21,7 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         let browserViewController = BrowserViewController()
         let rootViewController = UINavigationController(rootViewController: browserViewController)
-        rootViewController.isNavigationBarHidden = true
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
 
@@ -54,6 +53,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         splashView.removeFromSuperview()
                 })
         })
+    }
+}
 
+extension UINavigationController {
+    override open var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }

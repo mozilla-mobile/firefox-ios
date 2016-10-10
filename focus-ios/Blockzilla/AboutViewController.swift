@@ -21,35 +21,11 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         headerView.delegate = self
 
-        let aboutLabel = UILabel()
-        aboutLabel.text = NSLocalizedString("About", comment: "Title for the About screen")
-        aboutLabel.textColor = UIConstants.colors.navigationTitle
-        aboutLabel.font = UIConstants.fonts.defaultFontMedium
-        view.addSubview(aboutLabel)
-
-        let doneButton = UIButton()
-        doneButton.setTitle(NSLocalizedString("Done", comment: "Button at top of app that goes to the About screen"), for: UIControlState())
-        doneButton.setTitleColor(UIConstants.colors.focusBlue, for: UIControlState())
-        doneButton.setTitleColor(UIConstants.colors.buttonHighlight, for: UIControlState.highlighted)
-        doneButton.addTarget(self, action: #selector(AboutViewController.doneClicked(_:)), for: UIControlEvents.touchUpInside)
-        doneButton.titleLabel?.font = UIConstants.fonts.defaultFontSemibold
-        view.addSubview(doneButton)
+        title = NSLocalizedString("About", comment: "Title for the About screen")
 
         view.addSubview(tableView)
-
-        aboutLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.view).offset(30)
-            make.centerX.equalTo(self.view)
-        }
-
-        doneButton.snp.makeConstraints { make in
-            make.centerY.equalTo(aboutLabel)
-            make.trailing.equalTo(self.view).offset(UIConstants.layout.navigationDoneOffset)
-        }
-        
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(aboutLabel.snp.bottom)
-            make.leading.trailing.bottom.equalTo(self.view)
+            make.edges.equalTo(self.view)
         }
 
         tableView.dataSource = self
@@ -65,11 +41,6 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     override var preferredStatusBarStyle : UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(true, animated: true)
-        super.viewWillAppear(animated)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -147,26 +118,10 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
-    @objc func doneClicked(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
-    }
-
     fileprivate func aboutHeaderViewDidPressReadMore(_ aboutHeaderView: AboutHeaderView) {
         let contentViewController = AboutContentViewController()
         contentViewController.url = URL(string: "https://www.mozilla.org/\(AppInfo.LanguageCode)/about/manifesto/")
         navigationController?.pushViewController(contentViewController, animated: true)
-    }
-}
-
-class AboutNavigationController: UINavigationController {
-    override var preferredStatusBarStyle : UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
-    }
-
-    override func viewDidLoad() {
-        navigationBar.barTintColor = UIConstants.colors.background
-        navigationBar.isTranslucent = false
-        navigationBar.tintColor = UIConstants.colors.focusBlue
     }
 }
 
