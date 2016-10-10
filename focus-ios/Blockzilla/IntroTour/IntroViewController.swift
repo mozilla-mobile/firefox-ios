@@ -32,7 +32,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate, IntroSlideFin
 
         skipButton.setTitle(NSLocalizedString("Skip", comment: "Button at top of the last intro screen when the app is not enabled"), for: UIControlState())
         skipButton.setTitleColor(UIConstants.colors.focusBlue, for: UIControlState())
-        skipButton.setTitleColor(UIConstants.colors.buttonHighlightedColor, for: UIControlState.highlighted)
+        skipButton.setTitleColor(UIConstants.colors.buttonHighlight, for: UIControlState.highlighted)
         skipButton.addTarget(self, action: #selector(IntroViewController.skipClicked(_:)), for: UIControlEvents.touchUpInside)
         skipButton.titleLabel?.font = UIConstants.fonts.defaultFontSemibold
         skipButton.isHidden = true

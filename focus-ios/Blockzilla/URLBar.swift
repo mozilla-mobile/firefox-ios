@@ -28,7 +28,7 @@ class URLBar: UIView {
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
-        urlText.delegate = self
+        urlText.autocompleteDelegate = self
 
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
         cancelButton.titleLabel?.font = UIConstants.fonts.smallerFont
@@ -74,24 +74,28 @@ class URLBar: UIView {
     }
 }
 
-extension URLBar: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+extension URLBar: AutocompleteTextFieldDelegate {
+    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField) {
         cancelButtonWidthConstraint.deactivate()
-        textField.selectAll(nil)
+        autocompleteTextField.highlightAll()
     }
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    func autocompleteTextFieldDidEndEditing(_ autocompleteTextField: AutocompleteTextField) {
         cancelButtonWidthConstraint.activate()
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        delegate?.urlBar(urlBar: self, didSubmitText: textField.text!)
-        textField.resignFirstResponder()
+    func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        delegate?.urlBar(urlBar: self, didSubmitText: autocompleteTextField.text!)
+        autocompleteTextField.resignFirstResponder()
         return true
+    }
+
+    func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
+
     }
 }
 
-private class URLTextField: UITextField {
+private class URLTextField: AutocompleteTextField {
     override var placeholder: String? {
         didSet {
             attributedPlaceholder = NSAttributedString(string: placeholder!, attributes: [NSForegroundColorAttributeName: UIConstants.colors.urlTextPlaceholder])

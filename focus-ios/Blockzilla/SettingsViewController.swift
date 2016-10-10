@@ -39,7 +39,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let aboutButton = UIButton()
         aboutButton.setTitle(NSLocalizedString("About", comment: "Button at top of app that goes to the About screen"), for: UIControlState())
         aboutButton.setTitleColor(UIConstants.colors.navigationTitle, for: UIControlState())
-        aboutButton.setTitleColor(UIConstants.colors.buttonHighlightedColor, for: UIControlState.highlighted)
+        aboutButton.setTitleColor(UIConstants.colors.buttonHighlight, for: UIControlState.highlighted)
         aboutButton.addTarget(self, action: #selector(SettingsViewController.aboutClicked(_:)), for: UIControlEvents.touchUpInside)
         aboutButton.titleLabel?.font = UIConstants.fonts.defaultFontSemibold
         view.addSubview(aboutButton)

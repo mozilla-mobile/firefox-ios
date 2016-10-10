@@ -8,7 +8,7 @@ import UIKit
 struct UIConstants {
     struct colors {
         static let background = UIColor(rgb: 0x221F1F)
-        static let buttonHighlightedColor = UIColor(rgb: 0x333333)
+        static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIColor(rgb: 0x2C6EC8)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
         static let focusLightBlue = UIColor(rgb: 0x00A7E0)
@@ -28,6 +28,7 @@ struct UIConstants {
         static let urlBarBackgroundRight = UIColor(rgb: 0x2f2a8d)
         static let urlTextBackground = UIColor(rgb: 0xffffff, alpha: 0.44)
         static let urlTextFont = UIColor.white
+        static let urlTextHighlight = UIColor(rgb: 0xf27c33)
         static let urlTextPlaceholder = UIColor(rgb: 0xffffff, alpha: 0.8)
     }
 
