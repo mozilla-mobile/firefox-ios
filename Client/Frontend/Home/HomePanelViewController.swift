@@ -24,6 +24,7 @@ protocol HomePanelViewControllerDelegate: class {
     func homePanelViewController(HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
     func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController)
     func homePanelViewControllerDidRequestToCreateAccount(homePanelViewController: HomePanelViewController)
+    func homePanelViewControllerDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool)
 }
 
 @objc
@@ -40,6 +41,7 @@ struct HomePanelUX {
 protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
+    func homePanelDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
     func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
@@ -68,7 +70,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     var url: NSURL?
     weak var delegate: HomePanelViewControllerDelegate?
     weak var appStateDelegate: AppStateDelegate?
-    private var tabManager: TabManager
 
     private var buttonContainerView: UIView!
     private var buttonContainerBottomBorderView: UIView!
@@ -78,15 +79,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     private var finishEditingButton: UIButton?
     private var editingPanel: HomePanel?
     
-    init(tabManager: TabManager) {
-        self.tabManager = tabManager
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     var isPrivateMode: Bool = false {
         didSet {
             if oldValue != isPrivateMode {
@@ -186,7 +178,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 }
 
                 if index < panels.count {
-                    let panel = self.panels[index].makeViewController(profile: profile, tabManager: tabManager)
+                    let panel = self.panels[index].makeViewController(profile: profile)
                     let accessibilityLabel = self.panels[index].accessibilityLabel
                     if let panelController = panel as? UINavigationController,
                         let rootPanel = panelController.viewControllers.first {
@@ -317,6 +309,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     func homePanelDidRequestToSignIn(homePanel: HomePanel) {
         delegate?.homePanelViewControllerDidRequestToSignIn(self)
+    }
+    
+    func homePanelDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool) {
+        delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
 
     func homePanelWillEnterEditingMode(homePanel: HomePanel) {
