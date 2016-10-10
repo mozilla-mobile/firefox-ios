@@ -18,6 +18,8 @@
 		D32F71D31BCEF67C006D44FC /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */; };
 		D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */; };
 		D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCC41C44356500D7EEE8 /* Localizable.strings */; };
+		D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */; };
+		D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70341DA874AA00BABDCC /* StringExtensions.swift */; };
 		D362D2AB1C4EAF940041980A /* rights-Focus.html in Resources */ = {isa = PBXBuildFile; fileRef = D362D2AA1C4EAF940041980A /* rights-Focus.html */; };
 		D37DE5451BCDB7EF00906364 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE5441BCDB7EF00906364 /* IntroViewController.swift */; };
 		D37DE5471BCDB80B00906364 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE5461BCDB80B00906364 /* InstructionsView.swift */; };
@@ -115,6 +117,8 @@
 		D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D343DCC31C44356500D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
+		D34E70341DA874AA00BABDCC /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		D362D26A1C47326A0041980A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D362D2AA1C4EAF940041980A /* rights-Focus.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-Focus.html"; sourceTree = "<group>"; };
 		D37DE5441BCDB7EF00906364 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
@@ -280,6 +284,7 @@
 				D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
+				D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */,
 				D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */,
 				D3E2C9891DA47D5300DEBE3D /* Browser.swift */,
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
@@ -289,6 +294,7 @@
 				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
 				D3E2C96C1DA3077400DEBE3D /* NSCharacterSetExtensions.swift */,
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
+				D34E70341DA874AA00BABDCC /* StringExtensions.swift */,
 				D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */,
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
@@ -478,6 +484,7 @@
 				E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */,
 				D30179C81BCD78E2009AD388 /* SCSiriWaveformView.m in Sources */,
 				D37DE5451BCDB7EF00906364 /* IntroViewController.swift in Sources */,
+				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
 				D3E2C98A1DA47D5300DEBE3D /* Browser.swift in Sources */,
 				D3E2C8F81D9F129500DEBE3D /* Utils.swift in Sources */,
@@ -489,6 +496,7 @@
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
 				D3A8B1BE1DA5B56A00F450AD /* URLBarContainer.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */,
+				D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* ContentBlocker.swift in Sources */,
 				D37DE54B1BCDB84600906364 /* IntroSlideHowTo.swift in Sources */,
 				D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */,

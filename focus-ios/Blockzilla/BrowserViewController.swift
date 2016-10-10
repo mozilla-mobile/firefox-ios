@@ -20,6 +20,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(urlBarContainer)
 
         urlBarContainer.addSubview(urlBar)
+        urlBar.focus()
         urlBar.delegate = self
 
         view.addSubview(browser.view)
@@ -40,9 +41,12 @@ class BrowserViewController: UIViewController {
             make.top.leading.trailing.equalTo(self.view)
         }
 
-        urlBar.snp.makeConstraints { make in
-            make.top.equalTo(topLayoutGuide.snp.bottom)
-            make.leading.trailing.bottom.equalTo(urlBarContainer)
+        UIView.animate(withDuration: 0.5) {
+            self.urlBar.snp.makeConstraints { make in
+                make.top.equalTo(self.topLayoutGuide.snp.bottom)
+                make.leading.trailing.bottom.equalTo(urlBarContainer)
+            }
+            self.urlBar.layoutIfNeeded()
         }
 
         progressBar.snp.makeConstraints { make in
