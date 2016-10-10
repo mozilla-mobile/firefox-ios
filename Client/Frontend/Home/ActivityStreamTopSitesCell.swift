@@ -169,7 +169,7 @@ struct ASHorizontalScrollCellUX {
  */
 class ASHorizontalScrollCell: UITableViewCell {
 
-    lazy private var collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let layout  = HorizontalFlowLayout()
         layout.itemSize = ASHorizontalScrollCellUX.TopSiteItemSize
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
@@ -191,14 +191,6 @@ class ASHorizontalScrollCell: UITableViewCell {
         pageControl.accessibilityLabel = Strings.ASPageControlButton
         pageControl.accessibilityTraits = UIAccessibilityTraitButton
         return pageControl
-    }()
-
-    lazy private var longPress: UILongPressGestureRecognizer = {
-        let press = UILongPressGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handleLongPress(_:)))
-        press.minimumPressDuration = 0.5
-        press.delegate = self
-        press.delaysTouchesBegan = true
-        return press
     }()
 
     lazy private var pageControlPress: UITapGestureRecognizer = {
@@ -229,7 +221,6 @@ class ASHorizontalScrollCell: UITableViewCell {
         contentView.addSubview(collectionView)
         contentView.addSubview(pageControl)
         self.selectionStyle = UITableViewCellSelectionStyle.None
-        collectionView.addGestureRecognizer(self.longPress)
         pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp_makeConstraints { make in
@@ -272,18 +263,10 @@ class ASHorizontalScrollCell: UITableViewCell {
         self.collectionView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
     }
 
-    func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
-        guard gestureRecognizer.state == .Began else {
-            return //gesture not done
-        }
-
-        let p = gestureRecognizer.locationInView(self.collectionView)
-        guard let indexPath = self.collectionView.indexPathForItemAtPoint(p), let delegate = delegate else {
-            return //false click
-        }
-        delegate.collectionView(self.collectionView, showContextMenuFor: indexPath)
+    func deleteItemAtIndexPath(indexPath: NSIndexPath) {
+        delegate?.collectionView(self.collectionView, deleteItemAtIndexPath: indexPath)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -429,17 +412,11 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     var urlPressedHandler: ((NSURL, NSIndexPath) -> Void)?
     var pageChangedHandler: ((CGFloat) -> Void)?
-    var presentActionMenuHandler: ((UIAlertController) -> Void)?
     var deleteItemHandler: ((NSURL, NSIndexPath) -> Void)?
-    private let tabManager: TabManager
 
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
     var currentTraits: UITraitCollection?
 
-    init(tabManager: TabManager) {
-        self.tabManager = tabManager
-    }
-    
     // Size classes define how many items to show per row/column.
     func numberOfVerticalItems() -> Int {
         guard let traits = currentTraits else {
@@ -462,7 +439,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
-
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.content.count
     }
@@ -485,41 +462,6 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let pageWidth = CGRectGetWidth(scrollView.frame)
         pageChangedHandler?(scrollView.contentOffset.x / pageWidth)
-    }
-
-    func collectionView(collectionView: UICollectionView, showContextMenuFor indexPath: NSIndexPath) {
-        //Show a context menu with options for the topsite
-        let contentItem = content[indexPath.row]
-
-        let alertController = UIAlertController(title: contentItem.url, message: nil, preferredStyle: .ActionSheet)
-
-        let cancelAction = UIAlertAction(title: Strings.ASCancelButton, style: .Cancel, handler: nil)
-        alertController.addAction(cancelAction)
-
-        let openNewTabAction = UIAlertAction(title:NSLocalizedString("Open in New Tab", comment: "Label for \"Open in New Tab\" button"), style: .Default) { (action: UIAlertAction) in
-            guard let url = NSURL(string: contentItem.url) else {
-                return
-            }
-            self.tabManager.addTab(NSURLRequest(URL: url), afterTab: self.tabManager.selectedTab)
-         }
-        alertController.addAction(openNewTabAction)
-        
-        if #available(iOS 9, *) {
-            let openNewPrivateTabAction = UIAlertAction(title:NSLocalizedString("Open in New Private Tab", comment: "Label for \"Open in New Private Tab\" button"), style: .Default) { (action: UIAlertAction) in
-                guard let url = NSURL(string: contentItem.url) else {
-                    return
-                }
-                self.tabManager.addTab(NSURLRequest(URL: url), afterTab: self.tabManager.selectedTab, isPrivate: true)
-            }
-            alertController.addAction(openNewPrivateTabAction)
-        }
-
-        let deleteAction = UIAlertAction(title: NSLocalizedString("Remove", comment: "Label for Remove button"), style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
-            self.collectionView(collectionView, deleteItemAtIndexPath: indexPath)
-        })
-        alertController.addAction(deleteAction)
-        // Because ASHorizontalScrollCellManager is not a UIViewController we cannot present a AlertController on it.
-        self.presentActionMenuHandler?(alertController)
     }
 
     func collectionView(collectionView: UICollectionView, deleteItemAtIndexPath indexPath: NSIndexPath) {

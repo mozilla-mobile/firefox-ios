@@ -31,8 +31,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     private let profile: Profile
     private var onyxSession: OnyxSession?
-    private let topSitesManager: ASHorizontalScrollCellManager// = ASHorizontalScrollCellManager()
-    private let tabManager: TabManager
+    private let topSitesManager: ASHorizontalScrollCellManager = ASHorizontalScrollCellManager()
 
     var topSites: [Site] = []
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -41,10 +40,8 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
 
     var history: [Site] = []
 
-    init(profile: Profile, tabManager: TabManager) {
+    init(profile: Profile) {
         self.profile = profile
-        self.tabManager = tabManager
-        topSitesManager = ASHorizontalScrollCellManager(tabManager: tabManager)
         super.init(style: .Grouped)
         view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
@@ -298,9 +295,6 @@ extension ActivityStreamPanel {
                 ASOnyxPing.reportTapEvent(actionPosition: indexPath.item, source: .topSites)
                 self.showSiteWithURLHandler(url)
             }
-            self.topSitesManager.presentActionMenuHandler = { [unowned self] alert in
-                self.presentActionMenuHandler(alert)
-            }
             self.topSitesManager.deleteItemHandler = { [unowned self] url, indexPath in
                 ASOnyxPing.reportDeleteItemEvent(actionPosition: indexPath.item, source: .topSites)
                 self.hideURLFromTopSites(url)
@@ -350,13 +344,34 @@ extension ActivityStreamPanel {
             let touchPoint = longPressGestureRecognizer.locationInView(self.view)
             if let indexPath = tableView.indexPathForRowAtPoint(touchPoint) {
                 if Section(indexPath.section) == .Highlights {
-                    presentContextMenu(history[indexPath.row], indexPath: indexPath)
+                    presentContextMenu(history[indexPath.row], atIndexPath: indexPath)
+                } else {
+                    let topSiteCell = self.tableView.cellForRowAtIndexPath(indexPath) as! ASHorizontalScrollCell
+                    let touchPointWithinTopSiteCell = longPressGestureRecognizer.locationInView(topSiteCell.collectionView)
+                    if let indexPath = topSiteCell.collectionView.indexPathForItemAtPoint(touchPointWithinTopSiteCell) {
+                        presentContextMenu(topSites[indexPath.row], ofCollectionView: topSiteCell.collectionView, atIndexPath: indexPath)
+                    }
                 }
             }
         }
     }
+    
+    private func presentContextMenu(site: Site, ofCollectionView collectionView: UICollectionView? = nil, atIndexPath indexPath: NSIndexPath) {
+        //Show a context menu with options
+        let openInNewTabAction = ActionOverlayTableViewAction(title:NSLocalizedString("Open in New Tab", comment: "Label for \"Open in New Tab\" button"), iconString: "action_new_tab") { action in
+            guard let url = NSURL(string: site.url) else {
+                return
+            }
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false)
+        }
+        
+        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title:NSLocalizedString("Open in New Private Tab", comment: "Label for \"Open in New Private Tab\" button"), iconString: "action_new_private_tab") { action in
+            guard let url = NSURL(string: site.url) else {
+                return
+            }
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: true)
+        }
 
-    private func presentContextMenu(site: Site, indexPath: NSIndexPath) {
         let bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
             let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
             self.profile.bookmarks.shareItem(shareItem)
@@ -368,12 +383,16 @@ extension ActivityStreamPanel {
                 withUserData: userData,
                 toApplication: UIApplication.sharedApplication())
         })
-
+        
+        let removeAction = ActionOverlayTableViewAction(title: NSLocalizedString("Remove", comment: "Label for \"Remove\" button"), iconString: "action_remove", handler: { action in
+            self.topSitesManager.collectionView(collectionView!, deleteItemAtIndexPath: indexPath)
+        })
+        
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             ASOnyxPing.reportDeleteItemEvent(actionPosition: indexPath.item, source: .highlights)
             self.profile.history.removeHistoryForURL(site.url)
         })
-
+        
         let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
             if let url = NSURL(string: site.url) {
                 let helper = ShareExtensionHelper(url: url, tab: nil, activities: [])
@@ -395,7 +414,12 @@ extension ActivityStreamPanel {
                 }
         })
 
-        let contextMenu = ActionOverlayTableViewController(site: site, actions: [bookmarkAction, shareAction, dismissAction, deleteFromHistoryAction])
+        let contextMenu : ActionOverlayTableViewController
+        if let _ = collectionView {
+            contextMenu = ActionOverlayTableViewController(site: site, actions: [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, removeAction, shareAction, dismissAction])
+        } else {
+            contextMenu = ActionOverlayTableViewController(site: site, actions: [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, deleteFromHistoryAction, shareAction, dismissAction])
+        }
         contextMenu.modalPresentationStyle = .OverFullScreen
         contextMenu.modalTransitionStyle = .CrossDissolve
         self.presentViewController(contextMenu, animated: true, completion: nil)
