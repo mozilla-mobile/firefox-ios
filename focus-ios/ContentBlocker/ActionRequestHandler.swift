@@ -11,24 +11,26 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
         // As a workaround, we load each list into memory, then merge them into a single attachment.
         var mergedList = itemsFromFile("enabled-detector")
 
-        if Settings.getBool(Settings.keyBlockAds) ?? false {
-            mergedList.append(contentsOf: itemsFromFile("disconnect-advertising"))
-        }
+        if Settings.getToggle(.safari) {
+            if Settings.getToggle(.blockAds) {
+                mergedList.append(contentsOf: itemsFromFile("disconnect-advertising"))
+            }
 
-        if Settings.getBool(Settings.keyBlockAnalytics) ?? false {
-            mergedList.append(contentsOf: itemsFromFile("disconnect-analytics"))
-        }
+            if Settings.getToggle(.blockAnalytics) {
+                mergedList.append(contentsOf: itemsFromFile("disconnect-analytics"))
+            }
 
-        if Settings.getBool(Settings.keyBlockSocial) ?? false {
-            mergedList.append(contentsOf: itemsFromFile("disconnect-social"))
-        }
+            if Settings.getToggle(.blockSocial) {
+                mergedList.append(contentsOf: itemsFromFile("disconnect-social"))
+            }
 
-        if Settings.getBool(Settings.keyBlockOther) ?? false {
-            mergedList.append(contentsOf: itemsFromFile("disconnect-content"))
-        }
+            if Settings.getToggle(.blockOther) {
+                mergedList.append(contentsOf: itemsFromFile("disconnect-content"))
+            }
 
-        if Settings.getBool(Settings.keyBlockFonts) ?? false {
-            mergedList.append(contentsOf: itemsFromFile("web-fonts"))
+            if Settings.getToggle(.blockFonts) {
+                mergedList.append(contentsOf: itemsFromFile("web-fonts"))
+            }
         }
 
         let mergedListJSON = try! JSONSerialization.data(withJSONObject: mergedList, options: JSONSerialization.WritingOptions(rawValue: 0))

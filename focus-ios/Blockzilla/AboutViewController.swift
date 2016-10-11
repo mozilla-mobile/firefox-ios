@@ -5,13 +5,7 @@
 import Foundation
 import UIKit
 
-protocol AboutViewControllerDelegate: class {
-    func aboutViewControllerDidPressIntro(_ aboutViewController: AboutViewController)
-}
-
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
-    weak var delegate: AboutViewControllerDelegate?
-
     fileprivate let tableView = UITableView()
     fileprivate let headerView = AboutHeaderView()
     fileprivate let supportPath = (AppInfo.ProductName == "Focus") ? "en-US/kb/focus" : "products/klar"
@@ -44,7 +38,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,15 +49,9 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             headerView.snp.makeConstraints { make in
                 make.edges.equalTo(cell)
             }
-        case 1:
-            cell.textLabel?.text = NSLocalizedString("Setup Instructions", comment: "Label in About screen")
-            cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-        case 2:
-            cell.textLabel?.text = NSLocalizedString("Help", comment: "Label in About screen")
-        case 3:
-            cell.textLabel?.text = NSLocalizedString("Your Rights", comment: "Label in About screen")
-        default:
-            break
+        case 1: cell.textLabel?.text = NSLocalizedString("Help", comment: "Label in About screen")
+        case 2: cell.textLabel?.text = NSLocalizedString("Your Rights", comment: "Label in About screen")
+        default: break
         }
 
         cell.backgroundColor = UIConstants.colors.background
@@ -87,8 +75,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             headerView.layoutIfNeeded()
 
             return headerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
-        default:
-            break
+        default: break
         }
 
         return 44
@@ -102,17 +89,14 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         switch (indexPath as NSIndexPath).row {
         case 1:
-            delegate?.aboutViewControllerDidPressIntro(self)
-        case 2:
             let contentViewController = AboutContentViewController()
             contentViewController.url = URL(string: "https://support.mozilla.org/\(supportPath)")
             navigationController?.pushViewController(contentViewController, animated: true)
-        case 3:
+        case 2:
             let contentViewController = AboutContentViewController()
             contentViewController.url = LocalWebServer.sharedInstance.URLForPath("/rights-\(AppInfo.ProductName).html")
             navigationController?.pushViewController(contentViewController, animated: true)
-        default:
-            break
+        default: break
         }
 
         tableView.deselectRow(at: indexPath, animated: false)

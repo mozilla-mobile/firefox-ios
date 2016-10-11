@@ -12,9 +12,9 @@ class InstructionsView: UIView {
         let safariText = NSLocalizedString("Tap Safari, then select Content Blockers", comment: "Label for instructions to enable shown on the second introduction screen")
         let enableText = String(format: NSLocalizedString("Enable %@", comment: "Label for instructions to enable shown on the second introduction screen"), AppInfo.ProductName)
 
-        let settingsInstruction = InstructionView(text: settingsText, image: UIImage(named: "instructions-cog")!)
-        let safariInstruction = InstructionView(text: safariText, image: UIImage(named: "instructions-safari")!)
-        let enableInstruction = InstructionView(text: enableText, image: UIImage(named: "instructions-switch")!)
+        let settingsInstruction = InstructionView(text: settingsText, image: #imageLiteral(resourceName: "instructions-cog"))
+        let safariInstruction = InstructionView(text: safariText, image: #imageLiteral(resourceName: "instructions-safari"))
+        let enableInstruction = InstructionView(text: enableText, image: #imageLiteral(resourceName: "instructions-switch"))
 
         addSubview(settingsInstruction)
         addSubview(safariInstruction)

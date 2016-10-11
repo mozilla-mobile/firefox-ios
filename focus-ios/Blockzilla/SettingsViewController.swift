@@ -6,23 +6,26 @@ import Foundation
 import SnapKit
 import UIKit
 
-class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutViewControllerDelegate {
-    fileprivate let detector = BlockerEnabledDetector.makeInstance()
+class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    // Hold a strong reference to the block detector so it isn't deallocated
+    // in the middle of its detection.
+    private let detector = BlockerEnabledDetector.makeInstance()
 
-    fileprivate let tableView = UITableView()
-    fileprivate let headerView = WaveHeaderView()
-    fileprivate var shouldUpdateSafariEnabledWhenVisible = true
+    private var isSafariEnabled = false
+    private let tableView = UITableView()
+    private let headerView = WaveHeaderView()
 
-    fileprivate let toggles = [
-        BlockerToggle(label: UIConstants.strings.labelBlockAds, key: Settings.keyBlockAds),
-        BlockerToggle(label: UIConstants.strings.labelBlockAnalytics, key: Settings.keyBlockAnalytics),
-        BlockerToggle(label: UIConstants.strings.labelBlockSocial, key: Settings.keyBlockSocial),
-        BlockerToggle(label: UIConstants.strings.labelBlockOther, key: Settings.keyBlockOther, subtitle: UIConstants.strings.subtitleBlockOther),
-        BlockerToggle(label: UIConstants.strings.labelBlockFonts, key: Settings.keyBlockFonts),
+    private let toggles = [
+        BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari),
+        BlockerToggle(label: UIConstants.strings.labelBlockAds, setting: SettingsToggle.blockAds),
+        BlockerToggle(label: UIConstants.strings.labelBlockAnalytics, setting: SettingsToggle.blockAnalytics),
+        BlockerToggle(label: UIConstants.strings.labelBlockSocial, setting: SettingsToggle.blockSocial),
+        BlockerToggle(label: UIConstants.strings.labelBlockOther, setting: SettingsToggle.blockOther, subtitle: UIConstants.strings.subtitleBlockOther),
+        BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts),
     ]
 
     /// Used to calculate cell heights.
-    fileprivate lazy var dummyToggleCell: UITableViewCell = {
+    private lazy var dummyToggleCell: UITableViewCell = {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
         cell.accessoryView = PaddedSwitch(switchView: UISwitch())
         return cell
@@ -55,21 +58,30 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.separatorColor = UIColor(rgb: 0x333333)
         tableView.allowsSelection = false
         tableView.estimatedRowHeight = 44
-
-        // Don't show trailing rows.
-        tableView.tableFooterView = TableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 144))
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 44))
 
         toggles.forEach { blockerToggle in
             let toggle = blockerToggle.toggle
-            toggle.onTintColor = UIConstants.colors.focusBlue
-            toggle.tintColor = UIColor(rgb: 0x585E64)
-            toggle.addTarget(self, action: #selector(SettingsViewController.toggleSwitched(_:)), for: UIControlEvents.valueChanged)
-            toggle.isOn = Settings.getBool(blockerToggle.key) ?? false
+            toggle.onTintColor = UIConstants.colors.toggleOn
+            toggle.tintColor = UIConstants.colors.toggleOff
+            toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
+            toggle.isOn = Settings.getToggle(blockerToggle.setting)
         }
 
-        headerView.waveView.active = !toggles.filter { $0.toggle.isOn }.isEmpty
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+    }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+    override func viewWillAppear(_ animated: Bool) {
+        updateSafariEnabledState()
+    }
+
+    @objc private func applicationDidBecomeActive() {
+        // On iOS 9, we detect the blocker status by loading an invisible SafariViewController
+        // in the current view. We can only run the detector if the view is visible; otherwise,
+        // the detection callback won't fire and the detector won't be cleaned up.
+        if isViewLoaded && view.window != nil {
+            updateSafariEnabledState()
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -93,15 +105,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 make.edges.equalTo(cell)
             }
         case 1: fallthrough
-        case 2:
+        case 2: fallthrough
+        case 3:
             let toggle = toggleForIndexPath(indexPath)
             cell.textLabel?.text = toggle.label
             cell.textLabel?.numberOfLines = 0
             cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
             cell.detailTextLabel?.text = toggle.subtitle
             cell.detailTextLabel?.numberOfLines = 0
-        default:
-            break
+        default: break
         }
 
         cell.backgroundColor = UIConstants.colors.background
@@ -114,12 +126,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0:
-            return 1
-        case 1:
-            return 4
-        case 2:
-            return 1
+        case 0: return 1 // Header view.
+        case 1: return 1 // Integration.
+        case 2: return 4 // Privacy.
+        case 3: return 1 // Performance.
         default:
             assertionFailure("Invalid section")
             return 0
@@ -127,7 +137,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -151,7 +161,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return height + 22
     }
 
-    fileprivate func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
+    private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
         let attrs: [String: Any] = [NSFontAttributeName: label.font]
         let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
@@ -162,12 +172,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let labelText: String
 
         switch section {
-        case 1:
-            labelText = NSLocalizedString("PRIVACY", comment: "Section label for privacy toggles")
-        case 2:
-            labelText = NSLocalizedString("PERFORMANCE", comment: "Section label for performance toggles")
-        default:
-            return nil
+        case 1: labelText = UIConstants.strings.toggleSectionIntegration
+        case 2: labelText = UIConstants.strings.toggleSectionPrivacy
+        case 3: labelText = UIConstants.strings.toggleSectionPerformance
+        default: return nil
         }
 
         // Hack: We want the header view's margin to match the cells, so we create an empty
@@ -193,26 +201,26 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
-        case 1:
-            fallthrough
-        case 2:
-            return 30
-        default:
-            return 0
+        case 1: fallthrough
+        case 2: fallthrough
+        case 3: return 30
+        default: return 0
         }
     }
 
-    func aboutViewControllerDidPressIntro(_ aboutViewController: AboutViewController) {
-        dismiss(animated: true, completion: nil)
-        let introViewController = IntroViewController()
-        present(introViewController, animated: true, completion: nil)
+    private func updateSafariEnabledState() {
+        let safariToggle = self.toggles.first { $0.setting == .safari }!.toggle
+
+        safariToggle.isEnabled = false
+
+        detector.detectEnabled(view) { [weak self] enabled in
+            safariToggle.isOn = enabled && Settings.getToggle(.safari)
+            safariToggle.isEnabled = true
+            self?.isSafariEnabled = enabled
+        }
     }
 
-    fileprivate func updateSafariEnabledState() {
-        // TODO
-    }
-
-    fileprivate func heightForCustomCellWithView(_ view: UIView) -> CGFloat {
+    private func heightForCustomCellWithView(_ view: UIView) -> CGFloat {
         // We ask for the height before we do a layout pass, so manually trigger a layout here
         // so we can calculate the view's height.
         view.layoutIfNeeded()
@@ -220,30 +228,24 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
     }
 
-    @objc func aboutClicked(_ sender: UIButton) {
-        let aboutViewController = AboutViewController()
-        aboutViewController.delegate = self
-        navigationController!.pushViewController(aboutViewController, animated: true)
+    @objc private func aboutClicked() {
+        navigationController!.pushViewController(AboutViewController(), animated: true)
     }
 
-    @objc func applicationDidBecomeActive(_ sender: UIApplication) {
-        if isViewLoaded && view.window != nil {
-            updateSafariEnabledState()
-        } else {
-            shouldUpdateSafariEnabledWhenVisible = true
-        }
-    }
-
-    @objc func toggleSwitched(_ sender: UISwitch) {
+    @objc private func toggleSwitched(_ sender: UISwitch) {
         let toggle = toggles.filter { $0.toggle == sender }.first!
 
         func updateSetting() {
-            Settings.set(sender.isOn, forKey: toggle.key)
+            Settings.set(sender.isOn, forToggle: toggle.setting)
             Utils.reloadContentBlocker()
-            headerView.waveView.active = !toggles.filter { $0.toggle.isOn }.isEmpty
         }
 
-        if toggle.key == Settings.keyBlockOther && sender.isOn {
+        switch toggle.setting {
+        case .safari where sender.isOn && !isSafariEnabled:
+            let instructionsViewController = SafariInstructionsViewController()
+            navigationController!.pushViewController(instructionsViewController, animated: true)
+            updateSetting()
+        case .blockOther where sender.isOn:
             let message = NSLocalizedString("Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
             let yes = NSLocalizedString("I Understand", comment: "Button label for accepting Content blocker alert")
             let no = NSLocalizedString("No, Thanks", comment: "Button label for declining Content blocker alert")
@@ -258,14 +260,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             alertController.popoverPresentationController?.sourceView = sender
             alertController.popoverPresentationController?.sourceRect = sender.bounds
             present(alertController, animated: true, completion: nil)
-        } else {
+        default:
             updateSetting()
         }
     }
 }
 
 private class PaddedSwitch: UIView {
-    fileprivate static let Padding: CGFloat = 8
+    private static let Padding: CGFloat = 8
 
     init(switchView: UISwitch) {
         super.init(frame: CGRect.zero)
@@ -281,37 +283,15 @@ private class PaddedSwitch: UIView {
     }
 }
 
-private class TableFooterView: UIView {
-    lazy var logo: UIImageView = {
-        var image =  UIImageView(image: UIImage(named: "FooterLogo"))
-        image.contentMode = UIViewContentMode.center
-        return image
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(logo)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        logo.center = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-    }
-}
-
 private class BlockerToggle {
     let toggle = UISwitch()
     let label: String
-    let key: String
+    let setting: SettingsToggle
     let subtitle: String?
 
-    init(label: String, key: String, subtitle: String? = nil) {
+    init(label: String, setting: SettingsToggle, subtitle: String? = nil) {
         self.label = label
-        self.key = key
+        self.setting = setting
         self.subtitle = subtitle
     }
 }

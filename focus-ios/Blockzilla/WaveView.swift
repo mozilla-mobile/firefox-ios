@@ -17,7 +17,7 @@ private let SecondaryWaveFrequency: CGFloat = 0.8
 private let BaseDeviceRatio: CGFloat = 1.875
 
 class WaveView: UIView {
-    var active = false
+    var active = true
 
     fileprivate let frontWaveView = SCSiriWaveformView()
     fileprivate let backWaveView = SCSiriWaveformView()

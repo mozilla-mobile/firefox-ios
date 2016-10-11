@@ -4,32 +4,38 @@
 
 import Foundation
 
-struct Settings {
-    static let keyBlockAds = "BlockAds"
-    static let keyBlockAnalytics = "BlockAnalytics"
-    static let keyBlockSocial = "BlockSocial"
-    static let keyBlockOther = "BlockOther"
-    static let keyBlockFonts = "BlockFonts"
+enum SettingsToggle: String {
+    case blockAds = "BlockAds"
+    case blockAnalytics = "BlockAnalytics"
+    case blockSocial = "BlockSocial"
+    case blockOther = "BlockOther"
+    case blockFonts = "BlockFonts"
+    case safari = "Safari"
+}
 
+struct Settings {
     // No longer used, but will be set to true in existing users' settings.
     static let keyIntroDone = "IntroDone"
 
-    fileprivate static let defaults = UserDefaults(suiteName: AppInfo.SharedContainerIdentifier)!
+    fileprivate static let prefs = UserDefaults(suiteName: AppInfo.SharedContainerIdentifier)!
 
-    static func registerDefaults() {
-        set(true, forKey: keyBlockAds)
-        set(true, forKey: keyBlockAnalytics)
-        set(true, forKey: keyBlockSocial)
-        set(false, forKey: keyBlockOther)
-        set(false, forKey: keyBlockFonts)
+    private static func defaultForToggle(_ toggle: SettingsToggle) -> Bool {
+        switch toggle {
+            case .blockAds: return true
+            case .blockAnalytics: return true
+            case .blockSocial: return true
+            case .blockOther: return false
+            case .blockFonts: return false
+            case .safari: return true
+        }
     }
 
-    static func getBool(_ name: String) -> Bool? {
-        return defaults.object(forKey: name) as? Bool
+    static func getToggle(_ toggle: SettingsToggle) -> Bool {
+        return prefs.object(forKey: toggle.rawValue) as? Bool ?? defaultForToggle(toggle)
     }
 
-    static func set(_ value: Bool, forKey key: String) {
-        defaults.set(value, forKey: key)
-        defaults.synchronize()
+    static func set(_ value: Bool, forToggle toggle: SettingsToggle) {
+        prefs.set(value, forKey: toggle.rawValue)
+        prefs.synchronize()
     }
 }

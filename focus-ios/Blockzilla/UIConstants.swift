@@ -23,6 +23,8 @@ struct UIConstants {
         static let navigationTitle = UIColor(rgb: 0x61666D)
         static let progressBar = UIColor(rgb: 0xff9500)
         static let tableSectionHeader = UIColor(rgb: 0x61666D)
+        static let toggleOn = UIColor(rgb: 0x00A7E0)
+        static let toggleOff = UIColor(rgb: 0x585E64)
         static let toolbarButtonNormal = UIColor.darkGray
         static let toolbarBackground = UIColor(rgb: 0xEEEEEE)
         static let urlBarBackgroundLeft = UIColor(rgb: 0x9c62a7)
@@ -63,7 +65,11 @@ struct UIConstants {
         static let labelBlockFonts = NSLocalizedString("Block Web fonts", comment: "Label for toggle on main screen")
         static let labelOpenSettings = NSLocalizedString("Open Settings", comment: "Button label to open settings screen")
         static let settingsTitle = NSLocalizedString("Settings.title", value: "Settings", comment: "Title for settings screen")
-        static let subtitleBlockOther = NSLocalizedString("May break some videos and Web pages", comment: "Label for toggle on main screen")
+        static let subtitleBlockOther = NSLocalizedString("May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
+        static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section")
+        static let toggleSectionPerformance = NSLocalizedString("PERFORMANCE", comment: "Section label for performance toggles")
+        static let toggleSectionPrivacy = NSLocalizedString("PRIVACY", comment: "Section label for privacy toggles")
+        static let toggleSafari = NSLocalizedString("Settings.toggleSafari", value: "Safari", comment: "Safari toggle label on settings screen")
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
     }

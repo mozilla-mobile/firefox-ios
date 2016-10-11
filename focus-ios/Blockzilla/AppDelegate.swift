@@ -9,11 +9,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // If one of the toggles isn't enabled or disabled, this is the first launch. Load the list.
-        if Settings.getBool(Settings.keyBlockAds) == nil {
-            Settings.registerDefaults()
-        }
-
         Utils.reloadContentBlocker()
 
         LocalWebServer.sharedInstance.start()
