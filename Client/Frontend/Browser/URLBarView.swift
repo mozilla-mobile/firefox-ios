@@ -484,6 +484,7 @@ class URLBarView: UIView {
         self.forwardButton.hidden = !self.toolbarIsShowing
         self.backButton.hidden = !self.toolbarIsShowing
         self.stopReloadButton.hidden = !self.toolbarIsShowing
+        self.homePageButton.hidden = !self.toolbarIsShowing
     }
 
     func transitionToOverlay(didCancel: Bool = false) {
@@ -494,6 +495,7 @@ class URLBarView: UIView {
         self.forwardButton.alpha = inOverlayMode ? 0 : 1
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
+        self.homePageButton.alpha = inOverlayMode ? 0 : 1
 
         let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.CGColor
