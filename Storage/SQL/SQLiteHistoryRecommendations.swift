@@ -31,7 +31,7 @@ extension SQLiteHistory: HistoryRecommendations {
             "       GROUP BY siteID" +
             "   )" +
             "   LEFT JOIN \(TableHistory) ON \(TableHistory).id = s" +
-            "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND isBookmarked == 0 AND url NOT IN" +
+            "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND is_bookmarked == 0 AND url NOT IN" +
             "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
             "   LIMIT \(historyLimit)" +
             ")"
