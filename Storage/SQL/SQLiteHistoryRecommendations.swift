@@ -31,7 +31,8 @@ extension SQLiteHistory: HistoryRecommendations {
             "       GROUP BY siteID" +
             "   )" +
             "   LEFT JOIN \(TableHistory) ON \(TableHistory).id = s" +
-            "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND is_bookmarked == 0" +
+            "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND isBookmarked == 0 AND url NOT IN" +
+            "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
             "   LIMIT \(historyLimit)" +
             ")"
 
@@ -44,7 +45,8 @@ extension SQLiteHistory: HistoryRecommendations {
             "       WHERE \(ViewBookmarksLocalOnMirror).server_modified > ? OR \(ViewBookmarksLocalOnMirror).local_modified > ?" +
             "   )" +
             "   LEFT JOIN \(TableHistory) ON \(TableHistory).url = bmkUri" +
-            "   WHERE visitCount >= 3 AND \(TableHistory).title NOT NULL and \(TableHistory).title != ''" +
+            "   WHERE visitCount >= 3 AND \(TableHistory).title NOT NULL and \(TableHistory).title != '' AND url NOT IN" +
+            "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
             "   LIMIT \(bookmarkLimit)" +
             ")"
 
@@ -55,5 +57,9 @@ extension SQLiteHistory: HistoryRecommendations {
             "GROUP BY url"
 
         return self.db.runQuery(highlightsQuery, args: [thirtyMinutesAgo, threeDaysAgo, threeDaysAgo], factory: SQLiteHistory.iconHistoryColumnFactory)
+    }
+
+    public func removeHighlightForURL(url: String) -> Success {
+        return self.db.run([("INSERT INTO \(TableActivityStreamBlocklist) (url) VALUES (?)", [url])])
     }
 }

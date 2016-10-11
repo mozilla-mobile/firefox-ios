@@ -225,4 +225,5 @@ extension Strings {
     public static let DeleteFromHistoryContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.DeleteFromHistory", value: "Delete from History", comment: "The title for the Delete from History context menu action for Activity Stream")
     public static let ShareContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Share", value: "Share", comment: "The title for the Share context menu action for Activity Stream")
     public static let RemoveBookmarkContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.RemoveBookmark", value: "Remove Bookmark", comment: "The title for the Remove Bookmark context menu action for Activity Stream")
+    public static let DismissContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Dismiss", value: "Dismiss", comment: "The title for the Dismiss context menu action for Activity Stream")
 }
