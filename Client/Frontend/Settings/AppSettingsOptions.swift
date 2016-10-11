@@ -51,22 +51,22 @@ class DisconnectSetting: WithAccountSetting {
     override var textAlignment: NSTextAlignment { return .Center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
+        return NSAttributedString(string: NSLocalizedString("Sign Out", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
     }
 
-    override var accessibilityIdentifier: String? { return "LogOut" }
+    override var accessibilityIdentifier: String? { return "SignOut" }
 
     override func onClick(navigationController: UINavigationController?) {
         let alertController = UIAlertController(
-            title: NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert"),
-            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'log out firefox account' alert"),
+            title: NSLocalizedString("Sign Out?", comment: "Title of the 'sign out firefox account' alert"),
+            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'sign out firefox account' alert"),
             preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .Cancel) { (action) in
                 // Do nothing.
             })
         alertController.addAction(
-            UIAlertAction(title: NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert"), style: .Destructive) { (action) in
+            UIAlertAction(title: NSLocalizedString("Sign Out", comment: "Disconnect button in the 'sign out firefox account' alert"), style: .Destructive) { (action) in
                 self.settings.profile.removeAccount()
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()

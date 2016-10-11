@@ -306,7 +306,7 @@ class L10nSnapshotTests: XCTestCase {
 
         mySnapshot("50ClearPrivateData-\(index)")
 
-        let logOutCell = app.tables.cells["LogOut"]
+        let logOutCell = app.tables.cells["SignOut"]
         if logOutCell.exists {
             logOutCell.tap()
             sleep(2)
@@ -354,7 +354,7 @@ class L10nSnapshotTests: XCTestCase {
         app.tables["AppSettingsTableViewController.tableView"].swipeUp()
         mySnapshot("50ClearPrivateData-\(index)")
 
-        app.tables["AppSettingsTableViewController.tableView"].cells["LogOut"].tap()
+        app.tables["AppSettingsTableViewController.tableView"].cells["SignOut"].tap()
         mySnapshot("50ClearPrivateData-\(index)")
         app.alerts.elementBoundByIndex(0).collectionViews.buttons.elementBoundByIndex(1).tap()
         mySnapshot("50ClearPrivateData-\(index)")
