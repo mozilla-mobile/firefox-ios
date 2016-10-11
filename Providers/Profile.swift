@@ -476,8 +476,9 @@ public class BrowserProfile: Profile {
     }
 
     public func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
+        let id = DeviceInfo.clientIdentifier(self.prefs)
         let commands = items.map { item in
-            SyncCommand.fromShareItem(item, withAction: "displayURI")
+            SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
         self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }

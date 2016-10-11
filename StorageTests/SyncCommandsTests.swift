@@ -62,14 +62,13 @@ class SyncCommandsTests: XCTestCase {
     }
 
     func testCreateSyncCommandFromShareItem() {
-        let action = "testcommand"
         let shareItem = shareItems[0]
-        let syncCommand = SyncCommand.fromShareItem(shareItem, withAction: action)
+        let syncCommand = SyncCommand.displayURIFromShareItem(shareItem, asClient: "abcdefghijkl")
         XCTAssertNil(syncCommand.commandID)
         XCTAssertNotNil(syncCommand.value)
         let jsonObj: [String: AnyObject] = [
-            "command": action,
-            "args": [shareItem.url, "", shareItem.title ?? ""]
+            "command": "displayURI",
+            "args": [shareItem.url, "abcdefghijkl", shareItem.title ?? ""]
         ]
         XCTAssertEqual(JSON.stringify(jsonObj, pretty: false), syncCommand.value)
     }
@@ -95,9 +94,8 @@ class SyncCommandsTests: XCTestCase {
     }
 
     func testInsertWithURLOnly() {
-        let action = "testcommand"
         let shareItem = shareItems[3]
-        let syncCommand = SyncCommand.fromShareItem(shareItem, withAction: action)
+        let syncCommand = SyncCommand.displayURIFromShareItem(shareItem, asClient: "abcdefghijkl")
 
         let e = self.expectationWithDescription("Insert.")
         clientsAndTabs.insertCommand(syncCommand, forClients: clients).upon {
@@ -118,10 +116,9 @@ class SyncCommandsTests: XCTestCase {
     }
 
     func testInsertWithMultipleCommands() {
-        let action = "testcommand"
         let e = self.expectationWithDescription("Insert.")
         let syncCommands = shareItems.map { item in
-            return SyncCommand.fromShareItem(item, withAction: action)
+            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }
         clientsAndTabs.insertCommands(syncCommands, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
@@ -141,9 +138,8 @@ class SyncCommandsTests: XCTestCase {
     }
 
     func testGetForAllClients() {
-        let action = "testcommand"
         let syncCommands = shareItems.map { item in
-            return SyncCommand.fromShareItem(item, withAction: action)
+            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }.sort(byValue)
         clientsAndTabs.insertCommands(syncCommands, forClients: clients)
 
@@ -164,9 +160,8 @@ class SyncCommandsTests: XCTestCase {
     }
 
     func testDeleteForValidClient() {
-        let action = "testcommand"
         let syncCommands = shareItems.map { item in
-            return SyncCommand.fromShareItem(item, withAction: action)
+            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }.sort(byValue)
 
         var client = self.clients[0]
@@ -206,9 +201,8 @@ class SyncCommandsTests: XCTestCase {
     }
 
     func testDeleteForAllClients() {
-        let action = "testcommand"
         let syncCommands = shareItems.map { item in
-            return SyncCommand.fromShareItem(item, withAction: action)
+            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }
 
         let a = self.expectationWithDescription("Wipe for all clients.")
