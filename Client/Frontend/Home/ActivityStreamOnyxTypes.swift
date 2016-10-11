@@ -57,15 +57,14 @@ struct ASOnyxPing {
     /// - parameter unloadReason:    [navigation | unfocus | refresh]
     /// - parameter loadLatency:
     /// - parameter page:            [NEW_TAB | TIMELINE_ALL]
-    /// - parameter sessionDuration: Duration of user's session
     ///
     /// - returns: Onyx session ping for Activity Stream
     static func buildSessionPing(url: NSURL?, loadReason: ASLoadReasonField?,
-                                 unloadReason: ASLoadReasonField, loadLatency: Int?, page: ASPageField?,
-                                 sessionDuration: Int) -> SessionPing {
-        return SessionPing(url: url, loadReason: loadReason?.rawValue, unloadReason: loadReason?.rawValue,
+                                 unloadReason: ASLoadReasonField?, loadLatency: Int?,
+                                 page: ASPageField?) -> SessionPing {
+        return SessionPing(url: url, loadReason: loadReason?.rawValue, unloadReason: unloadReason?.rawValue,
                            loadLatency: loadLatency, locale: NSLocale.currentLocale(), page: page?.rawValue,
-                           action: "activity_stream_session", sessionDuration: sessionDuration)
+                           action: "activity_stream_session")
     }
 }
 
