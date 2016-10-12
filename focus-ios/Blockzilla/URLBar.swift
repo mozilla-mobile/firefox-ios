@@ -28,6 +28,7 @@ class URLBar: UIView {
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
+        urlText.clearButtonMode = .whileEditing
         urlText.autocompleteDelegate = self
 
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
