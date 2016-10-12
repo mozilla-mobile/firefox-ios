@@ -17,10 +17,9 @@ class ContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelegate {
     }
 
     override func startLoading() {
-        let url = request.url!
-        guard !ContentBlocker.blockList.isBlocked(url) else {
-            let response = URLResponse(url: url, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
-            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        guard !ContentBlocker.blockList.isBlocked(request) else {
+            let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Length": "0"])
+            client?.urlProtocol(self, didReceive: response!, cacheStoragePolicy: .notAllowed)
             client?.urlProtocolDidFinishLoading(self)
             return
         }
@@ -59,12 +58,19 @@ class ContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelegate {
     }
 }
 
-private class BlockRule {
-    fileprivate let regex: NSRegularExpression
-    fileprivate let domainExceptions: [NSRegularExpression]?
+private enum BlockType {
+    case all
+    case thirdParty
+}
 
-    init(regex: NSRegularExpression, domainExceptions: [NSRegularExpression]?) {
+private class BlockRule {
+    let regex: NSRegularExpression
+    let type: BlockType
+    let domainExceptions: [NSRegularExpression]?
+
+    init(regex: NSRegularExpression, type: BlockType, domainExceptions: [NSRegularExpression]?) {
         self.regex = regex
+        self.type = type
         self.domainExceptions = domainExceptions
     }
 }
@@ -96,20 +102,37 @@ private class BlockList {
                     return try! NSRegularExpression(pattern: regex, options: [])
                 }
 
-                blockRules.append(BlockRule(regex: filterRegex, domainExceptions: domainExceptions))
+                // "first-party" is not supported since we don't use it in any block lists.
+                let loadTypes = trigger["load-type"] as? [String] ?? []
+                let blockType = loadTypes.contains("third-party") ? BlockType.thirdParty : .all
+
+                blockRules.append(BlockRule(regex: filterRegex, type: blockType, domainExceptions: domainExceptions))
             }
         }
     }
 
-    func isBlocked(_ url: URL) -> Bool {
-        guard let host = url.host else { return false }
+    func isBlocked(_ request: URLRequest) -> Bool {
+        guard let documentUrl = request.mainDocumentURL,
+              let documentHost = documentUrl.host,
+            let resourceUrl = request.url else {
+            return false
+        }
 
-        let absoluteString = url.absoluteString
-        let range = NSRange(location: 0, length: absoluteString.characters.count)
+        let resourceString = resourceUrl.absoluteString
+        let resourceRange = NSRange(location: 0, length: resourceString.characters.count)
+        let documentString = documentUrl.absoluteString
+        let documentRange = NSRange(location: 0, length: documentString.characters.count)
 
         domainSearch: for rule in blockRules {
             // First, test the top-level filters to see if this URL might be blocked.
-            if rule.regex.firstMatch(in: absoluteString, options: .anchored, range: range) != nil {
+            if rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
+                // If this is a third-party load, don't block first-party sites.
+                if rule.type == .thirdParty {
+                    if rule.regex.firstMatch(in: documentString, options: .anchored, range: documentRange) != nil {
+                        continue
+                    }
+                }
+
                 // We matched, and there are no exceptions.
                 guard let domainExceptions = rule.domainExceptions else {
                     return true
@@ -117,8 +140,8 @@ private class BlockList {
 
                 // Check the domain exceptions. If a domain exception matches, this filter does not apply.
                 for domainRegex in domainExceptions {
-                    let range = NSRange(location: 0, length: host.characters.count)
-                    if domainRegex.firstMatch(in: host, options: [], range: range) != nil {
+                    let range = NSRange(location: 0, length: documentHost.characters.count)
+                    if domainRegex.firstMatch(in: documentHost, options: [], range: range) != nil {
                         continue domainSearch
                     }
                 }
