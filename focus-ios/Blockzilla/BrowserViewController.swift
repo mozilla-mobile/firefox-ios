@@ -6,6 +6,8 @@ import Foundation
 import UIKit
 import SnapKit
 
+private let SearchTemplate = "https://duckduckgo.com/?q=%s"
+
 class BrowserViewController: UIViewController {
     fileprivate let browser = Browser()
     fileprivate let urlBar = URLBar()
@@ -82,12 +84,19 @@ class BrowserViewController: UIViewController {
 
 extension BrowserViewController: URLBarDelegate {
     func urlBar(urlBar: URLBar, didSubmitText text: String) {
-        guard let url = URIFixup.getURL(entry: text) else {
-            print("TODO: Search not yet supported.")
-            return
+        var url = URIFixup.getURL(entry: text)
+
+        if url == nil {
+            guard let escaped = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                  let searchUrl = URL(string: SearchTemplate.replacingOccurrences(of: "%s", with: escaped)) else {
+                assertionFailure("Invalid search URL")
+                return
+            }
+
+            url = searchUrl
         }
 
-        browser.loadRequest(URLRequest(url: url))
+        browser.loadRequest(URLRequest(url: url!))
     }
 
     func urlBarDidCancel(urlBar: URLBar) {
