@@ -194,7 +194,7 @@ class SearchSettingsTableViewController: UITableViewController {
         if section == SectionDefault {
             sectionTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
         } else {
-            sectionTitle = NSLocalizedString("Quick-search Engines", comment: "Title for quick-search engines settings section.")
+            sectionTitle = NSLocalizedString("Quick-Search Engines", comment: "Title for quick-search engines settings section.")
         }
         headerView.titleLabel.text = sectionTitle
 
